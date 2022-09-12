@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_FLAGS: "--concurrency=2 ${{ secrets.TURBO_CACHE }}"
+  TURBO_FLAGS: "--concurrency=2 --api=http://127.0.0.1:9080 --token=foo --team=me"
 
 jobs:
   build:
@@ -37,6 +37,12 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -60,6 +66,12 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -117,6 +129,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
+
     - name: Run linters
       run: yarn run lint $TURBO_FLAGS
 
@@ -170,6 +188,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
+
     - name: Lint config files and Z-Wave specifics
       run: yarn run lint:zwave $TURBO_FLAGS
 
@@ -192,6 +216,12 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
 
     - name: Run component tests
       run: yarn run test:ci $TURBO_FLAGS
@@ -220,6 +250,12 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
 
     - name: Generate API report
       run: yarn run extract-api $TURBO_FLAGS
@@ -264,6 +300,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
+
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
 
@@ -297,6 +339,12 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -373,6 +421,12 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@local-artifacts
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo # ${{ secrets.TURBO_SERVER_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
