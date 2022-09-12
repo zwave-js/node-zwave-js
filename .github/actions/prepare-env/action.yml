@@ -18,3 +18,9 @@ runs:
     - name: Install dependencies
       shell: bash
       run: yarn install --immutable
+
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@master
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: foo
