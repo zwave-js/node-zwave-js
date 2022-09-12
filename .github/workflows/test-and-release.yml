@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_FLAGS: "--concurrency=2 --api=${{ secrets.TURBO_CACHE_SERVER }} --token=${{ secrets.TURBO_CACHE_TOKEN }} --team=zwave-js"
+  TURBO_FLAGS: "--concurrency=2 ${{ secrets.TURBO_CACHE }}"
 
 jobs:
   build:
