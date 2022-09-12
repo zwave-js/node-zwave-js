@@ -7,10 +7,9 @@ runs:
   steps:
     - name: Download turbo cache artifact
       uses: actions/download-artifact@v3
-      working-directory: ${{ runner.temp }}
       with:
         name: turbo-cache
-        path: turbo-cache.tgz
+        path: ${{ runner.temp }}/turbo-cache.tgz
 
     - name: Extract turbo cache
       shell: bash
