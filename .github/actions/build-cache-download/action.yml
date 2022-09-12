@@ -1,6 +1,10 @@
 name: 'Download Build Cache'
 description: 'Downloads the previously stored turborepo cache'
 author: 'AlCalzone'
+inputs:
+  cacheDir:
+    description: 'The parent directory of where the turbo-cache folder is located'
+    required: true
 
 runs:
   using: "composite"
@@ -9,10 +13,10 @@ runs:
       uses: actions/download-artifact@v3
       with:
         name: turbo-cache
-        path: "$RUNNER_TEMP"
+        path: "${{ inputs.cacheDir }}/turbo-cache.tgz"
 
     - name: Extract turbo cache
       shell: bash
       run: |
-        cd $RUNNER_TEMP
+        cd "${{ inputs.cacheDir }}"
         tar -xvzf turbo-cache.tgz && rm turbo-cache.tgz
