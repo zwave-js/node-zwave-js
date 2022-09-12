@@ -9,7 +9,7 @@ runs:
       uses: actions/download-artifact@v3
       with:
         name: turbo-cache
-        path: $RUNNER_TEMP
+        path: "$RUNNER_TEMP"
 
     - name: Extract turbo cache
       shell: bash
