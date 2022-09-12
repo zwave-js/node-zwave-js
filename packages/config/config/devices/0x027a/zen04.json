@@ -16,17 +16,17 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED Indicator Mode",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Follow outlet",
+					"label": "On when load is on",
 					"value": 0
 				},
 				{
-					"label": "Opposite of outlet",
+					"label": "On when load is off",
 					"value": 1
 				},
 				{
@@ -41,34 +41,15 @@
 		},
 		{
 			"#": "2",
-			"$import": "templates/zooz_template.json#auto_off_timer_duration",
-			"label": "Auto Turn-Off Timer Duration"
+			"$import": "templates/zooz_template.json#auto_off_timer_duration"
 		},
 		{
 			"#": "3",
-			"$import": "templates/zooz_template.json#auto_on_timer_duration",
-			"label": "Auto Turn-On Timer Duration"
+			"$import": "templates/zooz_template.json#auto_on_timer_duration"
 		},
 		{
 			"#": "4",
-			"label": "On/Off Status Recovery After Power Failure",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Previous status",
-					"value": 0
-				},
-				{
-					"label": "Always off",
-					"value": 1
-				},
-				{
-					"label": "Always on",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
 		},
 		{
 			"#": "5",
