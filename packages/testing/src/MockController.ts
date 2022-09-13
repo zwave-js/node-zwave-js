@@ -57,7 +57,8 @@ export class MockController {
 			),
 			getSafeCCVersionForNode: () => 100,
 			isCCSecure: () => false,
-			// TODO: We don't care about security classes yet
+			// TODO: We don't care about security classes on the controller
+			// This is handled by the nodes hosts
 			getHighestSecurityClass: () => undefined,
 			hasSecurityClass: () => false,
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -144,16 +145,17 @@ export class MockController {
 					throw new Error(
 						"Mock controller received a CAN from the host. This is illegal!",
 					);
-					return;
 				}
 			}
 		}
 
 		let msg: Message;
 		try {
-			// Parse the message while remembering potential decoding errors in embedded CCs
-			// This way we can log the invalid CC contents
-			msg = Message.from(this.host, data, MessageOrigin.Host);
+			msg = Message.from(this.host, {
+				data,
+				origin: MessageOrigin.Host,
+				parseCCs: false,
+			});
 			this.receivedHostMessages.push(msg);
 			// all good, respond with ACK
 			this.sendHeaderToHost(MessageHeaders.ACK);

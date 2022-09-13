@@ -206,6 +206,12 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		firmwareUpdateService?: string;
 	};
 
+	/**
+	 * An object with application/module/component names and their versions.
+	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
+	 */
+	userAgent?: Record<string, string>;
+
 	/** @internal Used for testing internally */
 	testingHooks?: {
 		serialPortBinding?: typeof SerialPort;
@@ -231,3 +237,16 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		loadConfiguration?: boolean;
 	};
 }
+
+export type EditableZWaveOptions = Pick<
+	ZWaveOptions,
+	| "disableOptimisticValueUpdate"
+	| "emitValueUpdateAfterSetValue"
+	| "inclusionUserCallbacks"
+	| "interview"
+	| "logConfig"
+	| "preferences"
+	| "preserveUnknownValues"
+> & {
+	userAgent?: Record<string, string | null | undefined>;
+};

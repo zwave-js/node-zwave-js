@@ -515,7 +515,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
     interviewStart(node: Interviewable): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    logNode(nodeId: number, message: string, level?: "debug" | "verbose" | "warn" | "error"): void;
+    logNode(nodeId: number, message: string, level?: LogNodeOptions["level"]): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     logNode(nodeId: number, options: LogNodeOptions): void;
@@ -1290,7 +1290,7 @@ export interface LogNodeOptions {
     // (undocumented)
     endpoint?: number;
     // (undocumented)
-    level?: "debug" | "verbose" | "warn" | "error";
+    level?: "silly" | "debug" | "verbose" | "warn" | "error";
     // (undocumented)
     message: string;
 }
@@ -1989,8 +1989,7 @@ export class SecurityManager2 {
     isDuplicateSinglecast(peerNodeId: number, sequenceNumber: number): boolean;
     // (undocumented)
     nextMPAN(group: number): Buffer;
-    // (undocumented)
-    nextNonce(peerNodeId: number): Buffer;
+    nextNonce(peerNodeId: number, store?: boolean): Buffer;
     nextSequenceNumber(peerNodeId: number): number;
     setKey(securityClass: SecurityClass, key: Buffer): void;
     setSPANState(peerNodeID: number, state: SPANTableEntry | {
@@ -1998,8 +1997,7 @@ export class SecurityManager2 {
     }): void;
     // (undocumented)
     storeRemoteEI(peerNodeId: number, remoteEI: Buffer): void;
-    // (undocumented)
-    storeSequenceNumber(peerNodeId: number, sequenceNumber: number): void;
+    storeSequenceNumber(peerNodeId: number, sequenceNumber: number): number | undefined;
     // Warning: (ae-forgotten-export) The symbol "TempNetworkKeys" needs to be exported by the entry point index.d.ts
     readonly tempKeys: Map<number, TempNetworkKeys>;
 }
@@ -2118,6 +2116,10 @@ export type SPANTableEntry = {
     type: SPANState.SPAN;
     securityClass: SecurityClass;
     rng: CtrDRBG;
+    currentSPAN?: {
+        nonce: Buffer;
+        expires: number;
+    };
 };
 
 // Warning: (ae-internal-missing-underscore) The name "stringToNodeList" should be prefixed with an underscore because the declaration is marked as @internal
@@ -3077,7 +3079,7 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
-// src/security/Manager2.ts:54:4 - (ae-forgotten-export) The symbol "CtrDRBG" needs to be exported by the entry point index.d.ts
+// src/security/Manager2.ts:55:4 - (ae-forgotten-export) The symbol "CtrDRBG" needs to be exported by the entry point index.d.ts
 // src/security/QR.ts:98:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)

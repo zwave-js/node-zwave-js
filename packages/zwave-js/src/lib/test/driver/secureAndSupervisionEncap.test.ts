@@ -1,6 +1,5 @@
 import { SecurityCCNonceGet } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { wait } from "alcalzone-shared/async";
 import path from "path";
 import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
 import { integrationTest } from "../integrationTestSuite";
@@ -52,8 +51,6 @@ integrationTest(
 						"The driver should have sent an S0-encapsulated command",
 				},
 			);
-
-			await wait(1000);
 		},
 	},
 );

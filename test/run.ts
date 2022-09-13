@@ -17,15 +17,15 @@ const driver = new Driver(port, {
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(
-			"5F103E487B11BE72EE5ED3F6961B0B46",
+			"5369389EFA18EE2A4894C7FB48347FEA",
 			"hex",
 		),
 		S2_Authenticated: Buffer.from(
-			"7666D813DEB4DD0FFDE089A38E883699",
+			"656EF5C0F020F3C14238C04A1748B7E1",
 			"hex",
 		),
 		S2_AccessControl: Buffer.from(
-			"92901F4D820FF38A999A751914D1A2BA",
+			"31132050077310B6F7032F91C79C2EB8",
 			"hex",
 		),
 	},

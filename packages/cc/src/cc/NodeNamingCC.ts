@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	MessagePriority,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -34,6 +35,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { NodeNamingAndLocationCommand } from "../lib/_Types";
@@ -90,11 +92,9 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 
 		switch (property) {
 			case "name":
-				await this.setName(value);
-				break;
+				return this.setName(value);
 			case "location":
-				await this.setLocation(value);
-				break;
+				return this.setLocation(value);
 		}
 
 		return undefined;
@@ -132,7 +132,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
-	public async setName(name: string): Promise<void> {
+	public async setName(name: string): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.NameSet,
@@ -143,7 +143,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			name,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getLocation(): Promise<string | undefined> {
@@ -165,7 +165,9 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
-	public async setLocation(location: string): Promise<void> {
+	public async setLocation(
+		location: string,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.LocationSet,
@@ -176,7 +178,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			location,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -248,6 +250,7 @@ interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(NodeNamingAndLocationCommand.NameSet)
+@useSupervision()
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -335,6 +338,7 @@ interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(NodeNamingAndLocationCommand.LocationSet)
+@useSupervision()
 export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC {
 	public constructor(
 		host: ZWaveHost,

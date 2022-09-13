@@ -1,9 +1,9 @@
 // Script to remove unnecessary min/maxValue from config files
 
+import { enumFilesRecursive } from "@zwave-js/shared";
 import * as JSONC from "comment-json";
 import * as fs from "fs-extra";
 import path from "path";
-import { enumFilesRecursive } from "../../shared/src";
 import { formatWithPrettier } from "./prettier";
 
 async function main() {

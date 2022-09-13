@@ -21,7 +21,11 @@ import {
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, OnlyMethods } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import { getAPI, getCommandClass } from "./CommandClassDecorators";
+import {
+	getAPI,
+	getCommandClass,
+	getImplementedVersion,
+} from "./CommandClassDecorators";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
@@ -261,7 +265,15 @@ export class CCAPI {
 	 * Retrieves the version of the given CommandClass this endpoint implements
 	 */
 	public get version(): number {
-		return this.endpoint.getCCVersion(this.ccId);
+		if (this.isSinglecast() && this.endpoint.nodeId !== NODE_ID_BROADCAST) {
+			return this.applHost.getSafeCCVersionForNode(
+				this.ccId,
+				this.endpoint.nodeId,
+				this.endpoint.index,
+			);
+		} else {
+			return getImplementedVersion(this.ccId);
+		}
 	}
 
 	/** Determines if this simplified API instance may be used. */

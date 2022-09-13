@@ -1,0 +1,27 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "12727 / ZW4003",
+	"description": "In-Wall Toggle Switch, 300S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3033",
+			"zwaveAllianceId": 1200
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "29",
+			"$import": "templates/jasco_template.json#load_sensing"
+		}
+	]
+}

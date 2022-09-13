@@ -1,0 +1,45 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "14292 / ZW4003",
+	"description": "In-Wall Toggle Switch, 500S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3037"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	}
+}

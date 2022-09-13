@@ -58,10 +58,11 @@ export function cpp2js(str: string): string;
 export function createThrowingMap<K, V>(throwKeyNotFound?: (key: K) => never): ThrowingMap<K, V>;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (ae-missing-release-tag) "createWrappingCounter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createWrappingCounter(maxValue: number): () => number;
+export function createWrappingCounter(maxValue: number, randomSeed?: boolean): () => number;
 
 // Warning: (ae-missing-release-tag) "DeepPartial" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -145,7 +146,7 @@ export function keysOf<T>(obj: T): (keyof T)[];
 // Warning: (ae-missing-release-tag) "mergeDeep" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function mergeDeep(target: Record<string, any> | undefined, source: Record<string, any>): Record<string, any>;
+export function mergeDeep(target: Record<string, any> | undefined, source: Record<string, any>, overwrite?: boolean): Record<string, any>;
 
 // Warning: (ae-missing-release-tag) "MethodsNamesOf" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

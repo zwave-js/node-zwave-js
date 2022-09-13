@@ -1,4 +1,12 @@
-import type { CommandClasses, CommandClassInfo } from "@zwave-js/core";
+import {
+	CommandClasses,
+	CommandClassInfo,
+	Maybe,
+	SecurityClass,
+	securityClassOrder,
+	unknownBoolean,
+} from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";
 import type { MockController } from "./MockController";
@@ -99,6 +107,48 @@ export class MockNode {
 		this.id = options.id;
 		this.controller = options.controller;
 
+		// A node's host is a bit more specialized than the controller's host.
+		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
+		this.host = {
+			...this.controller.host,
+			ownNodeId: this.id,
+			__internalIsMockNode: true,
+
+			// Mimic the behavior of ZWaveNode, but for arbitrary node IDs
+			hasSecurityClass(
+				nodeId: number,
+				securityClass: SecurityClass,
+			): Maybe<boolean> {
+				return (
+					securityClasses.get(nodeId)?.get(securityClass) ??
+					unknownBoolean
+				);
+			},
+			setSecurityClass(
+				nodeId: number,
+				securityClass: SecurityClass,
+				granted: boolean,
+			): void {
+				if (!securityClasses.has(nodeId)) {
+					securityClasses.set(nodeId, new Map());
+				}
+				securityClasses.get(nodeId)!.set(securityClass, granted);
+			},
+			getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+				const map = securityClasses.get(nodeId);
+				if (!map?.size) return undefined;
+				let missingSome = false;
+				for (const secClass of securityClassOrder) {
+					if (map.get(secClass) === true) return secClass;
+					if (!map.has(secClass)) {
+						missingSome = true;
+					}
+				}
+				// If we don't have the info for every security class, we don't know the highest one yet
+				return missingSome ? undefined : SecurityClass.None;
+			},
+		};
+
 		const {
 			commandClasses = [],
 			endpoints = [],
@@ -132,6 +182,7 @@ export class MockNode {
 		}
 	}
 
+	public readonly host: ZWaveHost;
 	public readonly id: number;
 	public readonly controller: MockController;
 	public readonly capabilities: MockNodeCapabilities;

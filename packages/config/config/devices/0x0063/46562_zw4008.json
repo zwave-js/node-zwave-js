@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "46562 / ZW4008",
-	"description": "In-Wall Smart Switch",
+	"description": "In-Wall Paddle Switch, QFSW, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

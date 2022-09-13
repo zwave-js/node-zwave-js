@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { MockController, MockNode, MockNodeOptions } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
 import crypto from "crypto";
 import fs from "fs-extra";
 import os from "os";
@@ -42,15 +43,15 @@ function prepareDriver(
 		securityKeys: {
 			S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 			S2_Unauthenticated: Buffer.from(
-				"5F103E487B11BE72EE5ED3F6961B0B46",
+				"11111111111111111111111111111111",
 				"hex",
 			),
 			S2_Authenticated: Buffer.from(
-				"7666D813DEB4DD0FFDE089A38E883699",
+				"22222222222222222222222222222222",
 				"hex",
 			),
 			S2_AccessControl: Buffer.from(
-				"92901F4D820FF38A999A751914D1A2BA",
+				"33333333333333333333333333333333",
 				"hex",
 			),
 		},
@@ -69,7 +70,7 @@ function prepareMocks(
 	mockNode: MockNode;
 } {
 	const mockController = new MockController({
-		homeId: 0x7e370001,
+		homeId: 0x7e570001,
 		ownNodeId: 1,
 		serial: mockPort,
 	});
@@ -196,7 +197,12 @@ function suite(options: IntegrationTestOptions) {
 	});
 
 	it("Test body", async () => {
-		await testBody(driver, node, mockController, mockNode);
+		try {
+			await testBody(driver, node, mockController, mockNode);
+		} finally {
+			// Give everything a chance to settle before destroying the driver.
+			await wait(100);
+		}
 	}, 30000);
 }
 
@@ -205,13 +211,13 @@ export const integrationTest = ((
 	name: string,
 	options: IntegrationTestOptions,
 ): void => {
-	describe(name, suite.bind(suite, options));
+	describe(name, () => suite(options));
 }) as IntegrationTest;
 
 integrationTest.only = (name: string, options: IntegrationTestOptions) => {
-	describe.only(name, suite.bind(suite, options));
+	describe.only(name, () => suite(options));
 };
 
 integrationTest.skip = (name: string, options: IntegrationTestOptions) => {
-	describe.skip(name, suite.bind(suite, options));
+	describe.skip(name, () => suite(options));
 };

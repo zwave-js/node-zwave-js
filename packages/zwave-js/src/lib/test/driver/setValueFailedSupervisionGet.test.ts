@@ -39,8 +39,8 @@ integrationTest(
 						frame.type === MockZWaveFrameType.Request &&
 						frame.payload instanceof SupervisionCCGet
 					) {
-						const cc = new SupervisionCCReport(controller.host, {
-							nodeId: self.id,
+						const cc = new SupervisionCCReport(self.host, {
+							nodeId: controller.host.ownNodeId,
 							sessionId: frame.payload.sessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Fail,
@@ -63,8 +63,8 @@ integrationTest(
 						frame.type === MockZWaveFrameType.Request &&
 						frame.payload instanceof BinarySwitchCCGet
 					) {
-						const cc = new BinarySwitchCCReport(controller.host, {
-							nodeId: self.id,
+						const cc = new BinarySwitchCCReport(self.host, {
+							nodeId: controller.host.ownNodeId,
 							currentValue: false,
 						});
 						await self.sendToController(
@@ -85,8 +85,6 @@ integrationTest(
 		testBody: async (driver, node, mockController, mockNode) => {
 			await node.setValue(BinarySwitchCCValues.targetValue.id, true);
 
-			await wait(1000);
-
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
 					frame.type === MockZWaveFrameType.Request &&
@@ -97,6 +95,9 @@ integrationTest(
 						"Node should have received a supervised BinarySwitchCCSet",
 				},
 			);
+
+			await wait(1500);
+
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
 					frame.type === MockZWaveFrameType.Request &&

@@ -1760,6 +1760,7 @@ function getResponseForBulkSet(cc: ConfigurationCCBulkSet) {
 
 @CCCommand(ConfigurationCommand.BulkSet)
 @expectedCCResponse(getResponseForBulkSet)
+@useSupervision()
 export class ConfigurationCCBulkSet extends ConfigurationCC {
 	public constructor(
 		host: ZWaveHost,

@@ -3,6 +3,8 @@ import {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	TransmitOptions,
 	validatePayload,
 	ValueMetadata,
@@ -35,6 +37,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { WakeUpCommand } from "../lib/_Types";
@@ -96,14 +99,17 @@ export class WakeUpCCAPI extends CCAPI {
 		if (typeof value !== "number") {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
-		await this.setInterval(value, this.applHost.ownNodeId ?? 1);
+		const result = await this.setInterval(
+			value,
+			this.applHost.ownNodeId ?? 1,
+		);
 
-		if (this.isSinglecast()) {
-			// Verify the current value after a (short) delay
+		// Verify the change after a short delay, unless the command was supervised and successful
+		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
 			this.schedulePoll({ property }, value, { transition: "fast" });
 		}
 
-		return undefined;
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -166,7 +172,7 @@ export class WakeUpCCAPI extends CCAPI {
 	public async setInterval(
 		wakeUpInterval: number,
 		controllerNodeId: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(WakeUpCommand, WakeUpCommand.IntervalSet);
 
 		const cc = new WakeUpCCIntervalSet(this.applHost, {
@@ -175,7 +181,7 @@ export class WakeUpCCAPI extends CCAPI {
 			wakeUpInterval,
 			controllerNodeId,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {
@@ -322,6 +328,7 @@ interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(WakeUpCommand.IntervalSet)
+@useSupervision()
 export class WakeUpCCIntervalSet extends WakeUpCC {
 	public constructor(
 		host: ZWaveHost,

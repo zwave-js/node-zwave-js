@@ -92,6 +92,7 @@ import {
 	getCCName,
 	getDSTInfo,
 	isRssiError,
+	isSupervisionResult,
 	isTransmissionError,
 	isUnsupervisedOrSucceeded,
 	isZWaveError,
@@ -112,6 +113,7 @@ import {
 	SecurityClassOwner,
 	SendCommandOptions,
 	sensorCCs,
+	SupervisionStatus,
 	timespan,
 	topologicalSort,
 	TXReport,
@@ -342,6 +344,8 @@ export class ZWaveNode
 		// @ts-expect-error This can happen for value updated events
 		if ("source" in outArg) delete outArg.source;
 
+		const loglevel = this.driver.getLogConfig().level;
+
 		// If this is a metadata event, make sure we return the merged metadata
 		if ("metadata" in outArg) {
 			(outArg as unknown as MetadataUpdatedArgs).metadata =
@@ -353,9 +357,24 @@ export class ZWaveNode
 			this,
 			arg.commandClass,
 		);
-		const isInternalValue = ccInstance?.isInternalValue(arg);
+		const isInternalValue = !!ccInstance?.isInternalValue(arg);
 		// Check whether this value change may be logged
 		const isSecretValue = !!ccInstance?.isSecretValue(arg);
+
+		if (loglevel === "silly") {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `[translateValueEvent: ${eventName}]
+  commandClass: ${getCCName(arg.commandClass)}
+  endpoint:     ${arg.endpoint}
+  property:     ${arg.property}
+  propertyKey:  ${arg.propertyKey}
+  internal:     ${isInternalValue}
+  secret:       ${isSecretValue}
+  event source: ${(arg as any as ValueUpdatedArgs).source}`,
+				level: "silly",
+			});
+		}
+
 		if (
 			!isSecretValue &&
 			(arg as any as ValueUpdatedArgs).source !== "driver"
@@ -380,6 +399,20 @@ export class ZWaveNode
 
 		//Don't expose value events for internal value IDs...
 		if (isInternalValue) return;
+
+		if (loglevel === "silly") {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `[translateValueEvent: ${eventName}]
+  is root endpoint:        ${!arg.endpoint}
+  is application CC:       ${applicationCCs.includes(arg.commandClass)}
+  should hide root values: ${nodeUtils.shouldHideRootApplicationCCValues(
+		this.driver,
+		this,
+  )}`,
+				level: "silly",
+			});
+		}
+
 		// ... and root values ID that mirrors endpoint functionality
 		if (
 			// Only root endpoint values need to be filtered
@@ -398,7 +431,20 @@ export class ZWaveNode
 					// but different endpoint
 					endpoint,
 				};
-				if (this.valueDB.hasValue(possiblyMirroredValueID)) return;
+				if (this.valueDB.hasValue(possiblyMirroredValueID)) {
+					if (loglevel === "silly") {
+						this.driver.controllerLog.logNode(this.id, {
+							message: `[translateValueEvent: ${eventName}] found mirrored value ID on different endpoint, ignoring event:
+  commandClass: ${getCCName(possiblyMirroredValueID.commandClass)}
+  endpoint:     ${possiblyMirroredValueID.endpoint}
+  property:     ${possiblyMirroredValueID.property}
+  propertyKey:  ${possiblyMirroredValueID.propertyKey}`,
+							level: "silly",
+						});
+					}
+
+					return;
+				}
 			}
 		}
 		// And pass the translated event to our listeners
@@ -851,7 +897,12 @@ export class ZWaveNode
 		value: unknown,
 		options?: SetValueAPIOptions,
 	): Promise<boolean> {
+		// Ensure we're dealing with a valid value ID, with no extra properties
+		valueId = normalizeValueID(valueId);
+
 		// Try to retrieve the corresponding CC API
+		const loglevel = this.driver.getLogConfig().level;
+
 		try {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
@@ -861,6 +912,19 @@ export class ZWaveNode
 			] as CCAPI;
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
+
+			if (loglevel === "silly") {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[setValue] calling SET_VALUE API ${
+						api.constructor.name
+					}:
+  property:     ${valueId.property}
+  property key: ${valueId.propertyKey}
+  optimistic:   ${api.isSetValueOptimistic(valueId)}`,
+					level: "silly",
+				});
+			}
+
 			// And call it
 			const result = await api.setValue(
 				{
@@ -871,6 +935,29 @@ export class ZWaveNode
 				options,
 			);
 
+			if (loglevel === "silly") {
+				let message = `[setValue] result of SET_VALUE API call for ${api.constructor.name}:`;
+				if (result) {
+					if (isSupervisionResult(result)) {
+						message += ` (SupervisionResult)
+  status:   ${getEnumMemberName(SupervisionStatus, result.status)}`;
+						if (result.remainingDuration) {
+							message += `
+  duration: ${result.remainingDuration.toString()}`;
+						}
+					} else {
+						message +=
+							" (other) " + JSON.stringify(result, null, 2);
+					}
+				} else {
+					message += " undefined";
+				}
+				this.driver.controllerLog.logNode(this.id, {
+					message,
+					level: "silly",
+				});
+			}
+
 			// Remember the new value if...
 			// ... the call did not throw (assume that the call was successful)
 			// ... the call was supervised and successful
@@ -878,16 +965,32 @@ export class ZWaveNode
 				api.isSetValueOptimistic(valueId) &&
 				isUnsupervisedOrSucceeded(result)
 			) {
+				const emitEvent =
+					!!result ||
+					!!this.driver.options.emitValueUpdateAfterSetValue;
+
+				if (loglevel === "silly") {
+					const message = emitEvent
+						? "updating value with event"
+						: "updating value without event";
+					this.driver.controllerLog.logNode(this.id, {
+						message: `[setValue] ${message}`,
+						level: "silly",
+					});
+				}
+
 				this._valueDB.setValue(
 					valueId,
 					value,
 					// We need to emit an event if applications opted in, or if this was a supervised call
 					// because in this case there won't be a verification query which would result in an update
-					!!result ||
-						!!this.driver.options.emitValueUpdateAfterSetValue
-						? { source: "driver" }
-						: { noEvent: true },
+					emitEvent ? { source: "driver" } : { noEvent: true },
 				);
+			} else if (loglevel === "silly") {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[setValue] not updating value`,
+					level: "silly",
+				});
 			}
 
 			return true;
@@ -909,6 +1012,19 @@ export class ZWaveNode
 						emitErrorEvent = true;
 						break;
 				}
+
+				if (loglevel === "silly") {
+					this.driver.controllerLog.logNode(this.id, {
+						message: `[setValue] raised ZWaveError (${
+							handled ? "handled" : "not handled"
+						}, code ${getEnumMemberName(
+							ZWaveErrorCodes,
+							e.code,
+						)}): ${e.message}`,
+						level: "silly",
+					});
+				}
+
 				if (emitErrorEvent) this.driver.emit("error", e);
 				if (handled) return false;
 			}
@@ -924,6 +1040,9 @@ export class ZWaveNode
 		valueId: ValueID,
 		sendCommandOptions: SendCommandOptions = {},
 	): Promise<T | undefined> {
+		// Ensure we're dealing with a valid value ID, with no extra properties
+		valueId = normalizeValueID(valueId);
+
 		// Try to retrieve the corresponding CC API
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 		if (!endpointInstance) {
@@ -1608,13 +1727,25 @@ protocol version:      ${this.protocolVersion}`;
 			return true;
 		}
 
+		/**
+		 * @param force When this is `true`, the interview will be attempted even when the CC is not supported by the endpoint.
+		 */
 		const interviewEndpoint = async (
 			endpoint: Endpoint,
 			cc: CommandClasses,
+			force: boolean = false,
 		): Promise<"continue" | false | void> => {
 			let instance: CommandClass;
 			try {
-				instance = endpoint.createCCInstance(cc)!;
+				if (force) {
+					instance = CommandClass.createInstanceUnchecked(
+						this.driver,
+						this,
+						cc,
+					)!;
+				} else {
+					instance = endpoint.createCCInstance(cc)!;
+				}
 			} catch (e) {
 				if (
 					isZWaveError(e) &&
@@ -1671,6 +1802,12 @@ protocol version:      ${this.protocolVersion}`;
 				securityClass == undefined ||
 				securityClassIsS2(securityClass)
 			) {
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					"Root device interview: Security S2",
+					"silly",
+				);
+
 				if (!this.driver.securityManager2) {
 					if (!this._hasEmittedNoS2NetworkKeyError) {
 						// Cannot interview a secure device securely without a network key
@@ -1716,6 +1853,12 @@ protocol version:      ${this.protocolVersion}`;
 
 			// Query supported CCs unless we know for sure that the node wasn't assigned the S0 security class
 			if (this.hasSecurityClass(SecurityClass.S0_Legacy) !== false) {
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					"Root device interview: Security S0",
+					"silly",
+				);
+
 				if (!this.driver.securityManager) {
 					if (!this._hasEmittedNoS0NetworkKeyError) {
 						// Cannot interview a secure device securely without a network key
@@ -1755,6 +1898,12 @@ protocol version:      ${this.protocolVersion}`;
 		// Manufacturer Specific and Version CC need to be handled before the other CCs because they are needed to
 		// identify the device and apply device configurations
 		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Root device interview: Manufacturer Specific",
+				"silly",
+			);
+
 			await interviewEndpoint(
 				this,
 				CommandClasses["Manufacturer Specific"],
@@ -1762,6 +1911,12 @@ protocol version:      ${this.protocolVersion}`;
 		}
 
 		if (this.supportsCC(CommandClasses.Version)) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Root device interview: Version",
+				"silly",
+			);
+
 			await interviewEndpoint(this, CommandClasses.Version);
 
 			// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
@@ -1820,8 +1975,30 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
+		this.driver.controllerLog.logNode(
+			this.nodeId,
+			`Root device interviews before endpoints: ${rootInterviewOrderBeforeEndpoints
+				.map((cc) => `\n· ${getCCName(cc)}`)
+				.join("")}`,
+			"silly",
+		);
+
+		this.driver.controllerLog.logNode(
+			this.nodeId,
+			`Root device interviews after endpoints: ${rootInterviewOrderAfterEndpoints
+				.map((cc) => `\n· ${getCCName(cc)}`)
+				.join("")}`,
+			"silly",
+		);
+
 		// Now that we know the correct order, do the interview in sequence
 		for (const cc of rootInterviewOrderBeforeEndpoints) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`Root device interview: ${getCCName(cc)}`,
+				"silly",
+			);
+
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
@@ -1846,10 +2023,15 @@ protocol version:      ${this.protocolVersion}`;
 
 				// If S2 is the highest security class, interview it for the endpoint
 				if (
-					securityClass != undefined &&
 					securityClassIsS2(securityClass) &&
 					!!this.driver.securityManager2
 				) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `Endpoint ${endpoint.index} interview: Security S2`,
+						level: "silly",
+					});
+
 					const action = await interviewEndpoint(
 						endpoint,
 						CommandClasses["Security 2"],
@@ -1867,6 +2049,12 @@ protocol version:      ${this.protocolVersion}`;
 					securityClass === SecurityClass.S0_Legacy &&
 					!!this.driver.securityManager
 				) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `Endpoint ${endpoint.index} interview: Security S0`,
+						level: "silly",
+					});
+
 					const action = await interviewEndpoint(
 						endpoint,
 						CommandClasses.Security,
@@ -1875,15 +2063,110 @@ protocol version:      ${this.protocolVersion}`;
 				}
 			}
 
-			if (
-				endpoint.supportsCC(CommandClasses.Security) &&
-				// The root endpoint has been interviewed, so we know if the device supports security
-				this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
-				// Only interview SecurityCC if the network key was set
-				this.driver.securityManager
-			) {
-				// Security is always supported *securely*
-				endpoint.addCC(CommandClasses.Security, { secure: true });
+			// It has been found that legacy nodes do not always advertise the S0 Command Class in their Multi
+			// Channel Capability Report and still accept all their Command Class using S0 encapsulation.
+			// A controlling node SHOULD try to control End Points with S0 encapsulation even if S0 is not
+			// listed in the Multi Channel Capability Report.
+
+			const endpointMissingS0 =
+				securityClass === SecurityClass.S0_Legacy &&
+				this.supportsCC(CommandClasses.Security) &&
+				!endpoint.supportsCC(CommandClasses.Security);
+
+			if (endpointMissingS0) {
+				// Define which CCs we can use to test this - and if supported, how
+				const possibleTests: {
+					ccId: CommandClasses;
+					// The test must return a truthy value if the check was successful
+					test: () => Promise<unknown>;
+				}[] = [
+					{
+						ccId: CommandClasses["Z-Wave Plus Info"],
+						test: () =>
+							endpoint.commandClasses["Z-Wave Plus Info"].get(),
+					},
+					{
+						ccId: CommandClasses["Binary Switch"],
+						test: () =>
+							endpoint.commandClasses["Binary Switch"].get(),
+					},
+					{
+						ccId: CommandClasses["Binary Sensor"],
+						test: () =>
+							endpoint.commandClasses["Binary Sensor"].get(),
+					},
+					{
+						ccId: CommandClasses["Multilevel Switch"],
+						test: () =>
+							endpoint.commandClasses["Multilevel Switch"].get(),
+					},
+					{
+						ccId: CommandClasses["Multilevel Sensor"],
+						test: () =>
+							endpoint.commandClasses["Multilevel Sensor"].get(),
+					},
+					// TODO: add other tests if necessary
+				];
+
+				const foundTest = possibleTests.find((t) =>
+					endpoint.supportsCC(t.ccId),
+				);
+				if (foundTest) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Testing if it accepts secure commands anyways.`,
+						level: "silly",
+					});
+
+					const { ccId, test } = foundTest;
+
+					// Temporarily mark the CC as secure so we can use it to test
+					endpoint.addCC(ccId, { secure: true });
+
+					// Perform the test and treat errors as negative results
+					const success = !!(await test().catch(() => false));
+
+					if (success) {
+						this.driver.controllerLog.logNode(this.nodeId, {
+							endpoint: endpoint.index,
+							message: `Endpoint ${endpoint.index} accepts/expects secure commands`,
+							level: "silly",
+						});
+						// Mark all endpoint CCs as secure
+						for (const [ccId] of endpoint.getCCs()) {
+							endpoint.addCC(ccId, { secure: true });
+						}
+					} else {
+						this.driver.controllerLog.logNode(this.nodeId, {
+							endpoint: endpoint.index,
+							message: `Endpoint ${endpoint.index} is actually not using S0`,
+							level: "silly",
+						});
+						// Mark the CC as not secure again
+						endpoint.addCC(ccId, { secure: false });
+					}
+				} else {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Found no way to test if accepts secure commands anyways.`,
+						level: "silly",
+					});
+				}
+			}
+
+			// This intentionally checks for Version CC support on the root device.
+			// Endpoints SHOULD not support this CC, but we still need to query their
+			// CCs that the root device may or may not support
+			if (this.supportsCC(CommandClasses.Version)) {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message: `Endpoint ${endpoint.index} interview: ${getCCName(
+						CommandClasses.Version,
+					)}`,
+					level: "silly",
+				});
+
+				await interviewEndpoint(endpoint, CommandClasses.Version, true);
 			}
 
 			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
@@ -1899,6 +2182,7 @@ protocol version:      ${this.protocolVersion}`;
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph([
 				CommandClasses.Security,
 				CommandClasses["Security 2"],
+				CommandClasses.Version,
 			]);
 			let endpointInterviewOrder: CommandClasses[];
 			try {
@@ -1913,8 +2197,26 @@ protocol version:      ${this.protocolVersion}`;
 				);
 			}
 
+			this.driver.controllerLog.logNode(this.nodeId, {
+				endpoint: endpoint.index,
+				message: `Endpoint ${
+					endpoint.index
+				} interview order: ${endpointInterviewOrder
+					.map((cc) => `\n· ${getCCName(cc)}`)
+					.join("")}`,
+				level: "silly",
+			});
+
 			// Now that we know the correct order, do the interview in sequence
 			for (const cc of endpointInterviewOrder) {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message: `Endpoint ${endpoint.index} interview: ${getCCName(
+						cc,
+					)}`,
+					level: "silly",
+				});
+
 				const action = await interviewEndpoint(endpoint, cc);
 				if (action === "continue") continue;
 				else if (typeof action === "boolean") return action;
@@ -1923,6 +2225,12 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Continue with the application CCs for the root endpoint
 		for (const cc of rootInterviewOrderAfterEndpoints) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`Root device interview: ${getCCName(cc)}`,
+				"silly",
+			);
+
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
@@ -2986,6 +3294,11 @@ protocol version:      ${this.protocolVersion}`;
 			// This is a known notification (status or event)
 			const notificationName = notificationConfig.name;
 
+			this.driver.controllerLog.logNode(this.id, {
+				message: `[handleNotificationReport] notificationName: ${notificationName}`,
+				level: "silly",
+			});
+
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
 				const valueConfig = notificationConfig.lookupValue(prevValue);
@@ -3035,6 +3348,25 @@ protocol version:      ${this.protocolVersion}`;
 
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
+
+			if (valueConfig) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[handleNotificationReport] valueConfig:
+  label: ${valueConfig.label}
+  ${
+		valueConfig.type === "event"
+			? "type: event"
+			: `type: state
+  variableName: ${valueConfig.variableName}`
+  }`,
+					level: "silly",
+				});
+			} else {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[handleNotificationReport] valueConfig: undefined`,
+					level: "silly",
+				});
+			}
 
 			// Perform some heuristics on the known notification
 			this.handleKnownNotification(command);
@@ -3090,6 +3422,10 @@ protocol version:      ${this.protocolVersion}`;
 				allowIdleReset &&
 				!!this._deviceConfig?.compat?.forceNotificationIdleReset
 			) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[handleNotificationReport] scheduling idle reset`,
+					level: "silly",
+				});
 				this.scheduleNotificationIdleReset(valueId, () =>
 					setStateIdle(value),
 				);

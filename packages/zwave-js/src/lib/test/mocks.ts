@@ -179,6 +179,12 @@ export function createEmptyMockDriver() {
 			},
 		),
 		configManager: new ConfigManager(),
+		getLogConfig: () => {
+			return {
+				enabled: false,
+				level: "info",
+			};
+		},
 	};
 	ret.sendCommand.mockImplementation(async (command, options) => {
 		const msg = new SendDataRequest(ret as unknown as Driver, {

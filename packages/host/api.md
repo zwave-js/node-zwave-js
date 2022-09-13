@@ -68,7 +68,7 @@ export interface NodeSchedulePollOptions {
 // Warning: (ae-missing-release-tag) "TestingHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type TestingHost = Overwrite<ZWaveApplicationHost, {
+export type TestingHost = Overwrite<Omit<ZWaveApplicationHost, "__internalIsMockNode">, {
     nodes: ThrowingMap<number, IZWaveNode>;
 }>;
 
@@ -97,6 +97,8 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 //
 // @public
 export interface ZWaveHost {
+    // (undocumented)
+    __internalIsMockNode?: boolean;
     // (undocumented)
     getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
     // (undocumented)

@@ -1,0 +1,17 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "45653WB / ZW4102",
+	"description": "Plug-in 1-Outlet Switch With Energy, 300S",
+	"devices": [
+		{
+			"productType": "0x5250",
+			"productId": "0x3031",
+			"zwaveAllianceId": 1225
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

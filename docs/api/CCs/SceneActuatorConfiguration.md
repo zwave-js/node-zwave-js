@@ -11,7 +11,7 @@ async set(
 	sceneId: number,
 	dimmingDuration?: Duration | string,
 	level?: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getActive`
