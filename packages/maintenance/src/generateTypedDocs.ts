@@ -340,7 +340,8 @@ async function processCCDocFile(
 	if (!APIClass) return;
 
 	const ccId = getCommandClassFromClassDeclaration(
-		file.compilerNode,
+		// FIXME: there seems to be some discrepancy between ts-morph's bundled typescript and our typescript
+		file.compilerNode as any,
 		APIClass.compilerNode,
 	);
 	if (ccId == undefined) return;
