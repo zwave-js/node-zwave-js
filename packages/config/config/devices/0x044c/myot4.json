@@ -91,10 +91,15 @@
 		{
 			"#": "95",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Data report frequency",
-			"description": "Amount of minutes between sensors reports (0: continuous reporting)",
+			"label": "Sensor Report Interval",
+			"unit": "minutes",
 			"defaultValue": 0,
-			"unit": "min"
+			"options": [
+				{
+					"label": "Continuous",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "96",
