@@ -64,7 +64,7 @@
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
-    "alcalzone-shared": "^4.0.1"
+    "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "*",

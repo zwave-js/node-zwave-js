@@ -4313,7 +4313,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
     "@zwave-js/transformers": "workspace:*"
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     ansi-colors: ^4.1.3
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
@@ -4342,7 +4342,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     ansi-colors: ^4.1.3
     comment-json: ^4.2.3
     esbuild: 0.14.51
@@ -4374,7 +4374,7 @@ __metadata:
     "@types/prettier": ^2
     "@types/triple-beam": ^1.3.2
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     ansi-colors: ^4.1.3
     dayjs: ^1.11.5
     esbuild: 0.14.51
@@ -4403,7 +4403,7 @@ __metadata:
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     jest-extended: ^2.0.0
     prettier: ^2.7.1
     typescript: 4.7.4
@@ -4453,7 +4453,7 @@ __metadata:
     "@types/yargs": ^17.0.12
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     esbuild: 0.14.51
     esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
@@ -4508,7 +4508,7 @@ __metadata:
     "@zwave-js/serial": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     ansi-colors: ^4.1.3
     chokidar-cli: ^3.0.0
     comment-json: ^4.2.3
@@ -4555,7 +4555,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     ansi-colors: ^4.1.3
     esbuild: 0.14.51
     esbuild-register: ^3.3.3
@@ -4576,7 +4576,7 @@ __metadata:
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.26
     "@types/prettier": ^2
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     esbuild: 0.14.51
     esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
@@ -4749,6 +4749,15 @@ __metadata:
   dependencies:
     debug: ^4.3.2
   checksum: 1c0e05226ca4dd4c73ea5615d964f9db2f3d6b332e3883df381c289d8d8f0e6e9fbe6464ee3d3c00a0f2cb28018a480496d7b931355bf699a42ad085cde27a63
+  languageName: node
+  linkType: hard
+
+"alcalzone-shared@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "alcalzone-shared@npm:4.0.8"
+  dependencies:
+    debug: ^4.3.4
+  checksum: 8ab2bbcb6b1a06e1806001df5eed72438fa27544427fa5b324e23ecefe2e8a3cff6f78bb544fcf2e3028b2cf57d9f5103b3559bdd565005c0538b60adff071bc
   languageName: node
   linkType: hard
 
@@ -12497,7 +12506,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
     "@zwave-js/transformers": "workspace:*"
-    alcalzone-shared: ^4.0.1
+    alcalzone-shared: ^4.0.8
     ansi-colors: ^4.1.3
     esbuild: 0.14.51
     esbuild-register: ^3.3.3

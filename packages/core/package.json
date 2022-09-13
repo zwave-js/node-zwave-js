@@ -63,7 +63,7 @@
   "dependencies": {
     "@alcalzone/jsonl-db": "^2.5.2",
     "@zwave-js/shared": "workspace:*",
-    "alcalzone-shared": "^4.0.1",
+    "alcalzone-shared": "^4.0.8",
     "ansi-colors": "^4.1.3",
     "dayjs": "^1.11.5",
     "logform": "^2.4.2",
