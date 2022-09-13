@@ -68,7 +68,7 @@
     "lint:prettier:fix": "yarn run lint:prettier -w"
   },
   "dependencies": {
-    "@sentry/node": "^7.8.1",
+    "@sentry/node": "^7.12.1",
     "@serialport/stream": "^10.3.0",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
