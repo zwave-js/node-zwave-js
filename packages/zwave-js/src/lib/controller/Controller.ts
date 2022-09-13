@@ -4542,12 +4542,18 @@ ${associatedNodes.join(", ")}`,
 		// Now invoke the service
 		try {
 			return await getAvailableFirmwareUpdates(
-				manufacturerId,
-				productType,
-				productId,
-				firmwareVersion,
-				options?.apiKey ??
-					this.driver.options.apiKeys?.firmwareUpdateService,
+				{
+					manufacturerId,
+					productType,
+					productId,
+					firmwareVersion,
+				},
+				{
+					userAgent: this.driver.userAgent,
+					apiKey:
+						options?.apiKey ??
+						this.driver.options.apiKeys?.firmwareUpdateService,
+				},
 			);
 		} catch (e: any) {
 			let message = `Cannot check for firmware updates for node ${nodeId}: `;

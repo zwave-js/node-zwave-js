@@ -13,6 +13,11 @@ import {
 } from "./visitor-type-check";
 import * as VisitorUtils from "./visitor-utils";
 
+const possibleDecoratorLocations = [
+	path.resolve(path.join(__dirname, "../../build/index.d.ts")),
+	path.resolve(path.join(__dirname, "../../src/index.ts")),
+];
+
 function createArrowFunction(
 	type: ts.Type,
 	rootName: string,
@@ -140,17 +145,20 @@ function isValidateArgsDecorator(
 			modifier.getSourceFile(),
 		);
 
-		if (
-			signature !== undefined &&
-			signature.declaration !== undefined &&
-			VisitorUtils.getCanonicalPath(
+		// if (visitorContext.sourceFile.fileName.endsWith("test1.ts")) debugger;
+
+		if (signature?.declaration && decoratorName === "validateArgs") {
+			const resolvedPath = VisitorUtils.getCanonicalPath(
 				path.resolve(signature.declaration.getSourceFile().fileName),
 				visitorContext,
-			) ===
-				path.resolve(path.join(__dirname, "../../build/index.d.ts")) &&
-			decoratorName === "validateArgs"
-		) {
-			return true;
+			);
+			if (possibleDecoratorLocations.includes(resolvedPath)) {
+				return true;
+			}
+			console.log(
+				"found decorator with name validateArgs but not from the right file: ",
+				resolvedPath,
+			);
 		}
 	}
 	return false;

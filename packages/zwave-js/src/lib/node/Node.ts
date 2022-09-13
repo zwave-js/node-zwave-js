@@ -885,6 +885,9 @@ export class ZWaveNode
 		value: unknown,
 		options?: SetValueAPIOptions,
 	): Promise<boolean> {
+		// Ensure we're dealing with a valid value ID, with no extra properties
+		valueId = normalizeValueID(valueId);
+
 		// Try to retrieve the corresponding CC API
 		const loglevel = this.driver.getLogConfig().level;
 
@@ -1025,6 +1028,9 @@ export class ZWaveNode
 		valueId: ValueID,
 		sendCommandOptions: SendCommandOptions = {},
 	): Promise<T | undefined> {
+		// Ensure we're dealing with a valid value ID, with no extra properties
+		valueId = normalizeValueID(valueId);
+
 		// Try to retrieve the corresponding CC API
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 		if (!endpointInstance) {

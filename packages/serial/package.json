@@ -1,11 +1,21 @@
 {
   "name": "@zwave-js/serial",
-  "version": "10.0.4",
+  "version": "10.1.0",
   "description": "zwave-js: Serialport driver",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "$types": "build/index.d.ts",
+    "$typesVersions": {
+      "*": {
+        "mock": [
+          "build/index_mock.d.ts"
+        ],
+        "safe": [
+          "build/index_safe.d.ts"
+        ]
+      }
+    }
   },
-  "keywords": [],
   "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
@@ -13,17 +23,18 @@
     "./mock": "./build/index_mock.js",
     "./safe": "./build/index_safe.js"
   },
-  "types": "build/index.d.ts",
+  "types": "src/index.ts",
   "typesVersions": {
     "*": {
       "mock": [
-        "build/index_mock.d.ts"
+        "src/index_mock.ts"
       ],
       "safe": [
-        "build/index_safe.d.ts"
+        "src/index_safe.ts"
       ]
     }
   },
+  "keywords": [],
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
@@ -47,10 +58,14 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --verbose",
+    "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty"
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run build --watch --pretty",
+    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix",
+    "lint:prettier": "prettier -c \"src/**/*.ts\"",
+    "lint:prettier:fix": "yarn run lint:prettier -w"
   },
   "dependencies": {
     "@sentry/node": "^7.8.1",
@@ -73,6 +88,7 @@
     "esbuild": "0.14.51",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",
+    "prettier": "^2.7.1",
     "typescript": "4.8.2"
   }
 }

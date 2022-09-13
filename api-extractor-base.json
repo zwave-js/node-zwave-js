@@ -358,8 +358,15 @@
 			"default": {
 				"logLevel": "warning",
 				"addToApiReportFile": true
-			}
+			},
 
+			// Disable this validation at your own risk:  Processing an incorrect file type
+			// may lead to other errors.  Function bodies may incorrectly get emitted in the
+			// .d.ts rollup.
+			"ae-wrong-input-file-type": {
+				// We only replace the types field in package.json when publishing
+				"logLevel": "none"
+			}
 			// "ae-extra-release-tag": {
 			//   "logLevel": "warning",
 			//   "addToApiReportFile": true

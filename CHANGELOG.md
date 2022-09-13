@@ -4,6 +4,19 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.1.0 (2022-09-09)
+### Features
+* Cache responses from firmware update service and queue requests (#5030)
+* Make user agent configurable and pass it to firmware update service (#5031)
+
+### Bugfixes
+* Fixed an issue where `ThermostatModeCC` would save its values twice (#5019)
+* Ensure value ID received from outside code is valid and normalized before passing through (#5036)
+* Merge notification metadata for variables with multiple states (#5037)
+
+### Changes under the hood
+* Added a test to ensure that `SupervisionCCReport` with status `Success` is always final, even if `more updates follow` is incorrectly set to `true` (#4963)
+
 ## 10.0.4 (2022-09-06)
 ### Bugfixes
 * Always query versions of CCs supported on endpoints, regardless of CC support (#5009)

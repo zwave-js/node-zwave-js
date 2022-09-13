@@ -1,0 +1,23 @@
+{
+	"manufacturer": "Fakro",
+	"manufacturerId": "0x0085",
+	"label": "ZRH12",
+	"description": "Remote",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
+}
