@@ -1,6 +1,6 @@
+import got from "@esm2cjs/got";
 import { formatId } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
-import axios from "axios";
 import * as crypto from "crypto";
 import type { Driver } from "../driver/Driver";
 
@@ -54,11 +54,12 @@ export async function sendStatistics(
 	statistics: Record<string, any>,
 ): Promise<boolean | number> {
 	try {
-		const { data } = await axios.post(
-			statisticsUrl,
-			{ data: [statistics] },
-			{ headers: { "x-api-token": apiToken } },
-		);
+		const data = await got
+			.post(statisticsUrl, {
+				json: { data: [statistics] },
+				headers: { "x-api-token": apiToken },
+			})
+			.json();
 		if (isObject(data) && typeof data.success === "boolean") {
 			return data.success;
 		}

@@ -19,6 +19,9 @@ concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  TURBO_FLAGS: "--concurrency=2 --api=http://127.0.0.1:9080 --token=foo --team=me" # The token must match the one in the prepare-env action
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,15 +34,77 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
-      run: yarn build
+      run: yarn build $TURBO_FLAGS
 
-    - name: Cache build output
+    - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload
+
+  # ===================
+
+  # Makes sure that the published packages can be require'd without issues in a production environment
+  test-packages:
+    needs: [build]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
+
+    # Test that the generated packages are ok
+    # I'd love to use yalc or something for this, but it doesn't use yarn pack to pack the tarballs
+    # so we need to fake the install
+    - name: Import main entry points for each package
+      run: |
+        TMP_DIR=$(mktemp -d)
+
+        echo "Re-creating a production environment..."
+        yarn prodpack "$TMP_DIR/.tarballs"
+        cd $TMP_DIR
+
+        npm init -y
+        npm i .tarballs/zwave-js.tgz
+
+        echo "Testing entry points..."
+        # Now all entrypoints should work
+        node -e 'require("zwave-js")'
+        node -e 'require("@zwave-js/cc")'
+        node -e 'require("@zwave-js/config")'
+        node -e 'require("@zwave-js/core")'
+        node -e 'require("@zwave-js/host")'
+        node -e 'require("@zwave-js/nvmedit")'
+        node -e 'require("@zwave-js/serial")'
+        node -e 'require("@zwave-js/shared")'
+        node -e 'require("@zwave-js/testing")'
+        node -e 'require("zwave-js/safe")'
+        node -e 'require("@zwave-js/cc/safe")'
+        node -e 'require("@zwave-js/config/safe")'
+        node -e 'require("@zwave-js/core/safe")'
+        node -e 'require("@zwave-js/host/safe")'
+        node -e 'require("@zwave-js/nvmedit/safe")'
+        node -e 'require("@zwave-js/serial/safe")'
+        node -e 'require("@zwave-js/shared/safe")'
 
   # ===================
 
@@ -55,16 +120,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Download cached build output
+    - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
 
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Run linters
-      run: yarn run lint
+      run: yarn run lint $TURBO_FLAGS
 
     - name: Prepare lint auto-fix patch
       if: |
@@ -73,8 +139,9 @@ jobs:
       id: lint
       run: |
         # Run all lint commands and abort if one has unfixable errors
-        yarn run lint:ts --fix
-        yarn run lint:configjson -w
+        yarn run lint:ts:fix $TURBO_FLAGS
+        yarn run lint:prettier:fix $TURBO_FLAGS
+        yarn run lint:configjson:fix $TURBO_FLAGS
 
         git diff --name-only || true
         if ! git diff --quiet ; then
@@ -110,19 +177,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Download cached build output
+    - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
 
-    - name: Lint config files
-      run: yarn run lint:config
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Lint Z-Wave specifics
-      run: yarn run lint:zwave
+    - name: Lint config files and Z-Wave specifics
+      run: yarn run lint:zwave $TURBO_FLAGS
 
   # ===================
   # Runs unit tests on all supported node versions and OSes
@@ -139,38 +204,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Download cached build output
+    - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
 
-    # Test that the generated packages are ok
-    - name: Import main entry points for each package
-      run: |
-        node -e 'require("zwave-js")'
-        node -e 'require("@zwave-js/cc")'
-        node -e 'require("@zwave-js/config")'
-        node -e 'require("@zwave-js/core")'
-        node -e 'require("@zwave-js/host")'
-        node -e 'require("@zwave-js/maintenance")'
-        node -e 'require("@zwave-js/nvmedit")'
-        node -e 'require("@zwave-js/serial")'
-        node -e 'require("@zwave-js/shared")'
-        node -e 'require("@zwave-js/testing")'
-        node -e 'require("zwave-js/safe")'
-        node -e 'require("@zwave-js/cc/safe")'
-        node -e 'require("@zwave-js/config/safe")'
-        node -e 'require("@zwave-js/core/safe")'
-        node -e 'require("@zwave-js/host/safe")'
-        node -e 'require("@zwave-js/nvmedit/safe")'
-        node -e 'require("@zwave-js/serial/safe")'
-        node -e 'require("@zwave-js/shared/safe")'
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run component tests
-      run: yarn run test:ci
+      run: yarn run test:ci $TURBO_FLAGS
       env:
         CI: true
 
@@ -192,16 +236,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Download cached build output
+    - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
 
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Generate API report
-      run: yarn run extract-api
+      run: yarn run extract-api $TURBO_FLAGS
 
     - name: Show changes
       if: failure()
@@ -214,9 +259,7 @@ jobs:
         echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
         echo "Please run" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "yarn clean" >> $GITHUB_STEP_SUMMARY
-        echo "yarn build" >> $GITHUB_STEP_SUMMARY
-        echo "yarn extract-api --local" >> $GITHUB_STEP_SUMMARY
+        echo "yarn accept-api" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
@@ -240,13 +283,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Download cached build output
-      uses: ./.github/actions/build-cache-download
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
 
     - name: Update CC table # (maybe)
       uses: ./.github/actions/gh-cc-table
@@ -274,13 +321,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Download cached build output
-      uses: ./.github/actions/build-cache-download
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
 
     - name: Update overview
       uses: ./.github/actions/toLogEntry
@@ -339,7 +390,7 @@ jobs:
       github.event_name == 'push' &&
       startsWith(github.ref, 'refs/tags/v')
 
-    needs: [lint, lint-zwave, unit-tests]
+    needs: [lint, lint-zwave, unit-tests, test-packages]
 
     runs-on: ubuntu-latest
     strategy:
@@ -350,13 +401,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Download cached build output
-      uses: ./.github/actions/build-cache-download
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
 
     - name: Extract the version and commit body from the tag
       id: extract_release

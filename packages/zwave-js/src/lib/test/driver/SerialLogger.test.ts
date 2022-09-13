@@ -2,10 +2,10 @@ import {
 	createDefaultTransportFormat,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import { SerialLogger } from "@zwave-js/serial";
 import { assertMessage, SpyTransport } from "@zwave-js/testing";
 import colors from "ansi-colors";
 import { pseudoRandomBytes } from "crypto";
-import { SerialLogger } from "./Logger";
 
 describe("lib/log/Serial =>", () => {
 	let serialLogger: SerialLogger;

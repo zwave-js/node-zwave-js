@@ -32,15 +32,15 @@ import type { DeferredPromise } from 'alcalzone-shared/deferred-promise';
 import type { DeviceConfig } from '@zwave-js/config';
 import { Duration } from '@zwave-js/core/safe';
 import { DurationUnit } from '@zwave-js/core/safe';
-import type { EntryControlDataTypes } from '@zwave-js/cc';
-import type { EntryControlEventTypes } from '@zwave-js/cc';
+import { EntryControlDataTypes } from '@zwave-js/cc/safe';
+import { EntryControlEventTypes } from '@zwave-js/cc/safe';
 import { extractFirmware } from '@zwave-js/core';
 import { FileSystem } from '@zwave-js/host/safe';
 import type { FileSystem as FileSystem_2 } from '@zwave-js/host';
 import { Firmware } from '@zwave-js/core';
 import { FirmwareFileFormat } from '@zwave-js/core';
 import { FirmwareUpdateCapabilities } from '@zwave-js/cc';
-import type { FirmwareUpdateStatus } from '@zwave-js/cc';
+import { FirmwareUpdateStatus } from '@zwave-js/cc/safe';
 import { FLiRS } from '@zwave-js/core/safe';
 import { FLiRS as FLiRS_2 } from '@zwave-js/core';
 import { formatId } from '@zwave-js/shared/safe';
@@ -75,18 +75,19 @@ import { MockNodeBehavior } from '@zwave-js/testing';
 import { MockPortBinding } from '@zwave-js/serial/mock';
 import { MulticastCC } from '@zwave-js/core';
 import { MulticastDestination } from '@zwave-js/core/safe';
-import type { MultilevelSwitchCommand } from '@zwave-js/cc';
+import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_MAX } from '@zwave-js/core/safe';
 import { NodeStatus } from '@zwave-js/core/safe';
 import type { NodeStatus as NodeStatus_2 } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core/safe';
 import { NodeType as NodeType_2 } from '@zwave-js/core';
-import type { NotificationCCReport } from '@zwave-js/cc';
+import type { NotificationCCReport } from '@zwave-js/cc/src';
 import { num2hex } from '@zwave-js/shared/safe';
 import { parseQRCodeString } from '@zwave-js/core';
-import { Powerlevel } from '@zwave-js/cc';
-import type { PowerlevelTestStatus } from '@zwave-js/cc';
+import { Powerlevel } from '@zwave-js/cc/safe';
+import { Powerlevel as Powerlevel_2 } from '@zwave-js/cc';
+import { PowerlevelTestStatus } from '@zwave-js/cc/safe';
 import { ProtocolDataRate } from '@zwave-js/core/safe';
 import type { ProtocolDataRate as ProtocolDataRate_2 } from '@zwave-js/core';
 import { protocolDataRateToString } from '@zwave-js/core';
@@ -301,6 +302,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     updateLogConfig(config: DeepPartial<LogConfig>): void;
     updateOptions(options: DeepPartial<EditableZWaveOptions>): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    updateUserAgent(components: Record<string, string | null | undefined>): void;
+    get userAgent(): string;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     waitForCommand<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, timeout: number): Promise<T>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -324,7 +328,9 @@ export { DurationUnit }
 // Warning: (ae-missing-release-tag) "EditableZWaveOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type EditableZWaveOptions = Pick<ZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences" | "preserveUnknownValues">;
+export type EditableZWaveOptions = Pick<ZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences" | "preserveUnknownValues"> & {
+    userAgent?: Record<string, string | null | undefined>;
+};
 
 // Warning: (ae-missing-release-tag) "Endpoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -366,6 +372,10 @@ export class Endpoint implements IZWaveEndpoint {
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "IZWaveEndpoint"
     readonly virtual = false;
 }
+
+export { EntryControlDataTypes }
+
+export { EntryControlEventTypes }
 
 // Warning: (ae-missing-release-tag) "ExclusionOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -411,6 +421,8 @@ export type FirmwareUpdateInfo = {
     changelog: string;
     files: FirmwareUpdateFileInfo[];
 };
+
+export { FirmwareUpdateStatus }
 
 export { FLiRS }
 
@@ -602,6 +614,8 @@ export { MessagePriority }
 
 export { MessageType }
 
+export { MultilevelSwitchCommand }
+
 export { NODE_ID_BROADCAST }
 
 export { NODE_ID_MAX }
@@ -651,6 +665,10 @@ export interface PlannedProvisioningEntry {
     securityClasses: SecurityClass[];
     status?: ProvisioningEntryStatus;
 }
+
+export { Powerlevel }
+
+export { PowerlevelTestStatus }
 
 export { ProtocolDataRate }
 
@@ -1154,7 +1172,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get supportsSecurity(): boolean | undefined;
     // (undocumented)
     get supportsWakeUpOnDemand(): boolean | undefined;
-    testPowerlevel(testNodeId: number, powerlevel: Powerlevel, healthCheckTestFrameCount: number, onProgress?: (acknowledged: number, total: number) => void): Promise<number>;
+    testPowerlevel(testNodeId: number, powerlevel: Powerlevel_2, healthCheckTestFrameCount: number, onProgress?: (acknowledged: number, total: number) => void): Promise<number>;
     waitForWakeup(): Promise<void>;
     // (undocumented)
     get zwavePlusNodeType(): ZWavePlusNodeType | undefined;
@@ -1419,6 +1437,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         nonce: number;
         serialAPIStarted: number;
     };
+    userAgent?: Record<string, string>;
 }
 
 

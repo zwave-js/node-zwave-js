@@ -7,26 +7,6 @@
 			{ "transform": "ts-nameof", "type": "raw" }
 		]
 	},
-	"references": [
-		{
-			"path": "../core/tsconfig.build.json"
-		},
-		{
-			"path": "../host/tsconfig.build.json"
-		},
-		{
-			"path": "../serial/tsconfig.build.json"
-		},
-		{
-			"path": "../shared/tsconfig.build.json"
-		},
-		{
-			"path": "../testing/tsconfig.build.json"
-		},
-		{
-			"path": "../transformers/tsconfig.build.json"
-		}
-	],
 	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

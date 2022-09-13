@@ -37,6 +37,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { WakeUpCommand } from "../lib/_Types";
@@ -327,6 +328,7 @@ interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(WakeUpCommand.IntervalSet)
+@useSupervision()
 export class WakeUpCCIntervalSet extends WakeUpCC {
 	public constructor(
 		host: ZWaveHost,

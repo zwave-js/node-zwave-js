@@ -1,22 +1,30 @@
 {
   "name": "@zwave-js/nvmedit",
-  "version": "10.0.0",
+  "version": "10.1.0",
   "description": "zwave-js: library to edit NVM backups",
-  "publishConfig": {
-    "access": "public"
-  },
   "keywords": [],
+  "publishConfig": {
+    "access": "public",
+    "$types": "build/index.d.ts",
+    "$typesVersions": {
+      "*": {
+        "safe": [
+          "build/index_safe.d.ts"
+        ]
+      }
+    }
+  },
   "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
     "./package.json": "./package.json",
     "./safe": "./build/index_safe.js"
   },
-  "types": "build/index.d.ts",
+  "types": "src/index.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "build/index_safe.d.ts"
+        "src/index_safe.ts"
       ]
     }
   },
@@ -54,21 +62,27 @@
     "yargs": "^17.5.1"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --verbose",
+    "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty"
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run build --watch --pretty",
+    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix",
+    "lint:prettier": "prettier -c \"src/**/*.ts\"",
+    "lint:prettier:fix": "yarn run lint:prettier -w"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
-    "@types/node": "^14.18.23",
-    "@types/semver": "^7.3.10",
-    "@types/yargs": "^17.0.10",
+    "@types/node": "^14.18.26",
+    "@types/prettier": "^2",
+    "@types/semver": "^7.3.12",
+    "@types/yargs": "^17.0.12",
     "esbuild": "0.14.51",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",
+    "prettier": "^2.7.1",
     "typescript": "4.7.4"
   }
 }

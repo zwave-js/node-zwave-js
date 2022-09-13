@@ -22,6 +22,7 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
+import { wait } from "alcalzone-shared/async";
 import { randomBytes } from "crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
@@ -294,13 +295,32 @@ export class SecurityCC extends CommandClass {
 			direction: "outbound",
 		});
 
-		const resp = await api.getSupportedCommands();
-		if (!resp) {
+		let supportedCCs: CommandClasses[] | undefined;
+		let controlledCCs: CommandClasses[] | undefined;
+
+		// Try up to 3 times on the root device. We REALLY don't want a spurious timeout or collision to cause us to discard a known good security class
+		const MAX_ATTEMPTS = this.endpointIndex === 0 ? 3 : 1;
+		for (let attempts = 1; attempts <= MAX_ATTEMPTS; attempts++) {
+			const resp = await api.getSupportedCommands();
+			if (resp) {
+				supportedCCs = resp.supportedCCs;
+				controlledCCs = resp.controlledCCs;
+				break;
+			} else if (attempts < MAX_ATTEMPTS) {
+				applHost.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Querying securely supported commands (S0), attempt ${attempts}/${MAX_ATTEMPTS} failed. Retrying in 500ms...`,
+					level: "warn",
+				});
+				await wait(500);
+			}
+		}
+
+		if (!supportedCCs || !controlledCCs) {
 			if (node.hasSecurityClass(SecurityClass.S0_Legacy) === true) {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message:
-						"Querying securely supported commands (S0) timed out",
+					message: "Querying securely supported commands (S0) failed",
 					level: "warn",
 				});
 				// TODO: Abort interview?
@@ -320,11 +340,11 @@ export class SecurityCC extends CommandClass {
 			"received secure commands (S0)",
 			"supported CCs:",
 		];
-		for (const cc of resp.supportedCCs) {
+		for (const cc of supportedCCs) {
 			logLines.push(`· ${getCCName(cc)}`);
 		}
 		logLines.push("controlled CCs:");
-		for (const cc of resp.controlledCCs) {
+		for (const cc of controlledCCs) {
 			logLines.push(`· ${getCCName(cc)}`);
 		}
 		applHost.controllerLog.logNode(node.id, {
@@ -333,17 +353,11 @@ export class SecurityCC extends CommandClass {
 		});
 
 		// Remember which commands are supported securely
-		for (const cc of resp.supportedCCs) {
-			endpoint.addCC(cc, {
-				isSupported: true,
-				secure: true,
-			});
+		for (const cc of supportedCCs) {
+			endpoint.addCC(cc, { isSupported: true, secure: true });
 		}
-		for (const cc of resp.controlledCCs) {
-			endpoint.addCC(cc, {
-				isControlled: true,
-				secure: true,
-			});
+		for (const cc of controlledCCs) {
+			endpoint.addCC(cc, { isControlled: true, secure: true });
 		}
 
 		// We know for sure that the node is included securely

@@ -14,7 +14,7 @@ const lint = () =>
 		// lintCCConstructors(),
 		lintCCValidateArgs(),
 	]);
-const prebuild = () =>
+const codegen = () =>
 	Promise.all([
 		generateCCAPIInterface(),
 		generateCCValuesInterface(),
@@ -26,8 +26,8 @@ const prebuild = () =>
 		await lint();
 	}
 
-	if (argv.includes("prebuild")) {
-		await prebuild();
+	if (argv.includes("codegen")) {
+		await codegen();
 	}
 })().catch((e) => {
 	console.error(red(e.message));

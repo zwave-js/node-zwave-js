@@ -29,6 +29,7 @@ import {
 	TransportServiceCCSegmentWait,
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	VersionCommand,
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
 } from "@zwave-js/cc";
@@ -440,6 +441,16 @@ export class Driver
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+		if (options?.userAgent) {
+			if (!isObject(options.userAgent)) {
+				throw new ZWaveError(
+					`The userAgent property must be an object!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+
+			this.updateUserAgent(options.userAgent);
+		}
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
@@ -814,11 +825,22 @@ export class Driver
 		) as ZWaveOptions;
 		checkOptions(newOptions);
 
+		if (options.userAgent && !isObject(options.userAgent)) {
+			throw new ZWaveError(
+				`The userAgent property must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
 		// All good, update the options
 		this.options = newOptions;
 
 		if (options.logConfig) {
 			this.updateLogConfig(options.logConfig);
+		}
+
+		if (options.userAgent) {
+			this.updateUserAgent(options.userAgent);
 		}
 	}
 
@@ -1649,6 +1671,53 @@ export class Driver
 		| Pick<AppInfo, "applicationName" | "applicationVersion">
 		| undefined;
 
+	private userAgentComponents = new Map<string, string>();
+
+	/**
+	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
+	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
+	 */
+	public updateUserAgent(
+		components: Record<string, string | null | undefined>,
+	): void {
+		// Remove everything that's not a letter, number, . or -
+		function normalize(str: string): string {
+			return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
+		}
+		for (let [name, version] of Object.entries(components)) {
+			if (name === "node-zwave-js") continue;
+
+			name = normalize(name);
+
+			if (version == undefined) {
+				this.userAgentComponents.delete(name);
+			} else {
+				version = normalize(version);
+				this.userAgentComponents.set(name, version);
+			}
+		}
+
+		this._userAgent = `node-zwave-js/${libVersion}`;
+		// Augment the user agent string with information passed by the application(s)
+		for (const [name, version] of this.userAgentComponents) {
+			this._userAgent += ` ${name}/${version}`;
+		}
+		// Default to the information for statistics if they are enabled but no user agent was configured
+		if (
+			this.userAgentComponents.size === 0 &&
+			this.statisticsAppInfo &&
+			this.statisticsAppInfo.applicationName !== "node-zwave-js"
+		) {
+			this._userAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
+		}
+	}
+
+	private _userAgent: string = `node-zwave-js/${libVersion}`;
+	/** Returns the user agent string used for service requests */
+	public get userAgent(): string {
+		return this._userAgent;
+	}
+
 	/**
 	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
 	 * inform your users before enabling statistics.
@@ -1657,7 +1726,6 @@ export class Driver
 		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
 	): void {
 		if (this._statisticsEnabled) return;
-		this._statisticsEnabled = true;
 
 		if (
 			!isObject(appInfo) ||
@@ -1680,6 +1748,7 @@ export class Driver
 			);
 		}
 
+		this._statisticsEnabled = true;
 		this.statisticsAppInfo = appInfo;
 
 		// If we're already ready, send statistics
@@ -1830,13 +1899,15 @@ export class Driver
 	}
 
 	/** This is called when a node's firmware was updated */
-	private onNodeFirmwareUpdated(
+	private async onNodeFirmwareUpdated(
 		node: ZWaveNode,
 		status: FirmwareUpdateStatus,
 		waitTime?: number,
-	): void {
+	): Promise<void> {
 		// Don't do this for non-successful updates
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
+
+		// TODO: Add support for delayed activation
 
 		// Wait the specified time plus a bit, so the device is actually ready to use
 		if (!waitTime) {
@@ -1849,6 +1920,38 @@ export class Driver
 		} else {
 			waitTime += 30;
 		}
+
+		if (status === FirmwareUpdateStatus.OK_NoRestart) {
+			// This status MUST not be advertised for target 0.
+			// Other chips should probably advertise this if they aren't mission critical.
+
+			// Treat this as a sign that the device continues working as before
+			this.controllerLog.logNode(
+				node.id,
+				`Firmware updated. No restart or re-interview required. Refreshing version information in ${waitTime} seconds...`,
+			);
+
+			await wait(waitTime * 1000, true);
+			try {
+				const versionAPI = node.commandClasses.Version;
+				await versionAPI.get();
+				if (
+					versionAPI.supportsCommand(VersionCommand.CapabilitiesGet)
+				) {
+					await versionAPI.getCapabilities();
+				}
+				if (
+					versionAPI.supportsCommand(VersionCommand.ZWaveSoftwareGet)
+				) {
+					await versionAPI.getZWaveSoftware();
+				}
+			} catch {
+				// ignore
+			}
+
+			return;
+		}
+
 		this.controllerLog.logNode(
 			node.id,
 			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
@@ -1970,7 +2073,7 @@ export class Driver
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
-	 * Returns 1 if the node claims that it does not support a CC.
+	 * Returns the highest implemented version if the node's CC version is unknown.
 	 * Throws if the CC is not implemented in this library yet.
 	 *
 	 * @param cc The command class whose version should be retrieved
@@ -1988,8 +2091,14 @@ export class Driver
 			endpointIndex,
 		);
 		if (supportedVersion === 0) {
-			// For unsupported CCs use version 1, no matter what
-			return 1;
+			// Unknown, use the highest implemented version
+			const implementedVersion = getImplementedVersion(cc);
+			if (
+				implementedVersion !== 0 &&
+				implementedVersion !== Number.POSITIVE_INFINITY
+			) {
+				return implementedVersion;
+			}
 		} else {
 			// For supported versions find the maximum version supported by both the
 			// node and this library
@@ -2000,11 +2109,11 @@ export class Driver
 			) {
 				return Math.min(supportedVersion, implementedVersion);
 			}
-			throw new ZWaveError(
-				"Cannot retrieve the version of a CC that is not implemented",
-				ZWaveErrorCodes.CC_NotSupported,
-			);
 		}
+		throw new ZWaveError(
+			"Cannot retrieve the version of a CC that is not implemented",
+			ZWaveErrorCodes.CC_NotSupported,
+		);
 	}
 
 	/**
@@ -2554,8 +2663,27 @@ export class Driver
 				}
 
 				// When we have a complete CC, save its values
-				this.persistCCValues(msg.command);
-
+				try {
+					this.persistCCValues(msg.command);
+				} catch (e) {
+					// Indicate invalid payloads with a special CC type
+					if (
+						isZWaveError(e) &&
+						e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+					) {
+						this.driverLog.print(
+							`dropping CC with invalid values${
+								typeof e.context === "string"
+									? ` (Reason: ${e.context})`
+									: ""
+							}`,
+							"warn",
+						);
+						return;
+					} else {
+						throw e;
+					}
+				}
 				// Transport Service CC can be eliminated from the encapsulation stack, since it is always the outermost CC
 				if (isTransportServiceEncapsulation(msg.command)) {
 					msg.command = msg.command.encapsulated;
@@ -3575,6 +3703,7 @@ ${handlers.length} left`,
 	 */
 	public readonly getNextSupervisionSessionId = createWrappingCounter(
 		MAX_SUPERVISION_SESSION_ID,
+		true,
 	);
 
 	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
@@ -4120,17 +4249,19 @@ ${handlers.length} left`,
 			SupervisionCC.mayUseSupervision(this, command)
 		) {
 			const result = await this.sendSupervisedCommand(command, options);
-			if (result?.status === SupervisionStatus.NoSupport) {
-				// The node should support supervision but it doesn't for this command. Remember this
-				SupervisionCC.setCCSupportedWithSupervision(
-					this,
-					command.getEndpoint(this)!,
-					command.ccId,
-					false,
-				);
+			if (result?.status !== SupervisionStatus.NoSupport) {
+				// @ts-expect-error TS doesn't know we've narrowed the return type to match
+				return result;
 			}
-			// @ts-expect-error TS doesn't know we've narrowed the return type to match
-			return result;
+
+			// The node should support supervision but it doesn't for this command. Remember this
+			SupervisionCC.setCCSupportedWithSupervision(
+				this,
+				command.getEndpoint(this)!,
+				command.ccId,
+				false,
+			);
+			// And retry the command without supervision
 		}
 
 		// Fall back to non-supervised commands

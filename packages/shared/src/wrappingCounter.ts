@@ -1,8 +1,12 @@
 /**
  * Creates a counter that starts at 1 and wraps after surpassing `maxValue`.
  * @param maxValue The maximum value that the counter can reach. Must a number where all bits are set to 1.
+ * @param randomSeed Whether the initial value should be randomized. Default: `false`.
  */
-export function createWrappingCounter(maxValue: number): () => number {
+export function createWrappingCounter(
+	maxValue: number,
+	randomSeed: boolean = false,
+): () => number {
 	const ret = (() => {
 		ret.value = (ret.value + 1) & maxValue;
 		if (ret.value === 0) ret.value = 1;
@@ -14,6 +18,6 @@ export function createWrappingCounter(maxValue: number): () => number {
 		// no longer need this
 		value: number;
 	};
-	ret.value = 0;
+	ret.value = randomSeed ? Math.round(Math.random() * maxValue) : 0;
 	return ret;
 }
