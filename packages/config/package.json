@@ -60,7 +60,7 @@
     "lint:zwave": "yarn ts maintenance/lintConfigFiles.ts",
     "ts": "node -r esbuild-register",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
-    "lint:prettier": "prettier -c \"src/**/*.ts\" -c \"config/**/*.json\"",
+    "lint:prettier": "prettier -c \"src/**/*.ts\" \"config/**/*.json\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier:fix": "yarn run lint:prettier -w"
   },

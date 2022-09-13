@@ -21,7 +21,9 @@
 		"lint": {
 			"dependsOn": [],
 			"inputs": [
-				"!(build)/**/*.{ts,json}"
+				// https://github.com/vercel/turborepo/issues/1407
+				":!:build/",
+				"**/*.{ts,json}"
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 			],
 			"outputs": []
@@ -30,7 +32,9 @@
 		"lint:ts": {
 			"dependsOn": [],
 			"inputs": [
-				"!(build)/**/*.{ts,json}"
+				// https://github.com/vercel/turborepo/issues/1407
+				":!:build/",
+				"**/*.{ts,json}"
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 			],
 			"outputs": []
@@ -42,7 +46,9 @@
 		"lint:prettier": {
 			"dependsOn": [],
 			"inputs": [
-				"!(build)/**/*.{ts,json}"
+				// https://github.com/vercel/turborepo/issues/1407
+				":!:build/",
+				"**/*.{ts,json}"
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 			],
 			"outputs": []
