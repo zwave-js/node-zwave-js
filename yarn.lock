@@ -52,14 +52,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/jsonl-db@npm:^2.5.2":
-  version: 2.5.2
-  resolution: "@alcalzone/jsonl-db@npm:2.5.2"
+"@alcalzone/jsonl-db@npm:^2.5.3":
+  version: 2.5.3
+  resolution: "@alcalzone/jsonl-db@npm:2.5.3"
   dependencies:
-    alcalzone-shared: ^4.0.1
+    "@alcalzone/proper-lockfile": ^4.1.3-0
+    alcalzone-shared: ^4.0.3
     fs-extra: ^10.1.0
-    proper-lockfile: ^4.1.2
-  checksum: 06435a422c31ac6c1f29d4c1210f638ee2021d897c34d5a41c7781c540c86d849ffd48e64eb4cee4054eb9a2ec300637299dddec0f4144c6f1a7e198fc2e1335
+  checksum: 7e9d798f2a720772e7273a506274e513de95d80ac3eee458ce02b170deba1ba68bfe09ba2b969f566abe883e20c9a7ec0483e0d96b08768fc3f2e800290dab4c
   languageName: node
   linkType: hard
 
@@ -71,6 +71,17 @@ __metadata:
     execa: ^5.0.0
     fs-extra: ^10.0.1
   checksum: cea838b7cb6a92135a751719cbfeff0608692804127914c9161f525af6e9ab477828f11a2ed0d5fe98c33add229e0c4f3aceb42b1fc03d3ffc6cd3f557cedaa5
+  languageName: node
+  linkType: hard
+
+"@alcalzone/proper-lockfile@npm:^4.1.3-0":
+  version: 4.1.3-0
+  resolution: "@alcalzone/proper-lockfile@npm:4.1.3-0"
+  dependencies:
+    graceful-fs: ^4.2.4
+    retry: ^0.12.0
+    signal-exit: ^3.0.2
+  checksum: c8b1d7c81bd4fdfba8f456d7f1f915a3b043f79402984586542008a6a275a8eec95b4997b4ed10fded8dda73462d31a482be5bbec1b6edec148d4b95cc027d22
   languageName: node
   linkType: hard
 
@@ -4380,7 +4391,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
-    "@alcalzone/jsonl-db": ^2.5.2
+    "@alcalzone/jsonl-db": ^2.5.3
     "@microsoft/api-extractor": "*"
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.26
@@ -4485,7 +4496,7 @@ __metadata:
     "@actions/core": ^1.9.1
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.3
-    "@alcalzone/jsonl-db": ^2.5.2
+    "@alcalzone/jsonl-db": ^2.5.3
     "@alcalzone/release-script": ~3.5.9
     "@babel/core": ^7.18.13
     "@babel/plugin-proposal-class-properties": "*"
@@ -4756,7 +4767,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alcalzone-shared@npm:^4.0.8":
+"alcalzone-shared@npm:^4.0.3, alcalzone-shared@npm:^4.0.8":
   version: 4.0.8
   resolution: "alcalzone-shared@npm:4.0.8"
   dependencies:
@@ -12436,7 +12447,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
-    "@alcalzone/jsonl-db": ^2.5.2
+    "@alcalzone/jsonl-db": ^2.5.3
     "@alcalzone/pak": ^0.8.1
     "@esm2cjs/got": ^12.4.1
     "@esm2cjs/p-queue": ^7.3.0

@@ -61,7 +61,7 @@
     "lint:prettier:fix": "yarn run lint:prettier -w"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^2.5.2",
+    "@alcalzone/jsonl-db": "^2.5.3",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.8",
     "ansi-colors": "^4.1.3",

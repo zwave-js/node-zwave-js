@@ -102,7 +102,7 @@
     "lint:prettier:fix": "yarn run lint:prettier -w"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^2.5.2",
+    "@alcalzone/jsonl-db": "^2.5.3",
     "@alcalzone/pak": "^0.8.1",
     "@esm2cjs/got": "^12.4.1",
     "@esm2cjs/p-queue": "^7.3.0",
