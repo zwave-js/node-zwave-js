@@ -70,7 +70,7 @@
     "nrf-intel-hex": "^1.3.0",
     "reflect-metadata": "^0.1.13",
     "triple-beam": "*",
-    "winston": "^3.8.1",
+    "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
     "winston-transport": "^4.5.0"
   },
