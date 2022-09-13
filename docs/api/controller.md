@@ -382,11 +382,11 @@ interface RouteStatistics {
 <!-- #import ProtocolDataRate from "zwave-js" -->
 
 ```ts
-declare enum ProtocolDataRate {
-	ZWave_9k6 = 1,
-	ZWave_40k = 2,
-	ZWave_100k = 3,
-	LongRange_100k = 4,
+enum ProtocolDataRate {
+	ZWave_9k6 = 0x01,
+	ZWave_40k = 0x02,
+	ZWave_100k = 0x03,
+	LongRange_100k = 0x04,
 }
 ```
 
@@ -853,19 +853,19 @@ Returns the type of the Z-Wave library that is supported by the controller hardw
 <!-- #import ZWaveLibraryTypes from "zwave-js" -->
 
 ```ts
-declare enum ZWaveLibraryTypes {
-	"Unknown" = 0,
-	"Static Controller" = 1,
-	"Controller" = 2,
-	"Enhanced Slave" = 3,
-	"Slave" = 4,
-	"Installer" = 5,
-	"Routing Slave" = 6,
-	"Bridge Controller" = 7,
-	"Device under Test" = 8,
-	"N/A" = 9,
-	"AV Remote" = 10,
-	"AV Device" = 11,
+enum ZWaveLibraryTypes {
+	"Unknown",
+	"Static Controller",
+	"Controller",
+	"Enhanced Slave",
+	"Slave",
+	"Installer",
+	"Routing Slave",
+	"Bridge Controller",
+	"Device under Test",
+	"N/A",
+	"AV Remote",
+	"AV Device",
 }
 ```
 

@@ -3,8 +3,7 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"composite": false,
-		"rootDir": "test/fixtures",
-		"outDir": "test/fixtures",
+		"outDir": "test/build",
 		"declaration": false,
 		"declarationMap": false,
 		"sourceMap": false,
@@ -12,13 +11,5 @@
 		"incremental": false,
 		"experimentalDecorators": true
 	},
-	"references": [
-		{
-			"path": "../maintenance/tsconfig.build.json"
-		},
-		{
-			"path": "./tsconfig.build.json"
-		}
-	],
 	"include": ["test/fixtures/**/*.ts"]
 }

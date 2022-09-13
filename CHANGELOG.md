@@ -4,6 +4,35 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.1.0 (2022-09-09)
+### Features
+* Cache responses from firmware update service and queue requests (#5030)
+* Make user agent configurable and pass it to firmware update service (#5031)
+
+### Bugfixes
+* Fixed an issue where `ThermostatModeCC` would save its values twice (#5019)
+* Ensure value ID received from outside code is valid and normalized before passing through (#5036)
+* Merge notification metadata for variables with multiple states (#5037)
+
+### Changes under the hood
+* Added a test to ensure that `SupervisionCCReport` with status `Success` is always final, even if `more updates follow` is incorrectly set to `true` (#4963)
+
+## 10.0.4 (2022-09-06)
+### Bugfixes
+* Always query versions of CCs supported on endpoints, regardless of CC support (#5009)
+* Avoid unnecessarily repeating tests for S0 support on endpoints (#4993)
+* Automatically retry commands with supervision status `NoSupport`, but without supervision (#5010)
+* Ensure S0 commands are not encapsulated inside S2 (#5012)
+* Fixed a bug which aborted interviews because `CCAPI` instances used a different CC version than the CC instance in charge of the interview in some cases (#5015)
+* Query secure endpoint CCs only once. When no response is received, assume all its known CCs are secure instead of defaulting to unencrypted communication (#5016)
+
+### Config file changes
+* Disable Supervision for Zooz ZSE19 (#5008)
+
+### Changes under the hood
+* Export some indirectly used types (#5011)
+* Add `silly` logging to `Node.translateValueEvent` to diagnose issues with some thermostats (#5017)
+
 ## 10.0.3 (2022-08-31)
 ### Bugfixes
 * Only refresh versions after FW update instead of a full interview when no restart is required (#4973)

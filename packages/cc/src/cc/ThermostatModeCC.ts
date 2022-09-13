@@ -10,8 +10,6 @@ import {
 	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -291,11 +289,18 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			const manufacturerDataLength = (this.payload[0] >>> 5) & 0b111;
+			this.mode = this.payload[0] & 0b11111;
+			if (manufacturerDataLength > 0) {
+				validatePayload(
+					this.payload.length >= 1 + manufacturerDataLength,
+				);
+				this.manufacturerData = this.payload.slice(
+					1,
+					1 + manufacturerDataLength,
+				);
+			}
 		} else {
 			this.mode = options.mode;
 			if ("manufacturerData" in options)
@@ -391,8 +396,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			});
 			this.setValue(applHost, supportedModesValue, supportedModes);
 		}
-
-		return super.persistValues(applHost);
+		return true;
 	}
 
 	@ccValue(ThermostatModeCCValues.thermostatMode)

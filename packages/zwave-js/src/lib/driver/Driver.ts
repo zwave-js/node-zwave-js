@@ -441,6 +441,16 @@ export class Driver
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+		if (options?.userAgent) {
+			if (!isObject(options.userAgent)) {
+				throw new ZWaveError(
+					`The userAgent property must be an object!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+
+			this.updateUserAgent(options.userAgent);
+		}
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
@@ -815,11 +825,22 @@ export class Driver
 		) as ZWaveOptions;
 		checkOptions(newOptions);
 
+		if (options.userAgent && !isObject(options.userAgent)) {
+			throw new ZWaveError(
+				`The userAgent property must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
 		// All good, update the options
 		this.options = newOptions;
 
 		if (options.logConfig) {
 			this.updateLogConfig(options.logConfig);
+		}
+
+		if (options.userAgent) {
+			this.updateUserAgent(options.userAgent);
 		}
 	}
 
@@ -1650,6 +1671,53 @@ export class Driver
 		| Pick<AppInfo, "applicationName" | "applicationVersion">
 		| undefined;
 
+	private userAgentComponents = new Map<string, string>();
+
+	/**
+	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
+	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
+	 */
+	public updateUserAgent(
+		components: Record<string, string | null | undefined>,
+	): void {
+		// Remove everything that's not a letter, number, . or -
+		function normalize(str: string): string {
+			return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
+		}
+		for (let [name, version] of Object.entries(components)) {
+			if (name === "node-zwave-js") continue;
+
+			name = normalize(name);
+
+			if (version == undefined) {
+				this.userAgentComponents.delete(name);
+			} else {
+				version = normalize(version);
+				this.userAgentComponents.set(name, version);
+			}
+		}
+
+		this._userAgent = `node-zwave-js/${libVersion}`;
+		// Augment the user agent string with information passed by the application(s)
+		for (const [name, version] of this.userAgentComponents) {
+			this._userAgent += ` ${name}/${version}`;
+		}
+		// Default to the information for statistics if they are enabled but no user agent was configured
+		if (
+			this.userAgentComponents.size === 0 &&
+			this.statisticsAppInfo &&
+			this.statisticsAppInfo.applicationName !== "node-zwave-js"
+		) {
+			this._userAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
+		}
+	}
+
+	private _userAgent: string = `node-zwave-js/${libVersion}`;
+	/** Returns the user agent string used for service requests */
+	public get userAgent(): string {
+		return this._userAgent;
+	}
+
 	/**
 	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
 	 * inform your users before enabling statistics.
@@ -1658,7 +1726,6 @@ export class Driver
 		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
 	): void {
 		if (this._statisticsEnabled) return;
-		this._statisticsEnabled = true;
 
 		if (
 			!isObject(appInfo) ||
@@ -1681,6 +1748,7 @@ export class Driver
 			);
 		}
 
+		this._statisticsEnabled = true;
 		this.statisticsAppInfo = appInfo;
 
 		// If we're already ready, send statistics
@@ -4181,17 +4249,19 @@ ${handlers.length} left`,
 			SupervisionCC.mayUseSupervision(this, command)
 		) {
 			const result = await this.sendSupervisedCommand(command, options);
-			if (result?.status === SupervisionStatus.NoSupport) {
-				// The node should support supervision but it doesn't for this command. Remember this
-				SupervisionCC.setCCSupportedWithSupervision(
-					this,
-					command.getEndpoint(this)!,
-					command.ccId,
-					false,
-				);
+			if (result?.status !== SupervisionStatus.NoSupport) {
+				// @ts-expect-error TS doesn't know we've narrowed the return type to match
+				return result;
 			}
-			// @ts-expect-error TS doesn't know we've narrowed the return type to match
-			return result;
+
+			// The node should support supervision but it doesn't for this command. Remember this
+			SupervisionCC.setCCSupportedWithSupervision(
+				this,
+				command.getEndpoint(this)!,
+				command.ccId,
+				false,
+			);
+			// And retry the command without supervision
 		}
 
 		// Fall back to non-supervised commands

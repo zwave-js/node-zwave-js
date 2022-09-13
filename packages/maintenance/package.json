@@ -1,11 +1,11 @@
 {
   "name": "@zwave-js/maintenance",
-  "version": "10.0.2",
+  "version": "10.1.0",
   "description": "zwave-js: maintenance scripts",
   "private": true,
   "keywords": [],
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
@@ -29,9 +29,15 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --verbose",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty"
+    "ts": "node -r esbuild-register",
+    "prebuild": "yarn ts src/lintForbiddenImports.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run build --watch --pretty",
+    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix",
+    "lint:prettier": "prettier -c \"src/**/*.ts\"",
+    "lint:prettier:fix": "yarn run lint:prettier -w"
   },
   "devDependencies": {
     "@types/clipboardy": "^2.0.1",
@@ -39,7 +45,7 @@
     "@types/globrex": "^0.1.2",
     "@types/jest": "^27.5.2",
     "@types/node": "^14.18.26",
-    "@types/prettier": "^2.6.4",
+    "@types/prettier": "^2",
     "@types/yargs": "^17.0.12",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
