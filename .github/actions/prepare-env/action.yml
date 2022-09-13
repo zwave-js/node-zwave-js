@@ -23,7 +23,7 @@ runs:
       run: yarn install --immutable
 
     - name: TurboRepo local server
-      uses: felixmosh/turborepo-gh-artifacts@v1.1
+      uses: felixmosh/turborepo-gh-artifacts@v1.1.0
       with:
         repo-token: ${{ inputs.githubToken }}
         server-token: foo
