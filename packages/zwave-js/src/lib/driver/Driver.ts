@@ -1672,7 +1672,7 @@ export class Driver
 
 	private userAgentComponents = new Map<string, string>();
 
-	/** @internal **/
+	/** @internal */
 	public getUserAgentStringAndComponents(
 		components?: Record<string, string | null | undefined>,
 	): [string, Map<string, string>] {
