@@ -3664,71 +3664,71 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/core@npm:7.8.1"
+"@sentry/core@npm:7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/core@npm:7.12.1"
   dependencies:
-    "@sentry/hub": 7.8.1
-    "@sentry/types": 7.8.1
-    "@sentry/utils": 7.8.1
+    "@sentry/hub": 7.12.1
+    "@sentry/types": 7.12.1
+    "@sentry/utils": 7.12.1
     tslib: ^1.9.3
-  checksum: 6fa019f49f4476a0d04b3efbe1d2f5b9ff5be14a5b2bff848ae97f7215113a6e768ac73d670f4d992af3e8defa495dfa31e5a9d3a6a38740f9b780ea088db172
+  checksum: c8cd62220a327bb4f7b1a97503c19b40710da0d880d7b881384e224aa470c983410c836d5dd85a2cd88166301771a0cea3fd2f93b53d17b29e82457282bb7d01
   languageName: node
   linkType: hard
 
-"@sentry/hub@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/hub@npm:7.8.1"
+"@sentry/hub@npm:7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/hub@npm:7.12.1"
   dependencies:
-    "@sentry/types": 7.8.1
-    "@sentry/utils": 7.8.1
+    "@sentry/types": 7.12.1
+    "@sentry/utils": 7.12.1
     tslib: ^1.9.3
-  checksum: a764749e311dd9e71cfe1fe2c6e781009ab4874e506e34615f723e11174a60ac97671b6f89de66cc3a208e64b4616d35901b5b231efe0785f54d60dc783b5014
+  checksum: f6607969a0dd16e6892ec56675a5dadcde20f39a031a39541816ae1a56a65cc4f26b942859c85ce40992c8a0959020bf0c27e4bd68bdc96adcf499ce6f147252
   languageName: node
   linkType: hard
 
-"@sentry/integrations@npm:^7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/integrations@npm:7.8.1"
+"@sentry/integrations@npm:^7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/integrations@npm:7.12.1"
   dependencies:
-    "@sentry/types": 7.8.1
-    "@sentry/utils": 7.8.1
+    "@sentry/types": 7.12.1
+    "@sentry/utils": 7.12.1
     localforage: ^1.8.1
     tslib: ^1.9.3
-  checksum: c95816f6ccbb77a2f54d8da2032d890fd59c5bd1b9d0f28478db9b6c23416eaac2d2c35f03ec92d39b2fbf7c2f59cd587838f0b8c78a6f80358ad5a0569de90b
+  checksum: 51ca3ed345850e841161b5228677236172edf6d36aff99f310d129180bf929e40a434443f21dc9c36b0d1c1ff2ebc75b3bd5b526a930e2830b2100bef4bf41a6
   languageName: node
   linkType: hard
 
-"@sentry/node@npm:^7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/node@npm:7.8.1"
+"@sentry/node@npm:^7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/node@npm:7.12.1"
   dependencies:
-    "@sentry/core": 7.8.1
-    "@sentry/hub": 7.8.1
-    "@sentry/types": 7.8.1
-    "@sentry/utils": 7.8.1
+    "@sentry/core": 7.12.1
+    "@sentry/hub": 7.12.1
+    "@sentry/types": 7.12.1
+    "@sentry/utils": 7.12.1
     cookie: ^0.4.1
     https-proxy-agent: ^5.0.0
     lru_map: ^0.3.3
     tslib: ^1.9.3
-  checksum: 9f45360a94592de0f24cdec7630929e227aef313d0d9ac4e9af3e6530967f113cf2cef93e728a1e33fa637cfeb6d55149c60c65cb2c13ab6f0f6879d9febc0e7
+  checksum: 57a06fb397ce72ff7df10c9397022c4ae109ade63bc3df530ac1be94f2fd3c3ef2b78ae0f2820ce9c52710cb8b44e382cd72d001e6429964bb6e70c7d4901d02
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/types@npm:7.8.1"
-  checksum: b06961923034b46d75a4cc2aef6658d14899f45483ff2c159dee281ab32c1180a5c972bfc5b443deece75ea815f9c7d05f1a77b52b559204dea6cbf8173660a7
+"@sentry/types@npm:7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/types@npm:7.12.1"
+  checksum: 5a60d8c92ecf4f69a5e584441312d42acbc87f7865e78079e8f8757474874b0deae69707f2d0e74ea0e6bf1665b1d7887e201a53154ddfecb2630a0d5a200342
   languageName: node
   linkType: hard
 
-"@sentry/utils@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/utils@npm:7.8.1"
+"@sentry/utils@npm:7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/utils@npm:7.12.1"
   dependencies:
-    "@sentry/types": 7.8.1
+    "@sentry/types": 7.12.1
     tslib: ^1.9.3
-  checksum: 7777e86885513fb5ef7baa22e71f0e4e8cbf8d00db6a00775444c2b3fe8d2935f39756374e058adb99673fb8618e0fb105d2f24f537ed60ce84977e68a2178f2
+  checksum: 22fa506c6e3116ec950a10aaf98929b70264c90fa83bfb4752da779753f312277a44f705c45102ce06b1781d99db2ea4e4e66662d0fde1792e8cae2559e63b5b
   languageName: node
   linkType: hard
 
@@ -4678,7 +4678,7 @@ __metadata:
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
     "@microsoft/api-extractor": "*"
-    "@sentry/node": ^7.8.1
+    "@sentry/node": ^7.12.1
     "@serialport/binding-mock": ^10.2.2
     "@serialport/bindings-interface": "*"
     "@serialport/stream": ^10.3.0
@@ -12577,8 +12577,8 @@ __metadata:
     "@esm2cjs/got": ^12.4.1
     "@esm2cjs/p-queue": ^7.3.0
     "@microsoft/api-extractor": "*"
-    "@sentry/integrations": ^7.8.1
-    "@sentry/node": ^7.8.1
+    "@sentry/integrations": ^7.12.1
+    "@sentry/node": ^7.12.1
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.29
