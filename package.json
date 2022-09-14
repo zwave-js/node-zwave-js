@@ -99,9 +99,9 @@
   "scripts": {
     "w": "chokidar \"packages/**/*.ts\" \"packages/**/{tsconfig,tsconfig.build,package}.json\" {tsconfig,package}.json -i \"**/build\" -i \"**/node_modules\" --initial -c",
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
-    "build": "yarn turbo run build",
-    "watch": "yarn w \"yarn build\"",
-    "clean": "del-cli packages/*/{build,*.tsbuildinfo}",
+    "clean": "yarn turbo run clean",
+    "build": "yarn turbo run clean && yarn turbo run build",
+    "watch": "yarn turbo run clean && yarn w \"yarn turbo run build\"",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
     "test:once": "yarn turbo run test:ts --",
