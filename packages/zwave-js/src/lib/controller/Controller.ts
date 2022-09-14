@@ -4549,10 +4549,9 @@ ${associatedNodes.join(", ")}`,
 					firmwareVersion,
 				},
 				{
-					userAgent: this.driver.getUserAgentStringAndComponents(
+					userAgent: this.driver.getUserAgentStringWithComponents(
 						options?.additionalUserAgentComponents,
-						false,
-					)[0],
+					),
 					apiKey:
 						options?.apiKey ??
 						this.driver.options.apiKeys?.firmwareUpdateService,

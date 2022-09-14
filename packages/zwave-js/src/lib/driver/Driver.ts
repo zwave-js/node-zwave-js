@@ -196,6 +196,7 @@ import {
 	installConfigUpdate,
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
+import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
 import type { EditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
@@ -1672,57 +1673,6 @@ export class Driver
 
 	private userAgentComponents = new Map<string, string>();
 
-	/** @internal */
-	public getUserAgentStringAndComponents(
-		components?: Record<string, string | null | undefined>,
-		allowOverwrite: boolean = true,
-	): [string, Map<string, string>] {
-		if (components === undefined) {
-			return [this._userAgent, this.userAgentComponents];
-		}
-
-		const newUserAgentComponents = { ...this.userAgentComponents };
-		// Remove everything that's not a letter, number, . or -
-		function normalize(str: string): string {
-			return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
-		}
-		for (let [name, version] of Object.entries(components)) {
-			if (name === "node-zwave-js") continue;
-
-			name = normalize(name);
-
-			if (version == undefined) {
-				newUserAgentComponents.delete(name);
-			} else {
-				version = normalize(version);
-				if (name in newUserAgentComponents && !allowOverwrite) {
-					this.driverLog.print(
-						`Cannot overwrite user agent component ${name}`,
-						"warn",
-					);
-					continue;
-				}
-				newUserAgentComponents.set(name, version);
-			}
-		}
-
-		let newUserAgent = `node-zwave-js/${libVersion}`;
-		// Augment the user agent string with information passed by the application(s)
-		for (const [name, version] of newUserAgentComponents) {
-			newUserAgent += ` ${name}/${version}`;
-		}
-		// Default to the information for statistics if they are enabled but no user agent was configured
-		if (
-			this.userAgentComponents.size === 0 &&
-			this.statisticsAppInfo &&
-			this.statisticsAppInfo.applicationName !== "node-zwave-js"
-		) {
-			newUserAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
-		}
-
-		return [newUserAgent, newUserAgentComponents];
-	}
-
 	/**
 	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
 	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
@@ -1730,14 +1680,59 @@ export class Driver
 	public updateUserAgent(
 		components: Record<string, string | null | undefined>,
 	): void {
-		[this._userAgent, this.userAgentComponents] =
-			this.getUserAgentStringAndComponents(components);
+		this.userAgentComponents = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+		);
+		this._userAgent = this.getEffectiveUserAgentString(
+			this.userAgentComponents,
+		);
+	}
+
+	/**
+	 * Returns the effective user agent string for the given components.
+	 * The driver name and version is automatically prepended and the statisticsAppInfo data is automatically appended if no components were given.
+	 */
+	private getEffectiveUserAgentString(
+		components: Map<string, string>,
+	): string {
+		const effectiveComponents = new Map([
+			[libName, libVersion],
+			...components,
+		]);
+		if (
+			effectiveComponents.size === 1 &&
+			this.statisticsAppInfo &&
+			this.statisticsAppInfo.applicationName !== "node-zwave-js"
+		) {
+			effectiveComponents.set(
+				this.statisticsAppInfo.applicationName,
+				this.statisticsAppInfo.applicationVersion,
+			);
+		}
+		return userAgentComponentsToString(effectiveComponents);
 	}
 
 	private _userAgent: string = `node-zwave-js/${libVersion}`;
 	/** Returns the user agent string used for service requests */
 	public get userAgent(): string {
 		return this._userAgent;
+	}
+
+	/** Returns the user agent string combined with the additional components (if given) */
+	public getUserAgentStringWithComponents(
+		components?: Record<string, string | null | undefined>,
+	): string {
+		if (!components || Object.keys(components).length === 0) {
+			return this._userAgent;
+		}
+
+		const merged = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+			false,
+		);
+		return this.getEffectiveUserAgentString(merged);
 	}
 
 	/**
