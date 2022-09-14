@@ -9,11 +9,25 @@
 			// ... but the maintenance prebuild task has dependencies
 			"dependsOn": ["^build"]
 		},
+
 		"codegen": {
 			// Code generation for packages requires the packages' dependencies to be built
 			// and runs after the own prebuild
 			"dependsOn": ["^build", "prebuild"]
 		},
+		"@zwave-js/cc#codegen": {
+			"dependsOn": ["^build", "prebuild"],
+			"outputs": [
+				"src/cc/index.ts",
+				"src/lib/API.ts",
+				"src/lib/Values.ts"
+			]
+		},
+		"@zwave-js/config#codegen": {
+			"dependsOn": ["^build", "prebuild"],
+			"outputs": ["src/LogicParser.ts"]
+		},
+
 		"build": {
 			"dependsOn": ["prebuild", "codegen", "^build"]
 		},
