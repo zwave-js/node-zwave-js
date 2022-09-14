@@ -4660,7 +4660,7 @@ __metadata:
     jest: ^28.1.3
     jest-extended: ^2.0.0
     prettier: ^2.7.1
-    prettier-plugin-organize-imports: ^3.0.0
+    prettier-plugin-organize-imports: ^3.1.1
     reflect-metadata: ^0.1.13
     semver: ^7.3.7
     source-map-support: ^0.5.21
@@ -10228,13 +10228,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-organize-imports@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "prettier-plugin-organize-imports@npm:3.0.0"
+"prettier-plugin-organize-imports@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "prettier-plugin-organize-imports@npm:3.1.1"
   peerDependencies:
+    "@volar/vue-typescript": ">=0.40.2"
     prettier: ">=2.0"
     typescript: ">=2.9"
-  checksum: 6ff49f5532b9c33e0574c9dc10ba9fd990801efb207b640126a0c136dbcb673d2ca131fd5ffd0007a56c2c08d80c0a4b11a179ac5ca86e54445f18df5188c6ca
+  peerDependenciesMeta:
+    "@volar/vue-typescript":
+      optional: true
+  checksum: a5776ddf70ba83990c5f97799a57e9844379226c25c5d3e89c072dce3615575aacc1da9c0870b86dcfd4df80df4194971538765f84a168cbb41d36de81740c30
   languageName: node
   linkType: hard
 
