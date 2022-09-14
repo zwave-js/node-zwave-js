@@ -161,6 +161,61 @@
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "33",
+			"$if": "firmwareVersion >= 1.13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Indicate Operation Mode On Startup"
+		},
+		{
+			"#": "34",
+			"$if": "firmwareVersion >= 1.13",
+			"label": "Relative LED Indicator Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 3
+		},
+		{
+			"#": "35",
+			"$if": "firmwareVersion >= 1.13",
+			"label": "Paddle Behavior (Switch Mode)",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top paddle turns on, Bottom paddle turns off",
+					"value": 0
+				},
+				{
+					"label": "Both paddles toggle",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "36",
+			"$if": "firmwareVersion >= 1.13",
+			"label": "Default Brightness (Manual Control)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Last non-zero brightness",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "37",
+			"$if": "firmwareVersion >= 1.13",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Control Load With Paddle",
+			"defaultValue": 0
 		}
 	],
 	"metadata": {
