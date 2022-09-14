@@ -3329,14 +3329,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/api-extractor-model@npm:7.23.3":
-  version: 7.23.3
-  resolution: "@microsoft/api-extractor-model@npm:7.23.3"
+"@microsoft/api-extractor-model@npm:7.24.0":
+  version: 7.24.0
+  resolution: "@microsoft/api-extractor-model@npm:7.24.0"
   dependencies:
     "@microsoft/tsdoc": 0.14.1
     "@microsoft/tsdoc-config": ~0.16.1
     "@rushstack/node-core-library": 3.51.1
-  checksum: 00ec7a31d1f6d1583c3fcd97b16130bf8570e27cd3be2ecd07cf601b0c91ef63885a55bf068932c5d9278f8a9ab2046dc8305c0047158e6df5e86f5e56e35b77
+  checksum: d683ca227ed79f0bd8725caba190bb281b1f2088602268cbecd5d8dd690c601034c447a35e22f63866f79544f9648bc46631e0d724c3e54bc7438591e1f4312f
   languageName: node
   linkType: hard
 
@@ -3362,11 +3362,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/api-extractor@npm:^7.29.5":
-  version: 7.29.5
-  resolution: "@microsoft/api-extractor@npm:7.29.5"
+"@microsoft/api-extractor@npm:^7.31.0":
+  version: 7.31.0
+  resolution: "@microsoft/api-extractor@npm:7.31.0"
   dependencies:
-    "@microsoft/api-extractor-model": 7.23.3
+    "@microsoft/api-extractor-model": 7.24.0
     "@microsoft/tsdoc": 0.14.1
     "@microsoft/tsdoc-config": ~0.16.1
     "@rushstack/node-core-library": 3.51.1
@@ -3380,7 +3380,7 @@ __metadata:
     typescript: ~4.7.4
   bin:
     api-extractor: bin/api-extractor
-  checksum: f80f5963591384029f71c8db2f3cd32eb098ce4f622e420b695ac947c104612a5a483126428aade638d5d751e840f79e4f36cb0c8e59c363663cf72971937b73
+  checksum: 834b0c534905e0c6cd5312da64dee15c9aa5384aae2dc77b139e136780eec2cabe51d3cd0cb8962f4d54ca40fba0284db374644d0686f11851bb58892ed375b9
   languageName: node
   linkType: hard
 
@@ -4608,7 +4608,7 @@ __metadata:
     "@babel/preset-typescript": ^7.18.6
     "@commitlint/cli": ^17.1.2
     "@commitlint/config-conventional": ^17.1.0
-    "@microsoft/api-extractor": ^7.29.5
+    "@microsoft/api-extractor": ^7.31.0
     "@tsconfig/node14": ^1.0.3
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
