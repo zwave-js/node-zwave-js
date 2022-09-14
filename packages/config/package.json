@@ -89,7 +89,7 @@
     "@types/yargs": "^17.0.12",
     "@zwave-js/maintenance": "workspace:*",
     "comment-json": "^4.2.3",
-    "esbuild": "0.14.51",
+    "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",
     "js-levenshtein": "^1.1.6",
