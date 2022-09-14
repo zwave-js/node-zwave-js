@@ -1,18 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`NVM conversion tests 500 to 700 series JSON conversion ctrlr_backup_500_static_6.8x.json 1`] = `
-Object {
-  "controller": Object {
+{
+  "controller": {
     "applicationData": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
     "applicationVersion": "1.2",
-    "commandClasses": Object {
-      "includedInsecurely": Array [
+    "commandClasses": {
+      "includedInsecurely": [
         33,
         32,
         134,
       ],
-      "includedSecurelyInsecureCCs": Array [],
-      "includedSecurelySecureCCs": Array [],
+      "includedSecurelyInsecureCCs": [],
+      "includedSecurelySecureCCs": [],
     },
     "controllerConfiguration": 60,
     "genericDeviceClass": 2,
@@ -22,18 +22,18 @@ Object {
     "maxNodeId": 4,
     "nodeId": 1,
     "optionalFunctionality": false,
-    "preferredRepeaters": Array [],
+    "preferredRepeaters": [],
     "protocolVersion": "6.07",
     "reservedId": 0,
     "specificDeviceClass": 1,
     "staticControllerNodeId": 1,
     "sucLastIndex": 5,
-    "sucUpdateEntries": Array [
-      Object {
+    "sucUpdateEntries": [
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           159,
@@ -55,11 +55,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           38,
           51,
@@ -74,17 +74,17 @@ Object {
           90,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           159,
@@ -110,8 +110,8 @@ Object {
     "systemState": 0,
   },
   "format": 0,
-  "nodes": Object {
-    "1": Object {
+  "nodes": {
+    "1": {
       "appRouteLock": false,
       "genericDeviceClass": 2,
       "isFrequentListening": false,
@@ -119,7 +119,7 @@ Object {
       "isRouting": false,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         3,
         4,
       ],
@@ -132,25 +132,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 255,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "3": Object {
+    "3": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
       ],
@@ -163,25 +163,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "4": Object {
+    "4": {
       "appRouteLock": false,
       "genericDeviceClass": 8,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         3,
       ],
@@ -194,7 +194,7 @@ Object {
       "specificDeviceClass": 6,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
@@ -206,11 +206,11 @@ Object {
 `;
 
 exports[`NVM conversion tests 500-series, binary to JSON ctrlr_backup_500_static_6.8x.bin 1`] = `
-Object {
-  "controller": Object {
+{
+  "controller": {
     "applicationData": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
     "applicationVersion": "1.2",
-    "commandClasses": Array [
+    "commandClasses": [
       33,
       32,
       134,
@@ -221,16 +221,16 @@ Object {
     "maxNodeId": 4,
     "nodeId": 0,
     "ownHomeId": "0xced44428",
-    "preferredRepeaters": Array [],
+    "preferredRepeaters": [],
     "protocolVersion": "6.07",
     "reservedId": 0,
-    "rfConfig": Object {
-      "powerLevelLow": Array [
+    "rfConfig": {
+      "powerLevelLow": [
         255,
         255,
         255,
       ],
-      "powerLevelNormal": Array [
+      "powerLevelNormal": [
         255,
         255,
         255,
@@ -241,12 +241,12 @@ Object {
     },
     "staticControllerNodeId": 1,
     "sucLastIndex": 5,
-    "sucUpdateEntries": Array [
-      Object {
+    "sucUpdateEntries": [
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           159,
@@ -268,11 +268,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           38,
           51,
@@ -287,17 +287,17 @@ Object {
           90,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           159,
@@ -324,15 +324,15 @@ Object {
     "watchdogStarted": 0,
   },
   "format": 500,
-  "meta": Object {
+  "meta": {
     "firmwareID": 90,
     "library": "static",
     "manufacturerID": 134,
     "productID": 90,
     "productType": 1,
   },
-  "nodes": Object {
-    "1": Object {
+  "nodes": {
+    "1": {
       "appRouteLock": false,
       "genericDeviceClass": 2,
       "isFrequentListening": false,
@@ -340,7 +340,7 @@ Object {
       "isRouting": false,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         3,
         4,
       ],
@@ -353,25 +353,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 255,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "3": Object {
+    "3": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
       ],
@@ -384,25 +384,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "4": Object {
+    "4": {
       "appRouteLock": false,
       "genericDeviceClass": 8,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         3,
       ],
@@ -415,7 +415,7 @@ Object {
       "specificDeviceClass": 6,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
@@ -427,12 +427,12 @@ Object {
 `;
 
 exports[`NVM conversion tests 700-series, binary to JSON ctrlr_backup_700_7.11.bin 1`] = `
-Object {
-  "controller": Object {
+{
+  "controller": {
     "applicationData": "a11d19000200001e3212270efd213a04fa1d00020000000000000000fd39277c022e000100000000000000000199445b8fcb3e537977d642e808b6568700000000000000000000000000000000000000000000008756e008a3cc6f339248ef5d663f50e136e12e8fe7432265349446d6c5541bf3c500be6567027beeb0e7712b11e21ddf53d86f0b134c00a3bdcd24963a89ef0d753a35b3033f64d1b759077a24d59b45da0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
     "applicationVersion": "7.0.0",
-    "commandClasses": Object {
-      "includedInsecurely": Array [
+    "commandClasses": {
+      "includedInsecurely": [
         94,
         85,
         86,
@@ -443,8 +443,8 @@ Object {
         108,
         138,
       ],
-      "includedSecurelyInsecureCCs": Array [],
-      "includedSecurelySecureCCs": Array [],
+      "includedSecurelyInsecureCCs": [],
+      "includedSecurelySecureCCs": [],
     },
     "controllerConfiguration": 60,
     "dcdcConfig": null,
@@ -457,12 +457,12 @@ Object {
     "maxNodeIdLR": null,
     "nodeId": 1,
     "optionalFunctionality": true,
-    "preferredRepeaters": Array [],
+    "preferredRepeaters": [],
     "primaryLongRangeChannelId": null,
     "protocolVersion": "7.11.0",
     "reservedId": 0,
     "reservedIdLR": null,
-    "rfConfig": Object {
+    "rfConfig": {
       "enablePTI": null,
       "maxTXPower": null,
       "measured0dBm": 3.3,
@@ -473,12 +473,12 @@ Object {
     "staticControllerNodeId": 1,
     "sucAwarenessPushNeeded": 0,
     "sucLastIndex": 7,
-    "sucUpdateEntries": Array [
-      Object {
+    "sucUpdateEntries": [
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -493,11 +493,11 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -509,47 +509,47 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 5,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 6,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -567,11 +567,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -590,14 +590,14 @@ Object {
     "systemState": 0,
   },
   "format": 0,
-  "meta": Object {
+  "meta": {
     "deviceFamily": 2047,
     "memoryMapped": true,
     "pageSize": 65536,
     "writeSize": 1,
   },
-  "nodes": Object {
-    "1": Object {
+  "nodes": {
+    "1": {
       "appRouteLock": false,
       "genericDeviceClass": 2,
       "isFrequentListening": false,
@@ -605,7 +605,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
       ],
       "nlwr": null,
@@ -617,14 +617,14 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 2,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "2": Object {
+    "2": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
@@ -632,7 +632,7 @@ Object {
       "isRouting": false,
       "isVirtual": true,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
       ],
       "nlwr": null,
@@ -644,14 +644,14 @@ Object {
       "specificDeviceClass": 2,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": false,
       "supportsSecurity": false,
     },
-    "3": Object {
+    "3": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
@@ -659,7 +659,7 @@ Object {
       "isRouting": false,
       "isVirtual": true,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
       ],
       "nlwr": null,
@@ -671,14 +671,14 @@ Object {
       "specificDeviceClass": 2,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": false,
       "supportsSecurity": false,
     },
-    "4": Object {
+    "4": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
@@ -686,7 +686,7 @@ Object {
       "isRouting": false,
       "isVirtual": true,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
       ],
       "nlwr": null,
@@ -698,14 +698,14 @@ Object {
       "specificDeviceClass": 2,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": false,
       "supportsSecurity": false,
     },
-    "5": Object {
+    "5": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
@@ -713,7 +713,7 @@ Object {
       "isRouting": false,
       "isVirtual": true,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
       ],
       "nlwr": null,
@@ -725,35 +725,35 @@ Object {
       "specificDeviceClass": 2,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": false,
       "supportsSecurity": false,
     },
-    "6": Object {
+    "6": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
         4,
         5,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -763,7 +763,7 @@ Object {
       "specificDeviceClass": 0,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
@@ -775,12 +775,12 @@ Object {
 `;
 
 exports[`NVM conversion tests 700-series, binary to JSON ctrlr_backup_700_7.12.bin 1`] = `
-Object {
-  "controller": Object {
+{
+  "controller": {
     "applicationData": "a11d19000200001e321b9884fdec8bdd380e00020000000000000000fd8e8c480f1700010000000000000000014c72cc54358f3dc9ce70ac752beb3e7a0000000000000000000000000000000000000000000000873206e7a00af5746fbc07ba927a6bde014d36396481ce9cce689ceba3f12841d85ffcc430bddb814dad5874aa73866b6a1361c9802cac47fc4df1627838f5857eb334b1bb0a8565a09d46bb8e722ac7910000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
     "applicationVersion": "7.12.0",
-    "commandClasses": Object {
-      "includedInsecurely": Array [
+    "commandClasses": {
+      "includedInsecurely": [
         94,
         85,
         86,
@@ -791,8 +791,8 @@ Object {
         108,
         138,
       ],
-      "includedSecurelyInsecureCCs": Array [],
-      "includedSecurelySecureCCs": Array [],
+      "includedSecurelyInsecureCCs": [],
+      "includedSecurelySecureCCs": [],
     },
     "controllerConfiguration": 60,
     "dcdcConfig": null,
@@ -805,12 +805,12 @@ Object {
     "maxNodeIdLR": null,
     "nodeId": 1,
     "optionalFunctionality": true,
-    "preferredRepeaters": Array [],
+    "preferredRepeaters": [],
     "primaryLongRangeChannelId": null,
     "protocolVersion": "7.12.0",
     "reservedId": 0,
     "reservedIdLR": null,
-    "rfConfig": Object {
+    "rfConfig": {
       "enablePTI": null,
       "maxTXPower": null,
       "measured0dBm": 3.3,
@@ -821,12 +821,12 @@ Object {
     "staticControllerNodeId": 1,
     "sucAwarenessPushNeeded": 0,
     "sucLastIndex": 21,
-    "sucUpdateEntries": Array [
-      Object {
+    "sucUpdateEntries": [
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -838,11 +838,11 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -854,47 +854,47 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 5,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -906,11 +906,11 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -922,11 +922,11 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -938,11 +938,11 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -954,11 +954,11 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -970,11 +970,11 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -986,11 +986,11 @@ Object {
           138,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 6,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -1007,17 +1007,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 7,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 8,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -1034,11 +1034,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 8,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           108,
           85,
@@ -1046,11 +1046,11 @@ Object {
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 8,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           108,
           85,
@@ -1058,11 +1058,11 @@ Object {
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 9,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -1079,11 +1079,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 10,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -1100,11 +1100,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 11,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -1121,11 +1121,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 12,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -1142,11 +1142,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           86,
@@ -1162,14 +1162,14 @@ Object {
     "systemState": 0,
   },
   "format": 1,
-  "meta": Object {
+  "meta": {
     "deviceFamily": 46,
     "memoryMapped": true,
     "pageSize": 2048,
     "writeSize": 1,
   },
-  "nodes": Object {
-    "1": Object {
+  "nodes": {
+    "1": {
       "appRouteLock": false,
       "genericDeviceClass": 2,
       "isFrequentListening": false,
@@ -1177,7 +1177,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
         8,
         9,
@@ -1194,14 +1194,14 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 12,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "10": Object {
+    "10": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
@@ -1209,7 +1209,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -1225,14 +1225,14 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "11": Object {
+    "11": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
@@ -1240,7 +1240,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -1256,14 +1256,14 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "12": Object {
+    "12": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
@@ -1271,7 +1271,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -1287,14 +1287,14 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "2": Object {
+    "2": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
@@ -1302,7 +1302,7 @@ Object {
       "isRouting": false,
       "isVirtual": true,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
         8,
         9,
@@ -1319,14 +1319,14 @@ Object {
       "specificDeviceClass": 2,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": false,
       "supportsSecurity": false,
     },
-    "3": Object {
+    "3": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
@@ -1334,7 +1334,7 @@ Object {
       "isRouting": false,
       "isVirtual": true,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
         8,
         9,
@@ -1351,14 +1351,14 @@ Object {
       "specificDeviceClass": 2,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": false,
       "supportsSecurity": false,
     },
-    "4": Object {
+    "4": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
@@ -1366,7 +1366,7 @@ Object {
       "isRouting": false,
       "isVirtual": true,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
         8,
         9,
@@ -1383,14 +1383,14 @@ Object {
       "specificDeviceClass": 2,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": false,
       "supportsSecurity": false,
     },
-    "5": Object {
+    "5": {
       "appRouteLock": false,
       "genericDeviceClass": 15,
       "isFrequentListening": false,
@@ -1398,7 +1398,7 @@ Object {
       "isRouting": false,
       "isVirtual": true,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         6,
         8,
       ],
@@ -1411,14 +1411,14 @@ Object {
       "specificDeviceClass": 2,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": false,
       "supportsSecurity": false,
     },
-    "6": Object {
+    "6": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
@@ -1426,7 +1426,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -1442,14 +1442,14 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "8": Object {
+    "8": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
@@ -1457,7 +1457,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -1473,14 +1473,14 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "9": Object {
+    "9": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
@@ -1488,7 +1488,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -1504,7 +1504,7 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
@@ -1516,12 +1516,12 @@ Object {
 `;
 
 exports[`NVM conversion tests 700-series, binary to JSON ctrlr_backup_700_7.15.bin 1`] = `
-Object {
-  "controller": Object {
+{
+  "controller": {
     "applicationData": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
     "applicationVersion": "7.15.4",
-    "commandClasses": Object {
-      "includedInsecurely": Array [
+    "commandClasses": {
+      "includedInsecurely": [
         94,
         34,
         133,
@@ -1539,8 +1539,8 @@ Object {
         108,
         116,
       ],
-      "includedSecurelyInsecureCCs": Array [],
-      "includedSecurelySecureCCs": Array [],
+      "includedSecurelyInsecureCCs": [],
+      "includedSecurelySecureCCs": [],
     },
     "controllerConfiguration": 60,
     "dcdcConfig": 255,
@@ -1558,7 +1558,7 @@ Object {
     "protocolVersion": "7.15.4",
     "reservedId": 0,
     "reservedIdLR": 0,
-    "rfConfig": Object {
+    "rfConfig": {
       "enablePTI": 0,
       "maxTXPower": 14,
       "measured0dBm": 3.3,
@@ -1569,12 +1569,12 @@ Object {
     "staticControllerNodeId": 1,
     "sucAwarenessPushNeeded": null,
     "sucLastIndex": 19,
-    "sucUpdateEntries": Array [
-      Object {
+    "sucUpdateEntries": [
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           34,
           133,
@@ -1593,11 +1593,11 @@ Object {
           159,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [
+        "supportedCCs": [
           37,
           50,
           114,
@@ -1612,11 +1612,11 @@ Object {
           86,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           134,
           114,
@@ -1634,11 +1634,11 @@ Object {
           90,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -1660,11 +1660,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -1686,17 +1686,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           134,
           114,
@@ -1713,57 +1713,57 @@ Object {
           90,
         ],
       },
-      Object {
+      {
         "changeType": 3,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 3,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 3,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           159,
           108,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           159,
           108,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           34,
           133,
@@ -1782,11 +1782,11 @@ Object {
           116,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           34,
           133,
@@ -1805,11 +1805,11 @@ Object {
           116,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 5,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -1831,17 +1831,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 3,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           134,
           114,
@@ -1863,14 +1863,14 @@ Object {
     "systemState": 0,
   },
   "format": 2,
-  "meta": Object {
+  "meta": {
     "deviceFamily": 46,
     "memoryMapped": true,
     "pageSize": 2048,
     "writeSize": 1,
   },
-  "nodes": Object {
-    "1": Object {
+  "nodes": {
+    "1": {
       "appRouteLock": false,
       "genericDeviceClass": 2,
       "isFrequentListening": false,
@@ -1878,7 +1878,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         3,
         5,
       ],
@@ -1891,32 +1891,32 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 16,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "2": Object {
+    "2": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           3,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         3,
         5,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -1928,32 +1928,32 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "3": Object {
+    "3": {
       "appRouteLock": false,
       "genericDeviceClass": 33,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -1963,32 +1963,32 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "5": Object {
+    "5": {
       "appRouteLock": false,
       "genericDeviceClass": 7,
       "isFrequentListening": false,
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -1998,7 +1998,7 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
@@ -2010,14 +2010,14 @@ Object {
 `;
 
 exports[`NVM conversion tests 700-series, binary to JSON ctrlr_backup_700_7.16_1.bin 1`] = `
-Object {
-  "controller": Object {
+{
+  "controller": {
     "applicationData": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
     "applicationVersion": "7.16.2",
-    "commandClasses": Object {
-      "includedInsecurely": Array [],
-      "includedSecurelyInsecureCCs": Array [],
-      "includedSecurelySecureCCs": Array [],
+    "commandClasses": {
+      "includedInsecurely": [],
+      "includedSecurelyInsecureCCs": [],
+      "includedSecurelySecureCCs": [],
     },
     "controllerConfiguration": 60,
     "dcdcConfig": 255,
@@ -2035,7 +2035,7 @@ Object {
     "protocolVersion": "7.16.2",
     "reservedId": 0,
     "reservedIdLR": 0,
-    "rfConfig": Object {
+    "rfConfig": {
       "enablePTI": 0,
       "maxTXPower": 14,
       "measured0dBm": 3.3,
@@ -2046,18 +2046,18 @@ Object {
     "staticControllerNodeId": 1,
     "sucAwarenessPushNeeded": null,
     "sucLastIndex": 60,
-    "sucUpdateEntries": Array [
-      Object {
+    "sucUpdateEntries": [
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 1,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           152,
@@ -2080,17 +2080,17 @@ Object {
           96,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           152,
@@ -2113,17 +2113,17 @@ Object {
           96,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 3,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 4,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           152,
@@ -2146,11 +2146,11 @@ Object {
           96,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 5,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2171,17 +2171,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 5,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 6,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2202,17 +2202,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 6,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 7,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2233,17 +2233,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 7,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 8,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2264,17 +2264,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 8,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 9,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2295,11 +2295,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 10,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           152,
@@ -2322,11 +2322,11 @@ Object {
           96,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 10,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           85,
           152,
@@ -2349,11 +2349,11 @@ Object {
           96,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 11,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2374,11 +2374,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 11,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2399,17 +2399,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 11,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 12,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2430,11 +2430,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 12,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2455,11 +2455,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 13,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2480,11 +2480,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 13,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2505,29 +2505,29 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 13,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 12,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 9,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 14,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2548,11 +2548,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 14,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2573,11 +2573,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 15,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2598,11 +2598,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 15,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2623,11 +2623,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 16,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2648,11 +2648,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 16,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2673,11 +2673,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 17,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2698,11 +2698,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 17,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2723,11 +2723,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 18,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2748,35 +2748,35 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 18,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 15,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 16,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 17,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 19,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2797,11 +2797,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 19,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2822,17 +2822,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 19,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 20,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2853,11 +2853,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 20,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2878,11 +2878,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 21,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2903,11 +2903,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 21,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2928,17 +2928,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 20,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 22,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2959,11 +2959,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 22,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -2984,21 +2984,21 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 23,
-        "supportedCCs": Array [
+        "supportedCCs": [
           152,
           114,
           134,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 24,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           89,
@@ -3019,11 +3019,11 @@ Object {
           134,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 24,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           89,
@@ -3044,11 +3044,11 @@ Object {
           134,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 25,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -3067,11 +3067,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 25,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           112,
           133,
@@ -3090,11 +3090,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 26,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           86,
           134,
@@ -3111,11 +3111,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 26,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           86,
           134,
@@ -3132,11 +3132,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 27,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -3156,11 +3156,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 28,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           86,
           134,
@@ -3181,14 +3181,14 @@ Object {
     "systemState": 0,
   },
   "format": 3,
-  "meta": Object {
+  "meta": {
     "deviceFamily": 46,
     "memoryMapped": true,
     "pageSize": 2048,
     "writeSize": 1,
   },
-  "nodes": Object {
-    "1": Object {
+  "nodes": {
+    "1": {
       "appRouteLock": false,
       "genericDeviceClass": 2,
       "isFrequentListening": false,
@@ -3196,7 +3196,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         4,
         14,
         21,
@@ -3216,29 +3216,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 2,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "10": Object {
+    "10": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
           24,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         14,
         22,
         23,
@@ -3246,7 +3246,7 @@ Object {
         25,
         28,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -3258,25 +3258,25 @@ Object {
       "specificDeviceClass": 0,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "14": Object {
+    "14": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         10,
@@ -3287,10 +3287,10 @@ Object {
         27,
         28,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -3300,25 +3300,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "21": Object {
+    "21": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         14,
@@ -3328,7 +3328,7 @@ Object {
         26,
         27,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -3340,28 +3340,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "22": Object {
+    "22": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           28,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         10,
@@ -3371,7 +3371,7 @@ Object {
         26,
         27,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -3383,26 +3383,26 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "23": Object {
+    "23": {
       "appRouteLock": false,
       "genericDeviceClass": 64,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         10,
@@ -3413,7 +3413,7 @@ Object {
         26,
         27,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
@@ -3425,24 +3425,24 @@ Object {
       "specificDeviceClass": 3,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "24": Object {
+    "24": {
       "appRouteLock": false,
       "genericDeviceClass": 3,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         10,
@@ -3453,10 +3453,10 @@ Object {
         26,
         27,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -3466,29 +3466,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "25": Object {
+    "25": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           22,
           10,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         10,
         14,
@@ -3496,10 +3496,10 @@ Object {
         26,
         28,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           14,
         ],
       },
@@ -3511,28 +3511,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "26": Object {
+    "26": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           10,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         21,
@@ -3543,7 +3543,7 @@ Object {
         27,
         28,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 2,
       },
@@ -3555,25 +3555,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "27": Object {
+    "27": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         14,
@@ -3584,10 +3584,10 @@ Object {
         26,
         28,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           24,
         ],
       },
@@ -3599,25 +3599,25 @@ Object {
       "specificDeviceClass": 4,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "28": Object {
+    "28": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         10,
@@ -3628,10 +3628,10 @@ Object {
         26,
         27,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -3641,25 +3641,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "4": Object {
+    "4": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         14,
         21,
@@ -3670,7 +3670,7 @@ Object {
         27,
         28,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 2,
       },
@@ -3682,7 +3682,7 @@ Object {
       "specificDeviceClass": 0,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
@@ -3694,12 +3694,12 @@ Object {
 `;
 
 exports[`NVM conversion tests 700-series, binary to JSON ctrlr_backup_700_7.16_2.bin 1`] = `
-Object {
-  "controller": Object {
+{
+  "controller": {
     "applicationData": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
     "applicationVersion": "255.0.0",
-    "commandClasses": Object {
-      "includedInsecurely": Array [
+    "commandClasses": {
+      "includedInsecurely": [
         94,
         134,
         114,
@@ -3718,8 +3718,8 @@ Object {
         152,
         159,
       ],
-      "includedSecurelyInsecureCCs": Array [],
-      "includedSecurelySecureCCs": Array [],
+      "includedSecurelyInsecureCCs": [],
+      "includedSecurelySecureCCs": [],
     },
     "controllerConfiguration": 60,
     "dcdcConfig": 255,
@@ -3737,7 +3737,7 @@ Object {
     "protocolVersion": "7.16.2",
     "reservedId": 0,
     "reservedIdLR": 0,
-    "rfConfig": Object {
+    "rfConfig": {
       "enablePTI": 0,
       "maxTXPower": 14,
       "measured0dBm": 3.3,
@@ -3748,12 +3748,12 @@ Object {
     "staticControllerNodeId": 1,
     "sucAwarenessPushNeeded": null,
     "sucLastIndex": 5,
-    "sucUpdateEntries": Array [
-      Object {
+    "sucUpdateEntries": [
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 59,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           50,
@@ -3770,11 +3770,11 @@ Object {
           90,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 60,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           50,
@@ -3791,11 +3791,11 @@ Object {
           90,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 61,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -3813,11 +3813,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 62,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -3838,11 +3838,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 62,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -3863,11 +3863,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 32,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -3888,11 +3888,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 32,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -3913,11 +3913,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 33,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -3938,11 +3938,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 34,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -3963,17 +3963,17 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 35,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 36,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -3994,11 +3994,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 37,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4019,11 +4019,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 38,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4044,11 +4044,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 39,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4069,11 +4069,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 40,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4094,11 +4094,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 41,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4119,11 +4119,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 41,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4144,11 +4144,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 41,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4169,11 +4169,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 42,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4194,11 +4194,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 42,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4219,11 +4219,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 43,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4244,11 +4244,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 43,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4269,11 +4269,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 44,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4294,11 +4294,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 44,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4319,11 +4319,11 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 45,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4344,29 +4344,29 @@ Object {
           106,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 33,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 36,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 39,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 46,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4386,11 +4386,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 46,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4410,11 +4410,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 46,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4434,23 +4434,23 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 46,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 47,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 48,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4470,11 +4470,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 48,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4494,11 +4494,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 49,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4518,17 +4518,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 48,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 50,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4548,11 +4548,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 50,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4572,29 +4572,29 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 3,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 2,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 3,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 6,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 3,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 7,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 51,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4614,11 +4614,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 51,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4638,23 +4638,23 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 51,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 51,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 52,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4674,17 +4674,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 52,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 53,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4704,11 +4704,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 53,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4728,11 +4728,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 53,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4752,23 +4752,23 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 53,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 53,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 54,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4788,17 +4788,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 54,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 55,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4818,17 +4818,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 55,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 56,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           37,
           133,
@@ -4848,17 +4848,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 27,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 57,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -4879,11 +4879,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 57,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -4904,17 +4904,17 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 2,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 57,
-        "supportedCCs": Array [],
+        "supportedCCs": [],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 58,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -4935,11 +4935,11 @@ Object {
           122,
         ],
       },
-      Object {
+      {
         "changeType": 1,
-        "controlledCCs": Array [],
+        "controlledCCs": [],
         "nodeId": 58,
-        "supportedCCs": Array [
+        "supportedCCs": [
           94,
           133,
           142,
@@ -4964,14 +4964,14 @@ Object {
     "systemState": 0,
   },
   "format": 3,
-  "meta": Object {
+  "meta": {
     "deviceFamily": 42,
     "memoryMapped": true,
     "pageSize": 2048,
     "writeSize": 1,
   },
-  "nodes": Object {
-    "1": Object {
+  "nodes": {
+    "1": {
       "appRouteLock": false,
       "genericDeviceClass": 2,
       "isFrequentListening": false,
@@ -4979,7 +4979,7 @@ Object {
       "isRouting": true,
       "isVirtual": false,
       "lwr": null,
-      "neighbors": Array [
+      "neighbors": [
         2,
         4,
         6,
@@ -5008,28 +5008,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 255,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "10": Object {
+    "10": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -5057,7 +5057,7 @@ Object {
         45,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -5069,25 +5069,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "11": Object {
+    "11": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -5119,10 +5119,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
@@ -5134,29 +5134,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "12": Object {
+    "12": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           18,
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         4,
@@ -5186,10 +5186,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
           18,
         ],
@@ -5202,29 +5202,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "14": Object {
+    "14": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           5,
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         5,
         7,
         8,
@@ -5241,10 +5241,10 @@ Object {
         45,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
           5,
         ],
@@ -5257,29 +5257,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "16": Object {
+    "16": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           10,
           11,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         7,
@@ -5300,7 +5300,7 @@ Object {
         59,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -5312,28 +5312,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "17": Object {
+    "17": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -5357,10 +5357,10 @@ Object {
         45,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           19,
         ],
       },
@@ -5372,28 +5372,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "18": Object {
+    "18": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -5416,7 +5416,7 @@ Object {
         45,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 2,
       },
@@ -5428,25 +5428,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "19": Object {
+    "19": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -5467,10 +5467,10 @@ Object {
         45,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
         ],
       },
@@ -5482,25 +5482,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "2": Object {
+    "2": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         3,
         4,
@@ -5534,10 +5534,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -5547,28 +5547,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "20": Object {
+    "20": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         4,
@@ -5595,10 +5595,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
@@ -5610,32 +5610,32 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "21": Object {
+    "21": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
           20,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         20,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -5647,25 +5647,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "22": Object {
+    "22": {
       "appRouteLock": false,
       "genericDeviceClass": 7,
       "isFrequentListening": false,
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         4,
@@ -5683,10 +5683,10 @@ Object {
         19,
         20,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
@@ -5698,28 +5698,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "23": Object {
+    "23": {
       "appRouteLock": false,
       "genericDeviceClass": 7,
       "isFrequentListening": false,
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         4,
@@ -5733,7 +5733,7 @@ Object {
         16,
         20,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -5745,28 +5745,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "26": Object {
+    "26": {
       "appRouteLock": false,
       "genericDeviceClass": 7,
       "isFrequentListening": false,
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -5776,10 +5776,10 @@ Object {
         18,
         19,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
           3,
         ],
@@ -5792,29 +5792,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "28": Object {
+    "28": {
       "appRouteLock": false,
       "genericDeviceClass": 7,
       "isFrequentListening": false,
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           12,
           49,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -5822,10 +5822,10 @@ Object {
         18,
         19,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
           2,
         ],
@@ -5838,29 +5838,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "29": Object {
+    "29": {
       "appRouteLock": false,
       "genericDeviceClass": 7,
       "isFrequentListening": false,
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
           3,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         3,
         4,
         7,
@@ -5868,10 +5868,10 @@ Object {
         18,
         19,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -5881,28 +5881,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "3": Object {
+    "3": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         4,
         5,
@@ -5927,10 +5927,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
@@ -5942,28 +5942,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "30": Object {
+    "30": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -5991,7 +5991,7 @@ Object {
         58,
         62,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
@@ -6003,28 +6003,28 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "31": Object {
+    "31": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -6049,10 +6049,10 @@ Object {
         58,
         62,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
@@ -6064,28 +6064,28 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "32": Object {
+    "32": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -6115,7 +6115,7 @@ Object {
         58,
         62,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
@@ -6127,28 +6127,28 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "34": Object {
+    "34": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           6,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -6170,10 +6170,10 @@ Object {
         31,
         32,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
@@ -6185,28 +6185,28 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "37": Object {
+    "37": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -6234,7 +6234,7 @@ Object {
         44,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
@@ -6246,29 +6246,29 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "38": Object {
+    "38": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           3,
           11,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -6296,7 +6296,7 @@ Object {
         44,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
@@ -6308,28 +6308,28 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "4": Object {
+    "4": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           6,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -6366,10 +6366,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -6379,25 +6379,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "40": Object {
+    "40": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         4,
@@ -6420,7 +6420,7 @@ Object {
         44,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
@@ -6432,33 +6432,33 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "41": Object {
+    "41": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
-      "neighbors": Array [
+      "neighbors": [
         43,
         45,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
           6,
         ],
@@ -6471,34 +6471,34 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "42": Object {
+    "42": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
-      "neighbors": Array [
+      "neighbors": [
         43,
         44,
         45,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -6508,25 +6508,25 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "43": Object {
+    "43": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         4,
@@ -6556,10 +6556,10 @@ Object {
         59,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
         ],
       },
@@ -6571,28 +6571,28 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "44": Object {
+    "44": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         6,
@@ -6619,7 +6619,7 @@ Object {
         59,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
@@ -6631,25 +6631,25 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "45": Object {
+    "45": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": "1000ms",
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -6680,7 +6680,7 @@ Object {
         59,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
       },
@@ -6692,34 +6692,34 @@ Object {
       "specificDeviceClass": 7,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "49": Object {
+    "49": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           10,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
           61,
         ],
@@ -6732,25 +6732,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "5": Object {
+    "5": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         4,
@@ -6776,10 +6776,10 @@ Object {
         45,
         60,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
@@ -6791,31 +6791,31 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "50": Object {
+    "50": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 2,
       },
@@ -6827,29 +6827,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "56": Object {
+    "56": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
       },
-      "neighbors": Array [],
-      "nlwr": Object {
+      "neighbors": [],
+      "nlwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           14,
         ],
       },
@@ -6861,29 +6861,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "58": Object {
+    "58": {
       "appRouteLock": false,
       "genericDeviceClass": 7,
       "isFrequentListening": false,
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           16,
           5,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -6892,7 +6892,7 @@ Object {
         31,
         32,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -6904,25 +6904,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "59": Object {
+    "59": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         4,
         11,
@@ -6936,10 +6936,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -6949,28 +6949,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "6": Object {
+    "6": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -6996,10 +6996,10 @@ Object {
         45,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           11,
         ],
       },
@@ -7011,28 +7011,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "60": Object {
+    "60": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -7060,7 +7060,7 @@ Object {
         59,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -7072,29 +7072,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "61": Object {
+    "61": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -7115,10 +7115,10 @@ Object {
         60,
         62,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 0,
-        "repeaterNodeIDs": Array [],
+        "repeaterNodeIDs": [],
       },
       "nodeType": 1,
       "optionalFunctionality": true,
@@ -7128,28 +7128,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "62": Object {
+    "62": {
       "appRouteLock": false,
       "genericDeviceClass": 7,
       "isFrequentListening": false,
       "isListening": false,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": "1000ms",
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         17,
@@ -7160,7 +7160,7 @@ Object {
         32,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
       },
@@ -7172,29 +7172,29 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "7": Object {
+    "7": {
       "appRouteLock": false,
       "genericDeviceClass": 16,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
           3,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         3,
@@ -7228,10 +7228,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 1,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
@@ -7243,25 +7243,25 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "8": Object {
+    "8": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
       },
-      "neighbors": Array [
+      "neighbors": [
         1,
         2,
         4,
@@ -7289,10 +7289,10 @@ Object {
         60,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           4,
         ],
       },
@@ -7304,28 +7304,28 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
       "supportsBeaming": true,
       "supportsSecurity": false,
     },
-    "9": Object {
+    "9": {
       "appRouteLock": false,
       "genericDeviceClass": 17,
       "isFrequentListening": false,
       "isListening": true,
       "isRouting": true,
       "isVirtual": false,
-      "lwr": Object {
+      "lwr": {
         "beaming": false,
         "protocolRate": 3,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
-      "neighbors": Array [
+      "neighbors": [
         2,
         3,
         4,
@@ -7350,10 +7350,10 @@ Object {
         45,
         61,
       ],
-      "nlwr": Object {
+      "nlwr": {
         "beaming": false,
         "protocolRate": 2,
-        "repeaterNodeIDs": Array [
+        "repeaterNodeIDs": [
           2,
         ],
       },
@@ -7365,7 +7365,7 @@ Object {
       "specificDeviceClass": 1,
       "sucPendingUpdate": false,
       "sucUpdateIndex": 254,
-      "supportedDataRates": Array [
+      "supportedDataRates": [
         40000,
         100000,
       ],
