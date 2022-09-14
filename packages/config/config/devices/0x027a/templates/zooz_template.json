@@ -241,7 +241,7 @@
 	},
 	"zwave_on_dimmer_ramp_rate": {
 		"$import": "~/templates/master_template.json#base_0-99_nounit",
-		"label": "Z-Wave Dimmer on ramp rate (fade-in effect for on zwave operation)",
+		"label": "Ramp Rate On (Z-Wave)",
 		"unit": "seconds",
 		"defaultValue": 0,
 		"options": [
