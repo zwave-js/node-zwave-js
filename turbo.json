@@ -37,8 +37,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -48,8 +53,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -62,8 +72,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -98,12 +113,6 @@
 		// Build fresh when TS related stuff changes
 		"tsconfig.json",
 		"tsconfig.build.json",
-		"*.tsbuildinfo",
-		// When https://github.com/vercel/turborepo/issues/1913 is solved, move these into the lint script `inputs`:
-		".eslintrc.js",
-		".eslintignore",
-		".prettierrc.js",
-		".prettierignore",
-		"tsconfig.eslint.json"
+		"*.tsbuildinfo"
 	]
 }
