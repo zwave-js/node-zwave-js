@@ -4451,7 +4451,7 @@ __metadata:
     jest-extended: ^2.0.0
     prettier: ^2.7.1
     reflect-metadata: ^0.1.13
-    typescript: 4.8.2
+    typescript: 4.8.3
   languageName: unknown
   linkType: soft
 
@@ -4487,7 +4487,7 @@ __metadata:
     prettier: ^2.7.1
     semver: ^7.3.7
     ts-pegjs: ^0.3.1
-    typescript: 4.8.2
+    typescript: 4.8.3
     winston: ^3.8.2
     xml2js: ^0.4.23
     yargs: ^17.5.1
@@ -4515,7 +4515,7 @@ __metadata:
     prettier: ^2.7.1
     reflect-metadata: ^0.1.13
     triple-beam: "*"
-    typescript: 4.8.2
+    typescript: 4.8.3
     winston: ^3.8.2
     winston-daily-rotate-file: ^4.7.1
     winston-transport: ^4.5.0
@@ -4535,7 +4535,7 @@ __metadata:
     alcalzone-shared: ^4.0.8
     jest-extended: ^2.0.0
     prettier: ^2.7.1
-    typescript: 4.8.2
+    typescript: 4.8.3
   languageName: unknown
   linkType: soft
 
@@ -4564,7 +4564,7 @@ __metadata:
     prettier: ^2.7.1
     reflect-metadata: ^0.1.13
     ts-morph: ^16.0.0
-    typescript: 4.8.2
+    typescript: 4.8.3
     yargs: ^17.5.1
   languageName: unknown
   linkType: soft
@@ -4589,7 +4589,7 @@ __metadata:
     prettier: ^2.7.1
     reflect-metadata: ^0.1.13
     semver: ^7.3.7
-    typescript: 4.8.2
+    typescript: 4.8.3
     yargs: ^17.5.1
   bin:
     nvmedit: bin/nvmedit.js
@@ -4661,7 +4661,7 @@ __metadata:
     ts-nameof: ^5.0.0
     ts-patch: ^2.0.2
     turbo: ^1.4.6
-    typescript: 4.8.2
+    typescript: 4.8.3
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -4687,7 +4687,7 @@ __metadata:
     jest-extended: ^2.0.0
     prettier: ^2.7.1
     serialport: ^10.4.0
-    typescript: 4.8.2
+    typescript: 4.8.3
     winston: ^3.8.2
   languageName: unknown
   linkType: soft
@@ -4706,7 +4706,7 @@ __metadata:
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
     prettier: ^2.7.1
-    typescript: 4.8.2
+    typescript: 4.8.3
   languageName: unknown
   linkType: soft
 
@@ -4728,7 +4728,7 @@ __metadata:
     jest-extended: ^2.0.0
     prettier: ^2.7.1
     triple-beam: "*"
-    typescript: 4.8.2
+    typescript: 4.8.3
     winston-transport: ^4.5.0
   languageName: unknown
   linkType: soft
@@ -4744,7 +4744,7 @@ __metadata:
     fs-extra: ^10.1.0
     prettier: ^2.7.1
     tsutils: ^3.21.0
-    typescript: 4.8.2
+    typescript: 4.8.3
   languageName: unknown
   linkType: soft
 
@@ -11978,13 +11978,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.8.2":
-  version: 4.8.2
-  resolution: "typescript@npm:4.8.2"
+"typescript@npm:4.8.3":
+  version: 4.8.3
+  resolution: "typescript@npm:4.8.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 7f5b81d0d558c9067f952c7af52ab7f19c2e70a916817929e4a5b256c93990bf3178eccb1ac8a850bc75df35f6781b6f4cb3370ce20d8b1ded92ed462348f628
+  checksum: 8286a5edcaf3d68e65c451aa1e7150ad1cf53ee0813c07ec35b7abdfdb10f355ecaa13c6a226a694ae7a67785fd7eeebf89f845da0b4f7e4a35561ddc459aba0
   languageName: node
   linkType: hard
 
@@ -12008,13 +12008,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.8.2#~builtin<compat/typescript>":
-  version: 4.8.2
-  resolution: "typescript@patch:typescript@npm%3A4.8.2#~builtin<compat/typescript>::version=4.8.2&hash=a1c5e5"
+"typescript@patch:typescript@4.8.3#~builtin<compat/typescript>":
+  version: 4.8.3
+  resolution: "typescript@patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 5cb0f02f414f5405f4b0e7ee1fd7fa9177b6a8783c9017b6cad85f56ce4c4f93e0e6f2ce37e863cb597d44227cd009474c9fbd85bf7a50004e5557426cb58079
+  checksum: 2222d2382fb3146089b1d27ce2b55e9d1f99cc64118f1aba75809b693b856c5d3c324f052f60c75b577947fc538bc1c27bad0eb76cbdba9a63a253489504ba7e
   languageName: node
   linkType: hard
 
@@ -12603,7 +12603,7 @@ __metadata:
     semver: ^7.3.7
     serialport: ^10.4.0
     source-map-support: ^0.5.21
-    typescript: 4.8.2
+    typescript: 4.8.3
     winston: ^3.8.2
     xstate: ^4.29.0
   languageName: unknown
