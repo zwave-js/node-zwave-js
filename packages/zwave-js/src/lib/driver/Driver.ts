@@ -1680,7 +1680,7 @@ export class Driver
 			return [this._userAgent, this.userAgentComponents];
 		}
 
-		let userAgentComponents = { ...this.userAgentComponents };
+		const userAgentComponents = { ...this.userAgentComponents };
 		// Remove everything that's not a letter, number, . or -
 		function normalize(str: string): string {
 			return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
