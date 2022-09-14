@@ -9,11 +9,25 @@
 			// ... but the maintenance prebuild task has dependencies
 			"dependsOn": ["^build"]
 		},
+
 		"codegen": {
 			// Code generation for packages requires the packages' dependencies to be built
 			// and runs after the own prebuild
 			"dependsOn": ["^build", "prebuild"]
 		},
+		"@zwave-js/cc#codegen": {
+			"dependsOn": ["^build", "prebuild"],
+			"outputs": [
+				"src/cc/index.ts",
+				"src/lib/API.ts",
+				"src/lib/Values.ts"
+			]
+		},
+		"@zwave-js/config#codegen": {
+			"dependsOn": ["^build", "prebuild"],
+			"outputs": ["src/LogicParser.ts"]
+		},
+
 		"build": {
 			"dependsOn": ["prebuild", "codegen", "^build"]
 		},
@@ -23,8 +37,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -34,8 +53,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -48,8 +72,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -84,12 +113,6 @@
 		// Build fresh when TS related stuff changes
 		"tsconfig.json",
 		"tsconfig.build.json",
-		"*.tsbuildinfo",
-		// When https://github.com/vercel/turborepo/issues/1913 is solved, move these into the lint script `inputs`:
-		".eslintrc.js",
-		".eslintignore",
-		".prettierrc.js",
-		".prettierignore",
-		"tsconfig.eslint.json"
+		"*.tsbuildinfo"
 	]
 }

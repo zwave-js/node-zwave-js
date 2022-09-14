@@ -3664,71 +3664,71 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/core@npm:7.8.1"
+"@sentry/core@npm:7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/core@npm:7.12.1"
   dependencies:
-    "@sentry/hub": 7.8.1
-    "@sentry/types": 7.8.1
-    "@sentry/utils": 7.8.1
+    "@sentry/hub": 7.12.1
+    "@sentry/types": 7.12.1
+    "@sentry/utils": 7.12.1
     tslib: ^1.9.3
-  checksum: 6fa019f49f4476a0d04b3efbe1d2f5b9ff5be14a5b2bff848ae97f7215113a6e768ac73d670f4d992af3e8defa495dfa31e5a9d3a6a38740f9b780ea088db172
+  checksum: c8cd62220a327bb4f7b1a97503c19b40710da0d880d7b881384e224aa470c983410c836d5dd85a2cd88166301771a0cea3fd2f93b53d17b29e82457282bb7d01
   languageName: node
   linkType: hard
 
-"@sentry/hub@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/hub@npm:7.8.1"
+"@sentry/hub@npm:7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/hub@npm:7.12.1"
   dependencies:
-    "@sentry/types": 7.8.1
-    "@sentry/utils": 7.8.1
+    "@sentry/types": 7.12.1
+    "@sentry/utils": 7.12.1
     tslib: ^1.9.3
-  checksum: a764749e311dd9e71cfe1fe2c6e781009ab4874e506e34615f723e11174a60ac97671b6f89de66cc3a208e64b4616d35901b5b231efe0785f54d60dc783b5014
+  checksum: f6607969a0dd16e6892ec56675a5dadcde20f39a031a39541816ae1a56a65cc4f26b942859c85ce40992c8a0959020bf0c27e4bd68bdc96adcf499ce6f147252
   languageName: node
   linkType: hard
 
-"@sentry/integrations@npm:^7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/integrations@npm:7.8.1"
+"@sentry/integrations@npm:^7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/integrations@npm:7.12.1"
   dependencies:
-    "@sentry/types": 7.8.1
-    "@sentry/utils": 7.8.1
+    "@sentry/types": 7.12.1
+    "@sentry/utils": 7.12.1
     localforage: ^1.8.1
     tslib: ^1.9.3
-  checksum: c95816f6ccbb77a2f54d8da2032d890fd59c5bd1b9d0f28478db9b6c23416eaac2d2c35f03ec92d39b2fbf7c2f59cd587838f0b8c78a6f80358ad5a0569de90b
+  checksum: 51ca3ed345850e841161b5228677236172edf6d36aff99f310d129180bf929e40a434443f21dc9c36b0d1c1ff2ebc75b3bd5b526a930e2830b2100bef4bf41a6
   languageName: node
   linkType: hard
 
-"@sentry/node@npm:^7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/node@npm:7.8.1"
+"@sentry/node@npm:^7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/node@npm:7.12.1"
   dependencies:
-    "@sentry/core": 7.8.1
-    "@sentry/hub": 7.8.1
-    "@sentry/types": 7.8.1
-    "@sentry/utils": 7.8.1
+    "@sentry/core": 7.12.1
+    "@sentry/hub": 7.12.1
+    "@sentry/types": 7.12.1
+    "@sentry/utils": 7.12.1
     cookie: ^0.4.1
     https-proxy-agent: ^5.0.0
     lru_map: ^0.3.3
     tslib: ^1.9.3
-  checksum: 9f45360a94592de0f24cdec7630929e227aef313d0d9ac4e9af3e6530967f113cf2cef93e728a1e33fa637cfeb6d55149c60c65cb2c13ab6f0f6879d9febc0e7
+  checksum: 57a06fb397ce72ff7df10c9397022c4ae109ade63bc3df530ac1be94f2fd3c3ef2b78ae0f2820ce9c52710cb8b44e382cd72d001e6429964bb6e70c7d4901d02
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/types@npm:7.8.1"
-  checksum: b06961923034b46d75a4cc2aef6658d14899f45483ff2c159dee281ab32c1180a5c972bfc5b443deece75ea815f9c7d05f1a77b52b559204dea6cbf8173660a7
+"@sentry/types@npm:7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/types@npm:7.12.1"
+  checksum: 5a60d8c92ecf4f69a5e584441312d42acbc87f7865e78079e8f8757474874b0deae69707f2d0e74ea0e6bf1665b1d7887e201a53154ddfecb2630a0d5a200342
   languageName: node
   linkType: hard
 
-"@sentry/utils@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@sentry/utils@npm:7.8.1"
+"@sentry/utils@npm:7.12.1":
+  version: 7.12.1
+  resolution: "@sentry/utils@npm:7.12.1"
   dependencies:
-    "@sentry/types": 7.8.1
+    "@sentry/types": 7.12.1
     tslib: ^1.9.3
-  checksum: 7777e86885513fb5ef7baa22e71f0e4e8cbf8d00db6a00775444c2b3fe8d2935f39756374e058adb99673fb8618e0fb105d2f24f537ed60ce84977e68a2178f2
+  checksum: 22fa506c6e3116ec950a10aaf98929b70264c90fa83bfb4752da779753f312277a44f705c45102ce06b1781d99db2ea4e4e66662d0fde1792e8cae2559e63b5b
   languageName: node
   linkType: hard
 
@@ -4660,14 +4660,14 @@ __metadata:
     jest: ^28.1.3
     jest-extended: ^2.0.0
     prettier: ^2.7.1
-    prettier-plugin-organize-imports: ^3.0.0
+    prettier-plugin-organize-imports: ^3.1.1
     reflect-metadata: ^0.1.13
     semver: ^7.3.7
     source-map-support: ^0.5.21
     tar-stream: ^2.2.0
     ts-nameof: ^5.0.0
     ts-patch: ^2.0.2
-    turbo: ^1.4.6
+    turbo: ^1.4.7-canary.0
     typescript: 4.8.3
     zwave-js: "workspace:*"
   languageName: unknown
@@ -4678,7 +4678,7 @@ __metadata:
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
     "@microsoft/api-extractor": "*"
-    "@sentry/node": ^7.8.1
+    "@sentry/node": ^7.12.1
     "@serialport/binding-mock": ^10.2.2
     "@serialport/bindings-interface": "*"
     "@serialport/stream": ^10.3.0
@@ -10228,13 +10228,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-organize-imports@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "prettier-plugin-organize-imports@npm:3.0.0"
+"prettier-plugin-organize-imports@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "prettier-plugin-organize-imports@npm:3.1.1"
   peerDependencies:
+    "@volar/vue-typescript": ">=0.40.2"
     prettier: ">=2.0"
     typescript: ">=2.9"
-  checksum: 6ff49f5532b9c33e0574c9dc10ba9fd990801efb207b640126a0c136dbcb673d2ca131fd5ffd0007a56c2c08d80c0a4b11a179ac5ca86e54445f18df5188c6ca
+  peerDependenciesMeta:
+    "@volar/vue-typescript":
+      optional: true
+  checksum: a5776ddf70ba83990c5f97799a57e9844379226c25c5d3e89c072dce3615575aacc1da9c0870b86dcfd4df80df4194971538765f84a168cbb41d36de81740c30
   languageName: node
   linkType: hard
 
@@ -11776,122 +11780,122 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-android-arm64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-android-arm64@npm:1.4.6"
+"turbo-android-arm64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-android-arm64@npm:1.4.7-canary.0"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-darwin-64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-darwin-64@npm:1.4.6"
+"turbo-darwin-64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-darwin-64@npm:1.4.7-canary.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-darwin-arm64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-darwin-arm64@npm:1.4.6"
+"turbo-darwin-arm64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-darwin-arm64@npm:1.4.7-canary.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-freebsd-64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-freebsd-64@npm:1.4.6"
+"turbo-freebsd-64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-freebsd-64@npm:1.4.7-canary.0"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-freebsd-arm64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-freebsd-arm64@npm:1.4.6"
+"turbo-freebsd-arm64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-freebsd-arm64@npm:1.4.7-canary.0"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-32@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-linux-32@npm:1.4.6"
+"turbo-linux-32@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-linux-32@npm:1.4.7-canary.0"
   conditions: os=linux & cpu=ia32
   languageName: node
   linkType: hard
 
-"turbo-linux-64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-linux-64@npm:1.4.6"
+"turbo-linux-64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-linux-64@npm:1.4.7-canary.0"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-linux-arm64@npm:1.4.6"
+"turbo-linux-arm64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-linux-arm64@npm:1.4.7-canary.0"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-linux-arm@npm:1.4.6"
+"turbo-linux-arm@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-linux-arm@npm:1.4.7-canary.0"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"turbo-linux-mips64le@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-linux-mips64le@npm:1.4.6"
+"turbo-linux-mips64le@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-linux-mips64le@npm:1.4.7-canary.0"
   conditions: os=linux & cpu=mipsel
   languageName: node
   linkType: hard
 
-"turbo-linux-ppc64le@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-linux-ppc64le@npm:1.4.6"
+"turbo-linux-ppc64le@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-linux-ppc64le@npm:1.4.7-canary.0"
   conditions: os=linux & cpu=ppc64
   languageName: node
   linkType: hard
 
-"turbo-windows-32@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-windows-32@npm:1.4.6"
+"turbo-windows-32@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-windows-32@npm:1.4.7-canary.0"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"turbo-windows-64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-windows-64@npm:1.4.6"
+"turbo-windows-64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-windows-64@npm:1.4.7-canary.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-windows-arm64@npm:1.4.6":
-  version: 1.4.6
-  resolution: "turbo-windows-arm64@npm:1.4.6"
+"turbo-windows-arm64@npm:1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo-windows-arm64@npm:1.4.7-canary.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo@npm:^1.4.6":
-  version: 1.4.6
-  resolution: "turbo@npm:1.4.6"
+"turbo@npm:^1.4.7-canary.0":
+  version: 1.4.7-canary.0
+  resolution: "turbo@npm:1.4.7-canary.0"
   dependencies:
-    turbo-android-arm64: 1.4.6
-    turbo-darwin-64: 1.4.6
-    turbo-darwin-arm64: 1.4.6
-    turbo-freebsd-64: 1.4.6
-    turbo-freebsd-arm64: 1.4.6
-    turbo-linux-32: 1.4.6
-    turbo-linux-64: 1.4.6
-    turbo-linux-arm: 1.4.6
-    turbo-linux-arm64: 1.4.6
-    turbo-linux-mips64le: 1.4.6
-    turbo-linux-ppc64le: 1.4.6
-    turbo-windows-32: 1.4.6
-    turbo-windows-64: 1.4.6
-    turbo-windows-arm64: 1.4.6
+    turbo-android-arm64: 1.4.7-canary.0
+    turbo-darwin-64: 1.4.7-canary.0
+    turbo-darwin-arm64: 1.4.7-canary.0
+    turbo-freebsd-64: 1.4.7-canary.0
+    turbo-freebsd-arm64: 1.4.7-canary.0
+    turbo-linux-32: 1.4.7-canary.0
+    turbo-linux-64: 1.4.7-canary.0
+    turbo-linux-arm: 1.4.7-canary.0
+    turbo-linux-arm64: 1.4.7-canary.0
+    turbo-linux-mips64le: 1.4.7-canary.0
+    turbo-linux-ppc64le: 1.4.7-canary.0
+    turbo-windows-32: 1.4.7-canary.0
+    turbo-windows-64: 1.4.7-canary.0
+    turbo-windows-arm64: 1.4.7-canary.0
   dependenciesMeta:
     turbo-android-arm64:
       optional: true
@@ -11923,7 +11927,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: f7191f36e0abddf6dc88eb9a83a007a8616ebed1edd44c37f9b19e0451f3ce90c4406699f6166a99c0a6f8d39cc1f24d96513b7ef16b21747863827538b9c966
+  checksum: 14a1d5fd0bc1acd24a68fed1a3d5b35a16d6430b38d380d64d68ad8c9d6dc10be5fa4830ae843b8b0965418ab535c4db679024658c16507283788b287efa9bc8
   languageName: node
   linkType: hard
 
@@ -12577,8 +12581,8 @@ __metadata:
     "@esm2cjs/got": ^12.4.1
     "@esm2cjs/p-queue": ^7.3.0
     "@microsoft/api-extractor": "*"
-    "@sentry/integrations": ^7.8.1
-    "@sentry/node": ^7.8.1
+    "@sentry/integrations": ^7.12.1
+    "@sentry/node": ^7.12.1
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.29
