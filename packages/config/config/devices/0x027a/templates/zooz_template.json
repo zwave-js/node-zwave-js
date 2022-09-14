@@ -217,7 +217,7 @@
 	},
 	"dimmer_on_ramp_rate": {
 		"$import": "~/templates/master_template.json#base_0-99_nounit",
-		"label": "Dimmer on ramp rate (fade-in effect for on  operation) when operated manually",
+		"label": "Ramp Rate On (Manual Control)",
 		"unit": "seconds",
 		"defaultValue": 0,
 		"options": [
