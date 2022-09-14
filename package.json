@@ -72,7 +72,7 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.14.51",
     "esbuild-register": "^3.3.3",
-    "eslint": "^8.23.0",
+    "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "execa": "^5.1.1",
