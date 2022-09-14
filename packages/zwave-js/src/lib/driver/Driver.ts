@@ -124,7 +124,6 @@ import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-
 import { ZWaveController } from "../controller/Controller";
 import {
 	InclusionState,
@@ -1673,13 +1672,15 @@ export class Driver
 
 	private userAgentComponents = new Map<string, string>();
 
-	/**
-	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
-	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
-	 */
-	public updateUserAgent(
-		components: Record<string, string | null | undefined>,
-	): void {
+	/** @internal **/
+	public getUserAgentStringAndComponents(
+		components?: Record<string, string | null | undefined>,
+	): [string, Map<string, string>] {
+		if (components === undefined) {
+			return [this._userAgent, this.userAgentComponents];
+		}
+
+		let userAgentComponents = { ...this.userAgentComponents };
 		// Remove everything that's not a letter, number, . or -
 		function normalize(str: string): string {
 			return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
@@ -1690,17 +1691,17 @@ export class Driver
 			name = normalize(name);
 
 			if (version == undefined) {
-				this.userAgentComponents.delete(name);
+				userAgentComponents.delete(name);
 			} else {
 				version = normalize(version);
-				this.userAgentComponents.set(name, version);
+				userAgentComponents.set(name, version);
 			}
 		}
 
-		this._userAgent = `node-zwave-js/${libVersion}`;
+		let userAgent = `node-zwave-js/${libVersion}`;
 		// Augment the user agent string with information passed by the application(s)
-		for (const [name, version] of this.userAgentComponents) {
-			this._userAgent += ` ${name}/${version}`;
+		for (const [name, version] of userAgentComponents) {
+			userAgent += ` ${name}/${version}`;
 		}
 		// Default to the information for statistics if they are enabled but no user agent was configured
 		if (
@@ -1708,8 +1709,21 @@ export class Driver
 			this.statisticsAppInfo &&
 			this.statisticsAppInfo.applicationName !== "node-zwave-js"
 		) {
-			this._userAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
+			userAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
 		}
+
+		return [userAgent, userAgentComponents];
+	}
+
+	/**
+	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
+	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
+	 */
+	public updateUserAgent(
+		components: Record<string, string | null | undefined>,
+	): void {
+		[this._userAgent, this.userAgentComponents] =
+			this.getUserAgentStringAndComponents(components);
 	}
 
 	private _userAgent: string = `node-zwave-js/${libVersion}`;
