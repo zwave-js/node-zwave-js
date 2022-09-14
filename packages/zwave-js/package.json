@@ -139,7 +139,7 @@
     "@xstate/test": "^0.5.1",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
-    "esbuild": "0.14.51",
+    "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",
     "mockdate": "^3.0.5",

@@ -70,7 +70,7 @@
     "commitizen": "^4.2.5",
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^5.0.0",
-    "esbuild": "0.14.51",
+    "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
