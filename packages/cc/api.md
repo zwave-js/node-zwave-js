@@ -68,8 +68,8 @@ import { TypedClassDecorator as TypedClassDecorator_2 } from '@zwave-js/shared';
 import type { TypedPropertyDecorator } from '@zwave-js/shared';
 import { ValueChangeOptions } from '@zwave-js/core';
 import { ValueDB } from '@zwave-js/core';
-import { ValueID } from '@zwave-js/core/safe';
-import { ValueID as ValueID_2 } from '@zwave-js/core';
+import { ValueID } from '@zwave-js/core';
+import { ValueID as ValueID_2 } from '@zwave-js/core/safe';
 import { ValueMetadata } from '@zwave-js/core';
 import { ValueMetadata as ValueMetadata_2 } from '@zwave-js/core/safe';
 import type { ZWaveApplicationHost } from '@zwave-js/host/safe';
@@ -166,7 +166,7 @@ export const AlarmSensorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedSensorTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -205,7 +205,7 @@ export const AlarmSensorCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -240,7 +240,7 @@ export const AlarmSensorCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -273,7 +273,7 @@ export const AlarmSensorCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -489,7 +489,7 @@ export const AssociationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -517,7 +517,7 @@ export const AssociationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -537,7 +537,7 @@ export const AssociationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "groupCount";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -562,7 +562,7 @@ export const AssociationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "hasLifeline";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -747,7 +747,7 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -775,7 +775,7 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -803,7 +803,7 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -823,7 +823,7 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "hasDynamicInfo";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -1347,7 +1347,7 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -1367,7 +1367,7 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "currentState";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current Barrier State";
             readonly states: {
@@ -1398,7 +1398,7 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "targetState";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target Barrier State";
             readonly states: {
@@ -1429,7 +1429,7 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "position";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Barrier Position";
             readonly unit: "%";
@@ -1458,7 +1458,7 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedSubsystemTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -1581,7 +1581,7 @@ export const BasicCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "event";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Event value";
             readonly writeable: false;
@@ -1609,7 +1609,7 @@ export const BasicCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "restorePrevious";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Restore previous value";
             readonly readable: false;
@@ -1635,7 +1635,7 @@ export const BasicCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "duration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining duration";
             readonly minVersion: number;
@@ -1662,7 +1662,7 @@ export const BasicCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "targetValue";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target value";
             readonly forceCreation: boolean;
@@ -1691,7 +1691,7 @@ export const BasicCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "currentValue";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current value";
             readonly writeable: false;
@@ -1806,7 +1806,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lowTemperatureStatus";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Battery temperature is low";
             readonly writeable: false;
@@ -1832,7 +1832,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "disconnected";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Battery is disconnected";
             readonly writeable: false;
@@ -1858,7 +1858,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rechargeOrReplace";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Recharge or replace";
             readonly states: {
@@ -1889,7 +1889,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lowFluid";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Fluid is low";
             readonly writeable: false;
@@ -1915,7 +1915,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "overheating";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Overheating";
             readonly writeable: false;
@@ -1941,7 +1941,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "backup";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Used as backup";
             readonly writeable: false;
@@ -1967,7 +1967,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rechargeable";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Rechargeable";
             readonly writeable: false;
@@ -1993,7 +1993,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "chargingStatus";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Charging status";
             readonly states: {
@@ -2024,7 +2024,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "temperature";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Temperature";
             readonly writeable: false;
@@ -2052,7 +2052,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "maximumCapacity";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly max: 100;
             readonly unit: "%";
@@ -2081,7 +2081,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "isLow";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Low battery level";
             readonly writeable: false;
@@ -2107,7 +2107,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "level";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly max: 100;
             readonly unit: "%";
@@ -2253,7 +2253,7 @@ export const BinarySensorCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -2273,7 +2273,7 @@ export const BinarySensorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedSensorTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -2418,7 +2418,7 @@ export const BinarySwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "duration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining duration";
             readonly writeable: false;
@@ -2444,7 +2444,7 @@ export const BinarySwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "targetValue";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target value";
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -2471,7 +2471,7 @@ export const BinarySwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "currentValue";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current value";
             readonly writeable: false;
@@ -2538,7 +2538,7 @@ export class CCAPI {
             nodeId: number[];
         };
     };
-    isSetValueOptimistic(valueId: ValueID_2): boolean;
+    isSetValueOptimistic(valueId: ValueID): boolean;
     // (undocumented)
     protected isSinglecast(): this is this & {
         endpoint: IZWaveEndpoint_2;
@@ -2968,7 +2968,7 @@ export const CentralSceneCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -2988,7 +2988,7 @@ export const CentralSceneCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "slowRefresh";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Send held down notifications at a slow rate";
             readonly description: "When this is true, KeyHeldDown notifications are sent every 55s. When this is false, the notifications are sent every 200ms.";
@@ -3015,7 +3015,7 @@ export const CentralSceneCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedKeyAttributes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -3040,7 +3040,7 @@ export const CentralSceneCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsSlowRefresh";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -3065,7 +3065,7 @@ export const CentralSceneCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "sceneCount";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -3248,7 +3248,7 @@ export const ClimateControlScheduleCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -3268,7 +3268,7 @@ export const ClimateControlScheduleCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "overrideState";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Override state";
             readonly min: -12.8;
@@ -3295,7 +3295,7 @@ export const ClimateControlScheduleCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "overrideType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Override type";
             readonly states: {
@@ -3593,7 +3593,7 @@ export const ColorSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -3625,7 +3625,7 @@ export const ColorSwitchCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -3645,7 +3645,7 @@ export const ColorSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "hexColor";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly minLength: 6;
             readonly maxLength: 7;
@@ -3674,7 +3674,7 @@ export const ColorSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "duration";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Remaining duration";
             readonly writeable: false;
@@ -3700,7 +3700,7 @@ export const ColorSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "targetColor";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Target color";
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -3727,7 +3727,7 @@ export const ColorSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "currentColor";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Current color";
             readonly writeable: false;
@@ -3753,7 +3753,7 @@ export const ColorSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsHexColor";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -3778,7 +3778,7 @@ export const ColorSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedColorComponents";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -3855,10 +3855,10 @@ export class CommandClass implements ICommandClass {
     expectsCCResponse(): boolean;
     static from(host: ZWaveHost, options: CommandClassDeserializationOptions): CommandClass;
     static getCCCommand(data: Buffer): number | undefined;
-    protected getCCValue(valueId: ValueID_2): StaticCCValue | DynamicCCValue | undefined;
+    protected getCCValue(valueId: ValueID): StaticCCValue | DynamicCCValue | undefined;
     static getCommandClass(data: Buffer): CommandClasses_2;
     static getConstructor(ccData: Buffer): CCConstructor<CommandClass>;
-    getDefinedValueIDs(applHost: ZWaveApplicationHost_2): ValueID_2[];
+    getDefinedValueIDs(applHost: ZWaveApplicationHost_2): ValueID[];
     getEncapsulatingCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     // (undocumented)
     getEndpoint(applHost: ZWaveApplicationHost_2): IZWaveEndpoint_2 | undefined;
@@ -3952,7 +3952,7 @@ export class ConfigurationCC extends CommandClass {
         partialValue: number;
     }[]): number;
     deserializeParamInformationFromConfig(applHost: ZWaveApplicationHost, config: ParamInfoMap): void;
-    getPartialParamInfos(applHost: ZWaveApplicationHost, parameter: number): (ValueID & {
+    getPartialParamInfos(applHost: ZWaveApplicationHost, parameter: number): (ValueID_2 & {
         metadata: ConfigurationMetadata;
     })[];
     getQueriedParamInfos(applHost: ZWaveApplicationHost): Record<number, ConfigurationMetadata>;
@@ -4231,7 +4231,7 @@ export const ConfigurationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -4251,7 +4251,7 @@ export const ConfigurationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "isParamInformationFromConfig";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4563,7 +4563,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "doorStatus";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current status of the door";
             readonly writeable: false;
@@ -4589,7 +4589,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "doorSupported";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4614,7 +4614,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "boltStatus";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current status of the bolt";
             readonly writeable: false;
@@ -4640,7 +4640,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "boltSupported";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4665,7 +4665,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "latchStatus";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current status of the latch";
             readonly writeable: false;
@@ -4691,7 +4691,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "latchSupported";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4716,7 +4716,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "blockToBlock";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Block-to-block functionality enabled";
             readonly type: "boolean";
@@ -4742,7 +4742,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "blockToBlockSupported";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4767,7 +4767,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "twistAssist";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Twist Assist enabled";
             readonly type: "boolean";
@@ -4793,7 +4793,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "twistAssistSupported";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4818,7 +4818,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "holdAndReleaseTime";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Duration in seconds the latch stays retracted";
             readonly min: 0;
@@ -4846,7 +4846,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "holdAndReleaseSupported";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4871,7 +4871,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "autoRelockTime";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Duration in seconds until lock returns to secure state";
             readonly min: 0;
@@ -4899,7 +4899,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "autoRelockSupported";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4924,7 +4924,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lockTimeout";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Seconds until lock mode times out";
             readonly writeable: false;
@@ -4952,7 +4952,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lockTimeoutConfiguration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Duration of timed mode in seconds";
             readonly min: 0;
@@ -4980,7 +4980,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "operationType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Lock operation type";
             readonly states: {
@@ -5011,7 +5011,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "insideHandlesCanOpenDoor";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Which inside handles can open the door (actual status)";
             readonly writeable: false;
@@ -5037,7 +5037,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "insideHandlesCanOpenDoorConfiguration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Which inside handles can open the door (configuration)";
             readonly type: "any";
@@ -5063,7 +5063,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedInsideHandles";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5088,7 +5088,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "outsideHandlesCanOpenDoor";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Which outside handles can open the door (actual status)";
             readonly writeable: false;
@@ -5114,7 +5114,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "outsideHandlesCanOpenDoorConfiguration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Which outside handles can open the door (configuration)";
             readonly type: "any";
@@ -5140,7 +5140,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedOutsideHandles";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5165,7 +5165,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "duration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining duration until target lock mode";
             readonly writeable: false;
@@ -5191,7 +5191,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "currentMode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current lock mode";
             readonly states: {
@@ -5222,7 +5222,7 @@ export const DoorLockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "targetMode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target lock mode";
             readonly states: {
@@ -5338,7 +5338,7 @@ export const DoorLockLoggingCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "recordsCount";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5678,7 +5678,7 @@ export const EntryControlCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedKeys";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5703,7 +5703,7 @@ export const EntryControlCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedEventTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5728,7 +5728,7 @@ export const EntryControlCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedDataTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5753,7 +5753,7 @@ export const EntryControlCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "keyCacheTimeout";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Key cache timeout";
             readonly unit: "seconds";
@@ -5783,7 +5783,7 @@ export const EntryControlCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "keyCacheSize";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Key cache size";
             readonly description: "Number of character that must be stored before sending";
@@ -6266,7 +6266,7 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "continuesToFunction";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6291,7 +6291,7 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "additionalFirmwareIDs";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6316,7 +6316,7 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "firmwareUpgradable";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6341,7 +6341,7 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsActivation";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6714,7 +6714,7 @@ export const HumidityControlModeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedModes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6739,7 +6739,7 @@ export const HumidityControlModeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "mode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -6835,7 +6835,7 @@ export const HumidityControlOperatingStateCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "state";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -7049,7 +7049,7 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7081,7 +7081,7 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7101,7 +7101,7 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedSetpointTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -7329,7 +7329,7 @@ export const IndicatorCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly stateful: true;
@@ -7357,7 +7357,7 @@ export const IndicatorCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -7377,7 +7377,7 @@ export const IndicatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "value";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Indicator value";
             readonly ccSpecific: {
@@ -7408,7 +7408,7 @@ export const IndicatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedIndicatorIds";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -7655,7 +7655,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7687,7 +7687,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7716,7 +7716,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7745,7 +7745,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7774,7 +7774,7 @@ export const IrrigationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7805,7 +7805,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7834,7 +7834,7 @@ export const IrrigationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7865,7 +7865,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7894,7 +7894,7 @@ export const IrrigationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7925,7 +7925,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7954,7 +7954,7 @@ export const IrrigationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -7983,7 +7983,7 @@ export const IrrigationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8012,7 +8012,7 @@ export const IrrigationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8044,7 +8044,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8076,7 +8076,7 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8106,7 +8106,7 @@ export const IrrigationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8135,7 +8135,7 @@ export const IrrigationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8155,7 +8155,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "shutoff";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Shutoff system";
             readonly readable: false;
@@ -8181,7 +8181,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "firstOpenZoneId";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "First open zone valve ID";
             readonly writeable: false;
@@ -8207,7 +8207,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "masterValveOpen";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Master valve is open";
             readonly writeable: false;
@@ -8233,7 +8233,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "errorValve";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: valve reporting error";
             readonly writeable: false;
@@ -8259,7 +8259,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lowPressureThreshold";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Low pressure threshold";
             readonly unit: "kPa";
@@ -8286,7 +8286,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "errorLowPressure";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: low pressure";
             readonly writeable: false;
@@ -8312,7 +8312,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "highPressureThreshold";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "High pressure threshold";
             readonly unit: "kPa";
@@ -8339,7 +8339,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "errorHighPressure";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: high pressure";
             readonly writeable: false;
@@ -8365,7 +8365,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "errorEmergencyShutdown";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: emergency shutdown";
             readonly writeable: false;
@@ -8391,7 +8391,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "errorNotProgrammed";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: device not programmed";
             readonly writeable: false;
@@ -8417,7 +8417,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "shutoffDuration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining shutoff duration";
             readonly unit: "hours";
@@ -8446,7 +8446,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "pressure";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Pressure";
             readonly unit: "kPa";
@@ -8473,7 +8473,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "flow";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Flow";
             readonly unit: "l/h";
@@ -8500,7 +8500,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "moistureSensorPolarity";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Moisture sensor polarity";
             readonly min: 0;
@@ -8531,7 +8531,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "moistureSensorActive";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Moisture sensor attached and active";
             readonly writeable: false;
@@ -8557,7 +8557,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rainSensorPolarity";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Rain sensor polarity";
             readonly min: 0;
@@ -8588,7 +8588,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rainSensorActive";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Rain sensor attached and active";
             readonly writeable: false;
@@ -8614,7 +8614,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "pressureSensorActive";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Pressure sensor active";
             readonly writeable: false;
@@ -8640,7 +8640,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "flowSensorActive";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Flow sensor active";
             readonly writeable: false;
@@ -8666,7 +8666,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "masterValveDelay";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Master valve delay";
             readonly description: "The delay between turning on the master valve and turning on any zone valve";
@@ -8696,7 +8696,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "systemVoltage";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "System voltage";
             readonly unit: "V";
@@ -8725,7 +8725,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "maxValveTableSize";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -8750,7 +8750,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsMasterValve";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -8775,7 +8775,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "numValveTables";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -8800,7 +8800,7 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "numValves";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -9209,7 +9209,7 @@ export const LanguageCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "country";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Country code";
             readonly writeable: false;
@@ -9235,7 +9235,7 @@ export const LanguageCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "language";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Language code";
             readonly writeable: false;
@@ -9347,7 +9347,7 @@ export const LockCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "locked";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Locked";
             readonly description: "Whether the lock is locked";
@@ -9494,7 +9494,7 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly stateful: true;
@@ -9514,7 +9514,7 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "productId";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Product ID";
             readonly writeable: false;
@@ -9542,7 +9542,7 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "productType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Product type";
             readonly writeable: false;
@@ -9570,7 +9570,7 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "manufacturerId";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Manufacturer ID";
             readonly writeable: false;
@@ -9734,7 +9734,7 @@ export const MeterCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9766,7 +9766,7 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9786,7 +9786,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "reset";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Reset accumulated values";
             readonly readable: false;
@@ -9812,7 +9812,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedRateTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -9837,7 +9837,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedScales";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -9862,7 +9862,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsReset";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -9887,7 +9887,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "type";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10104,7 +10104,7 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -10132,7 +10132,7 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -10160,7 +10160,7 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -10180,7 +10180,7 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "groupCount";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10439,7 +10439,7 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -10459,7 +10459,7 @@ export const MultiChannelCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "deviceClass";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10484,7 +10484,7 @@ export const MultiChannelCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "commandClasses";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10509,7 +10509,7 @@ export const MultiChannelCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "identicalCapabilities";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10534,7 +10534,7 @@ export const MultiChannelCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "countIsDynamic";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10559,7 +10559,7 @@ export const MultiChannelCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "aggregatedCount";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10584,7 +10584,7 @@ export const MultiChannelCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "individualCount";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10609,7 +10609,7 @@ export const MultiChannelCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "endpointIndizes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10839,7 +10839,7 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -10867,7 +10867,7 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -10887,7 +10887,7 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedSensorTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11070,7 +11070,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11101,7 +11101,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11121,7 +11121,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "superviseStartStopLevelChange";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11146,7 +11146,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "switchType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11171,7 +11171,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "event";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Event value";
             readonly writeable: false;
@@ -11199,7 +11199,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "restorePrevious";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Restore previous value";
             readonly readable: false;
@@ -11225,7 +11225,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "duration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining duration";
             readonly writeable: false;
@@ -11251,7 +11251,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "targetValue";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target value";
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -11280,7 +11280,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "currentValue";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current value";
             readonly writeable: false;
@@ -11441,7 +11441,7 @@ export const NodeNamingAndLocationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "location";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Node location";
             readonly type: "string";
@@ -11467,7 +11467,7 @@ export const NodeNamingAndLocationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "name";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Node name";
             readonly type: "string";
@@ -11665,7 +11665,7 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11699,7 +11699,7 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11731,7 +11731,7 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11759,7 +11759,7 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -11779,7 +11779,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "alarmLevel";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Alarm Level";
             readonly writeable: false;
@@ -11807,7 +11807,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "alarmType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Alarm Type";
             readonly writeable: false;
@@ -11835,7 +11835,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "notificationMode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11860,7 +11860,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedNotificationTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11885,7 +11885,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsV1Alarm";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12251,7 +12251,7 @@ export const ProtectionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedRFStates";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12276,7 +12276,7 @@ export const ProtectionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedLocalStates";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12301,7 +12301,7 @@ export const ProtectionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsTimeout";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12326,7 +12326,7 @@ export const ProtectionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsExclusiveControl";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12351,7 +12351,7 @@ export const ProtectionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "timeout";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "RF protection timeout";
             readonly min: 0;
@@ -12379,7 +12379,7 @@ export const ProtectionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rf";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "RF protection state";
             readonly states: {
@@ -12408,7 +12408,7 @@ export const ProtectionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "local";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Local protection state";
             readonly states: {
@@ -12437,7 +12437,7 @@ export const ProtectionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "exclusiveControlNodeId";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 1;
             readonly max: 232;
@@ -12555,7 +12555,7 @@ export const SceneActivationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "dimmingDuration";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Dimming duration";
             readonly type: "duration";
@@ -12581,7 +12581,7 @@ export const SceneActivationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "sceneId";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 1;
             readonly label: "Scene ID";
@@ -12693,7 +12693,7 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -12725,7 +12725,7 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -12837,7 +12837,7 @@ export const SceneControllerConfigurationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -12869,7 +12869,7 @@ export const SceneControllerConfigurationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -13563,7 +13563,7 @@ export const SoundSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "defaultToneId";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 0;
             readonly max: 254;
@@ -13591,7 +13591,7 @@ export const SoundSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "defaultVolume";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 0;
             readonly max: 100;
@@ -13620,7 +13620,7 @@ export const SoundSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "toneId";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Play Tone";
             readonly valueChangeOptions: readonly ["volume"];
@@ -13649,7 +13649,7 @@ export const SoundSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "volume";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 0;
             readonly max: 100;
@@ -13816,7 +13816,7 @@ export const SupervisionCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -13986,7 +13986,7 @@ export const ThermostatFanModeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedModes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -14011,7 +14011,7 @@ export const ThermostatFanModeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "mode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -14042,7 +14042,7 @@ export const ThermostatFanModeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "off";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Thermostat fan turned off";
             readonly type: "boolean";
@@ -14145,7 +14145,7 @@ export const ThermostatFanStateCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "state";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -14300,7 +14300,7 @@ export const ThermostatModeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedModes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -14325,7 +14325,7 @@ export const ThermostatModeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "manufacturerData";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Manufacturer data";
             readonly writeable: false;
@@ -14351,7 +14351,7 @@ export const ThermostatModeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "mode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -14465,7 +14465,7 @@ export const ThermostatOperatingStateCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "state";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Operating state";
             readonly states: {
@@ -14559,7 +14559,7 @@ export const ThermostatSetbackCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "setbackState";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: -12.8;
             readonly max: 12;
@@ -14587,7 +14587,7 @@ export const ThermostatSetbackCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "setbackType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Setback type";
             readonly type: "any";
@@ -14770,7 +14770,7 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly minVersion: 1;
             readonly stateful: true;
@@ -14802,7 +14802,7 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -14822,7 +14822,7 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "setpointTypesInterpretation";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -14847,7 +14847,7 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedSetpointTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15141,7 +15141,7 @@ export const TimeParametersCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "dateAndTime";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Date and Time";
             readonly type: "any";
@@ -15619,7 +15619,7 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -15648,7 +15648,7 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -15668,7 +15668,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "masterCode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Master Code";
             readonly minLength: 4;
@@ -15696,7 +15696,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "keypadMode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Keypad Mode";
             readonly writeable: false;
@@ -15722,7 +15722,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "userCodeChecksum";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15747,7 +15747,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedASCIIChars";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15772,7 +15772,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedKeypadModes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15797,7 +15797,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedUserIDStatuses";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15822,7 +15822,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsMultipleUserCodeSet";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15847,7 +15847,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsMultipleUserCodeReport";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15872,7 +15872,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsUserCodeChecksum";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15897,7 +15897,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsMasterCodeDeactivation";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15922,7 +15922,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsMasterCode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15947,7 +15947,7 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedUsers";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -16049,7 +16049,7 @@ export { utils }
 // Warning: (ae-missing-release-tag) "ValueIDProperties" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ValueIDProperties = Pick<ValueID_2, "property" | "propertyKey">;
+export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ValveId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16172,7 +16172,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "applicationBuildNumber";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Application build number";
             readonly writeable: false;
@@ -16198,7 +16198,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "applicationVersion";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Application version";
             readonly writeable: false;
@@ -16224,7 +16224,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "zWaveProtocolBuildNumber";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave protocol build number";
             readonly writeable: false;
@@ -16250,7 +16250,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "zWaveProtocolVersion";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave protocol version";
             readonly writeable: false;
@@ -16276,7 +16276,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "hostInterfaceBuildNumber";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Serial API build number";
             readonly writeable: false;
@@ -16302,7 +16302,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "hostInterfaceVersion";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Serial API version";
             readonly writeable: false;
@@ -16328,7 +16328,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "applicationFrameworkBuildNumber";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave application framework API build number";
             readonly writeable: false;
@@ -16354,7 +16354,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "applicationFrameworkAPIVersion";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave application framework API version";
             readonly writeable: false;
@@ -16380,7 +16380,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "sdkVersion";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "SDK version";
             readonly writeable: false;
@@ -16406,7 +16406,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsZWaveSoftwareGet";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -16431,7 +16431,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "hardwareVersion";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave chip hardware version";
             readonly writeable: false;
@@ -16457,7 +16457,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "protocolVersion";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave protocol version";
             readonly writeable: false;
@@ -16483,7 +16483,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "libraryType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Library type";
             readonly states: {
@@ -16512,7 +16512,7 @@ export const VersionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "firmwareVersions";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "string[]";
             readonly label: "Z-Wave chip firmware versions";
@@ -16678,7 +16678,7 @@ export const WakeUpCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "wakeUpOnDemandSupported";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -16703,7 +16703,7 @@ export const WakeUpCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "wakeUpInterval";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Wake Up interval";
             readonly min: 0;
@@ -16731,7 +16731,7 @@ export const WakeUpCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "controllerNodeId";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Node ID of the controller";
             readonly writeable: false;
@@ -16890,7 +16890,7 @@ export const ZWavePlusCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "installerIcon";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -16915,7 +16915,7 @@ export const ZWavePlusCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "userIcon";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -16940,7 +16940,7 @@ export const ZWavePlusCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "roleType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -16965,7 +16965,7 @@ export const ZWavePlusCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "nodeType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -16990,7 +16990,7 @@ export const ZWavePlusCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "zwavePlusVersion";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
