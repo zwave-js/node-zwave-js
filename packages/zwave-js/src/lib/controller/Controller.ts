@@ -4499,7 +4499,6 @@ ${associatedNodes.join(", ")}`,
 	public async getAvailableFirmwareUpdates(
 		nodeId: number,
 		options?: GetFirmwareUpdatesOptions,
-		additionalUserAgentComponents?: Record<string, string>,
 	): Promise<FirmwareUpdateInfo[]> {
 		const node = this.nodes.getOrThrow(nodeId);
 
@@ -4551,7 +4550,7 @@ ${associatedNodes.join(", ")}`,
 				},
 				{
 					userAgent: this.driver.getUserAgentStringAndComponents(
-						additionalUserAgentComponents,
+						options.userAgentComponents,
 					)[0],
 					apiKey:
 						options?.apiKey ??
