@@ -253,7 +253,7 @@
 	},
 	"zwave_off_dimmer_ramp_rate": {
 		"$import": "~/templates/master_template.json#base_0-99_nounit",
-		"label": "Z-Wave Dimmer off ramp rate (fade-out effect for on zwave operation)",
+		"label": "Ramp Rate Off (Z-Wave)",
 		"unit": "seconds",
 		"defaultValue": 0,
 		"options": [
