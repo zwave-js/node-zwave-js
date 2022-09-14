@@ -797,7 +797,7 @@ This method requires an API key to be set in the [driver options](#ZWaveOptions)
 interface GetFirmwareUpdatesOptions {
 	/** Allows overriding the API key for the firmware update service */
 	apiKey?: string;
-	/** Allows adding and removing components from the user agent for the firmware update service (behaves like `Driver.updateUserAgent` but only for this call) */
+	/** Allows adding new components to the user agent sent to the firmware update service (existing components cannot be overwritten) */
 	userAgentComponents?: Record<string, string>;
 }
 ```

@@ -1675,6 +1675,7 @@ export class Driver
 	/** @internal */
 	public getUserAgentStringAndComponents(
 		components?: Record<string, string | null | undefined>,
+		allowOverwrite: boolean = true,
 	): [string, Map<string, string>] {
 		if (components === undefined) {
 			return [this._userAgent, this.userAgentComponents];
@@ -1694,6 +1695,13 @@ export class Driver
 				userAgentComponents.delete(name);
 			} else {
 				version = normalize(version);
+				if (name in userAgentComponents && !allowOverwrite) {
+					this.driverLog.print(
+						`Cannot overwrite user agent component ${name}`,
+						"warn",
+					);
+					continue;
+				}
 				userAgentComponents.set(name, version);
 			}
 		}
