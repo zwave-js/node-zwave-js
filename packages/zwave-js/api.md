@@ -470,8 +470,8 @@ export { getEnumMemberName }
 //
 // @public (undocumented)
 export interface GetFirmwareUpdatesOptions {
+    additionalUserAgentComponents?: Record<string, string>;
     apiKey?: string;
-    userAgentComponents?: Record<string, string>;
 }
 
 export { guessFirmwareFileFormat }

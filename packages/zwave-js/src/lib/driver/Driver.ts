@@ -1681,7 +1681,7 @@ export class Driver
 			return [this._userAgent, this.userAgentComponents];
 		}
 
-		const userAgentComponents = { ...this.userAgentComponents };
+		const newUserAgentComponents = { ...this.userAgentComponents };
 		// Remove everything that's not a letter, number, . or -
 		function normalize(str: string): string {
 			return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
@@ -1692,24 +1692,24 @@ export class Driver
 			name = normalize(name);
 
 			if (version == undefined) {
-				userAgentComponents.delete(name);
+				newUserAgentComponents.delete(name);
 			} else {
 				version = normalize(version);
-				if (name in userAgentComponents && !allowOverwrite) {
+				if (name in newUserAgentComponents && !allowOverwrite) {
 					this.driverLog.print(
 						`Cannot overwrite user agent component ${name}`,
 						"warn",
 					);
 					continue;
 				}
-				userAgentComponents.set(name, version);
+				newUserAgentComponents.set(name, version);
 			}
 		}
 
-		let userAgent = `node-zwave-js/${libVersion}`;
+		let newUserAgent = `node-zwave-js/${libVersion}`;
 		// Augment the user agent string with information passed by the application(s)
-		for (const [name, version] of userAgentComponents) {
-			userAgent += ` ${name}/${version}`;
+		for (const [name, version] of newUserAgentComponents) {
+			newUserAgent += ` ${name}/${version}`;
 		}
 		// Default to the information for statistics if they are enabled but no user agent was configured
 		if (
@@ -1717,10 +1717,10 @@ export class Driver
 			this.statisticsAppInfo &&
 			this.statisticsAppInfo.applicationName !== "node-zwave-js"
 		) {
-			userAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
+			newUserAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
 		}
 
-		return [userAgent, userAgentComponents];
+		return [newUserAgent, newUserAgentComponents];
 	}
 
 	/**
