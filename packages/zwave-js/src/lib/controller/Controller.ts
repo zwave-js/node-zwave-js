@@ -4550,7 +4550,7 @@ ${associatedNodes.join(", ")}`,
 				},
 				{
 					userAgent: this.driver.getUserAgentStringAndComponents(
-						options.userAgentComponents,
+						options?.userAgentComponents,
 					)[0],
 					apiKey:
 						options?.apiKey ??
