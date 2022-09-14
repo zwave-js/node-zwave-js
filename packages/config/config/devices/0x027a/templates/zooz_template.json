@@ -51,7 +51,7 @@
 				"value": 2
 			}
 		],
-		"label": "Auto Timer Time Unit"
+		"label": "Auto Timer Unit"
 	},
 	"auto_timer_duration_base": {
 		"valueSize": 4,
@@ -62,11 +62,11 @@
 		"unsigned": true
 	},
 	"auto_off_timer_duration": {
-		"label": "Auto Turn-Off Timer Duration",
+		"label": "Auto Turn-Off Duration",
 		"$import": "#auto_timer_duration_base"
 	},
 	"auto_on_timer_duration": {
-		"label": "Auto Turn-On Timer Duration",
+		"label": "Auto Turn-On Duration",
 		"$import": "#auto_timer_duration_base"
 	},
 	"enable_scene_control": {
@@ -102,7 +102,7 @@
 		]
 	},
 	"led_indicator_brightness": {
-		"label": "LED Indicator Brightness Level",
+		"label": "LED Indicator Brightness",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
