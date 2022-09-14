@@ -68,7 +68,7 @@
     "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
-    "@types/node": "^14.18.26",
+    "@types/node": "^14.18.29",
     "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",

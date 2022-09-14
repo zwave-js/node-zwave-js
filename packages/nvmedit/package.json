@@ -75,7 +75,7 @@
     "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
-    "@types/node": "^14.18.26",
+    "@types/node": "^14.18.29",
     "@types/semver": "^7.3.12",
     "@types/yargs": "^17.0.12",
     "esbuild": "0.15.7",
