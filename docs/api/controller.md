@@ -759,8 +759,8 @@ getAvailableFirmwareUpdates(nodeId: number, options?: GetFirmwareUpdatesOptions)
 
 Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). The following options are available to control the behavior:
 
-<!-- TODO: Figure out why this cannot be imported automatically -->
-<!-- #import GetFirmwareUpdatesOptions from "zwave-js" -->
+<!-- TODO: Figure out why this cannot be imported automatically:
+#import GetFirmwareUpdatesOptions from "zwave-js" -->
 
 ```ts
 interface GetFirmwareUpdatesOptions {
