@@ -1,6 +1,10 @@
 {
 	"$schema": "https://turborepo.org/schema.json",
 	"pipeline": {
+		"clean": {
+			"cache": false
+		},
+
 		"prebuild": {
 			// Prebuild tasks run before everything else
 			"dependsOn": ["^prebuild"]
@@ -29,7 +33,9 @@
 		},
 
 		"build": {
-			"dependsOn": ["prebuild", "codegen", "^build"]
+			"dependsOn": ["^build", "prebuild", "codegen"],
+			"inputs": ["src/**"],
+			"outputs": ["build/**", "*.tsbuildinfo"]
 		},
 
 		"lint": {
@@ -112,7 +118,6 @@
 		"yarn.lock",
 		// Build fresh when TS related stuff changes
 		"tsconfig.json",
-		"tsconfig.build.json",
-		"*.tsbuildinfo"
+		"tsconfig.build.json"
 	]
 }
