@@ -40,7 +40,9 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS
+      run: |
+        yarn clean $TURBO_FLAGS
+        yarn build $TURBO_FLAGS
 
     - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload

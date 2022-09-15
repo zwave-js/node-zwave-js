@@ -92,9 +92,9 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json",
+    "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "//clean": "yarn run build --clean",
     "//watch": "yarn run build --watch --pretty",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
@@ -139,6 +139,7 @@
     "@xstate/test": "^0.5.1",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
+    "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",
