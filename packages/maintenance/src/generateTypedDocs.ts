@@ -333,6 +333,7 @@ function printOverload(method: MethodDeclaration): string {
 
 async function processCCDocFile(
 	file: SourceFile,
+	dtsFile: SourceFile,
 ): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
 	const APIClass = file
 		.getClasses()
@@ -431,7 +432,7 @@ ${
 
 	// List defined value IDs
 	const valueIDsConst = (() => {
-		for (const stmt of file.getVariableStatements()) {
+		for (const stmt of dtsFile.getVariableStatements()) {
 			if (!stmt.hasExportKeyword()) continue;
 			for (const decl of stmt.getDeclarations()) {
 				if (decl.getName()?.endsWith("CCValues")) {
@@ -486,17 +487,26 @@ ${
 			if (getOptions("internal") === "true") continue;
 
 			// "Unwrap" dynamic value IDs
+			const originalValueType = valueType;
 			if (valueType.getCallSignatures().length === 1) {
 				const signature = valueType.getCallSignatures()[0];
 
-				// The call signature has a single argument
-				// args: [arg1: type1, arg2: type2, ...]
-				callSignature = `(${signature
-					.getParameters()[0]
-					.getTypeAtLocation(valueIDsConst)
-					.getText(valueIDsConst)
-					// Remove the [] from the tuple
-					.slice(1, -1)})`;
+				// const test = printNode(signature.compilerSignature.declaration?.getText());
+
+				callSignature = `(${signature.compilerSignature
+					.declaration!.parameters.map((p) => p.getText())
+					.join(", ")})`;
+
+				// // The call signature has a single argument
+				// // args: [arg1: type1, arg2: type2, ...]
+				// callSignature = `(${signature
+				// 	.getParameters()[0]
+				// 	.getTypeAtLocation(valueIDsConst)
+				// 	.getText(valueIDsConst)
+				// 	// Remove the [] from the tuple
+				// 	.slice(1, -1)})`;
+
+				if (!callSignature.includes(":")) debugger;
 
 				valueType = signature.getReturnType();
 			} else if (valueType.getCallSignatures().length > 1) {
@@ -732,9 +742,13 @@ export function processImport(filename: string): Promise<boolean> {
 export async function processCC(
 	filename: string,
 ): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
-	const sourceFile = getProgram().getSourceFileOrThrow(filename);
+	const program = getProgram();
+	const sourceFile = program.getSourceFileOrThrow(filename);
+	const dtsFile = program.addSourceFileAtPath(
+		filename.replace("/src/", "/build/").replace(/(?<!\.d)\.ts$/, ".d.ts"),
+	);
 	try {
-		return await processCCDocFile(sourceFile);
+		return await processCCDocFile(sourceFile, dtsFile);
 	} catch (e: any) {
 		throw new Error(`Error processing CC file: ${filename}\n${e.stack}`);
 	}
