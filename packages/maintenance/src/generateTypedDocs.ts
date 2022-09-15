@@ -487,16 +487,14 @@ ${
 			if (getOptions("internal") === "true") continue;
 
 			// "Unwrap" dynamic value IDs
-			const originalValueType = valueType;
 			if (valueType.getCallSignatures().length === 1) {
 				const signature = valueType.getCallSignatures()[0];
-
-				// const test = printNode(signature.compilerSignature.declaration?.getText());
 
 				callSignature = `(${signature.compilerSignature
 					.declaration!.parameters.map((p) => p.getText())
 					.join(", ")})`;
 
+				// This used to be true. leaving it here in case it becomes true again
 				// // The call signature has a single argument
 				// // args: [arg1: type1, arg2: type2, ...]
 				// callSignature = `(${signature
