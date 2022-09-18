@@ -60,7 +60,19 @@
 		},
 		{
 			"#": "9",
-			"$import": "templates/zooz_template.json#dimmer_ramp_rate"
+			"$import": "templates/zooz_template.json#dimmer_on_ramp_rate"
+		},
+		{
+			"#": "27",
+			"$import": "templates/zooz_template.json#dimmer_off_ramp_rate"
+		},
+		{
+			"#": "28",
+			"$import": "templates/zooz_template.json#zwave_on_dimmer_ramp_rate"
+		},
+		{
+			"#": "29",
+			"$import": "templates/zooz_template.json#zwave_off_dimmer_ramp_rate"
 		},
 		{
 			"#": "10",
