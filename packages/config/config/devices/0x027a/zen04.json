@@ -90,6 +90,10 @@
 			"maxValue": 100,
 			"defaultValue": 1,
 			"unsigned": true
-		}
+		},
+		{
+			"#": "9",
+			"$import": "templates/zooz_template.json#led_indicator_brightness"
+		}		
 	]
 }
