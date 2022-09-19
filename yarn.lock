@@ -63,6 +63,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alcalzone/monopack@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@alcalzone/monopack@npm:1.0.0"
+  dependencies:
+    "@alcalzone/pak": ^0.9.0
+    fs-extra: ^10.1.0
+    tar-stream: ^2.2.0
+  bin:
+    monopack: bin/cli.js
+  checksum: d841e7e8c180b24b09c14b96b2880143bf25d5d6bdfbf030169fe31d8e6c2c3d3111ca9a187c2c7f295ae8aa1e71cd58bfdaf581a1a9a8c13f6813478f7c0473
+  languageName: node
+  linkType: hard
+
 "@alcalzone/pak@npm:^0.8.1":
   version: 0.8.1
   resolution: "@alcalzone/pak@npm:0.8.1"
@@ -71,6 +84,19 @@ __metadata:
     execa: ^5.0.0
     fs-extra: ^10.0.1
   checksum: cea838b7cb6a92135a751719cbfeff0608692804127914c9161f525af6e9ab477828f11a2ed0d5fe98c33add229e0c4f3aceb42b1fc03d3ffc6cd3f557cedaa5
+  languageName: node
+  linkType: hard
+
+"@alcalzone/pak@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "@alcalzone/pak@npm:0.9.0"
+  dependencies:
+    axios: ^0.27.2
+    execa: ~5.0.0
+    fs-extra: ^10.1.0
+    semver: ^7.3.7
+    tiny-glob: ^0.2.9
+  checksum: f2043462c0608fad9d929dd76765d58c06c94a0bf4602d5b183e141cbc3dc83d0387f3806b4f994cc3d4bd160d54f18913d6f2ca334c90c88b4dfba9cc4c7cfb
   languageName: node
   linkType: hard
 
@@ -4262,15 +4288,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tar-stream@npm:^2":
-  version: 2.2.2
-  resolution: "@types/tar-stream@npm:2.2.2"
-  dependencies:
-    "@types/node": "*"
-  checksum: 4b33bc0d53770e952d6e2e8acb8889190510326a3e255d0c6edd94136d6027ecae939a7b49188d1d02d774328d9a3742ff633d505709d1a1200b3413c88d793d
-  languageName: node
-  linkType: hard
-
 "@types/triple-beam@npm:^1.3.2":
   version: 1.3.2
   resolution: "@types/triple-beam@npm:1.3.2"
@@ -4638,6 +4655,7 @@ __metadata:
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.3
     "@alcalzone/jsonl-db": ^2.5.3
+    "@alcalzone/monopack": ^1.0.0
     "@alcalzone/release-script": ~3.5.9
     "@babel/core": ^7.19.0
     "@babel/plugin-proposal-class-properties": "*"
@@ -4656,7 +4674,6 @@ __metadata:
     "@types/node": ^14.18.29
     "@types/semver": ^7.3.12
     "@types/source-map-support": ^0.5.6
-    "@types/tar-stream": ^2
     "@types/ts-nameof": ^4.2.1
     "@typescript-eslint/eslint-plugin": ^5.37.0
     "@typescript-eslint/parser": ^5.37.0
@@ -4691,7 +4708,6 @@ __metadata:
     reflect-metadata: ^0.1.13
     semver: ^7.3.7
     source-map-support: ^0.5.21
-    tar-stream: ^2.2.0
     ts-nameof: ^5.0.0
     ts-patch: ^2.0.2
     turbo: ^1.4.7-canary.0
@@ -5132,7 +5148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.27.1":
+"axios@npm:^0.27.1, axios@npm:^0.27.2":
   version: 0.27.2
   resolution: "axios@npm:0.27.2"
   dependencies:
@@ -7025,6 +7041,23 @@ __metadata:
     signal-exit: ^3.0.3
     strip-final-newline: ^2.0.0
   checksum: fba9022c8c8c15ed862847e94c252b3d946036d7547af310e344a527e59021fd8b6bb0723883ea87044dc4f0201f949046993124a42ccb0855cae5bf8c786343
+  languageName: node
+  linkType: hard
+
+"execa@npm:~5.0.0":
+  version: 5.0.1
+  resolution: "execa@npm:5.0.1"
+  dependencies:
+    cross-spawn: ^7.0.3
+    get-stream: ^6.0.0
+    human-signals: ^2.1.0
+    is-stream: ^2.0.0
+    merge-stream: ^2.0.0
+    npm-run-path: ^4.0.1
+    onetime: ^5.1.2
+    signal-exit: ^3.0.3
+    strip-final-newline: ^2.0.0
+  checksum: 8d78a3a5006115b8d7f7c4c17077afdeaa7e7ba08d6b11f2e621fec585ea8cd0857293495f28f90ba12be905562c780e5f48752c2df78590d910689548b43228
   languageName: node
   linkType: hard
 
