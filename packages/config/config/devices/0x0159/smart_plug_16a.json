@@ -164,6 +164,8 @@
 			"label": "Action in case of exceeding defined power values (parameters 50 and 51)",
 			"description": "Parameter defines the way 3rd association group devices are controlled, depending on the current power load",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
 			"defaultValue": 6,
 			"options": [
 				{
