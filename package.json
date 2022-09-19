@@ -32,6 +32,7 @@
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.0.3",
     "@alcalzone/jsonl-db": "^2.5.3",
+    "@alcalzone/monopack": "^1.0.0",
     "@alcalzone/release-script": "~3.5.9",
     "@babel/core": "^7.19.0",
     "@babel/plugin-proposal-class-properties": "*",
@@ -50,7 +51,6 @@
     "@types/node": "^14.18.29",
     "@types/semver": "^7.3.12",
     "@types/source-map-support": "^0.5.6",
-    "@types/tar-stream": "^2",
     "@types/ts-nameof": "^4.2.1",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
@@ -85,7 +85,6 @@
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.7",
     "source-map-support": "^0.5.21",
-    "tar-stream": "^2.2.0",
     "ts-nameof": "^5.0.0",
     "ts-patch": "^2.0.2",
     "turbo": "^1.4.7-canary.0",
@@ -139,7 +138,7 @@
     "codefind": "yarn ts packages/maintenance/src/codefind.ts",
     "extract-api": "yarn turbo run extract-api",
     "accept-api": "yarn clean && yarn extract-api -- --local",
-    "prodpack": "yarn ts maintenance/prodpack.ts"
+    "monopack": "yarn exec monopack"
   },
   "readme": "README.md",
   "config": {
