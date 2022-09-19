@@ -58,7 +58,7 @@
 		{
 			"#": "12",
 			"label": "Turn Smart plug 16A On Automatically with Timer",
-			"description":"If Smart plug 16A is OFF, you can schedule it to turn ON automatically after a period of time defined in this parameter. The timer is reset to zero each time the device receives an OFF command, either remotely (from the gateway (hub) or associated device) or locally from the switch.",
+			"description": "If Smart plug 16A is OFF, you can schedule it to turn ON automatically after a period of time defined in this parameter. The timer is reset to zero each time the device receives an OFF command, either remotely (from the gateway (hub) or associated device) or locally from the switch.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -120,7 +120,7 @@
 				{
 					"label": "Disabled",
 					"value": 0
-				},
+				}
 			]
 		},
 		{
@@ -136,7 +136,7 @@
 				{
 					"label": "Disabled",
 					"value": 0
-				},
+				}
 			]
 		},
 		{
@@ -195,7 +195,7 @@
 				{
 					"label": "2 and 3 combined. Turn the associated devices off, once the power drops below Down value (parameter 50). Turn the associated devices on, once the power rises above Up value (parameter no. 51).",
 					"value": 6
-				},
+				}
 			]
 		},
 		{
@@ -262,7 +262,7 @@
 				{
 					"label": "Enabled",
 					"value": 1
-				},
+				}
 			]
 		},
 		{
@@ -281,7 +281,7 @@
 				{
 					"label": "Enabled",
 					"value": 1
-				},
+				}
 			]
 		},
 	]
