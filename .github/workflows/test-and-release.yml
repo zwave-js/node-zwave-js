@@ -82,7 +82,7 @@ jobs:
         TMP_DIR=$(mktemp -d)
 
         echo "Re-creating a production environment..."
-        yarn monopack --target "$TMP_DIR/.tarballs"
+        yarn monopack --target "$TMP_DIR/.tarballs" --no-version
         cd $TMP_DIR
 
         npm init -y
