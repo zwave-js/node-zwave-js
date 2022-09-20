@@ -4,6 +4,32 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added the ability to pass more user agent components in `getAvailableFirmwareUpdates` (#5070)
+
+### Bugfixes
+* Do not enforce Multilevel Switch CC secondary switch type field to exist when parsing commands (#5042)
+* Use the correct payload to transmit usage statistics again (#5051)
+* Respect `useLocalTime` flag in `TimeParametersCCSet` constructor (#5086)
+
+### Config file changes
+* Add missing parameter 9 to Zooz ZEN04 (#5087)
+* Add Zooz Zen77 Z-Wave Ramp Rates (#5006)
+* Add HomeSeer HS-WX300 v1.13 parameters (#4959)
+* Add MyOT OpenTherm Actuator v4 (#5001)
+* Add fingerprint for Radio Thermostat CT30 (#5005)
+* Add Zooz ZEN04 (#5043)
+* Correct LED Indicator (param 3) for GE 14287 / ZW4002 (#5038)
+* Add Fakro ZRH12 (#5049)
+* Cleanup Fakro ZWS12 config (#5039)
+* Add fingerprint `0x0005:0x0012` to "Fakro AMZ Solar" (#5040)
+
+### Changes under the hood
+* The build process now uses Turborepo to cache the result of tasks and skip them if the inputs haven't changed.
+* Testing package imports on CI is now done in a more production-like environment, outside of the monorepo
+* Correct `json2nvm` documentation to use `--protocolVersion` flag (#5083)
+
 ## 10.1.0 (2022-09-09)
 ### Features
 * Cache responses from firmware update service and queue requests (#5030)
