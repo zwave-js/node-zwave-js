@@ -60,11 +60,16 @@
 			"dependsOn": ["build"],
 			"outputs": []
 		},
-		// "test": {},
 
 		"extract-api": {
 			"dependsOn": ["build"],
 			"outputs": ["api.md"]
+		},
+
+		"test:ts": {
+			"dependsOn": ["^build"],
+			"inputs": ["src/**/*.ts"],
+			"outputs": [] // TODO: consider snapshot files
 		},
 
 		// For now, run tests in the root:
