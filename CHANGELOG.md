@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.2.0 (2022-09-20)
+## __WORK IN PROGRESS__
 ### Features
 * Added the ability to pass more user agent components in `getAvailableFirmwareUpdates` (#5070)
 
