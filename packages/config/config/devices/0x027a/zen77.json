@@ -84,7 +84,28 @@
 		},
 		{
 			"#": "9",
+			"$if": "firmwareVersion <= 10.10",
 			"$import": "templates/zooz_template.json#dimmer_ramp_rate"
+		},
+		{
+			"#": "9",
+			"$if": "firmwareVersion >= 10.20",
+			"$import": "templates/zooz_template.json#dimmer_on_ramp_rate"
+		},
+		{
+			"#": "27",
+			"$if": "firmwareVersion >= 10.20",
+			"$import": "templates/zooz_template.json#dimmer_off_ramp_rate"
+		},
+		{
+			"#": "28",
+			"$if": "firmwareVersion >= 10.20",
+			"$import": "templates/zooz_template.json#zwave_on_dimmer_ramp_rate"
+		},
+		{
+			"#": "29",
+			"$if": "firmwareVersion >= 10.20",
+			"$import": "templates/zooz_template.json#zwave_off_dimmer_ramp_rate"
 		},
 		{
 			"#": "10",

@@ -124,7 +124,6 @@ import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-
 import { ZWaveController } from "../controller/Controller";
 import {
 	InclusionState,
@@ -197,6 +196,7 @@ import {
 	installConfigUpdate,
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
+import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
 import type { EditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
@@ -1680,42 +1680,59 @@ export class Driver
 	public updateUserAgent(
 		components: Record<string, string | null | undefined>,
 	): void {
-		// Remove everything that's not a letter, number, . or -
-		function normalize(str: string): string {
-			return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
-		}
-		for (let [name, version] of Object.entries(components)) {
-			if (name === "node-zwave-js") continue;
+		this.userAgentComponents = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+		);
+		this._userAgent = this.getEffectiveUserAgentString(
+			this.userAgentComponents,
+		);
+	}
 
-			name = normalize(name);
-
-			if (version == undefined) {
-				this.userAgentComponents.delete(name);
-			} else {
-				version = normalize(version);
-				this.userAgentComponents.set(name, version);
-			}
-		}
-
-		this._userAgent = `node-zwave-js/${libVersion}`;
-		// Augment the user agent string with information passed by the application(s)
-		for (const [name, version] of this.userAgentComponents) {
-			this._userAgent += ` ${name}/${version}`;
-		}
-		// Default to the information for statistics if they are enabled but no user agent was configured
+	/**
+	 * Returns the effective user agent string for the given components.
+	 * The driver name and version is automatically prepended and the statisticsAppInfo data is automatically appended if no components were given.
+	 */
+	private getEffectiveUserAgentString(
+		components: Map<string, string>,
+	): string {
+		const effectiveComponents = new Map([
+			[libName, libVersion],
+			...components,
+		]);
 		if (
-			this.userAgentComponents.size === 0 &&
+			effectiveComponents.size === 1 &&
 			this.statisticsAppInfo &&
 			this.statisticsAppInfo.applicationName !== "node-zwave-js"
 		) {
-			this._userAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
+			effectiveComponents.set(
+				this.statisticsAppInfo.applicationName,
+				this.statisticsAppInfo.applicationVersion,
+			);
 		}
+		return userAgentComponentsToString(effectiveComponents);
 	}
 
 	private _userAgent: string = `node-zwave-js/${libVersion}`;
 	/** Returns the user agent string used for service requests */
 	public get userAgent(): string {
 		return this._userAgent;
+	}
+
+	/** Returns the user agent string combined with the additional components (if given) */
+	public getUserAgentStringWithComponents(
+		components?: Record<string, string | null | undefined>,
+	): string {
+		if (!components || Object.keys(components).length === 0) {
+			return this._userAgent;
+		}
+
+		const merged = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+			false,
+		);
+		return this.getEffectiveUserAgentString(merged);
 	}
 
 	/**

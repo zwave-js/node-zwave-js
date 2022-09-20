@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/transformers",
-  "version": "10.0.2",
+  "version": "10.2.0",
   "description": "zwave-js: compile-time transformers",
   "private": true,
   "keywords": [],
@@ -29,8 +29,8 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "//clean": "tsc -b tsconfig.build.json --clean",
+    "build": "tsc -b tsconfig.build.json",
+    "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "//watch": "yarn run build --watch --pretty",
     "pretest": "del-cli \"test/fixtures/*.js\" && tsc -p tsconfig.test.json && cpy \"test/build/test/fixtures/*.js\" test/fixtures && del-cli test/build",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
@@ -46,6 +46,6 @@
     "fs-extra": "^10.1.0",
     "prettier": "^2.7.1",
     "tsutils": "^3.21.0",
-    "typescript": "4.8.2"
+    "typescript": "4.8.3"
   }
 }
