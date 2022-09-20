@@ -1,4 +1,3 @@
 module.exports = {
-	extensions: ["ts"],
-	require: ["esbuild-register"],
+	...require("../../ava.config.cjs"),
 };
