@@ -63,16 +63,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/monopack@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@alcalzone/monopack@npm:1.0.0"
+"@alcalzone/monopack@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@alcalzone/monopack@npm:1.1.0"
   dependencies:
     "@alcalzone/pak": ^0.9.0
     fs-extra: ^10.1.0
     tar-stream: ^2.2.0
   bin:
     monopack: bin/cli.js
-  checksum: d841e7e8c180b24b09c14b96b2880143bf25d5d6bdfbf030169fe31d8e6c2c3d3111ca9a187c2c7f295ae8aa1e71cd58bfdaf581a1a9a8c13f6813478f7c0473
+  checksum: 3ed52431270fea849631d4fbffd4c01e32a52a3d6f73d99ca2b8c0be319c2a7f5f60bfda0886eb5557db38b56b418f2169455d18f4cf6eff8d860ca65c818687
   languageName: node
   linkType: hard
 
@@ -4655,7 +4655,7 @@ __metadata:
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.3
     "@alcalzone/jsonl-db": ^2.5.3
-    "@alcalzone/monopack": ^1.0.0
+    "@alcalzone/monopack": ^1.1.0
     "@alcalzone/release-script": ~3.5.9
     "@babel/core": ^7.19.0
     "@babel/plugin-proposal-class-properties": "*"
