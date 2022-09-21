@@ -1,4 +1,8 @@
-import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
+import {
+	assertLogInfo,
+	assertMessage,
+	SpyTransport,
+} from "@zwave-js/testing/ava";
 import ava, { TestFn } from "ava";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { InterviewStage } from "../consts/InterviewStage";
