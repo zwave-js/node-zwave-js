@@ -83,7 +83,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToNotificationEventSupportedGet);
 		},
 
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (driver, node, _mockController, _mockNode) => {
 			await node.commandClasses.Notification.getSupportedEvents(0x06);
 
 			const states = (
