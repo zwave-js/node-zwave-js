@@ -1,4 +1,3 @@
-import { failAssertion } from "@zwave-js/testing";
 import test from "ava";
 import { deserializeCacheValue, serializeCacheValue } from "./Cache";
 import { Duration } from "./Duration";
@@ -101,8 +100,4 @@ test("deserializeCacheValue() -> restores Durations", (t) => {
 		$$type$$: "duration",
 	};
 	t.deepEqual(deserializeCacheValue(input), expected);
-});
-
-test("sinon test", (t) => {
-	failAssertion();
 });

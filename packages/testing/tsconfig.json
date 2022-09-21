@@ -2,6 +2,6 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {},
-	"include": ["src/**/*.ts", "../core/src/test/SpyTransport.ts"],
+	"include": ["src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

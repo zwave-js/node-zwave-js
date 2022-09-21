@@ -304,28 +304,28 @@ test("encodeBitMask() -> should respect the startValue too", (t) => {
 	}
 });
 
-test("getMinIntegerSize() -> should return 1 for numbers from -128 to 127", (t) => {
+test("getMinIntegerSize(signed) -> should return 1 for numbers from -128 to 127", (t) => {
 	function test(val: number) {
 		t.is(getMinIntegerSize(val, true), 1);
 	}
 	[-128, -1, 0, 1, 127].forEach(test);
 });
 
-test("getMinIntegerSize() -> should return 2 for numbers from -32768 to 32767", (t) => {
+test("getMinIntegerSize(signed) -> should return 2 for numbers from -32768 to 32767", (t) => {
 	function test(val: number) {
 		t.is(getMinIntegerSize(val, true), 2);
 	}
 	[-32768, -129, 128, 32767].forEach(test);
 });
 
-test("getMinIntegerSize() -> should return 4 for numbers from -2147483648 to 2147483647", (t) => {
+test("getMinIntegerSize(signed) -> should return 4 for numbers from -2147483648 to 2147483647", (t) => {
 	function test(val: number) {
 		t.is(getMinIntegerSize(val, true), 4);
 	}
 	[-2147483648, -32769, 32768, 2147483647].forEach(test);
 });
 
-test("getMinIntegerSize() -> should return undefined for larger and smaller numbers", (t) => {
+test("getMinIntegerSize(signed) -> should return undefined for larger and smaller numbers", (t) => {
 	function test(val: number) {
 		t.is(getMinIntegerSize(val, true), undefined);
 	}
@@ -337,28 +337,28 @@ test("getMinIntegerSize() -> should return undefined for larger and smaller numb
 	].forEach(test);
 });
 
-test("getMinIntegerSize() -> should return 1 for numbers from 0 to 255", (t) => {
+test("getMinIntegerSize(unsigned) -> should return 1 for numbers from 0 to 255", (t) => {
 	function test(val: number) {
 		t.is(getMinIntegerSize(val, false), 1);
 	}
 	[0, 1, 254, 255].forEach(test);
 });
 
-test("getMinIntegerSize() -> should return 2 for numbers from 256 to 65535", (t) => {
+test("getMinIntegerSize(unsigned) -> should return 2 for numbers from 256 to 65535", (t) => {
 	function test(val: number) {
 		t.is(getMinIntegerSize(val, false), 2);
 	}
 	[256, 257, 65534, 65535].forEach(test);
 });
 
-test("getMinIntegerSize() -> should return 4 for numbers from 65536 to 4294967295", (t) => {
+test("getMinIntegerSize(unsigned) -> should return 4 for numbers from 65536 to 4294967295", (t) => {
 	function test(val: number) {
 		t.is(getMinIntegerSize(val, false), 4);
 	}
 	[65536, 65537, 4294967294, 4294967295].forEach(test);
 });
 
-test("getMinIntegerSize() -> should return undefined for larger and smaller numbers", (t) => {
+test("getMinIntegerSize(unsigned) -> should return undefined for larger and smaller numbers", (t) => {
 	function test(val: number) {
 		t.is(getMinIntegerSize(val, false), undefined);
 	}
