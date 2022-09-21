@@ -1,7 +1,7 @@
 import { pick } from "@zwave-js/shared";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
+import { assertZWaveErrorAva } from "../test/assertZWaveError";
 import { ValueMetadata } from "../values/Metadata";
 import { dbKeyToValueIdFast, ValueDB } from "./ValueDB";
 import type { ValueID } from "./_Types";
@@ -896,7 +896,7 @@ describe("lib/node/ValueDB => ", () => {
 		];
 		it("getValue()", () => {
 			for (const valueId of invalidValueIDs) {
-				assertZWaveError(() => valueDB.getValue(valueId as any), {
+				assertZWaveErrorAva(t, () => valueDB.getValue(valueId as any), {
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 				});
 			}
@@ -904,15 +904,19 @@ describe("lib/node/ValueDB => ", () => {
 
 		it("setValue()", () => {
 			for (const valueId of invalidValueIDs) {
-				assertZWaveError(() => valueDB.setValue(valueId as any, 0), {
-					errorCode: ZWaveErrorCodes.Argument_Invalid,
-				});
+				assertZWaveErrorAva(
+					t,
+					() => valueDB.setValue(valueId as any, 0),
+					{
+						errorCode: ZWaveErrorCodes.Argument_Invalid,
+					},
+				);
 			}
 		});
 
 		it("hasValue()", () => {
 			for (const valueId of invalidValueIDs) {
-				assertZWaveError(() => valueDB.hasValue(valueId as any), {
+				assertZWaveErrorAva(t, () => valueDB.hasValue(valueId as any), {
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 				});
 			}
@@ -920,23 +924,32 @@ describe("lib/node/ValueDB => ", () => {
 
 		it("removeValue()", () => {
 			for (const valueId of invalidValueIDs) {
-				assertZWaveError(() => valueDB.removeValue(valueId as any), {
-					errorCode: ZWaveErrorCodes.Argument_Invalid,
-				});
+				assertZWaveErrorAva(
+					t,
+					() => valueDB.removeValue(valueId as any),
+					{
+						errorCode: ZWaveErrorCodes.Argument_Invalid,
+					},
+				);
 			}
 		});
 
 		it("getMetadata()", () => {
 			for (const valueId of invalidValueIDs) {
-				assertZWaveError(() => valueDB.getMetadata(valueId as any), {
-					errorCode: ZWaveErrorCodes.Argument_Invalid,
-				});
+				assertZWaveErrorAva(
+					t,
+					() => valueDB.getMetadata(valueId as any),
+					{
+						errorCode: ZWaveErrorCodes.Argument_Invalid,
+					},
+				);
 			}
 		});
 
 		it("setMetadata()", () => {
 			for (const valueId of invalidValueIDs) {
-				assertZWaveError(
+				assertZWaveErrorAva(
+					t,
 					() => valueDB.setMetadata(valueId as any, {} as any),
 					{
 						errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -947,9 +960,13 @@ describe("lib/node/ValueDB => ", () => {
 
 		it("hasMetadata()", () => {
 			for (const valueId of invalidValueIDs) {
-				assertZWaveError(() => valueDB.hasMetadata(valueId as any), {
-					errorCode: ZWaveErrorCodes.Argument_Invalid,
-				});
+				assertZWaveErrorAva(
+					t,
+					() => valueDB.hasMetadata(valueId as any),
+					{
+						errorCode: ZWaveErrorCodes.Argument_Invalid,
+					},
+				);
 			}
 		});
 	});
