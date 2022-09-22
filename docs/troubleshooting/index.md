@@ -27,7 +27,7 @@ Here's an example how this **DOES** look like (correct log, correct loglevel):
 2021-10-15T16:16:59.888Z CNTRLR   [Node 029] The node is asleep.
 ```
 
-Here's how it **DOES NOT** look like. This is an **application log** from `zwave-js-ui` (former `zwavejs2mqtt`):
+Here's how it **DOES NOT** look like. This is an **application log** from `zwave-js-ui` (formerly `zwavejs2mqtt`):
 
 ```log
 2021-08-04 15:56:59.250 INFO MQTT: MQTT is disabled

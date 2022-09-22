@@ -10,7 +10,7 @@ This is where **Z-Wave JS** comes in. It has the difficult parts, DOs and DON'Ts
 
 For applications built with Node.js, the npm package `zwave-js` can be installed and used directly. To get started, check out [Quick Start](getting-started/quickstart.md) and the [API overview](api/overview.md). Examples for this can be found in the following applications:
 
--   [Z-Wave JS UI](https://github.com/zwave-js/zwave-js-ui) _(former ZwaveJS2MQTT)_
+-   [Z-Wave JS UI](https://github.com/zwave-js/zwave-js-ui) _(formerly ZwaveJS2MQTT)_
 -   [ioBroker.zwave2](https://github.com/AlCalzone/ioBroker.zwave2)
 -   [node-red-contrib-zwave-js](https://github.com/zwave-js/node-red-contrib-zwave-js)
 
