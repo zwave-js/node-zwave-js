@@ -417,11 +417,20 @@ export interface FirmwareUpdateFileInfo {
 // Warning: (ae-missing-release-tag) "FirmwareUpdateInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type FirmwareUpdateInfo = {
-    version: string;
+export interface FirmwareUpdateInfo {
+    // (undocumented)
     changelog: string;
+    // (undocumented)
+    channel: "stable" | "beta";
+    // (undocumented)
+    downgrade: boolean;
+    // (undocumented)
     files: FirmwareUpdateFileInfo[];
-};
+    // (undocumented)
+    normalizedVersion: string;
+    // (undocumented)
+    version: string;
+}
 
 export { FirmwareUpdateStatus }
 
@@ -473,6 +482,7 @@ export { getEnumMemberName }
 export interface GetFirmwareUpdatesOptions {
     additionalUserAgentComponents?: Record<string, string>;
     apiKey?: string;
+    includePrereleases?: boolean;
 }
 
 export { guessFirmwareFileFormat }
