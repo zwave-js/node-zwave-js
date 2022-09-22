@@ -6,6 +6,7 @@ module.exports = {
 		// TODO: Add those packages that have been migrated to ava
 		"<rootDir>/packages/shared",
 		"<rootDir>/packages/core",
+		"<rootDir>/packages/nvmedit",
 	],
 	moduleNameMapper: {
 		// Somehow the testing module isn't found automatically 🤷‍♂️
@@ -26,6 +27,4 @@ module.exports = {
 	},
 	// Help jest resolve the compiled files which are referenced inside publishConfig
 	resolver: "./test/jest.moduleResolver.js",
-	// Place snapshots next to test files
-	snapshotResolver: "<rootDir>/test/jest.snapshotResolver.js",
 };
