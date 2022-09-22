@@ -18,7 +18,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"The toneId value should have value change options after SoundSwitchCC interview",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			commandClasses: [CommandClasses["Sound Switch"]],
@@ -101,7 +101,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToSoundSwitchToneInfoGet);
 		},
 
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (driver, node, _mockController, _mockNode) => {
 			const toneIdValue = SoundSwitchCCValues.toneId;
 			const meta = node.getValueMetadata(toneIdValue.id);
 			console.dir(meta);
