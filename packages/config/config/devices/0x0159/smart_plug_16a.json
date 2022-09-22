@@ -41,8 +41,8 @@
 		},
 		{
 			"#": "11",
-			"label": "Turn Smart plug 16A Off Automatically with Timer",
-			"description": "If Smart plug 16A is ON, you can schedule it to turn OFF automatically after a period defined in this parameter. The timer is reset to zero each time the device receives an ON command, either remotely (from the gateway (hub) or associated device) or locally from the switch.",
+			"label": "Auto-Off Timer",
+			"description": "Turn OFF automatically after a period defined in this parameter.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -57,8 +57,8 @@
 		},
 		{
 			"#": "12",
-			"label": "Turn Smart plug 16A On Automatically with Timer",
-			"description": "If Smart plug 16A is OFF, you can schedule it to turn ON automatically after a period of time defined in this parameter. The timer is reset to zero each time the device receives an OFF command, either remotely (from the gateway (hub) or associated device) or locally from the switch.",
+			"label": "Auto-On Timer",
+			"description": "Turn ON automatically after a period of time defined in this parameter.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -91,8 +91,8 @@
 		},
 		{
 			"#": "30",
-			"label": "Restore on/off status for Smart plug 16A after power failure",
-			"description": "This parameter determines if on/off status is saved and restored for the Smart plug 16A after power failure.",
+			"label": "Restore on/off status",
+			"description": "After power failure",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -109,8 +109,8 @@
 		},
 		{
 			"#": "40",
-			"label": "Power Consumption (Watt) Reporting Threshold",
-			"description": "Choose by how much power consumption needs to increase or decrease to be reported. Values correspond to percentages, so if 20 is set (by default), the device will report any power consumption changes of 20% or more compared to the last reading.",
+			"label": "Power Consumption Reporting Threshold",
+			"description": "Percentage of increase or decrease to be reported.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -125,8 +125,8 @@
 		},
 		{
 			"#": "42",
-			"label": "Power Consumption (Watt) Reporting Interval",
-			"description": "Set value refers to the time interval with which power consumption in Watts is reported (30 – 32535 seconds).",
+			"label": "Power Consumption Reporting Interval",
+			"description": "Time interval for power consumption reports (30 – 32535 seconds).",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -141,8 +141,8 @@
 		},
 		{
 			"#": "50",
-			"label": "Down value",
-			"description": "Lower power threshold used in parameter no. 52.",
+			"label": "Lower power threshold",
+			"description": "Used in parameter no. 52.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -151,8 +151,8 @@
 		},
 		{
 			"#": "51",
-			"label": "Up value",
-			"description": "Upper power threshold used in parameter no. 52.",
+			"label": "Upper power threshold",
+			"description": "Used in parameter no. 52.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -161,8 +161,8 @@
 		},
 		{
 			"#": "52",
-			"label": "Action in case of exceeding defined power values (parameters 50 and 51)",
-			"description": "Parameter defines the way 3rd association group devices are controlled, depending on the current power load",
+			"label": "Associated Devices Action",
+			"description": "In case of exceeding defined power values",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -173,27 +173,27 @@
 					"value": 0
 				},
 				{
-					"label": "turn the associated devices on, once the power drops below Down value (parameter no. 50)",
+					"label": "turn on, once the power drops below lower power threshold",
 					"value": 1
 				},
 				{
-					"label": "turn the associated devices off, once the power drops below Down value (parameter no. 50)",
+					"label": "turn off, once the power drops below lower power threshold",
 					"value": 2
 				},
 				{
-					"label": "turn the associated devices on, once the power rises above Up value (parameter no. 51)",
+					"label": "turn on, once the power rises above upper power threshold",
 					"value": 3
 				},
 				{
-					"label": "turn the associated devices off, once the power rises above Up value (parameter no. 51)",
+					"label": "turn off, once the power rises above upper power threshold",
 					"value": 4
 				},
 				{
-					"label": "1 and 4 combined. Turn the associated devices on, once the power drops below Down value (parameter no. 50). Turn the associated devices off, once the power rises above Up value (parameter no. 51).",
+					"label": "Turn on, once the power drops below lower power threshold. Turn off, once the power rises above upper power threshold",
 					"value": 5
 				},
 				{
-					"label": "2 and 3 combined. Turn the associated devices off, once the power drops below Down value (parameter 50). Turn the associated devices on, once the power rises above Up value (parameter no. 51).",
+					"label": "Turn off, once the power drops below lower power threshold. Turn on, once the power rises above upper power threshold.",
 					"value": 6
 				}
 			]
@@ -201,7 +201,7 @@
 		{
 			"#": "70",
 			"label": "Overload safety switch",
-			"description": "The function allows for turning off the controlled device in case of exceeding the defined power for more than 3 seconds. Controlled device can be turned back on by S-button or sending a control frame. By default this function is inactive.",
+			"description": "Turn off the controlled device in case of exceeding the defined power for more than 3 seconds.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -217,7 +217,7 @@
 		{
 			"#": "71",
 			"label": "Power threshold",
-			"description": "This function allows setting the power threshold for triggering the Program started notification. When the threshold is reached, the notification will let the user know that the device connected to the smart plug started working.",
+			"description": "Sets the power threshold for triggering the program started notification.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -233,7 +233,7 @@
 		{
 			"#": "72",
 			"label": "Time interval",
-			"description": "This function allows setting the time interval for triggering the Program completed notification. When the active power will fall below the power threshold set in parameter 71, the time interval will start and when it will expire the notification will let the user know that the device connected to the smart plug finished working. The time interval is useful for the devices that have pause intervals during operations.",
+			"description": "Sets the time interval for triggering the Program completed notification.",
 			"unit": "mn",
 			"valueSize": 1,
 			"minValue": 0,
@@ -249,7 +249,7 @@
 		{
 			"#": "73",
 			"label": "Turn Smart Plug OFF",
-			"description": "This function allows turning the Smart Plug output to OFF once the time interval is expired and the Program completed notification is sent to the controller.",
+			"description": "Turns OFF once the time interval is expired and the Program completed notification is sent to the controller.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -268,7 +268,7 @@
 		{
 			"#": "74",
 			"label": "Enable/disable LED",
-			"description": "This function allows enabling or disabling the Smart Plug LED. In case the user doesn’t want the LED indicator, it can be turned OFF with this parameter.",
+			"description": "This function allows enabling or disabling the Smart Plug LED.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
