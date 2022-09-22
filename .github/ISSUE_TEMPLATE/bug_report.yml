@@ -28,11 +28,11 @@ body:
 
   - type: dropdown
     attributes:
-      label: Is your problem within ZWaveJS2MQTT?
-      description: If yes, please open your issue at https://github.com/zwave-js/zwavejs2mqtt/issues
+      label: Is your problem within Z-Wave JS UI (former ZwaveJS2MQTT)?
+      description: If yes, please open your issue at https://github.com/zwave-js/zwave-js-ui/issues
       options:
-        - NO, my problem is NOT within ZWaveJS2MQTT
-        - YES, BUT a ZWaveJS2MQTT developer has told me to come here
+        - NO, my problem is NOT within Z-Wave JS UI
+        - YES, BUT a Z-Wave JS UI developer has told me to come here
     validations:
       required: true
 
@@ -94,9 +94,9 @@ body:
     attributes:
       label: How are you using `node-zwave-js`?
       options:
-        - label: '`zwavejs2mqtt` Docker image (latest)'
-        - label: '`zwavejs2mqtt` Docker image (dev)'
-        - label: '`zwavejs2mqtt` Docker manually built _(please specify branches)_'
+        - label: '`zwave-js-ui` (former `zwavejs2mqtt`) Docker image (latest)'
+        - label: '`zwave-js-ui` (former `zwavejs2mqtt`) Docker image (dev)'
+        - label: '`zwave-js-ui` (former `zwavejs2mqtt`) Docker manually built _(please specify branches)_'
         - label: '`ioBroker.zwave2` adapter _(please specify version)_'
         - label: '`HomeAssistant zwave_js` integration  _(please specify version)_'
         - label: '`pkg`'
@@ -114,7 +114,7 @@ body:
       value: |
         version:
         `node-zwave-js` branch:
-        `zwavejs2mqtt` branch:
+        `zwave-js-ui` branch:
 
   - type: markdown
     attributes:
