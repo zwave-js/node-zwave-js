@@ -18,4 +18,6 @@ export type FirmwareUpdateInfo = {
 export interface GetFirmwareUpdatesOptions {
 	/** Allows overriding the API key for the firmware update service */
 	apiKey?: string;
+	/** Allows adding new components to the user agent sent to the firmware update service (existing components cannot be overwritten) */
+	additionalUserAgentComponents?: Record<string, string>;
 }

@@ -1,6 +1,10 @@
 {
 	"$schema": "https://turborepo.org/schema.json",
 	"pipeline": {
+		"clean": {
+			"cache": false
+		},
+
 		"prebuild": {
 			// Prebuild tasks run before everything else
 			"dependsOn": ["^prebuild"]
@@ -9,13 +13,31 @@
 			// ... but the maintenance prebuild task has dependencies
 			"dependsOn": ["^build"]
 		},
+
 		"codegen": {
 			// Code generation for packages requires the packages' dependencies to be built
 			// and runs after the own prebuild
 			"dependsOn": ["^build", "prebuild"]
 		},
+		"@zwave-js/cc#codegen": {
+			"dependsOn": ["^build", "prebuild"],
+			"outputs": [
+				"src/cc/index.ts",
+				"src/lib/API.ts",
+				"src/lib/Values.ts"
+			]
+		},
+		"@zwave-js/config#codegen": {
+			"dependsOn": ["^build", "prebuild"],
+			"outputs": ["src/LogicParser.ts"]
+		},
+
 		"build": {
-			"dependsOn": ["prebuild", "codegen", "^build"]
+			"dependsOn": ["^build", "prebuild", "codegen"],
+			// TODO: Figure out how to exclude test files from inputs
+			// :!:**/*.test.ts doesn't work
+			"inputs": [":!:**/*.test.ts", "src/**"],
+			"outputs": ["build/**", "*.tsbuildinfo"]
 		},
 
 		"lint": {
@@ -23,8 +45,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -34,8 +61,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -48,8 +80,13 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}"
+				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
 			],
 			"outputs": []
 		},
@@ -60,11 +97,16 @@
 			"dependsOn": ["build"],
 			"outputs": []
 		},
-		// "test": {},
 
 		"extract-api": {
 			"dependsOn": ["build"],
 			"outputs": ["api.md"]
+		},
+
+		"test:ts": {
+			"dependsOn": ["^build"],
+			"inputs": ["src/**/*.ts"],
+			"outputs": [] // TODO: consider snapshot files
 		},
 
 		// For now, run tests in the root:
@@ -83,13 +125,6 @@
 		"yarn.lock",
 		// Build fresh when TS related stuff changes
 		"tsconfig.json",
-		"tsconfig.build.json",
-		"*.tsbuildinfo",
-		// When https://github.com/vercel/turborepo/issues/1913 is solved, move these into the lint script `inputs`:
-		".eslintrc.js",
-		".eslintignore",
-		".prettierrc.js",
-		".prettierignore",
-		"tsconfig.eslint.json"
+		"tsconfig.build.json"
 	]
 }

@@ -2,8 +2,8 @@ import {
 	createDefaultTransportFormat,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import { assertMessage, SpyTransport } from "@zwave-js/core/test";
 import { SerialLogger } from "@zwave-js/serial";
-import { assertMessage, SpyTransport } from "@zwave-js/testing";
 import colors from "ansi-colors";
 import { pseudoRandomBytes } from "crypto";
 

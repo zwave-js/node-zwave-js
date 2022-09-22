@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/cc",
-  "version": "10.1.0",
+  "version": "10.2.0",
   "description": "zwave-js: Command Classes",
   "keywords": [],
   "publishConfig": {
@@ -62,9 +62,9 @@
   "scripts": {
     "task": "yarn ts maintenance/_tasks.ts",
     "codegen": "yarn task codegen",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json",
+    "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "//clean": "tsc -b tsconfig.build.json --clean",
     "//watch": "yarn run codegen && tsc -b tsconfig.build.json --watch --pretty",
     "lint:zwave": "yarn task lint",
     "ts": "node -r esbuild-register",
@@ -85,11 +85,12 @@
   "devDependencies": {
     "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^27.5.2",
+    "@types/jest": "^29.0.2",
     "@types/node": "^14.18.29",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/testing": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
+    "del-cli": "^5.0.0",
     "fs-extra": "^10.1.0",
     "jest-extended": "^2.0.0",
     "prettier": "^2.7.1",

@@ -1,36 +1,30 @@
+import test from "ava";
+import sinon from "sinon";
 import { TimedExpectation } from "./TimedExpectation";
 
-describe("TimedExpectation", () => {
-	// beforeAll(() => {
-	// 	jest.useFakeTimers();
-	// });
-
-	afterAll(() => {
-		jest.clearAllTimers();
-		jest.useRealTimers();
+test("resolves to the given value", async (t) => {
+	const exp = new TimedExpectation<string>(100);
+	setImmediate(() => {
+		exp.resolve("OK");
 	});
+	const result = await exp;
+	t.is(result, "OK");
+});
 
-	it("resolves to the given value", async () => {
-		const exp = new TimedExpectation<string>(100);
-		setImmediate(() => {
-			exp.resolve("OK");
-		});
-		const result = await exp;
-		expect(result).toBe("OK");
+test("only resolves once", async (t) => {
+	const exp = new TimedExpectation<string>(100);
+	setImmediate(() => {
+		exp.resolve("OK");
+		exp.resolve("NOK");
 	});
+	const result = await exp;
+	t.is(result, "OK");
+});
 
-	it("only resolves once", async () => {
-		const exp = new TimedExpectation<string>(100);
-		setImmediate(() => {
-			exp.resolve("OK");
-			exp.resolve("NOK");
-		});
-		const result = await exp;
-		expect(result).toBe("OK");
-	});
+test("rejects when timed out and does not resolve afterwards", (t) => {
+	const clock = sinon.useFakeTimers(Date.now());
 
-	it("rejects when timed out and does not resolve afterwards", (done) => {
-		jest.useFakeTimers();
+	return new Promise<void>((resolve) => {
 		const start = Date.now();
 		const exp = new TimedExpectation<string>(100);
 		exp.then(
@@ -38,13 +32,14 @@ describe("TimedExpectation", () => {
 				throw new Error("Should not resolve");
 			},
 			(e) => {
-				expect(e).toBeInstanceOf(Error);
-				expect(Date.now() - start).toBe(100);
+				t.true(e instanceof Error);
+				t.is(Date.now() - start, 100);
 				exp.resolve("NOK");
-				done();
+				clock.restore();
+				resolve();
 			},
 		);
 
-		jest.advanceTimersToNextTimer();
+		clock.next();
 	});
 });

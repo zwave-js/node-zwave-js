@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/core",
-  "version": "10.1.0",
+  "version": "10.2.0",
   "description": "zwave-js: core components",
   "keywords": [],
   "publishConfig": {
@@ -10,6 +10,12 @@
       "*": {
         "safe": [
           "build/index_safe.d.ts"
+        ],
+        "test": [
+          "build/index_test.d.ts"
+        ],
+        "ava": [
+          "build/index_ava.d.ts"
         ]
       }
     }
@@ -18,13 +24,21 @@
   "exports": {
     ".": "./build/index.js",
     "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js"
+    "./safe": "./build/index_safe.js",
+    "./test": "./build/index_test.js",
+    "./ava": "./build/index_ava.js"
   },
   "types": "src/index.ts",
   "typesVersions": {
     "*": {
       "safe": [
         "src/index_safe.ts"
+      ],
+      "test": [
+        "src/index_test.ts"
+      ],
+      "ava": [
+        "src/index_ava.ts"
       ]
     }
   },
@@ -51,14 +65,15 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json",
+    "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "//clean": "tsc -b tsconfig.build.json --clean",
     "//watch": "yarn run build --watch --pretty",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:prettier:fix": "yarn run lint:prettier -w",
+    "test:ts": "ava"
   },
   "dependencies": {
     "@alcalzone/jsonl-db": "^2.5.3",
@@ -76,13 +91,15 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "*",
-    "@types/jest": "^27.5.2",
     "@types/node": "^14.18.29",
+    "@types/sinon": "^10.0.13",
     "@types/triple-beam": "^1.3.2",
+    "ava": "^4.3.3",
+    "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
-    "jest-extended": "^2.0.0",
     "prettier": "^2.7.1",
+    "sinon": "^14.0.0",
     "typescript": "4.8.3"
   }
 }
