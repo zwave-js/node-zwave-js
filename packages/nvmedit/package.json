@@ -69,19 +69,19 @@
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:prettier:fix": "yarn run lint:prettier -w",
+    "test:ts": "ava"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^29.0.2",
     "@types/node": "^14.18.29",
     "@types/semver": "^7.3.12",
     "@types/yargs": "^17.0.12",
+    "ava": "^4.3.3",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
-    "jest-extended": "^2.0.0",
     "prettier": "^2.7.1",
     "typescript": "4.8.3"
   }

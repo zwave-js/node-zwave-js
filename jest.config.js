@@ -6,6 +6,7 @@ module.exports = {
 		// TODO: Add those packages that have been migrated to ava
 		"<rootDir>/packages/shared",
 		"<rootDir>/packages/core",
+		"<rootDir>/packages/nvmedit",
 	],
 	moduleNameMapper: {
 		// Somehow the testing module isn't found automatically 🤷‍♂️
