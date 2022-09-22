@@ -118,6 +118,7 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 export interface GetAvailableFirmwareUpdateOptions {
 	userAgent: string;
 	apiKey?: string;
+	includePrereleases?: boolean;
 }
 
 /**
@@ -137,7 +138,9 @@ export function getAvailableFirmwareUpdates(
 
 	const config: OptionsOfTextResponseBody = {
 		method: "POST",
-		url: `${serviceURL}/api/v1/updates`,
+		url: `${serviceURL}/api/${
+			options.includePrereleases ? "v2" : "v1"
+		}/updates`,
 		json: {
 			manufacturerId: formatId(deviceId.manufacturerId),
 			productType: formatId(deviceId.productType),

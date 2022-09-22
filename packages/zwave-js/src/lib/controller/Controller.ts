@@ -4555,6 +4555,7 @@ ${associatedNodes.join(", ")}`,
 					apiKey:
 						options?.apiKey ??
 						this.driver.options.apiKeys?.firmwareUpdateService,
+					includePrereleases: options?.includePrereleases,
 				},
 			);
 		} catch (e: any) {
