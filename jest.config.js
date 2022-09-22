@@ -7,6 +7,7 @@ module.exports = {
 		"<rootDir>/packages/shared",
 		"<rootDir>/packages/core",
 		"<rootDir>/packages/nvmedit",
+		"<rootDir>/packages/transformers",
 	],
 	moduleNameMapper: {
 		// Somehow the testing module isn't found automatically 🤷‍♂️

@@ -4873,6 +4873,7 @@ __metadata:
   resolution: "@zwave-js/transformers@workspace:packages/transformers"
   dependencies:
     "@types/fs-extra": ^9.0.13
+    ava: ^4.3.3
     cpy-cli: ^4.2.0
     del-cli: ^5.0.0
     execa: ^5.1.1
