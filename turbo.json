@@ -34,7 +34,9 @@
 
 		"build": {
 			"dependsOn": ["^build", "prebuild", "codegen"],
-			"inputs": ["src/**"],
+			// TODO: Figure out how to exclude test files from inputs
+			// :!:**/*.test.ts doesn't work
+			"inputs": [":!:**/*.test.ts", "src/**"],
 			"outputs": ["build/**", "*.tsbuildinfo"]
 		},
 
@@ -95,11 +97,16 @@
 			"dependsOn": ["build"],
 			"outputs": []
 		},
-		// "test": {},
 
 		"extract-api": {
 			"dependsOn": ["build"],
 			"outputs": ["api.md"]
+		},
+
+		"test:ts": {
+			"dependsOn": ["^build"],
+			"inputs": ["src/**/*.ts"],
+			"outputs": [] // TODO: consider snapshot files
 		},
 
 		// For now, run tests in the root:

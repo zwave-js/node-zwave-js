@@ -330,6 +330,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 			);
 		} else {
 			this.dateAndTime = options.dateAndTime;
+			this.useLocalTime = options.useLocalTime;
 		}
 	}
 

@@ -2,6 +2,10 @@ module.exports = {
 	testEnvironment: "node",
 	testRegex: "(\\.|/)test\\.tsx?$",
 	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+	modulePathIgnorePatterns: [
+		// TODO: Add those packages that have been migrated to ava
+		"<rootDir>/packages/shared",
+	],
 	moduleNameMapper: {
 		// Somehow the testing module isn't found automatically 🤷‍♂️
 		"^@zwave-js/testing(.*)": "<rootDir>/packages/testing/src$1",
