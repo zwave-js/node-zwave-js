@@ -103,7 +103,7 @@
     "watch": "yarn w \"yarn build\"",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
-    "test:once": "FORCE_COLOR=1 yarn turbo run test:ts --",
+    "test:once": "FORCE_COLOR=1 yarn turbo run test:ts ${TURBO_FLAGS:-''} --",
     "test": "yarn w \"yarn test:once\"",
     "test:ci": "yarn test:once --runInBand --forceExit",
     "coverage": "yarn run test:once --collect-coverage",
