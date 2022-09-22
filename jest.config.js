@@ -5,6 +5,7 @@ module.exports = {
 	modulePathIgnorePatterns: [
 		// TODO: Add those packages that have been migrated to ava
 		"<rootDir>/packages/shared",
+		"<rootDir>/packages/core",
 	],
 	moduleNameMapper: {
 		// Somehow the testing module isn't found automatically 🤷‍♂️
