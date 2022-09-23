@@ -4,7 +4,7 @@ Only a strong and healthy Z-Wave network is a reliable Z-Wave network. Ensuring 
 
 ## Testing the connection strength
 
-A flaky connection will cause issues during usage and can compound other existing issues. Z-Wave JS can perform health checks test the physical connection strength between the controller and a node (or between two nodes). Whether this functionality is available depends on the application you use Z-Wave JS with, but at least [Z-Wave JS UI](https://github.com/zwave-js/zwave-js-ui) exposes it (see [Nodes health check](usage/nodes_healthcheck)).
+A flaky connection will cause issues during usage and can compound other existing issues. Z-Wave JS can perform health checks test the physical connection strength between the controller and a node (or between two nodes). Whether this functionality is available depends on the application you use Z-Wave JS with, but at least [Z-Wave JS UI](https://github.com/zwave-js/zwave-js-ui) exposes it (see [Nodes health check](https://zwave-js.github.io/zwave-js-ui/#/usage/nodes_healthcheck)).
 
 Such a health check will ping a node several times, and (if the node supports it) instruct it to ping the controller with varying TX power. This way, Z-Wave JS will determine the following things, not all of which may be supported by your combination of controller and nodes:
 
