@@ -21,7 +21,6 @@ concurrency:
 
 env:
   TURBO_FLAGS: "--concurrency=2 --api=http://127.0.0.1:9080 --token=foo --team=me" # The token must match the one in the prepare-env action
-  # TODO: Remove workaround for https://github.com/vercel/turborepo/issues/2040 from prepare-env action when fixed
 
 jobs:
   build:

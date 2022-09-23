@@ -22,12 +22,6 @@ runs:
       shell: bash
       run: yarn install --immutable
 
-    - name: Work around https://github.com/vercel/turborepo/issues/2040
-      shell: bash
-      run: |
-        mkdir -p .turbo/
-        echo '{"apiurl": "http://127.0.0.1:9080", "teamid": "me"}' > .turbo/config.json
-
     - name: TurboRepo local server
       uses: felixmosh/turborepo-gh-artifacts@v1.1.0
       with:
