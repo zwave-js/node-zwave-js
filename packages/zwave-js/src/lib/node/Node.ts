@@ -1342,6 +1342,8 @@ export class ZWaveNode
 		return this.driver.interviewNodeInternal(this);
 	}
 
+	private _refreshInfoPending: boolean = false;
+
 	/**
 	 * Resets all information about this node and forces a fresh interview.
 	 * **Note:** This does nothing for the controller node.
@@ -1353,6 +1355,11 @@ export class ZWaveNode
 		// It does not make sense to re-interview the controller. All important information is queried
 		// directly via the serial API
 		if (this.isControllerNode) return;
+
+		// The driver does deduplicate re-interview requests, but only at the end of this method.
+		// Without blocking here, many re-interview tasks for sleeping nodes may be queued, leading to parallel interviews
+		if (this._refreshInfoPending) return;
+		this._refreshInfoPending = true;
 
 		const { resetSecurityClasses = false, waitForWakeup = true } = options;
 		// Unless desired, don't forget the information about sleeping nodes immediately, so they continue to function
@@ -1406,7 +1413,9 @@ export class ZWaveNode
 
 		// Don't keep the node awake after the interview
 		this.keepAwake = false;
+
 		void this.driver.interviewNodeInternal(this);
+		this._refreshInfoPending = false;
 	}
 
 	/**
