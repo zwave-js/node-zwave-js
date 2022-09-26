@@ -143,6 +143,7 @@ import {
 	stringify,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
+import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
@@ -3609,6 +3610,8 @@ protocol version:      ${this.protocolVersion}`;
 		  }
 		| undefined;
 
+	private _abortFirmwareUpdate: (() => void) | undefined;
+
 	/**
 	 * Retrieves the firmware update capabilities of a node to decide which options to offer a user prior to the update.
 	 * This method uses cached information from the most recent interview.
@@ -3829,6 +3832,333 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
+	/** Handles the process of doing a firmware update of a single target */
+	private async updateFirmwareInternal(
+		data: Buffer,
+		target: number,
+		onProgress: (fragment: number, total: number) => void,
+	): Promise<
+		Pick<FirmwareUpdateResult, "status" | "waitTime"> & {
+			success: boolean;
+		}
+	> {
+		// Support aborting the update
+		let abort = false;
+		let tooLateToAbort = false;
+
+		const abortPromise = createDeferredPromise<boolean>();
+		this._abortFirmwareUpdate = async () => {
+			if (tooLateToAbort) {
+				throw new ZWaveError(
+					`The firmware update was transmitted completely, cannot abort anymore.`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
+				);
+			}
+
+			this.driver.controllerLog.logNode(this.id, {
+				message: `Aborting firmware update...`,
+				direction: "outbound",
+			});
+
+			// Trigger the abort
+			abort = true;
+			const aborted = await abortPromise;
+			if (!aborted) {
+				throw new ZWaveError(
+					`The node did not acknowledge the aborted update`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
+				);
+			}
+			this.driver.controllerLog.logNode(this.id, {
+				message: `Firmware update aborted`,
+				direction: "inbound",
+			});
+		};
+
+		const version = this.getCCVersion(
+			CommandClasses["Firmware Update Meta Data"],
+		);
+		const api = this.commandClasses["Firmware Update Meta Data"];
+
+		// FIXME: set keepAwake to false after calling this
+
+		// ================================
+		// STEP 1:
+		// Check if this update is possible
+		const meta = await api.getMetaData();
+		if (!meta) {
+			throw new ZWaveError(
+				`Failed to start the update: The node did not respond in time!`,
+				ZWaveErrorCodes.Controller_NodeTimeout,
+			);
+		}
+
+		if (target === 0) {
+			if (!meta.firmwareUpgradable) {
+				throw new ZWaveError(
+					`Failed to start the update: The Z-Wave chip firmware is not upgradable!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
+				);
+			}
+		} else {
+			if (version < 3) {
+				throw new ZWaveError(
+					`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
+				);
+			} else if (meta.additionalFirmwareIDs[target - 1] == undefined) {
+				throw new ZWaveError(
+					`Failed to start the update: Firmware target #${target} not found on this node!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
+				);
+			}
+		}
+
+		// ================================
+		// STEP 2:
+		// Determine the fragment size
+		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
+			nodeId: this.id,
+		});
+		const maxNetPayloadSize =
+			this.driver.computeNetCCPayloadSize(fcc) -
+			2 - // report number
+			(version >= 2 ? 2 : 0); // checksum
+		// Use the smallest allowed payload
+		const fragmentSize = Math.min(
+			maxNetPayloadSize,
+			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
+		);
+		const numFragments = Math.ceil(data.length / fragmentSize);
+
+		if (abort) {
+			abortPromise.resolve(true);
+			return {
+				success: false,
+				status: FirmwareUpdateStatus.Error_TransmissionFailed,
+			};
+		}
+
+		// ================================
+		// STEP 3:
+		// Start the update
+		this.driver.controllerLog.logNode(this.id, {
+			message: `Starting firmware update...`,
+			direction: "outbound",
+		});
+
+		// Request the node to start the upgrade
+		// TODO: Should manufacturer id and firmware id be provided externally?
+		const requestUpdateStatus = await api.requestUpdate({
+			manufacturerId: meta.manufacturerId,
+			firmwareId:
+				target == 0
+					? meta.firmwareId
+					: meta.additionalFirmwareIDs[target - 1],
+			firmwareTarget: target,
+			fragmentSize,
+			checksum: CRC16_CCITT(data),
+		});
+		switch (requestUpdateStatus) {
+			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:
+				throw new ZWaveError(
+					`Failed to start the update: A manual authentication event (e.g. button push) was expected!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.Error_BatteryLow:
+				throw new ZWaveError(
+					`Failed to start the update: The battery level is too low!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.Error_FirmwareUpgradeInProgress:
+				throw new ZWaveError(
+					`Failed to start the update: A firmware upgrade is already in progress!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_Busy,
+				);
+			case FirmwareUpdateRequestStatus.Error_InvalidManufacturerOrFirmwareID:
+				throw new ZWaveError(
+					`Failed to start the update: Invalid manufacturer or firmware id!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.Error_InvalidHardwareVersion:
+				throw new ZWaveError(
+					`Failed to start the update: Invalid hardware version!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.Error_NotUpgradable:
+				throw new ZWaveError(
+					`Failed to start the update: Firmware target #${target} is not upgradable!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
+				);
+			case FirmwareUpdateRequestStatus.Error_FragmentSizeTooLarge:
+				throw new ZWaveError(
+					`Failed to start the update: The chosen fragment size is too large!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.OK:
+				// All good, we have started!
+				// Keep the node awake until the update is done.
+				this.keepAwake = true;
+		}
+
+		// ================================
+		// STEP 4:
+		// Respond to fragment requests from the node
+		update: while (true) {
+			// FIXME: Respond to this when no upgrade is in progress -> abort
+			const fragmentRequest = await this.driver
+				.waitForCommand<FirmwareUpdateMetaDataCCGet>(
+					(cc) =>
+						cc.nodeId === this.nodeId &&
+						cc instanceof FirmwareUpdateMetaDataCCGet,
+					30000,
+				)
+				.catch(() => undefined);
+
+			if (!fragmentRequest) {
+				// In some cases it can happen that the device stops requesting update frames
+				// We need to timeout the update in this case so it can be restarted
+
+				this.driver.controllerLog.logNode(this.id, {
+					message: `Firmware update timed out`,
+					direction: "none",
+					level: "warn",
+				});
+
+				return {
+					success: false,
+					status: FirmwareUpdateStatus.Error_Timeout,
+				};
+			}
+			// When a node requests a firmware update fragment, it must be awake
+			try {
+				this.markAsAwake();
+			} catch {
+				/* ignore */
+			}
+
+			if (fragmentRequest.reportNumber > numFragments) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `Received Firmware Update Get for an out-of-bounds fragment. Forcing the node to abort...`,
+					direction: "inbound",
+				});
+				await this.sendCorruptedFirmwareUpdateReportNew(
+					fragmentRequest.reportNumber,
+					randomBytes(fragmentSize),
+				);
+				// This will cause the node to abort the process, wait for that
+				break update;
+			}
+
+			// Actually send the requested frames
+			request: for (
+				let num = fragmentRequest.reportNumber;
+				num < fragmentRequest.reportNumber + fragmentRequest.numReports;
+				num++
+			) {
+				// Check if the node requested more fragments than are left
+				if (num > numFragments) {
+					break;
+				}
+				const fragment = data.slice(
+					(num - 1) * fragmentSize,
+					num * fragmentSize,
+				);
+
+				if (abort) {
+					await this.sendCorruptedFirmwareUpdateReportNew(
+						fragmentRequest.reportNumber,
+						randomBytes(fragment.length),
+					);
+					// This will cause the node to abort the process, wait for that
+					break update;
+				} else {
+					// Avoid queuing duplicate fragments
+					if (this.hasPendingFirmwareUpdateFragment(num)) {
+						this.driver.controllerLog.logNode(this.id, {
+							message: `Firmware fragment ${num} already queued`,
+							level: "warn",
+						});
+						continue request;
+					}
+
+					this.driver.controllerLog.logNode(this.id, {
+						message: `Sending firmware fragment ${num} / ${numFragments}`,
+						direction: "outbound",
+					});
+					const isLast = num === numFragments;
+
+					await this.commandClasses[
+						"Firmware Update Meta Data"
+					].sendFirmwareFragment(num, isLast, fragment);
+
+					onProgress(num, numFragments);
+					// FIXME: Emit progress events in the calling method
+
+					// If that was the last one wait for status report from the node and restart interview
+					if (isLast) {
+						tooLateToAbort = true;
+						break update;
+					}
+				}
+			}
+		}
+
+		// ================================
+		// STEP 5:
+		// Finalize the update process
+
+		const statusReport = await this.driver
+			.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
+				(cc) =>
+					cc.nodeId === this.nodeId &&
+					cc instanceof FirmwareUpdateMetaDataCCStatusReport,
+				// Wait up to 5 minutes. It should never take that long, but the specs
+				// don't say anything specific
+				5 * 60000,
+			)
+			.catch(() => undefined);
+
+		if (abort) {
+			abortPromise.resolve(
+				statusReport?.status ===
+					FirmwareUpdateStatus.Error_TransmissionFailed,
+			);
+		}
+
+		if (!statusReport) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`The node did not acknowledge the completed update`,
+				"warn",
+			);
+
+			return {
+				success: false,
+				status: FirmwareUpdateStatus.Error_Timeout,
+			};
+		}
+
+		const { status, waitTime } = statusReport;
+
+		// Actually, OK_WaitingForActivation should never happen since we don't allow
+		// delayed activation in the RequestGet command
+		const success = status >= FirmwareUpdateStatus.OK_WaitingForActivation;
+
+		this.driver.controllerLog.logNode(this.id, {
+			message: `Firmware update ${
+				success ? "completed" : "failed"
+			} with status ${getEnumMemberName(FirmwareUpdateStatus, status)}`,
+			direction: "inbound",
+		});
+
+		return {
+			success,
+			status,
+			waitTime,
+		};
+	}
+
 	/**
 	 * Aborts an active firmware update process
 	 */
@@ -3881,6 +4211,30 @@ protocol version:      ${this.protocolVersion}`;
 			}
 			throw e;
 		}
+	}
+
+	private async sendCorruptedFirmwareUpdateReportNew(
+		reportNum: number,
+		fragment: Buffer,
+	): Promise<void> {
+		try {
+			await this.commandClasses[
+				"Firmware Update Meta Data"
+			].sendFirmwareFragment(reportNum, true, fragment);
+		} catch {
+			// ignore
+		}
+	}
+
+	private hasPendingFirmwareUpdateFragment(fragmentNumber: number): boolean {
+		// Avoid queuing duplicate fragments
+		const isCurrentFirmwareFragment = (t: Transaction) =>
+			t.message.getNodeId() === this.nodeId &&
+			isCommandClassContainer(t.message) &&
+			t.message.command instanceof FirmwareUpdateMetaDataCCReport &&
+			t.message.command.reportNumber === fragmentNumber;
+
+		return this.driver.hasPendingTransactions(isCurrentFirmwareFragment);
 	}
 
 	private async sendCorruptedFirmwareUpdateReport(
@@ -3977,17 +4331,7 @@ protocol version:      ${this.protocolVersion}`;
 					return;
 				} else {
 					// Avoid queuing duplicate fragments
-					const isCurrentFirmwareFragment = (t: Transaction) =>
-						t.message.getNodeId() === this.nodeId &&
-						isCommandClassContainer(t.message) &&
-						t.message.command instanceof
-							FirmwareUpdateMetaDataCCReport &&
-						t.message.command.reportNumber === num;
-					if (
-						this.driver.hasPendingTransactions(
-							isCurrentFirmwareFragment,
-						)
-					) {
+					if (this.hasPendingFirmwareUpdateFragment(num)) {
 						this.driver.controllerLog.logNode(this.id, {
 							message: `Firmware fragment ${num} already queued`,
 							level: "warn",

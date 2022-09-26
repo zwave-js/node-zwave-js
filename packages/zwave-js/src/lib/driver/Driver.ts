@@ -1936,7 +1936,7 @@ export class Driver
 		}
 	}
 
-	/** This is called when a node's firmware was updated */
+	/** This is called when the firmware on one of a node's firmware targets was updated */
 	private async onNodeFirmwareUpdated(
 		node: ZWaveNode,
 		_status: FirmwareUpdateStatus,

@@ -711,6 +711,7 @@ export enum FirmwareUpdateStatus {
 	Error_Timeout = -1,
 
 	Error_Checksum = 0,
+	/** TransmissionFailed is also used for user-aborted upgrades */
 	Error_TransmissionFailed = 1,
 	Error_InvalidManufacturerID = 2,
 	Error_InvalidFirmwareID = 3,
