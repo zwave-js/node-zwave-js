@@ -3671,6 +3671,8 @@ protocol version:      ${this.protocolVersion}`;
 		data: Buffer,
 		target: number = 0,
 	): Promise<void> {
+		const loglevel = this.driver.getLogConfig().level;
+
 		// Don't start the process twice
 		if (this._firmwareUpdateStatus) {
 			throw new ZWaveError(
@@ -3729,6 +3731,17 @@ protocol version:      ${this.protocolVersion}`;
 		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
 			nodeId: this.id,
 		});
+
+		if (loglevel === "silly") {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`[beginFirmwareUpdate]
+  version = ${version}
+  CC version for net payload size = ${fcc.version}
+  CC API version = ${api.version}`,
+			);
+		}
+
 		const maxNetPayloadSize =
 			this.driver.computeNetCCPayloadSize(fcc) -
 			2 - // report number
