@@ -3698,6 +3698,11 @@ protocol version:      ${this.protocolVersion}`;
 		const originalKeepAwake = this.keepAwake;
 		this.keepAwake = true;
 
+		const restore = () => {
+			this.keepAwake = originalKeepAwake;
+			this._firmwareUpdateInProgress = false;
+		};
+
 		// Kick off the firmware update "synchronously"
 		let abortContext: AbortFirmwareUpdateContext;
 		let fragmentSize: number;
@@ -3705,6 +3710,7 @@ protocol version:      ${this.protocolVersion}`;
 		try {
 			({ abortContext, fragmentSize, numFragments } =
 				await this.beginFirmwareUpdateInternal(data, target));
+
 			// Handle early aborts
 			if (abortContext.abort) {
 				this.emit(
@@ -3718,11 +3724,12 @@ protocol version:      ${this.protocolVersion}`;
 						target,
 					},
 				);
+				restore();
 				return;
 			}
-		} finally {
-			this.keepAwake = originalKeepAwake;
-			this._firmwareUpdateInProgress = false;
+		} catch {
+			restore();
+			return;
 		}
 
 		// Perform the update in the background
@@ -3759,8 +3766,7 @@ protocol version:      ${this.protocolVersion}`;
 			} catch {
 				// ignore
 			} finally {
-				this.keepAwake = originalKeepAwake;
-				this._firmwareUpdateInProgress = false;
+				restore();
 			}
 		})();
 	}
