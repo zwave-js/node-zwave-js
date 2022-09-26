@@ -1,15 +1,13 @@
+import type { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import type {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
+	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	MultilevelSwitchCommand,
 	Powerlevel,
 	PowerlevelTestStatus,
 } from "@zwave-js/cc/safe";
-import type {
-	FirmwareUpdateResult,
-	NotificationCCReport,
-} from "@zwave-js/cc/src";
 import type {
 	CommandClasses,
 	MetadataUpdatedArgs,

@@ -3818,8 +3818,6 @@ protocol version:      ${this.protocolVersion}`;
 		);
 		const api = this.commandClasses["Firmware Update Meta Data"];
 
-		// FIXME: set keepAwake to false after calling this
-
 		// ================================
 		// STEP 1:
 		// Check if this update is possible
@@ -3962,7 +3960,6 @@ protocol version:      ${this.protocolVersion}`;
 		// STEP 4:
 		// Respond to fragment requests from the node
 		update: while (true) {
-			// FIXME: Respond to this when no upgrade is in progress -> abort
 			const fragmentRequest = await this.driver
 				.waitForCommand<FirmwareUpdateMetaDataCCGet>(
 					(cc) =>
