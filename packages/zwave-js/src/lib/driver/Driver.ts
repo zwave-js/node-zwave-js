@@ -5,6 +5,7 @@ import {
 	CommandClass,
 	CRC16CC,
 	DeviceResetLocallyCCNotification,
+	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	getImplementedVersion,
 	ICommandClassContainer,
@@ -1915,28 +1916,50 @@ export class Driver
 		this.checkAllNodesReady();
 	}
 
+	/**
+	 * Returns the time in seconds to actually wait after a firmware upgrade, depending on what the device said.
+	 * This number will always be a bit greater than the advertised duration, because devices have been found to take longer to actually reboot.
+	 */
+	public getConservativeWaitTimeAfterFirmwareUpdate(
+		advertisedWaitTime: number | undefined,
+	): number {
+		// Wait the specified time plus a bit, so the device is actually ready to use
+		if (!advertisedWaitTime) {
+			// Wait at least 5 seconds
+			return 5;
+		} else if (advertisedWaitTime < 20) {
+			return advertisedWaitTime + 5;
+		} else if (advertisedWaitTime < 60) {
+			return advertisedWaitTime + 10;
+		} else {
+			return advertisedWaitTime + 30;
+		}
+	}
+
 	/** This is called when a node's firmware was updated */
 	private async onNodeFirmwareUpdated(
 		node: ZWaveNode,
-		status: FirmwareUpdateStatus,
-		waitTime?: number,
+		_status: FirmwareUpdateStatus,
+		_waitTime: number | undefined,
+		result: FirmwareUpdateResult,
 	): Promise<void> {
+		const { status, complete } = result;
+		let { waitTime } = result;
+
 		// Don't do this for non-successful updates
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
 
 		// TODO: Add support for delayed activation
 
+		// Reset nonces etc. to prevent false-positive duplicates after the update
+		this.securityManager?.deleteAllNoncesForReceiver(node.id);
+		this.securityManager2?.deleteNonce(node.id);
+
+		// If the update process isn't complete yet, sequencing the actions is done elsewhere
+		if (!complete) return;
+
 		// Wait the specified time plus a bit, so the device is actually ready to use
-		if (!waitTime) {
-			// Wait at least 5 seconds
-			waitTime = 5;
-		} else if (waitTime < 20) {
-			waitTime += 5;
-		} else if (waitTime < 60) {
-			waitTime += 10;
-		} else {
-			waitTime += 30;
-		}
+		waitTime = this.getConservativeWaitTimeAfterFirmwareUpdate(waitTime);
 
 		if (status === FirmwareUpdateStatus.OK_NoRestart) {
 			// This status MUST not be advertised for target 0.
@@ -1984,10 +2007,6 @@ export class Driver
 				});
 			}, waitTime * 1000).unref(),
 		);
-
-		// Reset nonces etc. to prevent false-positive duplicates after the update
-		this.securityManager?.deleteAllNoncesForReceiver(node.id);
-		this.securityManager2?.deleteNonce(node.id);
 	}
 
 	/** This is called when a node emits a `"notification"` event */

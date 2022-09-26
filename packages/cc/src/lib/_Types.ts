@@ -760,6 +760,20 @@ export type FirmwareUpdateCapabilities =
 			readonly supportsActivation: Maybe<boolean>;
 	  };
 
+export interface FirmwareUpdateResult {
+	/** The status returned by the device for this firmware update attempt */
+	status: FirmwareUpdateStatus;
+	/** Which firmware target was (attempted to be) updated */
+	target: number;
+	/** How long to wait before interacting with the device again */
+	waitTime?: number;
+	/**
+	 * Whether the firmware update sequence is complete.
+	 * For multi-target updates, this will be false until the last target has been updated.
+	 */
+	complete: boolean;
+}
+
 /** @publicAPI */
 export enum HailCommand {
 	Hail = 0x01,

@@ -6,7 +6,10 @@ import type {
 	Powerlevel,
 	PowerlevelTestStatus,
 } from "@zwave-js/cc/safe";
-import type { NotificationCCReport } from "@zwave-js/cc/src";
+import type {
+	FirmwareUpdateResult,
+	NotificationCCReport,
+} from "@zwave-js/cc/src";
 import type {
 	CommandClasses,
 	MetadataUpdatedArgs,
@@ -89,8 +92,9 @@ export type ZWaveNodeFirmwareUpdateProgressCallback = (
 ) => void;
 export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 	node: ZWaveNode,
-	status: FirmwareUpdateStatus,
-	waitTime?: number,
+	__DEPRECATED__status: FirmwareUpdateStatus,
+	__DEPRECATED__waitTime: number | undefined,
+	result: FirmwareUpdateResult,
 ) => void;
 export type ZWaveNodeStatusChangeCallback = (
 	node: ZWaveNode,
