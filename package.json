@@ -32,7 +32,7 @@
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.0.3",
     "@alcalzone/jsonl-db": "^2.5.3",
-    "@alcalzone/monopack": "^1.1.0",
+    "@alcalzone/monopack": "^1.2.0",
     "@alcalzone/release-script": "~3.5.9",
     "@babel/core": "^7.19.0",
     "@babel/plugin-proposal-class-properties": "*",
