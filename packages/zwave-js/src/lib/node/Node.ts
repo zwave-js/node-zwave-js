@@ -3694,22 +3694,67 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 		this._firmwareUpdateInProgress = true;
+
+		// Support aborting the update
+		const abortContext: {
+			abort: boolean;
+			tooLateToAbort: boolean;
+			abortPromise: DeferredPromise<boolean>;
+		} = {
+			abort: false,
+			tooLateToAbort: false,
+			abortPromise: createDeferredPromise<boolean>(),
+		};
+
+		this._abortFirmwareUpdate = async () => {
+			if (abortContext.tooLateToAbort) {
+				throw new ZWaveError(
+					`The firmware update was transmitted completely, cannot abort anymore.`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
+				);
+			}
+
+			this.driver.controllerLog.logNode(this.id, {
+				message: `Aborting firmware update...`,
+				direction: "outbound",
+			});
+
+			// Trigger the abort
+			abortContext.abort = true;
+			const aborted = await abortContext.abortPromise;
+			if (!aborted) {
+				throw new ZWaveError(
+					`The node did not acknowledge the aborted update`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
+				);
+			}
+			this.driver.controllerLog.logNode(this.id, {
+				message: `Firmware update aborted`,
+				direction: "inbound",
+			});
+		};
+
 		// If the node isn't supposed to be kept awake yet, do it
 		const originalKeepAwake = this.keepAwake;
 		this.keepAwake = true;
 
+		// Reset persisted state after the update
 		const restore = () => {
 			this.keepAwake = originalKeepAwake;
 			this._firmwareUpdateInProgress = false;
+			this._abortFirmwareUpdate = undefined;
 		};
 
 		// Kick off the firmware update "synchronously"
-		let abortContext: AbortFirmwareUpdateContext;
 		let fragmentSize: number;
 		let numFragments: number;
 		try {
-			({ abortContext, fragmentSize, numFragments } =
-				await this.beginFirmwareUpdateInternal(data, target));
+			({ fragmentSize, numFragments } =
+				await this.beginFirmwareUpdateInternal(
+					data,
+					target,
+					abortContext,
+				));
 
 			// Handle early aborts
 			if (abortContext.abort) {
@@ -3775,50 +3820,11 @@ protocol version:      ${this.protocolVersion}`;
 	private async beginFirmwareUpdateInternal(
 		data: Buffer,
 		target: number,
+		abortContext: AbortFirmwareUpdateContext,
 	): Promise<{
-		abortContext: AbortFirmwareUpdateContext;
 		fragmentSize: number;
 		numFragments: number;
 	}> {
-		// Support aborting the update
-		const abortContext: {
-			abort: boolean;
-			tooLateToAbort: boolean;
-			abortPromise: DeferredPromise<boolean>;
-		} = {
-			abort: false,
-			tooLateToAbort: false,
-			abortPromise: createDeferredPromise<boolean>(),
-		};
-
-		this._abortFirmwareUpdate = async () => {
-			if (abortContext.tooLateToAbort) {
-				throw new ZWaveError(
-					`The firmware update was transmitted completely, cannot abort anymore.`,
-					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
-				);
-			}
-
-			this.driver.controllerLog.logNode(this.id, {
-				message: `Aborting firmware update...`,
-				direction: "outbound",
-			});
-
-			// Trigger the abort
-			abortContext.abort = true;
-			const aborted = await abortContext.abortPromise;
-			if (!aborted) {
-				throw new ZWaveError(
-					`The node did not acknowledge the aborted update`,
-					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
-				);
-			}
-			this.driver.controllerLog.logNode(this.id, {
-				message: `Firmware update aborted`,
-				direction: "inbound",
-			});
-		};
-
 		const version = this.getCCVersion(
 			CommandClasses["Firmware Update Meta Data"],
 		);
@@ -3876,7 +3882,6 @@ protocol version:      ${this.protocolVersion}`;
 		if (abortContext.abort) {
 			abortContext.abortPromise.resolve(true);
 			return {
-				abortContext,
 				fragmentSize: 0,
 				numFragments: 0,
 			};
@@ -3944,7 +3949,6 @@ protocol version:      ${this.protocolVersion}`;
 				this.keepAwake = true;
 		}
 		return {
-			abortContext,
 			fragmentSize,
 			numFragments,
 		};
