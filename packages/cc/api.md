@@ -6410,6 +6410,16 @@ export enum FirmwareUpdateRequestStatus {
     OK = 255
 }
 
+// Warning: (ae-missing-release-tag) "FirmwareUpdateResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateResult {
+    complete: boolean;
+    status: FirmwareUpdateStatus;
+    target: number;
+    waitTime?: number;
+}
+
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "FirmwareUpdateStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6433,7 +6443,6 @@ export enum FirmwareUpdateStatus {
     Error_InvalidManufacturerID = 2,
     // (undocumented)
     Error_Timeout = -1,
-    // (undocumented)
     Error_TransmissionFailed = 1,
     // (undocumented)
     OK_NoRestart = 254,
