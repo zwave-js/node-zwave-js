@@ -38,6 +38,7 @@ import { V } from "../lib/Values";
 import {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
+	FirmwareUpdateMetaData,
 	FirmwareUpdateMetaDataCommand,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
@@ -92,8 +93,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	/**
 	 * Requests information about the current firmware on the device
 	 */
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getMetaData() {
+	public async getMetaData(): Promise<FirmwareUpdateMetaData | undefined> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.MetaDataGet,
@@ -266,7 +266,10 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataReport)
-export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDataCC {
+export class FirmwareUpdateMetaDataCCMetaDataReport
+	extends FirmwareUpdateMetaDataCC
+	implements FirmwareUpdateMetaData
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,

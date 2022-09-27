@@ -6,6 +6,7 @@ import {
 	EntryControlDataTypes,
 	entryControlEventTypeLabels,
 	FirmwareUpdateCapabilities,
+	FirmwareUpdateMetaData,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
@@ -3747,14 +3748,12 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Kick off the firmware update "synchronously"
 		let fragmentSize: number;
-		let numFragments: number;
 		try {
-			({ fragmentSize, numFragments } =
-				await this.beginFirmwareUpdateInternal(
-					data,
-					target,
-					abortContext,
-				));
+			const result = await this.prepareFirmwareUpdateInternal(
+				data,
+				target,
+				abortContext,
+			);
 
 			// Handle early aborts
 			if (abortContext.abort) {
@@ -3772,6 +3771,16 @@ protocol version:      ${this.protocolVersion}`;
 				restore();
 				return;
 			}
+
+			let meta: FirmwareUpdateMetaData;
+			({ fragmentSize, ...meta } = result!);
+
+			await this.beginFirmwareUpdateInternal(
+				data,
+				target,
+				meta,
+				fragmentSize,
+			);
 		} catch {
 			restore();
 			return;
@@ -3783,7 +3792,6 @@ protocol version:      ${this.protocolVersion}`;
 				const result = await this.doFirmwareUpdateInternal(
 					data,
 					fragmentSize,
-					numFragments,
 					abortContext,
 					(fragment, total) => {
 						this.emit(
@@ -3816,15 +3824,17 @@ protocol version:      ${this.protocolVersion}`;
 		})();
 	}
 
-	/** Kicks off a firmware update of a single target */
-	private async beginFirmwareUpdateInternal(
+	/** Prepares the firmware update of a single target by collecting the necessary information */
+	private async prepareFirmwareUpdateInternal(
 		data: Buffer,
 		target: number,
 		abortContext: AbortFirmwareUpdateContext,
-	): Promise<{
-		fragmentSize: number;
-		numFragments: number;
-	}> {
+	): Promise<
+		| undefined
+		| (FirmwareUpdateMetaData & {
+				fragmentSize: number;
+		  })
+	> {
 		const version = this.getCCVersion(
 			CommandClasses["Firmware Update Meta Data"],
 		);
@@ -3877,15 +3887,23 @@ protocol version:      ${this.protocolVersion}`;
 			maxNetPayloadSize,
 			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
 		);
-		const numFragments = Math.ceil(data.length / fragmentSize);
 
 		if (abortContext.abort) {
 			abortContext.abortPromise.resolve(true);
-			return {
-				fragmentSize: 0,
-				numFragments: 0,
-			};
+			return;
+		} else {
+			return { ...meta, fragmentSize };
 		}
+	}
+
+	/** Kicks off a firmware update of a single target */
+	private async beginFirmwareUpdateInternal(
+		data: Buffer,
+		target: number,
+		meta: FirmwareUpdateMetaData,
+		fragmentSize: number,
+	): Promise<void> {
+		const api = this.commandClasses["Firmware Update Meta Data"];
 
 		// ================================
 		// STEP 3:
@@ -3948,17 +3966,12 @@ protocol version:      ${this.protocolVersion}`;
 				// Keep the node awake until the update is done.
 				this.keepAwake = true;
 		}
-		return {
-			fragmentSize,
-			numFragments,
-		};
 	}
 
 	/** Actually performs the firmware update of a single target */
 	private async doFirmwareUpdateInternal(
 		data: Buffer,
 		fragmentSize: number,
-		numFragments: number,
 		abortContext: AbortFirmwareUpdateContext,
 		onProgress: (fragment: number, total: number) => void,
 	): Promise<
@@ -3966,6 +3979,7 @@ protocol version:      ${this.protocolVersion}`;
 			success: boolean;
 		}
 	> {
+		const numFragments = Math.ceil(data.length / fragmentSize);
 		// ================================
 		// STEP 4:
 		// Respond to fragment requests from the node

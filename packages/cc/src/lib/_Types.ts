@@ -692,6 +692,18 @@ export enum FirmwareUpdateMetaDataCommand {
 	PrepareReport = 0x0b,
 }
 
+export interface FirmwareUpdateMetaData {
+	manufacturerId: number;
+	firmwareId: number;
+	checksum: number;
+	firmwareUpgradable: boolean;
+	maxFragmentSize?: number;
+	additionalFirmwareIDs: readonly number[];
+	hardwareVersion?: number;
+	continuesToFunction: Maybe<boolean>;
+	supportsActivation: Maybe<boolean>;
+}
+
 /** @publicAPI */
 export enum FirmwareUpdateRequestStatus {
 	Error_InvalidManufacturerOrFirmwareID = 0,

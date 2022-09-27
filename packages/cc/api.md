@@ -6049,6 +6049,30 @@ export type FirmwareUpdateCapabilities = {
     readonly supportsActivation: Maybe<boolean>;
 };
 
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaData" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaData {
+    // (undocumented)
+    additionalFirmwareIDs: readonly number[];
+    // (undocumented)
+    checksum: number;
+    // (undocumented)
+    continuesToFunction: Maybe<boolean>;
+    // (undocumented)
+    firmwareId: number;
+    // (undocumented)
+    firmwareUpgradable: boolean;
+    // (undocumented)
+    hardwareVersion?: number;
+    // (undocumented)
+    manufacturerId: number;
+    // (undocumented)
+    maxFragmentSize?: number;
+    // (undocumented)
+    supportsActivation: Maybe<boolean>;
+}
+
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6126,7 +6150,7 @@ export class FirmwareUpdateMetaDataCCMetaDataGet extends FirmwareUpdateMetaDataC
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCMetaDataReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDataCC {
+export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDataCC implements FirmwareUpdateMetaData {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
     readonly additionalFirmwareIDs: readonly number[];
