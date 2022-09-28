@@ -13443,11 +13443,14 @@ export class SoundSwitchCCConfigurationGet extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCConfigurationReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCConfigurationReportOptions);
     // (undocumented)
-    readonly defaultToneId: number;
+    defaultToneId: number;
     // (undocumented)
-    readonly defaultVolume: number;
+    defaultVolume: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
@@ -13486,11 +13489,14 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCToneInfoReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCToneInfoReportOptions);
     // (undocumented)
     readonly duration: number;
     // (undocumented)
     readonly name: string;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
     // (undocumented)
@@ -13542,11 +13548,14 @@ export class SoundSwitchCCTonesNumberGet extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCTonesNumberReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCTonesNumberReportOptions);
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
     // (undocumented)
-    readonly toneCount: number;
+    toneCount: number;
 }
 
 // Warning: (ae-missing-release-tag) "SoundSwitchCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -1,6 +1,10 @@
 {
 	"$schema": "https://turborepo.org/schema.json",
 	"pipeline": {
+		"clean": {
+			"cache": false
+		},
+
 		"prebuild": {
 			// Prebuild tasks run before everything else
 			"dependsOn": ["^prebuild"]
@@ -29,7 +33,11 @@
 		},
 
 		"build": {
-			"dependsOn": ["prebuild", "codegen", "^build"]
+			"dependsOn": ["^build", "prebuild", "codegen"],
+			// TODO: Figure out how to exclude test files from inputs
+			// :!:**/*.test.ts doesn't work
+			"inputs": [":!:**/*.test.ts", "src/**"],
+			"outputs": ["build/**", "*.tsbuildinfo"]
 		},
 
 		"lint": {
@@ -89,11 +97,16 @@
 			"dependsOn": ["build"],
 			"outputs": []
 		},
-		// "test": {},
 
 		"extract-api": {
 			"dependsOn": ["build"],
 			"outputs": ["api.md"]
+		},
+
+		"test:ts": {
+			"dependsOn": ["^build"],
+			"inputs": ["src/**/*.ts"],
+			"outputs": [] // TODO: consider snapshot files
 		},
 
 		// For now, run tests in the root:
@@ -112,7 +125,6 @@
 		"yarn.lock",
 		// Build fresh when TS related stuff changes
 		"tsconfig.json",
-		"tsconfig.build.json",
-		"*.tsbuildinfo"
+		"tsconfig.build.json"
 	]
 }

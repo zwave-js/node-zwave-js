@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/config",
-  "version": "10.1.0",
+  "version": "10.2.0",
   "description": "zwave-js: configuration files",
   "publishConfig": {
     "access": "public",
@@ -53,9 +53,9 @@
   },
   "scripts": {
     "codegen": "yarn ts maintenance/codegen.ts",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json",
+    "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "//clean": "tsc -b tsconfig.build.json --clean",
     "//watch": "yarn run build --watch --pretty",
     "lint:zwave": "yarn ts maintenance/lintConfigFiles.ts",
     "ts": "node -r esbuild-register",
@@ -89,6 +89,7 @@
     "@types/yargs": "^17.0.12",
     "@zwave-js/maintenance": "workspace:*",
     "comment-json": "^4.2.3",
+    "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",
