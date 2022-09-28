@@ -1,5 +1,4 @@
 {
-	"enabled": false,
 	"extends": ["config:base"],
 	"baseBranches": ["master"],
 	"automergeType": "pr-comment",
