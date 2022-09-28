@@ -22,7 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -42,7 +41,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -57,12 +55,11 @@
 		},
 		{
 			"#": "3",
-			"label": "Two state switch",
+			"label": "External switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -83,7 +80,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-		   "unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -99,13 +95,12 @@
 		{
 			"#": "5",
 			"label": "Timer function",
-			"description": "Timer function to automaticly turn off the Load",
+			"description": "Timer function to automaticly turn off the load",
 			"unit": "100ms",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
     {
 			"#": "8",
@@ -115,7 +110,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -144,7 +138,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -161,12 +154,11 @@
 		{
 			"#": "21",
 			"label": "Remote operation",
-        "description": "If remote operation of the switch is allowed",
+            "description": "If remote operation of the switch is allowed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -186,7 +178,6 @@
 			"minValue": 0,
 			"maxValue":85,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
