@@ -111,6 +111,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Report both on/off",
