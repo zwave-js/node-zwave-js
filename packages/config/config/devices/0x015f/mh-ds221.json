@@ -102,7 +102,7 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-    {
+        {
 			"#": "8",
 			"label": "Report options",
 			"description": "Sets report options to association group 2",
