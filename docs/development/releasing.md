@@ -38,6 +38,7 @@ This section is meant as a guide for maintainers on how to release a new version
 5. Clean up commit new changelog entries (this may make sense to do as part of 4.):
 
     - Remove the commit prefix like (`fix:` or `feat:`, etc...)
+    - Prefix each entry with `* `, so it gets rendered as a list item
     - Capitalize the first letter of the commit message. You can do this with VSCode by selecting the first letter using the multi-cursor selection, pressing <kbd>F1</kbd>, entering `Uppercase` and selecting `Transform to uppercase`
     - Consider rewording the commit message to make it more user-friendly
 
