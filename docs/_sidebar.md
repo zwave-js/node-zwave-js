@@ -61,6 +61,7 @@
     -   [Introduction](development/intro.md)
     -   [Implementing a Command Class](development/implementing-cc.md)
     -   [Installing from GitHub](development/installing-from-github.md)
+    -   [Releasing](development/releasing.md)
 
 -   Data Collection & Use Practices
 
