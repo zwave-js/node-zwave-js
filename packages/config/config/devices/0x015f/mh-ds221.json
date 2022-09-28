@@ -1,0 +1,204 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-DS221",
+	"description": "Micro Switch",
+	"devices": [
+		{
+			"productType": "0xd221",
+			"productId": "0x7102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{			
+		    "#": "1", 
+			"label": "Behavior if power fails",
+			"description": "If the state of the switch is saved after a power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not saved, switch will be off",
+					"value": 0
+				},
+				{
+					"label": "Saved, will return to previous state",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "External switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+		    }
+			]
+		},
+		{
+			"#": "3",
+			"label": "Two state switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Without specified on/off position",
+					"value": 0
+				},
+				{
+					"label": "With specified on/off position",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Behavior when timer is active",
+			"description": "If manual operation is allowed when the timer function is active",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+		   "unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Forbid manual operation",
+					"value": 0
+				},
+				{
+					"label": "Allow manual operation",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Timer function",
+			"description": "Timer function to automaticly turn off the Load",
+			"unit": "100ms",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+    {
+			"#": "8",
+			"label": "Report options",
+			"description": "Sets report options to association group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Report both on/off",
+					"value": 0
+				},
+				{
+					"label": "Report on only",
+					"value": 1
+				},
+				{
+					"label": "Report off only",
+					"value": 2
+				},
+				{
+					"label": "Reporting is disabled",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Local operation",
+			"description": "If local operation of the switch is allowed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Local operation is enabled",
+					"value": 0
+				},
+				{
+					"label": "Locked, local operation is disabled",
+					"value": 1
+				}
+			]
+		},
+		
+		{
+			"#": "21",
+			"label": "Remote operation",
+        "description": "If remote operation of the switch is allowed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Remote operation is enabled",
+					"value": 0
+				},
+				{
+					"label": "Locked, remote operation is disabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "255",
+			"label": "Factory reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue":85,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Factory reset",
+					"value": 85
+				}
+			]
+		}
+	]
+}
