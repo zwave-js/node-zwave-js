@@ -11,11 +11,11 @@ This section is meant as a guide for maintainers on how to release a new version
 
 ## Update the changelog
 
-1. Open `CHANGELOG.md` and insert a newline between the placeholder comment and the start of the previous version:
+1. Open `CHANGELOG.md` and insert a newline between the placeholder comment and the start of the previous version:  
    ![Step 1](../_images/release_step1.png)
 
-2. Press `wip`, followed by a <kbd>CTRL</kbd>+<kbd>SPACE</kbd>, <kbd>ENTER</kbd> to auto-complete the changelog placeholder:
-   ![Step 2a](../_images/release_step2a.png)
+2. Press `wip`, followed by a <kbd>CTRL</kbd>+<kbd>SPACE</kbd>, <kbd>ENTER</kbd> to auto-complete the changelog placeholder:  
+   ![Step 2a](../_images/release_step2a.png)  
    ![Step 2b](../_images/release_step2b.png)
 
 3. Open the changes since the last release in a separate VSCode window, by executing this command in a VSCode terminal. You'll need to do this in `git bash` or any other UNIX-like terminal:
