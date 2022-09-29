@@ -176,7 +176,7 @@
 			"label": "Factory reset",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue":85,
+			"maxValue": 85,
 			"defaultValue": 0,
 			"writeOnly": true,
 			"allowManualEntry": false,
