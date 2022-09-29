@@ -91,6 +91,7 @@ import {
 	CommandClasses,
 	CRC16_CCITT,
 	DataRate,
+	Firmware,
 	FLiRS,
 	getCCName,
 	getDSTInfo,
@@ -3615,6 +3616,11 @@ protocol version:      ${this.protocolVersion}`;
 
 	private _abortFirmwareUpdate: (() => Promise<void>) | undefined;
 
+	/** Is used to remember fragment requests that came in before they were able to be handled */
+	private _firmwareUpdatePrematureRequest:
+		| FirmwareUpdateMetaDataCCGet
+		| undefined;
+
 	/**
 	 * Retrieves the firmware update capabilities of a node to decide which options to offer a user prior to the update.
 	 * This method uses cached information from the most recent interview.
@@ -3749,6 +3755,7 @@ protocol version:      ${this.protocolVersion}`;
 			this.keepAwake = keepAwake;
 			this._firmwareUpdateInProgress = false;
 			this._abortFirmwareUpdate = undefined;
+			this._firmwareUpdatePrematureRequest = undefined;
 		};
 
 		// Kick off the firmware update "synchronously"
@@ -3844,14 +3851,7 @@ protocol version:      ${this.protocolVersion}`;
 	 *
 	 * @returns Whether all of the given updates were successful.
 	 */
-	public async updateFirmware(
-		updates: {
-			/** The firmware target (i.e. chip) to upgrade. 0 updates the Z-Wave chip, >=1 updates others if they exist. */
-			target: number;
-			/** The firmware image for this chip */
-			data: Buffer;
-		}[],
-	): Promise<boolean> {
+	public async updateFirmware(updates: Firmware[]): Promise<boolean> {
 		if (updates.length === 0) {
 			throw new ZWaveError(
 				`At least one update must be provided`,
@@ -3868,7 +3868,10 @@ protocol version:      ${this.protocolVersion}`;
 		}
 
 		// Check that the targets are not duplicates
-		if (distinct(updates.map((u) => u.target)).length !== updates.length) {
+		if (
+			distinct(updates.map((u) => u.firmwareTarget ?? 0)).length !==
+			updates.length
+		) {
 			throw new ZWaveError(
 				`The target of all provided firmware updates must be unique`,
 				ZWaveErrorCodes.Argument_Invalid,
@@ -3931,6 +3934,7 @@ protocol version:      ${this.protocolVersion}`;
 			this.keepAwake = keepAwake;
 			this._firmwareUpdateInProgress = false;
 			this._abortFirmwareUpdate = undefined;
+			this._firmwareUpdatePrematureRequest = undefined;
 		};
 
 		// Prepare the firmware update
@@ -3938,7 +3942,7 @@ protocol version:      ${this.protocolVersion}`;
 		let meta: FirmwareUpdateMetaData;
 		try {
 			const result = await this.prepareFirmwareUpdateInternal(
-				updates.map((u) => u.target),
+				updates.map((u) => u.firmwareTarget ?? 0),
 				abortContext,
 			);
 
@@ -3983,7 +3987,7 @@ protocol version:      ${this.protocolVersion}`;
 				`Updating firmware (part ${i + 1} / ${updates.length})...`,
 			);
 
-			const { target, data } = updates[i];
+			const { firmwareTarget: target = 0, data } = updates[i];
 			// Tell the node to start requesting fragments
 			await this.beginFirmwareUpdateInternal(
 				data,
@@ -4242,18 +4246,27 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	> {
 		const numFragments = Math.ceil(data.length / fragmentSize);
+
+		// Make sure we're not responding to an outdated request immediately
+		this._firmwareUpdatePrematureRequest = undefined;
+
 		// ================================
 		// STEP 4:
 		// Respond to fragment requests from the node
 		update: while (true) {
-			const fragmentRequest = await this.driver
-				.waitForCommand<FirmwareUpdateMetaDataCCGet>(
-					(cc) =>
-						cc.nodeId === this.nodeId &&
-						cc instanceof FirmwareUpdateMetaDataCCGet,
-					30000,
-				)
-				.catch(() => undefined);
+			// During ongoing firmware updates, it can happen that the next request is received before the callback for the previous response
+			// is back. In that case we can immediately handle the premature request. Otherwise wait for the next request.
+			const fragmentRequest =
+				this._firmwareUpdatePrematureRequest ??
+				(await this.driver
+					.waitForCommand<FirmwareUpdateMetaDataCCGet>(
+						(cc) =>
+							cc.nodeId === this.nodeId &&
+							cc instanceof FirmwareUpdateMetaDataCCGet,
+						30000,
+					)
+					.catch(() => undefined));
+			this._firmwareUpdatePrematureRequest = undefined;
 
 			if (!fragmentRequest) {
 				// In some cases it can happen that the device stops requesting update frames
@@ -4436,6 +4449,14 @@ protocol version:      ${this.protocolVersion}`;
 	private async handleUnexpectedFirmwareUpdateGet(
 		command: FirmwareUpdateMetaDataCCGet,
 	): Promise<void> {
+		// This method will only be called under two circumstances:
+		// 1. The node is currently busy responding to a firmware update request -> remember the request
+		if (this.isFirmwareUpdateInProgress()) {
+			this._firmwareUpdatePrematureRequest = command;
+			return;
+		}
+
+		// 2. No firmware update is in progress -> abort
 		this.driver.controllerLog.logNode(this.id, {
 			message: `Received Firmware Update Get, but no firmware update is in progress. Forcing the node to abort...`,
 			direction: "inbound",
