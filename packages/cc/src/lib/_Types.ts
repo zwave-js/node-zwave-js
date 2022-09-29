@@ -773,18 +773,28 @@ export type FirmwareUpdateCapabilities =
 			readonly supportsActivation: Maybe<boolean>;
 	  };
 
+export interface FirmwareUpdateProgress {
+	/** Which part/file of the firmware update process is currently in progress. This is a number from 1 to `totalFiles` and can be used to display progress. */
+	currentFile: number;
+	/** How many files the firmware update process consists of. */
+	totalFiles: number;
+	/** How many fragments of the current file have been transmitted. Together with `totalFragments` this can be used to display progress. */
+	sentFragments: number;
+	/** How many fragments the current file of the firmware update consists of. */
+	totalFragments: number;
+	/** The total progress of the firmware update in %, rounded to two digits. This considers the total size of all files. */
+	progress: number;
+}
+
 export interface FirmwareUpdateResult {
-	/** The status returned by the device for this firmware update attempt */
+	/** The status returned by the device for this firmware update attempt. For multi-target updates, this will be the status for the last update. */
 	status: FirmwareUpdateStatus;
-	/** Which firmware target was (attempted to be) updated */
-	target: number;
-	/** How long to wait before interacting with the device again */
+	/** Whether the update was successful. This is a simpler interpretation of the `status` field. */
+	success: boolean;
+	/** How long (in seconds) to wait before interacting with the device again */
 	waitTime?: number;
-	/**
-	 * Whether the firmware update sequence is complete.
-	 * For multi-target updates, this will be false until the last target has been updated.
-	 */
-	complete: boolean;
+	/** Whether the device will be re-interviewed. If this is `true`, applications should wait for the `"ready"` event to interact with the device again. */
+	reInterview: boolean;
 }
 
 /** @publicAPI */

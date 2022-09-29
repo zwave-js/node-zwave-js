@@ -1943,11 +1943,10 @@ export class Driver
 		_waitTime: number | undefined,
 		result: FirmwareUpdateResult,
 	): Promise<void> {
-		const { status, complete } = result;
-		let { waitTime } = result;
+		const { success, reInterview } = result;
 
-		// Don't do this for non-successful updates
-		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
+		// Nothing to do for non-successful updates
+		if (!success) return;
 
 		// TODO: Add support for delayed activation
 
@@ -1955,23 +1954,33 @@ export class Driver
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
 
-		// If the update process isn't complete yet, sequencing the actions is done elsewhere
-		if (!complete) return;
+		// waitTime should always be defined, but just to be sure
+		const waitTime = result.waitTime ?? 5;
 
-		// Wait the specified time plus a bit, so the device is actually ready to use
-		waitTime = this.getConservativeWaitTimeAfterFirmwareUpdate(waitTime);
-
-		if (status === FirmwareUpdateStatus.OK_NoRestart) {
-			// This status MUST not be advertised for target 0.
-			// Other chips should probably advertise this if they aren't mission critical.
-
-			// Treat this as a sign that the device continues working as before
+		if (reInterview) {
+			this.controllerLog.logNode(
+				node.id,
+				`Firmware updated, scheduling interview in ${waitTime} seconds...`,
+			);
+			// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
+			this.retryNodeInterviewTimeouts.set(
+				node.id,
+				setTimeout(() => {
+					this.retryNodeInterviewTimeouts.delete(node.id);
+					void node.refreshInfo({
+						// After a firmware update, we need to refresh the node info
+						waitForWakeup: false,
+					});
+				}, waitTime * 1000).unref(),
+			);
+		} else {
 			this.controllerLog.logNode(
 				node.id,
 				`Firmware updated. No restart or re-interview required. Refreshing version information in ${waitTime} seconds...`,
 			);
 
 			await wait(waitTime * 1000, true);
+
 			try {
 				const versionAPI = node.commandClasses.Version;
 				await versionAPI.get();
@@ -1988,25 +1997,7 @@ export class Driver
 			} catch {
 				// ignore
 			}
-
-			return;
 		}
-
-		this.controllerLog.logNode(
-			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
-		);
-		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
-		this.retryNodeInterviewTimeouts.set(
-			node.id,
-			setTimeout(() => {
-				this.retryNodeInterviewTimeouts.delete(node.id);
-				void node.refreshInfo({
-					// After a firmware update, we need to refresh the node info
-					waitForWakeup: false,
-				});
-			}, waitTime * 1000).unref(),
-		);
 	}
 
 	/** This is called when a node emits a `"notification"` event */

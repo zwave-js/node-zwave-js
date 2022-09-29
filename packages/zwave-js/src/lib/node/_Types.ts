@@ -2,6 +2,7 @@ import type { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import type {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
+	FirmwareUpdateProgress,
 	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	MultilevelSwitchCommand,
@@ -85,8 +86,9 @@ export type ZWaveInterviewFailedCallback = (
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,
-	sentFragments: number,
-	totalFragments: number,
+	__DEPRECATED__sentFragments: number,
+	__DEPRECATED__totalFragments: number,
+	progress: FirmwareUpdateProgress,
 ) => void;
 export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 	node: ZWaveNode,

@@ -7,6 +7,7 @@ import {
 	entryControlEventTypeLabels,
 	FirmwareUpdateCapabilities,
 	FirmwareUpdateMetaData,
+	FirmwareUpdateProgress,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
@@ -144,6 +145,7 @@ import {
 	stringify,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
+import { distinct } from "alcalzone-shared/arrays";
 import {
 	createDeferredPromise,
 	DeferredPromise,
@@ -3678,6 +3680,10 @@ protocol version:      ${this.protocolVersion}`;
 	/**
 	 * Starts an OTA firmware update process for this node.
 	 *
+	 * This method will resolve after the process has **STARTED** successfully. It does not wait for the update to finish.
+	 *
+	 * @deprecated Use {@link updateFirmware} instead, which allows waiting for the update to finish.
+	 *
 	 * **WARNING: Use at your own risk! We don't take any responsibility if your devices don't work after an update.**
 	 *
 	 * @param data The firmware image
@@ -3736,12 +3742,11 @@ protocol version:      ${this.protocolVersion}`;
 		};
 
 		// If the node isn't supposed to be kept awake yet, do it
-		const originalKeepAwake = this.keepAwake;
 		this.keepAwake = true;
 
 		// Reset persisted state after the update
-		const restore = () => {
-			this.keepAwake = originalKeepAwake;
+		const restore = (keepAwake: boolean) => {
+			this.keepAwake = keepAwake;
 			this._firmwareUpdateInProgress = false;
 			this._abortFirmwareUpdate = undefined;
 		};
@@ -3750,8 +3755,7 @@ protocol version:      ${this.protocolVersion}`;
 		let fragmentSize: number;
 		try {
 			const result = await this.prepareFirmwareUpdateInternal(
-				data,
-				target,
+				[target],
 				abortContext,
 			);
 
@@ -3763,12 +3767,12 @@ protocol version:      ${this.protocolVersion}`;
 					FirmwareUpdateStatus.Error_TransmissionFailed,
 					undefined,
 					{
+						success: false,
 						status: FirmwareUpdateStatus.Error_TransmissionFailed,
-						complete: false,
-						target,
+						reInterview: false,
 					},
 				);
-				restore();
+				restore(false);
 				return;
 			}
 
@@ -3782,52 +3786,306 @@ protocol version:      ${this.protocolVersion}`;
 				fragmentSize,
 			);
 		} catch {
-			restore();
+			restore(false);
 			return;
 		}
 
 		// Perform the update in the background
 		void (async () => {
-			try {
-				const result = await this.doFirmwareUpdateInternal(
-					data,
-					fragmentSize,
-					abortContext,
-					(fragment, total) => {
-						this.emit(
-							"firmware update progress",
-							this,
-							fragment,
-							total,
-						);
+			const result = await this.doFirmwareUpdateInternal(
+				data,
+				fragmentSize,
+				abortContext,
+				(fragment, total) => {
+					const progress: FirmwareUpdateProgress = {
+						currentFile: 1,
+						totalFiles: 1,
+						sentFragments: fragment,
+						totalFragments: total,
+						progress: roundTo((fragment / total) * 100, 2),
+					};
+					this.emit(
+						"firmware update progress",
+						this,
+						fragment,
+						total,
+						progress,
+					);
+				},
+			);
+
+			let waitTime = result.waitTime;
+			if (result.success) {
+				waitTime =
+					this.driver.getConservativeWaitTimeAfterFirmwareUpdate(
+						result.waitTime,
+					);
+			}
+
+			this.emit(
+				"firmware update finished",
+				this,
+				result.status,
+				waitTime,
+				{ ...result, waitTime, reInterview: result.success },
+			);
+			restore(result.success);
+		})();
+	}
+
+	/**
+	 * Performs an OTA firmware upgrade of one or more chips on this node.
+	 *
+	 * This method will resolve after the process has **COMPLETED**. Failure to start any one of the provided updates will throw an error.
+	 *
+	 * **WARNING: Use at your own risk! We don't take any responsibility if your devices don't work after an update.**
+	 *
+	 * @param updates An array of firmware updates that will be done in sequence
+	 *
+	 * @returns Whether all of the given updates were successful.
+	 */
+	public async updateFirmware(
+		updates: {
+			/** The firmware target (i.e. chip) to upgrade. 0 updates the Z-Wave chip, >=1 updates others if they exist. */
+			target: number;
+			/** The firmware image for this chip */
+			data: Buffer;
+		}[],
+	): Promise<boolean> {
+		if (updates.length === 0) {
+			throw new ZWaveError(
+				`At least one update must be provided`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Check that each update has a buffer with at least 1 byte
+		if (updates.some((u) => u.data.length === 0)) {
+			throw new ZWaveError(
+				`All firmware updates must have a non-empty data buffer`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Check that the targets are not duplicates
+		if (distinct(updates.map((u) => u.target)).length !== updates.length) {
+			throw new ZWaveError(
+				`The target of all provided firmware updates must be unique`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Don't start the process twice
+		if (this.isFirmwareUpdateInProgress()) {
+			throw new ZWaveError(
+				`Failed to start the update: A firmware upgrade is already in progress!`,
+				ZWaveErrorCodes.FirmwareUpdateCC_Busy,
+			);
+		}
+		this._firmwareUpdateInProgress = true;
+
+		// Support aborting the update
+		const abortContext: {
+			abort: boolean;
+			tooLateToAbort: boolean;
+			abortPromise: DeferredPromise<boolean>;
+		} = {
+			abort: false,
+			tooLateToAbort: false,
+			abortPromise: createDeferredPromise<boolean>(),
+		};
+
+		this._abortFirmwareUpdate = async () => {
+			if (abortContext.tooLateToAbort) {
+				throw new ZWaveError(
+					`The firmware update was transmitted completely, cannot abort anymore.`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
+				);
+			}
+
+			this.driver.controllerLog.logNode(this.id, {
+				message: `Aborting firmware update...`,
+				direction: "outbound",
+			});
+
+			// Trigger the abort
+			abortContext.abort = true;
+			const aborted = await abortContext.abortPromise;
+			if (!aborted) {
+				throw new ZWaveError(
+					`The node did not acknowledge the aborted update`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
+				);
+			}
+			this.driver.controllerLog.logNode(this.id, {
+				message: `Firmware update aborted`,
+				direction: "inbound",
+			});
+		};
+
+		// If the node isn't supposed to be kept awake yet, do it
+		this.keepAwake = true;
+
+		// Reset persisted state after the update
+		const restore = (keepAwake: boolean) => {
+			this.keepAwake = keepAwake;
+			this._firmwareUpdateInProgress = false;
+			this._abortFirmwareUpdate = undefined;
+		};
+
+		// Prepare the firmware update
+		let fragmentSize: number;
+		let meta: FirmwareUpdateMetaData;
+		try {
+			const result = await this.prepareFirmwareUpdateInternal(
+				updates.map((u) => u.target),
+				abortContext,
+			);
+
+			// Handle early aborts
+			if (abortContext.abort) {
+				this.emit(
+					"firmware update finished",
+					this,
+					FirmwareUpdateStatus.Error_TransmissionFailed,
+					undefined,
+					{
+						success: false,
+						status: FirmwareUpdateStatus.Error_TransmissionFailed,
+						reInterview: false,
 					},
 				);
+				restore(false);
+				return false;
+			}
+
+			// If the firmware update was not aborted, result is definitely defined
+			({ fragmentSize, ...meta } = result!);
+		} catch {
+			restore(false);
+			return false;
+		}
+
+		// Perform all firmware updates in sequence
+		let result!: Awaited<ReturnType<ZWaveNode["doFirmwareUpdateInternal"]>>;
+		let conservativeWaitTime: number;
+
+		const totalFragments: number = updates.reduce(
+			(total, update) =>
+				total + Math.ceil(update.data.length / fragmentSize),
+			0,
+		);
+		let sentFragmentsOfPreviousFiles = 0;
+
+		for (let i = 0; i < updates.length; i++) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`Updating firmware (part ${i + 1} / ${updates.length})...`,
+			);
+
+			const { target, data } = updates[i];
+			// Tell the node to start requesting fragments
+			await this.beginFirmwareUpdateInternal(
+				data,
+				target,
+				meta,
+				fragmentSize,
+			);
+
+			// And handle them
+			result = await this.doFirmwareUpdateInternal(
+				data,
+				fragmentSize,
+				abortContext,
+				(fragment, total) => {
+					const progress: FirmwareUpdateProgress = {
+						currentFile: i + 1,
+						totalFiles: updates.length,
+						sentFragments: fragment,
+						totalFragments: total,
+						progress: roundTo(
+							((sentFragmentsOfPreviousFiles + fragment) /
+								totalFragments) *
+								100,
+							2,
+						),
+					};
+					this.emit(
+						"firmware update progress",
+						this,
+						fragment,
+						total,
+						progress,
+					);
+
+					// When this file is done, add the fragments to the total, so we can compute the total progress correctly
+					if (fragment === total) {
+						sentFragmentsOfPreviousFiles += fragment;
+					}
+				},
+			);
+
+			// If we wait, wait a bit longer than the device told us, so it is actually ready to use
+			conservativeWaitTime =
+				this.driver.getConservativeWaitTimeAfterFirmwareUpdate(
+					result.waitTime,
+				);
+
+			if (!result.success) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `Firmware update (part ${i + 1} / ${
+						updates.length
+					}) failed with status ${getEnumMemberName(
+						FirmwareUpdateStatus,
+						result.status,
+					)}`,
+					direction: "inbound",
+				});
 
 				this.emit(
 					"firmware update finished",
 					this,
 					result.status,
-					result.waitTime,
-					{
-						...result,
-						target,
-						// This method only supports single-file updates
-						// so treat the update as complete.
-						complete: true,
-					},
+					undefined,
+					{ ...result, waitTime: undefined, reInterview: false },
 				);
-			} catch {
-				// ignore
-			} finally {
-				restore();
+				restore(false);
+				return false;
+			} else if (i < updates.length - 1) {
+				// Update succeeded, but we're not done yet
+
+				this.driver.controllerLog.logNode(this.id, {
+					message: `Firmware update (part ${i + 1} / ${
+						updates.length
+					}) succeeded with status ${getEnumMemberName(
+						FirmwareUpdateStatus,
+						result.status,
+					)}`,
+					direction: "inbound",
+				});
+
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Continuing with next part in ${conservativeWaitTime} seconds...`,
+				);
 			}
-		})();
+		}
+
+		this.emit(
+			"firmware update finished",
+			this,
+			result.status,
+			conservativeWaitTime!,
+			{ ...result, waitTime: conservativeWaitTime!, reInterview: true },
+		);
+
+		restore(true);
+		return true;
 	}
 
 	/** Prepares the firmware update of a single target by collecting the necessary information */
 	private async prepareFirmwareUpdateInternal(
-		data: Buffer,
-		target: number,
+		targets: number[],
 		abortContext: AbortFirmwareUpdateContext,
 	): Promise<
 		| undefined
@@ -3851,24 +4109,28 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
-		if (target === 0) {
-			if (!meta.firmwareUpgradable) {
-				throw new ZWaveError(
-					`Failed to start the update: The Z-Wave chip firmware is not upgradable!`,
-					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
-				);
-			}
-		} else {
-			if (version < 3) {
-				throw new ZWaveError(
-					`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
-					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
-				);
-			} else if (meta.additionalFirmwareIDs[target - 1] == undefined) {
-				throw new ZWaveError(
-					`Failed to start the update: Firmware target #${target} not found on this node!`,
-					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
-				);
+		for (const target of targets) {
+			if (target === 0) {
+				if (!meta.firmwareUpgradable) {
+					throw new ZWaveError(
+						`Failed to start the update: The Z-Wave chip firmware is not upgradable!`,
+						ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
+					);
+				}
+			} else {
+				if (version < 3) {
+					throw new ZWaveError(
+						`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
+						ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
+					);
+				} else if (
+					meta.additionalFirmwareIDs[target - 1] == undefined
+				) {
+					throw new ZWaveError(
+						`Failed to start the update: Firmware target #${target} not found on this node!`,
+						ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
+					);
+				}
 			}
 		}
 
@@ -3968,7 +4230,7 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
-	/** Actually performs the firmware update of a single target */
+	/** Performs the firmware update of a single target */
 	private async doFirmwareUpdateInternal(
 		data: Buffer,
 		fragmentSize: number,
@@ -4066,16 +4328,26 @@ protocol version:      ${this.protocolVersion}`;
 					});
 					const isLast = num === numFragments;
 
-					await this.commandClasses[
-						"Firmware Update Meta Data"
-					].sendFirmwareFragment(num, isLast, fragment);
+					try {
+						await this.commandClasses[
+							"Firmware Update Meta Data"
+						].sendFirmwareFragment(num, isLast, fragment);
 
-					onProgress(num, numFragments);
+						onProgress(num, numFragments);
 
-					// If that was the last one wait for status report from the node and restart interview
-					if (isLast) {
-						abortContext.tooLateToAbort = true;
-						break update;
+						// If that was the last one wait for status report from the node and restart interview
+						if (isLast) {
+							abortContext.tooLateToAbort = true;
+							break update;
+						}
+					} catch {
+						// When transmitting fails, simply stop responding to this request and wait for the node to re-request the fragment
+						this.driver.controllerLog.logNode(this.id, {
+							message: `Failed to send firmware fragment ${num} / ${numFragments}`,
+							direction: "outbound",
+							level: "warn",
+						});
+						break request;
 					}
 				}
 			}
@@ -4121,13 +4393,6 @@ protocol version:      ${this.protocolVersion}`;
 		// Actually, OK_WaitingForActivation should never happen since we don't allow
 		// delayed activation in the RequestGet command
 		const success = status >= FirmwareUpdateStatus.OK_WaitingForActivation;
-
-		this.driver.controllerLog.logNode(this.id, {
-			message: `Firmware update ${
-				success ? "completed" : "failed"
-			} with status ${getEnumMemberName(FirmwareUpdateStatus, status)}`,
-			direction: "inbound",
-		});
 
 		return {
 			success,
