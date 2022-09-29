@@ -40,6 +40,7 @@ import type { FileSystem as FileSystem_2 } from '@zwave-js/host';
 import { Firmware } from '@zwave-js/core';
 import { FirmwareFileFormat } from '@zwave-js/core';
 import { FirmwareUpdateCapabilities } from '@zwave-js/cc';
+import type { FirmwareUpdateProgress } from '@zwave-js/cc/safe';
 import type { FirmwareUpdateResult } from '@zwave-js/cc/safe';
 import { FirmwareUpdateStatus } from '@zwave-js/cc/safe';
 import { FLiRS } from '@zwave-js/core/safe';
@@ -930,6 +931,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     beginHealingNetwork(): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     beginInclusion(options?: InclusionOptions): Promise<boolean>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "firmwareUpdateOTA"
+    //
+    // @deprecated
     beginOTAFirmwareUpdate(nodeId: number, update: FirmwareUpdateFileInfo): Promise<void>;
     // (undocumented)
     cancelSecureBootstrapS2(reason: KEXFailType): void;
@@ -951,6 +955,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         endOfFile: boolean;
     }>;
     externalNVMWriteByte(offset: number, data: number): Promise<boolean>;
+    firmwareUpdateOTA(nodeId: number, updates: FirmwareUpdateFileInfo[]): Promise<void>;
     // (undocumented)
     get firmwareVersion(): string | undefined;
     getAllAssociationGroups(nodeId: number): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>>;
@@ -1096,6 +1101,9 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "updateFirmware"
+    //
+    // @deprecated
     beginFirmwareUpdate(data: Buffer, target?: number): Promise<void>;
     // (undocumented)
     get canSleep(): boolean | undefined;
@@ -1187,6 +1195,8 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // (undocumented)
     get supportsWakeUpOnDemand(): boolean | undefined;
     testPowerlevel(testNodeId: number, powerlevel: Powerlevel_2, healthCheckTestFrameCount: number, onProgress?: (acknowledged: number, total: number) => void): Promise<number>;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    updateFirmware(updates: Firmware[]): Promise<boolean>;
     waitForWakeup(): Promise<void>;
     // (undocumented)
     get zwavePlusNodeType(): ZWavePlusNodeType | undefined;
@@ -1239,7 +1249,7 @@ export type ZWaveNodeFirmwareUpdateFinishedCallback = (node: ZWaveNode, __DEPREC
 // Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateProgressCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ZWaveNodeFirmwareUpdateProgressCallback = (node: ZWaveNode, sentFragments: number, totalFragments: number) => void;
+export type ZWaveNodeFirmwareUpdateProgressCallback = (node: ZWaveNode, __DEPRECATED__sentFragments: number, __DEPRECATED__totalFragments: number, progress: FirmwareUpdateProgress) => void;
 
 // Warning: (ae-missing-release-tag) "ZWaveNodeMetadataUpdatedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

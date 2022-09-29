@@ -6415,6 +6415,17 @@ export enum FirmwareUpdateMetaDataCommand {
     StatusReport = 7
 }
 
+// Warning: (ae-missing-release-tag) "FirmwareUpdateProgress" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateProgress {
+    currentFile: number;
+    progress: number;
+    sentFragments: number;
+    totalFiles: number;
+    totalFragments: number;
+}
+
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "FirmwareUpdateRequestStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6442,9 +6453,9 @@ export enum FirmwareUpdateRequestStatus {
 //
 // @public (undocumented)
 export interface FirmwareUpdateResult {
-    complete: boolean;
+    reInterview: boolean;
     status: FirmwareUpdateStatus;
-    target: number;
+    success: boolean;
     waitTime?: number;
 }
 

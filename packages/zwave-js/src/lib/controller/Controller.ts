@@ -4584,6 +4584,8 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Downloads the desired firmware update from the Z-Wave JS firmware update service and starts a firmware update for the given node.
+	 *
+	 * @deprecated Use {@link firmwareUpdateOTA} instead, which properly handles multi-target updates
 	 */
 	public async beginOTAFirmwareUpdate(
 		nodeId: number,
@@ -4629,5 +4631,75 @@ ${associatedNodes.join(", ")}`,
 			`Firmware update ${update.url} downloaded, installing...`,
 		);
 		await node.beginFirmwareUpdate(firmware.data, firmware.firmwareTarget);
+	}
+
+	/**
+	 * Downloads the desired firmware update(s) from the Z-Wave JS firmware update service and updates the firmware of the given node.
+	 */
+	public async firmwareUpdateOTA(
+		nodeId: number,
+		updates: FirmwareUpdateFileInfo[],
+	): Promise<void> {
+		if (updates.length === 0) {
+			throw new ZWaveError(
+				`At least one update must be provided`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const node = this.nodes.getOrThrow(nodeId);
+		this.driver.controllerLog.logNode(
+			nodeId,
+			`OTA firmware update started, downloading ${updates.length} updates...`,
+		);
+
+		const loglevel = this.driver.getLogConfig().level;
+
+		const firmwares: Firmware[] = [];
+		for (let i = 0; i < updates.length; i++) {
+			const update = updates[i];
+			let logMessage = `Downloading firmware update ${i} of ${updates.length}...`;
+			if (loglevel === "silly") {
+				logMessage += `
+  URL:       ${update.url}
+  integrity: ${update.integrity}`;
+			}
+			this.driver.controllerLog.logNode(nodeId, logMessage);
+
+			try {
+				const firmware = await downloadFirmwareUpdate(update);
+				firmwares.push(firmware);
+			} catch (e: any) {
+				let message = `Downloading the firmware update for node ${nodeId} failed:\n`;
+				if (isZWaveError(e)) {
+					// Pass "real" Z-Wave errors through
+					throw new ZWaveError(message + e.message, e.code);
+				} else if (e.response) {
+					// And construct a better error message for HTTP errors
+					if (
+						isObject(e.response.data) &&
+						typeof e.response.data.message === "string"
+					) {
+						message += `${e.response.data.message} `;
+					}
+					message += `[${e.response.status} ${e.response.statusText}]`;
+				} else if (typeof e.message === "string") {
+					message += e.message;
+				} else {
+					message += `Failed to download firmware update!`;
+				}
+
+				throw new ZWaveError(
+					message,
+					ZWaveErrorCodes.FWUpdateService_RequestError,
+				);
+			}
+		}
+
+		this.driver.controllerLog.logNode(
+			nodeId,
+			`All updates downloaded, installing...`,
+		);
+		await node.updateFirmware(firmwares);
 	}
 }
