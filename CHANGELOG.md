@@ -4,6 +4,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Support opt-in to receive beta firmware releases via the update service (#5076)
+* Implement Schedule Entry Lock CC (#4836)
+* Sequencing of multi-target firmware updates is now handled in the driver, including waiting between targets, and re-interviewing only after the last one (#5121)
+
+### Bugfixes
+* Pin `xstate` dependency to version `4.29.0` to avoid a memory leak (#5108)
+* Fix: the `ccId` parameter in the `CommandClass` constructor may be zero (#5115)
+* Fixed an issue where multiple re-interview tasks for sleeping nodes could be queued and would be executed in parallel (#5105)
+* Fixed an issue where firmware updates could use a too large fragment size after upgrading to v10, causing the update to fail (#5117)
+
+### Config file changes
+* Disable Supervision for Everspring AC301 (#5119)
+
+### Changes under the hood
+* The packages `core`, `shared` and `nvmedit` now use `ava` for testing instead of `jest`
+* Implement decoding/serialization of some `Sound Switch CC` commands, ensure `valueChangeOptions` are set (#5071)
+
 ## 10.2.0 (2022-09-20)
 ### Features
 * Added the ability to pass more user agent components in `getAvailableFirmwareUpdates` (#5070)
