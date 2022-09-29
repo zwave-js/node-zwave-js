@@ -7,7 +7,7 @@
 /// <reference types="node" />
 
 import { AllOrNone } from '@zwave-js/shared/safe';
-import type { AllOrNone as AllOrNone_2 } from '@zwave-js/shared';
+import { AllOrNone as AllOrNone_2 } from '@zwave-js/shared';
 import { ApplicationNodeInformation } from '@zwave-js/core/safe';
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
@@ -2670,6 +2670,10 @@ export interface CCAPIs {
     //
     // (undocumented)
     "Scene Controller Configuration": SceneControllerConfigurationCCAPI;
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCAPI" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    "Schedule Entry Lock": ScheduleEntryLockCCAPI;
     // Warning: (ae-forgotten-export) The symbol "Security2CCAPI" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -2835,7 +2839,7 @@ export type CCToAPI<CC extends CommandClasses_2> = CCToName<CC> extends keyof CC
 // @public (undocumented)
 export type CCToName<CC extends CommandClasses_2> = [CC] extends [
 typeof CommandClasses_2["Alarm Sensor"]
-] ? "Alarm Sensor" : [CC] extends [typeof CommandClasses_2["Association"]] ? "Association" : [CC] extends [typeof CommandClasses_2["Association Group Information"]] ? "Association Group Information" : [CC] extends [typeof CommandClasses_2["Barrier Operator"]] ? "Barrier Operator" : [CC] extends [typeof CommandClasses_2["Basic"]] ? "Basic" : [CC] extends [typeof CommandClasses_2["Battery"]] ? "Battery" : [CC] extends [typeof CommandClasses_2["Binary Sensor"]] ? "Binary Sensor" : [CC] extends [typeof CommandClasses_2["Binary Switch"]] ? "Binary Switch" : [CC] extends [typeof CommandClasses_2["CRC-16 Encapsulation"]] ? "CRC-16 Encapsulation" : [CC] extends [typeof CommandClasses_2["Central Scene"]] ? "Central Scene" : [CC] extends [typeof CommandClasses_2["Climate Control Schedule"]] ? "Climate Control Schedule" : [CC] extends [typeof CommandClasses_2["Clock"]] ? "Clock" : [CC] extends [typeof CommandClasses_2["Color Switch"]] ? "Color Switch" : [CC] extends [typeof CommandClasses_2["Configuration"]] ? "Configuration" : [CC] extends [typeof CommandClasses_2["Door Lock"]] ? "Door Lock" : [CC] extends [typeof CommandClasses_2["Door Lock Logging"]] ? "Door Lock Logging" : [CC] extends [typeof CommandClasses_2["Entry Control"]] ? "Entry Control" : [CC] extends [typeof CommandClasses_2["Firmware Update Meta Data"]] ? "Firmware Update Meta Data" : [CC] extends [typeof CommandClasses_2["Humidity Control Mode"]] ? "Humidity Control Mode" : [CC] extends [typeof CommandClasses_2["Humidity Control Operating State"]] ? "Humidity Control Operating State" : [CC] extends [typeof CommandClasses_2["Humidity Control Setpoint"]] ? "Humidity Control Setpoint" : [CC] extends [typeof CommandClasses_2["Indicator"]] ? "Indicator" : [CC] extends [typeof CommandClasses_2["Irrigation"]] ? "Irrigation" : [CC] extends [typeof CommandClasses_2["Language"]] ? "Language" : [CC] extends [typeof CommandClasses_2["Lock"]] ? "Lock" : [CC] extends [typeof CommandClasses_2["Manufacturer Proprietary"]] ? "Manufacturer Proprietary" : [CC] extends [typeof CommandClasses_2["Manufacturer Specific"]] ? "Manufacturer Specific" : [CC] extends [typeof CommandClasses_2["Meter"]] ? "Meter" : [CC] extends [typeof CommandClasses_2["Multi Channel Association"]] ? "Multi Channel Association" : [CC] extends [typeof CommandClasses_2["Multi Channel"]] ? "Multi Channel" : [CC] extends [typeof CommandClasses_2["Multi Command"]] ? "Multi Command" : [CC] extends [typeof CommandClasses_2["Multilevel Sensor"]] ? "Multilevel Sensor" : [CC] extends [typeof CommandClasses_2["Multilevel Switch"]] ? "Multilevel Switch" : [CC] extends [typeof CommandClasses_2["No Operation"]] ? "No Operation" : [CC] extends [typeof CommandClasses_2["Node Naming and Location"]] ? "Node Naming and Location" : [CC] extends [typeof CommandClasses_2["Notification"]] ? "Notification" : [CC] extends [typeof CommandClasses_2["Powerlevel"]] ? "Powerlevel" : [CC] extends [typeof CommandClasses_2["Protection"]] ? "Protection" : [CC] extends [typeof CommandClasses_2["Scene Activation"]] ? "Scene Activation" : [CC] extends [typeof CommandClasses_2["Scene Actuator Configuration"]] ? "Scene Actuator Configuration" : [CC] extends [typeof CommandClasses_2["Scene Controller Configuration"]] ? "Scene Controller Configuration" : [CC] extends [typeof CommandClasses_2["Security 2"]] ? "Security 2" : [CC] extends [typeof CommandClasses_2["Security"]] ? "Security" : [CC] extends [typeof CommandClasses_2["Sound Switch"]] ? "Sound Switch" : [CC] extends [typeof CommandClasses_2["Supervision"]] ? "Supervision" : [CC] extends [typeof CommandClasses_2["Thermostat Fan Mode"]] ? "Thermostat Fan Mode" : [CC] extends [typeof CommandClasses_2["Thermostat Fan State"]] ? "Thermostat Fan State" : [CC] extends [typeof CommandClasses_2["Thermostat Mode"]] ? "Thermostat Mode" : [CC] extends [typeof CommandClasses_2["Thermostat Operating State"]] ? "Thermostat Operating State" : [CC] extends [typeof CommandClasses_2["Thermostat Setback"]] ? "Thermostat Setback" : [CC] extends [typeof CommandClasses_2["Thermostat Setpoint"]] ? "Thermostat Setpoint" : [CC] extends [typeof CommandClasses_2["Time"]] ? "Time" : [CC] extends [typeof CommandClasses_2["Time Parameters"]] ? "Time Parameters" : [CC] extends [typeof CommandClasses_2["User Code"]] ? "User Code" : [CC] extends [typeof CommandClasses_2["Version"]] ? "Version" : [CC] extends [typeof CommandClasses_2["Wake Up"]] ? "Wake Up" : [CC] extends [typeof CommandClasses_2["Z-Wave Plus Info"]] ? "Z-Wave Plus Info" : never;
+] ? "Alarm Sensor" : [CC] extends [typeof CommandClasses_2["Association"]] ? "Association" : [CC] extends [typeof CommandClasses_2["Association Group Information"]] ? "Association Group Information" : [CC] extends [typeof CommandClasses_2["Barrier Operator"]] ? "Barrier Operator" : [CC] extends [typeof CommandClasses_2["Basic"]] ? "Basic" : [CC] extends [typeof CommandClasses_2["Battery"]] ? "Battery" : [CC] extends [typeof CommandClasses_2["Binary Sensor"]] ? "Binary Sensor" : [CC] extends [typeof CommandClasses_2["Binary Switch"]] ? "Binary Switch" : [CC] extends [typeof CommandClasses_2["CRC-16 Encapsulation"]] ? "CRC-16 Encapsulation" : [CC] extends [typeof CommandClasses_2["Central Scene"]] ? "Central Scene" : [CC] extends [typeof CommandClasses_2["Climate Control Schedule"]] ? "Climate Control Schedule" : [CC] extends [typeof CommandClasses_2["Clock"]] ? "Clock" : [CC] extends [typeof CommandClasses_2["Color Switch"]] ? "Color Switch" : [CC] extends [typeof CommandClasses_2["Configuration"]] ? "Configuration" : [CC] extends [typeof CommandClasses_2["Door Lock"]] ? "Door Lock" : [CC] extends [typeof CommandClasses_2["Door Lock Logging"]] ? "Door Lock Logging" : [CC] extends [typeof CommandClasses_2["Entry Control"]] ? "Entry Control" : [CC] extends [typeof CommandClasses_2["Firmware Update Meta Data"]] ? "Firmware Update Meta Data" : [CC] extends [typeof CommandClasses_2["Humidity Control Mode"]] ? "Humidity Control Mode" : [CC] extends [typeof CommandClasses_2["Humidity Control Operating State"]] ? "Humidity Control Operating State" : [CC] extends [typeof CommandClasses_2["Humidity Control Setpoint"]] ? "Humidity Control Setpoint" : [CC] extends [typeof CommandClasses_2["Indicator"]] ? "Indicator" : [CC] extends [typeof CommandClasses_2["Irrigation"]] ? "Irrigation" : [CC] extends [typeof CommandClasses_2["Language"]] ? "Language" : [CC] extends [typeof CommandClasses_2["Lock"]] ? "Lock" : [CC] extends [typeof CommandClasses_2["Manufacturer Proprietary"]] ? "Manufacturer Proprietary" : [CC] extends [typeof CommandClasses_2["Manufacturer Specific"]] ? "Manufacturer Specific" : [CC] extends [typeof CommandClasses_2["Meter"]] ? "Meter" : [CC] extends [typeof CommandClasses_2["Multi Channel Association"]] ? "Multi Channel Association" : [CC] extends [typeof CommandClasses_2["Multi Channel"]] ? "Multi Channel" : [CC] extends [typeof CommandClasses_2["Multi Command"]] ? "Multi Command" : [CC] extends [typeof CommandClasses_2["Multilevel Sensor"]] ? "Multilevel Sensor" : [CC] extends [typeof CommandClasses_2["Multilevel Switch"]] ? "Multilevel Switch" : [CC] extends [typeof CommandClasses_2["No Operation"]] ? "No Operation" : [CC] extends [typeof CommandClasses_2["Node Naming and Location"]] ? "Node Naming and Location" : [CC] extends [typeof CommandClasses_2["Notification"]] ? "Notification" : [CC] extends [typeof CommandClasses_2["Powerlevel"]] ? "Powerlevel" : [CC] extends [typeof CommandClasses_2["Protection"]] ? "Protection" : [CC] extends [typeof CommandClasses_2["Scene Activation"]] ? "Scene Activation" : [CC] extends [typeof CommandClasses_2["Scene Actuator Configuration"]] ? "Scene Actuator Configuration" : [CC] extends [typeof CommandClasses_2["Scene Controller Configuration"]] ? "Scene Controller Configuration" : [CC] extends [typeof CommandClasses_2["Schedule Entry Lock"]] ? "Schedule Entry Lock" : [CC] extends [typeof CommandClasses_2["Security 2"]] ? "Security 2" : [CC] extends [typeof CommandClasses_2["Security"]] ? "Security" : [CC] extends [typeof CommandClasses_2["Sound Switch"]] ? "Sound Switch" : [CC] extends [typeof CommandClasses_2["Supervision"]] ? "Supervision" : [CC] extends [typeof CommandClasses_2["Thermostat Fan Mode"]] ? "Thermostat Fan Mode" : [CC] extends [typeof CommandClasses_2["Thermostat Fan State"]] ? "Thermostat Fan State" : [CC] extends [typeof CommandClasses_2["Thermostat Mode"]] ? "Thermostat Mode" : [CC] extends [typeof CommandClasses_2["Thermostat Operating State"]] ? "Thermostat Operating State" : [CC] extends [typeof CommandClasses_2["Thermostat Setback"]] ? "Thermostat Setback" : [CC] extends [typeof CommandClasses_2["Thermostat Setpoint"]] ? "Thermostat Setpoint" : [CC] extends [typeof CommandClasses_2["Time"]] ? "Time" : [CC] extends [typeof CommandClasses_2["Time Parameters"]] ? "Time Parameters" : [CC] extends [typeof CommandClasses_2["User Code"]] ? "User Code" : [CC] extends [typeof CommandClasses_2["Version"]] ? "Version" : [CC] extends [typeof CommandClasses_2["Wake Up"]] ? "Wake Up" : [CC] extends [typeof CommandClasses_2["Z-Wave Plus Info"]] ? "Z-Wave Plus Info" : never;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-forgotten-export) The symbol "StaticCCValue" needs to be exported by the entry point index.d.ts
@@ -12894,6 +12898,564 @@ export enum SceneControllerConfigurationCommand {
     Set = 1
 }
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCC extends CommandClass {
+    // (undocumented)
+    ccCommand: ScheduleEntryLockCommand;
+    static getNumDailyRepeatingSlotsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
+    static getNumWeekDaySlotsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
+    static getNumYearDaySlotsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
+    // (undocumented)
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCDailyRepeatingScheduleGetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCDailyRepeatingScheduleGetOptions);
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCDailyRepeatingScheduleReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | (CCCommandOptions & ScheduleEntryLockCCDailyRepeatingScheduleReportOptions));
+    // (undocumented)
+    durationHour?: number;
+    // (undocumented)
+    durationMinute?: number;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    startHour?: number;
+    // (undocumented)
+    startMinute?: number;
+    // (undocumented)
+    userId: number;
+    // (undocumented)
+    weekdays?: ScheduleEntryLockWeekday[];
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryLockCC {
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCDailyRepeatingScheduleSetOptions);
+    // (undocumented)
+    action: ScheduleEntryLockSetAction;
+    // (undocumented)
+    durationHour?: number;
+    // (undocumented)
+    durationMinute?: number;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    startHour?: number;
+    // (undocumented)
+    startMinute?: number;
+    // (undocumented)
+    userId: number;
+    // (undocumented)
+    weekdays?: ScheduleEntryLockWeekday[];
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleSetOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCDailyRepeatingScheduleSetOptions = CCCommandOptions & ScheduleEntryLockSlotId & ({
+    action: ScheduleEntryLockSetAction.Erase;
+} | ({
+    action: ScheduleEntryLockSetAction.Set;
+} & ScheduleEntryLockDailyRepeatingSchedule));
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableAllSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCEnableAllSetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCEnableAllSetOptions);
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCEnableSetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCEnableSetOptions);
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCSupportedGet extends ScheduleEntryLockCC {
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCSupportedReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCSupportedReportOptions);
+    // (undocumented)
+    numDailyRepeatingSlots: number | undefined;
+    // (undocumented)
+    numWeekDaySlots: number;
+    // (undocumented)
+    numYearDaySlots: number;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCTimeOffsetGet extends ScheduleEntryLockCC {
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCTimeOffsetReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCTimeOffsetReportOptions);
+    // (undocumented)
+    dstOffset: number;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    standardOffset: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCTimeOffsetSetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCTimeOffsetSetOptions);
+    // (undocumented)
+    dstOffset: number;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    standardOffset: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ScheduleEntryLockCCValues: Readonly<{
+    numDailyRepeatingSlots: {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "numDailyRepeatingSlots";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "numDailyRepeatingSlots";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly minVersion: 1;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+    numYearDaySlots: {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "numYearDaySlots";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "numYearDaySlots";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly minVersion: 1;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+    numWeekDaySlots: {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "numWeekDaySlots";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "numWeekDaySlots";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly minVersion: 1;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+}>;
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCWeekDayScheduleGetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleGetOptions);
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCWeekDayScheduleReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleReportOptions);
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    startHour?: number;
+    // (undocumented)
+    startMinute?: number;
+    // (undocumented)
+    stopHour?: number;
+    // (undocumented)
+    stopMinute?: number;
+    // (undocumented)
+    userId: number;
+    // (undocumented)
+    weekday?: ScheduleEntryLockWeekday;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleSetOptions);
+    // (undocumented)
+    action: ScheduleEntryLockSetAction;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    startHour?: number;
+    // (undocumented)
+    startMinute?: number;
+    // (undocumented)
+    stopHour?: number;
+    // (undocumented)
+    stopMinute?: number;
+    // (undocumented)
+    userId: number;
+    // (undocumented)
+    weekday?: ScheduleEntryLockWeekday;
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleSetOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCWeekDayScheduleSetOptions = CCCommandOptions & ScheduleEntryLockSlotId & ({
+    action: ScheduleEntryLockSetAction.Erase;
+} | ({
+    action: ScheduleEntryLockSetAction.Set;
+} & ScheduleEntryLockWeekDaySchedule));
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCYearDayScheduleGetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleGetOptions);
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockCC {
+    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCYearDayScheduleReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleReportOptions);
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    startDay?: number;
+    // (undocumented)
+    startHour?: number;
+    // (undocumented)
+    startMinute?: number;
+    // (undocumented)
+    startMonth?: number;
+    // (undocumented)
+    startYear?: number;
+    // (undocumented)
+    stopDay?: number;
+    // (undocumented)
+    stopHour?: number;
+    // (undocumented)
+    stopMinute?: number;
+    // (undocumented)
+    stopMonth?: number;
+    // (undocumented)
+    stopYear?: number;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleSetOptions);
+    // (undocumented)
+    action: ScheduleEntryLockSetAction;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    startDay?: number;
+    // (undocumented)
+    startHour?: number;
+    // (undocumented)
+    startMinute?: number;
+    // (undocumented)
+    startMonth?: number;
+    // (undocumented)
+    startYear?: number;
+    // (undocumented)
+    stopDay?: number;
+    // (undocumented)
+    stopHour?: number;
+    // (undocumented)
+    stopMinute?: number;
+    // (undocumented)
+    stopMonth?: number;
+    // (undocumented)
+    stopYear?: number;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleSetOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCYearDayScheduleSetOptions = CCCommandOptions & ScheduleEntryLockSlotId & ({
+    action: ScheduleEntryLockSetAction.Erase;
+} | ({
+    action: ScheduleEntryLockSetAction.Set;
+} & ScheduleEntryLockYearDaySchedule));
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ScheduleEntryLockCommand {
+    // (undocumented)
+    DailyRepeatingScheduleGet = 14,
+    // (undocumented)
+    DailyRepeatingScheduleReport = 15,
+    // (undocumented)
+    DailyRepeatingScheduleSet = 16,
+    // (undocumented)
+    EnableAllSet = 2,
+    // (undocumented)
+    EnableSet = 1,
+    // (undocumented)
+    SupportedGet = 9,
+    // (undocumented)
+    SupportedReport = 10,
+    // (undocumented)
+    TimeOffsetGet = 11,
+    // (undocumented)
+    TimeOffsetReport = 12,
+    // (undocumented)
+    TimeOffsetSet = 13,
+    // (undocumented)
+    WeekDayScheduleGet = 4,
+    // (undocumented)
+    WeekDayScheduleReport = 5,
+    // (undocumented)
+    WeekDayScheduleSet = 3,
+    // (undocumented)
+    YearDayScheduleGet = 7,
+    // (undocumented)
+    YearDayScheduleReport = 8,
+    // (undocumented)
+    YearDayScheduleSet = 6
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockDailyRepeatingSchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockDailyRepeatingSchedule {
+    // (undocumented)
+    durationHour: number;
+    // (undocumented)
+    durationMinute: number;
+    // (undocumented)
+    startHour: number;
+    // (undocumented)
+    startMinute: number;
+    // (undocumented)
+    weekdays: ScheduleEntryLockWeekday[];
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockSetAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ScheduleEntryLockSetAction {
+    // (undocumented)
+    Erase = 0,
+    // (undocumented)
+    Set = 1
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockSlotId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockSlotId {
+    // (undocumented)
+    slotId: number;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockWeekday" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ScheduleEntryLockWeekday {
+    // (undocumented)
+    Friday = 5,
+    // (undocumented)
+    Monday = 1,
+    // (undocumented)
+    Saturday = 6,
+    // (undocumented)
+    Sunday = 0,
+    // (undocumented)
+    Thursday = 4,
+    // (undocumented)
+    Tuesday = 2,
+    // (undocumented)
+    Wednesday = 3
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockWeekDaySchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockWeekDaySchedule {
+    // (undocumented)
+    startHour: number;
+    // (undocumented)
+    startMinute: number;
+    // (undocumented)
+    stopHour: number;
+    // (undocumented)
+    stopMinute: number;
+    // (undocumented)
+    weekday: ScheduleEntryLockWeekday;
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockYearDaySchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockYearDaySchedule {
+    // (undocumented)
+    startDay: number;
+    // (undocumented)
+    startHour: number;
+    // (undocumented)
+    startMinute: number;
+    // (undocumented)
+    startMonth: number;
+    // (undocumented)
+    startYear: number;
+    // (undocumented)
+    stopDay: number;
+    // (undocumented)
+    stopHour: number;
+    // (undocumented)
+    stopMinute: number;
+    // (undocumented)
+    stopMonth: number;
+    // (undocumented)
+    stopYear: number;
+}
+
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleOverrideType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -15181,6 +15743,7 @@ export enum TimeParametersCommand {
     Set = 1
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "Timezone" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
