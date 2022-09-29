@@ -14,8 +14,8 @@
 		"max": "255.255"
 	},
 	"paramInformation": [
-		{			
-		    "#": "1", 
+		{
+			"#": "1", 
 			"label": "Behavior if power fails",
 			"description": "If the state of the switch is saved after a power failure",
 			"valueSize": 1,
@@ -102,7 +102,7 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-        {
+		{
 			"#": "8",
 			"label": "Report options",
 			"description": "Sets report options to association group 2",
