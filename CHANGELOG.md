@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.3.0 (2022-09-29)
 ### Features
 * Support opt-in to receive beta firmware releases via the update service (#5076)
 * Implement Schedule Entry Lock CC (#4836)
