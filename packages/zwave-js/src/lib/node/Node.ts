@@ -3680,8 +3680,6 @@ protocol version:      ${this.protocolVersion}`;
 		data: Buffer,
 		target: number = 0,
 	): Promise<void> {
-		const loglevel = this.driver.getLogConfig().level;
-
 		// Don't start the process twice
 		if (this._firmwareUpdateStatus) {
 			throw new ZWaveError(
@@ -3697,9 +3695,6 @@ protocol version:      ${this.protocolVersion}`;
 			abort: false,
 		};
 
-		const version = this.getCCVersion(
-			CommandClasses["Firmware Update Meta Data"],
-		);
 		const api = this.commandClasses["Firmware Update Meta Data"];
 
 		// Check if this update is possible
@@ -3721,7 +3716,7 @@ protocol version:      ${this.protocolVersion}`;
 				);
 			}
 		} else {
-			if (version < 3) {
+			if (api.version < 3) {
 				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
@@ -3741,20 +3736,10 @@ protocol version:      ${this.protocolVersion}`;
 			nodeId: this.id,
 		});
 
-		if (loglevel === "silly") {
-			this.driver.controllerLog.logNode(
-				this.id,
-				`[beginFirmwareUpdate]
-  version = ${version}
-  CC version for net payload size = ${fcc.version}
-  CC API version = ${api.version}`,
-			);
-		}
-
 		const maxNetPayloadSize =
 			this.driver.computeNetCCPayloadSize(fcc) -
 			2 - // report number
-			(version >= 2 ? 2 : 0); // checksum
+			(fcc.version >= 2 ? 2 : 0); // checksum
 		// Use the smallest allowed payload
 		this._firmwareUpdateStatus.fragmentSize = Math.min(
 			maxNetPayloadSize,
