@@ -4635,11 +4635,14 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Downloads the desired firmware update(s) from the Z-Wave JS firmware update service and updates the firmware of the given node.
+	 *
+	 * The return value indicates whether the update was successful.
+	 * **WARNING:** This method will throw instead of returning `false` if invalid arguments are passed or downloading files or starting an update fails.
 	 */
 	public async firmwareUpdateOTA(
 		nodeId: number,
 		updates: FirmwareUpdateFileInfo[],
-	): Promise<void> {
+	): Promise<boolean> {
 		if (updates.length === 0) {
 			throw new ZWaveError(
 				`At least one update must be provided`,
@@ -4700,6 +4703,6 @@ ${associatedNodes.join(", ")}`,
 			nodeId,
 			`All updates downloaded, installing...`,
 		);
-		await node.updateFirmware(firmwares);
+		return node.updateFirmware(firmwares);
 	}
 }
