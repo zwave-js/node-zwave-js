@@ -692,6 +692,18 @@ export enum FirmwareUpdateMetaDataCommand {
 	PrepareReport = 0x0b,
 }
 
+export interface FirmwareUpdateMetaData {
+	manufacturerId: number;
+	firmwareId: number;
+	checksum: number;
+	firmwareUpgradable: boolean;
+	maxFragmentSize?: number;
+	additionalFirmwareIDs: readonly number[];
+	hardwareVersion?: number;
+	continuesToFunction: Maybe<boolean>;
+	supportsActivation: Maybe<boolean>;
+}
+
 /** @publicAPI */
 export enum FirmwareUpdateRequestStatus {
 	Error_InvalidManufacturerOrFirmwareID = 0,
@@ -711,6 +723,7 @@ export enum FirmwareUpdateStatus {
 	Error_Timeout = -1,
 
 	Error_Checksum = 0,
+	/** TransmissionFailed is also used for user-aborted upgrades */
 	Error_TransmissionFailed = 1,
 	Error_InvalidManufacturerID = 2,
 	Error_InvalidFirmwareID = 3,
@@ -759,6 +772,30 @@ export type FirmwareUpdateCapabilities =
 			/** Indicates whether the node supports delayed activation of the new firmware */
 			readonly supportsActivation: Maybe<boolean>;
 	  };
+
+export interface FirmwareUpdateProgress {
+	/** Which part/file of the firmware update process is currently in progress. This is a number from 1 to `totalFiles` and can be used to display progress. */
+	currentFile: number;
+	/** How many files the firmware update process consists of. */
+	totalFiles: number;
+	/** How many fragments of the current file have been transmitted. Together with `totalFragments` this can be used to display progress. */
+	sentFragments: number;
+	/** How many fragments the current file of the firmware update consists of. */
+	totalFragments: number;
+	/** The total progress of the firmware update in %, rounded to two digits. This considers the total size of all files. */
+	progress: number;
+}
+
+export interface FirmwareUpdateResult {
+	/** The status returned by the device for this firmware update attempt. For multi-target updates, this will be the status for the last update. */
+	status: FirmwareUpdateStatus;
+	/** Whether the update was successful. This is a simpler interpretation of the `status` field. */
+	success: boolean;
+	/** How long (in seconds) to wait before interacting with the device again */
+	waitTime?: number;
+	/** Whether the device will be re-interviewed. If this is `true`, applications should wait for the `"ready"` event to interact with the device again. */
+	reInterview: boolean;
+}
 
 /** @publicAPI */
 export enum HailCommand {
