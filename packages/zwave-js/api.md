@@ -955,7 +955,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         endOfFile: boolean;
     }>;
     externalNVMWriteByte(offset: number, data: number): Promise<boolean>;
-    firmwareUpdateOTA(nodeId: number, updates: FirmwareUpdateFileInfo[]): Promise<void>;
+    firmwareUpdateOTA(nodeId: number, updates: FirmwareUpdateFileInfo[]): Promise<boolean>;
     // (undocumented)
     get firmwareVersion(): string | undefined;
     getAllAssociationGroups(nodeId: number): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>>;
