@@ -18,6 +18,7 @@ module.exports = {
 		ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
 		sourceType: "module", // Allows for the use of imports
 		project: "./tsconfig.eslint.json",
+		tsconfigRootDir: __dirname,
 	},
 	extends: [
 		// Use the recommended rules from the @typescript-eslint/eslint-plugin

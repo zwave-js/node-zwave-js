@@ -124,7 +124,6 @@ import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-
 import { ZWaveController } from "../controller/Controller";
 import {
 	InclusionState,
@@ -197,6 +196,7 @@ import {
 	installConfigUpdate,
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
+import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
 import type { EditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
@@ -441,6 +441,16 @@ export class Driver
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+		if (options?.userAgent) {
+			if (!isObject(options.userAgent)) {
+				throw new ZWaveError(
+					`The userAgent property must be an object!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+
+			this.updateUserAgent(options.userAgent);
+		}
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
@@ -815,11 +825,22 @@ export class Driver
 		) as ZWaveOptions;
 		checkOptions(newOptions);
 
+		if (options.userAgent && !isObject(options.userAgent)) {
+			throw new ZWaveError(
+				`The userAgent property must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
 		// All good, update the options
 		this.options = newOptions;
 
 		if (options.logConfig) {
 			this.updateLogConfig(options.logConfig);
+		}
+
+		if (options.userAgent) {
+			this.updateUserAgent(options.userAgent);
 		}
 	}
 
@@ -1650,6 +1671,70 @@ export class Driver
 		| Pick<AppInfo, "applicationName" | "applicationVersion">
 		| undefined;
 
+	private userAgentComponents = new Map<string, string>();
+
+	/**
+	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
+	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
+	 */
+	public updateUserAgent(
+		components: Record<string, string | null | undefined>,
+	): void {
+		this.userAgentComponents = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+		);
+		this._userAgent = this.getEffectiveUserAgentString(
+			this.userAgentComponents,
+		);
+	}
+
+	/**
+	 * Returns the effective user agent string for the given components.
+	 * The driver name and version is automatically prepended and the statisticsAppInfo data is automatically appended if no components were given.
+	 */
+	private getEffectiveUserAgentString(
+		components: Map<string, string>,
+	): string {
+		const effectiveComponents = new Map([
+			[libName, libVersion],
+			...components,
+		]);
+		if (
+			effectiveComponents.size === 1 &&
+			this.statisticsAppInfo &&
+			this.statisticsAppInfo.applicationName !== "node-zwave-js"
+		) {
+			effectiveComponents.set(
+				this.statisticsAppInfo.applicationName,
+				this.statisticsAppInfo.applicationVersion,
+			);
+		}
+		return userAgentComponentsToString(effectiveComponents);
+	}
+
+	private _userAgent: string = `node-zwave-js/${libVersion}`;
+	/** Returns the user agent string used for service requests */
+	public get userAgent(): string {
+		return this._userAgent;
+	}
+
+	/** Returns the user agent string combined with the additional components (if given) */
+	public getUserAgentStringWithComponents(
+		components?: Record<string, string | null | undefined>,
+	): string {
+		if (!components || Object.keys(components).length === 0) {
+			return this._userAgent;
+		}
+
+		const merged = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+			false,
+		);
+		return this.getEffectiveUserAgentString(merged);
+	}
+
 	/**
 	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
 	 * inform your users before enabling statistics.
@@ -1658,7 +1743,6 @@ export class Driver
 		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
 	): void {
 		if (this._statisticsEnabled) return;
-		this._statisticsEnabled = true;
 
 		if (
 			!isObject(appInfo) ||
@@ -1681,6 +1765,7 @@ export class Driver
 			);
 		}
 
+		this._statisticsEnabled = true;
 		this.statisticsAppInfo = appInfo;
 
 		// If we're already ready, send statistics

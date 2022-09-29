@@ -1,10 +1,10 @@
+import got from "@esm2cjs/got";
 import * as Sentry from "@sentry/node";
 import { AssociationGroupInfoCC, ConfigurationCC } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { formatId } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
-import axios from "axios";
 import type { ZWaveNode } from "../node/Node";
 
 const missingDeviceConfigCache = new Set<string>();
@@ -29,12 +29,15 @@ export async function reportMissingDeviceConfig(
 	if (missingDeviceConfigCache.has(configFingerprint)) return;
 	// Otherwise ask our device DB if it exists
 	try {
-		const { data } = await axios.get(
-			`https://devices.zwave-js.io/public_api/getdeviceinfo/${configFingerprint.replace(
-				/:/g,
-				"/",
-			)}`,
-		);
+		const data = await got
+			.get(
+				`https://devices.zwave-js.io/public_api/getdeviceinfo/${configFingerprint.replace(
+					/:/g,
+					"/",
+				)}`,
+			)
+			.json();
+
 		if (
 			isObject(data) &&
 			typeof data.deviceFound === "boolean" &&

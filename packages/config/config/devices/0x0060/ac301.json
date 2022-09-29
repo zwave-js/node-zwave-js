@@ -137,6 +137,14 @@
 		"overrideFloatEncoding": {
 			"precision": 1,
 			"size": 2
+		},
+		"commandClasses": {
+			"remove": {
+				// The device does not support Supervision correctly
+				"0x6c": {
+					"endpoints": "*"
+				}
+			}
 		}
 	}
 }

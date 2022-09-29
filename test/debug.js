@@ -19,7 +19,7 @@ const { ConfigManager } = require("@zwave-js/config");
 	await configManager.loadIndicators();
 
 	// The data to decode
-	const data = Buffer.from("010e00498414080421015e98845aeff3", "hex");
+	const data = Buffer.from("010b0004000503260703c70013", "hex");
 	// The nonce needed to decode it
 	const nonce = Buffer.from("478d7aa05d83f3ea", "hex");
 	// The network key needed to decode it
@@ -60,8 +60,9 @@ const { ConfigManager } = require("@zwave-js/config");
 			authKey: generateAuthKey(networkKey),
 			encryptionKey: generateEncryptionKey(networkKey),
 		},
+		isCCSecure: () => true,
 	};
-	const msg = Message.from(host, data);
+	const msg = Message.from(host, { data });
 
 	if (isCommandClassContainer(msg)) {
 		msg.command.mergePartialCCs(host, []);

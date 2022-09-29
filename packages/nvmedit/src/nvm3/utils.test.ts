@@ -1,6 +1,7 @@
+import test from "ava";
 import { computeBergerCode } from "./utils";
 
-describe("computeBergerCode", () => {
+{
 	const cases = [
 		{
 			input: 0b1111,
@@ -24,10 +25,9 @@ describe("computeBergerCode", () => {
 		},
 	];
 
-	it.each(cases.map((obj) => [obj.result, obj.input, obj.numBits]))(
-		`returns %s for input %s with %s bits`,
-		(result, input, numBits) => {
-			expect(computeBergerCode(input, numBits)).toBe(result);
-		},
-	);
-});
+	for (const { input, numBits, result } of cases) {
+		test(`computeBergerCode() -> returns ${result} for input ${input} with ${numBits} bits`, (t) => {
+			t.is(computeBergerCode(input, numBits), result);
+		});
+	}
+}

@@ -265,6 +265,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     getSupportedCCVersionForEndpoint(cc: CommandClasses_2, nodeId: number, endpointIndex?: number): number;
+    getUserAgentStringWithComponents(components?: Record<string, string | null | undefined>): string;
     hardReset(): Promise<void>;
     // Warning: (ae-forgotten-export) The symbol "Transaction" needs to be exported by the entry point index.d.ts
     hasPendingTransactions(predicate: (t: Transaction) => boolean): boolean;
@@ -302,6 +303,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     updateLogConfig(config: DeepPartial<LogConfig>): void;
     updateOptions(options: DeepPartial<EditableZWaveOptions>): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    updateUserAgent(components: Record<string, string | null | undefined>): void;
+    get userAgent(): string;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     waitForCommand<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, timeout: number): Promise<T>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -325,7 +329,9 @@ export { DurationUnit }
 // Warning: (ae-missing-release-tag) "EditableZWaveOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type EditableZWaveOptions = Pick<ZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences" | "preserveUnknownValues">;
+export type EditableZWaveOptions = Pick<ZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences" | "preserveUnknownValues"> & {
+    userAgent?: Record<string, string | null | undefined>;
+};
 
 // Warning: (ae-missing-release-tag) "Endpoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -411,11 +417,20 @@ export interface FirmwareUpdateFileInfo {
 // Warning: (ae-missing-release-tag) "FirmwareUpdateInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type FirmwareUpdateInfo = {
-    version: string;
+export interface FirmwareUpdateInfo {
+    // (undocumented)
     changelog: string;
+    // (undocumented)
+    channel: "stable" | "beta";
+    // (undocumented)
+    downgrade: boolean;
+    // (undocumented)
     files: FirmwareUpdateFileInfo[];
-};
+    // (undocumented)
+    normalizedVersion: string;
+    // (undocumented)
+    version: string;
+}
 
 export { FirmwareUpdateStatus }
 
@@ -465,7 +480,9 @@ export { getEnumMemberName }
 //
 // @public (undocumented)
 export interface GetFirmwareUpdatesOptions {
+    additionalUserAgentComponents?: Record<string, string>;
     apiKey?: string;
+    includePrereleases?: boolean;
 }
 
 export { guessFirmwareFileFormat }
@@ -1432,6 +1449,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         nonce: number;
         serialAPIStarted: number;
     };
+    userAgent?: Record<string, string>;
 }
 
 

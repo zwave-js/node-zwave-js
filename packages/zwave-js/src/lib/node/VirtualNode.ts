@@ -3,6 +3,7 @@ import {
 	actuatorCCs,
 	isZWaveError,
 	IVirtualNode,
+	normalizeValueID,
 	TranslatedValueID,
 	ValueID,
 	valueIdToString,
@@ -51,6 +52,9 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		value: unknown,
 		options?: SetValueAPIOptions,
 	): Promise<boolean> {
+		// Ensure we're dealing with a valid value ID, with no extra properties
+		valueId = normalizeValueID(valueId);
+
 		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
