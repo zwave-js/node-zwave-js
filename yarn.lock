@@ -63,16 +63,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/monopack@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@alcalzone/monopack@npm:1.1.0"
+"@alcalzone/monopack@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@alcalzone/monopack@npm:1.2.0"
   dependencies:
     "@alcalzone/pak": ^0.9.0
     fs-extra: ^10.1.0
     tar-stream: ^2.2.0
   bin:
     monopack: bin/cli.js
-  checksum: 3ed52431270fea849631d4fbffd4c01e32a52a3d6f73d99ca2b8c0be319c2a7f5f60bfda0886eb5557db38b56b418f2169455d18f4cf6eff8d860ca65c818687
+  checksum: 9db6c771f47776ca6a2c6ffec59cd11bc9ea575542a4b2c92ca7efd89e9bd03054ecb5b41fe5bad70f6d855f3e0e43887eb6f7ca1bf2f44bc167515255c7b0b2
   languageName: node
   linkType: hard
 
@@ -4689,7 +4689,7 @@ __metadata:
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.3
     "@alcalzone/jsonl-db": ^2.5.3
-    "@alcalzone/monopack": ^1.1.0
+    "@alcalzone/monopack": ^1.2.0
     "@alcalzone/release-script": ~3.5.9
     "@babel/core": ^7.19.0
     "@babel/plugin-proposal-class-properties": "*"
@@ -13036,7 +13036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xstate@npm:^4.29.0":
+"xstate@npm:4.29.0":
   version: 4.29.0
   resolution: "xstate@npm:4.29.0"
   checksum: af4d273632dbab9df91aba1204bf9c28ff2dbed73a23ed16c77e2151702a18030b9187565bdb92f9e95c309b0cffa6d86655d1b36f2e22e8f0a0d193472dea6b
@@ -13256,6 +13256,6 @@ __metadata:
     source-map-support: ^0.5.21
     typescript: 4.8.3
     winston: ^3.8.2
-    xstate: ^4.29.0
+    xstate: 4.29.0
   languageName: unknown
   linkType: soft

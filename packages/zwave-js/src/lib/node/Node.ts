@@ -4097,9 +4097,6 @@ protocol version:      ${this.protocolVersion}`;
 				fragmentSize: number;
 		  })
 	> {
-		const version = this.getCCVersion(
-			CommandClasses["Firmware Update Meta Data"],
-		);
 		const api = this.commandClasses["Firmware Update Meta Data"];
 
 		// ================================
@@ -4122,7 +4119,7 @@ protocol version:      ${this.protocolVersion}`;
 					);
 				}
 			} else {
-				if (version < 3) {
+				if (api.version < 3) {
 					throw new ZWaveError(
 						`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
 						ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
@@ -4147,7 +4144,7 @@ protocol version:      ${this.protocolVersion}`;
 		const maxNetPayloadSize =
 			this.driver.computeNetCCPayloadSize(fcc) -
 			2 - // report number
-			(version >= 2 ? 2 : 0); // checksum
+			(fcc.version >= 2 ? 2 : 0); // checksum
 		// Use the smallest allowed payload
 		const fragmentSize = Math.min(
 			maxNetPayloadSize,
