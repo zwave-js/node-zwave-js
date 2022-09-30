@@ -15,7 +15,7 @@
 	},
 	"paramInformation": [
 		{
-			"#": "1", 
+			"#": "1",
 			"label": "Behavior if power fails",
 			"description": "If the state of the switch is saved after a power failure",
 			"valueSize": 1,
@@ -50,12 +50,12 @@
 				{
 					"label": "Toggle",
 					"value": 1
-		        }
+				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "External switch type",
+			"label": "External switch behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -154,7 +154,7 @@
 		{
 			"#": "21",
 			"label": "Remote operation",
-            "description": "If remote operation of the switch is allowed",
+			"description": "If remote operation of the switch is allowed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
