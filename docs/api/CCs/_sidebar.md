@@ -66,6 +66,7 @@
         -   [Scene Activation CC](api/CCs/SceneActivation.md)
         -   [Scene Actuator Configuration CC](api/CCs/SceneActuatorConfiguration.md)
         -   [Scene Controller Configuration CC](api/CCs/SceneControllerConfiguration.md)
+        -   [Schedule Entry Lock CC](api/CCs/ScheduleEntryLock.md)
         -   [Security 2 CC](api/CCs/Security2.md)
         -   [Security CC](api/CCs/Security.md)
         -   [Sound Switch CC](api/CCs/SoundSwitch.md)

@@ -1,12 +1,14 @@
+import type { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import type {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
+	FirmwareUpdateProgress,
+	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	MultilevelSwitchCommand,
 	Powerlevel,
 	PowerlevelTestStatus,
 } from "@zwave-js/cc/safe";
-import type { NotificationCCReport } from "@zwave-js/cc/src";
 import type {
 	CommandClasses,
 	MetadataUpdatedArgs,
@@ -84,13 +86,15 @@ export type ZWaveInterviewFailedCallback = (
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,
-	sentFragments: number,
-	totalFragments: number,
+	__DEPRECATED__sentFragments: number,
+	__DEPRECATED__totalFragments: number,
+	progress: FirmwareUpdateProgress,
 ) => void;
 export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 	node: ZWaveNode,
-	status: FirmwareUpdateStatus,
-	waitTime?: number,
+	__DEPRECATED__status: FirmwareUpdateStatus,
+	__DEPRECATED__waitTime: number | undefined,
+	result: FirmwareUpdateResult,
 ) => void;
 export type ZWaveNodeStatusChangeCallback = (
 	node: ZWaveNode,
