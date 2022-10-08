@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Time Between Battery Reports",
+			"label": "Battery Reporting Interval",
 			"valueSize": 1,
 			"unit": "hours",
 			"minValue": 0,
@@ -26,102 +26,8 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
-				}
-			]
-		},
-		{
-			"#": "2",
-			"label": "Send Basic Set ON - Above Temperature",
-			"valueSize": 1,
-			"minValue": 15,
-			"maxValue": 121,
-			"defaultValue": 121,
-			"unsigned": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 121
-				}
-			]
-		},
-		{
-			"#": "3",
-			"label": "Send Basic Set ON - Below Temperature",
-			"valueSize": 1,
-			"minValue": 15,
-			"maxValue": 121,
-			"defaultValue": 121,
-			"unsigned": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 121
-				}
-			]
-		},
-		{
-			"#": "4",
-			"label": "Send Basic Set OFF - Above Temperature",
-			"valueSize": 1,
-			"minValue": 15,
-			"maxValue": 121,
-			"defaultValue": 121,
-			"unsigned": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 121
-				}
-			]
-		},
-		{
-			"#": "5",
-			"label": "Send Basic Set OFF - Below Temperature",
-			"valueSize": 1,
-			"minValue": 15,
-			"maxValue": 121,
-			"defaultValue": 121,
-			"unsigned": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 121
-				}
-			]
-		},
-		{
-			"#": "6",
-			"label": "Extra Basic Set Attempts",
-			"description": "Make multiple attempts for all Basic Set Commands. Number of extra attempts sent every minute after first send",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				}
-			]
-		},
-		{
-			"#": "7",
-			"label": "Temperature Units",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
 				}
 			]
 		},
@@ -146,7 +52,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -172,71 +78,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
-					"value": 0
-				}
-			]
-		},
-		{
-			"#": "12",
-			"label": "Send Basic Set ON - Above Humidity Level",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				}
-			]
-		},
-		{
-			"#": "13",
-			"label": "Send Basic Set ON - Below Humidity Level",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				}
-			]
-		},
-		{
-			"#": "14",
-			"label": "Send Basic Set OFF - Above Humidity Level",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				}
-			]
-		},
-		{
-			"#": "15",
-			"label": "Send Basic Set OFF - Below Humidity Level",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -262,7 +104,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -288,14 +130,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "20",
-			"label": "Enable/Disable Basic Set Commands",
+			"label": "Basic Set Commands",
 			"description": "Determines which combination of Basic Set commands will be sent",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -319,6 +161,151 @@
 					"value": 4
 				}
 			]
+		},
+		{
+			"#": "6",
+			"label": "Basic Set Retry Attempts",
+			"description": "Number of extra attempts sent every minute",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Send Basic Set On: Above Temperature",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 121,
+			"defaultValue": 121,
+			"unsigned": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 121
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Send Basic Set On: Below Temperature",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 121,
+			"defaultValue": 121,
+			"unsigned": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 121
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Send Basic Set Off: Above Temperature",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 121,
+			"defaultValue": 121,
+			"unsigned": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 121
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Send Basic Set Off: Below Temperature",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 121,
+			"defaultValue": 121,
+			"unsigned": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 121
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Send Basic Set On: Above Humidity Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Send Basic Set On: Below Humidity Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Send Basic Set Off: Above Humidity Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Send Basic Set Off: Below Humidity Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"defaultValue": 1
 		},
 		{
 			"#": "21",
