@@ -143,7 +143,7 @@
 		{
 			"#": "153",
 			"$import": "#paramInformation/152",
-			"label": "Second Chanel: Double Click Value"
+			"label": "Second Channel: Double Click Value"
 		}
 	]
 }

@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x] # This should be LTS
+        node-version: [16.x] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -79,8 +79,8 @@ jobs:
         # Create a clean build
         yarn build
 
-        # Lint config files
-        yarn run lint:config
+        # Lint config files and Z-Wave specifics
+        yarn run lint:zwave
 
         # ===============================
         # Bump the version and publish

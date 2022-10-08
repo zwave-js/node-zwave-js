@@ -1,0 +1,471 @@
+{
+	"factory_default": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Reset to Factory Default"
+	},
+	"load_sensing": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Load Sensing"
+	},
+	"switch_mode": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Switch Mode"
+	},
+	"report_method": {
+		"label": "Change Open/Close Report Method",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Notification",
+				"value": 1
+			},
+			{
+				"label": "Basic Set",
+				"value": 2
+			},
+			{
+				"label": "Basic Report",
+				"value": 3
+			}
+		]
+	},
+	"adjust_refresh": {
+		"label": "Reporting Interval",
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 55,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"alternate_exclusion": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Alternate Exclusion",
+		"description": "Press two times ON and two times OFF, LED will flash 5 times if successful"
+	},
+	"alternate_exclusion_h": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Alternate Exclusion",
+		"description": "Press 3 times and hold on the last press"
+	},
+	"alternate_exclusion_m": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Alternate Exclusion",
+		"description": "Press and release OFF, then ON"
+	},
+	"smooth_level_changes": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Smooth Level Changes"
+	},
+	"dimmer_steps": {
+		"label": "Dimmer Steps",
+		"$import": "~/templates/master_template.json#base_1-99_nounit"
+	},
+	"dimmer_times": {
+		"label": "Dimmer Rate",
+		"$import": "~/templates/master_template.json#dimming_timing"
+	},
+	"dimmer_steps_z": {
+		"label": "Dimmer Steps (Z-Wave)",
+		"$import": "~/templates/master_template.json#base_1-99_nounit"
+	},
+	"dimmer_times_z": {
+		"label": "Dimmer Rate (Z-Wave)",
+		"$import": "~/templates/master_template.json#dimming_timing"
+	},
+	"dimmer_steps_a": {
+		"label": "Dimmer Steps (All-On/All-Off)",
+		"$import": "~/templates/master_template.json#base_1-99_nounit"
+	},
+	"dimmer_times_a": {
+		"label": "Dimmer Rate (All-On/All-Off)",
+		"$import": "~/templates/master_template.json#dimming_timing"
+	},
+	"dim_threshold_min": {
+		"label": "Minimum Dimmer Threshold",
+		"$import": "~/templates/master_template.json#base_1-99_nounit"
+	},
+	"dim_threshold_max": {
+		"label": "Maximum Dimmer Threshold",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 99,
+		"unsigned": true
+	},
+	"default_brightness_level": {
+		"label": "Default Brightness Level",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"dim_level": {
+		"label": "Associated Light Brightness",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"unsigned": true
+	},
+	"switch_level": {
+		"label": "Switch Level",
+		"description": "Set power level for plain switch functionality",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0
+	},
+	"dim_rate": {
+		"label": "Dim Rate",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Dim Quickly",
+				"value": 0
+			},
+			{
+				"label": "Dim Slowly",
+				"value": 1
+			}
+		]
+	},
+	"timeout_duration": {
+		"label": "Timeout Duration",
+		"valueSize": 1,
+		"defaultValue": 5,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "5 seconds",
+				"value": 0
+			},
+			{
+				"label": "1 minute",
+				"value": 1
+			},
+			{
+				"label": "5 minutes",
+				"value": 5
+			},
+			{
+				"label": "15 minutes",
+				"value": 15
+			},
+			{
+				"label": "30 minutes",
+				"value": 30
+			},
+			{
+				"label": "Disable timeout",
+				"value": 255
+			}
+		]
+	},
+	"pir_sensitivity": {
+		"label": "PIR Sensitivity",
+		"valueSize": 1,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Low",
+				"value": 1
+			},
+			{
+				"label": "Medium",
+				"value": 2
+			},
+			{
+				"label": "High",
+				"value": 3
+			}
+		]
+	},
+	"motion_sensitivity": {
+		"label": "Motion Sensitivity",
+		"valueSize": 1,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "High",
+				"value": 1
+			},
+			{
+				"label": "Medium",
+				"value": 2
+			},
+			{
+				"label": "Low",
+				"value": 3
+			}
+		]
+	},
+	"operation_mode": {
+		"label": "Operation Mode",
+		"description": "Sets how the light responds to motion",
+		"valueSize": 1,
+		"defaultValue": 3,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Manual",
+				"value": 1
+			},
+			{
+				"label": "Vacancy",
+				"value": 2
+			},
+			{
+				"label": "Occupancy",
+				"value": 3
+			}
+		]
+	},
+	"light_sensor": {
+		"label": "Light Sensor",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+	"motion_sensor": {
+		"label": "Motion Sensor",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+	"ignore_start_level": {
+		"label": "Start Dimming From Current Level",
+		"description": "The start level in Z-Wave commands will be ignored, if enabled",
+		"$import": "~/templates/master_template.json#base_enable_disable"
+	},
+	"control_groups": {
+		"label": "Control Groups 2 & 3",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enable",
+				"value": 0
+			},
+			{
+				"label": "Disable",
+				"value": 1
+			}
+		]
+	},
+	"association_mode": {
+		"label": "Association Mode",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"reset_cycle": {
+		"label": "Reset Cycle",
+		"description": "15 second intervals, starting from 60 seconds: Duration = (value-1) 15s.",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 110,
+		"defaultValue": 2,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "10 seconds",
+				"value": 1
+			},
+			{
+				"label": "20 seconds",
+				"value": 2
+			},
+			{
+				"label": "30 seconds",
+				"value": 3
+			},
+			{
+				"label": "45 seconds",
+				"value": 4
+			},
+			{
+				"label": "27 minutes, 15 seconds",
+				"value": 110
+			}
+		]
+	},
+	"pir_timeout_duration": {
+		"label": "PIR Timeout Duration",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 4,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "1 min to 60 min",
+				"value": 60
+			},
+			{
+				"label": "5 seconds",
+				"value": 255
+			}
+		]
+	},
+	"led_indication": {
+		"label": "LED Indication",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"default_dim_level": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Full brightness",
+				"value": 0
+			},
+			{
+				"label": "Previous dim level",
+				"value": 1
+			},
+			{
+				"label": "Previous state",
+				"value": 2
+			}
+		]
+	},
+	"three_way_setup": {
+		"label": "3-Way Setup",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Add-on",
+				"value": 0
+			},
+			{
+				"label": "Standard",
+				"value": 1
+			}
+		]
+	},
+	"led_indicator_color": {
+		"label": "LED Indicator Color",
+		"valueSize": 1,
+		"defaultValue": 5,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Red",
+				"value": 1
+			},
+			{
+				"label": "Orange",
+				"value": 2
+			},
+			{
+				"label": "Yellow",
+				"value": 3
+			},
+			{
+				"label": "Green",
+				"value": 4
+			},
+			{
+				"label": "Blue",
+				"value": 5
+			},
+			{
+				"label": "Pink",
+				"value": 6
+			},
+			{
+				"label": "Purple",
+				"value": 7
+			},
+			{
+				"label": "White",
+				"value": 8
+			}
+		]
+	},
+	"led_indicator_intensity": {
+		"label": "LED Indicator Intensity",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 7,
+		"defaultValue": 4,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Off",
+				"value": 0
+			}
+		]
+	}
+}

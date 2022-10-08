@@ -1,3 +1,3 @@
 export * from "./MockController";
 export * from "./MockNode";
-export * from "./SpyTransport";
+export * from "./MockZWaveFrame";

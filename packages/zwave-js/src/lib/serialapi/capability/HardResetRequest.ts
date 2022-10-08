@@ -1,4 +1,5 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedCallback,
@@ -7,7 +8,7 @@ import {
 	Message,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
+	MessageOrigin,
 	MessageType,
 	messageTypes,
 	priority,
@@ -17,11 +18,18 @@ import {
 @priority(MessagePriority.Controller)
 export class HardResetRequestBase extends Message {
 	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== HardResetCallback
-		) {
-			return new HardResetCallback(host, options);
+		if (gotDeserializationOptions(options)) {
+			if (
+				options.origin === MessageOrigin.Host &&
+				(new.target as any) !== HardResetRequest
+			) {
+				return new HardResetRequest(host, options);
+			} else if (
+				options.origin !== MessageOrigin.Host &&
+				(new.target as any) !== HardResetCallback
+			) {
+				return new HardResetCallback(host, options);
+			}
 		}
 		super(host, options);
 	}

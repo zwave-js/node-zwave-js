@@ -1,0 +1,16 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "12726 / ZW4004",
+	"description": "Direct Wire 40A Outdoor Switch, 300S",
+	"devices": [
+		{
+			"productType": "0x4f44",
+			"productId": "0x3031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

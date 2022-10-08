@@ -17,5 +17,5 @@ async set(
 	hour: number,
 	minute: number,
 	weekday?: Weekday,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```

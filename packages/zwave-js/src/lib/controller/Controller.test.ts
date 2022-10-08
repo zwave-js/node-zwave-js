@@ -1,3 +1,4 @@
+import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import {
 	assertZWaveError,
 	CommandClasses,
@@ -6,7 +7,6 @@ import {
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
-import { getGroupCountValueId } from "../commandclass/AssociationCC";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
 import { ZWaveNode } from "../node/Node";
@@ -72,15 +72,16 @@ describe("lib/controller/Controller", () => {
 				isSupported: true,
 				version: 3,
 			});
-			node1.valueDB.setValue(getGroupCountValueId(0), 14);
-			node1["_deviceConfig"] =
-				await fakeDriver.configManager.lookupDevice(
-					// Logic Group ZDB5100
-					0x0234,
-					0x0003,
-					0x0121,
-					"0.0",
-				);
+			node1.valueDB.setValue(AssociationCCValues.groupCount.id, 14);
+
+			const deviceConfig = await fakeDriver.configManager.lookupDevice(
+				// Logic Group ZDB5100
+				0x0234,
+				0x0003,
+				0x0121,
+				"0.0",
+			);
+			fakeDriver.getDeviceConfig = () => deviceConfig;
 
 			expect(
 				ctrl.getAssociationGroups({ nodeId: 1, endpoint: 0 }).get(4)
@@ -97,15 +98,16 @@ describe("lib/controller/Controller", () => {
 				isSupported: true,
 				version: 3,
 			});
-			node1.valueDB.setValue(getGroupCountValueId(0), 14);
-			node1["_deviceConfig"] =
-				await fakeDriver.configManager.lookupDevice(
-					// Logic Group ZDB5100
-					0x0234,
-					0x0003,
-					0x0121,
-					"0.0",
-				);
+			node1.valueDB.setValue(AssociationCCValues.groupCount.id, 14);
+
+			const deviceConfig = await fakeDriver.configManager.lookupDevice(
+				// Logic Group ZDB5100
+				0x0234,
+				0x0003,
+				0x0121,
+				"0.0",
+			);
+			fakeDriver.getDeviceConfig = () => deviceConfig;
 
 			expect(
 				ctrl.getAssociationGroups({ nodeId: 1, endpoint: 0 }).get(4)

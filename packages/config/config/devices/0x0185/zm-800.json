@@ -37,6 +37,6 @@
 	"metadata": {
 		"inclusion": "1. Make sure ZM-800 is in the range of the Z-Wave controller. \n2. Set the Z-Wave controller to the inclusion mode. \n3. Quickly pressing TP-Switch2 button 3 times on the ZM-800.\n4. The ZM-800 is added to the network",
 		"exclusion": "1. Make sure ZM-800 is in the range of the Z-Wave controller. \n2. Set the Z-Wave controller to the exclusion mode. \n3. Quickly pressing TP-Switch2 button 3 times on the ZM-800.\n4. The ZM-800 is deleted from the network",
-		"reset": "Note: Use the reset procedure only in the event that the network primary controller is missing or otherwise inoperable.\n1. Presse the TP-Switch2 button more than 5 seconds. \n2. Z-Wave LED is start blinking.\n3. Release the TP-Switch2 button right now.\n4. Z-Wave LED off, reset is performed"
+		"reset": "Note: Use the reset procedure only in the event that the network primary controller is missing or otherwise inoperable.\n1. Press the TP-Switch2 button more than 5 seconds. \n2. Z-Wave LED is start blinking.\n3. Release the TP-Switch2 button right now.\n4. Z-Wave LED off, reset is performed"
 	}
 }

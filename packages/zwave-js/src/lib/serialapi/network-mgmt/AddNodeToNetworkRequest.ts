@@ -1,11 +1,12 @@
 import {
 	CommandClasses,
 	MessageOrCCLogEntry,
+	MessagePriority,
 	MessageRecord,
 	NodeType,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
@@ -15,7 +16,6 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
@@ -63,7 +63,7 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 }
 
 export function computeNeighborDiscoveryTimeout(
-	host: ZWaveHost,
+	host: ZWaveApplicationHost,
 	nodeType: NodeType,
 ): number {
 	const allNodes = [...host.nodes.values()];
@@ -307,9 +307,9 @@ export class AddNodeToNetworkRequestStatusReport
 
 interface AddNodeStatusContext {
 	nodeId: number;
-	basic?: number;
-	generic?: number;
-	specific?: number;
+	basicDeviceClass?: number;
+	genericDeviceClass?: number;
+	specificDeviceClass?: number;
 	supportedCCs?: CommandClasses[];
 	controlledCCs?: CommandClasses[];
 }

@@ -1,0 +1,16 @@
+{
+	"manufacturer": "AT&T",
+	"manufacturerId": "0x0063",
+	"label": "45657 / ZW4101",
+	"description": "Plug-in 2-Outlet Switch, 1 Controlled, 300S",
+	"devices": [
+		{
+			"productType": "0x6363",
+			"productId": "0x3030"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

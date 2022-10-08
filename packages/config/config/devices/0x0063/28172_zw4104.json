@@ -1,18 +1,13 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
-	"label": "28172 / 28713 / ZW4104",
-	"description": "Plug-in Smart Switch (Dual Plug)",
+	"label": "28172 / ZW4104",
+	"description": "Plug-in 2-Outlet Switch, 1 Controlled, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",
 			"productId": "0x3039",
 			"zwaveAllianceId": [1270, 1925, 2973]
-		},
-		{
-			"productType": "0x5052",
-			"productId": "0x3130",
-			"zwaveAllianceId": [1436, 2125, 2561]
 		}
 	],
 	"firmwareVersion": {
@@ -38,26 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"description": "LED status when device on or off.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED ON when load is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED On when light is turned On",
-					"value": 1
-				},
-				{
-					"label": "LED always OFF",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		}
 	],
 	"compat": {

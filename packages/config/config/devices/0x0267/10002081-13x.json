@@ -176,7 +176,7 @@
 	"metadata": {
 		"inclusion": "Set the Z-Wave Controller to inclusion mode.\n Press the button for between 2 and 30 seconds.",
 		"exclusion": "Set the Z-Wave Controller to exclusion mode.\n Press the button for between 2 and 30 seconds.",
-		"reset": "Long press button for more than 30 secounds in the product.\nMain LED lights up for 2.5 seconds，then turns off.",
+		"reset": "Long press button for more than 30 seconds in the product.\nMain LED lights up for 2.5 seconds，then turns off.",
 		"manual": "https://static.simonelectric.com/estaticos/extras/ficheros/contenidos/00/00/01/15/15//10002081-13x%20Tecla%20Master%20persianas%20IO_2.pdf"
 	}
 }

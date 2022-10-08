@@ -1,4 +1,4 @@
-/* @noExternalImports */
+/* @forbiddenImports external */
 
 export * from "./errors";
 export * from "./inheritance";
@@ -9,3 +9,4 @@ export * from "./ThrowingMap";
 export * from "./TimedExpectation";
 export * from "./types";
 export * from "./utils";
+export * from "./wrappingCounter";

@@ -2,7 +2,8 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { num2hex } from "./strings";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */
-export function keysOf<T>(obj: T): (keyof T)[] {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function keysOf<T extends {}>(obj: T): (keyof T)[] {
 	return Object.keys(obj) as unknown as (keyof T)[];
 }
 
@@ -105,19 +106,23 @@ export function throttle<T extends any[]>(
 export function mergeDeep(
 	target: Record<string, any> | undefined,
 	source: Record<string, any>,
+	overwrite?: boolean,
 ): Record<string, any> {
 	target = target || {};
 	for (const [key, value] of Object.entries(source)) {
-		if (!(key in target)) {
-			target[key] = value;
-		} else {
-			if (typeof value === "object") {
+		if (key in target) {
+			if (value === undefined) {
+				// Explicitly delete keys that were set to `undefined`, but only if overwriting is enabled
+				if (overwrite) delete target[key];
+			} else if (typeof value === "object") {
 				// merge objects
-				target[key] = mergeDeep(target[key], value);
-			} else if (typeof target[key] === "undefined") {
-				// don't override single keys
+				target[key] = mergeDeep(target[key], value, overwrite);
+			} else if (overwrite || typeof target[key] === "undefined") {
+				// Only overwrite existing primitives if the overwrite flag is set
 				target[key] = value;
 			}
+		} else if (value !== undefined) {
+			target[key] = value;
 		}
 	}
 	return target;

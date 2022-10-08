@@ -85,7 +85,9 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 	private keyToString(key: TKey): string {
 		const filledKey = { ...key };
 		if (this.defaultKeyProps) {
-			for (const [required, def] of entries(this.defaultKeyProps)) {
+			for (const [required, def] of Object.entries(
+				this.defaultKeyProps,
+			)) {
 				if (!(required in filledKey)) filledKey[required as any] = def;
 			}
 		}

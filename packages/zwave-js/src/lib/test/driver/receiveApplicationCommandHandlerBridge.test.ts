@@ -1,5 +1,6 @@
 import { CommandClasses, SecurityManager } from "@zwave-js/core";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -13,11 +14,13 @@ describe("regression tests", () => {
 
 	beforeEach(async () => {
 		({ driver, serialport } = await createAndStartDriver({
-			networkKey: Buffer.alloc(16, 0),
+			securityKeys: {
+				S0_Legacy: Buffer.alloc(16, 0),
+			},
 		}));
 
 		driver["_securityManager"] = new SecurityManager({
-			networkKey: driver.options.networkKey!,
+			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			ownNodeId: 1,
 			nonceTimeout: driver.options.timeouts.nonce,
 		});
@@ -39,7 +42,10 @@ describe("regression tests", () => {
 	it("Node responses in a BridgeApplicationCommandRequest should be understood", async () => {
 		// Repro for #1100
 		const node3 = new ZWaveNode(3, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(3, node3);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			3,
+			node3,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);
@@ -99,5 +105,5 @@ describe("regression tests", () => {
 		await expect(getNoncePromise).resolves.toEqual(
 			Buffer.from("3e55e4b714973b9e", "hex"),
 		);
-	}, 5000);
+	}, 30000);
 });

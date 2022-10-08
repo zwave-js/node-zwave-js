@@ -8,6 +8,7 @@ process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
+import got from "@esm2cjs/got";
 import { CommandClasses, getIntegerLimits } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
@@ -20,7 +21,6 @@ import {
 import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { AssertionError, ok } from "assert";
-import axios from "axios";
 import * as child from "child_process";
 import * as JSONC from "comment-json";
 import * as fs from "fs-extra";
@@ -177,19 +177,19 @@ function updateNumberOrDefault(
 
 /** Retrieves the list of database IDs from the OpenSmartHouse DB */
 async function fetchIDsOH(): Promise<number[]> {
-	const data = (await axios({ url: ohUrlIDs })).data;
+	const data = (await got.get(ohUrlIDs).json()) as any;
 	return data.devices.map((d: any) => d.id);
 }
 
 /** Retrieves the definition for a specific device from the OpenSmartHouse DB */
 async function fetchDeviceOH(id: number): Promise<string> {
-	const source = (await axios({ url: ohUrlDevice(id) })).data;
+	const source = (await got.get(ohUrlDevice(id)).json()) as any;
 	return stringify(source, "\t");
 }
 
 /** Retrieves the definition for a specific device from the Z-Wave Alliance DB */
 async function fetchDeviceZWA(id: number): Promise<string> {
-	const source = (await axios({ url: zwaUrlDevice(id) })).data;
+	const source = (await got.get(zwaUrlDevice(id)).json()) as any;
 	return stringify(source, "\t");
 }
 
@@ -202,7 +202,7 @@ async function downloadOZWConfig(): Promise<string> {
 
 	// this will return a stream in `data` that we pipe into write stream
 	// to store the file in `tmpDir`
-	const data = (await axios({ url: ozwTarUrl, responseType: "stream" })).data;
+	const data = got.stream.get(ozwTarUrl);
 
 	return new Promise((resolve, reject) => {
 		const fileDest = path.join(ozwTempDir, ozwTarName);
@@ -590,7 +590,7 @@ async function parseOZWProduct(
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
-		description: existingDevice?.description ?? productName, // don't override the descrition
+		description: existingDevice?.description ?? productName, // don't override the description
 		devices: devices,
 		firmwareVersion: {
 			min: existingDevice?.firmwareVersion.min ?? "0.0",
@@ -1049,7 +1049,7 @@ function combineDeviceFiles(json: Record<string, any>[]) {
 					);
 				}
 				// Show an error if the device parameters should match, but they don't
-				// TODO add erorr handling if a FW changes parameters
+				// TODO add error handling if a FW changes parameters
 				else if (
 					test_file.ProductId === file.ProductId &&
 					test_file.ProductTypeId === file.ProductTypeId &&
@@ -1060,7 +1060,7 @@ function combineDeviceFiles(json: Record<string, any>[]) {
 					) == false
 				) {
 					console.log(
-						`WARNING - Detected possible firmware parameter change ${file.Identifer} -- ${file.Id} and ${test_file.Id}`,
+						`WARNING - Detected possible firmware parameter change ${file.Identifier} -- ${file.Id} and ${test_file.Id}`,
 					);
 				}
 				// We were wrong to change the identifier because the params don't match, restore the tested file as it is different
@@ -1289,7 +1289,7 @@ async function parseZWAProduct(
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
-		description: existingDevice?.description ?? productName, // don't override the descrition
+		description: existingDevice?.description ?? productName, // don't override the description
 		devices: devices,
 		firmwareVersion: {
 			min: existingDevice?.firmwareVersion.min ?? "0.0",
@@ -1646,7 +1646,7 @@ async function retrieveZWADeviceIds(
 		let page = 1;
 		// Page 1
 		let currentUrl = `https://products.z-wavealliance.org/search/DoAdvancedSearch?productName=&productIdentifier=&productDescription=&category=-1&brand=${manu}&regionId=-1&order=&page=${page}`;
-		const firstPage = (await axios({ url: currentUrl })).data;
+		const firstPage = await got.get(currentUrl).text();
 		for (const i of firstPage.match(/(?<=productId=).*?(?=[\&\"])/g)) {
 			deviceIdsSet.add(i);
 		}
@@ -1666,7 +1666,7 @@ async function retrieveZWADeviceIds(
 					`Processing Page ${page} of ${lastPage}...`,
 				);
 				currentUrl = `https://products.z-wavealliance.org/search/DoAdvancedSearch?productName=&productIdentifier=&productDescription=&category=-1&brand=${manu}&regionId=-1&order=&page=${page}`;
-				const nextPage = (await axios({ url: currentUrl })).data;
+				const nextPage = await got.get(currentUrl).text();
 				const nextPageIds = nextPage.match(
 					/(?<=productId=).*?(?=[\&\"])/g,
 				);
@@ -1750,7 +1750,7 @@ async function downloadDevicesOH(IDs?: number[]): Promise<void> {
 async function downloadManufacturersOH(): Promise<void> {
 	process.stdout.write("Fetching manufacturers...");
 
-	const data = (await axios({ url: ohUrlManufacturers })).data;
+	const data = await got.get(ohUrlManufacturers).json();
 
 	// Delete the last line
 	process.stdout.write("\r\x1b[K");

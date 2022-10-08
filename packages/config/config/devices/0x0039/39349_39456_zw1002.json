@@ -1,0 +1,48 @@
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39349 / 39456 / ZW1002",
+	"description": "In-Wall Outlet, TR, 500S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3133",
+			"zwaveAllianceId": [2690, 3746]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "Led Light",
+			"description": "Invert LED light",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led on when load is off, LED off when load is on",
+					"value": 0
+				},
+				{
+					"label": "Led on when load is on, LED off when load is off (default)",
+					"value": 1
+				},
+				{
+					"label": "Led always off",
+					"value": 2
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and\nrelease the Program Button to add it in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the manual/program button to remove it from the\nnetwork",
+		"reset": "Press the button 3 times, then press and hold the button for at least 3\nseconds. The LED will blink 5 times to confirm.\nNOTE: This should only be used in the event your network’s primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2690/39349_HQSG_1.pdf"
+	}
+}

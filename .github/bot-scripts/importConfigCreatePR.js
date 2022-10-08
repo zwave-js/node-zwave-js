@@ -58,7 +58,7 @@ async function main(param) {
 
 If anyone feels compelled to help out, please follow these steps:
 
-- Fork this respository if you haven't already. If you have, synchronize your fork so you get a copy of the new branch.
+- Fork this repository if you haven't already. If you have, synchronize your fork so you get a copy of the new branch.
 - Make the necessary changes in the branch \`${process.env.branchname}\` in your fork
 - Create a pull request with your branch \`${process.env.branchname}\` as the source and our branch \`${process.env.branchname}\` as the target.
 

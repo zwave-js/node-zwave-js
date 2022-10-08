@@ -113,7 +113,7 @@ This dialog MUST be shown when `zwave-js` calls the `validateDSKAndEnterPIN` use
 
 ### Confirming the inclusion process
 
-Security bootstrapping (exchanging keys) happens after a node was included into the network. Since things can go wrong here (including timeouts during user interaction), a node can end up with a lower security class than intended. The `"node added"` event callback contains this infomation:
+Security bootstrapping (exchanging keys) happens after a node was included into the network. Since things can go wrong here (including timeouts during user interaction), a node can end up with a lower security class than intended. The `"node added"` event callback contains this information:
 
 ```ts
 driver.controller.on("node added", (node, result) => {

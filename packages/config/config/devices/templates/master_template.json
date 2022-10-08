@@ -63,11 +63,11 @@
 			}
 		]
 	},
-	"base_0-1_options_nounit": {
-		// This template is meant to be used for parameters that have predefined options
+	"base_options_nounit": {
+		// This template is meant to be used for all parameters that
+		// allow selection of predefined options without manual entry
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
+		// min/max value are inferred from the defined options
 		"defaultValue": 0,
 		"allowManualEntry": false
 	},
@@ -155,7 +155,7 @@
 		"valueSize": 4,
 		"minValue": 1,
 		"maxValue": 65535,
-		"defaultValue": 0,
+		"defaultValue": 1,
 		"unsigned": true
 	},
 	"base_true_false": {
@@ -350,6 +350,26 @@
 			},
 			{
 				"label": "On when load is on",
+				"value": 1
+			},
+			{
+				"label": "Always off",
+				"value": 2
+			}
+		]
+	},
+	"led_indicator_three_options_inverted": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "On when load is on",
+				"value": 0
+			},
+			{
+				"label": "On when load is off",
 				"value": 1
 			},
 			{

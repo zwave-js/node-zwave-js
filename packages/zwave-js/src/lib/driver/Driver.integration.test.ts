@@ -1,20 +1,21 @@
+import { AssociationCommand } from "@zwave-js/cc";
+import { AssociationCCReport } from "@zwave-js/cc/AssociationCC";
+import { BasicCCSet } from "@zwave-js/cc/BasicCC";
+import { FirmwareUpdateMetaDataCC } from "@zwave-js/cc/FirmwareUpdateMetaDataCC";
+import { MultiChannelCCCommandEncapsulation } from "@zwave-js/cc/MultiChannelCC";
+import { MultiCommandCCCommandEncapsulation } from "@zwave-js/cc/MultiCommandCC";
+import { SecurityCCCommandEncapsulation } from "@zwave-js/cc/SecurityCC";
+import { WakeUpCCIntervalSet } from "@zwave-js/cc/WakeUpCC";
 import {
 	CommandClasses,
+	EncapsulationFlags,
+	TransmitOptions,
 	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { MockController, MockNode } from "@zwave-js/testing";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
-import { AssociationCCReport } from "../commandclass/AssociationCC";
-import { BasicCCSet } from "../commandclass/BasicCC";
-import { FirmwareUpdateMetaDataCC } from "../commandclass/FirmwareUpdateMetaDataCC";
-import { MultiChannelCCCommandEncapsulation } from "../commandclass/MultiChannelCC";
-import { MultiCommandCCCommandEncapsulation } from "../commandclass/MultiCommandCC";
-import { SecurityCCCommandEncapsulation } from "../commandclass/SecurityCC";
-import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
-import { AssociationCommand } from "../commandclass/_Types";
-import { TransmitOptions } from "../controller/_Types";
 import { ZWaveNode } from "../node/Node";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
@@ -85,7 +86,7 @@ describe("lib/driver/Driver", () => {
 			driver.removeAllListeners();
 		});
 
-		it("the automatically created callback ID should be incremented and wrap from 0xff back to 10", () => {
+		it("the automatically created callback ID should be incremented and wrap from 0xff back to 1", () => {
 			let lastCallbackId: number | undefined;
 			for (let i = 0; i <= 300; i++) {
 				if (i === 300) {
@@ -162,7 +163,7 @@ describe("lib/driver/Driver", () => {
 			const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
 				nodeId: 2,
 			});
-			testMsg3.secure = true;
+			testMsg3.setEncapsulationFlag(EncapsulationFlags.Security, true);
 			expect(driver.computeNetCCPayloadSize(testMsg3)).toBe(46 - 20 - 2);
 		});
 	});

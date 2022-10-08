@@ -134,7 +134,7 @@
 		{
 			"#": "11",
 			"label": "Ambient Light Sensor Level",
-			"description": "Light threshold where keypad will stop backlighting if higher than choosen value",
+			"description": "Light threshold where keypad will stop backlighting if higher than chosen value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

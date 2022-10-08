@@ -2,7 +2,7 @@
 	"manufacturer": "TEM AG",
 	"manufacturerId": "0x034e",
 	"label": "MTBAS-100-WL",
-	"description": "Radio Base Modul",
+	"description": "Radio Base Module",
 	"devices": [
 		{
 			"productType": "0x0001",

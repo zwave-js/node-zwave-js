@@ -2,11 +2,11 @@ import {
 	createDefaultTransportFormat,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import { assertMessage, SpyTransport } from "@zwave-js/core/test";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
-import { assertMessage, SpyTransport } from "@zwave-js/testing";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import MockDate from "mockdate";
-import type { ThrowingMap } from "../../controller/Controller";
 import type { Driver } from "../../driver/Driver";
 import { DriverLogger } from "../../log/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -25,6 +25,7 @@ describe("regression tests", () => {
 		spyTransport = new SpyTransport();
 		spyTransport.format = createDefaultTransportFormat(true, true);
 		driverLogger = new DriverLogger(
+			undefined as any,
 			new ZWaveLogContainer({
 				transports: [spyTransport],
 			}),
@@ -55,6 +56,7 @@ describe("regression tests", () => {
 			removeAllListeners: () => {},
 		} as any;
 		driver["_driverLog"] = driverLogger;
+		(driverLogger as any).driver = driver;
 	});
 
 	afterEach(async () => {
@@ -77,8 +79,8 @@ describe("regression tests", () => {
 			driver["addNodeEventHandlers"](node);
 		}
 
-		node33["_isListening"] = true;
-		node33["_isFrequentListening"] = false;
+		node33["isListening"] = true;
+		node33["isFrequentListening"] = false;
 		node33.markAsAlive();
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);

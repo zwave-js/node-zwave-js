@@ -1,7 +1,6 @@
 import { CommandClasses } from "@zwave-js/core/safe";
 import { JSONObject, num2hex } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
-import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
@@ -144,7 +143,7 @@ export class GenericDeviceClass {
 
 		const specific = new Map<number, SpecificDeviceClass>();
 		if (isObject(definition.specific)) {
-			for (const [specificKey, specificDefinition] of entries(
+			for (const [specificKey, specificDefinition] of Object.entries(
 				definition.specific,
 			)) {
 				if (!hexKeyRegexNDigits.test(specificKey))
@@ -161,7 +160,7 @@ export class GenericDeviceClass {
 					specificKeyNum,
 					new SpecificDeviceClass(
 						specificKeyNum,
-						specificDefinition,
+						specificDefinition as any,
 						this,
 					),
 				);

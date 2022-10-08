@@ -3,6 +3,7 @@
 import { getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { highResTimestamp } from "../util/date";
 import { increment } from "./bufferUtils";
 import {
 	computeNoncePRK,
@@ -11,7 +12,7 @@ import {
 	encryptAES128ECB,
 } from "./crypto";
 import { CtrDRBG } from "./ctr_drbg";
-import { SecurityClass, SecurityClassOwner } from "./SecurityClass";
+import { SecurityClass } from "./SecurityClass";
 
 interface NetworkKeys {
 	pnk: Buffer;
@@ -52,10 +53,17 @@ export type SPANTableEntry =
 			type: SPANState.SPAN;
 			securityClass: SecurityClass;
 			rng: CtrDRBG;
+			/** The most recent generated SPAN */
+			currentSPAN?: {
+				nonce: Buffer;
+				expires: number;
+			};
 	  };
 
 // How many sequence numbers are remembered for each node when checking for duplicates
 const SINGLECAST_MAX_SEQ_NUMS = 10;
+// How long a singlecast nonce used for encryption will be kept around to attempt decryption of in-flight messages
+const SINGLECAST_NONCE_EXPIRY_NS = 500 * 1000 * 1000; // 500 ms in nanoseconds
 
 export class SecurityManager2 {
 	public constructor() {
@@ -132,10 +140,8 @@ export class SecurityManager2 {
 		return { ...keys };
 	}
 
-	public getKeysForNode(
-		node: SecurityClassOwner,
-	): NetworkKeys | TempNetworkKeys {
-		const spanState = this.getSPANState(node.id);
+	public getKeysForNode(peerNodeID: number): NetworkKeys | TempNetworkKeys {
+		const spanState = this.getSPANState(peerNodeID);
 		// The keys we return must match the actual SPAN state (if we have one)
 		// Meaning if an SPAN for the temporary inclusion key is established,
 		// we need to return that temporary key
@@ -143,14 +149,15 @@ export class SecurityManager2 {
 			spanState.type === SPANState.SPAN &&
 			spanState.securityClass === SecurityClass.Temporary
 		) {
-			if (this.tempKeys.has(node.id)) return this.tempKeys.get(node.id)!;
+			if (this.tempKeys.has(peerNodeID))
+				return this.tempKeys.get(peerNodeID)!;
 			throw new ZWaveError(
-				`Temporary encryption key for node ${node.id} is not known!`,
+				`Temporary encryption key for node ${peerNodeID} is not known!`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		} else if (spanState.type !== SPANState.SPAN) {
 			throw new ZWaveError(
-				`Security class for node ${node.id} is not yet known!`,
+				`Security class for node ${peerNodeID} is not yet known!`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
@@ -212,7 +219,7 @@ export class SecurityManager2 {
 
 	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
 	public initializeSPAN(
-		peer: SecurityClassOwner,
+		peerNodeId: number,
 		securityClass: SecurityClass,
 		senderEI: Buffer,
 		receiverEI: Buffer,
@@ -228,7 +235,7 @@ export class SecurityManager2 {
 		const noncePRK = computeNoncePRK(senderEI, receiverEI);
 		const MEI = deriveMEI(noncePRK);
 
-		this.spanTable.set(peer.id, {
+		this.spanTable.set(peerNodeId, {
 			securityClass,
 			type: SPANState.SPAN,
 			rng: new CtrDRBG(
@@ -243,7 +250,7 @@ export class SecurityManager2 {
 
 	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
 	public initializeTempSPAN(
-		peer: SecurityClassOwner,
+		peerNodeId: number,
 		senderEI: Buffer,
 		receiverEI: Buffer,
 	): void {
@@ -254,11 +261,11 @@ export class SecurityManager2 {
 			);
 		}
 
-		const keys = this.tempKeys.get(peer.id)!;
+		const keys = this.tempKeys.get(peerNodeId)!;
 		const noncePRK = computeNoncePRK(senderEI, receiverEI);
 		const MEI = deriveMEI(noncePRK);
 
-		this.spanTable.set(peer.id, {
+		this.spanTable.set(peerNodeId, {
 			securityClass: SecurityClass.Temporary,
 			type: SPANState.SPAN,
 			rng: new CtrDRBG(
@@ -283,15 +290,18 @@ export class SecurityManager2 {
 		);
 	}
 
+	/** Stores the latest sequence number for the given peer node ID and returns the previous one */
 	public storeSequenceNumber(
 		peerNodeId: number,
 		sequenceNumber: number,
-	): void {
+	): number | undefined {
 		if (this.peerSequenceNumbers.has(peerNodeId)) {
 			// Store the last SINGLECAST_MAX_SEQ_NUMS sequence numbers
 			const arr = this.peerSequenceNumbers.get(peerNodeId)!;
+			const prev = arr[arr.length - 1];
 			arr.push(sequenceNumber);
 			if (arr.length > SINGLECAST_MAX_SEQ_NUMS) arr.shift();
+			return prev;
 		} else {
 			this.peerSequenceNumbers.set(peerNodeId, [sequenceNumber]);
 		}
@@ -310,7 +320,11 @@ export class SecurityManager2 {
 		});
 	}
 
-	public nextNonce(peerNodeId: number): Buffer {
+	/**
+	 * Generates the next nonce for the given peer and returns it.
+	 * @param store - Whether the nonce should be stored/remembered as the current SPAN.
+	 */
+	public nextNonce(peerNodeId: number, store?: boolean): Buffer {
 		const spanState = this.spanTable.get(peerNodeId);
 		if (spanState?.type !== SPANState.SPAN) {
 			throw new ZWaveError(
@@ -318,8 +332,14 @@ export class SecurityManager2 {
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
-		const ret = spanState.rng.generate(16);
-		return ret.slice(0, 13);
+		const nonce = spanState.rng.generate(16).slice(0, 13);
+		spanState.currentSPAN = store
+			? {
+					nonce,
+					expires: highResTimestamp() + SINGLECAST_NONCE_EXPIRY_NS,
+			  }
+			: undefined;
+		return nonce;
 	}
 
 	/** Returns the next sequence number to use for outgoing messages to the given node */
@@ -328,7 +348,7 @@ export class SecurityManager2 {
 		if (seq == undefined) {
 			seq = crypto.randomInt(256);
 		} else {
-			seq = ++seq & 0xff;
+			seq = (seq + 1) & 0xff;
 		}
 		this.ownSequenceNumbers.set(peerNodeId, seq);
 		return seq;

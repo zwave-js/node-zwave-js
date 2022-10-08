@@ -61,7 +61,7 @@ function visitUnionOrIntersectionType(
 		}
 	} else {
 		if (stringTypes.some((stringType) => stringType === false)) {
-			// If T or U is not assignable to stirng, then T & U is not assignable to string.
+			// If T or U is not assignable to string, then T & U is not assignable to string.
 			return false;
 		}
 		if (stringTypes.some((stringType) => stringType !== true)) {

@@ -307,17 +307,17 @@
 		{
 			"#": "228[0xff0000]",
 			"$import": "templates/trane_template.json#schedule_minute",
-			"label": "Schedule - Sunday (1): - Minute"
+			"label": "Schedule - Sunday (1): Minute"
 		},
 		{
 			"#": "228[0xff00]",
 			"$import": "templates/trane_template.json#schedule_heat_setpoint",
-			"label": "Schedule - Sunday (1): - Heat Setpoint"
+			"label": "Schedule - Sunday (1): Heat Setpoint"
 		},
 		{
 			"#": "228[0xff]",
 			"$import": "templates/trane_template.json#schedule_cool_setpoint",
-			"label": "Schedule - Sunday (1): - Cool Setpoint"
+			"label": "Schedule - Sunday (1): Cool Setpoint"
 		},
 		{
 			"#": "229[0xff000000]",
@@ -387,17 +387,17 @@
 		{
 			"#": "232[0xff0000]",
 			"$import": "templates/trane_template.json#schedule_minute",
-			"label": "Schedule - Monday (1): - Minute"
+			"label": "Schedule - Monday (1): Minute"
 		},
 		{
 			"#": "232[0xff00]",
 			"$import": "templates/trane_template.json#schedule_heat_setpoint",
-			"label": "Schedule - Monday (1): - Heat Setpoint"
+			"label": "Schedule - Monday (1): Heat Setpoint"
 		},
 		{
 			"#": "232[0xff]",
 			"$import": "templates/trane_template.json#schedule_cool_setpoint",
-			"label": "Schedule - Monday (1): - Cool Setpoint"
+			"label": "Schedule - Monday (1): Cool Setpoint"
 		},
 		{
 			"#": "233[0xff000000]",
@@ -467,17 +467,17 @@
 		{
 			"#": "236[0xff0000]",
 			"$import": "templates/trane_template.json#schedule_minute",
-			"label": "Schedule - Tuesday (1): - Minute"
+			"label": "Schedule - Tuesday (1): Minute"
 		},
 		{
 			"#": "236[0xff00]",
 			"$import": "templates/trane_template.json#schedule_heat_setpoint",
-			"label": "Schedule - Tuesday (1): - Heat Setpoint"
+			"label": "Schedule - Tuesday (1): Heat Setpoint"
 		},
 		{
 			"#": "236[0xff]",
 			"$import": "templates/trane_template.json#schedule_cool_setpoint",
-			"label": "Schedule - Tuesday (1): - Cool Setpoint"
+			"label": "Schedule - Tuesday (1): Cool Setpoint"
 		},
 		{
 			"#": "237[0xff000000]",
@@ -547,17 +547,17 @@
 		{
 			"#": "240[0xff0000]",
 			"$import": "templates/trane_template.json#schedule_minute",
-			"label": "Schedule - Wednesday (1): - Minute"
+			"label": "Schedule - Wednesday (1): Minute"
 		},
 		{
 			"#": "240[0xff00]",
 			"$import": "templates/trane_template.json#schedule_heat_setpoint",
-			"label": "Schedule - Wednesday (1): - Heat Setpoint"
+			"label": "Schedule - Wednesday (1): Heat Setpoint"
 		},
 		{
 			"#": "240[0xff]",
 			"$import": "templates/trane_template.json#schedule_cool_setpoint",
-			"label": "Schedule - Wednesday (1): - Cool Setpoint"
+			"label": "Schedule - Wednesday (1): Cool Setpoint"
 		},
 		{
 			"#": "241[0xff000000]",
@@ -627,17 +627,17 @@
 		{
 			"#": "244[0xff0000]",
 			"$import": "templates/trane_template.json#schedule_minute",
-			"label": "Schedule - Thursday (1): - Minute"
+			"label": "Schedule - Thursday (1): Minute"
 		},
 		{
 			"#": "244[0xff00]",
 			"$import": "templates/trane_template.json#schedule_heat_setpoint",
-			"label": "Schedule - Thursday (1): - Heat Setpoint"
+			"label": "Schedule - Thursday (1): Heat Setpoint"
 		},
 		{
 			"#": "244[0xff]",
 			"$import": "templates/trane_template.json#schedule_cool_setpoint",
-			"label": "Schedule - Thursday (1): - Cool Setpoint"
+			"label": "Schedule - Thursday (1): Cool Setpoint"
 		},
 		{
 			"#": "245[0xff000000]",
@@ -707,17 +707,17 @@
 		{
 			"#": "248[0xff0000]",
 			"$import": "templates/trane_template.json#schedule_minute",
-			"label": "Schedule - Friday (1): - Minute"
+			"label": "Schedule - Friday (1): Minute"
 		},
 		{
 			"#": "248[0xff00]",
 			"$import": "templates/trane_template.json#schedule_heat_setpoint",
-			"label": "Schedule - Friday (1): - Heat Setpoint"
+			"label": "Schedule - Friday (1): Heat Setpoint"
 		},
 		{
 			"#": "248[0xff]",
 			"$import": "templates/trane_template.json#schedule_cool_setpoint",
-			"label": "Schedule - Friday (1): - Cool Setpoint"
+			"label": "Schedule - Friday (1): Cool Setpoint"
 		},
 		{
 			"#": "249[0xff000000]",
@@ -787,17 +787,17 @@
 		{
 			"#": "252[0xff0000]",
 			"$import": "templates/trane_template.json#schedule_minute",
-			"label": "Schedule - Saturday (1): - Minute"
+			"label": "Schedule - Saturday (1): Minute"
 		},
 		{
 			"#": "252[0xff00]",
 			"$import": "templates/trane_template.json#schedule_heat_setpoint",
-			"label": "Schedule - Saturday (1): - Heat Setpoint"
+			"label": "Schedule - Saturday (1): Heat Setpoint"
 		},
 		{
 			"#": "252[0xff]",
 			"$import": "templates/trane_template.json#schedule_cool_setpoint",
-			"label": "Schedule - Saturday (1): - Cool Setpoint"
+			"label": "Schedule - Saturday (1): Cool Setpoint"
 		},
 		{
 			"#": "253[0xff000000]",

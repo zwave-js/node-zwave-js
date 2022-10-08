@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "Count of External Buttons/Switches",
 			"options": [
 				{

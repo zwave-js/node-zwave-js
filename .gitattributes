@@ -3,3 +3,7 @@ specs/** linguist-vendored
 
 # Use JSONC for syntax highlighting in config files
 packages/config/config/**/*.json linguist-language=jsonc
+
+# And API extractor configuration
+api-extractor-*.json  linguist-language=jsonc
+api-extractor.json  linguist-language=jsonc

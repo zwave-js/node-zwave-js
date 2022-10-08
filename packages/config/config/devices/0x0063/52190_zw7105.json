@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "52190 / ZW7105",
-	"description": "Z-Wave LED Light Bulb",
+	"description": "LED A19 Bulb, 500S",
 	"devices": [
 		{
 			"productType": "0x4c42",
@@ -24,44 +24,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "State With Manual Switch or Power Failure",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness",
-					"value": 0
-				},
-				{
-					"label": "Last dim level",
-					"value": 1
-				},
-				{
-					"label": "Last state",
-					"value": 2
-				}
-			]
+			"$import": "templates/jasco_template.json#default_dim_level"
 		},
 		{
 			"#": "9",
-			"label": "Dim Rate Steps",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dimmer_steps"
 		},
 		{
 			"#": "10",
-			"label": "Dim Rate Timing",
-			"valueSize": 1,
-			"unit": "10ms",
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dimmer_times"
 		}
 	],
 	"metadata": {

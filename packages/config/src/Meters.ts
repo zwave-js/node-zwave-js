@@ -1,5 +1,4 @@
 import { JSONObject, num2hex } from "@zwave-js/shared/safe";
-import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
@@ -12,7 +11,7 @@ export class Meter {
 
 		const scales = new Map<number, MeterScale>();
 		if (isObject(definition.scales)) {
-			for (const [scaleId, scaleDefinition] of entries(
+			for (const [scaleId, scaleDefinition] of Object.entries(
 				definition.scales,
 			)) {
 				if (!hexKeyRegexNDigits.test(scaleId)) {

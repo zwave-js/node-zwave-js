@@ -23,7 +23,6 @@ describe("ConfigManager", () => {
 
 		beforeEach(async () => {
 			await fs.emptyDir(tempDir);
-			jest.resetModules();
 		});
 
 		afterAll(async () => {
@@ -100,7 +99,6 @@ describe("ConfigManager", () => {
 		beforeEach(async () => {
 			await fs.emptyDir(tempDir);
 			delete process.env.ZWAVEJS_EXTERNAL_CONFIG;
-			jest.resetModules();
 		});
 
 		afterAll(async () => {

@@ -1,6 +1,7 @@
 export * from "./ConfigManager";
 export * from "./DeviceClasses";
 export * from "./devices/AssociationConfig";
+export * from "./devices/CompatConfig";
 export * from "./devices/DeviceConfig";
 export * from "./devices/DeviceMetadata";
 export * from "./devices/EndpointConfig";

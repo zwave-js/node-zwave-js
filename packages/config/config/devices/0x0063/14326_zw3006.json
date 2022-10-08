@@ -1,0 +1,76 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14326 / ZW3006",
+	"description": "In-Wall 1000W Toggle Dimmer, 500S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3136",
+			"zwaveAllianceId": [1375, 2041]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "7",
+			"$import": "templates/jasco_template.json#dimmer_steps_z"
+		},
+		{
+			"#": "8",
+			"$import": "templates/jasco_template.json#dimmer_times_z"
+		},
+		{
+			"#": "9",
+			"$import": "templates/jasco_template.json#dimmer_steps"
+		},
+		{
+			"#": "10",
+			"$import": "templates/jasco_template.json#dimmer_times"
+		},
+		{
+			"#": "11",
+			"$import": "templates/jasco_template.json#dimmer_steps_a"
+		},
+		{
+			"#": "12",
+			"$import": "templates/jasco_template.json#dimmer_times_a"
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "Adding your device to a Z-wave network\n1. Follow the instructions for your Z-wave certified controller to include a device to the Z-wave\nnetwork.\n2. Once the controller is ready to include your device, press and release the top or bottom of the\nwireless smart switch(rocker) to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the Z-wave network\nto optimize performance.\nPlease reference the controller’s manual for instructions.\nNow you have complete control to turn your fixture ON/OFFaccording to groups, scenes, schedules\nand interactive automations programmed by your controller.\nIf your Z-wave certified controller features Remote Access, you can now control your fixture from\nyour mobile devices",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave\nnetwork.\n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the\nwireless smart dimmer (rocker) to exclude it from the network",
+		"reset": "To return your switch to factory defaults:\nQuickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three\n(3) times. The LED will flash ON/OFF 5 times when completed successfully.\nNote: This should only be used in the event your networks’ primary controller is\nmissing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2041/Binder1.pdf"
+	}
+}

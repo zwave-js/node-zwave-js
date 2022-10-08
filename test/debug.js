@@ -4,10 +4,8 @@ require("reflect-metadata");
 require("zwave-js");
 const { Message } = require("@zwave-js/serial");
 const { generateAuthKey, generateEncryptionKey } = require("@zwave-js/core");
+const { isCommandClassContainer } = require("@zwave-js/cc");
 const { ConfigManager } = require("@zwave-js/config");
-const {
-	isCommandClassContainer,
-} = require("../packages/zwave-js/build/lib/commandclass/ICommandClassContainer");
 
 (async () => {
 	const configManager = new ConfigManager();
@@ -21,16 +19,14 @@ const {
 	await configManager.loadIndicators();
 
 	// The data to decode
-	const data = Buffer.from(
-		"011b00a800011f129f03a70015820de70626870e785dafb9090300d543",
-		"hex",
-	);
+	const data = Buffer.from("010b0004000503260703c70013", "hex");
 	// The nonce needed to decode it
 	const nonce = Buffer.from("478d7aa05d83f3ea", "hex");
 	// The network key needed to decode it
 	const networkKey = Buffer.from("96bcdaa2da7b00621a7fa57e38813786", "hex");
 
 	console.log(Message.getMessageLength(data));
+	/** @type {any} */
 	const host = {
 		getSafeCCVersionForNode: () => 1,
 		configManager,
@@ -64,11 +60,12 @@ const {
 			authKey: generateAuthKey(networkKey),
 			encryptionKey: generateEncryptionKey(networkKey),
 		},
+		isCCSecure: () => true,
 	};
-	const msg = Message.from(/** @type {any} */ (host), data);
+	const msg = Message.from(host, { data });
 
 	if (isCommandClassContainer(msg)) {
-		msg.command.mergePartialCCs([]);
+		msg.command.mergePartialCCs(host, []);
 	}
 	msg;
 	debugger;

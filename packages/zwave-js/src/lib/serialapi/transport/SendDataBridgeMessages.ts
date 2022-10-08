@@ -1,6 +1,13 @@
+import type { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
 	MAX_NODES,
 	MessageOrCCLogEntry,
+	MessagePriority,
+	MulticastCC,
+	SinglecastCC,
+	TransmitOptions,
+	TransmitStatus,
+	TXReport,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -15,24 +22,12 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
-import type {
-	CommandClass,
-	MulticastCC,
-	SinglecastCC,
-} from "../../commandclass/CommandClass";
-import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
-import {
-	TransmitOptions,
-	TransmitStatus,
-	TXReport,
-} from "../../controller/_Types";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
 import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
@@ -85,8 +80,9 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** Which Node ID this command originates from */
@@ -123,15 +119,6 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		]);
 
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			sourceNodeId: this.sourceNodeId,
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -204,13 +191,6 @@ export class SendDataBridgeRequestTransmitReport
 		return this.transmitStatus === TransmitStatus.OK;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -249,12 +229,6 @@ export class SendDataBridgeResponse
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -325,8 +299,9 @@ export class SendDataMulticastBridgeRequest<
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** Which Node ID this command originates from */
@@ -368,15 +343,6 @@ export class SendDataMulticastBridgeRequest<
 		]);
 
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			sourceNodeId: this.sourceNodeId,
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -428,13 +394,6 @@ export class SendDataMulticastBridgeRequestTransmitReport
 		return this._transmitStatus === TransmitStatus.OK;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -469,12 +428,6 @@ export class SendDataMulticastBridgeResponse
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

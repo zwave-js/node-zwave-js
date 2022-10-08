@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "20",
-			"$import": "templates/minoston_template.json#association_reports"
+			"$import": "templates/minoston_template.json#association_reports_basic_multilevel"
 		},
 		{
 			"#": "22",

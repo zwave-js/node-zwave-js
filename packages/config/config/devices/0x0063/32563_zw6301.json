@@ -1,0 +1,22 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "32563 / ZW6301",
+	"description": "Hinge Pin Door Sensor, 500S",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "20",
+			"$import": "templates/jasco_template.json#report_method"
+		}
+	]
+}

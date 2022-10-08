@@ -320,7 +320,7 @@ describe("lib/message", () => {
 					type: MessageType.Request,
 					functionType: 0xff,
 				});
-				expect(msg.getNodeUnsafe()).toBeUndefined();
+				expect(msg.getNodeUnsafe(host)).toBeUndefined();
 			});
 
 			it("returns undefined when the message is no node query", () => {
@@ -328,7 +328,7 @@ describe("lib/message", () => {
 					type: MessageType.Request,
 					functionType: 0xff,
 				});
-				expect(msg.getNodeUnsafe()).toBeUndefined();
+				expect(msg.getNodeUnsafe(host)).toBeUndefined();
 			});
 
 			it("returns the associated node otherwise", () => {
@@ -341,11 +341,11 @@ describe("lib/message", () => {
 
 				// This node exists
 				(msg as any as INodeQuery).nodeId = 1;
-				expect(msg.getNodeUnsafe()).toBe(host.nodes.get(1));
+				expect(msg.getNodeUnsafe(host)).toBe(host.nodes.get(1));
 
 				// This one does
 				(msg as any as INodeQuery).nodeId = 2;
-				expect(msg.getNodeUnsafe()).toBeUndefined();
+				expect(msg.getNodeUnsafe(host)).toBeUndefined();
 			});
 		});
 	});

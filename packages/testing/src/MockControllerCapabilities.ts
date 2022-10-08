@@ -45,6 +45,8 @@ export function getDefaultMockControllerCapabilities(): MockControllerCapabiliti
 			FunctionType.GetControllerVersion,
 			FunctionType.GetControllerId,
 			FunctionType.GetNodeProtocolInfo,
+			FunctionType.RequestNodeInfo,
+			FunctionType.AssignSUCReturnRoute,
 		],
 
 		controllerType: ZWaveLibraryTypes["Static Controller"],

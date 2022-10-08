@@ -1,4 +1,5 @@
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -36,8 +37,14 @@ describe("regression tests", () => {
 
 		const node10 = new ZWaveNode(10, driver);
 		const node17 = new ZWaveNode(17, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(10, node10);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(17, node17);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			10,
+			node10,
+		);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			17,
+			node17,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);
@@ -48,7 +55,8 @@ describe("regression tests", () => {
 		node10.markAsAwake();
 		expect(node10.status).toBe(NodeStatus.Awake);
 
-		driver["lastCallbackId"] = 2;
+		// TODO: remove hack in packages/shared/src/wrappingCounter.ts when reworking this test to the new testing setup
+		(driver.getNextCallbackId as any).value = 2;
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
 		const pingPromise10 = node10.ping();
@@ -145,5 +153,5 @@ describe("regression tests", () => {
 		await expect(pingPromise17).resolves.toBeFalse();
 
 		driver.driverLog.sendQueue(driver["sendThread"].state.context.queue);
-	}, 5000);
+	}, 30000);
 });

@@ -46,7 +46,7 @@ The `.bin` file must either contain a 700-series NVM (SDK version 7.x) or a 500-
 ## Convert JSON NVM file to binary
 
 ```
-npx @zwave-js/nvmedit json2nvm --in /path/to/nvm.json --out /path/to/nvm.bin --version <ver.si.on>
+npx @zwave-js/nvmedit json2nvm --in /path/to/nvm.json --out /path/to/nvm.bin --protocolVersion <ver.si.on>
 ```
 
 `<ver.si.on>` determines the output format of the NVM file and must be replaced with the target SDK version which must match your stick's firmware version

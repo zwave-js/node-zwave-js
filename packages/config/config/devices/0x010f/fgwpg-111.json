@@ -1,0 +1,448 @@
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGWPG-111",
+	"description": "FIBARO Wall Plug UK",
+	"devices": [
+		{
+			"productType": "0x1801",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
+		},
+		{
+			"#": "3",
+			"label": "Overload",
+			"description": "Turn off the controlled device in case of exceeding the defined power.",
+			"valueSize": 2,
+			"unit": "0.1 W",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Power Reporting Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 15,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Energy Reporting Threshold",
+			"valueSize": 2,
+			"unit": "0.01 kWh",
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Power Reporting Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Energy Reporting Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Consumption",
+			"description": "Measure energy consumed by the Wall Plug itself",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Group 2: Switch On Value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Last State/On",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "25",
+			"label": "Group 2: Switch Off Value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Last State/On",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "23",
+			"label": "Group 3: Control Mode",
+			"description": "When to send a command to devices in the association group 3.",
+			"valueSize": 1,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power usage above upper threshold",
+					"value": 1
+				},
+				{
+					"label": "Power usage below lower threshold",
+					"value": 2
+				},
+				{
+					"label": "Both",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Group 3: Upper Power Threshold",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 30000,
+			"defaultValue": 500
+		},
+		{
+			"#": "22",
+			"label": "Group 3: Lower Power Threshold",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 29900,
+			"defaultValue": 300
+		},
+		{
+			"#": "26",
+			"label": "Group 3: Upper Threshold Command Value",
+			"description": "Which value to send when the power usage is above the upper threshold.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Last State/On",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "27",
+			"label": "Group 3: Lower Threshold Command Value",
+			"description": "Which value to send when the power usage is below the lower threshold.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Last State/On",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "30[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: General",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: Smoke",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: Carbon Monoxide",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: Carbon Dioxide",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: High Temperature",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: Flood",
+			"defaultValue": 1
+		},
+		{
+			"#": "31",
+			"label": "Response to alarm frames",
+			"description": "Wall plug response to alarms",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "No Reaction",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Alarm Duration",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 32400,
+			"defaultValue": 600
+		},
+		{
+			"#": "40",
+			"label": "LED Indicator: Power Threshold For Violet Color",
+			"valueSize": 2,
+			"unit": "0.1 W",
+			"minValue": 1000,
+			"maxValue": 30000,
+			"defaultValue": 30000
+		},
+		{
+			"#": "41",
+			"label": "LED Indicator: Color When Load On",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Off",
+					"value": 0
+				},
+				{
+					"label": "Active Power (Smooth)",
+					"value": 1
+				},
+				{
+					"label": "Active Power (Steps)",
+					"value": 2
+				},
+				{
+					"label": "White",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Green",
+					"value": 5
+				},
+				{
+					"label": "Blue",
+					"value": 6
+				},
+				{
+					"label": "Yellow",
+					"value": 7
+				},
+				{
+					"label": "Cyan",
+					"value": 8
+				},
+				{
+					"label": "Magenta",
+					"value": 9
+				}
+			]
+		},
+		{
+			"#": "42",
+			"label": "LED Indicator: Color When Load Off",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Off",
+					"value": 0
+				},
+				{
+					"label": "Last Measured Load",
+					"value": 1
+				},
+				{
+					"label": "White",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Green",
+					"value": 5
+				},
+				{
+					"label": "Blue",
+					"value": 6
+				},
+				{
+					"label": "Yellow",
+					"value": 7
+				},
+				{
+					"label": "Cyan",
+					"value": 8
+				},
+				{
+					"label": "Magenta",
+					"value": 9
+				}
+			]
+		},
+		{
+			"#": "43",
+			"label": "LED Indicator: Color During Alarm",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Off",
+					"value": 0
+				},
+				{
+					"label": "No change in color",
+					"value": 1
+				},
+				{
+					"label": "Red/White/Blue",
+					"value": 2
+				},
+				{
+					"label": "White",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Green",
+					"value": 5
+				},
+				{
+					"label": "Blue",
+					"value": 6
+				},
+				{
+					"label": "Yellow",
+					"value": 7
+				},
+				{
+					"label": "Cyan",
+					"value": 8
+				},
+				{
+					"label": "Magenta",
+					"value": 9
+				}
+			]
+		}
+	]
+}

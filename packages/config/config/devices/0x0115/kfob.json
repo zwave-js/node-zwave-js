@@ -245,7 +245,7 @@
 		{
 			"#": "20",
 			"label": "Typical click timeout",
-			"description": "Typical time used to differenciate click, hold and double clicks in 10ms units",
+			"description": "Typical time used to differentiate click, hold and double clicks in 10ms units",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -21,7 +21,7 @@ yarn run config import -s zwa -Dd --ids 1234 2345 3456
 
 ## OpenZWave
 
-If your device is already present in the [OpenZWave devices DB](https://github.com/OpenZWave/open-zwave/tree/master/config), you can import it by using its device id (which you can find in the zwavejs2mqtt control panel). Device config files also contain the device id but the format is different: `0086:0075:0004` in the file needs to be formatted as `0x0086-0x0075-0x0004` for the following commands.
+If your device is already present in the [OpenZWave devices DB](https://github.com/OpenZWave/open-zwave/tree/master/config), you can import it by using its device id (which you can find in the Z-Wave JS UI). Device config files also contain the device id but the format is different: `0086:0075:0004` in the file needs to be formatted as `0x0086-0x0075-0x0004` for the following commands.
 
 The command to use is:
 

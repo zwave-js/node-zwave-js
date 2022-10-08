@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "37792 / ZW5307",
-	"description": "2 Button Hub/Panel Remote",
+	"description": "Portable 2-Button Remote, 500S",
 	"devices": [
 		{
 			"productType": "0x4843",
@@ -17,13 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "21",
-			"label": "Adjust Refresh",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#adjust_refresh"
 		}
 	],
 	"metadata": {

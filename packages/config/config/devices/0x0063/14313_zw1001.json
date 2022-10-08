@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14313 / ZW1001",
-	"description": "In-Wall Smart Outlet",
+	"description": "In-Wall Outlet, 300S",
 	"devices": [
 		{
 			"productType": "0x4952",
@@ -33,26 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"description": "LED status when device on or off.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED Light off when Z-Wave turned On",
-					"value": 0
-				},
-				{
-					"label": "LED Light on when Z-Wave turned On",
-					"value": 1
-				},
-				{
-					"label": "LED Always Off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		}
 	],
 	"compat": {

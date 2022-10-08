@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Scene Command Targer",
+			"label": "Scene Command Target",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -47,7 +47,7 @@
 					"value": 0
 				},
 				{
-					"label": "Assocciation Group",
+					"label": "Association Group",
 					"value": 1
 				}
 			]

@@ -1,5 +1,8 @@
-/* @noExternalImports */
+/* @forbiddenImports external */
 
+export * from "./abstractions/ICommandClass";
+export * from "./abstractions/IZWaveEndpoint";
+export * from "./abstractions/IZWaveNode";
 export * from "./capabilities/CommandClasses";
 export * from "./capabilities/ControllerCapabilities";
 export * from "./capabilities/LibraryTypes";
@@ -12,7 +15,6 @@ export * from "./error/ZWaveError";
 export * from "./log/shared_safe";
 export * from "./security/DSK";
 export * from "./security/SecurityClass";
-export * from "./test/assertZWaveError";
 export * from "./util/crc";
 export * from "./util/graph";
 export * from "./util/misc";

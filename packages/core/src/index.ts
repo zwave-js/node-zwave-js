@@ -1,3 +1,6 @@
+export * from "./abstractions/ICommandClass";
+export * from "./abstractions/IZWaveEndpoint";
+export * from "./abstractions/IZWaveNode";
 export * from "./capabilities/CommandClasses";
 export * from "./capabilities/ControllerCapabilities";
 export * from "./capabilities/LibraryTypes";
@@ -19,6 +22,7 @@ export * from "./security/SecurityClass";
 export * from "./test/assertZWaveError";
 export * from "./util/crc";
 export * from "./util/date";
+export * from "./util/decorators";
 export * from "./util/firmware";
 export * from "./util/graph";
 export * from "./util/misc";

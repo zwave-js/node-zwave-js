@@ -245,7 +245,7 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.\n Step 3. The connected light will stay on solid for 3 seconds to indicate successfuly inclusion.",
+		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.\n Step 3. The connected light will stay on solid for 3 seconds to indicate successful inclusion.",
 		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Triple press the action button.",
 		"reset": "Press and hold the action button for over 10 seconds. The connected light will be set to 50% brightness and flash slowly.",
 		"manual": "https://cdn.shopify.com/s/files/1/0066/8149/3559/files/VES-ZW-DIM-001.pdf"

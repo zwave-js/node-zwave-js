@@ -222,6 +222,18 @@ getFirmwareUpdateCapabilities(): Promise<FirmwareUpdateCapabilities>
 
 Retrieves the firmware update capabilities of a node to decide which options (e.g. firmware targets) to offer a user prior to the update.
 
+> [!NOTE] This variant communicates with the node to retrieve fresh information.
+
+### `getFirmwareUpdateCapabilitiesCached`
+
+```ts
+getFirmwareUpdateCapabilitiesCached(): FirmwareUpdateCapabilities
+```
+
+Retrieves the firmware update capabilities of a node to decide which options (e.g. firmware targets) to offer a user prior to the update.
+
+> [!NOTE] This method uses cached information from the most recent interview.
+
 <!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
 
 ```ts
@@ -602,27 +614,30 @@ This property tracks the current status of the node interview. It contains a val
 <!-- #import InterviewStage from "zwave-js" -->
 
 ```ts
-declare enum InterviewStage {
+enum InterviewStage {
 	/** The interview process hasn't started for this node */
-	None = 0,
+	None,
 	/** The node's protocol information has been queried from the controller */
-	ProtocolInfo = 1,
+	ProtocolInfo,
 	/** The node has been queried for supported and controlled command classes */
-	NodeInfo = 2,
+	NodeInfo,
+
 	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.
 	 */
-	CommandClasses = 3,
+	CommandClasses,
+
 	/**
 	 * Device information for the node has been loaded from a config file.
 	 * If defined, some of the reported information will be overwritten based on the
 	 * config file contents.
 	 */
-	OverwriteConfig = 4,
+	OverwriteConfig,
+
 	/** The interview process has finished */
-	Complete = 5,
+	Complete,
 }
 ```
 
@@ -726,7 +741,7 @@ readonly zwavePlusRoleType: ZWavePlusRoleType | undefined
 
 If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` role type this device has, which is one of the following values:
 
-<!-- #import ZWavePlusRoleType from "zwave-js" -->
+<!-- #import ZWavePlusRoleType from "@zwave-js/cc" -->
 
 ```ts
 enum ZWavePlusRoleType {
@@ -827,7 +842,7 @@ The Z-Wave protocol version this node implements.
 <!-- #import ProtocolVersion from "zwave-js" -->
 
 ```ts
-declare enum ProtocolVersion {
+enum ProtocolVersion {
 	"unknown" = 0,
 	"2.0" = 1,
 	"4.2x / 5.0x" = 2,
@@ -888,7 +903,7 @@ When configuring devices or during longer message exchanges, this behavior may b
 
 ## ZWaveNode events
 
-The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
+The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are available:
 
 ### `"wake up"` / `"sleep"`
 

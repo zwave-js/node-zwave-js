@@ -14,7 +14,7 @@ The following properties are defined and should always be present in the same or
 | `associations`     | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
 | `paramInformation` | An array of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                                  |
 | `proprietary`      | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
-| `compat`           | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details.                                                                                      |
+| `compat`           | Compatibility flags used to influence the communication with non-compliant devices. [See below](#compat) for details.                                                                                      |
 | `metadata`         | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
 
 ## `devices`
@@ -54,6 +54,9 @@ If a range other than 0.0-255.255 is used, the firmware ranges should be reflect
 
 > [!NOTE]
 > Although some manufacturers tend to display firmware versions with leading zeroes, firmwares are interpreted as two numbers. This means `2.01` is equivalent to `2.1`. Leading zeroes **must not** be used in config files to avoid confusion.
+
+> [!NOTE]
+> Newer devices may have firmware versions of the form `1.2.3` as opposed to just `1.2`, both forms are accepted. For comparisons, versions will be padded with a `0` patch version, e.g. `1.2` becomes `1.2.0`.
 
 ## `metadata`
 
@@ -395,7 +398,7 @@ Many devices unnecessarily use endpoints when they could (or do) provide all fun
 
 ### `preserveRootApplicationCCValueIDs`
 
-The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achive this, set `preserveRootApplicationCCValueIDs` to `true`.
+The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achieve this, set `preserveRootApplicationCCValueIDs` to `true`.
 
 ### `skipConfigurationNameQuery`
 

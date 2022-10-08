@@ -5,7 +5,6 @@ import {
 	ZWaveLogContainer,
 } from "@zwave-js/core";
 import { getErrorMessage, JSONObject, num2hex } from "@zwave-js/shared";
-import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
@@ -792,11 +791,17 @@ export async function loadDeviceClassesInternal(
 		}
 
 		const basicDeviceClasses = new Map<number, string>();
-		for (const [key, basicClass] of entries(definition.basic)) {
+		for (const [key, basicClass] of Object.entries(definition.basic)) {
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"device classes",
 					`found invalid key "${key}" in the basic device class definition. Device classes must have lowercase hexadecimal IDs.`,
+				);
+			}
+			if (typeof basicClass !== "string") {
+				throwInvalidConfig(
+					"device classes",
+					`basic device class "${key}" must be a string`,
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
@@ -804,7 +809,9 @@ export async function loadDeviceClassesInternal(
 		}
 
 		const genericDeviceClasses = new Map<number, GenericDeviceClass>();
-		for (const [key, genericDefinition] of entries(definition.generic)) {
+		for (const [key, genericDefinition] of Object.entries(
+			definition.generic,
+		)) {
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"device classes",
@@ -814,7 +821,7 @@ export async function loadDeviceClassesInternal(
 			const keyNum = parseInt(key.slice(2), 16);
 			genericDeviceClasses.set(
 				keyNum,
-				new GenericDeviceClass(keyNum, genericDefinition),
+				new GenericDeviceClass(keyNum, genericDefinition as any),
 			);
 		}
 
@@ -867,11 +874,17 @@ export async function loadIndicatorsInternal(
 		}
 
 		const indicators = new Map<number, string>();
-		for (const [id, label] of entries(definition.indicators)) {
+		for (const [id, label] of Object.entries(definition.indicators)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"indicators",
 					`found invalid key "${id}" in "indicators". Indicators must have lowercase hexadecimal IDs.`,
+				);
+			}
+			if (typeof label !== "string") {
+				throwInvalidConfig(
+					"indicators",
+					`indicator "${id}" must be a string`,
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
@@ -879,7 +892,9 @@ export async function loadIndicatorsInternal(
 		}
 
 		const properties = new Map<number, IndicatorProperty>();
-		for (const [id, propDefinition] of entries(definition.properties)) {
+		for (const [id, propDefinition] of Object.entries(
+			definition.properties,
+		)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"indicators",
@@ -887,7 +902,10 @@ export async function loadIndicatorsInternal(
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			properties.set(idNum, new IndicatorProperty(idNum, propDefinition));
+			properties.set(
+				idNum,
+				new IndicatorProperty(idNum, propDefinition as any),
+			);
 		}
 
 		return { indicators, properties };
@@ -924,7 +942,7 @@ export async function loadMetersInternal(
 		}
 
 		const meters = new Map();
-		for (const [id, meterDefinition] of entries(definition)) {
+		for (const [id, meterDefinition] of Object.entries(definition)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"meters",
@@ -971,7 +989,7 @@ export async function loadNotificationsInternal(
 		}
 
 		const notifications = new Map();
-		for (const [id, ntfcnDefinition] of entries(definition)) {
+		for (const [id, ntfcnDefinition] of Object.entries(definition)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"notifications",
@@ -1021,7 +1039,7 @@ export async function loadNamedScalesInternal(
 		}
 
 		const namedScales = new Map<string, ScaleGroup>();
-		for (const [name, scales] of entries(definition)) {
+		for (const [name, scales] of Object.entries(definition)) {
 			if (!/[\w\d]+/.test(name)) {
 				throwInvalidConfig(
 					"named scales",
@@ -1033,7 +1051,7 @@ export async function loadNamedScalesInternal(
 				Scale
 			>();
 			named.name = name;
-			for (const [key, scaleDefinition] of entries(
+			for (const [key, scaleDefinition] of Object.entries(
 				scales as JSONObject,
 			)) {
 				if (!hexKeyRegexNDigits.test(key)) {
@@ -1085,7 +1103,7 @@ export async function loadSensorTypesInternal(
 		}
 
 		const sensorTypes = new Map();
-		for (const [key, sensorDefinition] of entries(definition)) {
+		for (const [key, sensorDefinition] of Object.entries(definition)) {
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"sensor types",

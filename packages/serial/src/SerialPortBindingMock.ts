@@ -300,7 +300,8 @@ export class MockPortBinding
 		this.writeOperation = (async () => {
 			await resolveNextTick();
 			if (!this.isOpen || !this.port) {
-				throw new Error("Write canceled");
+				return;
+				// throw new Error("Write canceled");
 			}
 			const data = (this.lastWrite = Buffer.from(buffer)); // copy
 			this.emit("write", data);

@@ -1,0 +1,22 @@
+name: 'Upload Turbo Cache'
+description: 'Uploads the turborepo cache to be used in later jobs'
+author: 'AlCalzone'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Compress turbo cache # Uploading or downloading many files takes ages
+      shell: bash
+      working-directory: ${{ runner.temp }}
+      run: |
+        cd ${{ runner.temp }}
+        tar -cvzf turbo-cache.tgz turbo-cache
+        pwd
+        ls -la
+
+    - name: Upload as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: turbo-cache
+        path: ${{ runner.temp }}/turbo-cache.tgz
+        retention-days: 1 # We don't need this any longer than the workflow takes, but 1 day is the minimum

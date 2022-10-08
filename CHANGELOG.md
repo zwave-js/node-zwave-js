@@ -4,6 +4,226 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.3.0 (2022-09-29)
+### Features
+* Support opt-in to receive beta firmware releases via the update service (#5076)
+* Implement Schedule Entry Lock CC (#4836)
+* Sequencing of multi-target firmware updates is now handled in the driver, including waiting between targets, and re-interviewing only after the last one (#5121)
+
+### Bugfixes
+* Pin `xstate` dependency to version `4.29.0` to avoid a memory leak (#5108)
+* Fix: the `ccId` parameter in the `CommandClass` constructor may be zero (#5115)
+* Fixed an issue where multiple re-interview tasks for sleeping nodes could be queued and would be executed in parallel (#5105)
+* Fixed an issue where firmware updates could use a too large fragment size after upgrading to v10, causing the update to fail (#5117)
+
+### Config file changes
+* Disable Supervision for Everspring AC301 (#5119)
+
+### Changes under the hood
+* The packages `core`, `shared` and `nvmedit` now use `ava` for testing instead of `jest`
+* Implement decoding/serialization of some `Sound Switch CC` commands, ensure `valueChangeOptions` are set (#5071)
+
+## 10.2.0 (2022-09-20)
+### Features
+* Added the ability to pass more user agent components in `getAvailableFirmwareUpdates` (#5070)
+
+### Bugfixes
+* Do not enforce Multilevel Switch CC secondary switch type field to exist when parsing commands (#5042)
+* Use the correct payload to transmit usage statistics again (#5051)
+* Respect `useLocalTime` flag in `TimeParametersCCSet` constructor (#5086)
+
+### Config file changes
+* Add missing parameter 9 to Zooz ZEN04 (#5087)
+* Add Zooz Zen77 Z-Wave Ramp Rates (#5006)
+* Add HomeSeer HS-WX300 v1.13 parameters (#4959)
+* Add MyOT OpenTherm Actuator v4 (#5001)
+* Add fingerprint for Radio Thermostat CT30 (#5005)
+* Add Zooz ZEN04 (#5043)
+* Correct LED Indicator (param 3) for GE 14287 / ZW4002 (#5038)
+* Add Fakro ZRH12 (#5049)
+* Cleanup Fakro ZWS12 config (#5039)
+* Add fingerprint `0x0005:0x0012` to "Fakro AMZ Solar" (#5040)
+
+### Changes under the hood
+* The build process now uses Turborepo to cache the result of tasks and skip them if the inputs haven't changed.
+* Testing package imports on CI is now done in a more production-like environment, outside of the monorepo
+* Correct `json2nvm` documentation to use `--protocolVersion` flag (#5083)
+
+## 10.1.0 (2022-09-09)
+### Features
+* Cache responses from firmware update service and queue requests (#5030)
+* Make user agent configurable and pass it to firmware update service (#5031)
+
+### Bugfixes
+* Fixed an issue where `ThermostatModeCC` would save its values twice (#5019)
+* Ensure value ID received from outside code is valid and normalized before passing through (#5036)
+* Merge notification metadata for variables with multiple states (#5037)
+
+### Changes under the hood
+* Added a test to ensure that `SupervisionCCReport` with status `Success` is always final, even if `more updates follow` is incorrectly set to `true` (#4963)
+
+## 10.0.4 (2022-09-06)
+### Bugfixes
+* Always query versions of CCs supported on endpoints, regardless of CC support (#5009)
+* Avoid unnecessarily repeating tests for S0 support on endpoints (#4993)
+* Automatically retry commands with supervision status `NoSupport`, but without supervision (#5010)
+* Ensure S0 commands are not encapsulated inside S2 (#5012)
+* Fixed a bug which aborted interviews because `CCAPI` instances used a different CC version than the CC instance in charge of the interview in some cases (#5015)
+* Query secure endpoint CCs only once. When no response is received, assume all its known CCs are secure instead of defaulting to unencrypted communication (#5016)
+
+### Config file changes
+* Disable Supervision for Zooz ZSE19 (#5008)
+
+### Changes under the hood
+* Export some indirectly used types (#5011)
+* Add `silly` logging to `Node.translateValueEvent` to diagnose issues with some thermostats (#5017)
+
+## 10.0.3 (2022-08-31)
+### Bugfixes
+* Only refresh versions after FW update instead of a full interview when no restart is required (#4973)
+* For securely included nodes, attempt endpoint communication with S0, even if S0 is not listed in the endpoint capabilities (#4978)
+
+### Config file changes
+* Correct reset instructions for HomeSeer HS-WD200 wall dimmer (#4958)
+
+## 10.0.2 (2022-08-30)
+### Bugfixes
+* Some CCs were incorrectly not marked to use Supervision (#4956)
+* Use highest CC version implemented by the driver when node's CC version is unknown (#4971)
+* Randomize Supervision session ID on startup (#4969)
+* Commands that can be decoded but contain invalid data no longer cause errors when attempting to save their values (#4972)
+
+### Changes under the hood
+* Add additional `silly` logging to `Node.setValue` (#4968)
+
+## 10.0.1 (2022-08-27)
+### Bugfixes
+* Corrected missing and incorrect dependencies
+
+## 10.0.0 (2022-08-25) · _„Woo-Hoo!”_
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
+* Dropped support for Node.js 12 (#4824, #4491)
+* Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
+* Added support to provide an API key for the firmware update service, soon mandatory (#4816)
+* Removed several deprecated things and reworked `beginExclusion` to use an options object instead (#4699)
+* CC implementations were moved into their own package (#4668)
+* CC code can now be used mostly without a driver instance (#4651)
+* Implement discoverable and transparently-typed CC value definitions instead of `getXYZValueId` methods (#4704)
+* `Supervision CC` is now used automatically for almost all CCs when supported (#4761, #4945)
+* Updated the argument type of the `"node found"` event to indicate that it is not an operational node (#4825)
+* S2 inclusion user callbacks were moved into `ZWaveOptions` (#4856) with the possibility to override them for individual inclusion attempts (#4911)
+* Node firmware versions are now exposed as `major.minor.patch` where supported (#4857)
+
+### Features
+* Implement Z-Wave Protocol CC, for internal use (#4691)
+* Implemented mock controller and mock nodes to vastly improve how integration tests are written (#4697, #4892)
+* Add values to `Basic CC` and `Multilevel Switch CC` to restore previous non-zero level (#4732)
+* Answer incoming requests with the same encapsulation (#4832)
+* Allow passing a custom serial port implementation in `port` param of the Driver class (#4885)
+* Support sending `TimeCC` reports and automatically respond to requests (#4858)
+* Allow overriding API key for the FW update service per call (#4912)
+* Support updating some driver options on the fly (#4930)
+* Support correlating node responses to requests for which the ACK hasn't been received yet (#4946)
+* `"notification"` events are now logged (#4948)
+
+### Bugfixes
+* Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
+* Do not request ACK when sending node to sleep (#4826)
+* Correctly interpret powerlevel values as signed in `GetPowerlevelResponse` (#4827)
+* Add missing `reflect-metadata` dependency to some packages that were meant to be used standalone (#4846)
+* Fixed an off-by-one error while parsing the `supportedOperationTypes` bitmask of `User Code CC` (#4848)
+* Query user codes 1-by-1 if bulk reading is not supported (#4849)
+* Include both V1 values and V2+ values in `Notification CC` logs (#4904)
+* Obfuscate keys in `Entry Control CC` logs (#4905)
+* Improved command flow for S2-encrypted communication when both parties transmit at the same time (#4900)
+* Fixed a bug where commands that should be discarded because of a lower than expected security level would still store their values into the value DB (#4924)
+* Fixed looking up a node's provisioning entry using its node ID. This didn't work previously and would cause excluded SmartStart nodes to be included again immediately. (#4925)
+* No longer overwrite the security classes of a node when they are known for certain, and retry querying securely supported CCs during the interview (#4923)
+* Increase wait time after firmware update and reset nonces before attempting communication (#4944)
+
+### Bugfixes (broken and fixed in v10 beta)
+* Emit value event after successful supervised `setValue` (#4899)
+* Correct nested encapsulation of Supervision CC Reports (#4890)
+* Ensure the `major.minor.patch` firmware version matches the legacy `major.minor` field before using it (#4906)
+* Move `"notification"` event args types back into `zwave-js` package (#4907)
+* Fixed a typo in `AddNodeStatusContext`, which would result in an `UNKNOWN` device class of newly included nodes (#4922)
+
+### Config file changes
+* Corrected manufacturer and device labels for Heatit devices (#4838)
+* Slightly clean up the Fibaro Motion Sensor config (#4790)
+* Update Zooz ZEN17 to firmware 1.10 (#4809)
+* Add NewOne N4003, template more in the Minoston directory (#4834)
+* Add Fibaro Wall Plug UK - FGWPG-111 (#4865)
+* Correct param 9 for STEINEL devices, rework to templates (#4895)
+* Add Zooz Zen05 Outdoor Smart Plug (#4896)
+* Add MP31ZP (rebranded MP21ZP) (#4894)
+* Update Zooz ZEN20 with additional parameters 28 - 36 (#4898)
+* Clean up branding of Jasco devices (#4873)
+* Add new 700 series Jasco devices (#4928)
+* Update description on several Jasco manufactured devices (#4927)
+* Apply compat flag to GreenWave PowerNode 5 (#4934)
+* Add wakeup instruction to Zooz ZEN34 (#4932)
+* Add parameter 15 Invert Output to Heatit Z-Temp2 (#4915)
+* Add Enbrighten 58438 / ZWA3016 (#4913)
+* Add alarm mappings to ZSMOKE (#4942)
+* Add Zooz ZEN14 (#4921)
+
+### Changes under the hood
+* Patch `tsserver` after install to allow displaying large types
+* Upgrade dependencies (#4820, #4663)
+* Make several reflection decorators generic and untangle `Manufacturer Proprietary CC` implementations (#4701)
+* Fixed typos throughout the project (#4837, #4842)
+* Added compliance tests for Z-Wave certification (#4832)
+* Removed a polyfill for `Object.entries` (#4859)
+* Added best practices for a reliable mesh to the docs (#4875)
+* Changes to the public API surface are now tracked using `@microsoft/api-extractor` (#4860)
+* Reorganized the CI jobs to only compile TypeScript once and reuse the build output during subsequent jobs (#4880)
+* Move Supervision Session ID onto `ZWaveHost` interface (#4891)
+* Add some `"silly"` logging to `handleNotificationReport` (#4949)
+
+## 9.6.2 (2022-07-20)
+### Bugfixes
+* `Color Switch CC`: Validate that all compound `targetColor` components are numeric (#4819)
+
+## 9.6.1 (2022-07-19)
+### Bugfixes
+* Check if node can sleep in `getAvailableFirmwareUpdates` before waiting for wake up (#4802)
+
+### Config file changes
+* Add Minoston MP22ZP, fix MP21ZP param 1 (#4807)
+* Work around Configuration Info reporting bug in ZEN73/74 (#4815)
+* Rename GE/Jasco 12724 from ZW3003 to ZW3005 (#4814)
+* Simplify base_options templates (#4813)
+* Rework GE/Jasco config params to templates (#4622)
+* Add Heatit Z-Dim2 (#4801)
+* Preserve endpoint 1 for Zooz ZEN30 (#4736)
+* Add Load Power parameter to Heltun HE-TPS01 (#4812)
+* Standardize labels of schedule params for Trane XR524 (#4783)
+* Disable strict entry control payload validation for Vivint Keypad (#4800)
+* Fix configuration files for Inovelli LZW41 and LZW42 (#4798)
+* Mark parameters of Ness Corporation 117001 as writable (#4792)
+* Add missing fingerprints to Fibargroup fgwp102 and fgdw002 (#4791)
+* Parameter 6 for the Leviton ZW4SF is led_timeout, not locator_led (#4788)
+* Parameter 6 for the Leviton DZ6HD is led_timeout, not locator_led (#4789)
+* Add parameter 17 to Zooz ZEN76, FW 10.0+ (#4784)
+
+## 9.6.0 (2022-07-05)
+### Features
+* Add labels to Multilevel Switch/Entry Control notifications (#4652)
+* Cache firmware update capabilities during the interview (#4779)
+* Add experimental support for semi-automatic firmware updates through the Z-Wave JS firmware update service. For details see https://github.com/zwave-js/firmware-updates/ (#4758)
+
+### Bugfixes
+* The legacy V1 alarm values contained in standardized V2+ notifications are now preserved/exposed (#4756)
+* Disable strict enum validation for `AlarmSensorCCAPI.get()` to work around devices with an incorrectly encoded sensor bitmask (#4759)
+* Outgoing `Supervision CC Reports` are no longer sent with the ACK flag. This should avoid long delays when a node request confirmation but cannot be reached (#4777)
+
+### Config file changes
+* Add alarm mapping for P-KFCON-MOD-YALE (#4760)
+* Add Zooz ZSE44 params for FW 1.20 (#4767)
+* Add MyOT OpenTherm Actuator v2 (#4711)
+* Add fingerprint to McoHome MH-S220 (#4778)
+
 ## 9.5.0 (2022-06-28)
 ### Features
 * Add methods to check if an OTA firmware update is in progress (#4742)

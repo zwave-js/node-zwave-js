@@ -1,7 +1,9 @@
+import { BasicCCValues, CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import {
 	actuatorCCs,
-	CommandClasses,
 	isZWaveError,
+	IVirtualNode,
+	normalizeValueID,
 	TranslatedValueID,
 	ValueID,
 	valueIdToString,
@@ -11,7 +13,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
-import type { CCAPI, SetValueAPIOptions } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { VirtualEndpoint } from "./VirtualEndpoint";
@@ -23,7 +24,7 @@ export interface VirtualValueID extends TranslatedValueID {
 	ccVersion: number;
 }
 
-export class VirtualNode extends VirtualEndpoint {
+export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 	public constructor(
 		public readonly id: number | undefined,
 		driver: Driver,
@@ -51,6 +52,9 @@ export class VirtualNode extends VirtualEndpoint {
 		value: unknown,
 		options?: SetValueAPIOptions,
 	): Promise<boolean> {
+		// Ensure we're dealing with a valid value ID, with no extra properties
+		valueId = normalizeValueID(valueId);
+
 		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
@@ -70,6 +74,10 @@ export class VirtualNode extends VirtualEndpoint {
 				value,
 				options,
 			);
+
+			// api.setValue could technically return a SupervisionResult
+			// but supervision isn't used for multicast / broadcast
+
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value
 				// for each node that was affected by this command
@@ -163,16 +171,14 @@ export class VirtualNode extends VirtualEndpoint {
 		for (const endpoint of exposedEndpoints) {
 			// TODO: This should be defined in the Basic CC file
 			const valueId: TranslatedValueID = {
-				commandClass: CommandClasses.Basic,
+				...BasicCCValues.targetValue.endpoint(endpoint),
 				commandClassName: "Basic",
-				endpoint,
-				property: "targetValue",
 				propertyName: "Target value",
 			};
 			const ccVersion = 1;
 			const metadata: ValueMetadataNumeric = {
-				...ValueMetadata.WriteOnlyUInt8,
-				label: "Target value",
+				...BasicCCValues.targetValue.meta,
+				readable: false,
 			};
 			ret.set(valueIdToString(valueId), {
 				...valueId,
@@ -221,6 +227,19 @@ export class VirtualNode extends VirtualEndpoint {
 			);
 		}
 		return this._endpointInstances.get(index)!;
+	}
+
+	public getEndpointOrThrow(index: number): VirtualEndpoint {
+		const ret = this.getEndpoint(index);
+		if (!ret) {
+			throw new ZWaveError(
+				`Endpoint ${index} does not exist on virtual node ${
+					this.id ?? "??"
+				}`,
+				ZWaveErrorCodes.Controller_EndpointNotFound,
+			);
+		}
+		return ret;
 	}
 
 	/** Returns the current endpoint count of this virtual node (the maximum in the list of physical nodes) */

@@ -19,33 +19,120 @@ concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
-jobs:
-  lint:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
+env:
+  TURBO_FLAGS: "--concurrency=2 --api=http://127.0.0.1:9080 --token=foo --team=me" # The token must match the one in the prepare-env action
 
+jobs:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x] # This should be LTS
+        node-version: [16.x] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-
-    - name: Install dependencies
-      run: yarn install --immutable
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
-      run: yarn build
+      run: |
+        yarn clean $TURBO_FLAGS
+        yarn build $TURBO_FLAGS
+
+    - name: Save Turbo Cache between jobs
+      uses: ./.github/actions/build-cache-upload
+
+  # ===================
+
+  # Makes sure that the published packages can be require'd without issues in a production environment
+  test-packages:
+    needs: [build]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
+
+    # Test that the generated packages are ok
+    # I'd love to use yalc or something for this, but it doesn't use yarn pack to pack the tarballs
+    # so we need to fake the install
+    - name: Import main entry points for each package
+      run: |
+        TMP_DIR=$(mktemp -d)
+
+        echo "Re-creating a production environment..."
+        yarn monopack --target "$TMP_DIR/.tarballs" --no-version
+        cd $TMP_DIR
+
+        npm init -y
+        npm i .tarballs/zwave-js.tgz
+
+        echo "Testing entry points..."
+        # Now all entrypoints should work
+        node -e 'require("zwave-js")'
+        node -e 'require("@zwave-js/cc")'
+        node -e 'require("@zwave-js/config")'
+        node -e 'require("@zwave-js/core")'
+        node -e 'require("@zwave-js/host")'
+        node -e 'require("@zwave-js/nvmedit")'
+        node -e 'require("@zwave-js/serial")'
+        node -e 'require("@zwave-js/shared")'
+        node -e 'require("@zwave-js/testing")'
+        node -e 'require("zwave-js/safe")'
+        node -e 'require("@zwave-js/cc/safe")'
+        node -e 'require("@zwave-js/config/safe")'
+        node -e 'require("@zwave-js/core/safe")'
+        node -e 'require("@zwave-js/host/safe")'
+        node -e 'require("@zwave-js/nvmedit/safe")'
+        node -e 'require("@zwave-js/serial/safe")'
+        node -e 'require("@zwave-js/shared/safe")'
+
+  # ===================
+
+  lint:
+    needs: [build]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run linters
-      run: yarn run lint
+      run: yarn run lint $TURBO_FLAGS
 
     - name: Prepare lint auto-fix patch
       if: |
@@ -54,8 +141,9 @@ jobs:
       id: lint
       run: |
         # Run all lint commands and abort if one has unfixable errors
-        yarn run lint:ts --fix
-        yarn run lint:configjson -w
+        yarn run lint:ts:fix $TURBO_FLAGS
+        yarn run lint:prettier:fix $TURBO_FLAGS
+        yarn run lint:configjson:fix $TURBO_FLAGS
 
         git diff --name-only || true
         if ! git diff --quiet ; then
@@ -72,7 +160,7 @@ jobs:
         failure() &&
         github.event_name == 'pull_request' &&
         steps.lint.outputs.changed == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: lint-fix
         path: fix.patch
@@ -80,73 +168,179 @@ jobs:
   # ===================
 
   lint-zwave:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    needs: [build]
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x] # This should be LTS
+        node-version: [16.x] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install dependencies
-      run: yarn install --immutable
-
-    - name: Compile TypeScript code
-      run: yarn build
-
-    - name: Lint config files
-      run: yarn run lint:config
-
-    - name: Lint Z-Wave specifics
-      run: yarn run lint:zwave
+    - name: Lint config files and Z-Wave specifics
+      run: yarn run lint:zwave $TURBO_FLAGS
 
   # ===================
   # Runs unit tests on all supported node versions and OSes
   unit-tests:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    needs: [build]
 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [14.x, 16.x, 18.x]
         os: [ubuntu-latest]
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-
-    - name: Install dependencies
-      run: yarn install --immutable
-
-    # Compilation is necessary, or the tests won't run
-    - name: Compile TypeScript code
-      run: yarn run build
-
-    # Test that the generated packages are ok
-    - name: Import main entry point
-      run: node -e 'require("zwave-js")'
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run component tests
-      run: yarn run test:ci
+      run: yarn run test:ci $TURBO_FLAGS
       env:
         CI: true
 
   # ===================
+  # This job checks if a PR changes the public API surface
+  api-surface:
+    name: Check public API surface
+    # Only run for PRs
+    if: github.event_name == 'pull_request'
+
+    needs: [build]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Generate API report
+      run: yarn run extract-api $TURBO_FLAGS
+
+    - name: Show changes
+      if: failure()
+      run: |
+        cat packages/*/.tmp/api.md
+
+    - name: Comment on PR
+      if: failure()
+      run: |
+        echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
+        echo "Please run" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "yarn accept-api" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+  # ===================
+
+  gh-cc-table:
+    name: Update CC implementation status
+    # Only run for master branch
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+    needs: [build]
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
+
+    - name: Update CC table # (maybe)
+      uses: ./.github/actions/gh-cc-table
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        CI: true
+
+  # ===================
+
+  generate-overview:
+    name: Update toLogEntry overview
+    # Only run for master branch
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+    needs: [build]
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
+
+    - name: Update overview
+      uses: ./.github/actions/toLogEntry
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        CI: true
 
   # # Generate coverage reports when the unit tests have succeeded
   # coverage:
@@ -160,7 +354,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   strategy:
   #     matrix:
-  #       node-version: [14.x] # This should be LTS
+  #       node-version: [16.x] # This should be LTS
 
   #   steps:
   #   - name: Checkout code
@@ -195,26 +389,31 @@ jobs:
     # Trigger this step only when a commit on any branch is tagged with a version number
     if: |
       github.actor == 'AlCalzone' &&
-      contains(github.event.head_commit.message, '[skip ci]') == false &&
       github.event_name == 'push' &&
       startsWith(github.ref, 'refs/tags/v')
 
-    needs: [lint, lint-zwave, unit-tests]
+    needs: [lint, lint-zwave, unit-tests, test-packages]
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x] # This should be LTS
+        node-version: [16.x] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
 
     - name: Extract the version and commit body from the tag
       id: extract_release
@@ -231,12 +430,6 @@ jobs:
         if [[ $VERSION == *"-"* ]] ; then
           echo "::set-output name=TAG::--tag next"
         fi
-
-    - name: Install dependencies
-      run: yarn install --immutable
-
-    - name: Create a clean build
-      run: yarn run build
 
     - name: Publish packages to npm
       env:

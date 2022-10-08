@@ -40,6 +40,10 @@
 		{
 			"productType": "0x3200",
 			"productId": "0x015e"
+		},
+		{
+			"productType": "0x1e12",
+			"productId": "0x0163"
 		}
 	],
 	"firmwareVersion": {

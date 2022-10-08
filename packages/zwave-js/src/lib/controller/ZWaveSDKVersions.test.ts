@@ -10,7 +10,7 @@ describe("protocolVersionToSDKVersion", () => {
 		expect(protocolVersionToSDKVersion("8.99")).toBe("8.99");
 	});
 
-	it("ensures a non-existant version is at least parsable with semver", () => {
+	it("ensures a non-existent version is at least parsable with semver", () => {
 		expect(protocolVersionToSDKVersion("99.01")).toBe("99.1");
 	});
 
