@@ -1560,10 +1560,13 @@ async function parseZWAProduct(
 	let output = "";
 	if (
 		newConfig.devices.filter(
-			(d) => d.productType === "0x9999" || d.productId === "0x9999",
+			(d) =>
+				d.productType === "0x9999" ||
+				d.productId === "0x9999" ||
+				d.manufacturerIdHex === "0x9999",
 		)
 	) {
-		output = `// TODO: This file contains a placeholder for the ProductType or Product ID (0x9999) that must be corrected. 
+		output = `// TODO: This file contains a placeholder for a productType, productID, or manufacturerId (0x9999) that must be corrected. 
 ${JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n"}`;
 	} else {
 		output = JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
