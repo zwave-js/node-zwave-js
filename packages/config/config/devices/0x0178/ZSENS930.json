@@ -85,7 +85,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Group 1 Humidity Threshold",
+			"label": "Humidity Threshold (Group 1)",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 1,
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Group 1 Humidity Report Interval",
+			"label": "Humidity Report Interval (Group 1)",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
@@ -111,7 +111,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Group 3 Humidity Threshold",
+			"label": "Humidity Threshold (Group 3)",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 1,
@@ -121,7 +121,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Group 3 Humidity Report Interval",
+			"label": "Humidity Report Interval (Group 3)",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
