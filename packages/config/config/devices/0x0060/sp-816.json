@@ -1,0 +1,30 @@
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "SP-816",
+	"description": "Outdoor Motion Detector",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0005",
+			"zwaveAllianceId": 4653
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into inclusion mode",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode",
+		"reset": "1. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode.\n2. Within 1 second of step 1, press the tamper switch again and hold until LED is off (about 5 seconds).\n3. Node ID is excluded. The device reverts to factory default state and will be in auto-inclusion mode for 4 minutes",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4653/SP-816%20(1).pdf"
+	}
+}
