@@ -75,8 +75,6 @@
 			"#": "25",
 			"label": "Brightness on Single Tap",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -103,8 +101,6 @@
 			"#": "12",
 			"label": "Brightness on Double Tap",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -136,8 +132,6 @@
 			"$import": "~/templates/master_template.json#default_dim_level_0-99",
 			"label": "Reporting in Smart Switch Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -166,8 +160,6 @@
 			"#": "20",
 			"label": "Association Reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -206,8 +198,6 @@
 			"#": "23",
 			"label": "Led Indicator Color",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -234,19 +224,17 @@
 			"#": "24",
 			"label": "Led Indicator Brightness",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Medium (60%)",
-					"value": 1
-				},
-				{
 					"label": "Low (30%)",
 					"value": 2
+				},
+				{
+					"label": "Medium (60%)",
+					"value": 1
 				},
 				{
 					"label": "Bright (100%)",
