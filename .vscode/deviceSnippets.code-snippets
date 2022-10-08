@@ -1,7 +1,7 @@
 {
 	"masterTemplateClipboard": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert Master Template Reference from Clipboard"],
+		"prefix": ["Insert Master Template Reference from Clipboard"],
 		"body": [
 			"\"$import\": \"~/templates/master_template.json#$CLIPBOARD\","
 		],
@@ -9,7 +9,7 @@
 	},
 	"masterTemplate": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert Master Template Reference"],
+		"prefix": ["Insert Master Template Reference"],
 		"body": [
 			"\"$import\": \"~/templates/master_template.json#${1:base_enable_disable}\","
 		],
@@ -17,7 +17,7 @@
 	},
 	"manufacturerTemplate": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert Manufacturer Template Reference"],
+		"prefix": ["Insert Manufacturer Template Reference"],
 		"body": [
 			"\"$import\": \"templates/${1:manufacturer}_template.json#${template}\","
 		],
@@ -25,9 +25,7 @@
 	},
 	"manufacturerTemplateClipboard": {
 		"scope": "json,jsonc",
-		"prefix": [
-			"zwavejs: Insert Manufacturer Template Reference from Clipboard"
-		],
+		"prefix": ["Insert Manufacturer Template Reference from Clipboard"],
 		"body": [
 			"\"$import\": \"templates/${1:manufacturer}_template.json#$CLIPBOARD\","
 		],
@@ -35,7 +33,7 @@
 	},
 	"allowManualEntryScaffold": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert allowManualEntry scaffold"],
+		"prefix": ["Insert allowManualEntry scaffold"],
 		"body": [
 			"\"allowManualEntry\": false,",
 			"\"options\": [",
@@ -53,7 +51,7 @@
 	},
 	"helperOption": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert Option Helper"],
+		"prefix": ["Insert Option Helper"],
 		"body": [
 			"\"options\": [",
 			"\t{",
@@ -66,7 +64,7 @@
 	},
 	"newParameterDropdown": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert New Parameter (Drop Down)"],
+		"prefix": ["Insert New Parameter (Drop Down)"],
 		"body": [
 			"{",
 			"\t\"#\": \"${1:1}\",",
@@ -90,7 +88,7 @@
 	},
 	"newParameterManual": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert New Parameter (Manual Entry)"],
+		"prefix": ["Insert New Parameter (Manual Entry)"],
 		"body": [
 			"{",
 			"\t\"#\": \"${1:1}\",",
@@ -116,7 +114,7 @@
 	},
 	"deviceEntry": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert Device Entry"],
+		"prefix": ["Insert Device Entry"],
 		"body": [
 			"{",
 			"\t\"productType\": \"0x${1:0000}\",",
@@ -127,13 +125,13 @@
 	},
 	"firmwareCondition": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert Parameter Condition"],
+		"prefix": ["Insert Parameter Condition"],
 		"body": ["\"$if\": \"firmwareVersion >= ${1:1.0}\","],
 		"description": "Import parameter condition"
 	},
 	"insertCompat": {
 		"scope": "json,jsonc",
-		"prefix": ["zwavejs: Insert Compat Flag"],
+		"prefix": ["Insert Compat Flag"],
 		"body": [
 			"\"compat\": {",
 			"$LINE_COMMENT This device incorrectly ${1:[problem]}",
