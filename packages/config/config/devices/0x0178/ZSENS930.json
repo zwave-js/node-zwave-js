@@ -1,0 +1,348 @@
+{
+	"manufacturer": "Nexia Home Intelligence",
+	"manufacturerId": "0x0178",
+	"label": "ZSENS930",
+	"description": "Remote Temperature and Humidity Sensor",
+	"devices": [
+		{
+			"productType": "0x5253",
+			"productId": "0x5433",
+			"zwaveAllianceId": 1939
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Battery Reporting Interval",
+			"valueSize": 1,
+			"unit": "hours",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Temperature Delta Report Threshold (Group 1)",
+			"unit": "0.1°",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 200,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Periodic Temperature Report Interval (Group 1)",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Temperature Delta Report Threshold (Group 2)",
+			"valueSize": 1,
+			"unit": "0.1°",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Periodic Temperature Report Interval (Group 2)",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Humidity Threshold (Group 1)",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "17",
+			"label": "Humidity Report Interval (Group 1)",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Humidity Threshold (Group 3)",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Humidity Report Interval (Group 3)",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Basic Set Commands",
+			"description": "Determines which combination of Basic Set commands will be sent",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable Parameters 2, 5, 12, 15",
+					"value": 1
+				},
+				{
+					"label": "Enable Parameters 2, 5, 13, 14",
+					"value": 2
+				},
+				{
+					"label": "Enable Parameters 3, 4, 12, 15",
+					"value": 3
+				},
+				{
+					"label": "Enable Parameters 3, 4, 13, 14",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Basic Set Retry Attempts",
+			"description": "Number of extra attempts sent every minute",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Send Basic Set On: Above Temperature",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 121,
+			"defaultValue": 121,
+			"unsigned": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 121
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Send Basic Set On: Below Temperature",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 121,
+			"defaultValue": 121,
+			"unsigned": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 121
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Send Basic Set Off: Above Temperature",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 121,
+			"defaultValue": 121,
+			"unsigned": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 121
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Send Basic Set Off: Below Temperature",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 121,
+			"defaultValue": 121,
+			"unsigned": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 121
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Send Basic Set On: Above Humidity Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Send Basic Set On: Below Humidity Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Send Basic Set Off: Above Humidity Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Send Basic Set Off: Below Humidity Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"defaultValue": 1
+		},
+		{
+			"#": "21",
+			"label": "Temperature Offset Correction",
+			"description": "Correct deviations in the device's temperature reading.",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": -7,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "22",
+			"label": "Humidity Offset Correction",
+			"description": "Correct deviations in the device's humidity reading.",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": -7,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "23",
+			"label": "Humidity Filter Time Constant",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 30,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Set your primary controller into inclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful inclusion into the network",
+		"exclusion": "Set your primary controller into exclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful exclusion from the network",
+		"reset": "Press and hold Install button for 10 seconds. Factory Reset should only be used if the primary controller is missing or inoperable."
+	}
+}
