@@ -7,7 +7,7 @@
 		{
 			"productType": "0x0004",
 			"productId": "0x000e",
-			"zwaveAllianceId": 4640
+			"zwaveAllianceId": [3633, 4640]
 		}
 	],
 	"firmwareVersion": {
@@ -110,8 +110,8 @@
 		},
 		{
 			"#": "6",
-			"label": "State After Power Failure: Relay 2",
-			"description": "1: remember 0: do not remember"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"label": "State After Power Failure: Relay 2"
 		}
 	],
 	"metadata": {
