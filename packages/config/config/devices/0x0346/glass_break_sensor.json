@@ -1,0 +1,252 @@
+// TODO: This file contains a placeholder for the ProductType or Product ID (0x9999) that must be corrected. 
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "GLASS BREAK SENSOR",
+	"description": "Glass Break Sensor",
+	"devices": [
+		{
+			"productType": "0x9999",
+			"productId": "0x0a01",
+			"zwaveAllianceId": 4554
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Heartbeat Interval",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Enable Led",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Enable Detection",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Spl Range Optimization",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 9,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Minimum Mic Spl, Part 1",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"label": "Minimum Mic Spl, Part 2",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "15",
+			"label": "Automatic Gain Control",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "16",
+			"label": "Minimum Detection Spl",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		{
+			"#": "17",
+			"label": "Mic-off Time",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 6,
+			"unsigned": true
+		},
+		{
+			"#": "18",
+			"label": "Dnn Queue Size",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 9,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Dnn Window",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 6,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Application Retries",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "20",
+			"label": "Dnn Backoff",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 55,
+			"unsigned": true
+		},
+		{
+			"#": "21",
+			"label": "Dnn Decision Threshold",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 32112,
+			"unsigned": true
+		},
+		{
+			"#": "22",
+			"label": "Debug Ndr Error",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Application Level Retry Base Wait Time Period",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Low Battery Threshold (percentage)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 25,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Critical Battery Threshold (percentage)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Supervisory Report Timeout",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 500,
+			"maxValue": 30000,
+			"defaultValue": 10000,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Z-Wave Sleep Timeout (secs)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Glass Break Clear Delay (in Seconds)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Faults Within Clear Delay Flag",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Classic Inclusion Steps: \n1. Initiate add flow for Security Devices in the Ring mobile application – Follow the guided add flow instructions provided in the Ring mobile application.\n2. Select add manually and enter the 5-digit DSK pin found on the package of the Ring Alarm Glass Break Sensor or the 5-digit DSK pin found under the QR code on the device. \n3. After powering on the device, press and hold the setup button on the front for 3 seconds. Release the button and the device will enter Classic inclusion mode",
+		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Glass Break Sensor” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s red LED turns on solid to indicate the device was removed from the network",
+		"reset": "Factory Default Instructions \n1. 1. To restore Ring Alarm Glass Break Sensor to factory default settings, locate the pinhole reset button on the device. This is found inside the battery compartment on the back of the device after removing the back bracket. \n2. Using a paperclip or similar object, insert it into the pinhole, press and hold the button down for 10 seconds. \n3. The device will rapidly blink green continuously for 10 seconds. After about 10 seconds, when the green blinking stops, release the button. The red LED will turn on solid to indicate the device was removed from the network"
+	}
+}
