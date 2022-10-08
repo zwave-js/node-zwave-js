@@ -1,0 +1,145 @@
+{
+	"masterTemplateClipboard": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert Master Template Reference from Clipboard"],
+		"body": [
+			"\"$import\": \"~/templates/master_template.json#$CLIPBOARD\","
+		],
+		"description": "Import reference for master template using the clipboard"
+	},
+	"masterTemplate": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert Master Template Reference"],
+		"body": [
+			"\"$import\": \"~/templates/master_template.json#${1:base_enable_disable}\","
+		],
+		"description": "Import reference for master template"
+	},
+	"manufacturerTemplate": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert Manufacturer Template Reference"],
+		"body": [
+			"\"$import\": \"templates/${1:manufacturer}_template.json#${template}\","
+		],
+		"description": "Import reference for master template"
+	},
+	"manufacturerTemplateClipboard": {
+		"scope": "json,jsonc",
+		"prefix": [
+			"zwavejs: Insert Manufacturer Template Reference from Clipboard"
+		],
+		"body": [
+			"\"$import\": \"templates/${1:manufacturer}_template.json#$CLIPBOARD\","
+		],
+		"description": "Import reference for master template using the clipboard"
+	},
+	"allowManualEntryScaffold": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert allowManualEntry scaffold"],
+		"body": [
+			"\"allowManualEntry\": false,",
+			"\"options\": [",
+			"\t{",
+			"\t\t\"label\": \"${1:Disable}\",",
+			"\t\t\"value\": 0",
+			"\t},",
+			"\t{",
+			"\t\t\"label\": \"${2:Option Name}\",",
+			"\t\t\"value\": 1",
+			"\t}",
+			"]"
+		],
+		"description": "Insert allowManualEntry = false scaffold"
+	},
+	"helperOption": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert Option Helper"],
+		"body": [
+			"\"options\": [",
+			"\t{",
+			"\t\t\"label\": \"${1:Disable}\",",
+			"\t\t\"value\": 0",
+			"\t}",
+			"]"
+		],
+		"description": "Insert allowManualEntry = false scaffold"
+	},
+	"newParameterDropdown": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert New Parameter (Drop Down)"],
+		"body": [
+			"{",
+			"\t\"#\": \"${1:1}\",",
+			"\t\"label\": \"${2:Parameter Name}\",",
+			"\t\"valueSize\": ${3:1},",
+			"\t\"defaultValue\": ${4:0},",
+			"\t\"allowManualEntry\": false,",
+			"\t\"options\": [",
+			"\t\t{",
+			"\t\t\t\"label\": \"${5:Disable}\",",
+			"\t\t\t\"value\": 0",
+			"\t\t},",
+			"\t\t{",
+			"\t\t\t\"label\": \"${6:Option Name}\",",
+			"\t\t\t\"value\": 1",
+			"\t\t}",
+			"\t]",
+			"},"
+		],
+		"description": "Insert new paramter - no manual entry"
+	},
+	"newParameterManual": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert New Parameter (Manual Entry)"],
+		"body": [
+			"{",
+			"\t\"#\": \"${1:1}\",",
+			"\t\"label\": \"${2:Parameter Name}\",",
+			"\t\"valueSize\": ${3:1},",
+			"\t\"minValue\": ${4:0},",
+			"\t\"maxValue\": ${5:655350},",
+			"\t\"defaultValue\": ${6:0},",
+			"\t\"allowManualEntry\": false,",
+			"\t\"options\": [",
+			"\t\t{",
+			"\t\t\t\"label\": \"${7:Disable}\",",
+			"\t\t\t\"value\": 0",
+			"\t\t},",
+			"\t\t{",
+			"\t\t\t\"label\": \"${8:Option Name}\",",
+			"\t\t\t\"value\": 1",
+			"\t\t}",
+			"\t]",
+			"},"
+		],
+		"description": "Insert new paramter - no manual entry"
+	},
+	"deviceEntry": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert Device Entry"],
+		"body": [
+			"{",
+			"\t\"productType\": \"0x${1:0000}\",",
+			"\t\"productId\": \"0x${2:0000}\"",
+			"}"
+		],
+		"description": "Import reference for master template"
+	},
+	"firmwareCondition": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert Parameter Condition"],
+		"body": ["\"$if\": \"firmwareVersion >= ${1:1.0}\","],
+		"description": "Import parameter condition"
+	},
+	"insertCompat": {
+		"scope": "json,jsonc",
+		"prefix": ["zwavejs: Insert Compat Flag"],
+		"body": [
+			"\"compat\": {",
+			"$LINE_COMMENT This device incorrectly ${1:[problem]}",
+			"\"${2|disableBasicMapping,disableStrictEntryControlDataValidation,disableStrictMeasurementValidation,enableBasicSetMapping,forceNotificationIdleReset,mapRootReportsToEndpoint,preserveRootApplicationCCValueIDs,skipConfigurationNameQuery,skipConfigurationInfoQuery,treatBasicSetAsEvent,treatMultilevelSwitchSetAsEvent,treatDestinationEndpointAsSource|}\": true",
+			"},"
+		],
+		"description": "Insert parameter condition"
+	}
+}
