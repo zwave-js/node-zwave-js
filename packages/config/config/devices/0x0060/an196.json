@@ -89,7 +89,6 @@
 		{
 			"#": "4",
 			"label": "Auto Off Time: Relay 2",
-			"description": "0: not auto off",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
