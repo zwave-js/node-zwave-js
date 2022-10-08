@@ -847,6 +847,25 @@ async function parseZWAFiles(): Promise<void> {
 		}
 	}
 
+	// Check for missing fields and add placeholders if missing
+	for (const device of jsonData) {
+		if (!device.ManufacturerId) {
+			device.ManufacturerId = "0x9999";
+		}
+
+		if (!device.Brand) {
+			device.ManufacturerId = "Unknown";
+		}
+
+		if (!device.ProductTypeId) {
+			device.ProductTypeId = "0x9999";
+		}
+
+		if (!device.ProductId) {
+			device.ProductId = "0x9999";
+		}
+	}
+
 	// Combine provided files within models
 	jsonData = combineDeviceFiles(jsonData);
 
@@ -865,11 +884,16 @@ async function parseZWAFiles(): Promise<void> {
 		const manufacturerName =
 			configManager.lookupManufacturer(manufacturerId);
 
-		// Add the manufacturer to our manufacturers.json if it is missing
-		if (Number.isNaN(manufacturerId)) {
-		} else if (manufacturerName === undefined && file.Brand !== undefined) {
-			console.log(`Adding missing manufacturer: ${file.Brand}`);
-			configManager.setManufacturer(manufacturerId, file.Brand);
+		if (file.ManufacturerId != "0x9999") {
+			// Add the manufacturer to our manufacturers.json if it is missing
+			if (Number.isNaN(manufacturerId)) {
+			} else if (
+				manufacturerName === undefined &&
+				file.Brand !== undefined
+			) {
+				console.log(`Adding missing manufacturer: ${file.Brand}`);
+				configManager.setManufacturer(manufacturerId, file.Brand);
+			}
 		}
 
 		/**
@@ -1176,7 +1200,7 @@ async function parseZWAProduct(
 	// any products descriptions have productName in it, remove it
 	const productName = product.Name.replace(productLabel, "");
 
-	// Format the device IDs like we expect them
+	// Format the manufacturer IDs like we expect them
 
 	let manufacturerIdHex = product.ManufacturerId.replace(/^0x/, "");
 	manufacturerIdHex = formatId(manufacturerIdHex);
@@ -1532,9 +1556,20 @@ async function parseZWAProduct(
 	const manufacturerDir = path.join(processedDir, manufacturerIdHex);
 	await fs.ensureDir(manufacturerDir);
 
+	// Insert a TODO comment if necessary
+	let output = "";
+	if (
+		newConfig.devices.filter(
+			(d) => d.productType === "0x9999" || d.productId === "0x9999",
+		)
+	) {
+		output = `// TODO: This file contains a placeholder for the ProductType or Product ID (0x9999) that must be corrected. 
+${JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n"}`;
+	} else {
+		output = JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
+	}
+
 	// Write the file
-	const output =
-		JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
 	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
