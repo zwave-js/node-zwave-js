@@ -208,6 +208,33 @@
 			}
 		]
 	},
+	"operating_mode_3": {
+		"label": "Operating Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal mode",
+				"value": 0
+			},
+			{
+				"label": "Vacation mode",
+				"value": 1
+			},
+			{
+				"label": "Privacy mode",
+				"value": 2
+			},
+			{
+				"label": "Passage mode",
+				"value": 3
+			}
+		]
+	},
 	"one_touch": {
 		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "One Touch Locking"
@@ -239,8 +266,31 @@
 			}
 		]
 	},
+	"reset_factory_255": {
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
+		"label": "Reset to Factory Defaults",
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
+				"label": "Reset to factory defaults",
+				"value": 1
+			}
+		]
+	},
 	"door_propped_timer": {
 		"$import": "~/templates/master_template.json#base_0-127_nounit",
+		"label": "Door Propped Time Limit",
+		"unit": "10 seconds",
+		"minValue": 10,
+		"defaultValue": 0
+	},
+	"door_propped_timer_255": {
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Door Propped Time Limit",
 		"unit": "10 seconds",
 		"minValue": 10,
