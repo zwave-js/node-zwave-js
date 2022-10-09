@@ -406,17 +406,6 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		config[l] = temp;
 	}
 
-	// Sort parameters
-	if (config.paramInformation) {
-		config.paramInformation = config.paramInformation.sort(
-			(a: Record<string, any>, b: Record<string, any>) => {
-				const aNum = parseInt(a["#"], 10);
-				const bNum = parseInt(b["#"], 10);
-				return aNum - bNum;
-			},
-		);
-	}
-
 	// Remove empty arrays and objects
 	for (const prop of Object.keys(disallowEmpty)) {
 		if (prop in config) {
