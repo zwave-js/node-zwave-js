@@ -1560,7 +1560,7 @@ async function parseZWAProduct(
 	let output = "";
 	if (
 		newConfig.devices.filter(
-			(d) => d.productType === "0x9999" || d.productType === "0x9999",
+			(d) => d.productType === "0x9999" || d.productId === "0x9999",
 		).length > 0 ||
 		newConfig.manufacturerIdHex === "0x9999"
 	) {
