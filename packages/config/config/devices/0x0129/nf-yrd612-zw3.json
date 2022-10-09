@@ -2,7 +2,7 @@
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "NF-YRD612-ZW3",
-	"description": "Yale Real Living® Assure Lock™ Z-Wave Enabled Push Button Deadbolt",
+	"description": "Real Living® Assure Lock™ Z-Wave Enabled Push Button Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8101",

@@ -300,6 +300,14 @@
 		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Door Propped Alarm"
 	},
+	"deadbolt_alarm": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Deadbolt Alarm"
+	},
+	"level_rotated_alarm": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Lever Rotated Alarm"
+	},
 	"enable_dps_alarm": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Door Propped Alarm",
@@ -308,6 +316,7 @@
 	"deadbolt_installed_state": {
 		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Deadbolt Status",
+		"readOnly": true,
 		"options": [
 			{
 				"label": "Not installed",
