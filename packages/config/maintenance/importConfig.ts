@@ -854,7 +854,7 @@ async function parseZWAFiles(): Promise<void> {
 		}
 
 		if (!device.Brand) {
-			device.ManufacturerId = "Unknown";
+			device.Brand = "Unknown";
 		}
 
 		if (!device.ProductTypeId) {
@@ -884,16 +884,15 @@ async function parseZWAFiles(): Promise<void> {
 		const manufacturerName =
 			configManager.lookupManufacturer(manufacturerId);
 
-		if (file.ManufacturerId != "0x9999") {
-			// Add the manufacturer to our manufacturers.json if it is missing
-			if (Number.isNaN(manufacturerId)) {
-			} else if (
-				manufacturerName === undefined &&
-				file.Brand !== undefined
-			) {
-				console.log(`Adding missing manufacturer: ${file.Brand}`);
-				configManager.setManufacturer(manufacturerId, file.Brand);
-			}
+		// Add the manufacturer to our manufacturers.json if it is missing
+		if (
+			!Number.isNaN(manufacturerId) &&
+			file.ManufacturerId != "0x9999" &&
+			manufacturerName === undefined &&
+			file.Brand !== undefined
+		) {
+			console.log(`Adding missing manufacturer: ${file.Brand}`);
+			configManager.setManufacturer(manufacturerId, file.Brand);
 		}
 
 		/**
@@ -1557,17 +1556,16 @@ async function parseZWAProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// Insert a TODO comment if necessary
-	let output = "";
+	let output = JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
 	if (
 		newConfig.devices.filter(
 			(d) => d.productType === "0x9999" || d.productId === "0x9999",
 		).length > 0 ||
 		newConfig.manufacturerIdHex === "0x9999"
 	) {
-		output = `// TODO: This file contains a placeholder for a productType, productID, or manufacturerId (0x9999) that must be corrected. 
-${JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n"}`;
-	} else {
-		output = JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
+		output =
+			"// TODO: This file contains a placeholder for a productType, productID, or manufacturerId (0x9999) that must be corrected.\n" +
+			output;
 	}
 
 	// Write the file
