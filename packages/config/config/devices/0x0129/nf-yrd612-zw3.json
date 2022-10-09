@@ -8,7 +8,7 @@
 			"productType": "0x8101",
 			"productId": "0x810a",
 			"zwaveAllianceId": 4681
-		},
+		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
@@ -67,6 +67,7 @@
 		{
 			"#": "7",
 			"import": "templates/yale_template.json#wrong_code_lockout"
+		}
 	],
 	"metadata": {
 		"reset": "When lock is reset to factory defaults all Entry Codes\n(including the Master Entry Code*) are deleted and all\nprogramming features are reset to original default\nsettings (see below).\n1. Remove battery cover and batteries.\n2. Remove inside lock to access reset button.\n3. Reset button (see image at right) is located beside\ncable adapter.\n4. While pressing reset button reinstall batteries. Hold\nreset button a minimum of 3 seconds then release.\n5. Replace battery cover.\nAfter reset, Master Entry Code creation is the only\noption available and must be performed prior to\nany other programming of the lock"
