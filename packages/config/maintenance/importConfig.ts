@@ -393,6 +393,20 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 	 * Standardize things
 	 ********************/
 
+	// Sort parameters in only new files
+	if (config.isNewFile) {
+		if (config.paramInformation) {
+			config.paramInformation = config.paramInformation.sort(
+				(a: Record<string, any>, b: Record<string, any>) => {
+					const aNum = parseInt(a["#"], 10);
+					const bNum = parseInt(b["#"], 10);
+					return aNum - bNum;
+				},
+			);
+		}
+	}
+	delete config.isNewFile;
+
 	// Enforce top-level order
 	for (const l of topOrder) {
 		if (typeof config[l] === "undefined") {
@@ -1309,6 +1323,7 @@ async function parseZWAProduct(
 	}
 
 	const newConfig: Record<string, any> = {
+		isNewFile: typeof existingDevice === "undefined",
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
