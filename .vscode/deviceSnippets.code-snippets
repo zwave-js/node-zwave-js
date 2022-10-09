@@ -134,10 +134,55 @@
 		"prefix": ["Insert Compat Flag"],
 		"body": [
 			"\"compat\": {",
-			"$LINE_COMMENT This device incorrectly ${1:[problem]}",
-			"\"${2|disableBasicMapping,disableStrictEntryControlDataValidation,disableStrictMeasurementValidation,enableBasicSetMapping,forceNotificationIdleReset,mapRootReportsToEndpoint,preserveRootApplicationCCValueIDs,skipConfigurationNameQuery,skipConfigurationInfoQuery,treatBasicSetAsEvent,treatMultilevelSwitchSetAsEvent,treatDestinationEndpointAsSource|}\": true",
+			"\t$LINE_COMMENT This device incorrectly ${1:[problem]}",
+			"\t\"${2|disableBasicMapping,disableStrictEntryControlDataValidation,disableStrictMeasurementValidation,enableBasicSetMapping,forceNotificationIdleReset,mapRootReportsToEndpoint,preserveRootApplicationCCValueIDs,skipConfigurationNameQuery,skipConfigurationInfoQuery,treatBasicSetAsEvent,treatMultilevelSwitchSetAsEvent,treatDestinationEndpointAsSource|}\": true",
 			"},"
 		],
 		"description": "Insert parameter condition"
+	},
+	"disableSupervision": {
+		"scope": "json,jsonc",
+		"prefix": ["Disable Supverision CC"],
+		"body": [
+			"\"compat\": {",
+			"\t\"commandClasses\": {",
+			"\t\t\"remove\": {",
+			"\t\t\t$LINE_COMMENT The device seems to report support for Supervision but ignores the commands",
+			"\t\t\t\"0x6c\": {",
+			"\t\t\t\t\"endpoints\": \"*\"",
+			"\t\t\t}",
+			"\t\t}",
+			"\t}",
+			"}"
+		],
+		"description": "Disables Supverision CC via compat flag"
+	},
+	"removeCC": {
+		"scope": "json,jsonc",
+		"prefix": ["Remove CC"],
+		"body": [
+			"\"compat\": {",
+			"\t\"commandClasses\": {",
+			"\t\t\"remove\": {",
+			"\t\t\t$LINE_COMMENT The device seems to ${1:[Describe why the CC is being removed]}",
+			"\t\t\t\"0x${2:5d}\": {",
+			"\t\t\t\t\"endpoints\": ${3:\"*\" or [0, 2]}",
+			"\t\t\t}",
+			"\t\t}",
+			"\t}",
+			"}"
+		],
+		"description": "Disables Supverision CC via compat flag"
+	},
+	"preserveEndpoints": {
+		"scope": "json,jsonc",
+		"prefix": ["Preserve Endpoints"],
+		"body": [
+			"\"compat\": {",
+			"\t$LINE_COMMENT The device seems to ${1:[Describe why the endpoint is being preserved]}",
+			"\t\"preserveEndpoints\": ${3:\"*\" or [0, 2]}",
+			"}"
+		],
+		"description": "Preserve endpoints via compat flag"
 	}
 }
