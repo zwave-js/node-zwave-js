@@ -887,7 +887,7 @@ async function parseZWAFiles(): Promise<void> {
 		// Add the manufacturer to our manufacturers.json if it is missing
 		if (
 			!Number.isNaN(manufacturerId) &&
-			file.ManufacturerId != "0x9999" &&
+			file.ManufacturerId !== "0x9999" &&
 			manufacturerName === undefined &&
 			file.Brand !== undefined
 		) {
@@ -1555,8 +1555,9 @@ async function parseZWAProduct(
 	const manufacturerDir = path.join(processedDir, manufacturerIdHex);
 	await fs.ensureDir(manufacturerDir);
 
-	// Insert a TODO comment if necessary
 	let output = JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
+
+	// Insert a TODO comment if necessary
 	if (
 		newConfig.devices.filter(
 			(d) => d.productType === "0x9999" || d.productId === "0x9999",
