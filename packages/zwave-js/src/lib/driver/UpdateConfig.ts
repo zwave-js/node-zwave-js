@@ -1,15 +1,14 @@
 import { detectPackageManager, PackageManager } from "@alcalzone/pak";
+import got from "@esm2cjs/got";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getErrorMessage } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
-import axios from "axios";
 import execa from "execa";
 import fs from "fs-extra";
 import os from "os";
 import * as path from "path";
 import * as lockfile from "proper-lockfile";
 import * as semver from "semver";
-import type { Readable } from "stream";
 
 /**
  * Checks whether there is a compatible update for the currently installed config package.
@@ -22,9 +21,9 @@ export async function checkForConfigUpdates(
 	let registry: Record<string, unknown>;
 
 	try {
-		registry = (
-			await axios.get<any>("https://registry.npmjs.org/@zwave-js/config")
-		).data;
+		registry = await got
+			.get("https://registry.npmjs.org/@zwave-js/config")
+			.json();
 	} catch (e) {
 		throw new ZWaveError(
 			`Could not check for config updates: Failed to download package information!`,
@@ -121,11 +120,9 @@ export async function installConfigUpdateInDocker(
 ): Promise<void> {
 	let registryInfo: any;
 	try {
-		registryInfo = (
-			await axios.get(
-				`https://registry.npmjs.org/@zwave-js/config/${newVersion}`,
-			)
-		).data;
+		registryInfo = await got
+			.get(`https://registry.npmjs.org/@zwave-js/config/${newVersion}`)
+			.json();
 	} catch {
 		throw new ZWaveError(
 			`Config update failed: Could not fetch package info from npm registry!`,
@@ -203,17 +200,12 @@ export async function installConfigUpdateInDocker(
 	try {
 		await fs.ensureDir(tmpDir);
 		const fstream = fs.createWriteStream(tarFilename, { autoClose: true });
-		const response = await axios({
-			method: "GET",
-			url,
-			responseType: "stream",
-		});
-		const rstream = response.data as Readable;
-		rstream.pipe(fstream);
+		const response = got.stream.get(url);
+		response.pipe(fstream);
 
 		await new Promise((resolve, reject) => {
-			rstream.on("error", reject);
-			rstream.on("end", resolve);
+			response.on("error", reject);
+			response.on("end", resolve);
 		});
 	} catch (e) {
 		await freeLock();

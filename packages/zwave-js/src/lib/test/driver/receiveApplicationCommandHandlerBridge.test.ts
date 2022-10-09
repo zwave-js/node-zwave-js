@@ -105,5 +105,5 @@ describe("regression tests", () => {
 		await expect(getNoncePromise).resolves.toEqual(
 			Buffer.from("3e55e4b714973b9e", "hex"),
 		);
-	}, 5000);
+	}, 30000);
 });

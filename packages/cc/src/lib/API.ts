@@ -21,7 +21,11 @@ import {
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, OnlyMethods } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import { getAPI, getCommandClass } from "./CommandClassDecorators";
+import {
+	getAPI,
+	getCommandClass,
+	getImplementedVersion,
+} from "./CommandClassDecorators";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
@@ -261,7 +265,15 @@ export class CCAPI {
 	 * Retrieves the version of the given CommandClass this endpoint implements
 	 */
 	public get version(): number {
-		return this.endpoint.getCCVersion(this.ccId);
+		if (this.isSinglecast() && this.endpoint.nodeId !== NODE_ID_BROADCAST) {
+			return this.applHost.getSafeCCVersionForNode(
+				this.ccId,
+				this.endpoint.nodeId,
+				this.endpoint.index,
+			);
+		} else {
+			return getImplementedVersion(this.ccId);
+		}
 	}
 
 	/** Determines if this simplified API instance may be used. */
@@ -593,6 +605,8 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Scene Actuator Configuration"
 	: [CC] extends [typeof CommandClasses["Scene Controller Configuration"]]
 	? "Scene Controller Configuration"
+	: [CC] extends [typeof CommandClasses["Schedule Entry Lock"]]
+	? "Schedule Entry Lock"
 	: [CC] extends [typeof CommandClasses["Security 2"]]
 	? "Security 2"
 	: [CC] extends [typeof CommandClasses["Security"]]
@@ -708,6 +722,7 @@ export interface CCAPIs {
 	"Scene Activation": import("../cc/SceneActivationCC").SceneActivationCCAPI;
 	"Scene Actuator Configuration": import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCAPI;
 	"Scene Controller Configuration": import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCAPI;
+	"Schedule Entry Lock": import("../cc/ScheduleEntryLockCC").ScheduleEntryLockCCAPI;
 	"Security 2": import("../cc/Security2CC").Security2CCAPI;
 	Security: import("../cc/SecurityCC").SecurityCCAPI;
 	"Sound Switch": import("../cc/SoundSwitchCC").SoundSwitchCCAPI;

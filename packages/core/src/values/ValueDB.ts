@@ -75,13 +75,13 @@ export function normalizeValueID(valueID: ValueID): ValueID {
 	assertValueID(valueID);
 	const { commandClass, endpoint, property, propertyKey } = valueID;
 
-	const jsonKey: ValueID = {
+	const normalized: ValueID = {
 		commandClass,
 		endpoint: endpoint ?? 0,
 		property,
 	};
-	if (propertyKey != undefined) jsonKey.propertyKey = propertyKey;
-	return jsonKey;
+	if (propertyKey != undefined) normalized.propertyKey = propertyKey;
+	return normalized;
 }
 
 export function valueIdToString(valueID: ValueID): string {

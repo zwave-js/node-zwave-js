@@ -5,6 +5,7 @@ import {
 	CommandClass,
 	CRC16CC,
 	DeviceResetLocallyCCNotification,
+	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	getImplementedVersion,
 	ICommandClassContainer,
@@ -124,7 +125,6 @@ import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-
 import { ZWaveController } from "../controller/Controller";
 import {
 	InclusionState,
@@ -197,6 +197,7 @@ import {
 	installConfigUpdate,
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
+import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
 import type { EditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
@@ -441,6 +442,16 @@ export class Driver
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+		if (options?.userAgent) {
+			if (!isObject(options.userAgent)) {
+				throw new ZWaveError(
+					`The userAgent property must be an object!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+
+			this.updateUserAgent(options.userAgent);
+		}
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
@@ -815,11 +826,22 @@ export class Driver
 		) as ZWaveOptions;
 		checkOptions(newOptions);
 
+		if (options.userAgent && !isObject(options.userAgent)) {
+			throw new ZWaveError(
+				`The userAgent property must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
 		// All good, update the options
 		this.options = newOptions;
 
 		if (options.logConfig) {
 			this.updateLogConfig(options.logConfig);
+		}
+
+		if (options.userAgent) {
+			this.updateUserAgent(options.userAgent);
 		}
 	}
 
@@ -1650,6 +1672,70 @@ export class Driver
 		| Pick<AppInfo, "applicationName" | "applicationVersion">
 		| undefined;
 
+	private userAgentComponents = new Map<string, string>();
+
+	/**
+	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
+	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
+	 */
+	public updateUserAgent(
+		components: Record<string, string | null | undefined>,
+	): void {
+		this.userAgentComponents = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+		);
+		this._userAgent = this.getEffectiveUserAgentString(
+			this.userAgentComponents,
+		);
+	}
+
+	/**
+	 * Returns the effective user agent string for the given components.
+	 * The driver name and version is automatically prepended and the statisticsAppInfo data is automatically appended if no components were given.
+	 */
+	private getEffectiveUserAgentString(
+		components: Map<string, string>,
+	): string {
+		const effectiveComponents = new Map([
+			[libName, libVersion],
+			...components,
+		]);
+		if (
+			effectiveComponents.size === 1 &&
+			this.statisticsAppInfo &&
+			this.statisticsAppInfo.applicationName !== "node-zwave-js"
+		) {
+			effectiveComponents.set(
+				this.statisticsAppInfo.applicationName,
+				this.statisticsAppInfo.applicationVersion,
+			);
+		}
+		return userAgentComponentsToString(effectiveComponents);
+	}
+
+	private _userAgent: string = `node-zwave-js/${libVersion}`;
+	/** Returns the user agent string used for service requests */
+	public get userAgent(): string {
+		return this._userAgent;
+	}
+
+	/** Returns the user agent string combined with the additional components (if given) */
+	public getUserAgentStringWithComponents(
+		components?: Record<string, string | null | undefined>,
+	): string {
+		if (!components || Object.keys(components).length === 0) {
+			return this._userAgent;
+		}
+
+		const merged = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+			false,
+		);
+		return this.getEffectiveUserAgentString(merged);
+	}
+
 	/**
 	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
 	 * inform your users before enabling statistics.
@@ -1658,7 +1744,6 @@ export class Driver
 		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
 	): void {
 		if (this._statisticsEnabled) return;
-		this._statisticsEnabled = true;
 
 		if (
 			!isObject(appInfo) ||
@@ -1681,6 +1766,7 @@ export class Driver
 			);
 		}
 
+		this._statisticsEnabled = true;
 		this.statisticsAppInfo = appInfo;
 
 		// If we're already ready, send statistics
@@ -1830,40 +1916,71 @@ export class Driver
 		this.checkAllNodesReady();
 	}
 
-	/** This is called when a node's firmware was updated */
+	/**
+	 * Returns the time in seconds to actually wait after a firmware upgrade, depending on what the device said.
+	 * This number will always be a bit greater than the advertised duration, because devices have been found to take longer to actually reboot.
+	 */
+	public getConservativeWaitTimeAfterFirmwareUpdate(
+		advertisedWaitTime: number | undefined,
+	): number {
+		// Wait the specified time plus a bit, so the device is actually ready to use
+		if (!advertisedWaitTime) {
+			// Wait at least 5 seconds
+			return 5;
+		} else if (advertisedWaitTime < 20) {
+			return advertisedWaitTime + 5;
+		} else if (advertisedWaitTime < 60) {
+			return advertisedWaitTime + 10;
+		} else {
+			return advertisedWaitTime + 30;
+		}
+	}
+
+	/** This is called when the firmware on one of a node's firmware targets was updated */
 	private async onNodeFirmwareUpdated(
 		node: ZWaveNode,
-		status: FirmwareUpdateStatus,
-		waitTime?: number,
+		_status: FirmwareUpdateStatus,
+		_waitTime: number | undefined,
+		result: FirmwareUpdateResult,
 	): Promise<void> {
-		// Don't do this for non-successful updates
-		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
+		const { success, reInterview } = result;
+
+		// Nothing to do for non-successful updates
+		if (!success) return;
 
 		// TODO: Add support for delayed activation
 
-		// Wait the specified time plus a bit, so the device is actually ready to use
-		if (!waitTime) {
-			// Wait at least 5 seconds
-			waitTime = 5;
-		} else if (waitTime < 20) {
-			waitTime += 5;
-		} else if (waitTime < 60) {
-			waitTime += 10;
+		// Reset nonces etc. to prevent false-positive duplicates after the update
+		this.securityManager?.deleteAllNoncesForReceiver(node.id);
+		this.securityManager2?.deleteNonce(node.id);
+
+		// waitTime should always be defined, but just to be sure
+		const waitTime = result.waitTime ?? 5;
+
+		if (reInterview) {
+			this.controllerLog.logNode(
+				node.id,
+				`Firmware updated, scheduling interview in ${waitTime} seconds...`,
+			);
+			// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
+			this.retryNodeInterviewTimeouts.set(
+				node.id,
+				setTimeout(() => {
+					this.retryNodeInterviewTimeouts.delete(node.id);
+					void node.refreshInfo({
+						// After a firmware update, we need to refresh the node info
+						waitForWakeup: false,
+					});
+				}, waitTime * 1000).unref(),
+			);
 		} else {
-			waitTime += 30;
-		}
-
-		if (status === FirmwareUpdateStatus.OK_NoRestart) {
-			// This status MUST not be advertised for target 0.
-			// Other chips should probably advertise this if they aren't mission critical.
-
-			// Treat this as a sign that the device continues working as before
 			this.controllerLog.logNode(
 				node.id,
 				`Firmware updated. No restart or re-interview required. Refreshing version information in ${waitTime} seconds...`,
 			);
 
 			await wait(waitTime * 1000, true);
+
 			try {
 				const versionAPI = node.commandClasses.Version;
 				await versionAPI.get();
@@ -1880,29 +1997,7 @@ export class Driver
 			} catch {
 				// ignore
 			}
-
-			return;
 		}
-
-		this.controllerLog.logNode(
-			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
-		);
-		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
-		this.retryNodeInterviewTimeouts.set(
-			node.id,
-			setTimeout(() => {
-				this.retryNodeInterviewTimeouts.delete(node.id);
-				void node.refreshInfo({
-					// After a firmware update, we need to refresh the node info
-					waitForWakeup: false,
-				});
-			}, waitTime * 1000).unref(),
-		);
-
-		// Reset nonces etc. to prevent false-positive duplicates after the update
-		this.securityManager?.deleteAllNoncesForReceiver(node.id);
-		this.securityManager2?.deleteNonce(node.id);
 	}
 
 	/** This is called when a node emits a `"notification"` event */
@@ -4181,17 +4276,19 @@ ${handlers.length} left`,
 			SupervisionCC.mayUseSupervision(this, command)
 		) {
 			const result = await this.sendSupervisedCommand(command, options);
-			if (result?.status === SupervisionStatus.NoSupport) {
-				// The node should support supervision but it doesn't for this command. Remember this
-				SupervisionCC.setCCSupportedWithSupervision(
-					this,
-					command.getEndpoint(this)!,
-					command.ccId,
-					false,
-				);
+			if (result?.status !== SupervisionStatus.NoSupport) {
+				// @ts-expect-error TS doesn't know we've narrowed the return type to match
+				return result;
 			}
-			// @ts-expect-error TS doesn't know we've narrowed the return type to match
-			return result;
+
+			// The node should support supervision but it doesn't for this command. Remember this
+			SupervisionCC.setCCSupportedWithSupervision(
+				this,
+				command.getEndpoint(this)!,
+				command.ccId,
+				false,
+			);
+			// And retry the command without supervision
 		}
 
 		// Fall back to non-supervised commands

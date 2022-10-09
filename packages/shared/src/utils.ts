@@ -2,7 +2,8 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { num2hex } from "./strings";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */
-export function keysOf<T>(obj: T): (keyof T)[] {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function keysOf<T extends {}>(obj: T): (keyof T)[] {
 	return Object.keys(obj) as unknown as (keyof T)[];
 }
 

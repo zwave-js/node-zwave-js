@@ -4,6 +4,80 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.3.0 (2022-09-29)
+### Features
+* Support opt-in to receive beta firmware releases via the update service (#5076)
+* Implement Schedule Entry Lock CC (#4836)
+* Sequencing of multi-target firmware updates is now handled in the driver, including waiting between targets, and re-interviewing only after the last one (#5121)
+
+### Bugfixes
+* Pin `xstate` dependency to version `4.29.0` to avoid a memory leak (#5108)
+* Fix: the `ccId` parameter in the `CommandClass` constructor may be zero (#5115)
+* Fixed an issue where multiple re-interview tasks for sleeping nodes could be queued and would be executed in parallel (#5105)
+* Fixed an issue where firmware updates could use a too large fragment size after upgrading to v10, causing the update to fail (#5117)
+
+### Config file changes
+* Disable Supervision for Everspring AC301 (#5119)
+
+### Changes under the hood
+* The packages `core`, `shared` and `nvmedit` now use `ava` for testing instead of `jest`
+* Implement decoding/serialization of some `Sound Switch CC` commands, ensure `valueChangeOptions` are set (#5071)
+
+## 10.2.0 (2022-09-20)
+### Features
+* Added the ability to pass more user agent components in `getAvailableFirmwareUpdates` (#5070)
+
+### Bugfixes
+* Do not enforce Multilevel Switch CC secondary switch type field to exist when parsing commands (#5042)
+* Use the correct payload to transmit usage statistics again (#5051)
+* Respect `useLocalTime` flag in `TimeParametersCCSet` constructor (#5086)
+
+### Config file changes
+* Add missing parameter 9 to Zooz ZEN04 (#5087)
+* Add Zooz Zen77 Z-Wave Ramp Rates (#5006)
+* Add HomeSeer HS-WX300 v1.13 parameters (#4959)
+* Add MyOT OpenTherm Actuator v4 (#5001)
+* Add fingerprint for Radio Thermostat CT30 (#5005)
+* Add Zooz ZEN04 (#5043)
+* Correct LED Indicator (param 3) for GE 14287 / ZW4002 (#5038)
+* Add Fakro ZRH12 (#5049)
+* Cleanup Fakro ZWS12 config (#5039)
+* Add fingerprint `0x0005:0x0012` to "Fakro AMZ Solar" (#5040)
+
+### Changes under the hood
+* The build process now uses Turborepo to cache the result of tasks and skip them if the inputs haven't changed.
+* Testing package imports on CI is now done in a more production-like environment, outside of the monorepo
+* Correct `json2nvm` documentation to use `--protocolVersion` flag (#5083)
+
+## 10.1.0 (2022-09-09)
+### Features
+* Cache responses from firmware update service and queue requests (#5030)
+* Make user agent configurable and pass it to firmware update service (#5031)
+
+### Bugfixes
+* Fixed an issue where `ThermostatModeCC` would save its values twice (#5019)
+* Ensure value ID received from outside code is valid and normalized before passing through (#5036)
+* Merge notification metadata for variables with multiple states (#5037)
+
+### Changes under the hood
+* Added a test to ensure that `SupervisionCCReport` with status `Success` is always final, even if `more updates follow` is incorrectly set to `true` (#4963)
+
+## 10.0.4 (2022-09-06)
+### Bugfixes
+* Always query versions of CCs supported on endpoints, regardless of CC support (#5009)
+* Avoid unnecessarily repeating tests for S0 support on endpoints (#4993)
+* Automatically retry commands with supervision status `NoSupport`, but without supervision (#5010)
+* Ensure S0 commands are not encapsulated inside S2 (#5012)
+* Fixed a bug which aborted interviews because `CCAPI` instances used a different CC version than the CC instance in charge of the interview in some cases (#5015)
+* Query secure endpoint CCs only once. When no response is received, assume all its known CCs are secure instead of defaulting to unencrypted communication (#5016)
+
+### Config file changes
+* Disable Supervision for Zooz ZSE19 (#5008)
+
+### Changes under the hood
+* Export some indirectly used types (#5011)
+* Add `silly` logging to `Node.translateValueEvent` to diagnose issues with some thermostats (#5017)
+
 ## 10.0.3 (2022-08-31)
 ### Bugfixes
 * Only refresh versions after FW update instead of a full interview when no restart is required (#4973)

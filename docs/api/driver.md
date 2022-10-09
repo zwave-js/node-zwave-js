@@ -78,14 +78,6 @@ disableStatistics(): void
 
 Disable sending usage statistics.
 
-### `statisticsEnabled`
-
-```ts
-statisticsEnabled(): boolean
-```
-
-Returns whether reporting usage statistics is currently enabled.
-
 ### `getSupportedCCVersionForEndpoint`
 
 ```ts
@@ -275,6 +267,14 @@ getLogConfig(): LogConfig
 
 Returns the current logging configuration.
 
+### `updateUserAgent`
+
+```ts
+updateUserAgent(components: Record<string, string | null | undefined>): void
+```
+
+Adds or updates individual components (name => version) of the user agent. By setting a version to `null` or `undefined`, the component will be removed from the user agent.
+
 ### `setPreferredScales`
 
 ```ts
@@ -298,6 +298,7 @@ Updates a subset of the driver options without having to restart the driver. The
 -   `logConfig`
 -   `preferences`
 -   `preserveUnknownValues`
+-   `userAgent` (behaves like `updateUserAgent`)
 
 ### `checkForConfigUpdates`
 
@@ -361,6 +362,22 @@ readonly allNodesReady: boolean
 ```
 
 Returns `true` after the `"all nodes ready"` event has been emitted. This is useful for client-server setups where listeners might not be set up while the driver is initializing.
+
+### `statisticsEnabled`
+
+```ts
+readonly statisticsEnabled: boolean
+```
+
+Returns whether reporting usage statistics is currently enabled.
+
+### `userAgent`
+
+```ts
+readonly userAgent: string
+```
+
+Returns the user agent string used for service requests.
 
 ## Driver events
 
@@ -547,13 +564,13 @@ The RSSI is either a number indicating the value in dBm or one of the special va
 <!-- #import RSSI from "zwave-js" -->
 
 ```ts
-declare type RSSI = number | RssiError;
+type RSSI = number | RssiError;
 ```
 
 <!-- #import RssiError from "zwave-js" -->
 
 ```ts
-declare enum RssiError {
+enum RssiError {
 	NotAvailable = 127,
 	ReceiverSaturated = 126,
 	NoSignalDetected = 125,
@@ -563,11 +580,11 @@ declare enum RssiError {
 <!-- #import ProtocolDataRate from "zwave-js" -->
 
 ```ts
-declare enum ProtocolDataRate {
-	ZWave_9k6 = 1,
-	ZWave_40k = 2,
-	ZWave_100k = 3,
-	LongRange_100k = 4,
+enum ProtocolDataRate {
+	ZWave_9k6 = 0x01,
+	ZWave_40k = 0x02,
+	ZWave_100k = 0x03,
+	LongRange_100k = 0x04,
 }
 ```
 
@@ -796,6 +813,12 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		/** API key for the Z-Wave JS Firmware Update Service (https://github.com/zwave-js/firmware-updates/) */
 		firmwareUpdateService?: string;
 	};
+
+	/**
+	 * An object with application/module/component names and their versions.
+	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
+	 */
+	userAgent?: Record<string, string>;
 }
 ````
 

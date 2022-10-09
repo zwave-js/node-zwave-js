@@ -1,12 +1,14 @@
+import type { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import type {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
+	FirmwareUpdateProgress,
+	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	MultilevelSwitchCommand,
-	NotificationCCReport,
 	Powerlevel,
 	PowerlevelTestStatus,
-} from "@zwave-js/cc";
+} from "@zwave-js/cc/safe";
 import type {
 	CommandClasses,
 	MetadataUpdatedArgs,
@@ -19,6 +21,16 @@ import type {
 } from "@zwave-js/core";
 import type { ZWaveNode } from "./Node";
 import type { RouteStatistics } from "./NodeStatistics";
+
+export {
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+	FirmwareUpdateStatus,
+	MultilevelSwitchCommand,
+	Powerlevel,
+	PowerlevelTestStatus,
+} from "@zwave-js/cc/safe";
+export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
@@ -74,13 +86,15 @@ export type ZWaveInterviewFailedCallback = (
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,
-	sentFragments: number,
-	totalFragments: number,
+	__DEPRECATED__sentFragments: number,
+	__DEPRECATED__totalFragments: number,
+	progress: FirmwareUpdateProgress,
 ) => void;
 export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 	node: ZWaveNode,
-	status: FirmwareUpdateStatus,
-	waitTime?: number,
+	__DEPRECATED__status: FirmwareUpdateStatus,
+	__DEPRECATED__waitTime: number | undefined,
+	result: FirmwareUpdateResult,
 ) => void;
 export type ZWaveNodeStatusChangeCallback = (
 	node: ZWaveNode,
@@ -201,8 +215,6 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 }
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
-
-export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 
 /** Represents the result of one health check round of a node's lifeline */
 export interface LifelineHealthCheckResult {

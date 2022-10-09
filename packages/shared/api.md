@@ -141,7 +141,7 @@ export type JSONObject = Record<string, any>;
 // Warning: (ae-missing-release-tag) "keysOf" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function keysOf<T>(obj: T): (keyof T)[];
+export function keysOf<T extends {}>(obj: T): (keyof T)[];
 
 // Warning: (ae-missing-release-tag) "mergeDeep" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

@@ -1,0 +1,130 @@
+{
+	"$schema": "https://turborepo.org/schema.json",
+	"pipeline": {
+		"clean": {
+			"cache": false
+		},
+
+		"prebuild": {
+			// Prebuild tasks run before everything else
+			"dependsOn": ["^prebuild"]
+		},
+		"@zwave-js/maintenance#prebuild": {
+			// ... but the maintenance prebuild task has dependencies
+			"dependsOn": ["^build"]
+		},
+
+		"codegen": {
+			// Code generation for packages requires the packages' dependencies to be built
+			// and runs after the own prebuild
+			"dependsOn": ["^build", "prebuild"]
+		},
+		"@zwave-js/cc#codegen": {
+			"dependsOn": ["^build", "prebuild"],
+			"outputs": [
+				"src/cc/index.ts",
+				"src/lib/API.ts",
+				"src/lib/Values.ts"
+			]
+		},
+		"@zwave-js/config#codegen": {
+			"dependsOn": ["^build", "prebuild"],
+			"outputs": ["src/LogicParser.ts"]
+		},
+
+		"build": {
+			"dependsOn": ["^build", "prebuild", "codegen"],
+			// TODO: Figure out how to exclude test files from inputs
+			// :!:**/*.test.ts doesn't work
+			"inputs": [":!:**/*.test.ts", "src/**"],
+			"outputs": ["build/**", "*.tsbuildinfo"]
+		},
+
+		"lint": {
+			"dependsOn": [],
+			"inputs": [
+				// https://github.com/vercel/turborepo/issues/1407
+				":!:build/",
+				"**/*.{ts,json}",
+				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
+			],
+			"outputs": []
+		},
+		// Specific linting tasks: ESLint
+		"lint:ts": {
+			"dependsOn": [],
+			"inputs": [
+				// https://github.com/vercel/turborepo/issues/1407
+				":!:build/",
+				"**/*.{ts,json}",
+				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
+			],
+			"outputs": []
+		},
+		"lint:ts:fix": {
+			"dependsOn": []
+		},
+		// Specific linting tasks: Prettier
+		"lint:prettier": {
+			"dependsOn": [],
+			"inputs": [
+				// https://github.com/vercel/turborepo/issues/1407
+				":!:build/",
+				"**/*.{ts,json}",
+				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
+			],
+			"outputs": []
+		},
+		"lint:prettier:fix": {
+			"dependsOn": []
+		},
+		"lint:zwave": {
+			"dependsOn": ["build"],
+			"outputs": []
+		},
+
+		"extract-api": {
+			"dependsOn": ["build"],
+			"outputs": ["api.md"]
+		},
+
+		"test:ts": {
+			"dependsOn": ["^build"],
+			"inputs": ["src/**/*.ts"],
+			"outputs": [] // TODO: consider snapshot files
+		},
+
+		// For now, run tests in the root:
+		"//#test:ts": {
+			"dependsOn": ["zwave-js#build"],
+			"inputs": [
+				"jest.config.js",
+				"test/jest.*.{js,ts}",
+				"packages/*/src/**/*.ts"
+			],
+			"outputs": []
+		}
+	},
+	"globalDependencies": [
+		// Build fresh when dependencies change
+		"yarn.lock",
+		// Build fresh when TS related stuff changes
+		"tsconfig.json",
+		"tsconfig.build.json"
+	]
+}

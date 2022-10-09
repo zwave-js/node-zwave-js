@@ -6,7 +6,7 @@ import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
 import { ZWaveNode } from "../../node/Node";
 
-// repro from https://github.com/zwave-js/zwavejs2mqtt/issues/101#issuecomment-749007701
+// repro from https://github.com/zwave-js/zwave-js-ui/issues/101#issuecomment-749007701
 
 describe("regression tests", () => {
 	let driver: Driver;
