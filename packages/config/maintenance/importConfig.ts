@@ -393,6 +393,20 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 	 * Standardize things
 	 ********************/
 
+	// Sort parameters in only new files
+	if (config.isNewFile) {
+		if (config.paramInformation) {
+			config.paramInformation = config.paramInformation.sort(
+				(a: Record<string, any>, b: Record<string, any>) => {
+					const aNum = parseInt(a["#"], 10);
+					const bNum = parseInt(b["#"], 10);
+					return aNum - bNum;
+				},
+			);
+		}
+	}
+	delete config.isNewFile;
+
 	// Enforce top-level order
 	for (const l of topOrder) {
 		if (typeof config[l] === "undefined") {
@@ -847,6 +861,25 @@ async function parseZWAFiles(): Promise<void> {
 		}
 	}
 
+	// Check for missing fields and add placeholders if missing
+	for (const device of jsonData) {
+		if (!device.ManufacturerId) {
+			device.ManufacturerId = "0x9999";
+		}
+
+		if (!device.Brand) {
+			device.Brand = "Unknown";
+		}
+
+		if (!device.ProductTypeId) {
+			device.ProductTypeId = "0x9999";
+		}
+
+		if (!device.ProductId) {
+			device.ProductId = "0x9999";
+		}
+	}
+
 	// Combine provided files within models
 	jsonData = combineDeviceFiles(jsonData);
 
@@ -866,8 +899,12 @@ async function parseZWAFiles(): Promise<void> {
 			configManager.lookupManufacturer(manufacturerId);
 
 		// Add the manufacturer to our manufacturers.json if it is missing
-		if (Number.isNaN(manufacturerId)) {
-		} else if (manufacturerName === undefined && file.Brand !== undefined) {
+		if (
+			!Number.isNaN(manufacturerId) &&
+			file.ManufacturerId !== "0x9999" &&
+			manufacturerName === undefined &&
+			file.Brand !== undefined
+		) {
 			console.log(`Adding missing manufacturer: ${file.Brand}`);
 			configManager.setManufacturer(manufacturerId, file.Brand);
 		}
@@ -1176,7 +1213,7 @@ async function parseZWAProduct(
 	// any products descriptions have productName in it, remove it
 	const productName = product.Name.replace(productLabel, "");
 
-	// Format the device IDs like we expect them
+	// Format the manufacturer IDs like we expect them
 
 	let manufacturerIdHex = product.ManufacturerId.replace(/^0x/, "");
 	manufacturerIdHex = formatId(manufacturerIdHex);
@@ -1286,6 +1323,7 @@ async function parseZWAProduct(
 	}
 
 	const newConfig: Record<string, any> = {
+		isNewFile: typeof existingDevice === "undefined",
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
@@ -1532,9 +1570,21 @@ async function parseZWAProduct(
 	const manufacturerDir = path.join(processedDir, manufacturerIdHex);
 	await fs.ensureDir(manufacturerDir);
 
+	let output = JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
+
+	// Insert a TODO comment if necessary
+	if (
+		newConfig.devices.filter(
+			(d) => d.productType === "0x9999" || d.productId === "0x9999",
+		).length > 0 ||
+		newConfig.manufacturerIdHex === "0x9999"
+	) {
+		output =
+			"// TODO: This file contains a placeholder for a productType, productID, or manufacturerId (0x9999) that must be corrected.\n" +
+			output;
+	}
+
 	// Write the file
-	const output =
-		JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
 	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
