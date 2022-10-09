@@ -3,7 +3,7 @@
 		"scope": "json,jsonc",
 		"prefix": ["Insert Master Template Reference from Clipboard"],
 		"body": [
-			"\"$import\": \"~/templates/master_template.json#$CLIPBOARD\","
+			"\"\\$import\": \"~/templates/master_template.json#$CLIPBOARD\","
 		],
 		"description": "Import reference for master template using the clipboard"
 	},
@@ -11,7 +11,7 @@
 		"scope": "json,jsonc",
 		"prefix": ["Insert Master Template Reference"],
 		"body": [
-			"\"$import\": \"~/templates/master_template.json#${1:base_enable_disable}\","
+			"\"\\$import\": \"~/templates/master_template.json#${1:base_enable_disable}\","
 		],
 		"description": "Import reference for master template"
 	},
@@ -19,7 +19,7 @@
 		"scope": "json,jsonc",
 		"prefix": ["Insert Manufacturer Template Reference"],
 		"body": [
-			"\"$import\": \"templates/${1:manufacturer}_template.json#${template}\","
+			"\"\\$import\": \"templates/${1:manufacturer}_template.json#${template}\","
 		],
 		"description": "Import reference for master template"
 	},
@@ -27,7 +27,7 @@
 		"scope": "json,jsonc",
 		"prefix": ["Insert Manufacturer Template Reference from Clipboard"],
 		"body": [
-			"\"$import\": \"templates/${1:manufacturer}_template.json#$CLIPBOARD\","
+			"\"\\$import\": \"templates/${1:manufacturer}_template.json#$CLIPBOARD\","
 		],
 		"description": "Import reference for master template using the clipboard"
 	},
