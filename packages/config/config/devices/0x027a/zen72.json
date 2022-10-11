@@ -129,6 +129,11 @@
 			"#": "29",
 			"$if": "firmwareVersion >= 10.10",
 			"$import": "templates/zooz_template.json#zwave_off_dimmer_ramp_rate"
+		},
+		{
+			"#": "30",
+			"$if": "firmwareVersion >= 10.10",
+			"$import": "templates/zooz_template.json#local_dimming_speed_group_3_and_4"
 		}
 	],
 	"compat": {

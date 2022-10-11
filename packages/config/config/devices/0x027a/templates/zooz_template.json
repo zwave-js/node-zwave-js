@@ -393,6 +393,16 @@
 		"defaultValue": 5,
 		"unsigned": true
 	},
+	"local_dimming_speed_group_3_and_4": {
+		"label": "Local Dimming Speed (Dimmer and Group 3 and 4)",
+		"description": "The time it takes to get from 0% to 100% brightness of dimmer and smart bulbs associated with Group 3 and 4 when pressing and holding the paddle.",
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 5,
+		"unsigned": true
+	},
 	"night_light_mode": {
 		"label": "Night Light Mode",
 		"description": "Set the brightness level the dimmer will turn on to when off and when lower paddle is held down for one second.",
