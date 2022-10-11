@@ -5,6 +5,7 @@ import {
 	CommandClass,
 	CRC16CC,
 	DeviceResetLocallyCCNotification,
+	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	getImplementedVersion,
 	ICommandClassContainer,
@@ -1931,40 +1932,71 @@ export class Driver
 		this.checkAllNodesReady();
 	}
 
-	/** This is called when a node's firmware was updated */
+	/**
+	 * Returns the time in seconds to actually wait after a firmware upgrade, depending on what the device said.
+	 * This number will always be a bit greater than the advertised duration, because devices have been found to take longer to actually reboot.
+	 */
+	public getConservativeWaitTimeAfterFirmwareUpdate(
+		advertisedWaitTime: number | undefined,
+	): number {
+		// Wait the specified time plus a bit, so the device is actually ready to use
+		if (!advertisedWaitTime) {
+			// Wait at least 5 seconds
+			return 5;
+		} else if (advertisedWaitTime < 20) {
+			return advertisedWaitTime + 5;
+		} else if (advertisedWaitTime < 60) {
+			return advertisedWaitTime + 10;
+		} else {
+			return advertisedWaitTime + 30;
+		}
+	}
+
+	/** This is called when the firmware on one of a node's firmware targets was updated */
 	private async onNodeFirmwareUpdated(
 		node: ZWaveNode,
-		status: FirmwareUpdateStatus,
-		waitTime?: number,
+		_status: FirmwareUpdateStatus,
+		_waitTime: number | undefined,
+		result: FirmwareUpdateResult,
 	): Promise<void> {
-		// Don't do this for non-successful updates
-		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
+		const { success, reInterview } = result;
+
+		// Nothing to do for non-successful updates
+		if (!success) return;
 
 		// TODO: Add support for delayed activation
 
-		// Wait the specified time plus a bit, so the device is actually ready to use
-		if (!waitTime) {
-			// Wait at least 5 seconds
-			waitTime = 5;
-		} else if (waitTime < 20) {
-			waitTime += 5;
-		} else if (waitTime < 60) {
-			waitTime += 10;
+		// Reset nonces etc. to prevent false-positive duplicates after the update
+		this.securityManager?.deleteAllNoncesForReceiver(node.id);
+		this.securityManager2?.deleteNonce(node.id);
+
+		// waitTime should always be defined, but just to be sure
+		const waitTime = result.waitTime ?? 5;
+
+		if (reInterview) {
+			this.controllerLog.logNode(
+				node.id,
+				`Firmware updated, scheduling interview in ${waitTime} seconds...`,
+			);
+			// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
+			this.retryNodeInterviewTimeouts.set(
+				node.id,
+				setTimeout(() => {
+					this.retryNodeInterviewTimeouts.delete(node.id);
+					void node.refreshInfo({
+						// After a firmware update, we need to refresh the node info
+						waitForWakeup: false,
+					});
+				}, waitTime * 1000).unref(),
+			);
 		} else {
-			waitTime += 30;
-		}
-
-		if (status === FirmwareUpdateStatus.OK_NoRestart) {
-			// This status MUST not be advertised for target 0.
-			// Other chips should probably advertise this if they aren't mission critical.
-
-			// Treat this as a sign that the device continues working as before
 			this.controllerLog.logNode(
 				node.id,
 				`Firmware updated. No restart or re-interview required. Refreshing version information in ${waitTime} seconds...`,
 			);
 
 			await wait(waitTime * 1000, true);
+
 			try {
 				const versionAPI = node.commandClasses.Version;
 				await versionAPI.get();
@@ -1981,29 +2013,7 @@ export class Driver
 			} catch {
 				// ignore
 			}
-
-			return;
 		}
-
-		this.controllerLog.logNode(
-			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
-		);
-		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
-		this.retryNodeInterviewTimeouts.set(
-			node.id,
-			setTimeout(() => {
-				this.retryNodeInterviewTimeouts.delete(node.id);
-				void node.refreshInfo({
-					// After a firmware update, we need to refresh the node info
-					waitForWakeup: false,
-				});
-			}, waitTime * 1000).unref(),
-		);
-
-		// Reset nonces etc. to prevent false-positive duplicates after the update
-		this.securityManager?.deleteAllNoncesForReceiver(node.id);
-		this.securityManager2?.deleteNonce(node.id);
 	}
 
 	/** This is called when a node emits a `"notification"` event */

@@ -609,6 +609,7 @@ export interface CCValues {
 	"Scene Activation": typeof import("../cc/SceneActivationCC").SceneActivationCCValues;
 	"Scene Actuator Configuration": typeof import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCValues;
 	"Scene Controller Configuration": typeof import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCValues;
+	"Schedule Entry Lock": typeof import("../cc/ScheduleEntryLockCC").ScheduleEntryLockCCValues;
 	"Sound Switch": typeof import("../cc/SoundSwitchCC").SoundSwitchCCValues;
 	Supervision: typeof import("../cc/SupervisionCC").SupervisionCCValues;
 	"Thermostat Fan Mode": typeof import("../cc/ThermostatFanModeCC").ThermostatFanModeCCValues;
