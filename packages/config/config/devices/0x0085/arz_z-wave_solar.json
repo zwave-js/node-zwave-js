@@ -8,6 +8,11 @@
 			// Solar variant of ARZ Z-Wave
 			"productType": "0x0003",
 			"productId": "0x0112"
+		},
+		{
+			// Solar variant of ARZ Z-Wave/102
+			"productType": "0x0003",
+			"productId": "0x0012"
 		}
 	],
 	"firmwareVersion": {
