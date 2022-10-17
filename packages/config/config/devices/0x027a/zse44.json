@@ -331,7 +331,7 @@
 			"minValue": 0,
 			"maxValue": 480,
 			"defaultValue": 240,
-			"unsigned": true
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -347,7 +347,7 @@
 			"minValue": 0,
 			"maxValue": 480,
 			"defaultValue": 240,
-			"unsigned": true
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
