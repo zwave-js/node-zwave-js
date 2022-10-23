@@ -1,0 +1,152 @@
+// TODO: This file contains a placeholder for a productType, productID, or manufacturerId (0x9999) that must be corrected.
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA042",
+	"description": "Outdoor Smart Plug",
+	"devices": [
+		{
+			"productType": "0x9999",
+			"productId": "0x0103",
+			"zwaveAllianceId": 4629
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Reaction of Led",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Night LED On Time",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2359296,
+			"defaultValue": 1572864,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Night LED Off Time",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2359296,
+			"defaultValue": 393216,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Indicator Play Duration",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Indicator Speed",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Control Turn Off",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Restore Status After Power Failure",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "30",
+			"label": "Alarm Setting",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "31",
+			"label": "Alarm Response in Device",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "32",
+			"label": "Alarm Disable Setting",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "40",
+			"label": "Auto Turn Off Timer",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "41",
+			"label": "Auto Turn On Timer",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Tap the button on device once",
+		"exclusion": "Tap the button on device twice",
+		"reset": "Press and hold the button for 20s.\n\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}
