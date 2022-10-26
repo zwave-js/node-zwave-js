@@ -89,11 +89,22 @@
 		},
 		{
 			"#": "5",
+			"$if": " firmwareVersion < 1.57",
 			"label": "Minimum Dim Level",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"$if": " firmwareVersion >= 1.57",
+			"label": "Minimum Dim Level",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
 			"defaultValue": 1
 		},
 		{
