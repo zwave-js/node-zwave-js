@@ -1,0 +1,347 @@
+{
+	"manufacturer": "wiDom",
+	"manufacturerId": "0x0149",
+	"label": "C7",
+	"description": "Energy Driven Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0009"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "21",
+			"label": "OUT_TYPE",
+			"description": "Define the output type.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "direct load control or normally Open relay",
+					"value": 0
+				},
+				{
+					"label": "normally Closed relay",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "23",
+			"label": "STARTUP_OUT",
+			"description": "Define the output level on startup.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "Previous status",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "31",
+			"label": "OFF_TIMEOUT",
+			"description": "Time in tenth of second after which the output will be switched Off.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 360000,
+			"defaultValue": 0
+		},
+		{
+			"#": "32",
+			"label": "ON_TIMEOUT",
+			"description": "Time in tenth of second after which the output will be switched On.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 360000,
+			"defaultValue": 0
+		},
+		{
+			"#": "40",
+			"label": "UP_POWER_LOCAL_CONTROL",
+			"description": "The value used to control the integrated Relay in case of Up Power Event.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "41",
+			"label": "DOWN_POWER_LOCAL_CONTROL",
+			"description": "The value used to control the integrated Relay in case of Down Power Event",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "42",
+			"label": "METER_TYPE",
+			"description": "Defines how positive and negative power is treated",
+			"valueSize": 1,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "as is (The device is connected in a bidirectional system and you want to measure consumed and produced energy)",
+					"value": 0
+				},
+				{
+					"label": "negative value is considered 0 (The device is connected in a bidirectional system, but you are interested only in consumed energy)",
+					"value": 1
+				},
+				{
+					"label": "positive value is considered 0 (The device is connected in a bidirectional system, but you are interested only in produced energy)",
+					"value": 2
+				},
+				{
+					"label": "All values are considered positive (The device is connected in a system that only consumes Energy)",
+					"value": 3
+				},
+				{
+					"label": "All values are considered negative (The device is connected in a system that only produces Energy)",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "43",
+			"label": "CT_TYPE",
+			"description": "Define the Model of Current Transformer connected to the device",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard Type",
+					"value": 1
+				},
+				{
+					"label": "Type 2 version",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "44",
+			"label": "UP_POWER_REMOTE_CONTROL",
+			"description": "The value used to control Up Power Group (where 0 equals OFF and 100 equals ON)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "45",
+			"label": "DOWN_POWER_REMOTE_CONTROL",
+			"description": "The value used to control Down Power Group (where 0 equals OFF and 100 equals ON)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		{
+			"#": "46",
+			"label": "OVER_VOLTAGE_LIMIT",
+			"description": "Define the Over Voltage Limit in tenth of volt",
+			"valueSize": 2,
+			"minValue": 900,
+			"maxValue": 2530,
+			"defaultValue": 2530
+		},
+                {
+			"#": "47",
+			"label": "DOWN_VOLTAGE_LIMIT",
+			"description": "Define the Down Voltage Limit in tenth of volt",
+			"valueSize": 2,
+			"minValue": 900,
+			"maxValue": 2530,
+			"defaultValue": 2070
+                },
+                {
+			"#": "50",
+			"label": "UP_POWER_LEVEL",
+			"description": "Sets the level of Watts beyond which time of permanence above this level is calculated (where 0 equals Up Power Event Disabled)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 100000,
+			"defaultValue": 0
+                },
+		{
+			"#": "51",
+			"label": "UP_POWER_TYPE",
+			"description": "Defines if the Up Power is consumed or produced",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Consumed",
+					"value": 0
+				},
+				{
+					"label": "Produced",
+					"value": 1
+				}
+			]
+		},
+                {
+			"#": "52",
+			"label": "UP_POWER_FIRST_TIMEOUT",
+			"description": "Defines the time of permanence in seconds above the Up power level after which the First Up Power event occurs",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 7200,
+			"defaultValue": 30
+                },
+                {
+			"#": "53",
+			"label": "UP_POWER_NEXT_TIMEOUT",
+			"description": "Defines the time of permanence in seconds above the Up power level after which the Next Up Power event occurs",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 7200,
+			"defaultValue": 5
+                },
+                {
+			"#": "54",
+			"label": "DOWN_POWER_LEVEL",
+			"description": "Sets the level of Watts beyond which time of permanence below this level is calculated (where 0 equals Down Power Event Disabled)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 100000,
+			"defaultValue": 0
+                },
+		{
+			"#": "55",
+			"label": "DOWN_POWER_TYPE",
+			"description": "Defines if the Down Power is consumed or produced",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Consumed",
+					"value": 0
+				},
+				{
+					"label": "Produced",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "56",
+			"label": "DOWN_POWER_FIRST_TIMEOUT",
+			"description": "Defines the time of permanence in seconds below the Down Power level after which the first Down Power event occurs",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 7200,
+			"defaultValue": 30
+		},
+		{
+			"#": "57",
+			"label": "DOWN_POWER_NEXT_TIMEOUT",
+			"description": "Defines the time of permanence in seconds below the Down Power level after which the next Up Down event occurs",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 7200,
+			"defaultValue": 5
+		},
+		{
+			"#": "58",
+			"label": "PROTECTION_TIME",
+			"description": "Define the minimum time is seconds, after which an Up/Down Power Event can be triggered again",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 3600,
+			"defaultValue": 60
+		},
+		{
+			"#": "71",
+			"label": "METER_REPORT_MAX_DELAY",
+			"description": "The Maximum Time in minutes after which the next Meter sequence report will be sent",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		{
+			"#": "75",
+			"label": "METER_ISTANT_REPORT",
+			"description": "The percentage of Power change from the last sent report that triggers a new meter report sequence (where 0 equals no report is sent for any power change)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20
+		},
+		{
+			"#": "76",
+			"label": "REPORT_CONFIG",
+			"description": "Define which Report scale will be sent. If you want to receive more than 1 scale, the value for the configuration parameter is the sum of the event values (117 to receive all reports)",
+			"valueSize": 1,
+			"defaultValue": 117,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "none",
+					"value": 0
+				},
+				{
+					"label": "Energy",
+					"value": 1
+				},
+				{
+					"label": "Power",
+					"value": 4
+				},
+				{
+					"label": "Voltage",
+					"value": 16
+				},
+				{
+					"label": "Current",
+					"value": 32
+				},
+				{
+					"label": "Power Factor",
+					"value": 64
+				}
+			]
+		}
+	]
+}
