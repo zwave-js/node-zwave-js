@@ -303,7 +303,7 @@ export class IndicatorCCAPI extends CCAPI {
 	 * Instructs the node to identify itself. Available starting with V3 of this CC.
 	 */
 	public async identify(): Promise<SupervisionResult | undefined> {
-		if (this.version <= 3) {
+		if (this.version < 3) {
 			throw new ZWaveError(
 				`The identify command is only supported in Version 3 and above`,
 				ZWaveErrorCodes.CC_NotSupported,
