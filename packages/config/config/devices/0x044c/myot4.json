@@ -15,7 +15,7 @@
 	},
 	"paramInformation": [
 		{
-			"#": "31",
+			"#": "30",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Summer Mode",
 			"description": "Turn heating on/off"
@@ -37,7 +37,7 @@
 			"readOnly": true
 		},
 		{
-			"#": "30",
+			"#": "31",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Domestic Hot Water"
 		},
