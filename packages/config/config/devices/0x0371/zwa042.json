@@ -1,0 +1,308 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA042",
+	"description": "Outdoor Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x002a",
+			"zwaveAllianceId": 4629
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Night light mode",
+					"value": 1
+				},
+				{
+					"label": "On when load is on",
+					"value": 2
+				},
+				{
+					"label": "On when load is off",
+					"value": 3
+				},
+				{
+					"label": "Always on",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Night Light: On Time",
+			"description": "Set in hex format: 0x00HHMMSS",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 1572864,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Night Light: Off Time",
+			"description": "Set in hex format: 0x00HMMSS",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 393216,
+			"unsigned": true
+		},
+		{
+			"#": "40",
+			"label": "Auto Off Timer",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "41",
+			"label": "Auto On Timer",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "LED Indicator: Strobe Duration",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "LED Indicator: Strobe Frequency",
+			"description": "Sets the blinks per second",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Local & Z-Wave Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Disable local control, allow inclusion/exclusion",
+					"value": 1
+				},
+				{
+					"label": "Disable local and Z-Wave control, allow inclusion/exclusion",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
+		},
+		{
+			"#": "30[0x01]",
+			"label": "React to Alarm: Smoke",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "30[0x02]",
+			"label": "React to Alarm: CO",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "30[0x04]",
+			"label": "React to Alarm: CO2",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "30[0x08]",
+			"label": "React to Alarm: Heat",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "30[0x10]",
+			"label": "React to Alarm: Water",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "30[0x20]",
+			"label": "React to Alarm: Access Control",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "30[0x40]",
+			"label": "React to Alarm: Home Security",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "30[0x80]",
+			"label": "React to Alarm: Motion Sensor",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "31",
+			"label": "Alarm Response: Action",
+			"description": "3-255 sets flash duration in 0.1 second increments",
+			"valueSize": 1,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				},
+				{
+					"label": "Turn off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Alarm Response: Disable Method",
+			"description": "5-255 sets alarm response duration",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "1x button press",
+					"value": 0
+				},
+				{
+					"label": "2x button press",
+					"value": 1
+				},
+				{
+					"label": "4x button press",
+					"value": 2
+				},
+				{
+					"label": "Hold button for 10 seconds",
+					"value": 3
+				},
+				{
+					"label": "Z-Wave commands",
+					"value": 4
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Tap the button on device once",
+		"exclusion": "Tap the button on device twice",
+		"reset": "Press and hold the button for 20s.\n\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://aeotec.freshdesk.com/support/solutions/articles/6000257262-outdoor-smart-plug-user-guide-"
+	}
+}

@@ -1,52 +1,22 @@
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRC216-ZW3",
-	"description": "Interconnected Z-Wave Enabled Keypad Deadbolt",
+	"label": "YRL256",
+	"description": "Assure Lever Lock",
 	"devices": [
 		{
-			"productType": "0x8004",
-			"productId": "0x46c1",
-			"zwaveAllianceId": 4097
+			"productType": "0x800c",
+			"productId": "0x4f00"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 3,
-			"isLifeline": true
-		}
-	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Volume",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "High",
-					"value": 1
-				},
-				{
-					"label": "Medium",
-					"value": 2
-				},
-				{
-					"label": "Low",
-					"value": 3
-				}
-			]
+			"$import": "templates/yale_template.json#volume"
 		},
 		{
 			"#": "2",
@@ -54,11 +24,11 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/yale_template.json#auto_relock_time_127"
+			"$import": "templates/yale_template.json#auto_relock_time_180"
 		},
 		{
 			"#": "4",
-			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
+			"$import": "templates/yale_template.json#wrong_code_limit_10"
 		},
 		{
 			"#": "5",
@@ -66,7 +36,7 @@
 		},
 		{
 			"#": "7",
-			"$import": "templates/yale_template.json#wrong_code_lockout_0_to_127"
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
 		},
 		{
 			"#": "8",
@@ -86,17 +56,46 @@
 		},
 		{
 			"#": "15",
-			"$import": "templates/yale_template.json#reset_factory_255"
-		},
-		{
-			"#": "6",
-			"$import": "templates/yale_template.json#wrong_code_lockout_0_to_127"
+			"$import": "templates/yale_template.json#reset_factory"
 		}
 	],
+	"compat": {
+		"alarmMapping": [
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_limit"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_manual_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rf_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_manual_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rf_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_deadbolt_jammed"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_low_battery"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_auto_relock"
+			}
+		]
+	},
 	"metadata": {
 		"inclusion": "Install Yale Smart Module into slot above battery compartment\nIMPORTANT: Batteries must be removed before inserting Yale Smart Module:\n• Remove battery cover\n• Remove batteries\n• Insert Yale Smart Module\n• Reinstall batteries\n• Reinstall battery cover\n2. Open Z-Wave system's smart home or alarm app on your smartphone or tablet\n3. If you have Smart Start* enabled with your Z-Wave System follow in-app prompts to add a new device\nIf you don't have smart start or are not sure, follow steps 4 - 6\n4. On your lock keypad, enter your master entry code followed by the gear icon\n5. Press the 7 key followed by the gear icon\n6. Press the 1 key followed by the gear icon",
 		"exclusion": "Open Z-Wave system's smart home or alarm app and follow instructions for removing a device\n2. On your lock keypad, enter your master entry code followed by the icon\n3. Press the 7 key followed by the gear icon\n4. Press the 3 key followed by the gear icon",
-		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4097/YRC216%20Manual%20(1).pdf"
+		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }
