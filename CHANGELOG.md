@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.3.1 (2022-11-12)
 ### Bugfixes
 * Mark Indicator Identify command as supported for CC v3 (#5195)
 
