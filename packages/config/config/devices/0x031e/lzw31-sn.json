@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "5",
-			"$if": " firmwareVersion < 1.57",
+			"$if": "firmwareVersion < 1.57",
 			"label": "Minimum Dim Level",
 			"unit": "%",
 			"valueSize": 1,
@@ -99,7 +99,7 @@
 		},
 		{
 			"#": "5",
-			"$if": " firmwareVersion >= 1.57",
+			"$if": "firmwareVersion >= 1.57",
 			"label": "Minimum Dim Level",
 			"unit": "%",
 			"valueSize": 1,
