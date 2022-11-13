@@ -72,8 +72,8 @@
 			"label": "Motion Retrigger Timeout",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 30,
-			"maxValue": 3600,
+			"minValue": 0,
+			"maxValue": 30,
 			"defaultValue": 30,
 			"unsigned": true
 		},
