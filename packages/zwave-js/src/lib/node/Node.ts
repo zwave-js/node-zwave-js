@@ -3709,11 +3709,8 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Don't let two firmware updates happen in parallel
 		if (this.driver.controller.isAnyOTAFirmwareUpdateInProgress()) {
-			const message =
-				"Failed to start the update: A firmware update is already in progress on this network!";
-			this.driver.controllerLog.print(message, "error");
 			throw new ZWaveError(
-				message,
+				`Failed to start the update: A firmware update is already in progress on this network!`,
 				ZWaveErrorCodes.Firmware_Update_In_Progress_Error,
 			);
 		}
@@ -3899,11 +3896,8 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Don't let two firmware updates happen in parallel
 		if (this.driver.controller.isAnyOTAFirmwareUpdateInProgress()) {
-			const message =
-				"Failed to start the update: A firmware update is already in progress on this network!";
-			this.driver.controllerLog.print(message, "error");
 			throw new ZWaveError(
-				message,
+				`Failed to start the update: A firmware update is already in progress on this network!`,
 				ZWaveErrorCodes.Firmware_Update_In_Progress_Error,
 			);
 		}

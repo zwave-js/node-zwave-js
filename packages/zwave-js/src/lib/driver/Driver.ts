@@ -2247,8 +2247,7 @@ export class Driver
 		}
 
 		if (this._controller!.isAnyOTAFirmwareUpdateInProgress()) {
-			const message =
-				"Failed to soft reset controller: A firmware update is in progress on this network.";
+			const message = `Failed to soft reset controller: A firmware update is in progress on this network.`;
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
@@ -2416,8 +2415,7 @@ export class Driver
 		this.ensureReady(true);
 
 		if (this._controller!.isAnyOTAFirmwareUpdateInProgress()) {
-			const message =
-				"Failed to hard reset controller: A firmware update is in progress on this network.";
+			const message = `Failed to hard reset controller: A firmware update is in progress on this network.`;
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,

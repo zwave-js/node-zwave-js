@@ -4593,8 +4593,7 @@ ${associatedNodes.join(", ")}`,
 	): Promise<void> {
 		// Don't let two firmware updates happen in parallel
 		if (this.isAnyOTAFirmwareUpdateInProgress()) {
-			const message =
-				"Failed to start the update: A firmware update is already in progress on this network!";
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
 			this.driver.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
@@ -4662,8 +4661,7 @@ ${associatedNodes.join(", ")}`,
 
 		// Don't let two firmware updates happen in parallel
 		if (this.isAnyOTAFirmwareUpdateInProgress()) {
-			const message =
-				"Failed to start the update: A firmware update is already in progress on this network!";
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
 			this.driver.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
