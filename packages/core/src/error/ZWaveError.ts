@@ -176,6 +176,9 @@ export enum ZWaveErrorCodes {
 	/** An firmware file with an unsupported format was provided */
 	Unsupported_Firmware_Format,
 
+	/** A firmware update is already in progress preventing this action from proceeding */
+	Firmware_Update_In_Progress_Error,
+
 	/** Unsupported target node for a powerlevel test */
 	PowerlevelCC_UnsupportedTestNode = 1600,
 }
