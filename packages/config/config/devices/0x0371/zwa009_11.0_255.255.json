@@ -224,7 +224,7 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "Set the controller in exclusion mode, then press the central button quickly three times in a row",
+		"inclusion": "Set the controller in inclusion mode, then press the central button quickly three times in a row",
 		"exclusion": "Set the controller in exclusion mode, then press the central button quickly three times in a row",
 		"wakeup": "Press the central button once",
 		"reset": "Keep the button pressed for 10 seconds. Then the green LED will start blinking. Release the button, when the LED stops blinking. Your device is reset to factory default now.",
