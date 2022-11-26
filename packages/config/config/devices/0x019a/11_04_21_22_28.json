@@ -203,6 +203,7 @@
 		"inclusion": "Place the controller into pairing or exclude mode and perform the \"wake up\" pattern as described below.\n1. Take the magnet and move it to the rounded edge and wait for the blink, then move the magnet away.\n2. Repeat this 3 times. A final short blink will confirm that the user-command was successful",
 		"exclusion": "Place the controller into exclude mode and perform the \"wake up\" pattern as described below.\n1. Take the magnet and move it to the rounded edge and wait for the blink, then move the magnet away.\n2. Repeat this 3 times. A final short blink will confirm that the user-command was successful",
 		"reset": "Follow the instructions for Wake Up above, but on the 3rd repetition, keep the magnet at the rounded edge for 10 seconds. A long LED signal indicates success",
+		"wakeup": "Place a magnet at the rounded edge. When the LED blinks, move the magnet away. Repeat a total of 3 times within 10 seconds, A LED blink indicates success.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4301/Strips%20Drip%20700%20manual.pdf"
 	}
 }
