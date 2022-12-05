@@ -1,0 +1,84 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YRD622-ZW2",
+	"description": "Assure Lock Touchscreen Deadbolt",
+	"devices": [
+		{
+			"productType": "0x8103",
+			"productId": "0x12d2",
+			"zwaveAllianceId": 4639
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "8",
+			"$import": "templates/yale_template.json#operating_mode"
+		},
+		{
+			"#": "13",
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "21",
+			"$import": "templates/yale_template.json#eco_mode"
+		},
+		{
+			"#": "11",
+			"$import": "templates/yale_template.json#one_touch"
+		},
+		{
+			"#": "12",
+			"$import": "templates/yale_template.json#privacy_button"
+		},
+		{
+			"#": "1",
+			"$import": "templates/yale_template.json#volume"
+		},
+		{
+			"#": "2",
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#auto_relock_time_180"
+		},
+		{
+			"#": "4",
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
+		},
+		{
+			"#": "7",
+			"$import": "templates/yale_template.json#wrong_code_lockout"
+		},
+		{
+			"#": "16",
+			"$import": "templates/yale_template.json#enable_escape_mode"
+		},
+		{
+			"#": "5",
+			"$import": "templates/yale_template.json#language"
+		},
+		{
+			"#": "15",
+			"$import": "templates/yale_template.json#reset_factory_255"
+		}
+	],
+	"metadata": {
+		"inclusion": "Enter the 4-8 master Pin code followed by the gear key.\nPress the 7 key followed by the gear key\nPress the 1 key followed by the gear key",
+		"exclusion": "Enter the 4-8 digit master pin code followed by the gear key\nPress the 7 key followed by the gear key\nPress the 3 key followed by the gear key",
+		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4639/Binder1.pdf"
+	}
+}
