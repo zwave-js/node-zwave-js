@@ -17,7 +17,7 @@
 		{
 			"#": "1",
 			"label": "Motion Sensitivity",
-                  "description": "The larger this value, the lower the sensitivity and the distance for motion detecting is closer",
+			"description": "The larger this value, the lower the sensitivity and the distance for motion detecting is closer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -26,7 +26,7 @@
 		{
 			"#": "2",
 			"label": "Motion Window Time",
-                  "description": "The specified time window in which the amount of pulses will trigger a motion event",
+			"description": "The specified time window in which the amount of pulses will trigger a motion event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -54,7 +54,7 @@
 		{
 			"#": "3",
 			"label": "Pulse Count",
-                  "description": "The amount of pulses during the specified time window which trigger a motion event",
+			"description": "The amount of pulses during the specified time window which trigger a motion event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
