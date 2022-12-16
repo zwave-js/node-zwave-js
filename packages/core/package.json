@@ -100,6 +100,6 @@
     "esbuild-register": "^3.3.3",
     "prettier": "^2.7.1",
     "sinon": "^14.0.0",
-    "typescript": "4.8.3"
+    "typescript": "4.9.4"
   }
 }

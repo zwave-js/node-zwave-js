@@ -52,8 +52,8 @@
     "@types/semver": "^7.3.12",
     "@types/source-map-support": "^0.5.6",
     "@types/ts-nameof": "^4.2.1",
-    "@typescript-eslint/eslint-plugin": "^5.37.0",
-    "@typescript-eslint/parser": "^5.37.0",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
@@ -86,9 +86,9 @@
     "semver": "^7.3.7",
     "source-map-support": "^0.5.21",
     "ts-nameof": "^5.0.0",
-    "ts-patch": "^2.0.2",
+    "ts-patch": "^2.1.0",
     "turbo": "1.5.2",
-    "typescript": "4.8.3",
+    "typescript": "4.9.4",
     "zwave-js": "workspace:*"
   },
   "resolutions": {

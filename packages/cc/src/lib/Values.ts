@@ -171,7 +171,7 @@ function defineStaticCCValue<
 		},
 		endpoint: (endpoint: number = 0) => {
 			if (!_blueprint.options.supportsEndpoints) endpoint = 0;
-			return { ...valueId, endpoint };
+			return { ...valueId, endpoint } as any;
 		},
 		is: (testValueId) => {
 			return (
@@ -229,7 +229,7 @@ function defineDynamicCCValue<
 			},
 			endpoint: (endpoint: number = 0) => {
 				if (!options.supportsEndpoints) endpoint = 0;
-				return { ...valueId, endpoint };
+				return { ...valueId, endpoint } as any;
 			},
 			get meta() {
 				return { ...ValueMetadata.Any, ...actualBlueprint.meta } as any;
