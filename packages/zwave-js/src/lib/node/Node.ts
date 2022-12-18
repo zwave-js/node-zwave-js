@@ -2913,10 +2913,13 @@ protocol version:      ${this.protocolVersion}`;
 		// It can happen that the node has not told us that it supports the Wake Up CC
 		// https://sentry.io/share/issue/6a681729d7db46d591f1dcadabe8d02e/
 		// To avoid a crash, mark it as supported
-		this.addCC(CommandClasses["Wake Up"], {
-			isSupported: true,
-			version: 1,
-		});
+		// Only add if Wake Up CC is currently marked as unsupported
+		if (this.getCCVersion(CommandClasses["Wake Up"]) == 0) {
+			this.addCC(CommandClasses["Wake Up"], {
+				isSupported: true,
+				version: 1,
+			});
+		}
 
 		this.markAsAwake();
 
