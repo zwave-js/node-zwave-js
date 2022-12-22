@@ -8,6 +8,11 @@
 			"productType": "0x4952",
 			"productId": "0x3135",
 			"zwaveAllianceId": 4143
+		},
+    {
+			"productType": "0x4952",
+			"productId": "0x3036",
+			"zwaveAllianceId": 4143
 		}
 	],
 	"firmwareVersion": {
