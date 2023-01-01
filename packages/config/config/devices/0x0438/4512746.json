@@ -1,0 +1,222 @@
+{
+	"manufacturer": "Namron",
+	"manufacturerId": "0x0438",
+	"label": "4512746",
+	"description": "Switch 16A",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0xd019"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Button 2",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Button 3",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button 4",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Saving load state before power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Shutoff load",
+					"value": 0
+				},
+				{
+					"label": "Turn on load",
+					"value": 1
+				},
+				{
+					"label": "Save load state before power failure",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Enable/disable to send the basic report to the Lifeline when the load state changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable to send Basic report",
+					"value": 0
+				},
+				{
+					"label": "Enable to send Basic report",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Enable/disable over current or over load protection, report alarm when the load is over 16A if enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "External switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Push button switch",
+					"value": 0
+				},
+				{
+					"label": "Normal on/off switch",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Added to and removed from a network through external\nswitch (when enabled this function, triple press the external\nswitch to be added to or removed from a network)\nNote: if this function is enabled, when triple press the\nswitch rapidly, the device will be set to inclusion or\nexclusion mode, then device status will not be reported\n(basic report) during this process.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Power change absolute threshold report, report when the power change value is over the threshold.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"unit": "W",
+			"options": [
+				{
+					"label": "Disable absolute threshold report function",
+					"value": 0
+				},
+				{
+					"label": "Value of the power change absolute threshold (1-255), if power change value is over the threshold value, report the power change value using METER_REPORT",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Current change absolute threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"unit": "0.1A",
+			"options": [
+				{
+					"label": "Disable absolute threshold function",
+					"value": 0
+				},
+				{
+					"label": "Value of the current change absolute threshold (1-255), if current change value is over the threshold value, report the current change value using METER_REPORT",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Voltage change absolute threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"unit": "V",
+			"options": [
+				{
+					"label": "Disable absolute threshold function",
+					"value": 0
+				},
+				{
+					"label": "Value of the voltage change absolute threshold (1-255), if voltage change value is over the threshold value, report the voltage change value using METER_REPORT",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Time cycle to report the values of energy consumption, voltage, current and load power actively",
+			"valueSize": 4,
+			"minValue": 60,
+			"maxValue": 2678400,
+			"defaultValue": 1800,
+			"unsigned": true,
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Value of the time cycle",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Triple press the action button on the switch, LED indicator will flash rapidly, it will set the switch into inclusion\nmode for 30 seconds, if there is no reply from the gateway, the device will quit inclusion mode after 30 seconds.\n2)When the value of parameter 5 is configured as 1, triple press the external switch rapidly within 1.5 seconds,\nLED indicator will flash rapidly, it will set the switch into inclusion mode for 30 seconds, if there is no reply from\nthe gateway, the device will quit inclusion mode after 30 seconds.\nThe LED indicator will stay solid on for 3 seconds if the device is added to the network successfully. The\nindicator will turn off if inclusion fails.",
+		"exclusion": "Triple press the action button on the switch, LED indicator will flash rapidly, it will set the switch into exclusion\nmode for 30 seconds, if there is no reply from the gateway, the device will quit exclusion mode after 30 seconds.\n2)When the value of parameter 5 is configured as 1, triple press the external switch rapidly within 1.5 seconds,\nLED indicator will flash rapidly, it will set the switch into exclusion mode for 30 seconds, if there is no reply from\nthe gateway, the device will quit exclusion mode after 30 seconds.",
+		"reset": "Press and hold down the action button for over 10 seconds, LED indicator flashes slowly, the switch will restart and reset to factory defaults.",
+		"manual": "https://www.elektroimportoren.no/docs/lib/4512746-Brukerveiledning-5.pdf"
+	}
+}
