@@ -45,6 +45,7 @@
 			"maxValue": 2,
 			"defaultValue": 2,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Shutoff load",
@@ -68,6 +69,7 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable to send Basic report",
@@ -87,6 +89,7 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -106,6 +109,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Push button switch",
@@ -119,12 +123,14 @@
 		},
 		{
 			"#": "7",
-			"label": "Added to and removed from a network through external\nswitch (when enabled this function, triple press the external\nswitch to be added to or removed from a network)\nNote: if this function is enabled, when triple press the\nswitch rapidly, the device will be set to inclusion or\nexclusion mode, then device status will not be reported\n(basic report) during this process.",
+			"label": "Added to and removed from a network through external switch.\nWhen enabled this function, triple press the external\nswitch to be added to or removed from a network",
+			"description": "Note: if this function is enabled, when triple press the\nswitch rapidly, the device will be set to inclusion or\nexclusion mode, then device status will not be reported\n(basic report) during this process.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -138,7 +144,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Power change absolute threshold report, report when the power change value is over the threshold.",
+			"label": "Power change absolute threshold report, report when the power change value is over the threshold.\n'0' disables threshold report function.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -151,7 +157,7 @@
 					"value": 0
 				},
 				{
-					"label": "Value of the power change absolute threshold (1-255), if power change value is over the threshold value, report the power change value using METER_REPORT",
+					"label": "Value of the power change absolute threshold (1-255), if power change value\nis over the threshold value, report the power change value using METER_REPORT",
 					"value": 255
 				}
 			]
@@ -198,19 +204,13 @@
 		},
 		{
 			"#": "13",
-			"label": "Time cycle to report the values of energy consumption, voltage, current and load power actively",
+			"label": "Time cycle to report the values of energy consumption, voltage,\ncurrent and load power actively",
 			"valueSize": 4,
 			"minValue": 60,
 			"maxValue": 2678400,
 			"defaultValue": 1800,
 			"unsigned": true,
-			"unit": "seconds",
-			"options": [
-				{
-					"label": "Value of the time cycle",
-					"value": 0
-				}
-			]
+			"unit": "seconds"
 		}
 	],
 	"metadata": {
