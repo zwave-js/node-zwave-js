@@ -515,6 +515,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this.driver.cacheSet(cacheKeys.controller.supportsSoftReset, value);
 	}
 
+	private _rfRegion: RFRegion | undefined;
+	/** Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet). This value is cached and can be changed through {@link setRFRegion}. */
+	public get rfRegion(): RFRegion | undefined {
+		return this._rfRegion;
+	}
+
 	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
@@ -881,6 +887,29 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					resp.success ? "successful" : "failed"
 				}...`,
 			);
+		}
+
+		// Also query the controller's current RF region if possible
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetRFRegion,
+			)
+		) {
+			this.driver.controllerLog.print(`Querying configured RF region...`);
+			const resp = await this.getRFRegion().catch(() => undefined);
+			if (resp != undefined) {
+				this.driver.controllerLog.print(
+					`The controller is using RF region ${getEnumMemberName(
+						RFRegion,
+						resp,
+					)}`,
+				);
+			} else {
+				this.driver.controllerLog.print(
+					`Querying the RF region failed!`,
+					"warn",
+				);
+			}
 		}
 
 		// find the SUC
@@ -3698,6 +3727,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		if (result.success) await this.driver.trySoftReset();
+		this._rfRegion = region;
 		return result.success;
 	}
 
@@ -3713,6 +3743,7 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
 		}
+		this._rfRegion = result.region;
 		return result.region;
 	}
 
