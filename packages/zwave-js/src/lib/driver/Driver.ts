@@ -2251,7 +2251,7 @@ export class Driver
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
-				ZWaveErrorCodes.Firmware_Update_In_Progress_Error,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
 			);
 		}
 
@@ -2419,7 +2419,7 @@ export class Driver
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
-				ZWaveErrorCodes.Firmware_Update_In_Progress_Error,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
 			);
 		}
 

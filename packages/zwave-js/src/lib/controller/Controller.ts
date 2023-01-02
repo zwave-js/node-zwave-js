@@ -4597,7 +4597,7 @@ ${associatedNodes.join(", ")}`,
 			this.driver.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
-				ZWaveErrorCodes.Firmware_Update_In_Progress_Error,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
 			);
 		}
 		const node = this.nodes.getOrThrow(nodeId);
@@ -4665,7 +4665,7 @@ ${associatedNodes.join(", ")}`,
 			this.driver.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
-				ZWaveErrorCodes.Firmware_Update_In_Progress_Error,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
 			);
 		}
 

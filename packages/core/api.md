@@ -2959,6 +2959,7 @@ export enum ZWaveErrorCodes {
     FirmwareUpdateCC_Busy = 1500,
     FirmwareUpdateCC_FailedToAbort = 1504,
     FirmwareUpdateCC_FailedToStart = 1503,
+    FirmwareUpdateCC_NetworkBusy = 1508,
     FirmwareUpdateCC_NotUpgradable = 1501,
     FirmwareUpdateCC_TargetNotFound = 1502,
     FirmwareUpdateCC_Timeout = 1505,

@@ -158,7 +158,7 @@ export enum ZWaveErrorCodes {
 	/** Gets thrown when parsing an invalid QR code */
 	Security2CC_InvalidQRCode,
 
-	/** The firmware update process is already active */
+	/** The firmware update process is already active on this node */
 	FirmwareUpdateCC_Busy = 1500,
 	/** The selected firmware target is not upgradable */
 	FirmwareUpdateCC_NotUpgradable,
@@ -176,8 +176,8 @@ export enum ZWaveErrorCodes {
 	/** An firmware file with an unsupported format was provided */
 	Unsupported_Firmware_Format,
 
-	/** A firmware update is already in progress preventing this action from proceeding */
-	Firmware_Update_In_Progress_Error,
+	/** A firmware update is already in progress on the network preventing this action from proceeding */
+	FirmwareUpdateCC_NetworkBusy,
 
 	/** Unsupported target node for a powerlevel test */
 	PowerlevelCC_UnsupportedTestNode = 1600,
