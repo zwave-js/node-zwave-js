@@ -22,9 +22,7 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
@@ -280,9 +278,7 @@ function visitTupleObjectType(
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
@@ -383,9 +379,7 @@ function visitArrayObjectType(
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
@@ -493,9 +487,7 @@ function visitRegularObjectType(
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
@@ -1096,11 +1088,9 @@ function visitTemplateLiteralType(
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
 					undefined,
 					f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-					undefined,
 				),
 			],
 			undefined,
@@ -1874,9 +1864,7 @@ export function visitUndefinedOrType(
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
