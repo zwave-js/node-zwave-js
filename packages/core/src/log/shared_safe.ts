@@ -88,6 +88,7 @@ export interface LogConfig {
 	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
+	numLogFiles: number;
 	nodeFilter?: number[];
 	filename: string;
 	forceConsole: boolean;
