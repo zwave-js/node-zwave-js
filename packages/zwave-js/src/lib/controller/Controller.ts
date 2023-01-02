@@ -4591,6 +4591,15 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 		update: FirmwareUpdateFileInfo,
 	): Promise<void> {
+		// Don't let two firmware updates happen in parallel
+		if (this.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
 		const node = this.nodes.getOrThrow(nodeId);
 
 		let firmware: Firmware;
@@ -4647,6 +4656,16 @@ ${associatedNodes.join(", ")}`,
 			throw new ZWaveError(
 				`At least one update must be provided`,
 				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Don't let two firmware updates happen in parallel
+		if (this.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
 			);
 		}
 
