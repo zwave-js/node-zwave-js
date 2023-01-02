@@ -324,7 +324,6 @@ export function createGenericAssertFunction(
 	return factory.createFunctionDeclaration(
 		undefined,
 		undefined,
-		undefined,
 		factory.createIdentifier("__assertType"),
 		undefined,
 		[

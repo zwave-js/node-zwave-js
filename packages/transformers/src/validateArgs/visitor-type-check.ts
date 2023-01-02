@@ -15,7 +15,6 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
-			undefined,
 			name,
 			undefined,
 			[
@@ -271,7 +270,6 @@ function visitTupleObjectType(
 		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
-			undefined,
 			name,
 			undefined,
 			[
@@ -370,7 +368,6 @@ function visitArrayObjectType(
 		const indexIdentifier = f.createIdentifier("i");
 
 		return f.createFunctionDeclaration(
-			undefined,
 			undefined,
 			undefined,
 			name,
@@ -478,7 +475,6 @@ function visitRegularObjectType(
 			: undefined;
 		const keyIdentifier = f.createIdentifier("key");
 		return f.createFunctionDeclaration(
-			undefined,
 			undefined,
 			undefined,
 			name,
@@ -1079,7 +1075,6 @@ function visitTemplateLiteralType(
 	);
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () =>
 		f.createFunctionDeclaration(
-			undefined,
 			undefined,
 			undefined,
 			name,
@@ -1855,7 +1850,6 @@ export function visitUndefinedOrType(
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 		const errorIdentifier = f.createIdentifier("error");
 		return f.createFunctionDeclaration(
-			undefined,
 			undefined,
 			undefined,
 			name,
