@@ -2246,7 +2246,7 @@ export class Driver
 			);
 		}
 
-		if (this._controller!.isAnyOTAFirmwareUpdateInProgress()) {
+		if (this._controller?.isAnyOTAFirmwareUpdateInProgress()) {
 			const message = `Failed to soft reset controller: A firmware update is in progress on this network.`;
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
@@ -2414,7 +2414,7 @@ export class Driver
 	public async hardReset(): Promise<void> {
 		this.ensureReady(true);
 
-		if (this._controller!.isAnyOTAFirmwareUpdateInProgress()) {
+		if (this.controller.isAnyOTAFirmwareUpdateInProgress()) {
 			const message = `Failed to hard reset controller: A firmware update is in progress on this network.`;
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
@@ -2424,8 +2424,8 @@ export class Driver
 		}
 
 		// Update the controller NIF prior to hard resetting
-		await this._controller!.setControllerNIF();
-		await this._controller!.hardReset();
+		await this.controller.setControllerNIF();
+		await this.controller.hardReset();
 
 		// Clean up
 		this.rejectTransactions(() => true, `The controller was hard-reset`);
