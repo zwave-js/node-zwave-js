@@ -71,7 +71,7 @@
     "ansi-colors": "^4.1.3",
     "fs-extra": "^10.1.0",
     "json-logic-js": "^2.0.2",
-    "json5": "^2.2.1",
+    "json5": "^2.2.2",
     "semver": "^7.3.7",
     "winston": "^3.8.2"
   },
