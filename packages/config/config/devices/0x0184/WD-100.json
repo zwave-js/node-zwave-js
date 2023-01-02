@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/master_template.json#dimming_timing",
+			"$import": "~/templates/master_template.json#dimming_timing",
 			"label": "Remote Dimming Step Duration"
 		},
 		{
@@ -35,7 +35,7 @@
 		},
 		{
 			"#": "10",
-			"$import": "templates/master_template.json#dimming_timing",
+			"$import": "~/templates/master_template.json#dimming_timing",
 			"label": "Local Dimming Step Duration"
 		}
 	],
