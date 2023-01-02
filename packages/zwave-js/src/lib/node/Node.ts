@@ -356,7 +356,7 @@ export class ZWaveNode
 	): void {
 		// Try to retrieve the speaking CC name
 		const outArg = nodeUtils.translateValueID(this.driver, this, arg);
-		// @ts-expect-error This can happen for value updated events
+		// This can happen for value updated events
 		if ("source" in outArg) delete outArg.source;
 
 		const loglevel = this.driver.getLogConfig().level;

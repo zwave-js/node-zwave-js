@@ -15,16 +15,13 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
-			undefined,
 			name,
 			undefined,
 			[
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
@@ -273,16 +270,13 @@ function visitTupleObjectType(
 		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
-			undefined,
 			name,
 			undefined,
 			[
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
@@ -376,16 +370,13 @@ function visitArrayObjectType(
 		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
-			undefined,
 			name,
 			undefined,
 			[
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
@@ -486,16 +477,13 @@ function visitRegularObjectType(
 		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
-			undefined,
 			name,
 			undefined,
 			[
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
@@ -1089,18 +1077,15 @@ function visitTemplateLiteralType(
 		f.createFunctionDeclaration(
 			undefined,
 			undefined,
-			undefined,
 			name,
 			undefined,
 			[
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
 					undefined,
 					f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-					undefined,
 				),
 			],
 			undefined,
@@ -1867,16 +1852,13 @@ export function visitUndefinedOrType(
 		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
-			undefined,
 			name,
 			undefined,
 			[
 				f.createParameterDeclaration(
 					undefined,
 					undefined,
-					undefined,
 					VisitorUtils.objectIdentifier,
-					undefined,
 					undefined,
 					undefined,
 				),
