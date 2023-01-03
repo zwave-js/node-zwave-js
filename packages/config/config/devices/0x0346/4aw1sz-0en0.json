@@ -1,0 +1,100 @@
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "4AW1SZ-0EN0",
+	"description": "Ring Retrofit Alarm Kit",
+	"devices": [
+		{
+			"productType": "0x0b01",
+			"productId": "0x0101",
+			"zwaveAllianceId": 3696
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Multi-channel association",
+			"maxNodes": 1
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Heartbeats",
+			"description": "Number of seconds between periodic battery reports. (heartbeats)",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 255,
+			"maxValue": 4200,
+			"defaultValue": 4200,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "One-time Wakeup Notification",
+			"description": "One-time wakeup notification. (in addition to normal wakeup notification)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Application Level Retries",
+			"description": "Number of application level retries after a failed transmission defined as either not acked or supervision report not returned when encapsulated",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Seconds to Sleep",
+			"description": "The minimum number of seconds to sleep between application level retries",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 6,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Application Retry Multiplier",
+			"description": "Application retry multiplier. the number of seconds between a current application retry is the count of retries multiplied by this number in seconds + a small random delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Wait For a Supervisory Report",
+			"description": "The number of milliseconds to wait for a supervisory report in response to a supervisory encapsulated get",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 500,
+			"maxValue": 5000,
+			"defaultValue": 1500,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Classic Inclusion Steps:\n1. Initiate add flow in the Ring Alarm mobile application – Follow the guided add flow instructions provided in the Ring Alarm Mobile application\n2. Select add manually and enter the 5 digit DSK pin found on the package of the Ring Alarm Retrofit Kit or the 5 digit DSK pin found on the inside of the top cover of the device.\n4. When the inclusion process in complete, the LED on the keypad will be solid green, then go out.\n\nSmart Start Inclusion Steps:\n1. Initiate add flow in the Ring Alarm mobile application – Follow the guided add flow instructions provided in the Ring Alarm Mobile application\n2. Scan the QR code found on the package of the Ring Alarm Retrofit Kit or the QR code found on the inside of the top cover of the device.\n4. When the inclusion process in complete, the LED on the keypad will be solid green, then go out",
+		"exclusion": "Exclusion Instructions:\n1. Initiate remove keypad flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device”\n2. Press and hold “1” key for three seconds\n3. When the exclusion process is complete, the LED on the keypad will be solid blue, then go out\n4. Test the Keypad. Any button presses would not beep",
+		"reset": "Ring Keypad – Reset\nFactory Default Instructions\n1. Press and hold “5” key and using a pointed end of a paperclip, gently press and release reset button via the reset pinhole found at the back of the keypad\n2. Red network LED at the top left-hand corner will start to blink rapidly\n3. Wait for the red LED to stop blinking then release the “5” key\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3696/Ring%20Retrofit%20Alarm%20Kit%20ZWave.pdf"
+	}
+}
