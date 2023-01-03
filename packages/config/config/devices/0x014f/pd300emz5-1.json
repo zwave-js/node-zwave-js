@@ -24,7 +24,8 @@
 		},
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#dim_step_zwave"
+			"$import": "templates/config_template.json#dim_step_zwave",
+			"valueSize": 2
 		},
 		{
 			"#": "8",
@@ -44,11 +45,13 @@
 		},
 		{
 			"#": "13",
-			"$import": "templates/config_template.json#report_interval"
+			"$import": "templates/config_template.json#report_interval",
+			"valueSize": 2
 		},
 		{
 			"#": "16",
-			"$import": "templates/config_template.json#dim_rate_manual"
+			"$import": "templates/config_template.json#dim_rate_manual",
+			"valueSize": 2
 		},
 		{
 			"#": "17",
@@ -56,7 +59,8 @@
 		},
 		{
 			"#": "18",
-			"$import": "templates/config_template.json#dim_rate_all"
+			"$import": "templates/config_template.json#dim_rate_all",
+			"valueSize": 2
 		}
 	]
 }
