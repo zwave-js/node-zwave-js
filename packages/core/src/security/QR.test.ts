@@ -111,3 +111,28 @@ test("QR code parsing -> Example case: Acme Light Dimmer w/o SmartStart", (t) =>
 		productId: 0x0003,
 	});
 });
+
+test("QR code parsing -> ignore surrounding whitespace", (t) => {
+	const result = parseQRCodeString(
+		"	900032782003515253545541424344453132333435212223242500100435301537022065520001000000300578  ",
+	);
+	t.deepEqual(result, {
+		version: QRCodeVersion.S2,
+		securityClasses: [
+			SecurityClass.S2_Unauthenticated,
+			SecurityClass.S2_Authenticated,
+		],
+		requestedSecurityClasses: [
+			SecurityClass.S2_Unauthenticated,
+			SecurityClass.S2_Authenticated,
+		],
+		dsk: "51525-35455-41424-34445-31323-33435-21222-32425",
+		applicationVersion: "2.66",
+		genericDeviceClass: 0x11,
+		specificDeviceClass: 0x01,
+		installerIconType: 0x0601,
+		manufacturerId: 0xfff0,
+		productType: 0x0064,
+		productId: 0x0003,
+	});
+});
