@@ -1,12 +1,12 @@
-import type {
-	Maybe,
-	MessageOrCCLogEntry,
-	MessageRecord,
-} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	MessageRecord,
 	parseBitMask,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -38,6 +38,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -162,11 +163,10 @@ export class EntryControlCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async setConfiguration(
 		keyCacheSize: number,
 		keyCacheTimeout: number,
-	) {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			EntryControlCommand,
 			EntryControlCommand.ConfigurationGet,
@@ -178,14 +178,7 @@ export class EntryControlCCAPI extends CCAPI {
 			keyCacheSize,
 			keyCacheTimeout,
 		});
-		const response =
-			await this.applHost.sendCommand<EntryControlCCConfigurationReport>(
-				cc,
-				this.commandOptions,
-			);
-		if (response) {
-			return pick(response, ["keyCacheSize", "keyCacheTimeout"]);
-		}
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -215,9 +208,17 @@ export class EntryControlCCAPI extends CCAPI {
 			}
 			keyCacheSize = oldKeyCacheSize;
 		}
-		await this.setConfiguration(keyCacheSize, keyCacheTimeout);
+		const result = await this.setConfiguration(
+			keyCacheSize,
+			keyCacheTimeout,
+		);
 
-		return undefined;
+		// Verify the change after a short delay, unless the command was supervised and successful
+		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+			this.schedulePoll({ property }, value, { transition: "fast" });
+		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -413,10 +414,19 @@ export class EntryControlCCNotification extends EntryControlCC {
 			"event type": this.eventType,
 		};
 		if (this.eventData) {
-			message["event data"] =
-				typeof this.eventData === "string"
-					? this.eventData
-					: buffer2hex(this.eventData);
+			switch (this.eventType) {
+				case EntryControlEventTypes.CachedKeys:
+				case EntryControlEventTypes.Enter:
+					// The event data is likely the user's PIN code, hide it from logs
+					message["event data"] = "*".repeat(this.eventData.length);
+					break;
+
+				default:
+					message["event data"] =
+						typeof this.eventData === "string"
+							? this.eventData
+							: buffer2hex(this.eventData);
+			}
 		}
 		return {
 			...super.toLogEntry(applHost),
@@ -595,7 +605,7 @@ interface EntryControlCCConfigurationSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(EntryControlCommand.ConfigurationSet)
-@expectedCCResponse(EntryControlCCConfigurationReport)
+@useSupervision()
 export class EntryControlCCConfigurationSet extends EntryControlCC {
 	public constructor(
 		host: ZWaveHost,

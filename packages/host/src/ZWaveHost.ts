@@ -67,7 +67,14 @@ export interface ZWaveHost {
 	 */
 	getNextCallbackId(): number;
 
+	/**
+	 * Returns the next session ID for supervised communication
+	 */
+	getNextSupervisionSessionId(): number;
+
 	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
+
+	__internalIsMockNode?: boolean;
 }
 
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */

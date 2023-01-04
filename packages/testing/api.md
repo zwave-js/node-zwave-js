@@ -4,42 +4,18 @@
 
 ```ts
 
-/// <reference types="jest" />
 /// <reference types="node" />
 
 import { CommandClasses } from '@zwave-js/core';
 import { CommandClassInfo } from '@zwave-js/core';
 import { FunctionType } from '@zwave-js/serial/safe';
-import type { ICommandClass } from '@zwave-js/core';
+import { ICommandClass } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import type { MockPortBinding } from '@zwave-js/serial/mock';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
-import Transport from 'winston-transport';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
-import type { ZWaveLogInfo } from '@zwave-js/core';
-
-// Warning: (ae-missing-release-tag) "assertLogInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function assertLogInfo(transport: SpyTransport, options: Partial<{
-    level: string;
-    predicate: (info: ZWaveLogInfo) => boolean;
-    callNumber: number;
-}>): void;
-
-// Warning: (ae-missing-release-tag) "assertMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function assertMessage(transport: SpyTransport, options: Partial<{
-    message: string;
-    predicate: (msg: string) => boolean;
-    ignoreColor: boolean;
-    ignoreTimestamp: boolean;
-    ignoreChannel: boolean;
-    callNumber: number;
-}>): void;
 
 // Warning: (ae-missing-release-tag) "createMockZWaveAckFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -188,6 +164,8 @@ export class MockNode {
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectControllerFrame<T extends MockZWaveFrame = MockZWaveFrame>(timeout: number, predicate: (msg: MockZWaveFrame) => msg is T): Promise<T>;
     // (undocumented)
+    readonly host: ZWaveHost;
+    // (undocumented)
     readonly id: number;
     // (undocumented)
     readonly implementedCCs: Map<CommandClasses, CommandClassInfo>;
@@ -258,20 +236,9 @@ export interface MockZWaveRequestFrame {
     type: MockZWaveFrameType.Request;
 }
 
-// Warning: (ae-missing-release-tag) "SpyTransport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export class SpyTransport extends Transport {
-    constructor();
-    // (undocumented)
-    log(info: any, next: () => void): any;
-    // (undocumented)
-    get spy(): jest.Mock;
-}
-
 // Warnings were encountered during analysis:
 //
-// src/MockNode.ts:46:3 - (ae-forgotten-export) The symbol "PartialCCCapabilities" needs to be exported by the entry point index.d.ts
+// src/MockNode.ts:54:3 - (ae-forgotten-export) The symbol "PartialCCCapabilities" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

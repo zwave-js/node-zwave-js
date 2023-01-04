@@ -1,0 +1,55 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "35211 / ZW6302B",
+	"description": "Portable Motion+Temp+Light Sensor, 500S",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3033",
+			"zwaveAllianceId": 2189
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "6",
+			"$import": "templates/jasco_template.json#motion_sensor"
+		},
+		{
+			"#": "13",
+			"$import": "templates/jasco_template.json#pir_sensitivity"
+		},
+		{
+			"#": "18",
+			"$import": "templates/jasco_template.json#pir_timeout_duration"
+		},
+		{
+			"#": "20",
+			"$import": "templates/jasco_template.json#report_method"
+		},
+		{
+			"#": "24",
+			"label": "Temperature And Light Sensor Sensing Frequency",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unit": "minutes",
+			"unsigned": true
+		},
+		{
+			"#": "28",
+			"$import": "templates/jasco_template.json#led_indication"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add the device in the Z-Wave network.\n2. Once the controller is ready to add your\nmotion sensor, press and release the button\non the sensor to add it in the network.\n3. The blue LED will activate for 3 seconds to\nconfirm it has been included in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller\nto remove the device from the Z-Wave network.\n2. Once the controller is ready to remove your\nmotion sensor, press and release the button on\nthe sensor to exclude it from the network.\n3. The LED will blink for 3 seconds at a time.\n\nNOTE: If the sensor’s power source is changed\nafter initial setup (ex: USB power instead of\nbattery power), the sensor must be excluded\nfrom the network and then re-included",
+		"reset": "1. Press the button 10 times within 6 seconds\n(interval between 2 presses of the button\ncannot be longer than 1 second).\n2. The blue LED will blink for 3 seconds",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2189/35211%20QSG%20and%20Parameters.pdf"
+	}
+}

@@ -137,11 +137,9 @@
 		{
 			"#": "6",
 			"label": "Low Temperature Basic Set Threshold",
-			"description": "Allowable Range: 200-1000.",
 			"unit": "0.1 °(C/F)",
-			"unsigned": true,
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": -200,
 			"maxValue": 1000,
 			"defaultValue": 0,
 			"options": [

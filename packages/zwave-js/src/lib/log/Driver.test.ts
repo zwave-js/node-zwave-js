@@ -4,8 +4,12 @@ import {
 	MessagePriority,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import {
+	assertLogInfo,
+	assertMessage,
+	SpyTransport,
+} from "@zwave-js/core/test";
 import { FunctionType, Message, MessageType } from "@zwave-js/serial";
-import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";

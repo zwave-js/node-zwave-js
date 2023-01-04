@@ -54,15 +54,6 @@ export const SupervisionCCValues = Object.freeze({
 // @noSetValueAPI - This CC has no values to set
 // @noInterview - This CC is only used for encapsulation
 
-let sessionId = 0;
-/** Returns the next session ID to be used for supervision */
-export function getNextSessionId(): number {
-	// TODO: Check if this needs to be on the applHost for Security 2
-	sessionId = (sessionId + 1) & 0b111111;
-	if (sessionId === 0) sessionId++;
-	return sessionId;
-}
-
 // @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
 @API(CommandClasses.Supervision)
@@ -88,6 +79,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			options;
 		const cc = new SupervisionCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...cmdOptions,
 		});
 
@@ -128,7 +120,8 @@ export class SupervisionCC extends CommandClass {
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
 			!!(cc.encapsulationFlags & EncapsulationFlags.Supervision) &&
-			!(cc instanceof SupervisionCCGet)
+			!(cc instanceof SupervisionCCGet) &&
+			!(cc instanceof SupervisionCCReport)
 		);
 	}
 
@@ -370,7 +363,7 @@ export class SupervisionCCGet extends SupervisionCC {
 				origin: options.origin,
 			});
 		} else {
-			this.sessionId = getNextSessionId();
+			this.sessionId = host.getNextSupervisionSessionId();
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;

@@ -1,0 +1,17 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "45652 / ZW3102",
+	"description": "Plug-in 1-Outlet Dimmer With Energy, 300S",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3032",
+			"zwaveAllianceId": 1207
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

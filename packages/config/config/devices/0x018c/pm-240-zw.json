@@ -1,0 +1,26 @@
+{
+	"manufacturer": "Dawon",
+	"manufacturerId": "0x018c",
+	"label": "PM-S240-ZW",
+	"description": "2-Channel Power Switch",
+	"devices": [
+		{
+			"productType": "0x0065",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device seems to report support for Supervision but ignores the commands
+				"0x6c": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
+}

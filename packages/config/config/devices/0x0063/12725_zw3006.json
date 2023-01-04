@@ -1,0 +1,54 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "12725 / ZW3006",
+	"description": "In-Wall 1000W Paddle Dimmer, 500S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "5",
+			"$import": "templates/jasco_template.json#ignore_start_level"
+		},
+		{
+			"#": "7",
+			"$import": "templates/jasco_template.json#dimmer_steps_z"
+		},
+		{
+			"#": "8",
+			"$import": "templates/jasco_template.json#dimmer_times_z"
+		},
+		{
+			"#": "9",
+			"$import": "templates/jasco_template.json#dimmer_steps"
+		},
+		{
+			"#": "10",
+			"$import": "templates/jasco_template.json#dimmer_times"
+		},
+		{
+			"#": "11",
+			"$import": "templates/jasco_template.json#dimmer_steps_a"
+		},
+		{
+			"#": "12",
+			"$import": "templates/jasco_template.json#dimmer_times_a"
+		}
+	]
+}

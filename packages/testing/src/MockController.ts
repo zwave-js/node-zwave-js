@@ -1,4 +1,4 @@
-import type { ICommandClass } from "@zwave-js/core";
+import { ICommandClass, MAX_SUPERVISION_SESSION_ID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
@@ -7,7 +7,7 @@ import {
 	SerialAPIParser,
 } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { TimedExpectation } from "@zwave-js/shared/safe";
+import { createWrappingCounter, TimedExpectation } from "@zwave-js/shared/safe";
 import {
 	getDefaultMockControllerCapabilities,
 	MockControllerCapabilities,
@@ -52,10 +52,13 @@ export class MockController {
 			securityManager2: undefined,
 			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
+			getNextSupervisionSessionId: createWrappingCounter(
+				MAX_SUPERVISION_SESSION_ID,
+			),
 			getSafeCCVersionForNode: () => 100,
 			isCCSecure: () => false,
-
-			// TODO: We don't care about security classes yet
+			// TODO: We don't care about security classes on the controller
+			// This is handled by the nodes hosts
 			getHighestSecurityClass: () => undefined,
 			hasSecurityClass: () => false,
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -142,16 +145,17 @@ export class MockController {
 					throw new Error(
 						"Mock controller received a CAN from the host. This is illegal!",
 					);
-					return;
 				}
 			}
 		}
 
 		let msg: Message;
 		try {
-			// Parse the message while remembering potential decoding errors in embedded CCs
-			// This way we can log the invalid CC contents
-			msg = Message.from(this.host, data, MessageOrigin.Host);
+			msg = Message.from(this.host, {
+				data,
+				origin: MessageOrigin.Host,
+				parseCCs: false,
+			});
 			this.receivedHostMessages.push(msg);
 			// all good, respond with ACK
 			this.sendHeaderToHost(MessageHeaders.ACK);

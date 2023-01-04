@@ -1,0 +1,29 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "32562 / ZW6301",
+	"description": "Hinge Pin Door Sensor, 500S",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3031",
+			"zwaveAllianceId": 1795
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "20",
+			"$import": "templates/jasco_template.json#report_method"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include the device to the Z-Wave network.\n2. Once the controller is ready to include your Hinge Pin Smart Door Sensor press and release the manual/program button on the smart switch to include it in the network.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n2. Once the controller is ready to exclude your device, press and release the manual/program button on the Hinge Pin Smart Door Sensor to exclude it from the network.",
+		"reset": "You may wish to reset all of your Hinge Pin Smart Door Sensor's settings to their factory defaults. To do this, press the program button 10 times within 6 seconds. If your Door Sensor has been successfully reset, its LED light will blink for 3 seconds. \n\nThis should only be used in the event your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1795/32562-1%20EnFrSp%20QSG%20-%20Combined.pdf"
+	}
+}

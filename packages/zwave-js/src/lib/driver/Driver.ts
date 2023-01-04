@@ -5,6 +5,7 @@ import {
 	CommandClass,
 	CRC16CC,
 	DeviceResetLocallyCCNotification,
+	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	getImplementedVersion,
 	ICommandClassContainer,
@@ -29,6 +30,7 @@ import {
 	TransportServiceCCSegmentWait,
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	VersionCommand,
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
 } from "@zwave-js/cc";
@@ -41,13 +43,17 @@ import {
 	CommandClasses,
 	ControllerLogger,
 	deserializeCacheValue,
+	Duration,
 	EncapsulationFlags,
 	highResTimestamp,
 	ICommandClass,
 	isZWaveError,
 	LogConfig,
+	MAX_SUPERVISION_SESSION_ID,
 	Maybe,
 	MessagePriority,
+	MessageRecord,
+	messageRecordToLines,
 	SecurityClass,
 	securityClassIsS2,
 	SecurityManager,
@@ -90,6 +96,9 @@ import {
 	ZWaveSocket,
 } from "@zwave-js/serial";
 import {
+	buffer2hex,
+	cloneDeep,
+	createWrappingCounter,
 	DeepPartial,
 	getErrorMessage,
 	isDocker,
@@ -114,13 +123,16 @@ import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-
 import { ZWaveController } from "../controller/Controller";
 import { InclusionState } from "../controller/Inclusion";
 import { DriverLogger } from "../log/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
-import { InterviewStage, NodeStatus } from "../node/_Types";
+import {
+	InterviewStage,
+	NodeStatus,
+	ZWaveNotificationCallback,
+} from "../node/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
@@ -176,7 +188,8 @@ import {
 	installConfigUpdate,
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
-import type { ZWaveOptions } from "./ZWaveOptions";
+import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
+import type { EditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -420,6 +433,16 @@ export class Driver
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+		if (options?.userAgent) {
+			if (!isObject(options.userAgent)) {
+				throw new ZWaveError(
+					`The userAgent property must be an object!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+
+			this.updateUserAgent(options.userAgent);
+		}
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
@@ -770,6 +793,47 @@ export class Driver
 	public static async enumerateSerialPorts(): Promise<string[]> {
 		const ports = await SerialPort.list();
 		return ports.map((port) => port.path);
+	}
+
+	/** Updates a subset of the driver options on the fly */
+	public updateOptions(options: DeepPartial<EditableZWaveOptions>): void {
+		// This code is called from user code, so we need to make sure no options were passed
+		// which we are not able to update on the fly
+		const safeOptions = pick(options, [
+			"disableOptimisticValueUpdate",
+			"emitValueUpdateAfterSetValue",
+			"inclusionUserCallbacks",
+			"interview",
+			"preferences",
+			"preserveUnknownValues",
+		]);
+
+		// Create a new deep-merged copy of the options so we can check them for validity
+		// without affecting our own options
+		const newOptions = mergeDeep(
+			cloneDeep(this.options),
+			safeOptions,
+			true,
+		) as ZWaveOptions;
+		checkOptions(newOptions);
+
+		if (options.userAgent && !isObject(options.userAgent)) {
+			throw new ZWaveError(
+				`The userAgent property must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
+		// All good, update the options
+		this.options = newOptions;
+
+		if (options.logConfig) {
+			this.updateLogConfig(options.logConfig);
+		}
+
+		if (options.userAgent) {
+			this.updateUserAgent(options.userAgent);
+		}
 	}
 
 	/** @internal */
@@ -1451,7 +1515,8 @@ export class Driver
 			.on(
 				"firmware update finished",
 				this.onNodeFirmwareUpdated.bind(this),
-			);
+			)
+			.on("notification", this.onNodeNotification.bind(this));
 	}
 
 	/** Removes a node's event handlers that were added with addNodeEventHandlers */
@@ -1462,7 +1527,8 @@ export class Driver
 			.removeAllListeners("dead")
 			.removeAllListeners("interview completed")
 			.removeAllListeners("ready")
-			.removeAllListeners("firmware update finished");
+			.removeAllListeners("firmware update finished")
+			.removeAllListeners("notification");
 	}
 
 	/** Is called when a node wakes up */
@@ -1597,6 +1663,70 @@ export class Driver
 		| Pick<AppInfo, "applicationName" | "applicationVersion">
 		| undefined;
 
+	private userAgentComponents = new Map<string, string>();
+
+	/**
+	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
+	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
+	 */
+	public updateUserAgent(
+		components: Record<string, string | null | undefined>,
+	): void {
+		this.userAgentComponents = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+		);
+		this._userAgent = this.getEffectiveUserAgentString(
+			this.userAgentComponents,
+		);
+	}
+
+	/**
+	 * Returns the effective user agent string for the given components.
+	 * The driver name and version is automatically prepended and the statisticsAppInfo data is automatically appended if no components were given.
+	 */
+	private getEffectiveUserAgentString(
+		components: Map<string, string>,
+	): string {
+		const effectiveComponents = new Map([
+			[libName, libVersion],
+			...components,
+		]);
+		if (
+			effectiveComponents.size === 1 &&
+			this.statisticsAppInfo &&
+			this.statisticsAppInfo.applicationName !== "node-zwave-js"
+		) {
+			effectiveComponents.set(
+				this.statisticsAppInfo.applicationName,
+				this.statisticsAppInfo.applicationVersion,
+			);
+		}
+		return userAgentComponentsToString(effectiveComponents);
+	}
+
+	private _userAgent: string = `node-zwave-js/${libVersion}`;
+	/** Returns the user agent string used for service requests */
+	public get userAgent(): string {
+		return this._userAgent;
+	}
+
+	/** Returns the user agent string combined with the additional components (if given) */
+	public getUserAgentStringWithComponents(
+		components?: Record<string, string | null | undefined>,
+	): string {
+		if (!components || Object.keys(components).length === 0) {
+			return this._userAgent;
+		}
+
+		const merged = mergeUserAgent(
+			this.userAgentComponents,
+			components,
+			false,
+		);
+		return this.getEffectiveUserAgentString(merged);
+	}
+
 	/**
 	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
 	 * inform your users before enabling statistics.
@@ -1605,7 +1735,6 @@ export class Driver
 		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
 	): void {
 		if (this._statisticsEnabled) return;
-		this._statisticsEnabled = true;
 
 		if (
 			!isObject(appInfo) ||
@@ -1628,6 +1757,7 @@ export class Driver
 			);
 		}
 
+		this._statisticsEnabled = true;
 		this.statisticsAppInfo = appInfo;
 
 		// If we're already ready, send statistics
@@ -1777,33 +1907,135 @@ export class Driver
 		this.checkAllNodesReady();
 	}
 
-	/** This is called when a node's firmware was updated */
-	private onNodeFirmwareUpdated(
-		node: ZWaveNode,
-		status: FirmwareUpdateStatus,
-		waitTime?: number,
-	): void {
-		// Don't do this for non-successful updates
-		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
-
-		// Wait at least 5 seconds
-		if (!waitTime) waitTime = 5;
-		this.controllerLog.logNode(
-			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
-		);
-		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
-		this.retryNodeInterviewTimeouts.set(
-			node.id,
-			setTimeout(() => {
-				this.retryNodeInterviewTimeouts.delete(node.id);
-				void node.refreshInfo({
-					// After a firmware update, we need to refresh the node info
-					waitForWakeup: false,
-				});
-			}, waitTime * 1000).unref(),
-		);
+	/**
+	 * Returns the time in seconds to actually wait after a firmware upgrade, depending on what the device said.
+	 * This number will always be a bit greater than the advertised duration, because devices have been found to take longer to actually reboot.
+	 */
+	public getConservativeWaitTimeAfterFirmwareUpdate(
+		advertisedWaitTime: number | undefined,
+	): number {
+		// Wait the specified time plus a bit, so the device is actually ready to use
+		if (!advertisedWaitTime) {
+			// Wait at least 5 seconds
+			return 5;
+		} else if (advertisedWaitTime < 20) {
+			return advertisedWaitTime + 5;
+		} else if (advertisedWaitTime < 60) {
+			return advertisedWaitTime + 10;
+		} else {
+			return advertisedWaitTime + 30;
+		}
 	}
+
+	/** This is called when the firmware on one of a node's firmware targets was updated */
+	private async onNodeFirmwareUpdated(
+		node: ZWaveNode,
+		_status: FirmwareUpdateStatus,
+		_waitTime: number | undefined,
+		result: FirmwareUpdateResult,
+	): Promise<void> {
+		const { success, reInterview } = result;
+
+		// Nothing to do for non-successful updates
+		if (!success) return;
+
+		// TODO: Add support for delayed activation
+
+		// Reset nonces etc. to prevent false-positive duplicates after the update
+		this.securityManager?.deleteAllNoncesForReceiver(node.id);
+		this.securityManager2?.deleteNonce(node.id);
+
+		// waitTime should always be defined, but just to be sure
+		const waitTime = result.waitTime ?? 5;
+
+		if (reInterview) {
+			this.controllerLog.logNode(
+				node.id,
+				`Firmware updated, scheduling interview in ${waitTime} seconds...`,
+			);
+			// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
+			this.retryNodeInterviewTimeouts.set(
+				node.id,
+				setTimeout(() => {
+					this.retryNodeInterviewTimeouts.delete(node.id);
+					void node.refreshInfo({
+						// After a firmware update, we need to refresh the node info
+						waitForWakeup: false,
+					});
+				}, waitTime * 1000).unref(),
+			);
+		} else {
+			this.controllerLog.logNode(
+				node.id,
+				`Firmware updated. No restart or re-interview required. Refreshing version information in ${waitTime} seconds...`,
+			);
+
+			await wait(waitTime * 1000, true);
+
+			try {
+				const versionAPI = node.commandClasses.Version;
+				await versionAPI.get();
+				if (
+					versionAPI.supportsCommand(VersionCommand.CapabilitiesGet)
+				) {
+					await versionAPI.getCapabilities();
+				}
+				if (
+					versionAPI.supportsCommand(VersionCommand.ZWaveSoftwareGet)
+				) {
+					await versionAPI.getZWaveSoftware();
+				}
+			} catch {
+				// ignore
+			}
+		}
+	}
+
+	/** This is called when a node emits a `"notification"` event */
+	private onNodeNotification: ZWaveNotificationCallback = (
+		node,
+		ccId,
+		ccArgs,
+	) => {
+		let prefix: string;
+		let details: string[];
+		if (ccId === CommandClasses.Notification) {
+			const msg: MessageRecord = {
+				type: ccArgs.label,
+				event: ccArgs.eventLabel,
+			};
+			if (ccArgs.parameters) {
+				if (Buffer.isBuffer(ccArgs.parameters)) {
+					msg.parameters = buffer2hex(ccArgs.parameters);
+				} else if (ccArgs.parameters instanceof Duration) {
+					msg.duration = ccArgs.parameters.toString();
+				} else if (isObject(ccArgs.parameters)) {
+					Object.assign(msg, ccArgs.parameters);
+				}
+			}
+			prefix = "[Notification]";
+			details = messageRecordToLines(msg);
+		} else if (ccId === CommandClasses["Entry Control"]) {
+			prefix = "[Notification] Entry Control";
+			details = messageRecordToLines({
+				"event type": ccArgs.eventTypeLabel,
+				"data type": ccArgs.dataTypeLabel,
+			});
+		} else if (ccId === CommandClasses["Multilevel Switch"]) {
+			prefix = "[Notification] Multilevel Switch";
+			details = messageRecordToLines({
+				"event type": ccArgs.eventTypeLabel,
+				direction: ccArgs.direction,
+			});
+		} /*if (ccId === CommandClasses.Powerlevel)*/ else {
+			// Don't bother logging this
+			return;
+		}
+
+		this.controllerLog.logNode(node.id, {
+			message: [prefix, ...details.map((d) => `  ${d}`)].join("\n"),
+		});
+	};
 
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
@@ -1859,7 +2091,7 @@ export class Driver
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
-	 * Returns 1 if the node claims that it does not support a CC.
+	 * Returns the highest implemented version if the node's CC version is unknown.
 	 * Throws if the CC is not implemented in this library yet.
 	 *
 	 * @param cc The command class whose version should be retrieved
@@ -1877,8 +2109,14 @@ export class Driver
 			endpointIndex,
 		);
 		if (supportedVersion === 0) {
-			// For unsupported CCs use version 1, no matter what
-			return 1;
+			// Unknown, use the highest implemented version
+			const implementedVersion = getImplementedVersion(cc);
+			if (
+				implementedVersion !== 0 &&
+				implementedVersion !== Number.POSITIVE_INFINITY
+			) {
+				return implementedVersion;
+			}
 		} else {
 			// For supported versions find the maximum version supported by both the
 			// node and this library
@@ -1889,11 +2127,11 @@ export class Driver
 			) {
 				return Math.min(supportedVersion, implementedVersion);
 			}
-			throw new ZWaveError(
-				"Cannot retrieve the version of a CC that is not implemented",
-				ZWaveErrorCodes.CC_NotSupported,
-			);
 		}
+		throw new ZWaveError(
+			"Cannot retrieve the version of a CC that is not implemented",
+			ZWaveErrorCodes.CC_NotSupported,
+		);
 	}
 
 	/**
@@ -1996,6 +2234,15 @@ export class Driver
 			throw new ZWaveError(
 				message,
 				ZWaveErrorCodes.Driver_FeatureDisabled,
+			);
+		}
+
+		if (this._controller?.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to soft reset controller: A firmware update is in progress on this network.`;
+			this.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
 			);
 		}
 
@@ -2158,9 +2405,18 @@ export class Driver
 	public async hardReset(): Promise<void> {
 		this.ensureReady(true);
 
+		if (this.controller.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to hard reset controller: A firmware update is in progress on this network.`;
+			this.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
+
 		// Update the controller NIF prior to hard resetting
-		await this._controller!.setControllerNIF();
-		await this._controller!.hardReset();
+		await this.controller.setControllerNIF();
+		await this.controller.hardReset();
 
 		// Clean up
 		this.rejectTransactions(() => true, `The controller was hard-reset`);
@@ -2317,7 +2573,7 @@ export class Driver
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.from(this, data);
+			msg = Message.from(this, { data });
 			// Ensure there are no errors
 			if (isCommandClassContainer(msg)) assertValidCCs(msg);
 			// And update statistics
@@ -2353,7 +2609,11 @@ export class Driver
 								// If it was, we need to notify the sender that we couldn't decode the command
 								const node = this.getNodeUnsafe(msg);
 								if (node) {
-									await node
+									const endpoint =
+										node.getEndpoint(
+											msg.command.endpointIndex,
+										) ?? node;
+									await endpoint
 										.createAPI(
 											CommandClasses.Supervision,
 											false,
@@ -2426,9 +2686,40 @@ export class Driver
 
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
-				// When we have a complete CC, save its values
-				this.persistCCValues(msg.command);
 
+				// Make sure we are allowed to handle this command
+				if (this.shouldDiscardCC(msg.command)) {
+					if (!wasMessageLogged) {
+						this.driverLog.logMessage(msg, {
+							direction: "inbound",
+							secondaryTags: ["discarded"],
+						});
+					}
+					return;
+				}
+
+				// When we have a complete CC, save its values
+				try {
+					this.persistCCValues(msg.command);
+				} catch (e) {
+					// Indicate invalid payloads with a special CC type
+					if (
+						isZWaveError(e) &&
+						e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+					) {
+						this.driverLog.print(
+							`dropping CC with invalid values${
+								typeof e.context === "string"
+									? ` (Reason: ${e.context})`
+									: ""
+							}`,
+							"warn",
+						);
+						return;
+					} else {
+						throw e;
+					}
+				}
 				// Transport Service CC can be eliminated from the encapsulation stack, since it is always the outermost CC
 				if (isTransportServiceEncapsulation(msg.command)) {
 					msg.command = msg.command.encapsulated;
@@ -3043,41 +3334,62 @@ ${handlers.length} left`,
 	 * Checks whether a CC may be handled or should be ignored.
 	 * This method expects `cc` to be unwrapped.
 	 */
-	private mayHandleUnsolicitedCommand(cc: CommandClass): boolean {
-		// This should only be necessary for unsolicited commands, since the response matching
-		// is pretty strict and looks at the encapsulation order
+	private shouldDiscardCC(cc: CommandClass): boolean {
+		// For Command Classes supported securely, a controlling node MUST discard
+		// the command from a supporting node if not received at the highest common
+		// security level between the controlling node and the sending S2 node.
 
-		// From SDS11847:
-		// A controlling node MUST discard a received Report/Notification type command if it is
-		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
+		const node = this.controller.nodes.get(cc.nodeId as number);
+		if (!node) {
+			// Node does not exist, don't accept the CC
+			this.controllerLog.logNode(
+				cc.nodeId as number,
+				`is unknown - discarding received command...`,
+				"warn",
+			);
+			return true;
+		}
 
-		if (
-			cc.encapsulationFlags & EncapsulationFlags.Security &&
-			cc.ccId !== CommandClasses.Security &&
-			cc.ccId !== CommandClasses["Security 2"]
-		) {
-			const commandName = cc.constructor.name;
-			if (
-				commandName.endsWith("Report") ||
-				commandName.endsWith("Notification")
-			) {
-				// Check whether there was a security encapsulation
-				if (
-					cc.isEncapsulatedWith(CommandClasses.Security) ||
-					cc.isEncapsulatedWith(CommandClasses["Security 2"])
-				) {
-					return true;
-				}
-				// none found, don't accept the CC
-				this.controllerLog.logNode(
-					cc.nodeId as number,
-					`command must be encrypted but was received without Security encapsulation - discarding it...`,
-					"warn",
-				);
+		switch (node.getHighestSecurityClass()) {
+			case SecurityClass.None:
+			case SecurityClass.Temporary:
 				return false;
+		}
+
+		let isSecure = false;
+		let requiresSecurity = false;
+		while (true) {
+			if (isEncapsulatingCommandClass(cc)) {
+				if (
+					cc.ccId === CommandClasses.Security ||
+					cc.ccId === CommandClasses["Security 2"]
+				) {
+					isSecure = true;
+				}
+				cc = cc.encapsulated;
+			} else if (isMultiEncapsulatingCommandClass(cc)) {
+				requiresSecurity = cc.encapsulated.some((cmd) =>
+					node.isCCSecure(cmd.ccId),
+				);
+				break;
+			} else {
+				requiresSecurity =
+					node.isCCSecure(cc.ccId) &&
+					cc.ccId !== CommandClasses.Security &&
+					cc.ccId !== CommandClasses["Security 2"];
+				break;
 			}
 		}
-		return true;
+		if (requiresSecurity && !isSecure) {
+			// none found, don't accept the CC
+			this.controllerLog.logNode(
+				cc.nodeId as number,
+				`command must be encrypted but was received without Security encapsulation - discarding it...`,
+				"warn",
+			);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -3105,6 +3417,32 @@ ${handlers.length} left`,
 			}
 		}
 
+		// It could also be that this is the node's response for a CC that we sent, but where the ACK is delayed
+		if (isCommandClassContainer(msg)) {
+			const { activeTransactions } = this.sendThread.state.context;
+			const pendingMessages = [...activeTransactions.values()]
+				.map((t) => t.transaction.getCurrentMessage())
+				.filter((m): m is Message => !!m);
+			const msgExpectingUpdate = pendingMessages.find((sentMsg) => {
+				return (
+					sentMsg.expectsNodeUpdate() &&
+					sentMsg.isExpectedNodeUpdate(msg)
+				);
+			});
+
+			if (msgExpectingUpdate) {
+				// Found a message that is still in progress but expects this message in response.
+				// Remember the message there.
+				this.controllerLog.logNode(msg.getNodeId()!, {
+					message: `received expected response prematurely, remembering it...`,
+					level: "verbose",
+					direction: "inbound",
+				});
+				msgExpectingUpdate.prematureNodeUpdate = msg;
+				return;
+			}
+		}
+
 		if (isCommandClassContainer(msg)) {
 			// For further actions, we are only interested in the innermost CC
 			this.unwrapCommands(msg);
@@ -3120,13 +3458,9 @@ ${handlers.length} left`,
 				// Force a new interview
 				void node.refreshInfo();
 			}
-
-			// Check if we may even handle the command
-			if (!this.mayHandleUnsolicitedCommand(msg.command)) return;
 		}
 
 		// Otherwise go through the static handlers
-
 		if (
 			msg instanceof ApplicationCommandRequest ||
 			msg instanceof BridgeApplicationCommandRequest
@@ -3208,7 +3542,10 @@ ${handlers.length} left`,
 
 						// send back a Supervision Report if the command was received via Supervision Get
 						if (supervisionSessionId !== undefined) {
-							await node
+							const endpoint =
+								node.getEndpoint(msg.command.endpointIndex) ??
+								node;
+							await endpoint
 								.createAPI(CommandClasses.Supervision, false)
 								.sendReport({
 									sessionId: supervisionSessionId,
@@ -3226,10 +3563,12 @@ ${handlers.length} left`,
 				// No one is waiting, dispatch the command to the node itself
 				if (supervisionSessionId !== undefined) {
 					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
+					const endpoint =
+						node.getEndpoint(msg.command.endpointIndex) ?? node;
 					try {
 						await node.handleCommand(msg.command);
 
-						await node
+						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.sendReport({
 								sessionId: supervisionSessionId,
@@ -3240,7 +3579,7 @@ ${handlers.length} left`,
 								encapsulationFlags,
 							});
 					} catch (e) {
-						await node
+						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.sendReport({
 								sessionId: supervisionSessionId,
@@ -3306,16 +3645,20 @@ ${handlers.length} left`,
 		}
 	}
 
-	private lastCallbackId = 0xff;
 	/**
 	 * Returns the next callback ID. Callback IDs are used to correlate requests
 	 * to the controller/nodes with its response
 	 */
-	public getNextCallbackId(): number {
-		this.lastCallbackId = (this.lastCallbackId + 1) & 0xff;
-		if (this.lastCallbackId < 1) this.lastCallbackId = 1;
-		return this.lastCallbackId;
-	}
+	public readonly getNextCallbackId = createWrappingCounter(0xff);
+
+	/**
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
+	 * to the controller/nodes with its response
+	 */
+	public readonly getNextSupervisionSessionId = createWrappingCounter(
+		MAX_SUPERVISION_SESSION_ID,
+		true,
+	);
 
 	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
 		// The encapsulation order (from outside to inside) is as follows:
@@ -3860,17 +4203,19 @@ ${handlers.length} left`,
 			SupervisionCC.mayUseSupervision(this, command)
 		) {
 			const result = await this.sendSupervisedCommand(command, options);
-			if (result?.status === SupervisionStatus.NoSupport) {
-				// The node should support supervision but it doesn't for this command. Remember this
-				SupervisionCC.setCCSupportedWithSupervision(
-					this,
-					command.getEndpoint(this)!,
-					command.ccId,
-					false,
-				);
+			if (result?.status !== SupervisionStatus.NoSupport) {
+				// @ts-expect-error TS doesn't know we've narrowed the return type to match
+				return result;
 			}
-			// @ts-expect-error TS doesn't know we've narrowed the return type to match
-			return result;
+
+			// The node should support supervision but it doesn't for this command. Remember this
+			SupervisionCC.setCCSupportedWithSupervision(
+				this,
+				command.getEndpoint(this)!,
+				command.ccId,
+				false,
+			);
+			// And retry the command without supervision
 		}
 
 		// Fall back to non-supervised commands

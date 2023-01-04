@@ -15,7 +15,9 @@ async get(
 ### `set`
 
 ```ts
-async set(value: number | IndicatorObject[]): Promise<void>;
+async set(
+	value: number | IndicatorObject[],
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSupported`
@@ -34,7 +36,7 @@ async getSupported(indicatorId: number): Promise<
 ### `identify`
 
 ```ts
-async identify(): Promise<void>;
+async identify(): Promise<SupervisionResult | undefined>;
 ```
 
 Instructs the node to identify itself. Available starting with V3 of this CC.

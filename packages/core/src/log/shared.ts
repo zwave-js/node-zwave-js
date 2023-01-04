@@ -48,6 +48,7 @@ export class ZWaveLogContainer extends winston.Container {
 		enabled: true,
 		level: getTransportLoglevel(),
 		logToFile: !!process.env.LOGTOFILE,
+		maxFiles: 7,
 		nodeFilter: stringToNodeList(process.env.LOG_NODES),
 		transports: undefined as any,
 		filename: require.main
@@ -101,6 +102,19 @@ export class ZWaveLogContainer extends winston.Container {
 			config.filename != undefined &&
 			config.filename !== this.logConfig.filename;
 
+		if (config.maxFiles != undefined) {
+			if (
+				typeof config.maxFiles !== "number" ||
+				config.maxFiles < 1 ||
+				config.maxFiles > 365
+			) {
+				delete config.maxFiles;
+			}
+		}
+		const changedMaxFiles =
+			config.maxFiles != undefined &&
+			config.maxFiles !== this.logConfig.maxFiles;
+
 		this.logConfig = Object.assign(this.logConfig, config);
 
 		// If the loglevel changed, our cached "is visible" info is out of date
@@ -115,7 +129,8 @@ export class ZWaveLogContainer extends winston.Container {
 			(this.fileTransport == undefined &&
 				this.consoleTransport == undefined) ||
 			changedLoggingTarget ||
-			changedFilename;
+			changedFilename ||
+			changedMaxFiles;
 
 		if (recreateInternalTransports) {
 			this.fileTransport?.destroy();
@@ -225,7 +240,7 @@ export class ZWaveLogContainer extends winston.Container {
 				.basename(this.logConfig.filename)
 				.replace(`_%DATE%`, "_current"),
 			zippedArchive: true,
-			maxFiles: "7d",
+			maxFiles: `${this.logConfig.maxFiles}d`,
 			format: createDefaultTransportFormat(false, false),
 			silent: this.isFileTransportSilent(),
 		});

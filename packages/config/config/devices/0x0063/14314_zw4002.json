@@ -1,13 +1,13 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14314 / ZW4002",
-	"description": "In-Wall Smart Fan Control",
+	"description": "In-Wall Fan Speed Control, 500S",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3232",
-			"zwaveAllianceId": 2557
+			"productId": "0x3138",
+			"zwaveAllianceId": [1369, 1937]
 		}
 	],
 	"firmwareVersion": {
@@ -32,8 +32,8 @@
 	},
 	"paramInformation": [
 		{
-			"#": "4",
-			"$import": "~/templates/master_template.json#orientation"
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		}
 	],
 	"compat": {
@@ -48,9 +48,9 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press and release the top or bottom of the smart fan control switch (rocker) to include it in the network.\n3. Once your controller has confirmed the device has been included, refresh the Z-Wave network to optimize performance",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch (rocker) to exclude it from the network",
-		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2557/Binder2.pdf"
+		"inclusion": "Linking your device\n1. Follow the instructions for your Z-wave certified controller to include a device to\nthe Z-wave network.\n2. Once the controller is ready to include your device, press and release the top or\nbottom of the wireless smart switch(rocker) to include it in the network.\nNote: Your controller may need to be within 10 feet of the device to be included.\n3. Once your controller has confirmed that the device has been included, refresh the\nZ-wave network to optimize performance.\nPlease reference the controller’s manual for instructions",
+		"exclusion": "Note: To exclude and reset the device, follow the instructions provided by your\nZ-Wave controller",
+		"reset": "Quickly press ON (Top) button three (3) times and then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1937/Binder1.pdf"
 	}
 }

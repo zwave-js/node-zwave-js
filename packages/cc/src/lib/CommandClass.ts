@@ -104,7 +104,9 @@ export class CommandClass implements ICommandClass {
 		this.host = host;
 		// Extract the cc from declared metadata if not provided by the CC constructor
 		this.ccId =
-			("ccId" in options && options.ccId) || getCommandClass(this);
+			"ccId" in options && options.ccId != undefined
+				? options.ccId
+				: getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;

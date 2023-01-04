@@ -10,7 +10,7 @@
 async set(
 	weekday: Weekday,
 	switchPoints: Switchpoint[],
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `get`
@@ -39,7 +39,7 @@ async getOverride(): Promise<{ type: ScheduleOverrideType; state: SetbackState; 
 async setOverride(
 	type: ScheduleOverrideType,
 	state: SetbackState,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Climate Control Schedule CC values

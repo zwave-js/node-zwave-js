@@ -4,6 +4,7 @@ import type {
 	IZWaveNode,
 	Maybe,
 	MessageRecord,
+	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -32,6 +33,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
@@ -184,7 +186,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	public async addNodeIds(
 		groupId: number,
 		...nodeIds: number[]
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Set);
 
 		const cc = new AssociationCCSet(this.applHost, {
@@ -193,7 +195,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			groupId,
 			nodeIds,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -202,7 +204,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async removeNodeIds(
 		options: AssociationCCRemoveOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.Remove,
@@ -213,14 +215,16 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
 	 * Removes nodes from all association groups
 	 */
 	@validateArgs()
-	public async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void> {
+	public async removeNodeIdsFromAllGroups(
+		nodeIds: number[],
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.Remove,
@@ -238,6 +242,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 					),
 				) ?? 0;
 			for (let groupId = 1; groupId <= groupCount; groupId++) {
+				// TODO: evaluate intermediate supervision results
 				await this.removeNodeIds({ nodeIds, groupId });
 			}
 		}
@@ -440,6 +445,7 @@ interface AssociationCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(AssociationCommand.Set)
+@useSupervision()
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -500,6 +506,7 @@ interface AssociationCCRemoveOptions {
 }
 
 @CCCommand(AssociationCommand.Remove)
+@useSupervision()
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
 		host: ZWaveHost,

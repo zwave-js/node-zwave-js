@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
-	"label": "38959/ZW6306",
-	"description": "Smart Flood/Freeze Sensor",
+	"label": "38959 / ZW6306",
+	"description": "Flood+Freeze Sensor, 500S",
 	"devices": [
 		{
 			"productType": "0x4953",

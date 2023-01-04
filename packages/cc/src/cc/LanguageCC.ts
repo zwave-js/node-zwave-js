@@ -2,6 +2,7 @@ import type {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
+	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -29,6 +30,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { LanguageCommand } from "../lib/_Types";
@@ -79,7 +81,10 @@ export class LanguageCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async set(language: string, country?: string): Promise<void> {
+	public async set(
+		language: string,
+		country?: string,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Set);
 
 		const cc = new LanguageCCSet(this.applHost, {
@@ -88,7 +93,7 @@ export class LanguageCCAPI extends CCAPI {
 			language,
 			country,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -148,6 +153,7 @@ interface LanguageCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(LanguageCommand.Set)
+@useSupervision()
 export class LanguageCCSet extends LanguageCC {
 	public constructor(
 		host: ZWaveHost,

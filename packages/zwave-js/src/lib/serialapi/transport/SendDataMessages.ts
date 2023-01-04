@@ -76,16 +76,22 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			const nodeId = this.payload[0];
+			this._nodeId = this.payload[0];
 			const serializedCCLength = this.payload[1];
-			const ccBuffer = this.payload.slice(2, 2 + serializedCCLength);
-			this.command = CommandClass.from(host, {
-				nodeId,
-				data: ccBuffer,
-				origin: options.origin,
-			}) as SinglecastCC<CCType>;
 			this.transmitOptions = this.payload[2 + serializedCCLength];
 			this.callbackId = this.payload[3 + serializedCCLength];
+			this.payload = this.payload.slice(2, 2 + serializedCCLength);
+
+			if (options.parseCCs !== false) {
+				this.command = CommandClass.from(host, {
+					nodeId: this._nodeId,
+					data: this.payload,
+					origin: options.origin,
+				}) as SinglecastCC<CCType>;
+			} else {
+				// Little hack for testing with a network mock. This will be parsed in the next step.
+				this.command = undefined as any;
+			}
 		} else {
 			if (!options.command.isSinglecast()) {
 				throw new ZWaveError(
@@ -95,6 +101,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			}
 
 			this.command = options.command;
+			this._nodeId = this.command.nodeId;
 			this.transmitOptions =
 				options.transmitOptions ?? TransmitOptions.DEFAULT;
 			if (options.maxSendAttempts != undefined) {
@@ -117,8 +124,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
 	}
 
+	private _nodeId: number;
 	public override getNodeId(): number | undefined {
-		return this.command.nodeId;
+		return this._nodeId;
 	}
 
 	public serialize(): Buffer {

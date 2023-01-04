@@ -407,18 +407,33 @@ duration: ${info.duration} seconds`;
 	}
 }
 
+interface SoundSwitchCCTonesNumberReportOptions extends CCCommandOptions {
+	toneCount: number;
+}
+
 @CCCommand(SoundSwitchCommand.TonesNumberReport)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| SoundSwitchCCTonesNumberReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.toneCount = this.payload[0];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.toneCount = this.payload[0];
+		} else {
+			this.toneCount = options.toneCount;
+		}
 	}
 
-	public readonly toneCount: number;
+	public toneCount: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.toneCount]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -432,24 +447,47 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 @expectedCCResponse(SoundSwitchCCTonesNumberReport)
 export class SoundSwitchCCTonesNumberGet extends SoundSwitchCC {}
 
+interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
+	toneId: number;
+	duration: number;
+	name: string;
+}
+
 @CCCommand(SoundSwitchCommand.ToneInfoReport)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| SoundSwitchCCToneInfoReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 4);
-		this.toneId = this.payload[0];
-		this.duration = this.payload.readUInt16BE(1);
-		const nameLength = this.payload[3];
-		validatePayload(this.payload.length >= 4 + nameLength);
-		this.name = this.payload.slice(4, 4 + nameLength).toString("utf8");
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 4);
+			this.toneId = this.payload[0];
+			this.duration = this.payload.readUInt16BE(1);
+			const nameLength = this.payload[3];
+			validatePayload(this.payload.length >= 4 + nameLength);
+			this.name = this.payload.slice(4, 4 + nameLength).toString("utf8");
+		} else {
+			this.toneId = options.toneId;
+			this.duration = options.duration;
+			this.name = options.name;
+		}
 	}
 
 	public readonly toneId: number;
 	public readonly duration: number;
 	public readonly name: string;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.toneId, 0, 0, this.name.length]),
+			Buffer.from(this.name, "utf8"),
+		]);
+		this.payload.writeUInt16BE(this.duration, 1);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -488,11 +526,8 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.toneId = this.payload[0];
 		} else {
 			this.toneId = options.toneId;
 		}
@@ -559,23 +594,40 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	}
 }
 
+interface SoundSwitchCCConfigurationReportOptions extends CCCommandOptions {
+	defaultVolume: number;
+	defaultToneId: number;
+}
+
 @CCCommand(SoundSwitchCommand.ConfigurationReport)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| SoundSwitchCCConfigurationReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.defaultVolume = clamp(this.payload[0], 0, 100);
-		this.defaultToneId = this.payload[1];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.defaultVolume = clamp(this.payload[0], 0, 100);
+			this.defaultToneId = this.payload[1];
+		} else {
+			this.defaultVolume = options.defaultVolume;
+			this.defaultToneId = options.defaultToneId;
+		}
 	}
 
 	@ccValue(SoundSwitchCCValues.defaultVolume)
-	public readonly defaultVolume: number;
+	public defaultVolume: number;
 
 	@ccValue(SoundSwitchCCValues.defaultToneId)
-	public readonly defaultToneId: number;
+	public defaultToneId: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

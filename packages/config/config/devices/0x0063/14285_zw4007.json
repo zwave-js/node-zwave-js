@@ -1,0 +1,59 @@
+{
+	"manufacturer": "Enbrighten",
+	"manufacturerId": "0x0063",
+	"label": "14285 / ZW4007",
+	"description": "Direct Wire 40A Outdoor Switch, 500S",
+	"devices": [
+		{
+			"productType": "0x4f44",
+			"productId": "0x3032"
+		},
+		{
+			"productType": "0x5042",
+			"productId": "0x4004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
+		},
+		{
+			"#": "2",
+			"label": "Energy Report Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Once monthly",
+					"value": 0
+				},
+				{
+					"label": "Reports based on Parameter 3 setting",
+					"value": 1
+				},
+				{
+					"label": "Once daily",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Energy Report Frequency",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 60,
+			"defaultValue": 5
+		},
+		{
+			"#": "19",
+			"$import": "templates/jasco_template.json#alternate_exclusion_h"
+		}
+	]
+}

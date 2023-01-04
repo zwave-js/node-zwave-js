@@ -171,7 +171,9 @@ function tryParseProvisioningList(
 				return;
 			}
 
-			const parsed = { ...entry } as SmartStartProvisioningEntry;
+			const parsed = {
+				...entry,
+			} as unknown as SmartStartProvisioningEntry;
 			parsed.securityClasses = entry.securityClasses
 				.map((s) => tryParseSerializedSecurityClass(s))
 				.filter((s): s is SecurityClass => s !== undefined);

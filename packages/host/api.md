@@ -11,7 +11,7 @@ import type { ConfigManager } from '@zwave-js/config';
 import type { ControllerLogger } from '@zwave-js/core';
 import type { DeviceConfig } from '@zwave-js/config';
 import type { ICommandClass } from '@zwave-js/core';
-import type { IZWaveNode } from '@zwave-js/core';
+import { IZWaveNode } from '@zwave-js/core';
 import type { Maybe } from '@zwave-js/core';
 import type { Overwrite } from 'alcalzone-shared/types';
 import type { ReadonlyThrowingMap } from '@zwave-js/shared';
@@ -68,7 +68,7 @@ export interface NodeSchedulePollOptions {
 // Warning: (ae-missing-release-tag) "TestingHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type TestingHost = Overwrite<ZWaveApplicationHost, {
+export type TestingHost = Overwrite<Omit<ZWaveApplicationHost, "__internalIsMockNode">, {
     nodes: ThrowingMap<number, IZWaveNode>;
 }>;
 
@@ -98,10 +98,13 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 // @public
 export interface ZWaveHost {
     // (undocumented)
+    __internalIsMockNode?: boolean;
+    // (undocumented)
     getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
     // (undocumented)
     getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
     getNextCallbackId(): number;
+    getNextSupervisionSessionId(): number;
     getSafeCCVersionForNode(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
     // (undocumented)
     hasSecurityClass(nodeId: number, securityClass: SecurityClass): Maybe<boolean>;

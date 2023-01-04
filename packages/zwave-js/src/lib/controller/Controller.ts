@@ -1,4 +1,5 @@
 import {
+	AssociationCC,
 	ECDHProfiles,
 	InclusionControllerCCComplete,
 	InclusionControllerCCInitiate,
@@ -8,6 +9,7 @@ import {
 	KEXFailType,
 	KEXSchemes,
 	ManufacturerSpecificCCValues,
+	MultiChannelAssociationCC,
 	Security2CCKEXFail,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
@@ -265,6 +267,7 @@ import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import type {
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
+	GetFirmwareUpdatesOptions,
 	HealNodeStatus,
 	SDKVersion,
 } from "./_Types";
@@ -524,6 +527,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this.driver.cacheSet(cacheKeys.controller.supportsSoftReset, value);
 	}
 
+	private _rfRegion: RFRegion | undefined;
+	/** Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet). This value is cached and can be changed through {@link setRFRegion}. */
+	public get rfRegion(): RFRegion | undefined {
+		return this._rfRegion;
+	}
+
 	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
@@ -605,13 +614,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public unprovisionSmartStartNode(dskOrNodeId: string | number): void {
 		const provisioningList = [...this.provisioningList];
 
-		const index = provisioningList.findIndex(
-			(e) =>
-				e.dsk === dskOrNodeId ||
-				(typeof dskOrNodeId === "number" &&
-					"nodeId" in e &&
-					e.nodeId === dskOrNodeId),
-		);
+		const entry = this.getProvisioningEntryInternal(dskOrNodeId);
+		if (!entry) return;
+
+		const index = provisioningList.indexOf(entry);
 		if (index >= 0) {
 			provisioningList.splice(index, 1);
 			this.autoProvisionSmartStart();
@@ -622,13 +628,24 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private getProvisioningEntryInternal(
 		dskOrNodeId: string | number,
 	): SmartStartProvisioningEntry | undefined {
-		return this.provisioningList.find(
-			(e) =>
-				e.dsk === dskOrNodeId ||
-				(typeof dskOrNodeId === "number" &&
-					"nodeId" in e &&
-					e.nodeId === dskOrNodeId),
-		);
+		if (typeof dskOrNodeId === "string") {
+			return this.provisioningList.find((e) => e.dsk === dskOrNodeId);
+		} else {
+			// The provisioning list may or may not contain the node ID for an entry, even if the node is already included.
+			let ret = this.provisioningList.find(
+				(e) => "nodeId" in e && e.nodeId === dskOrNodeId,
+			);
+			if (!ret) {
+				// Try to get the DSK from the node instance
+				const dsk = this.nodes.get(dskOrNodeId)?.dsk;
+				if (dsk) {
+					ret = this.provisioningList.find(
+						(e) => e.dsk === dskToString(dsk),
+					);
+				}
+			}
+			return ret;
+		}
 	}
 
 	/**
@@ -882,6 +899,29 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					resp.success ? "successful" : "failed"
 				}...`,
 			);
+		}
+
+		// Also query the controller's current RF region if possible
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetRFRegion,
+			)
+		) {
+			this.driver.controllerLog.print(`Querying configured RF region...`);
+			const resp = await this.getRFRegion().catch(() => undefined);
+			if (resp != undefined) {
+				this.driver.controllerLog.print(
+					`The controller is using RF region ${getEnumMemberName(
+						RFRegion,
+						resp,
+					)}`,
+				);
+			} else {
+				this.driver.controllerLog.print(
+					`Querying the RF region failed!`,
+					"warn",
+				);
+			}
 		}
 
 		// find the SUC
@@ -2126,7 +2166,10 @@ supported CCs: ${nodeInfo.supportedCCs
 				| InclusionStrategy.Security_S2
 				| InclusionStrategy.SmartStart;
 		};
-		if (inclusionOptions.provisioning) {
+		if (
+			"provisioning" in inclusionOptions &&
+			!!inclusionOptions.provisioning
+		) {
 			const grantedSecurityClasses =
 				inclusionOptions.provisioning.securityClasses;
 			const fullDSK = inclusionOptions.provisioning.dsk;
@@ -2149,8 +2192,14 @@ supported CCs: ${nodeInfo.supportedCCs
 					return Promise.resolve(pin);
 				},
 			};
+		} else if (
+			"userCallbacks" in inclusionOptions &&
+			!!inclusionOptions.userCallbacks
+		) {
+			// Use the callbacks provided to this inclusion attempt
+			userCallbacks = inclusionOptions.userCallbacks;
 		} else if (this.driver.options.inclusionUserCallbacks) {
-			// Use the provided callbacks
+			// Use the callbacks defined in the driver options as fallback
 			userCallbacks = this.driver.options.inclusionUserCallbacks;
 		} else {
 			// Cannot bootstrap S2 without user callbacks, abort.
@@ -2742,9 +2791,9 @@ supported CCs: ${nodeInfo.supportedCCs
 					this.driver,
 					new DeviceClass(
 						this.driver.configManager,
-						msg.statusContext!.basic!,
-						msg.statusContext!.generic!,
-						msg.statusContext!.specific!,
+						msg.statusContext!.basicDeviceClass!,
+						msg.statusContext!.genericDeviceClass!,
+						msg.statusContext!.specificDeviceClass!,
 					),
 					msg.statusContext!.supportedCCs,
 					msg.statusContext!.controlledCCs,
@@ -3794,8 +3843,11 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async removeNodeFromAllAssociations(nodeId: number): Promise<void> {
 		const tasks: Promise<any>[] = [];
+		// Check each endpoint of each node if they have an association to this node
 		for (const node of this.nodes.values()) {
 			if (node.id === this._ownNodeId || node.id === nodeId) continue;
+			if (node.interviewStage !== InterviewStage.Complete) continue;
+
 			for (const endpoint of node.getAllEndpoints()) {
 				// Prefer multi channel associations if that is available
 				if (
@@ -3803,15 +3855,40 @@ ${associatedNodes.join(", ")}`,
 						"Multi Channel Association"
 					].isSupported()
 				) {
-					return endpoint.commandClasses[
-						"Multi Channel Association"
-					].removeDestinations({
-						nodeIds: [nodeId],
-					});
+					const existing =
+						MultiChannelAssociationCC.getAllDestinationsCached(
+							this.driver,
+							endpoint,
+						);
+					if (
+						[...existing.values()].some((dests) =>
+							dests.some((a) => a.nodeId === nodeId),
+						)
+					) {
+						tasks.push(
+							endpoint.commandClasses[
+								"Multi Channel Association"
+							].removeDestinations({
+								nodeIds: [nodeId],
+							}),
+						);
+					}
 				} else if (endpoint.commandClasses.Association.isSupported()) {
-					return endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
-						[nodeId],
+					const existing = AssociationCC.getAllDestinationsCached(
+						this.driver,
+						endpoint,
 					);
+					if (
+						[...existing.values()].some((dests) =>
+							dests.some((a) => a.nodeId === nodeId),
+						)
+					) {
+						tasks.push(
+							endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
+								[nodeId],
+							),
+						);
+					}
 				}
 			}
 		}
@@ -4018,6 +4095,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		if (result.success) await this.driver.trySoftReset();
+		this._rfRegion = region;
 		return result.success;
 	}
 
@@ -4033,6 +4111,7 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
 		}
+		this._rfRegion = result.region;
 		return result.region;
 	}
 
@@ -4814,10 +4893,11 @@ ${associatedNodes.join(", ")}`,
 	 * **Note:** Sleeping nodes need to be woken up for this to work. This method will throw when called for a sleeping node
 	 * which did not wake up within a minute.
 	 *
-	 * **Note:** This requires an API key to be set in the driver options.
+	 * **Note:** This requires an API key to be set in the driver options, or passed .
 	 */
 	public async getAvailableFirmwareUpdates(
 		nodeId: number,
+		options?: GetFirmwareUpdatesOptions,
 	): Promise<FirmwareUpdateInfo[]> {
 		const node = this.nodes.getOrThrow(nodeId);
 
@@ -4861,11 +4941,22 @@ ${associatedNodes.join(", ")}`,
 		// Now invoke the service
 		try {
 			return await getAvailableFirmwareUpdates(
-				manufacturerId,
-				productType,
-				productId,
-				firmwareVersion,
-				this.driver.options.apiKeys?.firmwareUpdateService,
+				{
+					manufacturerId,
+					productType,
+					productId,
+					firmwareVersion,
+					rfRegion: this.rfRegion,
+				},
+				{
+					userAgent: this.driver.getUserAgentStringWithComponents(
+						options?.additionalUserAgentComponents,
+					),
+					apiKey:
+						options?.apiKey ??
+						this.driver.options.apiKeys?.firmwareUpdateService,
+					includePrereleases: options?.includePrereleases,
+				},
 			);
 		} catch (e: any) {
 			let message = `Cannot check for firmware updates for node ${nodeId}: `;
@@ -4893,11 +4984,22 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Downloads the desired firmware update from the Z-Wave JS firmware update service and starts a firmware update for the given node.
+	 *
+	 * @deprecated Use {@link firmwareUpdateOTA} instead, which properly handles multi-target updates
 	 */
 	public async beginOTAFirmwareUpdate(
 		nodeId: number,
 		update: FirmwareUpdateFileInfo,
 	): Promise<void> {
+		// Don't let two firmware updates happen in parallel
+		if (this.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
 		const node = this.nodes.getOrThrow(nodeId);
 
 		let firmware: Firmware;
@@ -4938,5 +5040,88 @@ ${associatedNodes.join(", ")}`,
 			`Firmware update ${update.url} downloaded, installing...`,
 		);
 		await node.beginFirmwareUpdate(firmware.data, firmware.firmwareTarget);
+	}
+
+	/**
+	 * Downloads the desired firmware update(s) from the Z-Wave JS firmware update service and updates the firmware of the given node.
+	 *
+	 * The return value indicates whether the update was successful.
+	 * **WARNING:** This method will throw instead of returning `false` if invalid arguments are passed or downloading files or starting an update fails.
+	 */
+	public async firmwareUpdateOTA(
+		nodeId: number,
+		updates: FirmwareUpdateFileInfo[],
+	): Promise<boolean> {
+		if (updates.length === 0) {
+			throw new ZWaveError(
+				`At least one update must be provided`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Don't let two firmware updates happen in parallel
+		if (this.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
+
+		const node = this.nodes.getOrThrow(nodeId);
+		this.driver.controllerLog.logNode(
+			nodeId,
+			`OTA firmware update started, downloading ${updates.length} updates...`,
+		);
+
+		const loglevel = this.driver.getLogConfig().level;
+
+		const firmwares: Firmware[] = [];
+		for (let i = 0; i < updates.length; i++) {
+			const update = updates[i];
+			let logMessage = `Downloading firmware update ${i} of ${updates.length}...`;
+			if (loglevel === "silly") {
+				logMessage += `
+  URL:       ${update.url}
+  integrity: ${update.integrity}`;
+			}
+			this.driver.controllerLog.logNode(nodeId, logMessage);
+
+			try {
+				const firmware = await downloadFirmwareUpdate(update);
+				firmwares.push(firmware);
+			} catch (e: any) {
+				let message = `Downloading the firmware update for node ${nodeId} failed:\n`;
+				if (isZWaveError(e)) {
+					// Pass "real" Z-Wave errors through
+					throw new ZWaveError(message + e.message, e.code);
+				} else if (e.response) {
+					// And construct a better error message for HTTP errors
+					if (
+						isObject(e.response.data) &&
+						typeof e.response.data.message === "string"
+					) {
+						message += `${e.response.data.message} `;
+					}
+					message += `[${e.response.status} ${e.response.statusText}]`;
+				} else if (typeof e.message === "string") {
+					message += e.message;
+				} else {
+					message += `Failed to download firmware update!`;
+				}
+
+				throw new ZWaveError(
+					message,
+					ZWaveErrorCodes.FWUpdateService_RequestError,
+				);
+			}
+		}
+
+		this.driver.controllerLog.logNode(
+			nodeId,
+			`All updates downloaded, installing...`,
+		);
+		return node.updateFirmware(firmwares);
 	}
 }

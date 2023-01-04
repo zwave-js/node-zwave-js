@@ -58,6 +58,11 @@ type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Default;
 			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
+			/**
 			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
 			 * This is not recommended due to the overhead caused by S0.
 			 */
@@ -66,9 +71,16 @@ type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Security_S2;
 			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			/**
 			 * The optional provisioning entry for the device to be included.
-			 * If not given, the inclusion user callbacks of the driver options
-			 * will be used.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
 			 */
 			provisioning?: PlannedProvisioningEntry;
 	  }
@@ -79,7 +91,7 @@ type InclusionOptions =
 	  };
 ```
 
-For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](#ZWaveOptions) (`inclusionUserCallbacks`). They are defined as follows:
+For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](#ZWaveOptions) (`inclusionUserCallbacks`). They can optionally be overridden for individual inclusion attempts by setting the `userCallbacks` property in the `InclusionOptions`. The callbacks are defined as follows:
 
 <!-- #import InclusionUserCallbacks from "zwave-js" -->
 
@@ -144,7 +156,7 @@ enum SecurityClass {
 }
 ```
 
-> [!NOTE] These callbacks will also be called when inclusion is initiated by an inclusion controller. As such, the corresponding UI must not be linked to an application-initiated inclusion.
+> [!NOTE] These callbacks will also be called when inclusion is initiated by an inclusion controller. As such, the corresponding UI flow must be supported outside of application-initiated inclusion.
 
 Alternatively, the node can be pre-provisioned by providing the full DSK and the granted security classes instead of the user callbacks:
 
@@ -370,11 +382,11 @@ interface RouteStatistics {
 <!-- #import ProtocolDataRate from "zwave-js" -->
 
 ```ts
-declare enum ProtocolDataRate {
-	ZWave_9k6 = 1,
-	ZWave_40k = 2,
-	ZWave_100k = 3,
-	LongRange_100k = 4,
+enum ProtocolDataRate {
+	ZWave_9k6 = 0x01,
+	ZWave_40k = 0x02,
+	ZWave_100k = 0x03,
+	LongRange_100k = 0x04,
 }
 ```
 
@@ -742,19 +754,38 @@ Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd ar
 ### `getAvailableFirmwareUpdates`
 
 ```ts
-getAvailableFirmwareUpdates(nodeId: number): Promise<FirmwareUpdateInfo[]>
+getAvailableFirmwareUpdates(nodeId: number, options?: GetFirmwareUpdatesOptions): Promise<FirmwareUpdateInfo[]>
 ```
 
-Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). Returns an array with all available firmware updates for the given node. The entries of the array have the following form:
+Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). The following options are available to control the behavior:
+
+<!-- TODO: Figure out why this cannot be imported automatically:
+#import GetFirmwareUpdatesOptions from "zwave-js" -->
+
+```ts
+interface GetFirmwareUpdatesOptions {
+	/** Allows overriding the API key for the firmware update service */
+	apiKey?: string;
+	/** Allows adding new components to the user agent sent to the firmware update service (existing components cannot be overwritten) */
+	additionalUserAgentComponents?: Record<string, string>;
+	/** Whether the returned firmware upgrades should include prereleases from the `"beta"` channel. Default: `false`. */
+	includePrereleases?: boolean;
+}
+```
+
+This method returns an array with all available firmware updates for the given node. The entries of the array have the following form:
 
 <!-- #import FirmwareUpdateInfo from "zwave-js" -->
 
 ```ts
-type FirmwareUpdateInfo = {
+interface FirmwareUpdateInfo {
 	version: string;
 	changelog: string;
+	channel: "stable" | "beta";
 	files: FirmwareUpdateFileInfo[];
-};
+	downgrade: boolean;
+	normalizedVersion: string;
+}
 ```
 
 where each entry in `files` looks like this:
@@ -769,15 +800,33 @@ interface FirmwareUpdateFileInfo {
 }
 ```
 
-The `version` and `changelog` are meant to be presented to the user prior to choosing an update.
+The `version` and `changelog` properties are meant to be **presented to the user** prior to choosing an update.
+The fields `downgrade` and `normalizedVersion` are meant **for applications** to filter and sort the updates.
+In addition, the `channel` property indicates which release channel an upgrade is from:
 
-Many Z-Wave devices only have a single upgradeable firmware target (chip), so the `files` array will usually contain a single entry. If there are more, the user needs to select one.
+-   `"stable"`: Production-ready, well-tested firmwares.
+-   `"beta"`: Beta or pre-release firmwares. This channel is supposed to contain firmwares that are stable enough for a wide audience to test, but may still contain bugs.
 
-> [!WARNING] This method **does not** rely on cached data to identify a node, so sleeping nodes need to be woken up for this to work. If a sleeping node is not woken up within a minute after calling this, the method will throw.
+Many Z-Wave devices only have a single upgradeable firmware target (chip), so the `files` array will usually contain a single entry. If there are more, the entries must be applied in the order they are defined.
+
+> [!WARNING] This method **does not** rely on cached data to identify a node, so sleeping nodes need to be woken up for this to work. If a sleeping node is not woken up within a minute after calling this, the method will throw. You can schedule the check when a node wakes up using the [`waitForWakeup`](api/node#waitForWakeup) method.
 
 > [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
 
-> [!NOTE] This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects).
+This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects and non-commercial use). The API key can also be passed via the `options` argument:
+
+<!-- #import GetFirmwareUpdatesOptions from "zwave-js" -->
+
+```ts
+interface GetFirmwareUpdatesOptions {
+	/** Allows overriding the API key for the firmware update service */
+	apiKey?: string;
+	/** Allows adding new components to the user agent sent to the firmware update service (existing components cannot be overwritten) */
+	additionalUserAgentComponents?: Record<string, string>;
+	/** Whether the returned firmware upgrades should include prereleases from the `"beta"` channel. Default: `false`. */
+	includePrereleases?: boolean;
+}
+```
 
 ### `beginOTAFirmwareUpdate`
 
@@ -832,19 +881,19 @@ Returns the type of the Z-Wave library that is supported by the controller hardw
 <!-- #import ZWaveLibraryTypes from "zwave-js" -->
 
 ```ts
-declare enum ZWaveLibraryTypes {
-	"Unknown" = 0,
-	"Static Controller" = 1,
-	"Controller" = 2,
-	"Enhanced Slave" = 3,
-	"Slave" = 4,
-	"Installer" = 5,
-	"Routing Slave" = 6,
-	"Bridge Controller" = 7,
-	"Device under Test" = 8,
-	"N/A" = 9,
-	"AV Remote" = 10,
-	"AV Device" = 11,
+enum ZWaveLibraryTypes {
+	"Unknown",
+	"Static Controller",
+	"Controller",
+	"Enhanced Slave",
+	"Slave",
+	"Installer",
+	"Routing Slave",
+	"Bridge Controller",
+	"Device under Test",
+	"N/A",
+	"AV Remote",
+	"AV Device",
 }
 ```
 
@@ -921,6 +970,15 @@ enum InclusionState {
 	SmartStart,
 }
 ```
+
+### `rfRegion`
+
+```ts
+readonly rfRegion: RFRegion | undefined
+```
+
+Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet).
+This value is cached and updated automatically when using [`getRFRegion` or `setRFRegion`](#configure-rf-region).
 
 ## Controller events
 

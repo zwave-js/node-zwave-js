@@ -1,0 +1,126 @@
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "4AW1SZ-0EN0",
+	"description": "Retrofit Alarm Kit",
+	"devices": [
+		{
+			"productType": "0x0b01",
+			"productId": "0x0101",
+			"zwaveAllianceId": 3696
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Contact Switch Notifications",
+			"maxNodes": 1
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Battery Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 255,
+			"maxValue": 4200,
+			"defaultValue": 4200
+		},
+		{
+			"#": "2",
+			"label": "One-Time Wakeup Delay",
+			"description": "Device will wakeup once after the configured delay. Value must be divisible by sleep step time (param 7).",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Message Retry Attempt Limit",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Delay Between Retry Attempts",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 6,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Retry Attempt Backoff Multiplier",
+			"description": "The delay between retry attempts is the count of retries multiplied by this factor plus a small random delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Supervision Report Timeout",
+			"description": "How long to wait for a Supervision Report response to a Supervision Get",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 500,
+			"maxValue": 5000,
+			"defaultValue": 1500,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Sleep Step Time",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Contact Debounce Time",
+			"valueSize": 1,
+			"unit": "10 ms",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 5
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Contact Switch: Message Retries"
+		}
+	],
+	"metadata": {
+		"inclusion": "Classic Inclusion Steps:\n1. Initiate add flow in the Ring Alarm mobile application – Follow the guided add flow instructions provided in the Ring Alarm Mobile application\n2. Select add manually and enter the 5 digit DSK pin found on the package of the Ring Alarm Retrofit Kit or the 5 digit DSK pin found on the inside of the top cover of the device.\n4. When the inclusion process in complete, the LED on the keypad will be solid green, then go out.\n\nSmart Start Inclusion Steps:\n1. Initiate add flow in the Ring Alarm mobile application – Follow the guided add flow instructions provided in the Ring Alarm Mobile application\n2. Scan the QR code found on the package of the Ring Alarm Retrofit Kit or the QR code found on the inside of the top cover of the device.\n4. When the inclusion process in complete, the LED on the keypad will be solid green, then go out",
+		"exclusion": "Exclusion Instructions:\n1. Initiate remove keypad flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device”\n2. Press and hold “1” key for three seconds\n3. When the exclusion process is complete, the LED on the keypad will be solid blue, then go out\n4. Test the Keypad. Any button presses would not beep",
+		"reset": "Ring Keypad – Reset\nFactory Default Instructions\n1. Press and hold “5” key and using a pointed end of a paperclip, gently press and release reset button via the reset pinhole found at the back of the keypad\n2. Red network LED at the top left-hand corner will start to blink rapidly\n3. Wait for the red LED to stop blinking then release the “5” key\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3696/Ring%20Retrofit%20Alarm%20Kit%20ZWave.pdf"
+	}
+}

@@ -1,0 +1,63 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN05",
+	"description": "Outdoor Smart Plug",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xb001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "LED Indicator Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always On",
+					"value": 0
+				},
+				{
+					"label": "Follow Outlet",
+					"value": 1
+				},
+				{
+					"label": "Always Off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"$import": "templates/zooz_template.json#auto_off_timer_duration",
+			"label": "Auto Turn-Off Timer Duration"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-On Timer"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
+		},
+		{
+			"#": "7",
+			"$import": "templates/zooz_template.json#led_indicator_brightness"
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Manual Control",
+			"defaultValue": 1
+		}
+	]
+}

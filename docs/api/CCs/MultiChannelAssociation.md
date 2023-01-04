@@ -26,7 +26,7 @@ Returns information about an association group.
 ```ts
 async addDestinations(
 	options: MultiChannelAssociationCCSetOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Adds new nodes or endpoints to an association group.
@@ -36,7 +36,7 @@ Adds new nodes or endpoints to an association group.
 ```ts
 async removeDestinations(
 	options: MultiChannelAssociationCCRemoveOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Removes nodes or endpoints from an association group.

@@ -6,7 +6,8 @@
 	"devices": [
 		{
 			"productType": "0x0015",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 4641
 		}
 	],
 	"firmwareVersion": {
@@ -130,13 +131,37 @@
 			"minValue": 10,
 			"maxValue": 60,
 			"defaultValue": 30
+		},
+		{
+			"#": "10",
+			"label": "Manual Override Duration",
+			"valueSize": 1,
+			"unit": "30 minutes",
+			"minValue": 1,
+			"maxValue": 48,
+			"defaultValue": 8,
+			"unsigned": true
 		}
 	],
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the P button 3 times within 1.5 seconds to put the unit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the P button 3 times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "1. Press the P button 3 times within 1.5 seconds to put the unit into exclusion mode.\n2. Within 1 second of step 1, press the button P again and hold for 5 seconds.\n3. Node ID is excluded. The device reverts to factory default state.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4641/ZRT-106%20user%20manual.pdf"
+	},
 	"compat": {
 		// This device only accepts Thermostat Setpoint Set commands with a specific float encoding
 		"overrideFloatEncoding": {
 			"precision": 1,
 			"size": 2
+		},
+		"commandClasses": {
+			"remove": {
+				// The device does not support Supervision correctly
+				"0x6c": {
+					"endpoints": "*"
+				}
+			}
 		}
 	}
 }

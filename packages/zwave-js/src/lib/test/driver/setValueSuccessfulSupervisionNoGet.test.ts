@@ -38,8 +38,8 @@ integrationTest(
 						frame.type === MockZWaveFrameType.Request &&
 						frame.payload instanceof SupervisionCCGet
 					) {
-						const cc = new SupervisionCCReport(controller.host, {
-							nodeId: self.id,
+						const cc = new SupervisionCCReport(self.host, {
+							nodeId: controller.host.ownNodeId,
 							sessionId: frame.payload.sessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Success,
@@ -57,6 +57,10 @@ integrationTest(
 			mockNode.defineBehavior(respondToSupervisionGet);
 		},
 		testBody: async (driver, node, mockController, mockNode) => {
+			const onValueChange = jest.fn();
+			node.on("value added", onValueChange);
+			node.on("value updated", onValueChange);
+
 			await node.setValue(BinarySwitchCCValues.targetValue.id, true);
 
 			await wait(500);
@@ -86,6 +90,22 @@ integrationTest(
 				BinarySwitchCCValues.currentValue.id,
 			);
 			expect(currentValue).toBeTrue();
+
+			// And make sure the value event handlers are called
+			expect(onValueChange).toHaveBeenCalledWith(
+				expect.anything(),
+				expect.objectContaining({
+					property: "currentValue",
+					newValue: true,
+				}),
+			);
+			expect(onValueChange).toHaveBeenCalledWith(
+				expect.anything(),
+				expect.objectContaining({
+					property: "targetValue",
+					newValue: true,
+				}),
+			);
 		},
 	},
 );

@@ -1,12 +1,16 @@
+import type { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import type {
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+	FirmwareUpdateProgress,
+	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
+	MultilevelSwitchCommand,
 	Powerlevel,
-	ZWaveNotificationCallbackParams_EntryControlCC,
-	ZWaveNotificationCallbackParams_MultilevelSwitchCC,
-	ZWaveNotificationCallbackParams_NotificationCC,
-	ZWaveNotificationCallbackParams_PowerlevelCC,
-} from "@zwave-js/cc";
+	PowerlevelTestStatus,
+} from "@zwave-js/cc/safe";
 import type {
+	CommandClasses,
 	MetadataUpdatedArgs,
 	NodeStatus,
 	ValueAddedArgs,
@@ -17,6 +21,16 @@ import type {
 } from "@zwave-js/core";
 import type { ZWaveNode } from "./Node";
 import type { RouteStatistics } from "./NodeStatistics";
+
+export {
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+	FirmwareUpdateStatus,
+	MultilevelSwitchCommand,
+	Powerlevel,
+	PowerlevelTestStatus,
+} from "@zwave-js/cc/safe";
+export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
@@ -72,18 +86,102 @@ export type ZWaveInterviewFailedCallback = (
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,
-	sentFragments: number,
-	totalFragments: number,
+	__DEPRECATED__sentFragments: number,
+	__DEPRECATED__totalFragments: number,
+	progress: FirmwareUpdateProgress,
 ) => void;
 export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 	node: ZWaveNode,
-	status: FirmwareUpdateStatus,
-	waitTime?: number,
+	__DEPRECATED__status: FirmwareUpdateStatus,
+	__DEPRECATED__waitTime: number | undefined,
+	result: FirmwareUpdateResult,
 ) => void;
 export type ZWaveNodeStatusChangeCallback = (
 	node: ZWaveNode,
 	oldStatus: NodeStatus,
 ) => void;
+
+/**
+ * This is emitted when a start or stop event is received
+ */
+export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
+	/** The numeric identifier for the event type */
+	eventType:
+		| MultilevelSwitchCommand.StartLevelChange
+		| MultilevelSwitchCommand.StopLevelChange;
+	/** A human-readable label for the event type */
+	eventTypeLabel: string;
+	/** The direction of the level change */
+	direction?: string;
+}
+
+/**
+ * Parameter types for the MultilevelSwitch CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Multilevel Switch"],
+	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+];
+
+export interface ZWaveNotificationCallbackArgs_NotificationCC {
+	/** The numeric identifier for the notification type */
+	type: number;
+	/** The human-readable label for the notification type */
+	label: string;
+	/** The numeric identifier for the notification event */
+	event: number;
+	/** The human-readable label for the notification event */
+	eventLabel: string;
+	/** Additional information related to the event */
+	parameters?: NotificationCCReport["eventParameters"];
+}
+
+/**
+ * Parameter types for the Notification CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_NotificationCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Notification,
+	args: ZWaveNotificationCallbackArgs_NotificationCC,
+];
+
+/**
+ * This is emitted when an unsolicited powerlevel test report is received
+ */
+export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
+	testNodeId: number;
+	status: PowerlevelTestStatus;
+	acknowledgedFrames: number;
+}
+
+/**
+ * Parameter types for the Powerlevel CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_PowerlevelCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Powerlevel,
+	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
+];
+
+export interface ZWaveNotificationCallbackArgs_EntryControlCC {
+	eventType: EntryControlEventTypes;
+	/** A human-readable label for the event type */
+	eventTypeLabel: string;
+	dataType: EntryControlDataTypes;
+	/** A human-readable label for the data type */
+	dataTypeLabel: string;
+	eventData?: Buffer | string;
+}
+
+/**
+ * Parameter types for the Entry Control CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_EntryControlCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Entry Control"],
+	args: ZWaveNotificationCallbackArgs_EntryControlCC,
+];
 
 export type ZWaveNotificationCallback = (
 	...args:
@@ -117,8 +215,6 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 }
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
-
-export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 
 /** Represents the result of one health check round of a node's lifeline */
 export interface LifelineHealthCheckResult {

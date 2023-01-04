@@ -19,7 +19,7 @@ async getInternal(
 ```ts
 async sendReport(
 	options: NotificationCCReportOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `get`
@@ -34,7 +34,7 @@ async get(options: NotificationCCGetSpecificOptions): Promise<Pick<NotificationC
 async set(
 	notificationType: number,
 	notificationStatus: boolean,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSupported`

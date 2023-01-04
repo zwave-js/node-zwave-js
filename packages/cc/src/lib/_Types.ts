@@ -3,12 +3,10 @@ import {
 	CommandClasses,
 	DataRate,
 	FLiRS,
-	IZWaveNode,
 	Maybe,
 	ValueMetadata,
 	ZWaveDataRate,
 } from "@zwave-js/core/safe";
-import type { NotificationCCReport } from "../cc/NotificationCC";
 
 export enum AlarmSensorCommand {
 	Get = 0x01,
@@ -441,7 +439,6 @@ export const ColorComponentMap = {
 export type ColorKey = keyof typeof ColorComponentMap;
 
 /**
- * @publicAPI
  * This type is used to accept both the kebabCase names and numeric components as table keys
  */
 export type ColorTable =
@@ -637,26 +634,6 @@ export enum EntryControlDataTypes {
 	MD5 = 0x03,
 }
 
-export interface ZWaveNotificationCallbackArgs_EntryControlCC {
-	eventType: EntryControlEventTypes;
-	/** A human-readable label for the event type */
-	eventTypeLabel: string;
-	dataType: EntryControlDataTypes;
-	/** A human-readable label for the data type */
-	dataTypeLabel: string;
-	eventData?: Buffer | string;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Entry Control CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: IZWaveNode,
-	ccId: typeof CommandClasses["Entry Control"],
-	args: ZWaveNotificationCallbackArgs_EntryControlCC,
-];
-
 export enum FirmwareUpdateMetaDataCommand {
 	MetaDataGet = 0x01,
 	MetaDataReport = 0x02,
@@ -669,6 +646,30 @@ export enum FirmwareUpdateMetaDataCommand {
 	ActivationReport = 0x09,
 	PrepareGet = 0x0a,
 	PrepareReport = 0x0b,
+}
+
+export interface FirmwareUpdateMetaData {
+	manufacturerId: number;
+	firmwareId: number;
+	checksum: number;
+	firmwareUpgradable: boolean;
+	maxFragmentSize?: number;
+	additionalFirmwareIDs: readonly number[];
+	hardwareVersion?: number;
+	continuesToFunction: Maybe<boolean>;
+	supportsActivation: Maybe<boolean>;
+}
+
+export interface FirmwareUpdateMetaData {
+	manufacturerId: number;
+	firmwareId: number;
+	checksum: number;
+	firmwareUpgradable: boolean;
+	maxFragmentSize?: number;
+	additionalFirmwareIDs: readonly number[];
+	hardwareVersion?: number;
+	continuesToFunction: Maybe<boolean>;
+	supportsActivation: Maybe<boolean>;
 }
 
 export enum FirmwareUpdateRequestStatus {
@@ -688,6 +689,7 @@ export enum FirmwareUpdateStatus {
 	Error_Timeout = -1,
 
 	Error_Checksum = 0,
+	/** TransmissionFailed is also used for user-aborted upgrades */
 	Error_TransmissionFailed = 1,
 	Error_InvalidManufacturerID = 2,
 	Error_InvalidFirmwareID = 3,
@@ -733,6 +735,30 @@ export type FirmwareUpdateCapabilities =
 			/** Indicates whether the node supports delayed activation of the new firmware */
 			readonly supportsActivation: Maybe<boolean>;
 	  };
+
+export interface FirmwareUpdateProgress {
+	/** Which part/file of the firmware update process is currently in progress. This is a number from 1 to `totalFiles` and can be used to display progress. */
+	currentFile: number;
+	/** How many files the firmware update process consists of. */
+	totalFiles: number;
+	/** How many fragments of the current file have been transmitted. Together with `totalFragments` this can be used to display progress. */
+	sentFragments: number;
+	/** How many fragments the current file of the firmware update consists of. */
+	totalFragments: number;
+	/** The total progress of the firmware update in %, rounded to two digits. This considers the total size of all files. */
+	progress: number;
+}
+
+export interface FirmwareUpdateResult {
+	/** The status returned by the device for this firmware update attempt. For multi-target updates, this will be the status for the last update. */
+	status: FirmwareUpdateStatus;
+	/** Whether the update was successful. This is a simpler interpretation of the `status` field. */
+	success: boolean;
+	/** How long (in seconds) to wait before interacting with the device again */
+	waitTime?: number;
+	/** Whether the device will be re-interviewed. If this is `true`, applications should wait for the `"ready"` event to interact with the device again. */
+	reInterview: boolean;
+}
 
 export enum HailCommand {
 	Hail = 0x01,
@@ -1015,31 +1041,6 @@ export type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	};
 };
 
-/**
- * @publicAPI
- * This is emitted when a start or stop event is received
- */
-export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
-	/** The numeric identifier for the event type */
-	eventType:
-		| MultilevelSwitchCommand.StartLevelChange
-		| MultilevelSwitchCommand.StopLevelChange;
-	/** A human-readable label for the event type */
-	eventTypeLabel: string;
-	/** The direction of the level change */
-	direction?: string;
-}
-
-/**
- * @publicAPI
- * Parameter types for the MultilevelSwitch CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: IZWaveNode,
-	ccId: typeof CommandClasses["Multilevel Switch"],
-	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
-];
-
 export enum NodeNamingAndLocationCommand {
 	NameSet = 0x01,
 	NameGet = 0x02,
@@ -1064,29 +1065,6 @@ export type NotificationMetadata = ValueMetadata & {
 		notificationType: number;
 	};
 };
-
-export interface ZWaveNotificationCallbackArgs_NotificationCC {
-	/** The numeric identifier for the notification type */
-	type: number;
-	/** The human-readable label for the notification type */
-	label: string;
-	/** The numeric identifier for the notification event */
-	event: number;
-	/** The human-readable label for the notification event */
-	eventLabel: string;
-	/** Additional information related to the event */
-	parameters?: NotificationCCReport["eventParameters"];
-}
-
-/**
- * @publicAPI
- * Parameter types for the Notification CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: IZWaveNode,
-	ccId: CommandClasses.Notification,
-	args: ZWaveNotificationCallbackArgs_NotificationCC,
-];
 
 export enum PowerlevelCommand {
 	Set = 0x01,
@@ -1115,26 +1093,6 @@ export enum PowerlevelTestStatus {
 	Success = 0x01,
 	"In Progress" = 0x02,
 }
-
-/**
- * @publicAPI
- * This is emitted when an unsolicited powerlevel test report is received
- */
-export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
-	testNodeId: number;
-	status: PowerlevelTestStatus;
-	acknowledgedFrames: number;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Powerlevel CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: IZWaveNode,
-	ccId: CommandClasses.Powerlevel,
-	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
-];
 
 export enum ProtectionCommand {
 	Set = 0x01,
@@ -1176,6 +1134,75 @@ export enum SceneControllerConfigurationCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
+}
+
+export enum ScheduleEntryLockCommand {
+	EnableSet = 0x01,
+	EnableAllSet = 0x02,
+	WeekDayScheduleSet = 0x03,
+	WeekDayScheduleGet = 0x04,
+	WeekDayScheduleReport = 0x05,
+	YearDayScheduleSet = 0x06,
+	YearDayScheduleGet = 0x07,
+	YearDayScheduleReport = 0x08,
+	SupportedGet = 0x09,
+	SupportedReport = 0x0a,
+	TimeOffsetGet = 0x0b,
+	TimeOffsetReport = 0x0c,
+	TimeOffsetSet = 0x0d,
+	DailyRepeatingScheduleGet = 0x0e,
+	DailyRepeatingScheduleReport = 0x0f,
+	DailyRepeatingScheduleSet = 0x10,
+}
+
+export enum ScheduleEntryLockSetAction {
+	Erase,
+	Set,
+}
+
+export interface ScheduleEntryLockSlotId {
+	userId: number;
+	slotId: number;
+}
+
+export enum ScheduleEntryLockWeekday {
+	// Yay, consistency!
+	Sunday = 0x00,
+	Monday = 0x01,
+	Tuesday = 0x02,
+	Wednesday = 0x03,
+	Thursday = 0x04,
+	Friday = 0x05,
+	Saturday = 0x06,
+}
+
+export interface ScheduleEntryLockDailyRepeatingSchedule {
+	weekdays: ScheduleEntryLockWeekday[];
+	startHour: number;
+	startMinute: number;
+	durationHour: number;
+	durationMinute: number;
+}
+
+export interface ScheduleEntryLockYearDaySchedule {
+	startYear: number;
+	startMonth: number;
+	startDay: number;
+	startHour: number;
+	startMinute: number;
+	stopYear: number;
+	stopMonth: number;
+	stopDay: number;
+	stopHour: number;
+	stopMinute: number;
+}
+
+export interface ScheduleEntryLockWeekDaySchedule {
+	weekday: ScheduleEntryLockWeekday;
+	startHour: number;
+	startMinute: number;
+	stopHour: number;
+	stopMinute: number;
 }
 
 export enum Security2Command {
@@ -1230,6 +1257,11 @@ export enum ToneId {
 export enum SupervisionCommand {
 	Get = 0x01,
 	Report = 0x02,
+}
+
+export interface Timezone {
+	standardOffset: number;
+	dstOffset: number;
 }
 
 export enum ThermostatFanModeCommand {
@@ -1330,12 +1362,6 @@ export enum ThermostatSetbackCommand {
 	Report = 0x03,
 }
 
-export interface Timezone {
-	standardOffset: number;
-	dstOffset: number;
-}
-
-/** @publicAPI */
 export enum SetbackType {
 	None = 0x00,
 	Temporary = 0x01,

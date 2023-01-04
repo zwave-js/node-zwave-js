@@ -2,9 +2,9 @@ import {
 	createDefaultTransportFormat,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import { assertMessage, SpyTransport } from "@zwave-js/core/test";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import type { ThrowingMap } from "@zwave-js/shared";
-import { assertMessage, SpyTransport } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import MockDate from "mockdate";
 import type { Driver } from "../../driver/Driver";
