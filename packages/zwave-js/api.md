@@ -84,12 +84,8 @@ import { NodeStatus } from '@zwave-js/core/safe';
 import type { NodeStatus as NodeStatus_2 } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core/safe';
 import { NodeType as NodeType_2 } from '@zwave-js/core';
-<<<<<<< HEAD
 import { NodeUpdatePayload } from '@zwave-js/core';
-||||||| 4497d92ad
-=======
 import type { NotificationCCReport } from '@zwave-js/cc/NotificationCC';
->>>>>>> master
 import { num2hex } from '@zwave-js/shared/safe';
 import { parseQRCodeString } from '@zwave-js/core';
 import { Powerlevel } from '@zwave-js/cc/safe';

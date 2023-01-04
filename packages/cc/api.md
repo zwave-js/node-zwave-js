@@ -2824,19 +2824,9 @@ export type CCToAPI<CC extends CommandClasses_2> = CCToName<CC> extends keyof CC
 // Warning: (ae-missing-release-tag) "CCToName" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-<<<<<<< HEAD
-export type CCToName<CC extends CommandClasses_2> = [CC] extends [
-typeof CommandClasses_2["Alarm Sensor"]
-] ? "Alarm Sensor" : [CC] extends [typeof CommandClasses_2["Association"]] ? "Association" : [CC] extends [typeof CommandClasses_2["Association Group Information"]] ? "Association Group Information" : [CC] extends [typeof CommandClasses_2["Barrier Operator"]] ? "Barrier Operator" : [CC] extends [typeof CommandClasses_2["Basic"]] ? "Basic" : [CC] extends [typeof CommandClasses_2["Battery"]] ? "Battery" : [CC] extends [typeof CommandClasses_2["Binary Sensor"]] ? "Binary Sensor" : [CC] extends [typeof CommandClasses_2["Binary Switch"]] ? "Binary Switch" : [CC] extends [typeof CommandClasses_2["CRC-16 Encapsulation"]] ? "CRC-16 Encapsulation" : [CC] extends [typeof CommandClasses_2["Central Scene"]] ? "Central Scene" : [CC] extends [typeof CommandClasses_2["Climate Control Schedule"]] ? "Climate Control Schedule" : [CC] extends [typeof CommandClasses_2["Clock"]] ? "Clock" : [CC] extends [typeof CommandClasses_2["Color Switch"]] ? "Color Switch" : [CC] extends [typeof CommandClasses_2["Configuration"]] ? "Configuration" : [CC] extends [typeof CommandClasses_2["Door Lock"]] ? "Door Lock" : [CC] extends [typeof CommandClasses_2["Door Lock Logging"]] ? "Door Lock Logging" : [CC] extends [typeof CommandClasses_2["Entry Control"]] ? "Entry Control" : [CC] extends [typeof CommandClasses_2["Firmware Update Meta Data"]] ? "Firmware Update Meta Data" : [CC] extends [typeof CommandClasses_2["Humidity Control Mode"]] ? "Humidity Control Mode" : [CC] extends [typeof CommandClasses_2["Humidity Control Operating State"]] ? "Humidity Control Operating State" : [CC] extends [typeof CommandClasses_2["Humidity Control Setpoint"]] ? "Humidity Control Setpoint" : [CC] extends [typeof CommandClasses_2["Inclusion Controller"]] ? "Inclusion Controller" : [CC] extends [typeof CommandClasses_2["Indicator"]] ? "Indicator" : [CC] extends [typeof CommandClasses_2["Irrigation"]] ? "Irrigation" : [CC] extends [typeof CommandClasses_2["Language"]] ? "Language" : [CC] extends [typeof CommandClasses_2["Lock"]] ? "Lock" : [CC] extends [typeof CommandClasses_2["Manufacturer Proprietary"]] ? "Manufacturer Proprietary" : [CC] extends [typeof CommandClasses_2["Manufacturer Specific"]] ? "Manufacturer Specific" : [CC] extends [typeof CommandClasses_2["Meter"]] ? "Meter" : [CC] extends [typeof CommandClasses_2["Multi Channel Association"]] ? "Multi Channel Association" : [CC] extends [typeof CommandClasses_2["Multi Channel"]] ? "Multi Channel" : [CC] extends [typeof CommandClasses_2["Multi Command"]] ? "Multi Command" : [CC] extends [typeof CommandClasses_2["Multilevel Sensor"]] ? "Multilevel Sensor" : [CC] extends [typeof CommandClasses_2["Multilevel Switch"]] ? "Multilevel Switch" : [CC] extends [typeof CommandClasses_2["No Operation"]] ? "No Operation" : [CC] extends [typeof CommandClasses_2["Node Naming and Location"]] ? "Node Naming and Location" : [CC] extends [typeof CommandClasses_2["Notification"]] ? "Notification" : [CC] extends [typeof CommandClasses_2["Powerlevel"]] ? "Powerlevel" : [CC] extends [typeof CommandClasses_2["Protection"]] ? "Protection" : [CC] extends [typeof CommandClasses_2["Scene Activation"]] ? "Scene Activation" : [CC] extends [typeof CommandClasses_2["Scene Actuator Configuration"]] ? "Scene Actuator Configuration" : [CC] extends [typeof CommandClasses_2["Scene Controller Configuration"]] ? "Scene Controller Configuration" : [CC] extends [typeof CommandClasses_2["Security 2"]] ? "Security 2" : [CC] extends [typeof CommandClasses_2["Security"]] ? "Security" : [CC] extends [typeof CommandClasses_2["Sound Switch"]] ? "Sound Switch" : [CC] extends [typeof CommandClasses_2["Supervision"]] ? "Supervision" : [CC] extends [typeof CommandClasses_2["Thermostat Fan Mode"]] ? "Thermostat Fan Mode" : [CC] extends [typeof CommandClasses_2["Thermostat Fan State"]] ? "Thermostat Fan State" : [CC] extends [typeof CommandClasses_2["Thermostat Mode"]] ? "Thermostat Mode" : [CC] extends [typeof CommandClasses_2["Thermostat Operating State"]] ? "Thermostat Operating State" : [CC] extends [typeof CommandClasses_2["Thermostat Setback"]] ? "Thermostat Setback" : [CC] extends [typeof CommandClasses_2["Thermostat Setpoint"]] ? "Thermostat Setpoint" : [CC] extends [typeof CommandClasses_2["Time"]] ? "Time" : [CC] extends [typeof CommandClasses_2["Time Parameters"]] ? "Time Parameters" : [CC] extends [typeof CommandClasses_2["User Code"]] ? "User Code" : [CC] extends [typeof CommandClasses_2["Version"]] ? "Version" : [CC] extends [typeof CommandClasses_2["Wake Up"]] ? "Wake Up" : [CC] extends [typeof CommandClasses_2["Z-Wave Plus Info"]] ? "Z-Wave Plus Info" : never;
-||||||| 4497d92ad
-export type CCToName<CC extends CommandClasses_2> = [CC] extends [
-typeof CommandClasses_2["Alarm Sensor"]
-] ? "Alarm Sensor" : [CC] extends [typeof CommandClasses_2["Association"]] ? "Association" : [CC] extends [typeof CommandClasses_2["Association Group Information"]] ? "Association Group Information" : [CC] extends [typeof CommandClasses_2["Barrier Operator"]] ? "Barrier Operator" : [CC] extends [typeof CommandClasses_2["Basic"]] ? "Basic" : [CC] extends [typeof CommandClasses_2["Battery"]] ? "Battery" : [CC] extends [typeof CommandClasses_2["Binary Sensor"]] ? "Binary Sensor" : [CC] extends [typeof CommandClasses_2["Binary Switch"]] ? "Binary Switch" : [CC] extends [typeof CommandClasses_2["CRC-16 Encapsulation"]] ? "CRC-16 Encapsulation" : [CC] extends [typeof CommandClasses_2["Central Scene"]] ? "Central Scene" : [CC] extends [typeof CommandClasses_2["Climate Control Schedule"]] ? "Climate Control Schedule" : [CC] extends [typeof CommandClasses_2["Clock"]] ? "Clock" : [CC] extends [typeof CommandClasses_2["Color Switch"]] ? "Color Switch" : [CC] extends [typeof CommandClasses_2["Configuration"]] ? "Configuration" : [CC] extends [typeof CommandClasses_2["Door Lock"]] ? "Door Lock" : [CC] extends [typeof CommandClasses_2["Door Lock Logging"]] ? "Door Lock Logging" : [CC] extends [typeof CommandClasses_2["Entry Control"]] ? "Entry Control" : [CC] extends [typeof CommandClasses_2["Firmware Update Meta Data"]] ? "Firmware Update Meta Data" : [CC] extends [typeof CommandClasses_2["Humidity Control Mode"]] ? "Humidity Control Mode" : [CC] extends [typeof CommandClasses_2["Humidity Control Operating State"]] ? "Humidity Control Operating State" : [CC] extends [typeof CommandClasses_2["Humidity Control Setpoint"]] ? "Humidity Control Setpoint" : [CC] extends [typeof CommandClasses_2["Indicator"]] ? "Indicator" : [CC] extends [typeof CommandClasses_2["Irrigation"]] ? "Irrigation" : [CC] extends [typeof CommandClasses_2["Language"]] ? "Language" : [CC] extends [typeof CommandClasses_2["Lock"]] ? "Lock" : [CC] extends [typeof CommandClasses_2["Manufacturer Proprietary"]] ? "Manufacturer Proprietary" : [CC] extends [typeof CommandClasses_2["Manufacturer Specific"]] ? "Manufacturer Specific" : [CC] extends [typeof CommandClasses_2["Meter"]] ? "Meter" : [CC] extends [typeof CommandClasses_2["Multi Channel Association"]] ? "Multi Channel Association" : [CC] extends [typeof CommandClasses_2["Multi Channel"]] ? "Multi Channel" : [CC] extends [typeof CommandClasses_2["Multi Command"]] ? "Multi Command" : [CC] extends [typeof CommandClasses_2["Multilevel Sensor"]] ? "Multilevel Sensor" : [CC] extends [typeof CommandClasses_2["Multilevel Switch"]] ? "Multilevel Switch" : [CC] extends [typeof CommandClasses_2["No Operation"]] ? "No Operation" : [CC] extends [typeof CommandClasses_2["Node Naming and Location"]] ? "Node Naming and Location" : [CC] extends [typeof CommandClasses_2["Notification"]] ? "Notification" : [CC] extends [typeof CommandClasses_2["Powerlevel"]] ? "Powerlevel" : [CC] extends [typeof CommandClasses_2["Protection"]] ? "Protection" : [CC] extends [typeof CommandClasses_2["Scene Activation"]] ? "Scene Activation" : [CC] extends [typeof CommandClasses_2["Scene Actuator Configuration"]] ? "Scene Actuator Configuration" : [CC] extends [typeof CommandClasses_2["Scene Controller Configuration"]] ? "Scene Controller Configuration" : [CC] extends [typeof CommandClasses_2["Security 2"]] ? "Security 2" : [CC] extends [typeof CommandClasses_2["Security"]] ? "Security" : [CC] extends [typeof CommandClasses_2["Sound Switch"]] ? "Sound Switch" : [CC] extends [typeof CommandClasses_2["Supervision"]] ? "Supervision" : [CC] extends [typeof CommandClasses_2["Thermostat Fan Mode"]] ? "Thermostat Fan Mode" : [CC] extends [typeof CommandClasses_2["Thermostat Fan State"]] ? "Thermostat Fan State" : [CC] extends [typeof CommandClasses_2["Thermostat Mode"]] ? "Thermostat Mode" : [CC] extends [typeof CommandClasses_2["Thermostat Operating State"]] ? "Thermostat Operating State" : [CC] extends [typeof CommandClasses_2["Thermostat Setback"]] ? "Thermostat Setback" : [CC] extends [typeof CommandClasses_2["Thermostat Setpoint"]] ? "Thermostat Setpoint" : [CC] extends [typeof CommandClasses_2["Time"]] ? "Time" : [CC] extends [typeof CommandClasses_2["Time Parameters"]] ? "Time Parameters" : [CC] extends [typeof CommandClasses_2["User Code"]] ? "User Code" : [CC] extends [typeof CommandClasses_2["Version"]] ? "Version" : [CC] extends [typeof CommandClasses_2["Wake Up"]] ? "Wake Up" : [CC] extends [typeof CommandClasses_2["Z-Wave Plus Info"]] ? "Z-Wave Plus Info" : never;
-=======
 export type CCToName<CC extends CommandClasses_2> = {
     [K in keyof CCNameMap]: CCNameMap[K] extends CC ? K : never;
 }[keyof CCNameMap];
->>>>>>> master
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-forgotten-export) The symbol "StaticCCValue" needs to be exported by the entry point index.d.ts
@@ -3810,7 +3800,6 @@ export enum ColorSwitchCommand {
     SupportedReport = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ColorTable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -6025,7 +6014,30 @@ export type FirmwareUpdateCapabilities = {
 };
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaData" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaData" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
+// @public (undocumented)
+export interface FirmwareUpdateMetaData {
+    // (undocumented)
+    additionalFirmwareIDs: readonly number[];
+    // (undocumented)
+    checksum: number;
+    // (undocumented)
+    continuesToFunction: Maybe<boolean>;
+    // (undocumented)
+    firmwareId: number;
+    // (undocumented)
+    firmwareUpgradable: boolean;
+    // (undocumented)
+    hardwareVersion?: number;
+    // (undocumented)
+    manufacturerId: number;
+    // (undocumented)
+    maxFragmentSize?: number;
+    // (undocumented)
+    supportsActivation: Maybe<boolean>;
+}
+
 // @public (undocumented)
 export interface FirmwareUpdateMetaData {
     // (undocumented)
@@ -6385,10 +6397,6 @@ export enum FirmwareUpdateMetaDataCommand {
     StatusReport = 7
 }
 
-<<<<<<< HEAD
-||||||| 4497d92ad
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-=======
 // Warning: (ae-missing-release-tag) "FirmwareUpdateProgress" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6400,8 +6408,6 @@ export interface FirmwareUpdateProgress {
     totalFragments: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
->>>>>>> master
 // Warning: (ae-missing-release-tag) "FirmwareUpdateRequestStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6424,10 +6430,6 @@ export enum FirmwareUpdateRequestStatus {
     OK = 255
 }
 
-<<<<<<< HEAD
-||||||| 4497d92ad
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-=======
 // Warning: (ae-missing-release-tag) "FirmwareUpdateResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6438,8 +6440,6 @@ export interface FirmwareUpdateResult {
     waitTime?: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
->>>>>>> master
 // Warning: (ae-missing-release-tag) "FirmwareUpdateStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12952,10 +12952,6 @@ export enum SceneControllerConfigurationCommand {
     Set = 1
 }
 
-<<<<<<< HEAD
-||||||| 4497d92ad
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-=======
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13371,7 +13367,6 @@ export type ScheduleEntryLockCCYearDayScheduleSetOptions = CCCommandOptions & Sc
     action: ScheduleEntryLockSetAction.Set;
 } & ScheduleEntryLockYearDaySchedule));
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13410,7 +13405,6 @@ export enum ScheduleEntryLockCommand {
     YearDayScheduleSet = 6
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockDailyRepeatingSchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13427,7 +13421,6 @@ export interface ScheduleEntryLockDailyRepeatingSchedule {
     weekdays: ScheduleEntryLockWeekday[];
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockSetAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13438,7 +13431,6 @@ export enum ScheduleEntryLockSetAction {
     Set = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockSlotId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13449,7 +13441,6 @@ export interface ScheduleEntryLockSlotId {
     userId: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockWeekday" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13470,7 +13461,6 @@ export enum ScheduleEntryLockWeekday {
     Wednesday = 3
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockWeekDaySchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13487,7 +13477,6 @@ export interface ScheduleEntryLockWeekDaySchedule {
     weekday: ScheduleEntryLockWeekday;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockYearDaySchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13514,8 +13503,6 @@ export interface ScheduleEntryLockYearDaySchedule {
     stopYear: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
->>>>>>> master
 // Warning: (ae-missing-release-tag) "ScheduleOverrideType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14010,7 +13997,6 @@ export type SetbackSpecialState = "Frost Protection" | "Energy Saving" | "Unused
 // @public (undocumented)
 export type SetbackState = number | SetbackSpecialState;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SetbackType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15776,7 +15762,6 @@ export enum TimeParametersCommand {
     Set = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "Timezone" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -17433,188 +17418,6 @@ export type WrapWithTXReport<T> = [T] extends [Promise<infer U>] ? Promise<WrapW
 // @public (undocumented)
 export function ZWaveDataRate2DataRate(zdr: ZWaveDataRate_2): DataRate_2;
 
-<<<<<<< HEAD
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZWaveNotificationCallbackArgs_EntryControlCC {
-    // (undocumented)
-    dataType: EntryControlDataTypes;
-    dataTypeLabel: string;
-    // (undocumented)
-    eventData?: Buffer | string;
-    // (undocumented)
-    eventType: EntryControlEventTypes;
-    eventTypeLabel: string;
-}
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_MultilevelSwitchCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
-    direction?: string;
-    eventType: MultilevelSwitchCommand.StartLevelChange | MultilevelSwitchCommand.StopLevelChange;
-    eventTypeLabel: string;
-}
-
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZWaveNotificationCallbackArgs_NotificationCC {
-    event: number;
-    eventLabel: string;
-    label: string;
-    parameters?: NotificationCCReport["eventParameters"];
-    type: number;
-}
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_PowerlevelCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
-    // (undocumented)
-    acknowledgedFrames: number;
-    // (undocumented)
-    status: PowerlevelTestStatus;
-    // (undocumented)
-    testNodeId: number;
-}
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export type ZWaveNotificationCallbackParams_EntryControlCC = [
-node: IZWaveNode,
-ccId: typeof CommandClasses["Entry Control"],
-args: ZWaveNotificationCallbackArgs_EntryControlCC
-];
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_MultilevelSwitchCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-node: IZWaveNode,
-ccId: typeof CommandClasses["Multilevel Switch"],
-args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
-];
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export type ZWaveNotificationCallbackParams_NotificationCC = [
-node: IZWaveNode,
-ccId: CommandClasses.Notification,
-args: ZWaveNotificationCallbackArgs_NotificationCC
-];
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_PowerlevelCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export type ZWaveNotificationCallbackParams_PowerlevelCC = [
-node: IZWaveNode,
-ccId: CommandClasses.Powerlevel,
-args: ZWaveNotificationCallbackArgs_PowerlevelCC
-];
-
-||||||| 4497d92ad
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZWaveNotificationCallbackArgs_EntryControlCC {
-    // (undocumented)
-    dataType: EntryControlDataTypes;
-    dataTypeLabel: string;
-    // (undocumented)
-    eventData?: Buffer | string;
-    // (undocumented)
-    eventType: EntryControlEventTypes;
-    eventTypeLabel: string;
-}
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_MultilevelSwitchCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
-    direction?: string;
-    eventType: MultilevelSwitchCommand.StartLevelChange | MultilevelSwitchCommand.StopLevelChange;
-    eventTypeLabel: string;
-}
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZWaveNotificationCallbackArgs_NotificationCC {
-    event: number;
-    eventLabel: string;
-    label: string;
-    parameters?: NotificationCCReport["eventParameters"];
-    type: number;
-}
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_PowerlevelCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
-    // (undocumented)
-    acknowledgedFrames: number;
-    // (undocumented)
-    status: PowerlevelTestStatus;
-    // (undocumented)
-    testNodeId: number;
-}
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export type ZWaveNotificationCallbackParams_EntryControlCC = [
-node: IZWaveNode,
-ccId: typeof CommandClasses["Entry Control"],
-args: ZWaveNotificationCallbackArgs_EntryControlCC
-];
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_MultilevelSwitchCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-node: IZWaveNode,
-ccId: typeof CommandClasses["Multilevel Switch"],
-args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
-];
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export type ZWaveNotificationCallbackParams_NotificationCC = [
-node: IZWaveNode,
-ccId: CommandClasses.Notification,
-args: ZWaveNotificationCallbackArgs_NotificationCC
-];
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_PowerlevelCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export type ZWaveNotificationCallbackParams_PowerlevelCC = [
-node: IZWaveNode,
-ccId: CommandClasses.Powerlevel,
-args: ZWaveNotificationCallbackArgs_PowerlevelCC
-];
-
-=======
->>>>>>> master
 // Warning: (ae-missing-release-tag) "ZWavePlusCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
