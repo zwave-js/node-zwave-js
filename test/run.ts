@@ -1,7 +1,10 @@
+import { wait as _wait } from "alcalzone-shared/async";
 import os from "os";
 import path from "path";
 import "reflect-metadata";
 import { Driver } from "zwave-js";
+
+const wait = _wait;
 
 process.on("unhandledRejection", (_r) => {
 	debugger;
