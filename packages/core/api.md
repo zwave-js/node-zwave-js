@@ -1271,6 +1271,8 @@ export interface LogConfig {
     // (undocumented)
     logToFile: boolean;
     // (undocumented)
+    maxFiles: number;
+    // (undocumented)
     nodeFilter?: number[];
     // (undocumented)
     transports: Transport[];
