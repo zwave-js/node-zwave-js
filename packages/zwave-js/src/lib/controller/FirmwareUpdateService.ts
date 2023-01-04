@@ -13,8 +13,10 @@ import { formatId } from "@zwave-js/shared";
 import crypto from "crypto";
 import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
-const serviceURL = "http://127.0.0.1:8787";
-// const serviceURL = "https://firmware.zwave-js.io";
+function serviceURL(): string {
+	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
+}
+
 const DOWNLOAD_TIMEOUT = 60000;
 // const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
 
@@ -88,7 +90,7 @@ export function getAvailableFirmwareUpdates(
 
 	const config: OptionsOfTextResponseBody = {
 		method: "POST",
-		url: `${serviceURL}/api/${
+		url: `${serviceURL()}/api/${
 			options.includePrereleases ? "v3" : "v1"
 		}/updates`,
 		json: body,
