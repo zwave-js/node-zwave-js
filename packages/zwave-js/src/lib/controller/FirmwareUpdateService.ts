@@ -5,6 +5,7 @@ import {
 	extractFirmware,
 	Firmware,
 	guessFirmwareFileFormat,
+	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -121,12 +122,42 @@ export interface GetAvailableFirmwareUpdateOptions {
 	includePrereleases?: boolean;
 }
 
+/** Converts the RF region to a format the update service understands */
+function rfRegionToUpdateServiceRegion(
+	rfRegion?: RFRegion,
+): string | undefined {
+	switch (rfRegion) {
+		case RFRegion["Default (EU)"]:
+		case RFRegion.Europe:
+			return "europe";
+		case RFRegion.USA:
+		case RFRegion["USA (Long Range)"]:
+			return "usa";
+		case RFRegion["Australia/New Zealand"]:
+			return "australia/new zealand";
+		case RFRegion["Hong Kong"]:
+			return "hong kong";
+		case RFRegion.India:
+			return "india";
+		case RFRegion.Israel:
+			return "israel";
+		case RFRegion.Russia:
+			return "russia";
+		case RFRegion.China:
+			return "china";
+		case RFRegion.Japan:
+			return "japan";
+		case RFRegion.Korea:
+			return "korea";
+	}
+}
+
 /**
  * Retrieves the available firmware updates for the node with the given fingerprint.
  * Returns the service response or `undefined` in case of an error.
  */
 export function getAvailableFirmwareUpdates(
-	deviceId: DeviceID & { firmwareVersion: string },
+	deviceId: DeviceID & { firmwareVersion: string; rfRegion?: RFRegion },
 	options: GetAvailableFirmwareUpdateOptions,
 ): Promise<FirmwareUpdateInfo[]> {
 	const headers: Headers = {
@@ -136,17 +167,23 @@ export function getAvailableFirmwareUpdates(
 		headers["X-API-Key"] = options.apiKey;
 	}
 
+	const body: Record<string, string> = {
+		manufacturerId: formatId(deviceId.manufacturerId),
+		productType: formatId(deviceId.productType),
+		productId: formatId(deviceId.productId),
+		firmwareVersion: deviceId.firmwareVersion,
+	};
+	const rfRegion = rfRegionToUpdateServiceRegion(deviceId.rfRegion);
+	if (rfRegion) {
+		body.region = rfRegion;
+	}
+
 	const config: OptionsOfTextResponseBody = {
 		method: "POST",
 		url: `${serviceURL}/api/${
-			options.includePrereleases ? "v2" : "v1"
+			options.includePrereleases ? "v3" : "v1"
 		}/updates`,
-		json: {
-			manufacturerId: formatId(deviceId.manufacturerId),
-			productType: formatId(deviceId.productType),
-			productId: formatId(deviceId.productId),
-			firmwareVersion: deviceId.firmwareVersion,
-		},
+		json: body,
 		// TODO: Re-enable this in favor of cachedGot when fixed
 		// cache: requestCache,
 		// cacheOptions: {

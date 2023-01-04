@@ -4578,6 +4578,7 @@ ${associatedNodes.join(", ")}`,
 					productType,
 					productId,
 					firmwareVersion,
+					rfRegion: this.rfRegion,
 				},
 				{
 					userAgent: this.driver.getUserAgentStringWithComponents(
