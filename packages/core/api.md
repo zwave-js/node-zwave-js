@@ -7,6 +7,7 @@
 /// <reference types="node" />
 
 import { DeepPartial } from '@zwave-js/shared';
+import type { ExecutionContext } from 'ava';
 import type { Format } from 'logform';
 import type { JsonlDB } from '@alcalzone/jsonl-db';
 import type { JSONObject } from '@zwave-js/shared';
@@ -55,6 +56,13 @@ export function assertValueID(param: Record<any, any>): asserts param is ValueID
 //
 // @public
 export function assertZWaveError<T>(valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
+
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (ae-missing-release-tag) "assertZWaveErrorAva" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function assertZWaveErrorAva<T>(t: ExecutionContext, valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
 
 // Warning: (ae-missing-release-tag) "AssertZWaveErrorOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2951,6 +2959,7 @@ export enum ZWaveErrorCodes {
     FirmwareUpdateCC_Busy = 1500,
     FirmwareUpdateCC_FailedToAbort = 1504,
     FirmwareUpdateCC_FailedToStart = 1503,
+    FirmwareUpdateCC_NetworkBusy = 1508,
     FirmwareUpdateCC_NotUpgradable = 1501,
     FirmwareUpdateCC_TargetNotFound = 1502,
     FirmwareUpdateCC_Timeout = 1505,

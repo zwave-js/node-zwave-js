@@ -71,7 +71,6 @@ function createArrowFunction(
 			f.createParameterDeclaration(
 				undefined,
 				undefined,
-				undefined,
 				VisitorUtils.objectIdentifier,
 				undefined,
 				f.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
@@ -325,21 +324,17 @@ export function createGenericAssertFunction(
 	return factory.createFunctionDeclaration(
 		undefined,
 		undefined,
-		undefined,
 		factory.createIdentifier("__assertType"),
 		undefined,
 		[
 			factory.createParameterDeclaration(
 				undefined,
 				undefined,
-				undefined,
 				factory.createIdentifier("argName"),
 				undefined,
 				factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-				undefined,
 			),
 			factory.createParameterDeclaration(
-				undefined,
 				undefined,
 				undefined,
 				factory.createIdentifier("typeName"),
@@ -350,10 +345,8 @@ export function createGenericAssertFunction(
 						ts.SyntaxKind.UndefinedKeyword,
 					),
 				]),
-				undefined,
 			),
 			factory.createParameterDeclaration(
-				undefined,
 				undefined,
 				undefined,
 				factory.createIdentifier("boundHasError"),
@@ -363,7 +356,6 @@ export function createGenericAssertFunction(
 					[],
 					factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
 				),
-				undefined,
 			),
 		],
 		undefined,

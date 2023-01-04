@@ -692,6 +692,18 @@ export enum FirmwareUpdateMetaDataCommand {
 	PrepareReport = 0x0b,
 }
 
+export interface FirmwareUpdateMetaData {
+	manufacturerId: number;
+	firmwareId: number;
+	checksum: number;
+	firmwareUpgradable: boolean;
+	maxFragmentSize?: number;
+	additionalFirmwareIDs: readonly number[];
+	hardwareVersion?: number;
+	continuesToFunction: Maybe<boolean>;
+	supportsActivation: Maybe<boolean>;
+}
+
 /** @publicAPI */
 export enum FirmwareUpdateRequestStatus {
 	Error_InvalidManufacturerOrFirmwareID = 0,
@@ -711,6 +723,7 @@ export enum FirmwareUpdateStatus {
 	Error_Timeout = -1,
 
 	Error_Checksum = 0,
+	/** TransmissionFailed is also used for user-aborted upgrades */
 	Error_TransmissionFailed = 1,
 	Error_InvalidManufacturerID = 2,
 	Error_InvalidFirmwareID = 3,
@@ -759,6 +772,30 @@ export type FirmwareUpdateCapabilities =
 			/** Indicates whether the node supports delayed activation of the new firmware */
 			readonly supportsActivation: Maybe<boolean>;
 	  };
+
+export interface FirmwareUpdateProgress {
+	/** Which part/file of the firmware update process is currently in progress. This is a number from 1 to `totalFiles` and can be used to display progress. */
+	currentFile: number;
+	/** How many files the firmware update process consists of. */
+	totalFiles: number;
+	/** How many fragments of the current file have been transmitted. Together with `totalFragments` this can be used to display progress. */
+	sentFragments: number;
+	/** How many fragments the current file of the firmware update consists of. */
+	totalFragments: number;
+	/** The total progress of the firmware update in %, rounded to two digits. This considers the total size of all files. */
+	progress: number;
+}
+
+export interface FirmwareUpdateResult {
+	/** The status returned by the device for this firmware update attempt. For multi-target updates, this will be the status for the last update. */
+	status: FirmwareUpdateStatus;
+	/** Whether the update was successful. This is a simpler interpretation of the `status` field. */
+	success: boolean;
+	/** How long (in seconds) to wait before interacting with the device again */
+	waitTime?: number;
+	/** Whether the device will be re-interviewed. If this is `true`, applications should wait for the `"ready"` event to interact with the device again. */
+	reInterview: boolean;
+}
 
 /** @publicAPI */
 export enum HailCommand {
@@ -1167,6 +1204,82 @@ export enum SceneControllerConfigurationCommand {
 }
 
 /** @publicAPI */
+export enum ScheduleEntryLockCommand {
+	EnableSet = 0x01,
+	EnableAllSet = 0x02,
+	WeekDayScheduleSet = 0x03,
+	WeekDayScheduleGet = 0x04,
+	WeekDayScheduleReport = 0x05,
+	YearDayScheduleSet = 0x06,
+	YearDayScheduleGet = 0x07,
+	YearDayScheduleReport = 0x08,
+	SupportedGet = 0x09,
+	SupportedReport = 0x0a,
+	TimeOffsetGet = 0x0b,
+	TimeOffsetReport = 0x0c,
+	TimeOffsetSet = 0x0d,
+	DailyRepeatingScheduleGet = 0x0e,
+	DailyRepeatingScheduleReport = 0x0f,
+	DailyRepeatingScheduleSet = 0x10,
+}
+
+/** @publicAPI */
+export enum ScheduleEntryLockSetAction {
+	Erase,
+	Set,
+}
+
+/** @publicAPI */
+export interface ScheduleEntryLockSlotId {
+	userId: number;
+	slotId: number;
+}
+
+/** @publicAPI */
+export enum ScheduleEntryLockWeekday {
+	// Yay, consistency!
+	Sunday = 0x00,
+	Monday = 0x01,
+	Tuesday = 0x02,
+	Wednesday = 0x03,
+	Thursday = 0x04,
+	Friday = 0x05,
+	Saturday = 0x06,
+}
+
+/** @publicAPI */
+export interface ScheduleEntryLockDailyRepeatingSchedule {
+	weekdays: ScheduleEntryLockWeekday[];
+	startHour: number;
+	startMinute: number;
+	durationHour: number;
+	durationMinute: number;
+}
+
+/** @publicAPI */
+export interface ScheduleEntryLockYearDaySchedule {
+	startYear: number;
+	startMonth: number;
+	startDay: number;
+	startHour: number;
+	startMinute: number;
+	stopYear: number;
+	stopMonth: number;
+	stopDay: number;
+	stopHour: number;
+	stopMinute: number;
+}
+
+/** @publicAPI */
+export interface ScheduleEntryLockWeekDaySchedule {
+	weekday: ScheduleEntryLockWeekday;
+	startHour: number;
+	startMinute: number;
+	stopHour: number;
+	stopMinute: number;
+}
+
+/** @publicAPI */
 export enum Security2Command {
 	NonceGet = 0x01,
 	NonceReport = 0x02,
@@ -1223,6 +1336,12 @@ export enum ToneId {
 export enum SupervisionCommand {
 	Get = 0x01,
 	Report = 0x02,
+}
+
+/** @publicAPI */
+export interface Timezone {
+	standardOffset: number;
+	dstOffset: number;
 }
 
 /** @publicAPI */
@@ -1330,11 +1449,6 @@ export enum ThermostatSetbackCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
-}
-
-export interface Timezone {
-	standardOffset: number;
-	dstOffset: number;
 }
 
 /** @publicAPI */

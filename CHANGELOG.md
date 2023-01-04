@@ -4,6 +4,45 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.3.1 (2022-11-12)
+### Bugfixes
+* Mark Indicator Identify command as supported for CC v3 (#5195)
+
+### Config file changes
+* Swap parameter numbers of myot4 (#5198)
+* Fix typo in configuration options for Greenwave GWPN1 (#5188)
+* Add all ZWA approved Yale locks (#5154)
+* Add Aeotec ZWA042 outdoor smart plug (#5177)
+* Work around Configuration Info reporting bug in ZSE41/42 (#5168)
+* Disable Supervision for Zooz ZSE29 (#5159)
+* Add support for Nexia ZSENS930 (#5142)
+* Zooz zen72 zen74 param 27, 28 and 29 (#5125)
+* Import several device files (#5147)
+* Add Dawon PM-S240-ZW, disable Supervision (#5136)
+
+### Changes under the hood
+* Add resiliency to import config routines (#5148)
+* Add snippets for authoring config files to VSCode (#5153)
+
+## 10.3.0 (2022-09-29)
+### Features
+* Support opt-in to receive beta firmware releases via the update service (#5076)
+* Implement Schedule Entry Lock CC (#4836)
+* Sequencing of multi-target firmware updates is now handled in the driver, including waiting between targets, and re-interviewing only after the last one (#5121)
+
+### Bugfixes
+* Pin `xstate` dependency to version `4.29.0` to avoid a memory leak (#5108)
+* Fix: the `ccId` parameter in the `CommandClass` constructor may be zero (#5115)
+* Fixed an issue where multiple re-interview tasks for sleeping nodes could be queued and would be executed in parallel (#5105)
+* Fixed an issue where firmware updates could use a too large fragment size after upgrading to v10, causing the update to fail (#5117)
+
+### Config file changes
+* Disable Supervision for Everspring AC301 (#5119)
+
+### Changes under the hood
+* The packages `core`, `shared` and `nvmedit` now use `ava` for testing instead of `jest`
+* Implement decoding/serialization of some `Sound Switch CC` commands, ensure `valueChangeOptions` are set (#5071)
+
 ## 10.2.0 (2022-09-20)
 ### Features
 * Added the ability to pass more user agent components in `getAvailableFirmwareUpdates` (#5070)

@@ -409,6 +409,31 @@ export {
 	SceneControllerConfigurationCCValues,
 } from "./SceneControllerConfigurationCC";
 export {
+	ScheduleEntryLockCC,
+	ScheduleEntryLockCCDailyRepeatingScheduleGet,
+	ScheduleEntryLockCCDailyRepeatingScheduleReport,
+	ScheduleEntryLockCCDailyRepeatingScheduleSet,
+	ScheduleEntryLockCCEnableAllSet,
+	ScheduleEntryLockCCEnableSet,
+	ScheduleEntryLockCCSupportedGet,
+	ScheduleEntryLockCCSupportedReport,
+	ScheduleEntryLockCCTimeOffsetGet,
+	ScheduleEntryLockCCTimeOffsetReport,
+	ScheduleEntryLockCCTimeOffsetSet,
+	ScheduleEntryLockCCValues,
+	ScheduleEntryLockCCWeekDayScheduleGet,
+	ScheduleEntryLockCCWeekDayScheduleReport,
+	ScheduleEntryLockCCWeekDayScheduleSet,
+	ScheduleEntryLockCCYearDayScheduleGet,
+	ScheduleEntryLockCCYearDayScheduleReport,
+	ScheduleEntryLockCCYearDayScheduleSet,
+} from "./ScheduleEntryLockCC";
+export type {
+	ScheduleEntryLockCCDailyRepeatingScheduleSetOptions,
+	ScheduleEntryLockCCWeekDayScheduleSetOptions,
+	ScheduleEntryLockCCYearDayScheduleSetOptions,
+} from "./ScheduleEntryLockCC";
+export {
 	Security2CC,
 	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,

@@ -4,7 +4,6 @@
 
 ```ts
 
-/// <reference types="jest" />
 /// <reference types="node" />
 
 import { CommandClasses } from '@zwave-js/core';
@@ -14,32 +13,9 @@ import { ICommandClass } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import type { MockPortBinding } from '@zwave-js/serial/mock';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
-import Transport from 'winston-transport';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
-import type { ZWaveLogInfo } from '@zwave-js/core';
-
-// Warning: (ae-missing-release-tag) "assertLogInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function assertLogInfo(transport: SpyTransport, options: Partial<{
-    level: string;
-    predicate: (info: ZWaveLogInfo) => boolean;
-    callNumber: number;
-}>): void;
-
-// Warning: (ae-missing-release-tag) "assertMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function assertMessage(transport: SpyTransport, options: Partial<{
-    message: string;
-    predicate: (msg: string) => boolean;
-    ignoreColor: boolean;
-    ignoreTimestamp: boolean;
-    ignoreChannel: boolean;
-    callNumber: number;
-}>): void;
 
 // Warning: (ae-missing-release-tag) "createMockZWaveAckFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -258,17 +234,6 @@ export interface MockZWaveRequestFrame {
     repeaters: number[];
     // (undocumented)
     type: MockZWaveFrameType.Request;
-}
-
-// Warning: (ae-missing-release-tag) "SpyTransport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export class SpyTransport extends Transport {
-    constructor();
-    // (undocumented)
-    log(info: any, next: () => void): any;
-    // (undocumented)
-    get spy(): jest.Mock;
 }
 
 // Warnings were encountered during analysis:

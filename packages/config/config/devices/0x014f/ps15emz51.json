@@ -32,7 +32,8 @@
 		},
 		{
 			"#": "13",
-			"$import": "templates/config_template.json#report_interval"
+			"$import": "templates/config_template.json#report_interval",
+			"valueSize": 2
 		}
 	],
 	"metadata": {

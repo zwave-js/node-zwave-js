@@ -7,7 +7,7 @@
 ### `getMetaData`
 
 ```ts
-async getMetaData(): Promise<Pick<FirmwareUpdateMetaDataCCMetaDataReport, "manufacturerId" | "firmwareId" | "checksum" | "firmwareUpgradable" | "maxFragmentSize" | "additionalFirmwareIDs" | "hardwareVersion" | "continuesToFunction" | "supportsActivation"> | undefined>;
+async getMetaData(): Promise<FirmwareUpdateMetaData | undefined>;
 ```
 
 Requests information about the current firmware on the device.
