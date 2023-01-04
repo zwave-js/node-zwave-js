@@ -1829,7 +1829,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// to avoid indexing the existing values
 				this.createValueDBForNode(nodeId, new Set()),
 			);
-			this._nodePendingInclusion = newNode;
+			this._nodes.set(nodeId, newNode);
+
+			this.emit("node found", {
+				id: nodeId,
+				deviceClass,
+				supportedCCs: nodeInfo.supportedCCs,
+			});
 
 			this.driver.controllerLog.print(
 				`Node ${newNode.id} was included by another controller:
@@ -1840,12 +1846,6 @@ supported CCs: ${nodeInfo.supportedCCs
 					.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
 					.join("")}`,
 			);
-
-			this.emit("node found", {
-				id: nodeId,
-				deviceClass,
-				supportedCCs: nodeInfo.supportedCCs,
-			});
 
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -2045,7 +2045,7 @@ supported CCs: ${nodeInfo.supportedCCs
 					newNode.once("ready", () => {
 						this.driver.controllerLog.logNode(
 							nodeId,
-							`Notifying ${inclCtrlrId} of finished inclusion`,
+							`Notifying node ${inclCtrlrId} of finished inclusion`,
 						);
 						void inclCtrlr!.commandClasses["Inclusion Controller"]
 							.completeStep(step, InclusionControllerStatus.OK)
