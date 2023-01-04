@@ -2,7 +2,7 @@
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
 	"label": "4AW1SZ-0EN0",
-	"description": "Ring Retrofit Alarm Kit",
+	"description": "Retrofit Alarm Kit",
 	"devices": [
 		{
 			"productType": "0x0b01",
@@ -21,21 +21,19 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Multi-channel association",
+			"label": "Contact Switch Notifications",
 			"maxNodes": 1
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Heartbeats",
-			"description": "Number of seconds between periodic battery reports. (heartbeats)",
+			"label": "Battery Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 255,
 			"maxValue": 4200,
-			"defaultValue": 4200,
-			"unsigned": true
+			"defaultValue": 4200
 		},
 		{
 			"#": "2",
@@ -49,8 +47,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Application Level Retries",
-			"description": "Number of application level retries after a failed transmission defined as either not acked or supervision report not returned when encapsulated",
+			"label": "Message Retry Attempt Limit",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
@@ -59,8 +56,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Seconds to Sleep",
-			"description": "The minimum number of seconds to sleep between application level retries",
+			"label": "Delay Between Retry Attempts",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -70,8 +66,8 @@
 		},
 		{
 			"#": "5",
-			"label": "Application Retry Multiplier",
-			"description": "Application retry multiplier. the number of seconds between a current application retry is the count of retries multiplied by this number in seconds + a small random delay",
+			"label": "Retry Attempt Backoff Multiplier",
+			"description": "The delay between retry attempts is the count of retries multiplied by this factor plus a small random delay",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -81,10 +77,10 @@
 		},
 		{
 			"#": "6",
-			"label": "Wait For a Supervisory Report",
-			"description": "The number of milliseconds to wait for a supervisory report in response to a supervisory encapsulated get",
+			"label": "Supervision Report Timeout",
+			"description": "How long to wait for a Supervision Report response to a Supervision Get",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "ms",
 			"minValue": 500,
 			"maxValue": 5000,
 			"defaultValue": 1500,
