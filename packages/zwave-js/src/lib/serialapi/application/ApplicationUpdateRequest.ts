@@ -133,7 +133,19 @@ export class ApplicationUpdateRequestNodeInfoRequestFailed
 export class ApplicationUpdateRequestNodeAdded extends ApplicationUpdateRequestWithNodeInfo {}
 
 @applicationUpdateType(ApplicationUpdateTypes.Node_Removed)
-export class ApplicationUpdateRequestNodeRemoved extends ApplicationUpdateRequestWithNodeInfo {}
+export class ApplicationUpdateRequestNodeRemoved extends ApplicationUpdateRequest {
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+
+		this.nodeId = this.payload[0];
+		// byte 1 is 0, meaning unknown
+	}
+
+	public nodeId: number;
+}
 
 @applicationUpdateType(ApplicationUpdateTypes.SmartStart_HomeId_Received)
 export class ApplicationUpdateRequestSmartStartHomeIDReceived extends ApplicationUpdateRequest {
