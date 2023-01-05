@@ -7231,6 +7231,8 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
     status: InclusionControllerStatus;
     // (undocumented)
     step: InclusionControllerStep;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "InclusionControllerCCInitiate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7245,6 +7247,8 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
     serialize(): Buffer;
     // (undocumented)
     step: InclusionControllerStep;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "InclusionControllerCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
