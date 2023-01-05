@@ -285,7 +285,6 @@ export const AlarmSensorCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "AlarmSensorCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -300,7 +299,6 @@ export enum AlarmSensorCommand {
     SupportedReport = 4
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "AlarmSensorType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -321,7 +319,6 @@ export enum AlarmSensorType {
     Smoke = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "AlarmSensorValueMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -353,7 +350,6 @@ export type APIMethodsOf<CC extends CommandClasses_2> = Omit<OnlyMethods<CCToAPI
 // @public (undocumented)
 export function assertValidCCs(container: ICommandClassContainer): void;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "AssociationAddress" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -579,7 +575,6 @@ export const AssociationCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "AssociationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -598,7 +593,6 @@ export enum AssociationCommand {
     SupportedGroupingsReport = 6
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "AssociationGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -840,7 +834,6 @@ export const AssociationGroupInfoCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -859,7 +852,6 @@ export enum AssociationGroupInfoCommand {
     NameReport = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoProfile" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1475,7 +1467,6 @@ export const BarrierOperatorCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BarrierOperatorCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1498,7 +1489,6 @@ export enum BarrierOperatorCommand {
     SignalingCapabilitiesReport = 5
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BarrierState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1711,7 +1701,6 @@ export const BasicCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BasicCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2128,7 +2117,6 @@ export const BatteryCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BatteryChargingStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2141,7 +2129,6 @@ export enum BatteryChargingStatus {
     Maintaining = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BatteryCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2156,7 +2143,6 @@ export enum BatteryCommand {
     Report = 3
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BatteryReplacementStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2290,7 +2276,6 @@ export const BinarySensorCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BinarySensorCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2305,7 +2290,6 @@ export enum BinarySensorCommand {
     SupportedReport = 4
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BinarySensorType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2340,7 +2324,6 @@ export enum BinarySensorType {
     Water = 6
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BinarySensorValueMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2489,7 +2472,6 @@ export const BinarySwitchCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "BinarySwitchCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2622,6 +2604,10 @@ export interface CCAPIs {
     //
     // (undocumented)
     "Humidity Control Setpoint": HumidityControlSetpointCCAPI;
+    // Warning: (ae-forgotten-export) The symbol "InclusionControllerCCAPI" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    "Inclusion Controller": InclusionControllerCCAPI;
     // Warning: (ae-forgotten-export) The symbol "ManufacturerProprietaryCCAPI" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -3087,7 +3073,6 @@ export const CentralSceneCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "CentralSceneCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3106,7 +3091,6 @@ export enum CentralSceneCommand {
     SupportedReport = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "CentralSceneKeys" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3321,7 +3305,6 @@ export const ClimateControlScheduleCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3395,7 +3378,6 @@ export class ClockCCSet extends ClockCC {
     weekday: Weekday;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ClockCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3408,7 +3390,6 @@ export enum ClockCommand {
     Set = 4
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ColorComponent" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3433,7 +3414,6 @@ export enum ColorComponent {
     Red = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ColorComponentMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3800,7 +3780,6 @@ export const ColorSwitchCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ColorSwitchCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3821,7 +3800,6 @@ export enum ColorSwitchCommand {
     SupportedReport = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ColorTable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -4273,7 +4251,6 @@ export const ConfigurationCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ConfigurationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4339,7 +4316,6 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "CRC16Command" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4353,7 +4329,6 @@ export enum CRC16Command {
 // @public (undocumented)
 export function dataRate2ZWaveDataRate(dataRate: DataRate_2): ZWaveDataRate_2;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DeviceIdType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4382,7 +4357,6 @@ export class DeviceResetLocallyCC extends CommandClass {
 export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DeviceResetLocallyCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4391,7 +4365,6 @@ export enum DeviceResetLocallyCommand {
     Notification = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DoorHandleStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5250,7 +5223,6 @@ export const DoorLockCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DoorLockCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5360,7 +5332,6 @@ export const DoorLockLoggingCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5375,7 +5346,6 @@ export enum DoorLockLoggingCommand {
     RecordsSupportedReport = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DoorLockLoggingEventType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5446,7 +5416,6 @@ export enum DoorLockLoggingEventType {
     UserCodeDeleted = 24
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DoorLockLoggingRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5463,7 +5432,6 @@ export interface DoorLockLoggingRecord {
     userId?: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DoorLockLoggingRecordStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5474,7 +5442,6 @@ export enum DoorLockLoggingRecordStatus {
     HoldsLegalData = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DoorLockMode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5497,7 +5464,6 @@ export enum DoorLockMode {
     UnsecuredWithTimeout = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "DoorLockOperationType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5548,7 +5514,6 @@ export interface EncapsulatingCommandClassStatic {
     encapsulate(applHost: ZWaveApplicationHost_2, cc: CommandClass): EncapsulatingCommandClass;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "EndpointAddress" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5809,7 +5774,6 @@ export const EntryControlCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "EntryControlCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5832,7 +5796,6 @@ export enum EntryControlCommand {
     Notification = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "EntryControlDataTypes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5852,7 +5815,6 @@ export enum EntryControlDataTypes {
 // @public (undocumented)
 export const entryControlEventTypeLabels: Record<EntryControlEventTypes, string>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "EntryControlEventTypes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6009,7 +5971,6 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "FirmwareDownloadStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6028,7 +5989,6 @@ export enum FirmwareDownloadStatus {
     OK = 255
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "FirmwareUpdateActivationStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6041,7 +6001,6 @@ export enum FirmwareUpdateActivationStatus {
     OK = 255
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "FirmwareUpdateCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6055,7 +6014,30 @@ export type FirmwareUpdateCapabilities = {
 };
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaData" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaData" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
+// @public (undocumented)
+export interface FirmwareUpdateMetaData {
+    // (undocumented)
+    additionalFirmwareIDs: readonly number[];
+    // (undocumented)
+    checksum: number;
+    // (undocumented)
+    continuesToFunction: Maybe<boolean>;
+    // (undocumented)
+    firmwareId: number;
+    // (undocumented)
+    firmwareUpgradable: boolean;
+    // (undocumented)
+    hardwareVersion?: number;
+    // (undocumented)
+    manufacturerId: number;
+    // (undocumented)
+    maxFragmentSize?: number;
+    // (undocumented)
+    supportsActivation: Maybe<boolean>;
+}
+
 // @public (undocumented)
 export interface FirmwareUpdateMetaData {
     // (undocumented)
@@ -6387,7 +6369,6 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6427,7 +6408,6 @@ export interface FirmwareUpdateProgress {
     totalFragments: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "FirmwareUpdateRequestStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6460,7 +6440,6 @@ export interface FirmwareUpdateResult {
     waitTime?: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "FirmwareUpdateStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6663,7 +6642,6 @@ export class HailCC extends CommandClass {
     ccCommand: HailCommand.Hail;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HailCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6672,7 +6650,6 @@ export enum HailCommand {
     Hail = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlMode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6811,7 +6788,6 @@ export const HumidityControlModeCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlModeCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6828,7 +6804,6 @@ export enum HumidityControlModeCommand {
     SupportedReport = 5
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlOperatingState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6907,7 +6882,6 @@ export const HumidityControlOperatingStateCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlOperatingStateCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6918,7 +6892,6 @@ export enum HumidityControlOperatingStateCommand {
     Report = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7167,7 +7140,6 @@ export const HumidityControlSetpointCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7192,7 +7164,6 @@ export enum HumidityControlSetpointCommand {
     SupportedReport = 5
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7202,7 +7173,6 @@ export type HumidityControlSetpointMetadata = ValueMetadata_2 & {
     };
 };
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7217,7 +7187,6 @@ export enum HumidityControlSetpointType {
     "Humidifier" = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7241,6 +7210,82 @@ export interface ICommandClassContainer {
 //
 // @public
 export const implementedVersion: <TTarget extends CommandClass>(version: number) => TypedClassDecorator_2<TTarget>;
+
+// Warning: (ae-missing-release-tag) "InclusionControllerCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class InclusionControllerCC extends CommandClass {
+    // (undocumented)
+    ccCommand: InclusionControllerCommand;
+}
+
+// Warning: (ae-missing-release-tag) "InclusionControllerCCComplete" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class InclusionControllerCCComplete extends InclusionControllerCC {
+    // Warning: (ae-forgotten-export) The symbol "InclusionControllerCCCompleteOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | InclusionControllerCCCompleteOptions);
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    status: InclusionControllerStatus;
+    // (undocumented)
+    step: InclusionControllerStep;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "InclusionControllerCCInitiate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class InclusionControllerCCInitiate extends InclusionControllerCC {
+    // Warning: (ae-forgotten-export) The symbol "InclusionControllerCCInitiateOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | InclusionControllerCCInitiateOptions);
+    // (undocumented)
+    includedNodeId: number;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    step: InclusionControllerStep;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "InclusionControllerCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum InclusionControllerCommand {
+    // (undocumented)
+    Complete = 2,
+    // (undocumented)
+    Initiate = 1
+}
+
+// Warning: (ae-missing-release-tag) "InclusionControllerStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum InclusionControllerStatus {
+    // (undocumented)
+    Failed = 3,
+    // (undocumented)
+    NotSupported = 4,
+    // (undocumented)
+    OK = 1,
+    // (undocumented)
+    UserRejected = 2
+}
+
+// Warning: (ae-missing-release-tag) "InclusionControllerStep" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum InclusionControllerStep {
+    // (undocumented)
+    ProxyInclusion = 1,
+    // (undocumented)
+    ProxyInclusionReplace = 3,
+    // (undocumented)
+    S0Inclusion = 2
+}
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "inclusionTimeouts" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7474,7 +7519,6 @@ export const IndicatorCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "IndicatorCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7491,7 +7535,6 @@ export enum IndicatorCommand {
     SupportedReport = 5
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "IndicatorMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9064,7 +9107,6 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "IrrigationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9107,7 +9149,6 @@ export enum IrrigationCommand {
     ValveTableSet = 14
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "IrrigationSensorPolarity" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9180,7 +9221,6 @@ export enum KEXSchemes {
     KEXScheme1 = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "KeypadMode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9302,7 +9342,6 @@ export const LanguageCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "LanguageCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9315,7 +9354,6 @@ export enum LanguageCommand {
     Set = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "LevelChangeDirection" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9326,7 +9364,6 @@ export enum LevelChangeDirection {
     "up" = 0
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "LocalProtectionState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9415,7 +9452,6 @@ export const LockCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "LockCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9639,7 +9675,6 @@ export const ManufacturerSpecificCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9953,7 +9988,6 @@ export const MeterCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MeterCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9970,7 +10004,6 @@ export enum MeterCommand {
     SupportedReport = 4
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MeterMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10246,7 +10279,6 @@ export const MultiChannelAssociationCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10675,7 +10707,6 @@ export const MultiChannelCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MultiChannelCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10731,7 +10762,6 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MultiCommandCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10953,7 +10983,6 @@ export const MultilevelSensorCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MultilevelSensorCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10972,7 +11001,6 @@ export enum MultilevelSensorCommand {
     SupportedSensorReport = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MultilevelSensorValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10983,7 +11011,6 @@ export interface MultilevelSensorValue {
     value: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MultilevelSensorValueMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11349,7 +11376,6 @@ export const MultilevelSwitchCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11370,7 +11396,6 @@ export enum MultilevelSwitchCommand {
     SupportedReport = 7
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "MultilevelSwitchLevelChangeMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11534,7 +11559,6 @@ export const NodeNamingAndLocationCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11951,7 +11975,6 @@ export const NotificationCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "NotificationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11972,7 +11995,6 @@ export enum NotificationCommand {
     SupportedReport = 8
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "NotificationMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12011,7 +12033,6 @@ export const POLL_VALUE: unique symbol;
 // @public (undocumented)
 export type PollValueImplementation<T = unknown> = (property: ValueIDProperties) => Promise<T | undefined>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "Powerlevel" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12120,7 +12141,6 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "PowerlevelCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12139,7 +12159,6 @@ export enum PowerlevelCommand {
     TestNodeSet = 4
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "PowerlevelTestStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12506,7 +12525,6 @@ export const ProtectionCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ProtectionCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12535,7 +12553,6 @@ export enum ProtectionCommand {
     TimeoutSet = 9
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "RateType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12553,7 +12570,6 @@ export enum RateType {
 // @public (undocumented)
 function removeAssociations(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, group: number, destinations: AssociationAddress[]): Promise<void>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "RFProtectionState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12651,7 +12667,6 @@ export const SceneActivationCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SceneActivationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12786,7 +12801,6 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12930,7 +12944,6 @@ export const SceneControllerConfigurationCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13358,7 +13371,6 @@ export type ScheduleEntryLockCCYearDayScheduleSetOptions = CCCommandOptions & Sc
     action: ScheduleEntryLockSetAction.Set;
 } & ScheduleEntryLockYearDaySchedule));
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13397,7 +13409,6 @@ export enum ScheduleEntryLockCommand {
     YearDayScheduleSet = 6
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockDailyRepeatingSchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13414,7 +13425,6 @@ export interface ScheduleEntryLockDailyRepeatingSchedule {
     weekdays: ScheduleEntryLockWeekday[];
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockSetAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13425,7 +13435,6 @@ export enum ScheduleEntryLockSetAction {
     Set = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockSlotId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13436,7 +13445,6 @@ export interface ScheduleEntryLockSlotId {
     userId: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockWeekday" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13457,7 +13465,6 @@ export enum ScheduleEntryLockWeekday {
     Wednesday = 3
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockWeekDaySchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13474,7 +13481,6 @@ export interface ScheduleEntryLockWeekDaySchedule {
     weekday: ScheduleEntryLockWeekday;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockYearDaySchedule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13501,7 +13507,6 @@ export interface ScheduleEntryLockYearDaySchedule {
     stopYear: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ScheduleOverrideType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13749,7 +13754,6 @@ export class Security2CCTransferEnd extends Security2CC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "Security2Command" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13954,7 +13958,6 @@ export class SecurityCCSchemeReport extends SecurityCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SecurityCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13988,19 +13991,16 @@ export enum SecurityCommand {
 // @public
 export const SET_VALUE: unique symbol;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SetbackSpecialState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SetbackSpecialState = "Frost Protection" | "Energy Saving" | "Unused";
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SetbackState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SetbackState = number | SetbackSpecialState;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SetbackType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14289,7 +14289,6 @@ export const SoundSwitchCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SoundSwitchCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14330,7 +14329,6 @@ export class SPANExtension extends Security2Extension {
     toLogEntry(): string;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SubsystemState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14341,7 +14339,6 @@ export enum SubsystemState {
     On = 255
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SubsystemType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14444,7 +14441,6 @@ export const SupervisionCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SupervisionCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14455,7 +14451,6 @@ export enum SupervisionCommand {
     Report = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "Switchpoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14468,7 +14463,6 @@ export interface Switchpoint {
     state: SetbackState | undefined;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "SwitchType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14491,7 +14485,6 @@ export enum SwitchType {
     "Reverse/Forward" = 6
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatFanMode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14676,7 +14669,6 @@ export const ThermostatFanModeCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14693,7 +14685,6 @@ export enum ThermostatFanModeCommand {
     SupportedReport = 5
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatFanState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14784,7 +14775,6 @@ export const ThermostatFanStateCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatFanStateCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14795,7 +14785,6 @@ export enum ThermostatFanStateCommand {
     Report = 3
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatMode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14990,7 +14979,6 @@ export const ThermostatModeCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatModeCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15007,7 +14995,6 @@ export enum ThermostatModeCommand {
     SupportedReport = 5
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatOperatingState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15104,7 +15091,6 @@ export const ThermostatOperatingStateCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatOperatingStateCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15221,7 +15207,6 @@ export const ThermostatSetbackCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatSetbackCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15234,7 +15219,6 @@ export enum ThermostatSetbackCommand {
     Set = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15480,7 +15464,6 @@ export const ThermostatSetpointCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15501,7 +15484,6 @@ export enum ThermostatSetpointCommand {
     SupportedReport = 5
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatSetpointMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15511,7 +15493,6 @@ export type ThermostatSetpointMetadata = ValueMetadata_2 & {
     };
 };
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatSetpointType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15542,7 +15523,6 @@ export enum ThermostatSetpointType {
     "Heating" = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ThermostatSetpointValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15677,7 +15657,6 @@ export class TimeCCTimeReport extends TimeCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "TimeCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15775,7 +15754,6 @@ export const TimeParametersCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "TimeParametersCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15788,7 +15766,6 @@ export enum TimeParametersCommand {
     Set = 1
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "Timezone" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15799,7 +15776,6 @@ export interface Timezone {
     standardOffset: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ToneId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15939,7 +15915,6 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "TransportServiceCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -16581,7 +16556,6 @@ export const UserCodeCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "UserCodeCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -16624,7 +16598,6 @@ export enum UserCodeCommand {
     UsersNumberReport = 5
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "UserIDStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -16668,13 +16641,11 @@ export { utils }
 // @public (undocumented)
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ValveId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ValveId = "master" | number;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ValveTableEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -16685,7 +16656,6 @@ export interface ValveTableEntry {
     valveId: number;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ValveType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -17180,7 +17150,6 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
     readonly zWaveProtocolVersion: string;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "VersionCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -17372,7 +17341,6 @@ export const WakeUpCCValues: Readonly<{
 export class WakeUpCCWakeUpNotification extends WakeUpCC {
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "WakeUpCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -17410,7 +17378,6 @@ export enum WakeUpTime {
 // @public (undocumented)
 export function wakeUpTime2FLiRS(value: WakeUpTime): FLiRS_2;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "Weekday" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -17624,7 +17591,6 @@ export const ZWavePlusCCValues: Readonly<{
     };
 }>;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ZWavePlusCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -17635,7 +17601,6 @@ export enum ZWavePlusCommand {
     Report = 2
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ZWavePlusNodeType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -17646,7 +17611,6 @@ export enum ZWavePlusNodeType {
     Node = 0
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ZWavePlusRoleType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -18165,7 +18129,6 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)

@@ -543,6 +543,7 @@ type CCNameMap = {
 	"Humidity Control Mode": typeof CommandClasses["Humidity Control Mode"];
 	"Humidity Control Operating State": typeof CommandClasses["Humidity Control Operating State"];
 	"Humidity Control Setpoint": typeof CommandClasses["Humidity Control Setpoint"];
+	"Inclusion Controller": typeof CommandClasses["Inclusion Controller"];
 	Indicator: typeof CommandClasses["Indicator"];
 	Irrigation: typeof CommandClasses["Irrigation"];
 	Language: typeof CommandClasses["Language"];
@@ -646,6 +647,7 @@ export interface CCAPIs {
 	"Humidity Control Mode": import("../cc/HumidityControlModeCC").HumidityControlModeCCAPI;
 	"Humidity Control Operating State": import("../cc/HumidityControlOperatingStateCC").HumidityControlOperatingStateCCAPI;
 	"Humidity Control Setpoint": import("../cc/HumidityControlSetpointCC").HumidityControlSetpointCCAPI;
+	"Inclusion Controller": import("../cc/InclusionControllerCC").InclusionControllerCCAPI;
 	Indicator: import("../cc/IndicatorCC").IndicatorCCAPI;
 	Irrigation: import("../cc/IrrigationCC").IrrigationCCAPI;
 	Language: import("../cc/LanguageCC").LanguageCCAPI;

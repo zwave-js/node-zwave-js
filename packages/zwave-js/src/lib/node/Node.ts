@@ -12,6 +12,8 @@ import {
 	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	getCCValues,
+	InclusionControllerCCInitiate,
+	InclusionControllerStep,
 	isCommandClassContainer,
 	MultilevelSwitchCommand,
 	PollValueImplementation,
@@ -1494,7 +1496,9 @@ export class ZWaveNode
 			}
 
 			if (this.interviewStage === InterviewStage.ProtocolInfo) {
-				if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
+				if (
+					!(await tryInterviewStage(() => this.interviewNodeInfo()))
+				) {
 					return false;
 				}
 			}
@@ -1636,7 +1640,7 @@ protocol version:      ${this.protocolVersion}`;
 	 * Step #5 of the node interview
 	 * Request node info
 	 */
-	protected async queryNodeInfo(): Promise<void> {
+	protected async interviewNodeInfo(): Promise<void> {
 		if (this.isControllerNode) {
 			this.driver.controllerLog.logNode(
 				this.id,
@@ -1650,16 +1654,42 @@ protocol version:      ${this.protocolVersion}`;
 			message: "querying node info...",
 			direction: "outbound",
 		});
+		try {
+			const nodeInfo = await this.requestNodeInfo();
+			const logLines: string[] = ["node info received", "supported CCs:"];
+			for (const cc of nodeInfo.supportedCCs) {
+				const ccName = CommandClasses[cc];
+				logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
+			}
+			this.driver.controllerLog.logNode(this.id, {
+				message: logLines.join("\n"),
+				direction: "inbound",
+			});
+			this.updateNodeInfo(nodeInfo);
+		} catch (e) {
+			if (
+				isZWaveError(e) &&
+				(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+					e.code === ZWaveErrorCodes.Controller_CallbackNOK)
+			) {
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Querying the node info failed`,
+					"error",
+				);
+			}
+			throw e;
+		}
+
+		this.setInterviewStage(InterviewStage.NodeInfo);
+	}
+
+	public async requestNodeInfo(): Promise<NodeUpdatePayload> {
 		const resp = await this.driver.sendMessage<
 			RequestNodeInfoResponse | ApplicationUpdateRequest
 		>(new RequestNodeInfoRequest(this.driver, { nodeId: this.id }));
 		if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
 			// TODO: handle this in SendThreadMachine
-			this.driver.controllerLog.logNode(
-				this.id,
-				`Querying the node info failed`,
-				"error",
-			);
 			throw new ZWaveError(
 				`Querying the node info failed`,
 				ZWaveErrorCodes.Controller_ResponseNOK,
@@ -1668,11 +1698,6 @@ protocol version:      ${this.protocolVersion}`;
 			resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
 		) {
 			// TODO: handle this in SendThreadMachine
-			this.driver.controllerLog.logNode(
-				this.id,
-				`Querying the node info failed`,
-				"error",
-			);
 			throw new ZWaveError(
 				`Querying the node info failed`,
 				ZWaveErrorCodes.Controller_CallbackNOK,
@@ -1687,9 +1712,12 @@ protocol version:      ${this.protocolVersion}`;
 				message: logLines.join("\n"),
 				direction: "inbound",
 			});
-			this.updateNodeInfo(resp.nodeInformation);
+			return resp.nodeInformation;
 		}
-		this.setInterviewStage(InterviewStage.NodeInfo);
+		throw new ZWaveError(
+			`Received unexpected response to RequestNodeInfoRequest`,
+			ZWaveErrorCodes.Controller_CommandError,
+		);
 	}
 
 	/**
@@ -2591,6 +2619,15 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleTimeOffsetGet(command);
 		} else if (command instanceof ZWavePlusCCGet) {
 			return this.handleZWavePlusGet(command);
+		} else if (command instanceof InclusionControllerCCInitiate) {
+			// Inclusion controller commands are handled by the controller class
+			if (
+				command.step === InclusionControllerStep.ProxyInclusionReplace
+			) {
+				return this.driver.controller.handleInclusionControllerCCInitiateReplace(
+					command,
+				);
+			}
 		}
 
 		// Ignore all commands that don't need to be handled
