@@ -12,6 +12,8 @@ import {
 	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	getCCValues,
+	InclusionControllerCCInitiate,
+	InclusionControllerStep,
 	isCommandClassContainer,
 	MultilevelSwitchCommand,
 	PollValueImplementation,
@@ -2617,6 +2619,15 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleTimeOffsetGet(command);
 		} else if (command instanceof ZWavePlusCCGet) {
 			return this.handleZWavePlusGet(command);
+		} else if (command instanceof InclusionControllerCCInitiate) {
+			// Inclusion controller commands are handled by the controller class
+			if (
+				command.step === InclusionControllerStep.ProxyInclusionReplace
+			) {
+				return this.driver.controller.handleInclusionControllerCCInitiateReplace(
+					command,
+				);
+			}
 		}
 
 		// Ignore all commands that don't need to be handled

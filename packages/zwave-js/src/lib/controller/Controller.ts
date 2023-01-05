@@ -1867,15 +1867,10 @@ supported CCs: ${nodeInfo.supportedCCs
 							cc instanceof InclusionControllerCCInitiate &&
 							cc.isSinglecast() &&
 							cc.includedNodeId === nodeId &&
-							(cc.step ===
-								InclusionControllerStep.ProxyInclusion ||
-								cc.step ===
-									InclusionControllerStep.ProxyInclusionReplace),
+							cc.step === InclusionControllerStep.ProxyInclusion,
 						10000,
 					)
 					.catch(() => undefined);
-
-				// TODO: handle replacing correctly
 
 				// Assume the device is alive
 				// If it is actually a sleeping device, it will be marked as such later
@@ -1902,84 +1897,10 @@ supported CCs: ${nodeInfo.supportedCCs
 					if (requestedNodeInfo)
 						newNode.updateNodeInfo(requestedNodeInfo);
 
-					// Include using the default inclusion strategy:
-					// * Use S2 if possible,
-					// * only use S0 if necessary,
-					// * use no encryption otherwise
-					if (newNode.supportsCC(CommandClasses["Security 2"])) {
-						await this.secureBootstrapS2(newNode);
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass <
-								SecurityClass.S2_Unauthenticated
-						) {
-							lowSecurity = true;
-						}
-					} else if (
-						newNode.supportsCC(CommandClasses.Security) &&
-						(deviceClass.specific ?? deviceClass.generic)
-							.requiresSecurity
-					) {
-						// S0 bootstrapping is deferred to the inclusion controller
-						this.driver.controllerLog.logNode(
-							nodeId,
-							`Waiting for node ${inclCtrlr.id} to perform S0 bootstrapping...`,
-						);
-
-						await inclCtrlr.commandClasses[
-							"Inclusion Controller"
-						].initiateStep(
-							newNode.id,
-							InclusionControllerStep.S0Inclusion,
-						);
-						// Wait 60s for the S0 bootstrapping to complete
-						const s0result = await this.driver
-							.waitForCommand<InclusionControllerCCComplete>(
-								(cc) =>
-									cc.nodeId === inclCtrlr!.id &&
-									cc instanceof
-										InclusionControllerCCComplete &&
-									cc.step ===
-										InclusionControllerStep.S0Inclusion,
-								60000,
-							)
-							.catch(() => undefined);
-
-						this.driver.controllerLog.logNode(
-							nodeId,
-							`S0 bootstrapping ${
-								s0result == undefined
-									? "timed out"
-									: s0result.status ===
-									  InclusionControllerStatus.OK
-									? "succeeded"
-									: "failed"
-							}`,
-						);
-
-						// When bootstrapping with S0, no other keys are granted
-						for (const secClass of securityClassOrder) {
-							if (secClass !== SecurityClass.S0_Legacy) {
-								newNode.securityClasses.set(secClass, false);
-							}
-						}
-						// Whether the S0 key is granted depends on the result
-						// received from the inclusion controller
-						newNode.securityClasses.set(
-							SecurityClass.S0_Legacy,
-							s0result?.status === InclusionControllerStatus.OK,
-						);
-						lowSecurity = !newNode.hasSecurityClass(
-							SecurityClass.S0_Legacy,
-						);
-					} else {
-						// Remember that no security classes were granted
-						for (const secClass of securityClassOrder) {
-							newNode.securityClasses.set(secClass, false);
-						}
-					}
+					// Perform S0/S2 bootstrapping
+					lowSecurity = (
+						await this.proxyBootstrap(newNode, inclCtrlr)
+					).lowSecurity;
 				} else {
 					// No command received, bootstrap node by ourselves
 					this.driver.controllerLog.logNode(
@@ -2055,6 +1976,185 @@ supported CCs: ${nodeInfo.supportedCCs
 				}
 			});
 		}
+	}
+
+	/**
+	 * @internal
+	 * Handles replace requests from an inclusion controller
+	 */
+	public handleInclusionControllerCCInitiateReplace(
+		initiate: InclusionControllerCCInitiate,
+	): void {
+		if (initiate.step !== InclusionControllerStep.ProxyInclusionReplace) {
+			throw new ZWaveError(
+				"Expected an inclusion controller replace request, but got a different step",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.setInclusionState(InclusionState.Busy);
+
+		const inclCtrlr = this.nodes.getOrThrow(initiate.nodeId as number);
+
+		const replacedNodeId = initiate.includedNodeId;
+		const oldNode = this.nodes.get(replacedNodeId);
+		if (oldNode) {
+			this.emit("node removed", oldNode, true);
+			this._nodes.delete(oldNode.id);
+		}
+
+		// Create a fresh node instance and forget the old one
+		const newNode = new ZWaveNode(
+			replacedNodeId,
+			this.driver,
+			undefined,
+			undefined,
+			undefined,
+			// Create an empty value DB and specify that it contains no values
+			// to avoid indexing the existing values
+			this.createValueDBForNode(replacedNodeId, new Set()),
+		);
+		this._nodes.set(newNode.id, newNode);
+
+		this.emit("node found", {
+			id: newNode.id,
+		});
+
+		// Assume the device is alive
+		// If it is actually a sleeping device, it will be marked as such later
+		newNode.markAsAlive();
+
+		// Inclusion is handled by the inclusion controller, which (hopefully) sets the SUC return route
+		newNode.hasSUCReturnRoute = true;
+
+		// Handle communication with the node in the background
+		process.nextTick(async () => {
+			// SIS, A, MUST request a Node Info Frame from Joining Node, B
+			const requestedNodeInfo = await newNode
+				.requestNodeInfo()
+				.catch(() => undefined);
+			if (requestedNodeInfo) {
+				newNode.updateNodeInfo(requestedNodeInfo);
+
+				// TODO: Check if this stuff works for a normal replace too
+				const deviceClass = new DeviceClass(
+					this.driver.configManager,
+					requestedNodeInfo.basicDeviceClass,
+					requestedNodeInfo.genericDeviceClass,
+					requestedNodeInfo.specificDeviceClass,
+				);
+				newNode["applyDeviceClass"](deviceClass);
+			}
+
+			// Perform S0/S2 bootstrapping
+			const lowSecurity = (await this.proxyBootstrap(newNode, inclCtrlr))
+				.lowSecurity;
+
+			// Bootstrap the node's lifelines, so it knows where the controller is
+			await this.bootstrapLifelineAndWakeup(newNode);
+
+			// We're done adding this node, notify listeners
+			const result: InclusionResult = {};
+			if (lowSecurity) result.lowSecurity = true;
+			this.emit("node added", newNode, result);
+
+			this.setInclusionState(InclusionState.Idle);
+
+			// And notify the inclusion controller after we're done interviewing
+			newNode.once("ready", () => {
+				this.driver.controllerLog.logNode(
+					inclCtrlr.nodeId,
+					`Notifying inclusion controller of finished inclusion`,
+				);
+				void inclCtrlr.commandClasses["Inclusion Controller"]
+					.completeStep(initiate.step, InclusionControllerStatus.OK)
+					// eslint-disable-next-line @typescript-eslint/no-empty-function
+					.catch(() => {});
+			});
+		});
+	}
+
+	/**
+	 * Handles bootstrapping the security keys for a node that was included by an inclusion controller
+	 */
+	private async proxyBootstrap(
+		newNode: ZWaveNode,
+		inclCtrlr: ZWaveNode,
+	): Promise<{ lowSecurity: boolean }> {
+		// This part is to be done before the interview
+
+		const deviceClass = newNode.deviceClass!;
+		let lowSecurity = false;
+
+		// Include using the default inclusion strategy:
+		// * Use S2 if possible,
+		// * only use S0 if necessary,
+		// * use no encryption otherwise
+		if (newNode.supportsCC(CommandClasses["Security 2"])) {
+			await this.secureBootstrapS2(newNode);
+			const actualSecurityClass = newNode.getHighestSecurityClass();
+			if (
+				actualSecurityClass == undefined ||
+				actualSecurityClass < SecurityClass.S2_Unauthenticated
+			) {
+				lowSecurity = true;
+			}
+		} else if (
+			newNode.supportsCC(CommandClasses.Security) &&
+			(deviceClass.specific ?? deviceClass.generic).requiresSecurity
+		) {
+			// S0 bootstrapping is deferred to the inclusion controller
+			this.driver.controllerLog.logNode(
+				newNode.id,
+				`Waiting for node ${inclCtrlr.id} to perform S0 bootstrapping...`,
+			);
+
+			await inclCtrlr.commandClasses["Inclusion Controller"].initiateStep(
+				newNode.id,
+				InclusionControllerStep.S0Inclusion,
+			);
+			// Wait 60s for the S0 bootstrapping to complete
+			const s0result = await this.driver
+				.waitForCommand<InclusionControllerCCComplete>(
+					(cc) =>
+						cc.nodeId === inclCtrlr.id &&
+						cc instanceof InclusionControllerCCComplete &&
+						cc.step === InclusionControllerStep.S0Inclusion,
+					60000,
+				)
+				.catch(() => undefined);
+
+			this.driver.controllerLog.logNode(
+				newNode.id,
+				`S0 bootstrapping ${
+					s0result == undefined
+						? "timed out"
+						: s0result.status === InclusionControllerStatus.OK
+						? "succeeded"
+						: "failed"
+				}`,
+			);
+
+			// When bootstrapping with S0, no other keys are granted
+			for (const secClass of securityClassOrder) {
+				if (secClass !== SecurityClass.S0_Legacy) {
+					newNode.securityClasses.set(secClass, false);
+				}
+			}
+			// Whether the S0 key is granted depends on the result
+			// received from the inclusion controller
+			newNode.securityClasses.set(
+				SecurityClass.S0_Legacy,
+				s0result?.status === InclusionControllerStatus.OK,
+			);
+			lowSecurity = !newNode.hasSecurityClass(SecurityClass.S0_Legacy);
+		} else {
+			// Remember that no security classes were granted
+			for (const secClass of securityClassOrder) {
+				newNode.securityClasses.set(secClass, false);
+			}
+		}
+
+		return { lowSecurity };
 	}
 
 	private async secureBootstrapS0(
