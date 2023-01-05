@@ -1,5 +1,11 @@
-import { CommandClasses, Maybe, validatePayload } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import {
+	CommandClasses,
+	Maybe,
+	MessageOrCCLogEntry,
+	validatePayload,
+} from "@zwave-js/core";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
 	CommandClass,
@@ -109,6 +115,19 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 		this.payload = Buffer.from([this.step, this.status]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				step: getEnumMemberName(InclusionControllerStep, this.step),
+				status: getEnumMemberName(
+					InclusionControllerStatus,
+					this.status,
+				),
+			},
+		};
+	}
 }
 
 interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
@@ -144,5 +163,15 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.includedNodeId, this.step]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"included node id": this.includedNodeId,
+				step: getEnumMemberName(InclusionControllerStep, this.step),
+			},
+		};
 	}
 }
