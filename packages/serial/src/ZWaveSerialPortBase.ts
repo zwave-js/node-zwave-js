@@ -146,10 +146,9 @@ export class ZWaveSerialPortBase extends PassThrough {
 		this[Symbol.asyncIterator] = () => this.parser[Symbol.asyncIterator]();
 	}
 
-	public open(): Promise<void> {
-		return this.implementation.open(this.serial).then(() => {
-			this._isOpen = true;
-		});
+	public async open(): Promise<void> {
+		await this.implementation.open(this.serial);
+		this._isOpen = true;
 	}
 
 	public close(): Promise<void> {

@@ -51,7 +51,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_MEMORY_GET_BUFFER = 0x23,
 	UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 0x24,
 
-	UNKNOWN_FUNC_FlashAutoProgSet = 0x27, // ??
+	EnterBootloader = 0x27, // Leave Serial API and enter bootloader (xmodem protocol)
 	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
 
 	GetNVMId = 0x29, // Returns information about the external NVM

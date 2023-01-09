@@ -1,3 +1,6 @@
+export * from "./BootloaderSerialPort";
+export * from "./BootloaderSerialPortBase";
+export * from "./BootloaderSocket";
 export { SerialLogger } from "./Logger";
 export { SerialLogContext } from "./Logger_safe";
 export * from "./message/Constants";
