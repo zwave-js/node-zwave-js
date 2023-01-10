@@ -84,6 +84,7 @@ import { NodeStatus } from '@zwave-js/core/safe';
 import type { NodeStatus as NodeStatus_2 } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core/safe';
 import { NodeType as NodeType_2 } from '@zwave-js/core';
+import { NodeUpdatePayload } from '@zwave-js/core';
 import type { NotificationCCReport } from '@zwave-js/cc/NotificationCC';
 import { num2hex } from '@zwave-js/shared/safe';
 import { parseQRCodeString } from '@zwave-js/core';
@@ -1028,6 +1029,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "restoreNVM"
     restoreNVMRaw(nvmData: Buffer, onProgress?: (bytesWritten: number, total: number) => void): Promise<void>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "setRFRegion"
+    get rfRegion(): RFRegion_2 | undefined;
     // (undocumented)
     get sdkVersion(): string | undefined;
     sdkVersionGt(version: SDKVersion): boolean | undefined;
@@ -1146,6 +1149,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get interviewAttempts(): number;
     interviewCC(cc: CommandClasses_2): Promise<void>;
     protected interviewCCs(): Promise<boolean>;
+    protected interviewNodeInfo(): Promise<void>;
     get interviewStage(): InterviewStage;
     set interviewStage(value: InterviewStage);
     get isControllerNode(): boolean;
@@ -1175,12 +1179,13 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // (undocumented)
     get productType(): number | undefined;
     get protocolVersion(): ProtocolVersion_2 | undefined;
-    protected queryNodeInfo(): Promise<void>;
     protected queryProtocolInfo(): Promise<void>;
     get ready(): boolean;
     refreshCCValues(cc: CommandClasses_2): Promise<void>;
     refreshInfo(options?: RefreshInfoOptions): Promise<void>;
     refreshValues(): Promise<void>;
+    // (undocumented)
+    requestNodeInfo(): Promise<NodeUpdatePayload>;
     requiresManualValueRefresh(): boolean;
     // (undocumented)
     get sdkVersion(): string | undefined;

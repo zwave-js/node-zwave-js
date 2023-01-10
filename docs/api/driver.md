@@ -426,6 +426,7 @@ interface LogConfig {
 	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
+	maxFiles: number;
 	nodeFilter?: number[];
 	filename: string;
 	forceConsole: boolean;

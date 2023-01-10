@@ -1,9 +1,10 @@
-import { wait } from "alcalzone-shared/async";
-import fs from "fs/promises";
+import { wait as _wait } from "alcalzone-shared/async";
 import os from "os";
 import path from "path";
 import "reflect-metadata";
-import { Driver, extractFirmware, guessFirmwareFileFormat } from "zwave-js";
+import { Driver } from "zwave-js";
+
+const wait = _wait;
 
 process.on("unhandledRejection", (_r) => {
 	debugger;
@@ -16,6 +17,9 @@ const driver = new Driver(port, {
 	// 	logToFile: true,
 	// 	forceConsole: true,
 	// },
+	logConfig: {
+		level: "verbose",
+	},
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(
@@ -38,42 +42,7 @@ const driver = new Driver(port, {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		const node = driver.controller.nodes.getOrThrow(8);
-		node.once("ready", async () => {
-			await wait(2000);
-			const fwFilename =
-				"/home/dominic/Repositories/zwavejs2mqtt/MultiSensor_OTA_Security_ZW050x_EU_A_V1_13_hex__TargetZwave__.bin";
-			const fwData = await fs.readFile(fwFilename);
-			const format = guessFirmwareFileFormat(
-				path.basename(fwFilename),
-				fwData,
-			);
-			const fw = extractFirmware(fwData, format);
-
-			await node.beginFirmwareUpdate(fw.data, fw.firmwareTarget);
-			await wait(2000);
-			await node.abortFirmwareUpdate();
-		});
-		// setTimeout(
-		// 	() => driver.controller.nodes.getOrThrow(2).refreshInfo(),
-		// 	2500,
-		// );
-		// Test code
-		// await wait(1000);
-		// const updates = await driver.controller.getAvailableFirmwareUpdates(10);
-		// console.log("Found updates:");
-		// console.dir(updates, { depth: Infinity });
-		// await wait(1000);
-		// try {
-		// 	console.log(`Installing update ${updates[0].version}...`);
-		// 	await wait(1000);
-		// 	await driver.controller.beginOTAFirmwareUpdate(
-		// 		2,
-		// 		updates[0].files[0],
-		// 	);
-		// } catch (e) {
-		// 	console.error(e);
-		// }
+		// Test code goes here
 	});
 void driver.start();
 // driver.enableStatistics({
