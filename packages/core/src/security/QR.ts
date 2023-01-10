@@ -2,7 +2,7 @@ import { createHash } from "crypto";
 import { Protocols } from "../capabilities/Protocols";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask } from "../values/Primitive";
-import { dskToString, isValidDSK } from "./DSK";
+import { dskToString } from "./DSK";
 import { SecurityClass } from "./SecurityClass";
 
 function readNumber(qr: string, offset: number, length: number): number {
@@ -215,21 +215,6 @@ function parseTLV(qr: string): {
 		entry,
 		charsRead: offset,
 	};
-}
-
-/**
- * Tries to extract a DSK from a scanned QR code. If the string is a valid DSK (prefixed with "zws2dsk:" or unprefixed), the DSK will be returned.
- * This can then be used to initiate an S2 inclusion with pre-filled DSK.
- */
-export function tryParseDSKFromQRCodeString(qr: string): string | undefined {
-	// Trim off whitespace that might have been copied by accident
-	qr = qr.trim();
-	if (qr.startsWith("zws2dsk:")) {
-		qr = qr.slice("zws2dsk:".length);
-	}
-	if (isValidDSK(qr)) {
-		return qr;
-	}
 }
 
 /** Parses a string that has been decoded from a Z-Wave (S2 or SmartStart) QR code */
