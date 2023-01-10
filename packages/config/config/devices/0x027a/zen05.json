@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Always On",
+					"label": "LED indicator is on when the plug is on, LED indicator is off when the plug is off",
 					"value": 0
 				},
 				{
-					"label": "Follow Outlet",
+					"label": "LED indicator is on when the plug is off, LED indicator is off when the plug is on",
 					"value": 1
 				},
 				{
