@@ -17,9 +17,6 @@ const driver = new Driver(port, {
 	// 	logToFile: true,
 	// 	forceConsole: true,
 	// },
-	logConfig: {
-		level: "verbose",
-	},
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(
@@ -43,6 +40,10 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
+		await wait(10000);
+		await driver.enterBootloader();
+		await wait(1000);
+		await driver.beginGblUpload();
 	});
 void driver.start();
 // driver.enableStatistics({

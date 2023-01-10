@@ -1,4 +1,9 @@
-import { BootloaderSerialPort } from "@zwave-js/serial";
+import { ZWaveLogContainer } from "@zwave-js/core";
+import {
+	BootloaderChunkType,
+	ZWaveSerialMode,
+	ZWaveSerialPort,
+} from "@zwave-js/serial";
 import { wait as _wait } from "alcalzone-shared/async";
 import os from "os";
 import "reflect-metadata";
@@ -11,18 +16,32 @@ process.on("unhandledRejection", (_r) => {
 
 const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 
-const gblSerial = new BootloaderSerialPort(port);
-gblSerial.on("data", async (data) => {
+const logContainer = new ZWaveLogContainer();
+const serial = new ZWaveSerialPort(port, logContainer);
+serial.mode = ZWaveSerialMode.Bootloader;
+
+serial.on("bootloaderData", async (data) => {
 	console.log("got data:");
 	console.log(data);
 
-	if (data.error != undefined) return;
-	if (data.waitingForInput) {
-		await gblSerial.writeAsync(Buffer.from("1", "ascii"));
+	if (data.type === BootloaderChunkType.Menu) {
+		console.log("run");
+		const promise = serial.writeAsync(Buffer.from("2", "ascii"));
+		console.log("SERIAL API mode");
+		serial.mode = ZWaveSerialMode.SerialAPI;
+		await promise;
+		await wait(2000);
+		process.exit(0);
+		// await gblSerial.writeAsync(Buffer.from("2", "ascii"));
 	}
 });
 
-void gblSerial.open().then(async () => {
-	await gblSerial.writeAsync(Buffer.from("01030027db", "hex"));
+serial.on("data", (data) => {
+	console.log("got SERIAL data:");
+	console.log(data);
+});
+
+void serial.open().then(async () => {
+	await serial.writeAsync(Buffer.from("01030027db", "hex"));
 	await wait(2000);
 });

@@ -81,6 +81,8 @@ import type {
 	ZWaveApplicationHost,
 } from "@zwave-js/host";
 import {
+	BootloaderChunk,
+	BootloaderChunkType,
 	FunctionType,
 	getDefaultPriority,
 	INodeQuery,
@@ -90,6 +92,7 @@ import {
 	Message,
 	MessageHeaders,
 	MessageType,
+	ZWaveSerialMode,
 	ZWaveSerialPort,
 	ZWaveSerialPortBase,
 	ZWaveSerialPortImplementation,
@@ -100,6 +103,7 @@ import {
 	cloneDeep,
 	createWrappingCounter,
 	DeepPartial,
+	getEnumMemberName,
 	getErrorMessage,
 	isDocker,
 	mergeDeep,
@@ -164,6 +168,7 @@ import {
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
+import { Bootloader, BootloaderState } from "./Bootloader";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -673,13 +678,25 @@ export class Driver
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
 	public get controller(): ZWaveController {
-		if (this._controller == undefined) {
+		if (this._controller == undefined || this._bootloader) {
 			throw new ZWaveError(
 				"The controller is not yet ready!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 		return this._controller;
+	}
+
+	/** While in bootloader mode, this encapsulates information about the bootloader and its state */
+	private _bootloader: Bootloader | undefined;
+	private get bootloader(): Bootloader {
+		if (this._bootloader == undefined) {
+			throw new ZWaveError(
+				"The controller is not in bootloader mode!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._bootloader;
 	}
 
 	private _securityManager: SecurityManager | undefined;
@@ -906,6 +923,7 @@ export class Driver
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
+			.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
 			.on("error", (err) => {
 				if (this.isSoftResetting && !this.serial?.isOpen) {
 					// A disconnection while soft resetting is to be expected
@@ -2349,7 +2367,9 @@ export class Driver
 		// Wait the configured amount of time for the Serial API started command to be received
 		this.controllerLog.print("Waiting for the Serial API to start...");
 		waitResult = await this.waitForMessage<SerialAPIStartedRequest>(
-			(msg) => msg.functionType === FunctionType.SerialAPIStarted,
+			(msg) => {
+				return msg.functionType === FunctionType.SerialAPIStarted;
+			},
 			this.options.timeouts.serialAPIStarted,
 		).catch(() => false as const);
 
@@ -3251,6 +3271,7 @@ export class Driver
 	 * @param msg The decoded message
 	 */
 	private async handleUnsolicitedMessage(msg: Message): Promise<void> {
+		console.log("handleUnsolicitedMessage");
 		if (msg.type === MessageType.Request) {
 			// This is a request we might have registered handlers for
 			try {
@@ -3409,9 +3430,19 @@ ${handlers.length} left`,
 		}
 
 		// Check if we have a dynamic handler waiting for this message
+		console.log(
+			"handleRequest. awaited messages: ",
+			this.awaitedMessages.length,
+		);
 		for (const entry of this.awaitedMessages) {
 			if (entry.predicate(msg)) {
 				// resolve the promise - this will remove the entry from the list
+				console.log(
+					`resolve awaited message ${getEnumMemberName(
+						FunctionType,
+						msg.functionType,
+					)}`,
+				);
 				entry.promise.resolve(msg);
 				return;
 			}
@@ -4690,5 +4721,45 @@ ${handlers.length} left`,
 		}
 
 		return true;
+	}
+
+	public async enterBootloader(): Promise<void> {
+		this.controllerLog.print("Entering bootloader mode...");
+		// await this.controller.toggleRF(false);
+		await this.trySoftReset();
+		const promise = this.writeSerial(Buffer.from("01030027db", "hex"));
+		this.serial!.mode = ZWaveSerialMode.Bootloader;
+		await promise;
+	}
+
+	public async leaveBootloader(): Promise<void> {
+		this.controllerLog.print("Starting Serial API...");
+		const promise = this.writeSerial(
+			Buffer.from(this.bootloader.runOption.toString(), "ascii"),
+		);
+		this.serial!.mode = ZWaveSerialMode.SerialAPI;
+		await promise;
+
+		await this.ensureSerialAPI();
+	}
+
+	private async serialport_onBootloaderData(
+		data: BootloaderChunk,
+	): Promise<void> {
+		console.log("bootloader data: ", data);
+		if (data.type === BootloaderChunkType.Menu) {
+			if (!this._bootloader) {
+				this._bootloader = new Bootloader(data.version, data.options);
+				// TODO: handle errors, resolve enterBootloader promise only after checking
+			}
+			this._bootloader.state = BootloaderState.Menu;
+		}
+		await Promise.resolve();
+	}
+
+	public async beginGblUpload(): Promise<void> {
+		await this.writeSerial(
+			Buffer.from(this.bootloader.uploadOption.toString(), "ascii"),
+		);
 	}
 }
