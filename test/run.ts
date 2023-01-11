@@ -1,4 +1,5 @@
 import { wait as _wait } from "alcalzone-shared/async";
+import fs from "fs/promises";
 import os from "os";
 import path from "path";
 import "reflect-metadata";
@@ -17,6 +18,9 @@ const driver = new Driver(port, {
 	// 	logToFile: true,
 	// 	forceConsole: true,
 	// },
+	testingHooks: {
+		skipNodeInterview: true,
+	},
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(
@@ -36,16 +40,34 @@ const driver = new Driver(port, {
 		cacheDir: path.join(__dirname, "cache"),
 		lockDir: path.join(__dirname, "cache/locks"),
 	},
+	allowBootloaderOnly: true,
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-		await wait(10000);
-		await driver.enterBootloader();
-		await wait(1000);
-		await driver.beginGblUpload();
+		await wait(2000);
+		void update();
+	})
+	.once("bootloader ready", async () => {
+		console.log("RECOVERY MODE");
+		await wait(500);
+		void update();
 	});
 void driver.start();
+
+async function update() {
+	const data = await fs.readFile(
+		"ZW_SerialAPI_Controller_7_17_0_284_EFR32ZG14_REGION_EU.gbl",
+	);
+	driver.controller.on("firmware update progress", (progress) => {
+		console.debug(`firmware update progress: ${progress.progress}`);
+	});
+	driver.controller.on("firmware update finished", (result) => {
+		console.debug(`firmware update finished: ${result.success}`);
+	});
+
+	await driver.controller.firmwareUpdateOTW(data);
+}
 // driver.enableStatistics({
 // 	applicationName: "test",
 // 	applicationVersion: "0.0.1",

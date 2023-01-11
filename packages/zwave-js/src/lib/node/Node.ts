@@ -3664,7 +3664,6 @@ protocol version:      ${this.protocolVersion}`;
 
 	private _firmwareUpdateInProgress: boolean = false;
 	/**
-	 *
 	 * Returns whether a firmware update is in progress for this node.
 	 */
 	public isFirmwareUpdateInProgress(): boolean {

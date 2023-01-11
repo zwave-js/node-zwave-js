@@ -1,10 +1,12 @@
 import { Transform, TransformCallback } from "stream";
+import type { SerialLogger } from "../Logger";
+import { XModemMessageHeaders } from "../MessageHeaders";
 
 export enum BootloaderChunkType {
 	Error,
 	Menu,
 	Message,
-	AwaitingInput,
+	FlowControl,
 }
 
 export type BootloaderChunk =
@@ -25,13 +27,26 @@ export type BootloaderChunk =
 			_raw: string;
 	  }
 	| {
-			type: BootloaderChunkType.AwaitingInput;
-			_raw: string;
+			type: BootloaderChunkType.FlowControl;
+			command:
+				| XModemMessageHeaders.ACK
+				| XModemMessageHeaders.NAK
+				| XModemMessageHeaders.CAN
+				| XModemMessageHeaders.C;
 	  };
+
+function isFlowControl(byte: number): boolean {
+	return (
+		byte === XModemMessageHeaders.ACK ||
+		byte === XModemMessageHeaders.NAK ||
+		byte === XModemMessageHeaders.CAN ||
+		byte === XModemMessageHeaders.C
+	);
+}
 
 /** Parses the screen output from the bootloader, either waiting for a NUL char or a timeout */
 export class BootloaderScreenParser extends Transform {
-	constructor() {
+	constructor(private logger?: SerialLogger) {
 		// We read byte streams but emit messages
 		super({ readableObjectMode: true });
 	}
@@ -44,21 +59,39 @@ export class BootloaderScreenParser extends Transform {
 		encoding: string,
 		callback: TransformCallback,
 	): void {
-		this.receiveBuffer += chunk.toString("utf8");
-
-		// Emit all full "screens"
-		let nulCharIndex: number;
-		while ((nulCharIndex = this.receiveBuffer.indexOf("\0")) > -1) {
-			const line = this.receiveBuffer.slice(0, nulCharIndex + 1);
-			this.receiveBuffer = this.receiveBuffer.slice(nulCharIndex + 1);
-			this.push(line);
-		}
-
-		// If a partial output is kept for a certain amount of time, emit it aswell
 		if (this.flushTimeout) {
 			clearTimeout(this.flushTimeout);
 			this.flushTimeout = undefined;
 		}
+
+		this.receiveBuffer += chunk.toString("utf8");
+
+		// Correct buggy ordering of NUL char in error codes.
+		// The bootloader may send errors as "some error 0x\012" instead of "some error 0x12\0"
+		this.receiveBuffer = this.receiveBuffer.replace(
+			/(error 0x)\0([0-9a-f]+)/gi,
+			"$1$2\0",
+		);
+
+		// Emit all full "screens"
+		let nulCharIndex: number;
+		while ((nulCharIndex = this.receiveBuffer.indexOf("\0")) > -1) {
+			const line = this.receiveBuffer.slice(0, nulCharIndex).trim();
+			this.receiveBuffer = this.receiveBuffer.slice(nulCharIndex + 1);
+			this.push(line);
+		}
+
+		// Emit single flow-control bytes
+		while (this.receiveBuffer.length > 0) {
+			const charCode = this.receiveBuffer.charCodeAt(0);
+			if (!isFlowControl(charCode)) break;
+
+			this.logger?.data("inbound", Buffer.from([charCode]));
+			this.push(charCode);
+			this.receiveBuffer = this.receiveBuffer.slice(1);
+		}
+
+		// If a partial output is kept for a certain amount of time, emit it aswell
 		if (this.receiveBuffer) {
 			this.flushTimeout = setTimeout(() => {
 				this.flushTimeout = undefined;
@@ -73,7 +106,7 @@ export class BootloaderScreenParser extends Transform {
 
 // const text = `Gecko Bootloader v1.7.1\r\n1. upload gbl\r\n2. run\r\n3. ebl info\r\nBL >`;
 
-const menuPreamble = "Gecko Bootloader";
+export const bootloaderMenuPreamble = "Gecko Bootloader";
 const preambleRegex = /^Gecko Bootloader v(?<version>\d+\.\d+\.\d+)/;
 const menuSuffix = "BL >";
 const optionsRegex = /^(?<num>\d+)\. (?<option>.+)/gm;
@@ -90,21 +123,20 @@ export class BootloaderParser extends Transform {
 		encoding: string,
 		callback: TransformCallback,
 	): void {
-		let screen = (chunk as string).trim();
-		if (!screen.endsWith("\0")) {
-			// This was triggered by timeout
+		// Flow control bytes come in as numbers
+		if (typeof chunk === "number") {
 			return callback(null, {
-				type: BootloaderChunkType.AwaitingInput,
-				_raw: screen,
+				type: BootloaderChunkType.FlowControl,
+				command: chunk,
 			} satisfies BootloaderChunk);
-		} else {
-			screen = screen.slice(0, -1).trim();
 		}
+
+		let screen = (chunk as string).trim();
 
 		// Apparently, the bootloader sometimes sends \0 in the wrong location.
 		// Therefore check if the screen contains the menu preamble, instead of forcing
 		// it to start with it
-		const menuPreambleIndex = screen.indexOf(menuPreamble);
+		const menuPreambleIndex = screen.indexOf(bootloaderMenuPreamble);
 
 		if (menuPreambleIndex > -1 && screen.endsWith(menuSuffix)) {
 			screen = screen.slice(menuPreambleIndex);
@@ -134,7 +166,6 @@ export class BootloaderParser extends Transform {
 			} satisfies BootloaderChunk);
 		} else {
 			// Some output
-			console.log(`some message. raw = ${screen}`);
 			this.push({
 				type: BootloaderChunkType.Message,
 				_raw: screen,

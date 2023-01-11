@@ -109,6 +109,9 @@ export enum ZWaveErrorCodes {
 	/** The replace process was aborted because the node has responded */
 	ReplaceFailedNode_NodeOK,
 
+	/** The controller is currently busy with something that prevents an OTW update */
+	OTW_Update_Busy = 380,
+
 	// Here follow CC specific errors
 
 	/**

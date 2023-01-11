@@ -3,14 +3,15 @@ import { Mixin } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import { Duplex, PassThrough, Readable, Writable } from "stream";
-import {
-	BootloaderChunk,
-	BootloaderParser,
-	BootloaderScreenParser,
-} from "./BootloaderParsers";
 import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
-import { SerialAPIParser } from "./SerialAPIParser";
+import {
+	BootloaderChunk,
+	bootloaderMenuPreamble,
+	BootloaderParser,
+	BootloaderScreenParser,
+} from "./parsers/BootloaderParsers";
+import { SerialAPIParser } from "./parsers/SerialAPIParser";
 
 export type ZWaveSerialChunk =
 	| MessageHeaders.ACK
@@ -26,6 +27,7 @@ export enum ZWaveSerialMode {
 export interface ZWaveSerialPortEventCallbacks {
 	error: (e: Error) => void;
 	data: (data: ZWaveSerialChunk) => void;
+	discarded: (data: Buffer) => void;
 	bootloaderData: (data: BootloaderChunk) => void;
 }
 
@@ -104,32 +106,7 @@ export class ZWaveSerialPortBase extends PassThrough {
 	private bootloaderParser: BootloaderParser;
 
 	// Allow switching between modes
-	private _mode: ZWaveSerialMode = ZWaveSerialMode.SerialAPI;
-	public get mode(): ZWaveSerialMode {
-		return this._mode;
-	}
-	public set mode(mode: ZWaveSerialMode) {
-		if (this._mode === mode) return;
-		this._mode = mode;
-
-		if (mode === ZWaveSerialMode.SerialAPI) {
-			this.switchToSerialAPIMode();
-		} else {
-			this.switchToBootloaderMode();
-		}
-	}
-
-	private switchToSerialAPIMode(): void {
-		// Hook up the serial port to the Serial API parser
-		this.serial.unpipe();
-		this.serial.pipe(this.parser);
-	}
-
-	private switchToBootloaderMode(): void {
-		// Hook up the serial port to the Bootloader parser
-		this.serial.unpipe();
-		this.serial.pipe(this.bootloaderScreenParser);
-	}
+	public mode: ZWaveSerialMode | undefined;
 
 	// Allow strongly-typed async iteration
 	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<ZWaveSerialChunk>;
@@ -173,17 +150,35 @@ export class ZWaveSerialPortBase extends PassThrough {
 
 		// Prepare parsers to hook up to the serial port
 		// -> Serial API mode
-		this.parser = new SerialAPIParser(this.logger);
+		this.parser = new SerialAPIParser(this.logger, (discarded) =>
+			this.emit("discarded", discarded),
+		);
 
 		// -> Bootloader mode
 		// This one looks for NUL chars which terminate each bootloader output screen
-		this.bootloaderScreenParser = new BootloaderScreenParser();
+		this.bootloaderScreenParser = new BootloaderScreenParser(this.logger);
 		// This one parses the bootloader output into a more usable format
 		this.bootloaderParser = new BootloaderParser();
 		// this.bootloaderParser.pipe(this.output);
 		this.bootloaderScreenParser.pipe(this.bootloaderParser);
 
-		this.switchToSerialAPIMode();
+		// Check the incoming messages and route them to the correct parser
+		this.serial.on("data", (data) => {
+			if (this.mode == undefined) {
+				// If we haven't figured out the startup mode yet,
+				// inspect the chunk to see if it contains the bootloader preamble
+				const str = (data as Buffer).toString("ascii").trim();
+				this.mode = str.startsWith(bootloaderMenuPreamble)
+					? ZWaveSerialMode.Bootloader
+					: ZWaveSerialMode.SerialAPI;
+			}
+
+			if (this.mode === ZWaveSerialMode.Bootloader) {
+				this.bootloaderScreenParser.write(data);
+			} else {
+				this.parser.write(data);
+			}
+		});
 
 		// When something is piped to us, pipe it to the serial port instead
 		// Also pass all written data to the serialport unchanged
