@@ -104,8 +104,6 @@ export class BootloaderScreenParser extends Transform {
 	}
 }
 
-// const text = `Gecko Bootloader v1.7.1\r\n1. upload gbl\r\n2. run\r\n3. ebl info\r\nBL >`;
-
 export const bootloaderMenuPreamble = "Gecko Bootloader";
 const preambleRegex = /^Gecko Bootloader v(?<version>\d+\.\d+\.\d+)/;
 const menuSuffix = "BL >";
