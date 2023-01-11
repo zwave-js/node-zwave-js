@@ -3884,13 +3884,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/parser-delimiter@npm:^10.5.0":
-  version: 10.5.0
-  resolution: "@serialport/parser-delimiter@npm:10.5.0"
-  checksum: 7a5d24fa577bddde428979a641081604116f98ff9b0a59ec4fe1021d4d2f1ec4177546e40580e4bb04714b85365a19de3f16f183d6f8cf46ca37bca13b4fb567
-  languageName: node
-  linkType: hard
-
 "@serialport/parser-inter-byte-timeout@npm:10.3.0":
   version: 10.3.0
   resolution: "@serialport/parser-inter-byte-timeout@npm:10.3.0"
@@ -4783,7 +4776,6 @@ __metadata:
     "@sentry/node": ^7.12.1
     "@serialport/binding-mock": ^10.2.2
     "@serialport/bindings-interface": "*"
-    "@serialport/parser-delimiter": ^10.5.0
     "@serialport/stream": ^10.3.0
     "@types/jest": ^29.0.2
     "@types/node": ^14.18.36
