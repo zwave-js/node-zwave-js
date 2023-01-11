@@ -383,7 +383,6 @@ interface AwaitedChunk<T> {
 type AwaitedMessageEntry = AwaitedChunk<Message>;
 type AwaitedCommandEntry = AwaitedChunk<ICommandClass>;
 export type AwaitedBootloaderChunkEntry = AwaitedChunk<BootloaderChunk>;
-type AwaitedDiscardedDataEntry = AwaitedChunk<Buffer>;
 
 interface TransportServiceSession {
 	fragmentSize: number;
@@ -618,8 +617,6 @@ export class Driver
 	private awaitedCommands: AwaitedCommandEntry[] = [];
 	/** A map of awaited chunks from the bootloader */
 	private awaitedBootloaderChunks: AwaitedBootloaderChunkEntry[] = [];
-	/** A map of awaited discarded data fragments from the Serial API parser */
-	private awaitedDiscardedData: AwaitedDiscardedDataEntry[] = [];
 
 	/** A map of Node ID -> ongoing sessions */
 	private nodeSessions = new Map<number, Sessions>();
@@ -933,7 +930,6 @@ export class Driver
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
 			.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
-			.on("discarded", this.serialport_onDiscardedData.bind(this))
 			.on("error", (err) => {
 				if (this.isSoftResetting && !this.serial?.isOpen) {
 					// A disconnection while soft resetting is to be expected
@@ -2596,7 +2592,6 @@ export class Driver
 			...this.awaitedCommands.map((c) => c.timeout),
 			...this.awaitedMessages.map((m) => m.timeout),
 			...this.awaitedBootloaderChunks.map((b) => b.timeout),
-			...this.awaitedDiscardedData.map((d) => d.timeout),
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
@@ -4925,55 +4920,5 @@ ${handlers.length} left`,
 				resolve(cc as T);
 			});
 		});
-	}
-
-	/**
-	 * Waits until a specific chunk of data is discarded by the serial API parser. Returns the received chunk.
-	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
-	 * @param predicate A predicate function to test all discarded chunks
-	 */
-	// FIXME: Remove this if really not needed
-	public waitForDiscardedData(
-		predicate: (discarded: Buffer) => boolean,
-		timeout: number,
-	): Promise<Buffer> {
-		return new Promise((resolve, reject) => {
-			const entry: AwaitedDiscardedDataEntry = {
-				predicate,
-				promise: createDeferredPromise(),
-				timeout: undefined,
-			};
-			this.awaitedDiscardedData.push(entry);
-			const removeEntry = () => {
-				if (entry.timeout) clearTimeout(entry.timeout);
-				const index = this.awaitedDiscardedData.indexOf(entry);
-				if (index !== -1) this.awaitedDiscardedData.splice(index, 1);
-			};
-			// When the timeout elapses, remove the wait entry and reject the returned Promise
-			entry.timeout = setTimeout(() => {
-				removeEntry();
-				reject(
-					new ZWaveError(
-						`Discarded no matching data within the provided timeout!`,
-						ZWaveErrorCodes.Controller_Timeout,
-					),
-				);
-			}, timeout);
-			// When the promise is resolved, remove the wait entry and resolve the returned Promise
-			void entry.promise.then((data) => {
-				removeEntry();
-				resolve(data);
-			});
-		});
-	}
-
-	private serialport_onDiscardedData(data: Buffer): void {
-		for (const entry of this.awaitedDiscardedData) {
-			if (entry.predicate(data)) {
-				// resolve the promise - this will remove the entry from the list
-				entry.promise.resolve(data);
-				return;
-			}
-		}
 	}
 }

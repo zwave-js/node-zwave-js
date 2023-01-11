@@ -5280,6 +5280,8 @@ ${associatedNodes.join(", ")}`,
 	 *
 	 * The return value indicates whether the update was successful.
 	 * **WARNING:** After a successful update, the Z-Wave driver will destroy itself so it can be restarted.
+	 *
+	 * **WARNING:** A failure during this process may put your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded. Use at your own risk!
 	 */
 	public async firmwareUpdateOTW(data: Buffer): Promise<boolean> {
 		// Don't let two firmware updates happen in parallel

@@ -27,7 +27,7 @@ export enum ZWaveSerialMode {
 export interface ZWaveSerialPortEventCallbacks {
 	error: (e: Error) => void;
 	data: (data: ZWaveSerialChunk) => void;
-	discarded: (data: Buffer) => void;
+	discardedData: (data: Buffer) => void;
 	bootloaderData: (data: BootloaderChunk) => void;
 }
 
@@ -151,7 +151,7 @@ export class ZWaveSerialPortBase extends PassThrough {
 		// Prepare parsers to hook up to the serial port
 		// -> Serial API mode
 		this.parser = new SerialAPIParser(this.logger, (discarded) =>
-			this.emit("discarded", discarded),
+			this.emit("discardedData", discarded),
 		);
 
 		// -> Bootloader mode
