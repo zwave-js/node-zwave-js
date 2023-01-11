@@ -5284,6 +5284,13 @@ ${associatedNodes.join(", ")}`,
 	 * **WARNING:** A failure during this process may put your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded. Use at your own risk!
 	 */
 	public async firmwareUpdateOTW(data: Buffer): Promise<boolean> {
+		if (this.sdkVersionLt("7.0")) {
+			throw new ZWaveError(
+				"OTW firmware updates only supported for 700 series controllers or newer at the moment",
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		}
+
 		// Don't let two firmware updates happen in parallel
 		if (this.isAnyOTAFirmwareUpdateInProgress()) {
 			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
