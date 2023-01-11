@@ -383,11 +383,12 @@ Returns the user agent string used for service requests.
 
 The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are implemented:
 
-| Event               | Description                                                                                                                                                                                          |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"error"`           | Is emitted when the underlying serial port emits an error or invalid data is received. You **must** add a listener for this event, otherwise unhandled `"error"` events will crash your application! |
-| `"driver ready"`    | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                     |
-| `"all nodes ready"` | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                             |
+| Event                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"error"`            | Is emitted when the underlying serial port emits an error or invalid data is received. You **must** add a listener for this event, otherwise unhandled `"error"` events will crash your application!                                                                                                                                                                                                                                                                             |
+| `"driver ready"`     | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                                                                                                                                                                                                                                                                                                 |
+| `"all nodes ready"`  | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                                                                                                                                                                                                                                                                                                         |
+| `"bootloader ready"` | Is emitted when the controller is in recovery mode (e.g. after a failed firmware upgrade) and the bootloader has been entered. This behavior is opt-in using the `allowBootloaderOnly` flag of the [`ZWaveOptions`](#ZWaveOptions). If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image. The `"driver ready"` event will not be emitted and commands attempting to talk to the serial API will fail in this mode. |
 
 ## Interfaces
 
@@ -814,6 +815,18 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		/** API key for the Z-Wave JS Firmware Update Service (https://github.com/zwave-js/firmware-updates/) */
 		firmwareUpdateService?: string;
 	};
+
+	/**
+	 * Normally, the driver expects to start in Serial API mode and enter the bootloader on demand. If in bootloader,
+	 * it will try to exit it and enter Serial API mode again.
+	 *
+	 * However there are situations where a controller may be stuck in bootloader mode and no Serial API is available.
+	 * In this case, the driver startup will fail, unless this option is set to `true`.
+	 *
+	 * If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image.
+	 * Commands attempting to talk to the serial API will fail.
+	 */
+	allowBootloaderOnly?: boolean;
 
 	/**
 	 * An object with application/module/component names and their versions.
