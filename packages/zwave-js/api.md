@@ -563,6 +563,7 @@ export type InclusionOptions = {
     forceSecurity?: boolean;
 } | {
     strategy: InclusionStrategy.Security_S2;
+    dsk?: string;
     userCallbacks?: InclusionUserCallbacks;
 } | {
     strategy: InclusionStrategy.Security_S2;

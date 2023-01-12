@@ -15,6 +15,7 @@ export * from "./error/ZWaveError";
 export * from "./log/shared_safe";
 export * from "./security/DSK";
 export * from "./security/SecurityClass";
+export * from "./security/shared_safe";
 export * from "./util/crc";
 export * from "./util/graph";
 export * from "./util/misc";

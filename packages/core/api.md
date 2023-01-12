@@ -2312,6 +2312,11 @@ export enum TransmitStatus {
     OK = 0
 }
 
+// Warning: (ae-missing-release-tag) "tryParseDSKFromQRCodeString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function tryParseDSKFromQRCodeString(qr: string): string | undefined;
+
 // Warning: (ae-missing-release-tag) "TXReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)

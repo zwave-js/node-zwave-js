@@ -34,6 +34,7 @@ import {
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
+	isValidDSK,
 	isZWaveError,
 	NodeType,
 	NODE_ID_BROADCAST,
@@ -2525,13 +2526,23 @@ supported CCs: ${nodeInfo.supportedCCs
 				const tai2RemainingMs =
 					inclusionTimeouts.TAI2 - (Date.now() - timerStartTAI2);
 
-				const pinResult = await Promise.race([
-					wait(tai2RemainingMs, true).then(() => false as const),
-					userCallbacks
-						.validateDSKAndEnterPIN(dsk)
-						// ignore errors in application callbacks
-						.catch(() => false as const),
-				]);
+				let pinResult: string | false;
+				if (
+					"dsk" in inclusionOptions &&
+					typeof inclusionOptions.dsk === "string" &&
+					isValidDSK(inclusionOptions.dsk)
+				) {
+					pinResult = inclusionOptions.dsk.slice(0, 5);
+				} else {
+					pinResult = await Promise.race([
+						wait(tai2RemainingMs, true).then(() => false as const),
+						userCallbacks
+							.validateDSKAndEnterPIN(dsk)
+							// ignore errors in application callbacks
+							.catch(() => false as const),
+					]);
+				}
+
 				if (
 					typeof pinResult !== "string" ||
 					!/^\d{5}$/.test(pinResult)
