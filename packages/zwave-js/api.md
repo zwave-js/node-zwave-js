@@ -187,6 +187,7 @@ export interface ControllerFirmwareUpdateResult {
 // @public (undocumented)
 export enum ControllerFirmwareUpdateStatus {
     Error_Aborted = 2,
+    Error_NotSupported = 3,
     Error_RetryLimitReached = 1,
     // (undocumented)
     Error_Timeout = 0,
