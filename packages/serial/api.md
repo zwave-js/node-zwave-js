@@ -149,6 +149,8 @@ export enum FunctionType {
     // (undocumented)
     ExtNVMWriteLongBuffer = 43,
     // (undocumented)
+    FirmwareUpdateNVM = 120,
+    // (undocumented)
     FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,
     // (undocumented)
     FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 209,
@@ -335,8 +337,6 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0x67 = 103,
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0x78 = 120,
-    // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0x98 = 152,
     // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0xB4 = 180,
@@ -476,6 +476,7 @@ export class Message {
     static getMessageLength(data: Buffer): number;
     getNodeId(): number | undefined;
     getNodeUnsafe(applHost: ZWaveApplicationHost): IZWaveNode | undefined;
+    getResponseTimeout(): number | undefined;
     hasCallbackId(): boolean;
     // (undocumented)
     protected host: ZWaveHost;
