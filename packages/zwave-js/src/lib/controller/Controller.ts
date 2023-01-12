@@ -5476,7 +5476,7 @@ ${associatedNodes.join(", ")}`,
 					);
 				} catch (e) {
 					this.driver.controllerLog.print(
-						"OTW update failed: The bootloader did not acknowledge the start of transfer.",
+						"OTW update failed: The bootloader did not acknowledge the end of transfer.",
 						"error",
 					);
 					this.emit("firmware update finished", {
