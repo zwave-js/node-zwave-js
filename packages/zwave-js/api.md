@@ -1514,21 +1514,6 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 
 export * from "@zwave-js/cc";
 
-// Warnings were encountered during analysis:
-//
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:129:6 - (TS2304) Cannot find name 'satisfies'.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:129:6 - (TS2554) Expected 0-2 arguments, but got 4.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:129:16 - (TS2693) 'BootloaderChunk' only refers to a type, but is being used as a value here.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:147:7 - (TS2304) Cannot find name 'satisfies'.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:147:7 - (TS2554) Expected 0-2 arguments, but got 4.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:147:17 - (TS2693) 'BootloaderChunk' only refers to a type, but is being used as a value here.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:164:6 - (TS2304) Cannot find name 'satisfies'.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:164:16 - (TS2554) Expected 1-2 arguments, but got 3.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:164:16 - (TS2693) 'BootloaderChunk' only refers to a type, but is being used as a value here.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:171:6 - (TS2304) Cannot find name 'satisfies'.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:171:16 - (TS2554) Expected 1-2 arguments, but got 3.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/parsers/BootloaderParsers.ts:171:16 - (TS2693) 'BootloaderChunk' only refers to a type, but is being used as a value here.
-
 // (No @packageDocumentation comment for this package)
 
 ```

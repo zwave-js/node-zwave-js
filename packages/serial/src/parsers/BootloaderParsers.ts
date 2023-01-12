@@ -123,10 +123,13 @@ export class BootloaderParser extends Transform {
 	): void {
 		// Flow control bytes come in as numbers
 		if (typeof chunk === "number") {
-			return callback(null, {
-				type: BootloaderChunkType.FlowControl,
-				command: chunk,
-			} satisfies BootloaderChunk);
+			return callback(
+				null,
+				{
+					type: BootloaderChunkType.FlowControl,
+					command: chunk,
+				} /* satisfies BootloaderChunk */,
+			);
 		}
 
 		let screen = (chunk as string).trim();
@@ -140,11 +143,14 @@ export class BootloaderParser extends Transform {
 			screen = screen.slice(menuPreambleIndex);
 			const version = preambleRegex.exec(screen)?.groups?.version;
 			if (!version) {
-				return callback(null, {
-					type: BootloaderChunkType.Error,
-					error: "Could not determine bootloader version",
-					_raw: screen,
-				} satisfies BootloaderChunk);
+				return callback(
+					null,
+					{
+						type: BootloaderChunkType.Error,
+						error: "Could not determine bootloader version",
+						_raw: screen,
+					} /* satisfies BootloaderChunk */,
+				);
 			}
 
 			const options: { num: number; option: string }[] = [];
@@ -156,19 +162,23 @@ export class BootloaderParser extends Transform {
 				});
 			}
 
-			this.push({
-				type: BootloaderChunkType.Menu,
-				_raw: screen,
-				version,
-				options,
-			} satisfies BootloaderChunk);
+			this.push(
+				{
+					type: BootloaderChunkType.Menu,
+					_raw: screen,
+					version,
+					options,
+				} /* satisfies BootloaderChunk */,
+			);
 		} else {
 			// Some output
-			this.push({
-				type: BootloaderChunkType.Message,
-				_raw: screen,
-				message: screen,
-			} satisfies BootloaderChunk);
+			this.push(
+				{
+					type: BootloaderChunkType.Message,
+					_raw: screen,
+					message: screen,
+				} /* satisfies BootloaderChunk */,
+			);
 		}
 
 		callback();
