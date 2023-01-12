@@ -2053,9 +2053,27 @@ protocol version:      ${this.protocolVersion}`;
 			const endpoint = this.getEndpoint(endpointIndex);
 			if (!endpoint) continue;
 
-			// Always interview Security first because it changes the interview order
 			// The root endpoint has been interviewed, so we know if the device supports security and which security classes it has
 			const securityClass = this.getHighestSecurityClass();
+
+			// From the specs, Multi Channel Capability Report Command:
+			// Non-secure End Point capabilities MUST also be supported securely and MUST also be advertised in
+			// the S0/S2 Commands Supported Report Commands unless they are encapsulated outside Security or
+			// Security themselves.
+			// Nodes supporting S2 MUST support addressing every End Point with S2 encapsulation and MAY
+			// explicitly list S2 in the non-secure End Point capabilities.
+
+			// This means we need to explicitly add S2 to the list of supported CCs of the endpoint, if the node is using S2.
+			// Otherwise the communication will incorrectly use no encryption.
+			const endpointMissingS2 =
+				securityClassIsS2(securityClass) &&
+				this.supportsCC(CommandClasses["Security 2"]) &&
+				!endpoint.supportsCC(CommandClasses["Security 2"]);
+			if (endpointMissingS2) {
+				endpoint.addCC(CommandClasses["Security 2"], { secure: true });
+			}
+
+			// Always interview Security first because it changes the interview order
 
 			if (endpoint.supportsCC(CommandClasses["Security 2"])) {
 				// Security S2 is always supported *securely*
