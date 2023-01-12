@@ -328,6 +328,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._type;
 	}
 
+	private _protocolVersion: string | undefined;
+	public get protocolVersion(): string | undefined {
+		return this._protocolVersion;
+	}
+
 	private _sdkVersion: string | undefined;
 	public get sdkVersion(): string | undefined {
 		return this._sdkVersion;
@@ -395,8 +400,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
-		return semver.gt(padVersion(sdkVersion), padVersion(version));
+		return semver.gt(padVersion(this._sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the SDK version is greater than or equal to the given one */
@@ -404,8 +408,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
-		return semver.gte(padVersion(sdkVersion), padVersion(version));
+		return semver.gte(padVersion(this._sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the SDK version is lower than the given one */
@@ -413,8 +416,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
-		return semver.lt(padVersion(sdkVersion), padVersion(version));
+		return semver.lt(padVersion(this._sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the SDK version is lower than or equal to the given one */
@@ -422,8 +424,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
-		return semver.lte(padVersion(sdkVersion), padVersion(version));
+		return semver.lte(padVersion(this._sdkVersion), padVersion(version));
 	}
 
 	private _manufacturerId: number | undefined;
@@ -783,12 +784,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					supportCheck: false,
 				},
 			);
-		this._sdkVersion = version.libraryVersion;
+		this._protocolVersion = version.libraryVersion;
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
 			`received version info:
   controller type: ${getEnumMemberName(ZWaveLibraryTypes, this._type)}
-  library version: ${this._sdkVersion}`,
+  library version: ${this._protocolVersion}`,
 		);
 
 		// If supported, get more fine-grained version info
@@ -801,9 +802,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					new GetProtocolVersionRequest(this.driver),
 				);
 
-			// Overwrite the SDK version with the more fine grained protocol version. We can assume this to be
-			// valid for 7.x firmwares, where SDK and protocol version are the same.
-			this._sdkVersion = protocol.protocolVersion;
+			this._protocolVersion = protocol.protocolVersion;
 
 			let message = `received protocol version info:
   protocol type:             ${getEnumMemberName(
@@ -822,6 +821,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 			this.driver.controllerLog.print(message);
 		}
+
+		// The SDK version cannot be queried directly, but we can deduce it from the protocol version
+		this._sdkVersion = protocolVersionToSDKVersion(this._protocolVersion);
 
 		this.driver.controllerLog.print(
 			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
@@ -1082,6 +1084,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		controllerValueDB.setValue(VersionCCValues.firmwareVersions.id, [
 			this._firmwareVersion,
 		]);
+		controllerValueDB.setMetadata(
+			VersionCCValues.zWaveProtocolVersion.id,
+			VersionCCValues.zWaveProtocolVersion.meta,
+		);
+		controllerValueDB.setValue(
+			VersionCCValues.zWaveProtocolVersion.id,
+			this._protocolVersion,
+		);
 		controllerValueDB.setMetadata(
 			VersionCCValues.sdkVersion.id,
 			VersionCCValues.sdkVersion.meta,
