@@ -5473,8 +5473,8 @@ ${associatedNodes.join(", ")}`,
 			await this.toggleRF(false);
 			turnedRadioOff = true;
 
-			// Write the firmware data in 48-byte fragments
-			const BLOCK_SIZE = 48;
+			// Upload the firmware data
+			const BLOCK_SIZE = 64;
 			const numFragments = Math.ceil(data.length / BLOCK_SIZE);
 			for (let fragment = 0; fragment < numFragments; fragment++) {
 				const fragmentData = data.slice(
@@ -5486,6 +5486,7 @@ ${associatedNodes.join(", ")}`,
 					fragmentData,
 				);
 
+				// This progress is technically too low, but we can keep 100% for after CRC checking this way
 				const progress: ControllerFirmwareUpdateProgress = {
 					sentFragments: fragment,
 					totalFragments: numFragments,
@@ -5507,6 +5508,12 @@ ${associatedNodes.join(", ")}`,
 				});
 				return false;
 			}
+
+			this.emit("firmware update progress", {
+				sentFragments: numFragments,
+				totalFragments: numFragments,
+				progress: 100,
+			});
 
 			// Enable the image
 			await this.firmwareUpdateNVMSetNewImage();

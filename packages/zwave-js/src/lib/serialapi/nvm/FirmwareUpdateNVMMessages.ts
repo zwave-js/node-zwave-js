@@ -26,12 +26,12 @@ import {
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 
 export enum FirmwareUpdateNVMCommand {
-	Init = 0x01,
-	SetNewImage = 0x02,
-	GetNewImage = 0x03,
-	UpdateCRC16 = 0x04,
-	IsValidCRC16 = 0x05,
-	Write = 0x06,
+	Init = 0x00,
+	SetNewImage = 0x01,
+	GetNewImage = 0x02,
+	UpdateCRC16 = 0x03,
+	IsValidCRC16 = 0x04,
+	Write = 0x05,
 }
 
 // We need to define the decorators for Requests and Responses separately
@@ -296,6 +296,11 @@ export class FirmwareUpdateNVM_UpdateCRC16Request extends FirmwareUpdateNVMReque
 	public offset: number;
 	public blockLength: number;
 
+	public override getResponseTimeout(): number | undefined {
+		// Computing the CRC-16 of a couple hundred KB can take a while on slow sticks
+		return 30000;
+	}
+
 	public serialize(): Buffer {
 		this.payload = Buffer.allocUnsafe(7);
 		this.payload.writeUIntBE(this.offset, 0, 3);
@@ -341,7 +346,12 @@ export class FirmwareUpdateNVM_UpdateCRC16Response extends FirmwareUpdateNVMResp
 // =============================================================================
 
 @subCommandRequest(FirmwareUpdateNVMCommand.IsValidCRC16)
-export class FirmwareUpdateNVM_IsValidCRC16Request extends FirmwareUpdateNVMRequest {}
+export class FirmwareUpdateNVM_IsValidCRC16Request extends FirmwareUpdateNVMRequest {
+	public override getResponseTimeout(): number | undefined {
+		// Computing the CRC-16 of a couple hundred KB can take a while on slow sticks
+		return 30000;
+	}
+}
 
 @subCommandResponse(FirmwareUpdateNVMCommand.IsValidCRC16)
 export class FirmwareUpdateNVM_IsValidCRC16Response extends FirmwareUpdateNVMResponse {
