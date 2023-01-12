@@ -244,6 +244,11 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		skipNodeInterview?: boolean;
 
 		/**
+		 * Set this to true to skip checking if the controller is in bootloader mode
+		 */
+		skipBootloaderCheck?: boolean;
+
+		/**
 		 * Set this to false to skip loading the configuration files. Default: `true`..
 		 */
 		loadConfiguration?: boolean;

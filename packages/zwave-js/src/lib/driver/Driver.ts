@@ -983,43 +983,45 @@ export class Driver
 			// to handle sticks that don't support the soft reset command. Therefore we do it
 			// after opening the value DBs
 
-			// After an incomplete firmware upgrade, we might be stuck in the bootloader
-			// Therefore wait a short amount of time to see if the serialport detects bootloader mode.
-			// If we are, the bootloader will reply with its menu.
-			await wait(1000);
-			if (this._bootloader) {
-				this.driverLog.print(
-					"Controller is in bootloader, attempting to recover...",
-					"warn",
-				);
-				await this.leaveBootloaderInternal();
-
-				// Wait a short time again. If we're in bootloader mode again, we're stuck
+			if (!this.options.testingHooks?.skipBootloaderCheck) {
+				// After an incomplete firmware upgrade, we might be stuck in the bootloader
+				// Therefore wait a short amount of time to see if the serialport detects bootloader mode.
+				// If we are, the bootloader will reply with its menu.
 				await wait(1000);
 				if (this._bootloader) {
-					if (this.options.allowBootloaderOnly) {
-						this.driverLog.print(
-							"Failed to recover from bootloader. Staying in bootloader mode as requested.",
-							"warn",
-						);
-						// Needed for the OTW feature to be available
-						this._controller = new ZWaveController(this, true);
-						this.emit("bootloader ready");
-					} else {
-						const message =
-							"Failed to recover from bootloader. Please flash a new firmware to continue...";
-						this.driverLog.print(message, "error");
-						this.emit(
-							"error",
-							new ZWaveError(
-								message,
-								ZWaveErrorCodes.Driver_Failed,
-							),
-						);
-						void this.destroy();
-					}
+					this.driverLog.print(
+						"Controller is in bootloader, attempting to recover...",
+						"warn",
+					);
+					await this.leaveBootloaderInternal();
 
-					return;
+					// Wait a short time again. If we're in bootloader mode again, we're stuck
+					await wait(1000);
+					if (this._bootloader) {
+						if (this.options.allowBootloaderOnly) {
+							this.driverLog.print(
+								"Failed to recover from bootloader. Staying in bootloader mode as requested.",
+								"warn",
+							);
+							// Needed for the OTW feature to be available
+							this._controller = new ZWaveController(this, true);
+							this.emit("bootloader ready");
+						} else {
+							const message =
+								"Failed to recover from bootloader. Please flash a new firmware to continue...";
+							this.driverLog.print(message, "error");
+							this.emit(
+								"error",
+								new ZWaveError(
+									message,
+									ZWaveErrorCodes.Driver_Failed,
+								),
+							);
+							void this.destroy();
+						}
+
+						return;
+					}
 				}
 			}
 
