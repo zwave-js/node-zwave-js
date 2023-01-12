@@ -82,5 +82,6 @@
 	"[typescript]": {
 		"editor.autoClosingBrackets": "languageDefined"
 	},
-	"git.ignoredRepositories": ["specs"]
+	"git.ignoredRepositories": ["specs"],
+	"search.followSymlinks": false
 }

@@ -43,6 +43,8 @@ export enum ControllerFirmwareUpdateStatus {
 	Error_RetryLimitReached,
 	/** The update was aborted by the bootloader */
 	Error_Aborted,
+	/** This controller does not support firmware updates */
+	Error_NotSupported,
 
 	OK = 0xff,
 }

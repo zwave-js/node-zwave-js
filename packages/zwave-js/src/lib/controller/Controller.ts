@@ -226,6 +226,20 @@ import {
 	ExtNVMWriteLongByteResponse,
 } from "../serialapi/nvm/ExtNVMWriteLongByteMessages";
 import {
+	FirmwareUpdateNVM_GetNewImageRequest,
+	FirmwareUpdateNVM_GetNewImageResponse,
+	FirmwareUpdateNVM_InitRequest,
+	FirmwareUpdateNVM_InitResponse,
+	FirmwareUpdateNVM_IsValidCRC16Request,
+	FirmwareUpdateNVM_IsValidCRC16Response,
+	FirmwareUpdateNVM_SetNewImageRequest,
+	FirmwareUpdateNVM_SetNewImageResponse,
+	FirmwareUpdateNVM_UpdateCRC16Request,
+	FirmwareUpdateNVM_UpdateCRC16Response,
+	FirmwareUpdateNVM_WriteRequest,
+	FirmwareUpdateNVM_WriteResponse,
+} from "../serialapi/nvm/FirmwareUpdateNVMMessages";
+import {
 	GetNVMIdRequest,
 	GetNVMIdResponse,
 	NVMId,
@@ -4462,6 +4476,98 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * **Z-Wave 500 series only**
 	 *
+	 * Initialize the Firmware Update functionality and determine if the firmware can be updated.
+	 */
+	private async firmwareUpdateNVMInit(): Promise<boolean> {
+		const ret =
+			await this.driver.sendMessage<FirmwareUpdateNVM_InitResponse>(
+				new FirmwareUpdateNVM_InitRequest(this.driver),
+			);
+		return ret.supported;
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Set the NEWIMAGE marker in the NVM (to the given value), which is used to signal that a new firmware image is present
+	 */
+	private async firmwareUpdateNVMSetNewImage(
+		value: boolean = true,
+	): Promise<void> {
+		await this.driver.sendMessage<FirmwareUpdateNVM_SetNewImageResponse>(
+			new FirmwareUpdateNVM_SetNewImageRequest(this.driver, {
+				newImage: value,
+			}),
+		);
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Return the value of the NEWIMAGE marker in the NVM, which is used to signal that a new firmware image is present
+	 */
+	private async firmwareUpdateNVMGetNewImage(): Promise<boolean> {
+		const ret =
+			await this.driver.sendMessage<FirmwareUpdateNVM_GetNewImageResponse>(
+				new FirmwareUpdateNVM_GetNewImageRequest(this.driver),
+			);
+		return ret.newImage;
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Calculates the CRC-16 for the specified block of data in the NVM
+	 */
+	private async firmwareUpdateNVMUpdateCRC16(
+		offset: number,
+		blockLength: number,
+		crcSeed: number,
+	): Promise<number> {
+		const ret =
+			await this.driver.sendMessage<FirmwareUpdateNVM_UpdateCRC16Response>(
+				new FirmwareUpdateNVM_UpdateCRC16Request(this.driver, {
+					offset,
+					blockLength,
+					crcSeed,
+				}),
+			);
+		return ret.crc16;
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Writes the given data into the firmware update region of the NVM.
+	 */
+	private async firmwareUpdateNVMWrite(
+		offset: number,
+		buffer: Buffer,
+	): Promise<void> {
+		await this.driver.sendMessage<FirmwareUpdateNVM_WriteResponse>(
+			new FirmwareUpdateNVM_WriteRequest(this.driver, {
+				offset,
+				buffer,
+			}),
+		);
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Checks if the firmware present in the NVM is valid
+	 */
+	private async firmwareUpdateNVMIsValidCRC16(): Promise<boolean> {
+		const ret =
+			await this.driver.sendMessage<FirmwareUpdateNVM_IsValidCRC16Response>(
+				new FirmwareUpdateNVM_IsValidCRC16Request(this.driver),
+			);
+		return ret.isValid;
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
 	 * Returns information of the controller's external NVM
 	 */
 	public async getNVMId(): Promise<NVMId> {
@@ -5305,13 +5411,6 @@ ${associatedNodes.join(", ")}`,
 	 * **WARNING:** A failure during this process may put your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded. Use at your own risk!
 	 */
 	public async firmwareUpdateOTW(data: Buffer): Promise<boolean> {
-		if (this.sdkVersionLt("7.0")) {
-			throw new ZWaveError(
-				"OTW firmware updates only supported for 700 series controllers or newer at the moment",
-				ZWaveErrorCodes.Controller_NotSupported,
-			);
-		}
-
 		// Don't let two firmware updates happen in parallel
 		if (this.isAnyOTAFirmwareUpdateInProgress()) {
 			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
@@ -5325,6 +5424,106 @@ ${associatedNodes.join(", ")}`,
 			throw new ZWaveError(message, ZWaveErrorCodes.OTW_Update_Busy);
 		}
 
+		if (this.sdkVersionGte("7.0")) {
+			return this.firmwareUpdateOTW700(data);
+		} else if (
+			this.sdkVersionGte("6.50.0") &&
+			this.supportedFunctionTypes?.includes(
+				FunctionType.FirmwareUpdateNVM,
+			)
+		) {
+			// This is 500 series
+			const wasUpdated = await this.firmwareUpdateOTW500(data);
+			if (wasUpdated) {
+				// After updating the firmware on 500 series sticks, we MUST soft-reset them
+				await this.driver.softResetAndRestart(
+					"Activating new firmware and restarting driver...",
+					"Controller firmware updates require a driver restart!",
+				);
+			}
+			return wasUpdated;
+		} else {
+			throw new ZWaveError(
+				`Firmware updates are not supported on this controller`,
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		}
+	}
+
+	private async firmwareUpdateOTW500(data: Buffer): Promise<boolean> {
+		this._firmwareUpdateInProgress = true;
+		let turnedRadioOff = false;
+		try {
+			this.driver.controllerLog.print("Beginning firmware update");
+
+			const canUpdate = await this.firmwareUpdateNVMInit();
+			if (!canUpdate) {
+				this.driver.controllerLog.print(
+					"OTW update failed: This controller does not support firmware updates",
+					"error",
+				);
+				this.emit("firmware update finished", {
+					success: false,
+					status: ControllerFirmwareUpdateStatus.Error_NotSupported,
+				});
+				return false;
+			}
+
+			// Avoid interruption by incoming messages
+			await this.toggleRF(false);
+			turnedRadioOff = true;
+
+			// Write the firmware data in 48-byte fragments
+			const BLOCK_SIZE = 48;
+			const numFragments = Math.ceil(data.length / BLOCK_SIZE);
+			for (let fragment = 0; fragment < numFragments; fragment++) {
+				const fragmentData = data.slice(
+					fragment * BLOCK_SIZE,
+					(fragment + 1) * BLOCK_SIZE,
+				);
+				await this.firmwareUpdateNVMWrite(
+					fragment * BLOCK_SIZE,
+					fragmentData,
+				);
+
+				const progress: ControllerFirmwareUpdateProgress = {
+					sentFragments: fragment,
+					totalFragments: numFragments,
+					progress: roundTo((fragment / numFragments) * 100, 2),
+				};
+				this.emit("firmware update progress", progress);
+			}
+
+			// Check if a valid image was written
+			const isValidCRC = await this.firmwareUpdateNVMIsValidCRC16();
+			if (!isValidCRC) {
+				this.driver.controllerLog.print(
+					"OTW update failed: The firmware image is invalid",
+					"error",
+				);
+				this.emit("firmware update finished", {
+					success: false,
+					status: ControllerFirmwareUpdateStatus.Error_Aborted,
+				});
+				return false;
+			}
+
+			// Enable the image
+			await this.firmwareUpdateNVMSetNewImage();
+
+			this.driver.controllerLog.print("Firmware update succeeded");
+			this.emit("firmware update finished", {
+				success: true,
+				status: ControllerFirmwareUpdateStatus.OK,
+			});
+			return true;
+		} finally {
+			this._firmwareUpdateInProgress = false;
+			if (turnedRadioOff) await this.toggleRF(true);
+		}
+	}
+
+	private async firmwareUpdateOTW700(data: Buffer): Promise<boolean> {
 		this._firmwareUpdateInProgress = true;
 		let destroy = false;
 
