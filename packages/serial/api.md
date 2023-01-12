@@ -34,6 +34,67 @@ import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLogContainer } from '@zwave-js/core';
 import { ZWaveLoggerBase } from '@zwave-js/core';
 
+// Warning: (ae-missing-release-tag) "BootloaderChunk" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BootloaderChunk = {
+    type: BootloaderChunkType.Error;
+    error: string;
+    _raw: string;
+} | {
+    type: BootloaderChunkType.Menu;
+    version: string;
+    options: {
+        num: number;
+        option: string;
+    }[];
+    _raw: string;
+} | {
+    type: BootloaderChunkType.Message;
+    message: string;
+    _raw: string;
+} | {
+    type: BootloaderChunkType.FlowControl;
+    command: XModemMessageHeaders.ACK | XModemMessageHeaders.NAK | XModemMessageHeaders.CAN | XModemMessageHeaders.C;
+};
+
+// Warning: (ae-missing-release-tag) "BootloaderChunkType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum BootloaderChunkType {
+    // (undocumented)
+    Error = 0,
+    // (undocumented)
+    FlowControl = 3,
+    // (undocumented)
+    Menu = 1,
+    // (undocumented)
+    Message = 2
+}
+
+// Warning: (ae-missing-release-tag) "bootloaderMenuPreamble" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const bootloaderMenuPreamble = "Gecko Bootloader";
+
+// Warning: (ae-missing-release-tag) "BootloaderParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class BootloaderParser extends Transform {
+    constructor();
+    // (undocumented)
+    _transform(chunk: any, encoding: string, callback: TransformCallback): void;
+}
+
+// Warning: (ae-missing-release-tag) "BootloaderScreenParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class BootloaderScreenParser extends Transform {
+    constructor(logger?: SerialLogger | undefined);
+    // (undocumented)
+    _transform(chunk: any, encoding: string, callback: TransformCallback): void;
+}
+
 // Warning: (ae-missing-release-tag) "createAndOpenMockedZWaveSerialPort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -77,6 +138,8 @@ export enum FunctionType {
     DeleteReturnRoute = 71,
     // (undocumented)
     DeleteSUCReturnRoute = 85,
+    // (undocumented)
+    EnterBootloader = 39,
     // (undocumented)
     ExtExtWriteLongByte = 45,
     // (undocumented)
@@ -203,8 +266,6 @@ export enum FunctionType {
     UNKNOWN_FUNC_CLOCK_GET = 49,
     // (undocumented)
     UNKNOWN_FUNC_CLOCK_SET = 48,
-    // (undocumented)
-    UNKNOWN_FUNC_FlashAutoProgSet = 39,
     // (undocumented)
     UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,
     // (undocumented)
@@ -598,7 +659,7 @@ export type ResponseRole = "unexpected" | "confirmation" | "final" | "fatal_cont
 //
 // @public (undocumented)
 export class SerialAPIParser extends Transform {
-    constructor(logger?: SerialLogger | undefined);
+    constructor(logger?: SerialLogger | undefined, onDiscarded?: ((data: Buffer) => void) | undefined);
     // (undocumented)
     _transform(chunk: any, encoding: string, callback: TransformCallback): void;
 }
@@ -644,10 +705,38 @@ export interface SuccessIndicator {
     isOK(): boolean;
 }
 
+// Warning: (ae-missing-release-tag) "XModemMessageHeaders" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum XModemMessageHeaders {
+    // (undocumented)
+    ACK = 6,
+    // (undocumented)
+    C = 67,
+    // (undocumented)
+    CAN = 24,
+    // (undocumented)
+    EOT = 4,
+    // (undocumented)
+    NAK = 21,
+    // (undocumented)
+    SOF = 1
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveSerialChunk" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveSerialChunk = MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Buffer;
+
+// Warning: (ae-missing-release-tag) "ZWaveSerialMode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZWaveSerialMode {
+    // (undocumented)
+    Bootloader = 1,
+    // (undocumented)
+    SerialAPI = 0
+}
 
 // Warning: (ae-missing-release-tag) "ZWaveSerialPort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -691,6 +780,8 @@ export class ZWaveSerialPortBase extends PassThrough {
     // (undocumented)
     protected logger: SerialLogger;
     // (undocumented)
+    mode: ZWaveSerialMode | undefined;
+    // (undocumented)
     open(): Promise<void>;
     // (undocumented)
     protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
@@ -703,7 +794,11 @@ export class ZWaveSerialPortBase extends PassThrough {
 // @public (undocumented)
 export interface ZWaveSerialPortEventCallbacks {
     // (undocumented)
+    bootloaderData: (data: BootloaderChunk) => void;
+    // (undocumented)
     data: (data: ZWaveSerialChunk) => void;
+    // (undocumented)
+    discardedData: (data: Buffer) => void;
     // (undocumented)
     error: (e: Error) => void;
 }
