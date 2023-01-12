@@ -1013,6 +1013,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     get productId(): number | undefined;
     // (undocumented)
     get productType(): number | undefined;
+    // (undocumented)
+    get protocolVersion(): string | undefined;
     provisionSmartStartNode(entry: PlannedProvisioningEntry): void;
     removeAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
