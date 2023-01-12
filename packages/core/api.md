@@ -2975,6 +2975,7 @@ export enum ZWaveErrorCodes {
     NVM_NoSpace = 284,
     NVM_NotSupported = 280,
     NVM_ObjectNotFound = 282,
+    OTW_Update_Busy = 380,
     // (undocumented)
     PacketFormat_Checksum = 2,
     // (undocumented)

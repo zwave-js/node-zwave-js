@@ -10,6 +10,7 @@ import { APIMethodsOf } from '@zwave-js/cc';
 import { AssociationAddress } from '@zwave-js/cc';
 import { AssociationGroup } from '@zwave-js/cc';
 import type { BasicDeviceClass } from '@zwave-js/config';
+import { BootloaderChunk } from '@zwave-js/serial';
 import { buffer2hex } from '@zwave-js/shared/safe';
 import { CCAPIs } from '@zwave-js/cc';
 import { CCConstructor } from '@zwave-js/cc';
@@ -162,6 +163,37 @@ export { buffer2hex }
 // @public (undocumented)
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
+// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateProgress" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ControllerFirmwareUpdateProgress {
+    progress: number;
+    sentFragments: number;
+    totalFragments: number;
+}
+
+// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ControllerFirmwareUpdateResult {
+    // (undocumented)
+    status: ControllerFirmwareUpdateStatus;
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ControllerFirmwareUpdateStatus {
+    Error_Aborted = 2,
+    Error_RetryLimitReached = 1,
+    // (undocumented)
+    Error_Timeout = 0,
+    // (undocumented)
+    OK = 255
+}
+
 export { ControllerLogContext }
 
 export { ControllerNodeLogContext }
@@ -278,6 +310,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     isCCSecure(ccId: CommandClasses_2, nodeId: number, endpointIndex?: number): boolean;
+    // (undocumented)
+    isInBootloader(): boolean;
     get ready(): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -309,6 +343,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     updateUserAgent(components: Record<string, string | null | undefined>): void;
     get userAgent(): string;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    waitForBootloaderChunk<T extends BootloaderChunk>(predicate: (chunk: BootloaderChunk) => boolean, timeout: number): Promise<T>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     waitForCommand<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, timeout: number): Promise<T>;
@@ -957,6 +994,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     }>;
     externalNVMWriteByte(offset: number, data: number): Promise<boolean>;
     firmwareUpdateOTA(nodeId: number, updates: FirmwareUpdateFileInfo[]): Promise<boolean>;
+    firmwareUpdateOTW(data: Buffer): Promise<boolean>;
     // (undocumented)
     get firmwareVersion(): string | undefined;
     getAllAssociationGroups(nodeId: number): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>>;
@@ -990,6 +1028,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     isAssociationAllowed(source: AssociationAddress, group: number, destination: AssociationAddress): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     isFailedNode(nodeId: number): Promise<boolean>;
+    isFirmwareUpdateInProgress(): boolean;
     isFunctionSupported(functionType: FunctionType): boolean;
     get isHealNetworkActive(): boolean;
     // (undocumented)
@@ -1420,6 +1459,7 @@ args: ZWaveNotificationCallbackArgs_PowerlevelCC
 //
 // @public (undocumented)
 export interface ZWaveOptions extends ZWaveHostOptions {
+    allowBootloaderOnly?: boolean;
     // (undocumented)
     apiKeys?: {
         firmwareUpdateService?: string;

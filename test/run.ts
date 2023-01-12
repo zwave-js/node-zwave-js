@@ -17,9 +17,9 @@ const driver = new Driver(port, {
 	// 	logToFile: true,
 	// 	forceConsole: true,
 	// },
-	logConfig: {
-		level: "verbose",
-	},
+	// testingHooks: {
+	// 	skipNodeInterview: true,
+	// },
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(
@@ -39,10 +39,15 @@ const driver = new Driver(port, {
 		cacheDir: path.join(__dirname, "cache"),
 		lockDir: path.join(__dirname, "cache/locks"),
 	},
+	allowBootloaderOnly: true,
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
+		await wait(2000);
+	})
+	.once("bootloader ready", async () => {
+		// What to do when stuck in the bootloader
 	});
 void driver.start();
 // driver.enableStatistics({

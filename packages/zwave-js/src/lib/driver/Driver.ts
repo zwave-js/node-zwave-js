@@ -81,6 +81,8 @@ import type {
 	ZWaveApplicationHost,
 } from "@zwave-js/host";
 import {
+	BootloaderChunk,
+	BootloaderChunkType,
 	FunctionType,
 	getDefaultPriority,
 	INodeQuery,
@@ -90,6 +92,8 @@ import {
 	Message,
 	MessageHeaders,
 	MessageType,
+	XModemMessageHeaders,
+	ZWaveSerialMode,
 	ZWaveSerialPort,
 	ZWaveSerialPortBase,
 	ZWaveSerialPortImplementation,
@@ -164,6 +168,7 @@ import {
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
+import { Bootloader } from "./Bootloader";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -369,17 +374,15 @@ interface RequestHandlerEntry<T extends Message = Message> {
 	oneTime: boolean;
 }
 
-interface AwaitedMessageEntry {
-	promise: DeferredPromise<Message>;
+interface AwaitedChunk<T> {
+	promise: DeferredPromise<T>;
 	timeout?: NodeJS.Timeout;
-	predicate: (msg: Message) => boolean;
+	predicate: (msg: T) => boolean;
 }
 
-interface AwaitedCommandEntry {
-	promise: DeferredPromise<ICommandClass>;
-	timeout?: NodeJS.Timeout;
-	predicate: (cc: ICommandClass) => boolean;
-}
+type AwaitedMessageEntry = AwaitedChunk<Message>;
+type AwaitedCommandEntry = AwaitedChunk<ICommandClass>;
+export type AwaitedBootloaderChunkEntry = AwaitedChunk<BootloaderChunk>;
 
 interface TransportServiceSession {
 	fragmentSize: number;
@@ -396,6 +399,7 @@ interface Sessions {
 // Strongly type the event emitter events
 export interface DriverEventCallbacks {
 	"driver ready": () => void;
+	"bootloader ready": () => void;
 	"all nodes ready": () => void;
 	error: (err: Error) => void;
 }
@@ -611,6 +615,8 @@ export class Driver
 	private awaitedMessages: AwaitedMessageEntry[] = [];
 	/** A map of awaited commands */
 	private awaitedCommands: AwaitedCommandEntry[] = [];
+	/** A map of awaited chunks from the bootloader */
+	private awaitedBootloaderChunks: AwaitedBootloaderChunkEntry[] = [];
 
 	/** A map of Node ID -> ongoing sessions */
 	private nodeSessions = new Map<number, Sessions>();
@@ -680,6 +686,23 @@ export class Driver
 			);
 		}
 		return this._controller;
+	}
+
+	/** While in bootloader mode, this encapsulates information about the bootloader and its state */
+	private _bootloader: Bootloader | undefined;
+	/** @internal */
+	public get bootloader(): Bootloader {
+		if (this._bootloader == undefined) {
+			throw new ZWaveError(
+				"The controller is not in bootloader mode!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._bootloader;
+	}
+
+	public isInBootloader(): boolean {
+		return this._bootloader != undefined;
 	}
 
 	private _securityManager: SecurityManager | undefined;
@@ -906,6 +929,7 @@ export class Driver
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
+			.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
 			.on("error", (err) => {
 				if (this.isSoftResetting && !this.serial?.isOpen) {
 					// A disconnection while soft resetting is to be expected
@@ -958,6 +982,48 @@ export class Driver
 			// Per the specs, this should be followed by a soft-reset but we need to be able
 			// to handle sticks that don't support the soft reset command. Therefore we do it
 			// after opening the value DBs
+
+			if (!this.options.testingHooks?.skipBootloaderCheck) {
+				// After an incomplete firmware upgrade, we might be stuck in the bootloader
+				// Therefore wait a short amount of time to see if the serialport detects bootloader mode.
+				// If we are, the bootloader will reply with its menu.
+				await wait(1000);
+				if (this._bootloader) {
+					this.driverLog.print(
+						"Controller is in bootloader, attempting to recover...",
+						"warn",
+					);
+					await this.leaveBootloaderInternal();
+
+					// Wait a short time again. If we're in bootloader mode again, we're stuck
+					await wait(1000);
+					if (this._bootloader) {
+						if (this.options.allowBootloaderOnly) {
+							this.driverLog.print(
+								"Failed to recover from bootloader. Staying in bootloader mode as requested.",
+								"warn",
+							);
+							// Needed for the OTW feature to be available
+							this._controller = new ZWaveController(this, true);
+							this.emit("bootloader ready");
+						} else {
+							const message =
+								"Failed to recover from bootloader. Please flash a new firmware to continue...";
+							this.driverLog.print(message, "error");
+							this.emit(
+								"error",
+								new ZWaveError(
+									message,
+									ZWaveErrorCodes.Driver_Failed,
+								),
+							);
+							void this.destroy();
+						}
+
+						return;
+					}
+				}
+			}
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
@@ -2349,7 +2415,9 @@ export class Driver
 		// Wait the configured amount of time for the Serial API started command to be received
 		this.controllerLog.print("Waiting for the Serial API to start...");
 		waitResult = await this.waitForMessage<SerialAPIStartedRequest>(
-			(msg) => msg.functionType === FunctionType.SerialAPIStarted,
+			(msg) => {
+				return msg.functionType === FunctionType.SerialAPIStarted;
+			},
 			this.options.timeouts.serialAPIStarted,
 		).catch(() => false as const);
 
@@ -2435,6 +2503,7 @@ export class Driver
 	private get wasDestroyed(): boolean {
 		return !!this._destroyPromise;
 	}
+
 	/**
 	 * Ensures that the driver is ready to communicate (serial port open and not destroyed).
 	 * If desired, also checks that the controller interview has been completed.
@@ -2449,6 +2518,12 @@ export class Driver
 		if (includingController && !this._controllerInterviewed) {
 			throw new ZWaveError(
 				"The controller is not ready yet",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		if (this._bootloader) {
+			throw new ZWaveError(
+				"Cannot do this while in bootloader mode",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
@@ -2518,6 +2593,7 @@ export class Driver
 			this.statisticsTimeout,
 			...this.awaitedCommands.map((c) => c.timeout),
 			...this.awaitedMessages.map((m) => m.timeout),
+			...this.awaitedBootloaderChunks.map((b) => b.timeout),
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
@@ -4690,5 +4766,161 @@ ${handlers.length} left`,
 		}
 
 		return true;
+	}
+
+	private _enterBootloaderPromise: DeferredPromise<void> | undefined;
+
+	/** @internal */
+	public async enterBootloader(): Promise<void> {
+		this.controllerLog.print("Entering bootloader...");
+		// await this.controller.toggleRF(false);
+		await this.trySoftReset();
+		this.pauseSendThread();
+		// It would be nicer to not hardcode the command here, but since we're switching stream parsers
+		// mid-command - thus ignoring the ACK, we can't really use the existing communication machinery
+		const promise = this.writeSerial(Buffer.from("01030027db", "hex"));
+		this.serial!.mode = ZWaveSerialMode.Bootloader;
+		await promise;
+
+		// Wait if the menu shows up
+		this._enterBootloaderPromise = createDeferredPromise();
+		const success = await Promise.race([
+			this._enterBootloaderPromise.then(() => true),
+			wait(5000, true).then(() => false),
+		]);
+		if (success) {
+			this.controllerLog.print("Entered bootloader");
+		} else {
+			throw new ZWaveError(
+				"Failed to enter bootloader",
+				ZWaveErrorCodes.Controller_Timeout,
+			);
+		}
+	}
+
+	private leaveBootloaderInternal(): Promise<void> {
+		const promise = this.bootloader.runApplication();
+		// Reset the known serial mode. We might end up in serial or bootloader mode afterwards.
+		this.serial!.mode = undefined;
+		this._bootloader = undefined;
+		return promise;
+	}
+
+	/**
+	 * @internal
+	 * Leaves the bootloader and destroys the driver instance if desired
+	 */
+	public async leaveBootloader(destroy: boolean = false): Promise<void> {
+		this.controllerLog.print("Leaving bootloader...");
+		await this.leaveBootloaderInternal();
+
+		// TODO: do we need to wait here?
+
+		if (destroy) {
+			const restartReason = "Restarting driver after OTW update...";
+			this.controllerLog.print(restartReason);
+
+			await this.destroy();
+
+			// Let the async calling context finish before emitting the error
+			process.nextTick(() => {
+				this.emit(
+					"error",
+					new ZWaveError(
+						restartReason,
+						ZWaveErrorCodes.Driver_Failed,
+					),
+				);
+			});
+		} else {
+			this.unpauseSendThread();
+			await this.ensureSerialAPI();
+		}
+	}
+
+	private serialport_onBootloaderData(data: BootloaderChunk): void {
+		switch (data.type) {
+			case BootloaderChunkType.Message: {
+				this.controllerLog.print(
+					`[BOOTLOADER] ${data.message}`,
+					"verbose",
+				);
+				break;
+			}
+			case BootloaderChunkType.FlowControl: {
+				if (data.command === XModemMessageHeaders.C) {
+					this.controllerLog.print(
+						`[BOOTLOADER] awaiting input...`,
+						"verbose",
+					);
+				}
+				break;
+			}
+		}
+
+		for (const entry of this.awaitedBootloaderChunks) {
+			if (entry.predicate(data)) {
+				// resolve the promise - this will remove the entry from the list
+				entry.promise.resolve(data);
+				return;
+			}
+		}
+
+		if (!this._bootloader && data.type === BootloaderChunkType.Menu) {
+			// We just entered the bootloader
+			this.controllerLog.print(
+				`[BOOTLOADER] version ${data.version}`,
+				"verbose",
+			);
+
+			this._bootloader = new Bootloader(
+				this.writeSerial.bind(this),
+				data.version,
+				data.options,
+			);
+			if (this._enterBootloaderPromise) {
+				this._enterBootloaderPromise.resolve();
+				this._enterBootloaderPromise = undefined;
+			}
+		}
+	}
+
+	/**
+	 * Waits until a specific chunk is received from the bootloader or a timeout has elapsed. Returns the received chunk.
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 * @param predicate A predicate function to test all incoming chunks
+	 */
+	public waitForBootloaderChunk<T extends BootloaderChunk>(
+		predicate: (chunk: BootloaderChunk) => boolean,
+		timeout: number,
+	): Promise<T> {
+		return new Promise<T>((resolve, reject) => {
+			const entry: AwaitedBootloaderChunkEntry = {
+				predicate,
+				promise: createDeferredPromise(),
+				timeout: undefined,
+			};
+			this.awaitedBootloaderChunks.push(entry);
+			const removeEntry = () => {
+				if (entry.timeout) clearTimeout(entry.timeout);
+				const index = this.awaitedBootloaderChunks.indexOf(entry);
+				if (index !== -1) this.awaitedBootloaderChunks.splice(index, 1);
+			};
+			// When the timeout elapses, remove the wait entry and reject the returned Promise
+			entry.timeout = setTimeout(() => {
+				removeEntry();
+				reject(
+					new ZWaveError(
+						`Received no matching chunk within the provided timeout!`,
+						ZWaveErrorCodes.Controller_Timeout,
+					),
+				);
+			}, timeout);
+			// When the promise is resolved, remove the wait entry and resolve the returned Promise
+			void entry.promise.then((cc) => {
+				removeEntry();
+				resolve(cc as T);
+			});
+		});
 	}
 }
