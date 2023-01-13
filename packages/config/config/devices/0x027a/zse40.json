@@ -172,6 +172,37 @@
 					"value": 3
 				}
 			]
+		},
+		{
+			"#": "8",
+			"$if": "firmwareVersion < 32.32",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Basic Set Reports",
+			"defaultValue": 1			
+		},
+		{
+			"#": "9",
+			"$if": "firmwareVersion < 32.32",
+			"label": "Temperature Offset",
+			"description": "Set the reporting offset on your temperature sensor. 0=-10, 100=0, 200=+10",
+			"valueSize": 1,
+			"unit": "0.1 °F/C",
+			"minValue": 0,
+			"maxValue": 200,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion < 32.32",
+			"label": "Humidity Offset",
+			"description": "Set the reporting offset on your humidity sensor. 0=-10%, 100=0%, 200=+10%",
+			"valueSize": 1,
+			"unit": "0.1 %",
+			"minValue": 0,
+			"maxValue": 200,
+			"defaultValue": 100,
+			"unsigned": true
 		}
 	],
 	"metadata": {
