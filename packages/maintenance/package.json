@@ -44,7 +44,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/globrex": "^0.1.2",
     "@types/jest": "^29.0.2",
-    "@types/node": "^14.18.29",
+    "@types/node": "^14.18.36",
     "@types/prettier": "^2.7.0",
     "@types/yargs": "^17.0.12",
     "@zwave-js/core": "workspace:*",
@@ -59,10 +59,10 @@
     "globrex": "^0.1.2",
     "jest-extended": "^2.0.0",
     "piscina": "^3.2.0",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.1",
     "reflect-metadata": "^0.1.13",
-    "ts-morph": "^16.0.0",
-    "typescript": "4.8.3",
+    "ts-morph": "^17.0.1",
+    "typescript": "4.9.4",
     "yargs": "^17.5.1"
   }
 }

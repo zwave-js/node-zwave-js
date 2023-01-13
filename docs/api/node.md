@@ -254,18 +254,29 @@ type FirmwareUpdateCapabilities =
 	  };
 ```
 
-### `beginFirmwareUpdate`
+### `updateFirmware`
 
 ```ts
-beginFirmwareUpdate(data: Buffer, target?: number): Promise<void>
+updateFirmware(updates: Firmware[]): Promise<boolean>
 ```
 
 > [!WARNING] Use at your own risk! We don't take any responsibility if your devices don't work after an update.
 
-Starts an OTA firmware update process for this node. This method takes two arguments:
+Performs an OTA firmware update process for this node, applying the provided firmware updates in sequence. The returned Promise will resolve after the process has **COMPLETED** and indicates whether the update was successful. Failure to start any one of the provided updates will throw an error.
+
+This method an array of firmware updates, each of which contains the following properties:
 
 -   `data` - A buffer containing the firmware image in a format supported by the device
 -   `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. `0` updates the Z-Wave chip, `>=1` updates others if they exist
+
+<!-- #import Firmware from "zwave-js" -->
+
+```ts
+interface Firmware {
+	data: Buffer;
+	firmwareTarget?: number;
+}
+```
 
 The library includes helper methods (exported from `zwave-js/Utils`) to prepare the firmware update.
 
@@ -290,16 +301,7 @@ guessFirmwareFileFormat(filename: string, rawData: Buffer): FirmwareFileFormat
 -   `filename`: The name of the firmware file (including the extension)
 -   `rawData`: A buffer containing the original firmware update file
 
-If successful, `extractFirmware` returns an object of the following form, whose properties can be passed to `beginFirmwareUpdate`:
-
-<!-- #import Firmware from "zwave-js" -->
-
-```ts
-interface Firmware {
-	data: Buffer;
-	firmwareTarget?: number;
-}
-```
+If successful, `extractFirmware` returns an `Firmware` object which can be passed to the `updateFirmware` method.
 
 If no firmware data can be extracted, the method will throw.
 

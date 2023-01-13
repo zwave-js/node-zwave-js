@@ -109,6 +109,9 @@ export enum ZWaveErrorCodes {
 	/** The replace process was aborted because the node has responded */
 	ReplaceFailedNode_NodeOK,
 
+	/** The controller is currently busy with something that prevents an OTW update */
+	OTW_Update_Busy = 380,
+
 	// Here follow CC specific errors
 
 	/**
@@ -158,7 +161,7 @@ export enum ZWaveErrorCodes {
 	/** Gets thrown when parsing an invalid QR code */
 	Security2CC_InvalidQRCode,
 
-	/** The firmware update process is already active */
+	/** The firmware update process is already active on this node */
 	FirmwareUpdateCC_Busy = 1500,
 	/** The selected firmware target is not upgradable */
 	FirmwareUpdateCC_NotUpgradable,
@@ -175,6 +178,9 @@ export enum ZWaveErrorCodes {
 	Invalid_Firmware_File,
 	/** An firmware file with an unsupported format was provided */
 	Unsupported_Firmware_Format,
+
+	/** A firmware update is already in progress on the network preventing this action from proceeding */
+	FirmwareUpdateCC_NetworkBusy,
 
 	/** Unsupported target node for a powerlevel test */
 	PowerlevelCC_UnsupportedTestNode = 1600,

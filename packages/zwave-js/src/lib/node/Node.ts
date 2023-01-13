@@ -12,6 +12,8 @@ import {
 	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	getCCValues,
+	InclusionControllerCCInitiate,
+	InclusionControllerStep,
 	isCommandClassContainer,
 	MultilevelSwitchCommand,
 	PollValueImplementation,
@@ -356,7 +358,7 @@ export class ZWaveNode
 	): void {
 		// Try to retrieve the speaking CC name
 		const outArg = nodeUtils.translateValueID(this.driver, this, arg);
-		// @ts-expect-error This can happen for value updated events
+		// This can happen for value updated events
 		if ("source" in outArg) delete outArg.source;
 
 		const loglevel = this.driver.getLogConfig().level;
@@ -1494,7 +1496,9 @@ export class ZWaveNode
 			}
 
 			if (this.interviewStage === InterviewStage.ProtocolInfo) {
-				if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
+				if (
+					!(await tryInterviewStage(() => this.interviewNodeInfo()))
+				) {
 					return false;
 				}
 			}
@@ -1636,7 +1640,7 @@ protocol version:      ${this.protocolVersion}`;
 	 * Step #5 of the node interview
 	 * Request node info
 	 */
-	protected async queryNodeInfo(): Promise<void> {
+	protected async interviewNodeInfo(): Promise<void> {
 		if (this.isControllerNode) {
 			this.driver.controllerLog.logNode(
 				this.id,
@@ -1650,16 +1654,42 @@ protocol version:      ${this.protocolVersion}`;
 			message: "querying node info...",
 			direction: "outbound",
 		});
+		try {
+			const nodeInfo = await this.requestNodeInfo();
+			const logLines: string[] = ["node info received", "supported CCs:"];
+			for (const cc of nodeInfo.supportedCCs) {
+				const ccName = CommandClasses[cc];
+				logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
+			}
+			this.driver.controllerLog.logNode(this.id, {
+				message: logLines.join("\n"),
+				direction: "inbound",
+			});
+			this.updateNodeInfo(nodeInfo);
+		} catch (e) {
+			if (
+				isZWaveError(e) &&
+				(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+					e.code === ZWaveErrorCodes.Controller_CallbackNOK)
+			) {
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Querying the node info failed`,
+					"error",
+				);
+			}
+			throw e;
+		}
+
+		this.setInterviewStage(InterviewStage.NodeInfo);
+	}
+
+	public async requestNodeInfo(): Promise<NodeUpdatePayload> {
 		const resp = await this.driver.sendMessage<
 			RequestNodeInfoResponse | ApplicationUpdateRequest
 		>(new RequestNodeInfoRequest(this.driver, { nodeId: this.id }));
 		if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
 			// TODO: handle this in SendThreadMachine
-			this.driver.controllerLog.logNode(
-				this.id,
-				`Querying the node info failed`,
-				"error",
-			);
 			throw new ZWaveError(
 				`Querying the node info failed`,
 				ZWaveErrorCodes.Controller_ResponseNOK,
@@ -1668,11 +1698,6 @@ protocol version:      ${this.protocolVersion}`;
 			resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
 		) {
 			// TODO: handle this in SendThreadMachine
-			this.driver.controllerLog.logNode(
-				this.id,
-				`Querying the node info failed`,
-				"error",
-			);
 			throw new ZWaveError(
 				`Querying the node info failed`,
 				ZWaveErrorCodes.Controller_CallbackNOK,
@@ -1687,9 +1712,12 @@ protocol version:      ${this.protocolVersion}`;
 				message: logLines.join("\n"),
 				direction: "inbound",
 			});
-			this.updateNodeInfo(resp.nodeInformation);
+			return resp.nodeInformation;
 		}
-		this.setInterviewStage(InterviewStage.NodeInfo);
+		throw new ZWaveError(
+			`Received unexpected response to RequestNodeInfoRequest`,
+			ZWaveErrorCodes.Controller_CommandError,
+		);
 	}
 
 	/**
@@ -2025,9 +2053,27 @@ protocol version:      ${this.protocolVersion}`;
 			const endpoint = this.getEndpoint(endpointIndex);
 			if (!endpoint) continue;
 
-			// Always interview Security first because it changes the interview order
 			// The root endpoint has been interviewed, so we know if the device supports security and which security classes it has
 			const securityClass = this.getHighestSecurityClass();
+
+			// From the specs, Multi Channel Capability Report Command:
+			// Non-secure End Point capabilities MUST also be supported securely and MUST also be advertised in
+			// the S0/S2 Commands Supported Report Commands unless they are encapsulated outside Security or
+			// Security themselves.
+			// Nodes supporting S2 MUST support addressing every End Point with S2 encapsulation and MAY
+			// explicitly list S2 in the non-secure End Point capabilities.
+
+			// This means we need to explicitly add S2 to the list of supported CCs of the endpoint, if the node is using S2.
+			// Otherwise the communication will incorrectly use no encryption.
+			const endpointMissingS2 =
+				securityClassIsS2(securityClass) &&
+				this.supportsCC(CommandClasses["Security 2"]) &&
+				!endpoint.supportsCC(CommandClasses["Security 2"]);
+			if (endpointMissingS2) {
+				endpoint.addCC(CommandClasses["Security 2"], { secure: true });
+			}
+
+			// Always interview Security first because it changes the interview order
 
 			if (endpoint.supportsCC(CommandClasses["Security 2"])) {
 				// Security S2 is always supported *securely*
@@ -2591,6 +2637,15 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleTimeOffsetGet(command);
 		} else if (command instanceof ZWavePlusCCGet) {
 			return this.handleZWavePlusGet(command);
+		} else if (command instanceof InclusionControllerCCInitiate) {
+			// Inclusion controller commands are handled by the controller class
+			if (
+				command.step === InclusionControllerStep.ProxyInclusionReplace
+			) {
+				return this.driver.controller.handleInclusionControllerCCInitiateReplace(
+					command,
+				);
+			}
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -2913,10 +2968,12 @@ protocol version:      ${this.protocolVersion}`;
 		// It can happen that the node has not told us that it supports the Wake Up CC
 		// https://sentry.io/share/issue/6a681729d7db46d591f1dcadabe8d02e/
 		// To avoid a crash, mark it as supported
-		this.addCC(CommandClasses["Wake Up"], {
-			isSupported: true,
-			version: 1,
-		});
+		if (this.getCCVersion(CommandClasses["Wake Up"]) === 0) {
+			this.addCC(CommandClasses["Wake Up"], {
+				isSupported: true,
+				version: 1,
+			});
+		}
 
 		this.markAsAwake();
 
@@ -3607,7 +3664,6 @@ protocol version:      ${this.protocolVersion}`;
 
 	private _firmwareUpdateInProgress: boolean = false;
 	/**
-	 *
 	 * Returns whether a firmware update is in progress for this node.
 	 */
 	public isFirmwareUpdateInProgress(): boolean {
@@ -3702,8 +3758,16 @@ protocol version:      ${this.protocolVersion}`;
 		// Don't start the process twice
 		if (this.isFirmwareUpdateInProgress()) {
 			throw new ZWaveError(
-				`Failed to start the update: A firmware upgrade is already in progress!`,
+				`Failed to start the update: A firmware upgrade for this node is already in progress!`,
 				ZWaveErrorCodes.FirmwareUpdateCC_Busy,
+			);
+		}
+
+		// Don't let two firmware updates happen in parallel
+		if (this.driver.controller.isAnyOTAFirmwareUpdateInProgress()) {
+			throw new ZWaveError(
+				`Failed to start the update: A firmware update is already in progress on this network!`,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
 			);
 		}
 		this._firmwareUpdateInProgress = true;
@@ -3883,6 +3947,14 @@ protocol version:      ${this.protocolVersion}`;
 			throw new ZWaveError(
 				`Failed to start the update: A firmware upgrade is already in progress!`,
 				ZWaveErrorCodes.FirmwareUpdateCC_Busy,
+			);
+		}
+
+		// Don't let two firmware updates happen in parallel
+		if (this.driver.controller.isAnyOTAFirmwareUpdateInProgress()) {
+			throw new ZWaveError(
+				`Failed to start the update: A firmware update is already in progress on this network!`,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
 			);
 		}
 		this._firmwareUpdateInProgress = true;

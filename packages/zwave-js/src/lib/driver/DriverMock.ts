@@ -102,6 +102,11 @@ export interface CreateAndStartTestingDriverOptions {
 	skipNodeInterview?: boolean;
 
 	/**
+	 * Set this to true to skip checking if the controller is in bootloader mode (default: true)
+	 */
+	skipBootloaderCheck?: boolean;
+
+	/**
 	 * Whether configuration files should be loaded (default: true)
 	 */
 	loadConfiguration?: boolean;
@@ -116,6 +121,7 @@ export async function createAndStartTestingDriver(
 	const {
 		beforeStartup,
 		skipControllerIdentification = false,
+		skipBootloaderCheck = true,
 		skipNodeInterview = false,
 		loadConfiguration = true,
 		...internalOptions
@@ -138,6 +144,10 @@ export async function createAndStartTestingDriver(
 	if (!loadConfiguration) {
 		internalOptions.testingHooks ??= {};
 		internalOptions.testingHooks.loadConfiguration = false;
+	}
+	if (skipBootloaderCheck) {
+		internalOptions.testingHooks ??= {};
+		internalOptions.testingHooks.skipBootloaderCheck = true;
 	}
 
 	// TODO: Ideally, this would be using mock-fs, but jest does not play nice with it

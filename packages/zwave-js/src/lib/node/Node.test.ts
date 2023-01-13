@@ -33,6 +33,7 @@ import { wait } from "alcalzone-shared/async";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
+import { ApplicationUpdateRequestNodeInfoReceived } from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
@@ -53,8 +54,8 @@ class TestNode extends ZWaveNode {
 	public async ping(): Promise<boolean> {
 		return super.ping();
 	}
-	public async queryNodeInfo(): Promise<void> {
-		return super["queryNodeInfo"]();
+	public async interviewNodeInfo(): Promise<void> {
+		return super["interviewNodeInfo"]();
 	}
 	public async interviewCCs(): Promise<boolean> {
 		return super.interviewCCs();
@@ -348,29 +349,39 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		describe(`queryNodeInfo()`, () => {
+		describe(`interviewNodeInfo()`, () => {
 			beforeAll(() =>
 				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
+					Promise.resolve(
+						new ApplicationUpdateRequestNodeInfoReceived(
+							undefined as any,
+							{
+								nodeInformation: {
+									nodeId: 2,
+									supportedCCs: [],
+								},
+							} as any,
+						),
+					),
 				),
 			);
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
 			it(`should set the interview stage to "NodeInfo"`, async () => {
-				await node["queryNodeInfo"]();
+				await node["interviewNodeInfo"]();
 				expect(node.interviewStage).toBe(InterviewStage.NodeInfo);
 			});
 
 			it("should not send anything if the node is the controller", async () => {
 				// Temporarily make this node the controller node
 				fakeDriver.controller.ownNodeId = node.id;
-				await node["queryNodeInfo"]();
+				await node["interviewNodeInfo"]();
 				expect(fakeDriver.sendMessage).not.toBeCalled();
 				fakeDriver.controller.ownNodeId = 1;
 			});
 
 			it("should send a RequestNodeInfoRequest with the node's ID", async () => {
-				await node["queryNodeInfo"]();
+				await node["interviewNodeInfo"]();
 				expect(fakeDriver.sendMessage).toBeCalled();
 				const request: RequestNodeInfoRequest =
 					fakeDriver.sendMessage.mock.calls[0][0];
@@ -597,7 +608,7 @@ describe("lib/node/Node", () => {
 			beforeAll(() => {
 				const interviewStagesAfter: Record<string, InterviewStage> = {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
-					queryNodeInfo: InterviewStage.NodeInfo,
+					interviewNodeInfo: InterviewStage.NodeInfo,
 					interviewCCs: InterviewStage.CommandClasses,
 				};
 				const returnValues: Partial<Record<keyof TestNode, any>> = {
@@ -606,7 +617,7 @@ describe("lib/node/Node", () => {
 				};
 				originalMethods = {
 					queryProtocolInfo: node["queryProtocolInfo"].bind(node),
-					queryNodeInfo: node["queryNodeInfo"].bind(node),
+					interviewNodeInfo: node["interviewNodeInfo"].bind(node),
 					interviewCCs: node["interviewCCs"].bind(node),
 				};
 				for (const method of Object.keys(

@@ -191,9 +191,15 @@ export class Message {
 		return true;
 	}
 
+	/** Returns the response timeout for this message in case the default settings do not apply. */
+	public getResponseTimeout(): number | undefined {
+		// Use default timeout
+		return;
+	}
+
 	/** Returns the callback timeout for this message in case the default settings do not apply. */
 	public getCallbackTimeout(): number | undefined {
-		// Use default timeout by default
+		// Use default timeout
 		return;
 	}
 
