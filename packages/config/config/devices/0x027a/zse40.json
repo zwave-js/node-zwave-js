@@ -178,7 +178,7 @@
 			"$if": "firmwareVersion < 32.32",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Basic Set Reports",
-			"defaultValue": 1			
+			"defaultValue": 1
 		},
 		{
 			"#": "9",
