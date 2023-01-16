@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.4.0 (2023-01-16)
 ### Features
 * Support OTW firmware updates of 500 and 700+ series controllers (#5321, #5326)
 * Parallel firmware updates and soft/hard reset during ongoing firmware updates is now prevented (#5220)
