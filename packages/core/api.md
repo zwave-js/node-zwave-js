@@ -1512,6 +1512,11 @@ export interface NodeUpdatePayload extends ApplicationNodeInformation {
 // @public
 export const nonApplicationCCs: readonly CommandClasses[];
 
+// Warning: (ae-internal-missing-underscore) The name "nonUndefinedLogConfigKeys" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const nonUndefinedLogConfigKeys: readonly ["enabled", "level", "transports", "logToFile", "maxFiles", "filename", "forceConsole"];
+
 // Warning: (ae-missing-release-tag) "normalizeValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
