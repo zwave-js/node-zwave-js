@@ -15,6 +15,7 @@ import {
 	LogContext,
 	LOG_WIDTH,
 	MessageRecord,
+	nonUndefinedLogConfigKeys,
 	stringToNodeList,
 	timestampFormatShort,
 	timestampPadding,
@@ -80,6 +81,12 @@ export class ZWaveLogContainer extends winston.Container {
 	}
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
+		// Avoid overwriting configuration settings with undefined if they shouldn't be
+		for (const key of nonUndefinedLogConfigKeys) {
+			if (key in config && config[key] === undefined) {
+				delete config[key];
+			}
+		}
 		const changedLoggingTarget =
 			(config.logToFile != undefined &&
 				config.logToFile !== this.logConfig.logToFile) ||
