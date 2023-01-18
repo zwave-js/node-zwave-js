@@ -71,6 +71,11 @@ type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Security_S2;
 			/**
+			 * Allows pre-filling the DSK, e.g. when a DSK-only QR code has been scanned.
+			 * If this is given, the `validateDSKAndEnterPIN` callback will not be called.
+			 */
+			dsk?: string;
+			/**
 			 * Allows overriding the user callbacks for this inclusion.
 			 * If not given, the inclusion user callbacks of the driver options will be used.
 			 */
@@ -1170,6 +1175,8 @@ enum ControllerFirmwareUpdateStatus {
 	Error_RetryLimitReached,
 	/** The update was aborted by the bootloader */
 	Error_Aborted,
+	/** This controller does not support firmware updates */
+	Error_NotSupported,
 
 	OK = 0xff,
 }

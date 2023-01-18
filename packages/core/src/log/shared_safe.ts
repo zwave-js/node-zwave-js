@@ -95,6 +95,17 @@ export interface LogConfig {
 }
 
 /** @internal */
+export const nonUndefinedLogConfigKeys = [
+	"enabled",
+	"level",
+	"transports",
+	"logToFile",
+	"maxFiles",
+	"filename",
+	"forceConsole",
+] as const;
+
+/** @internal */
 export function stringToNodeList(nodes?: string): number[] | undefined {
 	if (!nodes) return undefined;
 	return nodes
