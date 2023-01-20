@@ -62,7 +62,10 @@
 	"standard.enable": false,
 	"json.schemas": [
 		{
-			"fileMatch": ["/packages/config/config/devices/*/*.json"],
+			"fileMatch": [
+				"/packages/config/config/devices/*/*.json",
+				"!/packages/config/config/devices/templates/*.json"
+			],
 			"url": "/maintenance/schemas/device-config.json"
 		},
 		{
