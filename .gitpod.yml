@@ -21,6 +21,7 @@ vscode:
     - dbaeumer.vscode-eslint
     - esbenp.prettier-vscode
     - EditorConfig.EditorConfig
+    - zwave-js.config-editor
 
 # Configure prebuilds
 github:
