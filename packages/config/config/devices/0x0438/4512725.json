@@ -2,7 +2,7 @@
   "manufacturer": "Namron",
   "manufacturerId": "0x0438",
   "label": "4512725",
-  "description": "16A Thermostat wall plug",
+  "description": "16A Thermostat Wall Plug",
   "devices": [
     {
       "productType": "0x0200",
