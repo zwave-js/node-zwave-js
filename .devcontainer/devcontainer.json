@@ -1,0 +1,17 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+
+	"updateContentCommand": "yarn && yarn build",
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"EditorConfig.EditorConfig",
+				"amodio.toggle-excluded-files",
+				"zwave-js.config-editor"
+			]
+		}
+	}
+}
