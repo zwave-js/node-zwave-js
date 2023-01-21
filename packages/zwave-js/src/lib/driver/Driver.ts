@@ -2216,7 +2216,12 @@ export class Driver
 		const endpoint = node?.getEndpoint(endpointIndex);
 		return (
 			node?.isSecure !== false &&
-			!!(endpoint ?? node)?.isCCSecure(ccId) &&
+			// Special case for Basic CC, which we sometimes hide:
+			// A securely included node MAY support the Basic Command Class at the highest security level but it
+			// MUST NOT support the Basic Command Class at any lower security level or non-securely.
+			(ccId === CommandClasses.Basic ||
+				// For all other CCs check if the CC is marked as secure
+				!!(endpoint ?? node)?.isCCSecure(ccId)) &&
 			!!(this.securityManager || this.securityManager2)
 		);
 	}
