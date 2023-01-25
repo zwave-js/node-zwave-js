@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.5.0 (2023-01-25)
 ### Features
 * Created an OTW firmware flasher utility CLI which can be used to flash Z-Wave controllers without a UI (#5362)
 
