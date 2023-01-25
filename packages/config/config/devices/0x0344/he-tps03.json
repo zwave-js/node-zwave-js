@@ -248,5 +248,16 @@
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"defaultValue": 50
 		}
-	]
+	],
+	"compat": {
+		// Older firmware versions do not properly support Supervision CC
+		"$if": "firmwareVersion < 2.6",
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }
