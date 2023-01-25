@@ -16,6 +16,7 @@ describe("lib/driver/Driver", () => {
 		it("should open a new serialport", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				testingHooks: {
+					skipBootloaderCheck: true,
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -34,6 +35,7 @@ describe("lib/driver/Driver", () => {
 		it("should only work once", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				testingHooks: {
+					skipBootloaderCheck: true,
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -53,6 +55,7 @@ describe("lib/driver/Driver", () => {
 		it("the start promise should only be fulfilled after the port was opened", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				testingHooks: {
+					skipBootloaderCheck: true,
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -74,6 +77,7 @@ describe("lib/driver/Driver", () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				attempts: { openSerialPort: 1 },
 				testingHooks: {
+					skipBootloaderCheck: true,
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -99,6 +103,7 @@ describe("lib/driver/Driver", () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				attempts: { openSerialPort: 1 },
 				testingHooks: {
+					skipBootloaderCheck: true,
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -139,6 +144,7 @@ describe("lib/driver/Driver", () => {
 		it("should not be possible if the driver wasn't started", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				testingHooks: {
+					skipBootloaderCheck: true,
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -158,6 +164,7 @@ describe("lib/driver/Driver", () => {
 		it("should not be possible if the driver hasn't completed starting", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				testingHooks: {
+					skipBootloaderCheck: true,
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -180,6 +187,7 @@ describe("lib/driver/Driver", () => {
 		it("should not be possible if the driver failed to start", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				testingHooks: {
+					skipBootloaderCheck: true,
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},

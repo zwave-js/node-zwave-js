@@ -366,7 +366,14 @@ export function getSerialAPICommandMachineOptions(
 		},
 		delays: {
 			RETRY_DELAY: (ctx) => computeRetryDelay(ctx),
-			RESPONSE_TIMEOUT: timeoutConfig.response,
+			RESPONSE_TIMEOUT: (ctx) => {
+				return (
+					// Ask the message for its callback timeout
+					ctx.msg.getResponseTimeout() ||
+					// and fall back to default values
+					timeoutConfig.response
+				);
+			},
 			CALLBACK_TIMEOUT: (ctx) => {
 				return (
 					// Ask the message for its callback timeout

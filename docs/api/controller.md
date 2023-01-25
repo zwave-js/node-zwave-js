@@ -71,6 +71,11 @@ type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Security_S2;
 			/**
+			 * Allows pre-filling the DSK, e.g. when a DSK-only QR code has been scanned.
+			 * If this is given, the `validateDSKAndEnterPIN` callback will not be called.
+			 */
+			dsk?: string;
+			/**
 			 * Allows overriding the user callbacks for this inclusion.
 			 * If not given, the inclusion user callbacks of the driver options will be used.
 			 */
@@ -751,7 +756,12 @@ Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd ar
 
 > [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 
-### `getAvailableFirmwareUpdates`
+### Updating the firmware of a node (OTA)
+
+> [!NOTE]
+> This section describes updating the firmware of a node using the **Z-Wave JS firmware update service**. If you want to update the firmware of a node using a file, see [`ZWaveNode.updateFirmware`](api/node.md#updatefirmware).
+
+#### `getAvailableFirmwareUpdates`
 
 ```ts
 getAvailableFirmwareUpdates(nodeId: number, options?: GetFirmwareUpdatesOptions): Promise<FirmwareUpdateInfo[]>
@@ -828,26 +838,44 @@ interface GetFirmwareUpdatesOptions {
 }
 ```
 
-### `beginOTAFirmwareUpdate`
+#### `firmwareUpdateOTA`
 
 ```ts
-beginOTAFirmwareUpdate(nodeId: number, update: FirmwareUpdateFileInfo): Promise<void>
+firmwareUpdateOTA(nodeId: number, update: FirmwareUpdateFileInfo): Promise<boolean>
 ```
 
 > [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
 
-Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and starts an over-the-air (OTA) firmware update for the given node.  
-This is very similar to [`ZWaveNode.beginFirmwareUpdate`](api/node#beginfirmwareupdate), except that the updates are officially provided by manufacturers and downloaded in the background.
+Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and performs an over-the-air (OTA) firmware update for the given node. The return value indicates whether the update was successful.  
+This is very similar to [`ZWaveNode.updateFirmware`](api/node#updatefirmware), except that the updates are officially provided by manufacturers and downloaded in the background.
+
+To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/node#quotfirmware-update-progressquot) of the corresponding node.
 
 > [!NOTE] Calling this will result in an HTTP request to the URL contained in the `update` parameter.
 
-### `isAnyOTAFirmwareUpdateInProgress`
+#### `isAnyOTAFirmwareUpdateInProgress`
 
 ```ts
 isAnyOTAFirmwareUpdateInProgress(): boolean;
 ```
 
 Returns whether an OTA firmware update is in progress for any node.
+
+### Updating the firmware of the controller (OTW)
+
+```ts
+firmwareUpdateOTW(data: Buffer): Promise<boolean>
+```
+
+> [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
+
+Performs an over-the-wire (OTW) firmware update for the controller using the given firmware image. The return value indicates whether the update was successful.
+
+To do so, the controller gets put in bootloader mode where a new firmware image can be uploaded.
+
+> [!WARNING] A failure during this process may leave your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded.
+
+To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/controller#quotfirmware-update-progressquot) of the controller.
 
 ## Controller properties
 
@@ -970,6 +998,15 @@ enum InclusionState {
 	SmartStart,
 }
 ```
+
+### `rfRegion`
+
+```ts
+readonly rfRegion: RFRegion | undefined
+```
+
+Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet).
+This value is cached and updated automatically when using [`getRFRegion` or `setRFRegion`](#configure-rf-region).
 
 ## Controller events
 
@@ -1097,5 +1134,50 @@ interface ControllerStatistics {
 	timeoutCallback: number;
 	/** No. of outgoing messages that were dropped because they could not be sent */
 	messagesDroppedTX: number;
+}
+```
+
+### `"firmware update progress"`
+
+```ts
+(progress: ControllerFirmwareUpdateProgress) => void
+```
+
+Firmware update progress has been made. The callback arguments gives information about the progress of the update:
+
+<!-- #import ControllerFirmwareUpdateProgress from "zwave-js" -->
+
+```ts
+interface ControllerFirmwareUpdateProgress {
+	/** How many fragments of the firmware update have been transmitted. Together with `totalFragments` this can be used to display progress. */
+	sentFragments: number;
+	/** How many fragments the firmware update consists of. */
+	totalFragments: number;
+	/** The total progress of the firmware update in %, rounded to two digits. */
+	progress: number;
+}
+```
+
+### `"firmware update finished"`
+
+```ts
+(result: ControllerFirmwareUpdateResult) => void;
+```
+
+The firmware update process is finished. The `result` argument indicates whether the update was successful and a status with more details on potential errors.
+
+<!-- #import ControllerFirmwareUpdateStatus from "zwave-js" -->
+
+```ts
+enum ControllerFirmwareUpdateStatus {
+	Error_Timeout = 0,
+	/** The maximum number of retry attempts for a firmware fragments were reached */
+	Error_RetryLimitReached,
+	/** The update was aborted by the bootloader */
+	Error_Aborted,
+	/** This controller does not support firmware updates */
+	Error_NotSupported,
+
+	OK = 0xff,
 }
 ```

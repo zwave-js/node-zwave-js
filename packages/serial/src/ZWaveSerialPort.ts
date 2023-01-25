@@ -1,10 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
 import { SerialPort } from "serialport";
+import type { DisconnectError } from "./DisconnectError";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
-
-interface DisconnectError extends Error {
-	disconnected: boolean;
-}
 
 /** The default version of the Z-Wave serial binding that works using node-serialport */
 export class ZWaveSerialPort extends ZWaveSerialPortBase {

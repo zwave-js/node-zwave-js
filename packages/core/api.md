@@ -1271,6 +1271,8 @@ export interface LogConfig {
     // (undocumented)
     logToFile: boolean;
     // (undocumented)
+    maxFiles: number;
+    // (undocumented)
     nodeFilter?: number[];
     // (undocumented)
     transports: Transport[];
@@ -1509,6 +1511,11 @@ export interface NodeUpdatePayload extends ApplicationNodeInformation {
 //
 // @public
 export const nonApplicationCCs: readonly CommandClasses[];
+
+// Warning: (ae-internal-missing-underscore) The name "nonUndefinedLogConfigKeys" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const nonUndefinedLogConfigKeys: readonly ["enabled", "level", "transports", "logToFile", "maxFiles", "filename", "forceConsole"];
 
 // Warning: (ae-missing-release-tag) "normalizeValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2310,6 +2317,11 @@ export enum TransmitStatus {
     OK = 0
 }
 
+// Warning: (ae-missing-release-tag) "tryParseDSKFromQRCodeString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function tryParseDSKFromQRCodeString(qr: string): string | undefined;
+
 // Warning: (ae-missing-release-tag) "TXReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2959,6 +2971,7 @@ export enum ZWaveErrorCodes {
     FirmwareUpdateCC_Busy = 1500,
     FirmwareUpdateCC_FailedToAbort = 1504,
     FirmwareUpdateCC_FailedToStart = 1503,
+    FirmwareUpdateCC_NetworkBusy = 1508,
     FirmwareUpdateCC_NotUpgradable = 1501,
     FirmwareUpdateCC_TargetNotFound = 1502,
     FirmwareUpdateCC_Timeout = 1505,
@@ -2972,6 +2985,7 @@ export enum ZWaveErrorCodes {
     NVM_NoSpace = 284,
     NVM_NotSupported = 280,
     NVM_ObjectNotFound = 282,
+    OTW_Update_Busy = 380,
     // (undocumented)
     PacketFormat_Checksum = 2,
     // (undocumented)

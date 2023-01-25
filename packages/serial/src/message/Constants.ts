@@ -51,7 +51,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_MEMORY_GET_BUFFER = 0x23,
 	UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 0x24,
 
-	UNKNOWN_FUNC_FlashAutoProgSet = 0x27, // ??
+	EnterBootloader = 0x27, // Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
 	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
 
 	GetNVMId = 0x29, // Returns information about the external NVM
@@ -122,7 +122,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_TIMER_CANCEL = 0x72, // ??
 	UNKNOWN_FUNC_TIMER_CALL = 0x73, // ??
 
-	UNKNOWN_FUNC_UNKNOWN_0x78 = 0x78, // ??
+	FirmwareUpdateNVM = 0x78, // Access the NVM section for 500 series OTW firmware updates
 
 	GetRoutingInfo = 0x80, // Get a specified node's neighbor information from the controller
 

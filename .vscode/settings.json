@@ -62,7 +62,10 @@
 	"standard.enable": false,
 	"json.schemas": [
 		{
-			"fileMatch": ["/packages/config/config/devices/*/*.json"],
+			"fileMatch": [
+				"/packages/config/config/devices/*/*.json",
+				"!/packages/config/config/devices/templates/*.json"
+			],
 			"url": "/maintenance/schemas/device-config.json"
 		},
 		{
@@ -82,5 +85,6 @@
 	"[typescript]": {
 		"editor.autoClosingBrackets": "languageDefined"
 	},
-	"git.ignoredRepositories": ["specs"]
+	"git.ignoredRepositories": ["specs"],
+	"search.followSymlinks": false
 }

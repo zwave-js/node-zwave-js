@@ -1,6 +1,6 @@
 import { Transform, TransformCallback } from "stream";
-import type { SerialLogger } from "./Logger";
-import { MessageHeaders } from "./MessageHeaders";
+import type { SerialLogger } from "../Logger";
+import { MessageHeaders } from "../MessageHeaders";
 
 /**
  * Checks if there's enough data in the buffer to deserialize a complete message
@@ -16,7 +16,10 @@ function getMessageLength(data: Buffer): number {
 }
 
 export class SerialAPIParser extends Transform {
-	constructor(private logger?: SerialLogger) {
+	constructor(
+		private logger?: SerialLogger,
+		private onDiscarded?: (data: Buffer) => void,
+	) {
 		// We read byte streams but emit messages
 		super({ readableObjectMode: true });
 	}
@@ -71,6 +74,7 @@ export class SerialAPIParser extends Transform {
 						}
 						const discarded = this.receiveBuffer.slice(0, skip);
 						this.logger?.discarded(discarded);
+						this.onDiscarded?.(discarded);
 					}
 				}
 				// Continue with the next valid byte

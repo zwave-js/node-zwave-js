@@ -88,10 +88,22 @@ export interface LogConfig {
 	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
+	maxFiles: number;
 	nodeFilter?: number[];
 	filename: string;
 	forceConsole: boolean;
 }
+
+/** @internal */
+export const nonUndefinedLogConfigKeys = [
+	"enabled",
+	"level",
+	"transports",
+	"logToFile",
+	"maxFiles",
+	"filename",
+	"forceConsole",
+] as const;
 
 /** @internal */
 export function stringToNodeList(nodes?: string): number[] | undefined {

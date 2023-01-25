@@ -31,6 +31,7 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [Humidity Control Mode CC](api/CCs/HumidityControlMode.md) · `0x6d`
 -   [Humidity Control Operating State CC](api/CCs/HumidityControlOperatingState.md) · `0x6e`
 -   [Humidity Control Setpoint CC](api/CCs/HumidityControlSetpoint.md) · `0x64`
+-   [Inclusion Controller CC](api/CCs/InclusionController.md) · `0x74`
 -   [Indicator CC](api/CCs/Indicator.md) · `0x87`
 -   [Irrigation CC](api/CCs/Irrigation.md) · `0x6b`
 -   [Language CC](api/CCs/Language.md) · `0x89`

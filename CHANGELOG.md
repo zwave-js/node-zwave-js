@@ -4,6 +4,55 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.4.0 (2023-01-16)
+### Features
+* Support OTW firmware updates of 500 and 700+ series controllers (#5321, #5326)
+* Parallel firmware updates and soft/hard reset during ongoing firmware updates is now prevented (#5220)
+* Added a readonly `rfRegion` property to the `Controller` class (#5288)
+* Added support for requesting region-specific firmware updates from the update service (#5296)
+* Allow configuring the number of kept logfiles (#5294)
+* Added support for the `Inclusion Controller CC` which allows secondary controllers in the network to include devices on behalf of Z-Wave JS (#4851)
+* Added support for scanning QR codes that only contain the DSK, as well as pre-filling the DSK before the inclusion process (#5309)
+
+### Bugfixes
+* Known Wake Up CC version no longer gets overwritten with 1 (#5261)
+* Surrounding whitespace in S2 or SmartStart QR codes now gets ignored (#5295)
+* Always use S2 for endpoint communication if the node uses S2 (#5310)
+* Distinguish between protocol and SDK version on 500 series (#5323)
+
+### Config file changes
+* Add metadata for Sensative strips (#5223)
+* Add Ring Retrofit Alarm Kit (#5299)
+* Correct value size for some Nortek/GoControl device params (#5297)
+* Correct low temp threshold for Aeotec aërQ (#5286)
+* Add fingerprint for Fibaro FGWP102 (#5280)
+* Add metadata to Aeotec aërQ (#5224)
+* Allow higher minimum dim level for Inovelli LZW31-SN, FW 1.57+ (#5181)
+* Add Zooz 800 series controllers (#5324)
+
+### Changes under the hood
+* Removed a workaround for broken caching in the `got` library (#5090)
+
+## 10.3.1 (2022-11-12)
+### Bugfixes
+* Mark Indicator Identify command as supported for CC v3 (#5195)
+
+### Config file changes
+* Swap parameter numbers of myot4 (#5198)
+* Fix typo in configuration options for Greenwave GWPN1 (#5188)
+* Add all ZWA approved Yale locks (#5154)
+* Add Aeotec ZWA042 outdoor smart plug (#5177)
+* Work around Configuration Info reporting bug in ZSE41/42 (#5168)
+* Disable Supervision for Zooz ZSE29 (#5159)
+* Add support for Nexia ZSENS930 (#5142)
+* Zooz zen72 zen74 param 27, 28 and 29 (#5125)
+* Import several device files (#5147)
+* Add Dawon PM-S240-ZW, disable Supervision (#5136)
+
+### Changes under the hood
+* Add resiliency to import config routines (#5148)
+* Add snippets for authoring config files to VSCode (#5153)
+
 ## 10.3.0 (2022-09-29)
 ### Features
 * Support opt-in to receive beta firmware releases via the update service (#5076)
