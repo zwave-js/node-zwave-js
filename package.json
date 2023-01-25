@@ -57,6 +57,7 @@
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
+    "@zwave-js/flash": "workspace:*",
     "@zwave-js/host": "workspace:*",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/nvmedit": "workspace:*",

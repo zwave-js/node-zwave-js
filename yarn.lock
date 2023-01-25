@@ -4623,6 +4623,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@zwave-js/flash@workspace:*, @zwave-js/flash@workspace:packages/flash":
+  version: 0.0.0-use.local
+  resolution: "@zwave-js/flash@workspace:packages/flash"
+  dependencies:
+    "@types/fs-extra": ^9.0.13
+    "@types/node": ^14.18.36
+    "@types/yargs": ^17.0.12
+    "@zwave-js/core": "workspace:*"
+    del-cli: ^5.0.0
+    fs-extra: ^10.1.0
+    prettier: ^2.8.1
+    typescript: 4.9.4
+    yargs: ^17.5.1
+    zwave-js: "workspace:*"
+  bin:
+    flash: bin/flash.js
+  languageName: unknown
+  linkType: soft
+
 "@zwave-js/host@workspace:*, @zwave-js/host@workspace:packages/host":
   version: 0.0.0-use.local
   resolution: "@zwave-js/host@workspace:packages/host"
@@ -4732,6 +4751,7 @@ __metadata:
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
+    "@zwave-js/flash": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/nvmedit": "workspace:*"
