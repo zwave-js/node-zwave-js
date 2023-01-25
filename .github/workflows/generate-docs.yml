@@ -11,6 +11,8 @@ jobs:
   # This job checks if the docs can be generated and produce changes
   # If they do, a PR will be created with the changes
   check-and-update:
+    if: github.repository == 'zwave-js/node-zwave-js' # Don't run in forks
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
