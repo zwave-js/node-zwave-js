@@ -1,0 +1,249 @@
+{
+	"manufacturer": "Inteset",
+	"manufacturerId": "0x039a",
+	"label": "INT-SMMD-N1",
+	"description": "Inteset PIR Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0106"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Motion Sensitivity",
+			"description": "Higher values = lower sensitivity and lower range.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 3
+		},
+		{
+			"#": "2",
+			"label": "Motion Window Time",
+			"description": "The amount of time the moves specified in parameter #3 need to take place in for the sensor to report motion. Higher values = more sensitive.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "4s",
+					"value": 0
+				},
+				{
+					"label": "8s",
+					"value": 1
+				},
+				{
+					"label": "12s",
+					"value": 2
+				},
+				{
+					"label": "16s",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Pulse Count",
+			"description": "Number of moves required for the sensor to report motion. Higher values = less sensitive.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "1",
+					"value": 0
+				},
+				{
+					"label": "2",
+					"value": 1
+				},
+				{
+					"label": "3",
+					"value": 2
+				},
+				{
+					"label": "4",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Motion Blind Time",
+			"description": "The amount of time the sensor will not report motion after it has reported motion.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.5s",
+					"value": 0
+				},
+				{
+					"label": "1s",
+					"value": 1
+				},
+				{
+					"label": "1.5s",
+					"value": 2
+				},
+				{
+					"label": "2s",
+					"value": 3
+				},
+				{
+					"label": "2.5s",
+					"value": 4
+				},
+				{
+					"label": "3s",
+					"value": 5
+				},
+				{
+					"label": "3.5s",
+					"value": 6
+				},
+				{
+					"label": "4s",
+					"value": 7
+				},
+				{
+					"label": "4.5s",
+					"value": 8
+				},
+				{
+					"label": "5s",
+					"value": 9
+				},
+				{
+					"label": "5.5s",
+					"value": 10
+				},
+				{
+					"label": "6s",
+					"value": 11
+				},
+				{
+					"label": "6.5s",
+					"value": 12
+				},
+				{
+					"label": "7s",
+					"value": 13
+				},
+				{
+					"label": "7.5s",
+					"value": 14
+				},
+				{
+					"label": "8s",
+					"value": 15
+				}
+			]
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable Motion Sensor",
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"label": "Motion Clear Time",
+			"description": "How long the sensor will wait before reporting no motion",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 3600,
+			"defaultValue": 30
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator: Blink on Motion",
+			"defaultValue": 1
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Binary Sensor Reports"
+		},
+		{
+			"#": "9",
+			"label": "Group 2: Basic Set Level",
+			"description": "Turn on or off BASIC_SET",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off (0x00)",
+					"value": 0
+				},
+				{
+					"label": "On (0xff)",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Brightness Measuring Interval",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 3600,
+			"defaultValue": 180
+		},
+		{
+			"#": "11",
+			"label": "Brightness Change Report Threshold",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 50
+		},
+		{
+			"#": "12",
+			"label": "Night/Day Brightness Threshold",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 50
+		},
+		{
+			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Report Motion Only At Night",
+			"description": "When enabled, the sensor will report motion only when the ambient brightness is below parameter #12."
+		},
+		{
+			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Repeat Motion Event While Active"
+		}
+	],
+	"metadata": {
+		"wakeup": "Press the button briefly",
+		"inclusion": "Press the button 3 times within 1.5s to enter inclusion mode.",
+		"exclusion": "Press the button 3 times within 1.5s",
+		"reset": "Press and hold the button for 10s until LED light is on, then release the button.",
+		"manual": "http://downloads.inteset.com/Motion2In1ManualS2.pdf"
+	}
+}
