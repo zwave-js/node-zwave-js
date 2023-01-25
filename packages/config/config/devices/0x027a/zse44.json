@@ -39,6 +39,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
+			"$if": "firmwareVersion < 1.20",
 			"$import": "templates/zooz_template.json#battery_report_threshold",
 			"label": "Battery Report Threshold",
 			"maxValue": 10,
@@ -327,20 +328,32 @@
 			"label": "Temperature Reporting Interval",
 			"valueSize": 2,
 			"unit": "minutes",
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 480,
 			"defaultValue": 240,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "17",
 			"label": "Humidity Reporting Interval",
 			"valueSize": 2,
 			"unit": "minutes",
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 480,
 			"defaultValue": 240,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
 	],
 	"metadata": {
