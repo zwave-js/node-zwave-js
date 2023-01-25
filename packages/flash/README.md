@@ -15,7 +15,7 @@ npx @zwave-js/flash <port> <filename> [--verbose]
 or you can execute the version in the checked out repository by executing
 
 ```
-yarn ts packages/nvmedit/src/cli.ts <port> <filename> [--verbose]
+yarn ts packages/flash/src/cli.ts <port> <filename> [--verbose]
 ```
 
 The `--verbose` flag will cause the driver logs to be printed to console.
