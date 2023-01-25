@@ -4,6 +4,28 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Created an OTW firmware flasher utility CLI which can be used to flash Z-Wave controllers without a UI (#5362)
+
+### Bugfixes
+* Always use Security encapsulation for `Basic CC` commands on secure nodes (#5343)
+* Prevent accidentally setting certain log settings to undefined (#5341)
+
+### Config file changes
+* Add Inteset Motion Sensor (#5249, #5361)
+* Disable Supervision for HELTUN 700 series, FW 2.5 and below (#5357)
+* Correct Aeotec Multisensor 7, param 2 (#5206)
+* Update EvaLogik ZW39 parameters (#5175)
+* Add Fakro Solar ARZ Z-Wave/102 (#5166)
+* Update Zooz ZSE44 parameters (#5162)
+* Add MCO Home Technology Co. LTD MH-DS221 (#5138)
+* Disable Supervision for Schlage BE469ZP (#5359)
+
+### Changes under the hood
+* We now have a VSCode extension to help with authoring config files. This is automatically recommended when opening the repository. We strongly recommend using it.
+* The `generate-docs` workflow no longer runs in PRs from forks (where it fails anyways)
+
 ## 10.4.0 (2023-01-16)
 ### Features
 * Support OTW firmware updates of 500 and 700+ series controllers (#5321, #5326)
