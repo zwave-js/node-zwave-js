@@ -16,27 +16,12 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Behavior if power fails",
-			"description": "If the state of the switch is saved after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Not saved, switch will be off",
-					"value": 0
-				},
-				{
-					"label": "Saved, will return to previous state",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"defaultValue": 0
 		},
 		{
 			"#": "2",
-			"label": "External switch type",
+			"label": "External Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -55,7 +40,7 @@
 		},
 		{
 			"#": "3",
-			"label": "External switch behavior",
+			"label": "External Switch Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -74,38 +59,28 @@
 		},
 		{
 			"#": "4",
-			"label": "Behavior when timer is active",
-			"description": "If manual operation is allowed when the timer function is active",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Forbid manual operation",
-					"value": 0
-				},
-				{
-					"label": "Allow manual operation",
-					"value": 1
-				}
-			]
+			"label": "Manual Operation During Auto Turn-Off",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
-			"label": "Timer function",
-			"description": "Timer function to automaticly turn off the load",
+			"label": "Auto Turn-Off Timer",
 			"unit": "100ms",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "8",
-			"label": "Report options",
-			"description": "Sets report options to association group 2",
+			"label": "Reports To Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -114,69 +89,39 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Report both on/off",
+					"label": "On/Off",
 					"value": 0
 				},
 				{
-					"label": "Report on only",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "Report off only",
+					"label": "Off",
 					"value": 2
 				},
 				{
-					"label": "Reporting is disabled",
+					"label": "None",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "20",
-			"label": "Local operation",
-			"description": "If local operation of the switch is allowed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Local operation is enabled",
-					"value": 0
-				},
-				{
-					"label": "Locked, local operation is disabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Smart Switch Mode",
+			"description": "When enabled, local operation is disabled"
 		},
 		{
 			"#": "21",
-			"label": "Remote operation",
-			"description": "If remote operation of the switch is allowed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Remote operation is enabled",
-					"value": 0
-				},
-				{
-					"label": "Locked, remote operation is disabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Z-Wave Control",
+			"defaultValue": 0
 		},
 		{
 			"#": "255",
 			"label": "Factory reset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 85,
 			"defaultValue": 0,
 			"writeOnly": true,
 			"allowManualEntry": false,
