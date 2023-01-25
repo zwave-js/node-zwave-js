@@ -17,7 +17,7 @@
 		{
 			"#": "1",
 			"label": "Motion Sensitivity",
-			"description": "The larger this value, the lower the sensitivity and the distance for motion detecting is closer",
+			"description": "Higher values = lower sensitivity and lower range.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -26,7 +26,7 @@
 		{
 			"#": "2",
 			"label": "Motion Window Time",
-			"description": "The specified time window in which the amount of pulses will trigger a motion event",
+			"description": "The amount of time the moves specified in parameter #3 need to take place in for the sensor to report motion. Higher values = more sensitive.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -54,7 +54,7 @@
 		{
 			"#": "3",
 			"label": "Pulse Count",
-			"description": "The amount of pulses during the specified time window which trigger a motion event",
+			"description": "Number of moves required for the sensor to report motion. Higher values = less sensitive.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -81,7 +81,8 @@
 		},
 		{
 			"#": "4",
-			"label": " Motion Blind Time",
+			"label": "Motion Blind Time",
+			"description": "The amount of time the sensor will not report motion after it has reported motion.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -156,28 +157,14 @@
 		},
 		{
 			"#": "5",
-			"label": "Motion Enable",
-			"description": "Whether motion detection is enable or not",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable Motion Sensor",
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
 			"label": "Motion Clear Time",
-			"description": "The time to clear motion event after a motion event detected",
+			"description": "How long the sensor will wait before reporting no motion",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
@@ -186,47 +173,18 @@
 		},
 		{
 			"#": "7",
-			"label": "LED Indicator Enable",
-			"description": "Whether or not the LED blinks on motion detection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator: Blink on Motion",
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
-			"label": "Binary Sensor Report Enable",
-			"description": "Enable or disable sensor binary report when motion detected",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Binary Sensor Reports"
 		},
 		{
 			"#": "9",
-			"label": "Basic Set Level",
+			"label": "Group 2: Basic Set Level",
 			"description": "Turn on or off BASIC_SET",
 			"valueSize": 1,
 			"minValue": 0,
@@ -235,19 +193,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Off (0x00)",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "On (0xff)",
 					"value": 100
 				}
 			]
 		},
 		{
 			"#": "10",
-			"label": "Light Sensor Measure Interval",
-			"description": "The time interval for the light sensor to measure the ambient light intensity",
+			"label": "Brightness Measuring Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 30,
@@ -256,8 +213,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Light Intensity Differential Report",
-			"description": "The differential between current measured and previously reported value. If the differential value is larger than the settings, device will report this measured light intensity to controller",
+			"label": "Brightness Change Report Threshold",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -265,8 +221,7 @@
 		},
 		{
 			"#": "12",
-			"label": " Light Intensity Threshold",
-			"description": "Whether motion detection is enable or not",
+			"label": "Night/Day Brightness Threshold",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -274,43 +229,14 @@
 		},
 		{
 			"#": "13",
-			"label": " Light Intensity Associated Enable",
-			"description": "If enabled, if there is a motion event detected and the current light intensity is less than the settings in configuration 12, the device will send a BASIC_SET to nodes associated in group2. And if the current light intensity is larger than the settings in configuration 12, the device will not send BASIC_SET to nodes associated in group2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Report Motion Only At Night",
+			"description": "When enabled, the sensor will report motion only when the ambient brightness is below parameter #12."
 		},
 		{
 			"#": "14",
-			"label": " Motion Event Report Once Enable",
-			"description": "If enabled only reports motion once until device reports cleared event",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Repeat Motion Event While Active"
 		}
 	],
 	"metadata": {
