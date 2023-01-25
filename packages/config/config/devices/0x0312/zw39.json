@@ -59,7 +59,6 @@
 		{
 			"#": "9",
 			"$import": "~/templates/master_template.json#maximum_dim_level_0-99",
-			"defaultValue": 99,
 			"options": [
 				{
 					"label": "Disable",
@@ -69,7 +68,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Local dimmer speed control",
+			"label": "Local Dimmer Speed Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -77,11 +76,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control by paremeter 9",
+					"label": "Controlled by parameter 9",
 					"value": 0
 				},
 				{
-					"label": "On/off instantly",
+					"label": "Instant On/Off",
 					"value": 1
 				}
 			]
