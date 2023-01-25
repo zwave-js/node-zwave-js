@@ -185,7 +185,6 @@
 		{
 			"#": "9",
 			"label": "Group 2: Basic Set Level",
-			"description": "Turn on or off BASIC_SET",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -231,12 +230,22 @@
 			"#": "13",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Report Motion Only At Night",
-			"description": "When enabled, the sensor will report motion only when the ambient brightness is below parameter #12."
+			"description": "When enabled, the sensor will report motion only when the ambient brightness is below the value set in parameter #12."
 		},
 		{
 			"#": "14",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Repeat Motion Event While Active"
+		},
+		{
+			"#": "99",
+			"label": "Brightness Calibration Factor",
+			"valueSize": 2,
+			"unit": "1/1000",
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 1000,
+			"unsigned": true
 		}
 	],
 	"metadata": {
