@@ -180,7 +180,7 @@
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Binary Switch Reports to Lifeline",
 			"description": "Switch mode only",
-			"defaultValue": 1,
+			"defaultValue": 1
 		},
 		{
 			"#": "20",
