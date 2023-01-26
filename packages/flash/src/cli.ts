@@ -24,9 +24,12 @@ const verbose = !!argv.verbose;
 let firmware: Buffer;
 
 const driver = new Driver(port, {
-	logConfig: {
-		enabled: verbose,
-	},
+	logConfig: verbose
+		? {
+				enabled: true,
+				level: "silly",
+		  }
+		: { enabled: false },
 	testingHooks: {
 		skipNodeInterview: true,
 		loadConfiguration: false,

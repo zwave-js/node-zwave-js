@@ -76,9 +76,12 @@ export class BootloaderScreenParser extends Transform {
 		// Emit all full "screens"
 		let nulCharIndex: number;
 		while ((nulCharIndex = this.receiveBuffer.indexOf("\0")) > -1) {
-			const line = this.receiveBuffer.slice(0, nulCharIndex).trim();
+			const screen = this.receiveBuffer.slice(0, nulCharIndex).trim();
 			this.receiveBuffer = this.receiveBuffer.slice(nulCharIndex + 1);
-			this.push(line);
+
+			this.logger?.bootloaderScreen(screen);
+
+			this.push(screen);
 		}
 
 		// Emit single flow-control bytes
