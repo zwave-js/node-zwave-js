@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indicator is on when the plug is on, LED indicator is off when the plug is off",
+					"label": "On when plug is on, off when plug is off",
 					"value": 0
 				},
 				{
-					"label": "LED indicator is on when the plug is off, LED indicator is off when the plug is on",
+					"label": "On when plug is off, off when plug is on",
 					"value": 1
 				},
 				{
@@ -38,7 +38,6 @@
 		{
 			"#": "2",
 			"$import": "templates/zooz_template.json#auto_off_timer_duration",
-			"label": "Auto Turn-Off Timer Duration"
 		},
 		{
 			"#": "4",
