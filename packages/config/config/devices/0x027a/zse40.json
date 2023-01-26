@@ -6,14 +6,14 @@
 // Conditionals:
 // version 1.0: firmwareVersion >= 16.9 && firmwareVersion < 24.16
 // version 2.0: firmwareVersion >= 24.16 && firmwareVersion < 32.32
-// version 3.0: firmwareVersion >= 32.32 || (firmwareVersion >= 1.10 && firmwareVersion < 16.9)
+// version 3.0: firmwareVersion >= 32.32 || firmwareVersion >= 1.10 && firmwareVersion < 16.9
 
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": [
 		{
-			"$if": "firmwareVersion === 32.32 || (firmwareVersion >= 1.10 && firmwareVersion < 16.9)",
+			"$if": "firmwareVersion === 32.32 || firmwareVersion >= 1.10 && firmwareVersion < 16.9",
 			"value": "ZSE40 700"
 		},
 		// Fallback for non-700 series
@@ -38,7 +38,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"$if": "firmwareVersion >= 32.2 || (firmwareVersion >= 1.10 && firmwareVersion < 16.9)",
+			"$if": "firmwareVersion >= 32.2 || firmwareVersion >= 1.10 && firmwareVersion < 16.9",
 			"label": "Group 2",
 			"maxNodes": 5
 		}
@@ -190,7 +190,7 @@
 		{
 			"#": "7",
 			// Hardware version 3 has removed mode 4
-			"$if": "firmwareVersion >= 32.32 || (firmwareVersion >= 1.10 && firmwareVersion < 16.9)",
+			"$if": "firmwareVersion >= 32.32 || firmwareVersion >= 1.10 && firmwareVersion < 16.9",
 			"label": "LED Indicator Mode",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -239,7 +239,7 @@
 		{
 			"#": "8",
 			// Added in firmware version 32.2, still present in HW 3.0
-			"$if": "firmwareVersion >= 32.2 || (firmwareVersion >= 1.10 && firmwareVersion < 16.9)",
+			"$if": "firmwareVersion >= 32.2 || firmwareVersion >= 1.10 && firmwareVersion < 16.9",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Basic Set Reports",
 			"defaultValue": 1
