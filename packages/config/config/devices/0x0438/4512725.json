@@ -173,7 +173,7 @@
 		{
 			"#": "18",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
-			"description": "Depending on the operating mode this affects the relay or HVAC.",
+			"description": "Depending on the operating mode this affects the relay or HVAC."
 		},
 		{
 			"#": "19",
