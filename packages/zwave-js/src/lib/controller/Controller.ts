@@ -5424,7 +5424,8 @@ ${associatedNodes.join(", ")}`,
 			throw new ZWaveError(message, ZWaveErrorCodes.OTW_Update_Busy);
 		}
 
-		if (this.sdkVersionGte("7.0")) {
+		if (this.driver.isInBootloader() || this.sdkVersionGte("7.0")) {
+			// If the controller is stuck in bootloader mode, always use the 700 series update method
 			return this.firmwareUpdateOTW700(data);
 		} else if (
 			this.sdkVersionGte("6.50.0") &&
