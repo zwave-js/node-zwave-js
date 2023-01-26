@@ -39,95 +39,43 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Saving load state before power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Shutoff load",
-					"value": 0
-				},
-				{
-					"label": "Turn on load",
-					"value": 1
-				},
-				{
-					"label": "Save load state before power failure",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "3",
-			"label": "Enable/disable to send the basic report to the Lifeline when the load state changed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable to send Basic report",
-					"value": 0
-				},
-				{
-					"label": "Enable to send Basic report",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Lifeline: Send Basic Reports",
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Enable/disable over current or over load protection, report alarm when the load is over 16A if enabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Overload Protection",
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
-			"label": "External switch type",
+			"label": "External Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Push button switch",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Normal on/off switch",
+					"label": "Toggle",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Added to and removed from a network through external switch.\nWhen enabled this function, triple press the external\nswitch to be added to or removed from a network",
-			"description": "Note: if this function is enabled, when triple press the\nswitch rapidly, the device will be set to inclusion or\nexclusion mode, then device status will not be reported\n(basic report) during this process.",
+			"label": "Inclusion/Exclusion Using External Switch",
+			"description": "When enabled, triple pressing will put the device into inclusion/exclusion mode and not send status reports.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -144,7 +92,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Power change absolute threshold report, report when the power change value is over the threshold.\n'0' disables threshold report function.",
+			"label": "Power Change Report Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -153,18 +101,14 @@
 			"unit": "W",
 			"options": [
 				{
-					"label": "Disable absolute threshold report function",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Value of the power change absolute threshold (1-255), if power change value\nis over the threshold value, report the power change value using METER_REPORT",
-					"value": 255
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Current change absolute threshold",
+			"label": "Current Change Report Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -173,18 +117,14 @@
 			"unit": "0.1A",
 			"options": [
 				{
-					"label": "Disable absolute threshold function",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Value of the current change absolute threshold (1-255), if current change value is over the threshold value, report the current change value using METER_REPORT",
-					"value": 255
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "Voltage change absolute threshold",
+			"label": "Voltage Change Report Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -193,18 +133,14 @@
 			"unit": "V",
 			"options": [
 				{
-					"label": "Disable absolute threshold function",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Value of the voltage change absolute threshold (1-255), if voltage change value is over the threshold value, report the voltage change value using METER_REPORT",
-					"value": 255
 				}
 			]
 		},
 		{
 			"#": "13",
-			"label": "Time cycle to report the values of energy consumption, voltage,\ncurrent and load power actively",
+			"label": "Energy Reporting Interval",
 			"valueSize": 4,
 			"minValue": 60,
 			"maxValue": 2678400,
