@@ -1,0 +1,203 @@
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x041b",
+	"label": "TH6320ZW2007",
+	"description": "T6 Pro Z-Wave Programmable Thermostat with SmartStart",
+	"devices": [
+		{
+			"productType": "0x0011",
+			"productId": "0x0009"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/honeywell_template.json#schedule_type"
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#temperature_scale"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/honeywell_template.json#outdoor_temperature_sensor"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/honeywell_template.json#heating_equipment_type"
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/honeywell_template.json#reversing_valve"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/honeywell_template.json#cool_stages"
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/honeywell_template.json#heat_stages"
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/honeywell_template.json#auxiliary_emergency_control"
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/honeywell_template.json#auxiliary_heat_type"
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/honeywell_template.json#emergency_heat_type"
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/honeywell_template.json#fossil_kit_control"
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/honeywell_template.json#auto_changeover"
+		},
+		{
+			"#": "13",
+			"$import": "~/templates/honeywell_template.json#auto_differential"
+		},
+		{
+			"#": "14",
+			"$import": "~/templates/honeywell_template.json#high_cool_stage_finish"
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/honeywell_template.json#high_heat_stage_finish"
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/honeywell_template.json#auxiliary_heat_droop"
+		},
+		{
+			"#": "17",
+			"$import": "~/templates/honeywell_template.json#up_stage_timer_aux_heat"
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/honeywell_template.json#balance_point"
+		},
+		{
+			"#": "19",
+			"$import": "~/templates/honeywell_template.json#aux_heat_outdoor_lockout"
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/honeywell_template.json#cool_stage_1_cycle_rate"
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/honeywell_template.json#cool_stage_2_cycle_rate"
+		},
+		{
+			"#": "22",
+			"$import": "~/templates/honeywell_template.json#heat_stage_1_cycle_rate"
+		},
+		{
+			"#": "23",
+			"$import": "~/templates/honeywell_template.json#heat_stage_2_cycle_rate"
+		},
+		{
+			"#": "24",
+			"$import": "~/templates/honeywell_template.json#aux_heat_cycle_rate"
+		},
+		{
+			"#": "25",
+			"$import": "~/templates/honeywell_template.json#emergency_heat_cycle_rate"
+		},
+		{
+			"#": "26",
+			"$import": "~/templates/honeywell_template.json#compressor_protection"
+		},
+		{
+			"#": "27",
+			"$import": "~/templates/honeywell_template.json#adaptive_intelligent_recovery"
+		},
+		{
+			"#": "28",
+			"$import": "~/templates/honeywell_template.json#minimum_cool_temperature"
+		},
+		{
+			"#": "29",
+			"$import": "~/templates/honeywell_template.json#maximum_heat_temperature"
+		},
+		{
+			"#": "30",
+			"$import": "~/templates/honeywell_template.json#air_filters"
+		},
+		{
+			"#": "31",
+			"$import": "~/templates/honeywell_template.json#air_filter_1_reminder"
+		},
+		{
+			"#": "32",
+			"$import": "~/templates/honeywell_template.json#air_filter_2_reminder"
+		},
+		{
+			"#": "33",
+			"$import": "~/templates/honeywell_template.json#humidification_pad_reminder"
+		},
+		{
+			"#": "34",
+			"$import": "~/templates/honeywell_template.json#dehumidification_filter_reminder"
+		},
+		{
+			"#": "35",
+			"$import": "~/templates/honeywell_template.json#ventilation_filter_reminder"
+		},
+		{
+			"#": "36",
+			"$import": "~/templates/honeywell_template.json#uv_devices"
+		},
+		{
+			"#": "37",
+			"$import": "~/templates/honeywell_template.json#uv_bulb_1_reminder"
+		},
+		{
+			"#": "38",
+			"$import": "~/templates/honeywell_template.json#uv_bulb_2_reminder"
+		},
+		{
+			"#": "39",
+			"$import": "~/templates/honeywell_template.json#idle_brightness"
+		},
+		{
+			"#": "40",
+			"$import": "~/templates/master_template.json#clock_format"
+		},
+		{
+			"#": "41",
+			"$import": "~/templates/honeywell_template.json#daylight_saving"
+		},
+		{
+			"#": "42",
+			"$import": "~/templates/honeywell_template.json#temperature_offset"
+		},
+		{
+			"#": "43",
+			"$import": "~/templates/honeywell_template.json#humidity_offset"
+		},
+		{
+			"#": "44",
+			"$import": "~/templates/honeywell_template.json#temperature_resolution"
+		},
+		{
+			"#": "45",
+			"$import": "~/templates/honeywell_template.json#humidity_resolution"
+		}
+	],
+	"compat": {
+		// The device responds in a weird way to these requests which causes S2 collisions
+		"skipConfigurationNameQuery": true,
+		"skipConfigurationInfoQuery": true
+	}
+}

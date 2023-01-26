@@ -4,6 +4,49 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.5.2 (2023-01-26)
+### Bugfixes
+* The flasher now shows the raw output from the bootloader in verbose mode (#5364)
+
+### Config file changes
+* Add parameters for new Zooz ZEN72/74/77 firmwares, fix ZEN05 param 1 (#5317)
+* Support hardware version 2.0 for Zooz ZEN71, add parameter 17 (#5244)
+* Add wakeup instructions for Vision Security ZP3111-5 (#5275)
+* Add Airzone Aidoo Control HVAC unit (#5217)
+* Add fingerprint for Eurotronics Spirit (#5274)
+* Add configuration for Honeywell Thermostat TH6320ZW2007 (#5143)
+* Add Namron 4512725 thermostat wall plug (#5349)
+* Add Ring glass break sensor (#5149)
+* Add DragonTech WD-100 In-Wall Dimmer (#5283)
+* Add Namron 16 A switch and 4-channel remote control (#5282)
+* Clean up Zooz ZSE40 firmware version mess, add new parameters 9 and 10 (#5330)
+* Add parameter 24 to Zooz ZEN32, FW 10.30+ (#5329)
+* Add associations and metadata for Eaton RF9601 & RF9617 (#5314)
+* Allow higher pulse factor for NQ-9021 (#5269)
+* Correct config params for Logic Group ZSO7300 (#5255)
+
+## 10.5.1 (2023-01-25)
+### Features
+* Created an OTW firmware flasher utility CLI which can be used to flash Z-Wave controllers without a UI (#5362)
+
+### Bugfixes
+* Always use Security encapsulation for `Basic CC` commands on secure nodes (#5343)
+* Prevent accidentally setting certain log settings to undefined (#5341)
+
+### Config file changes
+* Add Inteset Motion Sensor (#5249, #5361)
+* Disable Supervision for HELTUN 700 series, FW 2.5 and below (#5357)
+* Correct Aeotec Multisensor 7, param 2 (#5206)
+* Update EvaLogik ZW39 parameters (#5175)
+* Add Fakro Solar ARZ Z-Wave/102 (#5166)
+* Update Zooz ZSE44 parameters (#5162)
+* Add MCO Home Technology Co. LTD MH-DS221 (#5138)
+* Disable Supervision for Schlage BE469ZP (#5359)
+
+### Changes under the hood
+* We now have a VSCode extension to help with authoring config files. This is automatically recommended when opening the repository. We strongly recommend using it.
+* The `generate-docs` workflow no longer runs in PRs from forks (where it fails anyways)
+
 ## 10.4.0 (2023-01-16)
 ### Features
 * Support OTW firmware updates of 500 and 700+ series controllers (#5321, #5326)

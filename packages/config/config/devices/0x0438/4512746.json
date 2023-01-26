@@ -1,0 +1,158 @@
+{
+	"manufacturer": "Namron",
+	"manufacturerId": "0x0438",
+	"label": "4512746",
+	"description": "Switch 16A",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0xd019"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Button 2",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Button 3",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button 4",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Lifeline: Send Basic Reports",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Overload Protection",
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"label": "External Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Inclusion/Exclusion Using External Switch",
+			"description": "When enabled, triple pressing will put the device into inclusion/exclusion mode and not send status reports.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Power Change Report Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"unit": "W",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Current Change Report Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"unit": "0.1A",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Voltage Change Report Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"unit": "V",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Energy Reporting Interval",
+			"valueSize": 4,
+			"minValue": 60,
+			"maxValue": 2678400,
+			"defaultValue": 1800,
+			"unsigned": true,
+			"unit": "seconds"
+		}
+	],
+	"metadata": {
+		"inclusion": "Triple press the action button on the switch, LED indicator will flash rapidly, it will set the switch into inclusion\nmode for 30 seconds, if there is no reply from the gateway, the device will quit inclusion mode after 30 seconds.\n2)When the value of parameter 5 is configured as 1, triple press the external switch rapidly within 1.5 seconds,\nLED indicator will flash rapidly, it will set the switch into inclusion mode for 30 seconds, if there is no reply from\nthe gateway, the device will quit inclusion mode after 30 seconds.\nThe LED indicator will stay solid on for 3 seconds if the device is added to the network successfully. The\nindicator will turn off if inclusion fails.",
+		"exclusion": "Triple press the action button on the switch, LED indicator will flash rapidly, it will set the switch into exclusion\nmode for 30 seconds, if there is no reply from the gateway, the device will quit exclusion mode after 30 seconds.\n2)When the value of parameter 5 is configured as 1, triple press the external switch rapidly within 1.5 seconds,\nLED indicator will flash rapidly, it will set the switch into exclusion mode for 30 seconds, if there is no reply from\nthe gateway, the device will quit exclusion mode after 30 seconds.",
+		"reset": "Press and hold down the action button for over 10 seconds, LED indicator flashes slowly, the switch will restart and reset to factory defaults.",
+		"manual": "https://www.elektroimportoren.no/docs/lib/4512746-Brukerveiledning-5.pdf"
+	}
+}

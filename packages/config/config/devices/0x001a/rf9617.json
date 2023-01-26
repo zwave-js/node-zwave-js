@@ -13,6 +13,17 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1",
@@ -95,5 +106,11 @@
 			"maxValue": 4,
 			"defaultValue": 2
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "This product may be added to a new or existing Z-Wave network. An Eaton Wiring Devices Z-Wave device has a blue LED,\nwhich will blink when the device is not included in a Z-Wave network. The LED stops blinking when the device is in a network.\n• This product works with other Z-Wave products from different vendors and product categories as part of the same network.\n• This product is a listening node and it will act as a repeater in the Z-Wave network. It will perform the repeater function with\nZ-Wave products from Eaton and from other Z-Wave vendors.\n• This secure Z-Wave Plus device will only associate with other secure devices based on the Z-Wave controller it’s being used with.\nPlease refer to instructions provided with the controller for more details.\nAdding Z-Wave Wireless switch to a Z-Wave Network:\n1. To include this device in a Z-Wave network, select the command on your Z-Wave controller for inclusion (Install, Add Device,\nAdd Node, Include Device, etc.). Then press the device ON/OFF switch one time to include it in the network.\n2. Based on the controller, the controller may ask you to scan the QR code on the device or manually enter 5 digit code under the\nQR code to install the device as a secured device. You may find this QR code on the device or included in device packaging.\n3. After the Device is added to the network, the LED will stop blinking. This indicates the device is installed in the Z-Wave network",
+		"exclusion": "Removing Z-Wave Wireless switch from a Z-Wave Network:\n1. To exclude this device from a Z-Wave network, select the setting on your Z-Wave controller for exclusion (Uninstall, Remove\nDevice, Remove Node, Exclude Device, etc.).\n2. Once your controller is in exclusion mode, press the device ON/OFF switch one time to exclude it from the network. The LED will start blinking",
+		"reset": "Local Reset (Please use this procedure only when the network primary controller is missing or otherwise inoperable).\nThe device could be reset locally. This will cause the device to be excluded from its network and restore to factory default.\nBefore leaving the network the switch will send a notification to the controller indicating its departure from the Z-Wave network.\n• Turn the device ON.\n• Press and hold ON/OFF button for 20 second till the LED flashes for the third time.\n• Release the ON/OFF button.\n• LED will start flashing rapidly. Once the LED starts blinking slowly, that indicates the device is not part of the network.",
+		"manual": "https://www.eaton.com/content/dam/eaton/products/wiring-devices-and-connectivity/wiring-devices/z-wave-plus/z-wave-plus-wireless-switch-accessory-switch-rf9601-rf9617-instruction-sheet.pdf"
+	}
 }

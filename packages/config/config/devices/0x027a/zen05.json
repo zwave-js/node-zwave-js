@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Always On",
+					"label": "On when plug is on, off when plug is off",
 					"value": 0
 				},
 				{
-					"label": "Follow Outlet",
+					"label": "On when plug is off, off when plug is on",
 					"value": 1
 				},
 				{
@@ -37,8 +37,7 @@
 		},
 		{
 			"#": "2",
-			"$import": "templates/zooz_template.json#auto_off_timer_duration",
-			"label": "Auto Turn-Off Timer Duration"
+			"$import": "templates/zooz_template.json#auto_off_timer_duration"
 		},
 		{
 			"#": "4",

@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/repo",
-  "version": "10.4.0",
+  "version": "10.5.2",
   "private": true,
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
@@ -57,6 +57,7 @@
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
+    "@zwave-js/flash": "workspace:*",
     "@zwave-js/host": "workspace:*",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/nvmedit": "workspace:*",
