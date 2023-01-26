@@ -1,8 +1,8 @@
 {
-	"manufacturer": "AIRZONE",
+	"manufacturer": "Airzone",
 	"manufacturerId": "0x044e",
 	"label": "AZAI6WSPFU2",
-	"description": "Aidoo Control Z-Wave™ HVAC unit",
+	"description": "Aidoo Control HVAC unit",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -11,7 +11,7 @@
 		}
 	],
 	"firmwareVersion": {
-    "min": "0.0",
-    "max": "255.255"
+		"min": "0.0",
+		"max": "255.255"
 	}
 }
