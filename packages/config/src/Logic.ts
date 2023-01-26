@@ -38,7 +38,11 @@ add_operation(
 );
 
 export function parseLogic(logic: string): RulesLogic {
-	return parse(logic);
+	try {
+		return parse(logic);
+	} catch (e: any) {
+		throw new Error(`Invalid logic: ${logic}\n${e.message}`);
+	}
 }
 
 export function evaluate(
