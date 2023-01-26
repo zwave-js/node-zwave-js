@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "2",
-			"$import": "templates/zooz_template.json#auto_off_timer_duration",
+			"$import": "templates/zooz_template.json#auto_off_timer_duration"
 		},
 		{
 			"#": "4",
