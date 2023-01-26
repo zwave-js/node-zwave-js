@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Device operating mode",
+			"label": "Operating Mode",
 			"description": "In Switch Mode, the device operates as a regular switch. In Thermostat Mode, the binary set command class will be invalid and the action button is disabled.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -47,7 +47,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Temperature compensation value",
+			"label": "Temperature Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": -50,
@@ -56,7 +56,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Over temperature Protection",
+			"label": "Overheat Protection",
 			"description": "Allowable range: 30-60",
 			"valueSize": 1,
 			"unit": "°C",
@@ -108,7 +108,6 @@
 		{
 			"#": "13",
 			"label": "Automatic Reporting: Power Change Threshold",
-			"description": "Allowable range: 1-255",
 			"valueSize": 1,
 			"unit": "W",
 			"minValue": 0,
@@ -125,7 +124,6 @@
 		{
 			"#": "14",
 			"label": "Automatic Reporting: Voltage Change Threshold",
-			"description": "Allowable range: 1-255",
 			"valueSize": 1,
 			"unit": "V",
 			"minValue": 0,
@@ -142,7 +140,6 @@
 		{
 			"#": "15",
 			"label": "Automatic Reporting: Current Change Threshold",
-			"description": "Allowable range: 1-255",
 			"valueSize": 1,
 			"unit": "0.1 A",
 			"minValue": 0,
@@ -175,31 +172,15 @@
 		},
 		{
 			"#": "18",
-			"label": "State After Power Reset",
-			"description": "State depends on operating mode",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Relay off (switch mode) / HVAC off (thermostat mode)",
-					"value": 0
-				},
-				{
-					"label": "Relay on (switch mode) / HVAC on (thermostat mode)",
-					"value": 1
-				},
-				{
-					"label": "Previous state",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
+			"description": "Depending on the operating mode this affects the relay or HVAC.",
 		},
 		{
 			"#": "19",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send SWITCH_BINARY_REPORT to Lifeline",
-			"description": "Enable/disable to send SWITCH_BINARY_REPORT to the Lifeline when the plug (under switch mode) state changes, reset power of the plug, and factory reset the plug."
+			"label": "Send Binary Switch Reports to Lifeline",
+			"description": "Switch mode only",
+			"defaultValue": 1,
 		},
 		{
 			"#": "20",
