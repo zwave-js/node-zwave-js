@@ -44,7 +44,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 65,
-		"defaultValue": 65,
+		"defaultValue": 0,
 		"unit": "°F",
 		"options": [
 			{
@@ -674,6 +674,88 @@
 		"minValue": -3,
 		"maxValue": 3,
 		"defaultValue": 0,
-		"unit": "°F"
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Off",
+				"value": 0
+			},
+			{
+				"label": "-1°F / -0.5°C",
+				"value": -1
+			},
+			{
+				"label": "-2°F / -1.0°C",
+				"value": -2
+			},
+			{
+				"label": "-3°F / -1.5°C",
+				"value": -3
+			},
+			{
+				"label": "+1°F / +0.5°C",
+				"value": 1
+			},
+			{
+				"label": "+2°F / +1.0°C",
+				"value": 2
+			},
+			{
+				"label": "+3°F / +1.5°C",
+				"value": 3
+			}
+		]
+	},
+	"humidity_offset": {
+		"label": "Humidity Offset",
+		"valueSize": 1,
+		"minValue": -12,
+		"maxValue": 12,
+		"defaultValue": 0,
+		"unit": "%"
+	},
+	"temperature_resolution": {
+		"label": "Temperature Resolution",
+		"description": "Min change before temperature is reported to the controller",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "0.5°F / 0.5°C",
+				"value": 0
+			},
+			{
+				"label": "1°F / 1.0°C",
+				"value": 1
+			},
+			{
+				"label": "2°F / 1.5°C",
+				"value": 2
+			},
+			{
+				"label": "3°F / 2.0°C",
+				"value": 3
+			},
+			{
+				"label": "4°F / 2.5°C",
+				"value": 4
+			},
+			{
+				"label": "5°F / 3.0°C",
+				"value": 5
+			}
+		]
+	},
+	"humidity_resolution": {
+		"label": "Humidity Resolution",
+		"description": "Min change before humidity is reported to the controller",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 5,
+		"defaultValue": 1,
+		"unit": "%"
 	}
 }

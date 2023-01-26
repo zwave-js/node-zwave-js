@@ -1,12 +1,12 @@
 {
 	"manufacturer": "Honeywell",
-	"manufacturerId": "0x0039",
-	"label": "TH6320ZW",
-	"description": "T6 Pro Z-Wave Programmable Thermostat",
+	"manufacturerId": "0x041b",
+	"label": "TH6320ZW2007",
+	"description": "T6 Pro Z-Wave Programmable Thermostat with SmartStart",
 	"devices": [
 		{
 			"productType": "0x0011",
-			"productId": "0x0008"
+			"productId": "0x0009"
 		}
 	],
 	"firmwareVersion": {
@@ -181,6 +181,18 @@
 		{
 			"#": "42",
 			"$import": "~/templates/honeywell_template.json#temperature_offset"
+		},
+		{
+			"#": "43",
+			"$import": "~/templates/honeywell_template.json#humidity_offset"
+		},
+		{
+			"#": "44",
+			"$import": "~/templates/honeywell_template.json#temperature_resolution"
+		},
+		{
+			"#": "45",
+			"$import": "~/templates/honeywell_template.json#humidity_resolution"
 		}
 	],
 	"compat": {
