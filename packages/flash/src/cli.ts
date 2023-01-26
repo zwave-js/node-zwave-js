@@ -88,8 +88,12 @@ async function flash() {
 		}
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	await driver.controller.firmwareUpdateOTW(firmware).catch(() => {});
+	try {
+		await driver.controller.firmwareUpdateOTW(firmware);
+	} catch (e: any) {
+		console.error("Failed to update firmware:", e.message);
+		process.exit(1);
+	}
 }
 
 async function main() {
