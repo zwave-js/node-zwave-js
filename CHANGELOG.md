@@ -4,6 +4,27 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The flasher now shows the raw output from the bootloader in verbose mode (#5364)
+
+### Config file changes
+* Add parameters for new Zooz ZEN72/74/77 firmwares, fix ZEN05 param 1 (#5317)
+* Support hardware version 2.0 for Zooz ZEN71, add parameter 17 (#5244)
+* Add wakeup instructions for Vision Security ZP3111-5 (#5275)
+* Add Airzone Aidoo Control HVAC unit (#5217)
+* Add fingerprint for Eurotronics Spirit (#5274)
+* Add configuration for Honeywell Thermostat TH6320ZW2007 (#5143)
+* Add Namron 4512725 thermostat wall plug (#5349)
+* Add Ring glass break sensor (#5149)
+* Add DragonTech WD-100 In-Wall Dimmer (#5283)
+* Add Namron 16 A switch and 4-channel remote control (#5282)
+* Clean up Zooz ZSE40 firmware version mess, add new parameters 9 and 10 (#5330)
+* Add parameter 24 to Zooz ZEN32, FW 10.30+ (#5329)
+* Add associations and metadata for Eaton RF9601 & RF9617 (#5314)
+* Allow higher pulse factor for NQ-9021 (#5269)
+* Correct config params for Logic Group ZSO7300 (#5255)
+
 ## 10.5.1 (2023-01-25)
 ### Features
 * Created an OTW firmware flasher utility CLI which can be used to flash Z-Wave controllers without a UI (#5362)
