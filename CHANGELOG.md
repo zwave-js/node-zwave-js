@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Use 700 series OTW method when already in bootloader mode instead of failing (#5365)
+
 ## 10.5.2 (2023-01-26)
 ### Bugfixes
 * The flasher now shows the raw output from the bootloader in verbose mode (#5364)
