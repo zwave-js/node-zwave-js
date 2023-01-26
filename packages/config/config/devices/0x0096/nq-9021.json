@@ -17,12 +17,24 @@
 	"paramInformation": [
 		{
 			"#": "1",
+			"$if": "firmwareVersion < 3.24",
 			"label": "Pulse factor",
 			"description": "Impulse or Rotation factor per KWh * 10",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1024,
+			"unsigned": true
+		},
+		{
+			"#": "1",
+			"$if": "firmwareVersion >= 3.24",
+			"label": "Pulse factor",
+			"description": "Impulse or Rotation factor per KWh * 10",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1000000,
+			"defaultValue": 10000,
 			"unsigned": true
 		},
 		{
