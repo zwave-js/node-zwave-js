@@ -2350,11 +2350,14 @@ export class Driver
 
 		this.isSoftResetting = false;
 
-		// Resume sending
-		this.unpauseSendThread();
-		// Soft-resetting disables any ongoing inclusion, so we need to reset
-		// the state that is tracked in the controller
-		this._controller?.setInclusionState(InclusionState.Idle);
+		// This is a bit hacky, but what the heck...
+		if (!this._enteringBootloader) {
+			// Resume sending
+			this.unpauseSendThread();
+			// Soft-resetting disables any ongoing inclusion, so we need to reset
+			// the state that is tracked in the controller
+			this._controller?.setInclusionState(InclusionState.Idle);
+		}
 	}
 
 	/** @internal */
@@ -4773,33 +4776,52 @@ ${handlers.length} left`,
 		return true;
 	}
 
+	private _enteringBootloader: boolean = false;
 	private _enterBootloaderPromise: DeferredPromise<void> | undefined;
 
 	/** @internal */
 	public async enterBootloader(): Promise<void> {
 		this.controllerLog.print("Entering bootloader...");
-		// await this.controller.toggleRF(false);
-		await this.trySoftReset();
-		this.pauseSendThread();
-		// It would be nicer to not hardcode the command here, but since we're switching stream parsers
-		// mid-command - thus ignoring the ACK, we can't really use the existing communication machinery
-		const promise = this.writeSerial(Buffer.from("01030027db", "hex"));
-		this.serial!.mode = ZWaveSerialMode.Bootloader;
-		await promise;
-
-		// Wait if the menu shows up
-		this._enterBootloaderPromise = createDeferredPromise();
-		const success = await Promise.race([
-			this._enterBootloaderPromise.then(() => true),
-			wait(5000, true).then(() => false),
-		]);
-		if (success) {
-			this.controllerLog.print("Entered bootloader");
-		} else {
-			throw new ZWaveError(
-				"Failed to enter bootloader",
-				ZWaveErrorCodes.Controller_Timeout,
+		this._enteringBootloader = true;
+		try {
+			// await this.controller.toggleRF(false);
+			// Avoid re-transmissions etc. communicating with the bootloader
+			this.rejectTransactions(
+				(_t) => true,
+				"The controller is entering bootloader mode.",
 			);
+
+			await this.trySoftReset();
+			this.pauseSendThread();
+
+			// Again, just to be very sure
+			this.rejectTransactions(
+				(_t) => true,
+				"The controller is entering bootloader mode.",
+			);
+
+			// It would be nicer to not hardcode the command here, but since we're switching stream parsers
+			// mid-command - thus ignoring the ACK, we can't really use the existing communication machinery
+			const promise = this.writeSerial(Buffer.from("01030027db", "hex"));
+			this.serial!.mode = ZWaveSerialMode.Bootloader;
+			await promise;
+
+			// Wait if the menu shows up
+			this._enterBootloaderPromise = createDeferredPromise();
+			const success = await Promise.race([
+				this._enterBootloaderPromise.then(() => true),
+				wait(5000, true).then(() => false),
+			]);
+			if (success) {
+				this.controllerLog.print("Entered bootloader");
+			} else {
+				throw new ZWaveError(
+					"Failed to enter bootloader",
+					ZWaveErrorCodes.Controller_Timeout,
+				);
+			}
+		} finally {
+			this._enteringBootloader = false;
 		}
 	}
 
