@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where ongoing transactions could be retried after entering the bootloader, corrupting 700+ series firmware updates (#5368)
+
 ## 10.5.3 (2023-01-26)
 ### Bugfixes
 * Use 700 series OTW method when already in bootloader mode instead of failing (#5365)
