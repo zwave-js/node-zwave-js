@@ -14,5 +14,11 @@ export function tryParseDSKFromQRCodeString(qr: string): string | undefined {
 }
 
 export function isValidDSK(dsk: string): boolean {
-	return /^(\d{5}-){7}\d{5}$/.test(dsk);
+	const patternMatches = /^(\d{5}-){7}\d{5}$/.test(dsk);
+	if (!patternMatches) return false;
+
+	return dsk
+		.split("-")
+		.map((p) => parseInt(p, 10))
+		.every((p) => p <= 0xffff);
 }
