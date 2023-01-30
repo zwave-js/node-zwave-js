@@ -11,6 +11,7 @@ import {
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
 import crypto from "crypto";
+import Keyv from "keyv";
 import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
 function serviceURL(): string {
@@ -20,7 +21,11 @@ function serviceURL(): string {
 const DOWNLOAD_TIMEOUT = 60000;
 // const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
 
-const requestCache = new Map();
+// Need to use a Keyv instance directly instead of a map, otherwise each request would
+// create a new Keyv instance, causing event emitter warnings
+// See https://github.com/jaredwray/cacheable-request/pull/101 for details
+const requestCache = new Keyv();
+requestCache.setMaxListeners(10000);
 
 // Queue requests to the firmware update service. Only allow few parallel requests so we can make some use of the cache.
 const requestQueue = new PQueue({ concurrency: 2 });
