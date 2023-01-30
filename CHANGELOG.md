@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Not really a feature
+* Add 800 series chip types (#4910)
+
+### Bugfixes
+* Prevent "possible memory leak" warnings caused by `got` caching (#5371)
+* When checking if a DSK is valid, also check its values, not only the format (#5376)
+
+### Config file changes
+* Define Lifeline association for Secure Meters SRT322 (#5370)
+* Add ZVIDAR Z-DWS-V01, Z-DG-V01 and Sunricher SR-ZV9001T4-DIM (#5277)
+* Disable Supervision for Minoston MP21Z (#5377)
+* Add Quby Energy Meter Reader (#5379)
+* Correct Zooz ZEN15 parameter 152 value size (#5378)
+
 ## 10.5.4 (2023-01-27)
 ### Bugfixes
 * Fixed an issue where ongoing transactions could be retried after entering the bootloader, corrupting 700+ series firmware updates (#5368)
