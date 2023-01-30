@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.5.5 (2023-01-30)
 ### Not really a feature
 * Add 800 series chip types (#4910)
 
