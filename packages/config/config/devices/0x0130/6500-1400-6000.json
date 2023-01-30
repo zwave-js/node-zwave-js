@@ -1,0 +1,77 @@
+{
+	"manufacturer": "Quby",
+	"manufacturerId": "0x0130",
+	"label": "6500-1400-6000",
+	"description": "Energy Meter Reader",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1281
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Analog Gas/Heat Port Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Analog Gas/Heat Port Resolution",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 400,
+			"defaultValue": 400,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Analog Electricity Port Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Analog Electricity Port Resolution",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 400,
+			"defaultValue": 400,
+			"unsigned": true
+		},
+		{
+			"#": "255",
+			"label": "Restart Device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "To add the Energy Meter Reader into a Z-Wave network, the inclu-sion process should be started on the controller. In factory default mode, the Energy Meter Reader will try to join a Z-Wave network automatically after being plugged into a power socket. If the Energy Meter Reader was previously included in a Z-Wave network, or was not just plugged into a power socket, one needs to triple-press the button (quickly)",
+		"exclusion": "To remove the Energy Meter Reader from a Z-wave network, the exclusion process should be started on the controller. The button on the Energy Meter Reader should then be triple-pressed (quickly)",
+		"reset": "The Energy Meter Reader can be reset to factory default by pressing and holding the button for approximately 10 seconds. This will reset the entire device to factory default, also removing the Z-Wave set-tings. After the reset is complete, both LEDs will blink a single time (indicating startup). If the device was connected to a Z-Wave net-work, it will no longer be connected after reset.\nPlease use this procedure only in the event that the primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1281/Manual%20meteradapter.pdf"
+	}
+}
