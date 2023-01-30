@@ -2,7 +2,7 @@
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0000",
 	"label": "SR-ZV9001T4-DIM",
-	"description": "Z-Wave Wall Controller.",
+	"description": "Z-Wave Wall Controller",
 	"devices": [
 		{
 			"productType": "0x0003",

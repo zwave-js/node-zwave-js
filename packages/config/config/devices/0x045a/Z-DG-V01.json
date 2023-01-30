@@ -2,7 +2,7 @@
 	"manufacturer": "ZVIDAR",
 	"manufacturerId": "0x045a",
 	"label": "Z-DG-V01",
-	"description": "800 Series-based Controller",
+	"description": "800 Series USB Controller",
 	"devices": [
 		{
 			"productType": "0x0004",
