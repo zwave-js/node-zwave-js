@@ -579,7 +579,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Returns the node with the given DSK */
 	public getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined {
-		if (typeof dsk === "string") dsk = dskFromString(dsk);
+		try {
+			if (typeof dsk === "string") dsk = dskFromString(dsk);
+		} catch (e) {
+			// Return undefined if the DSK is invalid
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Argument_Invalid)
+				return undefined;
+			throw e;
+		}
 		for (const node of this._nodes.values()) {
 			if (node.dsk?.equals(dsk)) return node;
 		}
