@@ -16,7 +16,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
@@ -26,17 +26,31 @@
 			"#": "1",
 			"label": "Analog Gas/Heat Port Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Gas",
+					"value": 1
+				},
+				{
+					"label": "Heat",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "2",
 			"label": "Analog Gas/Heat Port Resolution",
 			"valueSize": 4,
+			"unit": "pulses/(m³ or MJ)",
 			"minValue": 0,
-			"maxValue": 400,
+			"maxValue": 4294967295,
 			"defaultValue": 400,
 			"unsigned": true
 		},
@@ -44,17 +58,31 @@
 			"#": "3",
 			"label": "Analog Electricity Port Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Import",
+					"value": 1
+				},
+				{
+					"label": "Export",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "4",
 			"label": "Analog Electricity Port Resolution",
 			"valueSize": 4,
+			"unit": "pulses/kWh",
 			"minValue": 0,
-			"maxValue": 400,
+			"maxValue": 4294967295,
 			"defaultValue": 400,
 			"unsigned": true
 		},
@@ -62,10 +90,23 @@
 			"#": "255",
 			"label": "Restart Device",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Restart entire device",
+					"value": 1
+				},
+				{
+					"label": "Restart metering chip",
+					"value": 2
+				}
+			]
 		}
 	],
 	"metadata": {
