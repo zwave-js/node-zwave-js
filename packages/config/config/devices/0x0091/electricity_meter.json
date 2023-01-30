@@ -1,17 +1,27 @@
 {
 	"manufacturer": "Kamstrup A/S",
 	"manufacturerId": "0x0091",
-	"label": "electricity_meter",
-	"description": "Electricity meters",
+	"label": "Slave Module",
+	"description": "Electricity Meter",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0091",
+			"productId": "0x0001", // This is incorrect in the ZWA DB (0x0091)
 			"zwaveAllianceId": 255
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device reports support for Multi Channel CC v2, but does not respond to any commands
+				"0x60": {
+					"endpoints": "*"
+				}
+			}
+		}
 	}
 }
