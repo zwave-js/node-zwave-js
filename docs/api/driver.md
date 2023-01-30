@@ -78,14 +78,6 @@ disableStatistics(): void
 
 Disable sending usage statistics.
 
-### `statisticsEnabled`
-
-```ts
-statisticsEnabled(): boolean
-```
-
-Returns whether reporting usage statistics is currently enabled.
-
 ### `getSupportedCCVersionForEndpoint`
 
 ```ts
@@ -275,6 +267,14 @@ getLogConfig(): LogConfig
 
 Returns the current logging configuration.
 
+### `updateUserAgent`
+
+```ts
+updateUserAgent(components: Record<string, string | null | undefined>): void
+```
+
+Adds or updates individual components (name => version) of the user agent. By setting a version to `null` or `undefined`, the component will be removed from the user agent.
+
 ### `setPreferredScales`
 
 ```ts
@@ -282,6 +282,23 @@ setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void
 ```
 
 Configures a new set of preferred sensor scales without having to restart the driver. The `scales` argument has the same type as `preferences.scales` in [`ZWaveOptions`](#ZWaveOptions).
+
+### `updateOptions`
+
+```ts
+updateOptions(options: DeepPartial<EditableZWaveOptions>): void
+```
+
+Updates a subset of the driver options without having to restart the driver. The following properties from [`ZWaveOptions`](#ZWaveOptions) are supported:
+
+-   `disableOptimisticValueUpdate`
+-   `emitValueUpdateAfterSetValue`
+-   `inclusionUserCallbacks`
+-   `interview`
+-   `logConfig`
+-   `preferences`
+-   `preserveUnknownValues`
+-   `userAgent` (behaves like `updateUserAgent`)
 
 ### `checkForConfigUpdates`
 
@@ -346,15 +363,32 @@ readonly allNodesReady: boolean
 
 Returns `true` after the `"all nodes ready"` event has been emitted. This is useful for client-server setups where listeners might not be set up while the driver is initializing.
 
+### `statisticsEnabled`
+
+```ts
+readonly statisticsEnabled: boolean
+```
+
+Returns whether reporting usage statistics is currently enabled.
+
+### `userAgent`
+
+```ts
+readonly userAgent: string
+```
+
+Returns the user agent string used for service requests.
+
 ## Driver events
 
 The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are implemented:
 
-| Event               | Description                                                                                                                                                                                          |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"error"`           | Is emitted when the underlying serial port emits an error or invalid data is received. You **must** add a listener for this event, otherwise unhandled `"error"` events will crash your application! |
-| `"driver ready"`    | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                     |
-| `"all nodes ready"` | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                             |
+| Event                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"error"`            | Is emitted when the underlying serial port emits an error or invalid data is received. You **must** add a listener for this event, otherwise unhandled `"error"` events will crash your application!                                                                                                                                                                                                                                                                             |
+| `"driver ready"`     | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                                                                                                                                                                                                                                                                                                 |
+| `"all nodes ready"`  | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                                                                                                                                                                                                                                                                                                         |
+| `"bootloader ready"` | Is emitted when the controller is in recovery mode (e.g. after a failed firmware upgrade) and the bootloader has been entered. This behavior is opt-in using the `allowBootloaderOnly` flag of the [`ZWaveOptions`](#ZWaveOptions). If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image. The `"driver ready"` event will not be emitted and commands attempting to talk to the serial API will fail in this mode. |
 
 ## Interfaces
 
@@ -393,6 +427,7 @@ interface LogConfig {
 	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
+	maxFiles: number;
 	nodeFilter?: number[];
 	filename: string;
 	forceConsole: boolean;
@@ -531,13 +566,13 @@ The RSSI is either a number indicating the value in dBm or one of the special va
 <!-- #import RSSI from "zwave-js" -->
 
 ```ts
-declare type RSSI = number | RssiError;
+type RSSI = number | RssiError;
 ```
 
 <!-- #import RssiError from "zwave-js" -->
 
 ```ts
-declare enum RssiError {
+enum RssiError {
 	NotAvailable = 127,
 	ReceiverSaturated = 126,
 	NoSignalDetected = 125,
@@ -547,11 +582,11 @@ declare enum RssiError {
 <!-- #import ProtocolDataRate from "zwave-js" -->
 
 ```ts
-declare enum ProtocolDataRate {
-	ZWave_9k6 = 1,
-	ZWave_40k = 2,
-	ZWave_100k = 3,
-	LongRange_100k = 4,
+enum ProtocolDataRate {
+	ZWave_9k6 = 0x01,
+	ZWave_40k = 0x02,
+	ZWave_100k = 0x03,
+	LongRange_100k = 0x04,
 }
 ```
 
@@ -780,6 +815,24 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		/** API key for the Z-Wave JS Firmware Update Service (https://github.com/zwave-js/firmware-updates/) */
 		firmwareUpdateService?: string;
 	};
+
+	/**
+	 * Normally, the driver expects to start in Serial API mode and enter the bootloader on demand. If in bootloader,
+	 * it will try to exit it and enter Serial API mode again.
+	 *
+	 * However there are situations where a controller may be stuck in bootloader mode and no Serial API is available.
+	 * In this case, the driver startup will fail, unless this option is set to `true`.
+	 *
+	 * If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image.
+	 * Commands attempting to talk to the serial API will fail.
+	 */
+	allowBootloaderOnly?: boolean;
+
+	/**
+	 * An object with application/module/component names and their versions.
+	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
+	 */
+	userAgent?: Record<string, string>;
 }
 ````
 

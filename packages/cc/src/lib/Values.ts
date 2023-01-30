@@ -171,7 +171,7 @@ function defineStaticCCValue<
 		},
 		endpoint: (endpoint: number = 0) => {
 			if (!_blueprint.options.supportsEndpoints) endpoint = 0;
-			return { ...valueId, endpoint };
+			return { ...valueId, endpoint } as any;
 		},
 		is: (testValueId) => {
 			return (
@@ -229,7 +229,7 @@ function defineDynamicCCValue<
 			},
 			endpoint: (endpoint: number = 0) => {
 				if (!options.supportsEndpoints) endpoint = 0;
-				return { ...valueId, endpoint };
+				return { ...valueId, endpoint } as any;
 			},
 			get meta() {
 				return { ...ValueMetadata.Any, ...actualBlueprint.meta } as any;
@@ -609,6 +609,7 @@ export interface CCValues {
 	"Scene Activation": typeof import("../cc/SceneActivationCC").SceneActivationCCValues;
 	"Scene Actuator Configuration": typeof import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCValues;
 	"Scene Controller Configuration": typeof import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCValues;
+	"Schedule Entry Lock": typeof import("../cc/ScheduleEntryLockCC").ScheduleEntryLockCCValues;
 	"Sound Switch": typeof import("../cc/SoundSwitchCC").SoundSwitchCCValues;
 	Supervision: typeof import("../cc/SupervisionCC").SupervisionCCValues;
 	"Thermostat Fan Mode": typeof import("../cc/ThermostatFanModeCC").ThermostatFanModeCCValues;

@@ -222,5 +222,12 @@
 			"#": "255",
 			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_complete"
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Set the controller in inclusion mode, then press the central button quickly three times in a row",
+		"exclusion": "Set the controller in exclusion mode, then press the central button quickly three times in a row",
+		"wakeup": "Press the central button once",
+		"reset": "Keep the button pressed for 10 seconds. Then the green LED will start blinking. Release the button, when the LED stops blinking. Your device is reset to factory default now.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3876/Ae%CC%88rQ_Manual%20Extended-2_4.pdf"
+	}
 }

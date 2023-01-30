@@ -1,0 +1,16 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "14284 / ZW4201",
+	"description": "Plug-in Outdoor Switch, 500S",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -51,7 +51,7 @@
 				"value": 2
 			}
 		],
-		"label": "Auto Timer Time Unit"
+		"label": "Auto Timer Unit"
 	},
 	"auto_timer_duration_base": {
 		"valueSize": 4,
@@ -102,7 +102,7 @@
 		]
 	},
 	"led_indicator_brightness": {
-		"label": "LED Indicator Brightness Level",
+		"label": "LED Indicator Brightness",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -206,11 +206,59 @@
 	},
 	"dimmer_ramp_rate": {
 		"$import": "~/templates/master_template.json#base_0-99_nounit",
-		"label": "Dimmer ramp rate (fade-in / fade-out effect for on / off operation) when operated manually",
+		"label": "Ramp Rate Off/On (Manual Control)",
 		"unit": "seconds",
 		"options": [
 			{
 				"label": "Instant on/off",
+				"value": 0
+			}
+		]
+	},
+	"dimmer_on_ramp_rate": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Ramp Rate On (Manual Control)",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant on",
+				"value": 0
+			}
+		]
+	},
+	"dimmer_off_ramp_rate": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Ramp Rate Off (Manual Control)",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant off",
+				"value": 0
+			}
+		]
+	},
+	"zwave_on_dimmer_ramp_rate": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Ramp Rate On (Z-Wave)",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant on",
+				"value": 0
+			}
+		]
+	},
+	"zwave_off_dimmer_ramp_rate": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Ramp Rate Off (Z-Wave)",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant off",
 				"value": 0
 			}
 		]
@@ -338,6 +386,16 @@
 	"local_dimming_speed": {
 		"label": "Local Dimming Speed",
 		"description": "The time it takes to get from 0% to 100% brightness when pressing and holding the paddle.",
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 5,
+		"unsigned": true
+	},
+	"local_dimming_speed_group_3_and_4": {
+		"label": "Local Dimming Speed (Dimmer and Group 3 and 4)",
+		"description": "The time it takes to get from 0% to 100% brightness of dimmer and smart bulbs associated with Group 3 and 4 when pressing and holding the paddle.",
 		"valueSize": 1,
 		"unit": "seconds",
 		"minValue": 1,

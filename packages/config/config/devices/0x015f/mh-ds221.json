@@ -1,0 +1,140 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-DS221",
+	"description": "Micro Switch",
+	"devices": [
+		{
+			"productType": "0xd221",
+			"productId": "0x7102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"defaultValue": 0
+		},
+		{
+			"#": "2",
+			"label": "External Switch Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "External Switch Behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Without specified on/off position",
+					"value": 0
+				},
+				{
+					"label": "With specified on/off position",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Manual Operation During Auto Turn-Off",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"label": "Auto Turn-Off Timer",
+			"unit": "100ms",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Reports To Group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On/Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				},
+				{
+					"label": "None",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Smart Switch Mode",
+			"description": "When enabled, local operation is disabled"
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Z-Wave Control",
+			"defaultValue": 0
+		},
+		{
+			"#": "255",
+			"label": "Factory reset",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Factory reset",
+					"value": 85
+				}
+			]
+		}
+	]
+}

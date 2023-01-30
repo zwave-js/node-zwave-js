@@ -1,0 +1,29 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14309 / ZW4106",
+	"description": "Plug-in 2-Outlet Switch, Simultaneous, 500S",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3035",
+			"zwaveAllianceId": 1402
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network.\n2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart switch to include it in the network.\n3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network.\n2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart switch to exclude it from the network.",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1402/14309%20QSG.pdf"
+	}
+}

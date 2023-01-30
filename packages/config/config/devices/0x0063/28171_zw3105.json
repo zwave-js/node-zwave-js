@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "28171 / ZW3105",
-	"description": "Plug-in Smart Dimmer (Single Plug)",
+	"description": "Plug-in 2-Outlet Dimmer, 1 Controlled, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",

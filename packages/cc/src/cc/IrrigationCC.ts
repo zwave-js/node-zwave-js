@@ -604,7 +604,7 @@ export class IrrigationCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async setSystemConfig(
 		config: IrrigationCCSystemConfigSetOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.SystemConfigSet,
@@ -616,7 +616,7 @@ export class IrrigationCCAPI extends CCAPI {
 			...config,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -654,7 +654,7 @@ export class IrrigationCCAPI extends CCAPI {
 	@validateArgs()
 	public async setValveConfig(
 		options: IrrigationCCValveConfigSetOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveConfigSet,
@@ -666,7 +666,7 @@ export class IrrigationCCAPI extends CCAPI {
 			...options,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -731,7 +731,7 @@ export class IrrigationCCAPI extends CCAPI {
 	public async setValveTable(
 		tableId: number,
 		entries: ValveTableEntry[],
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveTableSet,
@@ -760,7 +760,7 @@ export class IrrigationCCAPI extends CCAPI {
 			entries,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -859,7 +859,7 @@ export class IrrigationCCAPI extends CCAPI {
 			options[property as keyof IrrigationCCSystemConfigSetOptions] =
 				value as any;
 
-			await this.setSystemConfig(options);
+			return this.setSystemConfig(options);
 		} else if (property === "shutoff") {
 			return this.shutoffSystem(0);
 		} else if (
@@ -895,7 +895,7 @@ export class IrrigationCCAPI extends CCAPI {
 				}
 				(options as any)[propertyKey] = value;
 
-				await this.setValveConfig(options);
+				return this.setValveConfig(options);
 			} else if (propertyKey === "duration") {
 				// The run duration needs to be set separately from triggering the run
 				// So this is okay
@@ -1424,6 +1424,7 @@ export type IrrigationCCSystemConfigSetOptions = {
 };
 
 @CCCommand(IrrigationCommand.SystemConfigSet)
+@useSupervision()
 export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1779,6 +1780,7 @@ export type IrrigationCCValveConfigSetOptions = {
 };
 
 @CCCommand(IrrigationCommand.ValveConfigSet)
+@useSupervision()
 export class IrrigationCCValveConfigSet extends IrrigationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -2094,6 +2096,7 @@ interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(IrrigationCommand.ValveTableSet)
+@useSupervision()
 export class IrrigationCCValveTableSet extends IrrigationCC {
 	public constructor(
 		host: ZWaveHost,

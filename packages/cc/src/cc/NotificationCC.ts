@@ -8,6 +8,7 @@ import {
 import {
 	CommandClasses,
 	Duration,
+	encodeBitMask,
 	isZWaveError,
 	IZWaveNode,
 	Maybe,
@@ -15,6 +16,7 @@ import {
 	MessagePriority,
 	MessageRecord,
 	parseBitMask,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ValueMetadataNumeric,
@@ -41,6 +43,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
 import * as ccUtils from "../lib/utils";
@@ -192,7 +195,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async sendReport(
 		options: NotificationCCReportOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Report,
@@ -203,7 +206,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -226,7 +229,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	public async set(
 		notificationType: number,
 		notificationStatus: boolean,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Set,
@@ -238,7 +241,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			notificationType,
 			notificationStatus,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -626,6 +629,7 @@ interface NotificationCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(NotificationCommand.Set)
+@useSupervision()
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -680,6 +684,7 @@ export type NotificationCCReportOptions =
 	  };
 
 @CCCommand(NotificationCommand.Report)
+@useSupervision()
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1120,11 +1125,14 @@ export class NotificationCCGet extends NotificationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.alarmType = this.payload[0] || undefined;
+			if (this.payload.length >= 2) {
+				this.notificationType = this.payload[1] || undefined;
+				if (this.payload.length >= 3 && this.notificationType != 0xff) {
+					this.notificationEvent = this.payload[2];
+				}
+			}
 		} else {
 			if ("alarmType" in options) {
 				this.alarmType = options.alarmType;
@@ -1182,34 +1190,65 @@ export class NotificationCCGet extends NotificationCC {
 	}
 }
 
+export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
+	supportsV1Alarm: boolean;
+	supportedNotificationTypes: number[];
+}
+
 @CCCommand(NotificationCommand.SupportedReport)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| NotificationCCSupportedReportOptions
+			| CommandClassDeserializationOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this.supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
-		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
-		validatePayload(
-			numBitMaskBytes > 0,
-			this.payload.length >= 1 + numBitMaskBytes,
-		);
-		const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
-		this.supportedNotificationTypes = parseBitMask(
-			notificationBitMask,
-			// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
-			0,
-		);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
+			const numBitMaskBytes = this.payload[0] & 0b0001_1111;
+			validatePayload(
+				numBitMaskBytes > 0,
+				this.payload.length >= 1 + numBitMaskBytes,
+			);
+			const notificationBitMask = this.payload.slice(
+				1,
+				1 + numBitMaskBytes,
+			);
+			this.supportedNotificationTypes = parseBitMask(
+				notificationBitMask,
+				// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
+				0,
+			);
+		} else {
+			this.supportsV1Alarm = options.supportsV1Alarm;
+			this.supportedNotificationTypes =
+				options.supportedNotificationTypes;
+		}
 	}
 
 	@ccValue(NotificationCCValues.supportsV1Alarm)
-	public readonly supportsV1Alarm: boolean;
+	public supportsV1Alarm: boolean;
 
 	@ccValue(NotificationCCValues.supportedNotificationTypes)
-	public readonly supportedNotificationTypes: readonly number[];
+	public supportedNotificationTypes: number[];
+
+	public serialize(): Buffer {
+		const bitMask = encodeBitMask(
+			this.supportedNotificationTypes,
+			Math.max(...this.supportedNotificationTypes),
+			0,
+		);
+		this.payload = Buffer.concat([
+			Buffer.from([
+				(this.supportsV1Alarm ? 0b1000_0000 : 0) | bitMask.length,
+			]),
+			bitMask,
+		]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -1233,30 +1272,43 @@ export class NotificationCCSupportedReport extends NotificationCC {
 @expectedCCResponse(NotificationCCSupportedReport)
 export class NotificationCCSupportedGet extends NotificationCC {}
 
+export interface NotificationCCEventSupportedReportOptions
+	extends CCCommandOptions {
+	notificationType: number;
+	supportedEvents: number[];
+}
+
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| NotificationCCEventSupportedReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this._notificationType = this.payload[0];
-		const numBitMaskBytes = this.payload[1] & 0b0001_1111;
-		if (numBitMaskBytes === 0) {
-			// Notification type is not supported
-			this._supportedEvents = [];
-			return;
-		}
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.notificationType = this.payload[0];
+			const numBitMaskBytes = this.payload[1] & 0b000_11111;
+			if (numBitMaskBytes === 0) {
+				// Notification type is not supported
+				this.supportedEvents = [];
+				return;
+			}
 
-		validatePayload(this.payload.length >= 2 + numBitMaskBytes);
-		const eventBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
-		this._supportedEvents = parseBitMask(
-			eventBitMask,
-			// In this mask, bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
-			0,
-		);
+			validatePayload(this.payload.length >= 2 + numBitMaskBytes);
+			const eventBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
+			this.supportedEvents = parseBitMask(
+				eventBitMask,
+				// In this mask, bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
+				0,
+			);
+		} else {
+			this.notificationType = options.notificationType;
+			this.supportedEvents = options.supportedEvents;
+		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
@@ -1266,14 +1318,14 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		this.setValue(
 			applHost,
 			NotificationCCValues.supportedNotificationEvents(
-				this._notificationType,
+				this.notificationType,
 			),
-			this._supportedEvents,
+			this.supportedEvents,
 		);
 
 		// For each event, predefine the value metadata
 		const notificationConfig = applHost.configManager.lookupNotification(
-			this._notificationType,
+			this.notificationType,
 		);
 
 		if (!notificationConfig) {
@@ -1281,12 +1333,13 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			this.setMetadata(
 				applHost,
 				NotificationCCValues.unknownNotificationType(
-					this._notificationType,
+					this.notificationType,
 				),
 			);
 		} else {
 			// This is a standardized notification
-			for (const value of this._supportedEvents) {
+			let isFirst = true;
+			for (const value of this.supportedEvents) {
 				// Find out which property we need to update
 				const valueConfig = notificationConfig.lookupValue(value);
 				if (valueConfig?.type === "state") {
@@ -1296,13 +1349,18 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 							valueConfig.variableName,
 						);
 
+					// After we've created the metadata initially, extend it
 					const metadata = getNotificationValueMetadata(
-						undefined,
+						isFirst
+							? undefined
+							: this.getMetadata(applHost, notificationValue),
 						notificationConfig,
 						valueConfig,
 					);
 
 					this.setMetadata(applHost, notificationValue, metadata);
+
+					isFirst = false;
 				}
 			}
 		}
@@ -1310,14 +1368,22 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return true;
 	}
 
-	private _notificationType: number;
-	public get notificationType(): number {
-		return this._notificationType;
-	}
+	public notificationType: number;
+	public supportedEvents: number[];
 
-	private _supportedEvents: number[];
-	public get supportedEvents(): readonly number[] {
-		return this._supportedEvents;
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.notificationType, 0]);
+		if (this.supportedEvents.length > 0) {
+			const bitMask = encodeBitMask(
+				this.supportedEvents,
+				Math.max(...this.supportedEvents),
+				0,
+			);
+			this.payload[1] = bitMask.length;
+			this.payload = Buffer.concat([this.payload, bitMask]);
+		}
+
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1359,11 +1425,8 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.notificationType = this.payload[0];
 		} else {
 			this.notificationType = options.notificationType;
 		}

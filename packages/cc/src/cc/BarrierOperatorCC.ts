@@ -202,7 +202,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 	public async setEventSignaling(
 		subsystemType: SubsystemType,
 		subsystemState: SubsystemState,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.EventSignalingSet,
@@ -215,7 +215,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			subsystemState,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -258,7 +258,14 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.setEventSignaling(propertyKey, value);
+			const result = await this.setEventSignaling(propertyKey, value);
+
+			// Verify the change after a short delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property }, value, { transition: "fast" });
+			}
+
+			return result;
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -511,6 +518,7 @@ interface BarrierOperatorCCEventSignalingSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(BarrierOperatorCommand.EventSignalingSet)
+@useSupervision()
 export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	public constructor(
 		host: ZWaveHost,

@@ -491,7 +491,7 @@
 		"label": "Power Change Threshold",
 		"valueSize": 2,
 		"unit": "W",
-		"minValue": 0,
+		"minValue": 1,
 		"maxValue": 500,
 		"defaultValue": 50,
 		"unsigned": true
@@ -500,7 +500,7 @@
 		"label": "Power Overload Limit",
 		"valueSize": 2,
 		"unit": "W",
-		"minValue": 0,
+		"minValue": 1,
 		"maxValue": 3000,
 		"defaultValue": 2900,
 		"unsigned": true
@@ -522,7 +522,7 @@
 				"value": 1
 			},
 			{
-				"label": "LED set by parameters 6 and 7",
+				"label": "Colors set by parameters 6 and 7",
 				"value": 2
 			}
 		]

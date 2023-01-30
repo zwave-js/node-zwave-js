@@ -1,5 +1,9 @@
 import type { ConfigManager } from "@zwave-js/config";
-import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	SupervisionResult,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	Maybe,
@@ -35,6 +39,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { IndicatorCommand } from "../lib/_Types";
@@ -179,7 +184,7 @@ export class IndicatorCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.set(value);
+			return this.set(value);
 		} else if (
 			typeof property === "number" &&
 			typeof propertyKey === "number"
@@ -201,7 +206,7 @@ export class IndicatorCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.set([
+			return this.set([
 				{
 					indicatorId: property,
 					propertyId: propertyKey,
@@ -211,8 +216,6 @@ export class IndicatorCCAPI extends CCAPI {
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
-
-		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -247,7 +250,9 @@ export class IndicatorCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async set(value: number | IndicatorObject[]): Promise<void> {
+	public async set(
+		value: number | IndicatorObject[],
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Set);
 
 		const cc = new IndicatorCCSet(this.applHost, {
@@ -255,7 +260,7 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...(typeof value === "number" ? { value } : { values: value }),
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -297,14 +302,14 @@ export class IndicatorCCAPI extends CCAPI {
 	/**
 	 * Instructs the node to identify itself. Available starting with V3 of this CC.
 	 */
-	public async identify(): Promise<void> {
-		if (this.version <= 3) {
+	public async identify(): Promise<SupervisionResult | undefined> {
+		if (this.version < 3) {
 			throw new ZWaveError(
 				`The identify command is only supported in Version 3 and above`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		await this.set([
+		return this.set([
 			{
 				indicatorId: 0x50,
 				propertyId: 0x03,
@@ -499,6 +504,7 @@ type IndicatorCCSetOptions =
 	  };
 
 @CCCommand(IndicatorCommand.Set)
+@useSupervision()
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
 		host: ZWaveHost,

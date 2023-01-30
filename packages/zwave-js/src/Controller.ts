@@ -18,8 +18,12 @@ export type { ControllerStatistics } from "./lib/controller/ControllerStatistics
 export { ZWaveFeature } from "./lib/controller/Features";
 export * from "./lib/controller/Inclusion";
 export {
+	ControllerFirmwareUpdateProgress,
+	ControllerFirmwareUpdateResult,
+	ControllerFirmwareUpdateStatus,
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
+	GetFirmwareUpdatesOptions,
 	HealNodeStatus,
 	SDKVersion,
 } from "./lib/controller/_Types";

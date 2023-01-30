@@ -76,7 +76,8 @@
 		},
 		{
 			"#": "17",
-			"$if": "firmwareVersion >= 10.0",
+			// This parameter was added in firmware 10.0, which the 2.0 firmware is based on
+			"$if": "firmwareVersion >= 2.0",
 			"$import": "templates/zooz_template.json#local_programming"
 		}
 	],

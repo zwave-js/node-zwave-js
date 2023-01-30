@@ -34,6 +34,8 @@ export enum MessageOrigin {
 export interface MessageDeserializationOptions {
 	data: Buffer;
 	origin?: MessageOrigin;
+	/** Whether CCs should be parsed immediately (only affects messages that contain CCs). Default: `true` */
+	parseCCs?: boolean;
 }
 
 /**
@@ -189,9 +191,15 @@ export class Message {
 		return true;
 	}
 
+	/** Returns the response timeout for this message in case the default settings do not apply. */
+	public getResponseTimeout(): number | undefined {
+		// Use default timeout
+		return;
+	}
+
 	/** Returns the callback timeout for this message in case the default settings do not apply. */
 	public getCallbackTimeout(): number | undefined {
-		// Use default timeout by default
+		// Use default timeout
 		return;
 	}
 
@@ -239,11 +247,10 @@ export class Message {
 	/** Creates an instance of the message that is serialized in the given buffer */
 	public static from(
 		host: ZWaveHost,
-		data: Buffer,
-		origin?: MessageOrigin,
+		options: MessageDeserializationOptions,
 	): Message {
-		const Constructor = Message.getConstructor(data);
-		const ret = new Constructor(host, { data, origin });
+		const Constructor = Message.getConstructor(options.data);
+		const ret = new Constructor(host, options);
 		return ret;
 	}
 
@@ -359,6 +366,9 @@ export class Message {
 		// Most messages don't expect an update by default
 		return false;
 	}
+
+	/** Gets set by the driver to remember an expected node update for this message that arrived before the Serial API command has finished. */
+	public prematureNodeUpdate: Message | undefined;
 
 	/** Finds the ID of the target or source node in a message, if it contains that information */
 	public getNodeId(): number | undefined {

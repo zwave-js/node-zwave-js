@@ -1,12 +1,13 @@
 {
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
-	"label": "ZWS12n",
+	"label": "ZWS12",
 	"description": "Chain actuator - window opener",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0011"
+			"productId": "0x0011",
+			"zwaveAllianceId": 2477
 		},
 		{
 			"productType": "0x0002",
@@ -20,7 +21,7 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Motor speed I",
+			"label": "Motor Speed I",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -28,7 +29,7 @@
 		},
 		{
 			"#": "8",
-			"label": "1 Motor speed II (rain sensor)",
+			"label": "Motor Speed II (Rain Sensor)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -44,12 +45,18 @@
 		},
 		{
 			"#": "15",
-			"label": "Close after time",
+			"label": "Close After Time",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 120
+			"defaultValue": 0
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Autoinclusion - This feature allow you to add hard to reach devices to Z-Wave network. 3-times ON and OFF the power actuator (OFF-ON-OFFON-OFF-ON) causes the introduction of actuator to Autoinclusion mode.\nPlease note that the procedure has been started the time between on and off can not exceed 20s. Autoinclusion mode is activated for a maximum of 10 minutes. During this time, we can add an actuator to any Z-Wave controller running in the Include procedure.\n\nInclude - This function allow you to add actuator to the network Z-Wave.\nFollow the procedure adding device to the network Z-Wave according to user manual supplied with the product. Then, press the programming button P on the actuator for 1 second",
+		"exclusion": "Exclude - This function allow you to remove actuator from the network Z-Wave. Follow the procedure removing device from the network Z-Wave\naccording to user manual supplied with the product. Then, press the\nprogramming button P on the actuator for 1 second. Function removes\ninformation only about network Z-Wave",
+		"reset": "Device Reset Locally – This function allows you to reset the Z-Wave\nnetwork without the use of Z-Wave controller. Press 5 times the\nprogramming button P fast, the actuator was removed from the Z-Wave\nnetwork, restore the default parameters, name and locations. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2477/170511%20ZWS12%20User%20Manual.pdf"
+	}
 }

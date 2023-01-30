@@ -206,6 +206,24 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		firmwareUpdateService?: string;
 	};
 
+	/**
+	 * Normally, the driver expects to start in Serial API mode and enter the bootloader on demand. If in bootloader,
+	 * it will try to exit it and enter Serial API mode again.
+	 *
+	 * However there are situations where a controller may be stuck in bootloader mode and no Serial API is available.
+	 * In this case, the driver startup will fail, unless this option is set to `true`.
+	 *
+	 * If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image.
+	 * Commands attempting to talk to the serial API will fail.
+	 */
+	allowBootloaderOnly?: boolean;
+
+	/**
+	 * An object with application/module/component names and their versions.
+	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
+	 */
+	userAgent?: Record<string, string>;
+
 	/** @internal Used for testing internally */
 	testingHooks?: {
 		serialPortBinding?: typeof SerialPort;
@@ -226,8 +244,26 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		skipNodeInterview?: boolean;
 
 		/**
+		 * Set this to true to skip checking if the controller is in bootloader mode
+		 */
+		skipBootloaderCheck?: boolean;
+
+		/**
 		 * Set this to false to skip loading the configuration files. Default: `true`..
 		 */
 		loadConfiguration?: boolean;
 	};
 }
+
+export type EditableZWaveOptions = Pick<
+	ZWaveOptions,
+	| "disableOptimisticValueUpdate"
+	| "emitValueUpdateAfterSetValue"
+	| "inclusionUserCallbacks"
+	| "interview"
+	| "logConfig"
+	| "preferences"
+	| "preserveUnknownValues"
+> & {
+	userAgent?: Record<string, string | null | undefined>;
+};

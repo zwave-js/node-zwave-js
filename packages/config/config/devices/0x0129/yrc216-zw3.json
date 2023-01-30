@@ -50,174 +50,47 @@
 		},
 		{
 			"#": "2",
-			"label": "Auto Relock",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#auto_relock"
 		},
 		{
 			"#": "3",
-			"label": "Relock Time",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 30,
-			"unsigned": true
+			"$import": "templates/yale_template.json#auto_relock_time_127"
 		},
 		{
 			"#": "4",
-			"label": "Wrong Code Entry Limit",
-			"valueSize": 1,
-			"minValue": 3,
-			"maxValue": 10,
-			"defaultValue": 5,
-			"unsigned": true
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
 		{
 			"#": "5",
-			"label": "Language",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "English",
-					"value": 0
-				},
-				{
-					"label": "Spanish",
-					"value": 1
-				},
-				{
-					"label": "French",
-					"value": 2
-				}
-			]
+			"$import": "templates/yale_template.json#language"
 		},
 		{
 			"#": "7",
-			"label": "Wrong Code Limit Lockout Time",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 60,
-			"unsigned": true
+			"$import": "templates/yale_template.json#wrong_code_lockout_0_to_127"
 		},
 		{
 			"#": "8",
-			"label": "Operating Mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal",
-					"value": 0
-				},
-				{
-					"label": "Vacation",
-					"value": 1
-				},
-				{
-					"label": "Privacy",
-					"value": 2
-				}
-			]
+			"$import": "templates/yale_template.json#operating_mode"
 		},
 		{
 			"#": "11",
-			"label": "One Touch Locking",
-			"valueSize": 1,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#one_touch"
 		},
 		{
 			"#": "12",
-			"label": "Privacy Button",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Vacation mode",
-					"value": 1
-				},
-				{
-					"label": "Privacy mode",
-					"value": 2
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#privacy_button"
 		},
 		{
 			"#": "13",
-			"label": "Lock Status LED",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#lock_status_led"
 		},
 		{
 			"#": "15",
-			"label": "Reset to Factory Resets",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal operation",
-					"value": 0
-				},
-				{
-					"label": "Reset to factory defaults",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#reset_factory_255"
+		},
+		{
+			"#": "6",
+			"$import": "templates/yale_template.json#wrong_code_lockout_0_to_127"
 		}
 	],
 	"metadata": {

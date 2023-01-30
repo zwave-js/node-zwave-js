@@ -1,0 +1,122 @@
+{
+	"manufacturer": "SmartDHOME",
+	"manufacturerId": "0x044c",
+	"label": "MyOT v4",
+	"description": "OpenTherm Actuator v4",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Summer Mode",
+			"description": "Turn heating on/off"
+		},
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Heating: Maximum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Heating: Minimum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "31",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Domestic Hot Water"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Domestic Hot Water: Maximum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Domestic Hot Water: Minimum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Flag",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Code",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "90",
+			"label": "ID",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "91",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Version",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "95",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Sensor Report Interval",
+			"unit": "minutes",
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Continuous",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "96",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Configuration Report Interval",
+			"unit": "minutes",
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Continuous",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "By pressing the FUNCTIONS button for 8 seconds",
+		"exclusion": "By pressing the FUNCTIONS button for 8 seconds"
+	}
+}

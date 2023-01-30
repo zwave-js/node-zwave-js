@@ -7,6 +7,7 @@
 /// <reference types="node" />
 
 import { DeepPartial } from '@zwave-js/shared';
+import type { ExecutionContext } from 'ava';
 import type { Format } from 'logform';
 import type { JsonlDB } from '@alcalzone/jsonl-db';
 import type { JSONObject } from '@zwave-js/shared';
@@ -55,6 +56,13 @@ export function assertValueID(param: Record<any, any>): asserts param is ValueID
 //
 // @public
 export function assertZWaveError<T>(valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
+
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (ae-missing-release-tag) "assertZWaveErrorAva" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function assertZWaveErrorAva<T>(t: ExecutionContext, valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
 
 // Warning: (ae-missing-release-tag) "AssertZWaveErrorOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -515,7 +523,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
     interviewStart(node: Interviewable): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    logNode(nodeId: number, message: string, level?: "debug" | "verbose" | "warn" | "error"): void;
+    logNode(nodeId: number, message: string, level?: LogNodeOptions["level"]): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     logNode(nodeId: number, options: LogNodeOptions): void;
@@ -1263,6 +1271,8 @@ export interface LogConfig {
     // (undocumented)
     logToFile: boolean;
     // (undocumented)
+    maxFiles: number;
+    // (undocumented)
     nodeFilter?: number[];
     // (undocumented)
     transports: Transport[];
@@ -1290,7 +1300,7 @@ export interface LogNodeOptions {
     // (undocumented)
     endpoint?: number;
     // (undocumented)
-    level?: "debug" | "verbose" | "warn" | "error";
+    level?: "silly" | "debug" | "verbose" | "warn" | "error";
     // (undocumented)
     message: string;
 }
@@ -1501,6 +1511,11 @@ export interface NodeUpdatePayload extends ApplicationNodeInformation {
 //
 // @public
 export const nonApplicationCCs: readonly CommandClasses[];
+
+// Warning: (ae-internal-missing-underscore) The name "nonUndefinedLogConfigKeys" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const nonUndefinedLogConfigKeys: readonly ["enabled", "level", "transports", "logToFile", "maxFiles", "filename", "forceConsole"];
 
 // Warning: (ae-missing-release-tag) "normalizeValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1989,8 +2004,7 @@ export class SecurityManager2 {
     isDuplicateSinglecast(peerNodeId: number, sequenceNumber: number): boolean;
     // (undocumented)
     nextMPAN(group: number): Buffer;
-    // (undocumented)
-    nextNonce(peerNodeId: number): Buffer;
+    nextNonce(peerNodeId: number, store?: boolean): Buffer;
     nextSequenceNumber(peerNodeId: number): number;
     setKey(securityClass: SecurityClass, key: Buffer): void;
     setSPANState(peerNodeID: number, state: SPANTableEntry | {
@@ -1998,8 +2012,7 @@ export class SecurityManager2 {
     }): void;
     // (undocumented)
     storeRemoteEI(peerNodeId: number, remoteEI: Buffer): void;
-    // (undocumented)
-    storeSequenceNumber(peerNodeId: number, sequenceNumber: number): void;
+    storeSequenceNumber(peerNodeId: number, sequenceNumber: number): number | undefined;
     // Warning: (ae-forgotten-export) The symbol "TempNetworkKeys" needs to be exported by the entry point index.d.ts
     readonly tempKeys: Map<number, TempNetworkKeys>;
 }
@@ -2118,6 +2131,10 @@ export type SPANTableEntry = {
     type: SPANState.SPAN;
     securityClass: SecurityClass;
     rng: CtrDRBG;
+    currentSPAN?: {
+        nonce: Buffer;
+        expires: number;
+    };
 };
 
 // Warning: (ae-internal-missing-underscore) The name "stringToNodeList" should be prefixed with an underscore because the declaration is marked as @internal
@@ -2299,6 +2316,11 @@ export enum TransmitStatus {
     // (undocumented)
     OK = 0
 }
+
+// Warning: (ae-missing-release-tag) "tryParseDSKFromQRCodeString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function tryParseDSKFromQRCodeString(qr: string): string | undefined;
 
 // Warning: (ae-missing-release-tag) "TXReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2949,6 +2971,7 @@ export enum ZWaveErrorCodes {
     FirmwareUpdateCC_Busy = 1500,
     FirmwareUpdateCC_FailedToAbort = 1504,
     FirmwareUpdateCC_FailedToStart = 1503,
+    FirmwareUpdateCC_NetworkBusy = 1508,
     FirmwareUpdateCC_NotUpgradable = 1501,
     FirmwareUpdateCC_TargetNotFound = 1502,
     FirmwareUpdateCC_Timeout = 1505,
@@ -2962,6 +2985,7 @@ export enum ZWaveErrorCodes {
     NVM_NoSpace = 284,
     NVM_NotSupported = 280,
     NVM_ObjectNotFound = 282,
+    OTW_Update_Busy = 380,
     // (undocumented)
     PacketFormat_Checksum = 2,
     // (undocumented)
@@ -3077,7 +3101,7 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
-// src/security/Manager2.ts:54:4 - (ae-forgotten-export) The symbol "CtrDRBG" needs to be exported by the entry point index.d.ts
+// src/security/Manager2.ts:55:4 - (ae-forgotten-export) The symbol "CtrDRBG" needs to be exported by the entry point index.d.ts
 // src/security/QR.ts:98:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)

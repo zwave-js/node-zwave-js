@@ -7,7 +7,9 @@
 ### `disable`
 
 ```ts
-async disable(groupId: number): Promise<void>;
+async disable(
+	groupId: number,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `set`
@@ -17,7 +19,7 @@ async set(
 	groupId: number,
 	sceneId: number,
 	dimmingDuration?: Duration | string,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getLastActivated`

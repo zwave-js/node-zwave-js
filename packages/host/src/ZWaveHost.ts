@@ -73,6 +73,8 @@ export interface ZWaveHost {
 	getNextSupervisionSessionId(): number;
 
 	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
+
+	__internalIsMockNode?: boolean;
 }
 
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */

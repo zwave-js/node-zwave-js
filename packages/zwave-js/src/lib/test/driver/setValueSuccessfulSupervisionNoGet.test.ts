@@ -38,8 +38,8 @@ integrationTest(
 						frame.type === MockZWaveFrameType.Request &&
 						frame.payload instanceof SupervisionCCGet
 					) {
-						const cc = new SupervisionCCReport(controller.host, {
-							nodeId: self.id,
+						const cc = new SupervisionCCReport(self.host, {
+							nodeId: controller.host.ownNodeId,
 							sessionId: frame.payload.sessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Success,

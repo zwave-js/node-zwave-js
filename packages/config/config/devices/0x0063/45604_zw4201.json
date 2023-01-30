@@ -1,0 +1,35 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "45604 / ZW4201",
+	"description": "Plug-in Outdoor Switch, 300S",
+	"devices": [
+		{
+			"productType": "0x5250",
+			"productId": "0x3130"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	}
+}

@@ -6,6 +6,7 @@ import {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -38,6 +39,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { SceneControllerConfigurationCommand } from "../lib/_Types";
@@ -114,7 +116,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 
 			if (value === 0) {
 				// Disable Group ID / Scene ID
-				await this.disable(propertyKey);
+				return this.disable(propertyKey);
 			} else {
 				// We need to set the dimming duration along with the scene ID
 				// Dimming duration is chosen with the following precedence:
@@ -129,7 +131,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 						).endpoint(this.endpoint.index),
 					) ??
 					new Duration(0, "default");
-				await this.set(propertyKey, value, dimmingDuration);
+				return this.set(propertyKey, value, dimmingDuration);
 			}
 		} else if (property === "dimmingDuration") {
 			if (typeof value !== "string" && !(value instanceof Duration)) {
@@ -172,12 +174,10 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 				return;
 			}
 
-			await this.set(propertyKey, sceneId, dimmingDuration);
+			return this.set(propertyKey, sceneId, dimmingDuration);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
-
-		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -204,7 +204,9 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	};
 
 	@validateArgs()
-	public async disable(groupId: number): Promise<void> {
+	public async disable(
+		groupId: number,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
 			SceneControllerConfigurationCommand.Set,
@@ -218,7 +220,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		groupId: number,
 		sceneId: number,
 		dimmingDuration?: Duration | string,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
 			SceneControllerConfigurationCommand.Set,
@@ -255,7 +257,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			dimmingDuration,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getLastActivated(): Promise<
@@ -457,6 +459,7 @@ interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(SceneControllerConfigurationCommand.Set)
+@useSupervision()
 export class SceneControllerConfigurationCCSet extends SceneControllerConfigurationCC {
 	public constructor(
 		host: ZWaveHost,

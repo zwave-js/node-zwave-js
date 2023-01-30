@@ -1,9 +1,15 @@
 import {
+	AssociationCC,
 	ECDHProfiles,
+	InclusionControllerCCComplete,
+	InclusionControllerCCInitiate,
+	InclusionControllerStatus,
+	InclusionControllerStep,
 	inclusionTimeouts,
 	KEXFailType,
 	KEXSchemes,
 	ManufacturerSpecificCCValues,
+	MultiChannelAssociationCC,
 	Security2CCKEXFail,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
@@ -28,6 +34,7 @@ import {
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
+	isValidDSK,
 	isZWaveError,
 	NodeType,
 	NODE_ID_BROADCAST,
@@ -38,13 +45,20 @@ import {
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
+	SinglecastCC,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { migrateNVM } from "@zwave-js/nvmedit";
-import type { Message, SuccessIndicator } from "@zwave-js/serial";
-import { FunctionType } from "@zwave-js/serial";
+import {
+	BootloaderChunk,
+	BootloaderChunkType,
+	FunctionType,
+	Message,
+	SuccessIndicator,
+	XModemMessageHeaders,
+} from "@zwave-js/serial";
 import {
 	createThrowingMap,
 	flatMap,
@@ -65,6 +79,7 @@ import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
+import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
 import semver from "semver";
@@ -76,6 +91,13 @@ import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { VirtualNode } from "../node/VirtualNode";
 import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/_Types";
+import {
+	ApplicationUpdateRequestNodeAdded,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeRemoved,
+	ApplicationUpdateRequestSmartStartHomeIDReceived,
+	type ApplicationUpdateRequest,
+} from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
@@ -204,6 +226,20 @@ import {
 	ExtNVMWriteLongByteResponse,
 } from "../serialapi/nvm/ExtNVMWriteLongByteMessages";
 import {
+	FirmwareUpdateNVM_GetNewImageRequest,
+	FirmwareUpdateNVM_GetNewImageResponse,
+	FirmwareUpdateNVM_InitRequest,
+	FirmwareUpdateNVM_InitResponse,
+	FirmwareUpdateNVM_IsValidCRC16Request,
+	FirmwareUpdateNVM_IsValidCRC16Response,
+	FirmwareUpdateNVM_SetNewImageRequest,
+	FirmwareUpdateNVM_SetNewImageResponse,
+	FirmwareUpdateNVM_UpdateCRC16Request,
+	FirmwareUpdateNVM_UpdateCRC16Response,
+	FirmwareUpdateNVM_WriteRequest,
+	FirmwareUpdateNVM_WriteResponse,
+} from "../serialapi/nvm/FirmwareUpdateNVMMessages";
+import {
 	GetNVMIdRequest,
 	GetNVMIdResponse,
 	NVMId,
@@ -250,9 +286,13 @@ import { determineNIF } from "./NodeInformationFrame";
 import { assertProvisioningEntry } from "./utils";
 import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
-import type {
+import {
+	ControllerFirmwareUpdateProgress,
+	ControllerFirmwareUpdateResult,
+	ControllerFirmwareUpdateStatus,
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
+	GetFirmwareUpdatesOptions,
 	HealNodeStatus,
 	SDKVersion,
 } from "./_Types";
@@ -273,6 +313,12 @@ interface ControllerEventCallbacks
 		progress: ReadonlyMap<number, HealNodeStatus>,
 	) => void;
 	"heal network done": (result: ReadonlyMap<number, HealNodeStatus>) => void;
+	"firmware update progress": (
+		progress: ControllerFirmwareUpdateProgress,
+	) => void;
+	"firmware update finished": (
+		result: ControllerFirmwareUpdateResult,
+	) => void;
 }
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
@@ -283,7 +329,10 @@ export interface ZWaveController extends ControllerStatisticsHost {}
 @Mixin([ControllerStatisticsHost])
 export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks> {
 	/** @internal */
-	public constructor(private readonly driver: Driver) {
+	public constructor(
+		private readonly driver: Driver,
+		bootloaderOnly: boolean = false,
+	) {
 		super();
 
 		this._nodes = createThrowingMap((nodeId) => {
@@ -292,6 +341,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				ZWaveErrorCodes.Controller_NodeNotFound,
 			);
 		});
+
+		// Limit interaction with the controller in bootloader-only mode
+		if (bootloaderOnly) return;
 
 		// register message handlers
 		driver.registerRequestHandler(
@@ -311,6 +363,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _type: ZWaveLibraryTypes | undefined;
 	public get type(): ZWaveLibraryTypes | undefined {
 		return this._type;
+	}
+
+	private _protocolVersion: string | undefined;
+	public get protocolVersion(): string | undefined {
+		return this._protocolVersion;
 	}
 
 	private _sdkVersion: string | undefined;
@@ -380,8 +437,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
-		return semver.gt(padVersion(sdkVersion), padVersion(version));
+		return semver.gt(padVersion(this._sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the SDK version is greater than or equal to the given one */
@@ -389,8 +445,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
-		return semver.gte(padVersion(sdkVersion), padVersion(version));
+		return semver.gte(padVersion(this._sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the SDK version is lower than the given one */
@@ -398,8 +453,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
-		return semver.lt(padVersion(sdkVersion), padVersion(version));
+		return semver.lt(padVersion(this._sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the SDK version is lower than or equal to the given one */
@@ -407,8 +461,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
-		return semver.lte(padVersion(sdkVersion), padVersion(version));
+		return semver.lte(padVersion(this._sdkVersion), padVersion(version));
 	}
 
 	private _manufacturerId: number | undefined;
@@ -512,6 +565,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this.driver.cacheSet(cacheKeys.controller.supportsSoftReset, value);
 	}
 
+	private _rfRegion: RFRegion | undefined;
+	/** Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet). This value is cached and can be changed through {@link setRFRegion}. */
+	public get rfRegion(): RFRegion | undefined {
+		return this._rfRegion;
+	}
+
 	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
@@ -593,13 +652,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public unprovisionSmartStartNode(dskOrNodeId: string | number): void {
 		const provisioningList = [...this.provisioningList];
 
-		const index = provisioningList.findIndex(
-			(e) =>
-				e.dsk === dskOrNodeId ||
-				(typeof dskOrNodeId === "number" &&
-					"nodeId" in e &&
-					e.nodeId === dskOrNodeId),
-		);
+		const entry = this.getProvisioningEntryInternal(dskOrNodeId);
+		if (!entry) return;
+
+		const index = provisioningList.indexOf(entry);
 		if (index >= 0) {
 			provisioningList.splice(index, 1);
 			this.autoProvisionSmartStart();
@@ -610,13 +666,24 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private getProvisioningEntryInternal(
 		dskOrNodeId: string | number,
 	): SmartStartProvisioningEntry | undefined {
-		return this.provisioningList.find(
-			(e) =>
-				e.dsk === dskOrNodeId ||
-				(typeof dskOrNodeId === "number" &&
-					"nodeId" in e &&
-					e.nodeId === dskOrNodeId),
-		);
+		if (typeof dskOrNodeId === "string") {
+			return this.provisioningList.find((e) => e.dsk === dskOrNodeId);
+		} else {
+			// The provisioning list may or may not contain the node ID for an entry, even if the node is already included.
+			let ret = this.provisioningList.find(
+				(e) => "nodeId" in e && e.nodeId === dskOrNodeId,
+			);
+			if (!ret) {
+				// Try to get the DSK from the node instance
+				const dsk = this.nodes.get(dskOrNodeId)?.dsk;
+				if (dsk) {
+					ret = this.provisioningList.find(
+						(e) => e.dsk === dskToString(dsk),
+					);
+				}
+			}
+			return ret;
+		}
 	}
 
 	/**
@@ -754,12 +821,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					supportCheck: false,
 				},
 			);
-		this._sdkVersion = version.libraryVersion;
+		this._protocolVersion = version.libraryVersion;
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
 			`received version info:
   controller type: ${getEnumMemberName(ZWaveLibraryTypes, this._type)}
-  library version: ${this._sdkVersion}`,
+  library version: ${this._protocolVersion}`,
 		);
 
 		// If supported, get more fine-grained version info
@@ -772,9 +839,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					new GetProtocolVersionRequest(this.driver),
 				);
 
-			// Overwrite the SDK version with the more fine grained protocol version. We can assume this to be
-			// valid for 7.x firmwares, where SDK and protocol version are the same.
-			this._sdkVersion = protocol.protocolVersion;
+			this._protocolVersion = protocol.protocolVersion;
 
 			let message = `received protocol version info:
   protocol type:             ${getEnumMemberName(
@@ -793,6 +858,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 			this.driver.controllerLog.print(message);
 		}
+
+		// The SDK version cannot be queried directly, but we can deduce it from the protocol version
+		this._sdkVersion = protocolVersionToSDKVersion(this._protocolVersion);
 
 		this.driver.controllerLog.print(
 			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
@@ -870,6 +938,29 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					resp.success ? "successful" : "failed"
 				}...`,
 			);
+		}
+
+		// Also query the controller's current RF region if possible
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetRFRegion,
+			)
+		) {
+			this.driver.controllerLog.print(`Querying configured RF region...`);
+			const resp = await this.getRFRegion().catch(() => undefined);
+			if (resp != undefined) {
+				this.driver.controllerLog.print(
+					`The controller is using RF region ${getEnumMemberName(
+						RFRegion,
+						resp,
+					)}`,
+				);
+			} else {
+				this.driver.controllerLog.print(
+					`Querying the RF region failed!`,
+					"warn",
+				);
+			}
 		}
 
 		// find the SUC
@@ -1030,6 +1121,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		controllerValueDB.setValue(VersionCCValues.firmwareVersions.id, [
 			this._firmwareVersion,
 		]);
+		controllerValueDB.setMetadata(
+			VersionCCValues.zWaveProtocolVersion.id,
+			VersionCCValues.zWaveProtocolVersion.meta,
+		);
+		controllerValueDB.setValue(
+			VersionCCValues.zWaveProtocolVersion.id,
+			this._protocolVersion,
+		);
 		controllerValueDB.setMetadata(
 			VersionCCValues.sdkVersion.id,
 			VersionCCValues.sdkVersion.meta,
@@ -1649,6 +1748,462 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 	}
 
+	/** @internal */
+	public async handleApplicationUpdateRequest(
+		msg: ApplicationUpdateRequest,
+	): Promise<void> {
+		const nodeId = msg.getNodeId();
+		let node: ZWaveNode | undefined;
+		if (nodeId != undefined) {
+			node = this.nodes.get(nodeId);
+		}
+
+		if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
+			if (node) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: "Received updated node info",
+					direction: "inbound",
+				});
+				node.updateNodeInfo(msg.nodeInformation);
+
+				// Tell the send thread that we received a NIF from the node
+				this.driver["sendThread"].send({
+					type: "NIF",
+					nodeId: node.id,
+				});
+
+				if (
+					node.canSleep &&
+					node.supportsCC(CommandClasses["Wake Up"])
+				) {
+					// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
+					this.driver.debounceSendNodeToSleep(node);
+				}
+
+				return;
+			}
+		} else if (
+			msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
+		) {
+			// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
+			this.driver.controllerLog.print(
+				"Received Smart Start inclusion request",
+			);
+
+			if (
+				this.inclusionState !== InclusionState.Idle &&
+				this.inclusionState !== InclusionState.SmartStart
+			) {
+				this.driver.controllerLog.print(
+					"Controller is busy and cannot handle this inclusion request right now...",
+				);
+				return;
+			}
+
+			// Check if the node is on the provisioning list
+			const provisioningEntry = this.provisioningList.find((entry) =>
+				nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
+					msg.nwiHomeId,
+				),
+			);
+			if (!provisioningEntry) {
+				this.driver.controllerLog.print(
+					"NWI Home ID not found in provisioning list, ignoring request...",
+				);
+				return;
+			} else if (
+				provisioningEntry.status === ProvisioningEntryStatus.Inactive
+			) {
+				this.driver.controllerLog.print(
+					"The provisioning entry for this node is inactive, ignoring request...",
+				);
+				return;
+			}
+
+			this.driver.controllerLog.print(
+				"NWI Home ID found in provisioning list, including node...",
+			);
+			try {
+				const result = await this.beginInclusionSmartStart(
+					provisioningEntry,
+				);
+				if (!result) {
+					this.driver.controllerLog.print(
+						"Smart Start inclusion could not be started",
+						"error",
+					);
+				}
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Smart Start inclusion could not be started: ${getErrorMessage(
+						e,
+					)}`,
+					"error",
+				);
+			}
+		} else if (msg instanceof ApplicationUpdateRequestNodeRemoved) {
+			// A node was removed by another controller
+			const node = this.nodes.get(msg.nodeId);
+			if (node) {
+				this.driver.controllerLog.logNode(
+					node.id,
+					"was removed from the network by another controller",
+				);
+
+				this.emit("node removed", node, false);
+			}
+		} else if (msg instanceof ApplicationUpdateRequestNodeAdded) {
+			// A node was included by another controller
+			const nodeId = msg.nodeId;
+			const nodeInfo = msg.nodeInformation;
+
+			this.setInclusionState(InclusionState.Busy);
+
+			const deviceClass = new DeviceClass(
+				this.driver.configManager,
+				nodeInfo.basicDeviceClass,
+				nodeInfo.genericDeviceClass,
+				nodeInfo.specificDeviceClass,
+			);
+
+			const newNode = new ZWaveNode(
+				nodeId,
+				this.driver,
+				deviceClass,
+				nodeInfo.supportedCCs,
+				undefined,
+				// Create an empty value DB and specify that it contains no values
+				// to avoid indexing the existing values
+				this.createValueDBForNode(nodeId, new Set()),
+			);
+			this._nodes.set(nodeId, newNode);
+
+			this.emit("node found", {
+				id: nodeId,
+				deviceClass,
+				supportedCCs: nodeInfo.supportedCCs,
+			});
+
+			this.driver.controllerLog.print(
+				`Node ${newNode.id} was included by another controller:
+basic device class:    ${newNode.deviceClass?.basic.label}
+generic device class:  ${newNode.deviceClass?.generic.label}
+specific device class: ${newNode.deviceClass?.specific.label}
+supported CCs: ${nodeInfo.supportedCCs
+					.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
+					.join("")}`,
+			);
+
+			this.driver.controllerLog.logNode(
+				nodeId,
+				"Waiting for initiate command to bootstrap node...",
+			);
+
+			// Handle inclusion in the background
+			process.nextTick(async () => {
+				// If an Inclusion Controller that does not support the Inclusion Controller Command Class includes a
+				// new node in a network, the SIS will never receive an Inclusion Controller Initiate Command. If no
+				// Initiate Command has been received approximately 10 seconds after a new node has been added to a
+				// network, the SIS SHOULD start interviewing the newly included node
+
+				const initiate = await this.driver
+					.waitForCommand<
+						SinglecastCC<InclusionControllerCCInitiate>
+					>(
+						(cc) =>
+							cc instanceof InclusionControllerCCInitiate &&
+							cc.isSinglecast() &&
+							cc.includedNodeId === nodeId &&
+							cc.step === InclusionControllerStep.ProxyInclusion,
+						10000,
+					)
+					.catch(() => undefined);
+
+				// Assume the device is alive
+				// If it is actually a sleeping device, it will be marked as such later
+				newNode.markAsAlive();
+
+				let inclCtrlr: ZWaveNode | undefined;
+				let lowSecurity = false;
+
+				if (initiate) {
+					inclCtrlr = this.nodes.getOrThrow(initiate.nodeId);
+
+					this.driver.controllerLog.logNode(
+						nodeId,
+						`Initiate command received from node ${inclCtrlr.id}`,
+					);
+
+					// Inclusion is handled by the inclusion controller, which (hopefully) sets the SUC return route
+					newNode.hasSUCReturnRoute = true;
+
+					// SIS, A, MUST request a Node Info Frame from Joining Node, B
+					const requestedNodeInfo = await newNode
+						.requestNodeInfo()
+						.catch(() => undefined);
+					if (requestedNodeInfo)
+						newNode.updateNodeInfo(requestedNodeInfo);
+
+					// Perform S0/S2 bootstrapping
+					lowSecurity = (
+						await this.proxyBootstrap(newNode, inclCtrlr)
+					).lowSecurity;
+				} else {
+					// No command received, bootstrap node by ourselves
+					this.driver.controllerLog.logNode(
+						nodeId,
+						"no initiate command received, bootstrapping node...",
+					);
+
+					// Assign SUC return route to make sure the node knows where to get its routes from
+					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
+						newNode.id,
+					);
+
+					// Include using the default inclusion strategy:
+					// * Use S2 if possible,
+					// * only use S0 if necessary,
+					// * use no encryption otherwise
+					if (newNode.supportsCC(CommandClasses["Security 2"])) {
+						await this.secureBootstrapS2(newNode);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass <
+								SecurityClass.S2_Unauthenticated
+						) {
+							lowSecurity = true;
+						}
+					} else if (
+						newNode.supportsCC(CommandClasses.Security) &&
+						(deviceClass.specific ?? deviceClass.generic)
+							.requiresSecurity
+					) {
+						await this.secureBootstrapS0(newNode);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass < SecurityClass.S0_Legacy
+						) {
+							lowSecurity = true;
+						}
+					} else {
+						// Remember that no security classes were granted
+						for (const secClass of securityClassOrder) {
+							newNode.securityClasses.set(secClass, false);
+						}
+					}
+				}
+
+				// Bootstrap the node's lifelines, so it knows where the controller is
+				await this.bootstrapLifelineAndWakeup(newNode);
+
+				// We're done adding this node, notify listeners
+				const result: InclusionResult = {};
+				if (lowSecurity) result.lowSecurity = true;
+				this.emit("node added", newNode, result);
+
+				this.setInclusionState(InclusionState.Idle);
+
+				if (inclCtrlr && initiate) {
+					const inclCtrlrId = inclCtrlr.id;
+					const step = initiate.step;
+					newNode.once("ready", () => {
+						this.driver.controllerLog.logNode(
+							nodeId,
+							`Notifying node ${inclCtrlrId} of finished inclusion`,
+						);
+						void inclCtrlr!.commandClasses["Inclusion Controller"]
+							.completeStep(step, InclusionControllerStatus.OK)
+							// eslint-disable-next-line @typescript-eslint/no-empty-function
+							.catch(() => {});
+					});
+				}
+			});
+		}
+	}
+
+	/**
+	 * @internal
+	 * Handles replace requests from an inclusion controller
+	 */
+	public handleInclusionControllerCCInitiateReplace(
+		initiate: InclusionControllerCCInitiate,
+	): void {
+		if (initiate.step !== InclusionControllerStep.ProxyInclusionReplace) {
+			throw new ZWaveError(
+				"Expected an inclusion controller replace request, but got a different step",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.setInclusionState(InclusionState.Busy);
+
+		const inclCtrlr = this.nodes.getOrThrow(initiate.nodeId as number);
+
+		const replacedNodeId = initiate.includedNodeId;
+		const oldNode = this.nodes.get(replacedNodeId);
+		if (oldNode) {
+			this.emit("node removed", oldNode, true);
+			this._nodes.delete(oldNode.id);
+		}
+
+		// Create a fresh node instance and forget the old one
+		const newNode = new ZWaveNode(
+			replacedNodeId,
+			this.driver,
+			undefined,
+			undefined,
+			undefined,
+			// Create an empty value DB and specify that it contains no values
+			// to avoid indexing the existing values
+			this.createValueDBForNode(replacedNodeId, new Set()),
+		);
+		this._nodes.set(newNode.id, newNode);
+
+		this.emit("node found", {
+			id: newNode.id,
+		});
+
+		// Assume the device is alive
+		// If it is actually a sleeping device, it will be marked as such later
+		newNode.markAsAlive();
+
+		// Inclusion is handled by the inclusion controller, which (hopefully) sets the SUC return route
+		newNode.hasSUCReturnRoute = true;
+
+		// Handle communication with the node in the background
+		process.nextTick(async () => {
+			// SIS, A, MUST request a Node Info Frame from Joining Node, B
+			const requestedNodeInfo = await newNode
+				.requestNodeInfo()
+				.catch(() => undefined);
+			if (requestedNodeInfo) {
+				newNode.updateNodeInfo(requestedNodeInfo);
+
+				// TODO: Check if this stuff works for a normal replace too
+				const deviceClass = new DeviceClass(
+					this.driver.configManager,
+					requestedNodeInfo.basicDeviceClass,
+					requestedNodeInfo.genericDeviceClass,
+					requestedNodeInfo.specificDeviceClass,
+				);
+				newNode["applyDeviceClass"](deviceClass);
+			}
+
+			// Perform S0/S2 bootstrapping
+			const lowSecurity = (await this.proxyBootstrap(newNode, inclCtrlr))
+				.lowSecurity;
+
+			// Bootstrap the node's lifelines, so it knows where the controller is
+			await this.bootstrapLifelineAndWakeup(newNode);
+
+			// We're done adding this node, notify listeners
+			const result: InclusionResult = {};
+			if (lowSecurity) result.lowSecurity = true;
+			this.emit("node added", newNode, result);
+
+			this.setInclusionState(InclusionState.Idle);
+
+			// And notify the inclusion controller after we're done interviewing
+			newNode.once("ready", () => {
+				this.driver.controllerLog.logNode(
+					inclCtrlr.nodeId,
+					`Notifying inclusion controller of finished inclusion`,
+				);
+				void inclCtrlr.commandClasses["Inclusion Controller"]
+					.completeStep(initiate.step, InclusionControllerStatus.OK)
+					// eslint-disable-next-line @typescript-eslint/no-empty-function
+					.catch(() => {});
+			});
+		});
+	}
+
+	/**
+	 * Handles bootstrapping the security keys for a node that was included by an inclusion controller
+	 */
+	private async proxyBootstrap(
+		newNode: ZWaveNode,
+		inclCtrlr: ZWaveNode,
+	): Promise<{ lowSecurity: boolean }> {
+		// This part is to be done before the interview
+
+		const deviceClass = newNode.deviceClass!;
+		let lowSecurity = false;
+
+		// Include using the default inclusion strategy:
+		// * Use S2 if possible,
+		// * only use S0 if necessary,
+		// * use no encryption otherwise
+		if (newNode.supportsCC(CommandClasses["Security 2"])) {
+			await this.secureBootstrapS2(newNode);
+			const actualSecurityClass = newNode.getHighestSecurityClass();
+			if (
+				actualSecurityClass == undefined ||
+				actualSecurityClass < SecurityClass.S2_Unauthenticated
+			) {
+				lowSecurity = true;
+			}
+		} else if (
+			newNode.supportsCC(CommandClasses.Security) &&
+			(deviceClass.specific ?? deviceClass.generic).requiresSecurity
+		) {
+			// S0 bootstrapping is deferred to the inclusion controller
+			this.driver.controllerLog.logNode(
+				newNode.id,
+				`Waiting for node ${inclCtrlr.id} to perform S0 bootstrapping...`,
+			);
+
+			await inclCtrlr.commandClasses["Inclusion Controller"].initiateStep(
+				newNode.id,
+				InclusionControllerStep.S0Inclusion,
+			);
+			// Wait 60s for the S0 bootstrapping to complete
+			const s0result = await this.driver
+				.waitForCommand<InclusionControllerCCComplete>(
+					(cc) =>
+						cc.nodeId === inclCtrlr.id &&
+						cc instanceof InclusionControllerCCComplete &&
+						cc.step === InclusionControllerStep.S0Inclusion,
+					60000,
+				)
+				.catch(() => undefined);
+
+			this.driver.controllerLog.logNode(
+				newNode.id,
+				`S0 bootstrapping ${
+					s0result == undefined
+						? "timed out"
+						: s0result.status === InclusionControllerStatus.OK
+						? "succeeded"
+						: "failed"
+				}`,
+			);
+
+			// When bootstrapping with S0, no other keys are granted
+			for (const secClass of securityClassOrder) {
+				if (secClass !== SecurityClass.S0_Legacy) {
+					newNode.securityClasses.set(secClass, false);
+				}
+			}
+			// Whether the S0 key is granted depends on the result
+			// received from the inclusion controller
+			newNode.securityClasses.set(
+				SecurityClass.S0_Legacy,
+				s0result?.status === InclusionControllerStatus.OK,
+			);
+			lowSecurity = !newNode.hasSecurityClass(SecurityClass.S0_Legacy);
+		} else {
+			// Remember that no security classes were granted
+			for (const secClass of securityClassOrder) {
+				newNode.securityClasses.set(secClass, false);
+			}
+		}
+
+		return { lowSecurity };
+	}
+
 	private async secureBootstrapS0(
 		node: ZWaveNode,
 		assumeSupported: boolean = false,
@@ -1758,7 +2313,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				| InclusionStrategy.Security_S2
 				| InclusionStrategy.SmartStart;
 		};
-		if (inclusionOptions.provisioning) {
+		if (
+			"provisioning" in inclusionOptions &&
+			!!inclusionOptions.provisioning
+		) {
 			const grantedSecurityClasses =
 				inclusionOptions.provisioning.securityClasses;
 			const fullDSK = inclusionOptions.provisioning.dsk;
@@ -1781,8 +2339,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					return Promise.resolve(pin);
 				},
 			};
+		} else if (
+			"userCallbacks" in inclusionOptions &&
+			!!inclusionOptions.userCallbacks
+		) {
+			// Use the callbacks provided to this inclusion attempt
+			userCallbacks = inclusionOptions.userCallbacks;
 		} else if (this.driver.options.inclusionUserCallbacks) {
-			// Use the provided callbacks
+			// Use the callbacks defined in the driver options as fallback
 			userCallbacks = this.driver.options.inclusionUserCallbacks;
 		} else {
 			// Cannot bootstrap S2 without user callbacks, abort.
@@ -1976,13 +2540,23 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				const tai2RemainingMs =
 					inclusionTimeouts.TAI2 - (Date.now() - timerStartTAI2);
 
-				const pinResult = await Promise.race([
-					wait(tai2RemainingMs, true).then(() => false as const),
-					userCallbacks
-						.validateDSKAndEnterPIN(dsk)
-						// ignore errors in application callbacks
-						.catch(() => false as const),
-				]);
+				let pinResult: string | false;
+				if (
+					"dsk" in inclusionOptions &&
+					typeof inclusionOptions.dsk === "string" &&
+					isValidDSK(inclusionOptions.dsk)
+				) {
+					pinResult = inclusionOptions.dsk.slice(0, 5);
+				} else {
+					pinResult = await Promise.race([
+						wait(tai2RemainingMs, true).then(() => false as const),
+						userCallbacks
+							.validateDSKAndEnterPIN(dsk)
+							// ignore errors in application callbacks
+							.catch(() => false as const),
+					]);
+				}
+
 				if (
 					typeof pinResult !== "string" ||
 					!/^\d{5}$/.test(pinResult)
@@ -2374,9 +2948,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					this.driver,
 					new DeviceClass(
 						this.driver.configManager,
-						msg.statusContext!.basic!,
-						msg.statusContext!.generic!,
-						msg.statusContext!.specific!,
+						msg.statusContext!.basicDeviceClass!,
+						msg.statusContext!.genericDeviceClass!,
+						msg.statusContext!.specificDeviceClass!,
 					),
 					msg.statusContext!.supportedCCs,
 					msg.statusContext!.controlledCCs,
@@ -3426,8 +4000,11 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async removeNodeFromAllAssociations(nodeId: number): Promise<void> {
 		const tasks: Promise<any>[] = [];
+		// Check each endpoint of each node if they have an association to this node
 		for (const node of this.nodes.values()) {
 			if (node.id === this._ownNodeId || node.id === nodeId) continue;
+			if (node.interviewStage !== InterviewStage.Complete) continue;
+
 			for (const endpoint of node.getAllEndpoints()) {
 				// Prefer multi channel associations if that is available
 				if (
@@ -3435,15 +4012,40 @@ ${associatedNodes.join(", ")}`,
 						"Multi Channel Association"
 					].isSupported()
 				) {
-					return endpoint.commandClasses[
-						"Multi Channel Association"
-					].removeDestinations({
-						nodeIds: [nodeId],
-					});
+					const existing =
+						MultiChannelAssociationCC.getAllDestinationsCached(
+							this.driver,
+							endpoint,
+						);
+					if (
+						[...existing.values()].some((dests) =>
+							dests.some((a) => a.nodeId === nodeId),
+						)
+					) {
+						tasks.push(
+							endpoint.commandClasses[
+								"Multi Channel Association"
+							].removeDestinations({
+								nodeIds: [nodeId],
+							}),
+						);
+					}
 				} else if (endpoint.commandClasses.Association.isSupported()) {
-					return endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
-						[nodeId],
+					const existing = AssociationCC.getAllDestinationsCached(
+						this.driver,
+						endpoint,
 					);
+					if (
+						[...existing.values()].some((dests) =>
+							dests.some((a) => a.nodeId === nodeId),
+						)
+					) {
+						tasks.push(
+							endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
+								[nodeId],
+							),
+						);
+					}
 				}
 			}
 		}
@@ -3650,6 +4252,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		if (result.success) await this.driver.trySoftReset();
+		this._rfRegion = region;
 		return result.success;
 	}
 
@@ -3665,6 +4268,7 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
 		}
+		this._rfRegion = result.region;
 		return result.region;
 	}
 
@@ -3867,6 +4471,98 @@ ${associatedNodes.join(", ")}`,
 			);
 			return false;
 		}
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Initialize the Firmware Update functionality and determine if the firmware can be updated.
+	 */
+	private async firmwareUpdateNVMInit(): Promise<boolean> {
+		const ret =
+			await this.driver.sendMessage<FirmwareUpdateNVM_InitResponse>(
+				new FirmwareUpdateNVM_InitRequest(this.driver),
+			);
+		return ret.supported;
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Set the NEWIMAGE marker in the NVM (to the given value), which is used to signal that a new firmware image is present
+	 */
+	private async firmwareUpdateNVMSetNewImage(
+		value: boolean = true,
+	): Promise<void> {
+		await this.driver.sendMessage<FirmwareUpdateNVM_SetNewImageResponse>(
+			new FirmwareUpdateNVM_SetNewImageRequest(this.driver, {
+				newImage: value,
+			}),
+		);
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Return the value of the NEWIMAGE marker in the NVM, which is used to signal that a new firmware image is present
+	 */
+	private async firmwareUpdateNVMGetNewImage(): Promise<boolean> {
+		const ret =
+			await this.driver.sendMessage<FirmwareUpdateNVM_GetNewImageResponse>(
+				new FirmwareUpdateNVM_GetNewImageRequest(this.driver),
+			);
+		return ret.newImage;
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Calculates the CRC-16 for the specified block of data in the NVM
+	 */
+	private async firmwareUpdateNVMUpdateCRC16(
+		offset: number,
+		blockLength: number,
+		crcSeed: number,
+	): Promise<number> {
+		const ret =
+			await this.driver.sendMessage<FirmwareUpdateNVM_UpdateCRC16Response>(
+				new FirmwareUpdateNVM_UpdateCRC16Request(this.driver, {
+					offset,
+					blockLength,
+					crcSeed,
+				}),
+			);
+		return ret.crc16;
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Writes the given data into the firmware update region of the NVM.
+	 */
+	private async firmwareUpdateNVMWrite(
+		offset: number,
+		buffer: Buffer,
+	): Promise<void> {
+		await this.driver.sendMessage<FirmwareUpdateNVM_WriteResponse>(
+			new FirmwareUpdateNVM_WriteRequest(this.driver, {
+				offset,
+				buffer,
+			}),
+		);
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Checks if the firmware present in the NVM is valid
+	 */
+	private async firmwareUpdateNVMIsValidCRC16(): Promise<boolean> {
+		const ret =
+			await this.driver.sendMessage<FirmwareUpdateNVM_IsValidCRC16Response>(
+				new FirmwareUpdateNVM_IsValidCRC16Request(this.driver),
+			);
+		return ret.isValid;
 	}
 
 	/**
@@ -4446,10 +5142,11 @@ ${associatedNodes.join(", ")}`,
 	 * **Note:** Sleeping nodes need to be woken up for this to work. This method will throw when called for a sleeping node
 	 * which did not wake up within a minute.
 	 *
-	 * **Note:** This requires an API key to be set in the driver options.
+	 * **Note:** This requires an API key to be set in the driver options, or passed .
 	 */
 	public async getAvailableFirmwareUpdates(
 		nodeId: number,
+		options?: GetFirmwareUpdatesOptions,
 	): Promise<FirmwareUpdateInfo[]> {
 		const node = this.nodes.getOrThrow(nodeId);
 
@@ -4493,11 +5190,22 @@ ${associatedNodes.join(", ")}`,
 		// Now invoke the service
 		try {
 			return await getAvailableFirmwareUpdates(
-				manufacturerId,
-				productType,
-				productId,
-				firmwareVersion,
-				this.driver.options.apiKeys?.firmwareUpdateService,
+				{
+					manufacturerId,
+					productType,
+					productId,
+					firmwareVersion,
+					rfRegion: this.rfRegion,
+				},
+				{
+					userAgent: this.driver.getUserAgentStringWithComponents(
+						options?.additionalUserAgentComponents,
+					),
+					apiKey:
+						options?.apiKey ??
+						this.driver.options.apiKeys?.firmwareUpdateService,
+					includePrereleases: options?.includePrereleases,
+				},
 			);
 		} catch (e: any) {
 			let message = `Cannot check for firmware updates for node ${nodeId}: `;
@@ -4525,11 +5233,32 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Downloads the desired firmware update from the Z-Wave JS firmware update service and starts a firmware update for the given node.
+	 *
+	 * @deprecated Use {@link firmwareUpdateOTA} instead, which properly handles multi-target updates
 	 */
 	public async beginOTAFirmwareUpdate(
 		nodeId: number,
 		update: FirmwareUpdateFileInfo,
 	): Promise<void> {
+		// Don't let two firmware updates happen in parallel
+		if (this.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
+		// Don't allow updating firmware when the controller is currently updating its own firmware
+		if (this.isFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: The controller is currently being updated!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
+
 		const node = this.nodes.getOrThrow(nodeId);
 
 		let firmware: Firmware;
@@ -4570,5 +5299,431 @@ ${associatedNodes.join(", ")}`,
 			`Firmware update ${update.url} downloaded, installing...`,
 		);
 		await node.beginFirmwareUpdate(firmware.data, firmware.firmwareTarget);
+	}
+
+	/**
+	 * Downloads the desired firmware update(s) from the Z-Wave JS firmware update service and updates the firmware of the given node.
+	 *
+	 * The return value indicates whether the update was successful.
+	 * **WARNING:** This method will throw instead of returning `false` if invalid arguments are passed or downloading files or starting an update fails.
+	 */
+	public async firmwareUpdateOTA(
+		nodeId: number,
+		updates: FirmwareUpdateFileInfo[],
+	): Promise<boolean> {
+		if (updates.length === 0) {
+			throw new ZWaveError(
+				`At least one update must be provided`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Don't let two firmware updates happen in parallel
+		if (this.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
+		// Don't allow updating firmware when the controller is currently updating its own firmware
+		if (this.isFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: The controller is currently being updated!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
+
+		const node = this.nodes.getOrThrow(nodeId);
+		this.driver.controllerLog.logNode(
+			nodeId,
+			`OTA firmware update started, downloading ${updates.length} updates...`,
+		);
+
+		const loglevel = this.driver.getLogConfig().level;
+
+		const firmwares: Firmware[] = [];
+		for (let i = 0; i < updates.length; i++) {
+			const update = updates[i];
+			let logMessage = `Downloading firmware update ${i} of ${updates.length}...`;
+			if (loglevel === "silly") {
+				logMessage += `
+  URL:       ${update.url}
+  integrity: ${update.integrity}`;
+			}
+			this.driver.controllerLog.logNode(nodeId, logMessage);
+
+			try {
+				const firmware = await downloadFirmwareUpdate(update);
+				firmwares.push(firmware);
+			} catch (e: any) {
+				let message = `Downloading the firmware update for node ${nodeId} failed:\n`;
+				if (isZWaveError(e)) {
+					// Pass "real" Z-Wave errors through
+					throw new ZWaveError(message + e.message, e.code);
+				} else if (e.response) {
+					// And construct a better error message for HTTP errors
+					if (
+						isObject(e.response.data) &&
+						typeof e.response.data.message === "string"
+					) {
+						message += `${e.response.data.message} `;
+					}
+					message += `[${e.response.status} ${e.response.statusText}]`;
+				} else if (typeof e.message === "string") {
+					message += e.message;
+				} else {
+					message += `Failed to download firmware update!`;
+				}
+
+				throw new ZWaveError(
+					message,
+					ZWaveErrorCodes.FWUpdateService_RequestError,
+				);
+			}
+		}
+
+		this.driver.controllerLog.logNode(
+			nodeId,
+			`All updates downloaded, installing...`,
+		);
+		return node.updateFirmware(firmwares);
+	}
+
+	private _firmwareUpdateInProgress: boolean = false;
+
+	/**
+	 * Returns whether a firmware update is in progress for the controller.
+	 */
+	public isFirmwareUpdateInProgress(): boolean {
+		return this._firmwareUpdateInProgress;
+	}
+
+	/**
+	 * Updates the firmware of the controller using the given firmware file.
+	 *
+	 * The return value indicates whether the update was successful.
+	 * **WARNING:** After a successful update, the Z-Wave driver will destroy itself so it can be restarted.
+	 *
+	 * **WARNING:** A failure during this process may put your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded. Use at your own risk!
+	 */
+	public async firmwareUpdateOTW(data: Buffer): Promise<boolean> {
+		// Don't let two firmware updates happen in parallel
+		if (this.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(message, ZWaveErrorCodes.OTW_Update_Busy);
+		}
+		// Don't allow updating firmware when the controller is currently updating its own firmware
+		if (this.isFirmwareUpdateInProgress()) {
+			const message = `Failed to start the update: The controller is currently being updated!`;
+			this.driver.controllerLog.print(message, "error");
+			throw new ZWaveError(message, ZWaveErrorCodes.OTW_Update_Busy);
+		}
+
+		if (this.driver.isInBootloader() || this.sdkVersionGte("7.0")) {
+			// If the controller is stuck in bootloader mode, always use the 700 series update method
+			return this.firmwareUpdateOTW700(data);
+		} else if (
+			this.sdkVersionGte("6.50.0") &&
+			this.supportedFunctionTypes?.includes(
+				FunctionType.FirmwareUpdateNVM,
+			)
+		) {
+			// This is 500 series
+			const wasUpdated = await this.firmwareUpdateOTW500(data);
+			if (wasUpdated) {
+				// After updating the firmware on 500 series sticks, we MUST soft-reset them
+				await this.driver.softResetAndRestart(
+					"Activating new firmware and restarting driver...",
+					"Controller firmware updates require a driver restart!",
+				);
+			}
+			return wasUpdated;
+		} else {
+			throw new ZWaveError(
+				`Firmware updates are not supported on this controller`,
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		}
+	}
+
+	private async firmwareUpdateOTW500(data: Buffer): Promise<boolean> {
+		this._firmwareUpdateInProgress = true;
+		let turnedRadioOff = false;
+		try {
+			this.driver.controllerLog.print("Beginning firmware update");
+
+			const canUpdate = await this.firmwareUpdateNVMInit();
+			if (!canUpdate) {
+				this.driver.controllerLog.print(
+					"OTW update failed: This controller does not support firmware updates",
+					"error",
+				);
+				this.emit("firmware update finished", {
+					success: false,
+					status: ControllerFirmwareUpdateStatus.Error_NotSupported,
+				});
+				return false;
+			}
+
+			// Avoid interruption by incoming messages
+			await this.toggleRF(false);
+			turnedRadioOff = true;
+
+			// Upload the firmware data
+			const BLOCK_SIZE = 64;
+			const numFragments = Math.ceil(data.length / BLOCK_SIZE);
+			for (let fragment = 0; fragment < numFragments; fragment++) {
+				const fragmentData = data.slice(
+					fragment * BLOCK_SIZE,
+					(fragment + 1) * BLOCK_SIZE,
+				);
+				await this.firmwareUpdateNVMWrite(
+					fragment * BLOCK_SIZE,
+					fragmentData,
+				);
+
+				// This progress is technically too low, but we can keep 100% for after CRC checking this way
+				const progress: ControllerFirmwareUpdateProgress = {
+					sentFragments: fragment,
+					totalFragments: numFragments,
+					progress: roundTo((fragment / numFragments) * 100, 2),
+				};
+				this.emit("firmware update progress", progress);
+			}
+
+			// Check if a valid image was written
+			const isValidCRC = await this.firmwareUpdateNVMIsValidCRC16();
+			if (!isValidCRC) {
+				this.driver.controllerLog.print(
+					"OTW update failed: The firmware image is invalid",
+					"error",
+				);
+				this.emit("firmware update finished", {
+					success: false,
+					status: ControllerFirmwareUpdateStatus.Error_Aborted,
+				});
+				return false;
+			}
+
+			this.emit("firmware update progress", {
+				sentFragments: numFragments,
+				totalFragments: numFragments,
+				progress: 100,
+			});
+
+			// Enable the image
+			await this.firmwareUpdateNVMSetNewImage();
+
+			this.driver.controllerLog.print("Firmware update succeeded");
+			this.emit("firmware update finished", {
+				success: true,
+				status: ControllerFirmwareUpdateStatus.OK,
+			});
+			return true;
+		} finally {
+			this._firmwareUpdateInProgress = false;
+			if (turnedRadioOff) await this.toggleRF(true);
+		}
+	}
+
+	private async firmwareUpdateOTW700(data: Buffer): Promise<boolean> {
+		this._firmwareUpdateInProgress = true;
+		let destroy = false;
+
+		try {
+			if (!this.driver.isInBootloader()) {
+				await this.driver.enterBootloader();
+			}
+
+			// Start the update process
+			this.driver.controllerLog.print("Beginning firmware upload");
+			await this.driver.bootloader.beginUpload();
+
+			// Wait for the bootloader to accept fragments
+			try {
+				await this.driver.waitForBootloaderChunk(
+					(c) =>
+						c.type === BootloaderChunkType.Message &&
+						c.message === "begin upload",
+					5000,
+				);
+				await this.driver.waitForBootloaderChunk(
+					(c) =>
+						c.type === BootloaderChunkType.FlowControl &&
+						c.command === XModemMessageHeaders.C,
+					1000,
+				);
+			} catch {
+				this.driver.controllerLog.print(
+					"OTW update failed: Expected response not received from the bootloader",
+					"error",
+				);
+				this.emit("firmware update finished", {
+					success: false,
+					status: ControllerFirmwareUpdateStatus.Error_Timeout,
+				});
+				return false;
+			}
+
+			const BLOCK_SIZE = 128;
+			if (data.length % BLOCK_SIZE !== 0) {
+				// Pad the data to a multiple of BLOCK_SIZE
+				data = Buffer.concat([
+					data,
+					Buffer.alloc(BLOCK_SIZE - (data.length % BLOCK_SIZE), 0xff),
+				]);
+			}
+			const numFragments = Math.ceil(data.length / BLOCK_SIZE);
+
+			let aborted = false;
+
+			transfer: for (
+				let fragment = 1;
+				fragment <= numFragments;
+				fragment++
+			) {
+				const fragmentData = data.slice(
+					(fragment - 1) * BLOCK_SIZE,
+					fragment * BLOCK_SIZE,
+				);
+
+				retry: for (let retry = 0; retry < 3; retry++) {
+					await this.driver.bootloader.uploadFragment(
+						fragment,
+						fragmentData,
+					);
+					let result: BootloaderChunk & {
+						type: BootloaderChunkType.FlowControl;
+					};
+					try {
+						result = await this.driver.waitForBootloaderChunk(
+							(c) => c.type === BootloaderChunkType.FlowControl,
+							1000,
+						);
+					} catch (e) {
+						this.driver.controllerLog.print(
+							"OTW update failed: The bootloader did not acknowledge the start of transfer.",
+							"error",
+						);
+						this.emit("firmware update finished", {
+							success: false,
+							status: ControllerFirmwareUpdateStatus.Error_Timeout,
+						});
+						return false;
+					}
+
+					switch (result.command) {
+						case XModemMessageHeaders.ACK: {
+							// The fragment was accepted
+							const progress: ControllerFirmwareUpdateProgress = {
+								sentFragments: fragment,
+								totalFragments: numFragments,
+								progress: roundTo(
+									(fragment / numFragments) * 100,
+									2,
+								),
+							};
+							this.emit("firmware update progress", progress);
+
+							// we've transmitted at least one fragment, so we need to destroy the driver afterwards
+							destroy = true;
+
+							continue transfer;
+						}
+						case XModemMessageHeaders.NAK:
+							// The fragment was rejected, try again
+							continue retry;
+						case XModemMessageHeaders.CAN:
+							// The bootloader aborted the update. We'll receive the reason afterwards as a message
+							aborted = true;
+							break transfer;
+					}
+				}
+
+				this.driver.controllerLog.print(
+					"OTW update failed: Maximum retry attempts reached",
+					"error",
+				);
+				this.emit("firmware update finished", {
+					success: false,
+					status: ControllerFirmwareUpdateStatus.Error_RetryLimitReached,
+				});
+				return false;
+			}
+
+			if (aborted) {
+				// wait for the reason to craft a good error message
+				const error = await this.driver
+					.waitForBootloaderChunk<
+						BootloaderChunk & { type: BootloaderChunkType.Message }
+					>(
+						(c) =>
+							c.type === BootloaderChunkType.Message &&
+							c.message.includes("error 0x"),
+						1000,
+					)
+					.catch(() => undefined);
+
+				// wait for the menu screen so it doesn't show up in logs
+				await this.driver
+					.waitForBootloaderChunk(
+						(c) => c.type === BootloaderChunkType.Menu,
+						1000,
+					)
+					.catch(() => undefined);
+
+				let message = `OTW update was aborted by the bootloader.`;
+				if (error) {
+					message += ` ${error.message}`;
+					// TODO: parse error code
+				}
+				this.driver.controllerLog.print(message, "error");
+				this.emit("firmware update finished", {
+					success: false,
+					status: ControllerFirmwareUpdateStatus.Error_Aborted,
+				});
+				return false;
+			} else {
+				// We're done, send EOT and wait for the menu screen
+				await this.driver.bootloader.finishUpload();
+				try {
+					await this.driver.waitForBootloaderChunk(
+						(c) =>
+							c.type === BootloaderChunkType.Message &&
+							c.message.includes("upload complete"),
+						1000,
+					);
+					await this.driver.waitForBootloaderChunk(
+						(c) => c.type === BootloaderChunkType.Menu,
+						1000,
+					);
+				} catch (e) {
+					this.driver.controllerLog.print(
+						"OTW update failed: The bootloader did not acknowledge the end of transfer.",
+						"error",
+					);
+					this.emit("firmware update finished", {
+						success: false,
+						status: ControllerFirmwareUpdateStatus.Error_Timeout,
+					});
+					return false;
+				}
+			}
+
+			this.driver.controllerLog.print("Firmware update succeeded");
+			this.emit("firmware update finished", {
+				success: true,
+				status: ControllerFirmwareUpdateStatus.OK,
+			});
+			return true;
+		} finally {
+			await this.driver.leaveBootloader(destroy);
+			this._firmwareUpdateInProgress = false;
+		}
 	}
 }

@@ -3,7 +3,11 @@ import {
 	getDefaultMeterScale,
 	MeterScale,
 } from "@zwave-js/config";
-import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	SupervisionResult,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	getMinIntegerSize,
@@ -47,6 +51,7 @@ import {
 	expectedCCResponse,
 	getCommandClass,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { MeterCommand, RateType } from "../lib/_Types";
@@ -296,7 +301,9 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
-	public async reset(options?: MeterCCResetOptions): Promise<void> {
+	public async reset(
+		options?: MeterCCResetOptions,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Reset);
 
 		const cc = new MeterCCReset(this.applHost, {
@@ -304,7 +311,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -898,6 +905,7 @@ type MeterCCResetOptions =
 	  };
 
 @CCCommand(MeterCommand.Reset)
+@useSupervision()
 export class MeterCCReset extends MeterCC {
 	public constructor(
 		host: ZWaveHost,

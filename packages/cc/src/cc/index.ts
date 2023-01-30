@@ -204,6 +204,11 @@ export {
 	HumidityControlSetpointCCValues,
 } from "./HumidityControlSetpointCC";
 export {
+	InclusionControllerCC,
+	InclusionControllerCCComplete,
+	InclusionControllerCCInitiate,
+} from "./InclusionControllerCC";
+export {
 	IndicatorCC,
 	IndicatorCCGet,
 	IndicatorCCReport,
@@ -408,6 +413,31 @@ export {
 	SceneControllerConfigurationCCSet,
 	SceneControllerConfigurationCCValues,
 } from "./SceneControllerConfigurationCC";
+export {
+	ScheduleEntryLockCC,
+	ScheduleEntryLockCCDailyRepeatingScheduleGet,
+	ScheduleEntryLockCCDailyRepeatingScheduleReport,
+	ScheduleEntryLockCCDailyRepeatingScheduleSet,
+	ScheduleEntryLockCCEnableAllSet,
+	ScheduleEntryLockCCEnableSet,
+	ScheduleEntryLockCCSupportedGet,
+	ScheduleEntryLockCCSupportedReport,
+	ScheduleEntryLockCCTimeOffsetGet,
+	ScheduleEntryLockCCTimeOffsetReport,
+	ScheduleEntryLockCCTimeOffsetSet,
+	ScheduleEntryLockCCValues,
+	ScheduleEntryLockCCWeekDayScheduleGet,
+	ScheduleEntryLockCCWeekDayScheduleReport,
+	ScheduleEntryLockCCWeekDayScheduleSet,
+	ScheduleEntryLockCCYearDayScheduleGet,
+	ScheduleEntryLockCCYearDayScheduleReport,
+	ScheduleEntryLockCCYearDayScheduleSet,
+} from "./ScheduleEntryLockCC";
+export type {
+	ScheduleEntryLockCCDailyRepeatingScheduleSetOptions,
+	ScheduleEntryLockCCWeekDayScheduleSetOptions,
+	ScheduleEntryLockCCYearDayScheduleSetOptions,
+} from "./ScheduleEntryLockCC";
 export {
 	Security2CC,
 	Security2CCCommandsSupportedGet,

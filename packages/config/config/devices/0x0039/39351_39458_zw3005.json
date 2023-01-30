@@ -1,0 +1,150 @@
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39351 / 39458 / ZW3005",
+	"description": "In-Wall Paddle Dimmer, 500S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3038",
+			"zwaveAllianceId": [2724, 3751]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON when load is ON",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Invert Switch",
+			"description": "If the switch is accidentally installed upside down with “On” at the bottom and “Off” at the top, the default On/Off rocker settings can be reversed by changing parameter 4’s value to “1”",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Orientation",
+					"value": 0
+				},
+				{
+					"label": "Invert Switch",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Dim Rate Steps (Z-Wave Command)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Dim Rate Timing (Z-Wave)",
+			"description": "Timing of steps or levels",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Dim Rate Steps (Manual)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Dim Rate Timing (Manual)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Dim Rate Steps (All-On/All-Off)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Dim Rate Timing (All-On/All-Off)",
+			"description": "Timing of steps or levels",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\ninclude a device to the Z-Wave network.\n2. Once the controller is ready to add your device,\npress and release the top or bottom of the wireless smart\nswitch (rocker) to add it in the network.\nPlease reference the controller’s manual for instructions",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker) to remove it from the network",
+		"reset": "Quickly press ON (Top) button three (3) times then immediately\npress the OFF (Bottom) button three (3) times. The LED will flash\nON/OFF 5 times when completed successfully.\nNOTE: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3751/39458_HQSG_v3.pdf"
+	}
+}

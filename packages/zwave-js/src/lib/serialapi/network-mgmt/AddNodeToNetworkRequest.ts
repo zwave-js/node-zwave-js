@@ -307,9 +307,9 @@ export class AddNodeToNetworkRequestStatusReport
 
 interface AddNodeStatusContext {
 	nodeId: number;
-	basic?: number;
-	generic?: number;
-	specific?: number;
+	basicDeviceClass?: number;
+	genericDeviceClass?: number;
+	specificDeviceClass?: number;
 	supportedCCs?: CommandClasses[];
 	controlledCCs?: CommandClasses[];
 }

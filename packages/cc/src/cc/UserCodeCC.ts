@@ -7,6 +7,8 @@ import {
 	MessagePriority,
 	MessageRecord,
 	parseBitMask,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	unknownBoolean,
 	validatePayload,
 	ValueMetadata,
@@ -14,7 +16,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { gotDeserializationOptions } from "@zwave-js/serial";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
@@ -37,6 +38,7 @@ import {
 } from "../lib/API";
 import {
 	CommandClass,
+	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -48,6 +50,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import type { NotificationEventPayload } from "../lib/NotificationEventPayload";
 import { V } from "../lib/Values";
@@ -283,6 +286,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		{ property, propertyKey },
 		value,
 	) => {
+		let result: SupervisionResult | undefined;
 		if (property === "keypadMode") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -292,7 +296,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 					typeof value,
 				);
 			}
-			await this.setKeypadMode(value);
+			result = await this.setKeypadMode(value);
 		} else if (property === "masterCode") {
 			if (typeof value !== "string") {
 				throwWrongValueType(
@@ -302,7 +306,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 					typeof value,
 				);
 			}
-			await this.setMasterCode(value);
+			result = await this.setMasterCode(value);
 		} else if (property === "userIdStatus") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
@@ -320,7 +324,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 			if (value === UserIDStatus.Available) {
 				// Clear Code
-				await this.clear(propertyKey);
+				result = await this.clear(propertyKey);
 			} else {
 				// We need to set the user code along with the status
 				const userCode = this.getValueDB().getValue<string>(
@@ -328,7 +332,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						this.endpoint.index,
 					),
 				);
-				await this.set(propertyKey, value, userCode!);
+				result = await this.set(propertyKey, value, userCode!);
 			}
 		} else if (property === "userCode") {
 			if (propertyKey == undefined) {
@@ -357,17 +361,19 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			) {
 				userIdStatus = UserIDStatus.Enabled;
 			}
-			await this.set(propertyKey, userIdStatus as any, value);
+			result = await this.set(propertyKey, userIdStatus as any, value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
 
-		// Verify the current value after a (short) delay
-		this.schedulePoll({ property, propertyKey }, value, {
-			transition: "fast",
-		});
+		// Verify the change after a short delay, unless the command was supervised and successful
+		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+			this.schedulePoll({ property, propertyKey }, value, {
+				transition: "fast",
+			});
+		}
 
-		return undefined;
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -481,7 +487,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserIDStatus.Available | UserIDStatus.StatusNotAvailable
 		>,
 		userCode: string | Buffer,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		if (this.version > 1 || userId > 255) {
 			return this.setMany([{ userId, userIdStatus, userCode }]);
 		}
@@ -507,12 +513,14 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			userCode,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Configures multiple user codes */
 	@validateArgs()
-	public async setMany(codes: UserCodeCCSetOptions[]): Promise<void> {
+	public async setMany(
+		codes: UserCodeCCSetOptions[],
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.ExtendedUserCodeSet,
@@ -611,7 +619,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			userCodes: codes,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -619,9 +627,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	 * @param userId The user code to clear. If none or 0 is given, all codes are cleared
 	 */
 	@validateArgs()
-	public async clear(userId: number = 0): Promise<void> {
+	public async clear(
+		userId: number = 0,
+	): Promise<SupervisionResult | undefined> {
 		if (this.version > 1 || userId > 255) {
-			await this.setMany([
+			return this.setMany([
 				{ userId, userIdStatus: UserIDStatus.Available },
 			]);
 		} else {
@@ -644,7 +654,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userId,
 				userIdStatus: UserIDStatus.Available,
 			});
-			await this.applHost.sendCommand(cc, this.commandOptions);
+			return this.applHost.sendCommand(cc, this.commandOptions);
 		}
 	}
 
@@ -697,7 +707,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs({ strictEnums: true })
-	public async setKeypadMode(keypadMode: KeypadMode): Promise<void> {
+	public async setKeypadMode(
+		keypadMode: KeypadMode,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.KeypadModeSet,
@@ -729,7 +741,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			keypadMode,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getMasterCode(): Promise<string | undefined> {
@@ -751,7 +763,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
-	public async setMasterCode(masterCode: string): Promise<void> {
+	public async setMasterCode(
+		masterCode: string,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeSet,
@@ -794,7 +808,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			masterCode,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getUserCodeChecksum(): Promise<number | undefined> {
@@ -1102,6 +1116,7 @@ type UserCodeCCSetOptions =
 	  };
 
 @CCCommand(UserCodeCommand.Set)
+@useSupervision()
 export class UserCodeCCSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1451,6 +1466,7 @@ interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(UserCodeCommand.KeypadModeSet)
+@useSupervision()
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1539,6 +1555,7 @@ interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(UserCodeCommand.MasterCodeSet)
+@useSupervision()
 export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1643,6 +1660,7 @@ export interface UserCode {
 }
 
 @CCCommand(UserCodeCommand.ExtendedUserCodeSet)
+@useSupervision()
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,

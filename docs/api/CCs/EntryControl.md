@@ -28,7 +28,7 @@ async getConfiguration(): Promise<Pick<EntryControlCCConfigurationReport, "keyCa
 async setConfiguration(
 	keyCacheSize: number,
 	keyCacheTimeout: number,
-): Promise<Pick<EntryControlCCConfigurationReport, "keyCacheSize" | "keyCacheTimeout"> | undefined>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Entry Control CC values

@@ -1,17 +1,22 @@
-name: 'Upload Build Cache'
-description: 'Uploads build artifacts to be used in later jobs'
+name: 'Upload Turbo Cache'
+description: 'Uploads the turborepo cache to be used in later jobs'
 author: 'AlCalzone'
 
 runs:
   using: "composite"
   steps:
-    - name: Compress build artifacts # Uploading or downloading many files takes ages
+    - name: Compress turbo cache # Uploading or downloading many files takes ages
       shell: bash
-      run: tar -cvzf built.tgz packages/*/build packages/*/src packages/*/*.tsbuildinfo
+      working-directory: ${{ runner.temp }}
+      run: |
+        cd ${{ runner.temp }}
+        tar -cvzf turbo-cache.tgz turbo-cache
+        pwd
+        ls -la
 
-    - name: Upload build artifacts to cache
+    - name: Upload as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: built
-        path: built.tgz
+        name: turbo-cache
+        path: ${{ runner.temp }}/turbo-cache.tgz
         retention-days: 1 # We don't need this any longer than the workflow takes, but 1 day is the minimum

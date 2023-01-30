@@ -17,9 +17,9 @@ export type TemplateLiteralPair = [
 	"string" | "number" | "bigint" | "any" | "undefined" | "null" | undefined,
 ];
 
-export const objectIdentifier = ts.createIdentifier("$o");
-export const pathIdentifier = ts.createIdentifier("path");
-const keyIdentifier = ts.createIdentifier("key");
+export const objectIdentifier = ts.factory.createIdentifier("$o");
+export const pathIdentifier = ts.factory.createIdentifier("path");
+const keyIdentifier = ts.factory.createIdentifier("key");
 
 export function checkIsClass(
 	type: ts.ObjectType,
@@ -306,12 +306,13 @@ export function getResolvedTypeParameter(
 }
 
 export function getFunctionFunction(visitorContext: VisitorContext): string {
+	const f = visitorContext.factory;
 	const name = "_function";
 	return setFunctionIfNotExists(name, visitorContext, () => {
 		return createAssertionFunction(
-			ts.createStrictInequality(
-				ts.createTypeOf(objectIdentifier),
-				ts.createStringLiteral("function"),
+			f.createStrictInequality(
+				f.createTypeOfExpression(objectIdentifier),
+				f.createStringLiteral("function"),
 			),
 			{ type: "function" },
 			name,
@@ -322,12 +323,13 @@ export function getFunctionFunction(visitorContext: VisitorContext): string {
 }
 
 export function getStringFunction(visitorContext: VisitorContext): string {
+	const f = visitorContext.factory;
 	const name = "_string";
 	return setFunctionIfNotExists(name, visitorContext, () => {
 		return createAssertionFunction(
-			ts.createStrictInequality(
-				ts.createTypeOf(objectIdentifier),
-				ts.createStringLiteral("string"),
+			f.createStrictInequality(
+				f.createTypeOfExpression(objectIdentifier),
+				f.createStringLiteral("string"),
 			),
 			{ type: "string" },
 			name,
@@ -338,12 +340,13 @@ export function getStringFunction(visitorContext: VisitorContext): string {
 }
 
 export function getBooleanFunction(visitorContext: VisitorContext): string {
+	const f = visitorContext.factory;
 	const name = "_boolean";
 	return setFunctionIfNotExists(name, visitorContext, () => {
 		return createAssertionFunction(
-			ts.createStrictInequality(
-				ts.createTypeOf(objectIdentifier),
-				ts.createStringLiteral("boolean"),
+			f.createStrictInequality(
+				f.createTypeOfExpression(objectIdentifier),
+				f.createStringLiteral("boolean"),
 			),
 			{ type: "boolean" },
 			name,
@@ -354,12 +357,13 @@ export function getBooleanFunction(visitorContext: VisitorContext): string {
 }
 
 export function getBigIntFunction(visitorContext: VisitorContext): string {
+	const f = visitorContext.factory;
 	const name = "_bigint";
 	return setFunctionIfNotExists(name, visitorContext, () => {
 		return createAssertionFunction(
-			ts.createStrictInequality(
-				ts.createTypeOf(objectIdentifier),
-				ts.createStringLiteral("bigint"),
+			f.createStrictInequality(
+				f.createTypeOfExpression(objectIdentifier),
+				f.createStringLiteral("bigint"),
 			),
 			{ type: "big-int" },
 			name,
@@ -370,12 +374,13 @@ export function getBigIntFunction(visitorContext: VisitorContext): string {
 }
 
 export function getNumberFunction(visitorContext: VisitorContext): string {
+	const f = visitorContext.factory;
 	const name = "_number";
 	return setFunctionIfNotExists(name, visitorContext, () => {
 		return createAssertionFunction(
-			ts.createStrictInequality(
-				ts.createTypeOf(objectIdentifier),
-				ts.createStringLiteral("number"),
+			f.createStrictInequality(
+				f.createTypeOfExpression(objectIdentifier),
+				f.createStringLiteral("number"),
 			),
 			{ type: "number" },
 			name,
@@ -386,12 +391,13 @@ export function getNumberFunction(visitorContext: VisitorContext): string {
 }
 
 export function getUndefinedFunction(visitorContext: VisitorContext): string {
+	const f = visitorContext.factory;
 	const name = "_undefined";
 	return setFunctionIfNotExists(name, visitorContext, () => {
 		return createAssertionFunction(
-			ts.createStrictInequality(
+			f.createStrictInequality(
 				objectIdentifier,
-				ts.createIdentifier("undefined"),
+				f.createIdentifier("undefined"),
 			),
 			{ type: "undefined" },
 			name,
@@ -402,6 +408,7 @@ export function getUndefinedFunction(visitorContext: VisitorContext): string {
 }
 
 export function getNullFunction(visitorContext: VisitorContext): string {
+	const f = visitorContext.factory;
 	const name = "_null";
 	return setFunctionIfNotExists(name, visitorContext, () => {
 		const strictNullChecks =
@@ -414,7 +421,7 @@ export function getNullFunction(visitorContext: VisitorContext): string {
 		}
 
 		return createAssertionFunction(
-			ts.createStrictInequality(objectIdentifier, ts.createNull()),
+			f.createStrictInequality(objectIdentifier, f.createNull()),
 			{ type: "null" },
 			name,
 			visitorContext,
@@ -424,17 +431,16 @@ export function getNullFunction(visitorContext: VisitorContext): string {
 }
 
 export function getNeverFunction(visitorContext: VisitorContext): string {
+	const f = visitorContext.factory;
 	const name = "_never";
 	return setFunctionIfNotExists(name, visitorContext, () => {
-		return ts.createFunctionDeclaration(
-			undefined,
+		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
 			name,
 			undefined,
 			[
-				ts.createParameter(
-					undefined,
+				f.createParameterDeclaration(
 					undefined,
 					undefined,
 					objectIdentifier,
@@ -444,9 +450,9 @@ export function getNeverFunction(visitorContext: VisitorContext): string {
 				),
 			],
 			undefined,
-			ts.createBlock(
+			f.createBlock(
 				[
-					ts.createReturn(
+					f.createReturnStatement(
 						createErrorObject({ type: "never" }, visitorContext),
 					),
 				],
@@ -484,7 +490,7 @@ export function createBinaries(
 ): ts.Expression {
 	if (expressions.length >= 1 || baseExpression === undefined) {
 		return expressions.reduce((previous, expression) =>
-			ts.createBinary(previous, operator, expression),
+			ts.factory.createBinaryExpression(previous, operator, expression),
 		);
 	} else {
 		return baseExpression;
@@ -494,15 +500,17 @@ export function createBinaries(
 export function createAcceptingFunction(
 	functionName: string,
 ): ts.FunctionDeclaration {
-	return ts.createFunctionDeclaration(
-		undefined,
+	return ts.factory.createFunctionDeclaration(
 		undefined,
 		undefined,
 		functionName,
 		undefined,
 		[],
 		undefined,
-		ts.createBlock([ts.createReturn(ts.createNull())], true),
+		ts.factory.createBlock(
+			[ts.factory.createReturnStatement(ts.factory.createNull())],
+			true,
+		),
 	);
 }
 
@@ -511,18 +519,16 @@ export function createConjunctionFunction(
 	functionName: string,
 	extraStatements?: ts.Statement[],
 ): ts.FunctionDeclaration {
-	const conditionsIdentifier = ts.createIdentifier("conditions");
-	const conditionIdentifier = ts.createIdentifier("condition");
-	const errorIdentifier = ts.createIdentifier("error");
-	return ts.createFunctionDeclaration(
-		undefined,
+	const conditionsIdentifier = ts.factory.createIdentifier("conditions");
+	const conditionIdentifier = ts.factory.createIdentifier("condition");
+	const errorIdentifier = ts.factory.createIdentifier("error");
+	return ts.factory.createFunctionDeclaration(
 		undefined,
 		undefined,
 		functionName,
 		undefined,
 		[
-			ts.createParameter(
-				undefined,
+			ts.factory.createParameterDeclaration(
 				undefined,
 				undefined,
 				objectIdentifier,
@@ -532,18 +538,21 @@ export function createConjunctionFunction(
 			),
 		],
 		undefined,
-		ts.createBlock(
+		ts.factory.createBlock(
 			[
-				ts.createVariableStatement(
+				ts.factory.createVariableStatement(
 					undefined,
-					ts.createVariableDeclarationList(
+					ts.factory.createVariableDeclarationList(
 						[
-							ts.createVariableDeclaration(
+							ts.factory.createVariableDeclaration(
 								conditionsIdentifier,
 								undefined,
-								ts.createArrayLiteral(
+								undefined,
+								ts.factory.createArrayLiteralExpression(
 									functionNames.map((functionName) =>
-										ts.createIdentifier(functionName),
+										ts.factory.createIdentifier(
+											functionName,
+										),
 									),
 								),
 							),
@@ -551,11 +560,11 @@ export function createConjunctionFunction(
 						ts.NodeFlags.Const,
 					),
 				),
-				ts.createForOf(
+				ts.factory.createForOfStatement(
 					undefined,
-					ts.createVariableDeclarationList(
+					ts.factory.createVariableDeclarationList(
 						[
-							ts.createVariableDeclaration(
+							ts.factory.createVariableDeclaration(
 								conditionIdentifier,
 								undefined,
 								undefined,
@@ -564,16 +573,17 @@ export function createConjunctionFunction(
 						ts.NodeFlags.Const,
 					),
 					conditionsIdentifier,
-					ts.createBlock(
+					ts.factory.createBlock(
 						[
-							ts.createVariableStatement(
+							ts.factory.createVariableStatement(
 								undefined,
-								ts.createVariableDeclarationList(
+								ts.factory.createVariableDeclarationList(
 									[
-										ts.createVariableDeclaration(
+										ts.factory.createVariableDeclaration(
 											errorIdentifier,
 											undefined,
-											ts.createCall(
+											undefined,
+											ts.factory.createCallExpression(
 												conditionIdentifier,
 												undefined,
 												[objectIdentifier],
@@ -583,16 +593,18 @@ export function createConjunctionFunction(
 									ts.NodeFlags.Const,
 								),
 							),
-							ts.createIf(
+							ts.factory.createIfStatement(
 								errorIdentifier,
-								ts.createReturn(errorIdentifier),
+								ts.factory.createReturnStatement(
+									errorIdentifier,
+								),
 							),
 						],
 						true,
 					),
 				),
 				...(extraStatements || []),
-				ts.createReturn(ts.createNull()),
+				ts.factory.createReturnStatement(ts.factory.createNull()),
 			],
 			true,
 		),
@@ -604,6 +616,8 @@ export function createDisjunctionFunction(
 	functionName: string,
 	visitorContext: VisitorContext,
 ): ts.FunctionDeclaration {
+	const f = visitorContext.factory;
+
 	// Not sure why this was here. It created spurious uncalled _null methods
 	//
 	// if (functionNames.length === 2) {
@@ -617,18 +631,16 @@ export function createDisjunctionFunction(
 	// 	}
 	// }
 
-	const conditionsIdentifier = ts.createIdentifier("conditions");
-	const conditionIdentifier = ts.createIdentifier("condition");
-	const errorIdentifier = ts.createIdentifier("error");
-	return ts.createFunctionDeclaration(
-		undefined,
+	const conditionsIdentifier = f.createIdentifier("conditions");
+	const conditionIdentifier = f.createIdentifier("condition");
+	const errorIdentifier = f.createIdentifier("error");
+	return f.createFunctionDeclaration(
 		undefined,
 		undefined,
 		functionName,
 		undefined,
 		[
-			ts.createParameter(
-				undefined,
+			f.createParameterDeclaration(
 				undefined,
 				undefined,
 				objectIdentifier,
@@ -638,18 +650,19 @@ export function createDisjunctionFunction(
 			),
 		],
 		undefined,
-		ts.createBlock(
+		f.createBlock(
 			[
-				ts.createVariableStatement(
+				f.createVariableStatement(
 					undefined,
-					ts.createVariableDeclarationList(
+					f.createVariableDeclarationList(
 						[
-							ts.createVariableDeclaration(
+							f.createVariableDeclaration(
 								conditionsIdentifier,
 								undefined,
-								ts.createArrayLiteral(
+								undefined,
+								f.createArrayLiteralExpression(
 									functionNames.map((functionName) =>
-										ts.createIdentifier(functionName),
+										f.createIdentifier(functionName),
 									),
 								),
 							),
@@ -657,11 +670,11 @@ export function createDisjunctionFunction(
 						ts.NodeFlags.Const,
 					),
 				),
-				ts.createForOf(
+				f.createForOfStatement(
 					undefined,
-					ts.createVariableDeclarationList(
+					f.createVariableDeclarationList(
 						[
-							ts.createVariableDeclaration(
+							f.createVariableDeclaration(
 								conditionIdentifier,
 								undefined,
 								undefined,
@@ -670,16 +683,17 @@ export function createDisjunctionFunction(
 						ts.NodeFlags.Const,
 					),
 					conditionsIdentifier,
-					ts.createBlock(
+					f.createBlock(
 						[
-							ts.createVariableStatement(
+							f.createVariableStatement(
 								undefined,
-								ts.createVariableDeclarationList(
+								f.createVariableDeclarationList(
 									[
-										ts.createVariableDeclaration(
+										f.createVariableDeclaration(
 											errorIdentifier,
 											undefined,
-											ts.createCall(
+											undefined,
+											f.createCallExpression(
 												conditionIdentifier,
 												undefined,
 												[objectIdentifier],
@@ -689,15 +703,15 @@ export function createDisjunctionFunction(
 									ts.NodeFlags.Const,
 								),
 							),
-							ts.createIf(
-								ts.createLogicalNot(errorIdentifier),
-								ts.createReturn(ts.createNull()),
+							f.createIfStatement(
+								f.createLogicalNot(errorIdentifier),
+								f.createReturnStatement(f.createNull()),
 							),
 						],
 						true,
 					),
 				),
-				ts.createReturn(
+				f.createReturnStatement(
 					createErrorObject({ type: "union" }, visitorContext),
 				),
 			],
@@ -751,19 +765,20 @@ export function createStrictNullCheckStatement(
 	identifier: ts.Identifier,
 	visitorContext: VisitorContext,
 ): ts.Statement {
+	const f = visitorContext.factory;
 	if (visitorContext.compilerOptions.strictNullChecks !== false) {
-		return ts.createEmptyStatement();
+		return f.createEmptyStatement();
 	} else {
-		return ts.createIf(
-			ts.createBinary(
-				ts.createStrictEquality(identifier, ts.createNull()),
+		return f.createIfStatement(
+			f.createBinaryExpression(
+				f.createStrictEquality(identifier, f.createNull()),
 				ts.SyntaxKind.BarBarToken,
-				ts.createStrictEquality(
+				f.createStrictEquality(
 					identifier,
-					ts.createIdentifier("undefined"),
+					f.createIdentifier("undefined"),
 				),
 			),
-			ts.createReturn(ts.createNull()),
+			f.createReturnStatement(f.createNull()),
 		);
 	}
 }
@@ -779,12 +794,10 @@ export function createAssertionFunction(
 	return f.createFunctionDeclaration(
 		undefined,
 		undefined,
-		undefined,
 		functionName,
 		undefined,
 		[
 			f.createParameterDeclaration(
-				undefined,
 				undefined,
 				undefined,
 				objectIdentifier,
@@ -816,31 +829,35 @@ export function createSuperfluousPropertiesLoop(
 	propertyNames: string[],
 	visitorContext: VisitorContext,
 ): ts.Statement {
-	return ts.createForOf(
+	const f = visitorContext.factory;
+	return f.createForOfStatement(
 		undefined,
-		ts.createVariableDeclarationList(
-			[ts.createVariableDeclaration(keyIdentifier, undefined, undefined)],
+		f.createVariableDeclarationList(
+			[f.createVariableDeclaration(keyIdentifier, undefined, undefined)],
 			ts.NodeFlags.Const,
 		),
-		ts.createCall(
-			ts.createPropertyAccess(ts.createIdentifier("Object"), "keys"),
+		f.createCallExpression(
+			f.createPropertyAccessExpression(
+				f.createIdentifier("Object"),
+				"keys",
+			),
 			undefined,
 			[objectIdentifier],
 		),
-		ts.createBlock(
+		f.createBlock(
 			[
-				ts.createIf(
+				f.createIfStatement(
 					createBinaries(
 						propertyNames.map((propertyName) =>
-							ts.createStrictInequality(
+							f.createStrictInequality(
 								keyIdentifier,
-								ts.createStringLiteral(propertyName),
+								f.createStringLiteral(propertyName),
 							),
 						),
 						ts.SyntaxKind.AmpersandAmpersandToken,
-						ts.createTrue(),
+						f.createTrue(),
 					),
-					ts.createReturn(
+					f.createReturnStatement(
 						createErrorObject(
 							{ type: "superfluous-property" },
 							visitorContext,
@@ -865,26 +882,32 @@ function createAssertionString(reason: string | ts.Expression): ts.Expression {
 	if (typeof reason === "string") {
 		return createBinaries(
 			[
-				ts.createStringLiteral("validation failed at "),
-				ts.createCall(
-					ts.createPropertyAccess(pathIdentifier, "join"),
+				ts.factory.createStringLiteral("validation failed at "),
+				ts.factory.createCallExpression(
+					ts.factory.createPropertyAccessExpression(
+						pathIdentifier,
+						"join",
+					),
 					undefined,
-					[ts.createStringLiteral(".")],
+					[ts.factory.createStringLiteral(".")],
 				),
-				ts.createStringLiteral(`: ${reason}`),
+				ts.factory.createStringLiteral(`: ${reason}`),
 			],
 			ts.SyntaxKind.PlusToken,
 		);
 	} else {
 		return createBinaries(
 			[
-				ts.createStringLiteral("validation failed at "),
-				ts.createCall(
-					ts.createPropertyAccess(pathIdentifier, "join"),
+				ts.factory.createStringLiteral("validation failed at "),
+				ts.factory.createCallExpression(
+					ts.factory.createPropertyAccessExpression(
+						pathIdentifier,
+						"join",
+					),
 					undefined,
-					[ts.createStringLiteral(".")],
+					[ts.factory.createStringLiteral(".")],
 				),
-				ts.createStringLiteral(`: `),
+				ts.factory.createStringLiteral(`: `),
 				reason,
 			],
 			ts.SyntaxKind.PlusToken,
@@ -896,20 +919,21 @@ export function createErrorObject(
 	reason: Reason,
 	visitorContext: VisitorContext,
 ): ts.Expression {
+	const f = visitorContext.factory;
 	if (visitorContext.options.emitDetailedErrors === false) {
-		return ts.createObjectLiteral([]);
+		return f.createObjectLiteralExpression([]);
 	}
-	return ts.createObjectLiteral([
-		ts.createPropertyAssignment("message", createErrorMessage(reason)),
-		ts.createPropertyAssignment(
+	return f.createObjectLiteralExpression([
+		f.createPropertyAssignment("message", createErrorMessage(reason)),
+		f.createPropertyAssignment(
 			"path",
-			ts.createCall(
-				ts.createPropertyAccess(pathIdentifier, "slice"),
+			f.createCallExpression(
+				f.createPropertyAccessExpression(pathIdentifier, "slice"),
 				undefined,
 				undefined,
 			),
 		),
-		ts.createPropertyAssignment(
+		f.createPropertyAssignment(
 			"reason",
 			serializeObjectToExpression(reason),
 		),
@@ -918,27 +942,27 @@ export function createErrorObject(
 
 function serializeObjectToExpression(object: unknown): ts.Expression {
 	if (typeof object === "string") {
-		return ts.createStringLiteral(object);
+		return ts.factory.createStringLiteral(object);
 	} else if (typeof object === "number") {
-		return ts.createNumericLiteral(object.toString());
+		return ts.factory.createNumericLiteral(object.toString());
 	} else if (typeof object === "boolean") {
-		return object ? ts.createTrue() : ts.createFalse();
+		return object ? ts.factory.createTrue() : ts.factory.createFalse();
 	} else if (typeof object === "bigint") {
-		return ts.createBigIntLiteral(object.toString());
+		return ts.factory.createBigIntLiteral(object.toString());
 	} else if (typeof object === "undefined") {
-		return ts.createIdentifier("undefined");
+		return ts.factory.createIdentifier("undefined");
 	} else if (typeof object === "object") {
 		if (object === null) {
-			return ts.createNull();
+			return ts.factory.createNull();
 		} else if (Array.isArray(object)) {
-			return ts.createArrayLiteral(
+			return ts.factory.createArrayLiteralExpression(
 				object.map((item) => serializeObjectToExpression(item)),
 			);
 		} else {
-			return ts.createObjectLiteral(
+			return ts.factory.createObjectLiteralExpression(
 				Object.keys(object).map((key) => {
 					const value = (object as { [Key: string]: unknown })[key];
-					return ts.createPropertyAssignment(
+					return ts.factory.createPropertyAssignment(
 						key,
 						serializeObjectToExpression(value),
 					);
@@ -967,9 +991,11 @@ function createErrorMessage(reason: Reason): ts.Expression {
 			return createAssertionString(
 				createBinaries(
 					[
-						ts.createStringLiteral(`superfluous property '`),
+						ts.factory.createStringLiteral(
+							`superfluous property '`,
+						),
 						keyIdentifier,
-						ts.createStringLiteral(`' in object`),
+						ts.factory.createStringLiteral(`' in object`),
 					],
 					ts.SyntaxKind.PlusToken,
 				),

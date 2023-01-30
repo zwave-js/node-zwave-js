@@ -16,6 +16,7 @@ const defaultImplementations = {
 	getNodeId: () => undefined,
 	toLogEntry: () => ({ tags: [] }),
 	needsCallbackId: () => true,
+	getResponseTimeout: () => undefined,
 	getCallbackTimeout: () => undefined,
 	markAsSent: () => void 0,
 	markAsCompleted: () => void 0,

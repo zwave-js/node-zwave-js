@@ -1,0 +1,153 @@
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39357 / 39464 / ZW3004",
+	"description": "In-Wall Toggle Dimmer, 500S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3130",
+			"zwaveAllianceId": 2727
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always Off",
+					"value": 2
+				},
+				{
+					"label": "LED always ON",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Invert Switch",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Orientation",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Dim Rate Steps (Z-Wave Command)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Dim Rate Timing (Z-Wave)",
+			"description": "Timing of steps or levels",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Dim Rate Steps (Manual)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Dim Rate Timing (Manual)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Dim Rate Steps (All-On/All-Off)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Dim Rate Timing (All-On/All-Off)",
+			"description": "Timing of steps or levels",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\ninclude a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker) to include it in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nexclude a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker) to exclude it from the network",
+		"reset": "1. Quickly press ON (up) button (3) times then immediately press the OFF (down) button (3) times. \nNote: This should only be used in the even your network's primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2727/39357-QSG-v1-para.pdf"
+	}
+}

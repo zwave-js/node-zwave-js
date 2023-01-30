@@ -763,8 +763,9 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 2);
+		validatePayload(this.payload.length >= 1);
 		this.switchType = this.payload[0] & 0b11111;
+		// We do not support the deprecated secondary switch type
 	}
 
 	// This is the primary switch type. We're not supporting secondary switch types

@@ -4,6 +4,7 @@ import {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	NodeStatus,
+	SupervisionResult,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -24,6 +25,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import {
 	Powerlevel,
@@ -45,7 +47,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async setNormalPowerlevel(): Promise<void> {
+	public async setNormalPowerlevel(): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Set);
 
 		const cc = new PowerlevelCCSet(this.applHost, {
@@ -53,14 +55,14 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			powerlevel: Powerlevel["Normal Power"],
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
 	public async setCustomPowerlevel(
 		powerlevel: Powerlevel,
 		timeout: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Set);
 
 		const cc = new PowerlevelCCSet(this.applHost, {
@@ -69,7 +71,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			powerlevel,
 			timeout,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getPowerlevel(): Promise<
@@ -95,7 +97,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 		testNodeId: number,
 		powerlevel: Powerlevel,
 		testFrameCount: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			PowerlevelCommand,
 			PowerlevelCommand.TestNodeSet,
@@ -128,7 +130,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			powerlevel,
 			testFrameCount,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getNodeTestStatus(): Promise<
@@ -181,6 +183,7 @@ type PowerlevelCCSetOptions = CCCommandOptions &
 	);
 
 @CCCommand(PowerlevelCommand.Set)
+@useSupervision()
 export class PowerlevelCCSet extends PowerlevelCC {
 	public constructor(
 		host: ZWaveHost,
@@ -271,6 +274,7 @@ interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(PowerlevelCommand.TestNodeSet)
+@useSupervision()
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public constructor(
 		host: ZWaveHost,

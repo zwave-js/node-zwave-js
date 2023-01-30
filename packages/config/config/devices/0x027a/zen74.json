@@ -46,10 +46,32 @@
 			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
+		// Ramp Rate Control
 		{
+			// This parameter was changed in firmware 10.10 and split into parameters 9, 27, 28, and 29
 			"#": "9",
-			"$import": "templates/zooz_template.json#dimmer_ramp_rate",
-			"defaultValue": 0
+			"$if": "firmwareVersion >= 10.10",
+			"$import": "templates/zooz_template.json#dimmer_on_ramp_rate"
+		},
+		{
+			// Old version (pre 10.10)
+			"#": "9",
+			"$import": "templates/zooz_template.json#dimmer_ramp_rate"
+		},
+		{
+			"#": "27",
+			"$if": "firmwareVersion >= 10.10",
+			"$import": "templates/zooz_template.json#dimmer_off_ramp_rate"
+		},
+		{
+			"#": "28",
+			"$if": "firmwareVersion >= 10.10",
+			"$import": "templates/zooz_template.json#zwave_on_dimmer_ramp_rate"
+		},
+		{
+			"#": "29",
+			"$if": "firmwareVersion >= 10.10",
+			"$import": "templates/zooz_template.json#zwave_off_dimmer_ramp_rate"
 		},
 		{
 			"#": "10",
@@ -99,6 +121,11 @@
 			"#": "26",
 			"$if": "firmwareVersion >= 10.0",
 			"$import": "templates/zooz_template.json#local_programming"
+		},
+		{
+			"#": "30",
+			"$if": "firmwareVersion >= 10.10",
+			"$import": "templates/zooz_template.json#local_dimming_speed_group_3_and_4"
 		}
 	],
 	"compat": {

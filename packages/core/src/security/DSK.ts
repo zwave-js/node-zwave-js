@@ -1,9 +1,6 @@
 import { padStart } from "alcalzone-shared/strings";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-
-export function isValidDSK(dsk: string): boolean {
-	return /^(\d{5}-){7}\d{5}$/.test(dsk);
-}
+import { isValidDSK } from "./shared_safe";
 
 export function dskToString(dsk: Buffer): string {
 	if (dsk.length !== 16) {

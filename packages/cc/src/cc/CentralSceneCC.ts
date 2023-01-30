@@ -1,4 +1,8 @@
-import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	SupervisionResult,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -37,6 +41,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
@@ -142,7 +147,9 @@ export class CentralSceneCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async setConfiguration(slowRefresh: boolean): Promise<void> {
+	public async setConfiguration(
+		slowRefresh: boolean,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			CentralSceneCommand,
 			CentralSceneCommand.ConfigurationSet,
@@ -153,7 +160,7 @@ export class CentralSceneCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			slowRefresh,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -166,9 +173,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		if (typeof value !== "boolean") {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
-		await this.setConfiguration(value);
-
-		return undefined;
+		return this.setConfiguration(value);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -485,6 +490,7 @@ interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(CentralSceneCommand.ConfigurationSet)
+@useSupervision()
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public constructor(
 		host: ZWaveHost,

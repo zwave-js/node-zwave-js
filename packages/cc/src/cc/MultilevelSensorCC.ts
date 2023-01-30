@@ -2,6 +2,7 @@ import { getDefaultScale, Scale } from "@zwave-js/config";
 import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
+	SupervisionResult,
 	ValueID,
 } from "@zwave-js/core/safe";
 import {
@@ -41,6 +42,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { MultilevelSensorCommand, MultilevelSensorValue } from "../lib/_Types";
@@ -317,7 +319,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		sensorType: number,
 		scale: number | Scale,
 		value: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.Report,
@@ -330,7 +332,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			scale,
 			value,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -525,6 +527,7 @@ export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultilevelSensorCommand.Report)
+@useSupervision()
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
 		host: ZWaveHost,

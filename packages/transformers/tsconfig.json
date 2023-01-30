@@ -9,11 +9,6 @@
 			"@zwave-js/transformers": ["./src"]
 		}
 	},
-	"references": [
-		{
-			"path": "../maintenance/tsconfig.build.json"
-		}
-	],
 	"include": ["src/**/*.ts", "test/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

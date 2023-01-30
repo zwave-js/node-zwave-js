@@ -80,7 +80,7 @@ The `options` bag contains options that influence the resulting commands, for ex
 <!-- #import SetValueAPIOptions from "zwave-js" -->
 
 ```ts
-declare type SetValueAPIOptions = Partial<ValueChangeOptions>;
+type SetValueAPIOptions = Partial<ValueChangeOptions>;
 ```
 
 ### `pollValue`
@@ -237,7 +237,7 @@ Retrieves the firmware update capabilities of a node to decide which options (e.
 <!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
 
 ```ts
-declare type FirmwareUpdateCapabilities =
+type FirmwareUpdateCapabilities =
 	| {
 			/** Indicates whether the node's firmware can be upgraded */
 			readonly firmwareUpgradable: false;
@@ -254,18 +254,29 @@ declare type FirmwareUpdateCapabilities =
 	  };
 ```
 
-### `beginFirmwareUpdate`
+### `updateFirmware`
 
 ```ts
-beginFirmwareUpdate(data: Buffer, target?: number): Promise<void>
+updateFirmware(updates: Firmware[]): Promise<boolean>
 ```
 
 > [!WARNING] Use at your own risk! We don't take any responsibility if your devices don't work after an update.
 
-Starts an OTA firmware update process for this node. This method takes two arguments:
+Performs an OTA firmware update process for this node, applying the provided firmware updates in sequence. The returned Promise will resolve after the process has **COMPLETED** and indicates whether the update was successful. Failure to start any one of the provided updates will throw an error.
+
+This method an array of firmware updates, each of which contains the following properties:
 
 -   `data` - A buffer containing the firmware image in a format supported by the device
 -   `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. `0` updates the Z-Wave chip, `>=1` updates others if they exist
+
+<!-- #import Firmware from "zwave-js" -->
+
+```ts
+interface Firmware {
+	data: Buffer;
+	firmwareTarget?: number;
+}
+```
 
 The library includes helper methods (exported from `zwave-js/Utils`) to prepare the firmware update.
 
@@ -290,16 +301,7 @@ guessFirmwareFileFormat(filename: string, rawData: Buffer): FirmwareFileFormat
 -   `filename`: The name of the firmware file (including the extension)
 -   `rawData`: A buffer containing the original firmware update file
 
-If successful, `extractFirmware` returns an object of the following form, whose properties can be passed to `beginFirmwareUpdate`:
-
-<!-- #import Firmware from "zwave-js" -->
-
-```ts
-interface Firmware {
-	data: Buffer;
-	firmwareTarget?: number;
-}
-```
+If successful, `extractFirmware` returns an `Firmware` object which can be passed to the `updateFirmware` method.
 
 If no firmware data can be extracted, the method will throw.
 
@@ -614,27 +616,30 @@ This property tracks the current status of the node interview. It contains a val
 <!-- #import InterviewStage from "zwave-js" -->
 
 ```ts
-declare enum InterviewStage {
+enum InterviewStage {
 	/** The interview process hasn't started for this node */
-	None = 0,
+	None,
 	/** The node's protocol information has been queried from the controller */
-	ProtocolInfo = 1,
+	ProtocolInfo,
 	/** The node has been queried for supported and controlled command classes */
-	NodeInfo = 2,
+	NodeInfo,
+
 	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.
 	 */
-	CommandClasses = 3,
+	CommandClasses,
+
 	/**
 	 * Device information for the node has been loaded from a config file.
 	 * If defined, some of the reported information will be overwritten based on the
 	 * config file contents.
 	 */
-	OverwriteConfig = 4,
+	OverwriteConfig,
+
 	/** The interview process has finished */
-	Complete = 5,
+	Complete,
 }
 ```
 
@@ -716,9 +721,9 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node typ
 <!-- #import ZWavePlusNodeType from "zwave-js" -->
 
 ```ts
-declare enum ZWavePlusNodeType {
-	Node = 0,
-	IPGateway = 2,
+enum ZWavePlusNodeType {
+	Node = 0x00, // ZWave+ Node
+	IPGateway = 0x02, // ZWave+ for IP Gateway
 }
 ```
 
@@ -839,7 +844,7 @@ The Z-Wave protocol version this node implements.
 <!-- #import ProtocolVersion from "zwave-js" -->
 
 ```ts
-declare enum ProtocolVersion {
+enum ProtocolVersion {
 	"unknown" = 0,
 	"2.0" = 1,
 	"4.2x / 5.0x" = 2,
@@ -1199,10 +1204,10 @@ with
 <!-- #import PowerlevelTestStatus from "zwave-js" -->
 
 ```ts
-declare enum PowerlevelTestStatus {
-	Failed = 0,
-	Success = 1,
-	"In Progress" = 2,
+enum PowerlevelTestStatus {
+	Failed = 0x00,
+	Success = 0x01,
+	"In Progress" = 0x02,
 }
 ```
 

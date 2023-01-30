@@ -1,109 +1,103 @@
+import test from "ava";
 import { deserializeCacheValue, serializeCacheValue } from "./Cache";
 import { Duration } from "./Duration";
 
-describe("lib/values/Cache", () => {
-	describe("serializeCacheValue()", () => {
-		it("leaves numbers untouched", () => {
-			const tests = [1, 2, 6, 7, -1, 0.15];
-			for (const val of tests) {
-				expect(serializeCacheValue(val)).toBe(val);
-			}
-		});
+test("serializeCacheValue() -> leaves numbers untouched", (t) => {
+	const tests = [1, 2, 6, 7, -1, 0.15];
+	for (const val of tests) {
+		t.is(serializeCacheValue(val), val);
+	}
+});
 
-		it("leaves strings untouched", () => {
-			const tests = ["1", "2", "6", "7", "-1", "0.15"];
-			for (const val of tests) {
-				expect(serializeCacheValue(val)).toBe(val);
-			}
-		});
+test("serializeCacheValue() -> leaves strings untouched", (t) => {
+	const tests = ["1", "2", "6", "7", "-1", "0.15"];
+	for (const val of tests) {
+		t.is(serializeCacheValue(val), val);
+	}
+});
 
-		it("leaves booleans untouched", () => {
-			expect(serializeCacheValue(true)).toBeTrue();
-		});
+test("serializeCacheValue() -> leaves booleans untouched", (t) => {
+	t.true(serializeCacheValue(true));
+});
 
-		it("leaves arrays untouched", () => {
-			const tests = [[], [1, 2, "3"], [false]];
-			for (const val of tests) {
-				expect(serializeCacheValue(val)).toBe(val);
-			}
-		});
+test("serializeCacheValue() -> leaves arrays untouched", (t) => {
+	const tests = [[], [1, 2, "3"], [false]];
+	for (const val of tests) {
+		t.is(serializeCacheValue(val), val);
+	}
+});
 
-		it("leaves objects untouched", () => {
-			const tests = [{}, { foo: "bar", baz: "inga" }, { 0: 1 }];
-			for (const val of tests) {
-				expect(serializeCacheValue(val)).toEqual(val);
-			}
-		});
+test("serializeCacheValue() -> leaves objects untouched", (t) => {
+	const tests = [{}, { foo: "bar", baz: "inga" }, { 0: 1 }];
+	for (const val of tests) {
+		t.deepEqual(serializeCacheValue(val), val);
+	}
+});
 
-		it("converts Maps into objects", () => {
-			const input = new Map<any, any>([
-				["foo", "bar"],
-				[0, 1],
-			]);
-			const expected = { foo: "bar", 0: 1, $$type$$: "map" };
-			expect(serializeCacheValue(input)).toEqual(expected);
-		});
+test("serializeCacheValue() -> converts Maps into objects", (t) => {
+	const input = new Map<any, any>([
+		["foo", "bar"],
+		[0, 1],
+	]);
+	const expected = { foo: "bar", 0: 1, $$type$$: "map" };
+	t.deepEqual(serializeCacheValue(input), expected);
+});
 
-		it("converts Durations into objects", () => {
-			const input = new Duration(2, "minutes");
-			const expected = {
-				unit: "minutes",
-				value: 2,
-				$$type$$: "duration",
-			};
-			expect(serializeCacheValue(input)).toEqual(expected);
-		});
-	});
+test("serializeCacheValue() -> converts Durations into objects", (t) => {
+	const input = new Duration(2, "minutes");
+	const expected = {
+		unit: "minutes",
+		value: 2,
+		$$type$$: "duration",
+	};
+	t.deepEqual(serializeCacheValue(input), expected);
+});
+test("deserializeCacheValue() -> leaves numbers untouched", (t) => {
+	const tests = [1, 2, 6, 7, -1, 0.15];
+	for (const val of tests) {
+		t.is(deserializeCacheValue(val), val);
+	}
+});
 
-	describe("deserializeCacheValue()", () => {
-		it("leaves numbers untouched", () => {
-			const tests = [1, 2, 6, 7, -1, 0.15];
-			for (const val of tests) {
-				expect(deserializeCacheValue(val)).toBe(val);
-			}
-		});
+test("deserializeCacheValue() -> leaves strings untouched", (t) => {
+	const tests = ["1", "2", "6", "7", "-1", "0.15"];
+	for (const val of tests) {
+		t.is(deserializeCacheValue(val), val);
+	}
+});
 
-		it("leaves strings untouched", () => {
-			const tests = ["1", "2", "6", "7", "-1", "0.15"];
-			for (const val of tests) {
-				expect(deserializeCacheValue(val)).toBe(val);
-			}
-		});
+test("deserializeCacheValue() -> leaves booleans untouched", (t) => {
+	t.true(deserializeCacheValue(true));
+});
 
-		it("leaves booleans untouched", () => {
-			expect(deserializeCacheValue(true)).toBeTrue();
-		});
+test("deserializeCacheValue() -> leaves arrays untouched", (t) => {
+	const tests = [[], [1, 2, "3"], [false]];
+	for (const val of tests) {
+		t.is(deserializeCacheValue(val), val);
+	}
+});
 
-		it("leaves arrays untouched", () => {
-			const tests = [[], [1, 2, "3"], [false]];
-			for (const val of tests) {
-				expect(deserializeCacheValue(val)).toBe(val);
-			}
-		});
+test("deserializeCacheValue() -> leaves objects untouched", (t) => {
+	const tests = [{}, { foo: "bar", baz: "inga" }, { 0: 1 }];
+	for (const val of tests) {
+		t.deepEqual(deserializeCacheValue(val), val);
+	}
+});
 
-		it("leaves objects untouched", () => {
-			const tests = [{}, { foo: "bar", baz: "inga" }, { 0: 1 }];
-			for (const val of tests) {
-				expect(deserializeCacheValue(val)).toEqual(val);
-			}
-		});
+test("deserializeCacheValue() -> Restores Maps", (t) => {
+	const input = { foo: "bar", 0: 1, $$type$$: "map" };
+	const expected = new Map<any, any>([
+		[0, 1],
+		["foo", "bar"],
+	]);
+	t.deepEqual(deserializeCacheValue(input), expected);
+});
 
-		it("Restores Maps", () => {
-			const input = { foo: "bar", 0: 1, $$type$$: "map" };
-			const expected = new Map<any, any>([
-				["foo", "bar"],
-				[0, 1],
-			]);
-			expect(deserializeCacheValue(input)).toEqual(expected);
-		});
-
-		it("restores Durations", () => {
-			const expected = new Duration(1, "default");
-			const input = {
-				unit: "default",
-				$$type$$: "duration",
-			};
-			expect(deserializeCacheValue(input)).toEqual(expected);
-		});
-	});
+test("deserializeCacheValue() -> restores Durations", (t) => {
+	const expected = new Duration(1, "default");
+	const input = {
+		unit: "default",
+		$$type$$: "duration",
+	};
+	t.deepEqual(deserializeCacheValue(input), expected);
 });

@@ -1,0 +1,48 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "28713 / ZW4104",
+	"description": "Plug-in 2-Outlet Switch, 1 Controlled, 500S",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3130",
+			"zwaveAllianceId": [1436, 2125, 2561]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network.\n2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart switch to include it in the network.\n3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network.\n2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart switch to exclude it from the network",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2973/28172%20binder.pdf"
+	}
+}

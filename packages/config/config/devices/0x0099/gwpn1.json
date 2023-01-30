@@ -48,7 +48,7 @@
 		{
 			"#": "1",
 			"label": "No communication light",
-			"description": "Minutes after which the device will flash if controller communicate is lost",
+			"description": "Minutes after which the device will flash if controller communication is lost",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
