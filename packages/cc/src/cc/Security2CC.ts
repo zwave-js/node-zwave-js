@@ -25,7 +25,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { EncapsulationFlags } from "@zwave-js/core/safe";
+import { EncapsulationFlags, encodeCCList } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -1768,23 +1768,37 @@ export class Security2CCTransferEnd extends Security2CC {
 	}
 }
 
+interface Security2CCCommandsSupportedReportOptions extends CCCommandOptions {
+	supportedCCs: CommandClasses[];
+}
+
 @CCCommand(Security2Command.CommandsSupportedReport)
 export class Security2CCCommandsSupportedReport extends Security2CC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| Security2CCCommandsSupportedReportOptions,
 	) {
 		super(host, options);
-		const CCs = parseCCList(this.payload);
-
-		// SDS13783: A sending node MAY terminate the list of supported command classes with the
-		// COMMAND_CLASS_MARK command class identifier.
-		// A receiving node MUST stop parsing the list of supported command classes if it detects the
-		// COMMAND_CLASS_MARK command class identifier in the Security 2 Commands Supported Report
-		this.supportedCCs = CCs.supportedCCs;
+		if (gotDeserializationOptions(options)) {
+			const CCs = parseCCList(this.payload);
+			// SDS13783: A sending node MAY terminate the list of supported command classes with the
+			// COMMAND_CLASS_MARK command class identifier.
+			// A receiving node MUST stop parsing the list of supported command classes if it detects the
+			// COMMAND_CLASS_MARK command class identifier in the Security 2 Commands Supported Report
+			this.supportedCCs = CCs.supportedCCs;
+		} else {
+			this.supportedCCs = options.supportedCCs;
+		}
 	}
 
 	public readonly supportedCCs: CommandClasses[];
+
+	public serialize(): Buffer {
+		this.payload = encodeCCList(this.supportedCCs, []);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

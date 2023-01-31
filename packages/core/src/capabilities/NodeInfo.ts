@@ -19,6 +19,16 @@ export function parseApplicationNodeInformation(
 	};
 }
 
+export function encodeApplicationNodeInformation(
+	nif: ApplicationNodeInformation,
+): Buffer {
+	const ccList = encodeCCList(nif.supportedCCs, []);
+	return Buffer.concat([
+		Buffer.from([nif.genericDeviceClass, nif.specificDeviceClass]),
+		ccList,
+	]);
+}
+
 export interface NodeUpdatePayload extends ApplicationNodeInformation {
 	nodeId: number;
 	basicDeviceClass: number;

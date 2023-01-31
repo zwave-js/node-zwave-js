@@ -1,4 +1,12 @@
-import { ZWavePlusNodeType, ZWavePlusRoleType } from "@zwave-js/cc";
+import {
+	CommandClass,
+	Security2CC,
+	Security2CCMessageEncapsulation,
+	SecurityCC,
+	SecurityCCCommandEncapsulation,
+	ZWavePlusNodeType,
+	ZWavePlusRoleType,
+} from "@zwave-js/cc";
 import { ZWavePlusCCGet, ZWavePlusCCReport } from "@zwave-js/cc/ZWavePlusCC";
 import {
 	ZWaveProtocolCCNodeInformationFrame,
@@ -61,7 +69,73 @@ const respondToZWavePlusCCGet: MockNodeBehavior = {
 	},
 };
 
+// TODO: We should handle this more generically:
+const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
+	async onControllerFrame(controller, self, frame) {
+		if (
+			frame.type === MockZWaveFrameType.Request &&
+			frame.payload instanceof SecurityCCCommandEncapsulation &&
+			frame.payload.encapsulated instanceof ZWavePlusCCGet
+		) {
+			let cc: CommandClass = new ZWavePlusCCReport(self.host, {
+				nodeId: controller.host.ownNodeId,
+				zwavePlusVersion: 2,
+				nodeType: ZWavePlusNodeType.Node,
+				roleType: self.capabilities.isListening
+					? ZWavePlusRoleType.AlwaysOnSlave
+					: self.capabilities.isFrequentListening
+					? ZWavePlusRoleType.SleepingListeningSlave
+					: ZWavePlusRoleType.SleepingReportingSlave,
+				installerIcon: 0x0000,
+				userIcon: 0x0000,
+			});
+			cc = SecurityCC.encapsulate(self.host, cc);
+			await self.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: true,
+				}),
+			);
+			return true;
+		}
+	},
+};
+
+const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
+	async onControllerFrame(controller, self, frame) {
+		if (
+			frame.type === MockZWaveFrameType.Request &&
+			frame.payload instanceof Security2CCMessageEncapsulation &&
+			frame.payload.encapsulated instanceof ZWavePlusCCGet
+		) {
+			let cc: CommandClass = new ZWavePlusCCReport(self.host, {
+				nodeId: controller.host.ownNodeId,
+				zwavePlusVersion: 2,
+				nodeType: ZWavePlusNodeType.Node,
+				roleType: self.capabilities.isListening
+					? ZWavePlusRoleType.AlwaysOnSlave
+					: self.capabilities.isFrequentListening
+					? ZWavePlusRoleType.SleepingListeningSlave
+					: ZWavePlusRoleType.SleepingReportingSlave,
+				installerIcon: 0x0000,
+				userIcon: 0x0000,
+			});
+			cc = Security2CC.encapsulate(self.host, cc);
+			await self.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: true,
+				}),
+			);
+			return true;
+		}
+	},
+};
+
 /** Predefined default behaviors that are required for interacting with the Mock Controller correctly */
 export function createDefaultBehaviors(): MockNodeBehavior[] {
-	return [respondToRequestNodeInfo, respondToZWavePlusCCGet];
+	return [
+		respondToRequestNodeInfo,
+		respondToZWavePlusCCGet,
+		respondToS0ZWavePlusCCGet,
+		respondToS2ZWavePlusCCGet,
+	];
 }

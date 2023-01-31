@@ -785,6 +785,11 @@ export enum EncapsulationFlags {
     Supervision = 1
 }
 
+// Warning: (ae-missing-release-tag) "encodeApplicationNodeInformation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function encodeApplicationNodeInformation(nif: ApplicationNodeInformation): Buffer;
+
 // Warning: (ae-missing-release-tag) "encodeBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public

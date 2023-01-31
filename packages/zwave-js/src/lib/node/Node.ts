@@ -2070,7 +2070,12 @@ protocol version:      ${this.protocolVersion}`;
 				this.supportsCC(CommandClasses["Security 2"]) &&
 				!endpoint.supportsCC(CommandClasses["Security 2"]);
 			if (endpointMissingS2) {
-				endpoint.addCC(CommandClasses["Security 2"], { secure: true });
+				endpoint.addCC(
+					CommandClasses["Security 2"],
+					this.implementedCommandClasses.get(
+						CommandClasses["Security 2"],
+					)!,
+				);
 			}
 
 			// Always interview Security first because it changes the interview order
