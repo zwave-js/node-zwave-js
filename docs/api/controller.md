@@ -410,7 +410,7 @@ The `healNode` method performs this step for a given node. The returned promise 
 ### `beginHealingNetwork`
 
 ```ts
-beginHealingNetwork(): boolean
+beginHealingNetwork(options?: HealNetworkOptions): boolean
 ```
 
 Synchronously (!) starts the healing process for all nodes in the network. Returns `true` if the process was started, otherwise `false`. This also returns `false` if a healing process is already active. The using library is notified about the progress with the following events:
@@ -424,6 +424,17 @@ In both cases, the listener is called with a `ReadonlyMap<number, HealNodeStatus
 -   `"done"`: The healing process for this node is done
 -   `"failed"`: There was an error while healing this node
 -   `"skipped"`: The node was skipped because it is dead
+
+The `options` argument can be used to skip healing sleeping nodes:
+
+<!-- #import HealNetworkOptions from "zwave-js" -->
+
+```ts
+interface HealNetworkOptions {
+	/** Whether sleeping nodes should be healed too at the end of the healing process. Default: true */
+	includeSleeping?: boolean;
+}
+```
 
 ### `stopHealingNetwork`
 

@@ -1,6 +1,7 @@
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
 
 export interface HealNetworkOptions {
+	/** Whether sleeping nodes should be healed too at the end of the healing process. Default: true */
 	includeSleeping?: boolean;
 }
 
