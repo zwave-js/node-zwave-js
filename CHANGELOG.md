@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.5.6 (2023-01-31)
+### Bugfixes
+* Always use S2 for endpoint communication if node uses S2 (#5386)
+
 ## 10.5.5 (2023-01-30)
 ### Not really a feature
 * Add 800 series chip types (#4910)
