@@ -64,12 +64,19 @@ Updates a value on the node. This method takes the following arguments:
 -   `value: unknown` - The new value to set
 -   `options?: SetValueAPIOptions` - Optional options for the resulting commands
 
-This method automatically figures out which commands to send to the node, so you don't have to use the specific commands yourself. The returned promise resolves to `true` after the value was successfully updated on the node. It resolves to `false` if any of the following conditions are met:
+This method automatically figures out which commands to send to the node, so you don't have to use the specific commands yourself. The returned promise resolves to `true` in these cases:
+
+-   The command was unsupervised and acknowledged by the node
+-   The command was supervised and the node reported that the value was updated
+-   The command was supervised and the node reported that it started changing the value
+
+It resolves to `false` if any of the following conditions are met:
 
 -   The `setValue` API is not implemented in the required Command Class
 -   The required Command Class is not supported by the node/endpoint
 -   The required Command Class is not implemented in this library yet
 -   The API for the required Command Class is not implemented in this library yet
+-   The command was supervised and the node reported that it failed to change the value
 
 > [!ATTENTION] By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call is enough for the application to know that the value was changed and update its own cache or UI. Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
 >
