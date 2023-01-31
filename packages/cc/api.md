@@ -10356,7 +10356,8 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 //
 // @public (undocumented)
 export class MultiChannelCCCapabilityReport extends MultiChannelCC implements ApplicationNodeInformation {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCCapabilityReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCCapabilityReportOptions);
     // (undocumented)
     readonly endpointIndex: number;
     // (undocumented)
@@ -10365,6 +10366,8 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC implements Ap
     readonly isDynamic: boolean;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly specificDeviceClass: number;
     // (undocumented)
@@ -10413,21 +10416,24 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 //
 // @public (undocumented)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCEndPointFindReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCEndPointFindReportOptions);
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
-    get foundEndpoints(): readonly number[];
+    foundEndpoints: number[];
     // (undocumented)
-    get genericClass(): number;
+    genericClass: number;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
     mergePartialCCs(applHost: ZWaveApplicationHost, partials: MultiChannelCCEndPointFindReport[]): void;
     // (undocumented)
-    get reportsToFollow(): number;
+    reportsToFollow: number;
     // (undocumented)
-    get specificClass(): number;
+    serialize(): Buffer;
+    // (undocumented)
+    specificClass: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
@@ -10442,15 +10448,18 @@ export class MultiChannelCCEndPointGet extends MultiChannelCC {
 //
 // @public (undocumented)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCEndPointReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCEndPointReportOptions);
     // (undocumented)
-    readonly aggregatedCount: number | undefined;
+    aggregatedCount: number | undefined;
     // (undocumented)
-    readonly countIsDynamic: boolean;
+    countIsDynamic: boolean;
     // (undocumented)
-    readonly identicalCapabilities: boolean;
+    identicalCapabilities: boolean;
     // (undocumented)
-    readonly individualCount: number;
+    individualCount: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
@@ -13551,7 +13560,10 @@ export class Security2CCCommandsSupportedGet extends Security2CC {
 //
 // @public (undocumented)
 export class Security2CCCommandsSupportedReport extends Security2CC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "Security2CCCommandsSupportedReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | Security2CCCommandsSupportedReportOptions);
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly supportedCCs: CommandClasses_2[];
     // (undocumented)
