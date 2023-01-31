@@ -5,7 +5,7 @@ import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("Assume a node to be awake at the start of a re-interview", {
-	debug: true,
+	// debug: true,
 
 	nodeCapabilities: {
 		isListening: false,

@@ -1380,13 +1380,15 @@ export class ZWaveNode
 
 		const { resetSecurityClasses = false, waitForWakeup = true } = options;
 		// Unless desired, don't forget the information about sleeping nodes immediately, so they continue to function
+		let didWakeUp = false;
 		if (
 			waitForWakeup &&
 			this.canSleep &&
 			this.supportsCC(CommandClasses["Wake Up"])
 		) {
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			await this.waitForWakeup().catch(() => {});
+			didWakeUp = await this.waitForWakeup()
+				.then(() => true)
+				.catch(() => false);
 		}
 
 		// preserve the node name and location, since they might not be stored on the node
@@ -1430,6 +1432,10 @@ export class ZWaveNode
 
 		// Don't keep the node awake after the interview
 		this.keepAwake = false;
+
+		// If we did wait for the wakeup, mark the node as awake again so it does not
+		// get considered asleep after querying protocol info.
+		if (didWakeUp) this.markAsAwake();
 
 		void this.driver.interviewNodeInternal(this);
 		this._refreshInfoPending = false;
@@ -1590,13 +1596,13 @@ protocol version:      ${this.protocolVersion}`;
 			direction: "inbound",
 		});
 
-		// Assume that sleeping nodes start asleep
+		// Assume that sleeping nodes start asleep (unless we know it is awake)
 		if (this.canSleep) {
 			if (this.status === NodeStatus.Alive) {
-				// unless it was just included and is currently communicating with us
-				// In that case we need to switch from alive/dead to awake/asleep
+				// If it was just included and is currently communicating with us,
+				// then we didn't know yet that it can sleep. So we need to switch from alive/dead to awake/asleep
 				this.markAsAwake();
-			} else {
+			} else if (this.status !== NodeStatus.Awake) {
 				this.markAsAsleep();
 			}
 		}
