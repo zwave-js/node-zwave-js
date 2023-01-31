@@ -533,7 +533,6 @@ export { guessFirmwareFileFormat }
 //
 // @public (undocumented)
 export interface HealNetworkOptions {
-    // (undocumented)
     includeSleeping?: boolean;
 }
 
