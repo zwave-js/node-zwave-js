@@ -31,7 +31,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"Security S2: Communicate with endpoints of secure nodes securely, even if the endpoint does not list S2 as supported",
 	{
-		debug: true,
+		// debug: true,
 
 		clearMessageStatsBeforeTest: false,
 
