@@ -3,7 +3,8 @@
 	"manufacturerId": "0x0346",
 	"label": "4AR1SZ-0EN0",
 	"description": "Range Extender (2nd generation)",
-	"devices": [{
+	"devices": [
+		{
 			"productType": "0x0401",
 			"productId": "0x0301",
 			"zwaveAllianceId": 4148
@@ -17,7 +18,8 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": [{
+	"paramInformation": [
+		{
 			"#": "1",
 			"label": "Heartbeat Interval",
 			"valueSize": 1,
@@ -53,7 +55,8 @@
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Always off",
 					"value": 0
 				},
