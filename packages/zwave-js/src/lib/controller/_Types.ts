@@ -1,4 +1,9 @@
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+
+export interface HealNetworkOptions {
+	includeSleeping?: boolean;
+}
+
 export type SDKVersion =
 	| `${number}.${number}`
 	| `${number}.${number}.${number}`;
