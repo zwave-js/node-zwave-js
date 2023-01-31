@@ -2,6 +2,7 @@ import type { GenericDeviceClass, SpecificDeviceClass } from "@zwave-js/config";
 import {
 	ApplicationNodeInformation,
 	CommandClasses,
+	encodeApplicationNodeInformation,
 	encodeBitMask,
 	getCCName,
 	IZWaveNode,
@@ -710,34 +711,60 @@ supported CCs:`;
 	}
 }
 
+export interface MultiChannelCCEndPointReportOptions extends CCCommandOptions {
+	countIsDynamic: boolean;
+	identicalCapabilities: boolean;
+	individualCount: number;
+	aggregatedCount?: number;
+}
+
 @CCCommand(MultiChannelCommand.EndPointReport)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCEndPointReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 2);
-		this.countIsDynamic = !!(this.payload[0] & 0b10000000);
-		this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
-		this.individualCount = this.payload[1] & 0b01111111;
-		if (this.version >= 4 && this.payload.length >= 3) {
-			this.aggregatedCount = this.payload[2] & 0b01111111;
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.countIsDynamic = !!(this.payload[0] & 0b10000000);
+			this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
+			this.individualCount = this.payload[1] & 0b01111111;
+			if (this.version >= 4 && this.payload.length >= 3) {
+				this.aggregatedCount = this.payload[2] & 0b01111111;
+			}
+		} else {
+			this.countIsDynamic = options.countIsDynamic;
+			this.identicalCapabilities = options.identicalCapabilities;
+			this.individualCount = options.individualCount;
+			this.aggregatedCount = options.aggregatedCount;
 		}
 	}
 
 	@ccValue(MultiChannelCCValues.endpointCountIsDynamic)
-	public readonly countIsDynamic: boolean;
+	public countIsDynamic: boolean;
 
 	@ccValue(MultiChannelCCValues.endpointsHaveIdenticalCapabilities)
-	public readonly identicalCapabilities: boolean;
+	public identicalCapabilities: boolean;
 
 	@ccValue(MultiChannelCCValues.individualEndpointCount)
-	public readonly individualCount: number;
+	public individualCount: number;
 
 	@ccValue(MultiChannelCCValues.aggregatedEndpointCount)
-	public readonly aggregatedCount: number | undefined;
+	public aggregatedCount: number | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			(this.countIsDynamic ? 0b10000000 : 0) |
+				(this.identicalCapabilities ? 0b01000000 : 0),
+			this.individualCount & 0b01111111,
+			this.aggregatedCount ?? 0,
+		]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -760,6 +787,16 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 @expectedCCResponse(MultiChannelCCEndPointReport)
 export class MultiChannelCCEndPointGet extends MultiChannelCC {}
 
+export interface MultiChannelCCCapabilityReportOptions
+	extends CCCommandOptions {
+	endpointIndex: number;
+	genericDeviceClass: number;
+	specificDeviceClass: number;
+	supportedCCs: CommandClasses[];
+	isDynamic: boolean;
+	wasRemoved: boolean;
+}
+
 @CCCommand(MultiChannelCommand.CapabilityReport)
 export class MultiChannelCCCapabilityReport
 	extends MultiChannelCC
@@ -767,26 +804,37 @@ export class MultiChannelCCCapabilityReport
 {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCCapabilityReportOptions,
 	) {
 		super(host, options);
 
-		// Only validate the bytes we expect to see here
-		// parseApplicationNodeInformation does its own validation
-		validatePayload(this.payload.length >= 1);
-		this.endpointIndex = this.payload[0] & 0b01111111;
-		this.isDynamic = !!(this.payload[0] & 0b10000000);
+		if (gotDeserializationOptions(options)) {
+			// Only validate the bytes we expect to see here
+			// parseApplicationNodeInformation does its own validation
+			validatePayload(this.payload.length >= 1);
+			this.endpointIndex = this.payload[0] & 0b01111111;
+			this.isDynamic = !!(this.payload[0] & 0b10000000);
 
-		const NIF = parseApplicationNodeInformation(this.payload.slice(1));
-		this.genericDeviceClass = NIF.genericDeviceClass;
-		this.specificDeviceClass = NIF.specificDeviceClass;
-		this.supportedCCs = NIF.supportedCCs;
+			const NIF = parseApplicationNodeInformation(this.payload.slice(1));
+			this.genericDeviceClass = NIF.genericDeviceClass;
+			this.specificDeviceClass = NIF.specificDeviceClass;
+			this.supportedCCs = NIF.supportedCCs;
 
-		// Removal reports have very specific information
-		this.wasRemoved =
-			this.isDynamic &&
-			this.genericDeviceClass === 0xff && // "Non-Interoperable"
-			this.specificDeviceClass === 0x00;
+			// Removal reports have very specific information
+			this.wasRemoved =
+				this.isDynamic &&
+				this.genericDeviceClass === 0xff && // "Non-Interoperable"
+				this.specificDeviceClass === 0x00;
+		} else {
+			this.endpointIndex = options.endpointIndex;
+			this.genericDeviceClass = options.genericDeviceClass;
+			this.specificDeviceClass = options.specificDeviceClass;
+			this.supportedCCs = options.supportedCCs;
+			this.isDynamic = options.isDynamic;
+			this.wasRemoved = options.wasRemoved;
+		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
@@ -814,6 +862,17 @@ export class MultiChannelCCCapabilityReport
 	public readonly supportedCCs: CommandClasses[];
 	public readonly isDynamic: boolean;
 	public readonly wasRemoved: boolean;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([
+				(this.endpointIndex & 0b01111111) |
+					(this.isDynamic ? 0b10000000 : 0),
+			]),
+			encodeApplicationNodeInformation(this),
+		]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const generic = applHost.configManager.lookupGenericDeviceClass(
@@ -853,11 +912,8 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.requestedEndpoint = this.payload[0] & 0b01111111;
 		} else {
 			this.requestedEndpoint = options.requestedEndpoint;
 		}
@@ -878,43 +934,58 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	}
 }
 
+export interface MultiChannelCCEndPointFindReportOptions
+	extends CCCommandOptions {
+	genericClass: number;
+	specificClass: number;
+	foundEndpoints: number[];
+	reportsToFollow: number;
+}
+
 @CCCommand(MultiChannelCommand.EndPointFindReport)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCEndPointFindReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 3);
-		this._reportsToFollow = this.payload[0];
-		this._genericClass = this.payload[1];
-		this._specificClass = this.payload[2];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 3);
+			this.reportsToFollow = this.payload[0];
+			this.genericClass = this.payload[1];
+			this.specificClass = this.payload[2];
 
-		// Some devices omit the endpoint list although that is not allowed in the specs
-		// therefore don't validatePayload here.
-		this._foundEndpoints = [...this.payload.slice(3)]
-			.map((e) => e & 0b01111111)
-			.filter((e) => e !== 0);
+			// Some devices omit the endpoint list although that is not allowed in the specs
+			// therefore don't validatePayload here.
+			this.foundEndpoints = [...this.payload.slice(3)]
+				.map((e) => e & 0b01111111)
+				.filter((e) => e !== 0);
+		} else {
+			this.genericClass = options.genericClass;
+			this.specificClass = options.specificClass;
+			this.foundEndpoints = options.foundEndpoints;
+			this.reportsToFollow = options.reportsToFollow;
+		}
 	}
 
-	private _genericClass: number;
-	public get genericClass(): number {
-		return this._genericClass;
-	}
-	private _specificClass: number;
-	public get specificClass(): number {
-		return this._specificClass;
-	}
+	public genericClass: number;
+	public specificClass: number;
+	public foundEndpoints: number[];
+	public reportsToFollow: number;
 
-	private _foundEndpoints: number[];
-	public get foundEndpoints(): readonly number[] {
-		return this._foundEndpoints;
-	}
-
-	private _reportsToFollow: number;
-	public get reportsToFollow(): number {
-		return this._reportsToFollow;
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([
+				this.reportsToFollow,
+				this.genericClass,
+				this.specificClass,
+			]),
+			Buffer.from(this.foundEndpoints.map((e) => e & 0b01111111)),
+		]);
+		return super.serialize();
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
@@ -926,7 +997,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	}
 
 	public expectMoreMessages(): boolean {
-		return this._reportsToFollow > 0;
+		return this.reportsToFollow > 0;
 	}
 
 	public mergePartialCCs(
@@ -934,8 +1005,8 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		partials: MultiChannelCCEndPointFindReport[],
 	): void {
 		// Concat the list of end points
-		this._foundEndpoints = [...partials, this]
-			.map((report) => report._foundEndpoints)
+		this.foundEndpoints = [...partials, this]
+			.map((report) => report.foundEndpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
@@ -952,8 +1023,8 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 						this.genericClass,
 						this.specificClass,
 					).label,
-				"found endpoints": this._foundEndpoints.join(", "),
-				"# of reports to follow": this._reportsToFollow,
+				"found endpoints": this.foundEndpoints.join(", "),
+				"# of reports to follow": this.reportsToFollow,
 			},
 		};
 	}
@@ -975,11 +1046,9 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.genericClass = this.payload[0];
+			this.specificClass = this.payload[1];
 		} else {
 			this.genericClass = options.genericClass;
 			this.specificClass = options.specificClass;
