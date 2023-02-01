@@ -60,6 +60,7 @@ import {
 } from "@zwave-js/cc/MultilevelSwitchCC";
 import { NodeNamingAndLocationCCValues } from "@zwave-js/cc/NodeNamingCC";
 import {
+	getNotificationStateValueWithEnum,
 	getNotificationValueMetadata,
 	NotificationCC,
 	NotificationCCReport,
@@ -3490,7 +3491,17 @@ protocol version:      ${this.protocolVersion}`;
 					}
 				}
 			}
-			this.valueDB.setValue(valueId, value);
+			if (typeof command.eventParameters === "number") {
+				// This notification contains an enum value. We set "fake" values for these to distinguish them
+				// from states without enum values
+				const valueWithEnum = getNotificationStateValueWithEnum(
+					value,
+					command.eventParameters,
+				);
+				this.valueDB.setValue(valueId, valueWithEnum);
+			} else {
+				this.valueDB.setValue(valueId, value);
+			}
 
 			// Nodes before V8 (and some misbehaving V8 ones) don't necessarily reset the notification to idle.
 			// The specifications advise to auto-reset the variables, but it has been found that this interferes

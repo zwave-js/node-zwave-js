@@ -219,8 +219,7 @@ export class NotificationParameter {
 			case "value":
 				return new NotificationParameterWithValue(definition);
 			case "enum":
-				// TODO
-				break;
+				return new NotificationParameterWithEnum(definition);
 		}
 	}
 }
@@ -239,6 +238,7 @@ export class NotificationParameterWithCommandClass {
 	}
 }
 
+/** Marks a notification that contains a named value */
 export class NotificationParameterWithValue {
 	public constructor(definition: JSONObject) {
 		if (typeof definition.name !== "string") {
@@ -250,4 +250,39 @@ export class NotificationParameterWithValue {
 		this.propertyName = definition.name;
 	}
 	public readonly propertyName: string;
+}
+
+/** Marks a notification that contains an enumeration of values */
+export class NotificationParameterWithEnum {
+	public constructor(definition: JSONObject) {
+		if (!isObject(definition.values)) {
+			throwInvalidConfig(
+				"notifications",
+				`Found a non-object definition for enum values`,
+			);
+		}
+
+		const values = new Map<number, string>();
+		for (const [enumValue, enumLabel] of Object.entries(
+			definition.values,
+		)) {
+			if (!hexKeyRegexNDigits.test(enumValue)) {
+				throwInvalidConfig(
+					"notifications",
+					`found invalid enum value "${enumValue}". All enum values must be defined in hexadecimal.`,
+				);
+			} else if (typeof enumLabel !== "string") {
+				throwInvalidConfig(
+					"notifications",
+					`found invalid label for enum value "${enumValue}". All enum labels must be defined as strings.`,
+				);
+			}
+
+			values.set(parseInt(enumValue, 16), enumLabel);
+		}
+
+		this.values = values;
+	}
+
+	public readonly values: ReadonlyMap<number, string>;
 }

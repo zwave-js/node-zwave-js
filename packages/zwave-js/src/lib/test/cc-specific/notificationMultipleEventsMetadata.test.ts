@@ -27,7 +27,7 @@ integrationTest(
 		},
 
 		customSetup: async (driver, controller, mockNode) => {
-			// Node supports the Access Control notifications Window open and Window closed
+			// Node supports the Smoke Alarm notifications Smoke alarm test, Alarm silenced (and idle)
 			const respondToNotificationSupportedGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
@@ -39,7 +39,7 @@ integrationTest(
 							{
 								nodeId: controller.host.ownNodeId,
 								supportsV1Alarm: false,
-								supportedNotificationTypes: [0x06],
+								supportedNotificationTypes: [0x01],
 							},
 						);
 						await self.sendToController(
@@ -60,14 +60,14 @@ integrationTest(
 						frame.type === MockZWaveFrameType.Request &&
 						frame.payload instanceof
 							NotificationCCEventSupportedGet &&
-						frame.payload.notificationType === 0x06
+						frame.payload.notificationType === 0x01
 					) {
 						const cc = new NotificationCCEventSupportedReport(
 							self.host,
 							{
 								nodeId: controller.host.ownNodeId,
-								notificationType: 0x06,
-								supportedEvents: [0x16, 0x17],
+								notificationType: 0x01,
+								supportedEvents: [0x03, 0x06],
 							},
 						);
 						await self.sendToController(
@@ -84,19 +84,20 @@ integrationTest(
 		},
 
 		testBody: async (driver, node, _mockController, _mockNode) => {
-			await node.commandClasses.Notification.getSupportedEvents(0x06);
+			await node.commandClasses.Notification.getSupportedEvents(0x01);
 
 			const states = (
 				node.getValueMetadata(
 					NotificationCCValues.notificationVariable(
-						"Access Control",
-						"Door state",
+						"Smoke Alarm",
+						"Alarm status",
 					).id,
 				) as ValueMetadataNumeric
 			).states;
 			expect(states).toStrictEqual({
-				22: "Window/door is open",
-				23: "Window/door is closed",
+				[0x00]: "idle",
+				[0x03]: "Smoke alarm test",
+				[0x06]: "Alarm silenced",
 			});
 		},
 	},
