@@ -61,6 +61,15 @@ export const IndicatorCCValues = Object.freeze({
 				indicatorId: 0,
 			},
 		} as const),
+
+		...V.staticProperty(
+			"identify",
+			{
+				...ValueMetadata.WriteOnlyBoolean,
+				label: "Identify",
+			} as const,
+			{ minVersion: 3 } as const,
+		),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses.Indicator, {
@@ -229,6 +238,16 @@ export class IndicatorCCAPI extends CCAPI {
 					value: value as any,
 				},
 			]);
+		} else if (property === "identify") {
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"boolean",
+					typeof value,
+				);
+			}
+			return this.identify();
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}

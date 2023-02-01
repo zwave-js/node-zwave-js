@@ -7516,6 +7516,32 @@ export const IndicatorCCValues: Readonly<{
             readonly internal: true;
         };
     };
+    identify: {
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: "identify";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: "identify";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
+        readonly meta: {
+            readonly label: "Identify";
+            readonly readable: false;
+            readonly type: "boolean";
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly internal: false;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly minVersion: 3;
+        };
+    };
     valueV1: {
         readonly id: {
             commandClass: CommandClasses.Indicator;
