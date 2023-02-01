@@ -210,6 +210,8 @@ export {
 } from "./InclusionControllerCC";
 export {
 	IndicatorCC,
+	IndicatorCCDescriptionGet,
+	IndicatorCCDescriptionReport,
 	IndicatorCCGet,
 	IndicatorCCReport,
 	IndicatorCCSet,
