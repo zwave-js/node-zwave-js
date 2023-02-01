@@ -101,6 +101,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			PowerlevelCommand,
 			PowerlevelCommand.TestNodeSet,
+			nameof(PowerlevelCommand),
 		);
 
 		if (testNodeId === this.endpoint.nodeId) {
@@ -143,6 +144,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			PowerlevelCommand,
 			PowerlevelCommand.TestNodeGet,
+			nameof(PowerlevelCommand),
 		);
 
 		const cc = new PowerlevelCCTestNodeGet(this.applHost, {

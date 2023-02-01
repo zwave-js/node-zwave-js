@@ -152,6 +152,7 @@ export class TimeParametersCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			TimeParametersCommand,
 			TimeParametersCommand.Get,
+			nameof(TimeParametersCommand),
 		);
 
 		const cc = new TimeParametersCCGet(this.applHost, {
@@ -173,6 +174,7 @@ export class TimeParametersCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			TimeParametersCommand,
 			TimeParametersCommand.Set,
+			nameof(TimeParametersCommand),
 		);
 
 		const useLocalTime = this.endpoint.virtual

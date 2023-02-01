@@ -41,6 +41,7 @@ export class MultiCommandCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultiCommandCommand,
 			MultiCommandCommand.CommandEncapsulation,
+			nameof(MultiCommandCommand),
 		);
 
 		// FIXME: This should not be on the API but rather on the applHost level

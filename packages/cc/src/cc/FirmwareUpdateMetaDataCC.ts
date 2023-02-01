@@ -97,6 +97,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.MetaDataGet,
+			nameof(FirmwareUpdateMetaDataCommand),
 		);
 
 		const cc = new FirmwareUpdateMetaDataCCMetaDataGet(this.applHost, {
@@ -134,6 +135,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.RequestGet,
+			nameof(FirmwareUpdateMetaDataCommand),
 		);
 
 		const cc = new FirmwareUpdateMetaDataCCRequestGet(this.applHost, {
@@ -167,6 +169,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.Report,
+			nameof(FirmwareUpdateMetaDataCommand),
 		);
 
 		const cc = new FirmwareUpdateMetaDataCCReport(this.applHost, {
@@ -187,6 +190,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.ActivationSet,
+			nameof(FirmwareUpdateMetaDataCommand),
 		);
 
 		const cc = new FirmwareUpdateMetaDataCCActivationSet(this.applHost, {

@@ -185,6 +185,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
 			ThermostatSetpointCommand.Get,
+			nameof(ThermostatSetpointCommand),
 		);
 
 		const cc = new ThermostatSetpointCCGet(this.applHost, {
@@ -217,6 +218,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
 			ThermostatSetpointCommand.Set,
+			nameof(ThermostatSetpointCommand),
 		);
 
 		const cc = new ThermostatSetpointCCSet(this.applHost, {
@@ -235,6 +237,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
 			ThermostatSetpointCommand.CapabilitiesGet,
+			nameof(ThermostatSetpointCommand),
 		);
 
 		const cc = new ThermostatSetpointCCCapabilitiesGet(this.applHost, {
@@ -268,6 +271,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
 			ThermostatSetpointCommand.SupportedGet,
+			nameof(ThermostatSetpointCommand),
 		);
 
 		const cc = new ThermostatSetpointCCSupportedGet(this.applHost, {

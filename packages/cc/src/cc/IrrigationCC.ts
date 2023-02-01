@@ -516,6 +516,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.SystemInfoGet,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCSystemInfoGet(this.applHost, {
@@ -542,6 +543,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.SystemStatusGet,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCSystemStatusGet(this.applHost, {
@@ -579,6 +581,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.SystemConfigGet,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCSystemConfigGet(this.applHost, {
@@ -608,6 +611,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.SystemConfigSet,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCSystemConfigSet(this.applHost, {
@@ -625,6 +629,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveInfoGet,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCValveInfoGet(this.applHost, {
@@ -658,6 +663,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveConfigSet,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCValveConfigSet(this.applHost, {
@@ -675,6 +681,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveConfigGet,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCValveConfigGet(this.applHost, {
@@ -708,6 +715,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveRun,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCValveRun(this.applHost, {
@@ -735,6 +743,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveTableSet,
+			nameof(IrrigationCommand),
 		);
 
 		if (!this.endpoint.virtual) {
@@ -770,6 +779,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveTableGet,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCValveTableGet(this.applHost, {
@@ -794,6 +804,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveTableRun,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCValveTableRun(this.applHost, {
@@ -816,6 +827,7 @@ export class IrrigationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.SystemShutoff,
+			nameof(IrrigationCommand),
 		);
 
 		const cc = new IrrigationCCSystemShutoff(this.applHost, {

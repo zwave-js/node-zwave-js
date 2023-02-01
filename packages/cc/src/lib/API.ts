@@ -301,6 +301,7 @@ export class CCAPI {
 	protected assertSupportsCommand(
 		commandEnum: unknown,
 		command: number,
+		enumName?: string,
 	): void {
 		if (this.supportsCommand(command) !== true) {
 			const hasNodeId = typeof this.endpoint.nodeId === "number";
@@ -314,10 +315,9 @@ export class CCAPI {
 					this.endpoint.index > 0
 						? ` (Endpoint ${this.endpoint.index})`
 						: ""
-				} does not support the command ${getEnumMemberName(
-					commandEnum,
-					command,
-				)}!`,
+				} does not support ${
+					enumName ? `${enumName}.` : "the command "
+				}${getEnumMemberName(commandEnum, command)}!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}

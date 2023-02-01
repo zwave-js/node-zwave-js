@@ -179,6 +179,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.SupportedGet,
+			nameof(ColorSwitchCommand),
 		);
 
 		const cc = new ColorSwitchCCSupportedGet(this.applHost, {
@@ -334,6 +335,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.StartLevelChange,
+			nameof(ColorSwitchCommand),
 		);
 
 		const cc = new ColorSwitchCCStartLevelChange(this.applHost, {
@@ -352,6 +354,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.StopLevelChange,
+			nameof(ColorSwitchCommand),
 		);
 
 		const cc = new ColorSwitchCCStopLevelChange(this.applHost, {

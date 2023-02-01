@@ -190,6 +190,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SceneActuatorConfigurationCommand,
 			SceneActuatorConfigurationCommand.Set,
+			nameof(SceneActuatorConfigurationCommand),
 		);
 
 		// Undefined `dimmingDuration` defaults to 0 seconds to simplify the call
@@ -217,6 +218,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SceneActuatorConfigurationCommand,
 			SceneActuatorConfigurationCommand.Get,
+			nameof(SceneActuatorConfigurationCommand),
 		);
 
 		const cc = new SceneActuatorConfigurationCCGet(this.applHost, {
@@ -245,6 +247,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SceneActuatorConfigurationCommand,
 			SceneActuatorConfigurationCommand.Get,
+			nameof(SceneActuatorConfigurationCommand),
 		);
 
 		if (sceneId === 0) {

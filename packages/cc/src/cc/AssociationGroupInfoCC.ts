@@ -99,6 +99,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
 			AssociationGroupInfoCommand.NameGet,
+			nameof(AssociationGroupInfoCommand),
 		);
 
 		const cc = new AssociationGroupInfoCCNameGet(this.applHost, {
@@ -120,6 +121,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
 			AssociationGroupInfoCommand.InfoGet,
+			nameof(AssociationGroupInfoCommand),
 		);
 
 		const cc = new AssociationGroupInfoCCInfoGet(this.applHost, {
@@ -155,6 +157,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
 			AssociationGroupInfoCommand.CommandListGet,
+			nameof(AssociationGroupInfoCommand),
 		);
 
 		const cc = new AssociationGroupInfoCCCommandListGet(this.applHost, {

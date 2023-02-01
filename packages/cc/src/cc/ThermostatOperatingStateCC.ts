@@ -73,6 +73,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			ThermostatOperatingStateCommand,
 			ThermostatOperatingStateCommand.Get,
+			nameof(ThermostatOperatingStateCommand),
 		);
 
 		const cc = new ThermostatOperatingStateCCGet(this.applHost, {

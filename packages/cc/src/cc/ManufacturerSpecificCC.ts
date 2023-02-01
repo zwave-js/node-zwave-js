@@ -96,6 +96,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			ManufacturerSpecificCommand,
 			ManufacturerSpecificCommand.Get,
+			nameof(ManufacturerSpecificCommand),
 		);
 
 		const cc = new ManufacturerSpecificCCGet(this.applHost, {
@@ -123,6 +124,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			ManufacturerSpecificCommand,
 			ManufacturerSpecificCommand.DeviceSpecificGet,
+			nameof(ManufacturerSpecificCommand),
 		);
 
 		const cc = new ManufacturerSpecificCCDeviceSpecificGet(this.applHost, {

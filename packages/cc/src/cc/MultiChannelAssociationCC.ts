@@ -195,6 +195,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.SupportedGroupingsGet,
+			nameof(MultiChannelAssociationCommand),
 		);
 
 		const cc = new MultiChannelAssociationCCSupportedGroupingsGet(
@@ -221,6 +222,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.Get,
+			nameof(MultiChannelAssociationCommand),
 		);
 
 		const cc = new MultiChannelAssociationCCGet(this.applHost, {
@@ -248,6 +250,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.Set,
+			nameof(MultiChannelAssociationCommand),
 		);
 
 		const cc = new MultiChannelAssociationCCSet(this.applHost, {
@@ -268,6 +271,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.Remove,
+			nameof(MultiChannelAssociationCommand),
 		);
 
 		if (!options.groupId && this.version === 1) {

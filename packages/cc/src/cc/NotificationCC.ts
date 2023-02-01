@@ -180,6 +180,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Get,
+			nameof(NotificationCommand),
 		);
 
 		const cc = new NotificationCCGet(this.applHost, {
@@ -200,6 +201,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Report,
+			nameof(NotificationCommand),
 		);
 
 		const cc = new NotificationCCReport(this.applHost, {
@@ -234,6 +236,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Set,
+			nameof(NotificationCommand),
 		);
 
 		const cc = new NotificationCCSet(this.applHost, {
@@ -250,6 +253,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.SupportedGet,
+			nameof(NotificationCommand),
 		);
 
 		const cc = new NotificationCCSupportedGet(this.applHost, {
@@ -276,6 +280,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.EventSupportedGet,
+			nameof(NotificationCommand),
 		);
 
 		const cc = new NotificationCCEventSupportedGet(this.applHost, {

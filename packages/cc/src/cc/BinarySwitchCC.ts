@@ -87,6 +87,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			BinarySwitchCommand,
 			BinarySwitchCommand.Get,
+			nameof(BinarySwitchCommand),
 		);
 
 		const cc = new BinarySwitchCCGet(this.applHost, {
@@ -120,6 +121,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			BinarySwitchCommand,
 			BinarySwitchCommand.Set,
+			nameof(BinarySwitchCommand),
 		);
 
 		const cc = new BinarySwitchCCSet(this.applHost, {

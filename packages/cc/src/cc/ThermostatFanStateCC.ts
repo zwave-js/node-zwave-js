@@ -69,6 +69,7 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatFanStateCommand,
 			ThermostatFanStateCommand.Get,
+			nameof(ThermostatFanStateCommand),
 		);
 
 		const cc = new ThermostatFanStateCCGet(this.applHost, {

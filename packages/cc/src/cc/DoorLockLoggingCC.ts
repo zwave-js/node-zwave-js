@@ -118,6 +118,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordsSupportedGet,
+			nameof(DoorLockLoggingCommand),
 		);
 
 		const cc = new DoorLockLoggingCCRecordsSupportedGet(this.applHost, {
@@ -140,6 +141,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordGet,
+			nameof(DoorLockLoggingCommand),
 		);
 
 		const cc = new DoorLockLoggingCCRecordGet(this.applHost, {

@@ -105,6 +105,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			CentralSceneCommand,
 			CentralSceneCommand.SupportedGet,
+			nameof(CentralSceneCommand),
 		);
 
 		const cc = new CentralSceneCCSupportedGet(this.applHost, {
@@ -130,6 +131,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			CentralSceneCommand,
 			CentralSceneCommand.ConfigurationGet,
+			nameof(CentralSceneCommand),
 		);
 
 		const cc = new CentralSceneCCConfigurationGet(this.applHost, {
@@ -153,6 +155,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			CentralSceneCommand,
 			CentralSceneCommand.ConfigurationSet,
+			nameof(CentralSceneCommand),
 		);
 
 		const cc = new CentralSceneCCConfigurationSet(this.applHost, {

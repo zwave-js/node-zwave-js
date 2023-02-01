@@ -99,6 +99,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			this.assertSupportsCommand(
 				ScheduleEntryLockCommand,
 				ScheduleEntryLockCommand.EnableSet,
+				nameof(ScheduleEntryLockCommand),
 			);
 
 			const cc = new ScheduleEntryLockCCEnableSet(this.applHost, {
@@ -113,6 +114,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			this.assertSupportsCommand(
 				ScheduleEntryLockCommand,
 				ScheduleEntryLockCommand.EnableAllSet,
+				nameof(ScheduleEntryLockCommand),
 			);
 
 			const cc = new ScheduleEntryLockCCEnableAllSet(this.applHost, {
@@ -130,6 +132,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.SupportedGet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		const cc = new ScheduleEntryLockCCSupportedGet(this.applHost, {
@@ -160,6 +163,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.WeekDayScheduleSet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		if (this.isSinglecast()) {
@@ -200,6 +204,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.WeekDayScheduleSet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		const cc = new ScheduleEntryLockCCWeekDayScheduleGet(this.applHost, {
@@ -232,6 +237,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.YearDayScheduleSet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		if (this.isSinglecast()) {
@@ -272,6 +278,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.YearDayScheduleSet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		const cc = new ScheduleEntryLockCCYearDayScheduleGet(this.applHost, {
@@ -309,6 +316,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.DailyRepeatingScheduleSet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		if (this.isSinglecast()) {
@@ -353,6 +361,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.DailyRepeatingScheduleSet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		const cc = new ScheduleEntryLockCCDailyRepeatingScheduleGet(
@@ -384,6 +393,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.TimeOffsetGet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		const cc = new ScheduleEntryLockCCTimeOffsetGet(this.applHost, {
@@ -408,6 +418,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.TimeOffsetSet,
+			nameof(ScheduleEntryLockCommand),
 		);
 
 		const cc = new ScheduleEntryLockCCTimeOffsetSet(this.applHost, {

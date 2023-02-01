@@ -50,6 +50,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			InclusionControllerCommand,
 			InclusionControllerCommand.Initiate,
+			nameof(InclusionControllerCommand),
 		);
 
 		const cc = new InclusionControllerCCInitiate(this.applHost, {
@@ -69,6 +70,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			InclusionControllerCommand,
 			InclusionControllerCommand.Complete,
+			nameof(InclusionControllerCommand),
 		);
 
 		const cc = new InclusionControllerCCComplete(this.applHost, {

@@ -140,6 +140,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.SupportedGroupingsGet,
+			nameof(AssociationCommand),
 		);
 
 		const cc = new AssociationCCSupportedGroupingsGet(this.applHost, {
@@ -208,6 +209,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.Remove,
+			nameof(AssociationCommand),
 		);
 
 		const cc = new AssociationCCRemove(this.applHost, {
@@ -228,6 +230,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.Remove,
+			nameof(AssociationCommand),
 		);
 
 		if (this.version >= 2) {

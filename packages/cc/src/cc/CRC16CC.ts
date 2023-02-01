@@ -42,6 +42,7 @@ export class CRC16CCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			CRC16Command,
 			CRC16Command.CommandEncapsulation,
+			nameof(CRC16Command),
 		);
 
 		const cc = new CRC16CCCommandEncapsulation(this.applHost, {
