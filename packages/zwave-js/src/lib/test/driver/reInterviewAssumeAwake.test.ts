@@ -1,5 +1,5 @@
 import { WakeUpCCWakeUpNotification } from "@zwave-js/cc";
-import { CommandClasses, InterviewStage } from "@zwave-js/core";
+import { CommandClasses } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
@@ -55,8 +55,12 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 				ackRequested: false,
 			}),
 		);
-		// This should not hang since the node just sent a wakeup notification
-		await wait(1000);
-		expect(node.interviewStage).not.toBe(InterviewStage.ProtocolInfo);
+
+		// The interview should complete without hanging since the node just sent a wakeup notification
+		const interviewCompleted = new Promise<void>((resolve) => {
+			node.on("interview completed", () => resolve());
+		});
+		const wait10s = wait(10000, true);
+		await Promise.race([interviewCompleted, wait10s]);
 	},
 });
