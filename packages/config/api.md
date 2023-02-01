@@ -788,9 +788,18 @@ export class NotificationParameterWithDuration {
     constructor(_definition: JSONObject);
 }
 
+// Warning: (ae-missing-release-tag) "NotificationParameterWithEnum" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class NotificationParameterWithEnum {
+    constructor(definition: JSONObject);
+    // (undocumented)
+    readonly values: ReadonlyMap<number, string>;
+}
+
 // Warning: (ae-missing-release-tag) "NotificationParameterWithValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public
 export class NotificationParameterWithValue {
     constructor(definition: JSONObject);
     // (undocumented)

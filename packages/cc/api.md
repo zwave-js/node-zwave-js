@@ -11668,7 +11668,7 @@ export class NotificationCCReport extends NotificationCC {
     // (undocumented)
     alarmType: number | undefined;
     // (undocumented)
-    eventParameters: Buffer | Duration | Record<string, number> | undefined;
+    eventParameters: Buffer | Duration | Record<string, number> | number | undefined;
     // (undocumented)
     notificationEvent: number | undefined;
     // (undocumented)
