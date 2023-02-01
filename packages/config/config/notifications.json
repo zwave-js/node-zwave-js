@@ -82,9 +82,7 @@
 				"states": {
 					"0x03": {
 						"label": "Carbon monoxide test",
-						// TODO: The event parameter buffer has different meanings. Implement parsing!
 						"params": {
-							// TODO: type "enum" replaces the actual value
 							"type": "enum",
 							"values": {
 								"0x01": "Test OK",
@@ -411,8 +409,9 @@
 						"params": {
 							"type": "enum",
 							"values": {
-								"0x00": "Open in regular position",
-								"0x01": "Open in tilt position"
+								// These values extend the existing states, so they need to be named in a similar fashion
+								"0x00": "Window/door is open in regular position",
+								"0x01": "Window/door is open in tilt position"
 							}
 						}
 					},
@@ -1070,7 +1069,6 @@
 						"label": "Volatile Organic Compound level",
 						"idle": false,
 						"params": {
-							// TODO: type "enum" replaces the actual value
 							"type": "enum",
 							"values": {
 								"0x01": "Clean",
@@ -1088,7 +1086,6 @@
 					"0x07": {
 						"label": "Sleep apnea detected",
 						"params": {
-							// TODO: type "enum" replaces the actual value
 							"type": "enum",
 							"values": {
 								"0x01": "Low breath",
@@ -1149,7 +1146,6 @@
 					"0x01": {
 						"label": "Valve operation",
 						"params": {
-							// TODO: type "enum" replaces the actual value
 							"type": "enum",
 							"values": {
 								"0x00": "Off / Closed",
@@ -1166,7 +1162,6 @@
 					"0x02": {
 						"label": "Master valve operation",
 						"params": {
-							// TODO: type "enum" replaces the actual value
 							"type": "enum",
 							"values": {
 								"0x00": "Off / Closed",
@@ -1198,7 +1193,6 @@
 					"0x05": {
 						"label": "Valve current alarm",
 						"params": {
-							// TODO: type "enum" replaces the actual value
 							"type": "enum",
 							"values": {
 								"0x01": "No data",
@@ -1216,7 +1210,6 @@
 					"0x06": {
 						"label": "Master valve current alarm",
 						"params": {
-							// TODO: type "enum" replaces the actual value
 							"type": "enum",
 							"values": {
 								"0x01": "No data",

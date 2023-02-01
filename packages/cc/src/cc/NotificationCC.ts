@@ -2,6 +2,7 @@ import {
 	Notification,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
+	NotificationParameterWithEnum,
 	NotificationParameterWithValue,
 	NotificationValueDefinition,
 } from "@zwave-js/config";
@@ -291,6 +292,32 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	}
 }
 
+function getNotificationEnumBehavior(
+	notificationConfig: Notification,
+	valueConfig: NotificationValueDefinition & { type: "state" },
+): "none" | "extend" | "replace" {
+	const variable = notificationConfig.variables.find((v) =>
+		v.states.has(valueConfig.value),
+	);
+	if (!variable) return "none";
+	const numStatesWithEnums = [...variable.states.values()].filter(
+		(val) => val.parameter instanceof NotificationParameterWithEnum,
+	).length;
+	if (numStatesWithEnums === 0) return "none";
+	// An enum value replaces the original value if there is only a single possible state
+	// which also has an enum parameter
+	if (numStatesWithEnums === 1 && variable.states.size === 1)
+		return "replace";
+	return "extend";
+}
+
+export function getNotificationStateValueWithEnum(
+	stateValue: number,
+	enumValue: number,
+): number {
+	return (stateValue << 8) | enumValue;
+}
+
 /**
  * Returns the metadata to use for a known notification value.
  * Can be used to extend a previously defined metadata,
@@ -312,7 +339,21 @@ export function getNotificationValueMetadata(
 	if (valueConfig.idle) {
 		metadata.states![0] = "idle";
 	}
-	metadata.states![valueConfig.value] = valueConfig.label;
+	const enumBehavior = getNotificationEnumBehavior(
+		notificationConfig,
+		valueConfig,
+	);
+	if (enumBehavior !== "replace") {
+		metadata.states![valueConfig.value] = valueConfig.label;
+	}
+	if (valueConfig.parameter instanceof NotificationParameterWithEnum) {
+		for (const [value, label] of valueConfig.parameter.values) {
+			metadata.states![
+				getNotificationStateValueWithEnum(valueConfig.value, value)
+			] = label;
+		}
+	}
+
 	return metadata;
 }
 
@@ -854,6 +895,7 @@ export class NotificationCCReport extends NotificationCC {
 		| Buffer
 		| Duration
 		| Record<string, number>
+		| number
 		| undefined;
 
 	public sequenceNumber: number | undefined;
@@ -867,8 +909,8 @@ export class NotificationCCReport extends NotificationCC {
 			};
 		}
 
+		let valueConfig: NotificationValueDefinition | undefined;
 		if (this.notificationType) {
-			let valueConfig: NotificationValueDefinition | undefined;
 			try {
 				valueConfig = applHost.configManager
 					.lookupNotification(this.notificationType)
@@ -911,7 +953,25 @@ export class NotificationCCReport extends NotificationCC {
 			message["sequence number"] = this.sequenceNumber;
 		}
 		if (this.eventParameters != undefined) {
-			if (Buffer.isBuffer(this.eventParameters)) {
+			if (typeof this.eventParameters === "number") {
+				// Try to look up the enum label
+				let found = false;
+				if (
+					valueConfig?.parameter instanceof
+					NotificationParameterWithEnum
+				) {
+					const label = valueConfig.parameter.values.get(
+						this.eventParameters,
+					);
+					if (label) {
+						message["state parameters"] = label;
+						found = true;
+					}
+				}
+				if (!found) {
+					message["state parameters"] = num2hex(this.eventParameters);
+				}
+			} else if (Buffer.isBuffer(this.eventParameters)) {
 				message["event parameters"] = buffer2hex(this.eventParameters);
 			} else if (this.eventParameters instanceof Duration) {
 				message["event parameters"] = this.eventParameters.toString();
@@ -1046,6 +1106,14 @@ export class NotificationCCReport extends NotificationCC {
 						this.eventParameters.length,
 					),
 			};
+		} else if (
+			valueConfig.parameter instanceof NotificationParameterWithEnum
+		) {
+			// The parameters may contain an enum value
+			this.eventParameters =
+				this.eventParameters.length === 1
+					? this.eventParameters[0]
+					: undefined;
 		}
 	}
 
