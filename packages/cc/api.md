@@ -7319,6 +7319,35 @@ export class IndicatorCC extends CommandClass {
     translatePropertyKey(applHost: ZWaveApplicationHost, property: string | number, propertyKey: string | number): string | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "IndicatorCCDescriptionGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IndicatorCCDescriptionGet extends IndicatorCC {
+    // Warning: (ae-forgotten-export) The symbol "IndicatorCCDescriptionGetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IndicatorCCDescriptionGetOptions);
+    // (undocumented)
+    indicatorId: number;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "IndicatorCCDescriptionReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IndicatorCCDescriptionReport extends IndicatorCC {
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // (undocumented)
+    description: string;
+    // (undocumented)
+    indicatorId: number;
+    // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost): boolean;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+}
+
 // Warning: (ae-missing-release-tag) "IndicatorCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7401,6 +7430,32 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 //
 // @public (undocumented)
 export const IndicatorCCValues: Readonly<{
+    indicatorDescription: ((indicatorId: number) => {
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: number;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+            readonly minVersion: 4;
+        };
+    };
     valueV2: ((indicatorId: number, propertyId: number) => {
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Indicator;
@@ -7523,6 +7578,10 @@ export const IndicatorCCValues: Readonly<{
 //
 // @public (undocumented)
 export enum IndicatorCommand {
+    // (undocumented)
+    DescriptionGet = 6,
+    // (undocumented)
+    DescriptionReport = 7,
     // (undocumented)
     Get = 2,
     // (undocumented)

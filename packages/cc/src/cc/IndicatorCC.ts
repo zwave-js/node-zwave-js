@@ -44,6 +44,10 @@ import {
 import { V } from "../lib/Values";
 import { IndicatorCommand } from "../lib/_Types";
 
+function isManufacturerDefinedIndicator(indicatorId: number): boolean {
+	return indicatorId >= 0x80 && indicatorId <= 0x9f;
+}
+
 export const IndicatorCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Indicator, {
 		...V.staticProperty("supportedIndicatorIds", undefined, {
@@ -89,6 +93,14 @@ export const IndicatorCCValues = Object.freeze({
 			}),
 			{ minVersion: 2 } as const,
 		),
+
+		...V.dynamicPropertyWithName(
+			"indicatorDescription",
+			(indicatorId: number) => indicatorId,
+			({ property }) => typeof property === "number",
+			undefined,
+			{ internal: true, minVersion: 4 } as const,
+		),
 	}),
 });
 
@@ -99,8 +111,10 @@ function getIndicatorMetadata(
 	configManager: ConfigManager,
 	indicatorId: number,
 	propertyId: number,
+	overrideIndicatorLabel?: string,
 ): ValueMetadata {
-	const label = configManager.lookupIndicator(indicatorId);
+	const label =
+		overrideIndicatorLabel || configManager.lookupIndicator(indicatorId);
 	const prop = configManager.lookupProperty(propertyId);
 	const baseMetadata = IndicatorCCValues.valueV2(
 		indicatorId,
@@ -166,6 +180,8 @@ export class IndicatorCCAPI extends CCAPI {
 				return true; // This is mandatory
 			case IndicatorCommand.SupportedGet:
 				return this.version >= 2 && this.isSinglecast();
+			case IndicatorCommand.DescriptionGet:
+				return this.version >= 4 && this.isSinglecast();
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -327,10 +343,32 @@ export class IndicatorCCAPI extends CCAPI {
 			},
 		]);
 	}
+
+	@validateArgs()
+	public async getDescription(
+		indicatorId: number,
+	): Promise<string | undefined> {
+		this.assertSupportsCommand(
+			IndicatorCommand,
+			IndicatorCommand.DescriptionGet,
+		);
+
+		const cc = new IndicatorCCDescriptionGet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			indicatorId,
+		});
+		const response =
+			await this.applHost.sendCommand<IndicatorCCDescriptionReport>(
+				cc,
+				this.commandOptions,
+			);
+		return response?.description;
+	}
 }
 
 @commandClass(CommandClasses.Indicator)
-@implementedVersion(3)
+@implementedVersion(4)
 @ccValues(IndicatorCCValues)
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
@@ -393,6 +431,25 @@ export class IndicatorCC extends CommandClass {
 				message: logMessage,
 				direction: "inbound",
 			});
+
+			if (this.version >= 4) {
+				const manufacturerDefinedIndicatorIds =
+					supportedIndicatorIds.filter((id) =>
+						isManufacturerDefinedIndicator(id),
+					);
+				if (manufacturerDefinedIndicatorIds.length > 0) {
+					applHost.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"retrieving description for manufacturer-defined indicator IDs...",
+						direction: "outbound",
+					});
+
+					for (const id of manufacturerDefinedIndicatorIds) {
+						await api.getDescription(id);
+					}
+				}
+			}
 		}
 
 		// Query current values
@@ -690,10 +747,21 @@ export class IndicatorCCReport extends IndicatorCC {
 		applHost: ZWaveApplicationHost,
 		value: IndicatorObject,
 	): void {
+		// Manufacturer-defined indicators may need a custom label
+		const overrideIndicatorLabel = isManufacturerDefinedIndicator(
+			value.indicatorId,
+		)
+			? this.getValue<string>(
+					applHost,
+					IndicatorCCValues.indicatorDescription(value.indicatorId),
+			  )
+			: undefined;
+
 		const metadata = getIndicatorMetadata(
 			applHost.configManager,
 			value.indicatorId,
 			value.propertyId,
+			overrideIndicatorLabel,
 		);
 		// Some values need to be converted
 		if (metadata.type === "boolean") {
@@ -846,8 +914,18 @@ interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 	indicatorId: number;
 }
 
+function testResponseForIndicatorSupportedGet(
+	sent: IndicatorCCSupportedGet,
+	received: IndicatorCCSupportedReport,
+) {
+	return received.indicatorId === sent.indicatorId;
+}
+
 @CCCommand(IndicatorCommand.SupportedGet)
-@expectedCCResponse(IndicatorCCSupportedReport)
+@expectedCCResponse(
+	IndicatorCCSupportedReport,
+	testResponseForIndicatorSupportedGet,
+)
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
 		host: ZWaveHost,
@@ -882,6 +960,106 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 					applHost.configManager,
 					this.indicatorId,
 				),
+			},
+		};
+	}
+}
+
+@CCCommand(IndicatorCommand.DescriptionReport)
+export class IndicatorCCDescriptionReport extends IndicatorCC {
+	public constructor(
+		host: ZWaveHost,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(host, options);
+
+		validatePayload(this.payload.length >= 2);
+		this.indicatorId = this.payload[0];
+		const descrptionLength = this.payload[1];
+		validatePayload(this.payload.length >= 2 + descrptionLength);
+		this.description = this.payload
+			.slice(2, 2 + descrptionLength)
+			.toString("utf8");
+	}
+
+	public indicatorId: number;
+	public description: string;
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		if (this.description) {
+			this.setValue(
+				applHost,
+				IndicatorCCValues.indicatorDescription(this.indicatorId),
+				this.description,
+			);
+		}
+
+		return true;
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"indicator ID": this.indicatorId,
+				description: this.description || "(none)",
+			},
+		};
+	}
+}
+
+interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
+	indicatorId: number;
+}
+
+function testResponseForIndicatorDescriptionGet(
+	sent: IndicatorCCDescriptionGet,
+	received: IndicatorCCDescriptionReport,
+) {
+	return received.indicatorId === sent.indicatorId;
+}
+
+@CCCommand(IndicatorCommand.DescriptionGet)
+@expectedCCResponse(
+	IndicatorCCDescriptionReport,
+	testResponseForIndicatorDescriptionGet,
+)
+export class IndicatorCCDescriptionGet extends IndicatorCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| IndicatorCCDescriptionGetOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.indicatorId = this.payload[0];
+		} else {
+			this.indicatorId = options.indicatorId;
+			if (!isManufacturerDefinedIndicator(this.indicatorId)) {
+				throw new ZWaveError(
+					"The indicator ID must be between 0x80 and 0x9f",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+	}
+
+	public indicatorId: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.indicatorId]);
+		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"indicator ID": this.indicatorId,
 			},
 		};
 	}

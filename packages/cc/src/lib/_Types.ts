@@ -851,6 +851,8 @@ export enum IndicatorCommand {
 	Report = 0x03,
 	SupportedGet = 0x04,
 	SupportedReport = 0x05,
+	DescriptionGet = 0x06,
+	DescriptionReport = 0x07,
 }
 
 export type IndicatorMetadata = ValueMetadata & {
