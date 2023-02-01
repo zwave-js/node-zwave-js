@@ -182,16 +182,16 @@ export const AlarmSensorCCValues: Readonly<{
         };
     };
     duration: ((sensorType: AlarmSensorType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "duration";
+            propertyKey: AlarmSensorType;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
             readonly endpoint: number;
             readonly property: "duration";
             readonly propertyKey: AlarmSensorType;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Alarm Sensor"];
-            property: "duration";
-            propertyKey: AlarmSensorType;
         };
         readonly meta: {
             readonly unit: "s";
@@ -216,16 +216,16 @@ export const AlarmSensorCCValues: Readonly<{
         };
     };
     severity: ((sensorType: AlarmSensorType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "severity";
+            propertyKey: AlarmSensorType;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
             readonly endpoint: number;
             readonly property: "severity";
             readonly propertyKey: AlarmSensorType;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Alarm Sensor"];
-            property: "severity";
-            propertyKey: AlarmSensorType;
         };
         readonly meta: {
             readonly min: 1;
@@ -251,16 +251,16 @@ export const AlarmSensorCCValues: Readonly<{
         };
     };
     state: ((sensorType: AlarmSensorType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "state";
+            propertyKey: AlarmSensorType;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
             readonly endpoint: number;
             readonly property: "state";
             readonly propertyKey: AlarmSensorType;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Alarm Sensor"];
-            property: "state";
-            propertyKey: AlarmSensorType;
         };
         readonly meta: {
             readonly label: `${string} state`;
@@ -468,16 +468,16 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 // @public (undocumented)
 export const AssociationCCValues: Readonly<{
     nodeIds: ((groupId: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Association;
+            property: "nodeIds";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Association;
             readonly endpoint: number;
             readonly property: "nodeIds";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Association;
-            property: "nodeIds";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -496,16 +496,16 @@ export const AssociationCCValues: Readonly<{
         };
     };
     maxNodes: ((groupId: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Association;
+            property: "maxNodes";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Association;
             readonly endpoint: number;
             readonly property: "maxNodes";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Association;
-            property: "maxNodes";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -724,16 +724,16 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 // @public (undocumented)
 export const AssociationGroupInfoCCValues: Readonly<{
     commands: ((groupId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Association Group Information"];
+            property: "issuedCommands";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Association Group Information"];
             readonly endpoint: number;
             readonly property: "issuedCommands";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Association Group Information"];
-            property: "issuedCommands";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -752,16 +752,16 @@ export const AssociationGroupInfoCCValues: Readonly<{
         };
     };
     groupInfo: ((groupId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Association Group Information"];
+            property: "info";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Association Group Information"];
             readonly endpoint: number;
             readonly property: "info";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Association Group Information"];
-            property: "info";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -780,16 +780,16 @@ export const AssociationGroupInfoCCValues: Readonly<{
         };
     };
     groupName: ((groupId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Association Group Information"];
+            property: "name";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Association Group Information"];
             readonly endpoint: number;
             readonly property: "name";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Association Group Information"];
-            property: "name";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -1316,16 +1316,16 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 // @public (undocumented)
 export const BarrierOperatorCCValues: Readonly<{
     signalingState: ((subsystemType: SubsystemType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Barrier Operator"];
+            property: "signalingState";
+            propertyKey: SubsystemType;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
             readonly endpoint: number;
             readonly property: "signalingState";
             readonly propertyKey: SubsystemType;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Barrier Operator"];
-            property: "signalingState";
-            propertyKey: SubsystemType;
         };
         readonly meta: {
             readonly label: `Signaling State (${string})`;
@@ -2220,14 +2220,14 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 // @public (undocumented)
 export const BinarySensorCCValues: Readonly<{
     state: ((sensorType: BinarySensorType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Binary Sensor"];
+            property: string;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Binary Sensor"];
             readonly endpoint: number;
             readonly property: string;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Binary Sensor"];
-            property: string;
         };
         readonly meta: {
             readonly label: `Sensor state (${string})`;
@@ -2939,16 +2939,16 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 // @public (undocumented)
 export const CentralSceneCCValues: Readonly<{
     scene: ((sceneNumber: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Central Scene"];
+            property: "scene";
+            propertyKey: string;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Central Scene"];
             readonly endpoint: number;
             readonly property: "scene";
             readonly propertyKey: string;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Central Scene"];
-            property: "scene";
-            propertyKey: string;
         };
         readonly meta: {
             readonly label: `Scene ${string}`;
@@ -3219,16 +3219,16 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 // @public (undocumented)
 export const ClimateControlScheduleCCValues: Readonly<{
     schedule: ((weekday: Weekday) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Climate Control Schedule"];
+            property: "schedule";
+            propertyKey: Weekday;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Climate Control Schedule"];
             readonly endpoint: number;
             readonly property: "schedule";
             readonly propertyKey: Weekday;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Climate Control Schedule"];
-            property: "schedule";
-            propertyKey: Weekday;
         };
         readonly meta: {
             readonly label: `Schedule (${string})`;
@@ -3556,16 +3556,16 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 // @public (undocumented)
 export const ColorSwitchCCValues: Readonly<{
     targetColorChannel: ((component: ColorComponent) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Color Switch"];
+            property: "targetColor";
+            propertyKey: ColorComponent;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
             readonly endpoint: number;
             readonly property: "targetColor";
             readonly propertyKey: ColorComponent;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Color Switch"];
-            property: "targetColor";
-            propertyKey: ColorComponent;
         };
         readonly meta: {
             readonly label: `Target value (${string})`;
@@ -3589,16 +3589,16 @@ export const ColorSwitchCCValues: Readonly<{
         };
     };
     currentColorChannel: ((component: ColorComponent) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Color Switch"];
+            property: "currentColor";
+            propertyKey: ColorComponent;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
             readonly endpoint: number;
             readonly property: "currentColor";
             readonly propertyKey: ColorComponent;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Color Switch"];
-            property: "currentColor";
-            propertyKey: ColorComponent;
         };
         readonly meta: {
             readonly label: `Current value (${string})`;
@@ -4197,16 +4197,16 @@ export class ConfigurationCCSet extends ConfigurationCC {
 // @public (undocumented)
 export const ConfigurationCCValues: Readonly<{
     paramInformation: ((parameter: number, bitMask?: number | undefined) => {
+        readonly id: {
+            commandClass: CommandClasses.Configuration;
+            property: number;
+            propertyKey: number | undefined;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Configuration;
             readonly endpoint: number;
             readonly property: number;
             readonly propertyKey: number | undefined;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Configuration;
-            property: number;
-            propertyKey: number | undefined;
         };
         readonly meta: {
             readonly type: "any";
@@ -7051,16 +7051,16 @@ export class HumidityControlSetpointCCSupportedReport extends HumidityControlSet
 // @public (undocumented)
 export const HumidityControlSetpointCCValues: Readonly<{
     setpointScale: ((setpointType: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            property: "setpointScale";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
             readonly endpoint: number;
             readonly property: "setpointScale";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-            property: "setpointScale";
-            propertyKey: number;
         };
         readonly meta: {
             readonly label: `Setpoint scale (${string})`;
@@ -7082,16 +7082,16 @@ export const HumidityControlSetpointCCValues: Readonly<{
         };
     };
     setpoint: ((setpointType: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            property: "setpoint";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
             readonly endpoint: number;
             readonly property: "setpoint";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-            property: "setpoint";
-            propertyKey: number;
         };
         readonly meta: {
             readonly label: `Setpoint (${string})`;
@@ -7402,16 +7402,16 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 // @public (undocumented)
 export const IndicatorCCValues: Readonly<{
     valueV2: ((indicatorId: number, propertyId: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: number;
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Indicator;
             readonly endpoint: number;
             readonly property: number;
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Indicator;
-            property: number;
-            propertyKey: number;
         };
         readonly meta: {
             readonly ccSpecific: {
@@ -7434,16 +7434,16 @@ export const IndicatorCCValues: Readonly<{
         };
     };
     supportedPropertyIDs: ((indicatorId: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: "supportedPropertyIDs";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Indicator;
             readonly endpoint: number;
             readonly property: "supportedPropertyIDs";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Indicator;
-            property: "supportedPropertyIDs";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -7729,16 +7729,16 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 // @public (undocumented)
 export const IrrigationCCValues: Readonly<{
     valveRunStartStop: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "startStop";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "startStop";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "startStop";
         };
         readonly meta: {
             readonly label: `${string}: Start/Stop`;
@@ -7758,16 +7758,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     valveRunDuration: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "duration";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "duration";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "duration";
         };
         readonly meta: {
             readonly label: `${string}: Run duration`;
@@ -7790,16 +7790,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     useMoistureSensor: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "useMoistureSensor";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "useMoistureSensor";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "useMoistureSensor";
         };
         readonly meta: {
             readonly label: `${string}: Use moisture sensor`;
@@ -7819,16 +7819,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     useRainSensor: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "useRainSensor";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "useRainSensor";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "useRainSensor";
         };
         readonly meta: {
             readonly label: `${string}: Use rain sensor`;
@@ -7848,16 +7848,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorLowFlow: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorLowFlow";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorLowFlow";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorLowFlow";
         };
         readonly meta: {
             readonly label: `${string}: Error - Flow below high threshold`;
@@ -7877,16 +7877,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     lowFlowThreshold: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "lowFlowThreshold";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "lowFlowThreshold";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "lowFlowThreshold";
         };
         readonly meta: {
             readonly label: `${string}: Low flow threshold`;
@@ -7908,16 +7908,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorHighFlow: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorHighFlow";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorHighFlow";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorHighFlow";
         };
         readonly meta: {
             readonly label: `${string}: Error - Flow above high threshold`;
@@ -7937,16 +7937,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     highFlowThreshold: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "highFlowThreshold";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "highFlowThreshold";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "highFlowThreshold";
         };
         readonly meta: {
             readonly label: `${string}: High flow threshold`;
@@ -7968,16 +7968,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorMaximumFlow: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorMaximumFlow";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorMaximumFlow";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorMaximumFlow";
         };
         readonly meta: {
             readonly label: `${string}: Error - Maximum flow detected`;
@@ -7997,16 +7997,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     maximumFlow: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "maximumFlow";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "maximumFlow";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "maximumFlow";
         };
         readonly meta: {
             readonly label: `${string}: Maximum flow`;
@@ -8028,16 +8028,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorLowCurrent: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorLowCurrent";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorLowCurrent";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorLowCurrent";
         };
         readonly meta: {
             readonly label: `${string}: Error - Current below low threshold`;
@@ -8057,16 +8057,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorHighCurrent: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorHighCurrent";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorHighCurrent";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorHighCurrent";
         };
         readonly meta: {
             readonly label: `${string}: Error - Current above high threshold`;
@@ -8086,16 +8086,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorShortCircuit: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorShortCircuit";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorShortCircuit";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorShortCircuit";
         };
         readonly meta: {
             readonly label: `${string}: Error - Short circuit detected`;
@@ -8115,16 +8115,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     nominalCurrentLowThreshold: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrentLowThreshold";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrentLowThreshold";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "nominalCurrentLowThreshold";
         };
         readonly meta: {
             readonly label: `${string}: Nominal current - low threshold`;
@@ -8147,16 +8147,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     nominalCurrentHighThreshold: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrentHighThreshold";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrentHighThreshold";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "nominalCurrentHighThreshold";
         };
         readonly meta: {
             readonly label: `${string}: Nominal current - high threshold`;
@@ -8179,16 +8179,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     nominalCurrent: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrent";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrent";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "nominalCurrent";
         };
         readonly meta: {
             readonly label: `${string}: Nominal current`;
@@ -8209,16 +8209,16 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     valveConnected: ((valveId: ValveId) => {
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "valveConnected";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Irrigation;
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "valveConnected";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "valveConnected";
         };
         readonly meta: {
             readonly label: `${string}: Connected`;
@@ -9561,16 +9561,16 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 // @public (undocumented)
 export const ManufacturerSpecificCCValues: Readonly<{
     deviceId: ((type: DeviceIdType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Manufacturer Specific"];
+            property: "deviceId";
+            propertyKey: string;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Manufacturer Specific"];
             readonly endpoint: number;
             readonly property: "deviceId";
             readonly propertyKey: string;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Manufacturer Specific"];
-            property: "deviceId";
-            propertyKey: string;
         };
         readonly meta: {
             readonly label: string;
@@ -9796,16 +9796,16 @@ export class MeterCCSupportedReport extends MeterCC {
 // @public (undocumented)
 export const MeterCCValues: Readonly<{
     value: ((meterType: number, rateType: RateType, scale: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Meter;
+            property: "value";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Meter;
             readonly endpoint: number;
             readonly property: "value";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Meter;
-            property: "value";
-            propertyKey: number;
         };
         readonly meta: {
             readonly ccSpecific: {
@@ -9829,16 +9829,16 @@ export const MeterCCValues: Readonly<{
         };
     };
     resetSingle: ((meterType: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Meter;
+            property: "reset";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Meter;
             readonly endpoint: number;
             readonly property: "reset";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Meter;
-            property: "reset";
-            propertyKey: number;
         };
         readonly meta: {
             readonly label: `Reset (${string})`;
@@ -10169,16 +10169,16 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 // @public (undocumented)
 export const MultiChannelAssociationCCValues: Readonly<{
     endpoints: ((groupId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            property: "endpoints";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Multi Channel Association"];
             readonly endpoint: number;
             readonly property: "endpoints";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multi Channel Association"];
-            property: "endpoints";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -10197,16 +10197,16 @@ export const MultiChannelAssociationCCValues: Readonly<{
         };
     };
     nodeIds: ((groupId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            property: "nodeIds";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Multi Channel Association"];
             readonly endpoint: number;
             readonly property: "nodeIds";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multi Channel Association"];
-            property: "nodeIds";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -10225,16 +10225,16 @@ export const MultiChannelAssociationCCValues: Readonly<{
         };
     };
     maxNodes: ((groupId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            property: "maxNodes";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Multi Channel Association"];
             readonly endpoint: number;
             readonly property: "maxNodes";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multi Channel Association"];
-            property: "maxNodes";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -10512,16 +10512,16 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 // @public (undocumented)
 export const MultiChannelCCValues: Readonly<{
     aggregatedEndpointMembers: ((endpointIndex: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multi Channel"];
+            property: "members";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Multi Channel"];
             readonly endpoint: number;
             readonly property: "members";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multi Channel"];
-            property: "members";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -10911,14 +10911,14 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 // @public (undocumented)
 export const MultilevelSensorCCValues: Readonly<{
     value: ((sensorTypeName: string) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Sensor"];
+            property: string;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Multilevel Sensor"];
             readonly endpoint: number;
             readonly property: string;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-            property: string;
         };
         readonly meta: {
             readonly label: string;
@@ -10938,16 +10938,16 @@ export const MultilevelSensorCCValues: Readonly<{
         };
     };
     supportedScales: ((sensorType: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Sensor"];
+            property: "supportedScales";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Multilevel Sensor"];
             readonly endpoint: number;
             readonly property: "supportedScales";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-            property: "supportedScales";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -11135,14 +11135,14 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 // @public (undocumented)
 export const MultilevelSwitchCCValues: Readonly<{
     levelChangeDown: ((switchType: SwitchType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            property: string;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
             readonly endpoint: number;
             readonly property: string;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Switch"];
-            property: string;
         };
         readonly meta: {
             readonly label: `Perform a level change (${string})`;
@@ -11166,14 +11166,14 @@ export const MultilevelSwitchCCValues: Readonly<{
         };
     };
     levelChangeUp: ((switchType: SwitchType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            property: string;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
             readonly endpoint: number;
             readonly property: string;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Switch"];
-            property: string;
         };
         readonly meta: {
             readonly label: `Perform a level change (${string})`;
@@ -11730,16 +11730,16 @@ export class NotificationCCSupportedReport extends NotificationCC {
 // @public (undocumented)
 export const NotificationCCValues: Readonly<{
     notificationVariable: ((notificationName: string, variableName: string) => {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+            propertyKey: string;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Notification;
             readonly endpoint: number;
             readonly property: string;
             readonly propertyKey: string;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Notification;
-            property: string;
-            propertyKey: string;
         };
         readonly meta: {
             readonly type: "any";
@@ -11758,16 +11758,16 @@ export const NotificationCCValues: Readonly<{
         };
     };
     unknownNotificationVariable: ((notificationType: number, notificationName: string) => {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+            propertyKey: "unknown";
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Notification;
             readonly endpoint: number;
             readonly property: string;
             readonly propertyKey: "unknown";
-        };
-        readonly id: {
-            commandClass: CommandClasses.Notification;
-            property: string;
-            propertyKey: "unknown";
         };
         readonly meta: {
             readonly label: `${string}: Unknown value`;
@@ -11792,14 +11792,14 @@ export const NotificationCCValues: Readonly<{
         };
     };
     unknownNotificationType: ((notificationType: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Notification;
             readonly endpoint: number;
             readonly property: string;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Notification;
-            property: string;
         };
         readonly meta: {
             readonly label: `Unknown notification (${string})`;
@@ -11824,16 +11824,16 @@ export const NotificationCCValues: Readonly<{
         };
     };
     supportedNotificationEvents: ((notificationType: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: "supportedNotificationEvents";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Notification;
             readonly endpoint: number;
             readonly property: "supportedNotificationEvents";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Notification;
-            property: "supportedNotificationEvents";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -12748,16 +12748,16 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 // @public (undocumented)
 export const SceneActuatorConfigurationCCValues: Readonly<{
     dimmingDuration: ((sceneId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
+            property: "dimmingDuration";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
             readonly endpoint: number;
             readonly property: "dimmingDuration";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-            property: "dimmingDuration";
-            propertyKey: number;
         };
         readonly meta: {
             readonly label: `Dimming duration (${number})`;
@@ -12777,16 +12777,16 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
         };
     };
     level: ((sceneId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
+            property: "level";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
             readonly endpoint: number;
             readonly property: "level";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-            property: "level";
-            propertyKey: number;
         };
         readonly meta: {
             readonly label: `Level (${number})`;
@@ -12891,16 +12891,16 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 // @public (undocumented)
 export const SceneControllerConfigurationCCValues: Readonly<{
     dimmingDuration: ((groupId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
+            property: "dimmingDuration";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
             readonly endpoint: number;
             readonly property: "dimmingDuration";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-            property: "dimmingDuration";
-            propertyKey: number;
         };
         readonly meta: {
             readonly label: `Dimming duration (${number})`;
@@ -12920,16 +12920,16 @@ export const SceneControllerConfigurationCCValues: Readonly<{
         };
     };
     sceneId: ((groupId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
+            property: "sceneId";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
             readonly endpoint: number;
             readonly property: "sceneId";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-            property: "sceneId";
-            propertyKey: number;
         };
         readonly meta: {
             readonly label: `Associated Scene ID (${number})`;
@@ -12989,6 +12989,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryL
     // (undocumented)
     slotId: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
 }
 
@@ -13010,6 +13012,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
     startHour?: number;
     // (undocumented)
     startMinute?: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
     // (undocumented)
@@ -13036,6 +13040,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryL
     // (undocumented)
     startMinute?: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
     // (undocumented)
     weekdays?: ScheduleEntryLockWeekday[];
@@ -13061,6 +13067,8 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
     enabled: boolean;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13073,6 +13081,8 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
     enabled: boolean;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13097,6 +13107,8 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
     numYearDaySlots: number;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13117,6 +13129,8 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
     serialize(): Buffer;
     // (undocumented)
     standardOffset: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13131,6 +13145,8 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
     serialize(): Buffer;
     // (undocumented)
     standardOffset: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13225,6 +13241,8 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
     // (undocumented)
     slotId: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
 }
 
@@ -13246,6 +13264,8 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
     stopHour?: number;
     // (undocumented)
     stopMinute?: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
     // (undocumented)
@@ -13272,6 +13292,8 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
     // (undocumented)
     stopMinute?: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
     // (undocumented)
     weekday?: ScheduleEntryLockWeekday;
@@ -13297,6 +13319,8 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
     serialize(): Buffer;
     // (undocumented)
     slotId: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13332,6 +13356,8 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
     // (undocumented)
     stopYear?: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
 }
 
@@ -13366,6 +13392,8 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
     stopMonth?: number;
     // (undocumented)
     stopYear?: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -14424,16 +14452,16 @@ export class SupervisionCCReport extends SupervisionCC {
 // @public (undocumented)
 export const SupervisionCCValues: Readonly<{
     ccSupported: ((ccId: CommandClasses) => {
+        readonly id: {
+            commandClass: CommandClasses.Supervision;
+            property: "ccSupported";
+            propertyKey: CommandClasses;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: CommandClasses.Supervision;
             readonly endpoint: number;
             readonly property: "ccSupported";
             readonly propertyKey: CommandClasses;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Supervision;
-            property: "ccSupported";
-            propertyKey: CommandClasses;
         };
         readonly meta: {
             readonly type: "any";
@@ -15365,16 +15393,16 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 // @public (undocumented)
 export const ThermostatSetpointCCValues: Readonly<{
     setpointScale: ((setpointType: ThermostatSetpointType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            property: "setpointScale";
+            propertyKey: ThermostatSetpointType;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
             readonly endpoint: number;
             readonly property: "setpointScale";
             readonly propertyKey: ThermostatSetpointType;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-            property: "setpointScale";
-            propertyKey: ThermostatSetpointType;
         };
         readonly meta: {
             readonly type: "any";
@@ -15393,16 +15421,16 @@ export const ThermostatSetpointCCValues: Readonly<{
         };
     };
     setpoint: ((setpointType: ThermostatSetpointType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            property: "setpoint";
+            propertyKey: ThermostatSetpointType;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
             readonly endpoint: number;
             readonly property: "setpoint";
             readonly propertyKey: ThermostatSetpointType;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-            property: "setpoint";
-            propertyKey: ThermostatSetpointType;
         };
         readonly meta: {
             readonly label: `Setpoint (${string})`;
@@ -16206,16 +16234,16 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 // @public (undocumented)
 export const UserCodeCCValues: Readonly<{
     userCode: ((userId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["User Code"];
+            property: "userCode";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["User Code"];
             readonly endpoint: number;
             readonly property: "userCode";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["User Code"];
-            property: "userCode";
-            propertyKey: number;
         };
         readonly meta: {
             readonly type: "any";
@@ -16234,16 +16262,16 @@ export const UserCodeCCValues: Readonly<{
         };
     };
     userIdStatus: ((userId: number) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["User Code"];
+            property: "userIdStatus";
+            propertyKey: number;
+        };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses)["User Code"];
             readonly endpoint: number;
             readonly property: "userIdStatus";
             readonly propertyKey: number;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["User Code"];
-            property: "userIdStatus";
-            propertyKey: number;
         };
         readonly meta: {
             readonly label: `User ID status (${number})`;
