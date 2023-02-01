@@ -30,6 +30,17 @@ export class ConditionalEndpointConfig
 		);
 		this.condition = definition.$if;
 
+		if (definition.label != undefined) {
+			if (typeof definition.label !== "string") {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+Endpoint ${index}: label is not a string`,
+				);
+			}
+			this.label = definition.label;
+		}
+
 		if (definition.associations != undefined) {
 			const associations = new Map<
 				number,
@@ -74,11 +85,13 @@ Endpoint ${index}: found non-numeric group id "${key}" in associations`,
 	>;
 
 	public readonly condition?: string;
+	public readonly label?: string;
 
 	public evaluateCondition(deviceId?: DeviceID): EndpointConfig | undefined {
 		if (!conditionApplies(this, deviceId)) return;
 		const ret: EndpointConfig = {
 			index: this.index,
+			label: this.label,
 		};
 		const associations = evaluateDeep(this.associations, deviceId);
 		if (associations) ret.associations = associations;

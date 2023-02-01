@@ -81,6 +81,12 @@ export class Endpoint implements IZWaveEndpoint {
 		}
 	}
 
+	/** Can be used to distinguish multiple endpoints of a node */
+	public get label(): string | undefined {
+		return this.getNodeUnsafe()?.deviceConfig?.endpoints?.get(this.index)
+			?.label;
+	}
+
 	/** Resets all stored information of this endpoint */
 	protected reset(): void {
 		this._implementedCommandClasses.clear();

@@ -229,6 +229,9 @@
 					"properties": {
 						"$import": { "$ref": "#/definitions/import" },
 						"$if": { "$ref": "#/definitions/condition" },
+						"label": {
+							"type": "string"
+						},
 						"associations": { "$ref": "#/definitions/associations" }
 					},
 					"additionalProperties": false
