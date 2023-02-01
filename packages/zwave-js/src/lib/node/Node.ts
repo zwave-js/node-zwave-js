@@ -999,7 +999,7 @@ export class ZWaveNode
 				});
 			}
 
-			return true;
+			return isUnsupervisedOrSucceeded(result);
 		} catch (e) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
