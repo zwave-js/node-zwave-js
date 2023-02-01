@@ -66,3 +66,19 @@ export function compareStrings(a: string, b: string): number {
 	if (b > a) return -1;
 	return 0;
 }
+
+export function formatTime(hour: number, minute: number): string {
+	return `${padStart(hour.toString(), 2, "0")}:${padStart(
+		minute.toString(),
+		2,
+		"0",
+	)}`;
+}
+
+export function formatDate(year: number, month: number, day: number): string {
+	return `${padStart(year.toString(), 4, "0")}-${padStart(
+		month.toString(),
+		2,
+		"0",
+	)}-${padStart(day.toString(), 2, "0")}`;
+}
