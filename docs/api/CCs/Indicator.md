@@ -41,7 +41,33 @@ async identify(): Promise<SupervisionResult | undefined>;
 
 Instructs the node to identify itself. Available starting with V3 of this CC.
 
+### `getDescription`
+
+```ts
+async getDescription(
+	indicatorId: number,
+): Promise<string | undefined>;
+```
+
 ## Indicator CC values
+
+### `identify`
+
+```ts
+{
+	commandClass: CommandClasses.Indicator,
+	endpoint: number,
+	property: "identify",
+}
+```
+
+-   **label:** Identify
+-   **min. CC version:** 3
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
 
 ### `valueV1`
 
