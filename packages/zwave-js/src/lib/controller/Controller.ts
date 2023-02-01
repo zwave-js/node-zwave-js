@@ -293,6 +293,7 @@ import {
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
 	GetFirmwareUpdatesOptions,
+	HealNetworkOptions,
 	HealNodeStatus,
 	SDKVersion,
 } from "./_Types";
@@ -3370,12 +3371,18 @@ supported CCs: ${nodeInfo.supportedCCs
 	 * requesting updated neighbor lists and assigning fresh routes to
 	 * association targets.
 	 */
-	public beginHealingNetwork(): boolean {
+	public beginHealingNetwork(options: HealNetworkOptions = {}): boolean {
 		// Don't start the process twice
 		if (this._healNetworkActive) return false;
 		this._healNetworkActive = true;
 
-		this.driver.controllerLog.print(`starting network heal...`);
+		options.includeSleeping ??= true;
+
+		this.driver.controllerLog.print(
+			`starting network heal${
+				options.includeSleeping ? "" : " for mains-powered nodes"
+			}...`,
+		);
 
 		// Reset all nodes to "not healed"
 		this._healNetworkProgress.clear();
@@ -3395,13 +3402,15 @@ supported CCs: ${nodeInfo.supportedCCs
 					`Skipping heal because the node is not responding.`,
 				);
 				this._healNetworkProgress.set(id, "skipped");
+			} else if (!options.includeSleeping && node.canSleep) {
+				this._healNetworkProgress.set(id, "skipped");
 			} else {
 				this._healNetworkProgress.set(id, "pending");
 			}
 		}
 
 		// Do the heal process in the background
-		void this.healNetwork().catch(() => {
+		void this.healNetwork(options).catch(() => {
 			/* ignore errors */
 		});
 
@@ -3411,7 +3420,7 @@ supported CCs: ${nodeInfo.supportedCCs
 		return true;
 	}
 
-	private async healNetwork(): Promise<void> {
+	private async healNetwork(options: HealNetworkOptions): Promise<void> {
 		const pendingNodes = new Set(
 			[...this._healNetworkProgress]
 				.filter(([, status]) => status === "pending")
@@ -3426,11 +3435,13 @@ supported CCs: ${nodeInfo.supportedCCs
 				pendingNodes.delete(nodeId);
 				const node = this.nodes.getOrThrow(nodeId);
 				if (node.canSleep) {
-					this.driver.controllerLog.logNode(
-						nodeId,
-						"added to healing queue for sleeping nodes",
-					);
-					todoSleeping.push(nodeId);
+					if (options.includeSleeping) {
+						this.driver.controllerLog.logNode(
+							nodeId,
+							"added to healing queue for sleeping nodes",
+						);
+						todoSleeping.push(nodeId);
+					}
 				} else {
 					this.driver.controllerLog.logNode(
 						nodeId,
@@ -3488,17 +3499,23 @@ supported CCs: ${nodeInfo.supportedCCs
 			if (!this._healNetworkActive) return;
 		}
 
-		// Now heal all sleeping nodes at once
-		this.driver.controllerLog.print(
-			"Healing sleeping nodes in parallel. Wake them up to heal.",
-		);
+		if (options.includeSleeping) {
+			// Now heal all sleeping nodes at once
+			this.driver.controllerLog.print(
+				"Healing sleeping nodes in parallel. Wake them up to heal.",
+			);
 
-		const tasks = todoSleeping.map((nodeId) => doHeal(nodeId));
-		await Promise.all(tasks);
+			const tasks = todoSleeping.map((nodeId) => doHeal(nodeId));
+			await Promise.all(tasks);
+		}
 
 		// Only emit the done event when the process wasn't stopped in the meantime
 		if (this._healNetworkActive) {
+			this.driver.controllerLog.print("network heal completed");
+
 			this.emit("heal network done", new Map(this._healNetworkProgress));
+		} else {
+			this.driver.controllerLog.print("network heal aborted");
 		}
 		// We're done!
 		this._healNetworkActive = false;

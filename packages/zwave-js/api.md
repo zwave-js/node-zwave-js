@@ -529,6 +529,13 @@ export interface GetFirmwareUpdatesOptions {
 
 export { guessFirmwareFileFormat }
 
+// Warning: (ae-missing-release-tag) "HealNetworkOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HealNetworkOptions {
+    includeSleeping?: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "HealNodeStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -968,7 +975,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     //
     // @deprecated
     beginExclusion(unprovision: boolean | "inactive"): Promise<boolean>;
-    beginHealingNetwork(): boolean;
+    beginHealingNetwork(options?: HealNetworkOptions): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     beginInclusion(options?: InclusionOptions): Promise<boolean>;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "firmwareUpdateOTA"

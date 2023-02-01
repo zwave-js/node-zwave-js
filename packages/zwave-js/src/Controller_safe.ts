@@ -14,6 +14,7 @@ export {
 	ControllerFirmwareUpdateResult,
 	ControllerFirmwareUpdateStatus,
 	GetFirmwareUpdatesOptions,
+	HealNetworkOptions,
 	HealNodeStatus,
 	SDKVersion,
 } from "./lib/controller/_Types";
