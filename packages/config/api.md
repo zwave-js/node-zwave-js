@@ -264,6 +264,8 @@ export class ConditionalEndpointConfig implements ConditionalItem<EndpointConfig
     evaluateCondition(deviceId?: DeviceID): EndpointConfig | undefined;
     // (undocumented)
     readonly index: number;
+    // (undocumented)
+    readonly label?: string;
 }
 
 // Warning: (ae-missing-release-tag) "ConditionalParamInfoMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
