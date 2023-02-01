@@ -3,7 +3,9 @@ import {
 	encodeBitMask,
 	IZWaveEndpoint,
 	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	MessageRecord,
 	parseBitMask,
 	SupervisionResult,
 	validatePayload,
@@ -11,7 +13,13 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { AllOrNone, pick } from "@zwave-js/shared";
+import {
+	AllOrNone,
+	formatDate,
+	formatTime,
+	getEnumMemberName,
+	pick,
+} from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
@@ -162,7 +170,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 			if (slot.slotId < 1 || slot.slotId > numSlots) {
 				throw new ZWaveError(
-					`The schedule slot ID must be between 1 and the number of supported day-of-week slots ${numSlots}.`,
+					`The schedule slot # must be between 1 and the number of supported day-of-week slots ${numSlots}.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -234,7 +242,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 			if (slot.slotId < 1 || slot.slotId > numSlots) {
 				throw new ZWaveError(
-					`The schedule slot ID must be between 1 and the number of supported day-of-year slots ${numSlots}.`,
+					`The schedule slot # must be between 1 and the number of supported day-of-year slots ${numSlots}.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -312,7 +320,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 			if (slot.slotId < 1 || slot.slotId > numSlots) {
 				throw new ZWaveError(
-					`The schedule slot ID must be between 1 and the number of supported daily repeating slots ${numSlots}.`,
+					`The schedule slot # must be between 1 and the number of supported daily repeating slots ${numSlots}.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -566,6 +574,16 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 		this.payload = Buffer.from([this.userId, this.enabled ? 0x01 : 0x00]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"user ID": this.userId,
+				action: this.enabled ? "enable" : "disable",
+			},
+		};
+	}
 }
 
 interface ScheduleEntryLockCCEnableAllSetOptions extends CCCommandOptions {
@@ -595,6 +613,15 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.enabled ? 0x01 : 0x00]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				action: this.enabled ? "enable all" : "disable all",
+			},
+		};
 	}
 }
 
@@ -646,6 +673,21 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 			]);
 		}
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"no. of weekday schedule slots": this.numWeekDaySlots,
+			"no. of day-of-year schedule slots": this.numYearDaySlots,
+		};
+		if (this.numDailyRepeatingSlots != undefined) {
+			message["no. of daily repeating schedule slots"] =
+				this.numDailyRepeatingSlots;
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
 	}
 }
 
@@ -733,6 +775,39 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		let message: MessageRecord;
+		if (this.action === ScheduleEntryLockSetAction.Erase) {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				action: "erase",
+			};
+		} else {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				action: "set",
+				weekday: getEnumMemberName(
+					ScheduleEntryLockWeekday,
+					this.weekday!,
+				),
+				"start time": formatTime(
+					this.startHour ?? 0,
+					this.startMinute ?? 0,
+				),
+				"end time": formatTime(
+					this.stopHour ?? 0,
+					this.stopMinute ?? 0,
+				),
+			};
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 type ScheduleEntryLockCCWeekDayScheduleReportOptions = CCCommandOptions &
@@ -800,6 +875,38 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		let message: MessageRecord;
+		if (this.weekday == undefined) {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				schedule: "(empty)",
+			};
+		} else {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				weekday: getEnumMemberName(
+					ScheduleEntryLockWeekday,
+					this.weekday,
+				),
+				"start time": formatTime(
+					this.startHour ?? 0,
+					this.startMinute ?? 0,
+				),
+				"end time": formatTime(
+					this.stopHour ?? 0,
+					this.stopMinute ?? 0,
+				),
+			};
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 type ScheduleEntryLockCCWeekDayScheduleGetOptions = CCCommandOptions &
@@ -831,6 +938,16 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.userId, this.slotId]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+			},
+		};
 	}
 }
 
@@ -934,6 +1051,37 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		let message: MessageRecord;
+		if (this.action === ScheduleEntryLockSetAction.Erase) {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				action: "erase",
+			};
+		} else {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				action: "set",
+				"start date": `${formatDate(
+					this.startYear ?? 0,
+					this.startMonth ?? 0,
+					this.startDay ?? 0,
+				)} ${formatTime(this.startHour ?? 0, this.startMinute ?? 0)}`,
+				"end date": `${formatDate(
+					this.stopYear ?? 0,
+					this.stopMonth ?? 0,
+					this.stopDay ?? 0,
+				)} ${formatTime(this.stopHour ?? 0, this.stopMinute ?? 0)}`,
+			};
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 type ScheduleEntryLockCCYearDayScheduleReportOptions = CCCommandOptions &
@@ -1031,6 +1179,37 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		let message: MessageRecord;
+		if (this.startYear !== undefined) {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				schedule: "(empty)",
+			};
+		} else {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				action: "set",
+				"start date": `${formatDate(
+					this.startYear ?? 0,
+					this.startMonth ?? 0,
+					this.startDay ?? 0,
+				)} ${formatTime(this.startHour ?? 0, this.startMinute ?? 0)}`,
+				"end date": `${formatDate(
+					this.stopYear ?? 0,
+					this.stopMonth ?? 0,
+					this.stopDay ?? 0,
+				)} ${formatTime(this.stopHour ?? 0, this.stopMinute ?? 0)}`,
+			};
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 type ScheduleEntryLockCCYearDayScheduleGetOptions = CCCommandOptions &
@@ -1062,6 +1241,16 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.userId, this.slotId]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+			},
+		};
 	}
 }
 
@@ -1100,6 +1289,16 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 		});
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"standard time offset": `${this.standardOffset} minutes`,
+				"DST offset": `${this.dstOffset} minutes`,
+			},
+		};
+	}
 }
 
 interface ScheduleEntryLockCCTimeOffsetReportOptions extends CCCommandOptions {
@@ -1135,6 +1334,16 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 			dstOffset: this.dstOffset,
 		});
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"standard time offset": `${this.standardOffset} minutes`,
+				"DST offset": `${this.dstOffset} minutes`,
+			},
+		};
 	}
 }
 
@@ -1234,6 +1443,38 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryL
 
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		let message: MessageRecord;
+		if (this.action === ScheduleEntryLockSetAction.Erase) {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				action: "erase",
+			};
+		} else {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				action: "set",
+				weekdays: this.weekdays!.map((w) =>
+					getEnumMemberName(ScheduleEntryLockWeekday, w),
+				).join(", "),
+				"start time": formatTime(
+					this.startHour ?? 0,
+					this.startMinute ?? 0,
+				),
+				duration: formatTime(
+					this.durationHour ?? 0,
+					this.durationMinute ?? 0,
+				),
+			};
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 type ScheduleEntryLockCCDailyRepeatingScheduleReportOptions =
@@ -1308,6 +1549,38 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		let message: MessageRecord;
+		if (!this.weekdays) {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				schedule: "(empty)",
+			};
+		} else {
+			message = {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+				action: "set",
+				weekdays: this.weekdays
+					.map((w) => getEnumMemberName(ScheduleEntryLockWeekday, w))
+					.join(", "),
+				"start time": formatTime(
+					this.startHour ?? 0,
+					this.startMinute ?? 0,
+				),
+				duration: formatTime(
+					this.durationHour ?? 0,
+					this.durationMinute ?? 0,
+				),
+			};
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions = CCCommandOptions &
@@ -1339,5 +1612,15 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryL
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.userId, this.slotId]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"user ID": this.userId,
+				"slot #": this.slotId,
+			},
+		};
 	}
 }

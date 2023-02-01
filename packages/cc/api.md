@@ -12989,6 +12989,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryL
     // (undocumented)
     slotId: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
 }
 
@@ -13010,6 +13012,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
     startHour?: number;
     // (undocumented)
     startMinute?: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
     // (undocumented)
@@ -13036,6 +13040,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryL
     // (undocumented)
     startMinute?: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
     // (undocumented)
     weekdays?: ScheduleEntryLockWeekday[];
@@ -13061,6 +13067,8 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
     enabled: boolean;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13073,6 +13081,8 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
     enabled: boolean;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13097,6 +13107,8 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
     numYearDaySlots: number;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13117,6 +13129,8 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
     serialize(): Buffer;
     // (undocumented)
     standardOffset: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13131,6 +13145,8 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
     serialize(): Buffer;
     // (undocumented)
     standardOffset: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13225,6 +13241,8 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
     // (undocumented)
     slotId: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
 }
 
@@ -13246,6 +13264,8 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
     stopHour?: number;
     // (undocumented)
     stopMinute?: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
     // (undocumented)
@@ -13272,6 +13292,8 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
     // (undocumented)
     stopMinute?: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
     // (undocumented)
     weekday?: ScheduleEntryLockWeekday;
@@ -13297,6 +13319,8 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
     serialize(): Buffer;
     // (undocumented)
     slotId: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13332,6 +13356,8 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
     // (undocumented)
     stopYear?: number;
     // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
     userId: number;
 }
 
@@ -13366,6 +13392,8 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
     stopMonth?: number;
     // (undocumented)
     stopYear?: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
