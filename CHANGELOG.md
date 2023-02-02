@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.6.0 (2023-02-02)
 ### Features
 * Support assigning labels to endpoints (#5403)
 * Added a writeonly value to trigger `Identify` on a node (#5397)
