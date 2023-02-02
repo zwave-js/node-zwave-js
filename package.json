@@ -138,7 +138,7 @@
     "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
     "codefind": "yarn ts packages/maintenance/src/codefind.ts",
     "extract-api": "FORCE_COLOR=1 yarn turbo run extract-api",
-    "accept-api": "yarn build --force && yarn extract-api -- --local",
+    "accept-api": "yarn extract-api --force -- --local",
     "monopack": "yarn exec monopack"
   },
   "readme": "README.md",

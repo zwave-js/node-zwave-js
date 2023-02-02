@@ -74,7 +74,7 @@ Can be used to add instructions for the user to a device:
 
 ## `endpoints`
 
-Optional endpoint-specific configuration. For now this only includes associations. Example:
+Optional endpoint-specific configuration. This includes associations and endpoint labels. Example:
 
 ```json
 "endpoints": {
@@ -84,6 +84,7 @@ Optional endpoint-specific configuration. For now this only includes association
 		}
 	},
 	"1": {
+		"label": "Relay",
 		"associations": {
 			// Association definitions for endpoint 1, see below for details
 		}
