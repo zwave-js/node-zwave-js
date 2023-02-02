@@ -2924,23 +2924,24 @@ __metadata:
   linkType: hard
 
 "@esm2cjs/cacheable-request@npm:^10.2.1":
-  version: 10.2.4
-  resolution: "@esm2cjs/cacheable-request@npm:10.2.4"
+  version: 10.2.5
+  resolution: "@esm2cjs/cacheable-request@npm:10.2.5"
   dependencies:
     "@esm2cjs/mimic-response": ^4.0.0
     "@esm2cjs/normalize-url": ^8.0.0
     "@esm2cjs/responselike": ^3.0.0
+    "@types/http-cache-semantics": ^4.0.1
     get-stream: ^6.0.1
     http-cache-semantics: ^4.1.0
     keyv: ^4.5.2
-  checksum: 717712214e0d9f371262d0dd91e67aa1f1509766962bad71f8bfc853b206699aa3407278788f0527652a859dae8ebeefdd22d1a45a920ef342f5251f039c06be
+  checksum: 590454cbcf146d9b1639560f341d7be43a4186a262d202cc60749a87acdd4a23e63d9c5d057ed42fa115b7b0b38b9d512ac9ecf9cd66c6722f11451d0b2457a9
   languageName: node
   linkType: hard
 
 "@esm2cjs/form-data-encoder@npm:^2.1.2":
-  version: 2.1.2
-  resolution: "@esm2cjs/form-data-encoder@npm:2.1.2"
-  checksum: d6430e5c58ae219d13fe208958690c24487189af2a0373505ff99c975d167466736317e1e2d87fa677f5a25360d93e32fdf14c180e7a95e41f9bbefc0d85e489
+  version: 2.1.4
+  resolution: "@esm2cjs/form-data-encoder@npm:2.1.4"
+  checksum: 558124dd52e1705e4be2e252bcbab07b634160c2fed18461f519430ec1a624c5376a86e9b9f7ae96f7c965e7f6549c467fe68271e88a8e7c09a2d6ccce64778a
   languageName: node
   linkType: hard
 
@@ -4147,6 +4148,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: d076bb61f45d0fc42dee496ef8b1c2f8742e15d5e47e90e20d0243386e426c04d4efd408a48875ab432f7960b4ce3414db20ed0fbbfc7bcc89d84e574f6e045a
+  languageName: node
+  linkType: hard
+
+"@types/http-cache-semantics@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@types/http-cache-semantics@npm:4.0.1"
+  checksum: 1048aacf627829f0d5f00184e16548205cd9f964bf0841c29b36bc504509230c40bc57c39778703a1c965a6f5b416ae2cbf4c1d4589c889d2838dd9dbfccf6e9
   languageName: node
   linkType: hard
 
@@ -13260,7 +13268,6 @@ __metadata:
     execa: ^5.1.1
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
-    keyv: ^4.5.2
     mockdate: ^3.0.5
     prettier: ^2.8.1
     proper-lockfile: ^4.1.2
