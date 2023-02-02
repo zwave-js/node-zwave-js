@@ -4,6 +4,30 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Support assigning labels to endpoints (#5403)
+* Added a writeonly value to trigger `Identify` on a node (#5397)
+* Add option to skip healing battery powered nodes (#5389)
+* Support Indicator CC v4 (#5395)
+
+### Bugfixes
+* Revert to our own implementation of HTTP caching to avoid errors when checking for firmware updates (#5405)
+* Clarify return value of `setValue` in the documentation and return `false` when a supervised command fails (#5380)
+* Add support for enums in Notification CC event parameters (#5394)
+* Battery-powered nodes are now initially assumed to be awake during re-interview if a wakeup triggered the re-interview (#5390)
+
+### Config file changes
+* Add new fingerprint for Fibaro FGCD001 CO sensor (#5387)
+* Add fingerprint `0x0003:0x0017` to "Heatit Z-Smoke 230V" (#5401)
+* Add Good Way WD6051 controller (#5400)
+* Treat Basic Set as events for TKB Home TZ56-D/TZ66-D (#5388)
+* Add fingerprint for Ring Extender G2 (#5385)
+* Add endpoint labels for Aeotec Siren 6 (#5403)
+
+### Changes under the hood
+* Add logging for Schedule Entry Lock CC (#5393)
+
 ## 10.5.6 (2023-01-31)
 ### Bugfixes
 * Always use S2 for endpoint communication if node uses S2 (#5386)
