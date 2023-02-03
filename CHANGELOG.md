@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* `node.isFirmwareUpdateInProgress()` now considers OTW updates if the node is the controller node (#5408)
+
+### Bugfixes
+* Rename `label` property on `Endpoint` class to `endpointLabel` (#5409)
+
 ## 10.6.0 (2023-02-02)
 ### Features
 * Support assigning labels to endpoints (#5403)
