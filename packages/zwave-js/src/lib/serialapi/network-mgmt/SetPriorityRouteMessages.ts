@@ -23,7 +23,7 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 
 export interface SetPriorityRouteRequestOptions extends MessageBaseOptions {
-	targetNodeId: number;
+	destinationNodeId: number;
 	repeaters: number[];
 	routeSpeed: ZWaveDataRate;
 }
@@ -53,19 +53,19 @@ export class SetPriorityRouteRequest extends Message {
 				);
 			}
 
-			this.targetNodeId = options.targetNodeId;
+			this.destinationNodeId = options.destinationNodeId;
 			this.repeaters = options.repeaters;
 			this.routeSpeed = options.routeSpeed;
 		}
 	}
 
-	public targetNodeId: number;
+	public destinationNodeId: number;
 	public repeaters: number[];
 	public routeSpeed: ZWaveDataRate;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			this.targetNodeId,
+			this.destinationNodeId,
 			this.repeaters[0] ?? 0,
 			this.repeaters[1] ?? 0,
 			this.repeaters[2] ?? 0,
@@ -80,7 +80,7 @@ export class SetPriorityRouteRequest extends Message {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"node ID": this.targetNodeId,
+				"node ID": this.destinationNodeId,
 				repeaters:
 					this.repeaters.length > 0
 						? this.repeaters.join(" -> ")
