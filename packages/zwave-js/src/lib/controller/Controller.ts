@@ -5155,7 +5155,8 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public isAnyOTAFirmwareUpdateInProgress(): boolean {
 		for (const node of this._nodes.values()) {
-			if (node.isFirmwareUpdateInProgress()) return true;
+			if (!node.isControllerNode && node.isFirmwareUpdateInProgress())
+				return true;
 		}
 		return false;
 	}
