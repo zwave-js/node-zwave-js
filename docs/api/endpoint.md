@@ -104,10 +104,10 @@ readonly index: number
 
 The index of this endpoint. 0 for the root device, 1+ otherwise.
 
-### `label`
+### `endpointLabel`
 
 ```ts
-readonly label: string | undefined;
+readonly endpointLabel: string | undefined;
 ```
 
 If the device config file contains a label for this endpoint, it is exposed here.
