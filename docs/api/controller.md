@@ -888,6 +888,14 @@ To do so, the controller gets put in bootloader mode where a new firmware image 
 
 To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/controller#quotfirmware-update-progressquot) of the controller.
 
+### `isFirmwareUpdateInProgress`
+
+```ts
+isFirmwareUpdateInProgress(): boolean;
+```
+
+Return whether a firmware update is in progress for the controller.
+
 ## Controller properties
 
 ### `nodes`
