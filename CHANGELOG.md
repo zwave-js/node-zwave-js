@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.7.0 (2023-02-03)
 ### Features
 * `node.isFirmwareUpdateInProgress()` now considers OTW updates if the node is the controller node (#5408)
 
