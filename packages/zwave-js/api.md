@@ -396,6 +396,7 @@ export class Endpoint implements IZWaveEndpoint {
     get deviceClass(): DeviceClass | undefined;
     protected set deviceClass(deviceClass: DeviceClass | undefined);
     protected readonly driver: Driver;
+    get endpointLabel(): string | undefined;
     // (undocumented)
     getCCs(): Iterable<[ccId: CommandClasses_2, info: CommandClassInfo]>;
     getCCVersion(cc: CommandClasses_2): number;
@@ -406,7 +407,6 @@ export class Endpoint implements IZWaveEndpoint {
     get installerIcon(): number | undefined;
     invokeCCAPI<CC extends CommandClasses_2, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     isCCSecure(cc: CommandClasses_2): boolean;
-    get label(): string | undefined;
     readonly nodeId: number;
     removeCC(cc: CommandClasses_2): void;
     protected reset(): void;
