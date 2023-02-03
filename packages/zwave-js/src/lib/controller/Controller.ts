@@ -3999,7 +3999,7 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * Sets the priority route for a node, which is the first route that will be used for commands sent to it.
+	 * Sets the priority route which will always be used for the first transmission attempt from the controller to the given node.
 	 * @param destinationNodeId The ID of the node that should be reached via the priority route
 	 * @param repeaters The IDs of the nodes that should be used as repeaters, or an empty array for direct connection
 	 * @param routeSpeed The transmission speed to use for the route
