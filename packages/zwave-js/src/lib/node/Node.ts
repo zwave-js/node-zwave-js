@@ -3689,7 +3689,11 @@ protocol version:      ${this.protocolVersion}`;
 	 * Returns whether a firmware update is in progress for this node.
 	 */
 	public isFirmwareUpdateInProgress(): boolean {
-		return this._firmwareUpdateInProgress;
+		return (
+			(this.isControllerNode &&
+				this.driver.controller.isFirmwareUpdateInProgress()) ||
+			this._firmwareUpdateInProgress
+		);
 	}
 
 	private _abortFirmwareUpdate: (() => Promise<void>) | undefined;
