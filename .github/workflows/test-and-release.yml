@@ -422,11 +422,11 @@ jobs:
         VERSION="${{ github.ref }}"
         VERSION=${VERSION##*/v}
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        EOF=$(</dev/urandom tr -dc "A-Za-z0-9" | head -c 6)
         BODY=$(git show -s --format=%b)
-        BODY="${BODY//'%'/'%25'}"
-        BODY="${BODY//$'\n'/'%0A'}"
-        BODY="${BODY//$'\r'/'%0D'}"
-        echo "BODY=$BODY" >> $GITHUB_OUTPUT
+        echo "BODY << $EOF" >> $GITHUB_OUTPUT
+        echo "$BODY" >> $GITHUB_OUTPUT
+        echo "$EOF" >> $GITHUB_OUTPUT
         if [[ $VERSION == *"-"* ]] ; then
           echo "TAG=--tag next" >> $GITHUB_OUTPUT
         fi
