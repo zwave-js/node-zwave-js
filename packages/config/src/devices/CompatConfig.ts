@@ -271,6 +271,30 @@ compat option manualValueRefreshDelayMs must be a non-negative integer!`,
 				definition.manualValueRefreshDelayMs;
 		}
 
+		if (definition.reportTimeout != undefined) {
+			if (typeof definition.reportTimeout !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option reportTimeout must be a number!`,
+				);
+			}
+
+			if (
+				definition.reportTimeout % 1 !== 0 ||
+				definition.reportTimeout < 1000 ||
+				definition.reportTimeout > 10000
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option reportTimeout must be an integer between 1000 and 10000!`,
+				);
+			}
+
+			this.reportTimeout = definition.reportTimeout;
+		}
+
 		if (definition.mapRootReportsToEndpoint != undefined) {
 			if (typeof definition.mapRootReportsToEndpoint !== "number") {
 				throwInvalidConfig(
@@ -505,6 +529,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 	};
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly preserveEndpoints?: "*" | readonly number[];
+	public readonly reportTimeout?: number;
 	public readonly skipConfigurationNameQuery?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
@@ -538,6 +563,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 			"manualValueRefreshDelayMs",
 			"mapRootReportsToEndpoint",
 			"overrideFloatEncoding",
+			"reportTimeout",
 			"preserveRootApplicationCCValueIDs",
 			"preserveEndpoints",
 			"skipConfigurationNameQuery",
