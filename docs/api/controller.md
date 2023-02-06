@@ -550,7 +550,15 @@ The `repeaters` array contains the node IDs of the repeaters (max. 4) that shoul
 
 `routeSpeed` is the transmission speed to be used for the route. Make sure that all nodes in the route support this speed.
 
-<!-- #import ZWaveDataRate from "zwave-js" -->
+<!-- #import ZWaveDataRate from "@zwave-js/core" -->
+
+```ts
+enum ZWaveDataRate {
+	"9k6" = 0x01,
+	"40k" = 0x02,
+	"100k" = 0x03,
+}
+```
 
 > [!WARNING] While these methods are meant to improve the routing and latency in certain situations, they can easily make things worse by choosing the wrong or unreachable repeaters, or by selecting a route speed that is not supported by a node in the route.
 >
