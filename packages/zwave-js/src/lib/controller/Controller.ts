@@ -47,6 +47,7 @@ import {
 	securityClassOrder,
 	SinglecastCC,
 	ValueDB,
+	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -167,10 +168,16 @@ import {
 	computeNeighborDiscoveryTimeout,
 	EnableSmartStartListenRequest,
 } from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
+import { AssignPriorityReturnRouteRequest } from "../serialapi/network-mgmt/AssignPriorityReturnRouteMessages";
+import { AssignPrioritySUCReturnRouteRequest } from "../serialapi/network-mgmt/AssignPrioritySUCReturnRouteMessages";
 import { AssignReturnRouteRequest } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
 import { AssignSUCReturnRouteRequest } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
 import { DeleteReturnRouteRequest } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
 import { DeleteSUCReturnRouteRequest } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
+import {
+	GetPriorityRouteRequest,
+	GetPriorityRouteResponse,
+} from "../serialapi/network-mgmt/GetPriorityRouteMessages";
 import {
 	GetRoutingInfoRequest,
 	GetRoutingInfoResponse,
@@ -208,6 +215,7 @@ import {
 	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
 } from "../serialapi/network-mgmt/RequestNodeNeighborUpdateMessages";
+import { SetPriorityRouteRequest } from "../serialapi/network-mgmt/SetPriorityRouteMessages";
 import { SetSUCNodeIdRequest } from "../serialapi/network-mgmt/SetSUCNodeIDMessages";
 import {
 	ExtNVMReadLongBufferRequest,
@@ -3906,6 +3914,158 @@ ${associatedNodes.join(", ")}`,
 				"error",
 			);
 			return false;
+		}
+	}
+
+	/**
+	 * Assigns a priority route between two end nodes. This route will always be used for the first transmission attempt.
+	 * @param nodeId The ID of the source node of the route
+	 * @param destinationNodeId The ID of the destination node of the route
+	 * @param repeaters The IDs of the nodes that should be used as repeaters, or an empty array for direct connection
+	 * @param routeSpeed The transmission speed to use for the route
+	 */
+	public async assignPriorityReturnRoute(
+		nodeId: number,
+		destinationNodeId: number,
+		repeaters: number[],
+		routeSpeed: ZWaveDataRate,
+	): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Assigning priority return route to node ${destinationNodeId}...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new AssignPriorityReturnRouteRequest(this.driver, {
+					nodeId,
+					destinationNodeId,
+					repeaters,
+					routeSpeed,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Assigning priority return route failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	/**
+	 * Assigns a priority route from an end node to the SUC. This route will always be used for the first transmission attempt.
+	 * @param nodeId The ID of the end node for which to assign the route
+	 * @param repeaters The IDs of the nodes that should be used as repeaters, or an empty array for direct connection
+	 * @param routeSpeed The transmission speed to use for the route
+	 */
+	public async assignPrioritySUCReturnRoute(
+		nodeId: number,
+		repeaters: number[],
+		routeSpeed: ZWaveDataRate,
+	): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Assigning priority SUC return route...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new AssignPrioritySUCReturnRouteRequest(this.driver, {
+					nodeId,
+					repeaters,
+					routeSpeed,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Assigning priority SUC return route failed: ${getErrorMessage(
+					e,
+				)}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	/**
+	 * Sets the priority route which will always be used for the first transmission attempt from the controller to the given node.
+	 * @param destinationNodeId The ID of the node that should be reached via the priority route
+	 * @param repeaters The IDs of the nodes that should be used as repeaters, or an empty array for direct connection
+	 * @param routeSpeed The transmission speed to use for the route
+	 */
+	public async setPriorityRoute(
+		destinationNodeId: number,
+		repeaters: number[],
+		routeSpeed: ZWaveDataRate,
+	): Promise<boolean> {
+		this.driver.controllerLog.print(
+			`Setting priority route to node ${destinationNodeId}...`,
+		);
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetPriorityRouteRequest(this.driver, {
+					destinationNodeId,
+					repeaters,
+					routeSpeed,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Setting priority route failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the priority route which is currently set for a node. If none is set, either the LWR or the NLWR is returned.
+	 * @param destinationNodeId The ID of the node for which the priority route should be returned
+	 */
+	public async getPriorityRoute(destinationNodeId: number): Promise<
+		| {
+				repeaters: number[];
+				routeSpeed: ZWaveDataRate;
+		  }
+		| undefined
+	> {
+		this.driver.controllerLog.print(
+			`Retrieving priority route to node ${destinationNodeId}...`,
+		);
+
+		try {
+			const result =
+				await this.driver.sendMessage<GetPriorityRouteResponse>(
+					new GetPriorityRouteRequest(this.driver, {
+						destinationNodeId,
+					}),
+				);
+
+			return {
+				repeaters: result.repeaters,
+				routeSpeed: result.routeSpeed,
+			};
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Retrieving priority route failed: ${getErrorMessage(e)}`,
+				"error",
+			);
 		}
 	}
 

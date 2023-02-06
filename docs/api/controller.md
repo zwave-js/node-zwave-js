@@ -493,6 +493,77 @@ type ReplaceNodeOptions =
 	  };
 ```
 
+### Managing routes
+
+The methods shown here can be used to manage routes between nodes. For the most part, these are not particularly relevant for applications or even end users, since they are used automatically by Z-Wave JS when necessary.
+
+```ts
+assignReturnRoute(nodeId: number, destinationNodeId: number): Promise<boolean>;
+deleteReturnRoute(nodeId: number): Promise<boolean>;
+
+assignSUCReturnRoute(nodeId: number): Promise<boolean>;
+deleteSUCReturnRoute(nodeId: number): Promise<boolean>;
+```
+
+-   `assignReturnRoute` instructs the controller to assign node `nodeId` a set of routes to node `destinationNodeId`. These routes are determined by the controller.
+-   `deleteReturnRoute` instructs node `nodeId` to delete all previously assigned routes.
+-   `assignSUCReturnRoute` works like `assignReturnRoute`, but the routes have the SUC as the destination.
+-   `deleteSUCReturnRoute` works like `deleteReturnRoute`, but for routes that have the SUC as the destination.
+
+In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first instead of the automatically determined routes. This is done with the following methods:
+
+```ts
+setPriorityRoute(
+	destinationNodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>
+
+getPriorityRoute(destinationNodeId: number): Promise<
+	| {
+			repeaters: number[];
+			routeSpeed: ZWaveDataRate;
+	  }
+	| undefined
+>;
+
+assignPriorityReturnRoute(
+	nodeId: number,
+	destinationNodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>;
+
+assignPrioritySUCReturnRoute(
+	nodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>
+```
+
+-   `setPriorityRoute` sets the priority route which will always be used for the first transmission attempt from the controller to the given node.
+-   `getPriorityRoute` returns the priority route to the given node. **Note:** if none is set, this will return the LWR or NLWR instead.
+-   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
+-   `assignPrioritySUCReturnRoute` does the same, but with the SUC as the destination node.
+
+The `repeaters` array contains the node IDs of the repeaters (max. 4) that should be used for the route. An empty array means a direct connection.
+
+`routeSpeed` is the transmission speed to be used for the route. Make sure that all nodes in the route support this speed.
+
+<!-- #import ZWaveDataRate from "@zwave-js/core" -->
+
+```ts
+enum ZWaveDataRate {
+	"9k6" = 0x01,
+	"40k" = 0x02,
+	"100k" = 0x03,
+}
+```
+
+> [!WARNING] While these methods are meant to improve the routing and latency in certain situations, they can easily make things worse by choosing the wrong or unreachable repeaters, or by selecting a route speed that is not supported by a node in the route.
+>
+> Typically you'll want to use these methods to force a direct connection as the first attempt.
+
 ### Managing associations
 
 The following methods can be used to manage associations between nodes and/or endpoints. This only works AFTER the interview process!

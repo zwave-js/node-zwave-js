@@ -93,6 +93,9 @@ export enum FunctionType {
 
 	FUNC_ID_ZW_CREATE_NEW_PRIMARY = 0x4c, // Control the createnewprimary process...start, stop, etc.
 	FUNC_ID_ZW_CONTROLLER_CHANGE = 0x4d, // Control the transferprimary process...start, stop, etc.
+
+	AssignPriorityReturnRoute = 0x4f, // Assign a priority route between two nodes
+
 	FUNC_ID_ZW_SET_LEARN_MODE = 0x50, // Put a controller into learn mode for replication/ receipt of configuration info
 	AssignSUCReturnRoute = 0x51, // Assign a return route to the SUC
 	FUNC_ID_ZW_ENABLE_SUC = 0x52, // Make a controller a Static Update Controller
@@ -102,7 +105,7 @@ export enum FunctionType {
 	GetSUCNodeId = 0x56, // Try to retrieve a Static Update Controller node id (zero if no SUC present)
 
 	UNKNOWN_FUNC_SEND_SUC_ID = 0x57,
-	UNKNOWN_FUNC_AssignPrioritySUCReturnRoute = 0x58,
+	AssignPrioritySUCReturnRoute = 0x58, // Assign a priority route from a node to the SUC
 	UNKNOWN_FUNC_REDISCOVERY_NEEDED = 0x59,
 
 	FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 0x5a, // Allow options for request node neighbor update
@@ -133,8 +136,8 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_LOCK_ROUTE_RESPONSE = 0x90, // ??
 	UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 0x91, // ??
-	UNKNOWN_FUNC_GET_PRIORITY_ROUTE = 0x92, // ??
-	UNKNOWN_FUNC_SET_PRIORITY_ROUTE = 0x93, // ??
+	GetPriorityRoute = 0x92, // Get the route that is used as the first routing attempty when transmitting to a node
+	SetPriorityRoute = 0x93, // Set the route that shall be used as the first routing attempty when transmitting to a node
 	UNKNOWN_FUNC_SERIAL_API_TEST = 0x95, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x98 = 0x98, // ??
 

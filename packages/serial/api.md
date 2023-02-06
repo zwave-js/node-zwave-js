@@ -129,6 +129,10 @@ export enum FunctionType {
     // (undocumented)
     ApplicationUpdateRequest = 73,
     // (undocumented)
+    AssignPriorityReturnRoute = 79,
+    // (undocumented)
+    AssignPrioritySUCReturnRoute = 88,
+    // (undocumented)
     AssignReturnRoute = 70,
     // (undocumented)
     AssignSUCReturnRoute = 81,
@@ -209,6 +213,8 @@ export enum FunctionType {
     // (undocumented)
     GetNVMId = 41,
     // (undocumented)
+    GetPriorityRoute = 146,
+    // (undocumented)
     GetProtocolVersion = 9,
     // (undocumented)
     GetRoutingInfo = 128,
@@ -251,6 +257,8 @@ export enum FunctionType {
     // (undocumented)
     SetApplicationNodeInformation = 3,
     // (undocumented)
+    SetPriorityRoute = 147,
+    // (undocumented)
     SetRFReceiveMode = 16,
     // (undocumented)
     SetSerialApiTimeouts = 6,
@@ -258,8 +266,6 @@ export enum FunctionType {
     SetSUCNodeId = 84,
     // (undocumented)
     SoftReset = 8,
-    // (undocumented)
-    UNKNOWN_FUNC_AssignPrioritySUCReturnRoute = 88,
     // (undocumented)
     UNKNOWN_FUNC_ClearNetworkStats = 57,
     // (undocumented)
@@ -270,8 +276,6 @@ export enum FunctionType {
     UNKNOWN_FUNC_CLOCK_SET = 48,
     // (undocumented)
     UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,
-    // (undocumented)
-    UNKNOWN_FUNC_GET_PRIORITY_ROUTE = 146,
     // (undocumented)
     UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 191,
     // (undocumented)
@@ -314,8 +318,6 @@ export enum FunctionType {
     UNKNOWN_FUNC_SEND_TEST_FRAME = 190,
     // (undocumented)
     UNKNOWN_FUNC_SERIAL_API_TEST = 149,
-    // (undocumented)
-    UNKNOWN_FUNC_SET_PRIORITY_ROUTE = 147,
     // (undocumented)
     UNKNOWN_FUNC_SET_SLEEP_MODE = 17,
     // (undocumented)
