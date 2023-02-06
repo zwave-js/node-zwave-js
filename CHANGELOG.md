@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.8.0 (2023-02-06)
 ### Features
 * Add support for managing priority (return) routes (#5410)
 
