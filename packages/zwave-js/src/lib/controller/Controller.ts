@@ -46,6 +46,7 @@ import {
 	securityClassIsS2,
 	securityClassOrder,
 	SinglecastCC,
+	TransmitStatus,
 	ValueDB,
 	ZWaveDataRate,
 	ZWaveError,
@@ -169,11 +170,26 @@ import {
 	EnableSmartStartListenRequest,
 } from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
 import { AssignPriorityReturnRouteRequest } from "../serialapi/network-mgmt/AssignPriorityReturnRouteMessages";
-import { AssignPrioritySUCReturnRouteRequest } from "../serialapi/network-mgmt/AssignPrioritySUCReturnRouteMessages";
-import { AssignReturnRouteRequest } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
-import { AssignSUCReturnRouteRequest } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
-import { DeleteReturnRouteRequest } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
-import { DeleteSUCReturnRouteRequest } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
+import {
+	AssignPrioritySUCReturnRouteRequest,
+	AssignPrioritySUCReturnRouteRequestTransmitReport,
+} from "../serialapi/network-mgmt/AssignPrioritySUCReturnRouteMessages";
+import {
+	AssignReturnRouteRequest,
+	AssignReturnRouteRequestTransmitReport,
+} from "../serialapi/network-mgmt/AssignReturnRouteMessages";
+import {
+	AssignSUCReturnRouteRequest,
+	AssignSUCReturnRouteRequestTransmitReport,
+} from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
+import {
+	DeleteReturnRouteRequest,
+	DeleteReturnRouteRequestTransmitReport,
+} from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
+import {
+	DeleteSUCReturnRouteRequest,
+	DeleteSUCReturnRouteRequestTransmitReport,
+} from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
 import {
 	GetPriorityRouteRequest,
 	GetPriorityRouteResponse,
@@ -261,6 +277,7 @@ import {
 	NVMOperationStatus,
 	NVMOperationsWriteRequest,
 } from "../serialapi/nvm/NVMOperationsMessages";
+import type { TransmitReport } from "../serialapi/transport/SendDataShared";
 import {
 	NodeIDType,
 	ZWaveApiVersion,
@@ -3825,15 +3842,14 @@ ${associatedNodes.join(", ")}`,
 		});
 
 		try {
-			const result = await this.driver.sendMessage<
-				Message & SuccessIndicator
-			>(
-				new AssignSUCReturnRouteRequest(this.driver, {
-					nodeId,
-				}),
-			);
+			const result =
+				await this.driver.sendMessage<AssignSUCReturnRouteRequestTransmitReport>(
+					new AssignSUCReturnRouteRequest(this.driver, {
+						nodeId,
+					}),
+				);
 
-			return result.isOK();
+			return this.handleRouteAssignmentTransmitReport(result, nodeId);
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -3851,15 +3867,14 @@ ${associatedNodes.join(", ")}`,
 		});
 
 		try {
-			const result = await this.driver.sendMessage<
-				Message & SuccessIndicator
-			>(
-				new DeleteSUCReturnRouteRequest(this.driver, {
-					nodeId,
-				}),
-			);
+			const result =
+				await this.driver.sendMessage<DeleteSUCReturnRouteRequestTransmitReport>(
+					new DeleteSUCReturnRouteRequest(this.driver, {
+						nodeId,
+					}),
+				);
 
-			return result.isOK();
+			return this.handleRouteAssignmentTransmitReport(result, nodeId);
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -3880,16 +3895,15 @@ ${associatedNodes.join(", ")}`,
 		});
 
 		try {
-			const result = await this.driver.sendMessage<
-				Message & SuccessIndicator
-			>(
-				new AssignReturnRouteRequest(this.driver, {
-					nodeId,
-					destinationNodeId,
-				}),
-			);
+			const result =
+				await this.driver.sendMessage<AssignReturnRouteRequestTransmitReport>(
+					new AssignReturnRouteRequest(this.driver, {
+						nodeId,
+						destinationNodeId,
+					}),
+				);
 
-			return result.isOK();
+			return this.handleRouteAssignmentTransmitReport(result, nodeId);
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -3907,15 +3921,14 @@ ${associatedNodes.join(", ")}`,
 		});
 
 		try {
-			const result = await this.driver.sendMessage<
-				Message & SuccessIndicator
-			>(
-				new DeleteReturnRouteRequest(this.driver, {
-					nodeId,
-				}),
-			);
+			const result =
+				await this.driver.sendMessage<DeleteReturnRouteRequestTransmitReport>(
+					new DeleteReturnRouteRequest(this.driver, {
+						nodeId,
+					}),
+				);
 
-			return result.isOK();
+			return this.handleRouteAssignmentTransmitReport(result, nodeId);
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -3945,18 +3958,17 @@ ${associatedNodes.join(", ")}`,
 		});
 
 		try {
-			const result = await this.driver.sendMessage<
-				Message & SuccessIndicator
-			>(
-				new AssignPriorityReturnRouteRequest(this.driver, {
-					nodeId,
-					destinationNodeId,
-					repeaters,
-					routeSpeed,
-				}),
-			);
+			const result =
+				await this.driver.sendMessage<AssignReturnRouteRequestTransmitReport>(
+					new AssignPriorityReturnRouteRequest(this.driver, {
+						nodeId,
+						destinationNodeId,
+						repeaters,
+						routeSpeed,
+					}),
+				);
 
-			return result.isOK();
+			return this.handleRouteAssignmentTransmitReport(result, nodeId);
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -3984,17 +3996,16 @@ ${associatedNodes.join(", ")}`,
 		});
 
 		try {
-			const result = await this.driver.sendMessage<
-				Message & SuccessIndicator
-			>(
-				new AssignPrioritySUCReturnRouteRequest(this.driver, {
-					nodeId,
-					repeaters,
-					routeSpeed,
-				}),
-			);
+			const result =
+				await this.driver.sendMessage<AssignPrioritySUCReturnRouteRequestTransmitReport>(
+					new AssignPrioritySUCReturnRouteRequest(this.driver, {
+						nodeId,
+						repeaters,
+						routeSpeed,
+					}),
+				);
 
-			return result.isOK();
+			return this.handleRouteAssignmentTransmitReport(result, nodeId);
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -4004,6 +4015,27 @@ ${associatedNodes.join(", ")}`,
 				"error",
 			);
 			return false;
+		}
+	}
+
+	private handleRouteAssignmentTransmitReport(
+		msg: TransmitReport,
+		nodeId: number,
+	): boolean {
+		switch (msg.transmitStatus) {
+			case TransmitStatus.OK:
+				return true;
+			case TransmitStatus.NoAck:
+				return false;
+			case TransmitStatus.NoRoute:
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`Route resolution failed`,
+					"warn",
+				);
+				return false;
+			default:
+				return false;
 		}
 	}
 
