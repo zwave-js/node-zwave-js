@@ -15,6 +15,7 @@ import {
 	InclusionControllerCCInitiate,
 	InclusionControllerStep,
 	isCommandClassContainer,
+	MultiCommandCCCommandEncapsulation,
 	MultilevelSwitchCommand,
 	PollValueImplementation,
 	Powerlevel,
@@ -2584,7 +2585,7 @@ protocol version:      ${this.protocolVersion}`;
 	 * @internal
 	 * Handles a CommandClass that was received from this node
 	 */
-	public handleCommand(command: CommandClass): Promise<void> | void {
+	public async handleCommand(command: CommandClass): Promise<void> {
 		// If the node sent us an unsolicited update, our initial assumption
 		// was wrong. Stop querying it regularly for updates
 		this.cancelManualValueRefresh(command.ccId);
@@ -2658,6 +2659,12 @@ protocol version:      ${this.protocolVersion}`;
 					command,
 				);
 			}
+		} else if (command instanceof MultiCommandCCCommandEncapsulation) {
+			// Handle each encapsulated command individually
+			for (const cmd of command.encapsulated) {
+				await this.handleCommand(cmd);
+			}
+			return;
 		}
 
 		// Ignore all commands that don't need to be handled
