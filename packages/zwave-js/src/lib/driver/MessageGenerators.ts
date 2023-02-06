@@ -108,7 +108,7 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 			// ReportTime timeout SHOULD be set to CommandTime + 1 second.
 			const timeout =
 				commandTimeMs +
-				driver.options.timeouts.report +
+				driver.getReportTimeout(msg) +
 				additionalCommandTimeoutMs;
 			return waitForNodeUpdate(driver, msg, timeout);
 		}

@@ -4667,6 +4667,18 @@ ${handlers.length} left`,
 		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
 	}
 
+	/** Determines time in milliseconds to wait for a report from a node */
+	public getReportTimeout(msg: Message): number {
+		const node = this.getNodeUnsafe(msg);
+
+		// If the node has a compat flag to override the timeout, use that,
+		// otherwise use the driver option
+		return (
+			node?.deviceConfig?.compat?.reportTimeout ??
+			this.options.timeouts.report
+		);
+	}
+
 	/** Returns the preferred constructor to use for singlecast SendData commands */
 	public getSendDataSinglecastConstructor():
 		| typeof SendDataRequest
