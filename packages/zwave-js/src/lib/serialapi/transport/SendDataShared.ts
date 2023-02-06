@@ -7,6 +7,8 @@ import {
 	stripUndefined,
 	TXReport,
 } from "@zwave-js/core/safe";
+import { AssignPriorityReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPriorityReturnRouteMessages";
+import { AssignPrioritySUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPrioritySUCReturnRouteMessages";
 import { AssignReturnRouteRequestTransmitReport } from "../network-mgmt/AssignReturnRouteMessages";
 import { AssignSUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignSUCReturnRouteMessages";
 import { DeleteReturnRouteRequestTransmitReport } from "../network-mgmt/DeleteReturnRouteMessages";
@@ -41,6 +43,8 @@ export type TransmitReport =
 	| SendDataTransmitReport
 	| AssignReturnRouteRequestTransmitReport
 	| AssignSUCReturnRouteRequestTransmitReport
+	| AssignPriorityReturnRouteRequestTransmitReport
+	| AssignPrioritySUCReturnRouteRequestTransmitReport
 	| DeleteReturnRouteRequestTransmitReport
 	| DeleteSUCReturnRouteRequestTransmitReport;
 
@@ -254,7 +258,9 @@ export function isTransmitReport(msg: unknown): msg is TransmitReport {
 		msg instanceof AssignReturnRouteRequestTransmitReport ||
 		msg instanceof AssignSUCReturnRouteRequestTransmitReport ||
 		msg instanceof DeleteReturnRouteRequestTransmitReport ||
-		msg instanceof DeleteSUCReturnRouteRequestTransmitReport
+		msg instanceof DeleteSUCReturnRouteRequestTransmitReport ||
+		msg instanceof AssignPriorityReturnRouteRequestTransmitReport ||
+		msg instanceof AssignPrioritySUCReturnRouteRequestTransmitReport
 	);
 }
 

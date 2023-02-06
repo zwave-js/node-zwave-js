@@ -110,17 +110,17 @@ export class DeleteReturnRouteRequestTransmitReport
 		super(host, options);
 
 		this.callbackId = this.payload[0];
-		this._transmitStatus = this.payload[1];
-	}
-
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
+		this.transmitStatus = this.payload[1];
 	}
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		// The other statuses are technically "not OK", but they are caused by
+		// not being able to contact the node. We don't want the node to be marked
+		// as dead because of that
+		return this.transmitStatus !== TransmitStatus.NoAck;
 	}
+
+	public readonly transmitStatus: TransmitStatus;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {

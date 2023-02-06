@@ -31,9 +31,13 @@ export class AssignPrioritySUCReturnRouteRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
-			(new.target as any) !== AssignPrioritySUCReturnRouteCallback
+			(new.target as any) !==
+				AssignPrioritySUCReturnRouteRequestTransmitReport
 		) {
-			return new AssignPrioritySUCReturnRouteCallback(host, options);
+			return new AssignPrioritySUCReturnRouteRequestTransmitReport(
+				host,
+				options,
+			);
 		}
 		super(host, options);
 	}
@@ -142,7 +146,7 @@ export class AssignPrioritySUCReturnRouteResponse
 	}
 }
 
-export class AssignPrioritySUCReturnRouteCallback
+export class AssignPrioritySUCReturnRouteRequestTransmitReport
 	extends AssignPrioritySUCReturnRouteRequestBase
 	implements SuccessIndicator
 {
@@ -153,17 +157,17 @@ export class AssignPrioritySUCReturnRouteCallback
 		super(host, options);
 
 		this.callbackId = this.payload[0];
-		this._transmitStatus = this.payload[1];
+		this.transmitStatus = this.payload[1];
 	}
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		// The other statuses are technically "not OK", but they are caused by
+		// not being able to contact the node. We don't want the node to be marked
+		// as dead because of that
+		return this.transmitStatus !== TransmitStatus.NoAck;
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
-	}
+	public readonly transmitStatus: TransmitStatus;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
