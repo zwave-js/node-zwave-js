@@ -2358,7 +2358,7 @@ export class BinarySwitchCCGet extends BinarySwitchCC {
 // @public (undocumented)
 export class BinarySwitchCCReport extends BinarySwitchCC {
     // Warning: (ae-forgotten-export) The symbol "BinarySwitchCCReportOptions" needs to be exported by the entry point index.d.ts
-    constructor(host: ZWaveHost_2, options: BinarySwitchCCReportOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BinarySwitchCCReportOptions);
     // (undocumented)
     readonly currentValue: Maybe<boolean> | undefined;
     // (undocumented)
