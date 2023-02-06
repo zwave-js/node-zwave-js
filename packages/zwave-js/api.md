@@ -290,6 +290,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     readonly getNextSupervisionSessionId: () => number;
     // (undocumented)
     getNodeUnsafe(msg: Message): ZWaveNode | undefined;
+    getReportTimeout(msg: Message): number;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
