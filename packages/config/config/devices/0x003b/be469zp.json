@@ -294,6 +294,8 @@
 					"endpoints": "*"
 				}
 			}
-		}
+		},
+		// The device is known to randomly take literal ages to respond to commands
+		"reportTimeout": 10000
 	}
 }
