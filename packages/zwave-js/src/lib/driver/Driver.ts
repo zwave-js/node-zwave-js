@@ -3803,10 +3803,7 @@ ${handlers.length} left`,
 		) {
 			const unwrapped = msg.command.encapsulated;
 			if (isArray(unwrapped)) {
-				this.driverLog.print(
-					`Received a command that contains multiple CommandClasses. This is not supported yet! Discarding the message...`,
-					"warn",
-				);
+				// Multi Command CC cannot be further unwrapped
 				return;
 			}
 

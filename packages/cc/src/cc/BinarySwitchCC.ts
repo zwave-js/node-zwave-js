@@ -334,7 +334,12 @@ export type BinarySwitchCCReportOptions = CCCommandOptions & {
 
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
-	public constructor(host: ZWaveHost, options: BinarySwitchCCReportOptions) {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| BinarySwitchCCReportOptions,
+	) {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {

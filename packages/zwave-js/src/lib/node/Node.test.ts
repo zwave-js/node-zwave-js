@@ -1939,7 +1939,7 @@ describe("lib/node/Node", () => {
 				},
 			);
 
-			node.handleCommand(command);
+			await node.handleCommand(command);
 
 			const calls = spy.mock.calls;
 			expect(calls.length).toBe(1);

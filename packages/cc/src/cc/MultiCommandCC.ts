@@ -96,7 +96,7 @@ interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultiCommandCommand.CommandEncapsulation)
-// TODO: This probably expects multiple commands in return
+// When sending commands encapsulated in this CC, responses to GET-type commands likely won't be encapsulated
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
 		host: ZWaveHost,
