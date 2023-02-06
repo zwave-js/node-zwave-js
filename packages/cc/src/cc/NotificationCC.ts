@@ -612,6 +612,54 @@ export class NotificationCC extends CommandClass {
 			this.ensureMetadata(applHost, NotificationCCValues.alarmLevel);
 		}
 
+		// Also create metadata for values mapped through compat config
+		const mappings = applHost.getDeviceConfig?.(this.nodeId as number)
+			?.compat?.alarmMapping;
+		if (mappings) {
+			// Find all mappings to a valid notification variable
+			for (const { to } of mappings) {
+				const notificationConfig =
+					applHost.configManager.lookupNotification(
+						to.notificationType,
+					);
+				if (!notificationConfig) continue;
+				const valueConfig = notificationConfig.lookupValue(
+					to.notificationEvent,
+				);
+				if (valueConfig?.type !== "state") continue;
+
+				const notificationValue =
+					NotificationCCValues.notificationVariable(
+						notificationConfig.name,
+						valueConfig.variableName,
+					);
+
+				// Create or update the metadata
+				const metadata = getNotificationValueMetadata(
+					this.getMetadata(applHost, notificationValue),
+					notificationConfig,
+					valueConfig,
+				);
+				this.setMetadata(applHost, notificationValue, metadata);
+
+				// Set the value to idle if it has no value yet
+				if (valueConfig.idle) {
+					// TODO: GH#1028
+					// * do this only if the last update was more than 5 minutes ago
+					// * schedule an auto-idle if the last update was less than 5 minutes ago but before the current applHost start
+					if (
+						this.getValue(applHost, notificationValue) == undefined
+					) {
+						this.setValue(
+							applHost,
+							notificationValue,
+							0 /* idle */,
+						);
+					}
+				}
+			}
+		}
+
 		// Remember that the interview is complete
 		this.setInterviewComplete(applHost, true);
 	}
