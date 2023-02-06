@@ -7,7 +7,7 @@ const host = createTestingHost();
 describe("SerialAPISetupMessages", () => {
 	it("GetSupportedCommandsResponse with extended bitmask parses correctly", () => {
 		const data = Buffer.from(
-			"0116010b01fe160103000100000001000000000000000109",
+			"0116010b01ff8b8001800000008000000000000000800097",
 			"hex",
 		);
 
