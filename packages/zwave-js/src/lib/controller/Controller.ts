@@ -913,6 +913,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
 				);
 			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
+
+			// According to the Host API specification, the first bit (bit 0) should be GetSupportedCommands
+			// However, before Z-Wave SDK 7.19.1, the entire bitmask is shifted by 1 bit and
+			// GetSupportedCommands is encoded in the second bit (bit 1)
+			if (this.sdkVersionLt("7.19.1")) {
+				this._supportedSerialAPISetupCommands =
+					this._supportedSerialAPISetupCommands.map((cmd) => cmd - 1);
+			}
+
 			this.driver.controllerLog.print(
 				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
 					.map(
