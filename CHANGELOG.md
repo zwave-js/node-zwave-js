@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add support for managing priority (return) routes (#5410)
+
+### Bugfixes
+* Update workaround for incorrectly encoded `SerialAPISetup` support bitmask to handle fixed controller firmware `7.19.1+` (#5419)
+
+### Config file changes
+* Add flag to override report timeout for single devices (#5416)
+* Increase report timeout for Schlage BE469ZP (#5418)
+* Disable Supervision and increase report timeout for Yale Smart Door Lock (#5417)
+
+### Changes under the hood
+* Replace deprecated `::set-output` commands in CI scripts (#5415)
+
 ## 10.7.0 (2023-02-03)
 ### Features
 * `node.isFirmwareUpdateInProgress()` now considers OTW updates if the node is the controller node (#5408)
