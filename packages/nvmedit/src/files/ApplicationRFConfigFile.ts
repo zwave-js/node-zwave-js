@@ -27,7 +27,7 @@ export class ApplicationRFConfigFile extends NVMFile {
 		if (gotDeserializationOptions(options)) {
 			this.rfRegion = this.payload[0];
 			this.txPower = this.payload[1] / 10;
-			this.measured0dBm = this.payload[2] / 10;
+			this.measured0dBm = this.payload.readIntLE(2, 1) / 10;
 			if (this.payload.length >= 5) {
 				this.enablePTI = this.payload[3];
 				this.maxTXPower = this.payload.readInt16LE(4) / 10;
@@ -48,11 +48,8 @@ export class ApplicationRFConfigFile extends NVMFile {
 	public maxTXPower?: number;
 
 	public serialize(): NVM3Object {
-		this.payload = Buffer.from([
-			this.rfRegion,
-			this.txPower * 10,
-			this.measured0dBm * 10,
-		]);
+		this.payload = Buffer.from([this.rfRegion, this.txPower * 10, 0]);
+		this.payload.writeIntLE(this.measured0dBm * 10, 2, 1);
 		if (this.enablePTI != undefined || this.maxTXPower != undefined) {
 			this.payload = Buffer.concat([
 				this.payload,
