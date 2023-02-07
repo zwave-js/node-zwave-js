@@ -53,6 +53,7 @@ describe("lib/driver/Transaction => ", () => {
 				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
+			getSupportedCCVersionForEndpoint() {},
 			isCCSecure: () => false,
 			options: {
 				attempts: {},
@@ -150,6 +151,7 @@ describe("lib/driver/Transaction => ", () => {
 				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
+			getSupportedCCVersionForEndpoint() {},
 			isCCSecure: () => false,
 			options: {
 				attempts: {},
@@ -269,6 +271,7 @@ describe("lib/driver/Transaction => ", () => {
 				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
+			getSupportedCCVersionForEndpoint() {},
 			isCCSecure: () => false,
 			options: {
 				attempts: {},
@@ -364,6 +367,7 @@ describe("lib/driver/Transaction => ", () => {
 				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
+			getSupportedCCVersionForEndpoint() {},
 			isCCSecure: () => false,
 			options: {
 				attempts: {},
@@ -408,6 +412,7 @@ describe("lib/driver/Transaction => ", () => {
 				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
+			getSupportedCCVersionForEndpoint() {},
 			isCCSecure: () => false,
 			options: {
 				attempts: {},

@@ -191,6 +191,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 
 			node2.addCC(CommandClasses.Basic, {
 				isSupported: true,
+				version: 1,
 			});
 		}, 30000);
 

@@ -1756,7 +1756,8 @@ export class BatteryCCHealthReport extends BatteryCC {
 //
 // @public (undocumented)
 export class BatteryCCReport extends BatteryCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "BatteryCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BatteryCCReportOptions);
     // (undocumented)
     readonly backup: boolean | undefined;
     // (undocumented)
@@ -1777,6 +1778,8 @@ export class BatteryCCReport extends BatteryCC {
     readonly rechargeable: boolean | undefined;
     // (undocumented)
     readonly rechargeOrReplace: BatteryReplacementStatus | undefined;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }

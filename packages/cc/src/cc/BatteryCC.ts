@@ -9,7 +9,7 @@ import {
 	ValueMetadata,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
+import { AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
 	PhysicalCCAPI,
@@ -18,7 +18,9 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	CCCommandOptions,
 	CommandClass,
+	gotDeserializationOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -342,37 +344,76 @@ temperature:   ${batteryHealth.temperature} °C`;
 	}
 }
 
+export type BatteryCCReportOptions = CCCommandOptions &
+	(
+		| {
+				isLow?: false;
+				level: number;
+		  }
+		| {
+				isLow: true;
+				level?: undefined;
+		  }
+	) &
+	AllOrNone<{
+		// V2+
+		chargingStatus: BatteryChargingStatus;
+		rechargeable: boolean;
+		backup: boolean;
+		overheating: boolean;
+		lowFluid: boolean;
+		rechargeOrReplace: BatteryReplacementStatus;
+		disconnected: boolean;
+	}> &
+	AllOrNone<{
+		// V3+
+		lowTemperatureStatus: boolean;
+	}>;
+
 @CCCommand(BatteryCommand.Report)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: CommandClassDeserializationOptions | BatteryCCReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this.level = this.payload[0];
-		if (this.level === 0xff) {
-			this.level = 0;
-			this.isLow = true;
-		} else {
-			this.isLow = false;
-		}
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.level = this.payload[0];
+			if (this.level === 0xff) {
+				this.level = 0;
+				this.isLow = true;
+			} else {
+				this.isLow = false;
+			}
 
-		if (this.payload.length >= 3) {
-			// Starting with V2
-			this.chargingStatus = this.payload[1] >>> 6;
-			this.rechargeable = !!(this.payload[1] & 0b0010_0000);
-			this.backup = !!(this.payload[1] & 0b0001_0000);
-			this.overheating = !!(this.payload[1] & 0b1000);
-			this.lowFluid = !!(this.payload[1] & 0b0100);
-			this.rechargeOrReplace = !!(this.payload[1] & 0b10)
-				? BatteryReplacementStatus.Now
-				: !!(this.payload[1] & 0b1)
-				? BatteryReplacementStatus.Soon
-				: BatteryReplacementStatus.No;
-			this.lowTemperatureStatus = !!(this.payload[2] & 0b10);
-			this.disconnected = !!(this.payload[2] & 0b1);
+			if (this.payload.length >= 3) {
+				// Starting with V2
+				this.chargingStatus = this.payload[1] >>> 6;
+				this.rechargeable = !!(this.payload[1] & 0b0010_0000);
+				this.backup = !!(this.payload[1] & 0b0001_0000);
+				this.overheating = !!(this.payload[1] & 0b1000);
+				this.lowFluid = !!(this.payload[1] & 0b0100);
+				this.rechargeOrReplace = !!(this.payload[1] & 0b10)
+					? BatteryReplacementStatus.Now
+					: !!(this.payload[1] & 0b1)
+					? BatteryReplacementStatus.Soon
+					: BatteryReplacementStatus.No;
+				this.lowTemperatureStatus = !!(this.payload[2] & 0b10);
+				this.disconnected = !!(this.payload[2] & 0b1);
+			}
+		} else {
+			this.level = options.isLow ? 0 : options.level;
+			this.isLow = !!options.isLow;
+			this.chargingStatus = options.chargingStatus;
+			this.rechargeable = options.rechargeable;
+			this.backup = options.backup;
+			this.overheating = options.overheating;
+			this.lowFluid = options.lowFluid;
+			this.rechargeOrReplace = options.rechargeOrReplace;
+			this.disconnected = options.disconnected;
+			this.lowTemperatureStatus = options.lowTemperatureStatus;
 		}
 	}
 
@@ -405,6 +446,31 @@ export class BatteryCCReport extends BatteryCC {
 
 	@ccValue(BatteryCCValues.lowTemperatureStatus)
 	public readonly lowTemperatureStatus: boolean | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.isLow ? 0xff : this.level]);
+		if (this.chargingStatus != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([
+					(this.chargingStatus << 6) +
+						(this.rechargeable ? 0b0010_0000 : 0) +
+						(this.backup ? 0b0001_0000 : 0) +
+						(this.overheating ? 0b1000 : 0) +
+						(this.lowFluid ? 0b0100 : 0) +
+						(this.rechargeOrReplace === BatteryReplacementStatus.Now
+							? 0b10
+							: this.rechargeOrReplace ===
+							  BatteryReplacementStatus.Soon
+							? 0b1
+							: 0),
+					(this.lowTemperatureStatus ? 0b10 : 0) +
+						(this.disconnected ? 0b1 : 0),
+				]),
+			]);
+		}
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {

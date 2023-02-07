@@ -19,6 +19,7 @@ export interface CreateTestingHostOptions {
 	homeId: ZWaveHost["homeId"];
 	ownNodeId: ZWaveHost["ownNodeId"];
 	getSafeCCVersionForNode: ZWaveHost["getSafeCCVersionForNode"];
+	getSupportedCCVersionForEndpoint?: ZWaveHost["getSupportedCCVersionForEndpoint"];
 }
 
 export type TestingHost = Overwrite<
@@ -68,6 +69,10 @@ export function createTestingHost(
 			);
 		}),
 		getSafeCCVersionForNode: options.getSafeCCVersionForNode ?? (() => 100),
+		getSupportedCCVersionForEndpoint:
+			options.getSupportedCCVersionForEndpoint ??
+			options.getSafeCCVersionForNode ??
+			(() => 100),
 		getNextCallbackId: createWrappingCounter(0xff),
 		getNextSupervisionSessionId: createWrappingCounter(
 			MAX_SUPERVISION_SESSION_ID,

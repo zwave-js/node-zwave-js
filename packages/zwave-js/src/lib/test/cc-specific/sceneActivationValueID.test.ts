@@ -31,6 +31,7 @@ describe("regression tests", () => {
 
 		node2.addCC(CommandClasses["Scene Activation"], {
 			isControlled: true,
+			version: 1,
 		});
 	}, 30000);
 
