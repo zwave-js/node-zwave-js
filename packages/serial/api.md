@@ -539,6 +539,7 @@ export interface MessageDeserializationOptions {
     // (undocumented)
     origin?: MessageOrigin;
     parseCCs?: boolean;
+    sdkVersion?: string;
 }
 
 // Warning: (ae-missing-release-tag) "MessageHeaders" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
