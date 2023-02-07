@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Values for `Notification CC` variables that are mapped from V1 Alarms are now created during the interview (#5420)
+
+### Bugfixes
+* Only create CC values for CC versions a node is known - not assumed - to support (#5427)
+* All commands contained in a `Multi Command CC` are now properly handled (#5423)
+* Nodes are no longer marked dead when assigning/deleting routes fails due to any other reason than the node being unreachable (#5421)
+* Parse some controller messages differently depending on SDK version, working around firmware `7.19.1` not matching the Host API specification (#5430)
+
+### Config file changes
+* Preserve temperature sensor endpoint for Fibaro FGK101 (#5424)
+* Update Danfoss 014G0205 (#5426)
+
+### Changes under the hood
+* The body of GitHub Releases should now be encoded correctly again
+
 ## 10.8.0 (2023-02-06)
 ### Features
 * Add support for managing priority (return) routes (#5410)
