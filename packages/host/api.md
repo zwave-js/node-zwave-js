@@ -36,6 +36,8 @@ export interface CreateTestingHostOptions {
     // (undocumented)
     getSafeCCVersionForNode: ZWaveHost["getSafeCCVersionForNode"];
     // (undocumented)
+    getSupportedCCVersionForEndpoint?: ZWaveHost["getSupportedCCVersionForEndpoint"];
+    // (undocumented)
     homeId: ZWaveHost["homeId"];
     // (undocumented)
     ownNodeId: ZWaveHost["ownNodeId"];
@@ -106,6 +108,7 @@ export interface ZWaveHost {
     getNextCallbackId(): number;
     getNextSupervisionSessionId(): number;
     getSafeCCVersionForNode(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
+    getSupportedCCVersionForEndpoint(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
     // (undocumented)
     hasSecurityClass(nodeId: number, securityClass: SecurityClass): Maybe<boolean>;
     homeId: number;
