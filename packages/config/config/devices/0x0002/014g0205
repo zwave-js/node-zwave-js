@@ -25,7 +25,6 @@
 		{
 			"#": "1",
 			"label": "Valve Type",
-			"description": "Type of Valve being controlled",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
