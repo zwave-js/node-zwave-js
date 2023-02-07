@@ -42,7 +42,6 @@
 		{
 			"#": "2",
 			"label": "Heat Load Strategy",
-			"description": "Set Head Load Strategy (0 = Stacking, 1 = Spreading)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
