@@ -68,7 +68,6 @@ import {
 	getErrorMessage,
 	Mixin,
 	num2hex,
-	padVersion,
 	pick,
 	ReadonlyObjectKeyMap,
 	ReadonlyThrowingMap,
@@ -84,7 +83,6 @@ import {
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
-import semver from "semver";
 import util from "util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
@@ -308,7 +306,13 @@ import {
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
 import { determineNIF } from "./NodeInformationFrame";
-import { assertProvisioningEntry } from "./utils";
+import {
+	assertProvisioningEntry,
+	sdkVersionGt,
+	sdkVersionGte,
+	sdkVersionLt,
+	sdkVersionLte,
+} from "./utils";
 import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import {
@@ -460,34 +464,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Checks if the SDK version is greater than the given one */
 	public sdkVersionGt(version: SDKVersion): boolean | undefined {
-		if (this._sdkVersion === undefined) {
-			return undefined;
-		}
-		return semver.gt(padVersion(this._sdkVersion), padVersion(version));
+		return sdkVersionGt(this._sdkVersion, version);
 	}
 
 	/** Checks if the SDK version is greater than or equal to the given one */
 	public sdkVersionGte(version: SDKVersion): boolean | undefined {
-		if (this._sdkVersion === undefined) {
-			return undefined;
-		}
-		return semver.gte(padVersion(this._sdkVersion), padVersion(version));
+		return sdkVersionGte(this._sdkVersion, version);
 	}
 
 	/** Checks if the SDK version is lower than the given one */
 	public sdkVersionLt(version: SDKVersion): boolean | undefined {
-		if (this._sdkVersion === undefined) {
-			return undefined;
-		}
-		return semver.lt(padVersion(this._sdkVersion), padVersion(version));
+		return sdkVersionLt(this._sdkVersion, version);
 	}
 
 	/** Checks if the SDK version is lower than or equal to the given one */
 	public sdkVersionLte(version: SDKVersion): boolean | undefined {
-		if (this._sdkVersion === undefined) {
-			return undefined;
-		}
-		return semver.lte(padVersion(this._sdkVersion), padVersion(version));
+		return sdkVersionLte(this._sdkVersion, version);
 	}
 
 	private _manufacturerId: number | undefined;
@@ -938,15 +930,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
 				);
 			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
-
-			// According to the Host API specification, the first bit (bit 0) should be GetSupportedCommands
-			// However, before Z-Wave SDK 7.19.1, the entire bitmask is shifted by 1 bit and
-			// GetSupportedCommands is encoded in the second bit (bit 1)
-			if (this.sdkVersionLt("7.19.1")) {
-				this._supportedSerialAPISetupCommands =
-					this._supportedSerialAPISetupCommands.map((cmd) => cmd - 1);
-			}
-
 			this.driver.controllerLog.print(
 				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
 					.map(

@@ -67,24 +67,31 @@ export class GetSerialApiInitDataResponse extends Message {
 			}
 
 			const capabilities = this.payload[1];
-			if (this.zwaveApiVersion.kind === "official") {
-				// The new "official" Host API specs sneakily switched the meaning of some flags
-				this.nodeType =
-					capabilities & 0b0001
-						? NodeType.Controller
-						: NodeType["End Node"];
-				this.supportsTimers = !!(capabilities & 0b0010);
-				this.isPrimary = !!(capabilities & 0b0100);
-				this.isSIS = !!(capabilities & 0b1000);
-			} else {
-				this.nodeType =
-					capabilities & 0b0001
-						? NodeType["End Node"]
-						: NodeType.Controller;
-				this.supportsTimers = !!(capabilities & 0b0010);
-				this.isPrimary = !(capabilities & 0b0100);
-				this.isSIS = !!(capabilities & 0b1000);
-			}
+			// TODO: Up to SDK 7.19.1 (inclusive), maybe later, the encoding for these flags is still the old one,
+			// despite the official Host API specs having changed it. When this is fixed, update the version comparison
+			// and uncomment the `if` branch
+
+			// if (
+			// 	this.zwaveApiVersion.kind === "official" &&
+			// 	sdkVersionGte(options.sdkVersion, "7.19.2")
+			// ) {
+			// 	// The new "official" Host API specs sneakily switched the meaning of some flags
+			// 	this.nodeType =
+			// 		capabilities & 0b0001
+			// 			? NodeType.Controller
+			// 			: NodeType["End Node"];
+			// 	this.supportsTimers = !!(capabilities & 0b0010);
+			// 	this.isPrimary = !!(capabilities & 0b0100);
+			// 	this.isSIS = !!(capabilities & 0b1000);
+			// } else {
+			this.nodeType =
+				capabilities & 0b0001
+					? NodeType["End Node"]
+					: NodeType.Controller;
+			this.supportsTimers = !!(capabilities & 0b0010);
+			this.isPrimary = !(capabilities & 0b0100);
+			this.isSIS = !!(capabilities & 0b1000);
+			// }
 
 			let offset = 2;
 			this.nodeIds = [];

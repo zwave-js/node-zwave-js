@@ -27,6 +27,7 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { sdkVersionLt } from "../../controller/utils";
 import { NodeIDType } from "../_Types";
 
 export enum SerialAPISetupCommand {
@@ -198,7 +199,12 @@ export class SerialAPISetup_GetSupportedCommandsResponse extends SerialAPISetupR
 			// Parse it as a bitmask
 			this.supportedCommands = parseBitMask(
 				this.payload.slice(1),
-				SerialAPISetupCommand.GetSupportedCommands,
+				// According to the Host API specification, the first bit (bit 0) should be GetSupportedCommands
+				// However, in Z-Wave SDK < 7.19.1, the entire bitmask is shifted by 1 bit and
+				// GetSupportedCommands is encoded in the second bit (bit 1)
+				sdkVersionLt(options.sdkVersion, "7.19.1")
+					? SerialAPISetupCommand.Unsupported
+					: SerialAPISetupCommand.GetSupportedCommands,
 			);
 		} else {
 			// This module only uses the single byte power-of-2 bitmask. Decode it manually
@@ -229,7 +235,6 @@ export class SerialAPISetup_GetSupportedCommandsResponse extends SerialAPISetupR
 		}
 	}
 
-	/** **WARNING:** In SDK versions < 7.19.1, all entries in this array need to be reduced by 1 due to an encoding error. */
 	public readonly supportedCommands: SerialAPISetupCommand[];
 }
 
