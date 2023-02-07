@@ -36,6 +36,8 @@ export interface MessageDeserializationOptions {
 	origin?: MessageOrigin;
 	/** Whether CCs should be parsed immediately (only affects messages that contain CCs). Default: `true` */
 	parseCCs?: boolean;
+	/** If known already, this contains the SDK version of the stick which can be used to interpret payloads differently */
+	sdkVersion?: string;
 }
 
 /**
