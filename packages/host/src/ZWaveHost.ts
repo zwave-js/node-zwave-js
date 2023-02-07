@@ -40,6 +40,17 @@ export interface ZWaveHost {
 	): number;
 
 	/**
+	 * Retrieves the maximum version of a command class the given node/endpoint has reported support for.
+	 * Returns 0 when the CC is not supported or that information is not known yet.
+	 */
+	// TODO: Rename this to getSupportedCCVersionForNode in v11
+	getSupportedCCVersionForEndpoint(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
+	): number;
+
+	/**
 	 * Determines whether a CC must be secure for a given node and endpoint.
 	 */
 	isCCSecure(

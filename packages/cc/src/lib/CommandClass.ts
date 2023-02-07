@@ -174,6 +174,12 @@ export class CommandClass implements ICommandClass {
 				this.nodeId,
 				this.endpointIndex,
 			);
+			// But remember which version the node supports
+			this._knownVersion = this.host.getSupportedCCVersionForEndpoint(
+				this.ccId,
+				this.nodeId,
+				this.endpointIndex,
+			);
 
 			// Send secure commands if necessary
 			this.setEncapsulationFlag(
@@ -188,6 +194,7 @@ export class CommandClass implements ICommandClass {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
+			this._knownVersion = this.version;
 		}
 	}
 
@@ -209,6 +216,9 @@ export class CommandClass implements ICommandClass {
 	/** The version of the command class used */
 	// Work around https://github.com/Microsoft/TypeScript/issues/27555
 	public version!: number;
+
+	/** The version of the CC the node has reported support for */
+	private _knownVersion!: number;
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpointIndex: number;
@@ -739,7 +749,7 @@ export class CommandClass implements ICommandClass {
 			// Skip those values that are only supported in higher versions of the CC
 			if (
 				value.options.minVersion != undefined &&
-				value.options.minVersion > this.version
+				value.options.minVersion > this._knownVersion
 			) {
 				continue;
 			}
@@ -829,16 +839,21 @@ export class CommandClass implements ICommandClass {
 			}
 
 			const valueId: ValueID = value.endpoint(this.endpointIndex);
+			const sourceValue = this[prop as keyof this];
 
-			// Metadata always gets created for non-internal values, regardless of the actual value being defined
-			if (!value.options.internal) {
-				if (!valueDB.hasMetadata(valueId)) {
-					valueDB.setMetadata(valueId, value.meta);
-				}
+			// Metadata gets created for non-internal values...
+			const createMetadata =
+				!value.options.internal &&
+				// ... but only if the value is included in the report we are persisting
+				(sourceValue != undefined ||
+					// ... or if we know which CC version the node supports
+					this._knownVersion >= value.options.minVersion);
+
+			if (createMetadata && !valueDB.hasMetadata(valueId)) {
+				valueDB.setMetadata(valueId, value.meta);
 			}
 
 			// The value only gets written if it is not undefined
-			const sourceValue = this[prop as keyof this];
 			if (sourceValue == undefined) continue;
 
 			valueDB.setValue(valueId, sourceValue, {

@@ -56,6 +56,18 @@ export class MockController {
 				MAX_SUPERVISION_SESSION_ID,
 			),
 			getSafeCCVersionForNode: () => 100,
+			getSupportedCCVersionForEndpoint: (
+				cc,
+				nodeId,
+				endpointIndex = 0,
+			) => {
+				if (!this.nodes.has(nodeId)) {
+					return 0;
+				}
+				const node = this.nodes.get(nodeId)!;
+				const endpoint = node.endpoints.get(endpointIndex);
+				return (endpoint ?? node).implementedCCs.get(cc)?.version ?? 0;
+			},
 			isCCSecure: () => false,
 			// TODO: We don't care about security classes on the controller
 			// This is handled by the nodes hosts

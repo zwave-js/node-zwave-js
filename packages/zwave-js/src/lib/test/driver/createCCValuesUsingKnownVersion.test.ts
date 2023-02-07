@@ -11,24 +11,12 @@ import { integrationTest } from "../integrationTestSuite";
 // values, which includes some the device does not actually support
 
 integrationTest("CC values are created using the known CC version", {
-	debug: true,
+	// debug: true,
 
 	provisioningDirectory: path.join(
 		__dirname,
 		"fixtures/ccValuesUnknownVersions",
 	),
-
-	nodeCapabilities: {
-		isListening: false,
-		isFrequentListening: false,
-		// 	commandClasses: [
-		// 		{
-		// 			ccId: CommandClasses["Z-Wave Plus Info"],
-		// 			isSupported: true,
-		// 			version: 2,
-		// 		},
-		// 	],
-	},
 
 	testBody: async (driver, node, mockController, mockNode) => {
 		const batteryReport = new BatteryCCReport(mockNode.host, {
