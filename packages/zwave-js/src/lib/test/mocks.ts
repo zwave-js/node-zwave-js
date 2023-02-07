@@ -58,7 +58,7 @@ export function createEmptyMockDriver() {
 	const ret = {
 		sendMessage: jest.fn().mockImplementation(() => Promise.resolve()),
 		sendCommand: jest.fn(),
-		getSafeCCVersionForNode: jest
+		getSupportedCCVersionForEndpoint: jest
 			.fn()
 			.mockImplementation(
 				(
@@ -75,10 +75,26 @@ export function createEmptyMockDriver() {
 						const ccVersion = node
 							.getEndpoint(endpointIndex)!
 							.getCCVersion(ccId);
-						if (ccVersion > 0) return ccVersion;
+						return ccVersion;
 					}
-					// default to the implemented version
-					return getImplementedVersion(ccId);
+					return 0;
+				},
+			),
+		getSafeCCVersionForNode: jest
+			.fn()
+			.mockImplementation(
+				(
+					ccId: CommandClasses,
+					nodeId: number,
+					endpointIndex: number = 0,
+				) => {
+					return (
+						ret.getSupportedCCVersionForEndpoint(
+							ccId,
+							nodeId,
+							endpointIndex,
+						) || getImplementedVersion(ccId)
+					);
 				},
 			),
 		isCCSecure: jest.fn().mockImplementation(() => false),
