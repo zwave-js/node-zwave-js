@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.9.0 (2023-02-07)
 ### Features
 * Values for `Notification CC` variables that are mapped from V1 Alarms are now created during the interview (#5420)
 
