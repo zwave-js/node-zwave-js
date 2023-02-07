@@ -59,7 +59,6 @@
 		{
 			"#": "3",
 			"label": "PWM Period",
-			"description": "Pulse-width modulation period",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
