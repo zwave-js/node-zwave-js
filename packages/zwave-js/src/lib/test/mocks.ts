@@ -58,45 +58,8 @@ export function createEmptyMockDriver() {
 	const ret = {
 		sendMessage: jest.fn().mockImplementation(() => Promise.resolve()),
 		sendCommand: jest.fn(),
-		getSupportedCCVersionForEndpoint: jest
-			.fn()
-			.mockImplementation(
-				(
-					ccId: CommandClasses,
-					nodeId: number,
-					endpointIndex: number = 0,
-				) => {
-					if (
-						ret.controller?.nodes instanceof Map &&
-						ret.controller.nodes.has(nodeId)
-					) {
-						const node: ZWaveNode =
-							ret.controller.nodes.get(nodeId);
-						const ccVersion = node
-							.getEndpoint(endpointIndex)!
-							.getCCVersion(ccId);
-						return ccVersion;
-					}
-					return 0;
-				},
-			),
-		getSafeCCVersionForNode: jest
-			.fn()
-			.mockImplementation(
-				(
-					ccId: CommandClasses,
-					nodeId: number,
-					endpointIndex: number = 0,
-				) => {
-					return (
-						ret.getSupportedCCVersionForEndpoint(
-							ccId,
-							nodeId,
-							endpointIndex,
-						) || getImplementedVersion(ccId)
-					);
-				},
-			),
+		getSupportedCCVersionForEndpoint: jest.fn(),
+		getSafeCCVersionForNode: jest.fn(),
 		isCCSecure: jest.fn().mockImplementation(() => false),
 		getNextCallbackId: jest
 			.fn()
@@ -209,6 +172,32 @@ export function createEmptyMockDriver() {
 		const resp = await ret.sendMessage(msg, options);
 		return resp?.command;
 	});
+	ret.getSupportedCCVersionForEndpoint.mockImplementation(
+		(ccId: CommandClasses, nodeId: number, endpointIndex: number = 0) => {
+			if (
+				ret.controller?.nodes instanceof Map &&
+				ret.controller.nodes.has(nodeId)
+			) {
+				const node: ZWaveNode = ret.controller.nodes.get(nodeId);
+				const ccVersion = node
+					.getEndpoint(endpointIndex)!
+					.getCCVersion(ccId);
+				return ccVersion;
+			}
+			return 0;
+		},
+	);
+	ret.getSafeCCVersionForNode.mockImplementation(
+		(ccId: CommandClasses, nodeId: number, endpointIndex: number = 0) => {
+			return (
+				ret.getSupportedCCVersionForEndpoint(
+					ccId,
+					nodeId,
+					endpointIndex,
+				) || getImplementedVersion(ccId)
+			);
+		},
+	);
 	return ret;
 }
 
