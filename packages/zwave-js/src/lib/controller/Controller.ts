@@ -126,6 +126,8 @@ import {
 	SerialAPISetup_GetLRMaximumPayloadSizeResponse,
 	SerialAPISetup_GetMaximumPayloadSizeRequest,
 	SerialAPISetup_GetMaximumPayloadSizeResponse,
+	SerialAPISetup_GetPowerlevel16BitRequest,
+	SerialAPISetup_GetPowerlevel16BitResponse,
 	SerialAPISetup_GetPowerlevelRequest,
 	SerialAPISetup_GetPowerlevelResponse,
 	SerialAPISetup_GetRFRegionRequest,
@@ -134,6 +136,8 @@ import {
 	SerialAPISetup_GetSupportedCommandsResponse,
 	SerialAPISetup_SetNodeIDTypeRequest,
 	SerialAPISetup_SetNodeIDTypeResponse,
+	SerialAPISetup_SetPowerlevel16BitRequest,
+	SerialAPISetup_SetPowerlevel16BitResponse,
 	SerialAPISetup_SetPowerlevelRequest,
 	SerialAPISetup_SetPowerlevelResponse,
 	SerialAPISetup_SetRFRegionRequest,
@@ -4485,15 +4489,32 @@ ${associatedNodes.join(", ")}`,
 		powerlevel: number,
 		measured0dBm: number,
 	): Promise<boolean> {
-		const result = await this.driver.sendMessage<
-			| SerialAPISetup_SetPowerlevelResponse
-			| SerialAPISetup_CommandUnsupportedResponse
-		>(
-			new SerialAPISetup_SetPowerlevelRequest(this.driver, {
+		let request: Message;
+		if (
+			this.supportedSerialAPISetupCommands?.includes(
+				SerialAPISetupCommand.SetPowerlevel16Bit,
+			)
+		) {
+			request = new SerialAPISetup_SetPowerlevel16BitRequest(
+				this.driver,
+				{
+					powerlevel,
+					measured0dBm,
+				},
+			);
+		} else {
+			request = new SerialAPISetup_SetPowerlevelRequest(this.driver, {
 				powerlevel,
 				measured0dBm,
-			}),
-		);
+			});
+		}
+
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetPowerlevelResponse
+			| SerialAPISetup_SetPowerlevel16BitResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(request);
+
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
 				`Your hardware does not support setting the powerlevel!`,
@@ -4510,10 +4531,22 @@ ${associatedNodes.join(", ")}`,
 			"powerlevel" | "measured0dBm"
 		>
 	> {
+		let request: Message;
+		if (
+			this.supportedSerialAPISetupCommands?.includes(
+				SerialAPISetupCommand.GetPowerlevel16Bit,
+			)
+		) {
+			request = new SerialAPISetup_GetPowerlevel16BitRequest(this.driver);
+		} else {
+			request = new SerialAPISetup_GetPowerlevelRequest(this.driver);
+		}
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_GetPowerlevelResponse
+			| SerialAPISetup_GetPowerlevel16BitResponse
 			| SerialAPISetup_CommandUnsupportedResponse
-		>(new SerialAPISetup_GetPowerlevelRequest(this.driver));
+		>(request);
+
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
 				`Your hardware does not support getting the powerlevel!`,

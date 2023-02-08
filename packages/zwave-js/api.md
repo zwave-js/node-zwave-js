@@ -846,17 +846,25 @@ export enum SerialAPISetupCommand {
     // (undocumented)
     GetLRMaximumPayloadSize = 17,
     // (undocumented)
+    GetLRMaximumTxPower = 5,
+    // (undocumented)
     GetMaximumPayloadSize = 16,
     // (undocumented)
     GetPowerlevel = 8,
+    // (undocumented)
+    GetPowerlevel16Bit = 19,
     // (undocumented)
     GetRFRegion = 32,
     // (undocumented)
     GetSupportedCommands = 1,
     // (undocumented)
+    SetLRMaximumTxPower = 3,
+    // (undocumented)
     SetNodeIDType = 128,
     // (undocumented)
     SetPowerlevel = 4,
+    // (undocumented)
+    SetPowerlevel16Bit = 18,
     // (undocumented)
     SetRFRegion = 64,
     // (undocumented)

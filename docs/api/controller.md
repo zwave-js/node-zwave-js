@@ -697,7 +697,12 @@ setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
 getPowerlevel(): Promise<{powerlevel: number, measured0dBm: number}>;
 ```
 
-Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm. Both are in dBm and must be between -12.8 and +12.7.
+Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm and serves as a calibration. Both are in dBm and must satisfy the following constraints:
+
+-   `powerlevel` between `-10` and either `+12.7`, `+14` or `+20` dBm (depending on the controller)
+-   `measured0dBm` between `-10` and `+10` or between `-12.8` and `+12.7` dBm (depending on the controller)
+
+Unfortunately there doesn't seem to be a way to determine which constrains apply for a given controller.
 
 > [!ATTENTION] Not all controllers support configuring the TX powerlevel. These methods will throw if they are not supported.
 
