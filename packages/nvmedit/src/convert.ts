@@ -10,7 +10,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import { cloneDeep, pick } from "@zwave-js/shared/safe";
+import { isObject } from "alcalzone-shared/typeguards";
 import semver from "semver";
+import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
@@ -56,9 +58,12 @@ import {
 	RouteCache,
 	RouteCacheFileV0,
 	RouteCacheFileV1,
-	SUCUpdateEntriesFile,
-	SUCUpdateEntriesFileID,
+	SUCUpdateEntriesFileIDV0,
+	SUCUpdateEntriesFileV0,
+	SUCUpdateEntriesFileV5,
 	SUCUpdateEntry,
+	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
+	SUC_UPDATES_PER_FILE_V5,
 } from "./files";
 import {
 	encodeNVM,
@@ -233,59 +238,81 @@ export function nvmObjectsToJSON(
 
 	const getFileOrThrow = <T extends NVMFile>(
 		id: number | ((id: number) => boolean),
+		fileVersion: string,
 	): T => {
 		const obj = getObjectOrThrow(id);
-		return NVMFile.from(obj) as T;
+		return NVMFile.from(obj, fileVersion) as T;
 	};
 
 	const getFile = <T extends NVMFile>(
 		id: number | ((id: number) => boolean),
+		fileVersion: string,
 	): T | undefined => {
 		const obj = getObject(id);
 		if (!obj) return undefined;
-		return NVMFile.from(obj) as T;
+		return NVMFile.from(obj, fileVersion) as T;
 	};
+
+	// === Protocol NVM files ===
 
 	// Figure out how to parse the individual files
 	const protocolVersionFile = getFileOrThrow<ProtocolVersionFile>(
 		ProtocolVersionFileID,
+		"7.0.0", // We don't know the version here yet
 	);
 	const protocolFileFormat = protocolVersionFile.format;
+	const protocolVersion = `${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`;
+
+	// Bail early if the NVM uses a protocol file format that's newer than we support
+	if (protocolFileFormat > MAX_PROTOCOL_FILE_FORMAT) {
+		throw new ZWaveError(
+			`Unsupported protocol file format: ${protocolFileFormat}`,
+			ZWaveErrorCodes.NVM_NotSupported,
+			{ protocolFileFormat },
+		);
+	}
 
 	// Figure out which nodes exist
 	const nodeIds = getFileOrThrow<ProtocolNodeListFile>(
 		ProtocolNodeListFileID,
+		protocolVersion,
 	).nodeIds;
 
 	// Read all flags for all nodes
 	const appRouteLock = new Set(
 		getFileOrThrow<ProtocolAppRouteLockNodeMaskFile>(
 			ProtocolAppRouteLockNodeMaskFileID,
+			protocolVersion,
 		).nodeIds,
 	);
 	const routeSlaveSUC = new Set(
 		getFileOrThrow<ProtocolRouteSlaveSUCNodeMaskFile>(
 			ProtocolRouteSlaveSUCNodeMaskFileID,
+			protocolVersion,
 		).nodeIds,
 	);
 	const sucPendingUpdate = new Set(
 		getFileOrThrow<ProtocolSUCPendingUpdateNodeMaskFile>(
 			ProtocolSUCPendingUpdateNodeMaskFileID,
+			protocolVersion,
 		).nodeIds,
 	);
 	const isVirtual = new Set(
 		getFileOrThrow<ProtocolVirtualNodeMaskFile>(
 			ProtocolVirtualNodeMaskFileID,
+			protocolVersion,
 		).nodeIds,
 	);
 	const pendingDiscovery = new Set(
 		getFileOrThrow<ProtocolPendingDiscoveryNodeMaskFile>(
 			ProtocolPendingDiscoveryNodeMaskFileID,
+			protocolVersion,
 		).nodeIds,
 	);
 	const routeCacheExists = new Set(
 		getFileOrThrow<ProtocolRouteCacheExistsNodeMaskFile>(
 			ProtocolRouteCacheExistsNodeMaskFileID,
+			protocolVersion,
 		).nodeIds,
 	);
 
@@ -304,17 +331,18 @@ export function nvmObjectsToJSON(
 		try {
 			if (protocolFileFormat === 0) {
 				const fileId = nodeIdToNodeInfoFileIDV0(id);
-				const file = getFileOrThrow<NodeInfoFileV0>(fileId);
-				nodeInfo = file.nodeInfo;
-			} else if (protocolFileFormat <= 4) {
-				const fileId = nodeIdToNodeInfoFileIDV1(id);
-				const file = getFileOrThrow<NodeInfoFileV1>(fileId);
-				nodeInfo = file.nodeInfos.find((i) => i.nodeId === id)!;
-			} else {
-				throw new ZWaveError(
-					`Unsupported protocol file format: ${protocolFileFormat}`,
-					ZWaveErrorCodes.NVM_NotSupported,
+				const file = getFileOrThrow<NodeInfoFileV0>(
+					fileId,
+					protocolVersion,
 				);
+				nodeInfo = file.nodeInfo;
+			} else {
+				const fileId = nodeIdToNodeInfoFileIDV1(id);
+				const file = getFileOrThrow<NodeInfoFileV1>(
+					fileId,
+					protocolVersion,
+				);
+				nodeInfo = file.nodeInfos.find((i) => i.nodeId === id)!;
 			}
 		} catch (e: any) {
 			if (e.message.includes("Object not found")) {
@@ -336,17 +364,12 @@ export function nvmObjectsToJSON(
 			let routeCache: RouteCache | undefined;
 			if (protocolFileFormat === 0) {
 				const fileId = nodeIdToRouteCacheFileIDV0(id);
-				const file = getFile<RouteCacheFileV0>(fileId);
+				const file = getFile<RouteCacheFileV0>(fileId, protocolVersion);
 				routeCache = file?.routeCache;
-			} else if (protocolFileFormat <= 4) {
-				const fileId = nodeIdToRouteCacheFileIDV1(id);
-				const file = getFile<RouteCacheFileV1>(fileId);
-				routeCache = file?.routeCaches.find((i) => i.nodeId === id);
 			} else {
-				throw new ZWaveError(
-					`Unsupported protocol file format: ${protocolFileFormat}`,
-					ZWaveErrorCodes.NVM_NotSupported,
-				);
+				const fileId = nodeIdToRouteCacheFileIDV1(id);
+				const file = getFile<RouteCacheFileV1>(fileId, protocolVersion);
+				routeCache = file?.routeCaches.find((i) => i.nodeId === id);
 			}
 			if (routeCache) {
 				node.lwr = routeCache.lwr;
@@ -359,28 +382,61 @@ export function nvmObjectsToJSON(
 	}
 
 	// Now read info about the controller
-	const controllerInfoFile =
-		getFileOrThrow<ControllerInfoFile>(ControllerInfoFileID);
-	const sucUpdateEntries = getFileOrThrow<SUCUpdateEntriesFile>(
-		SUCUpdateEntriesFileID,
-	).updateEntries;
+	const controllerInfoFile = getFileOrThrow<ControllerInfoFile>(
+		ControllerInfoFileID,
+		protocolVersion,
+	);
+
+	let sucUpdateEntries: SUCUpdateEntry[];
+	if (protocolFileFormat < 5) {
+		sucUpdateEntries = getFileOrThrow<SUCUpdateEntriesFileV0>(
+			SUCUpdateEntriesFileIDV0,
+			protocolVersion,
+		).updateEntries;
+	} else {
+		// V5 has split the entries into multiple files
+		sucUpdateEntries = [];
+		for (
+			let index = 0;
+			index < SUC_MAX_UPDATES;
+			index += SUC_UPDATES_PER_FILE_V5
+		) {
+			const file = getFile<SUCUpdateEntriesFileV5>(
+				sucUpdateIndexToSUCUpdateEntriesFileIDV5(index),
+				protocolVersion,
+			);
+			if (!file) break;
+			sucUpdateEntries.push(...file.updateEntries);
+		}
+	}
+
+	// === Application NVM files ===
+
+	const applicationVersionFile = getFileOrThrow<ApplicationVersionFile>(
+		ApplicationVersionFileID,
+		"7.0.0", // We don't know the version here yet
+	);
+	const applicationVersion = `${applicationVersionFile.major}.${applicationVersionFile.minor}.${applicationVersionFile.patch}`;
 
 	const rfConfigFile = getFile<ApplicationRFConfigFile>(
 		ApplicationRFConfigFileID,
+		applicationVersion,
 	);
-	const applicationVersionFile = getFileOrThrow<ApplicationVersionFile>(
-		ApplicationVersionFileID,
+	const applicationCCsFile = getFileOrThrow<ApplicationCCsFile>(
+		ApplicationCCsFileID,
+		applicationVersion,
 	);
-	const applicationCCsFile =
-		getFileOrThrow<ApplicationCCsFile>(ApplicationCCsFileID);
 	const applicationDataFile = getFile<ApplicationDataFile>(
 		ApplicationDataFileID,
+		applicationVersion,
 	);
 	const applicationTypeFile = getFileOrThrow<ApplicationTypeFile>(
 		ApplicationTypeFileID,
+		applicationVersion,
 	);
 	const preferredRepeaters = getFile<ProtocolPreferredRepeatersFile>(
 		ProtocolPreferredRepeatersFileID,
+		applicationVersion,
 	)?.nodeIds;
 
 	const controllerProps = [
@@ -518,23 +574,25 @@ function nvmJSONControllerToFileOptions(
 
 function serializeCommonApplicationObjects(nvm: NVMJSON): NVM3Object[] {
 	const ret: NVM3Object[] = [];
-	const applTypeFile = new ApplicationTypeFile(
-		pick(nvm.controller, [
+	const applTypeFile = new ApplicationTypeFile({
+		...pick(nvm.controller, [
 			"isListening",
 			"optionalFunctionality",
 			"genericDeviceClass",
 			"specificDeviceClass",
 		]),
-	);
+		fileVersion: nvm.controller.applicationVersion,
+	});
 	ret.push(applTypeFile.serialize());
 
-	const applCCsFile = new ApplicationCCsFile(
-		pick(nvm.controller.commandClasses, [
+	const applCCsFile = new ApplicationCCsFile({
+		...pick(nvm.controller.commandClasses, [
 			"includedInsecurely",
 			"includedSecurelyInsecureCCs",
 			"includedSecurelySecureCCs",
 		]),
-	);
+		fileVersion: nvm.controller.applicationVersion,
+	});
 	ret.push(applCCsFile.serialize());
 
 	if (nvm.controller.rfConfig) {
@@ -546,6 +604,7 @@ function serializeCommonApplicationObjects(nvm: NVMJSON): NVM3Object[] {
 			]),
 			enablePTI: nvm.controller.rfConfig.enablePTI ?? undefined,
 			maxTXPower: nvm.controller.rfConfig.maxTXPower ?? undefined,
+			fileVersion: nvm.controller.applicationVersion,
 		});
 		ret.push(applRFConfigFile.serialize());
 	}
@@ -554,6 +613,7 @@ function serializeCommonApplicationObjects(nvm: NVMJSON): NVM3Object[] {
 		// TODO: ensure this is 512 bytes long
 		const applDataFile = new ApplicationDataFile({
 			data: Buffer.from(nvm.controller.applicationData, "hex"),
+			fileVersion: nvm.controller.applicationVersion,
 		});
 		ret.push(applDataFile.serialize());
 	}
@@ -593,26 +653,31 @@ function serializeCommonProtocolObjects(nvm: NVMJSON): NVM3Object[] {
 	ret.push(
 		new ProtocolAppRouteLockNodeMaskFile({
 			nodeIds: [...appRouteLock],
+			fileVersion: nvm.controller.protocolVersion,
 		}).serialize(),
 	);
 	ret.push(
 		new ProtocolRouteSlaveSUCNodeMaskFile({
 			nodeIds: [...routeSlaveSUC],
+			fileVersion: nvm.controller.protocolVersion,
 		}).serialize(),
 	);
 	ret.push(
 		new ProtocolSUCPendingUpdateNodeMaskFile({
 			nodeIds: [...sucPendingUpdate],
+			fileVersion: nvm.controller.protocolVersion,
 		}).serialize(),
 	);
 	ret.push(
 		new ProtocolVirtualNodeMaskFile({
 			nodeIds: [...isVirtual],
+			fileVersion: nvm.controller.protocolVersion,
 		}).serialize(),
 	);
 	ret.push(
 		new ProtocolPendingDiscoveryNodeMaskFile({
 			nodeIds: [...pendingDiscovery],
+			fileVersion: nvm.controller.protocolVersion,
 		}).serialize(),
 	);
 
@@ -622,27 +687,51 @@ function serializeCommonProtocolObjects(nvm: NVMJSON): NVM3Object[] {
 		ret.push(
 			new ProtocolPreferredRepeatersFile({
 				nodeIds: nvm.controller.preferredRepeaters,
+				fileVersion: nvm.controller.protocolVersion,
 			}).serialize(),
 		);
 	}
 
-	ret.push(
-		new SUCUpdateEntriesFile({
-			updateEntries: nvm.controller.sucUpdateEntries,
-		}).serialize(),
-	);
+	if (nvm.format < 5) {
+		ret.push(
+			new SUCUpdateEntriesFileV0({
+				updateEntries: nvm.controller.sucUpdateEntries,
+				fileVersion: nvm.controller.protocolVersion,
+			}).serialize(),
+		);
+	} else {
+		// V5 has split the SUC update entries into multiple files
+		for (
+			let index = 0;
+			index < SUC_MAX_UPDATES;
+			index += SUC_UPDATES_PER_FILE_V5
+		) {
+			const slice = nvm.controller.sucUpdateEntries.slice(
+				index,
+				index + SUC_UPDATES_PER_FILE_V5,
+			);
+			if (slice.length === 0) break;
+			const file = new SUCUpdateEntriesFileV5({
+				updateEntries: slice,
+				fileVersion: nvm.controller.protocolVersion,
+			});
+			file.fileId = sucUpdateIndexToSUCUpdateEntriesFileIDV5(index);
+			ret.push(file.serialize());
+		}
+	}
 
 	return ret;
 }
 
-export function jsonToNVMObjects_v0(
+export function jsonToNVMObjects_v7_0_0(
 	json: NVMJSON,
-	major: number,
-	minor: number,
-	patch: number,
+	targetSDKVersion: semver.SemVer,
 ): NVM3Objects {
 	const target = cloneDeep(json);
+
+	target.controller.protocolVersion = "7.0.0";
 	target.format = 0;
+	target.controller.applicationVersion = targetSDKVersion.format();
 
 	const applicationObjects = new Map<number, NVM3Object>();
 	const protocolObjects = new Map<number, NVM3Object>();
@@ -659,13 +748,13 @@ export function jsonToNVMObjects_v0(
 	};
 
 	// Application files
-	const [applMajor, applMinor, applPatch] =
-		target.controller.applicationVersion.split(".").map((i) => parseInt(i));
 	const applVersionFile = new ApplicationVersionFile({
-		format: target.format,
-		major: applMajor,
-		minor: applMinor,
-		patch: applPatch,
+		// The SDK compares 4-byte values where the format is set to 0 to determine whether a migration is needed
+		format: 0,
+		major: targetSDKVersion.major,
+		minor: targetSDKVersion.minor,
+		patch: targetSDKVersion.patch,
+		fileVersion: target.controller.applicationVersion, // does not matter for this file
 	});
 	addApplicationObjects(applVersionFile.serialize());
 
@@ -675,9 +764,10 @@ export function jsonToNVMObjects_v0(
 
 	const protocolVersionFile = new ProtocolVersionFile({
 		format: target.format,
-		major,
-		minor,
-		patch,
+		major: 7,
+		minor: 0,
+		patch: 0,
+		fileVersion: target.controller.protocolVersion, // does not matter for this file
 	});
 	addProtocolObjects(protocolVersionFile.serialize());
 
@@ -698,6 +788,7 @@ export function jsonToNVMObjects_v0(
 			nodeInfoFileIndex,
 			new NodeInfoFileV0({
 				nodeInfo: nvmJSONNodeToNodeInfo(nodeId, node),
+				fileVersion: target.controller.protocolVersion,
 			}),
 		);
 
@@ -714,6 +805,7 @@ export function jsonToNVMObjects_v0(
 						lwr: node.lwr ?? getEmptyRoute(),
 						nlwr: node.nlwr ?? getEmptyRoute(),
 					},
+					fileVersion: target.controller.protocolVersion,
 				}),
 			);
 		}
@@ -722,11 +814,15 @@ export function jsonToNVMObjects_v0(
 	addProtocolObjects(...serializeCommonProtocolObjects(target));
 
 	addProtocolObjects(
-		new ProtocolNodeListFile({ nodeIds: [...nodeInfoExists] }).serialize(),
+		new ProtocolNodeListFile({
+			nodeIds: [...nodeInfoExists],
+			fileVersion: target.controller.protocolVersion,
+		}).serialize(),
 	);
 	addProtocolObjects(
 		new ProtocolRouteCacheExistsNodeMaskFile({
 			nodeIds: [...routeCacheExists],
+			fileVersion: target.controller.protocolVersion,
 		}).serialize(),
 	);
 
@@ -747,15 +843,63 @@ export function jsonToNVMObjects_v0(
 	};
 }
 
-export function jsonToNVMObjects_v1_to_v4(
-	format: 1 | 2 | 3 | 4,
+export function jsonToNVMObjects_v7_11_0(
 	json: NVMJSON,
-	major: number,
-	minor: number,
-	patch: number,
+	targetSDKVersion: semver.SemVer,
 ): NVM3Objects {
 	const target = cloneDeep(json);
-	target.format = format;
+
+	// Some NVMs have weird versions set. Fix them before doing anything else.
+	if (
+		// Application version is updated on every release, protocol version only sometimes. This means
+		// the application version can't be lower than the protocol version.
+		semver.lt(
+			target.controller.applicationVersion,
+			target.controller.protocolVersion,
+		) ||
+		// Some NVMs have an invalid application version set
+		semver.gte(target.controller.applicationVersion, "255.0.0")
+	) {
+		// replace both with the protocol version
+		target.controller.applicationVersion =
+			target.controller.protocolVersion;
+	}
+
+	let targetApplicationVersion: semver.SemVer;
+	let targetProtocolVersion: semver.SemVer;
+	let targetProtocolFormat: number;
+
+	// We currently support application version migrations up to 7.19.1
+	// For all higher ones, set the highest version we support and let the controller handle the migration itself
+	if (semver.lte(targetSDKVersion, "7.19.1")) {
+		targetApplicationVersion = semver.parse(targetSDKVersion)!;
+	} else {
+		targetApplicationVersion = semver.parse("7.19.1")!;
+	}
+
+	// The protocol version file only seems to be updated when the format of the protocol file system changes
+	// Once again, we simply set the highest version we support here and let the controller handle any potential migration
+	if (semver.gte(targetSDKVersion, "7.19.0")) {
+		targetProtocolVersion = semver.parse("7.19.0")!;
+		targetProtocolFormat = 5;
+	} else if (semver.gte(targetSDKVersion, "7.17.0")) {
+		targetProtocolVersion = semver.parse("7.17.0")!;
+		targetProtocolFormat = 4;
+	} else if (semver.gte(targetSDKVersion, "7.15.3")) {
+		targetProtocolVersion = semver.parse("7.15.3")!;
+		targetProtocolFormat = 3;
+	} else if (semver.gte(targetSDKVersion, "7.12.0")) {
+		targetProtocolVersion = semver.parse("7.12.0")!;
+		targetProtocolFormat = 2;
+	} else {
+		// All versions below 7.11.0 are handled in the _v7_0_0 method
+		targetProtocolVersion = semver.parse("7.11.0")!;
+		targetProtocolFormat = 1;
+	}
+
+	target.format = targetProtocolFormat;
+	target.controller.applicationVersion = targetApplicationVersion.format();
+	target.controller.protocolVersion = targetProtocolVersion.format();
 
 	const applicationObjects = new Map<number, NVM3Object>();
 	const protocolObjects = new Map<number, NVM3Object>();
@@ -772,13 +916,13 @@ export function jsonToNVMObjects_v1_to_v4(
 	};
 
 	// Application files
-	const [applMajor, applMinor, applPatch] =
-		target.controller.applicationVersion.split(".").map((i) => parseInt(i));
 	const applVersionFile = new ApplicationVersionFile({
-		format: target.format,
-		major: applMajor,
-		minor: applMinor,
-		patch: applPatch,
+		// The SDK compares 4-byte values where the format is set to 0 to determine whether a migration is needed
+		format: 0,
+		major: targetApplicationVersion.major,
+		minor: targetApplicationVersion.minor,
+		patch: targetApplicationVersion.patch,
+		fileVersion: target.controller.applicationVersion, // does not matter for this file
 	});
 	addApplicationObjects(applVersionFile.serialize());
 
@@ -792,9 +936,9 @@ export function jsonToNVMObjects_v1_to_v4(
 		maxTXPower: null,
 	};
 
-	// For v3+ targets, the enablePTI and maxTxPower must be set in the rfConfig
-	// or the controller will ignore the file and not accept any changes to the RF config
-	if (format >= 3) {
+	// Make sure the RF config format matches the application version.
+	// Otherwise, the controller will ignore the file and not accept any changes to the RF config
+	if (semver.gte(targetSDKVersion, "7.15.3")) {
 		target.controller.rfConfig.enablePTI ??= 0;
 		target.controller.rfConfig.maxTXPower ??= 14.0;
 	}
@@ -804,10 +948,11 @@ export function jsonToNVMObjects_v1_to_v4(
 	// Protocol files
 
 	const protocolVersionFile = new ProtocolVersionFile({
-		format: target.format,
-		major,
-		minor,
-		patch,
+		format: targetProtocolFormat,
+		major: targetProtocolVersion.major,
+		minor: targetProtocolVersion.minor,
+		patch: targetProtocolVersion.patch,
+		fileVersion: target.controller.protocolVersion, // does not matter for this file
 	});
 	addProtocolObjects(protocolVersionFile.serialize());
 
@@ -829,6 +974,7 @@ export function jsonToNVMObjects_v1_to_v4(
 				nodeInfoFileIndex,
 				new NodeInfoFileV1({
 					nodeInfos: [],
+					fileVersion: target.controller.protocolVersion,
 				}),
 			);
 		}
@@ -845,6 +991,7 @@ export function jsonToNVMObjects_v1_to_v4(
 					routeCacheFileIndex,
 					new RouteCacheFileV1({
 						routeCaches: [],
+						fileVersion: target.controller.protocolVersion,
 					}),
 				);
 			}
@@ -859,7 +1006,7 @@ export function jsonToNVMObjects_v1_to_v4(
 
 	// For v3+ targets, the ControllerInfoFile must contain the LongRange properties
 	// or the controller will ignore the file and not have a home ID
-	if (format >= 3) {
+	if (targetProtocolFormat >= 3) {
 		target.controller.lastNodeIdLR ??= 255;
 		target.controller.maxNodeIdLR ??= 0;
 		target.controller.reservedIdLR ??= 0;
@@ -870,11 +1017,15 @@ export function jsonToNVMObjects_v1_to_v4(
 	addProtocolObjects(...serializeCommonProtocolObjects(target));
 
 	addProtocolObjects(
-		new ProtocolNodeListFile({ nodeIds: [...nodeInfoExists] }).serialize(),
+		new ProtocolNodeListFile({
+			nodeIds: [...nodeInfoExists],
+			fileVersion: target.controller.protocolVersion,
+		}).serialize(),
 	);
 	addProtocolObjects(
 		new ProtocolRouteCacheExistsNodeMaskFile({
 			nodeIds: [...routeCacheExists],
+			fileVersion: target.controller.protocolVersion,
 		}).serialize(),
 	);
 
@@ -931,45 +1082,10 @@ export function jsonToNVM(
 	}
 
 	let objects: NVM3Objects;
-	if (semver.gte(parsedVersion, "7.17.0")) {
-		objects = jsonToNVMObjects_v1_to_v4(
-			4,
-			json,
-			parsedVersion.major,
-			parsedVersion.minor,
-			parsedVersion.patch,
-		);
-	} else if (semver.gte(parsedVersion, "7.15.3")) {
-		objects = jsonToNVMObjects_v1_to_v4(
-			3,
-			json,
-			parsedVersion.major,
-			parsedVersion.minor,
-			parsedVersion.patch,
-		);
-	} else if (semver.gte(parsedVersion, "7.12.0")) {
-		objects = jsonToNVMObjects_v1_to_v4(
-			2,
-			json,
-			parsedVersion.major,
-			parsedVersion.minor,
-			parsedVersion.patch,
-		);
-	} else if (semver.gte(parsedVersion, "7.11.0")) {
-		objects = jsonToNVMObjects_v1_to_v4(
-			1,
-			json,
-			parsedVersion.major,
-			parsedVersion.minor,
-			parsedVersion.patch,
-		);
+	if (semver.gte(parsedVersion, "7.11.0")) {
+		objects = jsonToNVMObjects_v7_11_0(json, parsedVersion);
 	} else if (semver.gte(parsedVersion, "7.0.0")) {
-		objects = jsonToNVMObjects_v0(
-			json,
-			parsedVersion.major,
-			parsedVersion.minor,
-			parsedVersion.patch,
-		);
+		objects = jsonToNVMObjects_v7_0_0(json, parsedVersion);
 	} else {
 		throw new ZWaveError(
 			"jsonToNVM cannot convert to a pre-7.0 NVM version. Use jsonToNVM500 instead.",
@@ -1188,11 +1304,15 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 	let source: ParsedNVM;
 	let target: ParsedNVM;
+	let sourceProtocolFileFormat: number | undefined;
+	let targetProtocolFileFormat: number | undefined;
+
 	try {
 		source = {
 			type: 700,
 			json: nvmToJSON(sourceNVM),
 		};
+		sourceProtocolFileFormat = source.json.format;
 	} catch (e) {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
 			// This is not a 700 series NVM, maybe it is a 500 series one?
@@ -1200,6 +1320,15 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 				type: 500,
 				json: nvm500ToJSON(sourceNVM),
 			};
+		} else if (
+			isZWaveError(e) &&
+			e.code === ZWaveErrorCodes.NVM_NotSupported &&
+			isObject(e.context) &&
+			typeof e.context.protocolFileFormat === "number"
+		) {
+			// This is a 700 series NVM, but the protocol version is not (yet) supported
+			source = { type: "unknown" };
+			sourceProtocolFileFormat = e.context.protocolFileFormat;
 		} else {
 			source = { type: "unknown" };
 		}
@@ -1210,6 +1339,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			type: 700,
 			json: nvmToJSON(targetNVM),
 		};
+		targetProtocolFileFormat = target.json.format;
 	} catch (e) {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
 			// This is not a 700 series NVM, maybe it is a 500 series one?
@@ -1217,13 +1347,34 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 				type: 500,
 				json: nvm500ToJSON(targetNVM),
 			};
+		} else if (
+			isZWaveError(e) &&
+			e.code === ZWaveErrorCodes.NVM_NotSupported &&
+			source.type === 700 &&
+			isObject(e.context) &&
+			typeof e.context.protocolFileFormat === "number"
+		) {
+			// This is a 700 series NVM, but the protocol version is not (yet) supported
+			target = { type: "unknown" };
+			targetProtocolFileFormat = e.context.protocolFileFormat;
 		} else {
 			target = { type: "unknown" };
 		}
 	}
 
 	// Short circuit if...
-	if (source.type === 700 && target.type === 700) {
+	if (
+		target.type === "unknown" &&
+		targetProtocolFileFormat &&
+		targetProtocolFileFormat > MAX_PROTOCOL_FILE_FORMAT &&
+		sourceProtocolFileFormat &&
+		sourceProtocolFileFormat <= targetProtocolFileFormat
+	) {
+		// ...both the source and the target are 700 series, but at least the target uses an unsupported protocol version.
+		// We can be sure hwoever that the target can upgrade any 700 series NVM to its protocol version, as long as the
+		// source protocol version is not higher than the target's
+		return sourceNVM;
+	} else if (source.type === 700 && target.type === 700) {
 		//... the source and target protocol versions are compatible without conversion
 		const sourceProtocolVersion = source.json.controller.protocolVersion;
 		const targetProtocolVersion = target.json.controller.protocolVersion;

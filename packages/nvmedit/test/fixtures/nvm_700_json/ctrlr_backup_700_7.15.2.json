@@ -1,7 +1,7 @@
 {
 	"format": 2,
 	"controller": {
-		"protocolVersion": "7.15.2",
+		"protocolVersion": "7.12.0",
 		"applicationVersion": "7.15.2",
 		"homeId": "0xd7db5d96",
 		"nodeId": 1,
@@ -34,8 +34,8 @@
 			"rfRegion": 0,
 			"txPower": 0,
 			"measured0dBm": 3.3,
-			"enablePTI": 0,
-			"maxTXPower": 14
+			"enablePTI": null,
+			"maxTXPower": null
 		},
 		"sucUpdateEntries": [
 			{

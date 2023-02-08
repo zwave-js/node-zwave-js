@@ -41,7 +41,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 			);
 			const nvm = jsonToNVM(
 				jsonInput,
-				jsonInput.controller.protocolVersion,
+				jsonInput.controller.applicationVersion,
 			);
 			const jsonOutput = nvmToJSON(nvm);
 			// @ts-expect-error
