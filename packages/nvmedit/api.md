@@ -39,7 +39,7 @@ export function json700To500(json: NVMJSON): NVM500JSON;
 // Warning: (ae-missing-release-tag) "jsonToNVM" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function jsonToNVM(json: Required<NVMJSON>, protocolVersion: string): Buffer;
+export function jsonToNVM(json: Required<NVMJSON>, targetSDKVersion: string): Buffer;
 
 // Warning: (ae-missing-release-tag) "jsonToNVM500" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

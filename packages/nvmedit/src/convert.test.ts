@@ -183,7 +183,9 @@ test("700 to 700 migration shortcut", async (t) => {
 	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_binary");
 
 	const nvmSource = await fs.readFile(
-		path.join(fixturesDir, "ctrlr_backup_700_7.11.bin"),
+		// cannot use 7.11.bin because it has an invalid combination of protocol
+		// and application version
+		path.join(fixturesDir, "ctrlr_backup_700_7.12.bin"),
 	);
 	const nvmTarget = await fs.readFile(
 		path.join(fixturesDir, "ctrlr_backup_700_7.16_1.bin"),
