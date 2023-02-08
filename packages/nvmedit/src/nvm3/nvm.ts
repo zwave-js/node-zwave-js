@@ -76,16 +76,16 @@ export function parseNVM(
 
 	// Build a compressed view of the NVM objects
 	const applicationObjects = compressObjects(
-		applicationPages.reduce(
+		applicationPages.reduce<NVM3Object[]>(
 			(acc, page) => acc.concat(page.objects),
-			[] as NVM3Object[],
+			[],
 		),
 	);
 
 	const protocolObjects = compressObjects(
-		protocolPages.reduce(
+		protocolPages.reduce<NVM3Object[]>(
 			(acc, page) => acc.concat(page.objects),
-			[] as NVM3Object[],
+			[],
 		),
 	);
 
