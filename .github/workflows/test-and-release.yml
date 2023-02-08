@@ -424,7 +424,7 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         EOF=$(</dev/urandom tr -dc "A-Za-z0-9" | head -c 6)
         BODY=$(git show -s --format=%b)
-        echo "BODY << $EOF" >> $GITHUB_OUTPUT
+        echo "BODY<<$EOF" >> $GITHUB_OUTPUT
         echo "$BODY" >> $GITHUB_OUTPUT
         echo "$EOF" >> $GITHUB_OUTPUT
         if [[ $VERSION == *"-"* ]] ; then
