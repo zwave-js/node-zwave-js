@@ -422,7 +422,7 @@ jobs:
         VERSION="${{ github.ref }}"
         VERSION=${VERSION##*/v}
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-        EOF=$(</dev/urandom tr -dc "A-Za-z0-9" | head -c 6)
+        EOF=$(od -An -N6 -x /dev/urandom | tr -d ' ')
         BODY=$(git show -s --format=%b)
         echo "BODY<<$EOF" >> $GITHUB_OUTPUT
         echo "$BODY" >> $GITHUB_OUTPUT
