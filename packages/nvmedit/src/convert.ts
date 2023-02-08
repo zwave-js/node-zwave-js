@@ -847,6 +847,22 @@ export function jsonToNVMObjects_v7_11_0(
 ): NVM3Objects {
 	const target = cloneDeep(json);
 
+	// Some NVMs have weird versions set. Fix them before doing anything else.
+	if (
+		// Application version is updated on every release, protocol version only sometimes. This means
+		// the application version can't be lower than the protocol version.
+		semver.lt(
+			target.controller.applicationVersion,
+			target.controller.protocolVersion,
+		) ||
+		// Some NVMs have an invalid application version set
+		semver.gte(target.controller.applicationVersion, "255.0.0")
+	) {
+		// replace both with the protocol version
+		target.controller.applicationVersion =
+			target.controller.protocolVersion;
+	}
+
 	let targetApplicationVersion: semver.SemVer;
 	let targetProtocolVersion: semver.SemVer;
 	let targetProtocolFormat: number;
