@@ -9,7 +9,7 @@ CLI utility to flash the firmware on Z-Wave controllers
 You can either execute the current version directly from `npm` using
 
 ```
-npx @zwave-js/flash <port> <filename> [--verbose]
+npx @zwave-js/flash@latest <port> <filename> [--verbose]
 ```
 
 or you can execute the version in the checked out repository by executing
