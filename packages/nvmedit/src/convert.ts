@@ -10,8 +10,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import { cloneDeep, pick } from "@zwave-js/shared/safe";
+import { isObject } from "alcalzone-shared/typeguards";
 import semver from "semver";
-import { SUC_MAX_UPDATES } from "./consts";
+import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
@@ -263,10 +264,11 @@ export function nvmObjectsToJSON(
 	const protocolVersion = `${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`;
 
 	// Bail early if the NVM uses a protocol file format that's newer than we support
-	if (protocolFileFormat > 5) {
+	if (protocolFileFormat > MAX_PROTOCOL_FILE_FORMAT) {
 		throw new ZWaveError(
 			`Unsupported protocol file format: ${protocolFileFormat}`,
 			ZWaveErrorCodes.NVM_NotSupported,
+			{ protocolFileFormat },
 		);
 	}
 
@@ -1302,11 +1304,15 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 	let source: ParsedNVM;
 	let target: ParsedNVM;
+	let sourceProtocolFileFormat: number | undefined;
+	let targetProtocolFileFormat: number | undefined;
+
 	try {
 		source = {
 			type: 700,
 			json: nvmToJSON(sourceNVM),
 		};
+		sourceProtocolFileFormat = source.json.format;
 	} catch (e) {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
 			// This is not a 700 series NVM, maybe it is a 500 series one?
@@ -1314,6 +1320,15 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 				type: 500,
 				json: nvm500ToJSON(sourceNVM),
 			};
+		} else if (
+			isZWaveError(e) &&
+			e.code === ZWaveErrorCodes.NVM_NotSupported &&
+			isObject(e.context) &&
+			typeof e.context.protocolFileFormat === "number"
+		) {
+			// This is a 700 series NVM, but the protocol version is not (yet) supported
+			source = { type: "unknown" };
+			sourceProtocolFileFormat = e.context.protocolFileFormat;
 		} else {
 			source = { type: "unknown" };
 		}
@@ -1324,6 +1339,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			type: 700,
 			json: nvmToJSON(targetNVM),
 		};
+		targetProtocolFileFormat = target.json.format;
 	} catch (e) {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
 			// This is not a 700 series NVM, maybe it is a 500 series one?
@@ -1331,13 +1347,34 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 				type: 500,
 				json: nvm500ToJSON(targetNVM),
 			};
+		} else if (
+			isZWaveError(e) &&
+			e.code === ZWaveErrorCodes.NVM_NotSupported &&
+			source.type === 700 &&
+			isObject(e.context) &&
+			typeof e.context.protocolFileFormat === "number"
+		) {
+			// This is a 700 series NVM, but the protocol version is not (yet) supported
+			target = { type: "unknown" };
+			targetProtocolFileFormat = e.context.protocolFileFormat;
 		} else {
 			target = { type: "unknown" };
 		}
 	}
 
 	// Short circuit if...
-	if (source.type === 700 && target.type === 700) {
+	if (
+		target.type === "unknown" &&
+		targetProtocolFileFormat &&
+		targetProtocolFileFormat > MAX_PROTOCOL_FILE_FORMAT &&
+		sourceProtocolFileFormat &&
+		sourceProtocolFileFormat <= targetProtocolFileFormat
+	) {
+		// ...both the source and the target are 700 series, but at least the target uses an unsupported protocol version.
+		// We can be sure hwoever that the target can upgrade any 700 series NVM to its protocol version, as long as the
+		// source protocol version is not higher than the target's
+		return sourceNVM;
+	} else if (source.type === 700 && target.type === 700) {
 		//... the source and target protocol versions are compatible without conversion
 		const sourceProtocolVersion = source.json.controller.protocolVersion;
 		const targetProtocolVersion = target.json.controller.protocolVersion;
