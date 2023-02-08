@@ -849,22 +849,6 @@ export function jsonToNVMObjects_v7_11_0(
 ): NVM3Objects {
 	const target = cloneDeep(json);
 
-	// Some NVMs have weird versions set. Fix them before doing anything else.
-	if (
-		// Application version is updated on every release, protocol version only sometimes. This means
-		// the application version can't be lower than the protocol version.
-		semver.lt(
-			target.controller.applicationVersion,
-			target.controller.protocolVersion,
-		) ||
-		// Some NVMs have an invalid application version set
-		semver.gte(target.controller.applicationVersion, "255.0.0")
-	) {
-		// replace both with the protocol version
-		target.controller.applicationVersion =
-			target.controller.protocolVersion;
-	}
-
 	let targetApplicationVersion: semver.SemVer;
 	let targetProtocolVersion: semver.SemVer;
 	let targetProtocolFormat: number;
@@ -1071,12 +1055,12 @@ export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON> {
 /** Takes a JSON represented NVM and converts it to binary */
 export function jsonToNVM(
 	json: Required<NVMJSON>,
-	protocolVersion: string,
+	targetSDKVersion: string,
 ): Buffer {
-	const parsedVersion = semver.parse(protocolVersion);
+	const parsedVersion = semver.parse(targetSDKVersion);
 	if (!parsedVersion) {
 		throw new ZWaveError(
-			`Invalid protocol version: ${protocolVersion}`,
+			`Invalid SDK version: ${targetSDKVersion}`,
 			ZWaveErrorCodes.Argument_Invalid,
 		);
 	}
@@ -1378,12 +1362,24 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 		//... the source and target protocol versions are compatible without conversion
 		const sourceProtocolVersion = source.json.controller.protocolVersion;
 		const targetProtocolVersion = target.json.controller.protocolVersion;
+		// ... and the application version on the both is compatible with the respective protocol version
+		const sourceApplicationVersion =
+			source.json.controller.applicationVersion;
+		const targetApplicationVersion =
+			target.json.controller.applicationVersion;
 
 		// The 700 series firmware can automatically upgrade backups from a previous protocol version
 		// Not sure when that ability was added. To be on the safe side, allow it for 7.16+ which definitely supports it.
 		if (
 			semver.gte(targetProtocolVersion, "7.16.0") &&
-			semver.gte(targetProtocolVersion, sourceProtocolVersion)
+			semver.gte(targetProtocolVersion, sourceProtocolVersion) &&
+			// the application version is updated on every update, protocol version only when the format changes
+			// so this is a good indicator if the NVMs are in a compatible state
+			semver.gte(targetApplicationVersion, targetProtocolVersion) &&
+			semver.gte(sourceApplicationVersion, sourceProtocolVersion) &&
+			// avoid preserving broken 255.x versions which appear on some controllers
+			semver.lt(sourceApplicationVersion, "255.0.0") &&
+			semver.lt(targetApplicationVersion, "255.0.0")
 		) {
 			return sourceNVM;
 		}
@@ -1408,6 +1404,16 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 	source = source as Exclude<ParsedNVM, { type: "unknown" }>;
 	target = target as Exclude<ParsedNVM, { type: "unknown" }>;
 
+	// Some 700 series NVMs have a strange 255.x application version - fix that first
+	if (
+		target.type === 700 &&
+		semver.gte(target.json.controller.applicationVersion, "255.0.0")
+	) {
+		// replace both with the protocol version
+		target.json.controller.applicationVersion =
+			target.json.controller.protocolVersion;
+	}
+
 	// In any case, preserve the application version of the target stick
 	source.json.controller.applicationVersion =
 		target.json.controller.applicationVersion;
@@ -1429,7 +1435,8 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 		};
 		// The target is a different series, try to preserve the RF config of the target stick
 		json.controller.rfConfig = target.json.controller.rfConfig;
-		return jsonToNVM(json, target.json.controller.protocolVersion);
+		// 700 series distinguishes the NVM format by the application version
+		return jsonToNVM(json, target.json.controller.applicationVersion);
 	} else if (source.type === 700 && target.type === 500) {
 		// We need to downgrade the source to 500 series
 		const json: Required<NVM500JSON> = {
@@ -1445,6 +1452,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			...(source.json as Required<NVMJSON>),
 			meta: (target.json as Required<NVMJSON>).meta,
 		};
-		return jsonToNVM(json, target.json.controller.protocolVersion);
+		// 700 series distinguishes the NVM format by the application version
+		return jsonToNVM(json, target.json.controller.applicationVersion);
 	}
 }
