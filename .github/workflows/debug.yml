@@ -1,0 +1,59 @@
+name: Test and Release
+
+# Run this job on all pushes to master, for pull requests
+# as well as tags with a semantic version
+on:
+  push:
+    branches:
+      # This avoids having duplicate builds in non-forked PRs
+      - "master"
+    tags:
+      # normal versions
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      # pre-releases
+      - "v[0-9]+.[0-9]+.[0-9]+-**"
+  pull_request: {}
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+# env:
+#   TURBO_FLAGS: "--concurrency=2 --api=http://127.0.0.1:9080 --token=foo --team=me" # The token must match the one in the prepare-env action
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Extract the version and commit body from the tag
+      id: extract_release
+      # The body may be multiline, therefore we need to escape some characters
+      run: |
+        VERSION="${{ github.ref }}"
+        VERSION=${VERSION##*/v}
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        EOF=$(</dev/urandom tr -dc "A-Za-z0-9" | head -c 6)
+        echo "EOF=$EOF"
+
+        BODY=$(git show -s --format=%b)
+        echo "BODY=$BODY"
+        
+        echo "BODY<<$EOF" >> $GITHUB_OUTPUT
+        echo "$BODY" >> $GITHUB_OUTPUT
+        echo "$EOF" >> $GITHUB_OUTPUT
+        if [[ $VERSION == *"-"* ]] ; then
+          echo "TAG=--tag next" >> $GITHUB_OUTPUT
+        fi
+
+        cat $GITHUB_OUTPUT
+
+    - name: Debug
+      run: |
+        echo "VERSION=${{ steps.extract_release.outputs.VERSION }}"
+        echo "BODY=${{ steps.extract_release.outputs.BODY }}"
+        echo "TAG=${{ steps.extract_release.outputs.TAG }}"
