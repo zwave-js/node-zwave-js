@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.10.0 (2023-02-08)
 **Note:** `10.9.0` was not actually released due to an error in the release pipeline. Some of these changes are tagged as `10.9.0` on GitHub, but are only released as part of `10.10.0`.
 
 ### Features
