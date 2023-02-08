@@ -1,5 +1,6 @@
-import { RFRegion } from "@zwave-js/core/safe";
-import { getEnumMemberName } from "@zwave-js/shared/safe";
+import { RFRegion, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
+import { AllOrNone, getEnumMemberName } from "@zwave-js/shared/safe";
+import semver from "semver";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
@@ -10,13 +11,14 @@ import {
 	nvmFileID,
 } from "./NVMFile";
 
-export interface ApplicationRFConfigFileOptions extends NVMFileCreationOptions {
+export type ApplicationRFConfigFileOptions = NVMFileCreationOptions & {
 	rfRegion: RFRegion;
 	txPower: number;
 	measured0dBm: number;
-	enablePTI?: number;
-	maxTXPower?: number;
-}
+} & AllOrNone<{
+		enablePTI?: number;
+		maxTXPower?: number;
+	}>;
 
 @nvmFileID(104)
 export class ApplicationRFConfigFile extends NVMFile {
@@ -25,12 +27,25 @@ export class ApplicationRFConfigFile extends NVMFile {
 	) {
 		super(options);
 		if (gotDeserializationOptions(options)) {
-			this.rfRegion = this.payload[0];
-			this.txPower = this.payload[1] / 10;
-			this.measured0dBm = this.payload.readIntLE(2, 1) / 10;
-			if (this.payload.length >= 5) {
-				this.enablePTI = this.payload[3];
-				this.maxTXPower = this.payload.readInt16LE(4) / 10;
+			if (this.payload.length === 3 || this.payload.length === 6) {
+				this.rfRegion = this.payload[0];
+				this.txPower = this.payload.readIntLE(1, 1) / 10;
+				this.measured0dBm = this.payload.readIntLE(2, 1) / 10;
+				if (this.payload.length === 6) {
+					this.enablePTI = this.payload[3];
+					this.maxTXPower = this.payload.readInt16LE(4) / 10;
+				}
+			} else if (this.payload.length === 8) {
+				this.rfRegion = this.payload[0];
+				this.txPower = this.payload.readInt16LE(1) / 10;
+				this.measured0dBm = this.payload.readInt16LE(3) / 10;
+				this.enablePTI = this.payload[5];
+				this.maxTXPower = this.payload.readInt16LE(6) / 10;
+			} else {
+				throw new ZWaveError(
+					`ApplicationRFConfigFile has unsupported length ${this.payload.length}`,
+					ZWaveErrorCodes.NVM_NotSupported,
+				);
 			}
 		} else {
 			this.rfRegion = options.rfRegion;
@@ -48,16 +63,25 @@ export class ApplicationRFConfigFile extends NVMFile {
 	public maxTXPower?: number;
 
 	public serialize(): NVM3Object {
-		this.payload = Buffer.from([this.rfRegion, this.txPower * 10, 0]);
-		this.payload.writeIntLE(this.measured0dBm * 10, 2, 1);
-		if (this.enablePTI != undefined || this.maxTXPower != undefined) {
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([this.enablePTI ?? 0, 0, 0]),
-			]);
-			if (this.maxTXPower != undefined) {
-				this.payload.writeInt16LE(this.maxTXPower * 10, 4);
+		if (semver.lt(this.fileVersion, "7.18.1")) {
+			this.payload = Buffer.alloc(
+				semver.gte(this.fileVersion, "7.15.3") ? 6 : 3,
+				0,
+			);
+			this.payload[0] = this.rfRegion;
+			this.payload.writeIntLE(this.txPower * 10, 1, 1);
+			this.payload.writeIntLE(this.measured0dBm * 10, 2, 1);
+			if (semver.gte(this.fileVersion, "7.15.3")) {
+				this.payload[3] = this.enablePTI ?? 0;
+				this.payload.writeInt16LE((this.maxTXPower ?? 0) * 10, 4);
 			}
+		} else {
+			this.payload = Buffer.alloc(8, 0);
+			this.payload[0] = this.rfRegion;
+			this.payload.writeInt16LE(this.txPower * 10, 1);
+			this.payload.writeInt16LE(this.measured0dBm * 10, 3);
+			this.payload[5] = this.enablePTI ?? 0;
+			this.payload.writeInt16LE((this.maxTXPower ?? 0) * 10, 6);
 		}
 		return super.serialize();
 	}

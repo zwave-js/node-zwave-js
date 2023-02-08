@@ -9,6 +9,7 @@ import type { NVM3Object } from "../nvm3/object";
 
 export interface NVMFileBaseOptions {
 	fileId?: number;
+	fileVersion: string;
 }
 export interface NVMFileDeserializationOptions extends NVMFileBaseOptions {
 	object: NVM3Object;
@@ -29,6 +30,8 @@ export type NVMFileOptions =
 
 export class NVMFile {
 	public constructor(options: NVMFileOptions) {
+		this.fileVersion = options.fileVersion;
+
 		if (gotDeserializationOptions(options)) {
 			this.fileId = options.object.key;
 			this.object = options.object;
@@ -51,15 +54,17 @@ export class NVMFile {
 	protected object: NVM3Object;
 	protected payload: Buffer;
 	public fileId: number = 0;
+	public fileVersion: string;
 
 	/**
 	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
-	public static from(object: NVM3Object): NVMFile {
+	public static from(object: NVM3Object, fileVersion: string): NVMFile {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor = getNVMFileConstructor(object.key)!;
 		return new Constructor({
 			fileId: object.key,
+			fileVersion,
 			object,
 		});
 	}
