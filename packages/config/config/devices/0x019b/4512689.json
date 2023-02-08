@@ -39,5 +39,20 @@
 		"exclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
 		"reset": "After the calibration process is finished, you may access the add/remove mode by pressing the function button three times within 1.5 seconds. Removing the device will reset it to factory defaults",
 		"manual": "https://media.heatit.com/709"
-	}
+	},
+	"compat": [
+		{
+			"$if": "firmwareVersion >= 4.2.0",
+			// Firmware 4.2.0 removed the Binary Switch CC in favor of Basic CC
+			// However since this is a sensor, Basic CC values are not offered automatically
+			"commandClasses": {
+				"add": {
+					"0x20": {
+						"version": 1,
+						"isSupported": true
+					}
+				}
+			}
+		}
+	]
 }
