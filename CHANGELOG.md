@@ -4,22 +4,27 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.9.0 (2023-02-07)
+## __WORK IN PROGRESS__
+**Note:** `10.9.0` was not actually released due to an error in the release pipeline. Some of these changes are tagged as `10.9.0` on GitHub, but are only released as part of `10.10.0`.
+
 ### Features
 * Values for `Notification CC` variables that are mapped from V1 Alarms are now created during the interview (#5420)
+* Add new SerialAPI Setup commands (#5437)
 
 ### Bugfixes
 * Only create CC values for CC versions a node is known - not assumed - to support (#5427)
 * All commands contained in a `Multi Command CC` are now properly handled (#5423)
 * Nodes are no longer marked dead when assigning/deleting routes fails due to any other reason than the node being unreachable (#5421)
 * Parse some controller messages differently depending on SDK version, working around firmware `7.19.1` not matching the Host API specification (#5430)
+* Several fixes to `nvmedit` utility which powers NVM backup/restore: include changes in `7.18.1` firmware, support `7.19.x` protocol file format, allow restoring NVMs onto unsupported future firmware versions (#5432, #5434)
 
 ### Config file changes
 * Preserve temperature sensor endpoint for Fibaro FGK101 (#5424)
 * Update Danfoss 014G0205 (#5426)
+* Disable Supervision for Heatit Z-RELAY (#5435)
 
 ### Changes under the hood
-* The body of GitHub Releases should now be encoded correctly again
+* The body of GitHub Releases should now be encoded correctly again (and the release pipeline should hopefully no longer fail)
 
 ## 10.8.0 (2023-02-06)
 ### Features
