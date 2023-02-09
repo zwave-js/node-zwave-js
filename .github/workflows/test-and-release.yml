@@ -20,7 +20,12 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_FLAGS: "--concurrency=2 --api=http://127.0.0.1:9080 --token=foo --team=me" # The token must match the one in the prepare-env action
+  TURBO_API: "http://127.0.0.1:9080"
+  # The token and team are required by the TurboRepo server, just set them to anything
+  TURBO_TOKEN: foo
+  TURBO_TEAM: me
+  # Additional CLI flags for turbo commands
+  TURBO_FLAGS: "" # "--concurrency=2"
 
 jobs:
   build:
