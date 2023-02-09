@@ -15,9 +15,7 @@
 		},
 
 		"codegen": {
-			// Code generation for packages requires the packages' dependencies to be built
-			// and runs after the own prebuild
-			"dependsOn": ["^build", "prebuild"]
+			// Dummy task to enable running all codegen tasks
 		},
 		"@zwave-js/cc#codegen": {
 			"dependsOn": ["^build", "prebuild"],
@@ -40,24 +38,23 @@
 			"outputs": ["build/**", "*.tsbuildinfo"]
 		},
 
-		"lint": {
-			"dependsOn": [],
-			"inputs": [
-				// https://github.com/vercel/turborepo/issues/1407
-				":!:build/",
-				"**/*.{ts,json}",
-				// The style based linting tasks depend on the corresponding configuration in the repo root
-				"../../.eslintrc.js",
-				"../../.eslintignore",
-				"../../.prettierrc.js",
-				"../../.prettierignore",
-				"../../tsconfig.eslint.json"
-			],
-			"outputs": []
-		},
 		// Specific linting tasks: ESLint
 		"lint:ts": {
-			"dependsOn": [],
+			// "dependsOn": ["^build"],
+			"inputs": [
+				// https://github.com/vercel/turborepo/issues/1407
+				":!:build/",
+				"**/*.{ts,json}",
+				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
+			]
+		},
+		"lint:ts:fix": {
+			"dependsOn": ["^build"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
@@ -69,10 +66,7 @@
 				"../../.prettierignore",
 				"../../tsconfig.eslint.json"
 			],
-			"outputs": []
-		},
-		"lint:ts:fix": {
-			"dependsOn": []
+			"outputs": ["**/*.{ts,json}"]
 		},
 		// Specific linting tasks: Prettier
 		"lint:prettier": {
@@ -87,26 +81,46 @@
 				"../../.prettierrc.js",
 				"../../.prettierignore",
 				"../../tsconfig.eslint.json"
-			],
-			"outputs": []
+			]
 		},
 		"lint:prettier:fix": {
-			"dependsOn": []
+			"dependsOn": [],
+			"inputs": [
+				// https://github.com/vercel/turborepo/issues/1407
+				":!:build/",
+				"**/*.{ts,json}",
+				// The style based linting tasks depend on the corresponding configuration in the repo root
+				"../../.eslintrc.js",
+				"../../.eslintignore",
+				"../../.prettierrc.js",
+				"../../.prettierignore",
+				"../../tsconfig.eslint.json"
+			],
+			"outputs": ["**/*.{ts,json}"]
 		},
+
 		"lint:zwave": {
-			"dependsOn": ["build"],
-			"outputs": []
+			// Dummy task to enable running all lint:zwave tasks
+		},
+		"@zwave-js/cc#lint:zwave": {
+			"dependsOn": ["^build"],
+			"inputs": ["**/*.ts"]
+		},
+		"@zwave-js/config#lint:zwave": {
+			"dependsOn": ["^build", "prebuild"],
+			"inputs": ["**/*.ts", "config/**/*.json"]
 		},
 
 		"extract-api": {
 			"dependsOn": ["build"],
-			"outputs": ["api.md"]
+			"inputs": ["src/**/*.ts", "build/**"],
+			"outputs": [".tmp/api.md", "api.md"]
 		},
 
 		"test:ts": {
 			"dependsOn": ["^build"],
-			"inputs": ["src/**/*.ts"],
-			"outputs": [] // TODO: consider snapshot files
+			"inputs": ["src/**/*.ts"]
+			// TODO: consider snapshot files
 		},
 
 		// For now, run tests in the root:
@@ -116,8 +130,7 @@
 				"jest.config.js",
 				"test/jest.*.{js,ts}",
 				"packages/*/src/**/*.ts"
-			],
-			"outputs": []
+			]
 		}
 	},
 	"globalDependencies": [
