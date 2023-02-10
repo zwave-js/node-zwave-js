@@ -6,6 +6,8 @@ on:
     branches:
       - master
   pull_request: {}
+  merge_group:
+    types: [checks_requested]
 
 jobs:
   # This job checks if the docs can be generated and produce changes

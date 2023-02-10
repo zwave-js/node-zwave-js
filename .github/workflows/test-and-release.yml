@@ -13,6 +13,8 @@ on:
       # pre-releases
       - "v[0-9]+.[0-9]+.[0-9]+-**"
   pull_request: {}
+  merge_group:
+    types: [checks_requested]
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency: 
