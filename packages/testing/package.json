@@ -56,7 +56,6 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
     "esbuild-register": "^3.3.3",
-    "jest-extended": "^2.0.0",
     "prettier": "^2.8.1",
     "triple-beam": "*",
     "typescript": "4.9.4",
