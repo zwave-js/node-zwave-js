@@ -19,6 +19,9 @@
         "Node": [
           "./build/Node.d.ts"
         ],
+        "Testing": [
+          "./build/Testing.d.ts"
+        ],
         "Utils": [
           "./build/Utils.d.ts"
         ],
@@ -39,6 +42,7 @@
     "./Driver": "./build/Driver.js",
     "./Error": "./build/Error.js",
     "./Node": "./build/Node.js",
+    "./Testing": "./build/Testing.js",
     "./Utils": "./build/Utils.js",
     "./Values": "./build/Values.js",
     "./safe": "./build/index_safe.js"
@@ -57,6 +61,9 @@
       ],
       "Node": [
         "./src/Node.ts"
+      ],
+      "Testing": [
+        "./src/Testing.ts"
       ],
       "Utils": [
         "./src/Utils.ts"

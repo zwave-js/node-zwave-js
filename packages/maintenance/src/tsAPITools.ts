@@ -4,9 +4,12 @@ import ts from "typescript";
 
 // Find this project's root dir
 export const projectRoot = process.cwd();
+export const repoRoot = path.normalize(
+	__dirname.slice(0, __dirname.lastIndexOf(`${path.sep}packages${path.sep}`)),
+);
 
 /** Used for ts-morph */
-export const tsConfigFilePath = path.join(projectRoot, "tsconfig.json");
+export const tsConfigFilePath = path.join(repoRoot, "tsconfig.json");
 
 export function loadTSConfig(
 	packageName: string = "",
@@ -16,9 +19,7 @@ export function loadTSConfig(
 	fileNames: string[];
 } {
 	const configFileName = ts.findConfigFile(
-		packageName
-			? path.join(projectRoot, `packages/${packageName}`)
-			: projectRoot,
+		packageName ? path.join(repoRoot, `packages/${packageName}`) : repoRoot,
 		// eslint-disable-next-line @typescript-eslint/unbound-method
 		ts.sys.fileExists,
 		build ? "tsconfig.build.json" : "tsconfig.json",

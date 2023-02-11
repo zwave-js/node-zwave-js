@@ -23,7 +23,6 @@ export {
 	num2hex,
 } from "@zwave-js/shared/safe";
 export { createDefaultBehaviors as createDefaultMockControllerBehaviors } from "./lib/controller/MockControllerBehaviors";
-export { createAndStartDriverWithMockPort } from "./lib/driver/DriverMock";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,
