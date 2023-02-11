@@ -4,6 +4,7 @@ module.exports = {
 	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 	modulePathIgnorePatterns: [
 		// TODO: Add those packages that have been migrated to ava
+		"<rootDir>/packages/cc",
 		"<rootDir>/packages/config",
 		"<rootDir>/packages/core",
 		"<rootDir>/packages/nvmedit",

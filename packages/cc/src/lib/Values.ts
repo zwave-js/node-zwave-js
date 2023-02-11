@@ -164,6 +164,7 @@ function defineStaticCCValue<
 		property: _blueprint.property,
 		propertyKey: _blueprint.propertyKey,
 	};
+	if (valueId.propertyKey === undefined) delete valueId.propertyKey;
 
 	const ret: InferStaticCCValue<TCommandClass, TBlueprint> = {
 		get id() {
@@ -219,6 +220,7 @@ function defineDynamicCCValue<
 			property: actualBlueprint.property,
 			propertyKey: actualBlueprint.propertyKey,
 		};
+		if (valueId.propertyKey === undefined) delete valueId.propertyKey;
 
 		const value: Omit<
 			InferStaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
