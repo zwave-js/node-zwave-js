@@ -75,7 +75,6 @@ import { MessageType } from '@zwave-js/serial';
 import type { MetadataUpdatedArgs } from '@zwave-js/core';
 import { MockControllerBehavior } from '@zwave-js/testing';
 import { MockNodeBehavior } from '@zwave-js/testing';
-import { MockPortBinding } from '@zwave-js/serial/mock';
 import { MulticastCC } from '@zwave-js/core';
 import { MulticastDestination } from '@zwave-js/core/safe';
 import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
@@ -218,13 +217,6 @@ export interface ControllerStatistics {
 }
 
 export { ControllerValueLogContext }
-
-// Warning: (ae-forgotten-export) The symbol "CreateAndStartDriverWithMockPortOptions" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "CreateAndStartDriverWithMockPortResult" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "createAndStartDriverWithMockPort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function createAndStartDriverWithMockPort(options?: DeepPartial<CreateAndStartDriverWithMockPortOptions & ZWaveOptions>): Promise<CreateAndStartDriverWithMockPortResult>;
 
 // Warning: (ae-missing-release-tag) "createDefaultBehaviors" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

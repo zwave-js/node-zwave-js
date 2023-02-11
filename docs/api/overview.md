@@ -11,6 +11,7 @@ In addition to the root entry point `"zwave-js"`, this module provides the follo
 -   `"zwave-js/Driver"`: The `Driver` class and `ZWaveOptions` interface.
 -   `"zwave-js/Error"`: The `ZWaveError` type and `ZWaveErrorCodes` enumeration.
 -   `"zwave-js/Node"`: The `ZWaveNode` class as well as types and enums used in its public API
+-   `"zwave-js/Testing"`: Utilities for integration testing
 -   `"zwave-js/Utils"`: [Helper functions](api/utils.md) that may be of use in applications
 -   `"zwave-js/Values"`: `ValueID`, `Metadata` definitions, value event definitions and specialized value types.
 
