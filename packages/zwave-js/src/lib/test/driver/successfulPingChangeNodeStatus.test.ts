@@ -1,4 +1,5 @@
-import { FunctionType, MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import { FunctionType, MessageHeaders } from "@zwave-js/serial";
+import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { getEnumMemberName, ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";

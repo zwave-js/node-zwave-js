@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 
-import { MockSerialPort } from "@zwave-js/serial";
+import { MockSerialPort } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
 import { Driver } from "../driver/Driver";
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
@@ -11,7 +11,7 @@ jest.mock("@zwave-js/serial", () => {
 		jest.requireActual("@zwave-js/serial");
 	return {
 		...mdl,
-		ZWaveSerialPort: mdl.MockSerialPort,
+		ZWaveSerialPort: MockSerialPort,
 	};
 });
 

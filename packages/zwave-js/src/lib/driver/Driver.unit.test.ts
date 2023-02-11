@@ -1,10 +1,6 @@
 import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import {
-	Message,
-	MessageType,
-	messageTypes,
-	MockSerialPort,
-} from "@zwave-js/serial";
+import { Message, MessageType, messageTypes } from "@zwave-js/serial";
+import { MockSerialPort } from "@zwave-js/serial/mock";
 import { createAndStartDriver, PORT_ADDRESS } from "../test/utils";
 import { Driver } from "./Driver";
 
