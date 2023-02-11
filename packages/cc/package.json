@@ -65,7 +65,6 @@
     "build": "tsc -b tsconfig.build.json",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "//watch": "yarn run codegen && tsc -b tsconfig.build.json --watch --pretty",
     "lint:zwave": "yarn task lint",
     "ts": "node -r esbuild-register",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",

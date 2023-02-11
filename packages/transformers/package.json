@@ -31,7 +31,6 @@
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
-    "//watch": "yarn run build --watch --pretty",
     "pretest": "del-cli \"test/fixtures/*.js\" && tsc -p tsconfig.test.json && cpy \"test/build/test/fixtures/*.js\" test/fixtures && del-cli test/build",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",

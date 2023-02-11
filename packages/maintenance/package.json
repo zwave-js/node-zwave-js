@@ -33,7 +33,6 @@
     "prebuild": "yarn ts src/lintForbiddenImports.ts",
     "build": "tsc -b tsconfig.build.json",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
-    "//watch": "yarn run build --watch --pretty",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier": "prettier -c \"src/**/*.ts\"",
