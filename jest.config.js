@@ -7,6 +7,7 @@ module.exports = {
 		"<rootDir>/packages/config",
 		"<rootDir>/packages/core",
 		"<rootDir>/packages/nvmedit",
+		"<rootDir>/packages/serial",
 		"<rootDir>/packages/shared",
 		"<rootDir>/packages/transformers",
 	],

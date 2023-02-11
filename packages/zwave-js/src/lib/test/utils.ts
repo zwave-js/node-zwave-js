@@ -46,9 +46,9 @@ export async function createAndStartDriver(
 	await driver.start();
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 
-	portInstance.openStub.mockClear();
-	portInstance.closeStub.mockClear();
-	portInstance.writeStub.mockClear();
+	portInstance.openStub.resetHistory();
+	portInstance.closeStub.resetHistory();
+	portInstance.writeStub.resetHistory();
 	portInstance["_lastWrite"] = undefined;
 
 	// Mock the value DB, because the original one will not be initialized

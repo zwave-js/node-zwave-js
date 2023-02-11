@@ -119,7 +119,7 @@
 
 		"test:ts": {
 			"dependsOn": ["^build"],
-			"inputs": ["src/**/*.ts"]
+			"inputs": ["src/**/*.ts", "ava.config.cjs", "../../ava.config.cjs"]
 			// TODO: consider snapshot files
 		},
 

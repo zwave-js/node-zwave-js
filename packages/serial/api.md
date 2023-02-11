@@ -4,7 +4,6 @@
 
 ```ts
 
-/// <reference types="jest" />
 /// <reference types="node" />
 
 import type { BindingPortInterface } from '@serialport/bindings-interface';
@@ -24,6 +23,7 @@ import type { PortInfo } from '@serialport/bindings-interface';
 import type { PortStatus } from '@serialport/bindings-interface';
 import { SerialPort } from 'serialport';
 import type { SetOptions } from '@serialport/bindings-interface';
+import { default as sinon_2 } from 'sinon';
 import { Transform } from 'stream';
 import { TransformCallback } from 'stream';
 import type { TypedClassDecorator } from '@zwave-js/shared/safe';
@@ -616,7 +616,7 @@ export class MockSerialPort extends ZWaveSerialPort {
     // (undocumented)
     close(): Promise<void>;
     // (undocumented)
-    readonly closeStub: jest.Mock;
+    readonly closeStub: sinon_2.SinonStub<any[], any>;
     // (undocumented)
     static getInstance(port: string): MockSerialPort | undefined;
     // (undocumented)
@@ -626,7 +626,7 @@ export class MockSerialPort extends ZWaveSerialPort {
     // (undocumented)
     open(): Promise<void>;
     // (undocumented)
-    readonly openStub: jest.Mock;
+    readonly openStub: sinon_2.SinonStub<any[], any>;
     // (undocumented)
     raiseError(err: Error): void;
     // (undocumented)
@@ -634,7 +634,7 @@ export class MockSerialPort extends ZWaveSerialPort {
     // (undocumented)
     writeAsync(data: Buffer): Promise<void>;
     // (undocumented)
-    readonly writeStub: jest.Mock;
+    readonly writeStub: sinon_2.SinonStub<any[], any>;
 }
 
 // Warning: (ae-missing-release-tag) "MultiStageCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -840,7 +840,7 @@ export type ZWaveSocketOptions = Omit<net.TcpSocketConnectOpts, "onread"> | Omit
 
 // Warnings were encountered during analysis:
 //
-// src/MockSerialPort.ts:109:2 - (ae-forgotten-export) The symbol "MockPortBinding" needs to be exported by the entry point index.d.ts
+// src/MockSerialPort.ts:110:2 - (ae-forgotten-export) The symbol "MockPortBinding" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
