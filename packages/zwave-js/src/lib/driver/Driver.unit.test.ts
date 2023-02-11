@@ -28,7 +28,7 @@ describe("lib/driver/Driver", () => {
 			await driver.start();
 
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			expect(portInstance.openStub).toBeCalledTimes(1);
+			expect(portInstance.openStub.callCount).toBe(1);
 			await driver.destroy();
 		});
 
@@ -48,7 +48,7 @@ describe("lib/driver/Driver", () => {
 			await driver.start();
 
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			expect(portInstance.openStub).toBeCalledTimes(1);
+			expect(portInstance.openStub.callCount).toBe(1);
 			await driver.destroy();
 		});
 
@@ -91,7 +91,7 @@ describe("lib/driver/Driver", () => {
 
 			// fail opening of the serialport
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			portInstance.openStub.mockImplementation(() =>
+			portInstance.openStub.callsFake(() =>
 				Promise.reject(new Error("NOPE")),
 			);
 
@@ -117,7 +117,7 @@ describe("lib/driver/Driver", () => {
 
 			// fail opening of the serialport
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			portInstance.openStub.mockRejectedValue(new Error("NOPE"));
+			portInstance.openStub.rejects(new Error("NOPE"));
 			await expect(startPromise).rejects.toThrow("NOPE");
 
 			// try to start again
@@ -201,7 +201,7 @@ describe("lib/driver/Driver", () => {
 
 			// fail opening of the serialport
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			portInstance.openStub.mockRejectedValue(new Error("NOPE"));
+			portInstance.openStub.rejects(new Error("NOPE"));
 			await expect(startPromise).rejects.toThrow("NOPE");
 
 			const msg = new TestMessage(driver);

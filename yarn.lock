@@ -4656,14 +4656,12 @@ __metadata:
   resolution: "@zwave-js/host@workspace:packages/host"
   dependencies:
     "@microsoft/api-extractor": "*"
-    "@types/jest": ^29.0.2
     "@types/node": ^14.18.36
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.8
     del-cli: ^5.0.0
-    jest-extended: ^2.0.0
     prettier: ^2.8.1
     typescript: 4.9.4
   languageName: unknown
@@ -4676,7 +4674,6 @@ __metadata:
     "@types/clipboardy": ^2.0.1
     "@types/fs-extra": ^9.0.13
     "@types/globrex": ^0.1.2
-    "@types/jest": ^29.0.2
     "@types/node": ^14.18.36
     "@types/prettier": ^2.7.0
     "@types/yargs": ^17.0.12
@@ -4690,7 +4687,6 @@ __metadata:
     esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
     globrex: ^0.1.2
-    jest-extended: ^2.0.0
     piscina: ^3.2.0
     prettier: ^2.8.1
     reflect-metadata: ^0.1.13
@@ -4807,19 +4803,20 @@ __metadata:
     "@serialport/binding-mock": ^10.2.2
     "@serialport/bindings-interface": "*"
     "@serialport/stream": ^10.3.0
-    "@types/jest": ^29.0.2
     "@types/node": ^14.18.36
+    "@types/sinon": ^10.0.13
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.8
     ansi-colors: ^4.1.3
+    ava: ^4.3.3
     del-cli: ^5.0.0
     esbuild: 0.15.7
     esbuild-register: ^3.3.3
-    jest-extended: ^2.0.0
     prettier: ^2.8.1
     serialport: ^10.4.0
+    sinon: ^14.0.0
     typescript: 4.9.4
     winston: ^3.8.2
   languageName: unknown
@@ -4850,7 +4847,6 @@ __metadata:
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
     "@microsoft/api-extractor": "*"
-    "@types/jest": ^29.0.2
     "@types/node": ^14.18.36
     "@types/triple-beam": ^1.3.2
     "@zwave-js/core": "workspace:*"
