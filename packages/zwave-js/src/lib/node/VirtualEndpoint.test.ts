@@ -5,8 +5,8 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { MockSerialPort } from "@zwave-js/serial";
 import { FunctionType } from "@zwave-js/serial";
+import type { MockSerialPort } from "@zwave-js/serial/mock";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import { ZWaveController } from "../controller/Controller";
