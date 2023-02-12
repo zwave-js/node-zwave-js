@@ -2,18 +2,18 @@
 
 import { MockSerialPort } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
-import { Driver } from "../driver/Driver";
+import proxyquire from "proxyquire";
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
 
 // load the driver with stubbed out Serialport
-jest.mock("@zwave-js/serial", () => {
-	const mdl: typeof import("@zwave-js/serial") =
-		jest.requireActual("@zwave-js/serial");
-	return {
-		...mdl,
-		ZWaveSerialPort: MockSerialPort,
-	};
-});
+const { Driver } = proxyquire<typeof import("../driver/Driver")>(
+	"../driver/Driver",
+	{
+		"@zwave-js/serial": {
+			ZWaveSerialPort: MockSerialPort,
+		},
+	},
+);
 
 export const PORT_ADDRESS = "/tty/FAKE";
 
