@@ -25,11 +25,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Led light on when device is on",
+					"label": "Default: LED Light ON when Device is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED Light ON when Device is ON",
 					"value": 1
 				},
 				{
-					"label": "Led light always on",
+					"label": "LED light always OFF",
 					"value": 2
 				}
 			]
