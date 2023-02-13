@@ -101,10 +101,10 @@ integrationTest(
 			mockNode.defineBehavior(respondToSoundSwitchToneInfoGet);
 		},
 
-		testBody: async (driver, node, _mockController, _mockNode) => {
+		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			const toneIdValue = SoundSwitchCCValues.toneId;
 			const meta = node.getValueMetadata(toneIdValue.id);
-			expect(meta.valueChangeOptions).toEqual(["volume"]);
+			t.deepEqual(meta.valueChangeOptions, ["volume"]);
 		},
 	},
 );

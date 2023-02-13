@@ -15,7 +15,7 @@ integrationTest(
 			"fixtures/multiChannelUnknownVersions",
 		),
 
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (t, driver, node, mockController, mockNode) => {
 			await node
 				.getEndpoint(1)!
 				.commandClasses["Binary Switch"].set(true);
@@ -27,6 +27,8 @@ integrationTest(
 						MultiChannelCCCommandEncapsulation &&
 					frame.payload.encapsulated instanceof BinarySwitchCCSet,
 			);
+
+			t.pass();
 		},
 	},
 );

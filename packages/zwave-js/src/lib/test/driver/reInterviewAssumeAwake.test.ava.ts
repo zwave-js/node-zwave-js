@@ -37,7 +37,7 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 		return Promise.resolve();
 	},
 
-	testBody: async (driver, node, mockController, mockNode) => {
+	testBody: async (t, driver, node, mockController, mockNode) => {
 		// Wait for the assignReturnRoute command to be completed
 		await wait(500);
 		node.markAsAsleep();
@@ -62,5 +62,7 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 		});
 		const wait10s = wait(10000, true);
 		await Promise.race([interviewCompleted, wait10s]);
+
+		t.pass();
 	},
 });

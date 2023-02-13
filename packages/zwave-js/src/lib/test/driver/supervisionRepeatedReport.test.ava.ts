@@ -68,7 +68,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToSupervisionGet);
 		},
 
-		testBody: async (driver, node, _mockController, _mockNode) => {
+		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			const promise = node.setValue(
 				MultilevelSwitchCCValues.targetValue.id,
 				77,
@@ -77,14 +77,14 @@ integrationTest(
 			let currentValue = node.getValue(
 				MultilevelSwitchCCValues.currentValue.id,
 			);
-			expect(currentValue).not.toBe(77);
+			t.not(currentValue, 77);
 
 			await promise;
 
 			currentValue = node.getValue(
 				MultilevelSwitchCCValues.currentValue.id,
 			);
-			expect(currentValue).toBe(77);
+			t.is(currentValue, 77);
 
 			// await node.commandClasses["Multilevel Switch"].startLevelChange({
 			// 	direction: "up",

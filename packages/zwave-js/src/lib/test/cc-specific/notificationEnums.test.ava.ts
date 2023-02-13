@@ -81,7 +81,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToNotificationEventSupportedGet);
 		},
 
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (t, driver, node, mockController, mockNode) => {
 			await node.commandClasses.Notification.getSupportedEvents(0x0f);
 
 			const valveOperationStatusId =
@@ -95,7 +95,7 @@ integrationTest(
 					valveOperationStatusId,
 				) as ValueMetadataNumeric
 			).states;
-			expect(states).toStrictEqual({
+			t.deepEqual(states, {
 				// For the valve operation status variable, the embedded enum replaces its possible states
 				// since there is only one meaningless state, so it doesn't make sense to preserve it
 				// This is different from the "Door state" value which has multiple states AND enums
@@ -119,7 +119,7 @@ integrationTest(
 			await wait(100);
 
 			let value = node.getValue(valveOperationStatusId);
-			expect(value).toBe(0x0100);
+			t.is(value, 0x0100);
 
 			cc = new NotificationCCReport(mockNode.host, {
 				nodeId: mockController.host.ownNodeId,
@@ -135,7 +135,7 @@ integrationTest(
 			await wait(100);
 
 			value = node.getValue(valveOperationStatusId);
-			expect(value).toBe(0x0101);
+			t.is(value, 0x0101);
 		},
 	},
 );
@@ -206,7 +206,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToNotificationEventSupportedGet);
 		},
 
-		testBody: async (driver, node, _mockController, _mockNode) => {
+		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			await node.commandClasses.Notification.getSupportedEvents(0x06);
 
 			const states = (
@@ -217,7 +217,7 @@ integrationTest(
 					).id,
 				) as ValueMetadataNumeric
 			).states;
-			expect(states).toStrictEqual({
+			t.deepEqual(states, {
 				[0x16]: "Window/door is open",
 				[0x17]: "Window/door is closed",
 				// The Door state notification type has an enum for the "open" state

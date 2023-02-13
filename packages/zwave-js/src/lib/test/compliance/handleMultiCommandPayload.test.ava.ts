@@ -29,7 +29,7 @@ integrationTest("All CCs contained in a Multi Command CC are handled", {
 	// 	],
 	// },
 
-	testBody: async (driver, node, mockController, mockNode) => {
+	testBody: async (t, driver, node, mockController, mockNode) => {
 		// This one requires a response
 		const zwpRequest = new ZWavePlusCCGet(mockNode.host, {
 			nodeId: mockController.host.ownNodeId,
@@ -60,7 +60,9 @@ integrationTest("All CCs contained in a Multi Command CC are handled", {
 				}
 			});
 		});
-		const expectNotification = expect(valueNotification).resolves.toBe(7);
+		const expectNotification = valueNotification.then((val) =>
+			t.is(val, 7),
+		);
 
 		await Promise.all([expectResponse, expectNotification]);
 	},
