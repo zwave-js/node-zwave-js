@@ -263,6 +263,7 @@ const testMachine = Machine<
 );
 
 const testModel = createModel<TestContext, TestMachineContext>(
+	// @ts-expect-error
 	testMachine,
 ).withEvents({
 	ADD: {
