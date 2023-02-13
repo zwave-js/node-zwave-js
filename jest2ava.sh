@@ -20,6 +20,7 @@ sed -r -i 's#expect\((.+?)\).toInclude\((.+?)\)#t.true\(\1.includes\(\2\)\)#' "$
 sed -r -i 's#expect\((.+?)\).not.toInclude\((.+?)\)#t.false\(\1.includes\(\2\)\)#' "$1"
 
 sed -r -i 's#assertZWaveError\(#assertZWaveErrorAva\(t, #' "$1"
+sed -r -i 's#assertCC\(#assertCCAva\(t, #' "$1"
 sed -r -i 's#jest\.fn\(\)#sinon.spy\(\)#' "$1"
 sed -r -i 's#expect\((.+?)\).not.toBeCalled\(\)#t.true\(\1.notCalled\)#' "$1"
 sed -r -i 's#expect\((.+?)\).toBeCalledTimes\((.+?)\)#t.is\(\1.callCount, \2\)#' "$1"
@@ -29,3 +30,5 @@ sed -r -i 's#expect\((.+?)\).toHaveLength\((.+?)\)#t.is\(\1.length, \2\)#' "$1"
 sed -r -i 's#expect\((.+?)\).toBeInstanceOf\((.+?)\)#t.true\(\1 instanceof \2\)#' "$1"
 
 sed -r -i 's#expect\((.+?)\).toMatchObject\(#t.like\(\1, #' "$1"
+
+sed -r -i 's#expect\((.+?)\).toResolve\(\)#t.notThrowsAsync\(\(\) => \1\)#' "$1"
