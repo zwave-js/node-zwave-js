@@ -12,6 +12,8 @@ sed -r -i 's#expect\((.+?)\).not.toEqual\(#t.notDeepEqual\(\1, #' "$1"
 
 sed -r -i 's#expect\((.+?)\).toBeTrue\(\)#t.true\(\1\)#' "$1"
 sed -r -i 's#expect\((.+?)\).toBeFalse\(\)#t.false\(\1\)#' "$1"
+sed -r -i 's#expect\((.+?)\).toBeTruthy\(\)#t.truthy\(\1\)#' "$1"
+sed -r -i 's#expect\((.+?)\).toBeFalsy\(\)#t.falsy\(\1\)#' "$1"
 
 sed -r -i 's#expect\((.+?)\).toBeUndefined\(\)#t.is\(\1, undefined\)#' "$1"
 sed -r -i 's#expect\((.+?)\).not.toBeUndefined\(\)#t.not\(\1, undefined\)#' "$1"
