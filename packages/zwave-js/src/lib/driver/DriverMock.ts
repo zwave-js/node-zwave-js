@@ -150,7 +150,7 @@ export async function createAndStartTestingDriver(
 		internalOptions.testingHooks.skipBootloaderCheck = true;
 	}
 
-	// TODO: Ideally, this would be using mock-fs, but jest does not play nice with it
+	// TODO: Make sure we delete this from time to time
 	const cacheDir = path.join(tmpdir(), "zwave-js-test-cache", testId);
 
 	internalOptions.storage ??= {};

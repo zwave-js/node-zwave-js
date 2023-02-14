@@ -16,7 +16,7 @@ const channelPrefixRegex = new RegExp(
 	"gm",
 );
 
-/** Log to a jest.fn() in order to perform assertions during unit tests */
+/** Log to a Sinon spy in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
 	public constructor() {
 		super({
@@ -36,53 +36,6 @@ export class SpyTransport extends Transport {
 
 /** Tests a printed log message */
 export function assertMessage(
-	transport: SpyTransport,
-	options: Partial<{
-		message: string;
-		predicate: (msg: string) => boolean;
-		/** Default: true */
-		ignoreColor: boolean;
-		/** Default: true */
-		ignoreTimestamp: boolean;
-		/** Default: true */
-		ignoreChannel: boolean;
-		callNumber: number;
-	}>,
-): void {
-	const callNumber = options.callNumber || 0;
-	expect(transport.spy.callCount).toBeGreaterThan(callNumber);
-	const callArg = transport.spy.getCall(callNumber).args[0];
-	let actualMessage: string = callArg[MESSAGE];
-	// By default ignore the color codes
-	const ignoreColor = options.ignoreColor !== false;
-	if (ignoreColor) {
-		actualMessage = stripColor(actualMessage);
-	}
-	// By default, strip away the timestamp and placeholder
-	if (options.ignoreTimestamp !== false) {
-		actualMessage = actualMessage
-			.replace(timestampPrefixRegex, "")
-			.replace(/^ {13}/gm, "");
-	}
-	// by default, strip away the channel label and placeholder
-	if (options.ignoreChannel !== false) {
-		actualMessage = actualMessage
-			.replace(channelPrefixRegex, "")
-			.replace(/^ {7}/gm, "");
-	}
-	if (typeof options.message === "string") {
-		if (ignoreColor) {
-			options.message = stripColor(options.message);
-		}
-		expect(actualMessage).toEqual(options.message);
-	}
-	if (typeof options.predicate === "function") {
-		expect(actualMessage).toSatisfy(options.predicate);
-	}
-}
-
-/** Tests a printed log message */
-export function assertMessageAva(
 	t: ExecutionContext,
 	transport: SpyTransport,
 	options: Partial<{
@@ -130,26 +83,6 @@ export function assertMessageAva(
 }
 
 export function assertLogInfo(
-	transport: SpyTransport,
-	options: Partial<{
-		level: string;
-		predicate: (info: ZWaveLogInfo) => boolean;
-		callNumber: number;
-	}>,
-): void {
-	const callNumber = options.callNumber || 0;
-	expect(transport.spy.callCount).toBeGreaterThan(callNumber);
-	const callArg = transport.spy.getCall(callNumber).args[0];
-
-	if (typeof options.level === "string") {
-		expect(callArg.level).toEqual(options.level);
-	}
-	if (typeof options.predicate === "function") {
-		expect(callArg).toSatisfy(options.predicate);
-	}
-}
-
-export function assertLogInfoAva(
 	t: ExecutionContext,
 	transport: SpyTransport,
 	options: Partial<{

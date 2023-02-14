@@ -198,7 +198,7 @@ test("the SupportedReport command should set the correct metadata", (t) => {
 
 // 		sinon.assert.called(host.sendMessage);
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[0][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[0][0], {
 // 			cc: HumidityControlModeCC,
 // 			nodeId,
 // 			ccValues: {
@@ -206,7 +206,7 @@ test("the SupportedReport command should set the correct metadata", (t) => {
 // 			},
 // 		});
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[1][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[1][0], {
 // 			cc: HumidityControlModeCC,
 // 			nodeId,
 // 			ccValues: {

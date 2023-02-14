@@ -121,16 +121,6 @@
 			"dependsOn": ["^build"],
 			"inputs": ["src/**/*.ts", "ava.config.cjs", "../../ava.config.cjs"]
 			// TODO: consider snapshot files
-		},
-
-		// For now, run tests in the root:
-		"//#test:ts": {
-			"dependsOn": ["zwave-js#build"],
-			"inputs": [
-				"jest.config.js",
-				"test/jest.*.{js,ts}",
-				"packages/*/src/**/*.ts"
-			]
 		}
 	},
 	"globalDependencies": [

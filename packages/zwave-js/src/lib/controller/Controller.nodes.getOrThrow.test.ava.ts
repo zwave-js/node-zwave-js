@@ -1,4 +1,4 @@
-import { assertZWaveErrorAva, ZWaveErrorCodes } from "@zwave-js/core";
+import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
@@ -45,7 +45,7 @@ test("should return a node if it was found", (t) => {
 
 test("should throw if the node was not found", (t) => {
 	const { driver } = t.context;
-	assertZWaveErrorAva(t, () => driver.controller.nodes.getOrThrow(3), {
+	assertZWaveError(t, () => driver.controller.nodes.getOrThrow(3), {
 		errorCode: ZWaveErrorCodes.Controller_NodeNotFound,
 	});
 });

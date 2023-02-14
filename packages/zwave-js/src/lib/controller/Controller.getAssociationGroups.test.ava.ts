@@ -3,7 +3,7 @@ import { CommandClasses } from "@zwave-js/core";
 import ava, { type TestFn } from "ava";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriverAva } from "../test/mocks";
+import { createEmptyMockDriver } from "../test/mocks";
 import { ZWaveController } from "./Controller";
 
 interface TestContext {
@@ -15,7 +15,7 @@ const test = ava as TestFn<TestContext>;
 test.before(async (t) => {
 	t.timeout(60000);
 
-	const fakeDriver = createEmptyMockDriverAva() as unknown as Driver;
+	const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	fakeDriver.registerRequestHandler = () => {};
 	await fakeDriver.configManager.loadAll();

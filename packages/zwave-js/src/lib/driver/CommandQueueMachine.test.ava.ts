@@ -12,7 +12,7 @@ import {
 	SendDataRequest,
 } from "../serialapi/transport/SendDataMessages";
 import { dummyCallbackNOK, dummyResponseNOK } from "../test/messages";
-import { createEmptyMockDriverAva } from "../test/mocks";
+import { createEmptyMockDriver } from "../test/mocks";
 import type { Driver } from "./Driver";
 import type {
 	SerialAPICommandDoneData,
@@ -74,7 +74,7 @@ interface TestContext {
 	actualReasons: SerialAPICommandError[];
 }
 
-const fakeDriver = createEmptyMockDriverAva() as unknown as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 const sm = new SecurityManager({
 	ownNodeId: 1,
 	nonceTimeout: 500,

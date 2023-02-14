@@ -9,7 +9,7 @@ import {
 	RateType,
 } from "@zwave-js/cc";
 import {
-	assertZWaveErrorAva,
+	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -233,7 +233,7 @@ test("the Report command should validate that a known meter type is given", (t) 
 	const report = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 	// Meter type 31 (does not exist)
-	assertZWaveErrorAva(t, () => report.persistValues(host), {
+	assertZWaveError(t, () => report.persistValues(host), {
 		errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 	});
 });
@@ -255,7 +255,7 @@ test("the Report command should validate that a known meter scale is given", (t)
 	const report = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 	// Meter type 4, Scale 8 (does not exist)
-	assertZWaveErrorAva(t, () => report.persistValues(host), {
+	assertZWaveError(t, () => report.persistValues(host), {
 		errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 	});
 });

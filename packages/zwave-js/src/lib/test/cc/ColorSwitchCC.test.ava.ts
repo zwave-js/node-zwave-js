@@ -11,7 +11,7 @@ import {
 	ColorSwitchCommand,
 } from "@zwave-js/cc";
 import {
-	assertZWaveErrorAva,
+	assertZWaveError,
 	CommandClasses,
 	Duration,
 	ZWaveErrorCodes,
@@ -279,7 +279,7 @@ test("the setValue API verifies that targetColor isn't set with non-numeric keys
 		undefined as any,
 		false,
 	);
-	await assertZWaveErrorAva(
+	await assertZWaveError(
 		t,
 		() =>
 			API.setValue!(

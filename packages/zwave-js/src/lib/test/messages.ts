@@ -1,14 +1,5 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import type { Message } from "@zwave-js/serial";
 import { MessageType } from "@zwave-js/serial";
-
-export const createSendDataResolvesNever = () =>
-	jest.fn().mockImplementation(() => new Promise<unknown>(() => {}));
-export const createSendDataResolvesImmediately = () =>
-	jest.fn().mockResolvedValue(undefined);
-export const createSendDataRejectsImmediately = () =>
-	jest.fn().mockRejectedValue(new Error("nope"));
 
 const defaultImplementations = {
 	serialize: () => Buffer.from([1, 2, 3]),

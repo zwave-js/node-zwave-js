@@ -1,5 +1,5 @@
 import {
-	assertZWaveErrorAva,
+	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -81,7 +81,7 @@ test("throws when called on a non-sleeping node", async (t) => {
 	const { makeNode } = t.context;
 	const node = makeNode(false);
 
-	await assertZWaveErrorAva(t, () => node.waitForWakeup(), {
+	await assertZWaveError(t, () => node.waitForWakeup(), {
 		errorCode: ZWaveErrorCodes.CC_NotSupported,
 	});
 

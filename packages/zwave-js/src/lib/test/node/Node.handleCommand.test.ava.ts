@@ -10,9 +10,9 @@ import {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
 } from "../../node/_Types";
-import { createEmptyMockDriverAva } from "../mocks";
+import { createEmptyMockDriver } from "../mocks";
 
-const fakeDriver = createEmptyMockDriverAva();
+const fakeDriver = createEmptyMockDriver();
 
 function makeNode(
 	ccs: [CommandClasses, Partial<CommandClassInfo>][] = [],

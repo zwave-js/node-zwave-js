@@ -1,4 +1,4 @@
-import { assertZWaveErrorAva, ZWaveErrorCodes } from "@zwave-js/core";
+import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import test from "ava";
 import {
 	decodeSetbackState,
@@ -64,7 +64,7 @@ test("encodeSwitchpoint() should correctly encode the minute part", (t) => {
 });
 
 test("encodeSwitchpoint() should throw when the switchpoint state is undefined", (t) => {
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() => encodeSwitchpoint({ hour: 1, minute: 5, state: undefined }),
 		{

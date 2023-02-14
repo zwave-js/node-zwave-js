@@ -59,7 +59,7 @@ test("the Report command should be deserialized correctly", (t) => {
 // });
 
 // describe.skip(`interview()`, () => {
-// 	const host = createEmptyMockDriverAva();
+// 	const host = createEmptyMockDriver();
 // 	const node = new ZWaveNode(2, host as unknown as Driver);
 
 // 	beforeAll(() => {
@@ -83,7 +83,7 @@ test("the Report command should be deserialized correctly", (t) => {
 
 // 		sinon.assert.called(host.sendMessage);
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[0][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[0][0], {
 // 			cc: HumidityControlOperatingStateCC,
 // 			nodeId: node.id,
 // 			ccValues: {

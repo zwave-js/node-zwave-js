@@ -1,5 +1,5 @@
 import test from "ava";
-import { assertZWaveErrorAva, SecurityClass, ZWaveErrorCodes } from "..";
+import { assertZWaveError, SecurityClass, ZWaveErrorCodes } from "..";
 import { parseQRCodeString, QRCodeVersion } from "./QR";
 
 function createDummyQR(firstDigits: string): string {
@@ -27,7 +27,7 @@ const cases = [
 
 for (const { code, reason } of cases) {
 	test(`QR code parsing -> throws when the QR code ${reason}`, (t) => {
-		assertZWaveErrorAva(t, () => parseQRCodeString(code), {
+		assertZWaveError(t, () => parseQRCodeString(code), {
 			errorCode: ZWaveErrorCodes.Security2CC_InvalidQRCode,
 		});
 		t.pass();

@@ -1,4 +1,4 @@
-import { assertZWaveErrorAva, SecurityClass } from "@zwave-js/core";
+import { assertZWaveError, SecurityClass } from "@zwave-js/core";
 import test from "ava";
 import { ProvisioningEntryStatus } from "./Inclusion";
 import { assertProvisioningEntry } from "./utils";
@@ -12,29 +12,29 @@ const securityClasses = [
 ];
 
 test("should throw if the argument is not an object", (t) => {
-	assertZWaveErrorAva(t, () => assertProvisioningEntry(undefined), {
+	assertZWaveError(t, () => assertProvisioningEntry(undefined), {
 		messageMatches: "not an object",
 	});
 
-	assertZWaveErrorAva(t, () => assertProvisioningEntry(1), {
+	assertZWaveError(t, () => assertProvisioningEntry(1), {
 		messageMatches: "not an object",
 	});
 });
 
 test("should throw if the argument does not have a valid dsk", (t) => {
-	assertZWaveErrorAva(t, () => assertProvisioningEntry({}), {
+	assertZWaveError(t, () => assertProvisioningEntry({}), {
 		messageMatches: "dsk must be a string",
 	});
-	assertZWaveErrorAva(t, () => assertProvisioningEntry({ dsk: 1 }), {
+	assertZWaveError(t, () => assertProvisioningEntry({ dsk: 1 }), {
 		messageMatches: "dsk must be a string",
 	});
-	assertZWaveErrorAva(t, () => assertProvisioningEntry({ dsk: "abc" }), {
+	assertZWaveError(t, () => assertProvisioningEntry({ dsk: "abc" }), {
 		messageMatches: "dsk does not have the correct format",
 	});
 });
 
 test("should throw if the status is invalid", (t) => {
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			assertProvisioningEntry({
@@ -43,7 +43,7 @@ test("should throw if the status is invalid", (t) => {
 			}),
 		{ messageMatches: "not a ProvisioningEntryStatus" },
 	);
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			assertProvisioningEntry({
@@ -55,7 +55,7 @@ test("should throw if the status is invalid", (t) => {
 });
 
 test("should throw if the securityClasses are invalid", (t) => {
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			assertProvisioningEntry({
@@ -65,7 +65,7 @@ test("should throw if the securityClasses are invalid", (t) => {
 			}),
 		{ messageMatches: "securityClasses must be an array" },
 	);
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			assertProvisioningEntry({
@@ -78,7 +78,7 @@ test("should throw if the securityClasses are invalid", (t) => {
 });
 
 test("should throw if the requestedSecurityClasses are invalid", (t) => {
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			assertProvisioningEntry({
@@ -89,7 +89,7 @@ test("should throw if the requestedSecurityClasses are invalid", (t) => {
 			}),
 		{ messageMatches: "requestedSecurityClasses must be an array" },
 	);
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			assertProvisioningEntry({

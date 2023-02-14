@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { assertZWaveErrorAva, ZWaveErrorCodes } from "@zwave-js/core";
+import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 // import { Message, MessageType, messageTypes } from "@zwave-js/serial";
 import { MockSerialPort } from "@zwave-js/serial/mock";
 import test from "ava";
@@ -133,7 +133,7 @@ test.serial(
 		await t.throwsAsync(startPromise, { message: /NOPE/ });
 
 		// try to start again
-		await assertZWaveErrorAva(t, () => driver.start(), {
+		await assertZWaveError(t, () => driver.start(), {
 			errorCode: ZWaveErrorCodes.Driver_Destroyed,
 		});
 
@@ -149,7 +149,7 @@ test.serial(
 			logConfig: { enabled: false },
 		});
 		// start the driver
-		await assertZWaveErrorAva(t, () => driver.start(), {
+		await assertZWaveError(t, () => driver.start(), {
 			errorCode: ZWaveErrorCodes.Driver_NoErrorHandler,
 		});
 	},
@@ -176,7 +176,7 @@ test.serial("the constructor should throw on duplicate security keys", (t) => {
 		}
 	});
 
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() => {
 			driver = new Driver("/dev/test", {
@@ -212,7 +212,7 @@ test.serial("the constructor should throw on duplicate security keys", (t) => {
 // 		driver.on("error", () => {});
 
 // 		const msg = new TestMessage(driver);
-// 		await assertZWaveErrorAva(t, () => driver.sendMessage(msg), {
+// 		await assertZWaveError(t, () => driver.sendMessage(msg), {
 // 			errorCode: ZWaveErrorCodes.Driver_NotReady,
 // 		});
 
@@ -235,7 +235,7 @@ test.serial("the constructor should throw on duplicate security keys", (t) => {
 // 		driver.start();
 
 // 		const msg = new TestMessage(driver);
-// 		await assertZWaveErrorAva(t, () => driver.sendMessage(msg), {
+// 		await assertZWaveError(t, () => driver.sendMessage(msg), {
 // 			errorCode: ZWaveErrorCodes.Driver_NotReady,
 // 		});
 
@@ -263,7 +263,7 @@ test.serial("the constructor should throw on duplicate security keys", (t) => {
 // 		await expect(startPromise).rejects.toThrow("NOPE");
 
 // 		const msg = new TestMessage(driver);
-// 		await assertZWaveErrorAva(t, () => driver.sendMessage(msg), {
+// 		await assertZWaveError(t, () => driver.sendMessage(msg), {
 // 			errorCode: ZWaveErrorCodes.Driver_NotReady,
 // 		});
 
@@ -320,7 +320,7 @@ test.serial("the constructor should throw on duplicate security keys", (t) => {
 // 		// receive something that's not a message header
 // 		await serialport.receiveData(Buffer.from([0xff]));
 // 		t.is(errorSpy.callCount, 1);
-// 		assertZWaveErrorAva(t, errorSpy.mock.calls[0][0] as unknown, {
+// 		assertZWaveError(t, errorSpy.mock.calls[0][0] as unknown, {
 // 			errorCode: ZWaveErrorCodes.Driver_InvalidDataReceived,
 // 		});
 
@@ -362,7 +362,7 @@ test.serial("the constructor should throw on duplicate security keys", (t) => {
 // 		// This is necessary or the test will finish too early and fail
 // 		await promise;
 // 		t.is(errorSpy.callCount, 1);
-// 		assertZWaveErrorAva(t, errorSpy.mock.calls[0][0] as unknown, {
+// 		assertZWaveError(t, errorSpy.mock.calls[0][0] as unknown, {
 // 			errorCode: ZWaveErrorCodes.Driver_Reset,
 // 		});
 // 	});

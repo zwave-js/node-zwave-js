@@ -10,7 +10,7 @@ import {
 	implementedVersion,
 } from "@zwave-js/cc";
 import {
-	assertZWaveErrorAva,
+	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -51,7 +51,7 @@ test(`creating and serializing should work for unspecified commands`, (t) => {
 
 test("from() throws CC_NotImplemented when receiving a non-implemented CC", (t) => {
 	// This is a Node Provisioning CC. Change it when that CC is implemented
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			CommandClass.from(host, {

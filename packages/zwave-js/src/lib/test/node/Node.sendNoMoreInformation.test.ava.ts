@@ -5,10 +5,10 @@ import test from "ava";
 import sinon from "sinon";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
-import { assertCCAva } from "../assertCC";
-import { createEmptyMockDriverAva } from "../mocks";
+import { assertCC } from "../assertCC";
+import { createEmptyMockDriver } from "../mocks";
 
-const fakeDriver = createEmptyMockDriverAva();
+const fakeDriver = createEmptyMockDriver();
 
 function makeNode(): ZWaveNode {
 	const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
@@ -64,7 +64,7 @@ test.serial("should send a WakeupCC.NoMoreInformation otherwise", async (t) => {
 	t.true(await node.sendNoMoreInformation());
 	sinon.assert.called(fakeDriver.sendMessage);
 
-	assertCCAva(t, fakeDriver.sendMessage.getCall(0).args[0], {
+	assertCC(t, fakeDriver.sendMessage.getCall(0).args[0], {
 		cc: WakeUpCC,
 		nodeId: node.id,
 		ccValues: {

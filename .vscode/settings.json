@@ -1,8 +1,6 @@
 {
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"jest.showCoverageOnLoad": false,
-	"jest.enableCodeLens": true,
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"eslint.validate": [
@@ -78,7 +76,6 @@
 		}
 	],
 	"debug.javascript.unmapMissingSources": true,
-	"jest.jestCommandLine": "yarn jest",
 	"search.exclude": {
 		"**/.yarn": true
 	},

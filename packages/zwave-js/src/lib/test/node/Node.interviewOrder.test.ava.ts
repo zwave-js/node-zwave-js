@@ -8,13 +8,13 @@ import {
 } from "@zwave-js/core";
 import test from "ava";
 import { ZWaveNode } from "../../node/Node";
-import { createEmptyMockDriverAva } from "../mocks";
+import { createEmptyMockDriver } from "../mocks";
 
 test("the CC interviews happen in the correct order", (t) => {
 	require("@zwave-js/cc");
 	t.not(getCCConstructor(49), undefined);
 
-	const fakeDriver = createEmptyMockDriverAva();
+	const fakeDriver = createEmptyMockDriver();
 
 	const node = new ZWaveNode(2, fakeDriver as any);
 	const CCs = [

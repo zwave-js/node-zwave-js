@@ -1,6 +1,6 @@
 import test from "ava";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveErrorAva } from "../test/assertZWaveError";
+import { assertZWaveError } from "../test/assertZWaveError";
 import {
 	getLegalRangeForBitMask,
 	getMinimumShiftForBitMask,
@@ -82,7 +82,7 @@ test("validatePayload() -> passes when all arguments are truthy", (t) => {
 
 test("validatePayload() -> throws a ZWaveError with PacketFormat_InvalidPayload otherwise", (t) => {
 	for (const args of [[false], [true, 0, true]]) {
-		assertZWaveErrorAva(t, () => validatePayload(...args), {
+		assertZWaveError(t, () => validatePayload(...args), {
 			errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 		});
 	}
@@ -90,7 +90,7 @@ test("validatePayload() -> throws a ZWaveError with PacketFormat_InvalidPayload 
 });
 
 test("validatePayload() -> The error message should contain the rejection reason", (t) => {
-	assertZWaveErrorAva(t, () => validatePayload.withReason("NOPE")(false), {
+	assertZWaveError(t, () => validatePayload.withReason("NOPE")(false), {
 		errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 		context: "NOPE",
 	});

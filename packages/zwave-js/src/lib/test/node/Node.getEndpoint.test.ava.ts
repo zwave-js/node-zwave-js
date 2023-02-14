@@ -1,5 +1,5 @@
 import {
-	assertZWaveErrorAva,
+	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -69,7 +69,7 @@ test.afterEach((t) => {
 
 test.serial("throws when a negative endpoint index is requested", (t) => {
 	const { node } = t.context;
-	assertZWaveErrorAva(t, () => node.getEndpoint(-1), {
+	assertZWaveError(t, () => node.getEndpoint(-1), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: "must be positive",
 	});

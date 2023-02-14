@@ -1,7 +1,7 @@
 import type { BinarySensorCCAPI } from "@zwave-js/cc/BinarySensorCC";
 import { BinarySwitchCCAPI } from "@zwave-js/cc/BinarySwitchCC";
 import {
-	assertZWaveErrorAva,
+	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -61,7 +61,7 @@ test.serial(
 	(t) => {
 		const { driver } = t.context;
 		const broadcast = driver.controller.getBroadcastNode();
-		assertZWaveErrorAva(t, () => broadcast.createAPI(0xbada55), {
+		assertZWaveError(t, () => broadcast.createAPI(0xbada55), {
 			errorCode: ZWaveErrorCodes.CC_NoAPI,
 			messageMatches: "no associated API",
 		});
@@ -84,7 +84,7 @@ test.serial(
 		// this does not throw
 		api.isSupported();
 		// this does
-		await assertZWaveErrorAva(t, () => api.get(), {
+		await assertZWaveError(t, () => api.get(), {
 			errorCode: ZWaveErrorCodes.CC_NotSupported,
 		});
 	},
@@ -133,7 +133,7 @@ test.serial(
 
 			const broadcast = driver.controller.getBroadcastNode();
 
-			assertZWaveErrorAva(
+			assertZWaveError(
 				t,
 				() => (broadcast.commandClasses as any).FOOBAR,
 				{
@@ -152,7 +152,7 @@ test.serial(
 	// 		prepareTest(t);
 
 	// 		const broadcast = driver.controller.getBroadcastNode();
-	// 		assertZWaveErrorAva(
+	// 		assertZWaveError(
 	// 			t,
 	// 			() => broadcast.commandClasses["Binary Switch"].set(true),
 	// 			{

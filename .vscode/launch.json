@@ -7,23 +7,6 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch current test file",
-			"runtimeExecutable": "yarn",
-			"runtimeArgs": [
-				"node",
-				"--async-stack-traces",
-				"--inspect-brk",
-				"node_modules/jest/bin/jest.js",
-				"${relativeFile}"
-			],
-			"console": "integratedTerminal",
-			"skipFiles": ["<node_internals>/**"],
-			"sourceMaps": true,
-			"preLaunchTask": "npm: build"
-		},
-		{
-			"type": "node",
-			"request": "launch",
 			"name": "Debug locally",
 			"port": 9229,
 			"runtimeExecutable": "yarn",
@@ -116,17 +99,6 @@
 			],
 			"console": "integratedTerminal",
 			"disableOptimisticBPs": true
-		},
-		{
-			"type": "node",
-			"name": "vscode-jest-tests",
-			"request": "launch",
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"disableOptimisticBPs": true,
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "yarn",
-			"args": ["run", "test:ts", "--runInBand", "--watchAll=false"]
 		}
 	]
 }

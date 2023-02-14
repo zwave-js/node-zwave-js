@@ -2,7 +2,7 @@ import {
 	createDefaultTransportFormat,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
-import { assertMessageAva, SpyTransport } from "@zwave-js/core/test";
+import { assertMessage, SpyTransport } from "@zwave-js/core/test";
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import type { ThrowingMap } from "@zwave-js/shared";
@@ -106,7 +106,7 @@ test("when an invalid CC is received, this is printed in the logs", async (t) =>
 	//        value: true
 	serialport.receiveData(Buffer.from("010800040021043003e5", "hex"));
 	await wait(10);
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		callNumber: 1,
 		message: `« [Node 033] [REQ] [ApplicationCommand]
   └─[BinarySensorCCReport2] [INVALID]`,

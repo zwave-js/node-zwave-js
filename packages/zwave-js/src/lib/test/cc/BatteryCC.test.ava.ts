@@ -144,7 +144,7 @@ test("deserializing an unsupported command should return an unspecified version 
 
 // 		sinon.assert.called(fakeDriver.sendMessage);
 
-// 		assertCCAva(t, fakeDriver.sendMessage.mock.calls[0][0], {
+// 		assertCC(t, fakeDriver.sendMessage.mock.calls[0][0], {
 // 			cc: BatteryCCGet,
 // 			nodeId: node.id,
 // 		});

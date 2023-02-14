@@ -5,8 +5,8 @@ import {
 	ZWaveLogContainer,
 } from "@zwave-js/core";
 import {
-	assertLogInfoAva,
-	assertMessageAva,
+	assertLogInfo,
+	assertMessage,
 	SpyTransport,
 } from "@zwave-js/core/test";
 import { FunctionType, Message, MessageType } from "@zwave-js/serial";
@@ -111,7 +111,7 @@ function createTransaction(
 test.serial("print() logs short messages correctly", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Test");
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		message: `  Test`,
 	});
 });
@@ -121,7 +121,7 @@ test.serial("print() logs long messages correctly", (t) => {
 	driverLogger.print(
 		"This is a very long message that should be broken into multiple lines maybe sometimes...",
 	);
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		message: `  This is a very long message that should be broken into multiple lines maybe so
   metimes...`,
 	});
@@ -130,13 +130,13 @@ test.serial("print() logs long messages correctly", (t) => {
 test.serial("print() logs with the given loglevel", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Test", "warn");
-	assertLogInfoAva(t, spyTransport, { level: "warn" });
+	assertLogInfo(t, spyTransport, { level: "warn" });
 });
 
 test.serial("print() has a default loglevel of verbose", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Test");
-	assertLogInfoAva(t, spyTransport, { level: "verbose" });
+	assertLogInfo(t, spyTransport, { level: "verbose" });
 });
 
 test.serial(
@@ -144,7 +144,7 @@ test.serial(
 	(t) => {
 		const { driverLogger, spyTransport } = t.context;
 		driverLogger.print("Whatever");
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			message: `00:00:00.000 DRIVER   Whatever`,
 			ignoreTimestamp: false,
 			ignoreChannel: false,
@@ -155,7 +155,7 @@ test.serial(
 test.serial("print() the timestamp is in a dim color", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Whatever");
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.startsWith(colors.gray("00:00:00.000")),
 		ignoreTimestamp: false,
 		ignoreChannel: false,
@@ -166,7 +166,7 @@ test.serial("print() the timestamp is in a dim color", (t) => {
 test.serial("print() the channel name is in inverted gray color", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Whatever");
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.startsWith(colors.gray.inverse("DRIVER")),
 		ignoreChannel: false,
 		ignoreColor: false,
@@ -178,7 +178,7 @@ test.serial(
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
 		driverLogger.transaction(createTransaction(driver, {}));
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.startsWith(getDirectionPrefix("outbound")),
 		});
 	},
@@ -190,14 +190,14 @@ test.serial(
 		driverLogger.transaction(
 			createTransaction(driver, { type: MessageType.Request }),
 		);
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[REQ]"),
 		});
 
 		driverLogger.transaction(
 			createTransaction(driver, { type: MessageType.Response }),
 		);
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[RES]"),
 			callNumber: 1,
 		});
@@ -213,7 +213,7 @@ test.serial(
 				functionType: FunctionType.GetSerialApiInitData,
 			}),
 		);
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[GetSerialApiInitData]"),
 		});
 	},
@@ -228,7 +228,7 @@ test.serial(
 				priority: MessagePriority.MultistepController,
 			}),
 		);
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[P: MultistepController]"),
 		});
 	},
@@ -240,7 +240,7 @@ test.serial(
 		const { driver, driverLogger, spyTransport } = t.context;
 		const msg = createMessage(driver, {});
 		driverLogger.transactionResponse(msg, undefined, null as any);
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.startsWith(getDirectionPrefix("inbound")),
 		});
 	},
@@ -254,7 +254,7 @@ test.serial(
 			type: MessageType.Request,
 		});
 		driverLogger.transactionResponse(msg, undefined, null as any);
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[REQ]"),
 		});
 
@@ -262,7 +262,7 @@ test.serial(
 			type: MessageType.Response,
 		});
 		driverLogger.transactionResponse(msg, undefined, null as any);
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[RES]"),
 			callNumber: 1,
 		});
@@ -277,7 +277,7 @@ test.serial(
 			functionType: FunctionType.HardReset,
 		});
 		driverLogger.transactionResponse(msg, undefined, null as any);
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[HardReset]"),
 		});
 	},
@@ -291,7 +291,7 @@ test.serial(
 			functionType: FunctionType.HardReset,
 		});
 		driverLogger.transactionResponse(msg, undefined, "fatal_controller");
-		assertMessageAva(t, spyTransport, {
+		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[fatal_controller]"),
 		});
 	},
@@ -301,7 +301,7 @@ test.serial("sendQueue() prints the send queue length", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
 	const queue = new SortedList<Transaction>();
 	driverLogger.sendQueue(queue);
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("(0 messages)"),
 	});
 
@@ -311,7 +311,7 @@ test.serial("sendQueue() prints the send queue length", (t) => {
 		}),
 	);
 	driverLogger.sendQueue(queue);
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("(1 message)"),
 		callNumber: 1,
 	});
@@ -322,7 +322,7 @@ test.serial("sendQueue() prints the send queue length", (t) => {
 		}),
 	);
 	driverLogger.sendQueue(queue);
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("(2 messages)"),
 		callNumber: 2,
 	});
@@ -341,10 +341,10 @@ test.serial("sendQueue() prints the function type for each message", (t) => {
 	);
 	driverLogger.sendQueue(queue);
 
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("GetSUCNodeId"),
 	});
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("HardReset"),
 	});
 });
@@ -366,10 +366,10 @@ test.serial("sendQueue() prints the message type for each message", (t) => {
 	);
 	driverLogger.sendQueue(queue);
 
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("· [REQ] GetSUCNodeId"),
 	});
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("· [RES] HardReset"),
 	});
 });
@@ -392,7 +392,7 @@ test.serial("primary tags are printed in inverse colors", (t) => {
 			colors.bgCyan("]"),
 	);
 
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes(expected1),
 		ignoreColor: false,
 	});
@@ -411,7 +411,7 @@ test.serial("inline tags are printed in inverse colors", (t) => {
 		colors.inverse("inline") +
 		colors.bgCyan("]");
 
-	assertMessageAva(t, spyTransport, {
+	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes(expected1),
 		ignoreColor: false,
 	});

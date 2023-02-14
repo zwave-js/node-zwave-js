@@ -128,7 +128,7 @@ test("the RecordReport command should be deserialized correctly", (t) => {
 
 // 		sinon.assert.called(fakeDriver.sendMessage);
 
-// 		assertCCAva(t, fakeDriver.sendMessage.mock.calls[0][0], {
+// 		assertCC(t, fakeDriver.sendMessage.mock.calls[0][0], {
 // 			cc: DoorLockLoggingCCRecordsSupportedGet,
 // 			nodeId: node.id,
 // 		});

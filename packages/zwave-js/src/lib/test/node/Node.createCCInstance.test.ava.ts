@@ -1,6 +1,6 @@
 import { BasicCC } from "@zwave-js/cc/BasicCC";
 import {
-	assertZWaveErrorAva,
+	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -43,7 +43,7 @@ test.after.always(async (t) => {
 test("should throw if the CC is not supported", (t) => {
 	const { driver } = t.context;
 	const node = new ZWaveNode(2, driver);
-	assertZWaveErrorAva(t, () => node.createCCInstance(CommandClasses.Basic), {
+	assertZWaveError(t, () => node.createCCInstance(CommandClasses.Basic), {
 		errorCode: ZWaveErrorCodes.CC_NotSupported,
 		messageMatches: "unsupported",
 	});

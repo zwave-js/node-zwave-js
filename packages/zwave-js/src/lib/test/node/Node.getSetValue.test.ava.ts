@@ -9,7 +9,7 @@ import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
 import { ZWaveNode } from "../../node/Node";
-import { assertCCAva } from "../assertCC";
+import { assertCC } from "../assertCC";
 
 interface TestContext {
 	driver: Driver;
@@ -84,7 +84,7 @@ test.serial("setValue() issues the correct xyzCCSet command", async (t) => {
 	t.true(result);
 	sinon.assert.called(sendMessage);
 
-	assertCCAva(t, sendMessage.getCall(0).args[0], {
+	assertCC(t, sendMessage.getCall(0).args[0], {
 		cc: BasicCC,
 		nodeId: node.id,
 		ccValues: {

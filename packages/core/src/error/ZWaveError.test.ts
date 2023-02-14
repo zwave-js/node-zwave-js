@@ -1,5 +1,5 @@
 import test from "ava";
-import { assertZWaveErrorAva } from "../test/assertZWaveError";
+import { assertZWaveError } from "../test/assertZWaveError";
 import { ZWaveError, ZWaveErrorCodes } from "./ZWaveError";
 
 const err = new ZWaveError(
@@ -16,7 +16,7 @@ test("ZWaveError should be of type Error", (t) => {
 });
 
 test("ZWaveError should contain an error code", (t) => {
-	assertZWaveErrorAva(t, thisThrows, {
+	assertZWaveError(t, thisThrows, {
 		messageMatches: "Test message",
 		errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
 	});

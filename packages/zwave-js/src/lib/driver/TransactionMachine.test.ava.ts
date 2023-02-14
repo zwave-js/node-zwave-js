@@ -1,7 +1,7 @@
 import { createModel } from "@xstate/test";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "@zwave-js/cc";
 import {
-	assertZWaveErrorAva,
+	assertZWaveError,
 	MessagePriority,
 	TransmitStatus,
 } from "@zwave-js/core";
@@ -20,7 +20,7 @@ import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
 } from "../serialapi/transport/SendDataMessages";
-import { createEmptyMockDriverAva } from "../test/mocks";
+import { createEmptyMockDriver } from "../test/mocks";
 import type { Driver } from "./Driver";
 import { createMessageGenerator } from "./MessageGenerators";
 import { createWrapperMachine } from "./StateMachineShared";
@@ -200,7 +200,7 @@ const testMachine = createMachine<TestMachineContext, TestMachineEvents>(
 							t.is(transactionDone, true);
 							t.is(actualResult, expectedResult);
 						} else if (expectedError) {
-							assertZWaveErrorAva(t, actualError, {
+							assertZWaveError(t, actualError, {
 								messageMatches: expectedError,
 							});
 						}
@@ -350,7 +350,7 @@ testPlans.forEach((plan) => {
 
 			// And create a test machine with it
 
-			const fakeDriver = createEmptyMockDriverAva() as unknown as Driver;
+			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 			const ctrlrIdRequest = new GetControllerIdRequest(fakeDriver);
 			const ctrlrIdResponse = new GetControllerIdResponse(fakeDriver, {
 				data: Buffer.from("01080120dc3452b301de", "hex"),

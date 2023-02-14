@@ -401,7 +401,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 
 // 		sinon.assert.called(host.sendMessage);
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[0][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[0][0], {
 // 			cc: HumidityControlSetpointCC,
 // 			nodeId: nodeId,
 // 			ccValues: {
@@ -409,7 +409,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 // 			},
 // 		});
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[1][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[1][0], {
 // 			cc: HumidityControlSetpointCC,
 // 			nodeId: nodeId,
 // 			ccValues: {
@@ -417,7 +417,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 // 			},
 // 		});
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[2][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[2][0], {
 // 			cc: HumidityControlSetpointCC,
 // 			nodeId: nodeId,
 // 			ccValues: {
@@ -425,7 +425,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 // 			},
 // 		});
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[3][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[3][0], {
 // 			cc: HumidityControlSetpointCC,
 // 			nodeId: nodeId,
 // 			ccValues: {
@@ -433,7 +433,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 // 			},
 // 		});
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[4][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[4][0], {
 // 			cc: HumidityControlSetpointCC,
 // 			nodeId: nodeId,
 // 			ccValues: {
@@ -441,7 +441,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 // 			},
 // 		});
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[5][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[5][0], {
 // 			cc: HumidityControlSetpointCC,
 // 			nodeId: nodeId,
 // 			ccValues: {
@@ -449,7 +449,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 // 			},
 // 		});
 
-// 		assertCCAva(t, host.sendMessage.mock.calls[6][0], {
+// 		assertCC(t, host.sendMessage.mock.calls[6][0], {
 // 			cc: HumidityControlSetpointCC,
 // 			nodeId: nodeId,
 // 			ccValues: {
