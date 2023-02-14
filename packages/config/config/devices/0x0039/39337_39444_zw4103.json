@@ -17,23 +17,22 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Led Light",
-			"description": "Led light off when device is turned off (default)",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default: LED Light ON when Device is OFF",
+					"label": "LED on when device is off",
 					"value": 0
 				},
 				{
-					"label": "LED Light ON when Device is ON",
+					"label": "LED on when device is on",
 					"value": 1
 				},
 				{
-					"label": "LED light always OFF",
+					"label": "Always off",
 					"value": 2
 				}
 			]
