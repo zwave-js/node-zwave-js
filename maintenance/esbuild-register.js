@@ -8,4 +8,6 @@ register({
 	},
 	// Prevent esbuild from adding a "2" to the names of CC classes for some reason.
 	keepNames: true,
+	// Target the correct node version in transpilation
+	target: `node${process.versions.node}`,
 });
