@@ -1,46 +1,56 @@
-import "@zwave-js/cc";
-import { CommandClasses } from "@zwave-js/core";
-import type { ThrowingMap } from "@zwave-js/shared";
-import { MockController } from "@zwave-js/testing";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { ZWaveNode } from "../../node/Node";
+import path from "path";
+import { integrationTest } from "../integrationTestSuite";
 
-describe("regression tests", () => {
-	let driver: Driver;
-	let node2: ZWaveNode;
-	let controller: MockController;
+integrationTest(
+	"a node that controls the Scene Activation CC should include the scene ID in getDefinedValueIDs()",
+	{
+		// debug: true,
+		provisioningDirectory: path.join(
+			__dirname,
+			"fixtures/sceneActivationCC",
+		),
 
-	beforeAll(async () => {
-		({ driver } = await createAndStartTestingDriver({
-			skipNodeInterview: true,
-			loadConfiguration: false,
-			beforeStartup(mockPort) {
-				controller = new MockController({ serial: mockPort });
-				controller.defineBehavior(
-					...createDefaultMockControllerBehaviors(),
-				);
-			},
-		}));
-		node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			node2.id,
-			node2,
-		);
+		testBody: async (t, driver, node, _mockController, _mockNode) => {
+			const valueIDs = node.getDefinedValueIDs();
+			t.true(valueIDs.some((v) => v.property === "sceneId"));
+		},
+	},
+);
 
-		node2.addCC(CommandClasses["Scene Activation"], {
-			isControlled: true,
-			version: 1,
-		});
-	}, 30000);
+// describe("regression tests", () => {
+// 	let driver: Driver;
+// 	let node2: ZWaveNode;
+// 	let controller: MockController;
 
-	afterAll(async () => {
-		await driver.destroy();
-	});
+// 	beforeAll(async () => {
+// 		({ driver } = await createAndStartTestingDriver({
+// 			skipNodeInterview: true,
+// 			loadConfiguration: false,
+// 			beforeStartup(mockPort) {
+// 				controller = new MockController({ serial: mockPort });
+// 				controller.defineBehavior(
+// 					...createDefaultMockControllerBehaviors(),
+// 				);
+// 			},
+// 		}));
+// 		node2 = new ZWaveNode(2, driver);
+// 		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+// 			node2.id,
+// 			node2,
+// 		);
 
-	it("a node that controls the Scene Activation CC should include the scene ID in getDefinedValueIDs()", async () => {
-		const valueIDs = node2.getDefinedValueIDs();
-		expect(valueIDs.some((v) => v.property === "sceneId")).toBeTrue();
-	});
-});
+// 		node2.addCC(CommandClasses["Scene Activation"], {
+// 			isControlled: true,
+// 			version: 1,
+// 		});
+// 	}, 30000);
+
+// 	afterAll(async () => {
+// 		await driver.destroy();
+// 	});
+
+// 	it("a node that controls the Scene Activation CC should include the scene ID in getDefinedValueIDs()", async () => {
+// 		const valueIDs = node2.getDefinedValueIDs();
+// 		expect(valueIDs.some((v) => v.property === "sceneId")).toBeTrue();
+// 	});
+// });

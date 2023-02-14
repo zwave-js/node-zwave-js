@@ -1,6 +1,6 @@
 import test from "ava";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveErrorAva } from "../test/assertZWaveError";
+import { assertZWaveError } from "../test/assertZWaveError";
 import { Duration } from "./Duration";
 
 test("constructor() -> should remember the given value and unit", (t) => {
@@ -97,7 +97,7 @@ test("serializeSet() -> should correctly parse default durations", (t) => {
 
 test("serializeSet() -> should throw for unknown durations", (t) => {
 	const duration = new Duration(0, "unknown");
-	assertZWaveErrorAva(t, () => duration.serializeSet(), {
+	assertZWaveError(t, () => duration.serializeSet(), {
 		errorCode: ZWaveErrorCodes.CC_Invalid,
 	});
 	t.pass();

@@ -1,69 +1,37 @@
 import {
-	BinarySwitchCommand,
-	CommandClass,
-	getCommandClassStatic,
-} from "@zwave-js/cc";
-import {
-	BinarySwitchCC,
 	BinarySwitchCCReport,
 	BinarySwitchCCValues,
 } from "@zwave-js/cc/BinarySwitchCC";
-import { CommandClasses } from "@zwave-js/core";
-import type { ThrowingMap } from "@zwave-js/shared";
-import { MockController } from "@zwave-js/testing";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { ZWaveNode } from "../../node/Node";
+import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 
-describe("regression tests", () => {
-	let driver: Driver;
-	let node2: ZWaveNode;
-	let controller: MockController;
+import { wait } from "alcalzone-shared/async";
+import path from "path";
+import { integrationTest } from "../integrationTestSuite";
 
-	beforeAll(async () => {
-		({ driver } = await createAndStartTestingDriver({
-			skipNodeInterview: true,
-			beforeStartup(mockPort) {
-				controller = new MockController({ serial: mockPort });
-				controller.defineBehavior(
-					...createDefaultMockControllerBehaviors(),
-				);
-			},
-		}));
-		node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			node2.id,
-			node2,
-		);
+integrationTest(
+	"receiving a BinarySwitchCC::Report with undefined targetValue should not delete the actual targetValue",
+	{
+		// debug: true,
+		provisioningDirectory: path.join(__dirname, "fixtures/binarySwitchCC"),
 
-		node2.addCC(CommandClasses["Binary Switch"], {
-			isSupported: true,
-			version: 2,
-		});
-	}, 30000);
+		testBody: async (t, driver, node, mockController, mockNode) => {
+			const targetValueValueID = BinarySwitchCCValues.targetValue.id;
+			node.valueDB.setValue(targetValueValueID, false);
 
-	afterAll(async () => {
-		await driver.destroy();
-	});
+			const cc = new BinarySwitchCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				currentValue: true,
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			// wait a bit for the value to be updated
+			await wait(100);
 
-	it("receiving a BinarySwitchCC::Report with undefined targetValue should not delete the actual targetValue", async () => {
-		const targetValueValueID = BinarySwitchCCValues.targetValue.id;
-		node2.valueDB.setValue(targetValueValueID, false);
-
-		const data = Buffer.from([
-			getCommandClassStatic(BinarySwitchCC),
-			BinarySwitchCommand.Report,
-			0xff, // currentValue
-		]);
-		const cc = CommandClass.from(driver, {
-			nodeId: 2,
-			data,
-		}) as BinarySwitchCCReport;
-		expect(cc).toBeInstanceOf(BinarySwitchCCReport);
-		expect(cc.targetValue).toBe(undefined);
-
-		// The value in the DB should not be changed because we have no new info
-		expect(node2.getValue(targetValueValueID)).toBe(false);
-	});
-});
+			// The value in the DB should not be changed because we have no new info
+			t.is(node.getValue(targetValueValueID), false);
+		},
+	},
+);

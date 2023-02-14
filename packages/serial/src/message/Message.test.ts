@@ -1,4 +1,4 @@
-import { assertZWaveErrorAva, ZWaveErrorCodes } from "@zwave-js/core";
+import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import { FunctionType, MessageType } from "./Constants";
@@ -72,7 +72,7 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 		],
 	];
 	for (const [message, msg, code] of brokenMessages) {
-		assertZWaveErrorAva(t, () => new Message(host, { data: message }), {
+		assertZWaveError(t, () => new Message(host, { data: message }), {
 			messageMatches: msg,
 			errorCode: code,
 		});
@@ -209,7 +209,7 @@ test("getConstructor() should return `Message` for an unknown packet type", (t) 
 
 test(`the constructor should throw when no message type is specified`, (t) => {
 	const host = createTestingHost();
-	assertZWaveErrorAva(t, () => new Message(host, { functionType: 0xff }), {
+	assertZWaveError(t, () => new Message(host, { functionType: 0xff }), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /message type/i,
 	});
@@ -217,7 +217,7 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 	@messageTypes(undefined as any, 0xff)
 	class FakeMessageWithoutMessageType extends Message {}
 
-	assertZWaveErrorAva(t, () => new FakeMessageWithoutMessageType(host), {
+	assertZWaveError(t, () => new FakeMessageWithoutMessageType(host), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /message type/i,
 	});
@@ -225,7 +225,7 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 
 test(`the constructor should throw when no function type is specified`, (t) => {
 	const host = createTestingHost();
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() => new Message(host, { type: MessageType.Request }),
 		{
@@ -237,7 +237,7 @@ test(`the constructor should throw when no function type is specified`, (t) => {
 	@messageTypes(MessageType.Request, undefined as any)
 	class FakeMessageWithoutFunctionType extends Message {}
 
-	assertZWaveErrorAva(t, () => new FakeMessageWithoutFunctionType(host), {
+	assertZWaveError(t, () => new FakeMessageWithoutFunctionType(host), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /function type/i,
 	});

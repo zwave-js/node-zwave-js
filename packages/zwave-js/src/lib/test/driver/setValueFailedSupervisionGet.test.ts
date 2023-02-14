@@ -82,7 +82,7 @@ integrationTest(
 				respondToBinarySwitchGet,
 			);
 		},
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (t, driver, node, mockController, mockNode) => {
 			await node.setValue(BinarySwitchCCValues.targetValue.id, true);
 
 			mockNode.assertReceivedControllerFrame(
@@ -118,6 +118,8 @@ integrationTest(
 						"Node should have sent a BinarySwitchCCReport with currentValue false",
 				},
 			);
+
+			t.pass();
 		},
 	},
 );

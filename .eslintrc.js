@@ -114,7 +114,7 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: ["*.test.ts"],
+			files: ["*.test.ts", "*.test.ava.ts"],
 			rules: {
 				"@typescript-eslint/explicit-function-return-type": "off",
 				"@typescript-eslint/no-empty-function": "off",

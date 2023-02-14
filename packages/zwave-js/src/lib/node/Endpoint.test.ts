@@ -8,6 +8,7 @@ import {
 } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
+import ava, { TestFn } from "ava";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
@@ -15,211 +16,259 @@ import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import { ZWaveNode } from "./Node";
 
-describe("lib/node/Endpoint", () => {
-	let driver: Driver;
-	let controller: MockController;
+interface TestContext {
+	driver: Driver;
+	controller: MockController;
+}
 
-	beforeAll(
-		async () => {
-			({ driver } = await createAndStartTestingDriver({
-				skipNodeInterview: true,
-				loadConfiguration: false,
-				beforeStartup(mockPort) {
-					controller = new MockController({ serial: mockPort });
-					controller.defineBehavior(
-						...createDefaultMockControllerBehaviors(),
-					);
-				},
-			}));
-			await driver.configManager.loadDeviceClasses();
+const test = ava as TestFn<TestContext>;
+
+test.before(async (t) => {
+	t.timeout(30000);
+
+	const { driver } = await createAndStartTestingDriver({
+		skipNodeInterview: true,
+		loadConfiguration: false,
+		beforeStartup(mockPort) {
+			const controller = new MockController({ serial: mockPort });
+			controller.defineBehavior(
+				...createDefaultMockControllerBehaviors(),
+			);
+			t.context.controller = controller;
 		},
-		// Loading configuration may take a while on CI
-		30000,
-	);
-
-	afterAll(async () => {
-		await driver.destroy();
 	});
+	await driver.configManager.loadDeviceClasses();
+	t.context.driver = driver;
+});
 
-	afterEach(async () => {
-		driver.networkCache.clear();
-		driver.valueDB?.clear();
-	});
+test.after.always(async (t) => {
+	const { driver } = t.context;
+	await driver.destroy();
+});
 
-	describe("createAPI", () => {
-		it("throws if a non-implemented API should be created", () => {
-			const endpoint = new Endpoint(1, driver, 1);
+test.afterEach((t) => {
+	const { driver } = t.context;
+	driver.networkCache.clear();
+	driver.valueDB?.clear();
+});
 
-			assertZWaveError(() => endpoint.createAPI(0xbada55), {
-				errorCode: ZWaveErrorCodes.CC_NoAPI,
-				messageMatches: "no associated API",
-			});
+test.serial(
+	"createAPI() throws if a non-implemented API should be created",
+	(t) => {
+		const { driver } = t.context;
+		const endpoint = new Endpoint(1, driver, 1);
+
+		assertZWaveError(t, () => endpoint.createAPI(0xbada55), {
+			errorCode: ZWaveErrorCodes.CC_NoAPI,
+			messageMatches: "no associated API",
+		});
+	},
+);
+
+test.serial(
+	"The API returned from createAPI() throws when trying to access a non-supported CC",
+	async (t) => {
+		const { driver } = t.context;
+		const endpoint = new Endpoint(1, driver, 1);
+		// We must not use Basic CC here, because that is assumed to be always supported
+		const api = endpoint.createAPI(CommandClasses["Binary Sensor"]);
+
+		// this does not throw
+		api.isSupported();
+		// this does
+		await assertZWaveError(t, () => api.get(), {
+			errorCode: ZWaveErrorCodes.CC_NotSupported,
+			messageMatches: /Node 1 \(endpoint 1\) does not support/,
 		});
 
-		it("the returned API throws when trying to access a non-supported CC", async () => {
-			const endpoint = new Endpoint(1, driver, 1);
-			// We must not use Basic CC here, because that is assumed to be always supported
-			const api = endpoint.createAPI(CommandClasses["Binary Sensor"]);
-
-			// this does not throw
-			api.isSupported();
-			// this does
-			await assertZWaveError(() => api.get(), {
-				errorCode: ZWaveErrorCodes.CC_NotSupported,
-				messageMatches: "Node 1 (endpoint 1) does not support",
-			});
-
-			// It only includes the endpoint number for non-root endpoints
-			(endpoint as any).index = 0;
-			await assertZWaveError(() => api.get(), {
-				errorCode: ZWaveErrorCodes.CC_NotSupported,
-				messageMatches: "Node 1 does not support",
-			});
+		// It only includes the endpoint number for non-root endpoints
+		(endpoint as any).index = 0;
+		await assertZWaveError(t, () => api.get(), {
+			errorCode: ZWaveErrorCodes.CC_NotSupported,
+			messageMatches: "Node 1 does not support",
 		});
-	});
+	},
+);
 
-	describe("commandClasses dictionary", () => {
-		it("throws when trying to access a non-implemented CC", () => {
-			const endpoint = new Endpoint(1, driver, 1);
-			assertZWaveError(() => (endpoint.commandClasses as any).FOOBAR, {
-				errorCode: ZWaveErrorCodes.CC_NotImplemented,
-				messageMatches: "FOOBAR is not implemented",
-			});
+test.serial(
+	"The commandClasses dictionary throws when trying to access a non-implemented CC",
+	(t) => {
+		const { driver } = t.context;
+		const endpoint = new Endpoint(1, driver, 1);
+		assertZWaveError(t, () => (endpoint.commandClasses as any).FOOBAR, {
+			errorCode: ZWaveErrorCodes.CC_NotImplemented,
+			messageMatches: "FOOBAR is not implemented",
 		});
+	},
+);
 
-		it("throws when trying to use a command of an unsupported CC", () => {
-			const endpoint = new Endpoint(1, driver, 1);
-			assertZWaveError(() => endpoint.commandClasses.Battery.get(), {
-				errorCode: ZWaveErrorCodes.CC_NotSupported,
-				messageMatches: "does not support the Command Class Battery",
-			});
+test.serial(
+	"The commandClasses dictionary throws when trying to use a command of an unsupported CC",
+	(t) => {
+		const { driver } = t.context;
+		const endpoint = new Endpoint(1, driver, 1);
+		assertZWaveError(t, () => endpoint.commandClasses.Battery.get(), {
+			errorCode: ZWaveErrorCodes.CC_NotSupported,
+			messageMatches: "does not support the Command Class Battery",
 		});
+	},
+);
 
-		it("does not throw when checking support of a CC", () => {
-			const endpoint = new Endpoint(1, driver, 1);
-			expect(endpoint.commandClasses.Battery.isSupported()).toBeFalse();
-		});
+test.serial(
+	"The commandClasses dictionary does not throw when checking support of a CC",
+	(t) => {
+		const { driver } = t.context;
+		const endpoint = new Endpoint(1, driver, 1);
+		t.false(endpoint.commandClasses.Battery.isSupported());
+	},
+);
 
-		it("does not throw when accessing the ID of a CC", () => {
-			const endpoint = new Endpoint(1, driver, 1);
-			expect(endpoint.commandClasses.Battery.ccId).toBe(
-				CommandClasses.Battery,
-			);
-		});
+test.serial(
+	"The commandClasses dictionary does not throw when accessing the ID of a CC",
+	(t) => {
+		const { driver } = t.context;
+		const endpoint = new Endpoint(1, driver, 1);
+		t.is(endpoint.commandClasses.Battery.ccId, CommandClasses.Battery);
+	},
+);
 
-		it("does not throw when scoping the API options", () => {
-			const endpoint = new Endpoint(1, driver, 1);
-			endpoint.commandClasses.Battery.withOptions({});
-		});
+test.serial(
+	"The commandClasses dictionary does not throw when scoping the API options",
+	(t) => {
+		const { driver } = t.context;
+		const endpoint = new Endpoint(1, driver, 1);
+		t.notThrows(() => endpoint.commandClasses.Battery.withOptions({}));
+	},
+);
 
-		it("returns all supported CCs when being enumerated", () => {
-			// No supported CCs, empty array
-			let node = new ZWaveNode(2, driver, undefined, []);
-			let actual = [...node.commandClasses];
-			expect(actual).toEqual([]);
+test.serial(
+	"The commandClasses dictionary returns all supported CCs when being enumerated",
+	(t) => {
+		const { driver } = t.context;
+		// No supported CCs, empty array
+		let node = new ZWaveNode(2, driver, undefined, []);
+		let actual = [...node.commandClasses];
+		t.deepEqual(actual, []);
 
-			// Supported and controlled CCs
-			node = new ZWaveNode(
-				2,
-				driver,
-				undefined,
-				[CommandClasses.Battery, CommandClasses.Version],
-				[CommandClasses["Wake Up"]],
-			);
-			actual = [...node.commandClasses];
-			expect(actual).toHaveLength(2);
-			expect(actual.map((api) => api.constructor)).toIncludeAllMembers([
+		// Supported and controlled CCs
+		node = new ZWaveNode(
+			2,
+			driver,
+			undefined,
+			[CommandClasses.Battery, CommandClasses.Version],
+			[CommandClasses["Wake Up"]],
+		);
+		actual = [...node.commandClasses];
+		t.is(actual.length, 2);
+		t.deepEqual(
+			actual.map((api) => api.constructor),
+			[
 				BatteryCCAPI,
 				VersionCCAPI,
 				// WakeUpCCAPI is not supported (only controlled), so no API!
-			]);
-			node.destroy();
-		});
+			],
+		);
+		node.destroy();
+	},
+);
 
-		it("returns [object Object] when turned into a string", () => {
-			const node = new ZWaveNode(2, driver, undefined, []);
-			expect((node.commandClasses as any)[Symbol.toStringTag]).toBe(
-				"[object Object]",
-			);
-			node.destroy();
-		});
+test.serial(
+	"The commandClasses dictionary returns [object Object] when turned into a string",
+	(t) => {
+		const { driver } = t.context;
+		const node = new ZWaveNode(2, driver, undefined, []);
+		t.is(
+			(node.commandClasses as any)[Symbol.toStringTag],
+			"[object Object]",
+		);
+		node.destroy();
+	},
+);
 
-		it("returns undefined for other symbol properties", () => {
-			const node = new ZWaveNode(2, driver, undefined, []);
-			expect(
-				(node.commandClasses as any)[Symbol.unscopables],
-			).toBeUndefined();
-			node.destroy();
-		});
-	});
+test.serial(
+	"The commandClasses dictionary returns undefined for other symbol properties",
+	(t) => {
+		const { driver } = t.context;
+		const node = new ZWaveNode(2, driver, undefined, []);
+		t.is((node.commandClasses as any)[Symbol.unscopables], undefined);
+		node.destroy();
+	},
+);
 
-	describe("createCCInstance()", () => {
-		it("returns undefined if the node supports the CC but it is not yet implemented", () => {
-			const endpoint = new Endpoint(1, driver, 1);
-			const cc = 0xbada55;
-			endpoint.addCC(cc, { isSupported: true });
-			const instance = endpoint.createCCInstance(cc);
-			expect(instance).toBeUndefined();
-		});
-	});
+test.serial(
+	"createCCInstance() returns undefined if the node supports the CC but it is not yet implemented",
+	(t) => {
+		const { driver } = t.context;
+		const endpoint = new Endpoint(1, driver, 1);
+		const cc = 0xbada55;
+		endpoint.addCC(cc, { isSupported: true });
+		const instance = endpoint.createCCInstance(cc);
+		t.is(instance, undefined);
+	},
+);
 
-	describe("Device Class quirks", () => {
-		it("A non-root endpoint with the `Power Strip Switch` device class does not support the Multi Channel CC", async () => {
-			const powerStripSwitch = new DeviceClass(
-				driver.configManager,
-				0x01,
-				0x10,
-				0x04,
-			);
+test.serial(
+	"A non-root endpoint with the `Power Strip Switch` device class does not support the Multi Channel CC",
+	async (t) => {
+		const { driver } = t.context;
+		const powerStripSwitch = new DeviceClass(
+			driver.configManager,
+			0x01,
+			0x10,
+			0x04,
+		);
 
-			const node = new ZWaveNode(1, driver, powerStripSwitch);
-			expect(node.supportsCC(CommandClasses["Multi Channel"])).toBeTrue();
-			const ep = new Endpoint(1, driver, 1, powerStripSwitch);
-			expect(ep.supportsCC(CommandClasses["Multi Channel"])).toBeFalse();
-		});
+		const node = new ZWaveNode(1, driver, powerStripSwitch);
+		t.true(node.supportsCC(CommandClasses["Multi Channel"]));
+		const ep = new Endpoint(1, driver, 1, powerStripSwitch);
+		t.false(ep.supportsCC(CommandClasses["Multi Channel"]));
+	},
+);
 
-		it("Non-root endpoints should not have the Manufacturer Specific CC (among others) added as mandatory", async () => {
-			const soundSwitch = new DeviceClass(
-				driver.configManager,
-				0x01,
-				0x03,
-				0x01,
-			);
+test.serial(
+	"Non-root endpoints should not have the Manufacturer Specific CC (among others) added as mandatory",
+	async (t) => {
+		const { driver } = t.context;
+		const soundSwitch = new DeviceClass(
+			driver.configManager,
+			0x01,
+			0x03,
+			0x01,
+		);
 
-			const node = new ZWaveNode(1, driver, soundSwitch);
-			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-				1,
-				node,
-			);
+		const node = new ZWaveNode(1, driver, soundSwitch);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			1,
+			node,
+		);
 
-			expect(
-				node.supportsCC(CommandClasses["Manufacturer Specific"]),
-			).toBeTrue();
-			const ep = new Endpoint(1, driver, 1, soundSwitch);
-			expect(
-				ep.supportsCC(CommandClasses["Manufacturer Specific"]),
-			).toBeFalse();
-		});
+		t.true(node.supportsCC(CommandClasses["Manufacturer Specific"]));
+		const ep = new Endpoint(1, driver, 1, soundSwitch);
+		t.false(ep.supportsCC(CommandClasses["Manufacturer Specific"]));
+	},
+);
 
-		it("Always-listening nodes should not have the Battery CC added as mandatory", async () => {
-			const soundSwitch = new DeviceClass(
-				driver.configManager,
-				0x01,
-				0x03,
-				0x01,
-			);
+test.serial(
+	"Always-listening nodes should not have the Battery CC added as mandatory",
+	async (t) => {
+		const { driver } = t.context;
+		const soundSwitch = new DeviceClass(
+			driver.configManager,
+			0x01,
+			0x03,
+			0x01,
+		);
 
-			const node = new ZWaveNode(1, driver);
-			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-				1,
-				node,
-			);
-			node["isListening"] = true;
-			node["applyDeviceClass"](soundSwitch);
+		const node = new ZWaveNode(1, driver);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			1,
+			node,
+		);
+		node["isListening"] = true;
+		node["applyDeviceClass"](soundSwitch);
 
-			expect(node.supportsCC(CommandClasses.Battery)).toBeFalse();
-			const ep = new Endpoint(1, driver, 1, soundSwitch);
-			expect(ep.supportsCC(CommandClasses.Battery)).toBeFalse();
-		});
-	});
-});
+		t.false(node.supportsCC(CommandClasses.Battery));
+		const ep = new Endpoint(1, driver, 1, soundSwitch);
+		t.false(ep.supportsCC(CommandClasses.Battery));
+	},
+);

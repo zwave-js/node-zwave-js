@@ -2,157 +2,161 @@ import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
+import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { NodeStatus } from "../../node/_Types";
 import { createAndStartDriver } from "../utils";
 import { isFunctionSupported_NoBridge } from "./fixtures";
 
-describe("regression tests", () => {
-	let driver: Driver;
-	let serialport: MockSerialPort;
-	process.env.LOGLEVEL = "debug";
+interface TestContext {
+	driver: Driver;
+	serialport: MockSerialPort;
+}
 
-	beforeEach(async () => {
-		({ driver, serialport } = await createAndStartDriver());
+const test = ava as TestFn<TestContext>;
 
-		driver["_controller"] = {
-			ownNodeId: 1,
-			isFunctionSupported: isFunctionSupported_NoBridge,
-			nodes: new Map(),
-			incrementStatistics: () => {},
-			removeAllListeners: () => {},
-		} as any;
-	});
+test.beforeEach(async (t) => {
+	t.timeout(30000);
 
-	afterEach(async () => {
-		await driver.destroy();
-		driver.removeAllListeners();
-	});
+	const { driver, serialport } = await createAndStartDriver();
 
-	it("marking a node with a pending message as asleep does not mess up the remaining transactions", async () => {
-		// Repro from #1107
+	driver["_controller"] = {
+		ownNodeId: 1,
+		isFunctionSupported: isFunctionSupported_NoBridge,
+		nodes: new Map(),
+		incrementStatistics: () => {},
+		removeAllListeners: () => {},
+	} as any;
 
-		// Node 10's awake timer elapses before its ping is rejected,
-		// this causes mismatched responses for all following messages
+	t.context = { driver, serialport };
+});
 
-		const node10 = new ZWaveNode(10, driver);
-		const node17 = new ZWaveNode(17, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			10,
-			node10,
-		);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			17,
-			node17,
-		);
-		// Add event handlers for the nodes
-		for (const node of driver.controller.nodes.values()) {
-			driver["addNodeEventHandlers"](node);
-		}
+test.afterEach.always(async (t) => {
+	const { driver } = t.context;
+	await driver.destroy();
+	driver.removeAllListeners();
+});
 
-		node10["isListening"] = false;
-		node10["isFrequentListening"] = false;
-		node10.markAsAwake();
-		expect(node10.status).toBe(NodeStatus.Awake);
+process.env.LOGLEVEL = "debug";
 
-		// TODO: remove hack in packages/shared/src/wrappingCounter.ts when reworking this test to the new testing setup
-		(driver.getNextCallbackId as any).value = 2;
-		const ACK = Buffer.from([MessageHeaders.ACK]);
+test("marking a node with a pending message as asleep does not mess up the remaining transactions", async (t) => {
+	const { driver, serialport } = t.context;
+	// Repro from #1107
 
-		const pingPromise10 = node10.ping();
-		await wait(1);
-		node10.commandClasses.Basic.set(60);
-		await wait(1);
-		const pingPromise17 = node17.ping();
-		await wait(1);
-		// » [Node 010] [REQ] [SendData]
-		//   │ transmit options: 0x25
-		//   │ callback id:      3
-		//   └─[NoOperationCC]
-		expect(serialport.lastWrite).toEqual(
-			Buffer.from("010800130a01002503c9", "hex"),
-		);
-		await wait(10);
-		serialport.receiveData(ACK);
+	// Node 10's awake timer elapses before its ping is rejected,
+	// this causes mismatched responses for all following messages
 
-		await wait(50);
+	const node10 = new ZWaveNode(10, driver);
+	const node17 = new ZWaveNode(17, driver);
+	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(10, node10);
+	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(17, node17);
+	// Add event handlers for the nodes
+	for (const node of driver.controller.nodes.values()) {
+		driver["addNodeEventHandlers"](node);
+	}
 
-		// « [RES] [SendData]
-		//     was sent: true
-		serialport.receiveData(Buffer.from("0104011301e8", "hex"));
-		// » [ACK]
-		expect(serialport.lastWrite).toEqual(ACK);
+	node10["isListening"] = false;
+	node10["isFrequentListening"] = false;
+	node10.markAsAwake();
+	t.is(node10.status, NodeStatus.Awake);
 
-		await wait(50);
+	// TODO: remove hack in packages/shared/src/wrappingCounter.ts when reworking this test to the new testing setup
+	(driver.getNextCallbackId as any).value = 2;
+	const ACK = Buffer.from([MessageHeaders.ACK]);
 
-		node10.markAsAsleep();
-		await wait(1);
-		expect(node10.status).toBe(NodeStatus.Asleep);
+	const pingPromise10 = node10.ping();
+	await wait(1);
+	node10.commandClasses.Basic.set(60);
+	await wait(1);
+	const pingPromise17 = node17.ping();
+	await wait(1);
+	// » [Node 010] [REQ] [SendData]
+	//   │ transmit options: 0x25
+	//   │ callback id:      3
+	//   └─[NoOperationCC]
+	t.deepEqual(
+		serialport.lastWrite,
+		Buffer.from("010800130a01002503c9", "hex"),
+	);
+	await wait(10);
+	serialport.receiveData(ACK);
 
-		// The command queue should now abort the ongoing transaction
-		// » [REQ] [SendDataAbort]
-		expect(serialport.lastWrite).toEqual(Buffer.from("01030016ea", "hex"));
-		await wait(10);
-		serialport.receiveData(ACK);
+	await wait(50);
 
-		await wait(50);
+	// « [RES] [SendData]
+	//     was sent: true
+	serialport.receiveData(Buffer.from("0104011301e8", "hex"));
+	// » [ACK]
+	t.deepEqual(serialport.lastWrite, ACK);
 
-		// Callback for previous message comes
-		// « [REQ] [SendData]
-		//     callback id:     3
-		//     transmit status: NoAck
-		serialport.receiveData(
-			Buffer.from(
-				"011800130301019b007f7f7f7f7f010107000000000204000012",
-				"hex",
-			),
-		);
-		// await wait(1);
-		expect(serialport.lastWrite).toEqual(ACK);
+	await wait(50);
 
-		// Abort was acknowledged, Ping for 10 should be failed
-		await wait(50);
-		await expect(pingPromise10).resolves.toBe(false);
+	node10.markAsAsleep();
+	await wait(1);
+	t.is(node10.status, NodeStatus.Asleep);
 
-		// Now the Ping for 17 should go out
-		// » [Node 017] [REQ] [SendData]
-		//   │ transmit options: 0x25
-		//   │ callback id:      4
-		//   └─[NoOperationCC]
-		expect(serialport.lastWrite).toEqual(
-			Buffer.from("010800131101002504d5", "hex"),
-		);
-		serialport.receiveData(ACK);
+	// The command queue should now abort the ongoing transaction
+	// » [REQ] [SendDataAbort]
+	t.deepEqual(serialport.lastWrite, Buffer.from("01030016ea", "hex"));
+	await wait(10);
+	serialport.receiveData(ACK);
 
-		await wait(50);
+	await wait(50);
 
-		// Ping 17 does not get resolved by the other callback
-		await expect(Promise.race([pingPromise17, wait(50)])).resolves.toBe(
-			undefined,
-		);
+	// Callback for previous message comes
+	// « [REQ] [SendData]
+	//     callback id:     3
+	//     transmit status: NoAck
+	serialport.receiveData(
+		Buffer.from(
+			"011800130301019b007f7f7f7f7f010107000000000204000012",
+			"hex",
+		),
+	);
+	// await wait(1);
+	t.deepEqual(serialport.lastWrite, ACK);
 
-		// « [RES] [SendData]
-		//     was sent: true
-		serialport.receiveData(Buffer.from("0104011301e8", "hex"));
-		// » [ACK]
-		expect(serialport.lastWrite).toEqual(ACK);
+	// Abort was acknowledged, Ping for 10 should be failed
+	await wait(50);
+	t.false(await pingPromise10);
 
-		await wait(50);
+	// Now the Ping for 17 should go out
+	// » [Node 017] [REQ] [SendData]
+	//   │ transmit options: 0x25
+	//   │ callback id:      4
+	//   └─[NoOperationCC]
+	t.deepEqual(
+		serialport.lastWrite,
+		Buffer.from("010800131101002504d5", "hex"),
+	);
+	serialport.receiveData(ACK);
 
-		// Callback for ping node 17 (failed)
-		// « [REQ] [SendData]
-		//     callback id:     4
-		//     transmit status: NoAck
-		serialport.receiveData(
-			Buffer.from(
-				"011800130401019d007f7f7f7f7f010107000000000204000013",
-				"hex",
-			),
-		);
-		expect(serialport.lastWrite).toEqual(ACK);
-		await expect(pingPromise17).resolves.toBeFalse();
+	await wait(50);
 
-		driver.driverLog.sendQueue(driver["sendThread"].state.context.queue);
-	}, 30000);
+	// Ping 17 does not get resolved by the other callback
+	t.is(await Promise.race([pingPromise17, wait(50)]), undefined);
+
+	// « [RES] [SendData]
+	//     was sent: true
+	serialport.receiveData(Buffer.from("0104011301e8", "hex"));
+	// » [ACK]
+	t.deepEqual(serialport.lastWrite, ACK);
+
+	await wait(50);
+
+	// Callback for ping node 17 (failed)
+	// « [REQ] [SendData]
+	//     callback id:     4
+	//     transmit status: NoAck
+	serialport.receiveData(
+		Buffer.from(
+			"011800130401019d007f7f7f7f7f010107000000000204000013",
+			"hex",
+		),
+	);
+	t.deepEqual(serialport.lastWrite, ACK);
+	t.false(await pingPromise17);
+
+	driver.driverLog.sendQueue(driver["sendThread"].state.context.queue);
 });

@@ -170,7 +170,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToSupervisionGet);
 		},
 
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (t, driver, node, mockController, mockNode) => {
 			// Send a secure Basic SET to sync the SPAN
 			await node.commandClasses.Basic.set(1);
 
@@ -202,10 +202,10 @@ integrationTest(
 
 			// If the collision was handled gracefully, we should now have the value reported by the node
 			const currentValue = node.getValue(BasicCCValues.currentValue.id);
-			expect(currentValue).toBe(99);
+			t.is(currentValue, 99);
 
 			// Ensure the Basic Set causing a collision eventually gets resolved
-			expect(p2result).toMatchObject({
+			t.like(p2result, {
 				status: SupervisionStatus.Success,
 			});
 		},
@@ -326,7 +326,7 @@ integrationTest(
 			mockNode.defineBehavior(handleInvalidCC);
 		},
 
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (t, driver, node, mockController, mockNode) => {
 			// Send a secure Basic SET to sync the SPAN
 			await node.commandClasses.Basic.set(1);
 
@@ -358,7 +358,7 @@ integrationTest(
 
 			// If the collision was handled gracefully, we should now have the value reported by the node
 			const currentValue = node.getValue(BasicCCValues.currentValue.id);
-			expect(currentValue).toBe(99);
+			t.is(currentValue, 99);
 		},
 	},
 );

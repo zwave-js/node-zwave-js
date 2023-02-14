@@ -337,7 +337,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToS2MultiChannelCCCapabilityGet);
 		},
 
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (t, driver, node, mockController, mockNode) => {
 			// The interview should request Z-Wave+ info from both endpoints securely
 			mockNode.assertReceivedControllerFrame(
 				(msg) =>
@@ -367,6 +367,7 @@ integrationTest(
 						"Expected communication with endpoint 2 to be secure",
 				},
 			);
+			t.pass();
 		},
 	},
 );

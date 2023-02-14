@@ -1,7 +1,7 @@
 import test from "ava";
 import * as crypto from "crypto";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveErrorAva } from "../test/assertZWaveError";
+import { assertZWaveError } from "../test/assertZWaveError";
 import { SecurityManager2 } from "./Manager2";
 import { SecurityClass } from "./SecurityClass";
 
@@ -39,7 +39,7 @@ function dummyInit(
 
 test("nextNonce() -> should throw if the PRNG for the given receiver node has not been initialized", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveErrorAva(t, () => man.nextNonce(2), {
+	assertZWaveError(t, () => man.nextNonce(2), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "initialized",
 	});
@@ -73,7 +73,7 @@ test("nextNonce() -> two nonces should be different", (t) => {
 test("initializeSPAN() -> should throw if either entropy input does not have length 16", (t) => {
 	const man = new SecurityManager2();
 	const nodeId = 2;
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			man.initializeSPAN(
@@ -88,7 +88,7 @@ test("initializeSPAN() -> should throw if either entropy input does not have len
 		},
 	);
 
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			man.initializeSPAN(
@@ -108,7 +108,7 @@ test("initializeSPAN() -> should throw if either entropy input does not have len
 test("initializeSPAN() -> should throw if the node has not been assigned a security class", (t) => {
 	const man = new SecurityManager2();
 	const nodeId = 2;
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			man.initializeSPAN(
@@ -128,7 +128,7 @@ test("initializeSPAN() -> should throw if the node has not been assigned a secur
 test("initializeSPAN() -> should throw if the keys for the node's security class have not been set up", (t) => {
 	const man = new SecurityManager2();
 	const nodeId = 2;
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() =>
 			man.initializeSPAN(
@@ -164,7 +164,7 @@ test("initializeSPAN() -> should not throw otherwise", (t) => {
 
 test("setKeys() -> throws if the network key does not have length 16", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveErrorAva(
+	assertZWaveError(
 		t,
 		() => man.setKey(SecurityClass.S2_Authenticated, Buffer.alloc(15)),
 		{
@@ -177,7 +177,7 @@ test("setKeys() -> throws if the network key does not have length 16", (t) => {
 
 test("setKeys() -> throws if the security class is not valid", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveErrorAva(t, () => man.setKey(-1 as any, Buffer.alloc(16)), {
+	assertZWaveError(t, () => man.setKey(-1 as any, Buffer.alloc(16)), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: "security class",
 	});
@@ -186,7 +186,7 @@ test("setKeys() -> throws if the security class is not valid", (t) => {
 
 test("nextMPAN() -> should throw if the MPAN state for the given multicast group has not been initialized", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveErrorAva(t, () => man.nextMPAN(1), {
+	assertZWaveError(t, () => man.nextMPAN(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "initialized",
 	});
@@ -196,7 +196,7 @@ test("nextMPAN() -> should throw if the MPAN state for the given multicast group
 test("nextMPAN() -> should throw if the multicast group has not been assigned to a security class", (t) => {
 	const man = new SecurityManager2();
 	man.initializeMPAN(1);
-	assertZWaveErrorAva(t, () => man.nextMPAN(1), {
+	assertZWaveError(t, () => man.nextMPAN(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "security class",
 	});
@@ -207,7 +207,7 @@ test("nextMPAN() -> should throw if the keys for the group's security class have
 	const man = new SecurityManager2();
 	man.assignSecurityClassMulticast(1, SecurityClass.S2_Authenticated);
 	man.initializeMPAN(1);
-	assertZWaveErrorAva(t, () => man.nextMPAN(1), {
+	assertZWaveError(t, () => man.nextMPAN(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "network key",
 	});

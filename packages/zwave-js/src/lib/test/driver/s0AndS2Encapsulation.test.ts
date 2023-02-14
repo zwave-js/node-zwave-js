@@ -223,7 +223,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		mockNode.defineBehavior(respondToSupervisionGet);
 	},
 
-	testBody: async (driver, node, mockController, mockNode) => {
+	testBody: async (t, driver, node, mockController, mockNode) => {
 		await node.commandClasses.Security.getSupportedCommands();
 
 		await wait(100);
@@ -234,5 +234,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 				f.payload.encapsulated instanceof
 					SecurityCCCommandsSupportedGet,
 		);
+
+		t.pass();
 	},
 });

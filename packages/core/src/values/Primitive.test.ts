@@ -1,6 +1,6 @@
 import test from "ava";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveErrorAva } from "../test/assertZWaveError";
+import { assertZWaveError } from "../test/assertZWaveError";
 import {
 	encodeBitMask,
 	encodeFloatWithScale,
@@ -211,10 +211,10 @@ test("encodeFloatWithScale() -> should fall back to sane options when the overri
 });
 
 test("encodeFloatWithScale() -> should throw when the value cannot be represented in 4 bytes", (t) => {
-	assertZWaveErrorAva(t, () => encodeFloatWithScale(0xffffffff, 0), {
+	assertZWaveError(t, () => encodeFloatWithScale(0xffffffff, 0), {
 		errorCode: ZWaveErrorCodes.Arithmetic,
 	});
-	assertZWaveErrorAva(t, () => encodeFloatWithScale(Number.NaN, 0), {
+	assertZWaveError(t, () => encodeFloatWithScale(Number.NaN, 0), {
 		errorCode: ZWaveErrorCodes.Arithmetic,
 	});
 });

@@ -26,7 +26,7 @@ integrationTest("Response to Z-Wave Plus Info Get", {
 		],
 	},
 
-	testBody: async (driver, node, mockController, mockNode) => {
+	testBody: async (t, driver, node, mockController, mockNode) => {
 		const zwpRequest = new ZWavePlusCCGet(mockController.host, {
 			nodeId: mockNode.id,
 		});
@@ -46,10 +46,8 @@ integrationTest("Response to Z-Wave Plus Info Get", {
 		);
 
 		// Z-Wave+ v2 specifications, section 3.1
-		expect(response.zwavePlusVersion).toBe(2);
+		t.is(response.zwavePlusVersion, 2);
 		// Z-Wave+ v2 specifications, section 4.1
-		expect(response.roleType).toBe(
-			ZWavePlusRoleType.CentralStaticController,
-		);
+		t.is(response.roleType, ZWavePlusRoleType.CentralStaticController);
 	},
 });

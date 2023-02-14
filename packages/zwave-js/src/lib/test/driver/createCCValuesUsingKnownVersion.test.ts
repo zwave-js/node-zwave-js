@@ -18,7 +18,7 @@ integrationTest("CC values are created using the known CC version", {
 		"fixtures/ccValuesUnknownVersions",
 	),
 
-	testBody: async (driver, node, mockController, mockNode) => {
+	testBody: async (t, driver, node, mockController, mockNode) => {
 		const batteryReport = new BatteryCCReport(mockNode.host, {
 			nodeId: mockController.host.ownNodeId,
 			isLow: true,
@@ -39,7 +39,7 @@ integrationTest("CC values are created using the known CC version", {
 
 		// The level value should be defined because it is included in the report
 		// The overheating value shouldn't, since the interview is not complete
-		expect(updatedMetadata).toEqual([
+		t.deepEqual(updatedMetadata, [
 			levelValue.id.property,
 			isLowValue.id.property,
 		]);
@@ -49,11 +49,11 @@ integrationTest("CC values are created using the known CC version", {
 			.getDefinedValueIDs()
 			.filter((id) => id.commandClass === CommandClasses.Battery)
 			.map((id) => id.property);
-		expect(definedProperties).toEqual([
+		t.deepEqual(definedProperties, [
 			levelValue.id.property,
 			isLowValue.id.property,
 		]);
 
-		expect(node.getValue(levelValue.id)).toBe(0);
+		t.is(node.getValue(levelValue.id), 0);
 	},
 });

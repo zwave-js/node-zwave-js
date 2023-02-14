@@ -1,58 +1,52 @@
 import { interpret, Interpreter } from "xstate";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
+import test, { ExecutionContext } from "ava";
 import {
 	createNodeReadyMachine,
 	NodeReadyContext,
 	NodeReadyEvent,
+	NodeReadyMachine,
 	NodeReadyStateSchema,
 } from "./NodeReadyMachine";
 
-describe("lib/driver/NodeReadyMachine", () => {
-	let service:
-		| undefined
-		| Interpreter<
-				NodeReadyContext,
-				NodeReadyStateSchema,
-				NodeReadyEvent,
-				any
-		  >;
-	afterEach(() => {
-		service?.stop();
-		service = undefined;
-	});
+function startMachine(
+	t: ExecutionContext,
+	machine: NodeReadyMachine,
+): Interpreter<NodeReadyContext, NodeReadyStateSchema, NodeReadyEvent, any> {
+	const service = interpret(machine).start();
+	t.teardown(() => service.stop());
+	return service;
+}
 
-	describe("default status changes", () => {
-		it(`The node should start in the notReady state`, () => {
-			const testMachine = createNodeReadyMachine(undefined as any);
+test(`The node should start in the notReady state`, (t) => {
+	const testMachine = createNodeReadyMachine(undefined as any);
 
-			service = interpret(testMachine).start();
-			expect(service.state.value).toBe("notReady");
-		});
+	const service = startMachine(t, testMachine);
+	t.is(service.state.value, "notReady");
+});
 
-		it("when the driver is restarted from cache, the node should be ready as soon as it is known NOT to be dead", () => {
-			const testMachine = createNodeReadyMachine();
-			service = interpret(testMachine).start();
-			service.send("RESTART_FROM_CACHE");
-			expect(service.state.value).toBe("readyIfNotDead");
-			// service.send("MAYBE_DEAD");
-			// expect(service.state.value).toBe("readyIfNotDead");
-			service.send("NOT_DEAD");
-			expect(service.state.value).toBe("ready");
-		});
+test("when the driver is restarted from cache, the node should be ready as soon as it is known NOT to be dead", (t) => {
+	const testMachine = createNodeReadyMachine();
+	const service = startMachine(t, testMachine);
+	service.send("RESTART_FROM_CACHE");
+	t.is(service.state.value, "readyIfNotDead");
+	// service.send("MAYBE_DEAD");
+	// t.is(service.state.value, "readyIfNotDead");
+	service.send("NOT_DEAD");
+	t.is(service.state.value, "ready");
+});
 
-		it("when the driver is restarted from cache and the node is known to be not dead, it should be ready immediately", () => {
-			const testMachine = createNodeReadyMachine();
-			service = interpret(testMachine).start();
-			service.send("NOT_DEAD");
-			service.send("RESTART_FROM_CACHE");
-			expect(service.state.value).toBe("ready");
-		});
+test("when the driver is restarted from cache and the node is known to be not dead, it should be ready immediately", (t) => {
+	const testMachine = createNodeReadyMachine();
+	const service = startMachine(t, testMachine);
+	service.send("NOT_DEAD");
+	service.send("RESTART_FROM_CACHE");
+	t.is(service.state.value, "ready");
+});
 
-		it("when the interview is done, the node should be marked as ready", () => {
-			const testMachine = createNodeReadyMachine();
-			service = interpret(testMachine).start();
-			service.send("INTERVIEW_DONE");
-			expect(service.state.value).toBe("ready");
-		});
-	});
+test("when the interview is done, the node should be marked as ready", (t) => {
+	const testMachine = createNodeReadyMachine();
+	const service = startMachine(t, testMachine);
+	service.send("INTERVIEW_DONE");
+	t.is(service.state.value, "ready");
 });

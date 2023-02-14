@@ -1,4 +1,4 @@
-import { assertZWaveErrorAva, ZWaveErrorCodes } from "@zwave-js/core";
+import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import test from "ava";
 import * as fs from "fs-extra";
 import { tmpdir } from "os";
@@ -131,7 +131,7 @@ test.serial(
 			"/template.json": JSON.stringify(template),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
@@ -161,7 +161,7 @@ test.serial(
 				"/test.json": JSON.stringify(test),
 			});
 
-			await assertZWaveErrorAva(
+			await assertZWaveError(
 				t,
 				() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 				{
@@ -189,7 +189,7 @@ test.serial(
 			"/template.json": JSON.stringify(template),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
@@ -292,7 +292,7 @@ test.serial(
 			"/template.json": JSON.stringify(template),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
@@ -322,7 +322,7 @@ test.serial(
 			"/template2.json": JSON.stringify(template2),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
@@ -365,7 +365,7 @@ test.serial(
 			"/template2.json": JSON.stringify(template2),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
@@ -433,7 +433,7 @@ test.serial(
 		await mockFs({
 			"/foo/bar/test.json": JSON.stringify(test),
 		});
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "foo/bar/test.json")),
 			{
@@ -535,7 +535,7 @@ test.serial(
 			"/template2.json": JSON.stringify(template2),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
@@ -557,7 +557,7 @@ test.serial(
 			"/test.json": JSON.stringify(test),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{},
@@ -581,7 +581,7 @@ test.serial(
 			"/test.json": JSON.stringify(test),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
@@ -733,7 +733,7 @@ test.serial(
 			[`/${rootDir}/test.json`]: JSON.stringify(test),
 		});
 
-		await assertZWaveErrorAva(
+		await assertZWaveError(
 			t,
 			() =>
 				readJsonWithTemplate(

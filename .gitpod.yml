@@ -17,7 +17,6 @@ tasks:
 # Auto-install VSCode extensions
 vscode:
   extensions:
-    # - Orta.vscode-jest          # disabled because it is annoying on gitpod
     - dbaeumer.vscode-eslint
     - esbenp.prettier-vscode
     - EditorConfig.EditorConfig

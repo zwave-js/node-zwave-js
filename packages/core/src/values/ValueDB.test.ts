@@ -3,7 +3,7 @@ import test from "ava";
 import sinon from "sinon";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveErrorAva } from "../test/assertZWaveError";
+import { assertZWaveError } from "../test/assertZWaveError";
 import { ValueMetadata } from "./Metadata";
 import { dbKeyToValueIdFast, ValueDB } from "./ValueDB";
 import type { ValueID } from "./_Types";
@@ -823,7 +823,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveErrorAva(t, () => valueDB.getValue(valueId as any), {
+			assertZWaveError(t, () => valueDB.getValue(valueId as any), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 			});
 		}
@@ -833,7 +833,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveErrorAva(t, () => valueDB.setValue(valueId as any, 0), {
+			assertZWaveError(t, () => valueDB.setValue(valueId as any, 0), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 			});
 		}
@@ -843,7 +843,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveErrorAva(t, () => valueDB.hasValue(valueId as any), {
+			assertZWaveError(t, () => valueDB.hasValue(valueId as any), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 			});
 		}
@@ -853,7 +853,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveErrorAva(t, () => valueDB.removeValue(valueId as any), {
+			assertZWaveError(t, () => valueDB.removeValue(valueId as any), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 			});
 		}
@@ -863,7 +863,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveErrorAva(t, () => valueDB.getMetadata(valueId as any), {
+			assertZWaveError(t, () => valueDB.getMetadata(valueId as any), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 			});
 		}
@@ -873,7 +873,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveErrorAva(
+			assertZWaveError(
 				t,
 				() => valueDB.setMetadata(valueId as any, {} as any),
 				{
@@ -887,7 +887,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveErrorAva(t, () => valueDB.hasMetadata(valueId as any), {
+			assertZWaveError(t, () => valueDB.hasMetadata(valueId as any), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 			});
 		}

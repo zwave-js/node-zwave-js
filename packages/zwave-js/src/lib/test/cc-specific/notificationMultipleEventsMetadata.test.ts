@@ -83,7 +83,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToNotificationEventSupportedGet);
 		},
 
-		testBody: async (driver, node, _mockController, _mockNode) => {
+		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			await node.commandClasses.Notification.getSupportedEvents(0x01);
 
 			const states = (
@@ -94,7 +94,7 @@ integrationTest(
 					).id,
 				) as ValueMetadataNumeric
 			).states;
-			expect(states).toStrictEqual({
+			t.deepEqual(states, {
 				[0x00]: "idle",
 				[0x03]: "Smoke alarm test",
 				[0x06]: "Alarm silenced",
