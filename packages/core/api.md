@@ -55,14 +55,7 @@ export function assertValueID(param: Record<any, any>): asserts param is ValueID
 // Warning: (ae-missing-release-tag) "assertZWaveError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function assertZWaveError<T>(valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
-
-// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "assertZWaveErrorAva" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function assertZWaveErrorAva<T>(t: ExecutionContext, valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
+export function assertZWaveError<T>(t: ExecutionContext, valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
 
 // Warning: (ae-missing-release-tag) "AssertZWaveErrorOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
