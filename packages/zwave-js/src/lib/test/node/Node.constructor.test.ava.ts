@@ -4,11 +4,11 @@ import "@zwave-js/cc";
 import { CommandClasses, ValueDB } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
-import { createDefaultMockControllerBehaviors } from "../../Utils";
-import type { Driver } from "../driver/Driver";
-import { createAndStartTestingDriver } from "../driver/DriverMock";
-import { DeviceClass } from "./DeviceClass";
-import { ZWaveNode } from "./Node";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
+import type { Driver } from "../../driver/Driver";
+import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import { DeviceClass } from "../../node/DeviceClass";
+import { ZWaveNode } from "../../node/Node";
 
 interface TestContext {
 	driver: Driver;

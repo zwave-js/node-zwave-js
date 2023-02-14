@@ -4,10 +4,13 @@ import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import { CommandClasses, type CommandClassInfo } from "@zwave-js/core";
 import test from "ava";
 import sinon from "sinon";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriverAva } from "../test/mocks";
-import { ZWaveNode } from "./Node";
-import { EntryControlDataTypes, EntryControlEventTypes } from "./_Types";
+import type { Driver } from "../../driver/Driver";
+import { ZWaveNode } from "../../node/Node";
+import {
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+} from "../../node/_Types";
+import { createEmptyMockDriverAva } from "../mocks";
 
 const fakeDriver = createEmptyMockDriverAva();
 

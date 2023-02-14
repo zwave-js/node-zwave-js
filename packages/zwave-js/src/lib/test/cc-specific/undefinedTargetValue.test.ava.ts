@@ -11,7 +11,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"receiving a BinarySwitchCC::Report with undefined targetValue should not delete the actual targetValue",
 	{
-		debug: true,
+		// debug: true,
 		provisioningDirectory: path.join(__dirname, "fixtures/binarySwitchCC"),
 
 		testBody: async (t, driver, node, mockController, mockNode) => {

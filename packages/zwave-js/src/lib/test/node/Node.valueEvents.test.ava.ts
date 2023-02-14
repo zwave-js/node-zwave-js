@@ -3,10 +3,10 @@ import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
 import sinon from "sinon";
-import { createDefaultMockControllerBehaviors } from "../../Utils";
-import type { Driver } from "../driver/Driver";
-import { createAndStartTestingDriver } from "../driver/DriverMock";
-import { ZWaveNode } from "./Node";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
+import type { Driver } from "../../driver/Driver";
+import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import { ZWaveNode } from "../../node/Node";
 
 interface TestContext {
 	driver: Driver;
