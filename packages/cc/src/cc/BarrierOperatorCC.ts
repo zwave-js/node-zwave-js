@@ -13,7 +13,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
+import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -360,6 +360,10 @@ export class BarrierOperatorCC extends CommandClass {
 			) ?? [];
 
 		for (const subsystemType of supportedSubsystems) {
+			// Some devices report invalid subsystem types, but the CC API checks
+			// for valid values and throws otherwise.
+			if (!isEnumMember(SubsystemType, subsystemType)) continue;
+
 			applHost.controllerLog.logNode(node.id, {
 				message: `Querying event signaling state for subsystem ${getEnumMemberName(
 					SubsystemType,

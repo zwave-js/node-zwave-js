@@ -11,7 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
+import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
@@ -119,9 +119,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
-	// We had `strictEnums: true` here, but this creates interview issues for devices
-	// that don't encode the bitmask correctly.
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: AlarmSensorType) {
 		this.assertSupportsCommand(AlarmSensorCommand, AlarmSensorCommand.Get);
@@ -244,6 +242,10 @@ export class AlarmSensorCC extends CommandClass {
 
 		// Always query (all of) the sensor's current value(s)
 		for (const type of supportedSensorTypes) {
+			// Some devices report invalid sensor types, but the CC API checks
+			// for valid values and throws otherwise.
+			if (!isEnumMember(AlarmSensorType, type)) continue;
+
 			const sensorName = getEnumMemberName(AlarmSensorType, type);
 
 			applHost.controllerLog.logNode(node.id, {

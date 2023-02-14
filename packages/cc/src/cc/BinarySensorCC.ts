@@ -10,7 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName } from "@zwave-js/shared/safe";
+import { getEnumMemberName, isEnumMember } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -229,6 +229,10 @@ export class BinarySensorCC extends CommandClass {
 				) ?? [];
 
 			for (const type of supportedSensorTypes) {
+				// Some devices report invalid sensor types, but the CC API checks
+				// for valid values and throws otherwise.
+				if (!isEnumMember(BinarySensorType, type)) continue;
+
 				const sensorName = getEnumMemberName(BinarySensorType, type);
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,

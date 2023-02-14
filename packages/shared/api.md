@@ -133,6 +133,13 @@ export type IsAny<T> = 0 extends 1 & T ? true : false;
 // @public
 export function isDocker(): boolean;
 
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (ae-missing-release-tag) "isEnumMember" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isEnumMember(enumeration: unknown, value: number): boolean;
+
 // Warning: (ae-missing-release-tag) "isPrintableASCII" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
