@@ -17,7 +17,12 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared/safe";
+import {
+	getEnumMemberName,
+	isEnumMember,
+	keysOf,
+	pick,
+} from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -606,6 +611,10 @@ export class ColorSwitchCC extends CommandClass {
 			) ?? [];
 
 		for (const color of supportedColors) {
+			// Some devices report invalid colors, but the CC API checks
+			// for valid values and throws otherwise.
+			if (!isEnumMember(ColorComponent, color)) continue;
+
 			const colorName = getEnumMemberName(ColorComponent, color);
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
