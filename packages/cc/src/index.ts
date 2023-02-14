@@ -18,5 +18,6 @@ export {
 	SPANExtension,
 } from "./lib/Security2/Extension";
 export * from "./lib/Security2/shared";
+export { CCValueOptions, defaultCCValueOptions } from "./lib/Values";
 export * from "./lib/_Types";
 export { utils };

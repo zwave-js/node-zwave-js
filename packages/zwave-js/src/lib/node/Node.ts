@@ -1,7 +1,9 @@
+import type { CCValueOptions } from "@zwave-js/cc";
 import {
 	CCAPI,
 	CentralSceneKeys,
 	CommandClass,
+	defaultCCValueOptions,
 	DoorLockMode,
 	EntryControlDataTypes,
 	entryControlEventTypeLabels,
@@ -124,6 +126,7 @@ import {
 	SupervisionStatus,
 	timespan,
 	topologicalSort,
+	TranslatedValueID,
 	TXReport,
 	unknownBoolean,
 	ValueDB,
@@ -208,7 +211,6 @@ import type {
 	RefreshInfoOptions,
 	RouteHealthCheckResult,
 	RouteHealthCheckSummary,
-	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeValueEventCallbacks,
 } from "./_Types";
@@ -872,22 +874,30 @@ export class ZWaveNode
 	 * This can be used to enhance the user interface of an application
 	 */
 	public getValueMetadata(valueId: ValueID): ValueMetadata {
-		// First attempt: look in the value DB
-		if (this._valueDB.hasMetadata(valueId)) {
-			return this._valueDB.getMetadata(valueId)!;
-		}
-
-		// Second attempt: check if a corresponding CC value is defined for this value ID
+		// Check if a corresponding CC value is defined for this value ID
+		// so we can extend the returned metadata
 		const definedCCValues = getCCValues(valueId.commandClass);
+		let valueOptions: Required<CCValueOptions> | undefined;
+		let meta: ValueMetadata | undefined;
 		if (definedCCValues) {
 			const value = Object.values(definedCCValues).find((v) =>
 				v?.is(valueId),
 			);
-			if (value && typeof value !== "function") return value.meta;
+			if (value && typeof value !== "function") {
+				meta = value.meta;
+				valueOptions = value.options;
+			}
 		}
 
-		// Default: Any
-		return ValueMetadata.Any;
+		// The priority for returned metadata is valueDB > defined value > Any (default)
+		return {
+			...(this._valueDB.getMetadata(valueId) ??
+				meta ??
+				ValueMetadata.Any),
+			// Don't allow overriding these flags:
+			stateful: valueOptions?.stateful ?? defaultCCValueOptions.stateful,
+			secret: valueOptions?.secret ?? defaultCCValueOptions.secret,
+		};
 	}
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */

@@ -72,7 +72,7 @@ import { MessageOptions } from '@zwave-js/serial';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessagePriority } from '@zwave-js/core';
 import { MessageType } from '@zwave-js/serial';
-import type { MetadataUpdatedArgs } from '@zwave-js/core';
+import type { MetadataUpdatedArgs } from '@zwave-js/core/safe';
 import { MockControllerBehavior } from '@zwave-js/testing';
 import { MockNodeBehavior } from '@zwave-js/testing';
 import { MulticastCC } from '@zwave-js/core';
@@ -81,7 +81,6 @@ import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_MAX } from '@zwave-js/core/safe';
 import { NodeStatus } from '@zwave-js/core/safe';
-import type { NodeStatus as NodeStatus_2 } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core/safe';
 import { NodeType as NodeType_2 } from '@zwave-js/core';
 import { NodeUpdatePayload } from '@zwave-js/core';
@@ -124,12 +123,13 @@ import { SetValueAPIOptions } from '@zwave-js/cc';
 import { SinglecastCC } from '@zwave-js/core';
 import type { SpecificDeviceClass } from '@zwave-js/config';
 import { Switchpoint } from '@zwave-js/cc';
+import { TranslatedValueID } from '@zwave-js/core/safe';
 import { TranslatedValueID as TranslatedValueID_2 } from '@zwave-js/core';
 import { TransmitOptions } from '@zwave-js/core';
 import { TXReport } from '@zwave-js/core/safe';
 import { TypedEventEmitter } from '@zwave-js/shared';
 import * as util from 'util';
-import type { ValueAddedArgs } from '@zwave-js/core';
+import type { ValueAddedArgs } from '@zwave-js/core/safe';
 import { ValueDB } from '@zwave-js/core';
 import { ValueID } from '@zwave-js/core/safe';
 import { ValueID as ValueID_2 } from '@zwave-js/core';
@@ -139,10 +139,10 @@ import { ValueMetadataAny } from '@zwave-js/core/safe';
 import { ValueMetadataBoolean } from '@zwave-js/core/safe';
 import { ValueMetadataNumeric } from '@zwave-js/core/safe';
 import { ValueMetadataString } from '@zwave-js/core/safe';
-import type { ValueNotificationArgs } from '@zwave-js/core';
-import type { ValueRemovedArgs } from '@zwave-js/core';
+import type { ValueNotificationArgs } from '@zwave-js/core/safe';
+import type { ValueRemovedArgs } from '@zwave-js/core/safe';
 import { ValueType } from '@zwave-js/core/safe';
-import type { ValueUpdatedArgs } from '@zwave-js/core';
+import type { ValueUpdatedArgs } from '@zwave-js/core/safe';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveApplicationHost } from '@zwave-js/host';
 import { ZWaveDataRate } from '@zwave-js/core';
@@ -874,17 +874,7 @@ export type SmartStartProvisioningEntry = PlannedProvisioningEntry | IncludedPro
 
 export { Switchpoint }
 
-// Warning: (ae-missing-release-tag) "TranslatedValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface TranslatedValueID extends ValueID_2 {
-    // (undocumented)
-    commandClassName: string;
-    // (undocumented)
-    propertyKeyName?: string;
-    // (undocumented)
-    propertyName?: string;
-}
+export { TranslatedValueID }
 
 export { TXReport }
 
@@ -1195,7 +1185,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // (undocumented)
     get firmwareVersion(): string | undefined;
     getAllEndpoints(): Endpoint[];
-    getDefinedValueIDs(): TranslatedValueID[];
+    getDefinedValueIDs(): TranslatedValueID_2[];
     getEndpoint(index: 0): Endpoint;
     // (undocumented)
     getEndpoint(index: number): Endpoint | undefined;
@@ -1340,7 +1330,7 @@ export type ZWaveNodeMetadataUpdatedCallback = (node: ZWaveNode, args: ZWaveNode
 // Warning: (ae-missing-release-tag) "ZWaveNodeStatusChangeCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ZWaveNodeStatusChangeCallback = (node: ZWaveNode, oldStatus: NodeStatus_2) => void;
+export type ZWaveNodeStatusChangeCallback = (node: ZWaveNode, oldStatus: NodeStatus) => void;
 
 // Warning: (ae-missing-release-tag) "ZWaveNodeValueAddedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1454,7 +1444,7 @@ export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
 // @public
 export type ZWaveNotificationCallbackParams_EntryControlCC = [
 node: ZWaveNode,
-ccId: typeof CommandClasses_2["Entry Control"],
+ccId: typeof CommandClasses["Entry Control"],
 args: ZWaveNotificationCallbackArgs_EntryControlCC
 ];
 
@@ -1463,7 +1453,7 @@ args: ZWaveNotificationCallbackArgs_EntryControlCC
 // @public
 export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
 node: ZWaveNode,
-ccId: typeof CommandClasses_2["Multilevel Switch"],
+ccId: typeof CommandClasses["Multilevel Switch"],
 args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 ];
 
@@ -1472,7 +1462,7 @@ args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 // @public
 export type ZWaveNotificationCallbackParams_NotificationCC = [
 node: ZWaveNode,
-ccId: CommandClasses_2.Notification,
+ccId: CommandClasses.Notification,
 args: ZWaveNotificationCallbackArgs_NotificationCC
 ];
 
@@ -1481,7 +1471,7 @@ args: ZWaveNotificationCallbackArgs_NotificationCC
 // @public
 export type ZWaveNotificationCallbackParams_PowerlevelCC = [
 node: ZWaveNode,
-ccId: CommandClasses_2.Powerlevel,
+ccId: CommandClasses.Powerlevel,
 args: ZWaveNotificationCallbackArgs_PowerlevelCC
 ];
 

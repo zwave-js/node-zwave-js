@@ -13,12 +13,12 @@ import type {
 	CommandClasses,
 	MetadataUpdatedArgs,
 	NodeStatus,
+	TranslatedValueID,
 	ValueAddedArgs,
-	ValueID,
 	ValueNotificationArgs,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import type { ZWaveNode } from "./Node";
 import type { RouteStatistics } from "./NodeStatistics";
 
@@ -31,12 +31,6 @@ export {
 	PowerlevelTestStatus,
 } from "@zwave-js/cc/safe";
 export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
-
-export interface TranslatedValueID extends ValueID {
-	commandClassName: string;
-	propertyName?: string;
-	propertyKeyName?: string;
-}
 
 export type NodeInterviewFailedEventArgs = {
 	errorMessage: string;
