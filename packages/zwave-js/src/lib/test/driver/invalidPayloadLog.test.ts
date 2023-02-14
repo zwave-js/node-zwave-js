@@ -109,7 +109,7 @@ test("when an invalid CC is received, this is printed in the logs", async (t) =>
 	assertMessage(t, spyTransport, {
 		callNumber: 1,
 		message: `« [Node 033] [REQ] [ApplicationCommand]
-  └─[BinarySensorCCReport2] [INVALID]`,
+  └─[BinarySensorCCReport] [INVALID]`,
 	});
 	// FIXME: The log message should be BinarySensorCCReport, not BinarySensorCCReport2
 	t.deepEqual(serialport.lastWrite, ACK);

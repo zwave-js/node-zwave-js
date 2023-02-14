@@ -2595,9 +2595,7 @@ protocol version:      ${this.protocolVersion}`;
 		// it is misbehaving. In any case, we would hide this report if we didn't map it
 		if (
 			command.endpointIndex === 0 &&
-			(command.constructor.name.endsWith("Report") ||
-				// FIXME: Figure out why this happens in tests and fix it
-				command.constructor.name.endsWith("Report2")) &&
+			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
 			// Only map reports from the root device to an endpoint if we know which one
 			this._deviceConfig?.compat?.mapRootReportsToEndpoint != undefined
