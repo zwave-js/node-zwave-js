@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+<!-- ### Breaking changes
+
+### Features -->
+
+### Bugfixes
+* Queries for invalid enum members are skipped during the interview. This could happen for some CCs when the device incorrectly encoded a support bitmask (#5465)
+
+### Config file changes
+* Force-add Basic CC as supported for HeatIt Z-Smoke 230V (#5436)
+
+### Changes under the hood
+* All remaining packages now use `ava` for testing instead of `jest` (#5460, #5459, #5454, #5452, #5447, #5443)
+* The mock serialport has been moved to the `@zwave-js/serial/mock` subpath export (#5455)
+* `createAndStartDriverWithMockPort` was moved to the `zwave-js/Testing` subpath export (#5458)
+* The `watch` tasks used during development are now working again
+
 ## 10.10.0 (2023-02-08)
 **Note:** `10.9.0` was not actually released due to an error in the release pipeline. Some of these changes are tagged as `10.9.0` on GitHub, but are only released as part of `10.10.0`.
 
