@@ -188,6 +188,11 @@ export const AlarmSensorCCValues: Readonly<{
             readonly property: "duration";
             readonly propertyKey: AlarmSensorType;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "duration";
+            propertyKey: AlarmSensorType;
+        };
         readonly meta: {
             readonly unit: "s";
             readonly label: `${string} duration`;
@@ -198,11 +203,6 @@ export const AlarmSensorCCValues: Readonly<{
             readonly writeable: false;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Alarm Sensor"];
-            property: "duration";
-            propertyKey: AlarmSensorType;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -222,6 +222,11 @@ export const AlarmSensorCCValues: Readonly<{
             readonly property: "severity";
             readonly propertyKey: AlarmSensorType;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "severity";
+            propertyKey: AlarmSensorType;
+        };
         readonly meta: {
             readonly min: 1;
             readonly max: 100;
@@ -233,11 +238,6 @@ export const AlarmSensorCCValues: Readonly<{
             readonly writeable: false;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Alarm Sensor"];
-            property: "severity";
-            propertyKey: AlarmSensorType;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -257,6 +257,11 @@ export const AlarmSensorCCValues: Readonly<{
             readonly property: "state";
             readonly propertyKey: AlarmSensorType;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "state";
+            propertyKey: AlarmSensorType;
+        };
         readonly meta: {
             readonly label: `${string} state`;
             readonly description: "Whether the alarm is active";
@@ -266,11 +271,6 @@ export const AlarmSensorCCValues: Readonly<{
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Alarm Sensor"];
-            property: "state";
-            propertyKey: AlarmSensorType;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -474,15 +474,15 @@ export const AssociationCCValues: Readonly<{
             readonly property: "nodeIds";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Association;
             property: "nodeIds";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -502,15 +502,15 @@ export const AssociationCCValues: Readonly<{
             readonly property: "maxNodes";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Association;
             property: "maxNodes";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -730,15 +730,15 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly property: "issuedCommands";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Association Group Information"];
             property: "issuedCommands";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -758,15 +758,15 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly property: "info";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Association Group Information"];
             property: "info";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -786,15 +786,15 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly property: "name";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Association Group Information"];
             property: "name";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -1322,6 +1322,11 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly property: "signalingState";
             readonly propertyKey: SubsystemType;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Barrier Operator"];
+            property: "signalingState";
+            propertyKey: SubsystemType;
+        };
         readonly meta: {
             readonly label: `Signaling State (${string})`;
             readonly states: {
@@ -1332,11 +1337,6 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Barrier Operator"];
-            property: "signalingState";
-            propertyKey: SubsystemType;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -2228,6 +2228,10 @@ export const BinarySensorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: string;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Binary Sensor"];
+            property: string;
+        };
         readonly meta: {
             readonly label: `Sensor state (${string})`;
             readonly ccSpecific: {
@@ -2236,10 +2240,6 @@ export const BinarySensorCCValues: Readonly<{
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Binary Sensor"];
-            property: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -2960,6 +2960,11 @@ export const CentralSceneCCValues: Readonly<{
             readonly property: "scene";
             readonly propertyKey: string;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Central Scene"];
+            property: "scene";
+            propertyKey: string;
+        };
         readonly meta: {
             readonly label: `Scene ${string}`;
             readonly writeable: false;
@@ -2967,11 +2972,6 @@ export const CentralSceneCCValues: Readonly<{
             readonly max: 255;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Central Scene"];
-            property: "scene";
-            propertyKey: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -3240,16 +3240,16 @@ export const ClimateControlScheduleCCValues: Readonly<{
             readonly property: "schedule";
             readonly propertyKey: Weekday;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Climate Control Schedule"];
+            property: "schedule";
+            propertyKey: Weekday;
+        };
         readonly meta: {
             readonly label: `Schedule (${string})`;
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Climate Control Schedule"];
-            property: "schedule";
-            propertyKey: Weekday;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -3577,6 +3577,11 @@ export const ColorSwitchCCValues: Readonly<{
             readonly property: "targetColor";
             readonly propertyKey: ColorComponent;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Color Switch"];
+            property: "targetColor";
+            propertyKey: ColorComponent;
+        };
         readonly meta: {
             readonly label: `Target value (${string})`;
             readonly description: `The target value of the ${string} channel.`;
@@ -3586,11 +3591,6 @@ export const ColorSwitchCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Color Switch"];
-            property: "targetColor";
-            propertyKey: ColorComponent;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -3610,6 +3610,11 @@ export const ColorSwitchCCValues: Readonly<{
             readonly property: "currentColor";
             readonly propertyKey: ColorComponent;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Color Switch"];
+            property: "currentColor";
+            propertyKey: ColorComponent;
+        };
         readonly meta: {
             readonly label: `Current value (${string})`;
             readonly description: `The current value of the ${string} channel.`;
@@ -3618,11 +3623,6 @@ export const ColorSwitchCCValues: Readonly<{
             readonly max: 255;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Color Switch"];
-            property: "currentColor";
-            propertyKey: ColorComponent;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -4218,15 +4218,15 @@ export const ConfigurationCCValues: Readonly<{
             readonly property: number;
             readonly propertyKey: number | undefined;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Configuration;
             property: number;
             propertyKey: number | undefined;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7084,6 +7084,11 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly property: "setpointScale";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            property: "setpointScale";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly label: `Setpoint scale (${string})`;
             readonly writeable: false;
@@ -7091,11 +7096,6 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly max: 255;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-            property: "setpointScale";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7115,6 +7115,11 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly property: "setpoint";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            property: "setpoint";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly label: `Setpoint (${string})`;
             readonly ccSpecific: {
@@ -7123,11 +7128,6 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-            property: "setpoint";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7463,14 +7463,14 @@ export const IndicatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: number;
         };
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: number;
+        };
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Indicator;
-            property: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7490,6 +7490,11 @@ export const IndicatorCCValues: Readonly<{
             readonly property: number;
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: number;
+            propertyKey: number;
+        };
         readonly meta: {
             readonly ccSpecific: {
                 indicatorId: number;
@@ -7498,11 +7503,6 @@ export const IndicatorCCValues: Readonly<{
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Indicator;
-            property: number;
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7522,15 +7522,15 @@ export const IndicatorCCValues: Readonly<{
             readonly property: "supportedPropertyIDs";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Indicator;
             property: "supportedPropertyIDs";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7847,16 +7847,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "startStop";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "startStop";
+        };
         readonly meta: {
             readonly label: `${string}: Start/Stop`;
             readonly type: "boolean";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "startStop";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7876,6 +7876,11 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "duration";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "duration";
+        };
         readonly meta: {
             readonly label: `${string}: Run duration`;
             readonly min: 1;
@@ -7884,11 +7889,6 @@ export const IrrigationCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "duration";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7908,16 +7908,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "useMoistureSensor";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "useMoistureSensor";
+        };
         readonly meta: {
             readonly label: `${string}: Use moisture sensor`;
             readonly type: "boolean";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "useMoistureSensor";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7937,16 +7937,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "useRainSensor";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "useRainSensor";
+        };
         readonly meta: {
             readonly label: `${string}: Use rain sensor`;
             readonly type: "boolean";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "useRainSensor";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7966,16 +7966,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "errorLowFlow";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorLowFlow";
+        };
         readonly meta: {
             readonly label: `${string}: Error - Flow below high threshold`;
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorLowFlow";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -7995,6 +7995,11 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "lowFlowThreshold";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "lowFlowThreshold";
+        };
         readonly meta: {
             readonly label: `${string}: Low flow threshold`;
             readonly min: 0;
@@ -8002,11 +8007,6 @@ export const IrrigationCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "lowFlowThreshold";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8026,16 +8026,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "errorHighFlow";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorHighFlow";
+        };
         readonly meta: {
             readonly label: `${string}: Error - Flow above high threshold`;
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorHighFlow";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8055,6 +8055,11 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "highFlowThreshold";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "highFlowThreshold";
+        };
         readonly meta: {
             readonly label: `${string}: High flow threshold`;
             readonly min: 0;
@@ -8062,11 +8067,6 @@ export const IrrigationCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "highFlowThreshold";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8086,16 +8086,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "errorMaximumFlow";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorMaximumFlow";
+        };
         readonly meta: {
             readonly label: `${string}: Error - Maximum flow detected`;
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorMaximumFlow";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8115,6 +8115,11 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "maximumFlow";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "maximumFlow";
+        };
         readonly meta: {
             readonly label: `${string}: Maximum flow`;
             readonly min: 0;
@@ -8122,11 +8127,6 @@ export const IrrigationCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "maximumFlow";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8146,16 +8146,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "errorLowCurrent";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorLowCurrent";
+        };
         readonly meta: {
             readonly label: `${string}: Error - Current below low threshold`;
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorLowCurrent";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8175,16 +8175,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "errorHighCurrent";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorHighCurrent";
+        };
         readonly meta: {
             readonly label: `${string}: Error - Current above high threshold`;
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorHighCurrent";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8204,16 +8204,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "errorShortCircuit";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorShortCircuit";
+        };
         readonly meta: {
             readonly label: `${string}: Error - Short circuit detected`;
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "errorShortCircuit";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8233,6 +8233,11 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrentLowThreshold";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrentLowThreshold";
+        };
         readonly meta: {
             readonly label: `${string}: Nominal current - low threshold`;
             readonly min: 0;
@@ -8241,11 +8246,6 @@ export const IrrigationCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "nominalCurrentLowThreshold";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8265,6 +8265,11 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrentHighThreshold";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrentHighThreshold";
+        };
         readonly meta: {
             readonly label: `${string}: Nominal current - high threshold`;
             readonly min: 0;
@@ -8273,11 +8278,6 @@ export const IrrigationCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "nominalCurrentHighThreshold";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8297,17 +8297,17 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrent";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrent";
+        };
         readonly meta: {
             readonly label: `${string}: Nominal current`;
             readonly unit: "mA";
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "nominalCurrent";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8327,16 +8327,16 @@ export const IrrigationCCValues: Readonly<{
             readonly property: ValveId;
             readonly propertyKey: "valveConnected";
         };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "valveConnected";
+        };
         readonly meta: {
             readonly label: `${string}: Connected`;
             readonly writeable: false;
             readonly type: "boolean";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Irrigation;
-            property: ValveId;
-            propertyKey: "valveConnected";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9679,16 +9679,16 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly property: "deviceId";
             readonly propertyKey: string;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Manufacturer Specific"];
+            property: "deviceId";
+            propertyKey: string;
+        };
         readonly meta: {
             readonly label: string;
             readonly writeable: false;
             readonly type: "string";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Manufacturer Specific"];
-            property: "deviceId";
-            propertyKey: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9914,6 +9914,11 @@ export const MeterCCValues: Readonly<{
             readonly property: "value";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: CommandClasses.Meter;
+            property: "value";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly ccSpecific: {
                 readonly meterType: number;
@@ -9923,11 +9928,6 @@ export const MeterCCValues: Readonly<{
             readonly writeable: false;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Meter;
-            property: "value";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9947,6 +9947,11 @@ export const MeterCCValues: Readonly<{
             readonly property: "reset";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: CommandClasses.Meter;
+            property: "reset";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly label: `Reset (${string})`;
             readonly ccSpecific: {
@@ -9955,11 +9960,6 @@ export const MeterCCValues: Readonly<{
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Meter;
-            property: "reset";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -10287,15 +10287,15 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly property: "endpoints";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multi Channel Association"];
             property: "endpoints";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -10315,15 +10315,15 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly property: "nodeIds";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multi Channel Association"];
             property: "nodeIds";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -10343,15 +10343,15 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly property: "maxNodes";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multi Channel Association"];
             property: "maxNodes";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -10630,15 +10630,15 @@ export const MultiChannelCCValues: Readonly<{
             readonly property: "members";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "members";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -11028,15 +11028,15 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: string;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Sensor"];
+            property: string;
+        };
         readonly meta: {
             readonly label: string;
             readonly writeable: false;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-            property: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -11056,15 +11056,15 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly property: "supportedScales";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multilevel Sensor"];
             property: "supportedScales";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -11252,6 +11252,10 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: string;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            property: string;
+        };
         readonly meta: {
             readonly label: `Perform a level change (${string})`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -11261,10 +11265,6 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Switch"];
-            property: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -11283,6 +11283,10 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: string;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            property: string;
+        };
         readonly meta: {
             readonly label: `Perform a level change (${string})`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -11292,10 +11296,6 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Switch"];
-            property: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -11848,15 +11848,15 @@ export const NotificationCCValues: Readonly<{
             readonly property: string;
             readonly propertyKey: string;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Notification;
             property: string;
             propertyKey: string;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -11876,6 +11876,11 @@ export const NotificationCCValues: Readonly<{
             readonly property: string;
             readonly propertyKey: "unknown";
         };
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+            propertyKey: "unknown";
+        };
         readonly meta: {
             readonly label: `${string}: Unknown value`;
             readonly ccSpecific: {
@@ -11886,11 +11891,6 @@ export const NotificationCCValues: Readonly<{
             readonly max: 255;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Notification;
-            property: string;
-            propertyKey: "unknown";
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -11909,6 +11909,10 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: string;
         };
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+        };
         readonly meta: {
             readonly label: `Unknown notification (${string})`;
             readonly ccSpecific: {
@@ -11919,10 +11923,6 @@ export const NotificationCCValues: Readonly<{
             readonly max: 255;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Notification;
-            property: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -11942,15 +11942,15 @@ export const NotificationCCValues: Readonly<{
             readonly property: "supportedNotificationEvents";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Notification;
             property: "supportedNotificationEvents";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -12866,16 +12866,16 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
             readonly property: "dimmingDuration";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
+            property: "dimmingDuration";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly label: `Dimming duration (${number})`;
             readonly type: "duration";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-            property: "dimmingDuration";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -12895,6 +12895,11 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
             readonly property: "level";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
+            property: "level";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly label: `Level (${number})`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -12903,11 +12908,6 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-            property: "level";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -13009,16 +13009,16 @@ export const SceneControllerConfigurationCCValues: Readonly<{
             readonly property: "dimmingDuration";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
+            property: "dimmingDuration";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly label: `Dimming duration (${number})`;
             readonly type: "duration";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-            property: "dimmingDuration";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -13038,6 +13038,11 @@ export const SceneControllerConfigurationCCValues: Readonly<{
             readonly property: "sceneId";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
+            property: "sceneId";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly label: `Associated Scene ID (${number})`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -13046,11 +13051,6 @@ export const SceneControllerConfigurationCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-            property: "sceneId";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -14570,15 +14570,15 @@ export const SupervisionCCValues: Readonly<{
             readonly property: "ccSupported";
             readonly propertyKey: CommandClasses;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Supervision;
             property: "ccSupported";
             propertyKey: CommandClasses;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -15511,15 +15511,15 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly property: "setpointScale";
             readonly propertyKey: ThermostatSetpointType;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
             property: "setpointScale";
             propertyKey: ThermostatSetpointType;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -15539,6 +15539,11 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly property: "setpoint";
             readonly propertyKey: ThermostatSetpointType;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            property: "setpoint";
+            propertyKey: ThermostatSetpointType;
+        };
         readonly meta: {
             readonly label: `Setpoint (${string})`;
             readonly ccSpecific: {
@@ -15547,11 +15552,6 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-            property: "setpoint";
-            propertyKey: ThermostatSetpointType;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -16352,15 +16352,15 @@ export const UserCodeCCValues: Readonly<{
             readonly property: "userCode";
             readonly propertyKey: number;
         };
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["User Code"];
             property: "userCode";
             propertyKey: number;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -16380,16 +16380,16 @@ export const UserCodeCCValues: Readonly<{
             readonly property: "userIdStatus";
             readonly propertyKey: number;
         };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["User Code"];
+            property: "userIdStatus";
+            propertyKey: number;
+        };
         readonly meta: {
             readonly label: `User ID status (${number})`;
             readonly type: "number";
             readonly readable: true;
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["User Code"];
-            property: "userIdStatus";
-            propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
