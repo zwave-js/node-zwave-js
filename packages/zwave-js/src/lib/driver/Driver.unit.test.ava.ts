@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 // import { Message, MessageType, messageTypes } from "@zwave-js/serial";
 import { MockSerialPort } from "@zwave-js/serial/mock";

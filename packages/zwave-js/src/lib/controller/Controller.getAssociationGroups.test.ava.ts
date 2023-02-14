@@ -16,7 +16,6 @@ test.before(async (t) => {
 	t.timeout(60000);
 
 	const fakeDriver = createEmptyMockDriver() as unknown as Driver;
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	fakeDriver.registerRequestHandler = () => {};
 	await fakeDriver.configManager.loadAll();
 
