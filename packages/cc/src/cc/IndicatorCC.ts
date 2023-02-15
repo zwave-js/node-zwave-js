@@ -937,7 +937,7 @@ function testResponseForIndicatorSupportedGet(
 	sent: IndicatorCCSupportedGet,
 	received: IndicatorCCSupportedReport,
 ) {
-	return received.indicatorId === sent.indicatorId;
+	return sent.indicatorId === 0 || received.indicatorId === sent.indicatorId;
 }
 
 @CCCommand(IndicatorCommand.SupportedGet)
