@@ -62,7 +62,8 @@
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier": "prettier -c \"src/**/*.ts\"",
     "lint:prettier:fix": "yarn run lint:prettier -w",
-    "test:ts": "ava"
+    "test:ts": "ava",
+    "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "*",
