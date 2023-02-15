@@ -293,7 +293,7 @@
 			"defaultValue": 0
 		},
 		{
-			"#": "19",
+			"#": "20",
 			"label": "Humidity Offset",
 			"description": "The value to be added to the actual measured humidity.",
 			"valueSize": 2,
