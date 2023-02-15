@@ -121,6 +121,16 @@
 			"dependsOn": ["^build"],
 			"inputs": ["src/**/*.ts", "ava.config.cjs", "../../ava.config.cjs"]
 			// TODO: consider snapshot files
+		},
+
+		"//#test:dirty:resolve": {
+			"inputs": ["**/*.ts", "package.json", "yarn.lock"],
+			"outputs": [".tmp/dirty-tests.json"]
+		},
+
+		"test:dirty": {
+			"dependsOn": ["//#test:dirty:resolve"],
+			"inputs": [".tmp/dirty-tests.json"]
 		}
 	},
 	"globalDependencies": [
