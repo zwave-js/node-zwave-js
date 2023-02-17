@@ -2,7 +2,7 @@
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
 	"label": "507801",
-	"description": "CONNECT radio flush-mounted receiver, Roller shutter",
+	"description": "Connect Roller Shutter",
 	"devices": [
 		{
 			"productType": "0x8003",
@@ -12,5 +12,75 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Move Roller Shutter",
+			"maxNodes": 5,
+			"isLifeline": false
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "176",
+			"label": "Break (motor protection)",
+			"description": "Changeover delay",
+			"valueSize": 1,
+			"unit": "0.1 seconds",
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10
+		},
+		{
+			"#": "177",
+			"label": "Travel Time Up, Byte 1",
+			"description": "Input 1.",
+			"valueSize": 1,
+			"unit": "25 seconds",
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 4
+		},
+		{
+			"#": "178",
+			"label": "Travel Time Up, Byte 2",
+			"description": "Input 2.",
+			"valueSize": 1,
+			"unsigned": true,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 176
+		},
+		{
+			"#": "179",
+			"label": "Travel Time Down, Byte 1",
+			"description": "Input 1.",
+			"valueSize": 1,
+			"unsigned": true,
+			"unit": "25 seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 4
+		},
+		{
+			"#": "180",
+			"label": "Travel Time Down, Byte 2",
+			"description": "Input 2.",
+			"valueSize": 1,
+			"unsigned": true,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 176
+		}
+	],
+	"metadata": {
+		"inclusion": "Triple click button",
+		"exclusion": "Triple click button",
+		"reset": "Tripple click button, then click and hold for 5 seconds",
+		"manual": "https://download.schneider-electric.com/files?p_Doc_Ref=MTN507801_HW_2008_43_EN&p_enDocType=User+guide&p_File_Name=MTN507801_HW_2008_43_EN.pdf"
 	}
 }
