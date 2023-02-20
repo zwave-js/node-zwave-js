@@ -123,6 +123,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 						fromEncapsulation: true,
 						encapCC: this,
 						origin: options.origin,
+						frameType: options.frameType,
 					}),
 				);
 				offset += 1 + cmdLength;

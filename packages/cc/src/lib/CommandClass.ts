@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	EncapsulationFlags,
+	FrameType,
 	getCCName,
 	ICommandClass,
 	isZWaveError,
@@ -60,6 +61,8 @@ import {
 export type CommandClassDeserializationOptions = {
 	data: Buffer;
 	origin?: MessageOrigin;
+	/** If known, the frame type of the containing message */
+	frameType?: FrameType;
 } & (
 	| {
 			fromEncapsulation?: false;

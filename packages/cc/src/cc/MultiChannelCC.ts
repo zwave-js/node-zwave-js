@@ -1242,6 +1242,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
+				frameType: options.frameType,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
@@ -1420,6 +1421,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
+				frameType: options.frameType,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;

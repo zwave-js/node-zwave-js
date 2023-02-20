@@ -122,6 +122,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
+				frameType: options.frameType,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;

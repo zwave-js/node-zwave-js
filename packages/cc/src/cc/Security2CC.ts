@@ -48,6 +48,7 @@ import {
 } from "../lib/CommandClassDecorators";
 import {
 	MGRPExtension,
+	MOSExtension,
 	Security2Extension,
 	SPANExtension,
 } from "../lib/Security2/Extension";
@@ -269,7 +270,7 @@ export class Security2CCAPI extends CCAPI {
 		if (MultiChannelCC.requiresEncapsulation(cc)) {
 			cc = MultiChannelCC.encapsulate(this.applHost, cc);
 		}
-		cc = Security2CC.encapsulate(this.applHost, cc, securityClass);
+		cc = Security2CC.encapsulate(this.applHost, cc, { securityClass });
 
 		const response =
 			await this.applHost.sendCommand<Security2CCCommandsSupportedReport>(
@@ -665,12 +666,16 @@ export class Security2CC extends CommandClass {
 	public static encapsulate(
 		host: ZWaveHost,
 		cc: CommandClass,
-		securityClass?: SecurityClass,
+		options?: {
+			securityClass?: SecurityClass;
+			MOS?: boolean;
+		},
 	): Security2CCMessageEncapsulation {
 		const ret = new Security2CCMessageEncapsulation(host, {
 			nodeId: cc.nodeId,
 			encapsulated: cc,
-			securityClass,
+			securityClass: options?.securityClass,
+			extensions: options?.MOS ? [new MOSExtension()] : undefined,
 		});
 
 		// Copy the encapsulation flags from the encapsulated command
@@ -720,6 +725,16 @@ function failNoMPAN(): never {
 	throw validatePayload.fail(ZWaveErrorCodes.Security2CC_NoMPAN);
 }
 
+type MulticastContext =
+	| {
+			isMulticast: true;
+			groupId: number;
+	  }
+	| {
+			isMulticast: false;
+			groupId?: number;
+	  };
+
 @CCCommand(Security2Command.MessageEncapsulation)
 @expectedCCResponse(
 	getCCResponseForMessageEncapsulation,
@@ -750,7 +765,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			// Check the sequence number to avoid duplicates
-			// TODO: distinguish between multicast and singlecast
 			this._sequenceNumber = this.payload[0];
 			const sendingNodeId = this.nodeId as number;
 
@@ -786,12 +800,36 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			};
 			if (hasExtensions) parseExtensions(this.payload);
 
-			const multicastGroupId = this.getMulticastGroupId();
+			const ctx = ((): MulticastContext => {
+				const multicastGroupId = this.getMulticastGroupId();
+				if (
+					options.frameType === "multicast" ||
+					options.frameType === "broadcast"
+				) {
+					if (multicastGroupId == undefined) {
+						throw validatePayload.fail(
+							"Multicast frames without MGRP extension",
+						);
+					}
+					return {
+						isMulticast: true,
+						groupId: multicastGroupId,
+					};
+				} else {
+					return { isMulticast: false, groupId: multicastGroupId };
+				}
+			})();
+
 			let prevSequenceNumber: number | undefined;
 			let mpanState:
 				| ReturnType<SecurityManager2["getPeerMPAN"]>
 				| undefined;
-			if (multicastGroupId == undefined) {
+			if (ctx.isMulticast) {
+				mpanState = this.host.securityManager2.getPeerMPAN(
+					sendingNodeId,
+					ctx.groupId,
+				);
+			} else {
 				// FIXME: When the newly removed node receives subsequent singlecast messages
 				// without MPAN extension, the newly removed node MUST forget about the Multicast group ID.
 
@@ -799,11 +837,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				prevSequenceNumber = validateSequenceNumber.call(
 					this,
 					this._sequenceNumber,
-				);
-			} else {
-				mpanState = this.host.securityManager2.getPeerMPAN(
-					sendingNodeId,
-					multicastGroupId,
 				);
 			}
 
@@ -826,13 +859,13 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			);
 
 			let decrypt: () => DecryptionResult;
-			if (multicastGroupId != undefined) {
+			if (ctx.isMulticast) {
 				// For incoming multicast commands, make sure we have an MPAN
 				if (mpanState?.type !== MPANState.MPAN) {
 					// If we don't, mark the MPAN as out of sync, so we can respond accordingly on the singlecast followup
 					this.host.securityManager2.storePeerMPAN(
 						sendingNodeId,
-						multicastGroupId,
+						ctx.groupId,
 						{ type: MPANState.OutOfSync },
 					);
 					throw failNoMPAN();
@@ -841,7 +874,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				decrypt = () =>
 					this.decryptMulticast(
 						sendingNodeId,
-						multicastGroupId,
+						ctx.groupId,
 						ciphertext,
 						authData,
 						authTag,
@@ -888,11 +921,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// If authentication fails, do so with an error code that instructs the
 			// applHost to tell the node we have no nonce
 			if (!authOK || !plaintext) {
-				if (multicastGroupId != undefined) {
+				if (ctx.isMulticast) {
 					// Mark the MPAN as out of sync
 					this.host.securityManager2.storePeerMPAN(
 						sendingNodeId,
-						multicastGroupId,
+						ctx.groupId,
 						{ type: MPANState.OutOfSync },
 					);
 					throw validatePayload.fail(
@@ -918,6 +951,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					data: decryptedCCBytes,
 					fromEncapsulation: true,
 					encapCC: this,
+					frameType: options.frameType,
 				});
 			}
 			this.key = key;

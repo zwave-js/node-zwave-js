@@ -20,6 +20,7 @@ import {
 	Security2CC,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
+	Security2Command,
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
 	SupervisionCC,
@@ -2773,32 +2774,6 @@ export class Driver
 					);
 				}
 
-				// Singlecast S2-encapsulated commands with MGRP extension (Multicast Followup)
-				// may need to trigger an MPAN resync
-				if (
-					(msg instanceof ApplicationCommandRequest ||
-						msg instanceof BridgeApplicationCommandRequest) &&
-					msg.frameType === "singlecast" &&
-					msg.command instanceof Security2CCMessageEncapsulation
-				) {
-					const node = this.getNodeUnsafe(msg);
-					const groupId = msg.command.getMulticastGroupId();
-					if (
-						node &&
-						groupId != undefined &&
-						this.securityManager2?.getPeerMPAN(
-							msg.command.nodeId as number,
-							groupId,
-						).type === MPANState.OutOfSync
-					) {
-						void node.commandClasses["Security 2"]
-							.sendMOS()
-							.catch(() => {
-								// Ignore errors
-							});
-					}
-				}
-
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
 
@@ -2830,11 +2805,13 @@ export class Driver
 							}`,
 							"warn",
 						);
+						// FIXME: We may need to do the S2 MOS dance here
 						return;
 					} else {
 						throw e;
 					}
 				}
+
 				// Transport Service CC can be eliminated from the encapsulation stack, since it is always the outermost CC
 				if (isTransportServiceEncapsulation(msg.command)) {
 					msg.command = msg.command.encapsulated;
@@ -2961,6 +2938,35 @@ export class Driver
 		throw e;
 	}
 
+	private mustReplyWithSecurityS2MOS(
+		msg: ApplicationCommandRequest | BridgeApplicationCommandRequest,
+	): boolean {
+		// We're looking for a singlecast S2-encapsulated request
+		if (msg.frameType !== "singlecast") return false;
+		const encapS2 = msg.command.getEncapsulatingCC(
+			CommandClasses["Security 2"],
+			Security2Command.MessageEncapsulation,
+		) as Security2CCMessageEncapsulation | undefined;
+		if (!encapS2) return false;
+
+		// With the MGRP extension present
+		const node = this.getNodeUnsafe(msg);
+		const groupId = encapS2.getMulticastGroupId();
+		if (
+			node &&
+			groupId != undefined &&
+			// but where we don't have an MPAN stored
+			this.securityManager2?.getPeerMPAN(
+				msg.command.nodeId as number,
+				groupId,
+			).type !== MPANState.MPAN
+		) {
+			// Singlecast S2-encap
+			return true;
+		}
+		return false;
+	}
+
 	private async handleSecurityS2DecodeError(
 		e: Error,
 		msg: Message | undefined,
@@ -3049,9 +3055,18 @@ export class Driver
 					direction: "outbound",
 				});
 				// Send the node our nonce
-				node.commandClasses["Security 2"].sendNonce().catch(() => {
-					// Ignore errors
-				});
+				// ... potentially with MOS extension
+				const multicastOutOfSync =
+					(msg instanceof ApplicationCommandRequest ||
+						msg instanceof BridgeApplicationCommandRequest) &&
+					this.mustReplyWithSecurityS2MOS(msg);
+
+				node.commandClasses["Security 2"]
+					.withOptions({ multicastOutOfSync })
+					.sendNonce()
+					.catch(() => {
+						// Ignore errors
+					});
 			} else {
 				this.controllerLog.logNode(nodeId, {
 					message: `${message}, cannot decode command.`,
@@ -3667,10 +3682,21 @@ ${handlers.length} left`,
 				const supervisionSessionId = SupervisionCC.getSessionId(
 					msg.command,
 				);
-				const encapsulationFlags = msg.command.encapsulationFlags;
-
 				// DO NOT force-add support for the Supervision CC here. Some devices only support Supervision when sending,
 				// so we need to trust the information we already have.
+
+				const encapsulationFlags = msg.command.encapsulationFlags;
+
+				// Figure out if we need to send a S2 MOS
+				const multicastOutOfSync = this.mustReplyWithSecurityS2MOS(msg);
+				if (supervisionSessionId === undefined) {
+					// If the command was NOT received using Supervision,
+					// we need to respond with an MOS nonce. Otherwise we'll set the flag
+					// on the Supervision Report
+					node.commandClasses["Security 2"].sendMOS().catch(() => {
+						// Ignore errors
+					});
+				}
 
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
@@ -3685,6 +3711,7 @@ ${handlers.length} left`,
 								node;
 							await endpoint
 								.createAPI(CommandClasses.Supervision, false)
+								.withOptions({ multicastOutOfSync })
 								.sendReport({
 									sessionId: supervisionSessionId,
 									moreUpdatesFollow: false,
@@ -3708,6 +3735,7 @@ ${handlers.length} left`,
 
 						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
+							.withOptions({ multicastOutOfSync })
 							.sendReport({
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
@@ -3719,6 +3747,7 @@ ${handlers.length} left`,
 					} catch (e) {
 						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
+							.withOptions({ multicastOutOfSync })
 							.sendReport({
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
@@ -3798,7 +3827,10 @@ ${handlers.length} left`,
 		true,
 	);
 
-	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
+	private encapsulateCommands(
+		msg: Message & ICommandClassContainer,
+		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
+	): void {
 		// The encapsulation order (from outside to inside) is as follows:
 		// 5. Any one of the following combinations:
 		//   a. Security (S0 or S2) followed by transport service
@@ -3839,7 +3871,9 @@ ${handlers.length} left`,
 						this.securityManager2?.tempKeys.has(node.id)) &&
 					Security2CC.requiresEncapsulation(msg.command)
 				) {
-					msg.command = Security2CC.encapsulate(this, msg.command);
+					msg.command = Security2CC.encapsulate(this, msg.command, {
+						MOS: !!options.multicastOutOfSync,
+					});
 				}
 			}
 			// This check will return false for S2-encapsulated commands
@@ -4218,7 +4252,9 @@ ${handlers.length} left`,
 		}
 
 		// Automatically encapsulate commands before sending
-		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
+		if (options.autoEncapsulate !== false) {
+			this.encapsulateCommands(msg, options);
+		}
 
 		return msg;
 	}
