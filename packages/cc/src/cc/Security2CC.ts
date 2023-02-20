@@ -11,6 +11,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
+	MPANState,
 	parseBitMask,
 	parseCCList,
 	S2SecurityClass,
@@ -191,6 +192,46 @@ export class Security2CCAPI extends CCAPI {
 				this.applHost.securityManager2.deleteNonce(
 					this.endpoint.nodeId,
 				);
+				return false;
+			} else {
+				// Pass other errors through
+				throw e;
+			}
+		}
+		return true;
+	}
+
+	/** Notifies the target node that the MPAN state is out of sync */
+	public async sendMOS(): Promise<boolean> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NonceReport,
+		);
+
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		const cc = new Security2CCNonceReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			SOS: false,
+			MOS: true,
+		});
+
+		try {
+			await this.applHost.sendCommand(cc, {
+				...this.commandOptions,
+				// Seems we need these options or some nodes won't accept the nonce
+				transmitOptions:
+					TransmitOptions.ACK | TransmitOptions.AutoRoute,
+				// Only try sending a nonce once
+				maxSendAttempts: 1,
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Nonce,
+				// We don't want failures causing us to treat the node as asleep or dead
+				changeNodeStatusOnMissingACK: false,
+			});
+		} catch (e) {
+			if (isTransmissionError(e)) {
 				return false;
 			} else {
 				// Pass other errors through
@@ -675,6 +716,10 @@ function failNoSPAN(): never {
 	throw validatePayload.fail(ZWaveErrorCodes.Security2CC_NoSPAN);
 }
 
+function failNoMPAN(): never {
+	throw validatePayload.fail(ZWaveErrorCodes.Security2CC_NoMPAN);
+}
+
 @CCCommand(Security2Command.MessageEncapsulation)
 @expectedCCResponse(
 	getCCResponseForMessageEncapsulation,
@@ -697,6 +742,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 		// Make sure that we can send/receive secure commands
 		assertSecurity.call(this, options);
+
+		// FIXME: Not the MGRP extension designates a multicast command,
+		// but the combination of MGRP and broadcast/multicast destination.
+		// Singlecast with MGRP extension is the singlecast followup!
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -737,13 +786,24 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			};
 			if (hasExtensions) parseExtensions(this.payload);
 
-			// Don't accept duplicate Singlecast commands
-			const multicastGroupID = this.getMulticastGroupId();
+			const multicastGroupId = this.getMulticastGroupId();
 			let prevSequenceNumber: number | undefined;
-			if (multicastGroupID == undefined) {
+			let mpanState:
+				| ReturnType<SecurityManager2["getPeerMPAN"]>
+				| undefined;
+			if (multicastGroupId == undefined) {
+				// FIXME: When the newly removed node receives subsequent singlecast messages
+				// without MPAN extension, the newly removed node MUST forget about the Multicast group ID.
+
+				// Don't accept duplicate Singlecast commands
 				prevSequenceNumber = validateSequenceNumber.call(
 					this,
 					this._sequenceNumber,
+				);
+			} else {
+				mpanState = this.host.securityManager2.getPeerMPAN(
+					sendingNodeId,
+					multicastGroupId,
 				);
 			}
 
@@ -766,9 +826,26 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			);
 
 			let decrypt: () => DecryptionResult;
-			if (multicastGroupID != undefined) {
-				// TODO: Multicast
-				throw new Error("Not implemented");
+			if (multicastGroupId != undefined) {
+				// For incoming multicast commands, make sure we have an MPAN
+				if (mpanState?.type !== MPANState.MPAN) {
+					// If we don't, mark the MPAN as out of sync, so we can respond accordingly on the singlecast followup
+					this.host.securityManager2.storePeerMPAN(
+						sendingNodeId,
+						multicastGroupId,
+						{ type: MPANState.OutOfSync },
+					);
+					throw failNoMPAN();
+				}
+
+				decrypt = () =>
+					this.decryptMulticast(
+						sendingNodeId,
+						multicastGroupId,
+						ciphertext,
+						authData,
+						authTag,
+					);
 			} else {
 				// Decrypt payload and verify integrity
 				const spanState =
@@ -811,10 +888,21 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// If authentication fails, do so with an error code that instructs the
 			// applHost to tell the node we have no nonce
 			if (!authOK || !plaintext) {
-				throw validatePayload.fail(
-					// FIXME: Consider Multicast
-					ZWaveErrorCodes.Security2CC_CannotDecode,
-				);
+				if (multicastGroupId != undefined) {
+					// Mark the MPAN as out of sync
+					this.host.securityManager2.storePeerMPAN(
+						sendingNodeId,
+						multicastGroupId,
+						{ type: MPANState.OutOfSync },
+					);
+					throw validatePayload.fail(
+						ZWaveErrorCodes.Security2CC_CannotDecodeMulticast,
+					);
+				} else {
+					throw validatePayload.fail(
+						ZWaveErrorCodes.Security2CC_CannotDecode,
+					);
+				}
 			}
 
 			offset = 0;
@@ -901,7 +989,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		);
 	}
 
-	private getMulticastGroupId(): number | undefined {
+	public getMulticastGroupId(): number | undefined {
 		const mgrpExtension = this.getMGRPExtension();
 		return mgrpExtension?.groupId;
 	}
@@ -1221,6 +1309,31 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 		// Nothing worked, fail the decryption
 		return { plaintext: Buffer.from([]), authOK: false };
+	}
+
+	private decryptMulticast(
+		sendingNodeId: number,
+		groupId: number,
+		ciphertext: Buffer,
+		authData: Buffer,
+		authTag: Buffer,
+	): {
+		plaintext: Buffer;
+		authOK: boolean;
+		key?: Buffer;
+		iv?: Buffer;
+	} {
+		const iv = this.host.securityManager2.nextPeerMPAN(
+			sendingNodeId,
+			groupId,
+		);
+		const { keyCCM: key } =
+			this.host.securityManager2.getKeysForNode(sendingNodeId);
+		return {
+			key,
+			iv,
+			...decryptAES128CCM(key, iv, ciphertext, authData, authTag),
+		};
 	}
 }
 

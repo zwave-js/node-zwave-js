@@ -37,6 +37,15 @@ export enum SPANState {
 	SPAN,
 }
 
+export enum MPANState {
+	/** No entry exists */
+	None = 0,
+	/** The group is in use, but no MPAN was received yet, or it is out of sync */
+	OutOfSync,
+	/** An MPAN has been established */
+	MPAN,
+}
+
 export type SPANTableEntry =
 	| {
 			// We know the other node's receiver's entropy input, but we didn't send it our sender's EI yet
@@ -58,6 +67,15 @@ export type SPANTableEntry =
 				nonce: Buffer;
 				expires: number;
 			};
+	  };
+
+export type MPANTableEntry =
+	| {
+			type: MPANState.OutOfSync;
+	  }
+	| {
+			type: MPANState.MPAN;
+			currentMPAN: Buffer;
 	  };
 
 // How many sequence numbers are remembered for each node when checking for duplicates
@@ -86,8 +104,10 @@ export class SecurityManager2 {
 	/** A map of sequence numbers that were last used in communication with a node */
 	private ownSequenceNumbers = new Map<number, number>();
 	private peerSequenceNumbers = new Map<number, number[]>();
-	/** A map of MPAN states for each multicast group */
+	/** A map of the inner MPAN states for each multicast group we manage */
 	private mpanStates = new Map<number, Buffer>();
+	/** MPANs used to decrypt multicast messages from other nodes. Peer Node ID -> MPAN Group -> MPAN */
+	private peerMPANs = new Map<number, Map<number, MPANTableEntry>>();
 	/** A map of permanent network keys per security class */
 	private networkKeys = new Map<SecurityClass, NetworkKeys>();
 	/** Which multicast group has been assigned which security class */
@@ -384,5 +404,66 @@ export class SecurityManager2 {
 		// Increment the inner state
 		increment(stateN);
 		return ret;
+	}
+
+	/**
+	 * Generates the next nonce for the given peer and returns it.
+	 * @param store - Whether the nonce should be stored/remembered as the current SPAN.
+	 */
+	public nextPeerMPAN(peerNodeId: number, groupId: number): Buffer {
+		const mpanState = this.getPeerMPAN(peerNodeId, groupId);
+		if (mpanState.type !== MPANState.MPAN) {
+			throw new ZWaveError(
+				`No peer multicast PAN exists for Node ${peerNodeId}, group ${groupId}`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+		const keys = this.getKeysForNode(peerNodeId);
+		if (!keys || !("keyMPAN" in keys)) {
+			throw new ZWaveError(
+				`The network keys for the security class of Node ${peerNodeId} have not been set up yet!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+
+		// Compute the next MPAN
+		const stateN = mpanState.currentMPAN;
+		const ret = encryptAES128ECB(stateN, keys.keyMPAN);
+		// Increment the inner state
+		increment(stateN);
+		return ret;
+	}
+
+	/** Returns the stored MPAN used to decrypt messages from `peerNodeId`, MPAN group `groupId` */
+	public getPeerMPAN(
+		peerNodeId: number,
+		groupId: number,
+	): MPANTableEntry | { type: MPANState.None } {
+		return (
+			this.peerMPANs.get(peerNodeId)?.get(groupId) ?? {
+				type: MPANState.None,
+			}
+		);
+	}
+
+	/** Reset all MPANs stored for the given node */
+	public resetPeerMPANs(peerNodeId: number): void {
+		this.peerMPANs.delete(peerNodeId);
+	}
+
+	/** Reset the MPAN stored for the given node with the given group ID */
+	public resetPeerMPAN(peerNodeId: number, groupId: number): void {
+		this.peerMPANs.get(peerNodeId)?.delete(groupId);
+	}
+
+	public storePeerMPAN(
+		peerNodeId: number,
+		groupId: number,
+		mpanState: MPANTableEntry,
+	): void {
+		if (!this.peerMPANs.has(peerNodeId)) {
+			this.peerMPANs.set(peerNodeId, new Map());
+		}
+		this.peerMPANs.get(peerNodeId)!.set(groupId, mpanState);
 	}
 }

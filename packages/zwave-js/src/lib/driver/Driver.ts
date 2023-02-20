@@ -18,6 +18,7 @@ import {
 	messageIsPing,
 	MultiChannelCC,
 	Security2CC,
+	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
@@ -54,6 +55,7 @@ import {
 	MessagePriority,
 	MessageRecord,
 	messageRecordToLines,
+	MPANState,
 	SecurityClass,
 	securityClassIsS2,
 	SecurityManager,
@@ -2771,6 +2773,32 @@ export class Driver
 					);
 				}
 
+				// Singlecast S2-encapsulated commands with MGRP extension (Multicast Followup)
+				// may need to trigger an MPAN resync
+				if (
+					(msg instanceof ApplicationCommandRequest ||
+						msg instanceof BridgeApplicationCommandRequest) &&
+					msg.frameType === "singlecast" &&
+					msg.command instanceof Security2CCMessageEncapsulation
+				) {
+					const node = this.getNodeUnsafe(msg);
+					const groupId = msg.command.getMulticastGroupId();
+					if (
+						node &&
+						groupId != undefined &&
+						this.securityManager2?.getPeerMPAN(
+							msg.command.nodeId as number,
+							groupId,
+						).type === MPANState.OutOfSync
+					) {
+						void node.commandClasses["Security 2"]
+							.sendMOS()
+							.catch(() => {
+								// Ignore errors
+							});
+					}
+				}
+
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
 
@@ -3031,6 +3059,29 @@ export class Driver
 					direction: "none",
 				});
 			}
+
+			return true;
+		} else if (
+			e.code === ZWaveErrorCodes.Security2CC_CannotDecodeMulticast &&
+			isCommandClassContainer(msg)
+		) {
+			// Decoding the command failed because the MPAN used by the other node
+			// is not known to us yet
+			const nodeId = msg.getNodeId()!;
+			// If the node isn't known, ignore this error
+			const node = this._controller?.nodes.get(nodeId);
+			if (!node) return false;
+
+			// Before we can send anything, ACK the command
+			await this.writeHeader(MessageHeaders.ACK);
+
+			this.driverLog.logMessage(msg, { direction: "inbound" });
+			node.incrementStatistics("commandsDroppedRX");
+
+			this.controllerLog.logNode(nodeId, {
+				message: `Cannot decode S2 multicast command, since MPAN is not known yet. Will attempt re-sync after the next singlecast.`,
+				level: "verbose",
+			});
 
 			return true;
 		}
