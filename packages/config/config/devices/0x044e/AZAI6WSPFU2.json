@@ -13,5 +13,13 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"compat": {
+		"compat": {
+			// This device only accepts Thermostat Setpoint Set commands with a precision of 1
+			"overrideFloatEncoding": {
+				"precision": 1
+			}
+		}
 	}
 }
