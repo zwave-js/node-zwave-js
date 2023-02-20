@@ -2818,7 +2818,9 @@ protocol version:      ${this.protocolVersion}`;
 	/**
 	 * Is called when a nonce report is received that does not belong to any transaction.
 	 */
-	private handleSecurity2NonceReport(command: Security2CCNonceReport): void {
+	private async handleSecurity2NonceReport(
+		command: Security2CCNonceReport,
+	): Promise<void> {
 		const secMan = this.driver.securityManager2;
 		if (!secMan) return;
 
@@ -2826,13 +2828,47 @@ protocol version:      ${this.protocolVersion}`;
 			// The node couldn't decrypt the last command we sent it. Invalidate
 			// the shared SPAN, since it did the same
 			secMan.storeRemoteEI(this.nodeId, command.receiverEI);
-		}
 
-		this.driver.controllerLog.logNode(this.id, {
-			message: `received S2 nonce, not sure what to do with it`,
-			level: "warn",
-			direction: "inbound",
-		});
+			// Since we landed here, this is not in response to any command we sent
+			this.driver.controllerLog.logNode(this.id, {
+				message: `received S2 nonce, not sure what to do with it`,
+				level: "warn",
+				direction: "inbound",
+			});
+		} else if (command.MOS) {
+			// The node notified us that its MPAN state is out of sync. Send the MPAN
+			const lastGroupId = secMan.getLastGroupId(this.nodeId);
+			if (lastGroupId == undefined) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `received S2 MOS, but group ID is unknown`,
+					level: "warn",
+					direction: "inbound",
+				});
+				return;
+			}
+
+			const innerMPANState = secMan.getInnerMPANState(lastGroupId);
+			if (!innerMPANState) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `received S2 MOS, but no MPAN state exists for group ${lastGroupId}`,
+					level: "warn",
+					direction: "inbound",
+				});
+				return;
+			}
+
+			try {
+				await this.commandClasses["Security 2"].sendMPAN(
+					lastGroupId,
+					innerMPANState,
+				);
+			} catch (e) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `failed to send nonce: ${getErrorMessage(e)}`,
+					direction: "inbound",
+				});
+			}
+		}
 	}
 
 	private busyPollingAfterHail: boolean = false;

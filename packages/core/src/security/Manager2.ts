@@ -106,8 +106,10 @@ export class SecurityManager2 {
 	private peerSequenceNumbers = new Map<number, number[]>();
 	/** A map of the inner MPAN states for each multicast group we manage */
 	private mpanStates = new Map<number, Buffer>();
-	/** MPANs used to decrypt multicast messages from other nodes. Peer Node ID -> MPAN Group -> MPAN */
+	/** MPANs used to decrypt multicast messages from other nodes. Peer Node ID -> Multicast Group -> MPAN */
 	private peerMPANs = new Map<number, Map<number, MPANTableEntry>>();
+	/** Remember which Multicast group was last used to send a command to a node */
+	private lastMulticastGroupId = new Map<number, number>();
 	/** A map of permanent network keys per security class */
 	private networkKeys = new Map<SecurityClass, NetworkKeys>();
 	/** Which multicast group has been assigned which security class */
@@ -406,6 +408,10 @@ export class SecurityManager2 {
 		return ret;
 	}
 
+	public getInnerMPANState(group: number): Buffer | undefined {
+		return this.mpanStates.get(group);
+	}
+
 	/**
 	 * Generates the next nonce for the given peer and returns it.
 	 * @param store - Whether the nonce should be stored/remembered as the current SPAN.
@@ -465,5 +471,22 @@ export class SecurityManager2 {
 			this.peerMPANs.set(peerNodeId, new Map());
 		}
 		this.peerMPANs.get(peerNodeId)!.set(groupId, mpanState);
+	}
+
+	/** Remember the multicast group ID which was last used to communicate with a node */
+	public setLastGroupId(
+		peerNodeId: number,
+		groupId: number | undefined,
+	): void {
+		if (groupId != undefined) {
+			this.lastMulticastGroupId.set(peerNodeId, groupId);
+		} else {
+			this.lastMulticastGroupId.delete(peerNodeId);
+		}
+	}
+
+	/** Return the multicast group ID which was last used to communicate with a node */
+	public getLastGroupId(peerNodeId: number): number | undefined {
+		return this.lastMulticastGroupId.get(peerNodeId);
 	}
 }

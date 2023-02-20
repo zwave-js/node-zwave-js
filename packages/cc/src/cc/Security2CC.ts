@@ -49,6 +49,7 @@ import {
 import {
 	MGRPExtension,
 	MOSExtension,
+	MPANExtension,
 	Security2Extension,
 	SPANExtension,
 } from "../lib/Security2/Extension";
@@ -216,6 +217,53 @@ export class Security2CCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			SOS: false,
 			MOS: true,
+		});
+
+		try {
+			await this.applHost.sendCommand(cc, {
+				...this.commandOptions,
+				// Seems we need these options or some nodes won't accept the nonce
+				transmitOptions:
+					TransmitOptions.ACK | TransmitOptions.AutoRoute,
+				// Only try sending a nonce once
+				maxSendAttempts: 1,
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Nonce,
+				// We don't want failures causing us to treat the node as asleep or dead
+				changeNodeStatusOnMissingACK: false,
+			});
+		} catch (e) {
+			if (isTransmissionError(e)) {
+				return false;
+			} else {
+				// Pass other errors through
+				throw e;
+			}
+		}
+		return true;
+	}
+
+	/** Sends the given MPAN to the node */
+	public async sendMPAN(
+		groupId: number,
+		innerMPANState: Buffer,
+	): Promise<boolean> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.MessageEncapsulation,
+		);
+
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		const cc = new Security2CCMessageEncapsulation(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			extensions: [
+				new MPANExtension({
+					groupId,
+					innerMPANState,
+				}),
+			],
 		});
 
 		try {
@@ -691,7 +739,7 @@ interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
 	/** Can be used to override the default security class for the command */
 	securityClass?: SecurityClass;
 	extensions?: Security2Extension[];
-	encapsulated: CommandClass;
+	encapsulated?: CommandClass;
 }
 
 // An S2 encapsulated command may result in a NonceReport to be sent by the node if it couldn't decrypt the message
@@ -757,10 +805,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 		// Make sure that we can send/receive secure commands
 		assertSecurity.call(this, options);
-
-		// FIXME: Not the MGRP extension designates a multicast command,
-		// but the combination of MGRP and broadcast/multicast destination.
-		// Singlecast with MGRP extension is the singlecast followup!
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -957,9 +1001,18 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			this.key = key;
 			this.iv = iv;
 		} else {
+			if (!options.encapsulated && !options.extensions) {
+				throw new ZWaveError(
+					"Security S2 encapsulation requires an encapsulated CC and/or extensions",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
 			this._securityClass = options.securityClass;
-			this.encapsulated = options.encapsulated;
-			options.encapsulated.encapsulatingCC = this as any;
+			if (options.encapsulated) {
+				this.encapsulated = options.encapsulated;
+				options.encapsulated.encapsulatingCC = this as any;
+			}
 
 			this.extensions = options.extensions ?? [];
 			if (
