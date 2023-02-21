@@ -874,14 +874,19 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					ctx.groupId,
 				);
 			} else {
-				// FIXME: When the newly removed node receives subsequent singlecast messages
-				// without MPAN extension, the newly removed node MUST forget about the Multicast group ID.
-
 				// Don't accept duplicate Singlecast commands
 				prevSequenceNumber = validateSequenceNumber.call(
 					this,
 					this._sequenceNumber,
 				);
+
+				// When a node removes a singlecast message after a multicast group was marked out of sync,
+				// it must forget about the group.
+				if (ctx.groupId == undefined) {
+					this.host.securityManager2.resetOutOfSyncMPANs(
+						sendingNodeId,
+					);
+				}
 			}
 
 			const unencryptedPayload = this.payload.slice(0, offset);

@@ -529,14 +529,15 @@ export class SecurityManager2 {
 		);
 	}
 
-	/** Reset all MPANs stored for the given node */
-	public resetPeerMPANs(peerNodeId: number): void {
-		this.peerMPANs.delete(peerNodeId);
-	}
-
-	/** Reset the MPAN stored for the given node with the given group ID */
-	public resetPeerMPAN(peerNodeId: number, groupId: number): void {
-		this.peerMPANs.get(peerNodeId)?.delete(groupId);
+	/** Reset all out of sync MPANs for the given node */
+	public resetOutOfSyncMPANs(peerNodeId: number): void {
+		const entries = this.peerMPANs.get(peerNodeId);
+		if (!entries) return;
+		for (const [groupId, state] of entries) {
+			if (state.type === MPANState.OutOfSync) {
+				entries.delete(groupId);
+			}
+		}
 	}
 
 	public storePeerMPAN(

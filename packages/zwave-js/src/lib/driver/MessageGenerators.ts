@@ -6,6 +6,7 @@ import {
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
+	SupervisionCommand,
 } from "@zwave-js/cc";
 import {
 	SecurityCCCommandEncapsulation,
@@ -13,6 +14,7 @@ import {
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
 import {
+	CommandClasses,
 	EncapsulationFlags,
 	MessagePriority,
 	NODE_ID_BROADCAST,
@@ -67,6 +69,19 @@ export async function waitForNodeUpdate<T extends Message>(
 	}
 }
 
+function getNodeUpdateTimeout(
+	driver: Driver,
+	msg: Message,
+	additionalCommandTimeoutMs = 0,
+): number {
+	const commandTimeMs = Math.ceil((msg.rtt ?? 0) / 1e6);
+	return (
+		commandTimeMs +
+		driver.getReportTimeout(msg) +
+		additionalCommandTimeoutMs
+	);
+}
+
 /** A simple message generator that simply sends a message, waits for the ACK (and the response if one is expected) */
 export const simpleMessageGenerator: MessageGeneratorImplementation =
 	async function* (
@@ -77,7 +92,6 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 	) {
 		// Pass this message to the send thread and wait for it to be sent
 		let result: Message;
-		let commandTimeMs: number;
 		// At this point we can't have received a premature update
 		msg.prematureNodeUpdate = undefined;
 
@@ -87,7 +101,6 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 
 			// Figure out how long the message took to be handled
 			msg.markAsCompleted();
-			commandTimeMs = Math.ceil(msg.rtt! / 1e6);
 
 			onMessageSent(msg, result);
 		} catch (e) {
@@ -112,10 +125,11 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 
 			// CommandTime is measured by the application
 			// ReportTime timeout SHOULD be set to CommandTime + 1 second.
-			const timeout =
-				commandTimeMs +
-				driver.getReportTimeout(msg) +
-				additionalCommandTimeoutMs;
+			const timeout = getNodeUpdateTimeout(
+				driver,
+				msg,
+				additionalCommandTimeoutMs,
+			);
 			return waitForNodeUpdate(driver, msg, timeout);
 		}
 
@@ -272,20 +286,40 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			additionalTimeoutMs,
 		);
 
-		// FIXME: We probably want to wait for the potential NonceReport, even if the command does not expect a response
-		// This allows us to better handle S2 decryption errors when NOT using Supervision
-
+		// If we want to make sure that a node understood a SET-type S2-encapsulated message, we either need to use
+		// Supervision and wait for the Supervision Report (handled by the simpleMessageGenerator), or we need to add a
+		// short delay between commands and wait if a NonceReport is received.
+		let nonceReport: Security2CCNonceReport | undefined;
 		if (
+			isTransmitReport(response) &&
+			!msg.command.expectsCCResponse() &&
+			!msg.command.getEncapsulatedCC(
+				CommandClasses.Supervision,
+				SupervisionCommand.Get,
+			)
+		) {
+			nonceReport = await driver
+				.waitForCommand<Security2CCNonceReport>(
+					(cc) =>
+						cc.nodeId === nodeId &&
+						cc instanceof Security2CCNonceReport,
+					500,
+				)
+				.catch(() => undefined);
+		} else if (
 			isCommandClassContainer(response) &&
 			response.command instanceof Security2CCNonceReport
 		) {
-			const command = response.command;
-			if (command.SOS && command.receiverEI) {
+			nonceReport = response.command;
+		}
+
+		if (nonceReport) {
+			if (nonceReport.SOS && nonceReport.receiverEI) {
 				// The node couldn't decrypt the last command we sent it. Invalidate
 				// the shared SPAN, since it did the same
-				secMan.storeRemoteEI(nodeId, command.receiverEI);
+				secMan.storeRemoteEI(nodeId, nonceReport.receiverEI);
 			}
-			if (command.MOS) {
+			if (nonceReport.MOS) {
 				const multicastGroupId = msg.command.getMulticastGroupId();
 				if (multicastGroupId != undefined) {
 					// The node couldn't decrypt the previous S2 multicast. Tell it the MPAN (again)

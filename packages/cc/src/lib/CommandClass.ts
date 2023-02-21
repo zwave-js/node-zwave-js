@@ -46,6 +46,7 @@ import {
 import {
 	EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
+	isMultiEncapsulatingCommandClass,
 } from "./EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
@@ -1034,7 +1035,7 @@ export class CommandClass implements ICommandClass {
 		return false;
 	}
 
-	/** Traverses the encapsulation stack of this CC and returns the one that has the given CC id and (optionally) CC Command if that exists. */
+	/** Traverses the encapsulation stack of this CC outwards and returns the one that has the given CC id and (optionally) CC Command if that exists. */
 	public getEncapsulatingCC(
 		ccId: CommandClasses,
 		ccCommand?: number,
@@ -1047,6 +1048,27 @@ export class CommandClass implements ICommandClass {
 				(ccCommand === undefined || cc.ccCommand === ccCommand)
 			) {
 				return cc;
+			}
+		}
+	}
+
+	/** Traverses the encapsulation stack of this CC inwards and returns the one that has the given CC id and (optionally) CC Command if that exists. */
+	public getEncapsulatedCC(
+		ccId: CommandClasses,
+		ccCommand?: number,
+	): CommandClass | undefined {
+		const predicate = (cc: CommandClass): boolean =>
+			cc.ccId === ccId &&
+			(ccCommand === undefined || cc.ccCommand === ccCommand);
+
+		if (isEncapsulatingCommandClass(this)) {
+			if (predicate(this.encapsulated)) return this.encapsulated;
+			return this.encapsulated.getEncapsulatedCC(ccId, ccCommand);
+		} else if (isMultiEncapsulatingCommandClass(this)) {
+			for (const encapsulated of this.encapsulated) {
+				if (predicate(encapsulated)) return encapsulated;
+				const ret = encapsulated.getEncapsulatedCC(ccId, ccCommand);
+				if (ret) return ret;
 			}
 		}
 	}

@@ -2805,7 +2805,7 @@ export class Driver
 							}`,
 							"warn",
 						);
-						// FIXME: We may need to do the S2 MOS dance here
+						// TODO: We may need to do the S2 MOS dance here - or we can deal with it when the next valid CC arrives
 						return;
 					} else {
 						throw e;
