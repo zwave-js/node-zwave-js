@@ -33,6 +33,7 @@ import type { DeferredPromise } from 'alcalzone-shared/deferred-promise';
 import type { DeviceConfig } from '@zwave-js/config';
 import { Duration } from '@zwave-js/core/safe';
 import { DurationUnit } from '@zwave-js/core/safe';
+import { EncapsulationFlags } from '@zwave-js/core';
 import { EntryControlDataTypes } from '@zwave-js/cc/safe';
 import { EntryControlEventTypes } from '@zwave-js/cc/safe';
 import { extractFirmware } from '@zwave-js/core';
@@ -325,6 +326,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     softReset(): Promise<void>;
     start(): Promise<void>;
     get statisticsEnabled(): boolean;
+    toggleEncapsulation(msg: Message & ICommandClassContainer, encapsulation: EncapsulationFlags, active: boolean): void;
     // (undocumented)
     tryGetEndpoint(cc: CommandClass): Endpoint | undefined;
     trySoftReset(): Promise<void>;

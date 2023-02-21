@@ -23,6 +23,7 @@ import { EncapsulationFlags } from '@zwave-js/core';
 import { EncapsulationFlags as EncapsulationFlags_2 } from '@zwave-js/core/safe';
 import { FLiRS } from '@zwave-js/core';
 import { FLiRS as FLiRS_2 } from '@zwave-js/core/safe';
+import { FrameType } from '@zwave-js/core';
 import type { GenericDeviceClass } from '@zwave-js/config';
 import { ICommandClass } from '@zwave-js/core';
 import { IVirtualEndpoint } from '@zwave-js/core';
@@ -3845,6 +3846,7 @@ export class CommandClass implements ICommandClass {
     static getCommandClass(data: Buffer): CommandClasses_2;
     static getConstructor(ccData: Buffer): CCConstructor<CommandClass>;
     getDefinedValueIDs(applHost: ZWaveApplicationHost_2): ValueID[];
+    getEncapsulatedCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     getEncapsulatingCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     // (undocumented)
     getEndpoint(applHost: ZWaveApplicationHost_2): IZWaveEndpoint_2 | undefined;
@@ -3879,7 +3881,6 @@ export class CommandClass implements ICommandClass {
     protected removeMetadata(applHost: ZWaveApplicationHost_2, ccValue: CCValue): void;
     protected removeValue(applHost: ZWaveApplicationHost_2, ccValue: CCValue): void;
     serialize(): Buffer;
-    setEncapsulationFlag(flag: EncapsulationFlags, active: boolean): void;
     setInterviewComplete(applHost: ZWaveApplicationHost_2, complete: boolean): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     setMappedBasicValue(_applHost: ZWaveApplicationHost_2, _value: number): boolean;
@@ -3889,6 +3890,7 @@ export class CommandClass implements ICommandClass {
     skipEndpointInterview(): boolean;
     // (undocumented)
     protected throwMissingCriticalInterviewResponse(): never;
+    toggleEncapsulationFlag(flag: EncapsulationFlags, active: boolean): void;
     toJSON(): JSONObject;
     toLogEntry(_applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -3912,6 +3914,7 @@ export const commandClass: <TTarget extends CommandClass>(ccId: CommandClasses_2
 export type CommandClassDeserializationOptions = {
     data: Buffer;
     origin?: MessageOrigin;
+    frameType?: FrameType;
 } & ({
     fromEncapsulation?: false;
     nodeId: number;
@@ -13660,7 +13663,10 @@ export interface SchedulePollOptions {
 export class Security2CC extends CommandClass {
     // (undocumented)
     ccCommand: Security2Command;
-    static encapsulate(host: ZWaveHost_2, cc: CommandClass, securityClass?: SecurityClass): Security2CCMessageEncapsulation;
+    static encapsulate(host: ZWaveHost_2, cc: CommandClass, options?: {
+        securityClass?: SecurityClass;
+        MOS?: boolean;
+    }): Security2CCMessageEncapsulation;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost): Promise<void>;
     static requiresEncapsulation(cc: CommandClass): boolean;
@@ -13762,6 +13768,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     encapsulated?: CommandClass;
     // (undocumented)
     extensions: Security2Extension[];
+    // (undocumented)
+    getMulticastGroupId(): number | undefined;
+    // (undocumented)
+    hasMOSExtension(): boolean;
     // (undocumented)
     host: ZWaveHost_2 & {
         securityManager2: SecurityManager2;

@@ -817,6 +817,11 @@ export function encodeFloatWithScale(value: number, scale: number, override?: {
 // @public
 export function encodeMaybeBoolean(val: Maybe<boolean>): number;
 
+// Warning: (ae-missing-release-tag) "encodeNodeBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer;
+
 // Warning: (ae-missing-release-tag) "encodeNodeInformationFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -907,6 +912,11 @@ export type FLiRS = false | "250ms" | "1000ms";
 //
 // @public (undocumented)
 export function formatDate(date: Date, format: string): string;
+
+// Warning: (ae-missing-release-tag) "FrameType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type FrameType = "singlecast" | "broadcast" | "multicast";
 
 // Warning: (ae-missing-release-tag) "generateAuthKey" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1402,6 +1412,25 @@ export interface MetadataUpdatedArgs extends ValueID {
     metadata: ValueMetadata | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "MPANState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum MPANState {
+    MPAN = 2,
+    None = 0,
+    OutOfSync = 1
+}
+
+// Warning: (ae-missing-release-tag) "MPANTableEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type MPANTableEntry = {
+    type: MPANState.OutOfSync;
+} | {
+    type: MPANState.MPAN;
+    currentMPAN: Buffer;
+};
+
 // Warning: (ae-missing-release-tag) "MulticastCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1413,6 +1442,16 @@ export type MulticastCC<T extends ICommandClass = ICommandClass> = T & {
 //
 // @public (undocumented)
 export type MulticastDestination = [number, number, ...number[]];
+
+// Warning: (ae-missing-release-tag) "MulticastGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MulticastGroup {
+    // (undocumented)
+    nodeIDs: readonly number[];
+    // (undocumented)
+    securityClass: S2SecurityClass;
+}
 
 // Warning: (ae-missing-release-tag) "NODE_ID_BROADCAST" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1590,6 +1629,11 @@ export function parseMaybeBoolean(val: number, preserveUnknown?: boolean): Maybe
 //
 // @public
 export function parseMaybeNumber(val: number): Maybe<number> | undefined;
+
+// Warning: (ae-missing-release-tag) "parseNodeBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function parseNodeBitMask(mask: Buffer): number[];
 
 // Warning: (ae-missing-release-tag) "parseNodeInformationFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1977,11 +2021,12 @@ export class SecurityManager {
 // @public (undocumented)
 export class SecurityManager2 {
     constructor();
-    // (undocumented)
-    assignSecurityClassMulticast(group: number, securityClass: SecurityClass): void;
+    createMulticastGroup(nodeIDs: number[], s2SecurityClass: S2SecurityClass): number;
     deleteNonce(receiver: number): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     generateNonce(receiver: number | undefined): Buffer;
+    // (undocumented)
+    getInnerMPANState(groupId: number): Buffer | undefined;
     // (undocumented)
     getKeysForNode(peerNodeID: number): NetworkKeys | TempNetworkKeys;
     // Warning: (ae-forgotten-export) The symbol "NetworkKeys" needs to be exported by the entry point index.d.ts
@@ -1989,30 +2034,43 @@ export class SecurityManager2 {
     // (undocumented)
     getKeysForSecurityClass(securityClass: SecurityClass): NetworkKeys;
     // (undocumented)
+    getMulticastGroup(group: number): Readonly<MulticastGroup> | undefined;
+    // (undocumented)
+    getMulticastKeyAndIV(groupId: number): {
+        key: Buffer;
+        iv: Buffer;
+    };
+    getPeerMPAN(peerNodeId: number, groupId: number): MPANTableEntry | {
+        type: MPANState.None;
+    };
+    // (undocumented)
     getSPANState(peerNodeID: number): SPANTableEntry | {
         type: SPANState.None;
     };
     // (undocumented)
     hasKeysForSecurityClass(securityClass: SecurityClass): boolean;
     hasUsedSecurityClass(peerNodeID: number, securityClass: SecurityClass): boolean;
-    // (undocumented)
-    initializeMPAN(group: number): void;
     initializeSPAN(peerNodeId: number, securityClass: SecurityClass, senderEI: Buffer, receiverEI: Buffer): void;
     initializeTempSPAN(peerNodeId: number, senderEI: Buffer, receiverEI: Buffer): void;
     isDuplicateSinglecast(peerNodeId: number, sequenceNumber: number): boolean;
     // (undocumented)
-    nextMPAN(group: number): Buffer;
+    nextMPAN(groupId: number): Buffer;
     nextNonce(peerNodeId: number, store?: boolean): Buffer;
+    nextPeerMPAN(peerNodeId: number, groupId: number): Buffer;
     nextSequenceNumber(peerNodeId: number): number;
+    resetOutOfSyncMPANs(peerNodeId: number): void;
     setKey(securityClass: SecurityClass, key: Buffer): void;
     setSPANState(peerNodeID: number, state: SPANTableEntry | {
         type: SPANState.None;
     }): void;
     // (undocumented)
+    storePeerMPAN(peerNodeId: number, groupId: number, mpanState: MPANTableEntry): void;
+    // (undocumented)
     storeRemoteEI(peerNodeId: number, remoteEI: Buffer): void;
     storeSequenceNumber(peerNodeId: number, sequenceNumber: number): number | undefined;
     // Warning: (ae-forgotten-export) The symbol "TempNetworkKeys" needs to be exported by the entry point index.d.ts
     readonly tempKeys: Map<number, TempNetworkKeys>;
+    tryIncrementPeerMPAN(peerNodeId: number, groupId: number): void;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityManagerOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2030,7 +2088,7 @@ export interface SecurityManagerOptions {
 // Warning: (ae-missing-release-tag) "SendCommandOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type SendCommandOptions = SendMessageOptions & SupervisionOptions & {
+export type SendCommandOptions = SendMessageOptions & SupervisionOptions & SendCommandSecurityS2Options & {
     maxSendAttempts?: number;
     autoEncapsulate?: boolean;
     encapsulationFlags?: EncapsulationFlags;
@@ -2041,6 +2099,13 @@ export type SendCommandOptions = SendMessageOptions & SupervisionOptions & {
 //
 // @public (undocumented)
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> = undefined extends TResponse ? SupervisionResult | undefined : TResponse | undefined;
+
+// Warning: (ae-missing-release-tag) "SendCommandSecurityS2Options" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SendCommandSecurityS2Options = {
+    multicastOutOfSync?: boolean;
+};
 
 // Warning: (ae-missing-release-tag) "SendMessageOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3000,8 +3065,10 @@ export enum ZWaveErrorCodes {
     ReplaceFailedNode_Failed = 362,
     ReplaceFailedNode_NodeOK = 363,
     Security2CC_CannotDecode = 1405,
+    Security2CC_CannotDecodeMulticast = 1408,
     Security2CC_InvalidQRCode = 1406,
     Security2CC_MissingExtension = 1404,
+    Security2CC_NoMPAN = 1407,
     Security2CC_NoSPAN = 1401,
     Security2CC_NotInitialized = 1402,
     Security2CC_NotSecure = 1403,
@@ -3099,7 +3166,7 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
-// src/security/Manager2.ts:55:4 - (ae-forgotten-export) The symbol "CtrDRBG" needs to be exported by the entry point index.d.ts
+// src/security/Manager2.ts:65:4 - (ae-forgotten-export) The symbol "CtrDRBG" needs to be exported by the entry point index.d.ts
 // src/security/QR.ts:98:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)
