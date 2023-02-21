@@ -1,0 +1,252 @@
+{
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV9080A-A",
+	"description": "Curtain Motor Controller",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xD00D",
+			"zwaveAllianceId": 3342
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "REP EP1",
+			"maxNodes": 5,
+			"description": "When endpoint 1 state changes, send SWITCH_MULTILEVEL_REPORT to associated devices of this group."
+		},
+		"3": {
+			"label": "REP EP2",
+			"maxNodes": 5,
+			"description": "When endpoint 2 state changes, send SWITCH_BINARY_REPORT to associated devices of this group."
+		}
+	},
+	"metadata": {
+		"Description": "The curtain motor controller is a universal, Z-Wave Plus compatible, electric motor controller. The device allows for controlling motors of roller blinds and venetian blinds, which are single phase AC powered. It can also act as double switch when set to 'light mode' (parameter 3)",
+		"Inclusion and Exclusion": "Find the button k2 on the unit and press 3 times or when s1 is enabled press the switch 3 times",
+		"Reset": "Find the button k2 on the unit and hold for over 10s",
+		"Calibration": "Find the button k1 on the unit and press it shortly",
+		"Manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3342/SR-ZV9080A-AZ-WaveCurtainMotorController_1.pdf"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Report state change in steps of 10% (0 = disable)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"label": "Working mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Light Mode",
+					"value": 0
+				},
+				{
+					"label": "Shutter mode without positioning",
+					"value": 1
+				},
+				{
+					"label": "Shutter mode with positioning",
+					"value": 2
+				},
+				{
+					"label": "Venetian mode (up/down and slats rotation)",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Save position percentage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Over current protection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Starting positioning calibration with 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Configuration S1 and 2 (light mode only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Short press S1 (2) to switch ON/OFF Q1 (2). Hold down S1 (2) to switch ON Q1 (2), then release to switch OFF Q2 (1)",
+					"value": 0
+				},
+				{
+					"label": "Short press S1 (2) to switch ON/OFF Q1 (2)",
+					"value": 1
+				},
+				{
+					"label": "Hold down S1 (2) to switch ON Q1 (2), release to switch OFF Q2 (1)",
+					"value": 2
+				},
+				{
+					"label": "Short press S1 or S2 to switch ON/OFF of both switches",
+					"value": 3
+				},
+				{
+					"label": "Hold down S1 (2) to switch ON (OFF) both switches",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Includion / exclusion via pressing s1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Scene activation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable to send for action of both S1 and S2",
+					"value": 0
+				},
+				{
+					"label": "Enable to send for action of both S1 and S2",
+					"value": 1
+				},
+				{
+					"label": "Enable to send for action of only S1",
+					"value": 2
+				},
+				{
+					"label": "Enable to send for action of only S2",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Report when power change in W",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "11",
+			"label": "Report when current change in 0.1A (0 is disabled)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "12",
+			"label": "Report when Voltage change in V (0 is disabled)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "13",
+			"label": "Slats rotation time in 0.1s",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 520,
+			"defaultValue": 15
+		},
+		{
+			"#": "14",
+			"label": "Time cycle to report on values in s",
+			"valueSize": 1,
+			"minValue": 300,
+			"maxValue": 2678400,
+			"defaultValue": 3600
+		}
+	]
+}
