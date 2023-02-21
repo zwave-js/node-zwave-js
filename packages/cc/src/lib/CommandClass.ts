@@ -186,7 +186,7 @@ export class CommandClass implements ICommandClass {
 			);
 
 			// Send secure commands if necessary
-			this.setEncapsulationFlag(
+			this.toggleEncapsulationFlag(
 				EncapsulationFlags.Security,
 				this.host.isCCSecure(
 					this.ccId,
@@ -235,7 +235,7 @@ export class CommandClass implements ICommandClass {
 	public encapsulationFlags: EncapsulationFlags = EncapsulationFlags.None;
 
 	/** Activates or deactivates the given encapsulation flag(s) */
-	public setEncapsulationFlag(
+	public toggleEncapsulationFlag(
 		flag: EncapsulationFlags,
 		active: boolean,
 	): void {

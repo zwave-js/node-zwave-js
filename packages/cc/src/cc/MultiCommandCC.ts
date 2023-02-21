@@ -81,7 +81,7 @@ export class MultiCommandCC extends CommandClass {
 			EncapsulationFlags.Security,
 			EncapsulationFlags.CRC16,
 		] as const) {
-			ret.setEncapsulationFlag(
+			ret.toggleEncapsulationFlag(
 				flag,
 				CCs.some((cc) => cc.encapsulationFlags & flag),
 			);

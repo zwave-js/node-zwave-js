@@ -6,6 +6,7 @@ import {
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
+	SupervisionCC,
 	SupervisionCommand,
 } from "@zwave-js/cc";
 import {
@@ -411,7 +412,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 
 		// Make sure the command is not using Supervision
 		// The specs mention that Supervision CAN be used for Multicast, but conveniently fail to explain how to respond to that.
-		driver.removeEncapsulationLayer(msg, EncapsulationFlags.Supervision);
+		driver.toggleEncapsulation(msg, EncapsulationFlags.Supervision, false);
 
 		// Send the multicast command. We remember the transmit report and treat it as the result of the multicast command
 		const response = yield* simpleMessageGenerator(
@@ -423,14 +424,20 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 		// Unwrap the command again, so we can make the following encapsulation depend on the target node
 		driver.unwrapCommands(msg);
 		const command = msg.command;
+		// Remember the original encapsulation flags
+		const encapsulationFlags = command.encapsulationFlags;
 
 		// Now do singlecast followups with every node in the group
 		for (const nodeId of group.nodeIDs) {
-			// FIXME: These SHOULD use supervision where possible
-			// For now, we just send them without supervision
-
-			// Reuse the S2 singlecast message generator for this.
+			// Point the CC at the target node
 			command.nodeId = nodeId;
+			// Figure out if supervision should be used
+			command.encapsulationFlags = encapsulationFlags;
+			command.toggleEncapsulationFlag(
+				EncapsulationFlags.Supervision,
+				SupervisionCC.mayUseSupervision(driver, command),
+			);
+
 			const scMsg = driver.createSendDataMessage(command, {
 				transmitOptions: msg.transmitOptions,
 				maxSendAttempts: msg.maxSendAttempts,
@@ -440,6 +447,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 				new MGRPExtension({ groupId }),
 			);
 
+			// Reuse the S2 singlecast message generator for sending this new message
 			try {
 				const scResponse = yield* secureMessageGeneratorS2(
 					driver,

@@ -3880,20 +3880,20 @@ ${handlers.length} left`,
 			unwrapped.encapsulationFlags = msg.command.encapsulationFlags;
 			switch (msg.command.ccId) {
 				case CommandClasses.Supervision:
-					unwrapped.setEncapsulationFlag(
+					unwrapped.toggleEncapsulationFlag(
 						EncapsulationFlags.Supervision,
 						true,
 					);
 					break;
 				case CommandClasses["Security 2"]:
 				case CommandClasses.Security:
-					unwrapped.setEncapsulationFlag(
+					unwrapped.toggleEncapsulationFlag(
 						EncapsulationFlags.Security,
 						true,
 					);
 					break;
 				case CommandClasses["CRC-16 Encapsulation"]:
-					unwrapped.setEncapsulationFlag(
+					unwrapped.toggleEncapsulationFlag(
 						EncapsulationFlags.CRC16,
 						true,
 					);
@@ -3904,12 +3904,14 @@ ${handlers.length} left`,
 		}
 	}
 
-	public removeEncapsulationLayer(
+	/** Adds or removes the given encapsulation from the given message */
+	public toggleEncapsulation(
 		msg: Message & ICommandClassContainer,
-		removeFlags: EncapsulationFlags,
+		encapsulation: EncapsulationFlags,
+		active: boolean,
 	): void {
 		this.unwrapCommands(msg);
-		msg.command.setEncapsulationFlag(removeFlags, false);
+		msg.command.toggleEncapsulationFlag(encapsulation, active);
 		this.encapsulateCommands(msg);
 	}
 
