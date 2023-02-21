@@ -1,6 +1,8 @@
 import {
 	CommandClass,
 	isCommandClassContainer,
+	MGRPExtension,
+	MPANExtension,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
@@ -11,8 +13,12 @@ import {
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
 import {
+	EncapsulationFlags,
+	MessagePriority,
+	NODE_ID_BROADCAST,
 	SendCommandOptions,
 	SPANState,
+	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -209,7 +215,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			);
 		} else if (typeof msg.command.nodeId !== "number") {
 			throw new ZWaveError(
-				"Cannot use the S2 message generator for multicast commands!", // (yet)
+				"Cannot use the S2 message generator for multicast commands!",
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		} else if (!(msg.command instanceof Security2CCMessageEncapsulation)) {
@@ -265,6 +271,10 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			onMessageSent,
 			additionalTimeoutMs,
 		);
+
+		// FIXME: We probably want to wait for the potential NonceReport, even if the command does not expect a response
+		// This allows us to better handle S2 decryption errors when NOT using Supervision
+
 		if (
 			isCommandClassContainer(response) &&
 			response.command instanceof Security2CCNonceReport
@@ -274,6 +284,21 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				// The node couldn't decrypt the last command we sent it. Invalidate
 				// the shared SPAN, since it did the same
 				secMan.storeRemoteEI(nodeId, command.receiverEI);
+			}
+			if (command.MOS) {
+				const multicastGroupId = msg.command.getMulticastGroupId();
+				if (multicastGroupId != undefined) {
+					// The node couldn't decrypt the previous S2 multicast. Tell it the MPAN (again)
+					const mpan = secMan.getInnerMPANState(multicastGroupId);
+					if (mpan) {
+						msg.command.extensions.push(
+							new MPANExtension({
+								groupId: multicastGroupId,
+								innerMPANState: mpan,
+							}),
+						);
+					}
+				}
 			}
 			driver.controllerLog.logNode(nodeId, {
 				message: `failed to decode the message, retrying with SPAN extension...`,
@@ -310,6 +335,128 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		return response;
 	};
 
+/** A message generator for security encapsulated messages (S2 Multicast) */
+export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
+	async function* (driver, msg, onMessageSent) {
+		if (!isSendData(msg)) {
+			throw new ZWaveError(
+				"Cannot use the S2 multicast message generator for a command that's not a SendData message!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			msg.command.isSinglecast() &&
+			msg.command.nodeId !== NODE_ID_BROADCAST
+		) {
+			throw new ZWaveError(
+				"Cannot use the S2 multicast message generator for singlecast commands!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (!(msg.command instanceof Security2CCMessageEncapsulation)) {
+			throw new ZWaveError(
+				"The S2 multicast message generator can only be used for Security S2 command encapsulation!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const groupId = msg.command.getMulticastGroupId();
+		if (groupId == undefined) {
+			throw new ZWaveError(
+				"Cannot use the S2 multicast message generator without a multicast group ID!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const secMan = driver.securityManager2!;
+		const group = secMan.getMulticastGroup(groupId);
+		if (!group) {
+			throw new ZWaveError(
+				`Multicast group ${groupId} does not exist!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Make sure the command is not using Supervision
+		// The specs mention that Supervision CAN be used for Multicast, but conveniently fail to explain how to respond to that.
+		driver.removeEncapsulationLayer(msg, EncapsulationFlags.Supervision);
+
+		// Send the multicast command. We remember the transmit report and treat it as the result of the multicast command
+		const response = yield* simpleMessageGenerator(
+			driver,
+			msg,
+			onMessageSent,
+		);
+
+		// Unwrap the command again, so we can make the following encapsulation depend on the target node
+		driver.unwrapCommands(msg);
+		const command = msg.command;
+
+		// Now do singlecast followups with every node in the group
+		for (const nodeId of group.nodeIDs) {
+			// FIXME: These SHOULD use supervision where possible
+			// For now, we just send them without supervision
+
+			// Reuse the S2 singlecast message generator for this.
+			command.nodeId = nodeId;
+			const scMsg = driver.createSendDataMessage(command, {
+				transmitOptions: msg.transmitOptions,
+				maxSendAttempts: msg.maxSendAttempts,
+			});
+			// The outermost command is a Security2CCMessageEncapsulation, we need to set the MGRP extension on this again
+			(scMsg.command as Security2CCMessageEncapsulation).extensions.push(
+				new MGRPExtension({ groupId }),
+			);
+
+			try {
+				const scResponse = yield* secureMessageGeneratorS2(
+					driver,
+					scMsg,
+					onMessageSent,
+				);
+				if (
+					isCommandClassContainer(scResponse) &&
+					scResponse.command instanceof
+						Security2CCMessageEncapsulation &&
+					scResponse.command.hasMOSExtension()
+				) {
+					// The node understood the S2 singlecast followup, but told us that its MPAN is out of sync
+
+					const innerMPANState = secMan.getInnerMPANState(groupId);
+					// This should always be defined, but better not throw unnecessarily here
+					if (innerMPANState) {
+						const cc = new Security2CCMessageEncapsulation(driver, {
+							nodeId,
+							extensions: [
+								new MPANExtension({
+									groupId,
+									innerMPANState,
+								}),
+							],
+						});
+
+						// Send it the MPAN
+						yield* sendCommandGenerator(driver, cc, onMessageSent, {
+							// Seems we need these options or some nodes won't accept the nonce
+							transmitOptions:
+								TransmitOptions.ACK | TransmitOptions.AutoRoute,
+							// Only try sending a nonce once
+							maxSendAttempts: 1,
+							// Nonce requests must be handled immediately
+							priority: MessagePriority.Nonce,
+							// We don't want failures causing us to treat the node as asleep or dead
+							changeNodeStatusOnMissingACK: false,
+						});
+					}
+				}
+			} catch (e) {
+				// TODO: Figure out how we got here, and what to do now.
+				// In any case, keep going with the next nodes
+				// TODO: We should probably respond that there was a failure
+			}
+		}
+
+		return response;
+	};
+
 export function createMessageGenerator<TResponse extends Message = Message>(
 	driver: Driver,
 	msg: Message,
@@ -338,7 +485,9 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 					if (
 						msg.command instanceof Security2CCMessageEncapsulation
 					) {
-						implementation = secureMessageGeneratorS2;
+						implementation = msg.command.isSinglecast()
+							? secureMessageGeneratorS2
+							: secureMessageGeneratorS2Multicast;
 					} else if (
 						msg.command instanceof SecurityCCCommandEncapsulation
 					) {

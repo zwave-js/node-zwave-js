@@ -1,8 +1,9 @@
 /** Management class and utils for Security S2 */
 
-import { getEnumMemberName } from "@zwave-js/shared";
+import { createWrappingCounter, getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { encodeNodeBitMask } from "../index_safe";
 import { highResTimestamp } from "../util/date";
 import { increment } from "./bufferUtils";
 import {
@@ -12,7 +13,7 @@ import {
 	encryptAES128ECB,
 } from "./crypto";
 import { CtrDRBG } from "./ctr_drbg";
-import { SecurityClass } from "./SecurityClass";
+import { S2SecurityClass, SecurityClass } from "./SecurityClass";
 
 interface NetworkKeys {
 	pnk: Buffer;
@@ -78,6 +79,11 @@ export type MPANTableEntry =
 			currentMPAN: Buffer;
 	  };
 
+export interface MulticastGroup {
+	nodeIDs: readonly number[];
+	securityClass: S2SecurityClass;
+}
+
 // How many sequence numbers are remembered for each node when checking for duplicates
 const SINGLECAST_MAX_SEQ_NUMS = 10;
 // How long a singlecast nonce used for encryption will be kept around to attempt decryption of in-flight messages
@@ -108,12 +114,14 @@ export class SecurityManager2 {
 	private mpanStates = new Map<number, Buffer>();
 	/** MPANs used to decrypt multicast messages from other nodes. Peer Node ID -> Multicast Group -> MPAN */
 	private peerMPANs = new Map<number, Map<number, MPANTableEntry>>();
-	/** Remember which Multicast group was last used to send a command to a node */
-	private lastMulticastGroupId = new Map<number, number>();
 	/** A map of permanent network keys per security class */
 	private networkKeys = new Map<SecurityClass, NetworkKeys>();
-	/** Which multicast group has been assigned which security class */
-	private groupClasses = new Map<number, SecurityClass>();
+	/** A map of the defined multicast groups */
+	private multicastGroups = new Map<number, MulticastGroup>();
+	/** Reverse lookup from node IDs (as stringified bitmask) to multicast group ID */
+	private multicastGroupLookup = new Map<string, number>();
+
+	private getNextMulticastGroupId = createWrappingCounter(255);
 
 	/** Sets the PNK for a given security class and derives the encryption keys from it */
 	public setKey(securityClass: SecurityClass, key: Buffer): void {
@@ -137,11 +145,47 @@ export class SecurityManager2 {
 		});
 	}
 
-	public assignSecurityClassMulticast(
+	/**
+	 * Creates (or re-uses) a multicast group for the given node IDs and remembers the security class.
+	 * The returned value is the group ID to be used in multicast commands
+	 */
+	public createMulticastGroup(
+		nodeIDs: number[],
+		s2SecurityClass: S2SecurityClass,
+	): number {
+		// Check if we already have a group for these nodes
+		const newHash = encodeNodeBitMask(nodeIDs).toString("hex");
+		if (this.multicastGroupLookup.has(newHash)) {
+			return this.multicastGroupLookup.get(newHash)!;
+		}
+
+		// If not, generate a new group ID
+		const groupId = this.getNextMulticastGroupId();
+
+		// The group ID may already be occupied. In that case, forget the old group
+		if (this.multicastGroups.has(groupId)) {
+			const oldGroup = this.multicastGroups.get(groupId)!;
+			this.multicastGroups.delete(groupId);
+			const oldHash = encodeNodeBitMask(oldGroup.nodeIDs).toString("hex");
+			this.multicastGroupLookup.delete(oldHash);
+		}
+
+		// Remember the new group
+		this.multicastGroups.set(groupId, {
+			nodeIDs,
+			securityClass: s2SecurityClass,
+		});
+		this.multicastGroupLookup.set(newHash, groupId);
+		// And reset the MPAN state
+		this.mpanStates.delete(groupId);
+
+		return groupId;
+	}
+
+	public getMulticastGroup(
 		group: number,
-		securityClass: SecurityClass,
-	): void {
-		this.groupClasses.set(group, securityClass);
+	): Readonly<MulticastGroup> | undefined {
+		return this.multicastGroups.get(group);
 	}
 
 	public hasKeysForSecurityClass(securityClass: SecurityClass): boolean {
@@ -376,45 +420,69 @@ export class SecurityManager2 {
 		return seq;
 	}
 
-	public initializeMPAN(group: number): void {
-		this.mpanStates.set(group, this.rng.generate(16));
+	public getInnerMPANState(groupId: number): Buffer | undefined {
+		return this.mpanStates.get(groupId);
 	}
 
-	public nextMPAN(group: number): Buffer {
-		if (!this.mpanStates.has(group)) {
+	public nextMPAN(groupId: number): Buffer {
+		const group = this.getMulticastGroup(groupId);
+
+		if (!group) {
 			throw new ZWaveError(
-				`The MPAN state has not been initialized for multicast group ${group}`,
-				ZWaveErrorCodes.Security2CC_NotInitialized,
-			);
-		} else if (!this.groupClasses.has(group)) {
-			throw new ZWaveError(
-				`Multicast group ${group} has not been assigned to a security class yet!`,
+				`Multicast group ${groupId} does not exist!`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
-		const keys = this.networkKeys.get(this.groupClasses.get(group)!);
-		if (!keys) {
-			throw new ZWaveError(
-				`The network keys for the security class of multicast group ${group} have not been set up yet!`,
-				ZWaveErrorCodes.Security2CC_NotInitialized,
-			);
+
+		const keys = this.getKeysForSecurityClass(group.securityClass);
+
+		// We may have to initialize the inner MPAN state
+		if (!this.mpanStates.has(groupId)) {
+			this.mpanStates.set(groupId, this.rng.generate(16));
 		}
 
 		// Compute the next MPAN
-		const stateN = this.mpanStates.get(group)!;
+		const stateN = this.mpanStates.get(groupId)!;
 		const ret = encryptAES128ECB(stateN, keys.keyMPAN);
 		// Increment the inner state
 		increment(stateN);
 		return ret;
 	}
 
-	public getInnerMPANState(group: number): Buffer | undefined {
-		return this.mpanStates.get(group);
+	public getMulticastKeyAndIV(groupId: number): {
+		key: Buffer;
+		iv: Buffer;
+	} {
+		const group = this.getMulticastGroup(groupId);
+
+		if (!group) {
+			throw new ZWaveError(
+				`Multicast group ${groupId} does not exist!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+
+		const keys = this.getKeysForSecurityClass(group.securityClass);
+
+		// We may have to initialize the inner MPAN state
+		if (!this.mpanStates.has(groupId)) {
+			this.mpanStates.set(groupId, this.rng.generate(16));
+		}
+
+		// Compute the next MPAN
+		const stateN = this.mpanStates.get(groupId)!;
+		const ret = encryptAES128ECB(stateN, keys.keyMPAN);
+		// Increment the inner state
+		increment(stateN);
+
+		return {
+			key: keys.keyCCM,
+			iv: ret,
+		};
 	}
 
 	/**
 	 * Generates the next nonce for the given peer and returns it.
-	 * @param store - Whether the nonce should be stored/remembered as the current SPAN.
 	 */
 	public nextPeerMPAN(peerNodeId: number, groupId: number): Buffer {
 		const mpanState = this.getPeerMPAN(peerNodeId, groupId);
@@ -438,6 +506,15 @@ export class SecurityManager2 {
 		// Increment the inner state
 		increment(stateN);
 		return ret;
+	}
+
+	/** As part of MPAN maintenance, this increments the peer's MPAN if it is known */
+	public tryIncrementPeerMPAN(peerNodeId: number, groupId: number): void {
+		const mpanState = this.getPeerMPAN(peerNodeId, groupId);
+		if (mpanState?.type !== MPANState.MPAN) return;
+
+		const stateN = mpanState.currentMPAN;
+		increment(stateN);
 	}
 
 	/** Returns the stored MPAN used to decrypt messages from `peerNodeId`, MPAN group `groupId` */
@@ -471,22 +548,5 @@ export class SecurityManager2 {
 			this.peerMPANs.set(peerNodeId, new Map());
 		}
 		this.peerMPANs.get(peerNodeId)!.set(groupId, mpanState);
-	}
-
-	/** Remember the multicast group ID which was last used to communicate with a node */
-	public setLastGroupId(
-		peerNodeId: number,
-		groupId: number | undefined,
-	): void {
-		if (groupId != undefined) {
-			this.lastMulticastGroupId.set(peerNodeId, groupId);
-		} else {
-			this.lastMulticastGroupId.delete(peerNodeId);
-		}
-	}
-
-	/** Return the multicast group ID which was last used to communicate with a node */
-	public getLastGroupId(peerNodeId: number): number | undefined {
-		return this.lastMulticastGroupId.get(peerNodeId);
 	}
 }

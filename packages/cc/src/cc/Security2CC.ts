@@ -980,6 +980,12 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						ZWaveErrorCodes.Security2CC_CannotDecode,
 					);
 				}
+			} else if (!ctx.isMulticast && ctx.groupId != undefined) {
+				// After reception of a singlecast followup, the MPAN state must be increased
+				this.host.securityManager2.tryIncrementPeerMPAN(
+					sendingNodeId,
+					ctx.groupId,
+				);
 			}
 
 			offset = 0;
@@ -1081,6 +1087,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		return mgrpExtension?.groupId;
 	}
 
+	public hasMOSExtension(): boolean {
+		return this.extensions.some((e) => e instanceof MOSExtension);
+	}
+
 	private getDestinationIDRX(): number {
 		return this.getMulticastGroupId() ?? this.host.ownNodeId;
 	}
@@ -1093,10 +1103,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		return spanExtension?.senderEI;
 	}
 
-	public serialize(): Buffer {
-		// TODO: Support Multicast
-		// Include Sender EI in the command if we only have the receiver's EI
-		const receiverNodeId = this.getDestinationIDTX();
+	private maybeAddSPANExtension(): void {
+		const receiverNodeId = this.nodeId as number;
 		const spanState =
 			this.host.securityManager2.getSPANState(receiverNodeId);
 		if (
@@ -1153,6 +1161,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				this.extensions.push(spanExtension);
 			}
 		}
+	}
+
+	public serialize(): Buffer {
+		// Include Sender EI in the command if we only have the receiver's EI
+		this.maybeAddSPANExtension();
 
 		const unencryptedExtensions = this.extensions.filter(
 			(e) => !e.isEncrypted(),
@@ -1180,26 +1193,40 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		]);
 
 		// Generate the authentication data for CCM encryption
+		const destinationTag = this.getDestinationIDTX();
 		const messageLength =
 			this.computeEncapsulationOverhead() + serializedCC.length;
 		const authData = getAuthenticationData(
 			this.host.ownNodeId,
-			receiverNodeId,
+			destinationTag,
 			this.host.homeId,
 			messageLength,
 			unencryptedPayload,
 		);
 
-		// Generate a nonce for encryption, and remember it to attempt decryption
-		// of potential in-flight messages from the target node.
-		const iv = this.host.securityManager2.nextNonce(receiverNodeId, true);
-		const { keyCCM: key } =
-			// Prefer the overridden security class if it was given
-			this._securityClass != undefined
-				? this.host.securityManager2.getKeysForSecurityClass(
-						this._securityClass,
-				  )
-				: this.host.securityManager2.getKeysForNode(receiverNodeId);
+		let key: Buffer;
+		let iv: Buffer;
+
+		if (typeof this.nodeId === "number") {
+			// Singlecast:
+			// Generate a nonce for encryption, and remember it to attempt decryption
+			// of potential in-flight messages from the target node.
+			iv = this.host.securityManager2.nextNonce(this.nodeId, true);
+			const { keyCCM } =
+				// Prefer the overridden security class if it was given
+				this._securityClass != undefined
+					? this.host.securityManager2.getKeysForSecurityClass(
+							this._securityClass,
+					  )
+					: this.host.securityManager2.getKeysForNode(this.nodeId);
+			key = keyCCM;
+		} else {
+			// Multicast:
+			const keyAndIV =
+				this.host.securityManager2.getMulticastKeyAndIV(destinationTag);
+			key = keyAndIV.key;
+			iv = keyAndIV.iv;
+		}
 
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,

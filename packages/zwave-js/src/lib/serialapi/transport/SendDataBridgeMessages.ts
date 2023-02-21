@@ -4,6 +4,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MulticastCC,
+	NODE_ID_BROADCAST,
 	SinglecastCC,
 	TransmitOptions,
 	TransmitStatus,
@@ -141,7 +142,13 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public expectsNodeUpdate(): boolean {
-		return this.command.expectsCCResponse();
+		return (
+			// Only true singlecast commands may expect a response
+			this.command.isSinglecast() &&
+			this.command.nodeId !== NODE_ID_BROADCAST &&
+			// ... and only if the command expects a response
+			this.command.expectsCCResponse()
+		);
 	}
 
 	public isExpectedNodeUpdate(msg: Message): boolean {

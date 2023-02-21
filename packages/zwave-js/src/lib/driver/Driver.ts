@@ -2961,7 +2961,6 @@ export class Driver
 				groupId,
 			).type !== MPANState.MPAN
 		) {
-			// Singlecast S2-encap
 			return true;
 		}
 		return false;
@@ -3054,8 +3053,7 @@ export class Driver
 					level: "verbose",
 					direction: "outbound",
 				});
-				// Send the node our nonce
-				// ... potentially with MOS extension
+				// Send the node our nonce, and use the chance to re-sync the MPAN if necessary
 				const multicastOutOfSync =
 					(msg instanceof ApplicationCommandRequest ||
 						msg instanceof BridgeApplicationCommandRequest) &&
@@ -3678,18 +3676,43 @@ ${handlers.length} left`,
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
 			} else {
-				// Figure out if the command was received with supervision encapsulation
+				// Figure out if the command was received with supervision encapsulation and we need to respond accordingly
 				const supervisionSessionId = SupervisionCC.getSessionId(
 					msg.command,
 				);
-				// DO NOT force-add support for the Supervision CC here. Some devices only support Supervision when sending,
-				// so we need to trust the information we already have.
+				// Figure out if this is an S2 multicast followup for a group that is out of sync
+				const multicastOutOfSync = this.mustReplyWithSecurityS2MOS(msg);
 
 				const encapsulationFlags = msg.command.encapsulationFlags;
 
-				// Figure out if we need to send a S2 MOS
-				const multicastOutOfSync = this.mustReplyWithSecurityS2MOS(msg);
-				if (supervisionSessionId === undefined) {
+				let reply: (success: boolean) => Promise<void>;
+				if (supervisionSessionId != undefined) {
+					// The command was supervised, and we must respond with a Supervision Report
+					const endpoint =
+						node.getEndpoint(msg.command.endpointIndex) ?? node;
+					reply = (success) =>
+						endpoint
+							.createAPI(CommandClasses.Supervision, false)
+							.withOptions({ multicastOutOfSync })
+							.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: success
+									? SupervisionStatus.Success
+									: SupervisionStatus.Fail,
+								requestWakeUpOnDemand:
+									this.shouldRequestWakeupOnDemand(node),
+								encapsulationFlags,
+							});
+				} else {
+					// Unsupervised, reply is a no-op
+					reply = () => Promise.resolve();
+				}
+				// DO NOT force-add support for the Supervision CC here. Some devices only support Supervision when sending,
+				// so we need to trust the information we already have.
+
+				// In the case where the command was unsupervised and we need to send a MOS, do it as soon as possible
+				if (supervisionSessionId == undefined && multicastOutOfSync) {
 					// If the command was NOT received using Supervision,
 					// we need to respond with an MOS nonce. Otherwise we'll set the flag
 					// on the Supervision Report
@@ -3704,64 +3727,22 @@ ${handlers.length} left`,
 						// resolve the promise - this will remove the entry from the list
 						entry.promise.resolve(msg.command);
 
-						// send back a Supervision Report if the command was received via Supervision Get
-						if (supervisionSessionId !== undefined) {
-							const endpoint =
-								node.getEndpoint(msg.command.endpointIndex) ??
-								node;
-							await endpoint
-								.createAPI(CommandClasses.Supervision, false)
-								.withOptions({ multicastOutOfSync })
-								.sendReport({
-									sessionId: supervisionSessionId,
-									moreUpdatesFollow: false,
-									status: SupervisionStatus.Success,
-									requestWakeUpOnDemand:
-										this.shouldRequestWakeupOnDemand(node),
-									encapsulationFlags,
-								});
-						}
+						// and possibly reply to a supervised command
+						await reply(true);
 						return;
 					}
 				}
 
 				// No one is waiting, dispatch the command to the node itself
-				if (supervisionSessionId !== undefined) {
-					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
-					const endpoint =
-						node.getEndpoint(msg.command.endpointIndex) ?? node;
-					try {
-						await node.handleCommand(msg.command);
-
-						await endpoint
-							.createAPI(CommandClasses.Supervision, false)
-							.withOptions({ multicastOutOfSync })
-							.sendReport({
-								sessionId: supervisionSessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Success,
-								requestWakeUpOnDemand:
-									this.shouldRequestWakeupOnDemand(node),
-								encapsulationFlags,
-							});
-					} catch (e) {
-						await endpoint
-							.createAPI(CommandClasses.Supervision, false)
-							.withOptions({ multicastOutOfSync })
-							.sendReport({
-								sessionId: supervisionSessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Fail,
-								requestWakeUpOnDemand:
-									this.shouldRequestWakeupOnDemand(node),
-								encapsulationFlags,
-							});
-
-						// In any case we don't want to swallow the error
-						throw e;
-					}
-				} else {
+				try {
 					await node.handleCommand(msg.command);
+					await reply(true);
+				} catch (e) {
+					await reply(false);
+
+					// We only caught the error to be able to respond to supervised requests.
+					// Re-Throw so it can be handled accordingly
+					throw e;
 				}
 			}
 
@@ -3921,6 +3902,15 @@ ${handlers.length} left`,
 
 			msg.command = unwrapped;
 		}
+	}
+
+	public removeEncapsulationLayer(
+		msg: Message & ICommandClassContainer,
+		removeFlags: EncapsulationFlags,
+	): void {
+		this.unwrapCommands(msg);
+		msg.command.setEncapsulationFlag(removeFlags, false);
+		this.encapsulateCommands(msg);
 	}
 
 	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */

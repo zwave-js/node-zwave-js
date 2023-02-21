@@ -11,7 +11,6 @@ function dummyInit(
 		keys?: boolean;
 		nodeId?: number;
 		secClass?: SecurityClass;
-		multicastGroup?: number;
 	} = {},
 ): void {
 	if (options.keys !== false) {
@@ -27,13 +26,6 @@ function dummyInit(
 			crypto.randomBytes(16),
 			crypto.randomBytes(16),
 		);
-	}
-	if (options.multicastGroup) {
-		man.assignSecurityClassMulticast(
-			options.multicastGroup,
-			options.secClass ?? SecurityClass.S2_Authenticated,
-		);
-		man.initializeMPAN(options.multicastGroup);
 	}
 }
 
@@ -184,30 +176,63 @@ test("setKeys() -> throws if the security class is not valid", (t) => {
 	t.pass();
 });
 
+test("createMulticastGroup() -> should return a different group ID for a different node set", (t) => {
+	const man = new SecurityManager2();
+	dummyInit(man);
+	const group1 = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
+	const group2 = man.createMulticastGroup(
+		[3, 4, 5],
+		SecurityClass.S2_Authenticated,
+	);
+
+	t.not(group1, group2);
+});
+
+//
+
+test("createMulticastGroup() -> should return the same group ID for a previously used node set", (t) => {
+	const man = new SecurityManager2();
+	dummyInit(man);
+	const group1 = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
+	const group2 = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
+
+	t.is(group1, group2);
+});
+
 test("nextMPAN() -> should throw if the MPAN state for the given multicast group has not been initialized", (t) => {
 	const man = new SecurityManager2();
 	assertZWaveError(t, () => man.nextMPAN(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
-		messageMatches: "initialized",
+		messageMatches: "does not exist",
 	});
 	t.pass();
 });
 
-test("nextMPAN() -> should throw if the multicast group has not been assigned to a security class", (t) => {
+test("nextMPAN() -> should throw if the multicast group has not been created", (t) => {
 	const man = new SecurityManager2();
-	man.initializeMPAN(1);
 	assertZWaveError(t, () => man.nextMPAN(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
-		messageMatches: "security class",
+		messageMatches: "does not exist",
 	});
 	t.pass();
 });
 
 test("nextMPAN() -> should throw if the keys for the group's security class have not been set up", (t) => {
 	const man = new SecurityManager2();
-	man.assignSecurityClassMulticast(1, SecurityClass.S2_Authenticated);
-	man.initializeMPAN(1);
-	assertZWaveError(t, () => man.nextMPAN(1), {
+	const groupId = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
+	assertZWaveError(t, () => man.nextMPAN(groupId), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "network key",
 	});
@@ -216,18 +241,44 @@ test("nextMPAN() -> should throw if the keys for the group's security class have
 
 test("nextMPAN() -> should generate a 16-byte buffer otherwise", (t) => {
 	const man = new SecurityManager2();
-	dummyInit(man, { multicastGroup: 1 });
-	const ret = man.nextMPAN(1);
+	dummyInit(man);
+	const groupId = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
+
+	const ret = man.nextMPAN(groupId);
 
 	t.true(Buffer.isBuffer(ret));
 	t.is(ret.length, 16);
 });
 
-test("nextMPAN() -> two nonces should be different", (t) => {
+test("nextMPAN() -> two nonces for the same group should be different", (t) => {
 	const man = new SecurityManager2();
-	dummyInit(man, { multicastGroup: 2 });
+	dummyInit(man);
+	const groupId = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
 
-	const nonce1 = man.nextMPAN(2);
-	const nonce2 = man.nextMPAN(2);
+	const nonce1 = man.nextMPAN(groupId);
+	const nonce2 = man.nextMPAN(groupId);
+	t.notDeepEqual(nonce1, nonce2);
+});
+
+test("nextMPAN() -> two nonces for different groups should be different", (t) => {
+	const man = new SecurityManager2();
+	dummyInit(man);
+	const group1 = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
+	const group2 = man.createMulticastGroup(
+		[3, 4, 5],
+		SecurityClass.S2_Authenticated,
+	);
+
+	const nonce1 = man.nextMPAN(group1);
+	const nonce2 = man.nextMPAN(group2);
 	t.notDeepEqual(nonce1, nonce2);
 });

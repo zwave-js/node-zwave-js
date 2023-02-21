@@ -233,7 +233,7 @@ export class CommandClass implements ICommandClass {
 	 */
 	public encapsulationFlags: EncapsulationFlags = EncapsulationFlags.None;
 
-	/** Activates or deactivates the given encapsulation flag */
+	/** Activates or deactivates the given encapsulation flag(s) */
 	public setEncapsulationFlag(
 		flag: EncapsulationFlags,
 		active: boolean,
