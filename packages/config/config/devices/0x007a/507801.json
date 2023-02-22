@@ -17,7 +17,7 @@
 		"1": {
 			"label": "Move Roller Shutter",
 			"maxNodes": 5,
-			"isLifeline": false
+			"isLifeline": true
 		}
 	},
 	"paramInformation": [
