@@ -217,18 +217,52 @@
 		},
 		{
 			"#": "7",
-			"label": "Toggle notification sound",
+			"label": "Toggle Notification Sound",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Primary notification",
+					"label": "Primary Notification",
 					"value": 1
 				},
 				{
-					"label": "Secondary notification",
+					"label": "Secondary Notification",
 					"value": 2
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Enable/Disable Primary Notification Strobe",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Ring Will Not Flash",
+					"value": 0
+				},
+				{
+					"label": "LED Ring Will Flash",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Enable/Disable Secondary Notification Strobe",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Ring Will Not Flash",
+					"value": 0
+				},
+				{
+					"label": "LED Ring Will Flash",
+					"value": 1
 				}
 			]
 		}
