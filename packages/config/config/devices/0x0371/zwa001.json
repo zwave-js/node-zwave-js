@@ -24,7 +24,6 @@
 			"description": "To send notifications to (Group 1) when state change.0 = Nothing.1= Basic CC.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,7 +44,6 @@
 			"minValue": 2700,
 			"maxValue": 4999,
 			"defaultValue": 2700,
-			"readOnly": true,
 			"options": [
 				{
 					"label": "Warm White(0x0A8C(2700k) ~ 0x1387 (4999k))",
