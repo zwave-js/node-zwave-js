@@ -23,8 +23,8 @@
 	"paramInformation": [
 		{
 			"#": "176",
-			"label": "Break (motor protection)",
-			"description": "Changeover delay",
+			"label": "Changeover Delay",
+			"description": "For motor protection",
 			"valueSize": 1,
 			"unit": "0.1 seconds",
 			"unsigned": true,
@@ -35,9 +35,8 @@
 		{
 			"#": "177",
 			"label": "Travel Time Up, Byte 1",
-			"description": "Input 1.",
 			"valueSize": 1,
-			"unit": "25 seconds",
+			"unit": "25.6 seconds",
 			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 255,
@@ -46,7 +45,6 @@
 		{
 			"#": "178",
 			"label": "Travel Time Up, Byte 2",
-			"description": "Input 2.",
 			"valueSize": 1,
 			"unsigned": true,
 			"unit": "0.1 seconds",
@@ -57,10 +55,9 @@
 		{
 			"#": "179",
 			"label": "Travel Time Down, Byte 1",
-			"description": "Input 1.",
 			"valueSize": 1,
 			"unsigned": true,
-			"unit": "25 seconds",
+			"unit": "25.6 seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 4
@@ -68,7 +65,6 @@
 		{
 			"#": "180",
 			"label": "Travel Time Down, Byte 2",
-			"description": "Input 2.",
 			"valueSize": 1,
 			"unsigned": true,
 			"unit": "0.1 seconds",
@@ -80,7 +76,7 @@
 	"metadata": {
 		"inclusion": "Triple click button",
 		"exclusion": "Triple click button",
-		"reset": "Tripple click button, then click and hold for 5 seconds",
+		"reset": "Triple click button, then click and hold for 5 seconds",
 		"manual": "https://download.schneider-electric.com/files?p_Doc_Ref=MTN507801_HW_2008_43_EN&p_enDocType=User+guide&p_File_Name=MTN507801_HW_2008_43_EN.pdf"
 	}
 }
