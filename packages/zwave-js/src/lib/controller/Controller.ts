@@ -626,8 +626,40 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._healNetworkActive;
 	}
 
-	/** Returns a reference to the (virtual) broadcast node, which allows sending commands to all nodes */
+	private groupNodesBySecurityClass(
+		nodeIDs?: number[],
+	): Map<SecurityClass, number[]> {
+		const ret = new Map<SecurityClass, number[]>();
+
+		const nodes = nodeIDs
+			? nodeIDs.map((id) => this._nodes.getOrThrow(id))
+			: [...this._nodes.values()];
+
+		for (const node of nodes) {
+			const secClass = node.getHighestSecurityClass();
+			if (secClass === SecurityClass.Temporary || secClass == undefined) {
+				continue;
+			}
+
+			if (!ret.has(secClass)) {
+				ret.set(secClass, []);
+			}
+			ret.get(secClass)!.push(node.id);
+		}
+
+		return ret;
+	}
+
+	/**
+	 * Returns a reference to the (virtual) broadcast node, which allows sending commands to all nodes.
+	 * @deprecated Use {@link getBroadcastNodes} instead, which automatically groups nodes by security class and ignores nodes that cannot be controlled via multicast/broadcast.
+	 */
 	public getBroadcastNode(): VirtualNode {
+		return this.getBroadcastNodeInsecure();
+	}
+
+	/** Returns a reference to the (virtual) broadcast node, which allows sending commands to all insecure nodes. */
+	public getBroadcastNodeInsecure(): VirtualNode {
 		return new VirtualNode(
 			NODE_ID_BROADCAST,
 			this.driver,
@@ -635,7 +667,36 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		);
 	}
 
-	/** Creates a virtual node that can be used to send multicast commands to several nodes */
+	/**
+	 * Creates the necessary virtual nodes to be able to send commands to all nodes in the network.
+	 * Nodes are grouped by security class automatically, and get ignored if they cannot be controlled via multicast/broadcast.
+	 */
+	public getBroadcastNodes(): VirtualNode[] {
+		const nodesBySecurityClass = this.groupNodesBySecurityClass();
+		nodesBySecurityClass.delete(SecurityClass.S0_Legacy);
+		if (
+			nodesBySecurityClass.size === 1 &&
+			nodesBySecurityClass.has(SecurityClass.None)
+		) {
+			// All nodes are insecure, we can use actual broadcasting
+			return [this.getBroadcastNodeInsecure()];
+		}
+
+		// We have to do multiple multicasts to reach all nodes
+		// Create a virtual node for each security class
+		return [...nodesBySecurityClass].map(([secClass, nodeIDs]) => {
+			if (secClass === SecurityClass.None) {
+				return this.getMulticastGroupInsecure(nodeIDs);
+			} else {
+				return this.getMulticastGroupS2(nodeIDs);
+			}
+		});
+	}
+
+	/**
+	 * Creates a virtual node that can be used to send multicast commands to several nodes.
+	 * @deprecated Use {@link getMulticastGroups} instead, which automatically groups nodes by security class and ignores nodes that cannot be controlled via multicast.
+	 */
 	public getMulticastGroup(nodeIDs: number[]): VirtualNode {
 		if (nodeIDs.length === 0) {
 			throw new ZWaveError(
@@ -649,10 +710,51 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
+	 * Creates the necessary virtual nodes to be able to send commands to the given nodes.
+	 * Nodes are grouped by security class automatically, and get ignored if they cannot be controlled via multicast.
+	 */
+	public getMulticastGroups(nodeIDs: number[]): VirtualNode[] {
+		const nodesBySecurityClass = this.groupNodesBySecurityClass(nodeIDs);
+		nodesBySecurityClass.delete(SecurityClass.S0_Legacy);
+
+		// Create a virtual node for each security class
+		return [...nodesBySecurityClass].map(([secClass, nodeIDs]) => {
+			if (secClass === SecurityClass.None) {
+				return this.getMulticastGroupInsecure(nodeIDs);
+			} else {
+				return this.getMulticastGroupS2(nodeIDs);
+			}
+		});
+	}
+
+	/**
+	 * Creates a virtual node that can be used to send multicast commands to several insecure nodes.
+	 * All nodes MUST be included insecurely.
+	 */
+	public getMulticastGroupInsecure(nodeIDs: number[]): VirtualNode {
+		if (nodeIDs.length === 0) {
+			throw new ZWaveError(
+				"Cannot create an empty multicast group",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const nodes = nodeIDs.map((id) => this._nodes.getOrThrow(id));
+		if (nodes.some((n) => n.isSecure !== false)) {
+			throw new ZWaveError(
+				"All nodes must be included insecurely",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		return new VirtualNode(undefined, this.driver, nodes);
+	}
+
+	/**
 	 * Creates a virtual node that can be used to send multicast commands to several nodes using Security S2.
 	 * All nodes MUST be included using Security S2 and MUST have the same (highest) security class.
 	 */
-	public getS2MulticastGroup(nodeIDs: number[]): VirtualNode {
+	public getMulticastGroupS2(nodeIDs: number[]): VirtualNode {
 		if (nodeIDs.length === 0) {
 			throw new ZWaveError(
 				"Cannot create an empty multicast group",
