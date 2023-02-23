@@ -74,6 +74,13 @@ export interface AssertZWaveErrorOptions {
 // @public (undocumented)
 export function authHomeIdFromDSK(dsk: Buffer): Buffer;
 
+// Warning: (ae-missing-release-tag) "BroadcastCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BroadcastCC<T extends ICommandClass = ICommandClass> = T & {
+    nodeId: typeof NODE_ID_BROADCAST;
+};
+
 // Warning: (ae-missing-release-tag) "CacheBackedMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1451,6 +1458,8 @@ export interface MulticastGroup {
     nodeIDs: readonly number[];
     // (undocumented)
     securityClass: S2SecurityClass;
+    // (undocumented)
+    sequenceNumber: number;
 }
 
 // Warning: (ae-missing-release-tag) "NODE_ID_BROADCAST" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2053,8 +2062,7 @@ export class SecurityManager2 {
     initializeSPAN(peerNodeId: number, securityClass: SecurityClass, senderEI: Buffer, receiverEI: Buffer): void;
     initializeTempSPAN(peerNodeId: number, senderEI: Buffer, receiverEI: Buffer): void;
     isDuplicateSinglecast(peerNodeId: number, sequenceNumber: number): boolean;
-    // (undocumented)
-    nextMPAN(groupId: number): Buffer;
+    nextMulticastSequenceNumber(groupId: number): number;
     nextNonce(peerNodeId: number, store?: boolean): Buffer;
     nextPeerMPAN(peerNodeId: number, groupId: number): Buffer;
     nextSequenceNumber(peerNodeId: number): number;
@@ -2070,6 +2078,7 @@ export class SecurityManager2 {
     storeSequenceNumber(peerNodeId: number, sequenceNumber: number): number | undefined;
     // Warning: (ae-forgotten-export) The symbol "TempNetworkKeys" needs to be exported by the entry point index.d.ts
     readonly tempKeys: Map<number, TempNetworkKeys>;
+    tryIncrementMPAN(groupId: number): void;
     tryIncrementPeerMPAN(peerNodeId: number, groupId: number): void;
 }
 
@@ -2104,7 +2113,8 @@ export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
 //
 // @public (undocumented)
 export type SendCommandSecurityS2Options = {
-    multicastOutOfSync?: boolean;
+    s2MulticastOutOfSync?: boolean;
+    s2MulticastGroupId?: number;
 };
 
 // Warning: (ae-missing-release-tag) "SendMessageOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

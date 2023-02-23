@@ -33,7 +33,6 @@ import type { DeferredPromise } from 'alcalzone-shared/deferred-promise';
 import type { DeviceConfig } from '@zwave-js/config';
 import { Duration } from '@zwave-js/core/safe';
 import { DurationUnit } from '@zwave-js/core/safe';
-import { EncapsulationFlags } from '@zwave-js/core';
 import { EntryControlDataTypes } from '@zwave-js/cc/safe';
 import { EntryControlEventTypes } from '@zwave-js/cc/safe';
 import { extractFirmware } from '@zwave-js/core';
@@ -117,6 +116,7 @@ import type { SecurityClass } from '@zwave-js/core/safe';
 import { SecurityClass as SecurityClass_2 } from '@zwave-js/core';
 import { SecurityClassOwner } from '@zwave-js/core';
 import { SendCommandOptions } from '@zwave-js/core';
+import { SendCommandOptions as SendCommandOptions_2 } from '@zwave-js/core/safe';
 import { SendCommandReturnType } from '@zwave-js/core';
 import { SendMessageOptions } from '@zwave-js/core';
 import { SensorType } from '@zwave-js/config';
@@ -326,7 +326,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     softReset(): Promise<void>;
     start(): Promise<void>;
     get statisticsEnabled(): boolean;
-    toggleEncapsulation(msg: Message & ICommandClassContainer, encapsulation: EncapsulationFlags, active: boolean): void;
     // (undocumented)
     tryGetEndpoint(cc: CommandClass): Endpoint | undefined;
     trySoftReset(): Promise<void>;
@@ -911,7 +910,8 @@ export class VirtualEndpoint implements IVirtualEndpoint {
     constructor(
     node: VirtualNode | undefined,
     driver: Driver,
-    index: number);
+    index: number,
+    defaultCommandOptions?: SendCommandOptions_2 | undefined);
     get commandClasses(): CCAPIs;
     protected readonly driver: Driver;
     getCCVersion(cc: CommandClasses): number;
@@ -932,7 +932,8 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 // @public (undocumented)
 export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
     constructor(id: number | undefined, driver: Driver,
-    physicalNodes: Iterable<ZWaveNode>);
+    physicalNodes: Iterable<ZWaveNode>,
+    defaultCommandOptions?: SendCommandOptions);
     getDefinedValueIDs(): VirtualValueID[];
     getEndpoint(index: 0): VirtualEndpoint;
     // (undocumented)
@@ -943,7 +944,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
     // (undocumented)
     readonly id: number | undefined;
     // (undocumented)
-    readonly physicalNodes: ZWaveNode[];
+    readonly physicalNodes: readonly ZWaveNode[];
     setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;
 }
 
@@ -1030,9 +1031,20 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         rssiChannel1: RSSI_2;
         rssiChannel2?: RSSI_2;
     }>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getBroadcastNodes"
+    //
+    // @deprecated
     getBroadcastNode(): VirtualNode;
+    getBroadcastNodeInsecure(): VirtualNode;
+    getBroadcastNodes(): VirtualNode[];
     getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroups"
+    //
+    // @deprecated
     getMulticastGroup(nodeIDs: number[]): VirtualNode;
+    getMulticastGroupInsecure(nodeIDs: number[]): VirtualNode;
+    getMulticastGroups(nodeIDs: number[]): VirtualNode[];
+    getMulticastGroupS2(nodeIDs: number[]): VirtualNode;
     getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined;
     getNodeNeighbors(nodeId: number, onlyRepeaters?: boolean): Promise<readonly number[]>;
     // Warning: (ae-forgotten-export) The symbol "NVMId" needs to be exported by the entry point index.d.ts

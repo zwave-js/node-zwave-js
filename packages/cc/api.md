@@ -9,6 +9,7 @@
 import { AllOrNone } from '@zwave-js/shared/safe';
 import { AllOrNone as AllOrNone_2 } from '@zwave-js/shared';
 import { ApplicationNodeInformation } from '@zwave-js/core/safe';
+import { BroadcastCC } from '@zwave-js/core';
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
 import { ConfigurationMetadata } from '@zwave-js/core/safe';
@@ -3859,6 +3860,8 @@ export class CommandClass implements ICommandClass {
     // (undocumented)
     protected host: ZWaveHost;
     interview(_applHost: ZWaveApplicationHost_2): Promise<void>;
+    // (undocumented)
+    isBroadcast(): this is BroadcastCC<this>;
     isEncapsulatedWith(ccId: CommandClasses_2, ccCommand?: number): boolean;
     // (undocumented)
     isExpectedCCResponse(received: CommandClass): boolean;
@@ -13665,7 +13668,8 @@ export class Security2CC extends CommandClass {
     ccCommand: Security2Command;
     static encapsulate(host: ZWaveHost_2, cc: CommandClass, options?: {
         securityClass?: SecurityClass;
-        MOS?: boolean;
+        multicastOutOfSync?: boolean;
+        multicastGroupId?: number;
     }): Security2CCMessageEncapsulation;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost): Promise<void>;
