@@ -250,7 +250,7 @@ test("getMulticastKeyAndIV() -> should generate a 13-byte IV otherwise", (t) => 
 	const ret = man.getMulticastKeyAndIV(groupId).iv;
 
 	t.true(Buffer.isBuffer(ret));
-	t.is(ret.length, 16);
+	t.is(ret.length, 13);
 });
 
 test("getMulticastKeyAndIV() -> two nonces for the same group should be different", (t) => {
