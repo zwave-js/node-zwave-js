@@ -191,7 +191,9 @@ export type SupervisionOptions =
 
 export type SendCommandSecurityS2Options = {
 	/** Whether the MOS extension should be included in S2 message encapsulation */
-	multicastOutOfSync?: boolean;
+	s2MulticastOutOfSync?: boolean;
+	/** The optional multicast group ID to use for S2 message encapsulation */
+	s2MulticastGroupId?: number;
 };
 
 export type SendCommandOptions = SendMessageOptions &

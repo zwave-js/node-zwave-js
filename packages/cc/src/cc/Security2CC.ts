@@ -27,7 +27,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { EncapsulationFlags, encodeCCList } from "@zwave-js/core/safe";
+import {
+	EncapsulationFlags,
+	encodeCCList,
+	NODE_ID_BROADCAST,
+} from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -119,7 +123,7 @@ function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 		);
 	} else if (!this.host.securityManager2) {
 		throw new ZWaveError(
-			`Secure commands (S2) can only be ${verb} when the network keys for the applHost are set!`,
+			`Secure commands (S2) can only be ${verb} when the network keys are configured!`,
 			ZWaveErrorCodes.Driver_NoSecurity,
 		);
 	}
@@ -716,14 +720,30 @@ export class Security2CC extends CommandClass {
 		cc: CommandClass,
 		options?: {
 			securityClass?: SecurityClass;
-			MOS?: boolean;
+			multicastOutOfSync?: boolean;
+			multicastGroupId?: number;
 		},
 	): Security2CCMessageEncapsulation {
+		// Determine which extensions must be used on the command
+		const extensions: Security2Extension[] = [];
+		if (options?.multicastOutOfSync) {
+			extensions.push(new MOSExtension());
+		}
+		if (options?.multicastGroupId != undefined) {
+			extensions.push(
+				new MGRPExtension({ groupId: options.multicastGroupId }),
+			);
+		}
+
+		// Make sure that S2 multicast uses broadcasts. While the specs mention that both multicast and broadcast
+		// are possible, it has been found that devices treat multicasts like singlecast followups and respond incorrectly.
+		const nodeId = cc.isMulticast() ? NODE_ID_BROADCAST : cc.nodeId;
+
 		const ret = new Security2CCMessageEncapsulation(host, {
-			nodeId: cc.nodeId,
+			nodeId,
 			encapsulated: cc,
 			securityClass: options?.securityClass,
-			extensions: options?.MOS ? [new MOSExtension()] : undefined,
+			extensions,
 		});
 
 		// Copy the encapsulation flags from the encapsulated command
@@ -895,6 +915,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				-SECURITY_S2_AUTH_TAG_LENGTH,
 			);
 			const authTag = this.payload.slice(-SECURITY_S2_AUTH_TAG_LENGTH);
+			this.authTag = authTag;
 
 			const messageLength =
 				super.computeEncapsulationOverhead() + this.payload.length;
@@ -1012,7 +1033,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			this.key = key;
 			this.iv = iv;
 		} else {
-			if (!options.encapsulated && !options.extensions) {
+			if (!options.encapsulated && !options.extensions?.length) {
 				throw new ZWaveError(
 					"Security S2 encapsulation requires an encapsulated CC and/or extensions",
 					ZWaveErrorCodes.Argument_Invalid,
@@ -1043,6 +1064,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	// Only used for testing/debugging purposes
 	private key?: Buffer;
 	private iv?: Buffer;
+	private authData?: Buffer;
+	private authTag?: Buffer;
+	private ciphertext?: Buffer;
 
 	private _sequenceNumber: number | undefined;
 	/**
@@ -1053,10 +1077,15 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	 */
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
-			this._sequenceNumber =
-				this.host.securityManager2.nextSequenceNumber(
-					this.nodeId as number,
+			if (this.isSinglecast()) {
+				this._sequenceNumber =
+					this.host.securityManager2.nextSequenceNumber(this.nodeId);
+			} else {
+				const groupId = this.getDestinationIDTX();
+				return this.host.securityManager2.nextMulticastSequenceNumber(
+					groupId,
 				);
+			}
 		}
 		return this._sequenceNumber;
 	}
@@ -1069,16 +1098,21 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 
 	private getDestinationIDTX(): number {
+		if (this.isSinglecast()) return this.nodeId;
+
 		const mgrpExtension = this.extensions.find(
 			(e): e is MGRPExtension => e instanceof MGRPExtension,
 		);
 		if (mgrpExtension) return mgrpExtension.groupId;
-		else if (typeof this.nodeId === "number") return this.nodeId;
 
 		throw new ZWaveError(
 			"Multicast Security S2 encapsulation requires the MGRP extension",
 			ZWaveErrorCodes.Security2CC_MissingExtension,
 		);
+	}
+
+	private getDestinationIDRX(): number {
+		return this.getMulticastGroupId() ?? this.host.ownNodeId;
 	}
 
 	private getMGRPExtension(): MGRPExtension | undefined {
@@ -1096,10 +1130,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		return this.extensions.some((e) => e instanceof MOSExtension);
 	}
 
-	private getDestinationIDRX(): number {
-		return this.getMulticastGroupId() ?? this.host.ownNodeId;
-	}
-
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
 	private getSenderEI(): Buffer | undefined {
 		const spanExtension = this.extensions.find(
@@ -1109,7 +1139,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 
 	private maybeAddSPANExtension(): void {
-		const receiverNodeId = this.nodeId as number;
+		if (!this.isSinglecast()) return;
+
+		const receiverNodeId: number = this.nodeId;
 		const spanState =
 			this.host.securityManager2.getSPANState(receiverNodeId);
 		if (
@@ -1212,7 +1244,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		let key: Buffer;
 		let iv: Buffer;
 
-		if (typeof this.nodeId === "number") {
+		if (this.isSinglecast()) {
 			// Singlecast:
 			// Generate a nonce for encryption, and remember it to attempt decryption
 			// of potential in-flight messages from the target node.
@@ -1244,6 +1276,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		// Remember key and IV for debugging purposes
 		this.key = key;
 		this.iv = iv;
+		this.authData = authData;
+		this.authTag = authTag;
+		this.ciphertext = ciphertextPayload;
 
 		this.payload = Buffer.concat([
 			unencryptedPayload,
@@ -1281,12 +1316,24 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				.join("");
 		}
 		// Log the used keys in integration tests
-		if (process.env.NODE_ENV === "test") {
+		if (
+			process.env.NODE_ENV === "test" ||
+			process.env.NODE_ENV === "development"
+		) {
 			if (this.key) {
 				message.key = buffer2hex(this.key);
 			}
 			if (this.iv) {
 				message.IV = buffer2hex(this.iv);
+			}
+			if (this.ciphertext) {
+				message.ciphertext = buffer2hex(this.ciphertext);
+			}
+			if (this.authData) {
+				message["auth data"] = buffer2hex(this.authData);
+			}
+			if (this.authTag) {
+				message["auth tag"] = buffer2hex(this.authTag);
 			}
 		}
 		return {

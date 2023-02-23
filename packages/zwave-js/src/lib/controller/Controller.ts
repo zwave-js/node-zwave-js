@@ -42,6 +42,7 @@ import {
 	ProtocolType,
 	RFRegion,
 	RSSI,
+	S2SecurityClass,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -636,8 +637,68 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Creates a virtual node that can be used to send multicast commands to several nodes */
 	public getMulticastGroup(nodeIDs: number[]): VirtualNode {
+		if (nodeIDs.length === 0) {
+			throw new ZWaveError(
+				"Cannot create an empty multicast group",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const nodes = nodeIDs.map((id) => this._nodes.getOrThrow(id));
 		return new VirtualNode(undefined, this.driver, nodes);
+	}
+
+	/**
+	 * Creates a virtual node that can be used to send multicast commands to several nodes using Security S2.
+	 * All nodes MUST be included using Security S2 and MUST have the same (highest) security class.
+	 */
+	public getS2MulticastGroup(nodeIDs: number[]): VirtualNode {
+		if (nodeIDs.length === 0) {
+			throw new ZWaveError(
+				"Cannot create an empty multicast group",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		if (!this.driver.securityManager2) {
+			throw new ZWaveError(
+				`Security S2 multicast can only be used when the network keys are configured!`,
+				ZWaveErrorCodes.Driver_NoSecurity,
+			);
+		}
+
+		const nodes = nodeIDs.map((id) => this._nodes.getOrThrow(id));
+		const fail = (): never => {
+			throw new ZWaveError(
+				"All nodes must be included using Security S2 and must have the same (highest) security class",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		};
+		const node0Class = nodes[0].getHighestSecurityClass();
+		for (let i = 0; i < nodes.length; i++) {
+			const node = nodes[i];
+			const secClass = node.getHighestSecurityClass();
+			if (!securityClassIsS2(secClass)) throw fail();
+			if (i > 0 && secClass !== node0Class) throw fail();
+		}
+
+		return new VirtualNode(
+			undefined,
+			this.driver,
+			nodes,
+			// For convenience, we automatically decide whether to use actual multicast
+			// or fall back to singlecast when there's only a single node
+			// in the multicast "group"
+			nodes.length > 1
+				? {
+						s2MulticastGroupId:
+							this.driver.securityManager2.createMulticastGroup(
+								nodeIDs,
+								node0Class as S2SecurityClass,
+							),
+				  }
+				: undefined,
+		);
 	}
 
 	/** @internal */

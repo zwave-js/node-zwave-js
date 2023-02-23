@@ -218,6 +218,7 @@ export class SupervisionCC extends CommandClass {
 		command: T,
 	): command is SinglecastCC<T> {
 		// Supervision may only be used for singlecast CCs that expect no response
+		// The specs mention that Supervision CAN be used for S2 multicast, but conveniently fail to explain how to respond to that.
 		if (!command.isSinglecast()) return false;
 		if (command.expectsCCResponse()) return false;
 

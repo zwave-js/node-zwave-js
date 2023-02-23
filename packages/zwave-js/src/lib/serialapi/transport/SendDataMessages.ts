@@ -4,7 +4,6 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MulticastCC,
-	NODE_ID_BROADCAST,
 	SinglecastCC,
 	TransmitOptions,
 	TransmitStatus,
@@ -94,7 +93,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 				this.command = undefined as any;
 			}
 		} else {
-			if (!options.command.isSinglecast()) {
+			if (
+				!options.command.isSinglecast() &&
+				!options.command.isBroadcast()
+			) {
 				throw new ZWaveError(
 					`SendDataRequest can only be used for singlecast and broadcast CCs`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -163,7 +165,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		return (
 			// Only true singlecast commands may expect a response
 			this.command.isSinglecast() &&
-			this.command.nodeId !== NODE_ID_BROADCAST &&
 			// ... and only if the command expects a response
 			this.command.expectsCCResponse()
 		);
@@ -361,7 +362,6 @@ export class SendDataMulticastRequest<
 	}
 
 	public serialize(): Buffer {
-		// The payload CC must not include the target node ids, so strip the header out
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
 			// # of target nodes and nodeIds

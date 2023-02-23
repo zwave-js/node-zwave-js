@@ -18,7 +18,6 @@ import {
 	CommandClasses,
 	EncapsulationFlags,
 	MessagePriority,
-	NODE_ID_BROADCAST,
 	SendCommandOptions,
 	SPANState,
 	TransmitOptions,
@@ -326,6 +325,10 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 					// The node couldn't decrypt the previous S2 multicast. Tell it the MPAN (again)
 					const mpan = secMan.getInnerMPANState(multicastGroupId);
 					if (mpan) {
+						// Replace the MGRP extension with an MPAN extension
+						msg.command.extensions = msg.command.extensions.filter(
+							(e) => !(e instanceof MGRPExtension),
+						);
 						msg.command.extensions.push(
 							new MPANExtension({
 								groupId: multicastGroupId,
@@ -378,10 +381,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 				"Cannot use the S2 multicast message generator for a command that's not a SendData message!",
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (
-			msg.command.isSinglecast() &&
-			msg.command.nodeId !== NODE_ID_BROADCAST
-		) {
+		} else if (msg.command.isSinglecast()) {
 			throw new ZWaveError(
 				"Cannot use the S2 multicast message generator for singlecast commands!",
 				ZWaveErrorCodes.Argument_Invalid,
@@ -410,10 +410,6 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 			);
 		}
 
-		// Make sure the command is not using Supervision
-		// The specs mention that Supervision CAN be used for Multicast, but conveniently fail to explain how to respond to that.
-		driver.toggleEncapsulation(msg, EncapsulationFlags.Supervision, false);
-
 		// Send the multicast command. We remember the transmit report and treat it as the result of the multicast command
 		const response = yield* simpleMessageGenerator(
 			driver,
@@ -421,16 +417,24 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 			onMessageSent,
 		);
 
+		// If a node in the group is out of sync, we need to transfer the MPAN state we're going to use for the next command.
+		// Therefore increment the MPAN state now and not after the followups like the specs mention
+		secMan.tryIncrementMPAN(groupId);
+
 		// Unwrap the command again, so we can make the following encapsulation depend on the target node
 		driver.unwrapCommands(msg);
 		const command = msg.command;
 		// Remember the original encapsulation flags
 		const encapsulationFlags = command.encapsulationFlags;
 
+		// In case someone sneaked a node ID into the group multiple times, remove duplicates for the singlecast followups
+		// Otherwise, the node will increase its MPAN multiple times, going out of sync.
+		const distinctNodeIDs = [...new Set(group.nodeIDs)];
+
 		// Now do singlecast followups with every node in the group
-		for (const nodeId of group.nodeIDs) {
+		for (const nodeId of distinctNodeIDs) {
 			// Point the CC at the target node
-			command.nodeId = nodeId;
+			(command.nodeId as number) = nodeId;
 			// Figure out if supervision should be used
 			command.encapsulationFlags = encapsulationFlags;
 			command.toggleEncapsulationFlag(

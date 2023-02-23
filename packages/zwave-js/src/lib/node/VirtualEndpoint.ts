@@ -9,6 +9,7 @@ import {
 	CommandClasses,
 	IVirtualEndpoint,
 	MulticastDestination,
+	SendCommandOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -32,6 +33,8 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 		protected readonly driver: Driver,
 		/** The index of this endpoint. 0 for the root device, 1+ otherwise */
 		public readonly index: number,
+		/** Default command options to use for the CC API */
+		private defaultCommandOptions?: SendCommandOptions,
 	) {
 		if (node) this._node = node;
 	}
@@ -86,8 +89,13 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 	 * @param ccId The command class to create an API instance for
 	 */
 	public createAPI(ccId: CommandClasses): CCAPI {
+		let ret = CCAPI.create(ccId, this.driver, this);
+		if (this.defaultCommandOptions) {
+			ret = ret.withOptions(this.defaultCommandOptions);
+		}
+
 		// Trust me on this, TypeScript :)
-		return CCAPI.create(ccId, this.driver, this) as any;
+		return ret as any;
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
@@ -136,7 +144,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 
 				// When accessing a CC API for the first time, we need to create it
 				if (!target.has(ccId)) {
-					const api = CCAPI.create(ccId, this.driver, this);
+					const api = this.createAPI(ccId);
 					target.set(ccId, api);
 				}
 				return target.get(ccId);

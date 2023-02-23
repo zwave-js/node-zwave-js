@@ -741,7 +741,7 @@ export class Driver
 	}
 
 	public tryGetEndpoint(cc: CommandClass): Endpoint | undefined {
-		if (typeof cc.nodeId === "number") {
+		if (cc.isSinglecast()) {
 			return this.controller.nodes
 				.get(cc.nodeId)
 				?.getEndpoint(cc.endpointIndex);
@@ -3054,13 +3054,13 @@ export class Driver
 					direction: "outbound",
 				});
 				// Send the node our nonce, and use the chance to re-sync the MPAN if necessary
-				const multicastOutOfSync =
+				const s2MulticastOutOfSync =
 					(msg instanceof ApplicationCommandRequest ||
 						msg instanceof BridgeApplicationCommandRequest) &&
 					this.mustReplyWithSecurityS2MOS(msg);
 
 				node.commandClasses["Security 2"]
-					.withOptions({ multicastOutOfSync })
+					.withOptions({ s2MulticastOutOfSync })
 					.sendNonce()
 					.catch(() => {
 						// Ignore errors
@@ -3681,7 +3681,8 @@ ${handlers.length} left`,
 					msg.command,
 				);
 				// Figure out if this is an S2 multicast followup for a group that is out of sync
-				const multicastOutOfSync = this.mustReplyWithSecurityS2MOS(msg);
+				const s2MulticastOutOfSync =
+					this.mustReplyWithSecurityS2MOS(msg);
 
 				const encapsulationFlags = msg.command.encapsulationFlags;
 
@@ -3693,7 +3694,7 @@ ${handlers.length} left`,
 					reply = (success) =>
 						endpoint
 							.createAPI(CommandClasses.Supervision, false)
-							.withOptions({ multicastOutOfSync })
+							.withOptions({ s2MulticastOutOfSync })
 							.sendReport({
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
@@ -3712,7 +3713,7 @@ ${handlers.length} left`,
 				// so we need to trust the information we already have.
 
 				// In the case where the command was unsupervised and we need to send a MOS, do it as soon as possible
-				if (supervisionSessionId == undefined && multicastOutOfSync) {
+				if (supervisionSessionId == undefined && s2MulticastOutOfSync) {
 					// If the command was NOT received using Supervision,
 					// we need to respond with an MOS nonce. Otherwise we'll set the flag
 					// on the Supervision Report
@@ -3809,9 +3810,9 @@ ${handlers.length} left`,
 	);
 
 	private encapsulateCommands(
-		msg: Message & ICommandClassContainer,
+		cmd: CommandClass,
 		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
-	): void {
+	): CommandClass {
 		// The encapsulation order (from outside to inside) is as follows:
 		// 5. Any one of the following combinations:
 		//   a. Security (S0 or S2) followed by transport service
@@ -3827,41 +3828,45 @@ ${handlers.length} left`,
 		// TODO: 2.
 
 		// 3.
-		if (SupervisionCC.requiresEncapsulation(msg.command)) {
-			msg.command = SupervisionCC.encapsulate(this, msg.command);
+		if (SupervisionCC.requiresEncapsulation(cmd)) {
+			cmd = SupervisionCC.encapsulate(this, cmd);
 		}
 
 		// 4.
-		if (MultiChannelCC.requiresEncapsulation(msg.command)) {
-			msg.command = MultiChannelCC.encapsulate(this, msg.command);
+		if (MultiChannelCC.requiresEncapsulation(cmd)) {
+			cmd = MultiChannelCC.encapsulate(this, cmd);
 		}
 
 		// 5.
-
-		if (CRC16CC.requiresEncapsulation(msg.command)) {
-			msg.command = CRC16CC.encapsulate(this, msg.command);
+		if (CRC16CC.requiresEncapsulation(cmd)) {
+			cmd = CRC16CC.encapsulate(this, cmd);
 		} else {
-			// When a node supports S2 and has a valid security class, the command
-			// must be S2-encapsulated
-			const node = msg.command.getNode(this);
+			// The command must be S2-encapsulated, if ...
+			let maybeS2 = false;
+			const node = cmd.getNode(this);
 			if (node?.supportsCC(CommandClasses["Security 2"])) {
-				const securityClass = node.getHighestSecurityClass();
-				if (
-					((securityClass != undefined &&
-						securityClass !== SecurityClass.S0_Legacy) ||
-						this.securityManager2?.tempKeys.has(node.id)) &&
-					Security2CC.requiresEncapsulation(msg.command)
-				) {
-					msg.command = Security2CC.encapsulate(this, msg.command, {
-						MOS: !!options.multicastOutOfSync,
-					});
-				}
+				// ... the node supports S2 and has a valid security class
+				const nodeSecClass = node.getHighestSecurityClass();
+				maybeS2 =
+					securityClassIsS2(nodeSecClass) ||
+					!!this.securityManager2?.tempKeys.has(node.id);
+			} else if (options.s2MulticastGroupId != undefined) {
+				// ... or we're dealing with S2 multicast
+				maybeS2 = true;
 			}
+			if (maybeS2 && Security2CC.requiresEncapsulation(cmd)) {
+				cmd = Security2CC.encapsulate(this, cmd, {
+					multicastOutOfSync: !!options.s2MulticastOutOfSync,
+					multicastGroupId: options.s2MulticastGroupId,
+				});
+			}
+
 			// This check will return false for S2-encapsulated commands
-			if (SecurityCC.requiresEncapsulation(msg.command)) {
-				msg.command = SecurityCC.encapsulate(this, msg.command);
+			if (SecurityCC.requiresEncapsulation(cmd)) {
+				cmd = SecurityCC.encapsulate(this, cmd);
 			}
 		}
+		return cmd;
 	}
 
 	public unwrapCommands(msg: Message & ICommandClassContainer): void {
@@ -3902,17 +3907,6 @@ ${handlers.length} left`,
 
 			msg.command = unwrapped;
 		}
-	}
-
-	/** Adds or removes the given encapsulation from the given message */
-	public toggleEncapsulation(
-		msg: Message & ICommandClassContainer,
-		encapsulation: EncapsulationFlags,
-		active: boolean,
-	): void {
-		this.unwrapCommands(msg);
-		msg.command.toggleEncapsulationFlag(encapsulation, active);
-		this.encapsulateCommands(msg);
 	}
 
 	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
@@ -4190,8 +4184,13 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
 	): SendDataMessage {
+		// Automatically encapsulate commands before sending
+		if (options.autoEncapsulate !== false) {
+			command = this.encapsulateCommands(command, options);
+		}
+
 		let msg: SendDataMessage;
-		if (command.isSinglecast()) {
+		if (command.isSinglecast() || command.isBroadcast()) {
 			if (
 				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
 			) {
@@ -4241,11 +4240,6 @@ ${handlers.length} left`,
 				// If no ACK is requested, set the callback ID to zero, because we won't get a controller callback
 				msg.callbackId = 0;
 			}
-		}
-
-		// Automatically encapsulate commands before sending
-		if (options.autoEncapsulate !== false) {
-			this.encapsulateCommands(msg, options);
 		}
 
 		return msg;
@@ -4356,6 +4350,11 @@ ${handlers.length} left`,
 	): Promise<SendCommandReturnType<TResponse>> {
 		if (options?.encapsulationFlags != undefined) {
 			command.encapsulationFlags = options.encapsulationFlags;
+		}
+
+		// For S2 multicast, the Security encapsulation flag does not get set automatically by the CC constructor
+		if (options?.s2MulticastGroupId != undefined) {
+			command.toggleEncapsulationFlag(EncapsulationFlags.Security, true);
 		}
 
 		// Only use supervision if...
@@ -4742,7 +4741,9 @@ ${handlers.length} left`,
 			const SendDataConstructor = this.getSendDataSinglecastConstructor();
 			msg = new SendDataConstructor(this, { command: commandOrMsg });
 		}
-		this.encapsulateCommands(msg);
+		msg.command = this.encapsulateCommands(
+			msg.command,
+		) as SinglecastCC<CommandClass>;
 		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
 	}
 

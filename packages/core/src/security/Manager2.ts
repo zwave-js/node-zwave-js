@@ -82,6 +82,7 @@ export type MPANTableEntry =
 export interface MulticastGroup {
 	nodeIDs: readonly number[];
 	securityClass: S2SecurityClass;
+	sequenceNumber: number;
 }
 
 // How many sequence numbers are remembered for each node when checking for duplicates
@@ -174,6 +175,7 @@ export class SecurityManager2 {
 		this.multicastGroups.set(groupId, {
 			nodeIDs,
 			securityClass: s2SecurityClass,
+			sequenceNumber: crypto.randomInt(256),
 		});
 		this.multicastGroupLookup.set(newHash, groupId);
 		// And reset the MPAN state
@@ -420,13 +422,9 @@ export class SecurityManager2 {
 		return seq;
 	}
 
-	public getInnerMPANState(groupId: number): Buffer | undefined {
-		return this.mpanStates.get(groupId);
-	}
-
-	public nextMPAN(groupId: number): Buffer {
-		const group = this.getMulticastGroup(groupId);
-
+	/** Returns the next sequence number to use for outgoing messages to the given multicast group */
+	public nextMulticastSequenceNumber(groupId: number): number {
+		const group = this.multicastGroups.get(groupId);
 		if (!group) {
 			throw new ZWaveError(
 				`Multicast group ${groupId} does not exist!`,
@@ -434,19 +432,14 @@ export class SecurityManager2 {
 			);
 		}
 
-		const keys = this.getKeysForSecurityClass(group.securityClass);
+		let seq = group.sequenceNumber;
+		seq = (seq + 1) & 0xff;
+		group.sequenceNumber = seq;
+		return seq;
+	}
 
-		// We may have to initialize the inner MPAN state
-		if (!this.mpanStates.has(groupId)) {
-			this.mpanStates.set(groupId, this.rng.generate(16));
-		}
-
-		// Compute the next MPAN
-		const stateN = this.mpanStates.get(groupId)!;
-		const ret = encryptAES128ECB(stateN, keys.keyMPAN);
-		// Increment the inner state
-		increment(stateN);
-		return ret;
+	public getInnerMPANState(groupId: number): Buffer | undefined {
+		return this.mpanStates.get(groupId);
 	}
 
 	public getMulticastKeyAndIV(groupId: number): {
@@ -471,7 +464,8 @@ export class SecurityManager2 {
 
 		// Compute the next MPAN
 		const stateN = this.mpanStates.get(groupId)!;
-		const ret = encryptAES128ECB(stateN, keys.keyMPAN);
+		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
+		const ret = encryptAES128ECB(stateN, keys.keyMPAN).slice(0, 13);
 		// Increment the inner state
 		increment(stateN);
 
@@ -479,6 +473,12 @@ export class SecurityManager2 {
 			key: keys.keyCCM,
 			iv: ret,
 		};
+	}
+
+	/** As part of MPAN maintenance, this increments our own MPAN for a group */
+	public tryIncrementMPAN(groupId: number): void {
+		const stateN = this.mpanStates.get(groupId);
+		if (stateN) increment(stateN);
 	}
 
 	/**

@@ -1,4 +1,5 @@
 import {
+	BroadcastCC,
 	CommandClasses,
 	EncapsulationFlags,
 	FrameType,
@@ -167,11 +168,7 @@ export class CommandClass implements ICommandClass {
 
 		if (this instanceof InvalidCC) return;
 
-		if (
-			options.origin !== MessageOrigin.Host &&
-			this.isSinglecast() &&
-			this.nodeId !== NODE_ID_BROADCAST
-		) {
+		if (options.origin !== MessageOrigin.Host && this.isSinglecast()) {
 			// For singlecast CCs, set the CC version as high as possible
 			this.version = this.host.getSafeCCVersionForNode(
 				this.ccId,
@@ -529,11 +526,17 @@ export class CommandClass implements ICommandClass {
 	}
 
 	public isSinglecast(): this is SinglecastCC<this> {
-		return typeof this.nodeId === "number";
+		return (
+			typeof this.nodeId === "number" && this.nodeId !== NODE_ID_BROADCAST
+		);
 	}
 
 	public isMulticast(): this is MulticastCC<this> {
 		return isArray(this.nodeId);
+	}
+
+	public isBroadcast(): this is BroadcastCC<this> {
+		return this.nodeId === NODE_ID_BROADCAST;
 	}
 
 	/**

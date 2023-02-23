@@ -208,38 +208,38 @@ test("createMulticastGroup() -> should return the same group ID for a previously
 	t.is(group1, group2);
 });
 
-test("nextMPAN() -> should throw if the MPAN state for the given multicast group has not been initialized", (t) => {
+test("getMulticastKeyAndIV() -> should throw if the MPAN state for the given multicast group has not been initialized", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveError(t, () => man.nextMPAN(1), {
+	assertZWaveError(t, () => man.getMulticastKeyAndIV(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "does not exist",
 	});
 	t.pass();
 });
 
-test("nextMPAN() -> should throw if the multicast group has not been created", (t) => {
+test("getMulticastKeyAndIV() -> should throw if the multicast group has not been created", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveError(t, () => man.nextMPAN(1), {
+	assertZWaveError(t, () => man.getMulticastKeyAndIV(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "does not exist",
 	});
 	t.pass();
 });
 
-test("nextMPAN() -> should throw if the keys for the group's security class have not been set up", (t) => {
+test("getMulticastKeyAndIV() -> should throw if the keys for the group's security class have not been set up", (t) => {
 	const man = new SecurityManager2();
 	const groupId = man.createMulticastGroup(
 		[2, 3, 4],
 		SecurityClass.S2_Authenticated,
 	);
-	assertZWaveError(t, () => man.nextMPAN(groupId), {
+	assertZWaveError(t, () => man.getMulticastKeyAndIV(groupId), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "network key",
 	});
 	t.pass();
 });
 
-test("nextMPAN() -> should generate a 16-byte buffer otherwise", (t) => {
+test("getMulticastKeyAndIV() -> should generate a 13-byte IV otherwise", (t) => {
 	const man = new SecurityManager2();
 	dummyInit(man);
 	const groupId = man.createMulticastGroup(
@@ -247,13 +247,13 @@ test("nextMPAN() -> should generate a 16-byte buffer otherwise", (t) => {
 		SecurityClass.S2_Authenticated,
 	);
 
-	const ret = man.nextMPAN(groupId);
+	const ret = man.getMulticastKeyAndIV(groupId).iv;
 
 	t.true(Buffer.isBuffer(ret));
 	t.is(ret.length, 16);
 });
 
-test("nextMPAN() -> two nonces for the same group should be different", (t) => {
+test("getMulticastKeyAndIV() -> two nonces for the same group should be different", (t) => {
 	const man = new SecurityManager2();
 	dummyInit(man);
 	const groupId = man.createMulticastGroup(
@@ -261,12 +261,12 @@ test("nextMPAN() -> two nonces for the same group should be different", (t) => {
 		SecurityClass.S2_Authenticated,
 	);
 
-	const nonce1 = man.nextMPAN(groupId);
-	const nonce2 = man.nextMPAN(groupId);
+	const nonce1 = man.getMulticastKeyAndIV(groupId).iv;
+	const nonce2 = man.getMulticastKeyAndIV(groupId).iv;
 	t.notDeepEqual(nonce1, nonce2);
 });
 
-test("nextMPAN() -> two nonces for different groups should be different", (t) => {
+test("getMulticastKeyAndIV() -> two nonces for different groups should be different", (t) => {
 	const man = new SecurityManager2();
 	dummyInit(man);
 	const group1 = man.createMulticastGroup(
@@ -278,7 +278,7 @@ test("nextMPAN() -> two nonces for different groups should be different", (t) =>
 		SecurityClass.S2_Authenticated,
 	);
 
-	const nonce1 = man.nextMPAN(group1);
-	const nonce2 = man.nextMPAN(group2);
+	const nonce1 = man.getMulticastKeyAndIV(group1).iv;
+	const nonce2 = man.getMulticastKeyAndIV(group2).iv;
 	t.notDeepEqual(nonce1, nonce2);
 });
