@@ -27,5 +27,17 @@
 			"maxNodes": 1,
 			"isLifeline": true
 		}
+	},
+	"compat": {
+		// The device seems to have a battery but does not include Battery CC in its reports
+		"commandClasses": {
+			"add": {
+				"0x80": {
+					"isSupported": true,
+					"version": 1,
+					"secure": true
+				}
+			}
+		}
 	}
 }
