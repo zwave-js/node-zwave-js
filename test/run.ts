@@ -55,13 +55,15 @@ const driver = new Driver(port, {
 		driver.on("all nodes ready", async () => {
 			console.log("nodes ready");
 
-			// Sync the SPAN state beforehand, to avoid having to send too long commands
+			// Sync the SPAN state beforehand, to trigger SOS plus MOS at once
 			await node11.commandClasses["Binary Switch"].set(false);
-			// await node12.commandClasses["Binary Switch"].set(false);
+			// now put it out of sync
+			for (let i = 1; i < 10; i++) driver.securityManager2?.nextNonce(11);
+			// // await node12.commandClasses["Binary Switch"].set(false);
 
-			const grp = driver.controller.getS2MulticastGroup([11, 11]);
-			await wait(1000);
-			await grp.commandClasses["Binary Switch"].set(true);
+			const grp = driver.controller.getMulticastGroupS2([11, 11]);
+			// await wait(1000);
+			// await grp.commandClasses["Binary Switch"].set(true);
 
 			await wait(5000);
 
@@ -78,10 +80,10 @@ const driver = new Driver(port, {
 			await wait(100);
 			await grp.commandClasses["Binary Switch"].set(true);
 
-			await wait(100);
-			await grp.commandClasses["Binary Switch"].set(false);
-			await wait(100);
-			await grp.commandClasses["Binary Switch"].set(true);
+			// await wait(100);
+			// await grp.commandClasses["Binary Switch"].set(false);
+			// await wait(100);
+			// await grp.commandClasses["Binary Switch"].set(true);
 		});
 	})
 	.once("bootloader ready", async () => {

@@ -323,6 +323,10 @@ export class CommandClass implements ICommandClass {
 		return data;
 	}
 
+	public prepareRetransmission(): void {
+		// Do nothing by default
+	}
+
 	/** Extracts the CC id from a buffer that contains a serialized CC */
 	public static getCommandClass(data: Buffer): CommandClasses {
 		return parseCCId(data).ccId;

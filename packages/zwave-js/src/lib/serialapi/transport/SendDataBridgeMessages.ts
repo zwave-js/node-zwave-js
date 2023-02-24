@@ -106,8 +106,24 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		return this.command.nodeId;
 	}
 
+	// Cache the serialized CC, so we can check if it needs to be fragmented
+	private _serializedCC: Buffer | undefined;
+	/** @internal */
+	public serializeCC(): Buffer {
+		if (!this._serializedCC) {
+			this._serializedCC = this.command.serialize();
+		}
+		return this._serializedCC;
+	}
+
+	public prepareRetransmission(): void {
+		this.command.prepareRetransmission();
+		this._serializedCC = undefined;
+		this.callbackId = undefined;
+	}
+
 	public serialize(): Buffer {
-		const serializedCC = this.command.serialize();
+		const serializedCC = this.serializeCC();
 		this.payload = Buffer.concat([
 			Buffer.from([
 				this.sourceNodeId,
@@ -331,8 +347,25 @@ export class SendDataMulticastBridgeRequest<
 		return undefined;
 	}
 
+	// Cache the serialized CC, so we can check if it needs to be fragmented
+	private _serializedCC: Buffer | undefined;
+	/** @internal */
+	public serializeCC(): Buffer {
+		if (!this._serializedCC) {
+			this._serializedCC = this.command.serialize();
+		}
+		return this._serializedCC;
+	}
+
+	public prepareRetransmission(): void {
+		this.command.prepareRetransmission();
+		this._serializedCC = undefined;
+		this.callbackId = undefined;
+	}
+
 	public serialize(): Buffer {
-		const serializedCC = this.command.serialize();
+		const serializedCC = this.serializeCC();
+
 		this.payload = Buffer.concat([
 			// # of target nodes and nodeIds
 			Buffer.from([
@@ -359,6 +392,15 @@ export class SendDataMulticastBridgeRequest<
 				"callback id": this.callbackId,
 			},
 		};
+	}
+	/** Computes the maximum payload size that can be transmitted with this message */
+	public getMaxPayloadLength(): number {
+		// From INS13954-13, chapter 4.3.3.6
+		if (this.transmitOptions & TransmitOptions.ACK) {
+			if (this.transmitOptions & TransmitOptions.Explore) return 17;
+			if (this.transmitOptions & TransmitOptions.AutoRoute) return 19;
+		}
+		return 25;
 	}
 }
 

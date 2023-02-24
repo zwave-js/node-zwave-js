@@ -3,7 +3,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
-import { getEnumMemberName, TypedClassDecorator } from "@zwave-js/shared/safe";
+import {
+	buffer2hex,
+	getEnumMemberName,
+	TypedClassDecorator,
+} from "@zwave-js/shared/safe";
 import "reflect-metadata";
 
 enum S2ExtensionType {
@@ -270,10 +274,15 @@ export class MPANExtension extends Security2Extension {
 	}
 
 	public toLogEntry(): string {
+		const mpanState =
+			process.env.NODE_ENV === "test" ||
+			process.env.NODE_ENV === "development"
+				? buffer2hex(this.innerMPANState)
+				: "(hidden)";
 		let ret = super.toLogEntry().replace(/^  payload:.+$/m, "");
 		ret += `
   group ID: ${this.groupId}
-  MPAN state: 0x${this.innerMPANState.toString("hex")}`;
+  MPAN state: ${mpanState}`;
 		return ret;
 	}
 }

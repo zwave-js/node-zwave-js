@@ -3009,6 +3009,7 @@ export enum ZWaveErrorCodes {
     // (undocumented)
     Controller_MessageDropped = 202,
     Controller_MessageExpired = 213,
+    Controller_MessageTooLarge = 215,
     Controller_NodeInsecureCommunication = 212,
     Controller_NodeNotFound = 209,
     Controller_NodeRemoved = 211,

@@ -58,6 +58,9 @@ export enum ZWaveErrorCodes {
 	/** A Serial API command resulted in an error response */
 	Controller_CommandError,
 
+	/** Tried to send a message that is too large */
+	Controller_MessageTooLarge,
+
 	/** Could not fetch some information to determine firmware upgrades from a node */
 	FWUpdateService_MissingInformation = 260,
 	/** Any error related to HTTP requests during firmware update communication */

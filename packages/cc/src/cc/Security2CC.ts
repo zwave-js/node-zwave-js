@@ -1093,7 +1093,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public encapsulated?: CommandClass;
 	public extensions: Security2Extension[];
 
-	public unsetSequenceNumber(): void {
+	public override prepareRetransmission(): void {
+		super.prepareRetransmission();
 		this._sequenceNumber = undefined;
 	}
 

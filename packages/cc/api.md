@@ -3880,6 +3880,8 @@ export class CommandClass implements ICommandClass {
     payload: Buffer;
     // Warning: (tsdoc-characters-after-block-tag) The token "@ccValue" looks like a TSDoc tag but contains an invalid character "."; if it is not a tag, use a backslash to escape the "@"
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    prepareRetransmission(): void;
     refreshValues(_applHost: ZWaveApplicationHost_2): Promise<void>;
     protected removeMetadata(applHost: ZWaveApplicationHost_2, ccValue: CCValue): void;
     protected removeValue(applHost: ZWaveApplicationHost_2, ccValue: CCValue): void;
@@ -13780,13 +13782,13 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     host: ZWaveHost_2 & {
         securityManager2: SecurityManager2;
     };
+    // (undocumented)
+    prepareRetransmission(): void;
     get sequenceNumber(): number;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
-    // (undocumented)
-    unsetSequenceNumber(): void;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -25,11 +25,13 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
+import { getErrorMessage } from "@zwave-js/shared";
 import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import {
+	exceedsMaxPayloadLength,
 	isSendData,
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
@@ -90,6 +92,14 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 		onMessageSent,
 		additionalCommandTimeoutMs = 0,
 	) {
+		// Make sure we can send this message
+		if (isSendData(msg) && exceedsMaxPayloadLength(msg)) {
+			throw new ZWaveError(
+				"Cannot send this message because it would exceed the maximum payload length!",
+				ZWaveErrorCodes.Controller_MessageTooLarge,
+			);
+		}
+
 		// Pass this message to the send thread and wait for it to be sent
 		let result: Message;
 		// At this point we can't have received a premature update
@@ -342,17 +352,16 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				message: `failed to decode the message, retrying with SPAN extension...`,
 				direction: "none",
 			});
-			// Prepare the message for re-transmission
-			msg.callbackId = undefined;
-			msg.command.unsetSequenceNumber();
 
 			// Send the message again
+			msg.prepareRetransmission();
 			response = yield* simpleMessageGenerator(
 				driver,
 				msg,
 				onMessageSent,
 				additionalTimeoutMs,
 			);
+
 			if (
 				isCommandClassContainer(response) &&
 				response.command instanceof Security2CCNonceReport
@@ -494,6 +503,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 					}
 				}
 			} catch (e) {
+				driver.driverLog.print(getErrorMessage(e), "error");
 				// TODO: Figure out how we got here, and what to do now.
 				// In any case, keep going with the next nodes
 				// TODO: We should probably respond that there was a failure
