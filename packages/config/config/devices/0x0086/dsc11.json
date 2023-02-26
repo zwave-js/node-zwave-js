@@ -380,5 +380,10 @@
 			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	]
+	],
+	"compat": {
+		// Add missing root binary switch and electrical consumption
+		"preserveRootApplicationCCValueIDs": true
+	}
+
 }
