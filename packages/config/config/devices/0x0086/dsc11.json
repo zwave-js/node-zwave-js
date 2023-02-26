@@ -385,5 +385,4 @@
 		// Add missing root binary switch and electrical consumption
 		"preserveRootApplicationCCValueIDs": true
 	}
-
 }
