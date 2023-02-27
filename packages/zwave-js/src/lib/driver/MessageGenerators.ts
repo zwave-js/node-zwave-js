@@ -16,6 +16,7 @@ import {
 } from "@zwave-js/cc/SecurityCC";
 import {
 	MAX_SEGMENT_SIZE,
+	RELAXED_TIMING_THRESHOLD,
 	TransportServiceCC,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
@@ -191,6 +192,10 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 		// Send the command split into multiple segments
 		const payload = msg.serializeCC();
 		const numSegments = Math.ceil(payload.length / MAX_SEGMENT_SIZE);
+		const segmentDelay =
+			numSegments > RELAXED_TIMING_THRESHOLD
+				? TransportServiceTimeouts.relaxedTimingDelayR2
+				: 0;
 		const sessionId = driver.getNextTransportServiceSessionId();
 		const nodeId = msg.command.nodeId;
 
@@ -261,8 +266,15 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 					.fill(0)
 					.map((_, i) => i);
 				let didRetryLastSegment = false;
+				let isFirstTransferredSegment = true;
 
 				while (unsentSegments.length > 0) {
+					// Wait if necessary
+					if (isFirstTransferredSegment) {
+						isFirstTransferredSegment = false;
+					} else if (segmentDelay) {
+						await wait(segmentDelay, true);
+					}
 					const segment = unsentSegments.shift()!;
 
 					const chunk = payload.slice(
