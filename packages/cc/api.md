@@ -16084,6 +16084,8 @@ export const TransportServiceTimeouts: {
     requestMissingSegmentR3: number;
     segmentCompleteR2: number;
     segmentCompleteR3: number;
+    relaxedTimingDelayR2: number;
+    relaxedTimingDelayR3: number;
 };
 
 // Warning: (ae-missing-release-tag) "UserCodeCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18350,6 +18352,11 @@ export enum ZWaveProtocolCommand {
     // (undocumented)
     TransferRangeInformation = 10
 }
+
+// Warnings were encountered during analysis:
+//
+// src/cc/TransportServiceCC.ts:43:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
+// src/cc/TransportServiceCC.ts:45:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
 
 // (No @packageDocumentation comment for this package)
 
