@@ -59,7 +59,7 @@ const driver = new Driver(port, {
 			await node11.commandClasses["Binary Switch"].set(false);
 			// now put it out of sync
 			for (let i = 1; i < 10; i++) driver.securityManager2?.nextNonce(11);
-			// // await node12.commandClasses["Binary Switch"].set(false);
+			// // // await node12.commandClasses["Binary Switch"].set(false);
 
 			const grp = driver.controller.getMulticastGroupS2([11, 11]);
 			// await wait(1000);
@@ -76,9 +76,9 @@ const driver = new Driver(port, {
 			await fs.writeFile(path.join(__dirname, "zwavejs_current.log"), "");
 
 			// await wait(200);
-			await grp.commandClasses["Binary Switch"].set(false);
-			await wait(100);
 			await grp.commandClasses["Binary Switch"].set(true);
+			await wait(100);
+			await grp.commandClasses["Binary Switch"].set(false);
 
 			// await wait(100);
 			// await grp.commandClasses["Binary Switch"].set(false);

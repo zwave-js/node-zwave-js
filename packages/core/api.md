@@ -1348,6 +1348,11 @@ export const MAX_REPEATERS = 4;
 // @public (undocumented)
 export const MAX_SUPERVISION_SESSION_ID = 63;
 
+// Warning: (ae-missing-release-tag) "MAX_TRANSPORT_SERVICE_SESSION_ID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const MAX_TRANSPORT_SERVICE_SESSION_ID = 15;
+
 // Warning: (ae-forgotten-export) The symbol "BrandedUnknown" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "Maybe" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

@@ -16082,6 +16082,8 @@ export enum TransportServiceCommand {
 export const TransportServiceTimeouts: {
     requestMissingSegmentR2: number;
     requestMissingSegmentR3: number;
+    segmentCompleteR2: number;
+    segmentCompleteR3: number;
 };
 
 // Warning: (ae-missing-release-tag) "UserCodeCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -280,8 +280,7 @@ export class MPANExtension extends Security2Extension {
 				? buffer2hex(this.innerMPANState)
 				: "(hidden)";
 		let ret = super.toLogEntry().replace(/^  payload:.+$/m, "");
-		ret += `
-  group ID: ${this.groupId}
+		ret += `  group ID: ${this.groupId}
   MPAN state: ${mpanState}`;
 		return ret;
 	}

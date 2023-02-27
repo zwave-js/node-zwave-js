@@ -15,6 +15,16 @@ import {
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
 import {
+	MAX_SEGMENT_SIZE,
+	TransportServiceCC,
+	TransportServiceCCFirstSegment,
+	TransportServiceCCSegmentComplete,
+	TransportServiceCCSegmentRequest,
+	TransportServiceCCSegmentWait,
+	TransportServiceCCSubsequentSegment,
+	TransportServiceTimeouts,
+} from "@zwave-js/cc/TransportServiceCC";
+import {
 	CommandClasses,
 	EncapsulationFlags,
 	MessagePriority,
@@ -26,6 +36,7 @@ import {
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
+import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
 	DeferredPromise,
@@ -146,6 +157,246 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 		return result;
 	};
 
+/** A generator for singlecast SendData messages that automatically uses Transport Service when necessary */
+export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
+	async function* (driver, msg, onMessageSent, additionalCommandTimeoutMs) {
+		// Make sure we can send this message
+		if (!isSendData(msg)) {
+			throw new ZWaveError(
+				"Cannot use the Transport Service message generator for messages that are not SendData!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (typeof msg.command.nodeId !== "number") {
+			throw new ZWaveError(
+				"Cannot use the Transport Service message generator for multicast commands!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const node = msg.getNodeUnsafe(driver);
+		const mayUseTransportService =
+			node?.supportsCC(CommandClasses["Transport Service"]) &&
+			node.getCCVersion(CommandClasses["Transport Service"]) >= 2;
+
+		if (!mayUseTransportService || !exceedsMaxPayloadLength(msg)) {
+			// Transport Service isn't needed for this message
+			return yield* simpleMessageGenerator(
+				driver,
+				msg,
+				onMessageSent,
+				additionalCommandTimeoutMs,
+			);
+		}
+
+		// Send the command split into multiple segments
+		const payload = msg.serializeCC();
+		const numSegments = Math.ceil(payload.length / MAX_SEGMENT_SIZE);
+		const sessionId = driver.getNextTransportServiceSessionId();
+		const nodeId = msg.command.nodeId;
+
+		// Since the command is never logged, we do it here
+		driver.driverLog.print(
+			"The following message is too large, using Transport Service to transmit it:",
+		);
+		driver.driverLog.logMessage(msg, {
+			direction: "outbound",
+		});
+
+		// I don't see an elegant way to wait for possible responses, so we just register a handler in the driver
+		// and remember the received commands
+		let unhandledResponses: TransportServiceCC[] = [];
+		const { unregister: unregisterHandler } = driver.registerCommandHandler(
+			(cc) =>
+				cc.nodeId === nodeId &&
+				(cc instanceof TransportServiceCCSegmentWait ||
+					(cc instanceof TransportServiceCCSegmentRequest &&
+						cc.sessionId === sessionId)),
+			(cc) => {
+				unhandledResponses.push(cc as TransportServiceCC);
+			},
+		);
+
+		const receivedSegmentWait = () => {
+			const index = unhandledResponses.findIndex(
+				(cc) => cc instanceof TransportServiceCCSegmentWait,
+			);
+			if (index >= 0) {
+				const cc = unhandledResponses[
+					index
+				] as TransportServiceCCSegmentWait;
+				unhandledResponses.splice(index, 1);
+				return cc;
+			}
+		};
+
+		const receivedSegmentRequest = () => {
+			const index = unhandledResponses.findIndex(
+				(cc) => cc instanceof TransportServiceCCSegmentRequest,
+			);
+			if (index >= 0) {
+				const cc = unhandledResponses[
+					index
+				] as TransportServiceCCSegmentRequest;
+				unhandledResponses.splice(index, 1);
+				return cc;
+			}
+		};
+
+		// We have to deal with multiple messages, but can only return a single result.
+		// Therefore we use the last one as the result.
+		let result!: Message;
+
+		try {
+			attempts: for (let attempt = 1; attempt <= 2; attempt++) {
+				driver.controllerLog.logNode(nodeId, {
+					message: `Beginning Transport Service TX session #${sessionId}...`,
+					level: "debug",
+					direction: "outbound",
+				});
+
+				// Clear the list of unhandled responses
+				unhandledResponses = [];
+				// Fill the list of unsent segments
+				const unsentSegments = new Array(numSegments)
+					.fill(0)
+					.map((_, i) => i);
+				let didRetryLastSegment = false;
+
+				while (unsentSegments.length > 0) {
+					const segment = unsentSegments.shift()!;
+
+					const chunk = payload.slice(
+						segment * MAX_SEGMENT_SIZE,
+						(segment + 1) * MAX_SEGMENT_SIZE,
+					);
+					let cc: TransportServiceCC;
+					if (segment === 0) {
+						cc = new TransportServiceCCFirstSegment(driver, {
+							nodeId,
+							sessionId,
+							datagramSize: payload.length,
+							partialDatagram: chunk,
+						});
+					} else {
+						cc = new TransportServiceCCSubsequentSegment(driver, {
+							nodeId,
+							sessionId,
+							datagramSize: payload.length,
+							datagramOffset: segment * MAX_SEGMENT_SIZE,
+							partialDatagram: chunk,
+						});
+					}
+
+					const tmsg = driver.createSendDataMessage(cc, {
+						autoEncapsulate: false,
+						maxSendAttempts: msg.maxSendAttempts,
+						transmitOptions: msg.transmitOptions,
+					});
+					result = yield* simpleMessageGenerator(
+						driver,
+						tmsg,
+						onMessageSent,
+					);
+
+					let segmentComplete:
+						| TransportServiceCCSegmentComplete
+						| undefined = undefined;
+					// After sending the last segment, wait for a SegmentComplete response, at the same time
+					// give the node a chance to send a SegmentWait or SegmentRequest(s)
+					if (segment === numSegments - 1) {
+						segmentComplete = await driver
+							.waitForCommand<TransportServiceCCSegmentComplete>(
+								(cc) =>
+									cc.nodeId === nodeId &&
+									cc instanceof
+										TransportServiceCCSegmentComplete &&
+									cc.sessionId === sessionId,
+								TransportServiceTimeouts.segmentCompleteR2,
+							)
+							.catch(() => undefined);
+					}
+
+					if (segmentComplete) {
+						// We're done!
+						driver.controllerLog.logNode(nodeId, {
+							message: `Transport Service TX session #${sessionId} complete`,
+							level: "debug",
+							direction: "outbound",
+						});
+						break attempts;
+					}
+
+					// If we received a SegmentWait, we need to wait and restart
+					const segmentWait = receivedSegmentWait();
+					if (segmentWait) {
+						const waitTime = segmentWait.pendingSegments * 100;
+						driver.controllerLog.logNode(nodeId, {
+							message: `Restarting Transport Service TX session #${sessionId} in ${waitTime} ms...`,
+							level: "debug",
+						});
+
+						await wait(waitTime, true);
+						continue attempts;
+					}
+
+					// If the node requested missing segments, add them to the list of unsent segments and continue transmitting
+					let segmentRequest:
+						| TransportServiceCCSegmentRequest
+						| undefined = undefined;
+					let readdedSegments = false;
+					while ((segmentRequest = receivedSegmentRequest())) {
+						unsentSegments.push(
+							segmentRequest.datagramOffset / MAX_SEGMENT_SIZE,
+						);
+						readdedSegments = true;
+					}
+					if (readdedSegments) continue;
+
+					// If we didn't receive anything after sending the last segment, retry the last segment
+					if (segment === numSegments - 1) {
+						if (didRetryLastSegment) {
+							driver.controllerLog.logNode(nodeId, {
+								message: `Transport Service TX session #${sessionId} failed`,
+								level: "debug",
+								direction: "outbound",
+							});
+							break attempts;
+						} else {
+							// Try the last segment again
+							driver.controllerLog.logNode(nodeId, {
+								message: `Transport Service TX session #${sessionId}: Segment Complete missing - re-transmitting last segment...`,
+								level: "debug",
+								direction: "outbound",
+							});
+							didRetryLastSegment = true;
+							unsentSegments.unshift(segment);
+							continue;
+						}
+					}
+				}
+			}
+		} finally {
+			// We're done, unregister the handler
+			unregisterHandler();
+		}
+
+		// Transport Service CCs do not expect a node update and have no knowledge about the encapsulated CC.
+		// Therefore we need to replicate the waiting from simpleMessageGenerator here
+
+		// If the sent message expects an update from the node, wait for it
+		if (msg.expectsNodeUpdate()) {
+			// TODO: Figure out if we can handle premature updates with Transport Service CC
+			const timeout = getNodeUpdateTimeout(
+				driver,
+				msg,
+				additionalCommandTimeoutMs,
+			);
+			return waitForNodeUpdate(driver, msg, timeout);
+		}
+
+		return result;
+	};
+
 /** A simple (internal) generator that simply sends a command, and optionally returns the response command */
 async function* sendCommandGenerator<
 	TResponse extends CommandClass = CommandClass,
@@ -153,11 +404,15 @@ async function* sendCommandGenerator<
 	driver: Driver,
 	command: CommandClass,
 	onMessageSent: (msg: Message, result: Message | undefined) => void,
-	options: SendCommandOptions,
+	options?: SendCommandOptions,
 ) {
 	const msg = driver.createSendDataMessage(command, options);
 
-	const resp = yield* simpleMessageGenerator(driver, msg, onMessageSent);
+	const resp = yield* maybeTransportServiceGenerator(
+		driver,
+		msg,
+		onMessageSent,
+	);
 	if (resp && isCommandClassContainer(resp)) {
 		driver.unwrapCommands(resp);
 		return resp.command as TResponse;
@@ -289,7 +544,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		}
 
 		// Now send the actual secure command
-		let response = yield* simpleMessageGenerator(
+		let response = yield* maybeTransportServiceGenerator(
 			driver,
 			msg,
 			onMessageSent,
@@ -355,7 +610,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 
 			// Send the message again
 			msg.prepareRetransmission();
-			response = yield* simpleMessageGenerator(
+			response = yield* maybeTransportServiceGenerator(
 				driver,
 				msg,
 				onMessageSent,
@@ -548,6 +803,8 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 						msg.command instanceof SecurityCCCommandEncapsulation
 					) {
 						implementation = secureMessageGeneratorS0;
+					} else if (msg.command.isSinglecast()) {
+						implementation = maybeTransportServiceGenerator;
 					}
 				}
 

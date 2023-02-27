@@ -52,6 +52,7 @@ import {
 	isZWaveError,
 	LogConfig,
 	MAX_SUPERVISION_SESSION_ID,
+	MAX_TRANSPORT_SERVICE_SESSION_ID,
 	Maybe,
 	MessagePriority,
 	MessageRecord,
@@ -377,15 +378,15 @@ interface RequestHandlerEntry<T extends Message = Message> {
 	oneTime: boolean;
 }
 
-interface AwaitedChunk<T> {
-	promise: DeferredPromise<T>;
+interface AwaitedThing<T> {
+	handler: (thing: T) => void;
 	timeout?: NodeJS.Timeout;
 	predicate: (msg: T) => boolean;
 }
 
-type AwaitedMessageEntry = AwaitedChunk<Message>;
-type AwaitedCommandEntry = AwaitedChunk<ICommandClass>;
-export type AwaitedBootloaderChunkEntry = AwaitedChunk<BootloaderChunk>;
+type AwaitedMessageEntry = AwaitedThing<Message>;
+type AwaitedCommandEntry = AwaitedThing<ICommandClass>;
+export type AwaitedBootloaderChunkEntry = AwaitedThing<BootloaderChunk>;
 
 interface TransportServiceSession {
 	fragmentSize: number;
@@ -3562,8 +3563,8 @@ ${handlers.length} left`,
 		// Check if we have a dynamic handler waiting for this message
 		for (const entry of this.awaitedMessages) {
 			if (entry.predicate(msg)) {
-				// resolve the promise - this will remove the entry from the list
-				entry.promise.resolve(msg);
+				// We do
+				entry.handler(msg);
 				return;
 			}
 		}
@@ -3725,8 +3726,8 @@ ${handlers.length} left`,
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
-						// resolve the promise - this will remove the entry from the list
-						entry.promise.resolve(msg.command);
+						// there is!
+						entry.handler(msg.command);
 
 						// and possibly reply to a supervised command
 						await reply(true);
@@ -3801,11 +3802,18 @@ ${handlers.length} left`,
 	public readonly getNextCallbackId = createWrappingCounter(0xff);
 
 	/**
-	 * Returns the next callback ID. Callback IDs are used to correlate requests
-	 * to the controller/nodes with its response
+	 * Returns the next session ID for Supervision CC
 	 */
 	public readonly getNextSupervisionSessionId = createWrappingCounter(
 		MAX_SUPERVISION_SESSION_ID,
+		true,
+	);
+
+	/**
+	 * Returns the next session ID for Transport Service CC
+	 */
+	public readonly getNextTransportServiceSessionId = createWrappingCounter(
+		MAX_TRANSPORT_SERVICE_SESSION_ID,
 		true,
 	);
 
@@ -4411,9 +4419,10 @@ ${handlers.length} left`,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
+			const promise = createDeferredPromise<Message>();
 			const entry: AwaitedMessageEntry = {
 				predicate,
-				promise: createDeferredPromise<Message>(),
+				handler: (msg) => promise.resolve(msg),
 				timeout: undefined,
 			};
 			this.awaitedMessages.push(entry);
@@ -4433,7 +4442,7 @@ ${handlers.length} left`,
 				);
 			}, timeout);
 			// When the promise is resolved, remove the wait entry and resolve the returned Promise
-			void entry.promise.then((cc) => {
+			void promise.then((cc) => {
 				removeEntry();
 				resolve(cc as T);
 			});
@@ -4450,9 +4459,10 @@ ${handlers.length} left`,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
+			const promise = createDeferredPromise<ICommandClass>();
 			const entry: AwaitedCommandEntry = {
 				predicate,
-				promise: createDeferredPromise(),
+				handler: (cc) => promise.resolve(cc),
 				timeout: undefined,
 			};
 			this.awaitedCommands.push(entry);
@@ -4472,11 +4482,38 @@ ${handlers.length} left`,
 				);
 			}, timeout);
 			// When the promise is resolved, remove the wait entry and resolve the returned Promise
-			void entry.promise.then((cc) => {
+			void promise.then((cc) => {
 				removeEntry();
 				resolve(cc as T);
 			});
 		});
+	}
+
+	/**
+	 * Calls the given handler function every time a CommandClass is received that matches the given predicate.
+	 * @param predicate A predicate function to test all incoming command classes
+	 */
+	public registerCommandHandler<T extends ICommandClass>(
+		predicate: (cc: ICommandClass) => boolean,
+		handler: (cc: T) => void,
+	): {
+		unregister: () => void;
+	} {
+		const entry: AwaitedCommandEntry = {
+			predicate,
+			handler: (cc) => handler(cc as T),
+			timeout: undefined,
+		};
+		this.awaitedCommands.push(entry);
+		const removeEntry = () => {
+			if (entry.timeout) clearTimeout(entry.timeout);
+			const index = this.awaitedCommands.indexOf(entry);
+			if (index !== -1) this.awaitedCommands.splice(index, 1);
+		};
+
+		return {
+			unregister: removeEntry,
+		};
 	}
 
 	/** Checks if a message is allowed to go into the wakeup queue */
@@ -4977,10 +5014,11 @@ ${handlers.length} left`,
 			}
 		}
 
+		// Check if there is a handler waiting for this chunk
 		for (const entry of this.awaitedBootloaderChunks) {
 			if (entry.predicate(data)) {
-				// resolve the promise - this will remove the entry from the list
-				entry.promise.resolve(data);
+				// there is!
+				entry.handler(data);
 				return;
 			}
 		}
@@ -5014,9 +5052,10 @@ ${handlers.length} left`,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
+			const promise = createDeferredPromise<BootloaderChunk>();
 			const entry: AwaitedBootloaderChunkEntry = {
 				predicate,
-				promise: createDeferredPromise(),
+				handler: (chunk) => promise.resolve(chunk),
 				timeout: undefined,
 			};
 			this.awaitedBootloaderChunks.push(entry);
@@ -5036,9 +5075,9 @@ ${handlers.length} left`,
 				);
 			}, timeout);
 			// When the promise is resolved, remove the wait entry and resolve the returned Promise
-			void entry.promise.then((cc) => {
+			void promise.then((chunk) => {
 				removeEntry();
-				resolve(cc as T);
+				resolve(chunk as T);
 			});
 		});
 	}
