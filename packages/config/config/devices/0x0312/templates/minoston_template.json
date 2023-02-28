@@ -1,4 +1,42 @@
 {
+	"base_led_color": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "White",
+				"value": 0
+			},
+			{
+				"label": "Blue",
+				"value": 1
+			},
+			{
+				"label": "Green",
+				"value": 2
+			},
+			{
+				"label": "Red",
+				"value": 3
+			},
+			{
+				"label": "Magenta",
+				"value": 4
+			},
+			{
+				"label": "Yellow",
+				"value": 5
+			},
+			{
+				"label": "Cyan",
+				"value": 6
+			}
+		]
+	},
 	"base_led_color_mr40z": {
 		"valueSize": 1,
 		"minValue": 0,
@@ -222,6 +260,14 @@
 				"value": 3
 			}
 		]
+	},
+	"led_indicator_color_upper": {
+		"$import": "#base_led_color",
+		"label": "Led Indicator: Upper Paddle Color"
+	},
+	"led_indicator_color_lower": {
+		"$import": "#base_led_color",
+		"label": "Led Indicator: Lower Paddle Color"
 	},
 	"led_indicator_color_first_button": {
 		"$import": "#base_led_color_mr40z",
