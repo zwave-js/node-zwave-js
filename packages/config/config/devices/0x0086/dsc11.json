@@ -382,7 +382,7 @@
 		}
 	],
 	"compat": {
-		// Add missing root binary switch and electrical consumption
+		// The root endpoint exposes a master binary switch and total energy consumption
 		"preserveRootApplicationCCValueIDs": true
 	}
 }
