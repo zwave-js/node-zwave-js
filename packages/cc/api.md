@@ -342,7 +342,7 @@ export type APIConstructor<T extends CCAPI = CCAPI> = new (applHost: ZWaveApplic
 // Warning: (ae-missing-release-tag) "APIMethodsOf" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type APIMethodsOf<CC extends CommandClasses_2> = Omit<OnlyMethods<CCToAPI<CC>>, "isSetValueOptimistic" | "isSupported" | "supportsCommand" | "withOptions" | "withTXReport">;
+export type APIMethodsOf<CC extends CCNameOrId> = Omit<OnlyMethods<CCToAPI<CC>>, "ccId" | "getNode" | "getNodeUnsafe" | "isSetValueOptimistic" | "isSupported" | "pollValue" | "setValue" | "version" | "supportsCommand" | "withOptions" | "withTXReport">;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "assertValidCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2806,6 +2806,11 @@ export type CCConstructor<T extends CommandClass> = typeof CommandClass & {
     new (host: ZWaveHost, options: any): T;
 };
 
+// Warning: (ae-missing-release-tag) "CCNameOrId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CCNameOrId = CommandClasses_2 | Extract<keyof CCAPIs, string>;
+
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "CCResponsePredicate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2821,7 +2826,7 @@ export type CCResponseRole = boolean | "checkEncapsulated";
 // Warning: (ae-missing-release-tag) "CCToAPI" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type CCToAPI<CC extends CommandClasses_2> = CCToName<CC> extends keyof CCAPIs ? CCAPIs[CCToName<CC>] : never;
+export type CCToAPI<CC extends CCNameOrId> = CC extends CommandClasses_2 ? CCToName<CC> extends keyof CCAPIs ? CCAPIs[CCToName<CC>] : never : CC extends keyof CCAPIs ? CCAPIs[CC] : never;
 
 // Warning: (ae-forgotten-export) The symbol "CCNameMap" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "CCToName" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11681,6 +11686,11 @@ export class NoOperationCC extends CommandClass {
     // (undocumented)
     ccCommand: undefined;
 }
+
+// Warning: (ae-missing-release-tag) "normalizeCCNameOrId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function normalizeCCNameOrId(ccNameOrId: number | string): CommandClasses_2 | undefined;
 
 // Warning: (ae-missing-release-tag) "NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
