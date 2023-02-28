@@ -41,14 +41,14 @@
 		},
 		{
 			"#": "7",
-                        "$import": "templates/minoston_template.json#led_indicator_brightness_mr40z"
+			"$import": "templates/minoston_template.json#led_indicator_brightness_mr40z"
 		}
 	],
 	"metadata": {
 		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the first button five times in one second",
 		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the second button five times in one second",
 		"reset": "Press the fourth button five times, then press it five times again when the red light is flashing",
-                "wakeup": "Press the third button 5 times quickly. LED will stay solid blue when awake and turns off when device returns to sleep mode",
+		"wakeup": "Press the third button 5 times quickly. LED will stay solid blue when awake and turns off when device returns to sleep mode",
 		"manual": "https://minoston.com/wp-content/uploads/2022/10/MR40Z-manual.pdf"
 	}
 }
