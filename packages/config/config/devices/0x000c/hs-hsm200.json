@@ -29,7 +29,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Off Delay After Motion",
+			"label": "Off Delay After Motion, 0=only sends motion triggers",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +53,7 @@
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
+			"maxValue": 255,
 			"defaultValue": 60
 		},
 		{
@@ -63,7 +63,7 @@
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
+			"maxValue": 255,
 			"defaultValue": 60
 		},
 		{
@@ -75,5 +75,11 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "1) Place the device within the direct range of your Z-Wave controller.\n2) Set the main controller in add mode (see the controller’s manual).\n3) Click the button on the side of the unit once, the LED indicator should start blinking blue. \n4) Wait for the adding process to end.\n5) Successful adding will be confirmed by the Z-Wave controller’s message.",
+		"exclusion": "1) Place the device within the direct range of your Z-Wave controller.\n2) Set the main controller remove mode (see the controller’s manual).\n3) Click the button on the side of the unit once\n4) Wait for the removing process to end.\n5) Successful adding will be confirmed by the Z-Wave controller’s message.",
+		"reset": "1) Power on the device\n2) Press and hold the side button for 60 seconds.\n2) Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://docs.homeseer.com/products/sensors/hsm200/hsm200-user-guide"
+	}
 }
