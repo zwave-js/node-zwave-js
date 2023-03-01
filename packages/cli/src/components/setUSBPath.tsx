@@ -21,6 +21,10 @@ export const SetUSBPath: React.FC<SetUSBPathProps> = (props) => {
 					onSubmit={props.onSubmit}
 				></UncontrolledTextInput>
 			</Box>
+			<Text dimColor>
+				<Text bold>ENTER</Text> to confirm, <Text bold>ESCAPE</Text> to
+				cancel
+			</Text>
 		</Box>
 	);
 };

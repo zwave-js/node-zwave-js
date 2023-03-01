@@ -1,5 +1,4 @@
-import { useInput } from "ink";
-import { Menu } from "./menu";
+import { Box, Text, useInput } from "ink";
 
 export interface ConfirmExitProps {
 	onExit: () => void;
@@ -13,23 +12,12 @@ export const ConfirmExit: React.FC<ConfirmExitProps> = (props) => {
 	});
 
 	return (
-		<Menu
-			label="Are you sure you want to exit?"
-			layoutProps={{
-				alignSelf: "center",
-			}}
-			options={[
-				{
-					input: "x",
-					label: "Yes, exit!",
-					onSelect: props.onExit,
-				},
-				{
-					input: "n",
-					label: "No, back to main menu",
-					onSelect: props.onCancel,
-				},
-			]}
-		/>
+		<Box flexDirection="column" justifyContent="center">
+			<Text color="red">Are you sure you want to exit?</Text>
+			<Text>
+				Press <Text bold>RETURN</Text> to exit, or{" "}
+				<Text bold>ESCAPE</Text> to cancel.
+			</Text>
+		</Box>
 	);
 };

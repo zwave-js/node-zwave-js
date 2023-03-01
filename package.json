@@ -85,7 +85,8 @@
   },
   "resolutions": {
     "minimist": "^1.2.6",
-    "colors": "1.4.0"
+    "colors": "1.4.0",
+    "yoga-layout-prebuilt@^1.9.6": "patch:yoga-layout-prebuilt@npm%3A1.10.0#./.yarn/patches/yoga-layout-prebuilt-npm-1.10.0-855b15449f.patch"
   },
   "scripts": {
     "w": "yarn ts maintenance/watch.ts",
