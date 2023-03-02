@@ -93,7 +93,7 @@
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
     "clean": "yarn turbo run clean",
     "build": "FORCE_COLOR=1 yarn turbo run build",
-    "build:cli": "yarn workspace @zwave-js/cli run build",
+    "build:cli": "yarn workspace @zwave-js/cli run build:dev",
     "watch": "yarn w build",
     "test:ts": "FORCE_COLOR=1 yarn turbo run test:ts ${TURBO_FLAGS:-'--concurrency=1'} --",
     "test": "yarn w test:ts",

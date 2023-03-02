@@ -32,6 +32,7 @@
     "node": ">=14.13.0"
   },
   "scripts": {
+    "build:dev": "esbuild src/cli.tsx --outfile=build/cli.js --platform=node --target=node16 --format=cjs --bundle --sourcemap --external:zwave-js",
     "build": "esbuild --define:process.env.NODE_ENV=\\\"production\\\" src/cli.tsx --outfile=build/cli.js --platform=node --target=node16 --format=cjs --bundle --minify --sourcemap --external:zwave-js",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
