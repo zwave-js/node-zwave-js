@@ -13,6 +13,9 @@
 				"--async-stack-traces",
 				"${workspaceFolder}/packages/cli/build/cli.js"
 			],
+			"env": {
+				// "DEV": "true"
+			},
 			"skipFiles": ["<node_internals>/**"],
 			"type": "node",
 			"console": "integratedTerminal",

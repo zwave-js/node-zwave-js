@@ -1,14 +1,13 @@
-import { Box, Text, useInput } from "ink";
-import type { ComponentPropsWithoutRef } from "react";
+import { Box, BoxProps, Text, TextProps, useInput } from "ink";
 
 export interface MenuProps {
 	label?: string;
-	layoutProps?: ComponentPropsWithoutRef<typeof Box>;
-	textProps?: ComponentPropsWithoutRef<typeof Text>;
+	layoutProps?: BoxProps;
+	textProps?: TextProps;
 	options: {
 		input: string;
 		label: string;
-		textProps?: ComponentPropsWithoutRef<typeof Text>;
+		textProps?: TextProps;
 		onSelect: () => void;
 	}[];
 }

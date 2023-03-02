@@ -10,6 +10,7 @@ import { ModalMessage, ModalMessageState } from "./components/ModalMessage";
 import { SetUSBPath } from "./components/setUSBPath";
 import { StartingDriverPage } from "./components/StartingDriver";
 import { VDivider } from "./components/VDivider";
+import { Layer, ZStack } from "./components/ZStack";
 import { Action, ActionsContext } from "./hooks/useActions";
 import { DialogsContext } from "./hooks/useDialogs";
 import { DriverContext } from "./hooks/useDriver";
@@ -94,89 +95,107 @@ const CLI: React.FC = () => {
 							value={{ driver: driver!, setDriver }}
 						>
 							<DialogsContext.Provider value={{ showError }}>
-								<Frame
-									topLabels={menuItemSlots.top}
-									bottomLabels={menuItemSlots.bottom}
-									height={rows}
-									paddingY={1}
-									flexDirection="row"
-									alignItems="stretch"
-									justifyContent="space-around"
-								>
-									{modalMessage ? (
-										<ModalMessage
-											onContinue={() =>
-												setModalMessage(undefined)
+								<ZStack height={rows} width={columns}>
+									<Layer>
+										<Frame
+											topLabels={
+												!modalMessage &&
+												menuItemSlots.top
 											}
-											color={modalMessage.color}
+											bottomLabels={
+												!modalMessage &&
+												menuItemSlots.bottom
+											}
+											height={rows}
+											width={columns}
+											paddingY={1}
+											flexDirection="row"
+											alignItems="stretch"
+											justifyContent="space-around"
 										>
-											{modalMessage.message}
-										</ModalMessage>
-									) : (
-										<>
-											<Box
-												flexGrow={1}
-												justifyContent="center"
-											>
-												{cliPage ===
-													CLIPage.Prepare && (
-													<PreparePage />
-												)}
+											<>
+												<Box
+													flexGrow={1}
+													justifyContent="center"
+												>
+													{cliPage ===
+														CLIPage.Prepare && (
+														<PreparePage />
+													)}
 
-												{cliPage ===
-													CLIPage.SetUSBPath && (
-													<SetUSBPath
-														path={usbPath}
-														onCancel={() =>
-															setCLIPage(
-																CLIPage.Prepare,
-															)
-														}
-														onSubmit={(path) => {
-															setUSBPath(path);
-															setCLIPage(
-																CLIPage.Prepare,
-															);
-														}}
-													/>
-												)}
-
-												{cliPage ===
-													CLIPage.StartingDriver && (
-													<StartingDriverPage />
-												)}
-
-												{cliPage ===
-													CLIPage.MainMenu && (
-													<MainMenu />
-												)}
-
-												{cliPage ===
-													CLIPage.ConfirmExit && (
-													<ConfirmExit
-														onCancel={() =>
-															setCLIPage(
-																CLIPage.Prepare,
-															)
-														}
-														onExit={async () => {
-															if (driver) {
-																await driver.destroy();
+													{cliPage ===
+														CLIPage.SetUSBPath && (
+														<SetUSBPath
+															path={usbPath}
+															onCancel={() =>
+																setCLIPage(
+																	CLIPage.Prepare,
+																)
 															}
-															exit();
-														}}
-													/>
-												)}
-											</Box>
-											{logEnabled && (
-												<Box>
-													<VDivider color="gray" />
-													<Log buffer={logBuffer} />
+															onSubmit={(
+																path,
+															) => {
+																setUSBPath(
+																	path,
+																);
+																setCLIPage(
+																	CLIPage.Prepare,
+																);
+															}}
+														/>
+													)}
+
+													{cliPage ===
+														CLIPage.StartingDriver && (
+														<StartingDriverPage />
+													)}
+
+													{cliPage ===
+														CLIPage.MainMenu && (
+														<MainMenu />
+													)}
+
+													{cliPage ===
+														CLIPage.ConfirmExit && (
+														<ConfirmExit
+															onCancel={() =>
+																setCLIPage(
+																	CLIPage.Prepare,
+																)
+															}
+															onExit={async () => {
+																if (driver) {
+																	await driver.destroy();
+																}
+																exit();
+															}}
+														/>
+													)}
 												</Box>
-											)}
-										</>
+												{logEnabled && (
+													<Box>
+														<VDivider color="gray" />
+														<Log
+															buffer={logBuffer}
+														/>
+													</Box>
+												)}
+											</>
+										</Frame>
+									</Layer>
+									{modalMessage && (
+										<Layer zIndex={100}>
+											<ModalMessage
+												onContinue={() =>
+													setModalMessage(undefined)
+												}
+												color={modalMessage.color}
+											>
+												{modalMessage.message}
+											</ModalMessage>
+										</Layer>
 									)}
-								</Frame>
+								</ZStack>
 							</DialogsContext.Provider>
 						</DriverContext.Provider>
 					</ActionsContext.Provider>

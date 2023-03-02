@@ -14,8 +14,12 @@ export const VDivider: React.FC<VDividerProps> = ({
 
 	useEffect(() => {
 		if (ref.current) {
-			const height = measureElement(ref.current).height;
-			setText(character.repeat(height));
+			const height = Math.max(1, measureElement(ref.current).height);
+			if (Number.isNaN(height)) {
+				setText(character);
+			} else {
+				setText(new Array(height).fill(character).join("\n"));
+			}
 		}
 	});
 

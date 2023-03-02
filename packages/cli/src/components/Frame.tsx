@@ -1,42 +1,6 @@
-import { pick } from "@zwave-js/shared/safe";
-import { Box, Text } from "ink";
-import type { ComponentPropsWithoutRef } from "react";
-
-type BoxProps = ComponentPropsWithoutRef<typeof Box>;
-
-// type BoxProps = {
-//     readonly position?: "absolute" | "relative" | undefined;
-//     readonly marginLeft?: number | undefined;
-//     readonly marginRight?: number | undefined;
-//     readonly marginTop?: number | undefined;
-//     readonly marginBottom?: number | undefined;
-//     readonly paddingLeft?: number | undefined;
-//     readonly paddingRight?: number | undefined;
-//     readonly paddingTop?: number | undefined;
-//     readonly paddingBottom?: number | undefined;
-//     readonly flexGrow?: number | undefined;
-//     readonly flexShrink?: number | undefined;
-//     readonly flexDirection?: "row" | "column" | "row-reverse" | "column-reverse" | undefined;
-//     readonly flexBasis?: string | number | undefined;
-//     readonly alignItems?: "flex-start" | "center" | "flex-end" | "stretch" | undefined;
-//     readonly alignSelf?: "flex-start" | "center" | "flex-end" | "auto" | undefined;
-//     readonly justifyContent?: "flex-start" | "center" | "flex-end" | "space-between" | "space-around" | undefined;
-//     readonly width?: string | number | undefined;
-//     readonly height?: string | number | undefined;
-//     readonly minWidth?: string | number | undefined;
-//     readonly minHeight?: string | number | undefined;
-//     readonly display?: "flex" | "none" | undefined;
-//     readonly borderStyle?: keyof cliBoxes.Boxes | undefined;
-//     readonly borderColor?: LiteralUnion<ForegroundColor, string> | undefined;
-//     readonly margin?: number | undefined;
-//     readonly marginX?: number | undefined;
-//     readonly marginY?: number | undefined;
-//     readonly padding?: number | undefined;
-//     readonly paddingX?: number | undefined;
-//     readonly paddingY?: number | undefined;
-//     children?: React.ReactNode;
-//     key?: React.Key | null | undefined;
-// }
+import { Box, BoxProps, Text } from "ink";
+import type React from "react";
+import { getInnerBoxProps, getOuterBoxProps } from "../lib/boxProps";
 
 export interface FrameLabelGroupProps {
 	left?: (React.ReactNode | undefined | false)[];
@@ -91,7 +55,7 @@ export interface FrameProps extends BoxProps {
 	bottomLabels?: FrameLabelGroupProps | false;
 }
 
-export const Frame: React.FC<FrameProps> = (props) => {
+export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = (props) => {
 	const { topLabels, bottomLabels, ...boxProps } = props;
 
 	const hasTopLabels = topLabels && Object.values(topLabels).some(Boolean);
@@ -103,40 +67,8 @@ export const Frame: React.FC<FrameProps> = (props) => {
 	boxProps.paddingX ??= 1;
 
 	if (hasTopLabels || hasBottomLabels) {
-		const outerBoxProps = pick(boxProps, [
-			"position",
-			"marginLeft",
-			"marginRight",
-			"marginTop",
-			"marginBottom",
-			"margin",
-			"marginX",
-			"marginY",
-			"flexGrow",
-			"flexShrink",
-			"flexBasis",
-			"alignSelf",
-			"width",
-			"height",
-			"minWidth",
-			"minHeight",
-			"borderStyle",
-			"borderColor",
-			"key",
-		]);
-
-		const innerBoxProps = pick(boxProps, [
-			"paddingLeft",
-			"paddingRight",
-			"paddingTop",
-			"paddingBottom",
-			"flexDirection",
-			"alignItems",
-			"justifyContent",
-			"padding",
-			"paddingX",
-			"paddingY",
-		]);
+		const outerBoxProps = getOuterBoxProps(boxProps);
+		const innerBoxProps = getInnerBoxProps(boxProps);
 
 		return (
 			<Box {...outerBoxProps} flexDirection="column">

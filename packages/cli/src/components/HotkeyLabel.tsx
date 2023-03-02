@@ -1,7 +1,4 @@
-import { Text, useInput } from "ink";
-import type { ComponentPropsWithoutRef } from "react";
-
-type TextProps = ComponentPropsWithoutRef<typeof Text>;
+import { Text, TextProps, useInput } from "ink";
 
 export interface HotkeyLabelProps extends TextProps {
 	label: string;
