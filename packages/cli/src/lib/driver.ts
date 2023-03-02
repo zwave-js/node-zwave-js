@@ -1,11 +1,13 @@
 import path from "path";
 import type winston from "winston";
-import { Driver } from "zwave-js";
+
+// This line is the boundary between ESM and CommonJS. We need it because zwave-js uses __dirname and __filename
+const { Driver } = require("zwave-js") as typeof import("zwave-js");
 
 export async function startDriver(
 	port: string,
 	logTransport: winston.transport,
-): Promise<Driver> {
+): Promise<import("zwave-js").Driver> {
 	const driver = new Driver(port, {
 		logConfig: {
 			// Do not log to console or file
