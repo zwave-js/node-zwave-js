@@ -91,3 +91,81 @@ export function useMenu(items: MaybeMenuItem[]): () => void {
 	// Return a hook to force-update if we cannot detec the changes
 	return () => setMenuItems(items);
 }
+
+// ^ for components
+// =====================================================================
+// v for the CLI
+
+export type MenuItemSlots = Record<
+	"top" | "bottom",
+	Record<"left" | "center" | "right", React.ReactNode[]>
+>;
+
+const compareMenuItems = (a: MenuItem, b: MenuItem): number => {
+	if (a.compareTo) {
+		return a.compareTo(b);
+	} else if (b.compareTo) {
+		return -b.compareTo(a);
+	} else {
+		return 0;
+	}
+};
+
+const visibleItemsAsNodes = (items: MenuItem[]): React.ReactNode[] => {
+	return items
+		.filter((i) => i.visible !== false)
+		.sort(compareMenuItems)
+		.map((i) => i.item)
+		.filter(Boolean);
+};
+
+const normalizeMenuItems = (items: MenuItem[]): MenuItemSlots["top"] => {
+	const leftItems = items.filter((i) => i.location.endsWith("Left"));
+	const centerItems = items.filter((i) => i.location.endsWith("Center"));
+	const rightItems = items.filter((i) => i.location.endsWith("Right"));
+	return {
+		left: visibleItemsAsNodes(leftItems),
+		center: visibleItemsAsNodes(centerItems),
+		right: visibleItemsAsNodes(rightItems),
+	};
+};
+
+export function useMenuItemSlots(
+	mergeWith: MenuItem[],
+): readonly [
+	slots: MenuItemSlots,
+	updateItems: (
+		added: MenuItem[],
+		changed: MenuItem[],
+		removed: MenuItem[],
+	) => void,
+] {
+	const [menuItems, setMenuItems] = React.useState<MenuItem[]>(mergeWith);
+
+	const updateMenuItems = React.useCallback(
+		(added: MenuItem[], changed: MenuItem[], removed: MenuItem[]) => {
+			setMenuItems((current) => {
+				const ret = [
+					...current.filter((i) => !removed.includes(i)),
+					...added,
+				];
+				return ret;
+			});
+		},
+		[setMenuItems],
+	);
+
+	const slots = React.useMemo(() => {
+		const topItems = menuItems.filter((i) => i.location.startsWith("top"));
+		const bottomItems = menuItems.filter((i) =>
+			i.location.startsWith("bottom"),
+		);
+
+		return {
+			top: normalizeMenuItems(topItems),
+			bottom: normalizeMenuItems(bottomItems),
+		};
+	}, [menuItems]);
+
+	return [slots, updateMenuItems];
+}
