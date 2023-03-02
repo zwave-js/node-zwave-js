@@ -54,7 +54,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 60
+			"defaultValue": 60,
+			"unsigned": true
 		},
 		{
 			"#": "4",
