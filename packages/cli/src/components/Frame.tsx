@@ -18,7 +18,7 @@ const FrameLabels: React.FC<{
 					<Box
 						key={i}
 						// Allow spaces between labels
-						marginLeft={i > 0 ? 1 : 0}
+						marginLeft={i > 0 ? 2 : 0}
 					>
 						<Text bold={typeof label !== "object"}> {label} </Text>
 					</Box>

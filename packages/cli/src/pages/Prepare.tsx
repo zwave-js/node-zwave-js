@@ -3,9 +3,9 @@ import { useState } from "react";
 import { HotkeyLabel } from "../components/HotkeyLabel";
 import { Logo } from "../components/Logo";
 import { useGlobals } from "../hooks/useGlobals";
-import { MenuItem, useMenu } from "../hooks/useMenu";
+import { useMenu } from "../hooks/useMenu";
 import { CLIPage, useNavigation } from "../hooks/useNavigation";
-import { toggleLogMenuItem } from "../lib/menu";
+import { exitMenuItem, toggleLogMenuItem } from "../lib/menu";
 
 export interface PreparePageProps {
 	// TODO:
@@ -13,26 +13,26 @@ export interface PreparePageProps {
 
 export const PreparePage: React.FC<PreparePageProps> = (props) => {
 	const { usbPath } = useGlobals();
-	const [navigate] = useNavigation();
+	const { navigate } = useNavigation();
 
 	const [visible, setVisible] = useState(false);
 
-	const startDriverMenuItem: MenuItem = {
-		location: "bottomLeft",
-		item: (
-			<HotkeyLabel
-				hotkey="s"
-				label="start"
-				onPress={() => {
-					navigate(CLIPage.StartingDriver);
-				}}
-			/>
-		),
-		visible: !!usbPath,
-	};
+	// const startDriverMenuItem: MenuItem = {
+	// 	location: "bottomLeft",
+	// 	item: (
+	// 		<HotkeyLabel
+	// 			hotkey="s"
+	// 			label="start"
+	// 			onPress={() => {
+	// 				navigate(CLIPage.StartingDriver);
+	// 			}}
+	// 		/>
+	// 	),
+	// 	visible: !!usbPath,
+	// };
 
 	useMenu([
-		startDriverMenuItem,
+		// startDriverMenuItem,
 		toggleLogMenuItem,
 		{
 			location: "bottomRight",
@@ -46,6 +46,7 @@ export const PreparePage: React.FC<PreparePageProps> = (props) => {
 				/>
 			),
 		},
+		exitMenuItem,
 	]);
 
 	return (
@@ -53,7 +54,18 @@ export const PreparePage: React.FC<PreparePageProps> = (props) => {
 			<Logo />
 			<Text> </Text>
 			{usbPath ? (
-				<Text>Ready to start the driver.</Text>
+				<Text>
+					<Text dimColor>Ready to </Text>
+					<HotkeyLabel
+						hotkey="s"
+						label="START"
+						color="green"
+						onPress={() => {
+							navigate(CLIPage.StartingDriver);
+						}}
+					/>
+					<Text dimColor> the driver.</Text>
+				</Text>
 			) : (
 				<Text>
 					Select a USB path in the options, then start the driver.

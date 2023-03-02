@@ -2,16 +2,23 @@ import path from "path";
 import type winston from "winston";
 import { Driver } from "zwave-js";
 
+export interface StartDriverOptions {
+	logTransport: winston.transport;
+	onDriverReady: (driver: Driver) => void;
+	onBootloaderReady: (driver: Driver) => void;
+	onError: (error: Error) => void;
+}
+
 export async function startDriver(
 	port: string,
-	logTransport: winston.transport,
+	options: StartDriverOptions,
 ): Promise<Driver> {
 	const driver = new Driver(port, {
 		logConfig: {
 			// Do not log to console or file
 			enabled: false,
 			// But log to our own transport
-			transports: [logTransport],
+			transports: [options.logTransport],
 		},
 		securityKeys: {
 			S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
@@ -33,14 +40,13 @@ export async function startDriver(
 			lockDir: path.join(__dirname, "cache/locks"),
 		},
 		allowBootloaderOnly: true,
-	})
-		.on("error", console.error)
-		.once("driver ready", async () => {
-			// Test code goes here
-		})
-		.once("bootloader ready", async () => {
-			// What to do when stuck in the bootloader
-		});
+	});
+
+	driver
+		.on("error", options.onError)
+		.once("driver ready", () => options.onDriverReady(driver))
+		.once("bootloader ready", () => options.onBootloaderReady(driver));
+
 	await driver.start();
 
 	return driver;

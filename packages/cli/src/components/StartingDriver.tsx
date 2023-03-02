@@ -1,21 +1,37 @@
 import { Box, Text } from "ink";
 import Spinner from "ink-spinner";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import type { Driver } from "zwave-js";
 import { useDialogs } from "../hooks/useDialogs";
 import { useDriver } from "../hooks/useDriver";
 import { useGlobals } from "../hooks/useGlobals";
 import { useMenu } from "../hooks/useMenu";
 import { CLIPage, useNavigation } from "../hooks/useNavigation";
 import { startDriver } from "../lib/driver";
-import { toggleLogMenuItem } from "../lib/menu";
+import { exitMenuItem, toggleLogMenuItem } from "../lib/menu";
 
 export const StartingDriverPage: React.FC = () => {
-	useMenu([toggleLogMenuItem]);
+	useMenu([toggleLogMenuItem, exitMenuItem]);
 
-	const { usbPath, logTransport } = useGlobals();
-	const [driver, setDriver] = useDriver();
-	const [navigate] = useNavigation();
+	const { usbPath, logTransport, clearLog } = useGlobals();
+	const { driver, setDriver } = useDriver();
+	const { navigate } = useNavigation();
 	const { showError } = useDialogs();
+	const [message, setMessage] = useState("starting driver");
+
+	const onError = useCallback(
+		(e: Error) => {
+			showError(e.message);
+		},
+		[showError],
+	);
+	const onDriverReady = useCallback((driver: Driver) => {
+		navigate(CLIPage.MainMenu);
+	}, []);
+	const onBootloaderReady = useCallback((driver: Driver) => {
+		setMessage("driver stuck in bootloader mode");
+		// TODO
+	}, []);
 
 	// When opening this page, try to start the driver
 	useEffect(() => {
@@ -29,9 +45,15 @@ export const StartingDriverPage: React.FC = () => {
 
 		(async () => {
 			try {
-				const driver = await startDriver(usbPath, logTransport);
+				clearLog();
+				const driver = await startDriver(usbPath, {
+					logTransport,
+					onError,
+					onDriverReady,
+					onBootloaderReady,
+				});
 				setDriver(driver);
-				navigate(CLIPage.MainMenu);
+				setMessage("initializing");
 			} catch (e: any) {
 				navigate(CLIPage.Prepare);
 				showError(e.message);
@@ -44,8 +66,8 @@ export const StartingDriverPage: React.FC = () => {
 			<Text>
 				<Text color="green">
 					<Spinner type="dots" />
-				</Text>
-				{" starting driver"}
+				</Text>{" "}
+				{message}
 			</Text>
 		</Box>
 	);

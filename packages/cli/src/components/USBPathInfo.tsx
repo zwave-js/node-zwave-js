@@ -3,9 +3,9 @@ import { useGlobals } from "../hooks/useGlobals";
 
 export const USBPathInfo: React.FC = () => {
 	const { usbPath } = useGlobals();
-	return (
+	return usbPath ? (
 		<Text bold={false} dimColor>
-			USB Path: {usbPath || "(none)"}
+			{usbPath}
 		</Text>
-	);
+	) : null;
 };

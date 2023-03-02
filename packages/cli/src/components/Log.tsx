@@ -1,6 +1,7 @@
-import { Box, DOMElement, measureElement, Text } from "ink";
+import { Box, DOMElement, measureElement, Spacer, Text } from "ink";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { LinesBuffer } from "../lib/logging";
+import { HotkeyLabel } from "./HotkeyLabel";
 
 export interface LogProps {
 	buffer: LinesBuffer;
@@ -44,8 +45,21 @@ export const Log: React.FC<LogProps> = (props) => {
 	}, [logHeight]);
 
 	return (
-		<Box width={104} ref={ref}>
+		<Box
+			minWidth={104}
+			flexGrow={1}
+			ref={ref}
+			flexDirection="row"
+			alignItems="stretch"
+		>
 			<Text>{log}</Text>
+			<Spacer />
+			<Box flexDirection="column" width={1}>
+				<HotkeyLabel hotkey="upArrow" />
+				<Text>█</Text>
+				<Spacer />
+				<HotkeyLabel hotkey="downArrow" />
+			</Box>
 		</Box>
 	);
 };

@@ -9,18 +9,14 @@ export enum CLIPage {
 }
 
 interface INavigationContext {
+	previousPage?: CLIPage;
 	currentPage: CLIPage;
 	navigate: (page: CLIPage) => void;
+	back: () => boolean;
 }
 
 export const NavigationContext = React.createContext<INavigationContext>(
 	{} as any,
 );
 
-export const useNavigation = (): readonly [
-	navigate: (page: CLIPage) => void,
-	currentPage: CLIPage,
-] => {
-	const { currentPage, navigate } = React.useContext(NavigationContext);
-	return [navigate, currentPage];
-};
+export const useNavigation = () => React.useContext(NavigationContext);

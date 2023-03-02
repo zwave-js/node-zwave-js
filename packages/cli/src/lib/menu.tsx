@@ -2,19 +2,20 @@ import { Text } from "ink";
 import { libVersion } from "zwave-js";
 import { HotkeyLabel } from "../components/HotkeyLabel";
 import { USBPathInfo } from "../components/USBPathInfo";
+import { useDriver } from "../hooks/useDriver";
 import { useGlobals } from "../hooks/useGlobals";
 import type { MenuItem } from "../hooks/useMenu";
 import { CLIPage, useNavigation } from "../hooks/useNavigation";
 
 const ToggleLogMenuItem: React.FC = () => {
-	const { logEnabled, setLogEnabled } = useGlobals();
+	const { logVisible, setLogVisible } = useGlobals();
 	return (
 		<HotkeyLabel
 			hotkey="l"
-			label={logEnabled ? "hide log" : "show log"}
-			color={logEnabled ? "red" : "green"}
+			label={logVisible ? "hide log" : "show log"}
+			color={logVisible ? "red" : "green"}
 			onPress={() => {
-				setLogEnabled((e) => !e);
+				setLogVisible((e) => !e);
 			}}
 		/>
 	);
@@ -28,13 +29,13 @@ export const toggleLogMenuItem: MenuItem = {
 // =====================================================================
 
 const ExitMenuItem: React.FC = () => {
-	const [navigate] = useNavigation();
+	const { navigate } = useNavigation();
 
 	return (
 		<HotkeyLabel
 			hotkey="x"
+			modifiers={["ctrl"]}
 			label="exit"
-			color="red"
 			onPress={() => navigate(CLIPage.ConfirmExit)}
 		/>
 	);
@@ -45,6 +46,29 @@ export const exitMenuItem: MenuItem = {
 	item: <ExitMenuItem />,
 	// always put this at the end
 	compareTo: () => 1,
+};
+
+// =====================================================================
+
+const DestroyDriverMenuItem: React.FC = () => {
+	const { navigate } = useNavigation();
+	const { driver, destroyDriver } = useDriver();
+
+	return (
+		<HotkeyLabel
+			hotkey="y"
+			label="destroy driver"
+			onPress={async () => {
+				await destroyDriver();
+				navigate(CLIPage.Prepare);
+			}}
+		/>
+	);
+};
+
+export const destroyDriverMenuItem: MenuItem = {
+	location: "bottomRight",
+	item: <DestroyDriverMenuItem />,
 };
 
 // =====================================================================
@@ -63,8 +87,7 @@ export const defaultMenuItems: MenuItem[] = [
 		),
 	},
 	{
-		location: "topRight",
+		location: "topLeft",
 		item: <USBPathInfo />,
 	},
-	exitMenuItem,
 ];

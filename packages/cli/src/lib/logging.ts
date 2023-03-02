@@ -58,4 +58,9 @@ export class LinesBuffer extends TypedEventEmitter<LinesBufferEvents> {
 	public getView(start: number, end: number): readonly string[] {
 		return this._lines.slice(start, end);
 	}
+
+	public clear(): void {
+		this._lines.splice(0, this._lines.length);
+		this.emit("change");
+	}
 }
