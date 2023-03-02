@@ -1,6 +1,6 @@
 import { Box, DOMElement, measureElement, Text } from "ink";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { LinesBuffer } from "../lib/logging";
+import type { LinesBuffer } from "../lib/logging.js";
 
 export interface LogProps {
 	buffer: LinesBuffer;

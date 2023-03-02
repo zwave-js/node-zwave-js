@@ -2,7 +2,9 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		"module": "Node16",
+		"moduleResolution": "node16"
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["build/**", "node_modules/**"]

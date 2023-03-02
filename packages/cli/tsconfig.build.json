@@ -4,7 +4,9 @@
 	"compilerOptions": {
 		"rootDir": "src",
 		"outDir": "build",
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		"module": "Node16",
+		"moduleResolution": "node16"
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["src/**/*.test.ts"]

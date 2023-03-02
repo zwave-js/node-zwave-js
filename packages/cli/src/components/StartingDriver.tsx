@@ -1,13 +1,13 @@
 import { Box, Text } from "ink";
 import Spinner from "ink-spinner";
 import { useEffect } from "react";
-import { useDialogs } from "../hooks/useDialogs";
-import { useDriver } from "../hooks/useDriver";
-import { useGlobals } from "../hooks/useGlobals";
-import { useMenu } from "../hooks/useMenu";
-import { CLIPage, useNavigation } from "../hooks/useNavigation";
-import { startDriver } from "../lib/driver";
-import { toggleLogMenuItem } from "../lib/menu";
+import { useDialogs } from "../hooks/useDialogs.js";
+import { useDriver } from "../hooks/useDriver.js";
+import { useGlobals } from "../hooks/useGlobals.js";
+import { useMenu } from "../hooks/useMenu.js";
+import { CLIPage, useNavigation } from "../hooks/useNavigation.js";
+import { startDriver } from "../lib/driver.js";
+import { toggleLogMenuItem } from "../lib/menu.js";
 
 export const StartingDriverPage: React.FC = () => {
 	useMenu([toggleLogMenuItem]);

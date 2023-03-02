@@ -14,7 +14,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { Center } from "./Center";
+import { Center } from "./Center.js";
 
 export interface ModalMessageState {
 	message: ReactNode;

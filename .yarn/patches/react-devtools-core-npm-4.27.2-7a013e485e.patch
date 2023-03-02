@@ -1,0 +1,9 @@
+diff --git a/dist/backend.js b/dist/backend.js
+index 3eecd3041e688f887bb491b793ba653e3d74a23a..9ad2645340f0dc4fe1e95802839980d9eac7c328 100644
+--- a/dist/backend.js
++++ b/dist/backend.js
+@@ -1,3 +1,4 @@
++var window = globalThis;
+ (function webpackUniversalModuleDefinition(root, factory) {
+ 	if(typeof exports === 'object' && typeof module === 'object')
+ 		module.exports = factory();

@@ -151,7 +151,7 @@
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
-    "esbuild-register": "^3.3.3",
+    "esbuild-register": "^3.4.2",
     "mockdate": "^3.0.5",
     "prettier": "^2.8.1",
     "proxyquire": "^2.1.3",

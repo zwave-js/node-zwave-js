@@ -1,5 +1,5 @@
 import { Box } from "ink";
-import type { OuterBoxProps } from "../lib/boxProps";
+import type { OuterBoxProps } from "../lib/boxProps.js";
 
 export interface CenterProps
 	extends Omit<OuterBoxProps, "flexDirection" | "justifyContent"> {
