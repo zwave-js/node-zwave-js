@@ -14920,33 +14920,33 @@ export enum ThermostatMode {
     // (undocumented)
     "Auto changeover" = 10,
     // (undocumented)
-    "Energy cool" = 12,
+    "Energy save cool" = 12,
     // (undocumented)
-    "Energy heat" = 11,
+    "Energy save heat" = 11,
     // (undocumented)
     "Full power" = 15,
     // (undocumented)
     "Manufacturer specific" = 31,
     // (undocumented)
-    "Resume (on)" = 5,
+    "Resume" = 5,
     // (undocumented)
     "Auto" = 3,
     // (undocumented)
-    "Auxiliary" = 4,
+    "Auxiliary/Emergency heat" = 4,
     // (undocumented)
     "Away" = 13,
     // (undocumented)
     "Cool" = 2,
     // (undocumented)
-    "Dry" = 8,
+    "Dry air" = 8,
     // (undocumented)
-    "Fan" = 6,
+    "Fan only" = 6,
     // (undocumented)
     "Furnace" = 7,
     // (undocumented)
     "Heat" = 1,
     // (undocumented)
-    "Moist" = 9,
+    "Moist air" = 9,
     // (undocumented)
     "Off" = 0
 }
