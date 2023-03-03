@@ -1,6 +1,6 @@
 import { Box, Text, TextProps, useInput } from "ink";
 import type { ReactNode } from "react";
-import { Center } from "./Center";
+import { Center } from "./Center.js";
 
 export interface ModalMessageState {
 	message: ReactNode;

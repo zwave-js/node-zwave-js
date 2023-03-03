@@ -6,7 +6,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { getOuterBoxProps, OuterBoxProps } from "../lib/boxProps";
+import { getOuterBoxProps, OuterBoxProps } from "../lib/boxProps.js";
 
 export interface LayerProps {
 	zIndex?: number;

@@ -1,7 +1,7 @@
 import { Box, DOMElement, measureElement, Spacer, Text } from "ink";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { LinesBuffer } from "../lib/logging";
-import { HotkeyLabel } from "./HotkeyLabel";
+import type { LinesBuffer } from "../lib/logging.js";
+import { HotkeyLabel } from "./HotkeyLabel.js";
 
 export interface LogProps {
 	buffer: LinesBuffer;

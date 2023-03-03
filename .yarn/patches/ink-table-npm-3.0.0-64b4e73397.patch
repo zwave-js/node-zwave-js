@@ -1,0 +1,233 @@
+diff --git a/README.md b/README.md
+index 699d51dc41299693f72b19f2876c8ef09570a16a..0560480a9762d6a3ed4b5f8dab259167cece5b53 100644
+--- a/README.md
++++ b/README.md
+@@ -13,7 +13,7 @@ npm install ink-table
+ ## Usage
+ 
+ ```jsx
+-import Table from 'ink-table'
++import { Table } from 'ink-table'
+ 
+ const data = [
+   {
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 9287fe4ed6b6da8a18149ae56f65ccca27fef483..3b7f4b98a2412e87e196ea3a22e9b07fcd4bb728 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,9 +1,12 @@
+ import React from 'react';
+-declare type Scalar = string | number | boolean | null | undefined;
+-declare type ScalarDict = {
++type Scalar = string | number | boolean | null | undefined;
++type ScalarDict = {
+     [key: string]: Scalar;
+ };
+-export declare type TableProps<T extends ScalarDict> = {
++export type CellProps = React.PropsWithChildren<{
++    column: number;
++}>;
++export type TableProps<T extends ScalarDict> = {
+     /**
+      * List of values (rows).
+      */
+@@ -23,13 +26,13 @@ export declare type TableProps<T extends ScalarDict> = {
+     /**
+      * Component used to render a cell in the table.
+      */
+-    cell: (props: React.PropsWithChildren<{}>) => JSX.Element;
++    cell: (props: CellProps) => JSX.Element;
+     /**
+      * Component used to render the skeleton of the table.
+      */
+     skeleton: (props: React.PropsWithChildren<{}>) => JSX.Element;
+ };
+-export default class Table<T extends ScalarDict> extends React.Component<Pick<TableProps<T>, 'data'> & Partial<TableProps<T>>> {
++export declare class Table<T extends ScalarDict> extends React.Component<Pick<TableProps<T>, 'data'> & Partial<TableProps<T>>> {
+     /**
+      * Merges provided configuration with defaults.
+      */
+@@ -56,12 +59,12 @@ export default class Table<T extends ScalarDict> extends React.Component<Pick<Ta
+     footer: (props: RowProps<T>) => JSX.Element;
+     render(): JSX.Element;
+ }
+-declare type RowProps<T extends ScalarDict> = {
++type RowProps<T extends ScalarDict> = {
+     key: string;
+     data: Partial<T>;
+     columns: Column<T>[];
+ };
+-declare type Column<T> = {
++type Column<T> = {
+     key: string;
+     column: keyof T;
+     width: number;
+@@ -73,7 +76,7 @@ export declare function Header(props: React.PropsWithChildren<{}>): JSX.Element;
+ /**
+  * Renders a cell in the table.
+  */
+-export declare function Cell(props: React.PropsWithChildren<{}>): JSX.Element;
++export declare function Cell(props: CellProps): JSX.Element;
+ /**
+  * Redners the scaffold of the table.
+  */
+diff --git a/dist/index.d.ts.map b/dist/index.d.ts.map
+index d4a29c524a775f460b47f9bb8cad7cf4debaf931..277335bfee61857bf3171dd19673c82b56b61997 100644
+--- a/dist/index.d.ts.map
++++ b/dist/index.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../src/index.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAA;AAMzB,aAAK,MAAM,GAAG,MAAM,GAAG,MAAM,GAAG,OAAO,GAAG,IAAI,GAAG,SAAS,CAAA;AAE1D,aAAK,UAAU,GAAG;IAChB,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAAA;CACtB,CAAA;AAED,oBAAY,UAAU,CAAC,CAAC,SAAS,UAAU,IAAI;IAC7C;;OAEG;IACH,IAAI,EAAE,CAAC,EAAE,CAAA;IACT;;OAEG;IACH,OAAO,EAAE,CAAC,MAAM,CAAC,CAAC,EAAE,CAAA;IACpB;;OAEG;IACH,OAAO,EAAE,MAAM,CAAA;IACf;;OAEG;IACH,MAAM,EAAE,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,KAAK,GAAG,CAAC,OAAO,CAAA;IAC3D;;OAEG;IACH,IAAI,EAAE,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,KAAK,GAAG,CAAC,OAAO,CAAA;IACzD;;OAEG;IACH,QAAQ,EAAE,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,KAAK,GAAG,CAAC,OAAO,CAAA;CAC9D,CAAA;AAID,MAAM,CAAC,OAAO,OAAO,KAAK,CAAC,CAAC,SAAS,UAAU,CAAE,SAAQ,KAAK,CAAC,SAAS,CACtE,IAAI,CAAC,UAAU,CAAC,CAAC,CAAC,EAAE,MAAM,CAAC,GAAG,OAAO,CAAC,UAAU,CAAC,CAAC,CAAC,CAAC,CACrD;IAGC;;OAEG;IACH,SAAS,IAAI,UAAU,CAAC,CAAC,CAAC;IAW1B;;OAEG;IACH,WAAW,IAAI,CAAC,MAAM,CAAC,CAAC,EAAE;IAa1B;;;;;OAKG;IACH,UAAU,IAAI,MAAM,CAAC,CAAC,CAAC,EAAE;IA0BzB;;OAEG;IACH,WAAW,IAAI,OAAO,CAAC,CAAC,CAAC;IAczB,MAAM,sCAWJ;IAGF,OAAO,sCAWL;IAGF,SAAS,sCAWP;IAGF,IAAI,sCAWF;IAGF,MAAM,sCAWJ;IAIF,MAAM;CA+BP;AA+BD,aAAK,QAAQ,CAAC,CAAC,SAAS,UAAU,IAAI;IACpC,GAAG,EAAE,MAAM,CAAA;IACX,IAAI,EAAE,OAAO,CAAC,CAAC,CAAC,CAAA;IAChB,OAAO,EAAE,MAAM,CAAC,CAAC,CAAC,EAAE,CAAA;CACrB,CAAA;AAED,aAAK,MAAM,CAAC,CAAC,IAAI;IACf,GAAG,EAAE,MAAM,CAAA;IACX,MAAM,EAAE,MAAM,CAAC,CAAA;IACf,KAAK,EAAE,MAAM,CAAA;CACd,CAAA;AA+DD;;GAEG;AACH,wBAAgB,MAAM,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,eAMxD;AAED;;GAEG;AACH,wBAAgB,IAAI,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,eAEtD;AAED;;GAEG;AACH,wBAAgB,QAAQ,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,eAE1D"}
+\ No newline at end of file
++{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../src/index.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAA;AAMzB,KAAK,MAAM,GAAG,MAAM,GAAG,MAAM,GAAG,OAAO,GAAG,IAAI,GAAG,SAAS,CAAA;AAE1D,KAAK,UAAU,GAAG;IAChB,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAAA;CACtB,CAAA;AAED,MAAM,MAAM,SAAS,GAAG,KAAK,CAAC,iBAAiB,CAAC;IAAE,MAAM,EAAE,MAAM,CAAA;CAAE,CAAC,CAAA;AAEnE,MAAM,MAAM,UAAU,CAAC,CAAC,SAAS,UAAU,IAAI;IAC7C;;OAEG;IACH,IAAI,EAAE,CAAC,EAAE,CAAA;IACT;;OAEG;IACH,OAAO,EAAE,CAAC,MAAM,CAAC,CAAC,EAAE,CAAA;IACpB;;OAEG;IACH,OAAO,EAAE,MAAM,CAAA;IACf;;OAEG;IACH,MAAM,EAAE,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,KAAK,GAAG,CAAC,OAAO,CAAA;IAC3D;;OAEG;IACH,IAAI,EAAE,CAAC,KAAK,EAAE,SAAS,KAAK,GAAG,CAAC,OAAO,CAAA;IACvC;;OAEG;IACH,QAAQ,EAAE,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,KAAK,GAAG,CAAC,OAAO,CAAA;CAC9D,CAAA;AAID,qBAAa,KAAK,CAAC,CAAC,SAAS,UAAU,CAAE,SAAQ,KAAK,CAAC,SAAS,CAC9D,IAAI,CAAC,UAAU,CAAC,CAAC,CAAC,EAAE,MAAM,CAAC,GAAG,OAAO,CAAC,UAAU,CAAC,CAAC,CAAC,CAAC,CACrD;IAGC;;OAEG;IACH,SAAS,IAAI,UAAU,CAAC,CAAC,CAAC;IAW1B;;OAEG;IACH,WAAW,IAAI,CAAC,MAAM,CAAC,CAAC,EAAE;IAa1B;;;;;OAKG;IACH,UAAU,IAAI,MAAM,CAAC,CAAC,CAAC,EAAE;IA0BzB;;OAEG;IACH,WAAW,IAAI,OAAO,CAAC,CAAC,CAAC;IAczB,MAAM,sCAWJ;IAGF,OAAO,sCAWL;IAGF,SAAS,sCAWP;IAGF,IAAI,sCAWF;IAGF,MAAM,sCAWJ;IAIF,MAAM;CA+BP;AA+BD,KAAK,QAAQ,CAAC,CAAC,SAAS,UAAU,IAAI;IACpC,GAAG,EAAE,MAAM,CAAA;IACX,IAAI,EAAE,OAAO,CAAC,CAAC,CAAC,CAAA;IAChB,OAAO,EAAE,MAAM,CAAC,CAAC,CAAC,EAAE,CAAA;CACrB,CAAA;AAED,KAAK,MAAM,CAAC,CAAC,IAAI;IACf,GAAG,EAAE,MAAM,CAAA;IACX,MAAM,EAAE,MAAM,CAAC,CAAA;IACf,KAAK,EAAE,MAAM,CAAA;CACd,CAAA;AA+DD;;GAEG;AACH,wBAAgB,MAAM,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,eAMxD;AAED;;GAEG;AACH,wBAAgB,IAAI,CAAC,KAAK,EAAE,SAAS,eAEpC;AAED;;GAEG;AACH,wBAAgB,QAAQ,CAAC,KAAK,EAAE,KAAK,CAAC,iBAAiB,CAAC,EAAE,CAAC,eAE1D"}
+\ No newline at end of file
+diff --git a/dist/index.js b/dist/index.js
+index 28ca7f7803896afdc857683544c8966d10a111c7..800986bca11571bdd10435fe7ad767409aa7521e 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1,14 +1,9 @@
+-"use strict";
+-var __importDefault = (this && this.__importDefault) || function (mod) {
+-    return (mod && mod.__esModule) ? mod : { "default": mod };
+-};
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.Skeleton = exports.Cell = exports.Header = void 0;
+-const react_1 = __importDefault(require("react"));
+-const ink_1 = require("ink");
+-const object_hash_1 = require("object-hash");
++import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
++import React from 'react';
++import { Box, Text } from 'ink';
++import { sha1 } from 'object-hash';
+ /* Table */
+-class Table extends react_1.default.Component {
++export class Table extends React.Component {
+     constructor() {
+         /* Config */
+         super(...arguments);
+@@ -148,21 +143,14 @@ class Table extends react_1.default.Component {
+         /**
+          * Render the table line by line.
+          */
+-        return (react_1.default.createElement(ink_1.Box, { flexDirection: "column" },
+-            this.header({ key: 'header', columns, data: {} }),
+-            this.heading({ key: 'heading', columns, data: headings }),
+-            this.props.data.map((row, index) => {
+-                // Calculate the hash of the row based on its value and position
+-                const key = `row-${object_hash_1.sha1(row)}-${index}`;
+-                // Construct a row.
+-                return (react_1.default.createElement(ink_1.Box, { flexDirection: "column", key: key },
+-                    this.separator({ key: `separator-${key}`, columns, data: {} }),
+-                    this.data({ key: `data-${key}`, columns, data: row })));
+-            }),
+-            this.footer({ key: 'footer', columns, data: {} })));
++        return (_jsxs(Box, { flexDirection: "column", children: [this.header({ key: 'header', columns, data: {} }), this.heading({ key: 'heading', columns, data: headings }), this.props.data.map((row, index) => {
++                    // Calculate the hash of the row based on its value and position
++                    const key = `row-${sha1(row)}-${index}`;
++                    // Construct a row.
++                    return (_jsxs(Box, { flexDirection: "column", children: [this.separator({ key: `separator-${key}`, columns, data: {} }), this.data({ key: `data-${key}`, columns, data: row })] }, key));
++                }), this.footer({ key: 'footer', columns, data: {} })] }));
+     }
+ }
+-exports.default = Table;
+ /**
+  * Constructs a Row element from the configuration.
+  */
+@@ -170,54 +158,48 @@ function row(config) {
+     /* This is a component builder. We return a function. */
+     const skeleton = config.skeleton;
+     /* Row */
+-    return (props) => (react_1.default.createElement(ink_1.Box, { flexDirection: "row" },
+-        react_1.default.createElement(skeleton.component, null, skeleton.left),
+-        intersperse((i) => {
+-            const key = `${props.key}-hseparator-${i}`;
+-            // The horizontal separator.
+-            return (react_1.default.createElement(skeleton.component, { key: key }, skeleton.cross));
+-        }, 
+-        // Values.
+-        props.columns.map((column) => {
+-            // content
+-            const value = props.data[column.column];
+-            if (value == undefined || value == null) {
+-                const key = `${props.key}-empty-${column.key}`;
+-                return (react_1.default.createElement(config.cell, { key: key }, skeleton.line.repeat(column.width)));
+-            }
+-            else {
+-                const key = `${props.key}-cell-${column.key}`;
+-                // margins
+-                const ml = config.padding;
+-                const mr = column.width - String(value).length - config.padding;
+-                return (
+-                /* prettier-ignore */
+-                react_1.default.createElement(config.cell, { key: key }, `${skeleton.line.repeat(ml)}${String(value)}${skeleton.line.repeat(mr)}`));
+-            }
+-        })),
+-        react_1.default.createElement(skeleton.component, null, skeleton.right)));
++    return (props) => (_jsxs(Box, { flexDirection: "row", children: [_jsx(skeleton.component, { children: skeleton.left }), ...intersperse((i) => {
++                const key = `${props.key}-hseparator-${i}`;
++                // The horizontal separator.
++                return (_jsx(skeleton.component, { children: skeleton.cross }, key));
++            }, 
++            // Values.
++            props.columns.map((column, colI) => {
++                // content
++                const value = props.data[column.column];
++                if (value == undefined || value == null) {
++                    const key = `${props.key}-empty-${column.key}`;
++                    return (_jsx(config.cell, { column: colI, children: skeleton.line.repeat(column.width) }, key));
++                }
++                else {
++                    const key = `${props.key}-cell-${column.key}`;
++                    // margins
++                    const ml = config.padding;
++                    const mr = column.width - String(value).length - config.padding;
++                    return (
++                    /* prettier-ignore */
++                    _jsx(config.cell, { column: colI, children: `${skeleton.line.repeat(ml)}${String(value)}${skeleton.line.repeat(mr)}` }, key));
++                }
++            })), _jsx(skeleton.component, { children: skeleton.right })] }));
+ }
+ /**
+  * Renders the header of a table.
+  */
+-function Header(props) {
+-    return (react_1.default.createElement(ink_1.Text, { bold: true, color: "blue" }, props.children));
++export function Header(props) {
++    return (_jsx(Text, { bold: true, color: "blue", children: props.children }));
+ }
+-exports.Header = Header;
+ /**
+  * Renders a cell in the table.
+  */
+-function Cell(props) {
+-    return react_1.default.createElement(ink_1.Text, null, props.children);
++export function Cell(props) {
++    return _jsx(Text, { children: props.children });
+ }
+-exports.Cell = Cell;
+ /**
+  * Redners the scaffold of the table.
+  */
+-function Skeleton(props) {
+-    return react_1.default.createElement(ink_1.Text, { bold: true }, props.children);
++export function Skeleton(props) {
++    return _jsx(Text, { bold: true, children: props.children });
+ }
+-exports.Skeleton = Skeleton;
+ /* Utility functions */
+ /**
+  * Intersperses a list of elements with another element.
+diff --git a/package.json b/package.json
+index 5ebd7734200cfab6483c5d0f32261ad870acefa6..2c73c97b1da24f557a895001070a51698f9d4abc 100644
+--- a/package.json
++++ b/package.json
+@@ -2,7 +2,9 @@
+   "name": "ink-table",
+   "version": "3.0.0",
+   "description": "A table component for Ink.",
+-  "main": "dist/index.js",
++  "type": "module",
++  "module": "dist/index.js",
++  "types": "dist/index.d.ts",
+   "repository": "maticzav/ink-table",
+   "author": "Matic Zavadlal <matic.zavadlal@gmail.com>",
+   "license": "MIT",

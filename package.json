@@ -65,7 +65,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
-    "esbuild-register": "^3.3.3",
+    "esbuild-register": "^3.4.2",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -86,7 +86,9 @@
   "resolutions": {
     "minimist": "^1.2.6",
     "colors": "1.4.0",
-    "yoga-layout-prebuilt@^1.9.6": "patch:yoga-layout-prebuilt@npm%3A1.10.0#./.yarn/patches/yoga-layout-prebuilt-npm-1.10.0-855b15449f.patch"
+    "yoga-layout-prebuilt@^1.9.6": "patch:yoga-layout-prebuilt@npm%3A1.10.0#./.yarn/patches/yoga-layout-prebuilt-npm-1.10.0-855b15449f.patch",
+    "react-devtools-core@^4.27.2": "patch:react-devtools-core@npm%3A4.27.2#./.yarn/patches/react-devtools-core-npm-4.27.2-7a013e485e.patch",
+    "ink-table@^3.0.0": "patch:ink-table@npm%3A3.0.0#./.yarn/patches/ink-table-npm-3.0.0-64b4e73397.patch"
   },
   "scripts": {
     "w": "yarn ts maintenance/watch.ts",

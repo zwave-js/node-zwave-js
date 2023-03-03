@@ -1,11 +1,11 @@
 import { Box, Text } from "ink";
 import { useState } from "react";
-import { HotkeyLabel } from "../components/HotkeyLabel";
-import { Logo } from "../components/Logo";
-import { useGlobals } from "../hooks/useGlobals";
-import { useMenu } from "../hooks/useMenu";
-import { CLIPage, useNavigation } from "../hooks/useNavigation";
-import { exitMenuItem, toggleLogMenuItem } from "../lib/menu";
+import { HotkeyLabel } from "../components/HotkeyLabel.js";
+import { Logo } from "../components/Logo.js";
+import { useGlobals } from "../hooks/useGlobals.js";
+import { useMenu } from "../hooks/useMenu.js";
+import { CLIPage, useNavigation } from "../hooks/useNavigation.js";
+import { exitMenuItem, toggleLogMenuItem } from "../lib/menu.js";
 
 export interface PreparePageProps {
 	// TODO:

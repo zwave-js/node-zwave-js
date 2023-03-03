@@ -1,11 +1,11 @@
 import { Text } from "ink";
 import { libVersion } from "zwave-js";
-import { HotkeyLabel } from "../components/HotkeyLabel";
-import { USBPathInfo } from "../components/USBPathInfo";
-import { useDriver } from "../hooks/useDriver";
-import { useGlobals } from "../hooks/useGlobals";
-import type { MenuItem } from "../hooks/useMenu";
-import { CLIPage, useNavigation } from "../hooks/useNavigation";
+import { HotkeyLabel } from "../components/HotkeyLabel.js";
+import { USBPathInfo } from "../components/USBPathInfo.js";
+import { useDriver } from "../hooks/useDriver.js";
+import { useGlobals } from "../hooks/useGlobals.js";
+import type { MenuItem } from "../hooks/useMenu.js";
+import { CLIPage, useNavigation } from "../hooks/useNavigation.js";
 
 const ToggleLogMenuItem: React.FC = () => {
 	const { logVisible, setLogVisible } = useGlobals();

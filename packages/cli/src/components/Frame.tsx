@@ -1,6 +1,6 @@
 import { Box, BoxProps, Text } from "ink";
 import type React from "react";
-import { getInnerBoxProps, getOuterBoxProps } from "../lib/boxProps";
+import { getInnerBoxProps, getOuterBoxProps } from "../lib/boxProps.js";
 
 export interface FrameLabelGroupProps {
 	left?: (React.ReactNode | undefined | false)[];

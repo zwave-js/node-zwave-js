@@ -1,24 +1,24 @@
 import { Box, Text } from "ink";
-import Table from "ink-table";
-import type { PropsWithChildren } from "react";
-import { CommandPalette } from "../components/CommandPalette";
-import { useDriver } from "../hooks/useDriver";
-import { useMenu } from "../hooks/useMenu";
+import { CellProps, Table } from "ink-table";
+import { CommandPalette } from "../components/CommandPalette.js";
+import { useDriver } from "../hooks/useDriver.js";
+import { useMenu } from "../hooks/useMenu.js";
 
 const okText = "✓";
 const nokText = "✗";
 
-const Cell: React.FC<PropsWithChildren<{ column: number }>> = ({
+const Cell: ((props: CellProps) => JSX.Element) | undefined = ({
 	children,
 	column,
 }) => {
 	if (
 		column === 3 /* ready */ &&
 		typeof children === "string" &&
-		children.length === 1
+		children.trim().length === 1
 	) {
+		const trimmed = children.trim();
 		return (
-			<Text color={children === okText ? "green" : "red"}>
+			<Text bold color={trimmed === okText ? "green" : "red"}>
 				{children}
 			</Text>
 		);
@@ -53,7 +53,6 @@ export const DevicesPage: React.FC = () => {
 				]}
 			></CommandPalette>
 
-			{/* @ts-expect-error cell type is wrong */}
 			<Table data={nodesData} cell={Cell} />
 		</Box>
 	);
