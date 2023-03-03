@@ -150,7 +150,10 @@ const CLI: React.FC = () => {
 									bottomLabels={
 										!modalMessage && menuItemSlots.bottom
 									}
-									height={rows}
+									height={
+										rows -
+										(layout === "horizontal" ? 4 : 10)
+									}
 									width={columns}
 									paddingY={1}
 									flexDirection={

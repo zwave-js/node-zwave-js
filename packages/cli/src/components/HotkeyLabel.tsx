@@ -17,7 +17,7 @@ const specialKeys: Record<string, string> = {
 	pageDown: "PgDn",
 	pageUp: "PgUp",
 	return: "↲",
-	escape: "",
+	escape: "Esc",
 	tab: "↹",
 	backspace: "⤆",
 	delete: "Del",

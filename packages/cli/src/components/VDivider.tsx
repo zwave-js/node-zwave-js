@@ -3,10 +3,12 @@ import { useEffect, useRef, useState } from "react";
 
 export interface VDividerProps extends TextProps {
 	character?: string;
+	margin?: number;
 }
 
 export const VDivider: React.FC<VDividerProps> = ({
 	character = "│",
+	margin = 1,
 	...textProps
 }) => {
 	const ref = useRef<DOMElement>(null);
@@ -24,7 +26,7 @@ export const VDivider: React.FC<VDividerProps> = ({
 	});
 
 	return (
-		<Box marginX={1} width={1} ref={ref}>
+		<Box marginX={margin} width={1} ref={ref}>
 			<Text {...textProps}>{text}</Text>
 		</Box>
 	);

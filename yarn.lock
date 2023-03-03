@@ -1814,6 +1814,7 @@ __metadata:
     esbuild: 0.15.7
     ink: ^3.2.0
     ink-spinner: ^4.0.3
+    ink-table: ^3.0.0
     ink-text-input: ^4.0.3
     ink-use-stdout-dimensions: ^1.0.5
     prettier: ^2.8.1
@@ -5239,6 +5240,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ink-table@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "ink-table@npm:3.0.0"
+  dependencies:
+    object-hash: ^2.0.3
+  peerDependencies:
+    ink: ">=3.0.0"
+    react: ">=16.8.0"
+  checksum: 281ec6295251435a268d3ad3f9382f63eab0548234b3ee6daef07663ac5f24f76f59d5f6ab527f0407b0def05ab6e7ddd8e52c69ce52db251fac40fd0d2c10a1
+  languageName: node
+  linkType: hard
+
 "ink-text-input@npm:^4.0.3":
   version: 4.0.3
   resolution: "ink-text-input@npm:4.0.3"
@@ -6689,7 +6702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-hash@npm:^2.0.1":
+"object-hash@npm:^2.0.1, object-hash@npm:^2.0.3":
   version: 2.2.0
   resolution: "object-hash@npm:2.2.0"
   checksum: 55ba841e3adce9c4f1b9b46b41983eda40f854e0d01af2802d3ae18a7085a17168d6b81731d43fdf1d6bcbb3c9f9c56d22c8fea992203ad90a38d7d919bc28f1

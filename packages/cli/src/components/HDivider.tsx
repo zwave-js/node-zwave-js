@@ -3,10 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 
 export interface HDividerProps extends TextProps {
 	character?: string;
+	margin?: number;
 }
 
 export const HDivider: React.FC<HDividerProps> = ({
 	character = "─",
+	margin = 1,
 	...textProps
 }) => {
 	const ref = useRef<DOMElement>(null);
@@ -24,7 +26,7 @@ export const HDivider: React.FC<HDividerProps> = ({
 	});
 
 	return (
-		<Box marginY={1} height={1} ref={ref}>
+		<Box marginY={margin} height={1} ref={ref}>
 			<Text {...textProps}>{text}</Text>
 		</Box>
 	);
