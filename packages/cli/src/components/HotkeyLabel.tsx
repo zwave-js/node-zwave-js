@@ -91,7 +91,7 @@ export const HotkeyLabel: React.FC<HotkeyLabelProps> = (props) => {
 		return (
 			<Text {...rest}>
 				{label}{" "}
-				<Text color={color}>({renderHotkey(hotkey, modifiers)})</Text>
+				<Text color={color}>{renderHotkey(hotkey, modifiers)}</Text>
 			</Text>
 		);
 	}

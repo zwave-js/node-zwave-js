@@ -52,6 +52,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alcalzone/ink-table@npm:~1.1.0":
+  version: 1.1.0
+  resolution: "@alcalzone/ink-table@npm:1.1.0"
+  dependencies:
+    object-hash: ^2.0.3
+  peerDependencies:
+    ink: ">=3.0.0"
+    react: ">=16.8.0"
+  checksum: bab57684264a7140877e0b01b631dd2e53c471fea5b06b563b46691552ed3905e6f1c59d1c34575d46223336c38e928649b4c113ff387021008a779d79894c61
+  languageName: node
+  linkType: hard
+
 "@alcalzone/jsonl-db@npm:^2.5.3":
   version: 2.5.3
   resolution: "@alcalzone/jsonl-db@npm:2.5.3"
@@ -1802,6 +1814,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/cli@workspace:packages/cli"
   dependencies:
+    "@alcalzone/ink-table": ~1.1.0
     "@esm2cjs/p-queue": ^7.3.0
     "@types/ink-spinner": ^3.0.1
     "@types/ink-text-input": ^2.0.2
@@ -1815,7 +1828,6 @@ __metadata:
     esbuild-register: ^3.4.2
     ink: ^4.0.0
     ink-spinner: ^5.0.0
-    ink-table: ^3.0.0
     ink-text-input: ^5.0.0
     ink-use-stdout-dimensions: ^1.0.5
     prettier: ^2.8.1
@@ -5233,30 +5245,6 @@ __metadata:
     ink: ">=4.0.0"
     react: ">=18.0.0"
   checksum: 88e547ff56ac8ee31239daef43b03ca2797eb20cc338ad25aba8e8fbe2cb322ea212494f8c545f327d345051be50542e1a27fdee3758a32a1b4a5db5308cad63
-  languageName: node
-  linkType: hard
-
-"ink-table@npm:3.0.0":
-  version: 3.0.0
-  resolution: "ink-table@npm:3.0.0"
-  dependencies:
-    object-hash: ^2.0.3
-  peerDependencies:
-    ink: ">=3.0.0"
-    react: ">=16.8.0"
-  checksum: 281ec6295251435a268d3ad3f9382f63eab0548234b3ee6daef07663ac5f24f76f59d5f6ab527f0407b0def05ab6e7ddd8e52c69ce52db251fac40fd0d2c10a1
-  languageName: node
-  linkType: hard
-
-"ink-table@patch:ink-table@npm%3A3.0.0#./.yarn/patches/ink-table-npm-3.0.0-64b4e73397.patch::locator=%40zwave-js%2Frepo%40workspace%3A.":
-  version: 3.0.0
-  resolution: "ink-table@patch:ink-table@npm%3A3.0.0#./.yarn/patches/ink-table-npm-3.0.0-64b4e73397.patch::version=3.0.0&hash=7c4409&locator=%40zwave-js%2Frepo%40workspace%3A."
-  dependencies:
-    object-hash: ^2.0.3
-  peerDependencies:
-    ink: ">=3.0.0"
-    react: ">=16.8.0"
-  checksum: e348d1fa35a3df1544d9ec69a89d1218dc917496f96c10c1822e107ce066a483877908b63bd92063505805d1d9fa3b43d88a4d16281ca8a0731490b9f3eb0a14
   languageName: node
   linkType: hard
 

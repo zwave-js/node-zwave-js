@@ -11,7 +11,8 @@
 			"runtimeArgs": [
 				"node",
 				"--async-stack-traces",
-				"${workspaceFolder}/packages/cli/build/cli.js"
+				"${workspaceFolder}/packages/cli/build/cli.js",
+				"--start"
 			],
 			"env": {
 				// "DEV": "true"

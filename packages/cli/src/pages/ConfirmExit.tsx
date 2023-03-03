@@ -1,6 +1,6 @@
 import { Box, Text, useApp, useInput } from "ink";
-import { useDriver } from "../hooks/useDriver";
-import { useNavigation } from "../hooks/useNavigation";
+import { useDriver } from "../hooks/useDriver.js";
+import { useNavigation } from "../hooks/useNavigation.js";
 
 export const ConfirmExitPage: React.FC = () => {
 	const { exit } = useApp();

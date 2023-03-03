@@ -48,6 +48,7 @@
     "zwave-js": "workspace:*"
   },
   "devDependencies": {
+    "@alcalzone/ink-table": "~1.1.0",
     "@esm2cjs/p-queue": "^7.3.0",
     "@types/ink-spinner": "^3.0.1",
     "@types/ink-text-input": "^2.0.2",
@@ -59,7 +60,6 @@
     "esbuild-register": "^3.4.2",
     "ink": "^4.0.0",
     "ink-spinner": "^5.0.0",
-    "ink-table": "^3.0.0",
     "ink-text-input": "^5.0.0",
     "ink-use-stdout-dimensions": "^1.0.5",
     "prettier": "^2.8.1",

@@ -1,38 +1,38 @@
 import { Box } from "ink";
 import { useState } from "react";
-import { HotkeyLabel } from "../components/HotkeyLabel";
-import { MenuItem, useMenu } from "../hooks/useMenu";
+import { HotkeyLabel } from "../components/HotkeyLabel.js";
+import { MenuItem, useMenu } from "../hooks/useMenu.js";
 import {
 	destroyDriverMenuItem,
 	exitMenuItem,
 	toggleLogMenuItem,
-} from "../lib/menu";
-import { DevicesPage } from "./Devices";
+} from "../lib/menu.js";
+import { DevicesPage } from "./Devices.js";
 
 export interface MainMenuPageProps {
 	// TODO:
 }
 
 enum MainMenuSubPage {
-	None,
+	// None,
 	Devices,
 }
 
 export const MainMenuPage: React.FC<MainMenuPageProps> = (props) => {
-	const [page, setPage] = useState(MainMenuSubPage.None);
+	const [page, setPage] = useState(MainMenuSubPage.Devices);
 
-	const backMenuItem: MenuItem = {
-		location: "bottomLeft",
-		item: (
-			<HotkeyLabel
-				hotkey="escape"
-				label="back"
-				onPress={() => {
-					setPage(MainMenuSubPage.None);
-				}}
-			/>
-		),
-	};
+	// const backMenuItem: MenuItem = {
+	// 	location: "bottomLeft",
+	// 	item: (
+	// 		<HotkeyLabel
+	// 			hotkey="escape"
+	// 			label="back"
+	// 			onPress={() => {
+	// 				setPage(MainMenuSubPage.None);
+	// 			}}
+	// 		/>
+	// 	),
+	// };
 
 	const devicesMenuItem: MenuItem = {
 		location: "bottomLeft",
@@ -49,7 +49,7 @@ export const MainMenuPage: React.FC<MainMenuPageProps> = (props) => {
 
 	useMenu([
 		page !== MainMenuSubPage.Devices && devicesMenuItem,
-		page !== MainMenuSubPage.None && backMenuItem,
+		// page !== MainMenuSubPage.Devices && backMenuItem,
 		toggleLogMenuItem,
 		destroyDriverMenuItem,
 		exitMenuItem,

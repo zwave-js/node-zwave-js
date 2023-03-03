@@ -1,10 +1,11 @@
 import { Box } from "ink";
 import React from "react";
-import { Frame } from "./Frame";
-import { HotkeyLabel, HotkeyLabelProps } from "./HotkeyLabel";
-import { VDivider } from "./VDivider";
+import { Frame } from "./Frame.js";
+import { HotkeyLabel, HotkeyLabelProps } from "./HotkeyLabel.js";
+import { VDivider } from "./VDivider.js";
 
 export interface CommandPaletteProps {
+	label?: React.ReactNode;
 	commands: HotkeyLabelProps[];
 }
 
@@ -12,7 +13,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = (props) => {
 	return (
 		<Frame
 			topLabels={{
-				left: ["Commands"],
+				left: [props.label ?? "Commands"],
 			}}
 			flexDirection="row"
 			justifyContent="flex-start"

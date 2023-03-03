@@ -29,8 +29,9 @@ const MIN_ROWS = 30;
 
 const logBuffer = new LinesBuffer(10000);
 const logTransport = createLogTransport(logBuffer.stream);
-
 const clearLog = () => logBuffer.clear();
+
+const autostart = process.argv.includes("--start");
 
 const CLI: React.FC = () => {
 	const [columns, rows] = useStdoutDimensions();
@@ -43,7 +44,7 @@ const CLI: React.FC = () => {
 		setLayout(columns >= 180 ? "horizontal" : "vertical");
 	}, [columns, setLayout]);
 
-	const [usbPath, setUSBPath] = useState<string>("/dev/ttyACM0");
+	const [usbPath, setUSBPath] = useState<string>("/dev/ttyUSB0");
 	const [driver, setDriver] = useState<Driver>();
 	const destroyDriver = useCallback(async () => {
 		if (driver) {
@@ -53,7 +54,9 @@ const CLI: React.FC = () => {
 
 	const [logVisible, setLogVisible] = useState<boolean>(false);
 
-	const [cliPage, setCLIPage] = useState<CLIPage>(CLIPage.Prepare);
+	const [cliPage, setCLIPage] = useState<CLIPage>(
+		usbPath && autostart ? CLIPage.StartingDriver : CLIPage.Prepare,
+	);
 	const [prevCliPage, setPrevCLIPage] = useState<CLIPage>();
 
 	const navigate = useCallback(
