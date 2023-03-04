@@ -4,7 +4,7 @@ import type { Driver } from "zwave-js";
 import { Frame } from "./components/Frame.js";
 import { HDivider } from "./components/HDivider.js";
 import { Log } from "./components/Log.js";
-import { ModalMessage, ModalMessageState } from "./components/ModalMessage.js";
+import { ModalMessage, ModalQuery, ModalState } from "./components/Modals.js";
 import { SetUSBPath } from "./components/setUSBPath.js";
 import { StartingDriverPage } from "./components/StartingDriver.js";
 import { VDivider } from "./components/VDivider.js";
@@ -76,15 +76,37 @@ const CLI: React.FC = () => {
 		return false;
 	}, [prevCliPage, setCLIPage, setPrevCLIPage]);
 
-	const [modalMessage, setModalMessage] = useState<ModalMessageState>();
+	const [modalState, setModalState] = useState<ModalState>();
 	const showError = useCallback(
 		(message: React.ReactNode) => {
-			setModalMessage({
-				message: message,
+			setModalState({
+				type: "message",
+				message,
 				color: "red",
+				onSubmit: () => setModalState(undefined),
 			});
 		},
-		[setModalMessage],
+		[setModalState],
+	);
+	const queryInput = useCallback(
+		(message: React.ReactNode, initial?: string) => {
+			return new Promise<any>((resolve) => {
+				setModalState({
+					type: "query",
+					message,
+					initial,
+					onSubmit: (value) => {
+						setModalState(undefined);
+						resolve(value);
+					},
+					onCancel: () => {
+						setModalState(undefined);
+						resolve(undefined);
+					},
+				});
+			});
+		},
+		[setModalState],
 	);
 
 	const [menuItemSlots, updateMenuItems] = useMenuItemSlots(defaultMenuItems);
@@ -145,13 +167,13 @@ const CLI: React.FC = () => {
 								destroyDriver,
 							}}
 						>
-							<DialogsContext.Provider value={{ showError }}>
+							<DialogsContext.Provider
+								value={{ showError, queryInput }}
+							>
 								<Frame
-									topLabels={
-										!modalMessage && menuItemSlots.top
-									}
+									topLabels={!modalState && menuItemSlots.top}
 									bottomLabels={
-										!modalMessage && menuItemSlots.bottom
+										!modalState && menuItemSlots.bottom
 									}
 									height={
 										rows -
@@ -167,7 +189,7 @@ const CLI: React.FC = () => {
 									alignItems="stretch"
 									justifyContent="space-around"
 								>
-									{!modalMessage && (
+									{!modalState && (
 										<>
 											<Box
 												flexGrow={1}
@@ -240,16 +262,24 @@ const CLI: React.FC = () => {
 											)}
 										</>
 									)}
-									{modalMessage && (
-										<ModalMessage
-											onContinue={() =>
-												setModalMessage(undefined)
-											}
-											color={modalMessage.color}
-										>
-											{modalMessage.message}
-										</ModalMessage>
-									)}
+									{modalState &&
+										(modalState.type === "message" ? (
+											<ModalMessage
+												onSubmit={modalState.onSubmit}
+												color={modalState.color}
+											>
+												{modalState.message}
+											</ModalMessage>
+										) : (
+											<ModalQuery
+												onSubmit={modalState.onSubmit}
+												onCancel={modalState.onCancel}
+												initial={modalState.initial}
+												color={modalState.color}
+											>
+												{modalState.message}
+											</ModalQuery>
+										))}
 								</Frame>
 							</DialogsContext.Provider>
 						</DriverContext.Provider>

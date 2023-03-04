@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { DeviceClass, NodeStatus, ZWaveNode } from "zwave-js";
 import { CommandPalette } from "../components/CommandPalette.js";
 import { HotkeyLabel } from "../components/HotkeyLabel.js";
+import { useDialogs } from "../hooks/useDialogs.js";
 import { useDriver } from "../hooks/useDriver.js";
 import { useForceRerender } from "../hooks/useForceRerender.js";
 
@@ -78,6 +79,7 @@ function getModel(node: ZWaveNode): string {
 export const DevicesPage: React.FC = () => {
 	const { driver } = useDriver();
 	const forceRerender = useForceRerender();
+	const { queryInput } = useDialogs();
 
 	const [maxRows, setMaxRows] = useState(10);
 
@@ -162,9 +164,24 @@ export const DevicesPage: React.FC = () => {
 					</Text>
 				}
 				commands={[
-					{ label: "Add", hotkey: "+" },
-					{ label: "Remove", hotkey: "-" },
-					{ label: "Select", hotkey: "s" },
+					{
+						label: "Select",
+						hotkey: "return",
+						onPress: async () => {
+							const nodeId = await queryInput("Enter node ID");
+							if (!nodeId) return;
+							const nodeIdNum = parseInt(nodeId, 10);
+							if (
+								!Number.isNaN(nodeIdNum) &&
+								nodeIDs.includes(nodeIdNum)
+							) {
+								// TODO: Select node ID
+								throw new Error(`Node ${nodeIdNum} selected`);
+							}
+						},
+					},
+					{ label: "Include", hotkey: "+" },
+					{ label: "Exclude", hotkey: "-" },
 				]}
 			></CommandPalette>
 

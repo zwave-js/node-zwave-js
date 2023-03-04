@@ -1,7 +1,11 @@
 import React from "react";
 
 export type IDialogsContext = {
-	showError: (message: React.ReactNode) => void;
+	showError(message: React.ReactNode): void;
+	queryInput(
+		message: React.ReactNode,
+		initial?: string,
+	): Promise<string | undefined>;
 };
 
 // Context that stores references to the methods that show Notifications and Modals
