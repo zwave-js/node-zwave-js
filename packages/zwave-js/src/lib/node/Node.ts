@@ -598,6 +598,8 @@ export class ZWaveNode
 	}
 
 	public get canSleep(): boolean | undefined {
+		// The controller node can never sleep (apparently it can report otherwise though)
+		if (this.isControllerNode) return false;
 		if (this.isListening == undefined) return undefined;
 		if (this.isFrequentListening == undefined) return undefined;
 		return !this.isListening && !this.isFrequentListening;
