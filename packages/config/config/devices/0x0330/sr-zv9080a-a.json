@@ -21,31 +21,29 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "REP EP1",
-			"maxNodes": 5,
-			"description": "When endpoint 1 state changes, send SWITCH_MULTILEVEL_REPORT to associated devices of this group."
+			"label": "Endpoint 1: Multilevel Switch Reports",
+			"maxNodes": 5
 		},
 		"3": {
-			"label": "REP EP2",
-			"maxNodes": 5,
-			"description": "When endpoint 2 state changes, send SWITCH_BINARY_REPORT to associated devices of this group."
+			"label": "Endpoint 2: Binary Switch Reports",
+			"maxNodes": 5
 		}
-	},
-	"metadata": {
-		"Description": "The curtain motor controller is a universal, Z-Wave Plus compatible, electric motor controller. The device allows for controlling motors of roller blinds and venetian blinds, which are single phase AC powered. It can also act as double switch when set to 'light mode' (parameter 3)",
-		"Inclusion and Exclusion": "Find the button k2 on the unit and press 3 times or when s1 is enabled press the switch 3 times",
-		"Reset": "Find the button k2 on the unit and hold for over 10s",
-		"Calibration": "Find the button k1 on the unit and press it shortly",
-		"Manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3342/SR-ZV9080A-AZ-WaveCurtainMotorController_1.pdf"
 	},
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Report state change in steps of 10% (0 = disable)",
+			"label": "Intermediate Reports",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "3",
@@ -76,64 +74,38 @@
 		},
 		{
 			"#": "4",
-			"label": "Save position percentage",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Remember Last State",
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
-			"label": "Over current protection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Overcurrent protection",
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "Starting positioning calibration with 1",
+			"label": "Calibration",
+			"description": "Venetian mode only",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Not calibrated",
 					"value": 0
 				},
 				{
-					"label": "Enable",
+					"label": "Calibrated / Start calibration",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Configuration S1 and 2 (light mode only)",
+			"label": "Switch Configuration",
+			"description": "Light mode only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -141,49 +113,35 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Short press S1 (2) to switch ON/OFF Q1 (2). Hold down S1 (2) to switch ON Q1 (2), then release to switch OFF Q2 (1)",
+					"label": "Short press S1: Toggle Q1. Hold down S1: switch Q1 on. Release S1: Switch Q2 off. Short press S2: Toggle Q2. Hold down S2: switch Q2 on. Release S2: Switch Q1 off.",
 					"value": 0
 				},
 				{
-					"label": "Short press S1 (2) to switch ON/OFF Q1 (2)",
+					"label": "Short press S1: Toggle Q1. Short press S2: Toggle Q2",
 					"value": 1
 				},
 				{
-					"label": "Hold down S1 (2) to switch ON Q1 (2), release to switch OFF Q2 (1)",
+					"label": "Hold down S1: switch Q1 on. Release S1: Switch Q2 off. Hold down S2: switch Q2 on. Release S2: Switch Q1 off.",
 					"value": 2
 				},
 				{
-					"label": "Short press S1 or S2 to switch ON/OFF of both switches",
+					"label": "Short press S1 or S2: Toggle Q1/Q2",
 					"value": 3
 				},
 				{
-					"label": "Hold down S1 (2) to switch ON (OFF) both switches",
+					"label": "Hold down S1: switch Q1/Q2 on. Hold down S2: switch Q1/Q2 off",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "8",
-			"label": "Includion / exclusion via pressing s1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Inclusion/Exclusion Using Switch S1"
 		},
 		{
 			"#": "9",
-			"label": "Scene activation",
+			"label": "Send Central Scene Notifications",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -191,62 +149,98 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable to send for action of both S1 and S2",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable to send for action of both S1 and S2",
+					"label": "Enable both switches",
 					"value": 1
 				},
 				{
-					"label": "Enable to send for action of only S1",
+					"label": "Enable S1 only",
 					"value": 2
 				},
 				{
-					"label": "Enable to send for action of only S2",
+					"label": "Enable S2 only",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "10",
-			"label": "Report when power change in W",
+			"label": "Power Change Report Threshold",
 			"valueSize": 1,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "11",
-			"label": "Report when current change in 0.1A (0 is disabled)",
+			"label": "Current Change Report Threshold",
 			"valueSize": 1,
+			"unit": "0.1 A",
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "12",
-			"label": "Report when Voltage change in V (0 is disabled)",
+			"label": "Voltage Change Report Threshold",
 			"valueSize": 1,
+			"unit": "V",
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "13",
-			"label": "Slats rotation time in 0.1s",
+			"label": "Slats Rotation Time",
+			"description": "Venetian mode only. Allowable range: 5-250 (0.5-25s)",
 			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 520,
-			"defaultValue": 15
+			"unit": "0.1s",
+			"minValue": 0,
+			"maxValue": 250,
+			"defaultValue": 15,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "14",
-			"label": "Time cycle to report on values in s",
+			"label": "Energy Report Interval",
 			"valueSize": 1,
-			"minValue": 300,
+			"unit": "s",
+			"minValue": 60,
 			"maxValue": 2678400,
 			"defaultValue": 3600
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Press button K2 on the unit 3 times, or when S1 is enabled press the switch 3 times",
+		"exclusion": "Press button K2 on the unit 3 times, or when S1 is enabled press the switch 3 times",
+		"reset": "Find the button k2 on the unit and hold for over 10s",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3342/SR-ZV9080A-AZ-WaveCurtainMotorController_1.pdf"
+	}
 }
