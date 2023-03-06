@@ -1,0 +1,22 @@
+{
+	"manufacturer": "Nexa Trading AB",
+	"manufacturerId": "0x0268",
+	"label": "ZPR-111",
+	"description": "Metered Wall Plug Switch",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x1027"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"comments": {
+			"level": "warning",
+			"text": "This device is buggy and sends large negative Meter Reports from time to time."
+		}
+	}
+}
