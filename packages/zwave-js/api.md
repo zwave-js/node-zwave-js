@@ -14,6 +14,7 @@ import { BootloaderChunk } from '@zwave-js/serial';
 import { buffer2hex } from '@zwave-js/shared/safe';
 import { CCAPIs } from '@zwave-js/cc';
 import { CCConstructor } from '@zwave-js/cc';
+import { CCNameOrId } from '@zwave-js/cc';
 import { CommandClass } from '@zwave-js/cc';
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
@@ -399,13 +400,13 @@ export class Endpoint implements IZWaveEndpoint {
     hideBasicCCInFavorOfActuatorCCs(): void;
     readonly index: number;
     get installerIcon(): number | undefined;
-    invokeCCAPI<CC extends CommandClasses_2, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
+    invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : Omit<CCNameOrId, CommandClasses_2> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     isCCSecure(cc: CommandClasses_2): boolean;
     readonly nodeId: number;
     removeCC(cc: CommandClasses_2): void;
     protected reset(): void;
     supportsCC(cc: CommandClasses_2): boolean;
-    supportsCCAPI(cc: CommandClasses_2): boolean;
+    supportsCCAPI(cc: CCNameOrId): boolean;
     get userIcon(): number | undefined;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "IZWaveEndpoint"
     readonly virtual = false;
@@ -914,7 +915,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
     protected readonly driver: Driver;
     getCCVersion(cc: CommandClasses): number;
     readonly index: number;
-    invokeCCAPI<CC extends CommandClasses, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
+    invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses extends CC ? any : Omit<CCNameOrId, CommandClasses> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     // (undocumented)
     get node(): VirtualNode;
     // (undocumented)

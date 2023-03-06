@@ -3,9 +3,11 @@ import {
 	CCAPI,
 	CCAPIs,
 	CCConstructor,
+	CCNameOrId,
 	CCToAPI,
 	CommandClass,
 	getCommandClassStatic,
+	normalizeCCNameOrId,
 } from "@zwave-js/cc";
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import type { IZWaveEndpoint } from "@zwave-js/core";
@@ -375,24 +377,13 @@ export class Endpoint implements IZWaveEndpoint {
 				// ignore all other symbols
 				return undefined;
 			} else {
-				// typeof ccNameOrId === "string"
-				let ccId: CommandClasses | undefined;
 				// The command classes are exposed to library users by their name or the ID
-				if (/^\d+$/.test(ccNameOrId)) {
-					// Since this is a property accessor, ccNameOrID is passed as a string,
-					// even when it was a number (CommandClasses)
-					ccId = +ccNameOrId;
-				} else {
-					// If a name was given, retrieve the corresponding ID
-					ccId = CommandClasses[ccNameOrId as any] as unknown as
-						| CommandClasses
-						| undefined;
-					if (ccId == undefined) {
-						throw new ZWaveError(
-							`Command Class ${ccNameOrId} is not implemented! If you are sure that the name/id is correct, consider opening an issue at https://github.com/AlCalzone/node-zwave-js`,
-							ZWaveErrorCodes.CC_NotImplemented,
-						);
-					}
+				const ccId = normalizeCCNameOrId(ccNameOrId);
+				if (ccId == undefined) {
+					throw new ZWaveError(
+						`Command Class ${ccNameOrId} is not implemented!`,
+						ZWaveErrorCodes.CC_NotImplemented,
+					);
 				}
 
 				// When accessing a CC API for the first time, we need to create it
@@ -426,7 +417,8 @@ export class Endpoint implements IZWaveEndpoint {
 	}
 
 	/** Allows checking whether a CC API is supported before calling it with {@link Endpoint.invokeCCAPI} */
-	public supportsCCAPI(cc: CommandClasses): boolean {
+	public supportsCCAPI(cc: CCNameOrId): boolean {
+		// No need to validate the `cc` parameter, the following line will throw for invalid CCs
 		return ((this.commandClasses as any)[cc] as CCAPI).isSupported();
 	}
 
@@ -435,26 +427,25 @@ export class Endpoint implements IZWaveEndpoint {
 	 * Use {@link Endpoint.supportsCCAPI} to check support first.
 	 */
 	public invokeCCAPI<
-		CC extends CommandClasses,
+		CC extends CCNameOrId,
 		TMethod extends keyof TAPI,
 		TAPI extends Record<
 			string,
 			(...args: any[]) => any
-		> = CommandClasses extends CC ? any : APIMethodsOf<CC>,
+		> = CommandClasses extends CC
+			? any
+			: Omit<CCNameOrId, CommandClasses> extends CC
+			? any
+			: APIMethodsOf<CC>,
 	>(
 		cc: CC,
 		method: TMethod,
 		...args: Parameters<TAPI[TMethod]>
 	): ReturnType<TAPI[TMethod]> {
-		if (typeof cc !== "number" || !(cc in CommandClasses)) {
-			throw new ZWaveError(
-				`Invalid CC ${cc}!`,
-				ZWaveErrorCodes.CC_Invalid,
-			);
-		}
-
-		const ccName = getCCName(cc);
+		// No need to validate the `cc` parameter, the following line will throw for invalid CCs
 		const CCAPI = (this.commandClasses as any)[cc];
+		const ccId = normalizeCCNameOrId(cc)!;
+		const ccName = getCCName(ccId);
 		if (!CCAPI) {
 			throw new ZWaveError(
 				`The API for the ${ccName} CC does not exist or is not implemented!`,
