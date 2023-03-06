@@ -5183,11 +5183,11 @@ export const DoorLockCCValues: Readonly<{
             readonly states: {
                 [x: number]: string;
             };
+            readonly writeable: false;
             readonly min: 0;
             readonly max: 255;
             readonly type: "number";
             readonly readable: true;
-            readonly writeable: true;
         };
         readonly options: {
             readonly internal: false;
