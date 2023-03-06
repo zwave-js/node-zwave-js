@@ -36,7 +36,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Temperature Report Interval (multiply by 10 for minutes IE: 3=30 min)",
+			"label": "Temperature Report Interval",
 			"valueSize": 1,
 			"unit": "1/10 minute",
 			"minValue": 3,

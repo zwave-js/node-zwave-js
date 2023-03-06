@@ -40,29 +40,30 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Load controlled by Z-Wave only",
+					"label": "Z-Wave only",
 					"value": 0
 				},
 				{
-					"label": "Load controlled by Z-Wave and Sensors",
+					"label": "Z-Wave and Sensors",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Load control sensor mode",
+			"label": "Load Control Sensor Mode",
+			"description": "Select which sensors control the load when parameter 5 is set to 1",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Load controlled by lux and motion",
+					"label": "Lux and motion",
 					"value": 0
 				},
 				{
-					"label": "Load controlled by lux only",
+					"label": "Lux only",
 					"value": 1
 				}
 			]

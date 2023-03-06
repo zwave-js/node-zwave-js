@@ -18,12 +18,18 @@
 		{
 			"#": "12",
 			"label": "Motion Sensor Sensitivity",
-			"description": "Higher values increase sensitivity,0=disables motion",
+			"description": "Higher values increase sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
 			"defaultValue": 8,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "14",

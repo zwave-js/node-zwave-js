@@ -16,25 +16,29 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "This group is normally automatically assigned to the Z-Wave system controller when EZMultiPli is added to the ZWave network.",
 			"maxNodes": 1,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic",
-			"description": "This group is used to directly turn lights on or off when motion is detected.",
+			"label": "Control Lights",
 			"maxNodes": 4
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Off Delay After Motion, 0=only sends motion triggers",
+			"label": "Off Delay After Motion",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable, only send motion triggers",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "2",
@@ -49,24 +53,34 @@
 		{
 			"#": "3",
 			"label": "Light Level Report Interval",
-			"description": "Sets the interval for light level reports; 0 to disable",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 60,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "4",
 			"label": "Temperature Report Interval",
-			"description": "Sets the interval for temp level reports; 0 to disable",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 60,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "5",
