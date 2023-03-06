@@ -109,7 +109,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 -   **label:** Current lock mode
 -   **min. CC version:** 1
 -   **readable:** true
--   **writeable:** true
+-   **writeable:** false
 -   **stateful:** true
 -   **secret:** false
 -   **value type:** `"number"`
