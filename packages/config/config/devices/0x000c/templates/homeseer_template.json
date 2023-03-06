@@ -95,7 +95,7 @@
 	},
 	"enable_notification_buzzer": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Enable Notifcaton Buzzer"
+		"label": "Enable Notificaton Buzzer"
 	},
 	"enable_shock_alarm": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
