@@ -2,7 +2,6 @@ import type { CommandClasses } from "../capabilities/CommandClasses";
 import type { ValueMetadata } from "./Metadata";
 
 /** Uniquely identifies to which CC, endpoint and property a value belongs to */
-
 export interface ValueID {
 	commandClass: CommandClasses;
 	endpoint?: number;
@@ -10,6 +9,7 @@ export interface ValueID {
 	propertyKey?: string | number;
 }
 
+/** Extends the {@link ValueID} interface with human-readable labels */
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
 	propertyName?: string;

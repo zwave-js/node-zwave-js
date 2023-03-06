@@ -261,9 +261,9 @@ export function translateValueID<T extends ValueID>(
  * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
  * Value ID on a non-root endpoint
  */
-export function filterRootApplicationCCValueIDs(
-	allValueIds: ValueID[],
-): ValueID[] {
+export function filterRootApplicationCCValueIDs<T extends ValueID>(
+	allValueIds: T[],
+): T[] {
 	const shouldHideRootValueID = (
 		valueId: ValueID,
 		allValueIds: ValueID[],
