@@ -186,7 +186,7 @@
 			"label": "Current Change Report Threshold",
 			"valueSize": 1,
 			"unit": "0.1 A",
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 0,
 			"options": [
@@ -201,7 +201,7 @@
 			"label": "Voltage Change Report Threshold",
 			"valueSize": 1,
 			"unit": "V",
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 0,
 			"options": [
@@ -220,6 +220,7 @@
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 15,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -230,7 +231,7 @@
 		{
 			"#": "14",
 			"label": "Energy Report Interval",
-			"valueSize": 1,
+			"valueSize": 4,
 			"unit": "s",
 			"minValue": 60,
 			"maxValue": 2678400,
