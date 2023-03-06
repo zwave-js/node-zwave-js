@@ -1,13 +1,25 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN52",
-	"description": "Z-Wave Plus 700 Series Double Relay",
+	"label": [
+		{
+			"$if": "productType === 0x0904",
+			"value": "ZEN52 LR"
+		},
+		"ZEN52"
+	],
+	"description": "700 Series Double Relay",
 	"devices": [
 		{
+			// Regular Z-Wave version:
 			"productType": "0x0104",
 			"productId": "0x0202",
 			"zwaveAllianceId": 4609
+		},
+		{
+			// Long Range capable version:
+			"productType": "0x0904",
+			"productId": "0x0202"
 		}
 	],
 	"firmwareVersion": {
