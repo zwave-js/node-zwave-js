@@ -235,7 +235,7 @@
 		]
 	},
 	"led_indicator_color": {
-		"label": "Led Indicator: Color",
+		"label": "LED Indicator: Color",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 3,
@@ -263,34 +263,34 @@
 	},
 	"led_indicator_color_upper": {
 		"$import": "#base_led_color",
-		"label": "Led Indicator: Upper Paddle Color"
+		"label": "LED Indicator: Upper Paddle Color"
 	},
 	"led_indicator_color_lower": {
 		"$import": "#base_led_color",
-		"label": "Led Indicator: Lower Paddle Color"
+		"label": "LED Indicator: Lower Paddle Color"
 	},
 	"led_indicator_color_first_button": {
 		"$import": "#base_led_color_mr40z",
 		"default": 0,
-		"label": "Led Indicator: First Button"
+		"label": "LED Indicator: First Button"
 	},
 	"led_indicator_color_second_button": {
 		"$import": "#base_led_color_mr40z",
 		"default": 1,
-		"label": "Led Indicator: Second Button"
+		"label": "LED Indicator: Second Button"
 	},
 	"led_indicator_color_third_button": {
 		"$import": "#base_led_color_mr40z",
 		"default": 2,
-		"label": "Led Indicator: Third Button"
+		"label": "LED Indicator: Third Button"
 	},
 	"led_indicator_color_fourth_button": {
 		"$import": "#base_led_color_mr40z",
 		"default": 3,
-		"label": "Led Indicator: Fourth Button"
+		"label": "LED Indicator: Fourth Button"
 	},
 	"led_indicator_brightness": {
-		"label": "Led Indicator: Brightness",
+		"label": "LED Indicator: Brightness",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -313,7 +313,7 @@
 		]
 	},
 	"led_indicator_brightness_mr40z": {
-		"label": "Led Indicator: Brightness",
+		"label": "LED Indicator: Brightness",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 10,
@@ -322,47 +322,47 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "LED OFf",
+				"label": "Off",
 				"value": 0
 			},
 			{
-				"label": "10% Brightness",
+				"label": "10%",
 				"value": 1
 			},
 			{
-				"label": "20% Brightness",
+				"label": "20%",
 				"value": 2
 			},
 			{
-				"label": "30% Brightness",
+				"label": "30%",
 				"value": 3
 			},
 			{
-				"label": "40% Brightness",
+				"label": "40%",
 				"value": 4
 			},
 			{
-				"label": "50% Brightness",
+				"label": "50%",
 				"value": 5
 			},
 			{
-				"label": "60% Brightness",
+				"label": "60%",
 				"value": 6
 			},
 			{
-				"label": "70% Brightness",
+				"label": "70%",
 				"value": 7
 			},
 			{
-				"label": "80% Brightness",
+				"label": "80%",
 				"value": 8
 			},
 			{
-				"label": "90% Brightness",
+				"label": "90%",
 				"value": 9
 			},
 			{
-				"label": "100% Brightness",
+				"label": "100%",
 				"value": 10
 			}
 		]
@@ -483,7 +483,7 @@
 		"defaultValue": 1
 	},
 	"battery_report_threshold": {
-		"label": "Battery Report Threshold %",
+		"label": "Battery Report Threshold",
 		"valueSize": 1,
 		"unit": "%",
 		"minValue": 1,
@@ -492,7 +492,7 @@
 		"unsigned": true
 	},
 	"battery_alarm_report": {
-		"label": "Low Battery Alarm Report",
+		"label": "Low Battery Alarm Threshold",
 		"valueSize": 1,
 		"unit": "%",
 		"minValue": 5,
