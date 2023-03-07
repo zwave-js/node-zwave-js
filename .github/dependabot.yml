@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: monthly
+      time: '04:00'
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    ignore:
+      # Typescript should not be updated automatically, except patch updates
+      # it does not follow semver and minor updates are usually breaking
+      - dependency-name: 'typescript'
+        update-types:
+          ['version-update:semver-minor', 'version-update:semver-major']
+      # @types/node should always match the minimum major version we support,
+      # so only apply patch and minor updates automatically
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      # xstate usually requires manual intervention
+      - dependency-name: 'xstate'
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: monthly
+      time: '04:00'
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
