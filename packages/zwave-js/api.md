@@ -1464,7 +1464,7 @@ export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
 // @public
 export type ZWaveNotificationCallbackParams_EntryControlCC = [
 node: ZWaveNode,
-ccId: typeof CommandClasses["Entry Control"],
+ccId: (typeof CommandClasses)["Entry Control"],
 args: ZWaveNotificationCallbackArgs_EntryControlCC
 ];
 
@@ -1473,7 +1473,7 @@ args: ZWaveNotificationCallbackArgs_EntryControlCC
 // @public
 export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
 node: ZWaveNode,
-ccId: typeof CommandClasses["Multilevel Switch"],
+ccId: (typeof CommandClasses)["Multilevel Switch"],
 args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 ];
 

@@ -16,12 +16,12 @@ async get(): Promise<Pick<ThermostatModeCCReport, "mode" | "manufacturerData"> |
 async set(
 	mode: Exclude<
 		ThermostatMode,
-		typeof ThermostatMode["Manufacturer specific"]
+		(typeof ThermostatMode)["Manufacturer specific"]
 	>,
 ): Promise<SupervisionResult | undefined>;
 
 async set(
-	mode: typeof ThermostatMode["Manufacturer specific"],
+	mode: (typeof ThermostatMode)["Manufacturer specific"],
 	manufacturerData: Buffer,
 ): Promise<SupervisionResult | undefined>;
 ```

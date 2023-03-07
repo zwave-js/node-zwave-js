@@ -1182,7 +1182,7 @@ function getCCResponseForCommandEncapsulation(
 		return [
 			MultiChannelCCCommandEncapsulation,
 			MultiChannelCCV1CommandEncapsulation,
-		] as any as typeof MultiChannelCCCommandEncapsulation[];
+		] as any as (typeof MultiChannelCCCommandEncapsulation)[];
 	}
 }
 

@@ -1094,7 +1094,7 @@ uses the following signature
 ```ts
 type ZWaveNotificationCallbackParams_EntryControlCC = [
 	node: ZWaveNode,
-	ccId: typeof CommandClasses["Entry Control"],
+	ccId: (typeof CommandClasses)["Entry Control"],
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
 ```
@@ -1124,7 +1124,7 @@ uses the following signature
 ```ts
 type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
 	node: ZWaveNode,
-	ccId: typeof CommandClasses["Multilevel Switch"],
+	ccId: (typeof CommandClasses)["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
 ```
