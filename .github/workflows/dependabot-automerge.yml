@@ -51,7 +51,7 @@ jobs:
 
             await github.rest.pulls.createReview({
               ...options,
-              pull_number: context.payload.issue.number,
+              pull_number: github.event.pull_request.number,
               event: "APPROVE"
             });
 
