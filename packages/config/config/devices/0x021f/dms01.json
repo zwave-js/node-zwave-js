@@ -217,7 +217,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Toggle notification sound",
+			"label": "Toggle Notification Sound",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -231,6 +231,16 @@
 					"value": 2
 				}
 			]
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Primary Notification: Flash LED"
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Secondary Notification: Flash LED"
 		}
 	],
 	"metadata": {

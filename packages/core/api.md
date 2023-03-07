@@ -2347,7 +2347,7 @@ export function topologicalSort<T>(graph: GraphNode<T>[]): T[];
 
 // Warning: (ae-missing-release-tag) "TranslatedValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public
 export interface TranslatedValueID extends ValueID {
     // (undocumented)
     commandClassName: string;
@@ -2843,6 +2843,8 @@ export interface ValueMetadataAny {
     description?: string;
     label?: string;
     readable: boolean;
+    secret?: boolean;
+    stateful?: boolean;
     type: ValueType;
     valueChangeOptions?: readonly (keyof ValueChangeOptions)[];
     writeable: boolean;

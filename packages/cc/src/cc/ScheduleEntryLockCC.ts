@@ -464,20 +464,22 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 			});
 		}
 
-		applHost.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "Querying configured time zone...",
-			direction: "outbound",
-		});
-		const tzResp = await api.getTimezone();
-		if (tzResp) {
+		if (api.supportsCommand(ScheduleEntryLockCommand.TimeOffsetGet)) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `received configured time zone:
+				message: "Querying configured time zone...",
+				direction: "outbound",
+			});
+			const tzResp = await api.getTimezone();
+			if (tzResp) {
+				applHost.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `received configured time zone:
 standard offset: ${tzResp.standardOffset} minutes
 dst offset:      ${tzResp.dstOffset} minutes`,
-				direction: "inbound",
-			});
+					direction: "inbound",
+				});
+			}
 		}
 
 		// Remember that the interview is complete

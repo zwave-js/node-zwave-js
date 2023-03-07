@@ -113,6 +113,7 @@ test.serial(
 );
 
 {
+	const valueDefinition = BasicCCValues.currentValue;
 	const valueId = BasicCCValues.currentValue.id;
 
 	function prepareTest(t: ExecutionContext<TestContext>): ZWaveNode {
@@ -138,6 +139,9 @@ test.serial(
 				writeable: false,
 				min: 0,
 				max: 99,
+				// Nothing special about this value, so we should get the default secret/stateful flags:
+				secret: false,
+				stateful: true,
 			});
 		},
 	);
@@ -151,8 +155,30 @@ test.serial(
 
 			const currentValueMeta = node.getValueMetadata(valueId);
 
-			// The label should be preserved from the static metadata
-			t.deepEqual(currentValueMeta, ValueMetadata.WriteOnlyInt32);
+			t.deepEqual(currentValueMeta, {
+				...ValueMetadata.WriteOnlyInt32,
+				secret: valueDefinition.options.secret,
+				stateful: valueDefinition.options.stateful,
+			});
+		},
+	);
+
+	test.serial(
+		"writing to the value DB with setValueMetadata() preserves the secret/stateful flags",
+		(t) => {
+			const node = prepareTest(t);
+			// Create dynamic metadata
+			node.valueDB.setMetadata(valueId, {
+				...ValueMetadata.WriteOnlyInt32,
+				secret: !valueDefinition.options.secret,
+				stateful: !valueDefinition.options.stateful,
+			});
+
+			const currentValueMeta = node.getValueMetadata(valueId);
+			t.like(currentValueMeta, {
+				secret: valueDefinition.options.secret,
+				stateful: valueDefinition.options.stateful,
+			});
 		},
 	);
 }

@@ -61,7 +61,7 @@ export const DoorLockCCValues = Object.freeze({
 		} as const),
 
 		...V.staticProperty("currentMode", {
-			...ValueMetadata.UInt8,
+			...ValueMetadata.ReadOnlyUInt8,
 			label: "Current lock mode",
 			states: enumValuesToMetadataStates(DoorLockMode),
 		} as const),

@@ -66,6 +66,10 @@ export interface ValueMetadataAny {
 	ccSpecific?: Record<string, any>;
 	/** Options that can be provided when changing this value on a device via its value ID. */
 	valueChangeOptions?: readonly (keyof ValueChangeOptions)[];
+	/** Whether this value represents a state (`true`) or a notification/event (`false`) */
+	stateful?: boolean;
+	/** Omit this value from value logs */
+	secret?: boolean;
 }
 
 /**

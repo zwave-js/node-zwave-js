@@ -55,6 +55,8 @@ interface ValueMetadataAny {
 	label?: string;
 	ccSpecific?: Record<string, any>;
 	valueChangeOptions?: (keyof ValueChangeOptions)[];
+	stateful: boolean;
+	secret: boolean;
 }
 ```
 
@@ -65,6 +67,8 @@ interface ValueMetadataAny {
 -   `label`: A human-readable label for the property
 -   `ccSpecific`: CC specific information to help identify this value [(see below)](#CC-specific-fields)
 -   `valueChangeOptions`: Parameters that can be passed as `options` to the [`setValue`](api/node.md#setvalue) command for this value.
+-   `stateful`: Whether this value represents a state (`true`) or a notification/event (`false`).
+-   `secret`: Whether this value should be omitted or obfuscated in logs.
 
 ### Value types
 

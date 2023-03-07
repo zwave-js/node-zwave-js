@@ -380,5 +380,9 @@
 			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	]
+	],
+	"compat": {
+		// The root endpoint exposes a master binary switch and total energy consumption
+		"preserveRootApplicationCCValueIDs": true
+	}
 }
