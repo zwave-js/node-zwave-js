@@ -29,10 +29,6 @@ jobs:
       - name: Check if PR should be auto-merged
         uses: actions/github-script@v6
         env:
-          packageEcosystem: ${{ steps.dependabot-metadata.outputs.package-ecosystem }}
-          dependencyNames: ${{ steps.dependabot-metadata.outputs.dependency-names }}
-          dependencyTypes: ${{ steps.dependabot-metadata.outputs.dependency-types }}
-          updateTypes: ${{ steps.dependabot-metadata.outputs.update-type }}
           updatedDependenciesJson: ${{ steps.dependabot-metadata.outputs.updated-dependencies-json }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -42,8 +38,4 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             };
-            console.log("packageEcosystem: " + process.env.packageEcosystem)
-            console.log("dependencyNames: " + process.env.dependencyNames)
-            console.log("dependencyTypes: " + process.env.dependencyTypes)
-            console.log("updateTypes: " + process.env.updateTypes)
-            console.log("updatedDependenciesJson: " + process.env.updatedDependenciesJson)
+            console.dir(JSON.parse(process.env.updatedDependenciesJson))
