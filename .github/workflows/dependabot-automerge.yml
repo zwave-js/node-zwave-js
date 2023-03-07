@@ -51,7 +51,7 @@ jobs:
 
             await github.rest.pulls.createReview({
               ...options,
-              pull_number: context.payload.pull_request.number,
+              pull_number: context.issue.number,
               event: "APPROVE"
             });
 
@@ -61,4 +61,4 @@ jobs:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
-          gh pr merge --auto --squash
+          gh pr merge --auto --squash "$PR_URL"
