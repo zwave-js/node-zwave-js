@@ -28,14 +28,15 @@ jobs:
 
       - name: Check if PR should be auto-merged
         uses: actions/github-script@v6
+        id: should-automerge
         env:
           updatedDependenciesJson: ${{ steps.dependabot-metadata.outputs.updated-dependencies-json }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           result-encoding: string
           script: |
-            const options = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            };
-            console.dir(JSON.parse(process.env.updatedDependenciesJson))
+            const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+            return bot.shouldAutomerge({github, context});
+
+      - run: |
+          echo "Should automerge: ${{ steps.should-automerge.outputs.result }}"

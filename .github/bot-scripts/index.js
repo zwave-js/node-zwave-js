@@ -18,4 +18,5 @@ module.exports = {
 		require("./renameCommitFeedback")(...args),
 	importConfigCreatePR: (...args) =>
 		require("./importConfigCreatePR")(...args),
+	shouldAutomerge: (...args) => require("./shouldAutomerge")(...args),
 };
