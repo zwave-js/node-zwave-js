@@ -262,12 +262,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/config-conventional@npm:^17.1.0":
-  version: 17.1.0
-  resolution: "@commitlint/config-conventional@npm:17.1.0"
+"@commitlint/config-conventional@npm:^17.4.4":
+  version: 17.4.4
+  resolution: "@commitlint/config-conventional@npm:17.4.4"
   dependencies:
     conventional-changelog-conventionalcommits: ^5.0.0
-  checksum: 8209f6b105ff0cd5239e3c0211be875fa17e02552927979faeba51d3797c8258df9bd1eb064f886e13aedf890d2da2083f6d41727d49d57bcc12520011d723a4
+  checksum: 679d92509fe6e53ee0cc4202f8069d88360c4f9dbd7ab74114bb28278a196da517ef711dfe69893033a66e54ffc29e8df2ccf63cfd746a89c82a053949473c4b
   languageName: node
   linkType: hard
 
@@ -1904,7 +1904,7 @@ __metadata:
     "@alcalzone/monopack": ^1.2.0
     "@alcalzone/release-script": ~3.5.9
     "@commitlint/cli": ^17.1.2
-    "@commitlint/config-conventional": ^17.1.0
+    "@commitlint/config-conventional": ^17.4.4
     "@esm2cjs/p-queue": ^7.3.0
     "@microsoft/api-extractor": ^7.33.7
     "@tsconfig/node14": ^1.0.3
