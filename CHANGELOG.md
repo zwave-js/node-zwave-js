@@ -5,21 +5,41 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
-<!-- ### Breaking changes
-
-### Features -->
+### Features
+* Add `stateful` and `secret` flags to `ValueMetadata` (#5467)
+* Added support for `Security S2` Multicast (#5475)
+* Large commands are now automatically fragmented using `Transport Service CC`. If this is not possible, the attempt will throw instead of relying on the stick's response (#5475)
 
 ### Bugfixes
 * Queries for invalid enum members are skipped during the interview. This could happen for some CCs when the device incorrectly encoded a support bitmask (#5465)
+* Correctly handle the response when requesting Indicator ID 0 (#5470)
+* Only configure timezone for `Schedule Entry Lock CC` if supported (#5484)
+* `invokeCCAPI` now officially accepts both the CC name and ID, e.g. `"Basic"` and `0x20`. At some point this was accidentally supported and later broken. (#5500)
+* The `currentMode` property for `Door Lock CC` is readonly (#5507)
+* Always return `false` for `canSleep` on the controller node, even if the controller claims otherwise (#5522)
 
 ### Config file changes
 * Force-add Basic CC as supported for HeatIt Z-Smoke 230V (#5436)
+* Add fingerprints for Long-Range capable ZEN51/52 variants (#5524)
+* Add wiDom C7 Energy Driven Switch (#5180)
+* Add Sunricher SR-SV9080A-A (#5486)
+* Add Namron SR-ZV9032A-EU (#5474)
+* Correct Minoston MR40Z parameters to match device (#5503)
+* Add params, metadata, associations to Merten 507801 (#5478)
+* Update Dome Wireless Siren (#5488)
+* Add Nexa ZPR-111 metered plug-in switch (#5512)
+* Update device config files for some HomeSeer products (#5515)
+* Preserve root endpoint with master switch and total consumption for Aeotec DSC11 (#5499)
+* Correct warm and cold white config parameter for Aeotec ZWA001 (#5487)
+* Override setpoint precision for Airzone Aidoo Control HVAC unit (#5483)
+* Correct LED Indicator param for Honeywell 39337 / 39444 / ZW4103 (#5461)
 
 ### Changes under the hood
 * All remaining packages now use `ava` for testing instead of `jest` (#5460, #5459, #5454, #5452, #5447, #5443)
 * The mock serialport has been moved to the `@zwave-js/serial/mock` subpath export (#5455)
 * `createAndStartDriverWithMockPort` was moved to the `zwave-js/Testing` subpath export (#5458)
 * The `watch` tasks used during development are now working again
+* Added `test:dirty` and `test:watch` scripts to run/watch only tests that are affected by changed files since the last commit (#5468)
 
 ## 10.10.0 (2023-02-08)
 **Note:** `10.9.0` was not actually released due to an error in the release pipeline. Some of these changes are tagged as `10.9.0` on GitHub, but are only released as part of `10.10.0`.
