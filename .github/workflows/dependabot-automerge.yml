@@ -23,6 +23,8 @@ jobs:
       - name: Dependabot metadata
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@v1
+        with:
+          github-token: ${{ secrets.PAT }}
 
       - name: Check if PR should be auto-merged
         uses: actions/github-script@v6
