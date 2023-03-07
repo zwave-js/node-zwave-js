@@ -230,12 +230,12 @@ const testModel = createModel<TestContext, TestMachineContext>(
 	},
 	TICK: {
 		exec: ({ avaExecutionContext: t }) => {
-			t.context.clock.tick(1);
+			return t.context.clock.tickAsync(1);
 		},
 	},
 	RETRY_TIMEOUT: {
 		exec: ({ avaExecutionContext: t }) => {
-			t.context.clock.tick(500);
+			return t.context.clock.tickAsync(500);
 		},
 	},
 
