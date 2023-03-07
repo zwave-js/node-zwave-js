@@ -149,7 +149,8 @@ export class CCAPI {
 						let messageStart: string;
 						if (endpoint.virtual) {
 							const hasNodeId =
-								typeof endpoint.nodeId === "number";
+								typeof endpoint.nodeId === "number" &&
+								endpoint.nodeId !== NODE_ID_BROADCAST;
 							messageStart = `${
 								hasNodeId ? "The" : "This"
 							} virtual node${
@@ -303,12 +304,10 @@ export class CCAPI {
 		command: number,
 	): void {
 		if (this.supportsCommand(command) !== true) {
-			const hasNodeId = typeof this.endpoint.nodeId === "number";
-
 			throw new ZWaveError(
 				`${
-					hasNodeId
-						? `Node #${this.endpoint.nodeId as number}`
+					this.isSinglecast()
+						? `Node #${this.endpoint.nodeId}`
 						: "This virtual node"
 				}${
 					this.endpoint.index > 0

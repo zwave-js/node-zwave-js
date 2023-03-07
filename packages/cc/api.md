@@ -9,6 +9,7 @@
 import { AllOrNone } from '@zwave-js/shared/safe';
 import { AllOrNone as AllOrNone_2 } from '@zwave-js/shared';
 import { ApplicationNodeInformation } from '@zwave-js/core/safe';
+import { BroadcastCC } from '@zwave-js/core';
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
 import { ConfigurationMetadata } from '@zwave-js/core/safe';
@@ -23,6 +24,7 @@ import { EncapsulationFlags } from '@zwave-js/core';
 import { EncapsulationFlags as EncapsulationFlags_2 } from '@zwave-js/core/safe';
 import { FLiRS } from '@zwave-js/core';
 import { FLiRS as FLiRS_2 } from '@zwave-js/core/safe';
+import { FrameType } from '@zwave-js/core';
 import type { GenericDeviceClass } from '@zwave-js/config';
 import { ICommandClass } from '@zwave-js/core';
 import { IVirtualEndpoint } from '@zwave-js/core';
@@ -3862,6 +3864,7 @@ export class CommandClass implements ICommandClass {
     static getCommandClass(data: Buffer): CommandClasses_2;
     static getConstructor(ccData: Buffer): CCConstructor<CommandClass>;
     getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[];
+    getEncapsulatedCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     getEncapsulatingCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     // (undocumented)
     getEndpoint(applHost: ZWaveApplicationHost): IZWaveEndpoint | undefined;
@@ -3874,6 +3877,8 @@ export class CommandClass implements ICommandClass {
     // (undocumented)
     protected host: ZWaveHost;
     interview(_applHost: ZWaveApplicationHost): Promise<void>;
+    // (undocumented)
+    isBroadcast(): this is BroadcastCC<this>;
     isEncapsulatedWith(ccId: CommandClasses_2, ccCommand?: number): boolean;
     // (undocumented)
     isExpectedCCResponse(received: CommandClass): boolean;
@@ -3892,11 +3897,12 @@ export class CommandClass implements ICommandClass {
     payload: Buffer;
     // Warning: (tsdoc-characters-after-block-tag) The token "@ccValue" looks like a TSDoc tag but contains an invalid character "."; if it is not a tag, use a backslash to escape the "@"
     persistValues(applHost: ZWaveApplicationHost): boolean;
+    // (undocumented)
+    prepareRetransmission(): void;
     refreshValues(_applHost: ZWaveApplicationHost): Promise<void>;
     protected removeMetadata(applHost: ZWaveApplicationHost, ccValue: CCValue): void;
     protected removeValue(applHost: ZWaveApplicationHost, ccValue: CCValue): void;
     serialize(): Buffer;
-    setEncapsulationFlag(flag: EncapsulationFlags, active: boolean): void;
     setInterviewComplete(applHost: ZWaveApplicationHost, complete: boolean): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     setMappedBasicValue(_applHost: ZWaveApplicationHost, _value: number): boolean;
@@ -3906,6 +3912,7 @@ export class CommandClass implements ICommandClass {
     skipEndpointInterview(): boolean;
     // (undocumented)
     protected throwMissingCriticalInterviewResponse(): never;
+    toggleEncapsulationFlag(flag: EncapsulationFlags, active: boolean): void;
     toJSON(): JSONObject;
     toLogEntry(_applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -3929,6 +3936,7 @@ export const commandClass: <TTarget extends CommandClass>(ccId: CommandClasses_2
 export type CommandClassDeserializationOptions = {
     data: Buffer;
     origin?: MessageOrigin;
+    frameType?: FrameType;
 } & ({
     fromEncapsulation?: false;
     nodeId: number;
@@ -13694,7 +13702,11 @@ export interface SchedulePollOptions {
 export class Security2CC extends CommandClass {
     // (undocumented)
     ccCommand: Security2Command;
-    static encapsulate(host: ZWaveHost_2, cc: CommandClass, securityClass?: SecurityClass): Security2CCMessageEncapsulation;
+    static encapsulate(host: ZWaveHost_2, cc: CommandClass, options?: {
+        securityClass?: SecurityClass;
+        multicastOutOfSync?: boolean;
+        multicastGroupId?: number;
+    }): Security2CCMessageEncapsulation;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     static requiresEncapsulation(cc: CommandClass): boolean;
@@ -13797,16 +13809,20 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     // (undocumented)
     extensions: Security2Extension[];
     // (undocumented)
+    getMulticastGroupId(): number | undefined;
+    // (undocumented)
+    hasMOSExtension(): boolean;
+    // (undocumented)
     host: ZWaveHost_2 & {
         securityManager2: SecurityManager2;
     };
+    // (undocumented)
+    prepareRetransmission(): void;
     get sequenceNumber(): number;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
-    // (undocumented)
-    unsetSequenceNumber(): void;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16100,6 +16116,10 @@ export enum TransportServiceCommand {
 export const TransportServiceTimeouts: {
     requestMissingSegmentR2: number;
     requestMissingSegmentR3: number;
+    segmentCompleteR2: number;
+    segmentCompleteR3: number;
+    relaxedTimingDelayR2: number;
+    relaxedTimingDelayR3: number;
 };
 
 // Warning: (ae-missing-release-tag) "UserCodeCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18366,6 +18386,11 @@ export enum ZWaveProtocolCommand {
     // (undocumented)
     TransferRangeInformation = 10
 }
+
+// Warnings were encountered during analysis:
+//
+// src/cc/TransportServiceCC.ts:43:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
+// src/cc/TransportServiceCC.ts:45:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
 
 // (No @packageDocumentation comment for this package)
 

@@ -18,7 +18,9 @@ import {
 	messageIsPing,
 	MultiChannelCC,
 	Security2CC,
+	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
+	Security2Command,
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
 	SupervisionCC,
@@ -50,10 +52,12 @@ import {
 	isZWaveError,
 	LogConfig,
 	MAX_SUPERVISION_SESSION_ID,
+	MAX_TRANSPORT_SERVICE_SESSION_ID,
 	Maybe,
 	MessagePriority,
 	MessageRecord,
 	messageRecordToLines,
+	MPANState,
 	SecurityClass,
 	securityClassIsS2,
 	SecurityManager,
@@ -374,15 +378,15 @@ interface RequestHandlerEntry<T extends Message = Message> {
 	oneTime: boolean;
 }
 
-interface AwaitedChunk<T> {
-	promise: DeferredPromise<T>;
+interface AwaitedThing<T> {
+	handler: (thing: T) => void;
 	timeout?: NodeJS.Timeout;
 	predicate: (msg: T) => boolean;
 }
 
-type AwaitedMessageEntry = AwaitedChunk<Message>;
-type AwaitedCommandEntry = AwaitedChunk<ICommandClass>;
-export type AwaitedBootloaderChunkEntry = AwaitedChunk<BootloaderChunk>;
+type AwaitedMessageEntry = AwaitedThing<Message>;
+type AwaitedCommandEntry = AwaitedThing<ICommandClass>;
+export type AwaitedBootloaderChunkEntry = AwaitedThing<BootloaderChunk>;
 
 interface TransportServiceSession {
 	fragmentSize: number;
@@ -738,7 +742,7 @@ export class Driver
 	}
 
 	public tryGetEndpoint(cc: CommandClass): Endpoint | undefined {
-		if (typeof cc.nodeId === "number") {
+		if (cc.isSinglecast()) {
 			return this.controller.nodes
 				.get(cc.nodeId)
 				?.getEndpoint(cc.endpointIndex);
@@ -2802,11 +2806,13 @@ export class Driver
 							}`,
 							"warn",
 						);
+						// TODO: We may need to do the S2 MOS dance here - or we can deal with it when the next valid CC arrives
 						return;
 					} else {
 						throw e;
 					}
 				}
+
 				// Transport Service CC can be eliminated from the encapsulation stack, since it is always the outermost CC
 				if (isTransportServiceEncapsulation(msg.command)) {
 					msg.command = msg.command.encapsulated;
@@ -2933,6 +2939,34 @@ export class Driver
 		throw e;
 	}
 
+	private mustReplyWithSecurityS2MOS(
+		msg: ApplicationCommandRequest | BridgeApplicationCommandRequest,
+	): boolean {
+		// We're looking for a singlecast S2-encapsulated request
+		if (msg.frameType !== "singlecast") return false;
+		const encapS2 = msg.command.getEncapsulatingCC(
+			CommandClasses["Security 2"],
+			Security2Command.MessageEncapsulation,
+		) as Security2CCMessageEncapsulation | undefined;
+		if (!encapS2) return false;
+
+		// With the MGRP extension present
+		const node = this.getNodeUnsafe(msg);
+		const groupId = encapS2.getMulticastGroupId();
+		if (
+			node &&
+			groupId != undefined &&
+			// but where we don't have an MPAN stored
+			this.securityManager2?.getPeerMPAN(
+				msg.command.nodeId as number,
+				groupId,
+			).type !== MPANState.MPAN
+		) {
+			return true;
+		}
+		return false;
+	}
+
 	private async handleSecurityS2DecodeError(
 		e: Error,
 		msg: Message | undefined,
@@ -3020,10 +3054,18 @@ export class Driver
 					level: "verbose",
 					direction: "outbound",
 				});
-				// Send the node our nonce
-				node.commandClasses["Security 2"].sendNonce().catch(() => {
-					// Ignore errors
-				});
+				// Send the node our nonce, and use the chance to re-sync the MPAN if necessary
+				const s2MulticastOutOfSync =
+					(msg instanceof ApplicationCommandRequest ||
+						msg instanceof BridgeApplicationCommandRequest) &&
+					this.mustReplyWithSecurityS2MOS(msg);
+
+				node.commandClasses["Security 2"]
+					.withOptions({ s2MulticastOutOfSync })
+					.sendNonce()
+					.catch(() => {
+						// Ignore errors
+					});
 			} else {
 				this.controllerLog.logNode(nodeId, {
 					message: `${message}, cannot decode command.`,
@@ -3031,6 +3073,29 @@ export class Driver
 					direction: "none",
 				});
 			}
+
+			return true;
+		} else if (
+			e.code === ZWaveErrorCodes.Security2CC_CannotDecodeMulticast &&
+			isCommandClassContainer(msg)
+		) {
+			// Decoding the command failed because the MPAN used by the other node
+			// is not known to us yet
+			const nodeId = msg.getNodeId()!;
+			// If the node isn't known, ignore this error
+			const node = this._controller?.nodes.get(nodeId);
+			if (!node) return false;
+
+			// Before we can send anything, ACK the command
+			await this.writeHeader(MessageHeaders.ACK);
+
+			this.driverLog.logMessage(msg, { direction: "inbound" });
+			node.incrementStatistics("commandsDroppedRX");
+
+			this.controllerLog.logNode(nodeId, {
+				message: `Cannot decode S2 multicast command, since MPAN is not known yet. Will attempt re-sync after the next singlecast.`,
+				level: "verbose",
+			});
 
 			return true;
 		}
@@ -3498,8 +3563,8 @@ ${handlers.length} left`,
 		// Check if we have a dynamic handler waiting for this message
 		for (const entry of this.awaitedMessages) {
 			if (entry.predicate(msg)) {
-				// resolve the promise - this will remove the entry from the list
-				entry.promise.resolve(msg);
+				// We do
+				entry.handler(msg);
 				return;
 			}
 		}
@@ -3612,76 +3677,74 @@ ${handlers.length} left`,
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
 			} else {
-				// Figure out if the command was received with supervision encapsulation
+				// Figure out if the command was received with supervision encapsulation and we need to respond accordingly
 				const supervisionSessionId = SupervisionCC.getSessionId(
 					msg.command,
 				);
+				// Figure out if this is an S2 multicast followup for a group that is out of sync
+				const s2MulticastOutOfSync =
+					this.mustReplyWithSecurityS2MOS(msg);
+
 				const encapsulationFlags = msg.command.encapsulationFlags;
 
+				let reply: (success: boolean) => Promise<void>;
+				if (supervisionSessionId != undefined) {
+					// The command was supervised, and we must respond with a Supervision Report
+					const endpoint =
+						node.getEndpoint(msg.command.endpointIndex) ?? node;
+					reply = (success) =>
+						endpoint
+							.createAPI(CommandClasses.Supervision, false)
+							.withOptions({ s2MulticastOutOfSync })
+							.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: success
+									? SupervisionStatus.Success
+									: SupervisionStatus.Fail,
+								requestWakeUpOnDemand:
+									this.shouldRequestWakeupOnDemand(node),
+								encapsulationFlags,
+							});
+				} else {
+					// Unsupervised, reply is a no-op
+					reply = () => Promise.resolve();
+				}
 				// DO NOT force-add support for the Supervision CC here. Some devices only support Supervision when sending,
 				// so we need to trust the information we already have.
+
+				// In the case where the command was unsupervised and we need to send a MOS, do it as soon as possible
+				if (supervisionSessionId == undefined && s2MulticastOutOfSync) {
+					// If the command was NOT received using Supervision,
+					// we need to respond with an MOS nonce. Otherwise we'll set the flag
+					// on the Supervision Report
+					node.commandClasses["Security 2"].sendMOS().catch(() => {
+						// Ignore errors
+					});
+				}
 
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
-						// resolve the promise - this will remove the entry from the list
-						entry.promise.resolve(msg.command);
+						// there is!
+						entry.handler(msg.command);
 
-						// send back a Supervision Report if the command was received via Supervision Get
-						if (supervisionSessionId !== undefined) {
-							const endpoint =
-								node.getEndpoint(msg.command.endpointIndex) ??
-								node;
-							await endpoint
-								.createAPI(CommandClasses.Supervision, false)
-								.sendReport({
-									sessionId: supervisionSessionId,
-									moreUpdatesFollow: false,
-									status: SupervisionStatus.Success,
-									requestWakeUpOnDemand:
-										this.shouldRequestWakeupOnDemand(node),
-									encapsulationFlags,
-								});
-						}
+						// and possibly reply to a supervised command
+						await reply(true);
 						return;
 					}
 				}
 
 				// No one is waiting, dispatch the command to the node itself
-				if (supervisionSessionId !== undefined) {
-					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
-					const endpoint =
-						node.getEndpoint(msg.command.endpointIndex) ?? node;
-					try {
-						await node.handleCommand(msg.command);
-
-						await endpoint
-							.createAPI(CommandClasses.Supervision, false)
-							.sendReport({
-								sessionId: supervisionSessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Success,
-								requestWakeUpOnDemand:
-									this.shouldRequestWakeupOnDemand(node),
-								encapsulationFlags,
-							});
-					} catch (e) {
-						await endpoint
-							.createAPI(CommandClasses.Supervision, false)
-							.sendReport({
-								sessionId: supervisionSessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Fail,
-								requestWakeUpOnDemand:
-									this.shouldRequestWakeupOnDemand(node),
-								encapsulationFlags,
-							});
-
-						// In any case we don't want to swallow the error
-						throw e;
-					}
-				} else {
+				try {
 					await node.handleCommand(msg.command);
+					await reply(true);
+				} catch (e) {
+					await reply(false);
+
+					// We only caught the error to be able to respond to supervised requests.
+					// Re-Throw so it can be handled accordingly
+					throw e;
 				}
 			}
 
@@ -3739,15 +3802,25 @@ ${handlers.length} left`,
 	public readonly getNextCallbackId = createWrappingCounter(0xff);
 
 	/**
-	 * Returns the next callback ID. Callback IDs are used to correlate requests
-	 * to the controller/nodes with its response
+	 * Returns the next session ID for Supervision CC
 	 */
 	public readonly getNextSupervisionSessionId = createWrappingCounter(
 		MAX_SUPERVISION_SESSION_ID,
 		true,
 	);
 
-	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
+	/**
+	 * Returns the next session ID for Transport Service CC
+	 */
+	public readonly getNextTransportServiceSessionId = createWrappingCounter(
+		MAX_TRANSPORT_SERVICE_SESSION_ID,
+		true,
+	);
+
+	private encapsulateCommands(
+		cmd: CommandClass,
+		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
+	): CommandClass {
 		// The encapsulation order (from outside to inside) is as follows:
 		// 5. Any one of the following combinations:
 		//   a. Security (S0 or S2) followed by transport service
@@ -3763,39 +3836,45 @@ ${handlers.length} left`,
 		// TODO: 2.
 
 		// 3.
-		if (SupervisionCC.requiresEncapsulation(msg.command)) {
-			msg.command = SupervisionCC.encapsulate(this, msg.command);
+		if (SupervisionCC.requiresEncapsulation(cmd)) {
+			cmd = SupervisionCC.encapsulate(this, cmd);
 		}
 
 		// 4.
-		if (MultiChannelCC.requiresEncapsulation(msg.command)) {
-			msg.command = MultiChannelCC.encapsulate(this, msg.command);
+		if (MultiChannelCC.requiresEncapsulation(cmd)) {
+			cmd = MultiChannelCC.encapsulate(this, cmd);
 		}
 
 		// 5.
-
-		if (CRC16CC.requiresEncapsulation(msg.command)) {
-			msg.command = CRC16CC.encapsulate(this, msg.command);
+		if (CRC16CC.requiresEncapsulation(cmd)) {
+			cmd = CRC16CC.encapsulate(this, cmd);
 		} else {
-			// When a node supports S2 and has a valid security class, the command
-			// must be S2-encapsulated
-			const node = msg.command.getNode(this);
+			// The command must be S2-encapsulated, if ...
+			let maybeS2 = false;
+			const node = cmd.getNode(this);
 			if (node?.supportsCC(CommandClasses["Security 2"])) {
-				const securityClass = node.getHighestSecurityClass();
-				if (
-					((securityClass != undefined &&
-						securityClass !== SecurityClass.S0_Legacy) ||
-						this.securityManager2?.tempKeys.has(node.id)) &&
-					Security2CC.requiresEncapsulation(msg.command)
-				) {
-					msg.command = Security2CC.encapsulate(this, msg.command);
-				}
+				// ... the node supports S2 and has a valid security class
+				const nodeSecClass = node.getHighestSecurityClass();
+				maybeS2 =
+					securityClassIsS2(nodeSecClass) ||
+					!!this.securityManager2?.tempKeys.has(node.id);
+			} else if (options.s2MulticastGroupId != undefined) {
+				// ... or we're dealing with S2 multicast
+				maybeS2 = true;
 			}
+			if (maybeS2 && Security2CC.requiresEncapsulation(cmd)) {
+				cmd = Security2CC.encapsulate(this, cmd, {
+					multicastOutOfSync: !!options.s2MulticastOutOfSync,
+					multicastGroupId: options.s2MulticastGroupId,
+				});
+			}
+
 			// This check will return false for S2-encapsulated commands
-			if (SecurityCC.requiresEncapsulation(msg.command)) {
-				msg.command = SecurityCC.encapsulate(this, msg.command);
+			if (SecurityCC.requiresEncapsulation(cmd)) {
+				cmd = SecurityCC.encapsulate(this, cmd);
 			}
 		}
+		return cmd;
 	}
 
 	public unwrapCommands(msg: Message & ICommandClassContainer): void {
@@ -3814,20 +3893,20 @@ ${handlers.length} left`,
 			unwrapped.encapsulationFlags = msg.command.encapsulationFlags;
 			switch (msg.command.ccId) {
 				case CommandClasses.Supervision:
-					unwrapped.setEncapsulationFlag(
+					unwrapped.toggleEncapsulationFlag(
 						EncapsulationFlags.Supervision,
 						true,
 					);
 					break;
 				case CommandClasses["Security 2"]:
 				case CommandClasses.Security:
-					unwrapped.setEncapsulationFlag(
+					unwrapped.toggleEncapsulationFlag(
 						EncapsulationFlags.Security,
 						true,
 					);
 					break;
 				case CommandClasses["CRC-16 Encapsulation"]:
-					unwrapped.setEncapsulationFlag(
+					unwrapped.toggleEncapsulationFlag(
 						EncapsulationFlags.CRC16,
 						true,
 					);
@@ -4113,8 +4192,13 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
 	): SendDataMessage {
+		// Automatically encapsulate commands before sending
+		if (options.autoEncapsulate !== false) {
+			command = this.encapsulateCommands(command, options);
+		}
+
 		let msg: SendDataMessage;
-		if (command.isSinglecast()) {
+		if (command.isSinglecast() || command.isBroadcast()) {
 			if (
 				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
 			) {
@@ -4165,9 +4249,6 @@ ${handlers.length} left`,
 				msg.callbackId = 0;
 			}
 		}
-
-		// Automatically encapsulate commands before sending
-		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
 
 		return msg;
 	}
@@ -4279,6 +4360,11 @@ ${handlers.length} left`,
 			command.encapsulationFlags = options.encapsulationFlags;
 		}
 
+		// For S2 multicast, the Security encapsulation flag does not get set automatically by the CC constructor
+		if (options?.s2MulticastGroupId != undefined) {
+			command.toggleEncapsulationFlag(EncapsulationFlags.Security, true);
+		}
+
 		// Only use supervision if...
 		if (
 			// ... not disabled
@@ -4333,9 +4419,10 @@ ${handlers.length} left`,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
+			const promise = createDeferredPromise<Message>();
 			const entry: AwaitedMessageEntry = {
 				predicate,
-				promise: createDeferredPromise<Message>(),
+				handler: (msg) => promise.resolve(msg),
 				timeout: undefined,
 			};
 			this.awaitedMessages.push(entry);
@@ -4355,7 +4442,7 @@ ${handlers.length} left`,
 				);
 			}, timeout);
 			// When the promise is resolved, remove the wait entry and resolve the returned Promise
-			void entry.promise.then((cc) => {
+			void promise.then((cc) => {
 				removeEntry();
 				resolve(cc as T);
 			});
@@ -4372,9 +4459,10 @@ ${handlers.length} left`,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
+			const promise = createDeferredPromise<ICommandClass>();
 			const entry: AwaitedCommandEntry = {
 				predicate,
-				promise: createDeferredPromise(),
+				handler: (cc) => promise.resolve(cc),
 				timeout: undefined,
 			};
 			this.awaitedCommands.push(entry);
@@ -4394,11 +4482,38 @@ ${handlers.length} left`,
 				);
 			}, timeout);
 			// When the promise is resolved, remove the wait entry and resolve the returned Promise
-			void entry.promise.then((cc) => {
+			void promise.then((cc) => {
 				removeEntry();
 				resolve(cc as T);
 			});
 		});
+	}
+
+	/**
+	 * Calls the given handler function every time a CommandClass is received that matches the given predicate.
+	 * @param predicate A predicate function to test all incoming command classes
+	 */
+	public registerCommandHandler<T extends ICommandClass>(
+		predicate: (cc: ICommandClass) => boolean,
+		handler: (cc: T) => void,
+	): {
+		unregister: () => void;
+	} {
+		const entry: AwaitedCommandEntry = {
+			predicate,
+			handler: (cc) => handler(cc as T),
+			timeout: undefined,
+		};
+		this.awaitedCommands.push(entry);
+		const removeEntry = () => {
+			if (entry.timeout) clearTimeout(entry.timeout);
+			const index = this.awaitedCommands.indexOf(entry);
+			if (index !== -1) this.awaitedCommands.splice(index, 1);
+		};
+
+		return {
+			unregister: removeEntry,
+		};
 	}
 
 	/** Checks if a message is allowed to go into the wakeup queue */
@@ -4663,7 +4778,9 @@ ${handlers.length} left`,
 			const SendDataConstructor = this.getSendDataSinglecastConstructor();
 			msg = new SendDataConstructor(this, { command: commandOrMsg });
 		}
-		this.encapsulateCommands(msg);
+		msg.command = this.encapsulateCommands(
+			msg.command,
+		) as SinglecastCC<CommandClass>;
 		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
 	}
 
@@ -4897,10 +5014,11 @@ ${handlers.length} left`,
 			}
 		}
 
+		// Check if there is a handler waiting for this chunk
 		for (const entry of this.awaitedBootloaderChunks) {
 			if (entry.predicate(data)) {
-				// resolve the promise - this will remove the entry from the list
-				entry.promise.resolve(data);
+				// there is!
+				entry.handler(data);
 				return;
 			}
 		}
@@ -4934,9 +5052,10 @@ ${handlers.length} left`,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
+			const promise = createDeferredPromise<BootloaderChunk>();
 			const entry: AwaitedBootloaderChunkEntry = {
 				predicate,
-				promise: createDeferredPromise(),
+				handler: (chunk) => promise.resolve(chunk),
 				timeout: undefined,
 			};
 			this.awaitedBootloaderChunks.push(entry);
@@ -4956,9 +5075,9 @@ ${handlers.length} left`,
 				);
 			}, timeout);
 			// When the promise is resolved, remove the wait entry and resolve the returned Promise
-			void entry.promise.then((cc) => {
+			void promise.then((chunk) => {
 				removeEntry();
-				resolve(cc as T);
+				resolve(chunk as T);
 			});
 		});
 	}

@@ -4,6 +4,7 @@ import {
 	isZWaveError,
 	IVirtualNode,
 	normalizeValueID,
+	SendCommandOptions,
 	TranslatedValueID,
 	ValueID,
 	valueIdToString,
@@ -30,9 +31,11 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		driver: Driver,
 		/** The references to the physical node this virtual node abstracts */
 		physicalNodes: Iterable<ZWaveNode>,
+		/** Default command options to use for the CC API */
+		defaultCommandOptions?: SendCommandOptions,
 	) {
 		// Define this node's intrinsic endpoint as the root device (0)
-		super(undefined, driver, 0);
+		super(undefined, driver, 0, defaultCommandOptions);
 		// Set the reference to this and the physical nodes
 		super.setNode(this);
 		this.physicalNodes = [...physicalNodes].filter(
@@ -41,7 +44,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		);
 	}
 
-	public readonly physicalNodes: ZWaveNode[];
+	public readonly physicalNodes: readonly ZWaveNode[];
 
 	/**
 	 * Updates a value for a given property of a given CommandClass.
@@ -77,6 +80,8 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 
 			// api.setValue could technically return a SupervisionResult
 			// but supervision isn't used for multicast / broadcast
+
+			// FIXME: It just may for S2 multicast
 
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value

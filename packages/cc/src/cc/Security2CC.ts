@@ -11,6 +11,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
+	MPANState,
 	parseBitMask,
 	parseCCList,
 	S2SecurityClass,
@@ -20,12 +21,17 @@ import {
 	SecurityManager2,
 	SECURITY_S2_AUTH_TAG_LENGTH,
 	SPANState,
+	SPANTableEntry,
 	TransmitOptions,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { EncapsulationFlags, encodeCCList } from "@zwave-js/core/safe";
+import {
+	EncapsulationFlags,
+	encodeCCList,
+	NODE_ID_BROADCAST,
+} from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -46,6 +52,8 @@ import {
 } from "../lib/CommandClassDecorators";
 import {
 	MGRPExtension,
+	MOSExtension,
+	MPANExtension,
 	Security2Extension,
 	SPANExtension,
 } from "../lib/Security2/Extension";
@@ -115,13 +123,20 @@ function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 		);
 	} else if (!this.host.securityManager2) {
 		throw new ZWaveError(
-			`Secure commands (S2) can only be ${verb} when the network keys for the applHost are set!`,
+			`Secure commands (S2) can only be ${verb} when the network keys are configured!`,
 			ZWaveErrorCodes.Driver_NoSecurity,
 		);
 	}
 }
 
 const DECRYPT_ATTEMPTS = 5;
+
+interface DecryptionResult {
+	plaintext: Buffer;
+	authOK: boolean;
+	key?: Buffer;
+	iv?: Buffer;
+}
 
 // @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
@@ -192,6 +207,93 @@ export class Security2CCAPI extends CCAPI {
 		return true;
 	}
 
+	/** Notifies the target node that the MPAN state is out of sync */
+	public async sendMOS(): Promise<boolean> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NonceReport,
+		);
+
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		const cc = new Security2CCNonceReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			SOS: false,
+			MOS: true,
+		});
+
+		try {
+			await this.applHost.sendCommand(cc, {
+				...this.commandOptions,
+				// Seems we need these options or some nodes won't accept the nonce
+				transmitOptions:
+					TransmitOptions.ACK | TransmitOptions.AutoRoute,
+				// Only try sending a nonce once
+				maxSendAttempts: 1,
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Nonce,
+				// We don't want failures causing us to treat the node as asleep or dead
+				changeNodeStatusOnMissingACK: false,
+			});
+		} catch (e) {
+			if (isTransmissionError(e)) {
+				return false;
+			} else {
+				// Pass other errors through
+				throw e;
+			}
+		}
+		return true;
+	}
+
+	/** Sends the given MPAN to the node */
+	public async sendMPAN(
+		groupId: number,
+		innerMPANState: Buffer,
+	): Promise<boolean> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.MessageEncapsulation,
+		);
+
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		const cc = new Security2CCMessageEncapsulation(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			extensions: [
+				new MPANExtension({
+					groupId,
+					innerMPANState,
+				}),
+			],
+		});
+
+		try {
+			await this.applHost.sendCommand(cc, {
+				...this.commandOptions,
+				// Seems we need these options or some nodes won't accept the nonce
+				transmitOptions:
+					TransmitOptions.ACK | TransmitOptions.AutoRoute,
+				// Only try sending a nonce once
+				maxSendAttempts: 1,
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Nonce,
+				// We don't want failures causing us to treat the node as asleep or dead
+				changeNodeStatusOnMissingACK: false,
+			});
+		} catch (e) {
+			if (isTransmissionError(e)) {
+				return false;
+			} else {
+				// Pass other errors through
+				throw e;
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * Queries the securely supported commands for the current security class
 	 * @param securityClass Can be used to overwrite the security class to use. If this doesn't match the current one, new nonces will need to be exchanged.
@@ -220,7 +322,7 @@ export class Security2CCAPI extends CCAPI {
 		if (MultiChannelCC.requiresEncapsulation(cc)) {
 			cc = MultiChannelCC.encapsulate(this.applHost, cc);
 		}
-		cc = Security2CC.encapsulate(this.applHost, cc, securityClass);
+		cc = Security2CC.encapsulate(this.applHost, cc, { securityClass });
 
 		const response =
 			await this.applHost.sendCommand<Security2CCCommandsSupportedReport>(
@@ -616,12 +718,32 @@ export class Security2CC extends CommandClass {
 	public static encapsulate(
 		host: ZWaveHost,
 		cc: CommandClass,
-		securityClass?: SecurityClass,
+		options?: {
+			securityClass?: SecurityClass;
+			multicastOutOfSync?: boolean;
+			multicastGroupId?: number;
+		},
 	): Security2CCMessageEncapsulation {
+		// Determine which extensions must be used on the command
+		const extensions: Security2Extension[] = [];
+		if (options?.multicastOutOfSync) {
+			extensions.push(new MOSExtension());
+		}
+		if (options?.multicastGroupId != undefined) {
+			extensions.push(
+				new MGRPExtension({ groupId: options.multicastGroupId }),
+			);
+		}
+
+		// Make sure that S2 multicast uses broadcasts. While the specs mention that both multicast and broadcast
+		// are possible, it has been found that devices treat multicasts like singlecast followups and respond incorrectly.
+		const nodeId = cc.isMulticast() ? NODE_ID_BROADCAST : cc.nodeId;
+
 		const ret = new Security2CCMessageEncapsulation(host, {
-			nodeId: cc.nodeId,
+			nodeId,
 			encapsulated: cc,
-			securityClass,
+			securityClass: options?.securityClass,
+			extensions,
 		});
 
 		// Copy the encapsulation flags from the encapsulated command
@@ -637,7 +759,7 @@ interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
 	/** Can be used to override the default security class for the command */
 	securityClass?: SecurityClass;
 	extensions?: Security2Extension[];
-	encapsulated: CommandClass;
+	encapsulated?: CommandClass;
 }
 
 // An S2 encapsulated command may result in a NonceReport to be sent by the node if it couldn't decrypt the message
@@ -662,6 +784,24 @@ function testCCResponseForMessageEncapsulation(
 		return received.SOS && !!received.receiverEI;
 	}
 }
+
+function failNoSPAN(): never {
+	throw validatePayload.fail(ZWaveErrorCodes.Security2CC_NoSPAN);
+}
+
+function failNoMPAN(): never {
+	throw validatePayload.fail(ZWaveErrorCodes.Security2CC_NoMPAN);
+}
+
+type MulticastContext =
+	| {
+			isMulticast: true;
+			groupId: number;
+	  }
+	| {
+			isMulticast: false;
+			groupId?: number;
+	  };
 
 @CCCommand(Security2Command.MessageEncapsulation)
 @expectedCCResponse(
@@ -689,19 +829,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			// Check the sequence number to avoid duplicates
-			// TODO: distinguish between multicast and singlecast
 			this._sequenceNumber = this.payload[0];
 			const sendingNodeId = this.nodeId as number;
 
-			// Don't accept duplicate commands
-			const prevSequenceNumber = validateSequenceNumber.call(
-				this,
-				this._sequenceNumber,
-			);
-
 			// Ensure the node has a security class
-			// const node = this.getNode()!;
-			// validatePayload.withReason("The node is not included")(!!node);
 			const securityClass =
 				this.host.getHighestSecurityClass(sendingNodeId);
 			validatePayload.withReason("No security class granted")(
@@ -733,12 +864,58 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			};
 			if (hasExtensions) parseExtensions(this.payload);
 
+			const ctx = ((): MulticastContext => {
+				const multicastGroupId = this.getMulticastGroupId();
+				if (
+					options.frameType === "multicast" ||
+					options.frameType === "broadcast"
+				) {
+					if (multicastGroupId == undefined) {
+						throw validatePayload.fail(
+							"Multicast frames without MGRP extension",
+						);
+					}
+					return {
+						isMulticast: true,
+						groupId: multicastGroupId,
+					};
+				} else {
+					return { isMulticast: false, groupId: multicastGroupId };
+				}
+			})();
+
+			let prevSequenceNumber: number | undefined;
+			let mpanState:
+				| ReturnType<SecurityManager2["getPeerMPAN"]>
+				| undefined;
+			if (ctx.isMulticast) {
+				mpanState = this.host.securityManager2.getPeerMPAN(
+					sendingNodeId,
+					ctx.groupId,
+				);
+			} else {
+				// Don't accept duplicate Singlecast commands
+				prevSequenceNumber = validateSequenceNumber.call(
+					this,
+					this._sequenceNumber,
+				);
+
+				// When a node removes a singlecast message after a multicast group was marked out of sync,
+				// it must forget about the group.
+				if (ctx.groupId == undefined) {
+					this.host.securityManager2.resetOutOfSyncMPANs(
+						sendingNodeId,
+					);
+				}
+			}
+
 			const unencryptedPayload = this.payload.slice(0, offset);
 			const ciphertext = this.payload.slice(
 				offset,
 				-SECURITY_S2_AUTH_TAG_LENGTH,
 			);
 			const authTag = this.payload.slice(-SECURITY_S2_AUTH_TAG_LENGTH);
+			this.authTag = authTag;
 
 			const messageLength =
 				super.computeEncapsulationOverhead() + this.payload.length;
@@ -751,160 +928,52 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				unencryptedPayload,
 			);
 
-			// Decrypt payload and verify integrity
-			const spanState =
-				this.host.securityManager2.getSPANState(sendingNodeId);
-			const failNoSPAN = () => {
-				return validatePayload.fail(ZWaveErrorCodes.Security2CC_NoSPAN);
-			};
-
-			// If we are not able to establish an SPAN yet, fail the decryption
-			if (spanState.type === SPANState.None) {
-				return failNoSPAN();
-			} else if (spanState.type === SPANState.RemoteEI) {
-				// TODO: The specs are not clear how to handle this case
-				// For now, do the same as if we didn't have any EI
-				return failNoSPAN();
-			}
-
-			const decrypt = (): {
-				plaintext: Buffer;
-				authOK: boolean;
-				key?: Buffer;
-				iv?: Buffer;
-			} => {
-				const decryptWithNonce = (nonce: Buffer) => {
-					const { keyCCM: key } =
-						this.host.securityManager2.getKeysForNode(
-							sendingNodeId,
-						);
-
-					const iv = nonce;
-					return {
-						key,
-						iv,
-						...decryptAES128CCM(
-							key,
-							iv,
-							ciphertext,
-							authData,
-							authTag,
-						),
-					};
-				};
-				const getNonceAndDecrypt = () => {
-					const iv =
-						this.host.securityManager2.nextNonce(sendingNodeId);
-					return decryptWithNonce(iv);
-				};
-
-				if (spanState.type === SPANState.SPAN) {
-					// There SHOULD be a shared SPAN between both parties. But experience has shown that both could have
-					// sent a command at roughly the same time, using the same SPAN for encryption.
-					// To avoid a nasty desync and both nodes trying to resync at the same time, causing message loss,
-					// we accept commands encrypted with the previous SPAN under very specific circumstances:
-					if (
-						// The previous SPAN is still known, i.e. the node didn't send another command that was successfully decrypted
-						!!spanState.currentSPAN &&
-						// it is still valid
-						spanState.currentSPAN.expires > highResTimestamp() &&
-						// The received command is exactly the next, expected one
-						prevSequenceNumber != undefined &&
-						this._sequenceNumber ===
-							((prevSequenceNumber + 1) & 0xff) &&
-						// And in case of a mock-based test, do this only on the controller
-						!this.host.__internalIsMockNode
-					) {
-						const nonce = spanState.currentSPAN.nonce;
-						spanState.currentSPAN = undefined;
-						return decryptWithNonce(nonce);
-					} else {
-						// forgetting the current SPAN shouldn't be necessary but better be safe than sorry
-						spanState.currentSPAN = undefined;
-					}
-
-					// This can only happen if the security class is known
-					return getNonceAndDecrypt();
-				} else if (spanState.type === SPANState.LocalEI) {
-					// We've sent the other our receiver's EI and received its sender's EI,
-					// meaning we can now establish an SPAN
-					const senderEI = this.getSenderEI();
-					if (!senderEI) return failNoSPAN();
-					const receiverEI = spanState.receiverEI;
-
-					// How we do this depends on whether we know the security class of the other node
-					if (
-						this.host.securityManager2.tempKeys.has(sendingNodeId)
-					) {
-						// We're currently bootstrapping the node, it might be using a temporary key
-						this.host.securityManager2.initializeTempSPAN(
-							sendingNodeId,
-							senderEI,
-							receiverEI,
-						);
-						const ret = getNonceAndDecrypt();
-						// Decryption with the temporary key worked
-						if (ret.authOK) return ret;
-
-						// Reset the SPAN state and try with the recently granted security class
-						this.host.securityManager2.setSPANState(
-							sendingNodeId,
-							spanState,
-						);
-					}
-
-					if (securityClass != undefined) {
-						this.host.securityManager2.initializeSPAN(
-							sendingNodeId,
-							securityClass,
-							senderEI,
-							receiverEI,
-						);
-
-						return getNonceAndDecrypt();
-					} else {
-						// Not knowing it can happen if we just took over an existing network
-						// Try multiple security classes
-						const possibleSecurityClasses = securityClassOrder
-							.filter((s) => securityClassIsS2(s))
-							.filter(
-								(s) =>
-									this.host.hasSecurityClass(
-										sendingNodeId,
-										s,
-									) !== false,
-							);
-						for (const secClass of possibleSecurityClasses) {
-							// Initialize an SPAN with that security class
-							this.host.securityManager2.initializeSPAN(
-								sendingNodeId,
-								secClass,
-								senderEI,
-								receiverEI,
-							);
-							const ret = getNonceAndDecrypt();
-
-							// It worked, return the result and remember the security class
-							if (ret.authOK) {
-								this.host.setSecurityClass(
-									sendingNodeId,
-									secClass,
-									true,
-								);
-								return ret;
-							}
-							// Reset the SPAN state and try with the next security class
-							this.host.securityManager2.setSPANState(
-								sendingNodeId,
-								spanState,
-							);
-						}
-					}
+			let decrypt: () => DecryptionResult;
+			if (ctx.isMulticast) {
+				// For incoming multicast commands, make sure we have an MPAN
+				if (mpanState?.type !== MPANState.MPAN) {
+					// If we don't, mark the MPAN as out of sync, so we can respond accordingly on the singlecast followup
+					this.host.securityManager2.storePeerMPAN(
+						sendingNodeId,
+						ctx.groupId,
+						{ type: MPANState.OutOfSync },
+					);
+					throw failNoMPAN();
 				}
 
-				// Nothing worked, fail the decryption
-				return { plaintext: Buffer.from([]), authOK: false };
-			};
+				decrypt = () =>
+					this.decryptMulticast(
+						sendingNodeId,
+						ctx.groupId,
+						ciphertext,
+						authData,
+						authTag,
+					);
+			} else {
+				// Decrypt payload and verify integrity
+				const spanState =
+					this.host.securityManager2.getSPANState(sendingNodeId);
+
+				// If we are not able to establish an SPAN yet, fail the decryption
+				if (spanState.type === SPANState.None) {
+					throw failNoSPAN();
+				} else if (spanState.type === SPANState.RemoteEI) {
+					// TODO: The specs are not clear how to handle this case
+					// For now, do the same as if we didn't have any EI
+					throw failNoSPAN();
+				}
+
+				decrypt = () =>
+					this.decryptSinglecast(
+						sendingNodeId,
+						prevSequenceNumber!,
+						ciphertext,
+						authData,
+						authTag,
+						securityClass,
+						spanState,
+					);
+			}
 
 			let plaintext: Buffer | undefined;
 			let authOK = false;
@@ -918,11 +987,30 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				({ plaintext, authOK, key, iv } = decrypt());
 				if (!!authOK && !!plaintext) break;
 			}
+
 			// If authentication fails, do so with an error code that instructs the
 			// applHost to tell the node we have no nonce
 			if (!authOK || !plaintext) {
-				return validatePayload.fail(
-					ZWaveErrorCodes.Security2CC_CannotDecode,
+				if (ctx.isMulticast) {
+					// Mark the MPAN as out of sync
+					this.host.securityManager2.storePeerMPAN(
+						sendingNodeId,
+						ctx.groupId,
+						{ type: MPANState.OutOfSync },
+					);
+					throw validatePayload.fail(
+						ZWaveErrorCodes.Security2CC_CannotDecodeMulticast,
+					);
+				} else {
+					throw validatePayload.fail(
+						ZWaveErrorCodes.Security2CC_CannotDecode,
+					);
+				}
+			} else if (!ctx.isMulticast && ctx.groupId != undefined) {
+				// After reception of a singlecast followup, the MPAN state must be increased
+				this.host.securityManager2.tryIncrementPeerMPAN(
+					sendingNodeId,
+					ctx.groupId,
 				);
 			}
 
@@ -939,14 +1027,24 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					data: decryptedCCBytes,
 					fromEncapsulation: true,
 					encapCC: this,
+					frameType: options.frameType,
 				});
 			}
 			this.key = key;
 			this.iv = iv;
 		} else {
+			if (!options.encapsulated && !options.extensions?.length) {
+				throw new ZWaveError(
+					"Security S2 encapsulation requires an encapsulated CC and/or extensions",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
 			this._securityClass = options.securityClass;
-			this.encapsulated = options.encapsulated;
-			options.encapsulated.encapsulatingCC = this as any;
+			if (options.encapsulated) {
+				this.encapsulated = options.encapsulated;
+				options.encapsulated.encapsulatingCC = this as any;
+			}
 
 			this.extensions = options.extensions ?? [];
 			if (
@@ -966,6 +1064,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	// Only used for testing/debugging purposes
 	private key?: Buffer;
 	private iv?: Buffer;
+	private authData?: Buffer;
+	private authTag?: Buffer;
+	private ciphertext?: Buffer;
 
 	private _sequenceNumber: number | undefined;
 	/**
@@ -976,10 +1077,15 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	 */
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
-			this._sequenceNumber =
-				this.host.securityManager2.nextSequenceNumber(
-					this.nodeId as number,
+			if (this.isSinglecast()) {
+				this._sequenceNumber =
+					this.host.securityManager2.nextSequenceNumber(this.nodeId);
+			} else {
+				const groupId = this.getDestinationIDTX();
+				return this.host.securityManager2.nextMulticastSequenceNumber(
+					groupId,
 				);
+			}
 		}
 		return this._sequenceNumber;
 	}
@@ -987,16 +1093,18 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public encapsulated?: CommandClass;
 	public extensions: Security2Extension[];
 
-	public unsetSequenceNumber(): void {
+	public override prepareRetransmission(): void {
+		super.prepareRetransmission();
 		this._sequenceNumber = undefined;
 	}
 
 	private getDestinationIDTX(): number {
+		if (this.isSinglecast()) return this.nodeId;
+
 		const mgrpExtension = this.extensions.find(
 			(e): e is MGRPExtension => e instanceof MGRPExtension,
 		);
 		if (mgrpExtension) return mgrpExtension.groupId;
-		else if (typeof this.nodeId === "number") return this.nodeId;
 
 		throw new ZWaveError(
 			"Multicast Security S2 encapsulation requires the MGRP extension",
@@ -1005,12 +1113,22 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 
 	private getDestinationIDRX(): number {
-		const mgrpExtension = this.extensions.find(
+		return this.getMulticastGroupId() ?? this.host.ownNodeId;
+	}
+
+	private getMGRPExtension(): MGRPExtension | undefined {
+		return this.extensions.find(
 			(e): e is MGRPExtension => e instanceof MGRPExtension,
 		);
-		if (mgrpExtension) return mgrpExtension.groupId;
+	}
 
-		return this.host.ownNodeId;
+	public getMulticastGroupId(): number | undefined {
+		const mgrpExtension = this.getMGRPExtension();
+		return mgrpExtension?.groupId;
+	}
+
+	public hasMOSExtension(): boolean {
+		return this.extensions.some((e) => e instanceof MOSExtension);
 	}
 
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
@@ -1021,10 +1139,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		return spanExtension?.senderEI;
 	}
 
-	public serialize(): Buffer {
-		// TODO: Support Multicast
-		// Include Sender EI in the command if we only have the receiver's EI
-		const receiverNodeId = this.getDestinationIDTX();
+	private maybeAddSPANExtension(): void {
+		if (!this.isSinglecast()) return;
+
+		const receiverNodeId: number = this.nodeId;
 		const spanState =
 			this.host.securityManager2.getSPANState(receiverNodeId);
 		if (
@@ -1081,6 +1199,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				this.extensions.push(spanExtension);
 			}
 		}
+	}
+
+	public serialize(): Buffer {
+		// Include Sender EI in the command if we only have the receiver's EI
+		this.maybeAddSPANExtension();
 
 		const unencryptedExtensions = this.extensions.filter(
 			(e) => !e.isEncrypted(),
@@ -1108,26 +1231,40 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		]);
 
 		// Generate the authentication data for CCM encryption
+		const destinationTag = this.getDestinationIDTX();
 		const messageLength =
 			this.computeEncapsulationOverhead() + serializedCC.length;
 		const authData = getAuthenticationData(
 			this.host.ownNodeId,
-			receiverNodeId,
+			destinationTag,
 			this.host.homeId,
 			messageLength,
 			unencryptedPayload,
 		);
 
-		// Generate a nonce for encryption, and remember it to attempt decryption
-		// of potential in-flight messages from the target node.
-		const iv = this.host.securityManager2.nextNonce(receiverNodeId, true);
-		const { keyCCM: key } =
-			// Prefer the overridden security class if it was given
-			this._securityClass != undefined
-				? this.host.securityManager2.getKeysForSecurityClass(
-						this._securityClass,
-				  )
-				: this.host.securityManager2.getKeysForNode(receiverNodeId);
+		let key: Buffer;
+		let iv: Buffer;
+
+		if (this.isSinglecast()) {
+			// Singlecast:
+			// Generate a nonce for encryption, and remember it to attempt decryption
+			// of potential in-flight messages from the target node.
+			iv = this.host.securityManager2.nextNonce(this.nodeId, true);
+			const { keyCCM } =
+				// Prefer the overridden security class if it was given
+				this._securityClass != undefined
+					? this.host.securityManager2.getKeysForSecurityClass(
+							this._securityClass,
+					  )
+					: this.host.securityManager2.getKeysForNode(this.nodeId);
+			key = keyCCM;
+		} else {
+			// Multicast:
+			const keyAndIV =
+				this.host.securityManager2.getMulticastKeyAndIV(destinationTag);
+			key = keyAndIV.key;
+			iv = keyAndIV.iv;
+		}
 
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,
@@ -1140,6 +1277,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		// Remember key and IV for debugging purposes
 		this.key = key;
 		this.iv = iv;
+		this.authData = authData;
+		this.authTag = authTag;
+		this.ciphertext = ciphertextPayload;
 
 		this.payload = Buffer.concat([
 			unencryptedPayload,
@@ -1177,17 +1317,189 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				.join("");
 		}
 		// Log the used keys in integration tests
-		if (process.env.NODE_ENV === "test") {
+		if (
+			process.env.NODE_ENV === "test" ||
+			process.env.NODE_ENV === "development"
+		) {
 			if (this.key) {
 				message.key = buffer2hex(this.key);
 			}
 			if (this.iv) {
 				message.IV = buffer2hex(this.iv);
 			}
+			if (this.ciphertext) {
+				message.ciphertext = buffer2hex(this.ciphertext);
+			}
+			if (this.authData) {
+				message["auth data"] = buffer2hex(this.authData);
+			}
+			if (this.authTag) {
+				message["auth tag"] = buffer2hex(this.authTag);
+			}
 		}
 		return {
 			...super.toLogEntry(applHost),
 			message,
+		};
+	}
+
+	private decryptSinglecast(
+		sendingNodeId: number,
+		prevSequenceNumber: number,
+		ciphertext: Buffer,
+		authData: Buffer,
+		authTag: Buffer,
+		securityClass: SecurityClass | undefined,
+		spanState: SPANTableEntry & {
+			type: SPANState.SPAN | SPANState.LocalEI;
+		},
+	): {
+		plaintext: Buffer;
+		authOK: boolean;
+		key?: Buffer;
+		iv?: Buffer;
+	} {
+		const decryptWithNonce = (nonce: Buffer) => {
+			const { keyCCM: key } =
+				this.host.securityManager2.getKeysForNode(sendingNodeId);
+
+			const iv = nonce;
+			return {
+				key,
+				iv,
+				...decryptAES128CCM(key, iv, ciphertext, authData, authTag),
+			};
+		};
+		const getNonceAndDecrypt = () => {
+			const iv = this.host.securityManager2.nextNonce(sendingNodeId);
+			return decryptWithNonce(iv);
+		};
+
+		if (spanState.type === SPANState.SPAN) {
+			// There SHOULD be a shared SPAN between both parties. But experience has shown that both could have
+			// sent a command at roughly the same time, using the same SPAN for encryption.
+			// To avoid a nasty desync and both nodes trying to resync at the same time, causing message loss,
+			// we accept commands encrypted with the previous SPAN under very specific circumstances:
+			if (
+				// The previous SPAN is still known, i.e. the node didn't send another command that was successfully decrypted
+				!!spanState.currentSPAN &&
+				// it is still valid
+				spanState.currentSPAN.expires > highResTimestamp() &&
+				// The received command is exactly the next, expected one
+				prevSequenceNumber != undefined &&
+				this["_sequenceNumber"] === ((prevSequenceNumber + 1) & 0xff) &&
+				// And in case of a mock-based test, do this only on the controller
+				!this.host.__internalIsMockNode
+			) {
+				const nonce = spanState.currentSPAN.nonce;
+				spanState.currentSPAN = undefined;
+				return decryptWithNonce(nonce);
+			} else {
+				// forgetting the current SPAN shouldn't be necessary but better be safe than sorry
+				spanState.currentSPAN = undefined;
+			}
+
+			// This can only happen if the security class is known
+			return getNonceAndDecrypt();
+		} else if (spanState.type === SPANState.LocalEI) {
+			// We've sent the other our receiver's EI and received its sender's EI,
+			// meaning we can now establish an SPAN
+			const senderEI = this.getSenderEI();
+			if (!senderEI) throw failNoSPAN();
+			const receiverEI = spanState.receiverEI;
+
+			// How we do this depends on whether we know the security class of the other node
+			if (this.host.securityManager2.tempKeys.has(sendingNodeId)) {
+				// We're currently bootstrapping the node, it might be using a temporary key
+				this.host.securityManager2.initializeTempSPAN(
+					sendingNodeId,
+					senderEI,
+					receiverEI,
+				);
+				const ret = getNonceAndDecrypt();
+				// Decryption with the temporary key worked
+				if (ret.authOK) return ret;
+
+				// Reset the SPAN state and try with the recently granted security class
+				this.host.securityManager2.setSPANState(
+					sendingNodeId,
+					spanState,
+				);
+			}
+
+			if (securityClass != undefined) {
+				this.host.securityManager2.initializeSPAN(
+					sendingNodeId,
+					securityClass,
+					senderEI,
+					receiverEI,
+				);
+
+				return getNonceAndDecrypt();
+			} else {
+				// Not knowing it can happen if we just took over an existing network
+				// Try multiple security classes
+				const possibleSecurityClasses = securityClassOrder
+					.filter((s) => securityClassIsS2(s))
+					.filter(
+						(s) =>
+							this.host.hasSecurityClass(sendingNodeId, s) !==
+							false,
+					);
+				for (const secClass of possibleSecurityClasses) {
+					// Initialize an SPAN with that security class
+					this.host.securityManager2.initializeSPAN(
+						sendingNodeId,
+						secClass,
+						senderEI,
+						receiverEI,
+					);
+					const ret = getNonceAndDecrypt();
+
+					// It worked, return the result and remember the security class
+					if (ret.authOK) {
+						this.host.setSecurityClass(
+							sendingNodeId,
+							secClass,
+							true,
+						);
+						return ret;
+					}
+					// Reset the SPAN state and try with the next security class
+					this.host.securityManager2.setSPANState(
+						sendingNodeId,
+						spanState,
+					);
+				}
+			}
+		}
+
+		// Nothing worked, fail the decryption
+		return { plaintext: Buffer.from([]), authOK: false };
+	}
+
+	private decryptMulticast(
+		sendingNodeId: number,
+		groupId: number,
+		ciphertext: Buffer,
+		authData: Buffer,
+		authTag: Buffer,
+	): {
+		plaintext: Buffer;
+		authOK: boolean;
+		key?: Buffer;
+		iv?: Buffer;
+	} {
+		const iv = this.host.securityManager2.nextPeerMPAN(
+			sendingNodeId,
+			groupId,
+		);
+		const { keyCCM: key } =
+			this.host.securityManager2.getKeysForNode(sendingNodeId);
+		return {
+			key,
+			iv,
+			...decryptAES128CCM(key, iv, ciphertext, authData, authTag),
 		};
 	}
 }

@@ -1,5 +1,6 @@
 import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
+	FrameType,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
@@ -65,6 +66,7 @@ export class BridgeApplicationCommandRequest
 			data: this.payload.slice(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 			origin: options.origin,
+			frameType: this.frameType,
 		}) as SinglecastCC<CommandClass>;
 		offset += commandLength;
 
@@ -86,7 +88,7 @@ export class BridgeApplicationCommandRequest
 	}
 
 	public readonly routedBusy: boolean;
-	public readonly frameType: "singlecast" | "broadcast" | "multicast";
+	public readonly frameType: FrameType;
 	public readonly targetNodeId: number | number[];
 	public readonly isExploreFrame: boolean;
 	public readonly isForeignFrame: boolean;

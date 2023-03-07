@@ -1,6 +1,8 @@
 import {
+	BroadcastCC,
 	CommandClasses,
 	EncapsulationFlags,
+	FrameType,
 	getCCName,
 	ICommandClass,
 	isZWaveError,
@@ -45,6 +47,7 @@ import {
 import {
 	EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
+	isMultiEncapsulatingCommandClass,
 } from "./EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
@@ -60,6 +63,8 @@ import {
 export type CommandClassDeserializationOptions = {
 	data: Buffer;
 	origin?: MessageOrigin;
+	/** If known, the frame type of the containing message */
+	frameType?: FrameType;
 } & (
 	| {
 			fromEncapsulation?: false;
@@ -163,11 +168,7 @@ export class CommandClass implements ICommandClass {
 
 		if (this instanceof InvalidCC) return;
 
-		if (
-			options.origin !== MessageOrigin.Host &&
-			this.isSinglecast() &&
-			this.nodeId !== NODE_ID_BROADCAST
-		) {
+		if (options.origin !== MessageOrigin.Host && this.isSinglecast()) {
 			// For singlecast CCs, set the CC version as high as possible
 			this.version = this.host.getSafeCCVersionForNode(
 				this.ccId,
@@ -182,7 +183,7 @@ export class CommandClass implements ICommandClass {
 			);
 
 			// Send secure commands if necessary
-			this.setEncapsulationFlag(
+			this.toggleEncapsulationFlag(
 				EncapsulationFlags.Security,
 				this.host.isCCSecure(
 					this.ccId,
@@ -230,8 +231,8 @@ export class CommandClass implements ICommandClass {
 	 */
 	public encapsulationFlags: EncapsulationFlags = EncapsulationFlags.None;
 
-	/** Activates or deactivates the given encapsulation flag */
-	public setEncapsulationFlag(
+	/** Activates or deactivates the given encapsulation flag(s) */
+	public toggleEncapsulationFlag(
 		flag: EncapsulationFlags,
 		active: boolean,
 	): void {
@@ -320,6 +321,10 @@ export class CommandClass implements ICommandClass {
 			this.payload.copy(data, 1 + ccIdLength);
 		}
 		return data;
+	}
+
+	public prepareRetransmission(): void {
+		// Do nothing by default
 	}
 
 	/** Extracts the CC id from a buffer that contains a serialized CC */
@@ -525,11 +530,17 @@ export class CommandClass implements ICommandClass {
 	}
 
 	public isSinglecast(): this is SinglecastCC<this> {
-		return typeof this.nodeId === "number";
+		return (
+			typeof this.nodeId === "number" && this.nodeId !== NODE_ID_BROADCAST
+		);
 	}
 
 	public isMulticast(): this is MulticastCC<this> {
 		return isArray(this.nodeId);
+	}
+
+	public isBroadcast(): this is BroadcastCC<this> {
+		return this.nodeId === NODE_ID_BROADCAST;
 	}
 
 	/**
@@ -1031,7 +1042,7 @@ export class CommandClass implements ICommandClass {
 		return false;
 	}
 
-	/** Traverses the encapsulation stack of this CC and returns the one that has the given CC id and (optionally) CC Command if that exists. */
+	/** Traverses the encapsulation stack of this CC outwards and returns the one that has the given CC id and (optionally) CC Command if that exists. */
 	public getEncapsulatingCC(
 		ccId: CommandClasses,
 		ccCommand?: number,
@@ -1044,6 +1055,27 @@ export class CommandClass implements ICommandClass {
 				(ccCommand === undefined || cc.ccCommand === ccCommand)
 			) {
 				return cc;
+			}
+		}
+	}
+
+	/** Traverses the encapsulation stack of this CC inwards and returns the one that has the given CC id and (optionally) CC Command if that exists. */
+	public getEncapsulatedCC(
+		ccId: CommandClasses,
+		ccCommand?: number,
+	): CommandClass | undefined {
+		const predicate = (cc: CommandClass): boolean =>
+			cc.ccId === ccId &&
+			(ccCommand === undefined || cc.ccCommand === ccCommand);
+
+		if (isEncapsulatingCommandClass(this)) {
+			if (predicate(this.encapsulated)) return this.encapsulated;
+			return this.encapsulated.getEncapsulatedCC(ccId, ccCommand);
+		} else if (isMultiEncapsulatingCommandClass(this)) {
+			for (const encapsulated of this.encapsulated) {
+				if (predicate(encapsulated)) return encapsulated;
+				const ret = encapsulated.getEncapsulatedCC(ccId, ccCommand);
+				if (ret) return ret;
 			}
 		}
 	}

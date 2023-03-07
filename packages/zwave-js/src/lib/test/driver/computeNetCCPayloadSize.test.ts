@@ -71,6 +71,6 @@ test("should compute the correct net payload sizes", (t) => {
 	const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
 		nodeId: 2,
 	});
-	testMsg3.setEncapsulationFlag(EncapsulationFlags.Security, true);
+	testMsg3.toggleEncapsulationFlag(EncapsulationFlags.Security, true);
 	t.is(driver.computeNetCCPayloadSize(testMsg3), 46 - 20 - 2);
 });

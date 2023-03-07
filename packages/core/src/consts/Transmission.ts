@@ -60,6 +60,8 @@ export enum TransmitStatus {
 	NoRoute = 0x04,
 }
 
+export type FrameType = "singlecast" | "broadcast" | "multicast";
+
 /** A number between -128 and +124 dBm or one of the special values in {@link RssiError} indicating an error */
 export type RSSI = number | RssiError;
 
@@ -187,8 +189,16 @@ export type SupervisionOptions =
 			useSupervision: false;
 	  };
 
+export type SendCommandSecurityS2Options = {
+	/** Whether the MOS extension should be included in S2 message encapsulation */
+	s2MulticastOutOfSync?: boolean;
+	/** The optional multicast group ID to use for S2 message encapsulation */
+	s2MulticastGroupId?: number;
+};
+
 export type SendCommandOptions = SendMessageOptions &
-	SupervisionOptions & {
+	SupervisionOptions &
+	SendCommandSecurityS2Options & {
 		/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 		maxSendAttempts?: number;
 		/** Whether the driver should automatically handle the encapsulation. Default: true */

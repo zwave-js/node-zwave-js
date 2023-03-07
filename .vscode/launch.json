@@ -18,6 +18,7 @@
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
+				"NODE_ENV": "development"
 				// "NO_CACHE": "true"
 				// "LOGLEVEL": "info"
 			},

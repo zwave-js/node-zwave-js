@@ -2830,18 +2830,22 @@ protocol version:      ${this.protocolVersion}`;
 	/**
 	 * Is called when a nonce report is received that does not belong to any transaction.
 	 */
-	private handleSecurity2NonceReport(command: Security2CCNonceReport): void {
-		const secMan = this.driver.securityManager2;
-		if (!secMan) return;
+	private handleSecurity2NonceReport(_command: Security2CCNonceReport): void {
+		// const secMan = this.driver.securityManager2;
+		// if (!secMan) return;
 
-		if (command.SOS && command.receiverEI) {
-			// The node couldn't decrypt the last command we sent it. Invalidate
-			// the shared SPAN, since it did the same
-			secMan.storeRemoteEI(this.nodeId, command.receiverEI);
-		}
+		// This has the potential of resetting our SPAN state in the middle of a transaction which may expect it to be valid
+		// So we probably shouldn't react here, and instead handle the NonceReport we'll get in response to the next command we send
 
+		// if (command.SOS && command.receiverEI) {
+		// 	// The node couldn't decrypt the last command we sent it. Invalidate
+		// 	// the shared SPAN, since it did the same
+		// 	secMan.storeRemoteEI(this.nodeId, command.receiverEI);
+		// }
+
+		// Since we landed here, this is not in response to any command we sent
 		this.driver.controllerLog.logNode(this.id, {
-			message: `received S2 nonce, not sure what to do with it`,
+			message: `received S2 nonce without an active transaction, not sure what to do with it`,
 			level: "warn",
 			direction: "inbound",
 		});

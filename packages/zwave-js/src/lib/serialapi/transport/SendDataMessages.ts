@@ -93,7 +93,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 				this.command = undefined as any;
 			}
 		} else {
-			if (!options.command.isSinglecast()) {
+			if (
+				!options.command.isSinglecast() &&
+				!options.command.isBroadcast()
+			) {
 				throw new ZWaveError(
 					`SendDataRequest can only be used for singlecast and broadcast CCs`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -129,8 +132,24 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		return this._nodeId;
 	}
 
+	// Cache the serialized CC, so we can check if it needs to be fragmented
+	private _serializedCC: Buffer | undefined;
+	/** @internal */
+	public serializeCC(): Buffer {
+		if (!this._serializedCC) {
+			this._serializedCC = this.command.serialize();
+		}
+		return this._serializedCC;
+	}
+
+	public prepareRetransmission(): void {
+		this.command.prepareRetransmission();
+		this._serializedCC = undefined;
+		this.callbackId = undefined;
+	}
+
 	public serialize(): Buffer {
-		const serializedCC = this.command.serialize();
+		const serializedCC = this.serializeCC();
 		this.payload = Buffer.concat([
 			Buffer.from([this.command.nodeId, serializedCC.length]),
 			serializedCC,
@@ -159,7 +178,12 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public expectsNodeUpdate(): boolean {
-		return this.command.expectsCCResponse();
+		return (
+			// Only true singlecast commands may expect a response
+			this.command.isSinglecast() &&
+			// ... and only if the command expects a response
+			this.command.expectsCCResponse()
+		);
 	}
 
 	public isExpectedNodeUpdate(msg: Message): boolean {
@@ -353,9 +377,24 @@ export class SendDataMulticastRequest<
 		return undefined;
 	}
 
+	// Cache the serialized CC, so we can check if it needs to be fragmented
+	private _serializedCC: Buffer | undefined;
+	/** @internal */
+	public serializeCC(): Buffer {
+		if (!this._serializedCC) {
+			this._serializedCC = this.command.serialize();
+		}
+		return this._serializedCC;
+	}
+
+	public prepareRetransmission(): void {
+		this.command.prepareRetransmission();
+		this._serializedCC = undefined;
+		this.callbackId = undefined;
+	}
+
 	public serialize(): Buffer {
-		// The payload CC must not include the target node ids, so strip the header out
-		const serializedCC = this.command.serialize();
+		const serializedCC = this.serializeCC();
 		this.payload = Buffer.concat([
 			// # of target nodes and nodeIds
 			Buffer.from([
@@ -380,6 +419,16 @@ export class SendDataMulticastRequest<
 				"callback id": this.callbackId,
 			},
 		};
+	}
+
+	/** Computes the maximum payload size that can be transmitted with this message */
+	public getMaxPayloadLength(): number {
+		// From INS13954-13, chapter 4.3.3.6
+		if (this.transmitOptions & TransmitOptions.ACK) {
+			if (this.transmitOptions & TransmitOptions.Explore) return 17;
+			if (this.transmitOptions & TransmitOptions.AutoRoute) return 19;
+		}
+		return 25;
 	}
 }
 
