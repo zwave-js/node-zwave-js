@@ -13,6 +13,25 @@ async sendNonce(): Promise<boolean>;
 Sends a nonce to the node, either in response to a NonceGet request or a message that failed to decrypt. The message is sent without any retransmission etc.
 The return value indicates whether a nonce was successfully sent.
 
+### `sendMOS`
+
+```ts
+async sendMOS(): Promise<boolean>;
+```
+
+Notifies the target node that the MPAN state is out of sync.
+
+### `sendMPAN`
+
+```ts
+async sendMPAN(
+	groupId: number,
+	innerMPANState: Buffer,
+): Promise<boolean>;
+```
+
+Sends the given MPAN to the node.
+
 ### `getSupportedCommands`
 
 ```ts
