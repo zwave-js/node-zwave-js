@@ -35,7 +35,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }} # This doesn't need special permissions
           result-encoding: string
           script: |
-            console.dir(github);
             const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
             return bot.shouldAutomerge({github, context});
 
@@ -52,7 +51,7 @@ jobs:
 
             await github.rest.pulls.createReview({
               ...options,
-              pull_number: github.event.pull_request.number,
+              pull_number: context.payload.pull_request.number,
               event: "APPROVE"
             });
 
