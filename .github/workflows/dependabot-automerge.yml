@@ -32,11 +32,33 @@ jobs:
         env:
           updatedDependenciesJson: ${{ steps.dependabot-metadata.outputs.updated-dependencies-json }}
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }} # This doesn't need special permissions
           result-encoding: string
           script: |
             const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
             return bot.shouldAutomerge({github, context});
 
-      - run: |
-          echo "Should automerge: ${{ steps.should-automerge.outputs.result }}"
+      - name: Approve PR
+        if: ${{ steps.should-automerge.outputs.result == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.PAT }}
+          script: |
+            const options = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            };
+
+            await github.rest.pulls.createReview({
+              ...options,
+              pull_number: context.payload.issue.number,
+              event: "APPROVE"
+            });
+
+      - name: Auto-merge PR
+        if: ${{ steps.should-automerge.outputs.result == 'true' }}
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        run: |
+          gh pr merge --auto --squash
