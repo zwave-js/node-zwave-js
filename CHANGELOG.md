@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.11.0 (2023-03-07)
 ### Features
 * Add `stateful` and `secret` flags to `ValueMetadata` (#5467)
 * Added support for `Security S2` Multicast (#5475)
