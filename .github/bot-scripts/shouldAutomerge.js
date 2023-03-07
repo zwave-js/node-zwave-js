@@ -55,12 +55,7 @@ function shouldAutomerge(update) {
 	);
 }
 
-/**
- * @param {{github: Github, context: Context}} param
- */
-async function main(param) {
-	const { github, context } = param;
-
+async function main() {
 	/** @type {any[]} */
 	const updates = JSON.parse(
 		/** @type {string} */
