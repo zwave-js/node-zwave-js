@@ -27,7 +27,7 @@ jobs:
       - name: Check if PR should be auto-merged
         uses: actions/github-script@v6
         env:
-          metadata: steps.dependabot-metadata.outputs
+          metadata: ${{ steps.dependabot-metadata.outputs }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           result-encoding: string
@@ -36,4 +36,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             };
+            console.log(process.env.metadata)
             console.dir(JSON.parse(process.env.metadata));
