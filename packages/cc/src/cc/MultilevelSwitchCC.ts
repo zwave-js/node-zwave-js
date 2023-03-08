@@ -427,7 +427,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				// Singlecast only: Try to retrieve the current value to use as the start level,
 				// even if the target node is going to ignore it. There might
 				// be some bugged devices that ignore the ignore start level flag.
-				const startLevel = this.tryGetValueDB()?.getValue<number>(
+				const startLevel = this.tryGetValueDB()?.getValue<
+					Maybe<number>
+				>(
 					MultilevelSwitchCCValues.currentValue.endpoint(
 						this.endpoint.index,
 					),
@@ -437,7 +439,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				return this.startLevelChange({
 					direction,
 					ignoreStartLevel: true,
-					startLevel,
+					startLevel:
+						typeof startLevel === "number" ? startLevel : undefined,
 					duration,
 				});
 			} else {
