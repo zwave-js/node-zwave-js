@@ -496,6 +496,22 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			addSequentialEndpoints();
 		}
 
+		// Step 2.5: remove ignored endpoints
+		const removeEndpoints =
+			applHost.getDeviceConfig?.(node.id)?.compat?.removeEndpoints ?? [];
+		if (removeEndpoints.length) {
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `The following endpoints are ignored through the config file: ${removeEndpoints.join(
+					", ",
+				)}`,
+				direction: "none",
+			});
+			allEndpoints = allEndpoints.filter(
+				(e) => !removeEndpoints.includes(e),
+			);
+		}
+
 		// Step 3: Query endpoints
 		let hasQueriedCapabilities = false;
 		for (const endpoint of allEndpoints) {

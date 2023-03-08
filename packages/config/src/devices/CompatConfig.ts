@@ -183,6 +183,26 @@ compat option preserveEndpoints must be "*" or an array of positive integers`,
 			this.preserveEndpoints = definition.preserveEndpoints;
 		}
 
+		if (definition.removeEndpoints != undefined) {
+			if (
+				!(
+					isArray(definition.removeEndpoints) &&
+					definition.removeEndpoints.every(
+						(d: any) =>
+							typeof d === "number" && d % 1 === 0 && d > 0,
+					)
+				)
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option removeEndpoints must be an array of positive integers`,
+				);
+			}
+
+			this.removeEndpoints = definition.removeEndpoints;
+		}
+
 		if (definition.skipConfigurationNameQuery != undefined) {
 			if (definition.skipConfigurationNameQuery !== true) {
 				throwInvalidConfig(
@@ -529,6 +549,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 	};
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly preserveEndpoints?: "*" | readonly number[];
+	public readonly removeEndpoints?: readonly number[];
 	public readonly reportTimeout?: number;
 	public readonly skipConfigurationNameQuery?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
@@ -566,6 +587,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 			"reportTimeout",
 			"preserveRootApplicationCCValueIDs",
 			"preserveEndpoints",
+			"removeEndpoints",
 			"skipConfigurationNameQuery",
 			"skipConfigurationInfoQuery",
 			"treatBasicSetAsEvent",

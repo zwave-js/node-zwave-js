@@ -634,6 +634,14 @@
 						}
 					}
 				},
+				"removeEndpoints": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "integer",
+						"minimum": 1
+					}
+				},
 				"reportTimeout": {
 					"type": "number",
 					"minimum": 1000,
