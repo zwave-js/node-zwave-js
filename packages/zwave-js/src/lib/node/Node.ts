@@ -4928,8 +4928,22 @@ protocol version:      ${this.protocolVersion}`;
 				const backgroundRSSI =
 					await this.driver.controller.getBackgroundRSSI();
 				if (`rssiChannel${channel}` in backgroundRSSI) {
-					snrMargin =
-						rssi - (backgroundRSSI as any)[`rssiChannel${channel}`];
+					const bgRSSI = (backgroundRSSI as any)[
+						`rssiChannel${channel}`
+					];
+					if (isRssiError(bgRSSI)) {
+						if (bgRSSI === RssiError.ReceiverSaturated) {
+							// RSSI is too high to measure, so there can't be any margin left
+							snrMargin = 0;
+						} else if (bgRSSI === RssiError.NoSignalDetected) {
+							// It is very quiet, assume -128 dBm
+							snrMargin = rssi + 128;
+						} else {
+							snrMargin = undefined;
+						}
+					} else {
+						snrMargin = rssi - bgRSSI;
+					}
 				}
 			}
 

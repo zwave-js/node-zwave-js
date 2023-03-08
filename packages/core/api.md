@@ -74,6 +74,11 @@ export interface AssertZWaveErrorOptions {
 // @public (undocumented)
 export function authHomeIdFromDSK(dsk: Buffer): Buffer;
 
+// Warning: (ae-missing-release-tag) "averageRSSI" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function averageRSSI(acc: RSSI, rssi: RSSI, weight: number): RSSI;
+
 // Warning: (ae-missing-release-tag) "BroadcastCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)

@@ -75,6 +75,26 @@ export function isRssiError(rssi: RSSI): rssi is RssiError {
 	return rssi >= RssiError.NoSignalDetected;
 }
 
+/** Averages RSSI measurements using an exponential moving average with the given weight for the accumulator */
+export function averageRSSI(acc: RSSI, rssi: RSSI, weight: number): RSSI {
+	if (isRssiError(rssi)) {
+		switch (rssi) {
+			case RssiError.NotAvailable:
+				return acc;
+			case RssiError.ReceiverSaturated:
+				// Assume rssi is 0 dBm
+				rssi = 0;
+				break;
+			case RssiError.NoSignalDetected:
+				// Assume rssi is -128 dBm
+				rssi = -128;
+				break;
+		}
+	}
+
+	return Math.round(acc * weight + rssi * (1 - weight));
+}
+
 /**
  * Converts an RSSI value to a human readable format, i.e. the measurement including the unit or the corresponding error message.
  */

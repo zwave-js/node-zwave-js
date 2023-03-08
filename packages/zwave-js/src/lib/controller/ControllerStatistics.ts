@@ -1,3 +1,4 @@
+import type { RSSI } from "@zwave-js/core";
 import { StatisticsHost } from "../driver/Statistics";
 
 export class ControllerStatisticsHost extends StatisticsHost<ControllerStatistics> {
@@ -36,4 +37,28 @@ export interface ControllerStatistics {
 	timeoutCallback: number;
 	/** No. of outgoing messages that were dropped because they could not be sent */
 	messagesDroppedTX: number;
+
+	/** Background RSSI of the network. */
+	backgroundRSSI?: {
+		/**
+		 * Average background RSSI of the network.
+		 * Consecutive measurements are combined using an exponential moving average.
+		 */
+		average: {
+			rssiChannel0: RSSI;
+			rssiChannel1: RSSI;
+			rssiChannel2?: RSSI;
+		};
+		/**
+		 * Current background RSSI of the network.
+		 * Can be compared to the average to detect interference/jamming.
+		 */
+		current: {
+			rssiChannel0: RSSI;
+			rssiChannel1: RSSI;
+			rssiChannel2?: RSSI;
+		};
+		/** Timestamp of the most recent measurement */
+		timestamp: number;
+	};
 }
