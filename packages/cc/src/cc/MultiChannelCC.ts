@@ -398,6 +398,18 @@ export class MultiChannelCC extends CommandClass {
 
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
+
+		const removeEndpoints = applHost.getDeviceConfig?.(node.id)?.compat
+			?.removeEndpoints;
+		if (removeEndpoints === "*") {
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `Skipping ${this.ccName} interview b/c all endpoints are ignored by the device config file...`,
+				direction: "none",
+			});
+			return;
+		}
+
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
@@ -497,9 +509,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		}
 
 		// Step 2.5: remove ignored endpoints
-		const removeEndpoints =
-			applHost.getDeviceConfig?.(node.id)?.compat?.removeEndpoints ?? [];
-		if (removeEndpoints.length) {
+		if (removeEndpoints?.length) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `The following endpoints are ignored through the config file: ${removeEndpoints.join(

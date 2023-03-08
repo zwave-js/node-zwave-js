@@ -403,9 +403,10 @@ The Z-Wave+ specs mandate that the root endpoint must **mirror** the application
 
 ### `removeEndpoints`
 
-Some devices expose endpoints which are not needed or don't behave correctly. Using this flag, they can be ignored/hidden from applications. Only endpoints starting from `1` can be removed. Example:
+Some devices expose endpoints which are not needed or don't behave correctly. Using this flag, they can be ignored/hidden from applications. Example:
 
 ```js
+"removeEndpoints": "*",    // to remove all endpoints and only preserve the root device
 "removeEndpoints": [3, 5], // to remove endpoints 3 and 5
 ```
 

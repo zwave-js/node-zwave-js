@@ -150,7 +150,7 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     // (undocumented)
     readonly removeCCs?: ReadonlyMap<CommandClasses, "*" | readonly number[]>;
     // (undocumented)
-    readonly removeEndpoints?: readonly number[];
+    readonly removeEndpoints?: "*" | readonly number[];
     // (undocumented)
     readonly reportTimeout?: number;
     // (undocumented)
