@@ -175,10 +175,10 @@ export const AlarmSensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -489,10 +489,10 @@ export const AssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -517,10 +517,10 @@ export const AssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -542,10 +542,10 @@ export const AssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -567,10 +567,10 @@ export const AssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -745,10 +745,10 @@ export const AssociationGroupInfoCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -773,10 +773,10 @@ export const AssociationGroupInfoCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -801,10 +801,10 @@ export const AssociationGroupInfoCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -826,10 +826,10 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -1459,10 +1459,10 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -1584,9 +1584,9 @@ export const BasicCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly stateful: false;
             readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
@@ -1809,9 +1809,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 3;
         };
@@ -1835,9 +1835,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -1866,9 +1866,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -1892,9 +1892,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -1918,9 +1918,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -1944,9 +1944,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -1970,9 +1970,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -2001,9 +2001,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -2029,9 +2029,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -2058,9 +2058,9 @@ export const BatteryCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -2271,10 +2271,10 @@ export const BinarySensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -2415,9 +2415,9 @@ export const BinarySwitchCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -3035,10 +3035,10 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -3060,10 +3060,10 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -3085,10 +3085,10 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -3767,10 +3767,10 @@ export const ColorSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -3792,10 +3792,10 @@ export const ColorSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -4614,10 +4614,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -4665,10 +4665,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -4716,10 +4716,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -4743,9 +4743,9 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 4;
         };
@@ -4767,9 +4767,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
             readonly minVersion: number;
@@ -4794,9 +4794,9 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 4;
         };
@@ -4818,9 +4818,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
             readonly minVersion: number;
@@ -4847,9 +4847,9 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 4;
         };
@@ -4871,9 +4871,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
             readonly minVersion: number;
@@ -4900,9 +4900,9 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 4;
         };
@@ -4924,9 +4924,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
             readonly minVersion: number;
@@ -5088,9 +5088,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
             readonly minVersion: number;
@@ -5165,9 +5165,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
             readonly minVersion: number;
@@ -5192,9 +5192,9 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 3;
         };
@@ -5362,10 +5362,10 @@ export const DoorLockLoggingCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -5695,10 +5695,10 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -5720,10 +5720,10 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -5745,10 +5745,10 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -6324,10 +6324,10 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -6349,10 +6349,10 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -6374,10 +6374,10 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -6399,10 +6399,10 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -6787,10 +6787,10 @@ export const HumidityControlModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -7170,10 +7170,10 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -7488,9 +7488,9 @@ export const IndicatorCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
             readonly minVersion: 4;
@@ -7521,9 +7521,9 @@ export const IndicatorCCValues: Readonly<{
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -7548,10 +7548,10 @@ export const IndicatorCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -7575,9 +7575,9 @@ export const IndicatorCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 3;
         };
@@ -7630,10 +7630,10 @@ export const IndicatorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -8949,10 +8949,10 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -8974,10 +8974,10 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -8999,10 +8999,10 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -9024,10 +9024,10 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -9707,9 +9707,9 @@ export const ManufacturerSpecificCCValues: Readonly<{
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -10028,10 +10028,10 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10053,10 +10053,10 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10078,10 +10078,10 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10103,10 +10103,10 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10313,10 +10313,10 @@ export const MultiChannelAssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10341,10 +10341,10 @@ export const MultiChannelAssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10369,10 +10369,10 @@ export const MultiChannelAssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10394,10 +10394,10 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10656,10 +10656,10 @@ export const MultiChannelCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10681,10 +10681,10 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -10706,10 +10706,10 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -11082,10 +11082,10 @@ export const MultilevelSensorCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -11107,10 +11107,10 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -11363,10 +11363,10 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -11392,9 +11392,9 @@ export const MultilevelSwitchCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly stateful: false;
             readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
@@ -12465,10 +12465,10 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -12490,10 +12490,10 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -12515,10 +12515,10 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -12540,10 +12540,10 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -12569,9 +12569,9 @@ export const ProtectionCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -12598,9 +12598,9 @@ export const ProtectionCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -12655,9 +12655,9 @@ export const ProtectionCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -12797,9 +12797,9 @@ export const SceneActivationCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly stateful: false;
         };
@@ -13300,10 +13300,10 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -13325,10 +13325,10 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -13350,10 +13350,10 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -14780,10 +14780,10 @@ export const ThermostatFanModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -14838,9 +14838,9 @@ export const ThermostatFanModeCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 3;
         };
@@ -15090,10 +15090,10 @@ export const ThermostatModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -15550,10 +15550,10 @@ export const ThermostatSetpointCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -15607,10 +15607,10 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -15632,10 +15632,10 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16396,9 +16396,9 @@ export const UserCodeCCValues: Readonly<{
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly secret: true;
         };
@@ -16453,8 +16453,8 @@ export const UserCodeCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
             readonly secret: true;
@@ -16479,9 +16479,9 @@ export const UserCodeCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 2;
         };
@@ -16503,10 +16503,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16528,10 +16528,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16553,10 +16553,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16578,10 +16578,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16603,10 +16603,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16628,10 +16628,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16653,10 +16653,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16678,10 +16678,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16703,10 +16703,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -16728,10 +16728,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -17182,9 +17182,9 @@ export const VersionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly minVersion: 3;
             readonly internal: true;
@@ -17663,10 +17663,10 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
@@ -17688,10 +17688,10 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
         };
