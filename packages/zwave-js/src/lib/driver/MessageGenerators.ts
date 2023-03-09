@@ -3,6 +3,7 @@ import {
 	isCommandClassContainer,
 	MGRPExtension,
 	MPANExtension,
+	Security2CC,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
@@ -566,9 +567,13 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		// If we want to make sure that a node understood a SET-type S2-encapsulated message, we either need to use
 		// Supervision and wait for the Supervision Report (handled by the simpleMessageGenerator), or we need to add a
 		// short delay between commands and wait if a NonceReport is received.
+
+		// However, we MUST NOT do this if the encapsulated command is also a Security S2 command, because this means
+		// we're in the middle of S2 bootstrapping, where timing is critical.
 		let nonceReport: Security2CCNonceReport | undefined;
 		if (
 			isTransmitReport(response) &&
+			!(msg.command.encapsulated instanceof Security2CC) &&
 			!msg.command.expectsCCResponse() &&
 			!msg.command.getEncapsulatedCC(
 				CommandClasses.Supervision,
