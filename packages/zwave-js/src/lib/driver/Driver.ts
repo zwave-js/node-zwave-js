@@ -5125,7 +5125,7 @@ ${handlers.length} left`,
 						// ignore errors
 					});
 				}, timeout);
-			} else if (!idle) {
+			} else {
 				clearTimeout(this.pollBackgroundRSSITimer);
 				this.pollBackgroundRSSITimer = undefined;
 			}
