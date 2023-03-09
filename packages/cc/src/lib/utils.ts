@@ -115,12 +115,6 @@ export function isAssociationAllowed(
 			? targetNode
 			: targetNode.getEndpointOrThrow(destination.endpoint ?? 0);
 
-	// SDS14223:
-	// A controlling node MUST NOT associate Node A to a Node B destination that does not support
-	// the Command Class that the Node A will be controlling
-	//
-	// To determine this, the node must support the AGI CC or we have no way of knowing which
-	// CCs the node will control
 	if (
 		!endpoint.supportsCC(CommandClasses.Association) &&
 		!endpoint.supportsCC(CommandClasses["Multi Channel Association"])
@@ -131,9 +125,56 @@ export function isAssociationAllowed(
 			} does not support associations!`,
 			ZWaveErrorCodes.CC_NotSupported,
 		);
-	} else if (
-		!endpoint.supportsCC(CommandClasses["Association Group Information"])
-	) {
+	}
+
+	// For Association version 1 and version 2 / MCA version 1-3:
+	// A controlling node MUST NOT associate Node A to a Node B destination
+	// if Node A and Node B’s highest Security Class are not identical.
+	// For Association version 3 / MCA version 4:
+	// A controlling node MUST NOT associate Node A to a Node B destination
+	// if Node A was not granted Node B’s highest Security Class.
+
+	const sourceNode = endpoint.getNodeUnsafe()!;
+	let securityClassMustMatch: boolean;
+	if (destination.endpoint == undefined) {
+		// "normal" association
+		const sourceNodeCCVersion = endpoint.getCCVersion(
+			CommandClasses.Association,
+		);
+		securityClassMustMatch = sourceNodeCCVersion < 3;
+	} else {
+		// multi channel association
+		const sourceNodeCCVersion = endpoint.getCCVersion(
+			CommandClasses["Multi Channel Association"],
+		);
+		securityClassMustMatch = sourceNodeCCVersion < 4;
+	}
+
+	const sourceSecurityClass = sourceNode.getHighestSecurityClass();
+	const targetSecurityClass = targetNode.getHighestSecurityClass();
+
+	// If the security classes are unknown, all bets are off
+	if (sourceSecurityClass != undefined && targetSecurityClass != undefined) {
+		if (
+			securityClassMustMatch &&
+			sourceSecurityClass !== targetSecurityClass
+		) {
+			return false;
+		} else if (
+			!securityClassMustMatch &&
+			!sourceNode.hasSecurityClass(targetSecurityClass)
+		) {
+			return false;
+		}
+	}
+
+	// SDS14223:
+	// A controlling node MUST NOT associate Node A to a Node B destination that does not support
+	// the Command Class that the Node A will be controlling
+	//
+	// To determine this, the node must support the AGI CC or we have no way of knowing which
+	// CCs the node will control
+	if (!endpoint.supportsCC(CommandClasses["Association Group Information"])) {
 		return true;
 	}
 
