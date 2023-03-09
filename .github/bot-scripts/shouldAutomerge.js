@@ -48,7 +48,7 @@ function shouldAutomerge(update) {
 			update.updateType === "version-update:semver-minor" &&
 			update.alertState === "OPEN") ||
 		// indirect dependencies: minor if security alert
-		(update.dependencyType === "direct:production" &&
+		(update.dependencyType === "indirect" &&
 			(update.updateType === "version-update:semver-patch" ||
 				update.updateType === "version-update:semver-minor") &&
 			update.alertState === "OPEN")
