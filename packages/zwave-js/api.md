@@ -207,6 +207,19 @@ export { ControllerSelfLogContext }
 //
 // @public
 export interface ControllerStatistics {
+    backgroundRSSI?: {
+        average: {
+            rssiChannel0: RSSI_2;
+            rssiChannel1: RSSI_2;
+            rssiChannel2?: RSSI_2;
+        };
+        current: {
+            rssiChannel0: RSSI_2;
+            rssiChannel1: RSSI_2;
+            rssiChannel2?: RSSI_2;
+        };
+        timestamp: number;
+    };
     CAN: number;
     messagesDroppedRX: number;
     messagesDroppedTX: number;
@@ -328,6 +341,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     sendMessage<TResponse extends Message = Message>(msg: Message, options?: SendMessageOptions): Promise<TResponse>;
+    get sendThreadIdle(): boolean;
     setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void;
     softReset(): Promise<void>;
     start(): Promise<void>;
