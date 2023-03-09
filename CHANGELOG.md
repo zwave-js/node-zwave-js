@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.11.1 (2023-03-09)
 ### Bugfixes
 * Do not start level change with unknown `startLevel` (#5542)
 * Do not wait to confirm unsupervised S2 delivery while bootstrapping, which prevented including nodes using S2 (#5547)
