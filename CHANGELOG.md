@@ -5,18 +5,16 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
-<!-- ### Breaking changes
-
-### Features -->
-
 ### Bugfixes
 * Do not start level change with unknown `startLevel` (#5542)
+* Do not wait to confirm unsupervised S2 delivery while bootstrapping, which prevented including nodes using S2 (#5547)
 
 ### Config file changes
-* add compat flag to ignore/remove endpoints (#5541)
-* disable Supervision for Everspring SP816 Motion Sensor (#5537)
-* separate config for 300 and 500 series of Vision Security ZM1602 (#5539)
-* remove endpoints from Everspring ST814 (#5541)
+* Add compat flag to ignore/remove endpoints (#5541)
+* Disable Supervision for Everspring SP816 Motion Sensor (#5537)
+* Separate config for 300 and 500 series of Vision Security ZM1602 (#5539)
+* Remove endpoints from Everspring ST814 (#5541)
+* Enable double tap for Honeywell 39348 / 39455 / ZW4005 (#5543)
 
 ### Changes under the hood
 * Moved back from Renovate Bot to Dependabot (#5527, #5536)
