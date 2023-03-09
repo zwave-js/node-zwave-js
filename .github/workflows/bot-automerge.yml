@@ -36,7 +36,14 @@ jobs:
               pull_number: context.payload.issue.number,
               event: "APPROVE"
             });
-  
+
+      - name: Auto-merge PR
+        env:
+          PR_URL: ${{github.event.issue.html_url}}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          gh pr merge --auto --squash "$PR_URL"
+
   bot-reenable-automerge:
     if: |
       github.event_name == 'pull_request'
