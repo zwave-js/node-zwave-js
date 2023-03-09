@@ -5541,8 +5541,7 @@ ${associatedNodes.join(", ")}`,
 			updated.backgroundRSSI!.channel0 = {
 				current: rssi.rssiChannel0,
 				average: averageRSSI(
-					current.backgroundRSSI?.channel0.average ??
-						rssi.rssiChannel0,
+					current.backgroundRSSI?.channel0.average,
 					rssi.rssiChannel0,
 					0.9,
 				),
@@ -5550,8 +5549,7 @@ ${associatedNodes.join(", ")}`,
 			updated.backgroundRSSI!.channel1 = {
 				current: rssi.rssiChannel1,
 				average: averageRSSI(
-					current.backgroundRSSI?.channel1.average ??
-						rssi.rssiChannel1,
+					current.backgroundRSSI?.channel1.average,
 					rssi.rssiChannel1,
 					0.9,
 				),
@@ -5561,8 +5559,7 @@ ${associatedNodes.join(", ")}`,
 				updated.backgroundRSSI!.channel2 = {
 					current: rssi.rssiChannel2,
 					average: averageRSSI(
-						current.backgroundRSSI?.channel2?.average ??
-							rssi.rssiChannel2,
+						current.backgroundRSSI?.channel2?.average,
 						rssi.rssiChannel2,
 						0.9,
 					),

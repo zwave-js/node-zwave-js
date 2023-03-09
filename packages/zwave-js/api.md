@@ -210,16 +210,16 @@ export interface ControllerStatistics {
     backgroundRSSI?: {
         timestamp: number;
         channel0: {
-            average: RSSI_2;
-            current: RSSI_2;
+            average: number;
+            current: number;
         };
         channel1: {
-            average: RSSI_2;
-            current: RSSI_2;
+            average: number;
+            current: number;
         };
         channel2?: {
-            average: RSSI_2;
-            current: RSSI_2;
+            average: number;
+            current: number;
         };
     };
     CAN: number;
