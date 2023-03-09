@@ -208,17 +208,19 @@ export { ControllerSelfLogContext }
 // @public
 export interface ControllerStatistics {
     backgroundRSSI?: {
-        average: {
-            rssiChannel0: RSSI_2;
-            rssiChannel1: RSSI_2;
-            rssiChannel2?: RSSI_2;
-        };
-        current: {
-            rssiChannel0: RSSI_2;
-            rssiChannel1: RSSI_2;
-            rssiChannel2?: RSSI_2;
-        };
         timestamp: number;
+        channel0: {
+            average: RSSI_2;
+            current: RSSI_2;
+        };
+        channel1: {
+            average: RSSI_2;
+            current: RSSI_2;
+        };
+        channel2?: {
+            average: RSSI_2;
+            current: RSSI_2;
+        };
     };
     CAN: number;
     messagesDroppedRX: number;

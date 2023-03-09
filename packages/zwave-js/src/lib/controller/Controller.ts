@@ -5535,32 +5535,39 @@ ${associatedNodes.join(", ")}`,
 
 		this.updateStatistics((current) => {
 			const updated = { ...current };
-			updated.backgroundRSSI = {
-				average: {},
-			} as any;
+			updated.backgroundRSSI = {} as any;
 
 			// Average all channels, defaulting to the current measurement
-			updated.backgroundRSSI!.average.rssiChannel0 = averageRSSI(
-				current.backgroundRSSI?.average.rssiChannel0 ??
+			updated.backgroundRSSI!.channel0 = {
+				current: rssi.rssiChannel0,
+				average: averageRSSI(
+					current.backgroundRSSI?.channel0.average ??
+						rssi.rssiChannel0,
 					rssi.rssiChannel0,
-				rssi.rssiChannel0,
-				0.9,
-			);
-			updated.backgroundRSSI!.average.rssiChannel1 = averageRSSI(
-				current.backgroundRSSI?.average.rssiChannel1 ??
-					rssi.rssiChannel1,
-				rssi.rssiChannel1,
-				0.9,
-			);
-			if (rssi.rssiChannel2 != undefined) {
-				updated.backgroundRSSI!.average.rssiChannel2 = averageRSSI(
-					current.backgroundRSSI?.average.rssiChannel2 ??
-						rssi.rssiChannel2,
-					rssi.rssiChannel2,
 					0.9,
-				);
+				),
+			};
+			updated.backgroundRSSI!.channel1 = {
+				current: rssi.rssiChannel1,
+				average: averageRSSI(
+					current.backgroundRSSI?.channel1.average ??
+						rssi.rssiChannel1,
+					rssi.rssiChannel1,
+					0.9,
+				),
+			};
+
+			if (rssi.rssiChannel2 != undefined) {
+				updated.backgroundRSSI!.channel2 = {
+					current: rssi.rssiChannel2,
+					average: averageRSSI(
+						current.backgroundRSSI?.channel2?.average ??
+							rssi.rssiChannel2,
+						rssi.rssiChannel2,
+						0.9,
+					),
+				};
 			}
-			updated.backgroundRSSI!.current = rssi;
 			updated.backgroundRSSI!.timestamp = Date.now();
 
 			return updated;

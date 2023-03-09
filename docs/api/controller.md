@@ -1249,28 +1249,25 @@ interface ControllerStatistics {
 	/** No. of outgoing messages that were dropped because they could not be sent */
 	messagesDroppedTX: number;
 
-	/** Background RSSI of the network. */
+	/**
+	 * Background RSSI of the network. The `average` values are calculated using an exponential moving average.
+	 * The `current` values are the most recent measurements, which can be compared to the average to detect interference/jamming.
+	 * The `timestamp` is the time of the most recent update of these measurements, and can be used to draw graphs.
+	 */
 	backgroundRSSI?: {
-		/**
-		 * Average background RSSI of the network.
-		 * Consecutive measurements are combined using an exponential moving average.
-		 */
-		average: {
-			rssiChannel0: RSSI;
-			rssiChannel1: RSSI;
-			rssiChannel2?: RSSI;
-		};
-		/**
-		 * Current background RSSI of the network.
-		 * Can be compared to the average to detect interference/jamming.
-		 */
-		current: {
-			rssiChannel0: RSSI;
-			rssiChannel1: RSSI;
-			rssiChannel2?: RSSI;
-		};
-		/** Timestamp of the most recent measurement */
 		timestamp: number;
+		channel0: {
+			average: RSSI;
+			current: RSSI;
+		};
+		channel1: {
+			average: RSSI;
+			current: RSSI;
+		};
+		channel2?: {
+			average: RSSI;
+			current: RSSI;
+		};
 	};
 }
 ```
