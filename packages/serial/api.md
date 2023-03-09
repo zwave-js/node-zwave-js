@@ -249,6 +249,8 @@ export enum FunctionType {
     // (undocumented)
     SetSUCNodeId = 84,
     // (undocumented)
+    Shutdown = 217,
+    // (undocumented)
     SoftReset = 8,
     // (undocumented)
     UNKNOWN_FUNC_ClearNetworkStats = 57,
