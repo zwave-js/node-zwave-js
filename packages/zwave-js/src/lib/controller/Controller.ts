@@ -4335,7 +4335,7 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Adds associations to a node or endpoint
 	 */
-	public addAssociations(
+	public async addAssociations(
 		source: AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
@@ -4343,12 +4343,21 @@ ${associatedNodes.join(", ")}`,
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
-		return ccUtils.addAssociations(
+		await ccUtils.addAssociations(
 			this.driver,
 			endpoint,
 			group,
 			destinations,
 		);
+
+		// Nodes need a return route to be able to send commands to other nodes
+		const destinationNodeIDs = distinct(
+			destinations.map((d) => d.nodeId),
+			// Except to the controller itself - this route is already known
+		).filter((id) => id !== this.ownNodeId);
+		for (const id of destinationNodeIDs) {
+			await this.assignReturnRoute(source.nodeId, id);
+		}
 	}
 
 	/**
