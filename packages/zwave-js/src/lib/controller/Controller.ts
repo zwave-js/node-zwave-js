@@ -23,6 +23,7 @@ import {
 } from "@zwave-js/cc";
 import {
 	authHomeIdFromDSK,
+	averageRSSI,
 	CommandClasses,
 	computePRK,
 	decodeX25519KeyDER,
@@ -5526,7 +5527,50 @@ ${associatedNodes.join(", ")}`,
 		const ret = await this.driver.sendMessage<GetBackgroundRSSIResponse>(
 			new GetBackgroundRSSIRequest(this.driver),
 		);
-		return pick(ret, ["rssiChannel0", "rssiChannel1", "rssiChannel2"]);
+		const rssi = pick(ret, [
+			"rssiChannel0",
+			"rssiChannel1",
+			"rssiChannel2",
+		]);
+
+		this.updateStatistics((current) => {
+			const updated = { ...current };
+			updated.backgroundRSSI = {} as any;
+
+			// Average all channels, defaulting to the current measurement
+			updated.backgroundRSSI!.channel0 = {
+				current: rssi.rssiChannel0,
+				average: averageRSSI(
+					current.backgroundRSSI?.channel0.average,
+					rssi.rssiChannel0,
+					0.9,
+				),
+			};
+			updated.backgroundRSSI!.channel1 = {
+				current: rssi.rssiChannel1,
+				average: averageRSSI(
+					current.backgroundRSSI?.channel1.average,
+					rssi.rssiChannel1,
+					0.9,
+				),
+			};
+
+			if (rssi.rssiChannel2 != undefined) {
+				updated.backgroundRSSI!.channel2 = {
+					current: rssi.rssiChannel2,
+					average: averageRSSI(
+						current.backgroundRSSI?.channel2?.average,
+						rssi.rssiChannel2,
+						0.9,
+					),
+				};
+			}
+			updated.backgroundRSSI!.timestamp = Date.now();
+
+			return updated;
+		});
+
+		return rssi;
 	}
 
 	/**

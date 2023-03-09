@@ -585,6 +585,15 @@ export class Driver
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
+		this._sendThreadIdle = false;
+
+		this.sendThread.onTransition((state) => {
+			if (state.changed) {
+				this.sendThreadIdle = state.matches("idle");
+			}
+		});
+
+		// For debugging
 		// this.sendThread.onTransition((state) => {
 		// 	if (state.changed)
 		// 		this.driverLog.print(
@@ -612,6 +621,18 @@ export class Driver
 	private serial: ZWaveSerialPortBase | undefined;
 	/** An instance of the Send Thread state machine */
 	private sendThread: SendThreadInterpreter;
+
+	private _sendThreadIdle: boolean;
+	/** Whether the Send Thread is currently idle */
+	public get sendThreadIdle(): boolean {
+		return this._sendThreadIdle;
+	}
+	private set sendThreadIdle(value: boolean) {
+		if (this._sendThreadIdle !== value) {
+			this._sendThreadIdle = value;
+			this.handleSendThreadIdleChange(value);
+		}
+	}
 
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
@@ -5080,5 +5101,34 @@ ${handlers.length} left`,
 				resolve(chunk as T);
 			});
 		});
+	}
+
+	private pollBackgroundRSSITimer: NodeJS.Timeout | undefined;
+	private lastBackgroundRSSITimestamp = 0;
+
+	private handleSendThreadIdleChange(idle: boolean): void {
+		if (!this.ready) return;
+		if (
+			this.controller.isFunctionSupported(FunctionType.GetBackgroundRSSI)
+		) {
+			// When the send thread stays idle for 5 seconds, poll the background RSSI, but at most every 30s
+			if (idle) {
+				const timeout = Math.max(
+					// Wait at least 5s
+					5000,
+					// and up to 30s if we recently queried the RSSI
+					30_000 - (Date.now() - this.lastBackgroundRSSITimestamp),
+				);
+				this.pollBackgroundRSSITimer = setTimeout(() => {
+					this.lastBackgroundRSSITimestamp = Date.now();
+					void this.controller.getBackgroundRSSI().catch(() => {
+						// ignore errors
+					});
+				}, timeout);
+			} else {
+				clearTimeout(this.pollBackgroundRSSITimer);
+				this.pollBackgroundRSSITimer = undefined;
+			}
+		}
 	}
 }

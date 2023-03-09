@@ -1248,6 +1248,29 @@ interface ControllerStatistics {
 	timeoutCallback: number;
 	/** No. of outgoing messages that were dropped because they could not be sent */
 	messagesDroppedTX: number;
+
+	/**
+	 * Background RSSI of the network in dBm. These values are typically between -100 and -30, but can be even smaller (down to -128 dBm) in quiet environments.
+	 *
+	 * The `average` values are calculated using an exponential moving average.
+	 * The `current` values are the most recent measurements, which can be compared to the average to detect interference/jamming.
+	 * The `timestamp` is the time of the most recent update of these measurements, and can be used to draw graphs.
+	 */
+	backgroundRSSI?: {
+		timestamp: number;
+		channel0: {
+			average: number;
+			current: number;
+		};
+		channel1: {
+			average: number;
+			current: number;
+		};
+		channel2?: {
+			average: number;
+			current: number;
+		};
+	};
 }
 ```
 
