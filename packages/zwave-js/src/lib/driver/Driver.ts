@@ -2532,6 +2532,31 @@ export class Driver
 		void this.initializeControllerAndNodes();
 	}
 
+	/**
+	 * Instructs the Z-Wave API to shut down in order to safely remove the power.
+	 * This will destroy the driver instance if it succeeds.
+	 */
+	public async shutdown(): Promise<boolean> {
+		this.ensureReady(true);
+
+		// Not a good idea to abort firmware updates this way
+		if (this.controller.isAnyOTAFirmwareUpdateInProgress()) {
+			const message = `Failed to shut down controller: A firmware update is in progress on this network.`;
+			this.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
+			);
+		}
+
+		const result = await this.controller.shutdown();
+		try {
+			if (result) await this.destroy();
+		} finally {
+			return result;
+		}
+	}
+
 	private _destroyPromise: DeferredPromise<void> | undefined;
 	private get wasDestroyed(): boolean {
 		return !!this._destroyPromise;
@@ -5124,7 +5149,7 @@ ${handlers.length} left`,
 					void this.controller.getBackgroundRSSI().catch(() => {
 						// ignore errors
 					});
-				}, timeout);
+				}, timeout).unref();
 			} else {
 				clearTimeout(this.pollBackgroundRSSITimer);
 				this.pollBackgroundRSSITimer = undefined;

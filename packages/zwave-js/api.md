@@ -345,6 +345,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     sendMessage<TResponse extends Message = Message>(msg: Message, options?: SendMessageOptions): Promise<TResponse>;
     get sendThreadIdle(): boolean;
     setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void;
+    shutdown(): Promise<boolean>;
     softReset(): Promise<void>;
     start(): Promise<void>;
     get statisticsEnabled(): boolean;

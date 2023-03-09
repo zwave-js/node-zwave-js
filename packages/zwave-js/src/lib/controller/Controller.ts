@@ -101,6 +101,10 @@ import {
 	type ApplicationUpdateRequest,
 } from "../serialapi/application/ApplicationUpdateRequest";
 import {
+	ShutdownRequest,
+	ShutdownResponse,
+} from "../serialapi/application/ShutdownMessages";
+import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
 } from "../serialapi/capability/GetControllerCapabilitiesMessages";
@@ -1398,6 +1402,33 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		} catch (e) {
 			this.driver.controllerLog.print(
 				`hard reset failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+			throw e;
+		}
+	}
+
+	/**
+	 * @internal
+	 */
+	public async shutdown(): Promise<boolean> {
+		// begin the reset process
+		try {
+			this.driver.controllerLog.print("Shutting down the Z-Wave API...");
+			const response = await this.driver.sendMessage<ShutdownResponse>(
+				new ShutdownRequest(this.driver),
+			);
+			if (response.success) {
+				this.driver.controllerLog.print("Z-Wave API was shut down");
+			} else {
+				this.driver.controllerLog.print(
+					"Failed to shut down the Z-Wave API",
+				);
+			}
+			return response.success;
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`shutdown failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			throw e;
