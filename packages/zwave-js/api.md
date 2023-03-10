@@ -1235,6 +1235,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     getHighestSecurityClass(): SecurityClass_2 | undefined;
     getValue<T = unknown>(valueId: ValueID_2): T | undefined;
     getValueMetadata(valueId: ValueID_2): ValueMetadata_2;
+    getValueTimestamp(valueId: ValueID_2): number | undefined;
     // (undocumented)
     hasSecurityClass(securityClass: SecurityClass_2): Maybe<boolean>;
     get hasSUCReturnRoute(): boolean;

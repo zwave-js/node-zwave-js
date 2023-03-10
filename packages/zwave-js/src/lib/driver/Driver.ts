@@ -1202,6 +1202,7 @@ export class Driver
 		);
 		this._valueDB = new JsonlDB(valueDBFile, {
 			...options,
+			enableTimestamps: true,
 			reviver: (key, value) => deserializeCacheValue(value),
 			serializer: (key, value) => serializeCacheValue(value),
 		});
