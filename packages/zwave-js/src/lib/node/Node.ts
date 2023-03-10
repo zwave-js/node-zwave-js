@@ -872,6 +872,13 @@ export class ZWaveNode
 	}
 
 	/**
+	 * Returns when the given value id was last updated
+	 */
+	public getValueTimestamp(valueId: ValueID): number | undefined {
+		return this._valueDB.getTimestamp(valueId);
+	}
+
+	/**
 	 * Retrieves metadata for a given value id.
 	 * This can be used to enhance the user interface of an application
 	 */

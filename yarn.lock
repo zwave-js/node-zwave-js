@@ -52,14 +52,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/jsonl-db@npm:^2.5.3":
-  version: 2.5.3
-  resolution: "@alcalzone/jsonl-db@npm:2.5.3"
+"@alcalzone/jsonl-db@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@alcalzone/jsonl-db@npm:3.0.0"
   dependencies:
     "@alcalzone/proper-lockfile": ^4.1.3-0
-    alcalzone-shared: ^4.0.3
+    alcalzone-shared: ^4.0.8
     fs-extra: ^10.1.0
-  checksum: 7e9d798f2a720772e7273a506274e513de95d80ac3eee458ce02b170deba1ba68bfe09ba2b969f566abe883e20c9a7ec0483e0d96b08768fc3f2e800290dab4c
+  checksum: e0c50a59faa6d19c6b5055cfafab0d69547a0d7a735bec2b976c15f959887944303d92b36caa69150d592b028dde2a8aac64cd2d70ed9a9a652f9ed27483326a
   languageName: node
   linkType: hard
 
@@ -1782,7 +1782,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
-    "@alcalzone/jsonl-db": ^2.5.3
+    "@alcalzone/jsonl-db": ^3.0.0
     "@microsoft/api-extractor": "*"
     "@types/node": ^14.18.36
     "@types/sinon": ^10.0.13
@@ -1907,7 +1907,7 @@ __metadata:
     "@actions/core": ^1.9.1
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.3
-    "@alcalzone/jsonl-db": ^2.5.3
+    "@alcalzone/jsonl-db": ^3.0.0
     "@alcalzone/monopack": ^1.2.0
     "@alcalzone/release-script": ~3.5.9
     "@commitlint/cli": ^17.1.2
@@ -2179,7 +2179,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alcalzone-shared@npm:^4.0.3, alcalzone-shared@npm:^4.0.8":
+"alcalzone-shared@npm:^4.0.8":
   version: 4.0.8
   resolution: "alcalzone-shared@npm:4.0.8"
   dependencies:
@@ -8835,7 +8835,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
-    "@alcalzone/jsonl-db": ^2.5.3
+    "@alcalzone/jsonl-db": ^3.0.0
     "@alcalzone/pak": ^0.8.1
     "@esm2cjs/got": ^12.5.3
     "@esm2cjs/p-queue": ^7.3.0

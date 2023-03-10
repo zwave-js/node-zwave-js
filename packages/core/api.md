@@ -2488,6 +2488,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
         metadata: ValueMetadata;
     })[];
     getMetadata(valueId: ValueID): ValueMetadata | undefined;
+    getTimestamp(valueId: ValueID): number | undefined;
     getValue<T = unknown>(valueId: ValueID): T | undefined;
     getValues(forCC: CommandClasses): (ValueID & {
         value: unknown;

@@ -275,6 +275,14 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		return ret;
 	}
 
+	/**
+	 * Returns when the given value id was last updated
+	 */
+	public getTimestamp(valueId: ValueID): number | undefined {
+		const key = this.valueIdToDBKey(valueId);
+		return this._db.getTimestamp(key);
+	}
+
 	/** Clears all values from the value DB */
 	public clear(options: SetValueOptions = {}): void {
 		for (const key of this._index) {

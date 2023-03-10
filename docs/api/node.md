@@ -44,6 +44,19 @@ Metadata in `zwave-js` can be separated into a **static** and a **dynamic** part
 >
 > If applications plan to use metadata, they **must not** assume that metadata does not exist if there was no `"metadata updated"` event. Instead the `getValueMetadata` method **must** be used to retrieve the metadata initially.
 
+### `getValueTimestamp`
+
+```ts
+getValueTimestamp(valueId: ValueID): number | undefined
+```
+
+Returns when the given value was last updated in the local cache. Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md#ValueID).
+
+The method either returns the stored timestamp if it was found, and `undefined` otherwise.
+
+> [!NOTE]
+> This does **not** communicate with the node.
+
 ### `getDefinedValueIDs`
 
 ```ts

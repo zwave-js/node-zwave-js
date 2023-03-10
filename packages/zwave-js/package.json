@@ -110,7 +110,7 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^2.5.3",
+    "@alcalzone/jsonl-db": "^3.0.0",
     "@alcalzone/pak": "^0.8.1",
     "@esm2cjs/got": "^12.5.3",
     "@esm2cjs/p-queue": "^7.3.0",
