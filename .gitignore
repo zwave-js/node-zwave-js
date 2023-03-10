@@ -18,6 +18,8 @@ coverage/
 
 # npm package files
 zwave-js-*.tgz
+zwave-js.tgz
+.monopack/
 
 # ZWave cache
 */cache

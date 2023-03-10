@@ -725,6 +725,17 @@ export class CommandClass implements ICommandClass {
 		);
 	}
 
+	private shouldAutoCreateValue(
+		applHost: ZWaveApplicationHost,
+		value: StaticCCValue,
+	): boolean {
+		return (
+			value.options.autoCreate === true ||
+			(typeof value.options.autoCreate === "function" &&
+				value.options.autoCreate(applHost, this.getEndpoint(applHost)!))
+		);
+	}
+
 	/** Returns a list of all value names that are defined for this CommandClass */
 	public getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[] {
 		// In order to compare value ids, we need them to be strings
@@ -769,16 +780,7 @@ export class CommandClass implements ICommandClass {
 			if (value.options.internal) continue;
 
 			// And determine if this value should be automatically "created"
-			if (
-				value.options.autoCreate === false ||
-				(typeof value.options.autoCreate === "function" &&
-					!value.options.autoCreate(
-						applHost,
-						this.getEndpoint(applHost)!,
-					))
-			) {
-				continue;
-			}
+			if (!this.shouldAutoCreateValue(applHost, value)) continue;
 
 			existingValueIds.push(value.endpoint(this.endpointIndex));
 		}
@@ -858,7 +860,9 @@ export class CommandClass implements ICommandClass {
 				// ... but only if the value is included in the report we are persisting
 				(sourceValue != undefined ||
 					// ... or if we know which CC version the node supports
-					this._knownVersion >= value.options.minVersion);
+					// and the value may be automatically created
+					(this._knownVersion >= value.options.minVersion &&
+						this.shouldAutoCreateValue(applHost, value)));
 
 			if (createMetadata && !valueDB.hasMetadata(valueId)) {
 				valueDB.setMetadata(valueId, value.meta);

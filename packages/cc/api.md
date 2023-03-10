@@ -4590,11 +4590,11 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
             readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     doorSupported: {
@@ -4641,11 +4641,11 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
             readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     boltSupported: {
@@ -4692,11 +4692,11 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
             readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     latchSupported: {
