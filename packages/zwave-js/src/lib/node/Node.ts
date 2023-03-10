@@ -2451,16 +2451,24 @@ protocol version:      ${this.protocolVersion}`;
 			for (const cc of endpoint.getSupportedCCInstances() as readonly SinglecastCC<CommandClass>[]) {
 				if (!cc.shouldRefreshValues(this.driver)) continue;
 
+				this.driver.controllerLog.logNode(this.id, {
+					message: `${getCCName(
+						cc.ccId,
+					)} CC values may be stale, refreshing...`,
+					endpoint: endpoint.index,
+					direction: "outbound",
+				});
+
 				try {
 					await cc.refreshValues(this.driver);
 				} catch (e) {
-					this.driver.controllerLog.logNode(
-						this.id,
-						`failed to refresh values for ${getCCName(
+					this.driver.controllerLog.logNode(this.id, {
+						message: `failed to refresh values for ${getCCName(
 							cc.ccId,
-						)}, endpoint ${endpoint.index}: ${getErrorMessage(e)}`,
-						"error",
-					);
+						)} CC: ${getErrorMessage(e)}`,
+						endpoint: endpoint.index,
+						level: "error",
+					});
 				}
 			}
 		}
