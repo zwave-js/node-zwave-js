@@ -4,7 +4,6 @@ import type { Driver } from "zwave-js";
 interface IDriverContext {
 	driver: Driver;
 	setDriver: (driver: Driver) => void;
-	destroyDriver: () => Promise<void>;
 }
 
 export const DriverContext = React.createContext<IDriverContext>({} as any);

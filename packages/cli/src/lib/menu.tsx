@@ -58,10 +58,7 @@ const DestroyDriverMenuItem: React.FC = () => {
 		<HotkeyLabel
 			hotkey="y"
 			label="destroy driver"
-			onPress={async () => {
-				await destroyDriver();
-				navigate(CLIPage.Prepare);
-			}}
+			onPress={() => navigate(CLIPage.DestroyingDriver)}
 		/>
 	);
 };

@@ -7,6 +7,7 @@ import { HotkeyLabel } from "../components/HotkeyLabel.js";
 import { useDialogs } from "../hooks/useDialogs.js";
 import { useDriver } from "../hooks/useDriver.js";
 import { useForceRerender } from "../hooks/useForceRerender.js";
+import { CLIPage, useNavigation } from "../hooks/useNavigation.js";
 
 const okText = "✓";
 const nokText = "✗";
@@ -19,11 +20,19 @@ const statusTexts = {
 	Asleep: ["z", "yellow"],
 } as const;
 
+const unknownText = "(unknown)";
+
 const Cell: ((props: CellProps) => JSX.Element) | undefined = ({
 	children,
 	column,
 }) => {
 	if (
+		column === 1 /* model */ &&
+		typeof children === "string" &&
+		children.trim() === unknownText
+	) {
+		return <Text color="gray">{children}</Text>;
+	} else if (
 		column === 3 /* ready */ &&
 		typeof children === "string" &&
 		children.trim().length === 1
@@ -80,6 +89,7 @@ export const DevicesPage: React.FC = () => {
 	const { driver } = useDriver();
 	const forceRerender = useForceRerender();
 	const { queryInput } = useDialogs();
+	const { navigate } = useNavigation();
 
 	const [maxRows, setMaxRows] = useState(10);
 
@@ -93,7 +103,7 @@ export const DevicesPage: React.FC = () => {
 
 	const nodesData = nodes.map((node) => ({
 		"#": node.id,
-		Model: getCustomName(node) || getModel(node),
+		Model: getCustomName(node) || getModel(node) || unknownText,
 		Type: getDeviceType(node.deviceClass),
 		R: node.ready ? "✓" : "✗",
 		S: node.status,
@@ -182,6 +192,26 @@ export const DevicesPage: React.FC = () => {
 					},
 					{ label: "Include", hotkey: "+" },
 					{ label: "Exclude", hotkey: "-" },
+					{ label: "Replace failed", hotkey: "r" },
+					{
+						label: "Remove failed",
+						hotkey: "f",
+						onPress: async () => {
+							const nodeId = await queryInput(
+								"Enter ID of the node to remove",
+							);
+							if (!nodeId) return;
+							const nodeIdNum = parseInt(nodeId, 10);
+							if (
+								!Number.isNaN(nodeIdNum) &&
+								nodeIDs.includes(nodeIdNum)
+							) {
+								navigate(CLIPage.RemoveFailedNode, {
+									nodeId: nodeIdNum,
+								});
+							}
+						},
+					},
 				]}
 			></CommandPalette>
 

@@ -6,20 +6,21 @@ import { HDivider } from "./components/HDivider.js";
 import { Log } from "./components/Log.js";
 import { ModalMessage, ModalQuery, ModalState } from "./components/Modals.js";
 import { SetUSBPath } from "./components/setUSBPath.js";
-import { StartingDriverPage } from "./components/StartingDriver.js";
 import { VDivider } from "./components/VDivider.js";
 import { ActionsContext } from "./hooks/useActions.js";
 import { DialogsContext } from "./hooks/useDialogs.js";
 import { DriverContext } from "./hooks/useDriver.js";
 import { GlobalsContext } from "./hooks/useGlobals.js";
 import { MenuContext, useMenuItemSlots } from "./hooks/useMenu.js";
-import { CLIPage, NavigationContext } from "./hooks/useNavigation.js";
+import {
+	CLIPage,
+	CLIPageWithProps,
+	getPageComponent,
+	NavigationContext,
+} from "./hooks/useNavigation.js";
 import { useStdoutDimensions } from "./hooks/useStdoutDimensions.js";
 import { createLogTransport, LinesBuffer } from "./lib/logging.js";
 import { defaultMenuItems } from "./lib/menu.js";
-import { ConfirmExitPage } from "./pages/ConfirmExit.js";
-import { MainMenuPage } from "./pages/MainMenu.js";
-import { PreparePage } from "./pages/Prepare.js";
 
 process.on("unhandledRejection", (err) => {
 	throw err;
@@ -46,23 +47,19 @@ const CLI: React.FC = () => {
 
 	const [usbPath, setUSBPath] = useState<string>("/dev/ttyUSB0");
 	const [driver, setDriver] = useState<Driver>();
-	const destroyDriver = useCallback(async () => {
-		if (driver) {
-			await driver.destroy();
-		}
-	}, [driver]);
 
 	const [logVisible, setLogVisible] = useState<boolean>(false);
 
-	const [cliPage, setCLIPage] = useState<CLIPage>(
-		usbPath && autostart ? CLIPage.StartingDriver : CLIPage.Prepare,
-	);
-	const [prevCliPage, setPrevCLIPage] = useState<CLIPage>();
+	const [cliPage, setCLIPage] = useState<CLIPageWithProps>({
+		page: usbPath && autostart ? CLIPage.StartingDriver : CLIPage.Prepare,
+		props: {},
+	});
+	const [prevCliPage, setPrevCLIPage] = useState<CLIPageWithProps>();
 
 	const navigate = useCallback(
-		(to: CLIPage) => {
+		(to: CLIPage, pageProps?: {}) => {
 			setPrevCLIPage(cliPage);
-			setCLIPage(to);
+			setCLIPage({ page: to, props: pageProps });
 		},
 		[cliPage, setCLIPage, setPrevCLIPage],
 	);
@@ -140,6 +137,8 @@ const CLI: React.FC = () => {
 		);
 	}
 
+	const PageComponent = getPageComponent(cliPage.page);
+
 	return (
 		<MenuContext.Provider value={{ updateItems: updateMenuItems }}>
 			<GlobalsContext.Provider
@@ -153,8 +152,8 @@ const CLI: React.FC = () => {
 			>
 				<NavigationContext.Provider
 					value={{
-						currentPage: cliPage,
-						previousPage: prevCliPage,
+						currentPage: cliPage.page,
+						previousPage: prevCliPage?.page,
 						navigate,
 						back,
 					}}
@@ -164,7 +163,6 @@ const CLI: React.FC = () => {
 							value={{
 								driver: driver!,
 								setDriver,
-								destroyDriver,
 							}}
 						>
 							<DialogsContext.Provider
@@ -195,42 +193,29 @@ const CLI: React.FC = () => {
 												flexGrow={1}
 												justifyContent="center"
 											>
-												{cliPage ===
-													CLIPage.Prepare && (
-													<PreparePage />
-												)}
-
-												{cliPage ===
+												{/* TODO: This should be merged into `selectPage` */}
+												{cliPage.page ===
 													CLIPage.SetUSBPath && (
 													<SetUSBPath
 														path={usbPath}
 														onCancel={() =>
-															setCLIPage(
-																CLIPage.Prepare,
-															)
+															setCLIPage({
+																page: CLIPage.Prepare,
+															})
 														}
 														onSubmit={(path) => {
 															setUSBPath(path);
-															setCLIPage(
-																CLIPage.Prepare,
-															);
+															setCLIPage({
+																page: CLIPage.Prepare,
+															});
 														}}
 													/>
 												)}
 
-												{cliPage ===
-													CLIPage.StartingDriver && (
-													<StartingDriverPage />
-												)}
-
-												{cliPage ===
-													CLIPage.MainMenu && (
-													<MainMenuPage />
-												)}
-
-												{cliPage ===
-													CLIPage.ConfirmExit && (
-													<ConfirmExitPage />
+												{PageComponent && (
+													<PageComponent
+														{...cliPage.props}
+													/>
 												)}
 											</Box>
 											{logVisible && (
