@@ -1,7 +1,9 @@
 import { getDefaultScale, Scale } from "@zwave-js/config";
+import { timespan } from "@zwave-js/core";
 import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
+	SinglecastCC,
 	SupervisionResult,
 	ValueID,
 } from "@zwave-js/core/safe";
@@ -71,7 +73,11 @@ export const MultilevelSensorCCValues = Object.freeze({
 			// This should have been the sensor type, but it is too late to change now
 			// Maybe we can migrate this without breaking in the future
 			(sensorTypeName: string) => sensorTypeName,
-			({ property }) => typeof property === "string",
+			({ property, propertyKey }) =>
+				typeof property === "string" &&
+				property !== "supportedSensorTypes" &&
+				property !== "supportedScales" &&
+				propertyKey == undefined,
 			(sensorTypeName: string) =>
 				({
 					// Just the base metadata, to be extended using a config manager
@@ -503,6 +509,27 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				}
 			}
 		}
+	}
+
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		applHost: ZWaveApplicationHost,
+	): boolean {
+		// Check when any of the supported values was last updated longer than 6 hours ago.
+		// This may lead to some unnecessary queries, but at least the values are up to date then
+		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		if (!valueDB) return true;
+
+		const values = this.getDefinedValueIDs(applHost).filter((v) =>
+			MultilevelSensorCCValues.value.is(v),
+		);
+		return values.some((v) => {
+			const lastUpdated = valueDB.getTimestamp(v);
+			return (
+				lastUpdated == undefined ||
+				Date.now() - lastUpdated > timespan.hours(6)
+			);
+		});
 	}
 
 	public translatePropertyKey(

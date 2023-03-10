@@ -497,6 +497,19 @@ export class CommandClass implements ICommandClass {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
+	/**
+	 * Checks if the CC values need to be manually refreshed.
+	 * This should be called regularly and when sleeping nodes wake up
+	 */
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		_applHost: ZWaveApplicationHost,
+	): boolean {
+		// This needs to be overwritten per command class.
+		// In the default implementation, don't require a refresh
+		return false;
+	}
+
 	/** Determines which CC interviews must be performed before this CC can be interviewed */
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// By default, all CCs require the VersionCC interview
@@ -691,6 +704,19 @@ export class CommandClass implements ICommandClass {
 		const valueDB = this.getValueDB(applHost);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		return valueDB.getValue(valueId);
+	}
+
+	/**
+	 * Reads when the value stored for the value ID of the given CC value was last updated in the value DB.
+	 * The endpoint index of the current CC instance is automatically taken into account.
+	 */
+	protected getValueTimestamp(
+		applHost: ZWaveApplicationHost,
+		ccValue: CCValue,
+	): number | undefined {
+		const valueDB = this.getValueDB(applHost);
+		const valueId = ccValue.endpoint(this.endpointIndex);
+		return valueDB.getTimestamp(valueId);
 	}
 
 	/** Returns the CC value definition for the current CC which matches the given value ID */

@@ -65,7 +65,6 @@ import { NodeNamingAndLocationCCValues } from "@zwave-js/cc/NodeNamingCC";
 import {
 	getNotificationStateValueWithEnum,
 	getNotificationValueMetadata,
-	NotificationCC,
 	NotificationCCReport,
 	NotificationCCValues,
 } from "@zwave-js/cc/NotificationCC";
@@ -123,8 +122,8 @@ import {
 	SecurityClassOwner,
 	SendCommandOptions,
 	sensorCCs,
+	SinglecastCC,
 	SupervisionStatus,
-	timespan,
 	topologicalSort,
 	TranslatedValueID,
 	TXReport,
@@ -339,7 +338,6 @@ export class ZWaveNode
 		for (const timeout of [
 			this.centralSceneKeyHeldDownContext?.timeout,
 			...this.notificationIdleTimeouts.values(),
-			...this.manualRefreshTimers.values(),
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
@@ -2347,8 +2345,12 @@ protocol version:      ${this.protocolVersion}`;
 		// supporting node issues a Wake Up Notification Command for sleeping nodes.
 
 		// This is not the handler for wakeup notifications, but some legacy devices send this
-		// message whenever there's an update.
-		if (this.requiresManualValueRefresh()) {
+		// message whenever there's an update and want to be polled.
+		if (
+			this.interviewStage === InterviewStage.Complete &&
+			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
+			!this.valueDB.getValue(AssociationCCValues.hasLifeline.id)
+		) {
 			const delay =
 				this.deviceConfig?.compat?.manualValueRefreshDelayMs || 0;
 			this.driver.controllerLog.logNode(this.nodeId, {
@@ -2357,79 +2359,6 @@ protocol version:      ${this.protocolVersion}`;
 				}...`,
 			});
 			setTimeout(() => this.refreshValues(), delay);
-		}
-	}
-
-	/** Returns whether a manual refresh of non-static values is likely necessary for this node */
-	public requiresManualValueRefresh(): boolean {
-		// If there was no lifeline configured, we assume that the controller
-		// does not receive unsolicited updates from the node
-		return (
-			this.interviewStage === InterviewStage.Complete &&
-			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
-			!this.valueDB.getValue(AssociationCCValues.hasLifeline.id)
-		);
-	}
-
-	/**
-	 * @internal
-	 * Schedules the regular refreshes of some CC values
-	 */
-	public scheduleManualValueRefreshes(): void {
-		// Only schedule this for listening nodes. Sleeping nodes are queried on wakeup
-		if (!this.canSleep) return;
-		// Only schedule this if we don't expect any unsolicited updates
-		if (!this.requiresManualValueRefresh()) return;
-
-		// TODO: The timespan definitions should be on the CCs themselves (probably as decorators)
-		this.scheduleManualValueRefresh(
-			CommandClasses.Battery,
-			// The specs say once per month, but that's a bit too unfrequent IMO
-			// Also the maximum that setInterval supports is ~24.85 days
-			timespan.days(7),
-		);
-		this.scheduleManualValueRefresh(
-			CommandClasses.Meter,
-			timespan.hours(6),
-		);
-		this.scheduleManualValueRefresh(
-			CommandClasses["Multilevel Sensor"],
-			timespan.hours(6),
-		);
-		if (
-			this.supportsCC(CommandClasses.Notification) &&
-			NotificationCC.getNotificationMode(this.driver, this) === "pull"
-		) {
-			this.scheduleManualValueRefresh(
-				CommandClasses.Notification,
-				timespan.hours(6),
-			);
-		}
-	}
-
-	private manualRefreshTimers = new Map<CommandClasses, NodeJS.Timeout>();
-	/**
-	 * Is used to schedule a manual value refresh for nodes that don't send unsolicited commands
-	 */
-	private scheduleManualValueRefresh(
-		cc: CommandClasses,
-		timeout: number,
-	): void {
-		// // Avoid triggering the refresh multiple times
-		// this.cancelManualValueRefresh(cc);
-		this.manualRefreshTimers.set(
-			cc,
-			setInterval(() => {
-				void this.refreshCCValues(cc);
-			}, timeout).unref(),
-		);
-	}
-
-	private cancelManualValueRefresh(cc: CommandClasses): void {
-		if (this.manualRefreshTimers.has(cc)) {
-			const timeout = this.manualRefreshTimers.get(cc)!;
-			clearTimeout(timeout);
-			this.manualRefreshTimers.delete(cc);
 		}
 	}
 
@@ -2508,6 +2437,38 @@ protocol version:      ${this.protocolVersion}`;
 						)}, endpoint ${endpoint.index}: ${getErrorMessage(e)}`,
 						"error",
 					);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Refreshes the values of all CCs that should be reporting regularly, but haven't been
+	 * @internal
+	 */
+	public async autoRefreshValues(): Promise<void> {
+		for (const endpoint of this.getAllEndpoints()) {
+			for (const cc of endpoint.getSupportedCCInstances() as readonly SinglecastCC<CommandClass>[]) {
+				if (!cc.shouldRefreshValues(this.driver)) continue;
+
+				this.driver.controllerLog.logNode(this.id, {
+					message: `${getCCName(
+						cc.ccId,
+					)} CC values may be stale, refreshing...`,
+					endpoint: endpoint.index,
+					direction: "outbound",
+				});
+
+				try {
+					await cc.refreshValues(this.driver);
+				} catch (e) {
+					this.driver.controllerLog.logNode(this.id, {
+						message: `failed to refresh values for ${getCCName(
+							cc.ccId,
+						)} CC: ${getErrorMessage(e)}`,
+						endpoint: endpoint.index,
+						level: "error",
+					});
 				}
 			}
 		}
@@ -2605,10 +2566,6 @@ protocol version:      ${this.protocolVersion}`;
 	 * Handles a CommandClass that was received from this node
 	 */
 	public async handleCommand(command: CommandClass): Promise<void> {
-		// If the node sent us an unsolicited update, our initial assumption
-		// was wrong. Stop querying it regularly for updates
-		this.cancelManualValueRefresh(command.ccId);
-
 		// If this is a report for the root endpoint and the node supports the CC on another endpoint,
 		// we need to map it to endpoint 1. Either it does not support multi channel associations or
 		// it is misbehaving. In any case, we would hide this report if we didn't map it
@@ -3041,10 +2998,14 @@ protocol version:      ${this.protocolVersion}`;
 		}
 		this.lastWakeUp = now;
 
-		// Some devices expect us to query them on wake up in order to function correctly
+		// Some legacy devices expect us to query them on wake up in order to function correctly
 		if (this._deviceConfig?.compat?.queryOnWakeup) {
-			// Don't wait
 			void this.compatDoWakeupQueries();
+		} else {
+			// For other devices we may have to refresh their values from time to time
+			void this.autoRefreshValues().catch(() => {
+				// ignore
+			});
 		}
 
 		// In case there are no messages in the queue, the node may go back to sleep very soon
