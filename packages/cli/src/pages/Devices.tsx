@@ -191,7 +191,13 @@ export const DevicesPage: React.FC = () => {
 						},
 					},
 					{ label: "Include", hotkey: "+" },
-					{ label: "Exclude", hotkey: "-" },
+					{
+						label: "Exclude",
+						hotkey: "-",
+						onPress: () => {
+							navigate(CLIPage.ExcludeNode);
+						},
+					},
 					{ label: "Replace failed", hotkey: "r" },
 					{
 						label: "Remove failed",

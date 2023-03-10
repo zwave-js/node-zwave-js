@@ -1,9 +1,9 @@
 import { Text } from "ink";
 import Spinner from "ink-spinner";
 import { useEffect } from "react";
+import { Center } from "../components/Center.js";
 import { useDriver } from "../hooks/useDriver.js";
 import { CLIPage, useNavigation } from "../hooks/useNavigation.js";
-import { Center } from "./Center.js";
 
 export const DestroyingDriverPage: React.FC = () => {
 	const { destroyDriver } = useDriver();

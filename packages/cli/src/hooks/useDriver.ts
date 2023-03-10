@@ -1,5 +1,9 @@
 import React from "react";
-import type { Driver } from "zwave-js";
+import type {
+	ControllerEventCallbacks,
+	Driver,
+	DriverEventCallbacks,
+} from "zwave-js";
 
 interface IDriverContext {
 	driver: Driver;
@@ -19,3 +23,26 @@ export const useDriver = () => {
 
 	return { driver, setDriver, destroyDriver };
 };
+
+export function useDriverEvent<K extends keyof DriverEventCallbacks>(
+	type: K,
+	listener: DriverEventCallbacks[K],
+): void {
+	const { driver } = React.useContext(DriverContext);
+	React.useEffect(() => {
+		driver.on(type, listener);
+		return () => void driver.off(type, listener);
+	}, [listener, type]);
+}
+
+export function useControllerEvent<K extends keyof ControllerEventCallbacks>(
+	type: K,
+	listener: ControllerEventCallbacks[K],
+): void {
+	const { driver } = React.useContext(DriverContext);
+	const controller = driver.controller;
+	React.useEffect(() => {
+		controller.on(type, listener);
+		return () => void controller.off(type, listener);
+	}, [listener, type]);
+}

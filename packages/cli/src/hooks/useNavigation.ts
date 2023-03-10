@@ -1,11 +1,12 @@
 import React from "react";
-import { DestroyingDriverPage } from "../components/DestroyingDriver.js";
 import { SetUSBPath } from "../components/setUSBPath.js";
-import { StartingDriverPage } from "../components/StartingDriver.js";
 import { ConfirmExitPage } from "../pages/ConfirmExit.js";
+import { DestroyingDriverPage } from "../pages/DestroyingDriver.js";
+import { ExcludeNodePage } from "../pages/ExcludeNode.js";
 import { MainMenuPage } from "../pages/MainMenu.js";
 import { PreparePage } from "../pages/Prepare.js";
 import { RemoveFailedNodePage } from "../pages/RemoveFailedNode.js";
+import { StartingDriverPage } from "../pages/StartingDriver.js";
 
 export enum CLIPage {
 	Prepare,
@@ -15,6 +16,7 @@ export enum CLIPage {
 
 	MainMenu,
 
+	ExcludeNode,
 	RemoveFailedNode,
 
 	ConfirmExit,
@@ -54,6 +56,8 @@ export function getPageComponent(cliPage: CLIPage): React.FC<any> | undefined {
 		case CLIPage.MainMenu:
 			return MainMenuPage;
 
+		case CLIPage.ExcludeNode:
+			return ExcludeNodePage;
 		case CLIPage.RemoveFailedNode:
 			return RemoveFailedNodePage;
 

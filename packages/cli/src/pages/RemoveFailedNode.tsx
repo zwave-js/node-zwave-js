@@ -15,12 +15,13 @@ export const RemoveFailedNodePage: React.FC<RemoveFailedNodePageProps> = (
 ) => {
 	const { driver } = useDriver();
 	const { navigate } = useNavigation();
-	const { showError } = useDialogs();
+	const { showError, showSuccess } = useDialogs();
 
 	useEffect(() => {
 		(async () => {
 			try {
 				await driver.controller.removeFailedNode(props.nodeId);
+				showSuccess(`Node ${props.nodeId} removed!`);
 			} catch (e: any) {
 				showError(`Failed to remove node: ${e.message}`);
 			} finally {

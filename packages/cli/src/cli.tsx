@@ -26,6 +26,9 @@ process.on("unhandledRejection", (err) => {
 	throw err;
 });
 
+// We may have more than 10 input listeners active at any given time
+process.stdin.setMaxListeners(100);
+
 const MIN_ROWS = 30;
 
 const logBuffer = new LinesBuffer(10000);
@@ -80,6 +83,17 @@ const CLI: React.FC = () => {
 				type: "message",
 				message,
 				color: "red",
+				onSubmit: () => setModalState(undefined),
+			});
+		},
+		[setModalState],
+	);
+	const showSuccess = useCallback(
+		(message: React.ReactNode) => {
+			setModalState({
+				type: "message",
+				message,
+				color: "green",
 				onSubmit: () => setModalState(undefined),
 			});
 		},
@@ -166,7 +180,7 @@ const CLI: React.FC = () => {
 							}}
 						>
 							<DialogsContext.Provider
-								value={{ showError, queryInput }}
+								value={{ showError, showSuccess, queryInput }}
 							>
 								<Frame
 									topLabels={!modalState && menuItemSlots.top}

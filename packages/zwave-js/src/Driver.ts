@@ -8,6 +8,7 @@ export type {
 	ResponseRole,
 } from "@zwave-js/serial";
 export { Driver, libName, libVersion } from "./lib/driver/Driver";
+export type { DriverEventCallbacks } from "./lib/driver/Driver";
 export type {
 	EditableZWaveOptions,
 	ZWaveOptions,

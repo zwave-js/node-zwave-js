@@ -332,7 +332,7 @@ import {
 } from "./_Types";
 
 // Strongly type the event emitter events
-interface ControllerEventCallbacks
+export interface ControllerEventCallbacks
 	extends StatisticsEventCallbacks<ControllerStatistics> {
 	"inclusion failed": () => void;
 	"exclusion failed": () => void;

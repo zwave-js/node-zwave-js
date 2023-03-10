@@ -2,6 +2,7 @@ import React from "react";
 
 export type IDialogsContext = {
 	showError(message: React.ReactNode): void;
+	showSuccess(message: React.ReactNode): void;
 	queryInput(
 		message: React.ReactNode,
 		initial?: string,
