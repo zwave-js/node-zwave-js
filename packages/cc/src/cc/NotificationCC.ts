@@ -6,6 +6,7 @@ import {
 	NotificationParameterWithValue,
 	NotificationValueDefinition,
 } from "@zwave-js/config";
+import { timespan } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -17,6 +18,7 @@ import {
 	MessagePriority,
 	MessageRecord,
 	parseBitMask,
+	SinglecastCC,
 	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
@@ -64,6 +66,9 @@ export const NotificationCCValues = Object.freeze({
 		...V.staticProperty("notificationMode", undefined, {
 			internal: true,
 			supportsEndpoints: false,
+		}),
+		...V.staticProperty("lastRefresh", undefined, {
+			internal: true,
 		}),
 
 		// V1 Alarm values
@@ -708,7 +713,38 @@ export class NotificationCC extends CommandClass {
 				// @ts-expect-error
 				if (response) await node.handleCommand(response);
 			}
+
+			// Remember when we did this
+			this.setValue(
+				applHost,
+				NotificationCCValues.lastRefresh,
+				Date.now(),
+			);
 		}
+	}
+
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		applHost: ZWaveApplicationHost,
+	): boolean {
+		// Pull-mode nodes must be polled regularly
+
+		const isPullMode =
+			NotificationCC.getNotificationMode(
+				applHost,
+				this.getNode(applHost)!,
+			) === "pull";
+		if (!isPullMode) return false;
+
+		const lastUpdated = this.getValue<number>(
+			applHost,
+			NotificationCCValues.lastRefresh,
+		);
+
+		return (
+			lastUpdated == undefined ||
+			Date.now() - lastUpdated > timespan.hours(6)
+		);
 	}
 }
 

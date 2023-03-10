@@ -1472,6 +1472,8 @@ export class Driver
 		}
 	}
 
+	private autoRefreshNodeValueTimers = new Map<number, NodeJS.Timeout>();
+
 	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
 	/**
 	 * @internal
@@ -1699,8 +1701,24 @@ export class Driver
 		this._nodesReady.add(node.id);
 		this.controllerLog.logNode(node.id, "The node is ready to be used");
 
-		// Regularly query listening nodes for updated values
-		node.scheduleManualValueRefreshes();
+		// Regularly check if values of non-sleeping nodes need to be refreshed per the specs
+		// For sleeping nodes this is done on wakeup
+		if (this.autoRefreshNodeValueTimers.has(node.id)) {
+			clearInterval(this.autoRefreshNodeValueTimers.get(node.id));
+			this.autoRefreshNodeValueTimers.delete(node.id);
+		}
+		if (!node.canSleep) {
+			// Randomize the interval so we don't get a flood of queries for all listening nodes
+			const intervalMinutes = 50 + Math.random() * 20;
+			this.autoRefreshNodeValueTimers.set(
+				node.id,
+				setInterval(() => {
+					void node.autoRefreshValues().catch(() => {
+						// ignore errors
+					});
+				}, timespan.minutes(intervalMinutes)).unref(),
+			);
+		}
 
 		this.checkAllNodesReady();
 	}
@@ -1964,6 +1982,11 @@ export class Driver
 			clearTimeout(this.retryNodeInterviewTimeouts.get(node.id));
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
+		if (this.autoRefreshNodeValueTimers.has(node.id)) {
+			clearTimeout(this.autoRefreshNodeValueTimers.get(node.id));
+			this.autoRefreshNodeValueTimers.delete(node.id);
+		}
+
 		// purge node values from the DB
 		node.valueDB.clear();
 		this.cachePurge(cacheKeys.node(node.id)._baseKey);
@@ -2528,6 +2551,14 @@ export class Driver
 			clearTimeout(timeout),
 		);
 		this.retryNodeInterviewTimeouts.clear();
+		this.autoRefreshNodeValueTimers.forEach((timeout) =>
+			clearTimeout(timeout),
+		);
+		this.autoRefreshNodeValueTimers.clear();
+		if (this.pollBackgroundRSSITimer) {
+			clearTimeout(this.pollBackgroundRSSITimer);
+			this.pollBackgroundRSSITimer = undefined;
+		}
 
 		this._controllerInterviewed = false;
 		void this.initializeControllerAndNodes();
@@ -2649,7 +2680,9 @@ export class Driver
 			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
 			...this.retryNodeInterviewTimeouts.values(),
+			...this.autoRefreshNodeValueTimers.values(),
 			this.statisticsTimeout,
+			this.pollBackgroundRSSITimer,
 			...this.awaitedCommands.map((c) => c.timeout),
 			...this.awaitedMessages.map((m) => m.timeout),
 			...this.awaitedBootloaderChunks.map((b) => b.timeout),
