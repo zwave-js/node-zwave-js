@@ -1285,7 +1285,6 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     refreshValues(): Promise<void>;
     // (undocumented)
     requestNodeInfo(): Promise<NodeUpdatePayload>;
-    requiresManualValueRefresh(): boolean;
     // (undocumented)
     get sdkVersion(): string | undefined;
     // (undocumented)

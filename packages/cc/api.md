@@ -1725,6 +1725,8 @@ export class BatteryCC extends CommandClass {
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
+    // (undocumented)
+    shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "BatteryCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1800,7 +1802,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lowTemperatureStatus";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Battery temperature is low";
             readonly writeable: false;
@@ -1826,7 +1828,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "disconnected";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Battery is disconnected";
             readonly writeable: false;
@@ -1852,7 +1854,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rechargeOrReplace";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Recharge or replace";
             readonly states: {
@@ -1883,7 +1885,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lowFluid";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Fluid is low";
             readonly writeable: false;
@@ -1909,7 +1911,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "overheating";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Overheating";
             readonly writeable: false;
@@ -1935,7 +1937,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "backup";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Used as backup";
             readonly writeable: false;
@@ -1961,7 +1963,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rechargeable";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Rechargeable";
             readonly writeable: false;
@@ -1987,7 +1989,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "chargingStatus";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Charging status";
             readonly states: {
@@ -2018,7 +2020,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "temperature";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Temperature";
             readonly writeable: false;
@@ -2046,7 +2048,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "maximumCapacity";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly max: 100;
             readonly unit: "%";
@@ -2075,7 +2077,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "isLow";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Low battery level";
             readonly writeable: false;
@@ -2101,7 +2103,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "level";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly max: 100;
             readonly unit: "%";
@@ -3874,6 +3876,7 @@ export class CommandClass implements ICommandClass {
     getPartialCCSessionId(): Record<string, any> | undefined;
     protected getValue<T>(applHost: ZWaveApplicationHost, ccValue: CCValue): T | undefined;
     protected getValueDB(applHost: ZWaveApplicationHost): ValueDB;
+    protected getValueTimestamp(applHost: ZWaveApplicationHost, ccValue: CCValue): number | undefined;
     // (undocumented)
     protected host: ZWaveHost;
     interview(_applHost: ZWaveApplicationHost): Promise<void>;
@@ -3909,6 +3912,7 @@ export class CommandClass implements ICommandClass {
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     protected setMetadata(applHost: ZWaveApplicationHost, ccValue: CCValue, meta?: ValueMetadata): void;
     protected setValue(applHost: ZWaveApplicationHost, ccValue: CCValue, value: unknown): void;
+    shouldRefreshValues(this: SinglecastCC<this>, _applHost: ZWaveApplicationHost): boolean;
     skipEndpointInterview(): boolean;
     // (undocumented)
     protected throwMissingCriticalInterviewResponse(): never;
@@ -9833,6 +9837,8 @@ export class MeterCC extends CommandClass {
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
+    shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
     translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
 
@@ -9943,7 +9949,7 @@ export const MeterCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9975,7 +9981,7 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9995,7 +10001,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "reset";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Reset accumulated values";
             readonly readable: false;
@@ -10021,7 +10027,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedRateTypes";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10046,7 +10052,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedScales";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10071,7 +10077,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsReset";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10096,7 +10102,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "type";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10937,6 +10943,8 @@ export class MultilevelSensorCC extends CommandClass {
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
+    shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
     translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
 
@@ -11737,6 +11745,8 @@ export class NotificationCC extends CommandClass {
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
+    // (undocumented)
+    shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCEventSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11877,7 +11887,7 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11911,7 +11921,7 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11943,7 +11953,7 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11971,7 +11981,7 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -11991,7 +12001,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "alarmLevel";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Alarm Level";
             readonly writeable: false;
@@ -12019,7 +12029,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "alarmType";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Alarm Type";
             readonly writeable: false;
@@ -12037,6 +12047,31 @@ export const NotificationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
+    lastRefresh: {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: "lastRefresh";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "lastRefresh";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
     notificationMode: {
         readonly id: {
             commandClass: CommandClasses.Notification;
@@ -12047,7 +12082,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "notificationMode";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12072,7 +12107,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedNotificationTypes";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12097,7 +12132,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsV1Alarm";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
