@@ -217,7 +217,11 @@ const CLI: React.FC = () => {
 									}
 									height={
 										rows -
-										(layout === "horizontal" ? 4 : 10)
+										(process.env.NODE_ENV === "development"
+											? layout === "horizontal"
+												? 4
+												: 10
+											: 0)
 									}
 									width={columns}
 									paddingY={1}

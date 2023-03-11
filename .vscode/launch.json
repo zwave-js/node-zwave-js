@@ -15,6 +15,7 @@
 				"--start"
 			],
 			"env": {
+				"NODE_ENV": "development"
 				// "DEV": "true"
 			},
 			"skipFiles": ["<node_internals>/**"],

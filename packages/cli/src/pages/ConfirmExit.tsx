@@ -1,4 +1,5 @@
-import { Box, Text, useApp, useInput } from "ink";
+import { Text, useApp, useInput } from "ink";
+import { Center } from "../components/Center.js";
 import { useDriver } from "../hooks/useDriver.js";
 import { useNavigation } from "../hooks/useNavigation.js";
 
@@ -17,12 +18,12 @@ export const ConfirmExitPage: React.FC = () => {
 	});
 
 	return (
-		<Box flexDirection="column" justifyContent="center">
+		<Center>
 			<Text color="red">Are you sure you want to exit?</Text>
 			<Text>
 				Press <Text bold>RETURN</Text> to exit, or{" "}
 				<Text bold>ESCAPE</Text> to cancel.
 			</Text>
-		</Box>
+		</Center>
 	);
 };
