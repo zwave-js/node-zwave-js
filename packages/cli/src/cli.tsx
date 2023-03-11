@@ -4,7 +4,12 @@ import type { Driver } from "zwave-js";
 import { Frame } from "./components/Frame.js";
 import { HDivider } from "./components/HDivider.js";
 import { Log } from "./components/Log.js";
-import { ModalMessage, ModalQuery, ModalState } from "./components/Modals.js";
+import {
+	InlineQuery,
+	ModalMessage,
+	ModalQuery,
+	ModalState,
+} from "./components/Modals.js";
 import { SetUSBPath } from "./components/setUSBPath.js";
 import { VDivider } from "./components/VDivider.js";
 import { ActionsContext } from "./hooks/useActions.js";
@@ -88,6 +93,17 @@ const CLI: React.FC = () => {
 		},
 		[setModalState],
 	);
+	const showWarning = useCallback(
+		(message: React.ReactNode) => {
+			setModalState({
+				type: "message",
+				message,
+				color: "yellow",
+				onSubmit: () => setModalState(undefined),
+			});
+		},
+		[setModalState],
+	);
 	const showSuccess = useCallback(
 		(message: React.ReactNode) => {
 			setModalState({
@@ -100,10 +116,17 @@ const CLI: React.FC = () => {
 		[setModalState],
 	);
 	const queryInput = useCallback(
-		(message: React.ReactNode, initial?: string) => {
+		(
+			message: React.ReactNode,
+			options: {
+				initial?: string;
+				inline?: boolean;
+			} = {},
+		) => {
+			const { initial, inline = false } = options;
 			return new Promise<any>((resolve) => {
 				setModalState({
-					type: "query",
+					type: inline ? "queryInline" : "query",
 					message,
 					initial,
 					onSubmit: (value) => {
@@ -180,7 +203,12 @@ const CLI: React.FC = () => {
 							}}
 						>
 							<DialogsContext.Provider
-								value={{ showError, showSuccess, queryInput }}
+								value={{
+									showError,
+									showWarning,
+									showSuccess,
+									queryInput,
+								}}
 							>
 								<Frame
 									topLabels={!modalState && menuItemSlots.top}
@@ -199,12 +227,15 @@ const CLI: React.FC = () => {
 											: "column"
 									}
 									alignItems="stretch"
-									justifyContent="space-around"
+									justifyContent="space-between"
 								>
-									{!modalState && (
+									{(!modalState ||
+										modalState.type === "queryInline") && (
 										<>
 											<Box
+												flexDirection="column"
 												flexGrow={1}
+												alignItems="stretch"
 												justifyContent="center"
 											>
 												{/* TODO: This should be merged into `selectPage` */}
@@ -230,6 +261,24 @@ const CLI: React.FC = () => {
 													<PageComponent
 														{...cliPage.props}
 													/>
+												)}
+
+												{modalState?.type ===
+													"queryInline" && (
+													<InlineQuery
+														onSubmit={
+															modalState.onSubmit
+														}
+														onCancel={
+															modalState.onCancel
+														}
+														initial={
+															modalState.initial
+														}
+														color={modalState.color}
+													>
+														{modalState.message}
+													</InlineQuery>
 												)}
 											</Box>
 											{logVisible && (
@@ -261,24 +310,34 @@ const CLI: React.FC = () => {
 											)}
 										</>
 									)}
-									{modalState &&
-										(modalState.type === "message" ? (
-											<ModalMessage
-												onSubmit={modalState.onSubmit}
-												color={modalState.color}
-											>
-												{modalState.message}
-											</ModalMessage>
-										) : (
-											<ModalQuery
-												onSubmit={modalState.onSubmit}
-												onCancel={modalState.onCancel}
-												initial={modalState.initial}
-												color={modalState.color}
-											>
-												{modalState.message}
-											</ModalQuery>
-										))}
+									{modalState && (
+										<>
+											{modalState.type === "message" && (
+												<ModalMessage
+													onSubmit={
+														modalState.onSubmit
+													}
+													color={modalState.color}
+												>
+													{modalState.message}
+												</ModalMessage>
+											)}
+											{modalState.type === "query" && (
+												<ModalQuery
+													onSubmit={
+														modalState.onSubmit
+													}
+													onCancel={
+														modalState.onCancel
+													}
+													initial={modalState.initial}
+													color={modalState.color}
+												>
+													{modalState.message}
+												</ModalQuery>
+											)}
+										</>
+									)}
 								</Frame>
 							</DialogsContext.Provider>
 						</DriverContext.Provider>

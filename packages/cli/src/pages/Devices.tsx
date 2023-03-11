@@ -88,7 +88,7 @@ function getModel(node: ZWaveNode): string {
 export const DevicesPage: React.FC = () => {
 	const { driver } = useDriver();
 	const forceRerender = useForceRerender();
-	const { queryInput } = useDialogs();
+	const { queryInput, showError } = useDialogs();
 	const { navigate } = useNavigation();
 
 	const [maxRows, setMaxRows] = useState(10);
@@ -178,7 +178,12 @@ export const DevicesPage: React.FC = () => {
 						label: "Select",
 						hotkey: "return",
 						onPress: async () => {
-							const nodeId = await queryInput("Enter node ID");
+							const nodeId = await queryInput(
+								"Select → Node ID",
+								{
+									inline: true,
+								},
+							);
 							if (!nodeId) return;
 							const nodeIdNum = parseInt(nodeId, 10);
 							if (
@@ -186,11 +191,19 @@ export const DevicesPage: React.FC = () => {
 								nodeIDs.includes(nodeIdNum)
 							) {
 								// TODO: Select node ID
-								throw new Error(`Node ${nodeIdNum} selected`);
+								// throw new Error(`Node ${nodeIdNum} selected`);
+							} else {
+								showError("Node not found");
 							}
 						},
 					},
-					{ label: "Include", hotkey: "+" },
+					{
+						label: "Include",
+						hotkey: "+",
+						onPress: () => {
+							navigate(CLIPage.IncludeNode);
+						},
+					},
 					{
 						label: "Exclude",
 						hotkey: "-",
@@ -198,13 +211,39 @@ export const DevicesPage: React.FC = () => {
 							navigate(CLIPage.ExcludeNode);
 						},
 					},
-					{ label: "Replace failed", hotkey: "r" },
+					{
+						label: "Replace failed",
+						hotkey: "r",
+						onPress: async () => {
+							const nodeId = await queryInput(
+								"Replace failed → Node ID",
+								{
+									inline: true,
+								},
+							);
+							if (!nodeId) return;
+							const nodeIdNum = parseInt(nodeId, 10);
+							if (
+								!Number.isNaN(nodeIdNum) &&
+								nodeIDs.includes(nodeIdNum)
+							) {
+								// navigate(CLIPage.ReplaceFailedNode, {
+								// 	nodeId: nodeIdNum,
+								// });
+							} else {
+								showError("Node not found");
+							}
+						},
+					},
 					{
 						label: "Remove failed",
 						hotkey: "f",
 						onPress: async () => {
 							const nodeId = await queryInput(
-								"Enter ID of the node to remove",
+								"Remove failed → Node ID",
+								{
+									inline: true,
+								},
 							);
 							if (!nodeId) return;
 							const nodeIdNum = parseInt(nodeId, 10);
@@ -215,6 +254,8 @@ export const DevicesPage: React.FC = () => {
 								navigate(CLIPage.RemoveFailedNode, {
 									nodeId: nodeIdNum,
 								});
+							} else {
+								showError("Node not found");
 							}
 						},
 					},

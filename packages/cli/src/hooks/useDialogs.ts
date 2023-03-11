@@ -2,10 +2,14 @@ import React from "react";
 
 export type IDialogsContext = {
 	showError(message: React.ReactNode): void;
+	showWarning(message: React.ReactNode): void;
 	showSuccess(message: React.ReactNode): void;
 	queryInput(
 		message: React.ReactNode,
-		initial?: string,
+		options?: {
+			initial?: string;
+			inline?: boolean;
+		},
 	): Promise<string | undefined>;
 };
 

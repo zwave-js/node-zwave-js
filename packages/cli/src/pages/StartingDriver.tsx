@@ -1,7 +1,8 @@
-import { Box, Text } from "ink";
+import { Text } from "ink";
 import Spinner from "ink-spinner";
 import { useCallback, useEffect, useState } from "react";
 import type { Driver } from "zwave-js";
+import { Center } from "../components/Center.js";
 import { useDialogs } from "../hooks/useDialogs.js";
 import { useDriver } from "../hooks/useDriver.js";
 import { useGlobals } from "../hooks/useGlobals.js";
@@ -62,13 +63,13 @@ export const StartingDriverPage: React.FC = () => {
 	}, []);
 
 	return (
-		<Box flexDirection="column" justifyContent="center">
+		<Center>
 			<Text>
 				<Text color="green">
 					<Spinner type="dots" />
 				</Text>{" "}
 				{message}
 			</Text>
-		</Box>
+		</Center>
 	);
 };

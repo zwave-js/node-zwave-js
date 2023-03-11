@@ -12,7 +12,7 @@ export type ModalState = {
 			onSubmit: () => void;
 	  }
 	| {
-			type: "query";
+			type: "query" | "queryInline";
 			initial?: string;
 			onSubmit: (input: string) => void;
 			onCancel?: () => void;
@@ -90,5 +90,39 @@ export const ModalQuery: React.FC<React.PropsWithChildren<ModalQueryProps>> = (
 				</Text>
 			</Box>
 		</Center>
+	);
+};
+
+export type InlineQueryProps = Omit<
+	ModalState & { type: "queryInline" },
+	"message" | "type"
+>;
+
+export const InlineQuery: React.FC<
+	React.PropsWithChildren<InlineQueryProps>
+> = (props) => {
+	useInput((input, key) => {
+		if (key.escape && props.onCancel) {
+			props.onCancel();
+		}
+		// Submitting is handled by the input component
+	});
+
+	return (
+		<Box
+			flexDirection="row"
+			alignItems="center"
+			justifyContent="space-between"
+			paddingY={0}
+			paddingX={1}
+		>
+			<Text color={props.color}>{props.children}: </Text>
+			<Box borderStyle="round" borderColor="gray" flexGrow={1}>
+				<UncontrolledTextInput
+					initialValue={props.initial}
+					onSubmit={props.onSubmit}
+				></UncontrolledTextInput>
+			</Box>
+		</Box>
 	);
 };
