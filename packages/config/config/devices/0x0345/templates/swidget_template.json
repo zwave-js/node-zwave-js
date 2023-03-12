@@ -7,6 +7,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 2400
 	},
 	"power_1_low_entry_value": {
@@ -17,6 +18,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_1_high_exit_value": {
@@ -27,6 +29,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 2400
 	},
 	"power_1_low_exit_value": {
@@ -37,6 +40,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_1_high_delay": {
@@ -47,6 +51,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_1_low_delay": {
@@ -57,6 +62,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_1_periodic_report": {
@@ -67,6 +73,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 3600
 	},
 	"power_1_change_report": {
@@ -77,6 +84,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 10
 	},
 	"power_1_renotification_delay": {
@@ -87,6 +95,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_1_high_entry_set_value": {
@@ -96,6 +105,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 255
 	},
 	"power_1_high_exit_set_value": {
@@ -105,6 +115,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_1_low_entry_set_value": {
@@ -114,6 +125,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 255
 	},
 	"power_1_low_exit_set_value": {
@@ -123,6 +135,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_1_high_actions_control_associations_on_entry": {
@@ -188,25 +201,25 @@
 	"power_1_low_actions_control_host_on_exit": {
 		// param 15b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: CONTROL HOST ON EXIT",
+		"label": "Power 1 Low Actions: CONTROL HOST ON EXIT",
 		"description": "If set, execute BASIC SET with “Power Low Exit SET Value” on host device on Power 1 Low state exit."
 	},
 	"power_1_low_actions_report_transitions": {
 		// param 15b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: REPORT TRANSITIONS",
+		"label": "Power 1 Low Actions: REPORT TRANSITIONS",
 		"description": "If set, send METER REPORT to Lifeline on low-power state entry and exit."
 	},
 	"power_1_low_actions_apply_entry_delay": {
 		// param 15b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: APPLY ENTRY DELAY",
+		"label": "Power 1 Low Actions: APPLY ENTRY DELAY",
 		"description": "If set, apply “Power 1 Low Delay” for Power 1 Low state entry."
 	},
 	"power_1_low_actions_apply_exit_delay": {
 		// param 15b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: APPLY EXIT DELAY",
+		"label": "Power 1 Low Actions: APPLY EXIT DELAY",
 		"description": "If set, apply “Power 1 Low Delay” for Power 1 Low state exit."
 	},
 	"power_2_high_entry_value": {
@@ -217,6 +230,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 2400
 	},
 	"power_2_low_entry_value": {
@@ -227,6 +241,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_2_high_exit_value": {
@@ -237,6 +252,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 2400
 	},
 	"power_2_low_exit_value": {
@@ -247,6 +263,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_2_high_delay": {
@@ -257,6 +274,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_2_low_delay": {
@@ -267,6 +285,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_2_periodic_report": {
@@ -277,6 +296,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 3600
 	},
 	"power_2_change_report": {
@@ -287,6 +307,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 2400,
+		"unsigned": true,
 		"defaultValue": 10
 	},
 	"power_2_renotification_delay": {
@@ -297,6 +318,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_2_high_entry_set_value": {
@@ -306,6 +328,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 255
 	},
 	"power_2_high_exit_set_value": {
@@ -315,6 +338,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_2_low_entry_set_value": {
@@ -324,6 +348,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 255
 	},
 	"power_2_low_exit_set_value": {
@@ -333,6 +358,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"power_2_high_actions_control_associations_on_entry": {
@@ -350,7 +376,7 @@
 	"power_2_high_actions_control_host_on_entry": {
 		// param 37b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: CONTROL HOST ON ENTRY",
+		"label": "Power 2 High Actions: CONTROL HOST ON ENTRY",
 		"description": "If set, execute BASIC SET with “Power 2 High Entry SET Value” on host device on Power 2 High state entry."
 	},
 	"power_2_high_actions_control_host_on_exit": {
@@ -368,7 +394,7 @@
 	"power_2_high_actions_apply_entry_delay": {
 		// param 37b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: APPLY ENTRY DELAY",
+		"label": "Power 2 High Actions: APPLY ENTRY DELAY",
 		"description": "If set, apply “Power 2 High Delay” for Power 2 High state entry."
 	},
 	"power_2_high_actions_apply_exit_delay": {
@@ -398,25 +424,25 @@
 	"power_2_low_actions_control_host_on_exit": {
 		// param 38b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: CONTROL HOST ON EXIT",
+		"label": "Power 2 Low Actions: CONTROL HOST ON EXIT",
 		"description": "If set, execute BASIC SET with “Power 2 Low Exit SET Value” on host device on Power 2 Low state exit."
 	},
 	"power_2_low_actions_report_transitions": {
 		// param 38b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: REPORT TRANSITIONS",
+		"label": "Power 2 Low Actions: REPORT TRANSITIONS",
 		"description": "If set, send METER REPORT to Lifeline on Power 2 Low state entry and exit."
 	},
 	"power_2_low_actions_apply_entry_delay": {
 		// param 38b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: APPLY ENTRY DELAY",
+		"label": "Power 2 Low Actions: APPLY ENTRY DELAY",
 		"description": "If set, apply “Power 2 Low Delay” for Power 2 Low state entry."
 	},
 	"power_2_low_actions_apply_exit_delay": {
 		// param 38b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: APPLY EXIT DELAY",
+		"label": "Power 2 Low Actions: APPLY EXIT DELAY",
 		"description": "If set, apply “Power 2 Low Delay” for Power 2 Low state exit."
 	},
 	"motion_sensitivity_level":{
@@ -432,6 +458,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 300
 	},
 	"motion_reset_delay": {
@@ -441,6 +468,7 @@
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 300
 	},
 	"motion_detected_entry_set_value": {
@@ -450,6 +478,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 255
 	},
 	"motion_detected_exit_set_value": {
@@ -459,6 +488,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"motion_actions_control_associations_on_entry": {
@@ -498,6 +528,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 500,
+		"unsigned": true,
 		"defaultValue": 100
 
 	},
@@ -508,6 +539,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 500,
+		"unsigned": true,
 		"defaultValue": 175
 	},
     "air_quality_level_3_index": {
@@ -517,6 +549,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 500,
+		"unsigned": true,
 		"defaultValue": 250
 	},
 	"air_quality_alert_level": {
@@ -527,6 +560,7 @@
 		"minValue": 1,
 		"maxValue": 3,
 		"defaultValue": 2,
+		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -550,6 +584,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"air_quality_renotification_delay": {
@@ -559,6 +594,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 300
 	},
 	"air_quality_voc_periodic_report": {
@@ -568,6 +604,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 3600
 	},
 	"air_quality_co2_periodic_report": {
@@ -577,6 +614,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 3600
 	},
 	"air_quality_alert_entry_set_value": {
@@ -586,6 +624,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 255
 	},
 	"air_quality_alert_exit_set_value": {
@@ -595,6 +634,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"air_quality_actions_control_associations_on_entry": {
@@ -674,6 +714,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"temperature_low_delay": {
@@ -684,6 +725,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"temperature_periodic_report": {
@@ -694,6 +736,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 28800,
+		"unsigned": true,
 		"defaultValue": 360
 	},
 	"temperature_change_report": {
@@ -704,6 +747,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 10
 	},
 	"temperature_renotification_delay": {
@@ -714,6 +758,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"temperature_high_entry_set_value": {
@@ -723,6 +768,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 255
 	},
 	"temperature_high_exit_set_value": {
@@ -732,6 +778,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"temperature_low_entry_set_value": {
@@ -741,6 +788,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 255
 	},
 	"temperature_low_exit_set_value": {
@@ -850,8 +898,7 @@
 	"temperature_units": {
 		// param 95
 		"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
-		"label": "Temperature Units",
-		"description": "Set the temperature Unit"
+		"label": "Temperature Units"
 	},
 	"pressure_high_entry_level": {
 		// param 104
@@ -861,16 +908,18 @@
 		"valueSize": 2,
 		"minValue": 88,
 		"maxValue": 1100,
+		"unsigned": true,
 		"defaultValue": 1010
 	},
 	"pressure_low_entry_level": {
 		// param 105
-		"label": "Pressure Low Exit Level",
+		"label": "Pressure Low Entry Level",
 		"description": "Used to set the pressure value that indicates entry into a low/under pressure state.",
 		"unit": "Tenths",
 		"valueSize": 2,
 		"minValue": 88,
 		"maxValue": 1100,
+		"unsigned": true,
 		"defaultValue": 1024
 	},
 	"pressure_high_exit_level": {
@@ -881,6 +930,7 @@
 		"valueSize": 2,
 		"minValue": 88,
 		"maxValue": 1100,
+		"unsigned": true,
 		"defaultValue": 1024
 	},
 	"pressure_low_exit_level": {
@@ -891,6 +941,7 @@
 		"valueSize": 2,
 		"minValue": 88,
 		"maxValue": 1100,
+		"unsigned": true,
 		"defaultValue": 1010
 	},
 	"pressure_high_delay": {
@@ -901,6 +952,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 900
 	},
 	"pressure_low_delay": {
@@ -911,6 +963,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 900
 	},
 	"pressure_periodic_report": {
@@ -921,6 +974,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 3600
 	},
 	"pressure_change_report": {
@@ -931,6 +985,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 10
 	},
 	"pressure_renotification_delay": {
@@ -941,6 +996,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"pressure_high_entry_set_value": {
@@ -950,6 +1006,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"pressure_high_exit_set_value": {
@@ -959,6 +1016,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"pressure_low_entry_set_value": {
@@ -968,6 +1026,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"pressure_low_exit_set_value": {
@@ -977,6 +1036,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"pressure_high_actions_control_associations_on_entry": {
@@ -1066,12 +1126,12 @@
 	"pressure_units": {
 		// param 119
 		"label": "Pressure Units",
-		"description": "Pressure Units",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 0,
 		"allowManualEntry": false,
+		"unsigned": true,
 		"options": [
 			{
 				"label": "Kilopascal (kPa)",
@@ -1091,16 +1151,18 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 100,
+		"unsigned": true,
 		"defaultValue": 15
 	},
 	"humidity_low_entry_level": {
 		// param 129
-		"label": "Humidity Low Exit Level",
+		"label": "Humidity Low Entry Level",
 		"description": "Used to set the humidity value that indicates entry into a low/under humidity state.",
 		"unit": "%",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 100,
+		"unsigned": true,
 		"defaultValue": 15
 	},
 	"humidity_high_exit_level": {
@@ -1111,6 +1173,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 100,
+		"unsigned": true,
 		"defaultValue": 12
 	},
 	"humidity_low_exit_level": {
@@ -1121,6 +1184,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 100,
+		"unsigned": true,
 		"defaultValue": 12
 	},
 	"humidity_high_delay": {
@@ -1131,6 +1195,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 300
 	},
 	"humidity_low_delay": {
@@ -1141,6 +1206,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 300
 	},
 	"humidity_periodic_report": {
@@ -1151,6 +1217,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 300
 	},
 	"humidity_change_report": {
@@ -1161,6 +1228,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 100,
+		"unsigned": true,
 		"defaultValue": 10
 	},
 	"humidity_renotification_delay": {
@@ -1171,6 +1239,7 @@
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"humidity_high_entry_set_value": {
@@ -1180,6 +1249,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"humidity_high_exit_set_value": {
@@ -1189,6 +1259,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"humidity_low_entry_set_value": {
@@ -1198,6 +1269,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"humidity_low_exit_set_value": {
@@ -1207,6 +1279,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"humidity_baseline": {
@@ -1217,6 +1290,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 100,
+		"unsigned": true,
 		"readOnly": true
 	},
 	"humidity_high_actions_control_associations_on_entry": {
@@ -1323,6 +1397,7 @@
 		"minValue": 0,
 		"maxValue": 4294967295,
 		"defaultValue": 0,
+		"unsigned": true,
 		"readOnly": true
 	},
 	"system_led_brightness": {
@@ -1333,6 +1408,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 100,
+		"unsigned": true,
 		"defaultValue": 100
 	},
 	"led_invert": {
@@ -1380,7 +1456,6 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 0,
-		"allowManualEntry": false,
 		"options": [
 			{
 				"label": "host output is reported on when energized, off when de-energized. Commands to host are not inverted.",
@@ -1400,6 +1475,7 @@
 		"minValue": 20,
 		"maxValue": 80,
 		"defaultValue": 42,
+		"unsigned": true,
 		"description": "Used to set the minimum power output to the dimmer on the lowest setting above ‘off’."
 	},
 	"dimmer_maximum_brightness": {
@@ -1410,6 +1486,7 @@
 		"minValue": 80,
 		"maxValue": 100,
 		"defaultValue": 100,
+		"unsigned": true,
 		"description": "Used to set the maximum power output to the dimmer on the highest ‘on’ setting."
 	},
 	"dimmer_default_brightness": {
@@ -1420,6 +1497,7 @@
 		"minValue": 0,
 		"maxValue": 100,
 		"defaultValue": 80,
+		"unsigned": true,
 		"description": "Used to set the power output to the dimmer when it is initially turned on by the manual switch."
 	}
 }
