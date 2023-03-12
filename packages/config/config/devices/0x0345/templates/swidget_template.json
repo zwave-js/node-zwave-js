@@ -798,6 +798,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
+		"unsigned": true,
 		"defaultValue": 0
 	},
 	"temperature_high_actions_control_associations_on_entry": {
@@ -863,24 +864,24 @@
 	"temperature_low_actions_control_host_on_entry": {
 		// param 94b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: CONTROL HOST ON ENTRY",
+		"label": "Temperature Low Actions: CONTROL HOST ON ENTRY",
 		"description": "If set, execute BASIC SET with 'Temperature Low Entry SET Value' on host device on low/under temperature state entry"
 	},
 	"temperature_low_actions_control_host_on_exit": {
 		// param 94b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: CONTROL HOST ON EXIT",
+		"label": "Temperature Low Actions: CONTROL HOST ON EXIT",
 		"description": "If set, execute BASIC SET with 'Temperature Low Exit SET Value' on host device on low/under temperature state exit"
 	},
 	"temperature_low_actions_report_transitions": {
 		// param 94b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: REPORT TRANSITIONS",
+		"label": "Temperature Low Actions: REPORT TRANSITIONS",
 		"description": "If set, send Temperature MULTILEVEL SENSOR REPORT to Lifeline on high/over temperature state entry and exit"
 	},
 	"temperature_low_actions_notify_transitions": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: NOTIFY TRANSITIONS",
+		"label": "Temperature Low Actions: NOTIFY TRANSITIONS",
 		"description": "If set, send NOTIFICATION REPORT to Lifeline on low/under temperature state entry (Heat Alarm: Underheat), low/under temperature state exit (Heat Alarm: Idle), and during the Renotification Period (if enabled)"
 	},
 	"temperature_low_actions_apply_entry_delay": {
