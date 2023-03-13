@@ -1,9 +1,8 @@
 import { getErrorMessage } from "@zwave-js/shared";
-import { Box, render, Spacer, Text, useInput } from "ink";
+import { Box, Line, render, Spacer, Text, useInput } from "ink";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Driver } from "zwave-js";
 import { Frame } from "./components/Frame.js";
-import { HDivider } from "./components/HDivider.js";
 import { Log } from "./components/Log.js";
 import {
 	InlineQuery,
@@ -12,7 +11,6 @@ import {
 	ModalState,
 } from "./components/Modals.js";
 import { SetUSBPath } from "./components/setUSBPath.js";
-import { VDivider } from "./components/VDivider.js";
 import { DialogsContext } from "./hooks/useDialogs.js";
 import { DriverContext } from "./hooks/useDriver.js";
 import { GlobalsContext } from "./hooks/useGlobals.js";
@@ -327,6 +325,9 @@ const CLI: React.FC = () => {
 										</Box>
 										{logVisible && (
 											<Box
+												display={
+													logVisible ? "flex" : "none"
+												}
 												flexDirection={
 													layout === "horizontal"
 														? "row"
@@ -343,11 +344,16 @@ const CLI: React.FC = () => {
 														  )
 												}
 											>
-												{layout === "horizontal" ? (
-													<VDivider color="gray" />
-												) : (
-													<HDivider color="gray" />
-												)}
+												<Line
+													orientation={
+														layout === "horizontal"
+															? "vertical"
+															: "horizontal"
+													}
+													borderColor="gray"
+													borderStyle="single"
+												/>
+
 												<Log buffer={logBuffer} />
 											</Box>
 										)}

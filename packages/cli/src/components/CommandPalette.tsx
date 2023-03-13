@@ -1,8 +1,7 @@
-import { Box } from "ink";
+import { Box, Line } from "ink";
 import React from "react";
 import { Frame } from "./Frame.js";
 import { HotkeyLabel, HotkeyLabelProps } from "./HotkeyLabel.js";
-import { VDivider } from "./VDivider.js";
 
 export interface CommandPaletteProps {
 	label?: React.ReactNode;
@@ -23,7 +22,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = (props) => {
 				.filter((c): c is HotkeyLabelProps => !!c)
 				.map((p, i) => (
 					<React.Fragment key={i}>
-						{i > 0 && <VDivider dimColor />}
+						{i > 0 && (
+							<Line
+								orientation="vertical"
+								borderStyle="single"
+								borderColor="gray"
+							/>
+						)}
 						<Box paddingX={2}>
 							<HotkeyLabel {...p} />
 						</Box>

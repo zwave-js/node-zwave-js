@@ -59,7 +59,7 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
     "esbuild-register": "^3.4.2",
-    "ink": "^4.0.0",
+    "ink": "https://github.com/AlCalzone/ink#lines-stable",
     "ink-select-input": "^5.0.0",
     "ink-spinner": "^5.0.0",
     "ink-text-input": "^5.0.0",

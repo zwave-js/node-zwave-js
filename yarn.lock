@@ -1826,7 +1826,7 @@ __metadata:
     del-cli: ^5.0.0
     esbuild: 0.15.7
     esbuild-register: ^3.4.2
-    ink: ^4.0.0
+    ink: "https://github.com/AlCalzone/ink#lines-stable"
     ink-select-input: ^5.0.0
     ink-spinner: ^5.0.0
     ink-text-input: ^5.0.0
@@ -3767,6 +3767,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"emoji-regex@npm:^10.2.1":
+  version: 10.2.1
+  resolution: "emoji-regex@npm:10.2.1"
+  checksum: 1aa2d16881c56531fdfc03d0b36f5c2b6221cc4097499a5665b88b711dc3fb4d5b8804f0ca6f00c56e5dcf89bac75f0487eee85da1da77df3a33accc6ecbe426
+  languageName: node
+  linkType: hard
+
 "emoji-regex@npm:^8.0.0":
   version: 8.0.0
   resolution: "emoji-regex@npm:8.0.0"
@@ -5303,9 +5310,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ink@npm:^4.0.0":
+"ink@https://github.com/AlCalzone/ink#lines-stable":
   version: 4.0.0
-  resolution: "ink@npm:4.0.0"
+  resolution: "ink@https://github.com/AlCalzone/ink.git#commit=770eb7cddb36a326713bef20c2685a5203d92dfc"
   dependencies:
     ansi-escapes: ^6.0.0
     auto-bind: ^5.0.1
@@ -5314,9 +5321,10 @@ __metadata:
     cli-cursor: ^4.0.0
     cli-truncate: ^3.1.0
     code-excerpt: ^4.0.0
+    emoji-regex: ^10.2.1
     indent-string: ^5.0.0
     is-ci: ^3.0.1
-    lodash-es: ^4.17.21
+    lodash: ^4.17.21
     patch-console: ^2.0.0
     react-reconciler: ^0.29.0
     scheduler: ^0.23.0
@@ -5338,7 +5346,7 @@ __metadata:
       optional: true
     react-devtools-core:
       optional: true
-  checksum: 7cd120ed6589e17ea4f8c0abcfeac37e3afb3d6c5b82342a7996f0a15a1a4d1ba933f926ae8e5539dd8adea3e6cfbcf5d4025d82c1d917fbcf8fc56f92213f63
+  checksum: 4055659133de0390b557fc492edbab3f62edf1a4899ef932096dcddf2fac4609f18ce2a1ce6c013fa4825d7aae4ea506c9e3e30db344901afebf82aabd7a8002
   languageName: node
   linkType: hard
 
@@ -5957,13 +5965,6 @@ __metadata:
   dependencies:
     p-locate: ^6.0.0
   checksum: 1d88af5b512d6e6398026252e17382907126683ab09ae5d6b8918d0bc72ca2642e1ad6e2fe635c5920840e369618e5d748c08deb57ba537fdd3f78e87ca993e0
-  languageName: node
-  linkType: hard
-
-"lodash-es@npm:^4.17.21":
-  version: 4.17.21
-  resolution: "lodash-es@npm:4.17.21"
-  checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
   languageName: node
   linkType: hard
 
@@ -9117,8 +9118,8 @@ __metadata:
   linkType: hard
 
 "ws@npm:^8.12.0":
-  version: 8.12.1
-  resolution: "ws@npm:8.12.1"
+  version: 8.13.0
+  resolution: "ws@npm:8.13.0"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ">=5.0.2"
@@ -9127,7 +9128,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 97301c1c4d838fc81bd413f370f75c12aabe44527b31323b761eab3043a9ecb7e32ffd668548382c9a6a5ad3a1c3a9249608e8338e6b939f2f9540f1e21970b5
+  checksum: 53e991bbf928faf5dc6efac9b8eb9ab6497c69feeb94f963d648b7a3530a720b19ec2e0ec037344257e05a4f35bd9ad04d9de6f289615ffb133282031b18c61c
   languageName: node
   linkType: hard
 
