@@ -51,7 +51,8 @@ export const HotkeyLabel: React.FC<HotkeyLabelProps> = (props) => {
 			hotkey &&
 			(input === hotkey ||
 				(hotkey in specialKeys && (key as any)[hotkey])) &&
-			(!modifiers || modifiers.every((mod) => key[mod]))
+			((modifiers && modifiers.every((mod) => key[mod])) ||
+				(!modifiers && !key.ctrl && !key.shift))
 		) {
 			props.onPress?.();
 		}

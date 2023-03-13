@@ -2,7 +2,6 @@ import { Text } from "ink";
 import { libVersion } from "zwave-js";
 import { HotkeyLabel } from "../components/HotkeyLabel.js";
 import { USBPathInfo } from "../components/USBPathInfo.js";
-import { useDriver } from "../hooks/useDriver.js";
 import { useGlobals } from "../hooks/useGlobals.js";
 import type { MenuItem } from "../hooks/useMenu.js";
 import { CLIPage, useNavigation } from "../hooks/useNavigation.js";
@@ -52,7 +51,6 @@ export const exitMenuItem: MenuItem = {
 
 const DestroyDriverMenuItem: React.FC = () => {
 	const { navigate } = useNavigation();
-	const { driver, destroyDriver } = useDriver();
 
 	return (
 		<HotkeyLabel
@@ -67,6 +65,32 @@ export const destroyDriverMenuItem: MenuItem = {
 	location: "bottomRight",
 	item: <DestroyDriverMenuItem />,
 };
+
+// =====================================================================
+
+interface RunScriptMenuItemProps {
+	onPress: () => void;
+}
+
+const RunScriptMenuItem: React.FC<RunScriptMenuItemProps> = (props) => {
+	const { navigate } = useNavigation();
+
+	return (
+		<HotkeyLabel
+			hotkey="r"
+			modifiers={["ctrl"]}
+			label="run script"
+			onPress={props.onPress}
+		/>
+	);
+};
+
+export function createRunScriptMenuItem(onPress: () => void): MenuItem {
+	return {
+		location: "topRight",
+		item: <RunScriptMenuItem onPress={onPress} />,
+	};
+}
 
 // =====================================================================
 

@@ -1,5 +1,6 @@
+import { getErrorMessage } from "@zwave-js/shared";
 import { Box, render, Spacer, Text, useInput } from "ink";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Driver } from "zwave-js";
 import { Frame } from "./components/Frame.js";
 import { HDivider } from "./components/HDivider.js";
@@ -12,7 +13,6 @@ import {
 } from "./components/Modals.js";
 import { SetUSBPath } from "./components/setUSBPath.js";
 import { VDivider } from "./components/VDivider.js";
-import { ActionsContext } from "./hooks/useActions.js";
 import { DialogsContext } from "./hooks/useDialogs.js";
 import { DriverContext } from "./hooks/useDriver.js";
 import { GlobalsContext } from "./hooks/useGlobals.js";
@@ -25,7 +25,7 @@ import {
 } from "./hooks/useNavigation.js";
 import { useStdoutDimensions } from "./hooks/useStdoutDimensions.js";
 import { createLogTransport, LinesBuffer } from "./lib/logging.js";
-import { defaultMenuItems } from "./lib/menu.js";
+import { createRunScriptMenuItem, defaultMenuItems } from "./lib/menu.js";
 
 process.on("unhandledRejection", (err) => {
 	throw err;
@@ -54,7 +54,12 @@ const CLI: React.FC = () => {
 	}, [columns, setLayout]);
 
 	const [usbPath, setUSBPath] = useState<string>("/dev/ttyUSB0");
-	const [driver, setDriver] = useState<Driver>();
+
+	// We cannot use setState here, because this can cause driver to be undefined when the component is re-mounted
+	const driver = useRef<Driver>();
+	const setDriver = useCallback((d: Driver) => {
+		driver.current = d;
+	}, []);
 
 	const [logVisible, setLogVisible] = useState<boolean>(false);
 
@@ -82,38 +87,34 @@ const CLI: React.FC = () => {
 	}, [prevCliPage, setCLIPage, setPrevCLIPage]);
 
 	const [modalState, setModalState] = useState<ModalState>();
-	const showError = useCallback(
-		(message: React.ReactNode) => {
-			setModalState({
-				type: "message",
-				message,
-				color: "red",
-				onSubmit: () => setModalState(undefined),
+	const showMessage = useCallback(
+		(message: React.ReactNode, color: ModalState["color"]) => {
+			return new Promise<void>((resolve) => {
+				setModalState({
+					type: "message",
+					message,
+					color,
+					onSubmit: () => {
+						setModalState(undefined);
+						resolve();
+					},
+				});
 			});
 		},
 		[setModalState],
+	);
+
+	const showError = useCallback(
+		(message: React.ReactNode) => showMessage(message, "red"),
+		[showMessage],
 	);
 	const showWarning = useCallback(
-		(message: React.ReactNode) => {
-			setModalState({
-				type: "message",
-				message,
-				color: "yellow",
-				onSubmit: () => setModalState(undefined),
-			});
-		},
-		[setModalState],
+		(message: React.ReactNode) => showMessage(message, "yellow"),
+		[showMessage],
 	);
 	const showSuccess = useCallback(
-		(message: React.ReactNode) => {
-			setModalState({
-				type: "message",
-				message,
-				color: "green",
-				onSubmit: () => setModalState(undefined),
-			});
-		},
-		[setModalState],
+		(message: React.ReactNode) => showMessage(message, "green"),
+		[showMessage],
 	);
 	const queryInput = useCallback(
 		(
@@ -143,7 +144,45 @@ const CLI: React.FC = () => {
 		[setModalState],
 	);
 
-	const [menuItemSlots, updateMenuItems] = useMenuItemSlots(defaultMenuItems);
+	const runScript = async () => {
+		const path = await queryInput("Script path");
+		if (!path) return;
+
+		let script: any;
+		try {
+			script = await import(`${path}?t=${Date.now()}`);
+		} catch {
+			showError(`Could not load script ${path}`);
+			return;
+		}
+
+		if (typeof script.default !== "function") {
+			showError(
+				`Script ${path} must export a function using "export default"`,
+			);
+			return;
+		}
+
+		try {
+			await script.default({
+				driver: driver.current!,
+				showSuccess,
+				showWarning,
+				showError,
+			});
+			showSuccess("Script executed successfully!");
+		} catch (e) {
+			showError(
+				`Error during script execution: ${getErrorMessage(e, true)}`,
+			);
+			return;
+		}
+	};
+
+	const [menuItemSlots, updateMenuItems] = useMenuItemSlots([
+		...defaultMenuItems,
+		createRunScriptMenuItem(runScript),
+	]);
 	const menuVisible = !modalState || modalState.type === "queryInline";
 
 	// Prevent the app from exiting automatically
@@ -196,162 +235,149 @@ const CLI: React.FC = () => {
 						back,
 					}}
 				>
-					<ActionsContext.Provider value={{ do: performAction }}>
-						<DriverContext.Provider
+					<DriverContext.Provider
+						value={{
+							driver: driver.current!,
+							setDriver,
+						}}
+					>
+						<DialogsContext.Provider
 							value={{
-								driver: driver!,
-								setDriver,
+								showError,
+								showWarning,
+								showSuccess,
+								queryInput,
 							}}
 						>
-							<DialogsContext.Provider
-								value={{
-									showError,
-									showWarning,
-									showSuccess,
-									queryInput,
-								}}
+							<Frame
+								topLabels={menuVisible && menuItemSlots.top}
+								bottomLabels={
+									menuVisible && menuItemSlots.bottom
+								}
+								height={
+									rows -
+									(process.env.NODE_ENV === "development"
+										? layout === "horizontal"
+											? 4
+											: 10
+										: 0)
+								}
+								width={columns}
+								paddingY={1}
+								flexDirection={
+									layout === "horizontal" ? "row" : "column"
+								}
+								alignItems="stretch"
+								justifyContent="space-between"
 							>
-								<Frame
-									topLabels={menuVisible && menuItemSlots.top}
-									bottomLabels={
-										menuVisible && menuItemSlots.bottom
-									}
-									height={
-										rows -
-										(process.env.NODE_ENV === "development"
-											? layout === "horizontal"
-												? 4
-												: 10
-											: 0)
-									}
-									width={columns}
-									paddingY={1}
-									flexDirection={
-										layout === "horizontal"
-											? "row"
-											: "column"
-									}
-									alignItems="stretch"
-									justifyContent="space-between"
-								>
-									{(!modalState ||
-										modalState.type === "queryInline") && (
-										<>
-											<Box
-												flexDirection="column"
-												flexGrow={1}
-												alignItems="stretch"
-												// justifyContent="center"
-											>
-												{/* TODO: This should be merged into `selectPage` */}
-												{cliPage.page ===
-													CLIPage.SetUSBPath && (
-													<SetUSBPath
-														path={usbPath}
-														onCancel={() =>
-															setCLIPage({
-																page: CLIPage.Prepare,
-															})
+								{(!modalState ||
+									modalState.type === "queryInline") && (
+									<>
+										<Box
+											flexDirection="column"
+											flexGrow={1}
+											alignItems="stretch"
+											// justifyContent="center"
+										>
+											{/* TODO: This should be merged into `selectPage` */}
+											{cliPage.page ===
+												CLIPage.SetUSBPath && (
+												<SetUSBPath
+													path={usbPath}
+													onCancel={() =>
+														setCLIPage({
+															page: CLIPage.Prepare,
+														})
+													}
+													onSubmit={(path) => {
+														setUSBPath(path);
+														setCLIPage({
+															page: CLIPage.Prepare,
+														});
+													}}
+												/>
+											)}
+
+											{PageComponent && (
+												<PageComponent
+													{...cliPage.props}
+												/>
+											)}
+
+											{modalState?.type ===
+												"queryInline" && (
+												<>
+													<Spacer />
+													<InlineQuery
+														onSubmit={
+															modalState.onSubmit
 														}
-														onSubmit={(path) => {
-															setUSBPath(path);
-															setCLIPage({
-																page: CLIPage.Prepare,
-															});
-														}}
-													/>
+														onCancel={
+															modalState.onCancel
+														}
+														initial={
+															modalState.initial
+														}
+														color={modalState.color}
+													>
+														{modalState.message}
+													</InlineQuery>
+												</>
+											)}
+										</Box>
+										{logVisible && (
+											<Box
+												flexDirection={
+													layout === "horizontal"
+														? "row"
+														: "column"
+												}
+												height={
+													layout === "horizontal"
+														? undefined
+														: Math.min(
+																Math.floor(
+																	rows / 2,
+																),
+																30,
+														  )
+												}
+											>
+												{layout === "horizontal" ? (
+													<VDivider color="gray" />
+												) : (
+													<HDivider color="gray" />
 												)}
-
-												{PageComponent && (
-													<PageComponent
-														{...cliPage.props}
-													/>
-												)}
-
-												{modalState?.type ===
-													"queryInline" && (
-													<>
-														<Spacer />
-														<InlineQuery
-															onSubmit={
-																modalState.onSubmit
-															}
-															onCancel={
-																modalState.onCancel
-															}
-															initial={
-																modalState.initial
-															}
-															color={
-																modalState.color
-															}
-														>
-															{modalState.message}
-														</InlineQuery>
-													</>
-												)}
+												<Log buffer={logBuffer} />
 											</Box>
-											{logVisible && (
-												<Box
-													flexDirection={
-														layout === "horizontal"
-															? "row"
-															: "column"
-													}
-													height={
-														layout === "horizontal"
-															? undefined
-															: Math.min(
-																	Math.floor(
-																		rows /
-																			2,
-																	),
-																	30,
-															  )
-													}
-												>
-													{layout === "horizontal" ? (
-														<VDivider color="gray" />
-													) : (
-														<HDivider color="gray" />
-													)}
-													<Log buffer={logBuffer} />
-												</Box>
-											)}
-										</>
-									)}
-									{modalState && (
-										<>
-											{modalState.type === "message" && (
-												<ModalMessage
-													onSubmit={
-														modalState.onSubmit
-													}
-													color={modalState.color}
-												>
-													{modalState.message}
-												</ModalMessage>
-											)}
-											{modalState.type === "query" && (
-												<ModalQuery
-													onSubmit={
-														modalState.onSubmit
-													}
-													onCancel={
-														modalState.onCancel
-													}
-													initial={modalState.initial}
-													color={modalState.color}
-												>
-													{modalState.message}
-												</ModalQuery>
-											)}
-										</>
-									)}
-								</Frame>
-							</DialogsContext.Provider>
-						</DriverContext.Provider>
-					</ActionsContext.Provider>
+										)}
+									</>
+								)}
+								{modalState && (
+									<>
+										{modalState.type === "message" && (
+											<ModalMessage
+												onSubmit={modalState.onSubmit}
+												color={modalState.color}
+											>
+												{modalState.message}
+											</ModalMessage>
+										)}
+										{modalState.type === "query" && (
+											<ModalQuery
+												onSubmit={modalState.onSubmit}
+												onCancel={modalState.onCancel}
+												initial={modalState.initial}
+												color={modalState.color}
+											>
+												{modalState.message}
+											</ModalQuery>
+										)}
+									</>
+								)}
+							</Frame>
+						</DialogsContext.Provider>
+					</DriverContext.Provider>
 				</NavigationContext.Provider>
 			</GlobalsContext.Provider>
 		</MenuContext.Provider>

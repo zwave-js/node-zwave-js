@@ -8,6 +8,7 @@
   },
   "type": "module",
   "module": "build/cli.js",
+  "types": "script.d.ts",
   "files": [
     "bin/",
     "build/**/*.{js,d.ts,map}"

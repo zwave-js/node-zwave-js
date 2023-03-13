@@ -1,9 +1,9 @@
 import React from "react";
 
 export type IDialogsContext = {
-	showError(message: React.ReactNode): void;
-	showWarning(message: React.ReactNode): void;
-	showSuccess(message: React.ReactNode): void;
+	showError(message: React.ReactNode): Promise<void>;
+	showWarning(message: React.ReactNode): Promise<void>;
+	showSuccess(message: React.ReactNode): Promise<void>;
 	queryInput(
 		message: React.ReactNode,
 		options?: {
