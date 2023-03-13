@@ -1,15 +1,15 @@
 import React from "react";
 import { SetUSBPath } from "../components/setUSBPath.js";
+import { BootstrappingNodePage } from "../pages/BootstrappingNode.js";
 import { ConfirmExitPage } from "../pages/ConfirmExit.js";
 import { DestroyingDriverPage } from "../pages/DestroyingDriver.js";
+import { DeviceDetailsPage } from "../pages/DeviceDetails.js";
+import { DeviceOverviewPage } from "../pages/DeviceOverview.js";
 import { ExcludeNodePage } from "../pages/ExcludeNode.js";
-import {
-	BootstrappingNodePage,
-	IncludeNodePage,
-} from "../pages/IncludeNode.js";
-import { MainMenuPage } from "../pages/MainMenu.js";
+import { IncludeNodePage } from "../pages/IncludeNode.js";
 import { PreparePage } from "../pages/Prepare.js";
 import { RemoveFailedNodePage } from "../pages/RemoveFailedNode.js";
+import { ReplaceFailedNodePage } from "../pages/ReplaceFailedNode.js";
 import { StartingDriverPage } from "../pages/StartingDriver.js";
 
 export enum CLIPage {
@@ -18,11 +18,13 @@ export enum CLIPage {
 	StartingDriver,
 	DestroyingDriver,
 
-	MainMenu,
+	DeviceOverview,
+	DeviceDetails,
 
 	IncludeNode,
 	BootstrappingNode,
 	ExcludeNode,
+	ReplaceFailedNode,
 	RemoveFailedNode,
 
 	ConfirmExit,
@@ -59,16 +61,20 @@ export function getPageComponent(cliPage: CLIPage): React.FC<any> | undefined {
 		case CLIPage.DestroyingDriver:
 			return DestroyingDriverPage;
 
-		case CLIPage.MainMenu:
-			return MainMenuPage;
+		case CLIPage.DeviceOverview:
+			return DeviceOverviewPage;
+		case CLIPage.DeviceDetails:
+			return DeviceDetailsPage;
 
 		case CLIPage.IncludeNode:
 			return IncludeNodePage;
 		case CLIPage.BootstrappingNode:
 			return BootstrappingNodePage;
-
 		case CLIPage.ExcludeNode:
 			return ExcludeNodePage;
+
+		case CLIPage.ReplaceFailedNode:
+			return ReplaceFailedNodePage;
 		case CLIPage.RemoveFailedNode:
 			return RemoveFailedNodePage;
 

@@ -9,20 +9,23 @@ import { useDialogs } from "../hooks/useDialogs.js";
 import { useControllerEvent, useDriver } from "../hooks/useDriver.js";
 import { CLIPage, useNavigation } from "../hooks/useNavigation.js";
 
-export interface IncludeNodePageProps {}
+export interface ReplaceFailedNodePageProps {
+	nodeId: number;
+}
 
-enum IncludeNodeStep {
+enum ReplaceFailedNodeStep {
 	SelectStrategy,
+	Replacing,
 	PushDaButton,
 }
 
-const inclusionStrategies = [
+const replaceStrategies = [
 	{
-		label: "Default",
-		value: InclusionStrategy.Default,
+		label: "Security S2",
+		value: InclusionStrategy.Security_S2,
 	},
 	{
-		label: "Security S0 (legacy)",
+		label: "Security S0",
 		value: InclusionStrategy.Security_S0,
 	},
 	{
@@ -34,16 +37,24 @@ const inclusionStrategies = [
 // We need to split this into two components, else querying the DSK will
 // reset the local state because the component gets unmounted
 
-export const IncludeNodePage: React.FC<IncludeNodePageProps> = () => {
+export const ReplaceFailedNodePage: React.FC<ReplaceFailedNodePageProps> = (
+	props,
+) => {
 	const { driver } = useDriver();
 	const { navigate } = useNavigation();
 	const { showError, queryInput } = useDialogs();
 
-	const [step, setStep] = useState(IncludeNodeStep.SelectStrategy);
+	const [step, setStep] = useState(ReplaceFailedNodeStep.SelectStrategy);
 
 	useInput(async (input, key) => {
 		if (key.escape) {
-			await driver.controller.stopInclusion();
+			if (step === ReplaceFailedNodeStep.Replacing) {
+				// Too late
+				return;
+			}
+			if (step === ReplaceFailedNodeStep.PushDaButton) {
+				await driver.controller.stopInclusion();
+			}
 			navigate(CLIPage.DeviceOverview);
 		}
 	});
@@ -58,35 +69,44 @@ export const IncludeNodePage: React.FC<IncludeNodePageProps> = () => {
 	});
 
 	const selectStrategy = useCallback(
-		async (strategy: typeof inclusionStrategies[number]) => {
-			setStep(IncludeNodeStep.PushDaButton);
+		async (strategy: typeof replaceStrategies[number]) => {
+			setStep(ReplaceFailedNodeStep.Replacing);
 			try {
-				const result = await driver.controller.beginInclusion({
-					strategy: strategy.value as any,
-					userCallbacks: {
-						async grantSecurityClasses(requested) {
-							// TODO: Ask user
-							return requested;
-						},
-						async validateDSKAndEnterPIN(dsk) {
-							const pin = await queryInput(
-								`Please enter S2 PIN and verify DSK: _____${dsk}`,
-							);
-							return pin || false;
-						},
-						async abort() {
-							navigate(CLIPage.DeviceOverview);
+				const result = await driver.controller.replaceFailedNode(
+					props.nodeId,
+					{
+						strategy: strategy.value as any,
+						userCallbacks: {
+							async grantSecurityClasses(requested) {
+								// TODO: Ask user
+								return requested;
+							},
+							async validateDSKAndEnterPIN(dsk) {
+								const pin = await queryInput(
+									`Please enter S2 PIN and verify DSK: _____${dsk}`,
+								);
+								return pin || false;
+							},
+							async abort() {
+								navigate(CLIPage.DeviceOverview);
+							},
 						},
 					},
-				});
+				);
 				if (result) {
-					setStep(IncludeNodeStep.PushDaButton);
+					setStep(ReplaceFailedNodeStep.PushDaButton);
 				} else {
-					showError("Failed to start inclusion!");
+					showError(
+						"Could not replace node - the controller is busy!",
+					);
 					navigate(CLIPage.DeviceOverview);
 				}
 			} catch (e) {
-				showError(`Failed to start inclusion: ${getErrorMessage(e)}`);
+				showError(
+					`Failed to replace node ${props.nodeId}: ${getErrorMessage(
+						e,
+					)}`,
+				);
 				navigate(CLIPage.DeviceOverview);
 			}
 		},
@@ -94,13 +114,13 @@ export const IncludeNodePage: React.FC<IncludeNodePageProps> = () => {
 	);
 
 	switch (step) {
-		case IncludeNodeStep.SelectStrategy:
+		case ReplaceFailedNodeStep.SelectStrategy:
 			return (
 				<Center>
 					<Box flexDirection="column">
-						<Text>Select the inclusion strategy:</Text>
+						<Text>Select how to include the replacement node:</Text>
 						<SelectInput
-							items={inclusionStrategies}
+							items={replaceStrategies}
 							onSelect={selectStrategy}
 						/>
 						<Text dimColor>
@@ -110,15 +130,27 @@ export const IncludeNodePage: React.FC<IncludeNodePageProps> = () => {
 				</Center>
 			);
 
-		case IncludeNodeStep.PushDaButton:
+		case ReplaceFailedNodeStep.Replacing:
+			return (
+				<Center>
+					<Text>
+						<Text color="red">
+							<Spinner type="dots" />
+						</Text>{" "}
+						The node is being replaced, please wait...
+					</Text>
+				</Center>
+			);
+
+		case ReplaceFailedNodeStep.PushDaButton:
 			return (
 				<Center>
 					<Text>
 						<Text color="green">
 							<Spinner type="dots" />
 						</Text>{" "}
-						Inclusion started, push the button on the device to
-						include it.
+						Ready to include the new device, push the button on the
+						device to include it.
 					</Text>
 					<Text dimColor>
 						Press <Text bold>ESCAPE</Text> to cancel.

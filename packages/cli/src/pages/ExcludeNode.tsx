@@ -19,7 +19,7 @@ export const ExcludeNodePage: React.FC<ExcludeNodePageProps> = (props) => {
 	useInput(async (input, key) => {
 		if (key.escape) {
 			await driver.controller.stopExclusion();
-			navigate(CLIPage.MainMenu);
+			navigate(CLIPage.DeviceOverview);
 		}
 	});
 
@@ -35,27 +35,27 @@ export const ExcludeNodePage: React.FC<ExcludeNodePageProps> = (props) => {
 					);
 				} else {
 					showError("Failed to start exclusion!");
-					navigate(CLIPage.MainMenu);
+					navigate(CLIPage.DeviceOverview);
 				}
 			} catch (e) {
 				showError(`Failed to start exclusion: ${getErrorMessage(e)}`);
-				navigate(CLIPage.MainMenu);
+				navigate(CLIPage.DeviceOverview);
 			}
 		})();
 	}, []);
 
 	// useControllerEvent("exclusion stopped", () => {
-	// 	navigate(CLIPage.MainMenu);
+	// 	navigate(CLIPage.DeviceOverview);
 	// });
 
 	useControllerEvent("exclusion failed", () => {
 		showError("Exclusion failed!");
-		navigate(CLIPage.MainMenu);
+		navigate(CLIPage.DeviceOverview);
 	});
 
 	useControllerEvent("node removed", (node) => {
 		showSuccess(`Node ${node.id} was removed!`);
-		navigate(CLIPage.MainMenu);
+		navigate(CLIPage.DeviceOverview);
 	});
 
 	return (

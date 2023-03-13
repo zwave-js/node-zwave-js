@@ -1,4 +1,4 @@
-import { Box, render, Text, useInput } from "ink";
+import { Box, render, Spacer, Text, useInput } from "ink";
 import { useCallback, useEffect, useState } from "react";
 import type { Driver } from "zwave-js";
 import { Frame } from "./components/Frame.js";
@@ -144,6 +144,7 @@ const CLI: React.FC = () => {
 	);
 
 	const [menuItemSlots, updateMenuItems] = useMenuItemSlots(defaultMenuItems);
+	const menuVisible = !modalState || modalState.type === "queryInline";
 
 	// Prevent the app from exiting automatically
 	useInput(() => {
@@ -211,9 +212,9 @@ const CLI: React.FC = () => {
 								}}
 							>
 								<Frame
-									topLabels={!modalState && menuItemSlots.top}
+									topLabels={menuVisible && menuItemSlots.top}
 									bottomLabels={
-										!modalState && menuItemSlots.bottom
+										menuVisible && menuItemSlots.bottom
 									}
 									height={
 										rows -
@@ -240,7 +241,7 @@ const CLI: React.FC = () => {
 												flexDirection="column"
 												flexGrow={1}
 												alignItems="stretch"
-												justifyContent="center"
+												// justifyContent="center"
 											>
 												{/* TODO: This should be merged into `selectPage` */}
 												{cliPage.page ===
@@ -269,20 +270,25 @@ const CLI: React.FC = () => {
 
 												{modalState?.type ===
 													"queryInline" && (
-													<InlineQuery
-														onSubmit={
-															modalState.onSubmit
-														}
-														onCancel={
-															modalState.onCancel
-														}
-														initial={
-															modalState.initial
-														}
-														color={modalState.color}
-													>
-														{modalState.message}
-													</InlineQuery>
+													<>
+														<Spacer />
+														<InlineQuery
+															onSubmit={
+																modalState.onSubmit
+															}
+															onCancel={
+																modalState.onCancel
+															}
+															initial={
+																modalState.initial
+															}
+															color={
+																modalState.color
+															}
+														>
+															{modalState.message}
+														</InlineQuery>
+													</>
 												)}
 											</Box>
 											{logVisible && (

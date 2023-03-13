@@ -25,7 +25,7 @@ export const RemoveFailedNodePage: React.FC<RemoveFailedNodePageProps> = (
 			} catch (e: any) {
 				showError(`Failed to remove node: ${e.message}`);
 			} finally {
-				navigate(CLIPage.MainMenu);
+				navigate(CLIPage.DeviceOverview);
 			}
 		})();
 	}, []);

@@ -27,7 +27,7 @@ export const StartingDriverPage: React.FC = () => {
 		[showError],
 	);
 	const onDriverReady = useCallback((driver: Driver) => {
-		navigate(CLIPage.MainMenu);
+		navigate(CLIPage.DeviceOverview);
 	}, []);
 	const onBootloaderReady = useCallback((driver: Driver) => {
 		setMessage("driver stuck in bootloader mode");
@@ -37,7 +37,7 @@ export const StartingDriverPage: React.FC = () => {
 	// When opening this page, try to start the driver
 	useEffect(() => {
 		if (driver) {
-			navigate(CLIPage.MainMenu);
+			navigate(CLIPage.DeviceOverview);
 			return;
 		} else if (!usbPath) {
 			navigate(CLIPage.Prepare);
