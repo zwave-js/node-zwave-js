@@ -1,10 +1,12 @@
 import { Text, TextProps, useInput } from "ink";
+import Spinner from "ink-spinner";
+import { useState } from "react";
 
 export interface HotkeyLabelProps extends TextProps {
 	label?: string;
 	hotkey?: string;
 	modifiers?: Modifiers;
-	onPress?: () => void;
+	onPress?: () => Promise<void> | void;
 }
 
 type Modifiers = ("ctrl" | "shift")[];
@@ -46,22 +48,44 @@ export const HotkeyLabel: React.FC<HotkeyLabelProps> = (props) => {
 
 	const { color, children, ...rest } = textProps;
 
-	useInput((input, key) => {
+	const [isBusy, setIsBusy] = useState(false);
+
+	const busyProps: TextProps = isBusy
+		? {
+				color: "greenBright",
+		  }
+		: {};
+
+	useInput(async (input, key) => {
 		if (
+			!isBusy &&
 			hotkey &&
+			props.onPress &&
 			(input === hotkey ||
 				(hotkey in specialKeys && (key as any)[hotkey])) &&
 			((modifiers && modifiers.every((mod) => key[mod])) ||
 				(!modifiers && !key.ctrl && !key.shift))
 		) {
-			props.onPress?.();
+			setIsBusy(true);
+			await props.onPress();
+			setIsBusy(false);
 		}
 	});
+
+	const BusySpinner = isBusy ? (
+		<>
+			{" "}
+			<Spinner type="dots" />
+		</>
+	) : null;
 
 	if (!label) {
 		if (hotkey) {
 			return (
-				<Text {...textProps}>{renderHotkey(hotkey, modifiers)}</Text>
+				<Text {...textProps} {...busyProps}>
+					{renderHotkey(hotkey, modifiers)}
+					{BusySpinner}
+				</Text>
 			);
 		} else {
 			throw new Error("At least one of label or hotkey must be provided");
@@ -69,7 +93,12 @@ export const HotkeyLabel: React.FC<HotkeyLabelProps> = (props) => {
 	}
 
 	if (!hotkey) {
-		return <Text {...textProps}>{label}</Text>;
+		return (
+			<Text {...textProps} {...busyProps}>
+				{label}
+				{BusySpinner}
+			</Text>
+		);
 	} else if (hotkey.length !== 1 && !(hotkey in specialKeys)) {
 		throw new Error("Hotkey must be a single character or a special key");
 	}
@@ -78,7 +107,14 @@ export const HotkeyLabel: React.FC<HotkeyLabelProps> = (props) => {
 		hotkey.length === 1 && !modifiers?.length
 			? label.toLowerCase().indexOf(hotkey.toLowerCase())
 			: -1;
-	if (hotkeyIndex >= 0) {
+	if (isBusy) {
+		return (
+			<Text {...rest} {...busyProps}>
+				{label}
+				{BusySpinner}
+			</Text>
+		);
+	} else if (hotkeyIndex >= 0) {
 		return (
 			<Text {...rest}>
 				{label.slice(0, hotkeyIndex)}
@@ -86,6 +122,7 @@ export const HotkeyLabel: React.FC<HotkeyLabelProps> = (props) => {
 					{label.slice(hotkeyIndex, hotkeyIndex + 1)}
 				</Text>
 				{label.slice(hotkeyIndex + 1)}
+				{BusySpinner}
 			</Text>
 		);
 	} else {
@@ -93,6 +130,7 @@ export const HotkeyLabel: React.FC<HotkeyLabelProps> = (props) => {
 			<Text {...rest}>
 				{label}{" "}
 				<Text color={color}>{renderHotkey(hotkey, modifiers)}</Text>
+				{BusySpinner}
 			</Text>
 		);
 	}

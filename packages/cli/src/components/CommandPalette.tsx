@@ -6,7 +6,7 @@ import { VDivider } from "./VDivider.js";
 
 export interface CommandPaletteProps {
 	label?: React.ReactNode;
-	commands: HotkeyLabelProps[];
+	commands: (HotkeyLabelProps | false | undefined | null)[];
 }
 
 export const CommandPalette: React.FC<CommandPaletteProps> = (props) => {
@@ -19,14 +19,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = (props) => {
 			justifyContent="flex-start"
 			borderColor="gray"
 		>
-			{props.commands.map((p, i) => (
-				<React.Fragment key={i}>
-					{i > 0 && <VDivider dimColor />}
-					<Box paddingX={2}>
-						<HotkeyLabel {...p} />
-					</Box>
-				</React.Fragment>
-			))}
+			{props.commands
+				.filter((c): c is HotkeyLabelProps => !!c)
+				.map((p, i) => (
+					<React.Fragment key={i}>
+						{i > 0 && <VDivider dimColor />}
+						<Box paddingX={2}>
+							<HotkeyLabel {...p} />
+						</Box>
+					</React.Fragment>
+				))}
 		</Frame>
 	);
 };
