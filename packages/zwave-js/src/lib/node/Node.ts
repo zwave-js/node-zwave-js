@@ -1805,7 +1805,7 @@ protocol version:      ${this.protocolVersion}`;
 				if (force) {
 					instance = CommandClass.createInstanceUnchecked(
 						this.driver,
-						this,
+						endpoint,
 						cc,
 					)!;
 				} else {
