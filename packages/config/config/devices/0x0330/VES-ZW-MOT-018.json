@@ -1,0 +1,248 @@
+{
+	"manufacturer": "Vesternet",
+	"manufacturerId": "0x0330",
+	"label": "VES-ZW-MOT-018",
+	"description": "Motor Controller",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0xd00d",
+			"zwaveAllianceId": 3342
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Send Multi Level Report On State Change",
+			"description": "Report percentage when level changes, unit is 1%",
+			"unit": "1%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"unsigned": true,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Working Mode",
+			"description": "Change mode of device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"unsigned": true,
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Light",
+					"value": 0
+				},
+				{
+					"label": "Shutter Mode Without Positioning",
+					"value": 1
+				},
+				{
+					"label": "Shutter Mode With Positioning",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Enable / Disable Save Positioning Percentage",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"label": "Over Current Protection",
+			"description": "Triggered when module goes over current limit.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"label": "Start Positioning Calibration",
+			"description": "ONLY VALID IN SHUTTER WITH POSITIONING MODE. Enable to begin, will revert to Disabled once completed.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Not Calibrated",
+					"value": 0
+				},
+				{
+					"label": "Calibrated",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Configuration Of Momentary Switch Inputs",
+			"description": "ONLY VALID IN LIGHT MODE. Switch inputs accept a variety of push combinations (press, hold & released), configure how the outputs react to them here.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "All The Same, Toggle The Respective Output",
+					"value": 0
+				},
+				{
+					"label": "Short Press Only, Toggle The Respective Output",
+					"value": 1
+				},
+				{
+					"label": "Hold & Release Only, Toggle The Respective Output",
+					"value": 2
+				},
+				{
+					"label": "Short Press Only, Toggle Both Outputs",
+					"value": 3
+				},
+				{
+					"label": "Hold & Release Only, Toggle Both Outputs",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "9",
+			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",
+			"description": "Switch inputs accept a variety of push combinations (press, hold & released), configure if Central Scene Commands are sent in response to them.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled For Both Inputs",
+					"value": 0
+				},
+				{
+					"label": "Enabled For Both Inputs",
+					"value": 1
+				},
+				{
+					"label": "Enable For S1 Input Only",
+					"value": 2
+				},
+				{
+					"label": "Enable For S2 Input Only",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Power Report Absolute Threshold",
+			"description": "Report when power changes by W value, unit is 1W.",
+			"unit": "W",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"unsigned": true,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Current Report Absolute Threshold",
+			"description": "Report when current changes by A value, unit is 0.1A.",
+			"unit": "0.1A",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"unsigned": true,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Voltage Report Absolute Threshold",
+			"description": "Report when voltage changes by V value, unit is 1V.",
+			"unit": "V",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"unsigned": true,
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Slats Rotation Time",
+			"description": "ONLY VALID IN SHUTTER WITH POSITIONING MODE. Time taken to rotate slats before blind starts to move, unit is 0.1S.",
+			"unit": "0.1S",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 250,
+			"unsigned": true,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Report Interval",
+			"description": "Time cycle to report the values of energy consumption, voltage, current and load power.",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"unsigned": true,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.\n Step 3. The connected light will stay on solid for 3 seconds to indicate successful inclusion.",
+		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Triple press the action button.",
+		"reset": "Press and hold the action button for over 10 seconds.",
+		"manual": "https://cdn.shopify.com/s/files/1/0066/8149/3559/files/VES-ZW-MOT-018.pdf"
+	}
+}
