@@ -5178,11 +5178,16 @@ ${handlers.length} left`,
 					// and up to 30s if we recently queried the RSSI
 					30_000 - (Date.now() - this.lastBackgroundRSSITimestamp),
 				);
-				this.pollBackgroundRSSITimer = setTimeout(() => {
+				this.pollBackgroundRSSITimer = setTimeout(async () => {
+					// Due to the timeout, the driver might have been destroyed in the meantime
+					if (!this.ready) return;
+
 					this.lastBackgroundRSSITimestamp = Date.now();
-					void this.controller.getBackgroundRSSI().catch(() => {
+					try {
+						await this.controller.getBackgroundRSSI();
+					} catch {
 						// ignore errors
-					});
+					}
 				}, timeout).unref();
 			} else {
 				clearTimeout(this.pollBackgroundRSSITimer);
