@@ -313,6 +313,7 @@ import {
 	PlannedProvisioningEntry,
 	ProvisioningEntryStatus,
 	ReplaceNodeOptions,
+	SecurityBootstrapFailure,
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
 import { determineNIF } from "./NodeInformationFrame";
@@ -2148,7 +2149,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				newNode.markAsAlive();
 
 				let inclCtrlr: ZWaveNode | undefined;
-				let lowSecurity = false;
+				let bootstrapFailure: SecurityBootstrapFailure | undefined;
 
 				if (initiate) {
 					inclCtrlr = this.nodes.getOrThrow(initiate.nodeId);
@@ -2169,9 +2170,10 @@ supported CCs: ${nodeInfo.supportedCCs
 						newNode.updateNodeInfo(requestedNodeInfo);
 
 					// Perform S0/S2 bootstrapping
-					lowSecurity = (
-						await this.proxyBootstrap(newNode, inclCtrlr)
-					).lowSecurity;
+					bootstrapFailure = await this.proxyBootstrap(
+						newNode,
+						inclCtrlr,
+					);
 				} else {
 					// No command received, bootstrap node by ourselves
 					this.driver.controllerLog.logNode(
@@ -2189,29 +2191,39 @@ supported CCs: ${nodeInfo.supportedCCs
 					// * only use S0 if necessary,
 					// * use no encryption otherwise
 					if (newNode.supportsCC(CommandClasses["Security 2"])) {
-						await this.secureBootstrapS2(newNode);
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass <
-								SecurityClass.S2_Unauthenticated
-						) {
-							lowSecurity = true;
+						bootstrapFailure = await this.secureBootstrapS2(
+							newNode,
+						);
+						if (bootstrapFailure == undefined) {
+							const actualSecurityClass =
+								newNode.getHighestSecurityClass();
+							if (
+								actualSecurityClass == undefined ||
+								actualSecurityClass <
+									SecurityClass.S2_Unauthenticated
+							) {
+								bootstrapFailure =
+									SecurityBootstrapFailure.Unknown;
+							}
 						}
 					} else if (
 						newNode.supportsCC(CommandClasses.Security) &&
 						(deviceClass.specific ?? deviceClass.generic)
 							.requiresSecurity
 					) {
-						await this.secureBootstrapS0(newNode);
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass < SecurityClass.S0_Legacy
-						) {
-							lowSecurity = true;
+						bootstrapFailure = await this.secureBootstrapS0(
+							newNode,
+						);
+						if (bootstrapFailure == undefined) {
+							const actualSecurityClass =
+								newNode.getHighestSecurityClass();
+							if (
+								actualSecurityClass == undefined ||
+								actualSecurityClass < SecurityClass.S0_Legacy
+							) {
+								bootstrapFailure =
+									SecurityBootstrapFailure.Unknown;
+							}
 						}
 					} else {
 						// Remember that no security classes were granted
@@ -2225,11 +2237,16 @@ supported CCs: ${nodeInfo.supportedCCs
 				await this.bootstrapLifelineAndWakeup(newNode);
 
 				// We're done adding this node, notify listeners
-				const result: InclusionResult = {};
-				if (lowSecurity) result.lowSecurity = true;
-				this.emit("node added", newNode, result);
+				const result: InclusionResult =
+					bootstrapFailure != undefined
+						? {
+								lowSecurity: true,
+								lowSecurityReason: bootstrapFailure,
+						  }
+						: { lowSecurity: false };
 
 				this.setInclusionState(InclusionState.Idle);
+				this.emit("node added", newNode, result);
 
 				if (inclCtrlr && initiate) {
 					const inclCtrlrId = inclCtrlr.id;
@@ -2317,18 +2334,24 @@ supported CCs: ${nodeInfo.supportedCCs
 			}
 
 			// Perform S0/S2 bootstrapping
-			const lowSecurity = (await this.proxyBootstrap(newNode, inclCtrlr))
-				.lowSecurity;
-
+			const bootstrapFailure = await this.proxyBootstrap(
+				newNode,
+				inclCtrlr,
+			);
 			// Bootstrap the node's lifelines, so it knows where the controller is
 			await this.bootstrapLifelineAndWakeup(newNode);
 
 			// We're done adding this node, notify listeners
-			const result: InclusionResult = {};
-			if (lowSecurity) result.lowSecurity = true;
-			this.emit("node added", newNode, result);
+			const result: InclusionResult =
+				bootstrapFailure != undefined
+					? {
+							lowSecurity: true,
+							lowSecurityReason: bootstrapFailure,
+					  }
+					: { lowSecurity: false };
 
 			this.setInclusionState(InclusionState.Idle);
+			this.emit("node added", newNode, result);
 
 			// And notify the inclusion controller after we're done interviewing
 			newNode.once("ready", () => {
@@ -2350,24 +2373,26 @@ supported CCs: ${nodeInfo.supportedCCs
 	private async proxyBootstrap(
 		newNode: ZWaveNode,
 		inclCtrlr: ZWaveNode,
-	): Promise<{ lowSecurity: boolean }> {
+	): Promise<SecurityBootstrapFailure | undefined> {
 		// This part is to be done before the interview
 
 		const deviceClass = newNode.deviceClass!;
-		let lowSecurity = false;
+		let bootstrapFailure: SecurityBootstrapFailure | undefined;
 
 		// Include using the default inclusion strategy:
 		// * Use S2 if possible,
 		// * only use S0 if necessary,
 		// * use no encryption otherwise
 		if (newNode.supportsCC(CommandClasses["Security 2"])) {
-			await this.secureBootstrapS2(newNode);
-			const actualSecurityClass = newNode.getHighestSecurityClass();
-			if (
-				actualSecurityClass == undefined ||
-				actualSecurityClass < SecurityClass.S2_Unauthenticated
-			) {
-				lowSecurity = true;
+			bootstrapFailure = await this.secureBootstrapS2(newNode);
+			if (bootstrapFailure == undefined) {
+				const actualSecurityClass = newNode.getHighestSecurityClass();
+				if (
+					actualSecurityClass == undefined ||
+					actualSecurityClass < SecurityClass.S2_Unauthenticated
+				) {
+					bootstrapFailure = SecurityBootstrapFailure.Unknown;
+				}
 			}
 		} else if (
 			newNode.supportsCC(CommandClasses.Security) &&
@@ -2404,6 +2429,12 @@ supported CCs: ${nodeInfo.supportedCCs
 						: "failed"
 				}`,
 			);
+			bootstrapFailure =
+				s0result == undefined
+					? SecurityBootstrapFailure.Timeout
+					: s0result.status === InclusionControllerStatus.OK
+					? undefined
+					: SecurityBootstrapFailure.Unknown;
 
 			// When bootstrapping with S0, no other keys are granted
 			for (const secClass of securityClassOrder) {
@@ -2417,7 +2448,6 @@ supported CCs: ${nodeInfo.supportedCCs
 				SecurityClass.S0_Legacy,
 				s0result?.status === InclusionControllerStatus.OK,
 			);
-			lowSecurity = !newNode.hasSecurityClass(SecurityClass.S0_Legacy);
 		} else {
 			// Remember that no security classes were granted
 			for (const secClass of securityClassOrder) {
@@ -2425,13 +2455,13 @@ supported CCs: ${nodeInfo.supportedCCs
 			}
 		}
 
-		return { lowSecurity };
+		return bootstrapFailure;
 	}
 
 	private async secureBootstrapS0(
 		node: ZWaveNode,
 		assumeSupported: boolean = false,
-	): Promise<void> {
+	): Promise<SecurityBootstrapFailure | undefined> {
 		// When bootstrapping with S0, no other keys are granted
 		for (const secClass of securityClassOrder) {
 			if (secClass !== SecurityClass.S0_Legacy) {
@@ -2442,7 +2472,7 @@ supported CCs: ${nodeInfo.supportedCCs
 		if (!this.driver.securityManager) {
 			// Remember that the node was NOT granted the S0 security class
 			node.securityClasses.set(SecurityClass.S0_Legacy, false);
-			return;
+			return SecurityBootstrapFailure.NoKeysConfigured;
 		}
 
 		// If security has been set up and we are allowed to include the node securely, try to do it
@@ -2480,20 +2510,26 @@ supported CCs: ${nodeInfo.supportedCCs
 			node.securityClasses.set(SecurityClass.S0_Legacy, true);
 		} catch (e) {
 			let errorMessage = `Security S0 bootstrapping failed, the node was not granted the S0 security class`;
+			let failure: SecurityBootstrapFailure =
+				SecurityBootstrapFailure.Unknown;
 			if (!isZWaveError(e)) {
 				errorMessage += `: ${e as any}`;
 			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
 				errorMessage += ": a secure inclusion timer has elapsed.";
+				failure = SecurityBootstrapFailure.Timeout;
 			} else if (
 				e.code !== ZWaveErrorCodes.Controller_MessageDropped &&
 				e.code !== ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				errorMessage += `: ${e.message}`;
+				failure = SecurityBootstrapFailure.Timeout;
 			}
 			this.driver.controllerLog.logNode(node.id, errorMessage, "warn");
 			// Remember that the node was NOT granted the S0 security class
 			node.securityClasses.set(SecurityClass.S0_Legacy, false);
 			node.removeCC(CommandClasses.Security);
+
+			return failure;
 		}
 	}
 
@@ -2517,7 +2553,7 @@ supported CCs: ${nodeInfo.supportedCCs
 	private async secureBootstrapS2(
 		node: ZWaveNode,
 		assumeSupported: boolean = false,
-	): Promise<void> {
+	): Promise<SecurityBootstrapFailure | undefined> {
 		const unGrantSecurityClasses = () => {
 			for (const secClass of securityClassOrder) {
 				node.securityClasses.set(secClass, false);
@@ -2527,7 +2563,7 @@ supported CCs: ${nodeInfo.supportedCCs
 		if (!this.driver.securityManager2) {
 			// Remember that the node was NOT granted any S2 security classes
 			unGrantSecurityClasses();
-			return;
+			return SecurityBootstrapFailure.NoKeysConfigured;
 		}
 
 		let userCallbacks: InclusionUserCallbacks;
@@ -2576,7 +2612,7 @@ supported CCs: ${nodeInfo.supportedCCs
 			// Cannot bootstrap S2 without user callbacks, abort.
 			// Remember that the node was NOT granted any S2 security classes
 			unGrantSecurityClasses();
-			return;
+			return SecurityBootstrapFailure.S2NoUserCallbacks;
 		}
 
 		// When replacing a node, we receive no NIF, so we cannot know that the Security CC is supported.
@@ -2618,7 +2654,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				this.cancelBootstrapS2Promise = undefined;
 			};
 
-			const abortUser = () => {
+			const abortUser = async () => {
 				setImmediate(() => {
 					try {
 						userCallbacks.abort();
@@ -2626,7 +2662,8 @@ supported CCs: ${nodeInfo.supportedCCs
 						// ignore errors in application callbacks
 					}
 				});
-				return abort(KEXFailType.BootstrappingCanceled);
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.UserCanceled;
 			};
 
 			// Ask the node for its desired security classes and key exchange params
@@ -2638,7 +2675,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					message: `Security S2 bootstrapping failed: did not receive the node's desired security classes.`,
 					level: "warn",
 				});
-				return abort();
+				await abort();
+				return SecurityBootstrapFailure.Timeout;
 			}
 
 			// Validate the response
@@ -2650,7 +2688,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					message: `Security S2 bootstrapping failed: No supported key exchange scheme.`,
 					level: "warn",
 				});
-				return abort(KEXFailType.NoSupportedScheme);
+				await abort(KEXFailType.NoSupportedScheme);
+				return SecurityBootstrapFailure.ParameterMismatch;
 			} else if (
 				!kexParams.supportedECDHProfiles.includes(
 					ECDHProfiles.Curve25519,
@@ -2660,7 +2699,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					message: `Security S2 bootstrapping failed: No supported ECDH profile.`,
 					level: "warn",
 				});
-				return abort(KEXFailType.NoSupportedCurve);
+				await abort(KEXFailType.NoSupportedCurve);
+				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 			const supportedKeys = kexParams.requestedKeys.filter((k) =>
 				securityClassOrder.includes(k as any),
@@ -2670,7 +2710,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					message: `Security S2 bootstrapping failed: None of the requested security classes are supported.`,
 					level: "warn",
 				});
-				return abort(KEXFailType.NoKeyMatch);
+				await abort(KEXFailType.NoKeyMatch);
+				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 
 			// TODO: Validate client-side auth if requested
@@ -2730,7 +2771,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					direction: "inbound",
 					level: "warn",
 				});
-				return abort();
+				await abort();
+				return SecurityBootstrapFailure.NodeCanceled;
 			}
 			const nodePublicKey = pubKeyResponse.publicKey;
 
@@ -2843,7 +2885,8 @@ supported CCs: ${nodeInfo.supportedCCs
 			if (typeof keySetEcho === "number") {
 				// The bootstrapping process was canceled - this is most likely because the PIN was incorrect
 				// and the node's commands cannot be decoded
-				return abort(keySetEcho);
+				await abort(keySetEcho);
+				return SecurityBootstrapFailure.S2IncorrectPIN;
 			}
 			// Validate that the received command contains the correct list of keys
 			if (keySetEcho instanceof Security2CCKEXFail || !keySetEcho.echo) {
@@ -2852,7 +2895,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					direction: "inbound",
 					level: "warn",
 				});
-				return abort();
+				await abort();
+				return SecurityBootstrapFailure.NodeCanceled;
 			} else if (
 				keySetEcho.grantedKeys.length !== grantedKeys.length ||
 				!keySetEcho.grantedKeys.every((k) => grantedKeys.includes(k))
@@ -2861,7 +2905,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					message: `Security S2 bootstrapping failed: Granted key mismatch.`,
 					level: "warn",
 				});
-				return abort(KEXFailType.WrongSecurityLevel);
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.S2WrongSecurityLevel;
 			}
 			// Confirm the keys - the node will start requesting the granted keys in response
 			await api.confirmGrantedKeys({
@@ -2887,7 +2932,8 @@ supported CCs: ${nodeInfo.supportedCCs
 						direction: "inbound",
 						level: "warn",
 					});
-					return abort();
+					await abort();
+					return SecurityBootstrapFailure.NodeCanceled;
 				}
 
 				const securityClass = keyRequest.requestedKey;
@@ -2902,14 +2948,16 @@ supported CCs: ${nodeInfo.supportedCCs
 						message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
 						level: "warn",
 					});
-					return abort(KEXFailType.WrongSecurityLevel);
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
 				} else if (!grantedKeys.includes(securityClass)) {
 					// and that the requested key is one of the granted keys
 					this.driver.controllerLog.logNode(node.id, {
 						message: `Security S2 bootstrapping failed: Node used key it was not granted.`,
 						level: "warn",
 					});
-					return abort(KEXFailType.KeyNotGranted);
+					await abort(KEXFailType.KeyNotGranted);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
 				}
 
 				// Send the node the requested key
@@ -2938,7 +2986,8 @@ supported CCs: ${nodeInfo.supportedCCs
 						direction: "inbound",
 						level: "warn",
 					});
-					return abort();
+					await abort();
+					return SecurityBootstrapFailure.NodeCanceled;
 				}
 
 				if (
@@ -2951,7 +3000,8 @@ supported CCs: ${nodeInfo.supportedCCs
 						message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
 						level: "warn",
 					});
-					return abort(KEXFailType.NoVerify);
+					await abort(KEXFailType.NoVerify);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
 				}
 
 				// Tell the node that verification was successful. We need to reset the SPAN state
@@ -2975,7 +3025,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					message: `Security S2 bootstrapping failed: Node did not confirm completion of the key exchange`,
 					level: "warn",
 				});
-				return abort();
+				await abort();
+				return SecurityBootstrapFailure.Timeout;
 			}
 
 			// Remember all security classes we have granted
@@ -3274,21 +3325,24 @@ supported CCs: ${nodeInfo.supportedCCs
 
 				const opts = this._inclusionOptions;
 				// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
-				let lowSecurity = false;
+				let bootstrapFailure: SecurityBootstrapFailure | undefined;
 				if (
 					newNode.supportsCC(CommandClasses["Security 2"]) &&
 					(opts.strategy === InclusionStrategy.Default ||
 						opts.strategy === InclusionStrategy.Security_S2 ||
 						opts.strategy === InclusionStrategy.SmartStart)
 				) {
-					await this.secureBootstrapS2(newNode);
-					const actualSecurityClass =
-						newNode.getHighestSecurityClass();
-					if (
-						actualSecurityClass == undefined ||
-						actualSecurityClass < SecurityClass.S2_Unauthenticated
-					) {
-						lowSecurity = true;
+					bootstrapFailure = await this.secureBootstrapS2(newNode);
+					if (bootstrapFailure == undefined) {
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass <
+								SecurityClass.S2_Unauthenticated
+						) {
+							bootstrapFailure = SecurityBootstrapFailure.Unknown;
+						}
 					}
 				} else if (
 					newNode.supportsCC(CommandClasses.Security) &&
@@ -3300,14 +3354,16 @@ supported CCs: ${nodeInfo.supportedCCs
 									newNode.deviceClass?.generic
 								)?.requiresSecurity)))
 				) {
-					await this.secureBootstrapS0(newNode);
-					const actualSecurityClass =
-						newNode.getHighestSecurityClass();
-					if (
-						actualSecurityClass == undefined ||
-						actualSecurityClass < SecurityClass.S0_Legacy
-					) {
-						lowSecurity = true;
+					bootstrapFailure = await this.secureBootstrapS0(newNode);
+					if (bootstrapFailure == undefined) {
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass < SecurityClass.S0_Legacy
+						) {
+							bootstrapFailure = SecurityBootstrapFailure.Unknown;
+						}
 					}
 				} else {
 					// Remember that no security classes were granted
@@ -3321,11 +3377,17 @@ supported CCs: ${nodeInfo.supportedCCs
 				await this.bootstrapLifelineAndWakeup(newNode);
 
 				// We're done adding this node, notify listeners
-				const result: InclusionResult = {};
-				if (lowSecurity) result.lowSecurity = true;
-				this.emit("node added", newNode, result);
+				const result: InclusionResult =
+					bootstrapFailure != undefined
+						? {
+								lowSecurity: true,
+								lowSecurityReason: bootstrapFailure,
+						  }
+						: { lowSecurity: false };
 
 				this.setInclusionState(InclusionState.Idle);
+				this.emit("node added", newNode, result);
+
 				return true; // Don't invoke any more handlers
 			}
 		}
@@ -3435,27 +3497,39 @@ supported CCs: ${nodeInfo.supportedCCs
 					// Try perform the security bootstrap process. When replacing a node, we don't know any supported CCs
 					// yet, so we need to trust the chosen inclusion strategy.
 					const strategy = this._inclusionOptions.strategy;
-					let lowSecurity = false;
+					let bootstrapFailure: SecurityBootstrapFailure | undefined;
 					if (strategy === InclusionStrategy.Security_S2) {
-						await this.secureBootstrapS2(newNode, true);
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass <
-								SecurityClass.S2_Unauthenticated
-						) {
-							lowSecurity = true;
+						bootstrapFailure = await this.secureBootstrapS2(
+							newNode,
+							true,
+						);
+						if (bootstrapFailure == undefined) {
+							const actualSecurityClass =
+								newNode.getHighestSecurityClass();
+							if (
+								actualSecurityClass == undefined ||
+								actualSecurityClass <
+									SecurityClass.S2_Unauthenticated
+							) {
+								bootstrapFailure =
+									SecurityBootstrapFailure.Unknown;
+							}
 						}
 					} else if (strategy === InclusionStrategy.Security_S0) {
-						await this.secureBootstrapS0(newNode, true);
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass < SecurityClass.S0_Legacy
-						) {
-							lowSecurity = true;
+						bootstrapFailure = await this.secureBootstrapS0(
+							newNode,
+							true,
+						);
+						if (bootstrapFailure == undefined) {
+							const actualSecurityClass =
+								newNode.getHighestSecurityClass();
+							if (
+								actualSecurityClass == undefined ||
+								actualSecurityClass < SecurityClass.S0_Legacy
+							) {
+								bootstrapFailure =
+									SecurityBootstrapFailure.Unknown;
+							}
 						}
 					} else {
 						// Remember that no security classes were granted
@@ -3468,8 +3542,13 @@ supported CCs: ${nodeInfo.supportedCCs
 					await this.bootstrapLifelineAndWakeup(newNode);
 
 					// We're done adding this node, notify listeners. This also kicks off the node interview
-					const result: InclusionResult = {};
-					if (lowSecurity) result.lowSecurity = true;
+					const result: InclusionResult =
+						bootstrapFailure != undefined
+							? {
+									lowSecurity: true,
+									lowSecurityReason: bootstrapFailure,
+							  }
+							: { lowSecurity: false };
 
 					this.setInclusionState(InclusionState.Idle);
 					this.emit("node added", newNode, result);
