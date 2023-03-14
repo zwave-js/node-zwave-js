@@ -22,6 +22,7 @@ import {
 	NavigationContext,
 } from "./hooks/useNavigation.js";
 import { useStdoutDimensions } from "./hooks/useStdoutDimensions.js";
+import { debounce } from "./lib/debounce.js";
 import { createLogTransport, LinesBuffer } from "./lib/logging.js";
 import { createRunScriptMenuItem, defaultMenuItems } from "./lib/menu.js";
 
@@ -60,6 +61,9 @@ const CLI: React.FC = () => {
 	}, []);
 
 	const [logVisible, setLogVisible] = useState<boolean>(false);
+	const setLogVisibleDebounced = useCallback(debounce(setLogVisible, 50), [
+		setLogVisible,
+	]);
 
 	const [cliPage, setCLIPage] = useState<CLIPageWithProps>({
 		page: usbPath && autostart ? CLIPage.StartingDriver : CLIPage.Prepare,
@@ -188,12 +192,6 @@ const CLI: React.FC = () => {
 		// nothing to do
 	});
 
-	const performAction = useCallback(async () => {
-		// if (action.type === "navigate") {
-		// 	setCLIPage(action.to);
-		// }
-	}, []);
-
 	if (rows < MIN_ROWS) {
 		return (
 			<Box height={rows} justifyContent="center" alignItems="center">
@@ -221,7 +219,7 @@ const CLI: React.FC = () => {
 					usbPath,
 					logTransport,
 					logVisible,
-					setLogVisible,
+					setLogVisible: setLogVisibleDebounced,
 					clearLog,
 				}}
 			>
@@ -325,9 +323,6 @@ const CLI: React.FC = () => {
 										</Box>
 										{logVisible && (
 											<Box
-												display={
-													logVisible ? "flex" : "none"
-												}
 												flexDirection={
 													layout === "horizontal"
 														? "row"

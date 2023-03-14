@@ -21,10 +21,18 @@ export const Log: React.FC<LogProps> = (props) => {
 		setLog(lines.join("\n"));
 	}, [props.buffer, logHeight]);
 
-	useEffect(() => {
+	const measure = useCallback(() => {
 		if (ref.current) {
-			setLogHeight(measureElement(ref.current).height);
+			const height = measureElement(ref.current).height;
+			if (!Number.isNaN(height)) setLogHeight(height);
 		}
+	}, [ref, setLogHeight]);
+
+	useEffect(() => {
+		// For some reason, the measurement can be wrong shortly after rendering
+		// so we measure a second time after a short delay
+		measure();
+		setTimeout(measure, 30);
 	});
 
 	// Update the log state whenever `buffer` emits a change event
