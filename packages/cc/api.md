@@ -16930,11 +16930,14 @@ export class VersionCCCommandClassGet extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCCommandClassReport extends VersionCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "VersionCCCommandClassReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: VersionCCCommandClassReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
-    get ccVersion(): number;
+    ccVersion: number;
     // (undocumented)
-    get requestedCC(): CommandClasses;
+    requestedCC: CommandClasses;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
