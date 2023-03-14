@@ -9,8 +9,6 @@ import {
 	unknownBoolean,
 	validatePayload,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 	ZWaveLibraryTypes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -587,27 +585,36 @@ export class VersionCCReport extends VersionCC {
 @expectedCCResponse(VersionCCReport)
 export class VersionCCGet extends VersionCC {}
 
+interface VersionCCCommandClassReportOptions extends CCCommandOptions {
+	requestedCC: CommandClasses;
+	ccVersion: number;
+}
+
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| VersionCCCommandClassReportOptions
+			| CommandClassDeserializationOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this._requestedCC = this.payload[0];
-		this._ccVersion = this.payload[1];
-		// No need to persist this, we're storing it manually
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.requestedCC = this.payload[0];
+			this.ccVersion = this.payload[1];
+		} else {
+			this.requestedCC = options.requestedCC;
+			this.ccVersion = options.ccVersion;
+		}
 	}
 
-	private _ccVersion: number;
-	public get ccVersion(): number {
-		return this._ccVersion;
-	}
+	public ccVersion: number;
+	public requestedCC: CommandClasses;
 
-	private _requestedCC: CommandClasses;
-	public get requestedCC(): CommandClasses {
-		return this._requestedCC;
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.requestedCC, this.ccVersion]);
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -615,7 +622,7 @@ export class VersionCCCommandClassReport extends VersionCC {
 			...super.toLogEntry(applHost),
 			message: {
 				CC: getCCName(this.requestedCC),
-				version: this._ccVersion,
+				version: this.ccVersion,
 			},
 		};
 	}
@@ -647,11 +654,8 @@ export class VersionCCCommandClassGet extends VersionCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.requestedCC = this.payload[0];
 		} else {
 			this.requestedCC = options.requestedCC;
 		}
