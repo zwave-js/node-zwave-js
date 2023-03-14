@@ -3678,18 +3678,6 @@ ${handlers.length} left`,
 		if (isCommandClassContainer(msg)) {
 			// For further actions, we are only interested in the innermost CC
 			this.unwrapCommands(msg);
-
-			const node = this.getNodeUnsafe(msg);
-			// If we receive an encrypted message but assume the node is insecure, change our assumption
-			if (
-				node?.isSecure === false &&
-				(msg.command.ccId === CommandClasses.Security ||
-					msg.command.isEncapsulatedWith(CommandClasses.Security))
-			) {
-				node.securityClasses.set(SecurityClass.S0_Legacy, true);
-				// Force a new interview
-				void node.refreshInfo();
-			}
 		}
 
 		// Otherwise go through the static handlers
