@@ -312,6 +312,9 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 -   `"hec"` - An encrypted Intel HEX firmware file
 -   `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
+> [!ATTENTION] At the moment, only some `.exe` files contain `firmwareTarget` information. **All** other formats only contain the firmware `data`.
+This means that the `firmwareTarget` property usually needs to be provided, unless it is `0`.
+
 You can use the helper method `guessFirmwareFileFormat` to guess which firmware format a file has based on the file extension and contents.
 
 ```ts
@@ -335,6 +338,10 @@ try {
 	actualFirmware = extractFirmware(rawData, format);
 } catch (e) {
 	// handle the error, then abort the update
+}
+
+if (actualFirmware.firmwareTarget == undefined) {
+	actualFirmware.firmwareTarget = getFirmwareTargetSomehow();
 }
 
 // try the update
