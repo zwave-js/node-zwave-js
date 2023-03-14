@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	MessageRecord,
 	NODE_ID_BROADCAST,
+	parseNodeBitMask,
 	RSSI,
 	RssiError,
 	SinglecastCC,
@@ -74,9 +75,9 @@ export class BridgeApplicationCommandRequest
 		const multicastNodesLength = this.payload[offset];
 		offset++;
 		if (this.frameType === "multicast") {
-			this.targetNodeId = [
-				...this.payload.slice(offset, offset + multicastNodesLength),
-			];
+			this.targetNodeId = parseNodeBitMask(
+				this.payload.slice(offset, offset + multicastNodesLength),
+			);
 		} else if (this.frameType === "singlecast") {
 			this.targetNodeId = this.payload[1];
 		} else {
@@ -111,10 +112,13 @@ export class BridgeApplicationCommandRequest
 			message.type = this.frameType;
 		}
 		if (this.targetNodeId !== this.host.ownNodeId) {
-			message["target node"] =
-				typeof this.targetNodeId === "number"
-					? this.targetNodeId
-					: this.targetNodeId.join(", ");
+			if (typeof this.targetNodeId === "number") {
+				message["target node"] = this.targetNodeId;
+			} else if (this.targetNodeId.length === 1) {
+				message["target node"] = this.targetNodeId[0];
+			} else {
+				message["target nodes"] = this.targetNodeId.join(", ");
+			}
 		}
 		if (this.rssi !== undefined) {
 			switch (true) {
