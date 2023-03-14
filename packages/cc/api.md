@@ -4399,6 +4399,7 @@ export class DeviceResetLocallyCC extends CommandClass {
 //
 // @public (undocumented)
 export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {
+    constructor(host: ZWaveHost_2, options: CommandClassOptions);
 }
 
 // Warning: (ae-missing-release-tag) "DeviceResetLocallyCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
