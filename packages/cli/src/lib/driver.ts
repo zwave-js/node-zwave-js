@@ -15,8 +15,9 @@ export async function startDriver(
 ): Promise<Driver> {
 	const driver = new Driver(port, {
 		logConfig: {
-			// Do not log to console or file
-			enabled: false,
+			// TODO: Make this configurable
+			enabled: true,
+			logToFile: true,
 			// But log to our own transport
 			transports: [options.logTransport],
 		},

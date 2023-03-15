@@ -2,6 +2,7 @@ import React from "react";
 import { SetUSBPath } from "../components/setUSBPath.js";
 import { BootstrappingNodePage } from "../pages/BootstrappingNode.js";
 import { ConfirmExitPage } from "../pages/ConfirmExit.js";
+import { ControllerSetRegionPage } from "../pages/Controller/SetRegion.js";
 import { DestroyingDriverPage } from "../pages/DestroyingDriver.js";
 import { DeviceDetailsPage } from "../pages/DeviceDetails.js";
 import { DeviceOverviewPage } from "../pages/DeviceOverview.js";
@@ -26,6 +27,8 @@ export enum CLIPage {
 	ExcludeNode,
 	ReplaceFailedNode,
 	RemoveFailedNode,
+
+	ControllerSetRegion,
 
 	ConfirmExit,
 }
@@ -77,6 +80,9 @@ export function getPageComponent(cliPage: CLIPage): React.FC<any> | undefined {
 			return ReplaceFailedNodePage;
 		case CLIPage.RemoveFailedNode:
 			return RemoveFailedNodePage;
+
+		case CLIPage.ControllerSetRegion:
+			return ControllerSetRegionPage;
 
 		case CLIPage.ConfirmExit:
 			return ConfirmExitPage;
