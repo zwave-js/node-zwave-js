@@ -122,7 +122,9 @@ import {
 	SecurityClassOwner,
 	SendCommandOptions,
 	sensorCCs,
+	SetValueOptions,
 	SinglecastCC,
+	supervisedCommandSucceeded,
 	SupervisionStatus,
 	topologicalSort,
 	TranslatedValueID,
@@ -870,7 +872,7 @@ export class ZWaveNode
 	}
 
 	/**
-	 * Returns when the given value id was last updated
+	 * Returns when the given value id was last updated by an update from the node.
 	 */
 	public getValueTimestamp(valueId: ValueID): number | undefined {
 		return this._valueDB.getTimestamp(valueId);
@@ -1003,13 +1005,19 @@ export class ZWaveNode
 					});
 				}
 
-				this._valueDB.setValue(
-					valueId,
-					value,
-					// We need to emit an event if applications opted in, or if this was a supervised call
-					// because in this case there won't be a verification query which would result in an update
-					emitEvent ? { source: "driver" } : { noEvent: true },
-				);
+				const options: SetValueOptions = {};
+				// We need to emit an event if applications opted in, or if this was a supervised call
+				// because in this case there won't be a verification query which would result in an update
+				if (emitEvent) {
+					options.source = "driver";
+				} else {
+					options.noEvent = true;
+				}
+				// Only update the timestamp of the value for successful supervised commands. Otherwise we don't know
+				// if the command was actually executed. If it wasn't, we'd have a wrong timestamp.
+				options.updateTimestamp = supervisedCommandSucceeded(result);
+
+				this._valueDB.setValue(valueId, value, options);
 			} else if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
 					message: `[setValue] not updating value`,
