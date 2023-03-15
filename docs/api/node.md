@@ -50,9 +50,9 @@ Metadata in `zwave-js` can be separated into a **static** and a **dynamic** part
 getValueTimestamp(valueId: ValueID): number | undefined
 ```
 
-Returns when the given value was last updated in the local cache. Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md#ValueID).
+Returns when the given value was last updated by the node. This includes unsolicited updates, responses to GET-type requests and successful supervised SET-type requests.
 
-The method either returns the stored timestamp if it was found, and `undefined` otherwise.
+Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md#ValueID). The method either returns the stored timestamp if it was found, and `undefined` otherwise.
 
 > [!NOTE]
 > This does **not** communicate with the node.
