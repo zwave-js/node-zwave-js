@@ -7,7 +7,7 @@
 ## 10.12.0 (2023-03-15)
 ### Features
 * Background RSSI is now measured frequently while the controller is idle and exposed as controller statistics (#5545, #5568)
-* The last update timestamp of values is now stored and can be read via `Node.getValueTimestamp` (#5554)
+* The last update timestamp of values is now stored and can be read via `Node.getValueTimestamp` (#5556)
 * Values for Battery, Meter, Multilevel Switch and (in some cases) Notification CC are now queried periodically or on device wakeup (#5560)
 * Added a command to shut down the Z-Wave chip for safe removal (#5553)
 * If a node was not included securely, the `"node added"` event now contains information why (#5570)
