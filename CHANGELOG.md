@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.12.0 (2023-03-15)
 ### Features
 * Background RSSI is now measured frequently while the controller is idle and exposed as controller statistics (#5545, #5568)
 * The last update timestamp of values is now stored and can be read via `Node.getValueTimestamp` (#5554)
