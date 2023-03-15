@@ -4,6 +4,27 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Background RSSI is now measured frequently while the controller is idle and exposed as controller statistics (#5545, #5568)
+* The last update timestamp of values is now stored and can be read via `Node.getValueTimestamp` (#5554)
+* Values for Battery, Meter, Multilevel Switch and (in some cases) Notification CC are now queried periodically or on device wakeup (#5560)
+* Added a command to shut down the Z-Wave chip for safe removal (#5553)
+* If a node was not included securely, the `"node added"` event now contains information why (#5570)
+
+### Bugfixes
+* Before adding associations between nodes, the security classes of those nodes are now checked to determine if the associations are allowed (#5551)
+* After adding associations between nodes, routes to the target are now automatically assigned (#5552)
+* No longer create values for unsupported `Door Lock CC` features (#5555)
+* Fixed an issue where querying the version of CCs that are only supported by endpoints was skipped (#5569)
+* The knowledge whether a node supports Security S0 is no longer changed outside of inclusion or re-interview (#5571)
+* Improved logging of target node IDs for incoming multicasts (#5572)
+* `Device Reset Locally Notifications` are now discarded when they don't exactly match the expected format (#5574)
+
+### Config file changes
+* Clean up Zooz ZEN20 product name (#5550)
+* Add config file for Alarm.com ADC-SWM150 (#5557)
+
 ## 10.11.1 (2023-03-09)
 ### Bugfixes
 * Do not start level change with unknown `startLevel` (#5542)
