@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	Duration,
 	enumValuesToMetadataStates,
+	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
@@ -61,7 +62,7 @@ export const DoorLockCCValues = Object.freeze({
 		} as const),
 
 		...V.staticProperty("currentMode", {
-			...ValueMetadata.UInt8,
+			...ValueMetadata.ReadOnlyUInt8,
 			label: "Current lock mode",
 			states: enumValuesToMetadataStates(DoorLockMode),
 		} as const),
@@ -169,24 +170,75 @@ export const DoorLockCCValues = Object.freeze({
 		),
 
 		...V.staticProperty("latchSupported", undefined, { internal: true }),
-		...V.staticProperty("latchStatus", {
-			...ValueMetadata.ReadOnly,
-			label: "Current status of the latch",
-		} as const),
+		...V.staticProperty(
+			"latchStatus",
+			{
+				...ValueMetadata.ReadOnly,
+				label: "Current status of the latch",
+			} as const,
+			{
+				autoCreate: shouldAutoCreateLatchStatusValue,
+			} as const,
+		),
 
 		...V.staticProperty("boltSupported", undefined, { internal: true }),
-		...V.staticProperty("boltStatus", {
-			...ValueMetadata.ReadOnly,
-			label: "Current status of the bolt",
-		} as const),
+		...V.staticProperty(
+			"boltStatus",
+			{
+				...ValueMetadata.ReadOnly,
+				label: "Current status of the bolt",
+			} as const,
+			{
+				autoCreate: shouldAutoCreateBoltStatusValue,
+			} as const,
+		),
 
 		...V.staticProperty("doorSupported", undefined, { internal: true }),
-		...V.staticProperty("doorStatus", {
-			...ValueMetadata.ReadOnly,
-			label: "Current status of the door",
-		} as const),
+		...V.staticProperty(
+			"doorStatus",
+			{
+				...ValueMetadata.ReadOnly,
+				label: "Current status of the door",
+			} as const,
+			{
+				autoCreate: shouldAutoCreateDoorStatusValue,
+			} as const,
+		),
 	}),
 });
+
+function shouldAutoCreateLatchStatusValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.latchSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateBoltStatusValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.boltSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateDoorStatusValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.doorSupported.endpoint(endpoint.index),
+	);
+}
 
 const configurationSetParameters = [
 	"operationType",
@@ -536,11 +588,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 		if (!hadCriticalTimeout) {
 			// Save support information for the status values
 			const doorStatusValue = DoorLockCCValues.doorStatus;
-			this.setMetadata(
-				applHost,
-				doorStatusValue,
-				doorSupported ? doorStatusValue.meta : undefined,
-			);
+			if (doorSupported) this.setMetadata(applHost, doorStatusValue);
 			this.setValue(
 				applHost,
 				DoorLockCCValues.doorSupported,
@@ -548,11 +596,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			);
 
 			const latchStatusValue = DoorLockCCValues.latchStatus;
-			this.setMetadata(
-				applHost,
-				latchStatusValue,
-				latchSupported ? latchStatusValue.meta : undefined,
-			);
+			if (latchSupported) this.setMetadata(applHost, latchStatusValue);
 			this.setValue(
 				applHost,
 				DoorLockCCValues.latchSupported,
@@ -560,11 +604,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			);
 
 			const boltStatusValue = DoorLockCCValues.boltStatus;
-			this.setMetadata(
-				applHost,
-				boltStatusValue,
-				boltSupported ? boltStatusValue.meta : undefined,
-			);
+			if (boltSupported) this.setMetadata(applHost, boltStatusValue);
 			this.setValue(
 				applHost,
 				DoorLockCCValues.boltSupported,

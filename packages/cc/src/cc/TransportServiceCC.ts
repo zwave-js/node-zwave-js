@@ -24,7 +24,9 @@ import {
 } from "../lib/CommandClassDecorators";
 import { TransportServiceCommand } from "../lib/_Types";
 
-const MAX_SEGMENT_SIZE = 39;
+export const MAX_SEGMENT_SIZE = 39;
+
+export const RELAXED_TIMING_THRESHOLD = 2;
 
 // TODO: Figure out how we know if communicating with R2 or R3
 /** @publicAPI */
@@ -33,6 +35,14 @@ export const TransportServiceTimeouts = {
 	requestMissingSegmentR2: 800,
 	/** Waiting time before requesting a missing segment at data rate R3 */
 	requestMissingSegmentR3: 400,
+	/** Waiting time before sending another datagram at data rate R2 */
+	segmentCompleteR2: 1000,
+	/** Waiting time before sending another datagram at data rate R3 */
+	segmentCompleteR3: 500,
+	/** Waiting time between segments when sending more than {@link RELAXED_TIMING_THRESHOLD} segments at data rate R2 */
+	relaxedTimingDelayR2: 35,
+	/** Waiting time between segments when sending more than {@link RELAXED_TIMING_THRESHOLD} segments at data rate R3 */
+	relaxedTimingDelayR3: 15,
 };
 
 @commandClass(CommandClasses["Transport Service"])

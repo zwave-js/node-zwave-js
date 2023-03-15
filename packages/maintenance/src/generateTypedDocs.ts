@@ -457,7 +457,7 @@ ${
 
 			// There is probably an official way to do this, but I can't find it
 			ret = ret
-				.replace(/typeof CommandClasses/g, "CommandClasses")
+				.replace(/\(?typeof CommandClasses\)?/g, "CommandClasses")
 				.replace(/^(\s+)readonly /gm, "$1")
 				.replace(/;$/gm, ",");
 

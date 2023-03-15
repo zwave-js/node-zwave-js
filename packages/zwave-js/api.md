@@ -14,6 +14,7 @@ import { BootloaderChunk } from '@zwave-js/serial';
 import { buffer2hex } from '@zwave-js/shared/safe';
 import { CCAPIs } from '@zwave-js/cc';
 import { CCConstructor } from '@zwave-js/cc';
+import { CCNameOrId } from '@zwave-js/cc';
 import { CommandClass } from '@zwave-js/cc';
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
@@ -72,7 +73,7 @@ import { MessageOptions } from '@zwave-js/serial';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessagePriority } from '@zwave-js/core';
 import { MessageType } from '@zwave-js/serial';
-import type { MetadataUpdatedArgs } from '@zwave-js/core';
+import type { MetadataUpdatedArgs } from '@zwave-js/core/safe';
 import { MockControllerBehavior } from '@zwave-js/testing';
 import { MockNodeBehavior } from '@zwave-js/testing';
 import { MulticastCC } from '@zwave-js/core';
@@ -81,7 +82,6 @@ import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_MAX } from '@zwave-js/core/safe';
 import { NodeStatus } from '@zwave-js/core/safe';
-import type { NodeStatus as NodeStatus_2 } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core/safe';
 import { NodeType as NodeType_2 } from '@zwave-js/core';
 import { NodeUpdatePayload } from '@zwave-js/core';
@@ -116,6 +116,7 @@ import type { SecurityClass } from '@zwave-js/core/safe';
 import { SecurityClass as SecurityClass_2 } from '@zwave-js/core';
 import { SecurityClassOwner } from '@zwave-js/core';
 import { SendCommandOptions } from '@zwave-js/core';
+import { SendCommandOptions as SendCommandOptions_2 } from '@zwave-js/core/safe';
 import { SendCommandReturnType } from '@zwave-js/core';
 import { SendMessageOptions } from '@zwave-js/core';
 import { SensorType } from '@zwave-js/config';
@@ -124,12 +125,13 @@ import { SetValueAPIOptions } from '@zwave-js/cc';
 import { SinglecastCC } from '@zwave-js/core';
 import type { SpecificDeviceClass } from '@zwave-js/config';
 import { Switchpoint } from '@zwave-js/cc';
+import { TranslatedValueID } from '@zwave-js/core/safe';
 import { TranslatedValueID as TranslatedValueID_2 } from '@zwave-js/core';
 import { TransmitOptions } from '@zwave-js/core';
 import { TXReport } from '@zwave-js/core/safe';
 import { TypedEventEmitter } from '@zwave-js/shared';
 import * as util from 'util';
-import type { ValueAddedArgs } from '@zwave-js/core';
+import type { ValueAddedArgs } from '@zwave-js/core/safe';
 import { ValueDB } from '@zwave-js/core';
 import { ValueID } from '@zwave-js/core/safe';
 import { ValueID as ValueID_2 } from '@zwave-js/core';
@@ -139,10 +141,10 @@ import { ValueMetadataAny } from '@zwave-js/core/safe';
 import { ValueMetadataBoolean } from '@zwave-js/core/safe';
 import { ValueMetadataNumeric } from '@zwave-js/core/safe';
 import { ValueMetadataString } from '@zwave-js/core/safe';
-import type { ValueNotificationArgs } from '@zwave-js/core';
-import type { ValueRemovedArgs } from '@zwave-js/core';
+import type { ValueNotificationArgs } from '@zwave-js/core/safe';
+import type { ValueRemovedArgs } from '@zwave-js/core/safe';
 import { ValueType } from '@zwave-js/core/safe';
-import type { ValueUpdatedArgs } from '@zwave-js/core';
+import type { ValueUpdatedArgs } from '@zwave-js/core/safe';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveApplicationHost } from '@zwave-js/host';
 import { ZWaveDataRate } from '@zwave-js/core';
@@ -205,6 +207,21 @@ export { ControllerSelfLogContext }
 //
 // @public
 export interface ControllerStatistics {
+    backgroundRSSI?: {
+        timestamp: number;
+        channel0: {
+            average: number;
+            current: number;
+        };
+        channel1: {
+            average: number;
+            current: number;
+        };
+        channel2?: {
+            average: number;
+            current: number;
+        };
+    };
     CAN: number;
     messagesDroppedRX: number;
     messagesDroppedTX: number;
@@ -281,6 +298,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     getLogConfig(): LogConfig;
     readonly getNextCallbackId: () => number;
     readonly getNextSupervisionSessionId: () => number;
+    readonly getNextTransportServiceSessionId: () => number;
     // (undocumented)
     getNodeUnsafe(msg: Message): ZWaveNode | undefined;
     getReportTimeout(msg: Message): number;
@@ -309,6 +327,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     isInBootloader(): boolean;
     get ready(): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    registerCommandHandler<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, handler: (cc: T) => void): {
+        unregister: () => void;
+    };
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (ae-forgotten-export) The symbol "RequestHandler" needs to be exported by the entry point index.d.ts
@@ -321,7 +343,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     sendMessage<TResponse extends Message = Message>(msg: Message, options?: SendMessageOptions): Promise<TResponse>;
+    get sendThreadIdle(): boolean;
     setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void;
+    shutdown(): Promise<boolean>;
     softReset(): Promise<void>;
     start(): Promise<void>;
     get statisticsEnabled(): boolean;
@@ -399,13 +423,13 @@ export class Endpoint implements IZWaveEndpoint {
     hideBasicCCInFavorOfActuatorCCs(): void;
     readonly index: number;
     get installerIcon(): number | undefined;
-    invokeCCAPI<CC extends CommandClasses_2, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
+    invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : Omit<CCNameOrId, CommandClasses_2> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     isCCSecure(cc: CommandClasses_2): boolean;
     readonly nodeId: number;
     removeCC(cc: CommandClasses_2): void;
     protected reset(): void;
     supportsCC(cc: CommandClasses_2): boolean;
-    supportsCCAPI(cc: CommandClasses_2): boolean;
+    supportsCCAPI(cc: CCNameOrId): boolean;
     get userIcon(): number | undefined;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "IZWaveEndpoint"
     readonly virtual = false;
@@ -578,9 +602,12 @@ export type InclusionOptions = {
 // Warning: (ae-missing-release-tag) "InclusionResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export interface InclusionResult {
-    lowSecurity?: boolean;
-}
+export type InclusionResult = {
+    lowSecurity?: false;
+} | {
+    lowSecurity: true;
+    lowSecurityReason: SecurityBootstrapFailure;
+};
 
 // Warning: (ae-missing-release-tag) "InclusionState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -827,6 +854,21 @@ export { Scale }
 // @public (undocumented)
 export type SDKVersion = `${number}.${number}` | `${number}.${number}.${number}`;
 
+// Warning: (ae-missing-release-tag) "SecurityBootstrapFailure" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum SecurityBootstrapFailure {
+    NodeCanceled = 5,
+    NoKeysConfigured = 1,
+    ParameterMismatch = 4,
+    S2IncorrectPIN = 6,
+    S2NoUserCallbacks = 2,
+    S2WrongSecurityLevel = 7,
+    Timeout = 3,
+    Unknown = 8,
+    UserCanceled = 0
+}
+
 export { SendMessageOptions }
 
 export { SensorType }
@@ -874,17 +916,7 @@ export type SmartStartProvisioningEntry = PlannedProvisioningEntry | IncludedPro
 
 export { Switchpoint }
 
-// Warning: (ae-missing-release-tag) "TranslatedValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface TranslatedValueID extends ValueID_2 {
-    // (undocumented)
-    commandClassName: string;
-    // (undocumented)
-    propertyKeyName?: string;
-    // (undocumented)
-    propertyName?: string;
-}
+export { TranslatedValueID }
 
 export { TXReport }
 
@@ -909,12 +941,13 @@ export class VirtualEndpoint implements IVirtualEndpoint {
     constructor(
     node: VirtualNode | undefined,
     driver: Driver,
-    index: number);
+    index: number,
+    defaultCommandOptions?: SendCommandOptions_2 | undefined);
     get commandClasses(): CCAPIs;
     protected readonly driver: Driver;
     getCCVersion(cc: CommandClasses): number;
     readonly index: number;
-    invokeCCAPI<CC extends CommandClasses, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
+    invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses extends CC ? any : Omit<CCNameOrId, CommandClasses> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     // (undocumented)
     get node(): VirtualNode;
     // (undocumented)
@@ -930,7 +963,8 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 // @public (undocumented)
 export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
     constructor(id: number | undefined, driver: Driver,
-    physicalNodes: Iterable<ZWaveNode>);
+    physicalNodes: Iterable<ZWaveNode>,
+    defaultCommandOptions?: SendCommandOptions);
     getDefinedValueIDs(): VirtualValueID[];
     getEndpoint(index: 0): VirtualEndpoint;
     // (undocumented)
@@ -941,7 +975,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
     // (undocumented)
     readonly id: number | undefined;
     // (undocumented)
-    readonly physicalNodes: ZWaveNode[];
+    readonly physicalNodes: readonly ZWaveNode[];
     setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;
 }
 
@@ -1028,9 +1062,20 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         rssiChannel1: RSSI_2;
         rssiChannel2?: RSSI_2;
     }>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getBroadcastNodes"
+    //
+    // @deprecated
     getBroadcastNode(): VirtualNode;
+    getBroadcastNodeInsecure(): VirtualNode;
+    getBroadcastNodes(): VirtualNode[];
     getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroups"
+    //
+    // @deprecated
     getMulticastGroup(nodeIDs: number[]): VirtualNode;
+    getMulticastGroupInsecure(nodeIDs: number[]): VirtualNode;
+    getMulticastGroups(nodeIDs: number[]): VirtualNode[];
+    getMulticastGroupS2(nodeIDs: number[]): VirtualNode;
     getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined;
     getNodeNeighbors(nodeId: number, onlyRepeaters?: boolean): Promise<readonly number[]>;
     // Warning: (ae-forgotten-export) The symbol "NVMId" needs to be exported by the entry point index.d.ts
@@ -1195,7 +1240,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // (undocumented)
     get firmwareVersion(): string | undefined;
     getAllEndpoints(): Endpoint[];
-    getDefinedValueIDs(): TranslatedValueID[];
+    getDefinedValueIDs(): TranslatedValueID_2[];
     getEndpoint(index: 0): Endpoint;
     // (undocumented)
     getEndpoint(index: number): Endpoint | undefined;
@@ -1208,6 +1253,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     getHighestSecurityClass(): SecurityClass_2 | undefined;
     getValue<T = unknown>(valueId: ValueID_2): T | undefined;
     getValueMetadata(valueId: ValueID_2): ValueMetadata_2;
+    getValueTimestamp(valueId: ValueID_2): number | undefined;
     // (undocumented)
     hasSecurityClass(securityClass: SecurityClass_2): Maybe<boolean>;
     get hasSUCReturnRoute(): boolean;
@@ -1257,7 +1303,6 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     refreshValues(): Promise<void>;
     // (undocumented)
     requestNodeInfo(): Promise<NodeUpdatePayload>;
-    requiresManualValueRefresh(): boolean;
     // (undocumented)
     get sdkVersion(): string | undefined;
     // (undocumented)
@@ -1340,7 +1385,7 @@ export type ZWaveNodeMetadataUpdatedCallback = (node: ZWaveNode, args: ZWaveNode
 // Warning: (ae-missing-release-tag) "ZWaveNodeStatusChangeCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ZWaveNodeStatusChangeCallback = (node: ZWaveNode, oldStatus: NodeStatus_2) => void;
+export type ZWaveNodeStatusChangeCallback = (node: ZWaveNode, oldStatus: NodeStatus) => void;
 
 // Warning: (ae-missing-release-tag) "ZWaveNodeValueAddedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1454,7 +1499,7 @@ export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
 // @public
 export type ZWaveNotificationCallbackParams_EntryControlCC = [
 node: ZWaveNode,
-ccId: typeof CommandClasses_2["Entry Control"],
+ccId: (typeof CommandClasses)["Entry Control"],
 args: ZWaveNotificationCallbackArgs_EntryControlCC
 ];
 
@@ -1463,7 +1508,7 @@ args: ZWaveNotificationCallbackArgs_EntryControlCC
 // @public
 export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
 node: ZWaveNode,
-ccId: typeof CommandClasses_2["Multilevel Switch"],
+ccId: (typeof CommandClasses)["Multilevel Switch"],
 args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 ];
 
@@ -1472,7 +1517,7 @@ args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 // @public
 export type ZWaveNotificationCallbackParams_NotificationCC = [
 node: ZWaveNode,
-ccId: CommandClasses_2.Notification,
+ccId: CommandClasses.Notification,
 args: ZWaveNotificationCallbackArgs_NotificationCC
 ];
 
@@ -1481,7 +1526,7 @@ args: ZWaveNotificationCallbackArgs_NotificationCC
 // @public
 export type ZWaveNotificationCallbackParams_PowerlevelCC = [
 node: ZWaveNode,
-ccId: CommandClasses_2.Powerlevel,
+ccId: CommandClasses.Powerlevel,
 args: ZWaveNotificationCallbackArgs_PowerlevelCC
 ];
 

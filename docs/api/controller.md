@@ -634,30 +634,49 @@ If the target endpoint is not given, the association is a "node association". If
 
 A target endpoint of `0` (i.e. the root endpoint), the association targets the node itself and acts like a node association for the target node. However, you should note that some devices don't like having a root endpoint association as the lifeline and must be configured with a node association.
 
-### `getBroadcastNode`
+### Controlling multiple nodes at once (multicast / broadcast)
 
-```ts
-getBroadcastNode(): VirtualNode
-```
+When controlling multiple nodes, a "waterfall" effect can often be observed, because nodes get the commands after another. This can be avoided by using multicast or broadcast, which sends commands to multiple/all nodes at once.
 
-Returns a reference to the (virtual) broadcast node. This can be used to send a command to all supporting nodes in the network with a single message. You can target individual endpoints as usual.
+> [!NOTE]
+> Multicast does **NOT** reduce the number of messages sent, but it can eliminate the waterfall effect when targeting many nodes. All multicasts are followed up by singlecast messages to the individual nodes. This makes sure that all nodes got the command, and is necessary to make secure (S2) multicast work at all.
 
-### `getMulticastGroup`
-
-```ts
-getMulticastGroup(nodeIDs: number[]): VirtualNode
-```
-
-Creates a virtual node that can be used to send commands to multiple supporting nodes with a single (multicast) message. You can target individual endpoints as usual.
+> [!NOTE]
+> There are some caveats when secure nodes are involved:
+>
+> -   True broadcast is only possible for insecure nodes. Secure nodes will not react to broadcasts.
+> -   Nodes that are included via `Security S0` can only be controlled using singlecast.
+> -   When controlling nodes with mixed security classes, each group of nodes must be targeted individually. It is not possible to send a single command that both secure and insecure nodes will understand.
 
 > [!NOTE]
 > Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details on the available methods and properties.
 
+#### Multicast
+
+```ts
+getMulticastGroups(nodeIDs: number[]): VirtualNode[]
+```
+
+Creates one or more virtual nodes that can be used to send commands to multiple supporting nodes with as few multicast messages as possible. Nodes are grouped by security class automatically, and get ignored if they cannot be controlled via multicast. You can target individual endpoints as usual.
+
 > [!NOTE]
-> Support for secure communication is very limited:
->
-> -   Broadcasting or multicasting commands is not possible using `Security S0`.
-> -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
+> This will actually send **broadcast** frames, since it has been found that some (all?) devices interpret S2 multicast frames as the S2 singlecast followup, causing them to respond incorrectly.
+
+#### Broadcast
+
+```ts
+getBroadcastNodeInsecure(): VirtualNode
+```
+
+Returns a reference to the (virtual) broadcast node. This can be used to send a command to all supporting insecure nodes in the network with a single message. You can target individual endpoints as usual.
+
+It is recommended to use the following method instead, which automatically groups nodes by security class and ignores those that cannot be controlled via broadcast.
+
+Note that this will do the same as `getMulticastGroups` if the network has mixed security classes.
+
+```ts
+getBroadcastNodes(): VirtualNode[]
+```
 
 ### Configuring the Z-Wave radio
 
@@ -1164,9 +1183,42 @@ The second argument gives additional info about the inclusion result.
 <!-- #import InclusionResult from "zwave-js" -->
 
 ```ts
-interface InclusionResult {
-	/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
-	lowSecurity?: boolean;
+type InclusionResult =
+	| {
+			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+			lowSecurity?: false;
+	  }
+	| {
+			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+			lowSecurity: true;
+			lowSecurityReason: SecurityBootstrapFailure;
+	  };
+```
+
+If there was a failure during the inclusion, the `lowSecurity` flag will be `true` and the `lowSecurityReason` property will contain additional information why.
+
+<!-- #import SecurityBootstrapFailure from "zwave-js" -->
+
+```ts
+enum SecurityBootstrapFailure {
+	/** Security bootstrapping was canceled by the user */
+	UserCanceled,
+	/** The required security keys were not configured in the driver */
+	NoKeysConfigured,
+	/** No Security S2 user callbacks (or provisioning info) were provided to grant security classes and/or validate the DSK. */
+	S2NoUserCallbacks,
+	/** An expected message was not received within the corresponding timeout */
+	Timeout,
+	/** There was no possible match in encryption parameters between the controller and the node */
+	ParameterMismatch,
+	/** Security bootstrapping was canceled by the included node */
+	NodeCanceled,
+	/** The PIN was incorrect, so the included node could not decode the key exchange commands */
+	S2IncorrectPIN,
+	/** There was a mismatch in security keys between the controller and the node */
+	S2WrongSecurityLevel,
+	/** Some other unspecified error happened */
+	Unknown,
 }
 ```
 
@@ -1229,6 +1281,29 @@ interface ControllerStatistics {
 	timeoutCallback: number;
 	/** No. of outgoing messages that were dropped because they could not be sent */
 	messagesDroppedTX: number;
+
+	/**
+	 * Background RSSI of the network in dBm. These values are typically between -100 and -30, but can be even smaller (down to -128 dBm) in quiet environments.
+	 *
+	 * The `average` values are calculated using an exponential moving average.
+	 * The `current` values are the most recent measurements, which can be compared to the average to detect interference/jamming.
+	 * The `timestamp` is the time of the most recent update of these measurements, and can be used to draw graphs.
+	 */
+	backgroundRSSI?: {
+		timestamp: number;
+		channel0: {
+			average: number;
+			current: number;
+		};
+		channel1: {
+			average: number;
+			current: number;
+		};
+		channel2?: {
+			average: number;
+			current: number;
+		};
+	};
 }
 ```
 

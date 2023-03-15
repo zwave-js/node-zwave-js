@@ -4,22 +4,78 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
-<!-- ### Breaking changes
+## 10.12.0 (2023-03-15)
+### Features
+* Background RSSI is now measured frequently while the controller is idle and exposed as controller statistics (#5545, #5568)
+* The last update timestamp of values is now stored and can be read via `Node.getValueTimestamp` (#5554)
+* Values for Battery, Meter, Multilevel Switch and (in some cases) Notification CC are now queried periodically or on device wakeup (#5560)
+* Added a command to shut down the Z-Wave chip for safe removal (#5553)
+* If a node was not included securely, the `"node added"` event now contains information why (#5570)
 
-### Features -->
+### Bugfixes
+* Before adding associations between nodes, the security classes of those nodes are now checked to determine if the associations are allowed (#5551)
+* After adding associations between nodes, routes to the target are now automatically assigned (#5552)
+* No longer create values for unsupported `Door Lock CC` features (#5555)
+* Fixed an issue where querying the version of CCs that are only supported by endpoints was skipped (#5569)
+* The knowledge whether a node supports Security S0 is no longer changed outside of inclusion or re-interview (#5571)
+* Improved logging of target node IDs for incoming multicasts (#5572)
+* `Device Reset Locally Notifications` are now discarded when they don't exactly match the expected format (#5574)
+
+### Config file changes
+* Clean up Zooz ZEN20 product name (#5550)
+* Add config file for Alarm.com ADC-SWM150 (#5557)
+
+## 10.11.1 (2023-03-09)
+### Bugfixes
+* Do not start level change with unknown `startLevel` (#5542)
+* Do not wait to confirm unsupervised S2 delivery while bootstrapping, which prevented including nodes using S2 (#5547)
+
+### Config file changes
+* Add compat flag to ignore/remove endpoints (#5541)
+* Disable Supervision for Everspring SP816 Motion Sensor (#5537)
+* Separate config for 300 and 500 series of Vision Security ZM1602 (#5539)
+* Remove endpoints from Everspring ST814 (#5541)
+* Enable double tap for Honeywell 39348 / 39455 / ZW4005 (#5543)
+
+### Changes under the hood
+* Moved back from Renovate Bot to Dependabot (#5527, #5536)
+
+## 10.11.0 (2023-03-07)
+### Features
+* Add `stateful` and `secret` flags to `ValueMetadata` (#5467)
+* Added support for `Security S2` Multicast (#5475)
+* Large commands are now automatically fragmented using `Transport Service CC`. If this is not possible, the attempt will throw instead of relying on the stick's response (#5475)
 
 ### Bugfixes
 * Queries for invalid enum members are skipped during the interview. This could happen for some CCs when the device incorrectly encoded a support bitmask (#5465)
+* Correctly handle the response when requesting Indicator ID 0 (#5470)
+* Only configure timezone for `Schedule Entry Lock CC` if supported (#5484)
+* `invokeCCAPI` now officially accepts both the CC name and ID, e.g. `"Basic"` and `0x20`. At some point this was accidentally supported and later broken. (#5500)
+* The `currentMode` property for `Door Lock CC` is readonly (#5507)
+* Always return `false` for `canSleep` on the controller node, even if the controller claims otherwise (#5522)
 
 ### Config file changes
 * Force-add Basic CC as supported for HeatIt Z-Smoke 230V (#5436)
+* Add fingerprints for Long-Range capable ZEN51/52 variants (#5524)
+* Add wiDom C7 Energy Driven Switch (#5180)
+* Add Sunricher SR-SV9080A-A (#5486)
+* Add Namron SR-ZV9032A-EU (#5474)
+* Correct Minoston MR40Z parameters to match device (#5503)
+* Add params, metadata, associations to Merten 507801 (#5478)
+* Update Dome Wireless Siren (#5488)
+* Add Nexa ZPR-111 metered plug-in switch (#5512)
+* Update device config files for some HomeSeer products (#5515)
+* Preserve root endpoint with master switch and total consumption for Aeotec DSC11 (#5499)
+* Correct warm and cold white config parameter for Aeotec ZWA001 (#5487)
+* Override setpoint precision for Airzone Aidoo Control HVAC unit (#5483)
+* Correct LED Indicator param for Honeywell 39337 / 39444 / ZW4103 (#5461)
 
 ### Changes under the hood
 * All remaining packages now use `ava` for testing instead of `jest` (#5460, #5459, #5454, #5452, #5447, #5443)
 * The mock serialport has been moved to the `@zwave-js/serial/mock` subpath export (#5455)
 * `createAndStartDriverWithMockPort` was moved to the `zwave-js/Testing` subpath export (#5458)
 * The `watch` tasks used during development are now working again
+* Added `test:dirty` and `test:watch` scripts to run/watch only tests that are affected by changed files since the last commit (#5468)
 
 ## 10.10.0 (2023-02-08)
 **Note:** `10.9.0` was not actually released due to an error in the release pipeline. Some of these changes are tagged as `10.9.0` on GitHub, but are only released as part of `10.10.0`.

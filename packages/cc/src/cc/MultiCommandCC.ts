@@ -81,7 +81,7 @@ export class MultiCommandCC extends CommandClass {
 			EncapsulationFlags.Security,
 			EncapsulationFlags.CRC16,
 		] as const) {
-			ret.setEncapsulationFlag(
+			ret.toggleEncapsulationFlag(
 				flag,
 				CCs.some((cc) => cc.encapsulationFlags & flag),
 			);
@@ -123,6 +123,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 						fromEncapsulation: true,
 						encapCC: this,
 						origin: options.origin,
+						frameType: options.frameType,
 					}),
 				);
 				offset += 1 + cmdLength;

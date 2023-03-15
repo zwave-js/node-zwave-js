@@ -44,6 +44,19 @@ Metadata in `zwave-js` can be separated into a **static** and a **dynamic** part
 >
 > If applications plan to use metadata, they **must not** assume that metadata does not exist if there was no `"metadata updated"` event. Instead the `getValueMetadata` method **must** be used to retrieve the metadata initially.
 
+### `getValueTimestamp`
+
+```ts
+getValueTimestamp(valueId: ValueID): number | undefined
+```
+
+Returns when the given value was last updated in the local cache. Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md#ValueID).
+
+The method either returns the stored timestamp if it was found, and `undefined` otherwise.
+
+> [!NOTE]
+> This does **not** communicate with the node.
+
 ### `getDefinedValueIDs`
 
 ```ts
@@ -299,6 +312,9 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 -   `"hec"` - An encrypted Intel HEX firmware file
 -   `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
+> [!ATTENTION] At the moment, only some `.exe` files contain `firmwareTarget` information. **All** other formats only contain the firmware `data`.
+> This means that the `firmwareTarget` property usually needs to be provided, unless it is `0`.
+
 You can use the helper method `guessFirmwareFileFormat` to guess which firmware format a file has based on the file extension and contents.
 
 ```ts
@@ -322,6 +338,10 @@ try {
 	actualFirmware = extractFirmware(rawData, format);
 } catch (e) {
 	// handle the error, then abort the update
+}
+
+if (actualFirmware.firmwareTarget == undefined) {
+	actualFirmware.firmwareTarget = getFirmwareTargetSomehow();
 }
 
 // try the update
@@ -1094,7 +1114,7 @@ uses the following signature
 ```ts
 type ZWaveNotificationCallbackParams_EntryControlCC = [
 	node: ZWaveNode,
-	ccId: typeof CommandClasses["Entry Control"],
+	ccId: (typeof CommandClasses)["Entry Control"],
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
 ```
@@ -1124,7 +1144,7 @@ uses the following signature
 ```ts
 type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
 	node: ZWaveNode,
-	ccId: typeof CommandClasses["Multilevel Switch"],
+	ccId: (typeof CommandClasses)["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
 ```

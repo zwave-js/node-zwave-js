@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/serial",
-  "version": "10.10.0",
+  "version": "10.12.0",
   "description": "zwave-js: Serialport driver",
   "publishConfig": {
     "access": "public",
@@ -89,7 +89,7 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.4",
     "sinon": "^14.0.0",
     "typescript": "4.9.4"
   }

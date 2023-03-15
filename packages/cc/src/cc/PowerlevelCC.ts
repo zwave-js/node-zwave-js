@@ -177,7 +177,7 @@ type PowerlevelCCSetOptions = CCCommandOptions &
 				timeout: number;
 		  }
 		| {
-				powerlevel: typeof Powerlevel["Normal Power"];
+				powerlevel: (typeof Powerlevel)["Normal Power"];
 				timeout?: undefined;
 		  }
 	);

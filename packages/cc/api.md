@@ -9,6 +9,7 @@
 import { AllOrNone } from '@zwave-js/shared/safe';
 import { AllOrNone as AllOrNone_2 } from '@zwave-js/shared';
 import { ApplicationNodeInformation } from '@zwave-js/core/safe';
+import { BroadcastCC } from '@zwave-js/core';
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
 import { ConfigurationMetadata } from '@zwave-js/core/safe';
@@ -23,12 +24,13 @@ import { EncapsulationFlags } from '@zwave-js/core';
 import { EncapsulationFlags as EncapsulationFlags_2 } from '@zwave-js/core/safe';
 import { FLiRS } from '@zwave-js/core';
 import { FLiRS as FLiRS_2 } from '@zwave-js/core/safe';
+import { FrameType } from '@zwave-js/core';
 import type { GenericDeviceClass } from '@zwave-js/config';
 import { ICommandClass } from '@zwave-js/core';
 import { IVirtualEndpoint } from '@zwave-js/core';
 import { IVirtualEndpoint as IVirtualEndpoint_2 } from '@zwave-js/core/safe';
-import { IZWaveEndpoint } from '@zwave-js/core/safe';
-import { IZWaveEndpoint as IZWaveEndpoint_2 } from '@zwave-js/core';
+import { IZWaveEndpoint } from '@zwave-js/core';
+import { IZWaveEndpoint as IZWaveEndpoint_2 } from '@zwave-js/core/safe';
 import { IZWaveNode } from '@zwave-js/core/safe';
 import { IZWaveNode as IZWaveNode_2 } from '@zwave-js/core';
 import { JSONObject } from '@zwave-js/shared';
@@ -72,8 +74,8 @@ import { ValueID } from '@zwave-js/core';
 import { ValueID as ValueID_2 } from '@zwave-js/core/safe';
 import { ValueMetadata } from '@zwave-js/core';
 import { ValueMetadata as ValueMetadata_2 } from '@zwave-js/core/safe';
-import type { ZWaveApplicationHost } from '@zwave-js/host/safe';
-import type { ZWaveApplicationHost as ZWaveApplicationHost_2 } from '@zwave-js/host';
+import type { ZWaveApplicationHost } from '@zwave-js/host';
+import type { ZWaveApplicationHost as ZWaveApplicationHost_2 } from '@zwave-js/host/safe';
 import { ZWaveDataRate } from '@zwave-js/core';
 import { ZWaveDataRate as ZWaveDataRate_2 } from '@zwave-js/core/safe';
 import { ZWaveErrorCodes } from '@zwave-js/core';
@@ -84,7 +86,7 @@ import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
 // Warning: (ae-missing-release-tag) "addAssociations" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-function addAssociations(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, group: number, destinations: AssociationAddress[]): Promise<void>;
+function addAssociations(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, group: number, destinations: AssociationAddress[]): Promise<void>;
 
 // Warning: (ae-missing-release-tag) "AlarmSensorCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -93,11 +95,11 @@ export class AlarmSensorCC extends CommandClass {
     // (undocumented)
     ccCommand: AlarmSensorCommand;
     // (undocumented)
-    protected createMetadataForSensorType(applHost: ZWaveApplicationHost, sensorType: AlarmSensorType): void;
+    protected createMetadataForSensorType(applHost: ZWaveApplicationHost_2, sensorType: AlarmSensorType): void;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "AlarmSensorCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -111,7 +113,7 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AlarmSensorCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -122,7 +124,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
     // (undocumented)
     readonly duration: number | undefined;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly sensorType: AlarmSensorType;
     // (undocumented)
@@ -130,7 +132,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
     // (undocumented)
     readonly state: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AlarmSensorCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -145,11 +147,11 @@ export class AlarmSensorCCSupportedGet extends AlarmSensorCC {
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     get supportedSensorTypes(): readonly AlarmSensorType[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AlarmSensorCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -173,9 +175,9 @@ export const AlarmSensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -337,12 +339,12 @@ export const API: <TTarget extends CCAPI>(cc: CommandClasses_2) => TypedClassDec
 // Warning: (ae-missing-release-tag) "APIConstructor" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type APIConstructor<T extends CCAPI = CCAPI> = new (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2 | IVirtualEndpoint) => T;
+export type APIConstructor<T extends CCAPI = CCAPI> = new (applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint | IVirtualEndpoint) => T;
 
 // Warning: (ae-missing-release-tag) "APIMethodsOf" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type APIMethodsOf<CC extends CommandClasses_2> = Omit<OnlyMethods<CCToAPI<CC>>, "isSetValueOptimistic" | "isSupported" | "supportsCommand" | "withOptions" | "withTXReport">;
+export type APIMethodsOf<CC extends CCNameOrId> = Omit<OnlyMethods<CCToAPI<CC>>, "ccId" | "getNode" | "getNodeUnsafe" | "isSetValueOptimistic" | "isSupported" | "pollValue" | "setValue" | "version" | "supportsCommand" | "withOptions" | "withTXReport">;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "assertValidCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -368,13 +370,13 @@ export class AssociationCC extends CommandClass {
     ccCommand: AssociationCommand;
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
-    static getAllDestinationsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): ReadonlyMap<number, readonly AssociationAddress[]>;
-    static getGroupCountCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
-    static getMaxNodesCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, groupId: number): number;
+    static getAllDestinationsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): ReadonlyMap<number, readonly AssociationAddress[]>;
+    static getGroupCountCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
+    static getMaxNodesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): number;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -388,7 +390,7 @@ export class AssociationCCGet extends AssociationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationCCRemove" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -404,7 +406,7 @@ export class AssociationCCRemove extends AssociationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -421,13 +423,13 @@ export class AssociationCCReport extends AssociationCC {
     // (undocumented)
     get maxNodes(): number;
     // (undocumented)
-    mergePartialCCs(applHost: ZWaveApplicationHost, partials: AssociationCCReport[]): void;
+    mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: AssociationCCReport[]): void;
     // (undocumented)
     get nodeIds(): readonly number[];
     // (undocumented)
     get reportsToFollow(): number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -443,7 +445,7 @@ export class AssociationCCSet extends AssociationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationCCSupportedGroupingsGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -460,7 +462,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
     // (undocumented)
     get groupCount(): number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -487,9 +489,9 @@ export const AssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -515,9 +517,9 @@ export const AssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -540,9 +542,9 @@ export const AssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -565,9 +567,9 @@ export const AssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -614,14 +616,14 @@ export class AssociationGroupInfoCC extends CommandClass {
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
     // (undocumented)
-    static findGroupsForIssuedCommand(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, ccId: CommandClasses, command: number): number[];
-    static getGroupNameCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, groupId: number): string | undefined;
-    static getGroupProfileCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, groupId: number): AssociationGroupInfoProfile | undefined;
-    static getIssuedCommandsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, groupId: number): ReadonlyMap<CommandClasses, readonly number[]> | undefined;
+    static findGroupsForIssuedCommand(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, ccId: CommandClasses, command: number): number[];
+    static getGroupNameCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): string | undefined;
+    static getGroupProfileCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): AssociationGroupInfoProfile | undefined;
+    static getIssuedCommandsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): ReadonlyMap<CommandClasses, readonly number[]> | undefined;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCCommandListGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -637,7 +639,7 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCCommandListReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -650,7 +652,7 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
     // (undocumented)
     readonly groupId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -668,7 +670,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -685,9 +687,9 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
     // (undocumented)
     readonly isListMode: boolean;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCNameGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -701,7 +703,7 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCNameReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -714,9 +716,9 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
     // (undocumented)
     readonly name: string;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -743,9 +745,9 @@ export const AssociationGroupInfoCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -771,9 +773,9 @@ export const AssociationGroupInfoCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -799,9 +801,9 @@ export const AssociationGroupInfoCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -824,9 +826,9 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -1211,9 +1213,9 @@ export class BarrierOperatorCC extends CommandClass {
     // (undocumented)
     ccCommand: BarrierOperatorCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1227,7 +1229,7 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
     // (undocumented)
     subsystemType: SubsystemType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1236,13 +1238,13 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly subsystemState: SubsystemState;
     // (undocumented)
     readonly subsystemType: SubsystemType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1258,7 +1260,7 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
     // (undocumented)
     subsystemType: SubsystemType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1277,7 +1279,7 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
     // (undocumented)
     readonly position: number | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1291,7 +1293,7 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
     // (undocumented)
     targetState: BarrierState.Open | BarrierState.Closed;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCSignalingCapabilitiesGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1308,7 +1310,7 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
     // (undocumented)
     readonly supportedSubsystemTypes: readonly SubsystemType[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1457,9 +1459,9 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -1512,9 +1514,9 @@ export class BasicCC extends CommandClass {
     // (undocumented)
     ccCommand: BasicCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "BasicCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1534,13 +1536,13 @@ export class BasicCCReport extends BasicCC {
     // (undocumented)
     readonly duration: Duration | undefined;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     readonly targetValue: number | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BasicCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1554,7 +1556,7 @@ export class BasicCCSet extends BasicCC {
     // (undocumented)
     targetValue: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BasicCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1582,11 +1584,11 @@ export const BasicCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly stateful: false;
-            readonly autoCreate: (applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint) => boolean;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     restorePrevious: {
@@ -1720,9 +1722,11 @@ export class BatteryCC extends CommandClass {
     // (undocumented)
     ccCommand: BatteryCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
+    // (undocumented)
+    shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "BatteryCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1745,11 +1749,11 @@ export class BatteryCCHealthReport extends BatteryCC {
     // (undocumented)
     readonly maximumCapacity: number | undefined;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly temperature: number | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BatteryCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1781,7 +1785,7 @@ export class BatteryCCReport extends BatteryCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BatteryCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1798,7 +1802,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lowTemperatureStatus";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Battery temperature is low";
             readonly writeable: false;
@@ -1824,7 +1828,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "disconnected";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Battery is disconnected";
             readonly writeable: false;
@@ -1850,7 +1854,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rechargeOrReplace";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Recharge or replace";
             readonly states: {
@@ -1881,7 +1885,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lowFluid";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Fluid is low";
             readonly writeable: false;
@@ -1907,7 +1911,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "overheating";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Overheating";
             readonly writeable: false;
@@ -1933,7 +1937,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "backup";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Used as backup";
             readonly writeable: false;
@@ -1959,7 +1963,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "rechargeable";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Rechargeable";
             readonly writeable: false;
@@ -1985,7 +1989,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "chargingStatus";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Charging status";
             readonly states: {
@@ -2016,7 +2020,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "temperature";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Temperature";
             readonly writeable: false;
@@ -2044,7 +2048,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "maximumCapacity";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly max: 100;
             readonly unit: "%";
@@ -2073,7 +2077,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "isLow";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Low battery level";
             readonly writeable: false;
@@ -2099,7 +2103,7 @@ export const BatteryCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "level";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly max: 100;
             readonly unit: "%";
@@ -2165,11 +2169,11 @@ export class BinarySensorCC extends CommandClass {
     // (undocumented)
     ccCommand: BinarySensorCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    setMappedBasicValue(applHost: ZWaveApplicationHost, value: number): boolean;
+    setMappedBasicValue(applHost: ZWaveApplicationHost_2, value: number): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "BinarySensorCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2183,7 +2187,7 @@ export class BinarySensorCCGet extends BinarySensorCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BinarySensorCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2192,9 +2196,9 @@ export class BinarySensorCCGet extends BinarySensorCC {
 export class BinarySensorCCReport extends BinarySensorCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get type(): BinarySensorType;
     // (undocumented)
@@ -2215,7 +2219,7 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
     // (undocumented)
     readonly supportedSensorTypes: readonly BinarySensorType[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BinarySensorCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2269,9 +2273,9 @@ export const BinarySensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -2343,11 +2347,11 @@ export class BinarySwitchCC extends CommandClass {
     // (undocumented)
     ccCommand: BinarySwitchCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    setMappedBasicValue(applHost: ZWaveApplicationHost, value: number): boolean;
+    setMappedBasicValue(applHost: ZWaveApplicationHost_2, value: number): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "BinarySwitchCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2371,7 +2375,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
     // (undocumented)
     readonly targetValue: boolean | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BinarySwitchCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2387,7 +2391,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
     // (undocumented)
     targetValue: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "BinarySwitchCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2496,19 +2500,19 @@ export class CCAPI {
     protected [POLL_VALUE]: PollValueImplementation | undefined;
     // (undocumented)
     protected [SET_VALUE]: SetValueImplementation | undefined;
-    constructor(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2 | IVirtualEndpoint);
+    constructor(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint | IVirtualEndpoint);
     // (undocumented)
-    protected readonly applHost: ZWaveApplicationHost_2;
+    protected readonly applHost: ZWaveApplicationHost;
     // (undocumented)
-    protected assertPhysicalEndpoint(endpoint: IZWaveEndpoint_2 | IVirtualEndpoint): asserts endpoint is IZWaveEndpoint_2;
+    protected assertPhysicalEndpoint(endpoint: IZWaveEndpoint | IVirtualEndpoint): asserts endpoint is IZWaveEndpoint;
     // (undocumented)
     protected assertSupportsCommand(commandEnum: unknown, command: number): void;
     readonly ccId: CommandClasses_2;
     protected get commandOptions(): SendCommandOptions;
     // (undocumented)
-    static create<T extends CommandClasses_2>(ccId: T, applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2 | IVirtualEndpoint, requireSupport?: boolean): CommandClasses_2 extends T ? CCAPI : CCToAPI<T>;
+    static create<T extends CommandClasses_2>(ccId: T, applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint | IVirtualEndpoint, requireSupport?: boolean): CommandClasses_2 extends T ? CCAPI : CCToAPI<T>;
     // (undocumented)
-    protected readonly endpoint: IZWaveEndpoint_2 | IVirtualEndpoint;
+    protected readonly endpoint: IZWaveEndpoint | IVirtualEndpoint;
     getNode(): IZWaveNode_2 | undefined;
     protected getValueDB(): ValueDB;
     // (undocumented)
@@ -2526,7 +2530,7 @@ export class CCAPI {
     isSetValueOptimistic(valueId: ValueID): boolean;
     // (undocumented)
     protected isSinglecast(): this is this & {
-        endpoint: IZWaveEndpoint_2;
+        endpoint: IZWaveEndpoint;
     };
     isSupported(): boolean;
     get pollValue(): PollValueImplementation | undefined;
@@ -2806,6 +2810,11 @@ export type CCConstructor<T extends CommandClass> = typeof CommandClass & {
     new (host: ZWaveHost, options: any): T;
 };
 
+// Warning: (ae-missing-release-tag) "CCNameOrId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CCNameOrId = CommandClasses_2 | Extract<keyof CCAPIs, string>;
+
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "CCResponsePredicate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2821,7 +2830,7 @@ export type CCResponseRole = boolean | "checkEncapsulated";
 // Warning: (ae-missing-release-tag) "CCToAPI" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type CCToAPI<CC extends CommandClasses_2> = CCToName<CC> extends keyof CCAPIs ? CCAPIs[CCToName<CC>] : never;
+export type CCToAPI<CC extends CCNameOrId> = CC extends CommandClasses_2 ? CCToName<CC> extends keyof CCAPIs ? CCAPIs[CCToName<CC>] : never : CC extends keyof CCAPIs ? CCAPIs[CC] : never;
 
 // Warning: (ae-forgotten-export) The symbol "CCNameMap" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "CCToName" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2844,6 +2853,18 @@ export function ccValue<TTarget extends CommandClass>(value: StaticCCValue): Typ
 // @public (undocumented)
 export function ccValue<TTarget extends CommandClass, TArgs extends any[]>(value: DynamicCCValue<TArgs>, getArgs: (self: TTarget) => Readonly<TArgs>): TypedPropertyDecorator<TTarget>;
 
+// Warning: (ae-missing-release-tag) "CCValueOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface CCValueOptions {
+    autoCreate?: boolean | ((applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint) => boolean);
+    internal?: boolean;
+    minVersion?: number;
+    secret?: boolean;
+    stateful?: boolean;
+    supportsEndpoints?: boolean;
+}
+
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ccValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2859,7 +2880,7 @@ export class CentralSceneCC extends CommandClass {
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     skipEndpointInterview(): boolean;
 }
@@ -2878,7 +2899,7 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
     // (undocumented)
     readonly slowRefresh: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "CentralSceneCCConfigurationSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2892,7 +2913,7 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
     // (undocumented)
     slowRefresh: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "CentralSceneCCNotification" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2903,7 +2924,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
     // (undocumented)
     readonly keyAttribute: CentralSceneKeys;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly sceneNumber: number;
     // (undocumented)
@@ -2911,7 +2932,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
     // (undocumented)
     readonly slowRefresh: boolean | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "CentralSceneCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2926,7 +2947,7 @@ export class CentralSceneCCSupportedGet extends CentralSceneCC {
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly sceneCount: number;
     // (undocumented)
@@ -2934,7 +2955,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
     // (undocumented)
     readonly supportsSlowRefresh: boolean | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "CentralSceneCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3016,9 +3037,9 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -3041,9 +3062,9 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -3066,9 +3087,9 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -3136,7 +3157,7 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
     // (undocumented)
     readonly changeCounter: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3148,7 +3169,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     weekday: Weekday;
 }
@@ -3169,7 +3190,7 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
     // (undocumented)
     readonly overrideType: ScheduleOverrideType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCOverrideSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3185,7 +3206,7 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3196,7 +3217,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
     // (undocumented)
     readonly schedule: readonly Switchpoint[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly weekday: Weekday;
 }
@@ -3212,7 +3233,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
     // (undocumented)
     switchPoints: Switchpoint[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     weekday: Weekday;
 }
@@ -3337,9 +3358,9 @@ export class ClockCC extends CommandClass {
     // (undocumented)
     ccCommand: ClockCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ClockCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3358,7 +3379,7 @@ export class ClockCCReport extends ClockCC {
     // (undocumented)
     readonly minute: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly weekday: Weekday;
 }
@@ -3376,7 +3397,7 @@ export class ClockCCSet extends ClockCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     weekday: Weekday;
 }
@@ -3444,11 +3465,11 @@ export class ColorSwitchCC extends CommandClass {
     // (undocumented)
     ccCommand: ColorSwitchCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    translatePropertyKey(applHost: ZWaveApplicationHost, property: string | number, propertyKey: string | number): string | undefined;
+    translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3463,7 +3484,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3478,11 +3499,11 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
     // (undocumented)
     readonly duration: Duration_2 | undefined;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly targetValue: number | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3498,7 +3519,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCStartLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3520,7 +3541,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
     // (undocumented)
     startLevel: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCStopLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3534,7 +3555,7 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3551,7 +3572,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
     // (undocumented)
     readonly supportedColorComponents: readonly ColorComponent[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3748,9 +3769,9 @@ export const ColorSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -3773,9 +3794,9 @@ export const ColorSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -3819,7 +3840,7 @@ export class CommandClass implements ICommandClass {
     // (undocumented)
     get ccName(): string;
     protected computeEncapsulationOverhead(): number;
-    static createInstanceUnchecked<T extends CommandClass>(host: ZWaveHost, endpoint: IZWaveEndpoint_2, cc: CommandClasses_2 | CCConstructor<T>): T | undefined;
+    static createInstanceUnchecked<T extends CommandClass>(host: ZWaveHost, endpoint: IZWaveEndpoint, cc: CommandClasses_2 | CCConstructor<T>): T | undefined;
     protected deserialize(data: Buffer): {
         ccId: CommandClasses_2;
         ccCommand: number;
@@ -3835,7 +3856,7 @@ export class CommandClass implements ICommandClass {
     endpointIndex: number;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (ae-forgotten-export) The symbol "CCValue" needs to be exported by the entry point index.d.ts
-    protected ensureMetadata(applHost: ZWaveApplicationHost_2, ccValue: CCValue, meta?: ValueMetadata): void;
+    protected ensureMetadata(applHost: ZWaveApplicationHost, ccValue: CCValue, meta?: ValueMetadata): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectMoreMessages(_session: CommandClass[]): boolean;
     expectsCCResponse(): boolean;
@@ -3844,59 +3865,66 @@ export class CommandClass implements ICommandClass {
     protected getCCValue(valueId: ValueID): StaticCCValue | DynamicCCValue | undefined;
     static getCommandClass(data: Buffer): CommandClasses_2;
     static getConstructor(ccData: Buffer): CCConstructor<CommandClass>;
-    getDefinedValueIDs(applHost: ZWaveApplicationHost_2): ValueID[];
+    getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[];
+    getEncapsulatedCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     getEncapsulatingCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     // (undocumented)
-    getEndpoint(applHost: ZWaveApplicationHost_2): IZWaveEndpoint_2 | undefined;
+    getEndpoint(applHost: ZWaveApplicationHost): IZWaveEndpoint | undefined;
     getMaxPayloadLength(baseLength: number): number;
-    protected getMetadata<T extends ValueMetadata>(applHost: ZWaveApplicationHost_2, ccValue: CCValue): T | undefined;
-    getNode(applHost: ZWaveApplicationHost_2): IZWaveNode_2 | undefined;
+    protected getMetadata<T extends ValueMetadata>(applHost: ZWaveApplicationHost, ccValue: CCValue): T | undefined;
+    getNode(applHost: ZWaveApplicationHost): IZWaveNode_2 | undefined;
     getPartialCCSessionId(): Record<string, any> | undefined;
-    protected getValue<T>(applHost: ZWaveApplicationHost_2, ccValue: CCValue): T | undefined;
-    protected getValueDB(applHost: ZWaveApplicationHost_2): ValueDB;
+    protected getValue<T>(applHost: ZWaveApplicationHost, ccValue: CCValue): T | undefined;
+    protected getValueDB(applHost: ZWaveApplicationHost): ValueDB;
+    protected getValueTimestamp(applHost: ZWaveApplicationHost, ccValue: CCValue): number | undefined;
     // (undocumented)
     protected host: ZWaveHost;
-    interview(_applHost: ZWaveApplicationHost_2): Promise<void>;
+    interview(_applHost: ZWaveApplicationHost): Promise<void>;
+    // (undocumented)
+    isBroadcast(): this is BroadcastCC<this>;
     isEncapsulatedWith(ccId: CommandClasses_2, ccCommand?: number): boolean;
     // (undocumented)
     isExpectedCCResponse(received: CommandClass): boolean;
     isExtended(): boolean;
     isInternalValue(properties: ValueIDProperties): boolean;
-    isInterviewComplete(applHost: ZWaveApplicationHost_2): boolean;
+    isInterviewComplete(applHost: ZWaveApplicationHost): boolean;
     // (undocumented)
     isMulticast(): this is MulticastCC<this>;
     isSecretValue(properties: ValueIDProperties): boolean;
     // (undocumented)
     isSinglecast(): this is SinglecastCC<this>;
     isStatefulValue(properties: ValueIDProperties): boolean;
-    mergePartialCCs(_applHost: ZWaveApplicationHost_2, _partials: CommandClass[]): void;
+    mergePartialCCs(_applHost: ZWaveApplicationHost, _partials: CommandClass[]): void;
     nodeId: number | MulticastDestination;
     // (undocumented)
     payload: Buffer;
     // Warning: (tsdoc-characters-after-block-tag) The token "@ccValue" looks like a TSDoc tag but contains an invalid character "."; if it is not a tag, use a backslash to escape the "@"
-    persistValues(applHost: ZWaveApplicationHost_2): boolean;
-    refreshValues(_applHost: ZWaveApplicationHost_2): Promise<void>;
-    protected removeMetadata(applHost: ZWaveApplicationHost_2, ccValue: CCValue): void;
-    protected removeValue(applHost: ZWaveApplicationHost_2, ccValue: CCValue): void;
+    persistValues(applHost: ZWaveApplicationHost): boolean;
+    // (undocumented)
+    prepareRetransmission(): void;
+    refreshValues(_applHost: ZWaveApplicationHost): Promise<void>;
+    protected removeMetadata(applHost: ZWaveApplicationHost, ccValue: CCValue): void;
+    protected removeValue(applHost: ZWaveApplicationHost, ccValue: CCValue): void;
     serialize(): Buffer;
-    setEncapsulationFlag(flag: EncapsulationFlags, active: boolean): void;
-    setInterviewComplete(applHost: ZWaveApplicationHost_2, complete: boolean): void;
+    setInterviewComplete(applHost: ZWaveApplicationHost, complete: boolean): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    setMappedBasicValue(_applHost: ZWaveApplicationHost_2, _value: number): boolean;
+    setMappedBasicValue(_applHost: ZWaveApplicationHost, _value: number): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    protected setMetadata(applHost: ZWaveApplicationHost_2, ccValue: CCValue, meta?: ValueMetadata): void;
-    protected setValue(applHost: ZWaveApplicationHost_2, ccValue: CCValue, value: unknown): void;
+    protected setMetadata(applHost: ZWaveApplicationHost, ccValue: CCValue, meta?: ValueMetadata): void;
+    protected setValue(applHost: ZWaveApplicationHost, ccValue: CCValue, value: unknown): void;
+    shouldRefreshValues(this: SinglecastCC<this>, _applHost: ZWaveApplicationHost): boolean;
     skipEndpointInterview(): boolean;
     // (undocumented)
     protected throwMissingCriticalInterviewResponse(): never;
+    toggleEncapsulationFlag(flag: EncapsulationFlags, active: boolean): void;
     toJSON(): JSONObject;
-    toLogEntry(_applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(_applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    translateProperty(_applHost: ZWaveApplicationHost_2, property: string | number, _propertyKey?: string | number): string;
+    translateProperty(_applHost: ZWaveApplicationHost, property: string | number, _propertyKey?: string | number): string;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    translatePropertyKey(_applHost: ZWaveApplicationHost_2, _property: string | number, propertyKey: string | number): string | undefined;
+    translatePropertyKey(_applHost: ZWaveApplicationHost, _property: string | number, propertyKey: string | number): string | undefined;
     version: number;
 }
 
@@ -3912,6 +3940,7 @@ export const commandClass: <TTarget extends CommandClass>(ccId: CommandClasses_2
 export type CommandClassDeserializationOptions = {
     data: Buffer;
     origin?: MessageOrigin;
+    frameType?: FrameType;
 } & ({
     fromEncapsulation?: false;
     nodeId: number;
@@ -3932,25 +3961,25 @@ export type CommandClassOptions = CommandClassCreationOptions | CommandClassDese
 export class ConfigurationCC extends CommandClass {
     // (undocumented)
     ccCommand: ConfigurationCommand;
-    composePartialParamValue(applHost: ZWaveApplicationHost, parameter: number, bitMask: number, partialValue: number): number;
-    composePartialParamValues(applHost: ZWaveApplicationHost, parameter: number, partials: {
+    composePartialParamValue(applHost: ZWaveApplicationHost_2, parameter: number, bitMask: number, partialValue: number): number;
+    composePartialParamValues(applHost: ZWaveApplicationHost_2, parameter: number, partials: {
         bitMask: number;
         partialValue: number;
     }[]): number;
-    deserializeParamInformationFromConfig(applHost: ZWaveApplicationHost, config: ParamInfoMap): void;
-    getPartialParamInfos(applHost: ZWaveApplicationHost, parameter: number): (ValueID_2 & {
+    deserializeParamInformationFromConfig(applHost: ZWaveApplicationHost_2, config: ParamInfoMap): void;
+    getPartialParamInfos(applHost: ZWaveApplicationHost_2, parameter: number): (ValueID_2 & {
         metadata: ConfigurationMetadata;
     })[];
-    getQueriedParamInfos(applHost: ZWaveApplicationHost): Record<number, ConfigurationMetadata>;
+    getQueriedParamInfos(applHost: ZWaveApplicationHost_2): Record<number, ConfigurationMetadata>;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
-    protected isParamInformationFromConfig(applHost: ZWaveApplicationHost): boolean;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
+    protected isParamInformationFromConfig(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    translateProperty(applHost: ZWaveApplicationHost, property: string | number, propertyKey?: string | number): string;
+    translateProperty(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey?: string | number): string;
     // (undocumented)
-    translatePropertyKey(applHost: ZWaveApplicationHost, property: string | number, propertyKey?: string | number): string | undefined;
+    translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey?: string | number): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCBulkGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3964,7 +3993,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCBulkReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3981,11 +4010,11 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
     // (undocumented)
     get isHandshakeResponse(): boolean;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     get reportsToFollow(): number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get values(): ReadonlyMap<number, ConfigValue>;
     // (undocumented)
@@ -4007,7 +4036,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get valueFormat(): ConfigValueFormat;
     // (undocumented)
@@ -4035,7 +4064,7 @@ export class ConfigurationCCGet extends ConfigurationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCInfoGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4048,7 +4077,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCInfoReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4063,15 +4092,15 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
     // (undocumented)
     get info(): string;
     // (undocumented)
-    mergePartialCCs(applHost: ZWaveApplicationHost, partials: ConfigurationCCInfoReport[]): void;
+    mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: ConfigurationCCInfoReport[]): void;
     // (undocumented)
     get parameter(): number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     get reportsToFollow(): number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCNameGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4084,7 +4113,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCNameReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4097,17 +4126,17 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
-    mergePartialCCs(applHost: ZWaveApplicationHost, partials: ConfigurationCCNameReport[]): void;
+    mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: ConfigurationCCNameReport[]): void;
     // (undocumented)
     get name(): string;
     // (undocumented)
     get parameter(): number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     get reportsToFollow(): number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCPropertiesGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4120,7 +4149,7 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCPropertiesReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4147,9 +4176,9 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
     // (undocumented)
     get parameter(): number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get valueFormat(): ConfigValueFormat;
     // (undocumented)
@@ -4164,9 +4193,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
     // (undocumented)
     get parameter(): number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get value(): ConfigValue;
     // (undocumented)
@@ -4186,7 +4215,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     value: ConfigValue | undefined;
     // (undocumented)
@@ -4220,9 +4249,9 @@ export const ConfigurationCCValues: Readonly<{
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -4244,9 +4273,9 @@ export const ConfigurationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -4289,7 +4318,7 @@ export enum ConfigurationCommand {
 // Warning: (ae-missing-release-tag) "configureLifelineAssociations" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-function configureLifelineAssociations(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): Promise<void>;
+function configureLifelineAssociations(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): Promise<void>;
 
 export { ConfigValue }
 
@@ -4316,7 +4345,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "CRC16Command" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4331,6 +4360,18 @@ export enum CRC16Command {
 //
 // @public (undocumented)
 export function dataRate2ZWaveDataRate(dataRate: DataRate_2): ZWaveDataRate_2;
+
+// Warning: (ae-missing-release-tag) "defaultCCValueOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const defaultCCValueOptions: {
+    readonly internal: false;
+    readonly minVersion: 1;
+    readonly secret: false;
+    readonly stateful: true;
+    readonly supportsEndpoints: true;
+    readonly autoCreate: true;
+};
 
 // Warning: (ae-missing-release-tag) "DeviceIdType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4358,6 +4399,7 @@ export class DeviceResetLocallyCC extends CommandClass {
 //
 // @public (undocumented)
 export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {
+    constructor(host: ZWaveHost_2, options: CommandClassOptions);
 }
 
 // Warning: (ae-missing-release-tag) "DeviceResetLocallyCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4380,9 +4422,9 @@ export class DoorLockCC extends CommandClass {
     // (undocumented)
     ccCommand: DoorLockCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockCCCapabilitiesGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4417,7 +4459,7 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
     // (undocumented)
     readonly supportedOutsideHandles: DoorHandleStatus;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly twistAssistSupported: boolean;
 }
@@ -4448,7 +4490,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
     // (undocumented)
     readonly outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly twistAssist?: boolean;
 }
@@ -4476,7 +4518,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     twistAssist?: boolean;
 }
@@ -4509,11 +4551,11 @@ export class DoorLockCCOperationReport extends DoorLockCC {
     // (undocumented)
     readonly outsideHandlesCanOpenDoor: DoorHandleStatus;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly targetMode?: DoorLockMode;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockCCOperationSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4527,7 +4569,7 @@ export class DoorLockCCOperationSet extends DoorLockCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4553,11 +4595,11 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
             readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     doorSupported: {
@@ -4577,9 +4619,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -4604,11 +4646,11 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
             readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     boltSupported: {
@@ -4628,9 +4670,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -4655,11 +4697,11 @@ export const DoorLockCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
             readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     latchSupported: {
@@ -4679,9 +4721,9 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -5178,11 +5220,11 @@ export const DoorLockCCValues: Readonly<{
             readonly states: {
                 [x: number]: string;
             };
+            readonly writeable: false;
             readonly min: 0;
             readonly max: 255;
             readonly type: "number";
             readonly readable: true;
-            readonly writeable: true;
         };
         readonly options: {
             readonly internal: false;
@@ -5255,9 +5297,9 @@ export class DoorLockLoggingCC extends CommandClass {
     // (undocumented)
     ccCommand: DoorLockLoggingCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5271,7 +5313,7 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5284,7 +5326,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
     // (undocumented)
     readonly recordNumber: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordsSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5301,7 +5343,7 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
     // (undocumented)
     readonly recordsCount: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5325,9 +5367,9 @@ export const DoorLockLoggingCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -5512,9 +5554,9 @@ export type EncapsulatingCommandClass = CommandClass & {
 // @public
 export interface EncapsulatingCommandClassStatic {
     // (undocumented)
-    new (applHost: ZWaveApplicationHost_2, options: CommandClassOptions): EncapsulatingCommandClass;
+    new (applHost: ZWaveApplicationHost, options: CommandClassOptions): EncapsulatingCommandClass;
     // (undocumented)
-    encapsulate(applHost: ZWaveApplicationHost_2, cc: CommandClass): EncapsulatingCommandClass;
+    encapsulate(applHost: ZWaveApplicationHost, cc: CommandClass): EncapsulatingCommandClass;
 }
 
 // Warning: (ae-missing-release-tag) "EndpointAddress" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5534,9 +5576,9 @@ export class EntryControlCC extends CommandClass {
     // (undocumented)
     ccCommand: EntryControlCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "EntryControlCCConfigurationGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5555,7 +5597,7 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
     // (undocumented)
     readonly keyCacheTimeout: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "EntryControlCCConfigurationSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5571,7 +5613,7 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "EntryControlCCEventSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5594,13 +5636,13 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
     // (undocumented)
     readonly minKeyCacheTimeout: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly supportedDataTypes: readonly EntryControlDataTypes[];
     // (undocumented)
     readonly supportedEventTypes: readonly EntryControlEventTypes[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "EntryControlCCKeySupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5617,7 +5659,7 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
     // (undocumented)
     readonly supportedKeys: readonly number[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "EntryControlCCNotification" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5634,7 +5676,7 @@ export class EntryControlCCNotification extends EntryControlCC {
     // (undocumented)
     readonly sequenceNumber: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "EntryControlCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5658,9 +5700,9 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -5683,9 +5725,9 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -5708,9 +5750,9 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -5898,9 +5940,9 @@ export class FibaroCC extends ManufacturerProprietaryCC {
     // (undocumented)
     fibaroCCId?: number;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     serialize(): Buffer;
 }
@@ -5931,9 +5973,9 @@ export class FibaroVenetianBlindCC extends FibaroCC {
     // (undocumented)
     fibaroCCId: FibaroCCIDs.VenetianBlind;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "FibaroVenetianBlindCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5949,13 +5991,13 @@ export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     get position(): Maybe<number> | undefined;
     // (undocumented)
     get tilt(): Maybe<number> | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FibaroVenetianBlindCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5971,7 +6013,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
     // (undocumented)
     tilt: number | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareDownloadStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6070,7 +6112,7 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
     // (undocumented)
     ccCommand: FirmwareUpdateMetaDataCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     skipEndpointInterview(): boolean;
 }
@@ -6093,7 +6135,7 @@ export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMeta
     // (undocumented)
     readonly manufacturerId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCActivationSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6115,7 +6157,7 @@ export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDat
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6128,7 +6170,7 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
     // (undocumented)
     readonly reportNumber: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCMetaDataGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6161,7 +6203,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
     // (undocumented)
     readonly supportsActivation: Maybe<boolean>;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCPrepareGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6183,7 +6225,7 @@ export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCPrepareReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6196,7 +6238,7 @@ export class FirmwareUpdateMetaDataCCPrepareReport extends FirmwareUpdateMetaDat
     // (undocumented)
     readonly status: FirmwareDownloadStatus;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6214,7 +6256,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCRequestGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6240,7 +6282,7 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCRequestReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6251,7 +6293,7 @@ export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDat
     // (undocumented)
     readonly status: FirmwareUpdateRequestStatus;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCStatusReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6262,7 +6304,7 @@ export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaData
     // (undocumented)
     readonly status: FirmwareUpdateStatus;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     readonly waitTime?: number;
 }
 
@@ -6287,9 +6329,9 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -6312,9 +6354,9 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -6337,9 +6379,9 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -6362,9 +6404,9 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -6482,12 +6524,12 @@ export function FLiRS2WakeUpTime(value: FLiRS_2): WakeUpTime;
 // Warning: (ae-missing-release-tag) "getAllAssociationGroups" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-function getAllAssociationGroups(applHost: ZWaveApplicationHost, node: IZWaveNode): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>>;
+function getAllAssociationGroups(applHost: ZWaveApplicationHost_2, node: IZWaveNode): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>>;
 
 // Warning: (ae-missing-release-tag) "getAllAssociations" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-function getAllAssociations(applHost: ZWaveApplicationHost, node: IZWaveNode): ReadonlyObjectKeyMap<AssociationAddress, ReadonlyMap<number, readonly AssociationAddress[]>>;
+function getAllAssociations(applHost: ZWaveApplicationHost_2, node: IZWaveNode): ReadonlyObjectKeyMap<AssociationAddress, ReadonlyMap<number, readonly AssociationAddress[]>>;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "getAPI" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6498,12 +6540,12 @@ export function getAPI(cc: CommandClasses_2): APIConstructor | undefined;
 // Warning: (ae-missing-release-tag) "getAssociationGroups" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-function getAssociationGroups(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): ReadonlyMap<number, AssociationGroup>;
+function getAssociationGroups(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): ReadonlyMap<number, AssociationGroup>;
 
 // Warning: (ae-missing-release-tag) "getAssociations" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-function getAssociations(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): ReadonlyMap<number, readonly AssociationAddress[]>;
+function getAssociations(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): ReadonlyMap<number, readonly AssociationAddress[]>;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "getCCCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6674,9 +6716,9 @@ export class HumidityControlModeCC extends CommandClass {
     // (undocumented)
     ccCommand: HumidityControlModeCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlModeCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6693,7 +6735,7 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
     // (undocumented)
     readonly mode: HumidityControlMode;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlModeCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6707,7 +6749,7 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlModeCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6722,11 +6764,11 @@ export class HumidityControlModeCCSupportedGet extends HumidityControlModeCC {
 export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     get supportedModes(): readonly HumidityControlMode[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlModeCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6750,9 +6792,9 @@ export const HumidityControlModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -6826,9 +6868,9 @@ export class HumidityControlOperatingStateCC extends CommandClass {
     // (undocumented)
     ccCommand: HumidityControlOperatingStateCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlOperatingStateCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6845,7 +6887,7 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
     // (undocumented)
     readonly state: HumidityControlOperatingState;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlOperatingStateCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6916,11 +6958,11 @@ export class HumidityControlSetpointCC extends CommandClass {
     // (undocumented)
     ccCommand: HumidityControlSetpointCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    translatePropertyKey(applHost: ZWaveApplicationHost, property: string | number, propertyKey: string | number): string | undefined;
+    translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCCapabilitiesGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6934,7 +6976,7 @@ export class HumidityControlSetpointCCCapabilitiesGet extends HumidityControlSet
     // (undocumented)
     setpointType: HumidityControlSetpointType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCCapabilitiesReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6951,9 +6993,9 @@ export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControl
     // (undocumented)
     get minValueScale(): number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get type(): HumidityControlSetpointType;
 }
@@ -6969,7 +7011,7 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
     // (undocumented)
     setpointType: HumidityControlSetpointType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6978,11 +7020,11 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly scale: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get type(): HumidityControlSetpointType;
     // (undocumented)
@@ -7000,7 +7042,7 @@ export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlS
     // (undocumented)
     setpointType: HumidityControlSetpointType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCScaleSupportedReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7011,7 +7053,7 @@ export class HumidityControlSetpointCCScaleSupportedReport extends HumidityContr
     // (undocumented)
     readonly supportedScales: readonly number[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7027,7 +7069,7 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
     // (undocumented)
     setpointType: HumidityControlSetpointType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     value: number;
 }
@@ -7046,7 +7088,7 @@ export class HumidityControlSetpointCCSupportedReport extends HumidityControlSet
     // (undocumented)
     readonly supportedSetpointTypes: readonly HumidityControlSetpointType[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7133,9 +7175,9 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -7235,7 +7277,7 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
     // (undocumented)
     step: InclusionControllerStep;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "InclusionControllerCCInitiate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7251,7 +7293,7 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
     // (undocumented)
     step: InclusionControllerStep;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "InclusionControllerCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7311,15 +7353,15 @@ export class IndicatorCC extends CommandClass {
     // (undocumented)
     ccCommand: IndicatorCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    protected supportsV2Indicators(applHost: ZWaveApplicationHost): boolean;
+    protected supportsV2Indicators(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    translateProperty(applHost: ZWaveApplicationHost, property: string | number, propertyKey?: string | number): string;
+    translateProperty(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey?: string | number): string;
     // (undocumented)
-    translatePropertyKey(applHost: ZWaveApplicationHost, property: string | number, propertyKey: string | number): string | undefined;
+    translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCDescriptionGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7333,7 +7375,7 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCDescriptionReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7346,9 +7388,9 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
     // (undocumented)
     indicatorId: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7362,7 +7404,7 @@ export class IndicatorCCGet extends IndicatorCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7371,9 +7413,9 @@ export class IndicatorCCGet extends IndicatorCC {
 export class IndicatorCCReport extends IndicatorCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly value: number | undefined;
     // Warning: (ae-forgotten-export) The symbol "IndicatorObject" needs to be exported by the entry point index.d.ts
@@ -7393,7 +7435,7 @@ export class IndicatorCCSet extends IndicatorCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     values: IndicatorObject[] | undefined;
 }
@@ -7409,7 +7451,7 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCSupportedReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7422,11 +7464,11 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
     // (undocumented)
     readonly nextIndicatorId: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly supportedProperties: readonly number[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7511,9 +7553,9 @@ export const IndicatorCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -7593,9 +7635,9 @@ export const IndicatorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -7662,15 +7704,15 @@ export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 export class IrrigationCC extends CommandClass {
     // (undocumented)
     ccCommand: IrrigationCommand;
-    static getMaxValveTableSizeCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number | undefined;
-    static getNumValvesCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number | undefined;
+    static getMaxValveTableSizeCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number | undefined;
+    static getNumValvesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number | undefined;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
-    static supportsMasterValveCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): boolean;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
+    static supportsMasterValveCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): boolean;
     // (undocumented)
-    translateProperty(applHost: ZWaveApplicationHost, property: string | number, propertyKey?: string | number): string;
+    translateProperty(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey?: string | number): string;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemConfigGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7695,7 +7737,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
     // (undocumented)
     readonly rainSensorPolarity?: IrrigationSensorPolarity;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemConfigSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7716,7 +7758,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemConfigSetOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7750,7 +7792,7 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
     // (undocumented)
     readonly supportsMasterValve: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemShutoff" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7764,7 +7806,7 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemStatusGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7809,7 +7851,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
     // (undocumented)
     systemVoltage: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8912,9 +8954,9 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -8937,9 +8979,9 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -8962,9 +9004,9 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -8987,9 +9029,9 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -9006,7 +9048,7 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     valveId: ValveId;
 }
@@ -9027,9 +9069,9 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
     // (undocumented)
     nominalCurrentLowThreshold: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     useMoistureSensor: boolean;
     // (undocumented)
@@ -9056,7 +9098,7 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     useMoistureSensor: boolean;
     // (undocumented)
@@ -9088,7 +9130,7 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     valveId: ValveId;
 }
@@ -9115,9 +9157,9 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
     // (undocumented)
     readonly nominalCurrent: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly valveId: ValveId;
 }
@@ -9133,7 +9175,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     valveId: ValveId;
 }
@@ -9149,7 +9191,7 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
     // (undocumented)
     tableId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9162,7 +9204,7 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
     // (undocumented)
     readonly tableId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableRun" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9176,7 +9218,7 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
     // (undocumented)
     tableIDs: number[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9192,7 +9234,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
     // (undocumented)
     tableId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9250,7 +9292,7 @@ export enum IrrigationSensorPolarity {
 // Warning: (ae-missing-release-tag) "isAssociationAllowed" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-function isAssociationAllowed(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, group: number, destination: AssociationAddress): boolean;
+function isAssociationAllowed(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, group: number, destination: AssociationAddress): boolean;
 
 // Warning: (ae-missing-release-tag) "isCommandClassContainer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -9330,9 +9372,9 @@ export class LanguageCC extends CommandClass {
     // (undocumented)
     ccCommand: LanguageCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "LanguageCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9351,7 +9393,7 @@ export class LanguageCCReport extends LanguageCC {
     // (undocumented)
     readonly language: string;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "LanguageCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9369,7 +9411,7 @@ export class LanguageCCSet extends LanguageCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "LanguageCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9471,9 +9513,9 @@ export class LockCC extends CommandClass {
     // (undocumented)
     ccCommand: LockCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "LockCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9490,7 +9532,7 @@ export class LockCCReport extends LockCC {
     // (undocumented)
     readonly locked: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "LockCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9504,7 +9546,7 @@ export class LockCCSet extends LockCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "LockCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9575,11 +9617,11 @@ export class ManufacturerProprietaryCC extends CommandClass {
     // (undocumented)
     createSpecificInstance(): ManufacturerProprietaryCC | undefined;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     manufacturerId?: number;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     serialize(): Buffer;
 }
@@ -9593,7 +9635,7 @@ export class ManufacturerSpecificCC extends CommandClass {
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCCDeviceSpecificGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9607,7 +9649,7 @@ export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecifi
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCCDeviceSpecificReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9618,7 +9660,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
     // (undocumented)
     readonly deviceId: string;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly type: DeviceIdType;
 }
@@ -9641,7 +9683,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
     // (undocumented)
     readonly productType: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9698,9 +9740,9 @@ export const ManufacturerSpecificCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -9726,9 +9768,9 @@ export const ManufacturerSpecificCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -9754,9 +9796,9 @@ export const ManufacturerSpecificCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -9792,11 +9834,13 @@ export class MeterCC extends CommandClass {
     // (undocumented)
     ccCommand: MeterCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    translatePropertyKey(applHost: ZWaveApplicationHost, property: string | number, propertyKey: string | number): string | undefined;
+    shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "MeterCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9812,7 +9856,7 @@ export class MeterCCGet extends MeterCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MeterCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9823,7 +9867,7 @@ export class MeterCCReport extends MeterCC {
     // (undocumented)
     get deltaTime(): Maybe<number>;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     get previousValue(): number | undefined;
     // (undocumented)
@@ -9831,7 +9875,7 @@ export class MeterCCReport extends MeterCC {
     // (undocumented)
     readonly scale: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get type(): number;
     // (undocumented)
@@ -9849,7 +9893,7 @@ export class MeterCCReset extends MeterCC {
     // (undocumented)
     targetValue: number | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     type: number | undefined;
 }
@@ -9866,7 +9910,7 @@ export class MeterCCSupportedGet extends MeterCC {
 export class MeterCCSupportedReport extends MeterCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly supportedRateTypes: readonly RateType[];
     // (undocumented)
@@ -9874,7 +9918,7 @@ export class MeterCCSupportedReport extends MeterCC {
     // (undocumented)
     readonly supportsReset: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly type: number;
 }
@@ -9906,7 +9950,7 @@ export const MeterCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9938,7 +9982,7 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9958,7 +10002,7 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "reset";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Reset accumulated values";
             readonly readable: false;
@@ -9984,16 +10028,16 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedRateTypes";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10009,16 +10053,16 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedScales";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10034,16 +10078,16 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsReset";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10059,16 +10103,16 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "type";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10151,13 +10195,13 @@ export class MultiChannelAssociationCC extends CommandClass {
     ccCommand: MultiChannelAssociationCommand;
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
-    static getAllDestinationsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): ReadonlyMap<number, readonly AssociationAddress[]>;
-    static getGroupCountCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
-    static getMaxNodesCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, groupId: number): number;
+    static getAllDestinationsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): ReadonlyMap<number, readonly AssociationAddress[]>;
+    static getGroupCountCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
+    static getMaxNodesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): number;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10171,7 +10215,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCRemove" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10189,7 +10233,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10208,13 +10252,13 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
     // (undocumented)
     readonly maxNodes: number;
     // (undocumented)
-    mergePartialCCs(applHost: ZWaveApplicationHost, partials: MultiChannelAssociationCCReport[]): void;
+    mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: MultiChannelAssociationCCReport[]): void;
     // (undocumented)
     get nodeIds(): readonly number[];
     // (undocumented)
     readonly reportsToFollow: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10232,7 +10276,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCSupportedGroupingsGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10249,7 +10293,7 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
     // (undocumented)
     readonly groupCount: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10276,9 +10320,9 @@ export const MultiChannelAssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10304,9 +10348,9 @@ export const MultiChannelAssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10332,9 +10376,9 @@ export const MultiChannelAssociationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10357,9 +10401,9 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10393,7 +10437,7 @@ export class MultiChannelCC extends CommandClass {
     ccCommand: MultiChannelCommand;
     static encapsulate(host: ZWaveHost_2, cc: CommandClass): MultiChannelCCCommandEncapsulation | MultiChannelCCV1CommandEncapsulation;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     static requiresEncapsulation(cc: CommandClass): boolean;
     // (undocumented)
     skipEndpointInterview(): boolean;
@@ -10410,7 +10454,7 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCAggregatedMembersReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10423,7 +10467,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
     // (undocumented)
     readonly members: readonly number[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCCapabilityGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10437,7 +10481,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCCapabilityReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10453,7 +10497,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC implements Ap
     // (undocumented)
     readonly isDynamic: boolean;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
@@ -10461,7 +10505,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC implements Ap
     // (undocumented)
     readonly supportedCCs: CommandClasses[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly wasRemoved: boolean;
 }
@@ -10481,7 +10525,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointFind" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10497,7 +10541,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
     // (undocumented)
     specificClass: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointFindReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10515,7 +10559,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
-    mergePartialCCs(applHost: ZWaveApplicationHost, partials: MultiChannelCCEndPointFindReport[]): void;
+    mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: MultiChannelCCEndPointFindReport[]): void;
     // (undocumented)
     reportsToFollow: number;
     // (undocumented)
@@ -10523,7 +10567,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
     // (undocumented)
     specificClass: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10549,7 +10593,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCV1CommandEncapsulation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10565,7 +10609,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCV1Get" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10579,7 +10623,7 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCV1Report" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10592,7 +10636,7 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
     // (undocumented)
     readonly requestedCC: CommandClasses;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10619,9 +10663,9 @@ export const MultiChannelCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10644,9 +10688,9 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10669,9 +10713,9 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -10694,9 +10738,9 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -10719,9 +10763,9 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -10744,9 +10788,9 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -10769,9 +10813,9 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -10794,9 +10838,9 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -10856,7 +10900,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultiCommandCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10882,9 +10926,9 @@ export interface MultiEncapsulatingCommandClass {
 // @public
 export interface MultiEncapsulatingCommandClassStatic {
     // (undocumented)
-    new (applHost: ZWaveApplicationHost_2, options: CommandClassOptions): MultiEncapsulatingCommandClass;
+    new (applHost: ZWaveApplicationHost, options: CommandClassOptions): MultiEncapsulatingCommandClass;
     // (undocumented)
-    encapsulate(applHost: ZWaveApplicationHost_2, CCs: CommandClass[]): MultiEncapsulatingCommandClass;
+    encapsulate(applHost: ZWaveApplicationHost, CCs: CommandClass[]): MultiEncapsulatingCommandClass;
     // (undocumented)
     requiresEncapsulation(cc: CommandClass): boolean;
 }
@@ -10896,11 +10940,13 @@ export class MultilevelSensorCC extends CommandClass {
     // (undocumented)
     ccCommand: MultilevelSensorCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    translatePropertyKey(applHost: ZWaveApplicationHost, property: string | number, propertyKey: string | number): string | undefined;
+    shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10916,7 +10962,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCGetSupportedScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10930,7 +10976,7 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCGetSupportedSensor" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10945,13 +10991,13 @@ export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultilevelSensorCCReportOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     scale: number;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     type: number;
     // (undocumented)
@@ -10980,7 +11026,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
     // (undocumented)
     readonly supportedScales: readonly number[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCSupportedSensorReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10991,7 +11037,7 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
     // (undocumented)
     readonly supportedSensorTypes: readonly number[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11045,9 +11091,9 @@ export const MultilevelSensorCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -11070,9 +11116,9 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -11125,13 +11171,13 @@ export class MultilevelSwitchCC extends CommandClass {
     // (undocumented)
     ccCommand: MultilevelSwitchCommand;
     // (undocumented)
-    protected createMetadataForLevelChangeActions(applHost: ZWaveApplicationHost, switchType?: SwitchType): void;
+    protected createMetadataForLevelChangeActions(applHost: ZWaveApplicationHost_2, switchType?: SwitchType): void;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    setMappedBasicValue(applHost: ZWaveApplicationHost, value: number): boolean;
+    setMappedBasicValue(applHost: ZWaveApplicationHost_2, value: number): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11150,11 +11196,11 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
     // (undocumented)
     readonly duration: Duration | undefined;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly targetValue: number | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11170,7 +11216,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
     // (undocumented)
     targetValue: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCStartLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11190,7 +11236,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
     // (undocumented)
     startLevel: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCStopLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11211,11 +11257,11 @@ export class MultilevelSwitchCCSupportedGet extends MultilevelSwitchCC {
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly switchType: SwitchType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11301,9 +11347,9 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -11326,9 +11372,9 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -11355,11 +11401,11 @@ export const MultilevelSwitchCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly stateful: false;
-            readonly autoCreate: (applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint) => boolean;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     restorePrevious: {
@@ -11529,9 +11575,9 @@ export class NodeNamingAndLocationCC extends CommandClass {
     // (undocumented)
     ccCommand: NodeNamingAndLocationCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     skipEndpointInterview(): boolean;
 }
@@ -11550,7 +11596,7 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
     // (undocumented)
     readonly location: string;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCLocationSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11564,7 +11610,7 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCNameGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11581,7 +11627,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
     // (undocumented)
     readonly name: string;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCNameSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11595,7 +11641,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11621,9 +11667,9 @@ export const NodeNamingAndLocationCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -11647,9 +11693,9 @@ export const NodeNamingAndLocationCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -11682,6 +11728,11 @@ export class NoOperationCC extends CommandClass {
     ccCommand: undefined;
 }
 
+// Warning: (ae-missing-release-tag) "normalizeCCNameOrId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function normalizeCCNameOrId(ccNameOrId: number | string): CommandClasses_2 | undefined;
+
 // Warning: (ae-missing-release-tag) "NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11690,11 +11741,13 @@ export class NotificationCC extends CommandClass {
     ccCommand: NotificationCommand;
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
-    static getNotificationMode(applHost: ZWaveApplicationHost, node: IZWaveNode): "push" | "pull" | undefined;
+    static getNotificationMode(applHost: ZWaveApplicationHost_2, node: IZWaveNode): "push" | "pull" | undefined;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
+    // (undocumented)
+    shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCEventSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11708,7 +11761,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCEventSupportedReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11720,13 +11773,13 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
     // (undocumented)
     notificationType: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     supportedEvents: number[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11742,7 +11795,7 @@ export class NotificationCCGet extends NotificationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11764,13 +11817,13 @@ export class NotificationCCReport extends NotificationCC {
     // (undocumented)
     notificationType: number | undefined;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     sequenceNumber: number | undefined;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly zensorNetSourceNodeId: number | undefined;
 }
@@ -11788,7 +11841,7 @@ export class NotificationCCSet extends NotificationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11810,7 +11863,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
     // (undocumented)
     supportsV1Alarm: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11835,7 +11888,7 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11869,7 +11922,7 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11901,7 +11954,7 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11929,11 +11982,11 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID_2) => boolean;
+        is: (valueId: ValueID) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -11949,7 +12002,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "alarmLevel";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Alarm Level";
             readonly writeable: false;
@@ -11977,7 +12030,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "alarmType";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Alarm Type";
             readonly writeable: false;
@@ -11995,6 +12048,31 @@ export const NotificationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
+    lastRefresh: {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: "lastRefresh";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "lastRefresh";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
     notificationMode: {
         readonly id: {
             commandClass: CommandClasses.Notification;
@@ -12005,16 +12083,16 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "notificationMode";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -12030,16 +12108,16 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedNotificationTypes";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -12055,16 +12133,16 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsV1Alarm";
         };
-        readonly is: (valueId: ValueID_2) => boolean;
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -12115,9 +12193,9 @@ export function parseWakeUpTime(value: number): WakeUpTime;
 //
 // @public
 export class PhysicalCCAPI extends CCAPI {
-    constructor(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2 | IVirtualEndpoint);
+    constructor(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint | IVirtualEndpoint);
     // (undocumented)
-    protected readonly endpoint: IZWaveEndpoint_2;
+    protected readonly endpoint: IZWaveEndpoint;
 }
 
 // Warning: (ae-missing-release-tag) "POLL_VALUE" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12180,7 +12258,7 @@ export class PowerlevelCCReport extends PowerlevelCC {
     // (undocumented)
     readonly timeout?: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "PowerlevelCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12196,7 +12274,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
     // (undocumented)
     timeout?: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "PowerlevelCCTestNodeGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12217,7 +12295,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
     // (undocumented)
     readonly testNodeId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "PowerlevelCCTestNodeSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12235,7 +12313,7 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
     // (undocumented)
     testNodeId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "PowerlevelCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12275,9 +12353,9 @@ export class ProtectionCC extends CommandClass {
     // (undocumented)
     ccCommand: ProtectionCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCExclusiveControlGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12294,7 +12372,7 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
     // (undocumented)
     readonly exclusiveControlNodeId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCExclusiveControlSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12308,7 +12386,7 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12327,7 +12405,7 @@ export class ProtectionCCReport extends ProtectionCC {
     // (undocumented)
     readonly rf?: RFProtectionState;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12343,7 +12421,7 @@ export class ProtectionCCSet extends ProtectionCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12358,7 +12436,7 @@ export class ProtectionCCSupportedGet extends ProtectionCC {
 export class ProtectionCCSupportedReport extends ProtectionCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly supportedLocalStates: LocalProtectionState[];
     // (undocumented)
@@ -12368,7 +12446,7 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
     // (undocumented)
     readonly supportsTimeout: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCTimeoutGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12385,7 +12463,7 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
     // (undocumented)
     readonly timeout: Timeout;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCTimeoutSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12399,7 +12477,7 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
     // (undocumented)
     timeout: Timeout;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12423,9 +12501,9 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -12448,9 +12526,9 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -12473,9 +12551,9 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -12498,9 +12576,9 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -12665,7 +12743,7 @@ export enum RateType {
 // Warning: (ae-missing-release-tag) "removeAssociations" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-function removeAssociations(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, group: number, destinations: AssociationAddress[]): Promise<void>;
+function removeAssociations(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, group: number, destinations: AssociationAddress[]): Promise<void>;
 
 // Warning: (ae-missing-release-tag) "RFProtectionState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12700,7 +12778,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SceneActivationCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12755,8 +12833,8 @@ export const SceneActivationCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly stateful: false;
@@ -12779,7 +12857,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
     // (undocumented)
     ccCommand: SceneActuatorConfigurationCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12793,7 +12871,7 @@ export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationC
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12806,11 +12884,11 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
     // (undocumented)
     readonly level?: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly sceneId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12828,7 +12906,7 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12918,11 +12996,11 @@ export class SceneControllerConfigurationCC extends CommandClass {
     ccCommand: SceneControllerConfigurationCommand;
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
-    static getGroupCountCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
+    static getGroupCountCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12936,7 +13014,7 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12949,11 +13027,11 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
     // (undocumented)
     readonly groupId: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly sceneId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12971,7 +13049,7 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13059,11 +13137,11 @@ export enum SceneControllerConfigurationCommand {
 export class ScheduleEntryLockCC extends CommandClass {
     // (undocumented)
     ccCommand: ScheduleEntryLockCommand;
-    static getNumDailyRepeatingSlotsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
-    static getNumWeekDaySlotsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
-    static getNumYearDaySlotsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number;
+    static getNumDailyRepeatingSlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
+    static getNumWeekDaySlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
+    static getNumYearDaySlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
+    interview(applHost: ZWaveApplicationHost): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13077,7 +13155,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryL
     // (undocumented)
     slotId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13101,7 +13179,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
     // (undocumented)
     startMinute?: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
     // (undocumented)
@@ -13128,7 +13206,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryL
     // (undocumented)
     startMinute?: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
     // (undocumented)
@@ -13156,7 +13234,7 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13170,7 +13248,7 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13196,7 +13274,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13218,7 +13296,7 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
     // (undocumented)
     standardOffset: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13234,7 +13312,7 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
     // (undocumented)
     standardOffset: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13258,9 +13336,9 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -13283,9 +13361,9 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -13308,9 +13386,9 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -13329,7 +13407,7 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
     // (undocumented)
     slotId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13353,7 +13431,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
     // (undocumented)
     stopMinute?: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
     // (undocumented)
@@ -13380,7 +13458,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
     // (undocumented)
     stopMinute?: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
     // (undocumented)
@@ -13408,7 +13486,7 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
     // (undocumented)
     slotId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13444,7 +13522,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
     // (undocumented)
     stopYear?: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13481,7 +13559,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
     // (undocumented)
     stopYear?: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     userId: number;
 }
@@ -13660,9 +13738,13 @@ export interface SchedulePollOptions {
 export class Security2CC extends CommandClass {
     // (undocumented)
     ccCommand: Security2Command;
-    static encapsulate(host: ZWaveHost_2, cc: CommandClass, securityClass?: SecurityClass): Security2CCMessageEncapsulation;
+    static encapsulate(host: ZWaveHost_2, cc: CommandClass, options?: {
+        securityClass?: SecurityClass;
+        multicastOutOfSync?: boolean;
+        multicastGroupId?: number;
+    }): Security2CCMessageEncapsulation;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     static requiresEncapsulation(cc: CommandClass): boolean;
 }
 
@@ -13683,7 +13765,7 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
     // (undocumented)
     readonly supportedCCs: CommandClasses_2[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCKEXFail" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13697,7 +13779,7 @@ export class Security2CCKEXFail extends Security2CC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCKEXGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13725,7 +13807,7 @@ export class Security2CCKEXReport extends Security2CC {
     // (undocumented)
     readonly supportedKEXSchemes: readonly KEXSchemes[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCKEXSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13747,7 +13829,7 @@ export class Security2CCKEXSet extends Security2CC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCMessageEncapsulation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13763,16 +13845,20 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     // (undocumented)
     extensions: Security2Extension[];
     // (undocumented)
+    getMulticastGroupId(): number | undefined;
+    // (undocumented)
+    hasMOSExtension(): boolean;
+    // (undocumented)
     host: ZWaveHost_2 & {
         securityManager2: SecurityManager2;
     };
+    // (undocumented)
+    prepareRetransmission(): void;
     get sequenceNumber(): number;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
-    // (undocumented)
-    unsetSequenceNumber(): void;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13786,7 +13872,7 @@ export class Security2CCNetworkKeyGet extends Security2CC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13802,7 +13888,7 @@ export class Security2CCNetworkKeyReport extends Security2CC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyVerify" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13824,7 +13910,7 @@ export class Security2CCNonceGet extends Security2CC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNonceReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13847,7 +13933,7 @@ export class Security2CCNonceReport extends Security2CC {
     // (undocumented)
     readonly SOS: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCPublicKeyReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13863,7 +13949,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCTransferEnd" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13879,7 +13965,7 @@ export class Security2CCTransferEnd extends Security2CC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "Security2Command" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13954,7 +14040,7 @@ export class SecurityCC extends CommandClass {
         securityManager: SecurityManager;
     };
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     nodeId: number;
     static requiresEncapsulation(cc: CommandClass): boolean;
@@ -13975,7 +14061,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
-    mergePartialCCs(applHost: ZWaveApplicationHost, partials: SecurityCCCommandEncapsulation[]): void;
+    mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: SecurityCCCommandEncapsulation[]): void;
     // (undocumented)
     nonce: Buffer | undefined;
     // (undocumented)
@@ -13983,7 +14069,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityCCCommandEncapsulationNonceGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14010,13 +14096,13 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
-    mergePartialCCs(applHost: ZWaveApplicationHost, partials: SecurityCCCommandsSupportedReport[]): void;
+    mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: SecurityCCCommandsSupportedReport[]): void;
     // (undocumented)
     readonly reportsToFollow: number;
     // (undocumented)
     get supportedCCs(): CommandClasses_2[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityCCNetworkKeySet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14054,7 +14140,7 @@ export class SecurityCCNonceReport extends SecurityCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityCCSchemeGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14065,7 +14151,7 @@ export class SecurityCCSchemeGet extends SecurityCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityCCSchemeInherit" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14076,7 +14162,7 @@ export class SecurityCCSchemeInherit extends SecurityCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityCCSchemeReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14165,7 +14251,7 @@ export class SoundSwitchCC extends CommandClass {
     // (undocumented)
     ccCommand: SoundSwitchCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "SoundSwitchCCConfigurationGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14187,7 +14273,7 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SoundSwitchCCConfigurationSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14203,7 +14289,7 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SoundSwitchCCToneInfoGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14215,7 +14301,7 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     toneId: number;
 }
@@ -14233,7 +14319,7 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly toneId: number;
 }
@@ -14250,7 +14336,7 @@ export class SoundSwitchCCTonePlayGet extends SoundSwitchCC {
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly toneId: ToneId | number;
     // (undocumented)
@@ -14266,7 +14352,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     toneId: ToneId | number;
     // (undocumented)
@@ -14288,7 +14374,7 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     toneCount: number;
 }
@@ -14484,13 +14570,13 @@ export class SupervisionCC extends CommandClass {
     // (undocumented)
     ccCommand: SupervisionCommand;
     static encapsulate(host: ZWaveHost_2, cc: CommandClass, requestStatusUpdates?: boolean): SupervisionCCGet;
-    static getCCSupportedWithSupervision(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, ccId: CommandClasses): boolean;
+    static getCCSupportedWithSupervision(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, ccId: CommandClasses): boolean;
     static getSessionId(command: CommandClass): number | undefined;
-    static mayUseSupervision<T extends CommandClass>(applHost: ZWaveApplicationHost, command: T): command is SinglecastCC_2<T>;
+    static mayUseSupervision<T extends CommandClass>(applHost: ZWaveApplicationHost_2, command: T): command is SinglecastCC_2<T>;
     // (undocumented)
     nodeId: number;
     static requiresEncapsulation(cc: CommandClass): boolean;
-    static setCCSupportedWithSupervision(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, ccId: CommandClasses, supported: boolean): void;
+    static setCCSupportedWithSupervision(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, ccId: CommandClasses, supported: boolean): void;
 }
 
 // Warning: (ae-missing-release-tag) "SupervisionCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14510,7 +14596,7 @@ export class SupervisionCCGet extends SupervisionCC {
     // (undocumented)
     sessionId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SupervisionCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14532,7 +14618,7 @@ export class SupervisionCCReport extends SupervisionCC {
     // (undocumented)
     readonly status: SupervisionStatus;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "SupervisionCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14559,9 +14645,9 @@ export const SupervisionCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
@@ -14650,9 +14736,9 @@ export class ThermostatFanModeCC extends CommandClass {
     // (undocumented)
     ccCommand: ThermostatFanModeCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14671,7 +14757,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
     // (undocumented)
     readonly off: boolean | undefined;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14687,7 +14773,7 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14702,11 +14788,11 @@ export class ThermostatFanModeCCSupportedGet extends ThermostatFanModeCC {
 export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly supportedModes: ThermostatFanMode[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14730,9 +14816,9 @@ export const ThermostatFanModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -14844,9 +14930,9 @@ export class ThermostatFanStateCC extends CommandClass {
     // (undocumented)
     ccCommand: ThermostatFanStateCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatFanStateCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14863,7 +14949,7 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
     // (undocumented)
     readonly state: ThermostatFanState;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatFanStateCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14958,9 +15044,9 @@ export class ThermostatModeCC extends CommandClass {
     // (undocumented)
     ccCommand: ThermostatModeCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatModeCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14979,9 +15065,9 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
     // (undocumented)
     readonly mode: ThermostatMode;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatModeCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14997,7 +15083,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatModeCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15012,11 +15098,11 @@ export class ThermostatModeCCSupportedGet extends ThermostatModeCC {
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly supportedModes: ThermostatMode[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatModeCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15040,9 +15126,9 @@ export const ThermostatModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -15160,9 +15246,9 @@ export class ThermostatOperatingStateCC extends CommandClass {
     // (undocumented)
     ccCommand: ThermostatOperatingStateCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatOperatingStateCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15179,7 +15265,7 @@ export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC
     // (undocumented)
     readonly state: ThermostatOperatingState;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatOperatingStateCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15236,9 +15322,9 @@ export class ThermostatSetbackCC extends CommandClass {
     // (undocumented)
     ccCommand: ThermostatSetbackCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetbackCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15257,7 +15343,7 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
     // (undocumented)
     readonly setbackType: SetbackType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetbackCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15272,7 +15358,7 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
     // (undocumented)
     setbackType: SetbackType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetbackCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15368,11 +15454,11 @@ export class ThermostatSetpointCC extends CommandClass {
     // (undocumented)
     ccCommand: ThermostatSetpointCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    translatePropertyKey(applHost: ZWaveApplicationHost, property: string | number, propertyKey: string | number): string | undefined;
+    translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilitiesGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15386,7 +15472,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
     // (undocumented)
     setpointType: ThermostatSetpointType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilitiesReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15403,9 +15489,9 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
     // (undocumented)
     get minValueScale(): number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get type(): ThermostatSetpointType;
 }
@@ -15421,7 +15507,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
     // (undocumented)
     setpointType: ThermostatSetpointType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15430,11 +15516,11 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     readonly scale: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get type(): ThermostatSetpointType;
     // (undocumented)
@@ -15454,7 +15540,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
     // (undocumented)
     setpointType: ThermostatSetpointType;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     value: number;
 }
@@ -15473,7 +15559,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
     // (undocumented)
     readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15500,9 +15586,9 @@ export const ThermostatSetpointCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -15557,9 +15643,9 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -15582,9 +15668,9 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -15688,7 +15774,7 @@ export class TimeCC extends CommandClass {
     // (undocumented)
     ccCommand: TimeCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "TimeCCDateGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15710,7 +15796,7 @@ export class TimeCCDateReport extends TimeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
     // (undocumented)
     year: number;
 }
@@ -15744,7 +15830,7 @@ export class TimeCCTimeOffsetReport extends TimeCC {
     // (undocumented)
     standardOffset: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "TimeCCTimeOffsetSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15764,7 +15850,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
     // (undocumented)
     standardOffset: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "TimeCCTimeReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15782,7 +15868,7 @@ export class TimeCCTimeReport extends TimeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "TimeCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15812,7 +15898,7 @@ export class TimeParametersCC extends CommandClass {
     // (undocumented)
     ccCommand: TimeParametersCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "TimeParametersCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15829,9 +15915,9 @@ export class TimeParametersCCReport extends TimeParametersCC {
     // (undocumented)
     get dateAndTime(): Date;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "TimeParametersCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15843,11 +15929,11 @@ export class TimeParametersCCSet extends TimeParametersCC {
     // (undocumented)
     dateAndTime: Date;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "TimeParametersCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15958,7 +16044,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
     // (undocumented)
     sessionId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentComplete" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15972,7 +16058,7 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
     // (undocumented)
     sessionId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentRequest" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15988,7 +16074,7 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
     // (undocumented)
     sessionId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentWait" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16002,7 +16088,7 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "TransportServiceCCSubsequentSegment" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16029,7 +16115,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
     // (undocumented)
     headerExtension: Buffer | undefined;
     // (undocumented)
-    mergePartialCCs(applHost: ZWaveApplicationHost, partials: [
+    mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: [
     TransportServiceCCFirstSegment,
     ...TransportServiceCCSubsequentSegment[]
     ]): void;
@@ -16040,7 +16126,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
     // (undocumented)
     sessionId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "TransportServiceCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16066,6 +16152,10 @@ export enum TransportServiceCommand {
 export const TransportServiceTimeouts: {
     requestMissingSegmentR2: number;
     requestMissingSegmentR3: number;
+    segmentCompleteR2: number;
+    segmentCompleteR3: number;
+    relaxedTimingDelayR2: number;
+    relaxedTimingDelayR3: number;
 };
 
 // Warning: (ae-missing-release-tag) "UserCodeCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16074,16 +16164,16 @@ export const TransportServiceTimeouts: {
 export class UserCodeCC extends CommandClass {
     // (undocumented)
     ccCommand: UserCodeCommand;
-    static getSupportedASCIICharsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): string | undefined;
-    static getSupportedKeypadModesCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): KeypadMode[] | undefined;
-    static getSupportedUserIDStatusesCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): UserIDStatus[] | undefined;
-    static getSupportedUsersCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number | undefined;
+    static getSupportedASCIICharsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): string | undefined;
+    static getSupportedKeypadModesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): KeypadMode[] | undefined;
+    static getSupportedUserIDStatusesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): UserIDStatus[] | undefined;
+    static getSupportedUsersCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number | undefined;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
-    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
-    static supportsMasterCodeDeactivationCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): boolean;
-    static supportsMultipleUserCodeSetCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): boolean;
+    refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
+    static supportsMasterCodeDeactivationCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): boolean;
+    static supportsMultipleUserCodeSetCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCCapabilitiesGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16114,7 +16204,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
     // (undocumented)
     readonly supportsUserCodeChecksum: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCExtendedUserCodeGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16128,7 +16218,7 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     userId: number;
 }
@@ -16141,9 +16231,9 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
     // (undocumented)
     readonly nextUserId: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // Warning: (ae-forgotten-export) The symbol "UserCode" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -16159,7 +16249,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // Warning: (ae-forgotten-export) The symbol "UserCodeCCSetOptions" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -16175,7 +16265,7 @@ export class UserCodeCCGet extends UserCodeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     userId: number;
 }
@@ -16194,9 +16284,9 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
     // (undocumented)
     readonly keypadMode: KeypadMode;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCKeypadModeSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16210,7 +16300,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16227,7 +16317,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
     // (undocumented)
     readonly masterCode: string;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16241,7 +16331,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-forgotten-export) The symbol "NotificationEventPayload" needs to be exported by the entry point index.d.ts
@@ -16251,9 +16341,9 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 export class UserCodeCCReport extends UserCodeCC implements NotificationEventPayload {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     toNotificationEventParameters(): {
         userId: number;
@@ -16274,7 +16364,7 @@ export class UserCodeCCSet extends UserCodeCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     userCode: string | Buffer;
     // (undocumented)
@@ -16295,7 +16385,7 @@ export class UserCodeCCUserCodeChecksumGet extends UserCodeCC {
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly userCodeChecksum: number;
 }
@@ -16314,7 +16404,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
     // (undocumented)
     readonly supportedUsers: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16342,8 +16432,8 @@ export const UserCodeCCValues: Readonly<{
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly secret: true;
@@ -16449,9 +16539,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16474,9 +16564,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16499,9 +16589,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16524,9 +16614,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16549,9 +16639,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16574,9 +16664,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16599,9 +16689,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16624,9 +16714,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16649,9 +16739,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16674,9 +16764,9 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -16803,7 +16893,7 @@ export class VersionCC extends CommandClass {
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCCCapabilitiesGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16820,7 +16910,7 @@ export class VersionCCCapabilitiesReport extends VersionCC {
     // (undocumented)
     readonly supportsZWaveSoftwareGet: boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCCCommandClassGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16834,20 +16924,23 @@ export class VersionCCCommandClassGet extends VersionCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCCCommandClassReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class VersionCCCommandClassReport extends VersionCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "VersionCCCommandClassReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: VersionCCCommandClassReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
-    get ccVersion(): number;
+    ccVersion: number;
     // (undocumented)
-    get requestedCC(): CommandClasses;
+    requestedCC: CommandClasses;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16870,7 +16963,7 @@ export class VersionCCReport extends VersionCC {
     // (undocumented)
     readonly protocolVersion: string;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17181,9 +17274,9 @@ export const VersionCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -17210,9 +17303,9 @@ export const VersionCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -17236,9 +17329,9 @@ export const VersionCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -17271,7 +17364,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
     // (undocumented)
     readonly sdkVersion: string;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly zWaveProtocolBuildNumber: number;
     // (undocumented)
@@ -17307,7 +17400,7 @@ export class WakeUpCC extends CommandClass {
     // (undocumented)
     ccCommand: WakeUpCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "WakeUpCCIntervalCapabilitiesGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17328,9 +17421,9 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
     // (undocumented)
     readonly minWakeUpInterval: number;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost): boolean;
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly wakeUpIntervalSteps: number;
     // (undocumented)
@@ -17351,7 +17444,7 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
     // (undocumented)
     readonly controllerNodeId: number;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly wakeUpInterval: number;
 }
@@ -17367,7 +17460,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     wakeUpInterval: number;
 }
@@ -17428,9 +17521,9 @@ export const WakeUpCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -17454,9 +17547,9 @@ export const WakeUpCCValues: Readonly<{
         };
         readonly options: {
             readonly internal: false;
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
@@ -17557,7 +17650,7 @@ export class ZWavePlusCC extends CommandClass {
     // (undocumented)
     ccCommand: ZWavePlusCommand;
     // (undocumented)
-    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    interview(applHost: ZWaveApplicationHost_2): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ZWavePlusCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17581,7 +17674,7 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     userIcon: number;
     // (undocumented)
@@ -17609,9 +17702,9 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -17634,9 +17727,9 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
             readonly internal: true;
@@ -17659,9 +17752,9 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
             readonly internal: true;
@@ -17684,9 +17777,9 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
             readonly internal: true;
@@ -17709,9 +17802,9 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly minVersion: 1;
             readonly stateful: true;
             readonly secret: false;
+            readonly minVersion: 1;
             readonly autoCreate: true;
             readonly supportsEndpoints: false;
             readonly internal: true;
@@ -18332,6 +18425,11 @@ export enum ZWaveProtocolCommand {
     // (undocumented)
     TransferRangeInformation = 10
 }
+
+// Warnings were encountered during analysis:
+//
+// src/cc/TransportServiceCC.ts:43:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
+// src/cc/TransportServiceCC.ts:45:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
 
 // (No @packageDocumentation comment for this package)
 

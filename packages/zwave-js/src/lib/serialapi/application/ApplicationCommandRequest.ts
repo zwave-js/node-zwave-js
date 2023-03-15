@@ -1,5 +1,6 @@
 import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
+	FrameType,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
@@ -88,6 +89,7 @@ export class ApplicationCommandRequest
 				data: this.payload.slice(3, 3 + commandLength),
 				nodeId,
 				origin: options.origin,
+				frameType: this.frameType,
 			}) as SinglecastCC<CommandClass>;
 		} else {
 			// TODO: This logic is unsound
@@ -108,7 +110,7 @@ export class ApplicationCommandRequest
 	}
 
 	public readonly routedBusy: boolean;
-	public readonly frameType: "singlecast" | "broadcast" | "multicast";
+	public readonly frameType: FrameType;
 	public readonly isExploreFrame: boolean;
 	public readonly isForeignFrame: boolean;
 	public readonly fromForeignHomeId: boolean;

@@ -171,6 +171,9 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0xD2 = 0xd2, // ??
 	UNKNOWN_FUNC_UNKNOWN_0xD3 = 0xd3, // ??
 	UNKNOWN_FUNC_UNKNOWN_0xD4 = 0xd4, // ??
+
+	Shutdown = 0xd9, // Instruct the Z-Wave API to shut down in order to safely remove the power
+
 	UNKNOWN_FUNC_UNKNOWN_0xEF = 0xef, // ??
 
 	// Special commands for Z-Wave.me sticks

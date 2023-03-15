@@ -1,4 +1,9 @@
-import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
+import { timespan } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	SinglecastCC,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -341,6 +346,25 @@ temperature:   ${batteryHealth.temperature} °C`;
 				});
 			}
 		}
+	}
+
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		applHost: ZWaveApplicationHost,
+	): boolean {
+		// Check when the battery state was last updated
+		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		if (!valueDB) return true;
+
+		const lastUpdated = valueDB.getTimestamp(
+			BatteryCCValues.level.endpoint(this.endpointIndex),
+		);
+		return (
+			lastUpdated == undefined ||
+			// The specs say once per month, but that's a bit too unfrequent IMO
+			// Also the maximum that setInterval supports is ~24.85 days
+			Date.now() - lastUpdated > timespan.days(7)
+		);
 	}
 }
 

@@ -1,5 +1,10 @@
-import { CommandClasses } from "@zwave-js/core/safe";
-import { CommandClass } from "../lib/CommandClass";
+import { CommandClasses, validatePayload } from "@zwave-js/core/safe";
+import type { ZWaveHost } from "@zwave-js/host/safe";
+import {
+	CommandClass,
+	CommandClassOptions,
+	gotDeserializationOptions,
+} from "../lib/CommandClass";
 import {
 	CCCommand,
 	commandClass,
@@ -19,4 +24,17 @@ export class DeviceResetLocallyCC extends CommandClass {
 }
 
 @CCCommand(DeviceResetLocallyCommand.Notification)
-export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {}
+export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
+
+		if (gotDeserializationOptions(options)) {
+			// We need to make sure this doesn't get parsed accidentally, e.g. because of a bit flip
+
+			// This CC has no payload
+			validatePayload(this.payload.length === 0);
+			// It MUST be issued by the root device
+			validatePayload(this.endpointIndex === 0);
+		}
+	}
+}

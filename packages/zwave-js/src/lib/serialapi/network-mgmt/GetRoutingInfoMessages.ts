@@ -2,6 +2,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	NUM_NODEMASK_BYTES,
+	parseNodeBitMask,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
@@ -14,7 +15,6 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { parseNodeBitMask } from "../../controller/NodeBitMask";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;

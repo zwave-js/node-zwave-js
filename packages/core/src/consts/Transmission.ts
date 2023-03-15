@@ -60,6 +60,8 @@ export enum TransmitStatus {
 	NoRoute = 0x04,
 }
 
+export type FrameType = "singlecast" | "broadcast" | "multicast";
+
 /** A number between -128 and +124 dBm or one of the special values in {@link RssiError} indicating an error */
 export type RSSI = number | RssiError;
 
@@ -71,6 +73,32 @@ export enum RssiError {
 
 export function isRssiError(rssi: RSSI): rssi is RssiError {
 	return rssi >= RssiError.NoSignalDetected;
+}
+
+/** Averages RSSI measurements using an exponential moving average with the given weight for the accumulator */
+export function averageRSSI(
+	acc: number | undefined,
+	rssi: RSSI,
+	weight: number,
+): number {
+	if (isRssiError(rssi)) {
+		switch (rssi) {
+			case RssiError.NotAvailable:
+				// If we don't have a value yet, return 0
+				return acc ?? 0;
+			case RssiError.ReceiverSaturated:
+				// Assume rssi is 0 dBm
+				rssi = 0;
+				break;
+			case RssiError.NoSignalDetected:
+				// Assume rssi is -128 dBm
+				rssi = -128;
+				break;
+		}
+	}
+
+	if (acc == undefined) return rssi;
+	return Math.round(acc * weight + rssi * (1 - weight));
 }
 
 /**
@@ -187,8 +215,16 @@ export type SupervisionOptions =
 			useSupervision: false;
 	  };
 
+export type SendCommandSecurityS2Options = {
+	/** Whether the MOS extension should be included in S2 message encapsulation */
+	s2MulticastOutOfSync?: boolean;
+	/** The optional multicast group ID to use for S2 message encapsulation */
+	s2MulticastGroupId?: number;
+};
+
 export type SendCommandOptions = SendMessageOptions &
-	SupervisionOptions & {
+	SupervisionOptions &
+	SendCommandSecurityS2Options & {
 		/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 		maxSendAttempts?: number;
 		/** Whether the driver should automatically handle the encapsulation. Default: true */

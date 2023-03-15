@@ -487,8 +487,8 @@ type MergeOptions<TOptions extends CCValueOptions> = DropOptional<
 type MergeMeta<TMeta extends ValueMetadata> = DropOptional<
 	ValueMetadata extends TMeta
 		? // When the type cannot be inferred exactly (not given), default to ValueMetadata.Any
-		  typeof ValueMetadata["Any"]
-		: Overwrite<typeof ValueMetadata["Any"], TMeta>
+		  (typeof ValueMetadata)["Any"]
+		: Overwrite<(typeof ValueMetadata)["Any"], TMeta>
 >;
 
 /** The common base type of all CC value definitions */

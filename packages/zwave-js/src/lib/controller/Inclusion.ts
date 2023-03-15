@@ -2,9 +2,36 @@ import type { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
 import type { DeviceClass } from "../node/DeviceClass";
 
 /** Additional information about the outcome of a node inclusion */
-export interface InclusionResult {
-	/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
-	lowSecurity?: boolean;
+export type InclusionResult =
+	| {
+			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+			lowSecurity?: false;
+	  }
+	| {
+			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+			lowSecurity: true;
+			lowSecurityReason: SecurityBootstrapFailure;
+	  };
+
+export enum SecurityBootstrapFailure {
+	/** Security bootstrapping was canceled by the user */
+	UserCanceled,
+	/** The required security keys were not configured in the driver */
+	NoKeysConfigured,
+	/** No Security S2 user callbacks (or provisioning info) were provided to grant security classes and/or validate the DSK. */
+	S2NoUserCallbacks,
+	/** An expected message was not received within the corresponding timeout */
+	Timeout,
+	/** There was no possible match in encryption parameters between the controller and the node */
+	ParameterMismatch,
+	/** Security bootstrapping was canceled by the included node */
+	NodeCanceled,
+	/** The PIN was incorrect, so the included node could not decode the key exchange commands */
+	S2IncorrectPIN,
+	/** There was a mismatch in security keys between the controller and the node */
+	S2WrongSecurityLevel,
+	/** Some other unspecified error happened */
+	Unknown,
 }
 
 export enum InclusionStrategy {

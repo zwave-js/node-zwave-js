@@ -3,9 +3,11 @@ import {
 	getDefaultMeterScale,
 	MeterScale,
 } from "@zwave-js/config";
+import { timespan } from "@zwave-js/core";
 import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
+	SinglecastCC,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
@@ -477,6 +479,27 @@ supports reset:       ${suppResp.supportsReset}`;
 				}
 			}
 		}
+	}
+
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		applHost: ZWaveApplicationHost,
+	): boolean {
+		// Check when any of the supported values was last updated longer than 6 hours ago.
+		// This may lead to some unnecessary queries, but at least the values are up to date then
+		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		if (!valueDB) return true;
+
+		const values = this.getDefinedValueIDs(applHost).filter((v) =>
+			MeterCCValues.value.is(v),
+		);
+		return values.some((v) => {
+			const lastUpdated = valueDB.getTimestamp(v);
+			return (
+				lastUpdated == undefined ||
+				Date.now() - lastUpdated > timespan.hours(6)
+			);
+		});
 	}
 
 	public translatePropertyKey(

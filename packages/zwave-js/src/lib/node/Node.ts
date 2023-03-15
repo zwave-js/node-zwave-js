@@ -1,7 +1,9 @@
+import type { CCValueOptions } from "@zwave-js/cc";
 import {
 	CCAPI,
 	CentralSceneKeys,
 	CommandClass,
+	defaultCCValueOptions,
 	DoorLockMode,
 	EntryControlDataTypes,
 	entryControlEventTypeLabels,
@@ -63,7 +65,6 @@ import { NodeNamingAndLocationCCValues } from "@zwave-js/cc/NodeNamingCC";
 import {
 	getNotificationStateValueWithEnum,
 	getNotificationValueMetadata,
-	NotificationCC,
 	NotificationCCReport,
 	NotificationCCValues,
 } from "@zwave-js/cc/NotificationCC";
@@ -121,9 +122,10 @@ import {
 	SecurityClassOwner,
 	SendCommandOptions,
 	sensorCCs,
+	SinglecastCC,
 	SupervisionStatus,
-	timespan,
 	topologicalSort,
+	TranslatedValueID,
 	TXReport,
 	unknownBoolean,
 	ValueDB,
@@ -208,7 +210,6 @@ import type {
 	RefreshInfoOptions,
 	RouteHealthCheckResult,
 	RouteHealthCheckSummary,
-	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeValueEventCallbacks,
 } from "./_Types";
@@ -337,7 +338,6 @@ export class ZWaveNode
 		for (const timeout of [
 			this.centralSceneKeyHeldDownContext?.timeout,
 			...this.notificationIdleTimeouts.values(),
-			...this.manualRefreshTimers.values(),
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
@@ -598,6 +598,8 @@ export class ZWaveNode
 	}
 
 	public get canSleep(): boolean | undefined {
+		// The controller node can never sleep (apparently it can report otherwise though)
+		if (this.isControllerNode) return false;
 		if (this.isListening == undefined) return undefined;
 		if (this.isFrequentListening == undefined) return undefined;
 		return !this.isListening && !this.isFrequentListening;
@@ -868,26 +870,41 @@ export class ZWaveNode
 	}
 
 	/**
+	 * Returns when the given value id was last updated
+	 */
+	public getValueTimestamp(valueId: ValueID): number | undefined {
+		return this._valueDB.getTimestamp(valueId);
+	}
+
+	/**
 	 * Retrieves metadata for a given value id.
 	 * This can be used to enhance the user interface of an application
 	 */
 	public getValueMetadata(valueId: ValueID): ValueMetadata {
-		// First attempt: look in the value DB
-		if (this._valueDB.hasMetadata(valueId)) {
-			return this._valueDB.getMetadata(valueId)!;
-		}
-
-		// Second attempt: check if a corresponding CC value is defined for this value ID
+		// Check if a corresponding CC value is defined for this value ID
+		// so we can extend the returned metadata
 		const definedCCValues = getCCValues(valueId.commandClass);
+		let valueOptions: Required<CCValueOptions> | undefined;
+		let meta: ValueMetadata | undefined;
 		if (definedCCValues) {
 			const value = Object.values(definedCCValues).find((v) =>
 				v?.is(valueId),
 			);
-			if (value && typeof value !== "function") return value.meta;
+			if (value && typeof value !== "function") {
+				meta = value.meta;
+				valueOptions = value.options;
+			}
 		}
 
-		// Default: Any
-		return ValueMetadata.Any;
+		// The priority for returned metadata is valueDB > defined value > Any (default)
+		return {
+			...(this._valueDB.getMetadata(valueId) ??
+				meta ??
+				ValueMetadata.Any),
+			// Don't allow overriding these flags:
+			stateful: valueOptions?.stateful ?? defaultCCValueOptions.stateful,
+			secret: valueOptions?.secret ?? defaultCCValueOptions.secret,
+		};
 	}
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
@@ -1788,7 +1805,7 @@ protocol version:      ${this.protocolVersion}`;
 				if (force) {
 					instance = CommandClass.createInstanceUnchecked(
 						this.driver,
-						this,
+						endpoint,
 						cc,
 					)!;
 				} else {
@@ -2328,8 +2345,12 @@ protocol version:      ${this.protocolVersion}`;
 		// supporting node issues a Wake Up Notification Command for sleeping nodes.
 
 		// This is not the handler for wakeup notifications, but some legacy devices send this
-		// message whenever there's an update.
-		if (this.requiresManualValueRefresh()) {
+		// message whenever there's an update and want to be polled.
+		if (
+			this.interviewStage === InterviewStage.Complete &&
+			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
+			!this.valueDB.getValue(AssociationCCValues.hasLifeline.id)
+		) {
 			const delay =
 				this.deviceConfig?.compat?.manualValueRefreshDelayMs || 0;
 			this.driver.controllerLog.logNode(this.nodeId, {
@@ -2338,79 +2359,6 @@ protocol version:      ${this.protocolVersion}`;
 				}...`,
 			});
 			setTimeout(() => this.refreshValues(), delay);
-		}
-	}
-
-	/** Returns whether a manual refresh of non-static values is likely necessary for this node */
-	public requiresManualValueRefresh(): boolean {
-		// If there was no lifeline configured, we assume that the controller
-		// does not receive unsolicited updates from the node
-		return (
-			this.interviewStage === InterviewStage.Complete &&
-			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
-			!this.valueDB.getValue(AssociationCCValues.hasLifeline.id)
-		);
-	}
-
-	/**
-	 * @internal
-	 * Schedules the regular refreshes of some CC values
-	 */
-	public scheduleManualValueRefreshes(): void {
-		// Only schedule this for listening nodes. Sleeping nodes are queried on wakeup
-		if (!this.canSleep) return;
-		// Only schedule this if we don't expect any unsolicited updates
-		if (!this.requiresManualValueRefresh()) return;
-
-		// TODO: The timespan definitions should be on the CCs themselves (probably as decorators)
-		this.scheduleManualValueRefresh(
-			CommandClasses.Battery,
-			// The specs say once per month, but that's a bit too unfrequent IMO
-			// Also the maximum that setInterval supports is ~24.85 days
-			timespan.days(7),
-		);
-		this.scheduleManualValueRefresh(
-			CommandClasses.Meter,
-			timespan.hours(6),
-		);
-		this.scheduleManualValueRefresh(
-			CommandClasses["Multilevel Sensor"],
-			timespan.hours(6),
-		);
-		if (
-			this.supportsCC(CommandClasses.Notification) &&
-			NotificationCC.getNotificationMode(this.driver, this) === "pull"
-		) {
-			this.scheduleManualValueRefresh(
-				CommandClasses.Notification,
-				timespan.hours(6),
-			);
-		}
-	}
-
-	private manualRefreshTimers = new Map<CommandClasses, NodeJS.Timeout>();
-	/**
-	 * Is used to schedule a manual value refresh for nodes that don't send unsolicited commands
-	 */
-	private scheduleManualValueRefresh(
-		cc: CommandClasses,
-		timeout: number,
-	): void {
-		// // Avoid triggering the refresh multiple times
-		// this.cancelManualValueRefresh(cc);
-		this.manualRefreshTimers.set(
-			cc,
-			setInterval(() => {
-				void this.refreshCCValues(cc);
-			}, timeout).unref(),
-		);
-	}
-
-	private cancelManualValueRefresh(cc: CommandClasses): void {
-		if (this.manualRefreshTimers.has(cc)) {
-			const timeout = this.manualRefreshTimers.get(cc)!;
-			clearTimeout(timeout);
-			this.manualRefreshTimers.delete(cc);
 		}
 	}
 
@@ -2489,6 +2437,38 @@ protocol version:      ${this.protocolVersion}`;
 						)}, endpoint ${endpoint.index}: ${getErrorMessage(e)}`,
 						"error",
 					);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Refreshes the values of all CCs that should be reporting regularly, but haven't been
+	 * @internal
+	 */
+	public async autoRefreshValues(): Promise<void> {
+		for (const endpoint of this.getAllEndpoints()) {
+			for (const cc of endpoint.getSupportedCCInstances() as readonly SinglecastCC<CommandClass>[]) {
+				if (!cc.shouldRefreshValues(this.driver)) continue;
+
+				this.driver.controllerLog.logNode(this.id, {
+					message: `${getCCName(
+						cc.ccId,
+					)} CC values may be stale, refreshing...`,
+					endpoint: endpoint.index,
+					direction: "outbound",
+				});
+
+				try {
+					await cc.refreshValues(this.driver);
+				} catch (e) {
+					this.driver.controllerLog.logNode(this.id, {
+						message: `failed to refresh values for ${getCCName(
+							cc.ccId,
+						)} CC: ${getErrorMessage(e)}`,
+						endpoint: endpoint.index,
+						level: "error",
+					});
 				}
 			}
 		}
@@ -2586,10 +2566,6 @@ protocol version:      ${this.protocolVersion}`;
 	 * Handles a CommandClass that was received from this node
 	 */
 	public async handleCommand(command: CommandClass): Promise<void> {
-		// If the node sent us an unsolicited update, our initial assumption
-		// was wrong. Stop querying it regularly for updates
-		this.cancelManualValueRefresh(command.ccId);
-
 		// If this is a report for the root endpoint and the node supports the CC on another endpoint,
 		// we need to map it to endpoint 1. Either it does not support multi channel associations or
 		// it is misbehaving. In any case, we would hide this report if we didn't map it
@@ -2818,18 +2794,22 @@ protocol version:      ${this.protocolVersion}`;
 	/**
 	 * Is called when a nonce report is received that does not belong to any transaction.
 	 */
-	private handleSecurity2NonceReport(command: Security2CCNonceReport): void {
-		const secMan = this.driver.securityManager2;
-		if (!secMan) return;
+	private handleSecurity2NonceReport(_command: Security2CCNonceReport): void {
+		// const secMan = this.driver.securityManager2;
+		// if (!secMan) return;
 
-		if (command.SOS && command.receiverEI) {
-			// The node couldn't decrypt the last command we sent it. Invalidate
-			// the shared SPAN, since it did the same
-			secMan.storeRemoteEI(this.nodeId, command.receiverEI);
-		}
+		// This has the potential of resetting our SPAN state in the middle of a transaction which may expect it to be valid
+		// So we probably shouldn't react here, and instead handle the NonceReport we'll get in response to the next command we send
 
+		// if (command.SOS && command.receiverEI) {
+		// 	// The node couldn't decrypt the last command we sent it. Invalidate
+		// 	// the shared SPAN, since it did the same
+		// 	secMan.storeRemoteEI(this.nodeId, command.receiverEI);
+		// }
+
+		// Since we landed here, this is not in response to any command we sent
 		this.driver.controllerLog.logNode(this.id, {
-			message: `received S2 nonce, not sure what to do with it`,
+			message: `received S2 nonce without an active transaction, not sure what to do with it`,
 			level: "warn",
 			direction: "inbound",
 		});
@@ -3018,10 +2998,14 @@ protocol version:      ${this.protocolVersion}`;
 		}
 		this.lastWakeUp = now;
 
-		// Some devices expect us to query them on wake up in order to function correctly
+		// Some legacy devices expect us to query them on wake up in order to function correctly
 		if (this._deviceConfig?.compat?.queryOnWakeup) {
-			// Don't wait
 			void this.compatDoWakeupQueries();
+		} else {
+			// For other devices we may have to refresh their values from time to time
+			void this.autoRefreshValues().catch(() => {
+				// ignore
+			});
 		}
 
 		// In case there are no messages in the queue, the node may go back to sleep very soon
@@ -4912,8 +4896,22 @@ protocol version:      ${this.protocolVersion}`;
 				const backgroundRSSI =
 					await this.driver.controller.getBackgroundRSSI();
 				if (`rssiChannel${channel}` in backgroundRSSI) {
-					snrMargin =
-						rssi - (backgroundRSSI as any)[`rssiChannel${channel}`];
+					const bgRSSI = (backgroundRSSI as any)[
+						`rssiChannel${channel}`
+					];
+					if (isRssiError(bgRSSI)) {
+						if (bgRSSI === RssiError.ReceiverSaturated) {
+							// RSSI is too high to measure, so there can't be any margin left
+							snrMargin = 0;
+						} else if (bgRSSI === RssiError.NoSignalDetected) {
+							// It is very quiet, assume -128 dBm
+							snrMargin = rssi + 128;
+						} else {
+							snrMargin = undefined;
+						}
+					} else {
+						snrMargin = rssi - bgRSSI;
+					}
 				}
 			}
 

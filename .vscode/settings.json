@@ -69,10 +69,6 @@
 		{
 			"fileMatch": ["/packages/config/config/deviceClasses.json"],
 			"url": "/maintenance/schemas/deviceClasses.json"
-		},
-		{
-			"fileMatch": ["renovate.json"],
-			"url": "https://docs.renovatebot.com/renovate-schema.json"
 		}
 	],
 	"debug.javascript.unmapMissingSources": true,
