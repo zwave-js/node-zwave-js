@@ -2261,6 +2261,14 @@ export class Driver
 		nodeId: number,
 		endpointIndex: number = 0,
 	): boolean {
+		// This is obvious
+		if (
+			ccId === CommandClasses.Security ||
+			ccId === CommandClasses["Security 2"]
+		) {
+			return true;
+		}
+
 		const node = this.controller.nodes.get(nodeId);
 		// Node is unknown, don't use secure communication
 		if (!node) return false;
