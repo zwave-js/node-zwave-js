@@ -1,7 +1,8 @@
-import type { CCValueOptions } from "@zwave-js/cc";
 import {
 	CCAPI,
+	CCValueOptions,
 	CentralSceneKeys,
+	ClockCommand,
 	CommandClass,
 	defaultCCValueOptions,
 	DoorLockMode,
@@ -22,10 +23,13 @@ import {
 	PollValueImplementation,
 	Powerlevel,
 	PowerlevelTestStatus,
+	ScheduleEntryLockCommand,
 	SetValueAPIOptions,
 	TimeCCDateGet,
 	TimeCCTimeGet,
 	TimeCCTimeOffsetGet,
+	TimeCommand,
+	TimeParametersCommand,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "@zwave-js/cc";
@@ -124,6 +128,7 @@ import {
 	sensorCCs,
 	SetValueOptions,
 	SinglecastCC,
+	supervisedCommandFailed,
 	supervisedCommandSucceeded,
 	SupervisionStatus,
 	topologicalSort,
@@ -5287,5 +5292,81 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			ret.lwr = newStats;
 			return ret;
 		});
+	}
+
+	/**
+	 * Sets the current date, time and timezone (or a subset of those) on the node using one or more of the respective CCs.
+	 * Returns whether the operation was successful.
+	 */
+	public async setDateAndTime(now: Date = new Date()): Promise<boolean> {
+		// There are multiple ways to communicate the current time to a node:
+		// 1. Time Parameters CC
+		// 2. Clock CC
+		// 3. Time CC, but only in response to requests from the node
+		const timeParametersAPI = this.commandClasses["Time Parameters"];
+		const timeAPI = this.commandClasses.Time;
+		const clockAPI = this.commandClasses.Clock;
+		const scheduleEntryLockAPI = this.commandClasses["Schedule Entry Lock"];
+
+		if (
+			timeParametersAPI.isSupported() &&
+			timeParametersAPI.supportsCommand(TimeParametersCommand.Set)
+		) {
+			try {
+				const result = await timeParametersAPI.set(now);
+				if (supervisedCommandFailed(result)) return false;
+			} catch {
+				return false;
+			}
+		} else if (
+			clockAPI.isSupported() &&
+			clockAPI.supportsCommand(ClockCommand.Set)
+		) {
+			try {
+				// Get desired time in local time
+				const hours = now.getHours();
+				const minutes = now.getMinutes();
+				// Sunday is 0 in JS, but 7 in Z-Wave
+				let weekday = now.getDay();
+				if (weekday === 0) weekday = 7;
+
+				const result = await clockAPI.set(hours, minutes, weekday);
+				if (supervisedCommandFailed(result)) return false;
+			} catch {
+				return false;
+			}
+		} else {
+			// No way to set the time
+			return false;
+		}
+
+		// We might also have to change the timezone. That is done with the Time CC.
+		// Or in really strange cases using the Schedule Entry Lock CC
+		const timezone = getDSTInfo(now);
+		if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.TimeOffsetSet)
+		) {
+			try {
+				const result = await timeAPI.setTimezone(timezone);
+				if (supervisedCommandFailed(result)) return false;
+			} catch {
+				return false;
+			}
+		} else if (
+			scheduleEntryLockAPI.isSupported() &&
+			scheduleEntryLockAPI.supportsCommand(
+				ScheduleEntryLockCommand.TimeOffsetSet,
+			)
+		) {
+			try {
+				const result = await scheduleEntryLockAPI.setTimezone(timezone);
+				if (supervisedCommandFailed(result)) return false;
+			} catch {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
