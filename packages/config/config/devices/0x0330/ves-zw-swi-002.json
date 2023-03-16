@@ -21,14 +21,14 @@
 		},
 		{
 			"#": "3",
-			"label": "Send Basic Report on State Change",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Basic Report on State Change",			
 			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Use External Switch for Inclusion/Exclusion",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Use External Switch for Inclusion/Exclusion",			
 			"defaultValue": 1
 		},
 		{

@@ -20,15 +20,15 @@
 		},
 		{
 			"#": "3",
-			"label": "Send Basic Report on State Change",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Basic Report on State Change",			
 			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Over Current Protection",
-			"description": "Triggered at over 16A.",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Over Current Protection",
+			"description": "Triggered at over 16A.",			
 			"defaultValue": 1
 		},
 		{
@@ -51,9 +51,8 @@
 		},
 		{
 			"#": "10",
-			"label": "Power Report Absolute Threshold",
-			"description": "Report when power changes by W value, unit is 1W.",
-			"unit": "W",
+			"label": "Power Change Report Threshold",
+			"unit": "1W",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -68,8 +67,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Current Report Absolute Threshold",
-			"description": "Report when current changes by A value, unit is 0.1A.",
+			"label": "Current Change Report Threshold",
 			"unit": "0.1A",
 			"valueSize": 1,
 			"minValue": 0,
@@ -85,9 +83,8 @@
 		},
 		{
 			"#": "12",
-			"label": "Voltage Report Absolute Threshold",
-			"description": "Report when voltage changes by V value, unit is 1V.",
-			"unit": "V",
+			"label": "Voltage Change Report Threshold",
+			"unit": "1V",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -102,8 +99,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Report Interval",
-			"description": "Time cycle to report the values of energy consumption, voltage, current and load power.",
+			"label": "Energy/Power/Voltage/Current Report Interval",
 			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,

@@ -26,79 +26,77 @@
 		},
 		{
 			"#": "5",
-			"label": "Over Current Protection",
-			"description": "Triggered when module goes over current limit.",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Over Current Protection",
+			"description": "Triggered when module goes over current limit.",			
 			"defaultValue": 1
 		},
 		{
 			"#": "7",
-			"label": "Configuration Of Momentary Switch Inputs",
-			"description": "Switch inputs accept a variety of push combinations (press, hold & released), configure how the outputs react to them here.",
+			"label": "Momentary Switch Input Behaviour",
+			"description": "Only valid in Light Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "All The Same, Toggle The Respective Output",
+					"label": "All the same, toggle the respective output",
 					"value": 0
 				},
 				{
-					"label": "Short Press Only, Toggle The Respective Output",
+					"label": "Short press only, toggle the respective output",
 					"value": 1
 				},
 				{
-					"label": "Hold & Release Only, Toggle The Respective Output",
+					"label": "Hold & release only, toggle the respective output",
 					"value": 2
 				},
 				{
-					"label": "Short Press Only, Toggle Both Outputs",
+					"label": "Short press only, toggle both outputs",
 					"value": 3
 				},
 				{
-					"label": "Hold & Release Only, Toggle Both Outputs",
+					"label": "Hold & release only, toggle both outputs",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "8",
-			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",			
 			"defaultValue": 1
 		},
 		{
 			"#": "9",
-			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",
-			"description": "Switch inputs accept a variety of push combinations (press, hold & released), configure if Central Scene Commands are sent in response to them.",
+			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",			
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled For Both Inputs",
+					"label": "Disabled for both inputs",
 					"value": 0
 				},
 				{
-					"label": "Enabled For Both Inputs",
+					"label": "Enabled for both inputs",
 					"value": 1
 				},
 				{
-					"label": "Enable For S1 Input Only",
+					"label": "Enable for S1 input only",
 					"value": 2
 				},
 				{
-					"label": "Enable For S2 Input Only",
+					"label": "Enable for S2 input only",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "10",
-			"label": "Power Report Absolute Threshold",
-			"description": "Report when power changes by W value, unit is 1W.",
+			"label": "Power Change Report Threshold",
 			"unit": "W",
 			"valueSize": 1,
 			"minValue": 0,
@@ -114,8 +112,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Current Report Absolute Threshold",
-			"description": "Report when current changes by A value, unit is 0.1A.",
+			"label": "Current Change Report Threshold",
 			"unit": "0.1A",
 			"valueSize": 1,
 			"minValue": 0,
@@ -131,8 +128,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Voltage Report Absolute Threshold",
-			"description": "Report when voltage changes by V value, unit is 1V.",
+			"label": "Voltage Change Report Threshold",
 			"unit": "V",
 			"valueSize": 1,
 			"minValue": 0,
@@ -148,8 +144,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Report Interval",
-			"description": "Time cycle to report the values of energy consumption, voltage, current and load power.",
+			"label": "Energy/Power/Voltage/Current Report Interval",
 			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
