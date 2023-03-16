@@ -1,0 +1,261 @@
+{
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
+	"manufacturerId": "0x0258",
+	"label": "NAS_PD02Z-2",
+	"description": "PIR Motion, Temperature & Light Sensor",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x1036"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "Group 1 is lifeline group; all nodes which associated in this group will receive the messages sent by device through lifeline.",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control",
+			"description": "Group 2 is controlling group, all nodes associated in this group will be controlled through BASIC_SET command by the device when device detects a movement event.",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Motion Sensor: Sensitivity",
+			"description": "Sensitivity for motion detection. 0 = highest; 99 = lowest",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 3
+		},
+		{
+			"#": "2",
+			"label": "Motion Sensor: Window Time",
+			"description": "Length of period during which motion is measured.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unit": "seconds",
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "4 seconds",
+					"value": 0
+				},
+				{
+					"label": "8 seconds",
+					"value": 1
+				},
+				{
+					"label": "12 seconds",
+					"value": 2
+				},
+				{
+					"label": "16 seconds",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Motion Sensor: Pulse Count",
+			"description": "Number of times motion must be detected within the measuring period (as defined by param 2: Motion Window Time) before a motion detected message is sent.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "1 time",
+					"value": 0
+				},
+				{
+					"label": "2 times",
+					"value": 1
+				},
+				{
+					"label": "3 times",
+					"value": 2
+				},
+				{
+					"label": "4 times",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Motion Sensor: Blind Time",
+			"description": "Time the sensor waits before sending a next motion detected message. This can be used to eliminate false positives by a light switching on or off due to the previously sent motion message.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"unit": "seconds",
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.5 seconds",
+					"value": 0
+				},
+				{
+					"label": "1 second",
+					"value": 1
+				},
+				{
+					"label": "1.5 seconds",
+					"value": 2
+				},
+				{
+					"label": "2 seconds",
+					"value": 3
+				},
+				{
+					"label": "2.5 seconds",
+					"value": 4
+				},
+				{
+					"label": "3 seconds",
+					"value": 5
+				},
+				{
+					"label": "3.5 seconds",
+					"value": 6
+				},
+				{
+					"label": "4 seconds",
+					"value": 7
+				},
+				{
+					"label": "4.5 seconds",
+					"value": 8
+				},
+				{
+					"label": "5 seconds",
+					"value": 9
+				},
+				{
+					"label": "5.5 seconds",
+					"value": 10
+				},
+				{
+					"label": "6 seconds",
+					"value": 11
+				},
+				{
+					"label": "6.5 seconds",
+					"value": 12
+				},
+				{
+					"label": "7 seconds",
+					"value": 13
+				},
+				{
+					"label": "7.5 seconds",
+					"value": 14
+				},
+				{
+					"label": "8 seconds",
+					"value": 15
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Motion Sensor",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"label": "Motion Sensor: Clear Time",
+			"description": "Time in seconds to wait before sending a 'Clear motion detected' message after the last motion was detected. This determines the minimum time the sensor remains on after motion was detected. Possible values are 10 to 3600 seconds.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 3600,
+			"defaultValue": 30
+		},
+		{
+			"#": "7",
+			"$import": "templates/shenzhen_neo_template.json#blink_on_motion"
+		},
+		{
+			"#": "8",
+			"label": "Binary Sensor Report Enable",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "9",
+			"label": "Motion Sensor: Basic Set Level",
+			"description": "Value for BASIC_SET for nodes associated in Group 2. '100'- BASIC_SET = 0xFF (ON). '0'- BASIC_SET = 0x00 (OFF).",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		{
+			"#": "10",
+			"label": "Light Sensor: Measuring Interval",
+			"description": "Time interval for light sensor measurement of ambient light intensity. Higher values result in longer battery life.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 3600,
+			"defaultValue": 180
+		},
+		{
+			"#": "11",
+			"label": "Light Sensor: Intensity Differential Report",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 50
+		},
+		{
+			"#": "12",
+			"label": "Light Sensor: Intensity Threshold",
+			"description": "If the light intensity current measured is less than the settings, device will considered to be dark at current time. If configuration 13 is enabled and a motion event is detected, the device will send a BASIC_SET to the nodes that associated in group 2.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 50
+		},
+		{
+			"#": "13",
+			"label": "Light Sensor: Intensity Associated Enable",
+			"description": "Send BASIC_SET commands to nodes in group 2 only if the environment is 'dark' (as defined by 12: 'Light Intensity Threshold').",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "14",
+			"label": "Motion Sensor: Report Once Enable",
+			"description": "Suppress sending more Motion Event Report messages after the first Motion Event Report message was sent until a Motion Event Cleared Report message has been sent.",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "15",
+			"label": "Temperature Sensor: Differential Report",
+			"valueSize": 1,
+			"minValue": 1,
+			"unit": "0.1 °C",
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "99",
+			"$import": "templates/shenzhen_neo_template.json#light_calibration",
+			"label": "Light Sensor: Offset Calibration"
+		}
+	]
+}
