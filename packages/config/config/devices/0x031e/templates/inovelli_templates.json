@@ -301,7 +301,7 @@
 	"all_led_effect_effect": {
 		"valueSize": 4,
 		"minValue": 0,
-		"maxValue": 19,
+		"maxValue": 255,
 		"defaultValue": 0,
 		"allowManualEntry": false,
 		"unsigned": true,
