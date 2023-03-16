@@ -16,13 +16,11 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Group 1 is lifeline group; all nodes which associated in this group will receive the messages sent by device through lifeline.",
 			"maxNodes": 1,
 			"isLifeline": true
 		},
 		"2": {
 			"label": "Control",
-			"description": "Group 2 is controlling group, all nodes associated in this group will be controlled through BASIC_SET command by the device when device detects a movement event.",
 			"maxNodes": 5
 		}
 	},
@@ -30,7 +28,7 @@
 		{
 			"#": "1",
 			"label": "Motion Sensor: Sensitivity",
-			"description": "Sensitivity for motion detection. 0 = highest; 99 = lowest",
+			"description": "0 = highest; 99 = lowest.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -39,7 +37,7 @@
 		{
 			"#": "2",
 			"label": "Motion Sensor: Window Time",
-			"description": "Length of period during which motion is measured.",
+			"description": "Period during which motion is measured.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -68,7 +66,7 @@
 		{
 			"#": "3",
 			"label": "Motion Sensor: Pulse Count",
-			"description": "Number of times motion must be detected within the measuring period (as defined by param 2: Motion Window Time) before a motion detected message is sent.",
+			"description": "Number of times motion must be detected within set window time before a detection message is sent.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -96,7 +94,7 @@
 		{
 			"#": "4",
 			"label": "Motion Sensor: Blind Time",
-			"description": "Time the sensor waits before sending a next motion detected message. This can be used to eliminate false positives by a light switching on or off due to the previously sent motion message.",
+			"description": "Time the sensor waits before sending a next motion detected message.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -179,7 +177,7 @@
 		{
 			"#": "6",
 			"label": "Motion Sensor: Clear Time",
-			"description": "Time in seconds to wait before sending a 'Clear motion detected' message after the last motion was detected. This determines the minimum time the sensor remains on after motion was detected. Possible values are 10 to 3600 seconds.",
+			"description": "Time in seconds to wait before sending 'Clear motion detected' since the last detection.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
@@ -192,22 +190,31 @@
 		},
 		{
 			"#": "8",
-			"label": "Binary Sensor Report Enable",
+			"label": "Binary Sensor Report",
 			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "9",
-			"label": "Motion Sensor: Basic Set Level",
-			"description": "Value for BASIC_SET for nodes associated in Group 2. '100'- BASIC_SET = 0xFF (ON). '0'- BASIC_SET = 0x00 (OFF).",
+			"label": "Motion Control: Basic Set Level",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100
+			"defaultValue": 100,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On",
+					"value": 100
+				},
+				{
+					"label": "Off",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "10",
 			"label": "Light Sensor: Measuring Interval",
-			"description": "Time interval for light sensor measurement of ambient light intensity. Higher values result in longer battery life.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 30,
@@ -218,14 +225,14 @@
 			"#": "11",
 			"label": "Light Sensor: Intensity Differential Report",
 			"valueSize": 1,
+			"unit": "lux",
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 50
 		},
 		{
 			"#": "12",
-			"label": "Light Sensor: Intensity Threshold",
-			"description": "If the light intensity current measured is less than the settings, device will considered to be dark at current time. If configuration 13 is enabled and a motion event is detected, the device will send a BASIC_SET to the nodes that associated in group 2.",
+			"label": "Light Sensor: Night/Day Threshold",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -233,19 +240,19 @@
 		},
 		{
 			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Light Sensor: Intensity Associated Enable",
-			"description": "Send BASIC_SET commands to nodes in group 2 only if the environment is 'dark' (as defined by 12: 'Light Intensity Threshold').",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Send BASIC_SET commands to nodes in group 2 only if the environment is 'dark' (as defined by 12: 'Light Intensity Threshold')."
 		},
 		{
 			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Motion Sensor: Report Once Enable",
-			"description": "Suppress sending more Motion Event Report messages after the first Motion Event Report message was sent until a Motion Event Cleared Report message has been sent.",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Suppress sending more Motion Event Report messages after the first Motion Event Report message was sent until a Motion Event Cleared Report message has been sent."
 		},
 		{
 			"#": "15",
-			"label": "Temperature Sensor: Differential Report",
+			"label": "Temperature Change Report Threshold",
 			"valueSize": 1,
 			"minValue": 1,
 			"unit": "0.1 °C",
