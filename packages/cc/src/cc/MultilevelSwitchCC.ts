@@ -197,6 +197,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.Get,
+			nameof(MultilevelSwitchCommand),
 		);
 
 		const cc = new MultilevelSwitchCCGet(this.applHost, {
@@ -227,6 +228,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.Set,
+			nameof(MultilevelSwitchCommand),
 		);
 
 		const cc = new MultilevelSwitchCCSet(this.applHost, {
@@ -245,6 +247,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.StartLevelChange,
+			nameof(MultilevelSwitchCommand),
 		);
 
 		const cc = new MultilevelSwitchCCStartLevelChange(this.applHost, {
@@ -260,6 +263,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.StopLevelChange,
+			nameof(MultilevelSwitchCommand),
 		);
 
 		const cc = new MultilevelSwitchCCStopLevelChange(this.applHost, {
@@ -274,6 +278,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.SupportedGet,
+			nameof(MultilevelSwitchCommand),
 		);
 
 		const cc = new MultilevelSwitchCCSupportedGet(this.applHost, {

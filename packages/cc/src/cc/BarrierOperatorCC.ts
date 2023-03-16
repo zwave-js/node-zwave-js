@@ -119,6 +119,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.Get,
+			nameof(BarrierOperatorCommand),
 		);
 
 		const cc = new BarrierOperatorCCGet(this.applHost, {
@@ -142,6 +143,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.Set,
+			nameof(BarrierOperatorCommand),
 		);
 
 		const cc = new BarrierOperatorCCSet(this.applHost, {
@@ -159,6 +161,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.SignalingCapabilitiesGet,
+			nameof(BarrierOperatorCommand),
 		);
 
 		const cc = new BarrierOperatorCCSignalingCapabilitiesGet(
@@ -183,6 +186,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.EventSignalingGet,
+			nameof(BarrierOperatorCommand),
 		);
 
 		const cc = new BarrierOperatorCCEventSignalingGet(this.applHost, {
@@ -206,6 +210,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.EventSignalingSet,
+			nameof(BarrierOperatorCommand),
 		);
 
 		const cc = new BarrierOperatorCCEventSignalingSet(this.applHost, {

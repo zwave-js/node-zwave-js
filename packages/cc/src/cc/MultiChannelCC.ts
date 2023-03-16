@@ -172,6 +172,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.EndPointGet,
+			nameof(MultiChannelCommand),
 		);
 
 		const cc = new MultiChannelCCEndPointGet(this.applHost, {
@@ -200,6 +201,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.CapabilityGet,
+			nameof(MultiChannelCommand),
 		);
 
 		const cc = new MultiChannelCCCapabilityGet(this.applHost, {
@@ -240,6 +242,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.EndPointFind,
+			nameof(MultiChannelCommand),
 		);
 
 		const cc = new MultiChannelCCEndPointFind(this.applHost, {
@@ -263,6 +266,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.AggregatedMembersGet,
+			nameof(MultiChannelCommand),
 		);
 
 		const cc = new MultiChannelCCAggregatedMembersGet(this.applHost, {
@@ -289,6 +293,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.CommandEncapsulation,
+			nameof(MultiChannelCommand),
 		);
 
 		const cc = new MultiChannelCCCommandEncapsulation(this.applHost, {
@@ -305,6 +310,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.GetV1,
+			nameof(MultiChannelCommand),
 		);
 
 		const cc = new MultiChannelCCV1Get(this.applHost, {
@@ -325,6 +331,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.CommandEncapsulationV1,
+			nameof(MultiChannelCommand),
 		);
 
 		const cc = new MultiChannelCCV1CommandEncapsulation(this.applHost, {

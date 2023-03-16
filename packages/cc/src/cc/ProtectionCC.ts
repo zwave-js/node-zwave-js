@@ -247,6 +247,7 @@ export class ProtectionCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.SupportedGet,
+			nameof(ProtectionCommand),
 		);
 
 		const cc = new ProtectionCCSupportedGet(this.applHost, {
@@ -272,6 +273,7 @@ export class ProtectionCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.ExclusiveControlGet,
+			nameof(ProtectionCommand),
 		);
 
 		const cc = new ProtectionCCExclusiveControlGet(this.applHost, {
@@ -293,6 +295,7 @@ export class ProtectionCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.ExclusiveControlSet,
+			nameof(ProtectionCommand),
 		);
 
 		const cc = new ProtectionCCExclusiveControlSet(this.applHost, {
@@ -307,6 +310,7 @@ export class ProtectionCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.TimeoutGet,
+			nameof(ProtectionCommand),
 		);
 
 		const cc = new ProtectionCCTimeoutGet(this.applHost, {
@@ -328,6 +332,7 @@ export class ProtectionCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.TimeoutSet,
+			nameof(ProtectionCommand),
 		);
 
 		const cc = new ProtectionCCTimeoutSet(this.applHost, {

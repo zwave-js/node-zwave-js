@@ -158,6 +158,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,
 			ThermostatFanModeCommand.Get,
+			nameof(ThermostatFanModeCommand),
 		);
 
 		const cc = new ThermostatFanModeCCGet(this.applHost, {
@@ -182,6 +183,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,
 			ThermostatFanModeCommand.Set,
+			nameof(ThermostatFanModeCommand),
 		);
 
 		const cc = new ThermostatFanModeCCSet(this.applHost, {
@@ -199,6 +201,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,
 			ThermostatFanModeCommand.SupportedGet,
+			nameof(ThermostatFanModeCommand),
 		);
 
 		const cc = new ThermostatFanModeCCSupportedGet(this.applHost, {

@@ -100,6 +100,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.TonesNumberGet,
+			nameof(SoundSwitchCommand),
 		);
 
 		const cc = new SoundSwitchCCTonesNumberGet(this.applHost, {
@@ -120,6 +121,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.ToneInfoGet,
+			nameof(SoundSwitchCommand),
 		);
 
 		const cc = new SoundSwitchCCToneInfoGet(this.applHost, {
@@ -143,6 +145,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.ConfigurationSet,
+			nameof(SoundSwitchCommand),
 		);
 
 		const cc = new SoundSwitchCCConfigurationSet(this.applHost, {
@@ -159,6 +162,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.ConfigurationGet,
+			nameof(SoundSwitchCommand),
 		);
 
 		const cc = new SoundSwitchCCConfigurationGet(this.applHost, {
@@ -183,6 +187,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.TonePlaySet,
+			nameof(SoundSwitchCommand),
 		);
 
 		if (toneId === 0) {
@@ -205,6 +210,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.TonePlaySet,
+			nameof(SoundSwitchCommand),
 		);
 
 		const cc = new SoundSwitchCCTonePlaySet(this.applHost, {
@@ -221,6 +227,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.TonePlayGet,
+			nameof(SoundSwitchCommand),
 		);
 
 		const cc = new SoundSwitchCCTonePlayGet(this.applHost, {

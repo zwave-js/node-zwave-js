@@ -94,6 +94,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatSetbackCommand,
 			ThermostatSetbackCommand.Get,
+			nameof(ThermostatSetbackCommand),
 		);
 
 		const cc = new ThermostatSetbackCCGet(this.applHost, {
@@ -118,6 +119,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ThermostatSetbackCommand,
 			ThermostatSetbackCommand.Get,
+			nameof(ThermostatSetbackCommand),
 		);
 
 		const cc = new ThermostatSetbackCCSet(this.applHost, {

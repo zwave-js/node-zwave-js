@@ -111,6 +111,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,
 			HumidityControlModeCommand.Get,
+			nameof(HumidityControlModeCommand),
 		);
 
 		const cc = new HumidityControlModeCCGet(this.applHost, {
@@ -134,6 +135,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,
 			HumidityControlModeCommand.Set,
+			nameof(HumidityControlModeCommand),
 		);
 
 		const cc = new HumidityControlModeCCSet(this.applHost, {
@@ -150,6 +152,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,
 			HumidityControlModeCommand.SupportedGet,
+			nameof(HumidityControlModeCommand),
 		);
 
 		const cc = new HumidityControlModeCCSupportedGet(this.applHost, {

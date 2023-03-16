@@ -369,6 +369,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			DoorLockCommand,
 			DoorLockCommand.CapabilitiesGet,
+			nameof(DoorLockCommand),
 		);
 
 		const cc = new DoorLockCCCapabilitiesGet(this.applHost, {
@@ -402,6 +403,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			DoorLockCommand,
 			DoorLockCommand.OperationGet,
+			nameof(DoorLockCommand),
 		);
 
 		const cc = new DoorLockCCOperationGet(this.applHost, {
@@ -435,6 +437,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			DoorLockCommand,
 			DoorLockCommand.OperationSet,
+			nameof(DoorLockCommand),
 		);
 
 		const cc = new DoorLockCCOperationSet(this.applHost, {
@@ -452,6 +455,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			DoorLockCommand,
 			DoorLockCommand.ConfigurationSet,
+			nameof(DoorLockCommand),
 		);
 
 		const cc = new DoorLockCCConfigurationSet(this.applHost, {
@@ -467,6 +471,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			DoorLockCommand,
 			DoorLockCommand.ConfigurationGet,
+			nameof(DoorLockCommand),
 		);
 
 		const cc = new DoorLockCCConfigurationGet(this.applHost, {

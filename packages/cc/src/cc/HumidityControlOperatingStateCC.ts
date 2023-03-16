@@ -77,6 +77,7 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			HumidityControlOperatingStateCommand,
 			HumidityControlOperatingStateCommand.Get,
+			nameof(HumidityControlOperatingStateCommand),
 		);
 
 		const cc = new HumidityControlOperatingStateCCGet(this.applHost, {

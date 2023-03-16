@@ -117,6 +117,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.NameGet,
+			nameof(NodeNamingAndLocationCommand),
 		);
 
 		const cc = new NodeNamingAndLocationCCNameGet(this.applHost, {
@@ -136,6 +137,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.NameSet,
+			nameof(NodeNamingAndLocationCommand),
 		);
 
 		const cc = new NodeNamingAndLocationCCNameSet(this.applHost, {
@@ -150,6 +152,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.LocationGet,
+			nameof(NodeNamingAndLocationCommand),
 		);
 
 		const cc = new NodeNamingAndLocationCCLocationGet(this.applHost, {
@@ -171,6 +174,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.LocationSet,
+			nameof(NodeNamingAndLocationCommand),
 		);
 
 		const cc = new NodeNamingAndLocationCCLocationSet(this.applHost, {

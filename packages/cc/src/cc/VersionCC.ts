@@ -260,6 +260,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			VersionCommand,
 			VersionCommand.CommandClassGet,
+			nameof(VersionCommand),
 		);
 
 		const cc = new VersionCCCommandClassGet(this.applHost, {
@@ -280,6 +281,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			VersionCommand,
 			VersionCommand.CapabilitiesGet,
+			nameof(VersionCommand),
 		);
 
 		const cc = new VersionCCCapabilitiesGet(this.applHost, {
@@ -301,6 +303,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			VersionCommand,
 			VersionCommand.ZWaveSoftwareGet,
+			nameof(VersionCommand),
 		);
 
 		const cc = new VersionCCZWaveSoftwareGet(this.applHost, {

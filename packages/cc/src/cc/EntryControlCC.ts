@@ -99,6 +99,7 @@ export class EntryControlCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			EntryControlCommand,
 			EntryControlCommand.KeySupportedGet,
+			nameof(EntryControlCommand),
 		);
 
 		const cc = new EntryControlCCKeySupportedGet(this.applHost, {
@@ -118,6 +119,7 @@ export class EntryControlCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			EntryControlCommand,
 			EntryControlCommand.EventSupportedGet,
+			nameof(EntryControlCommand),
 		);
 
 		const cc = new EntryControlCCEventSupportedGet(this.applHost, {
@@ -146,6 +148,7 @@ export class EntryControlCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			EntryControlCommand,
 			EntryControlCommand.ConfigurationGet,
+			nameof(EntryControlCommand),
 		);
 
 		const cc = new EntryControlCCConfigurationGet(this.applHost, {
@@ -170,6 +173,7 @@ export class EntryControlCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			EntryControlCommand,
 			EntryControlCommand.ConfigurationGet,
+			nameof(EntryControlCommand),
 		);
 
 		const cc = new EntryControlCCConfigurationSet(this.applHost, {

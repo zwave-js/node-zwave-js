@@ -101,6 +101,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.Set,
+			nameof(ClimateControlScheduleCommand),
 		);
 
 		const cc = new ClimateControlScheduleCCSet(this.applHost, {
@@ -119,6 +120,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.Get,
+			nameof(ClimateControlScheduleCommand),
 		);
 
 		const cc = new ClimateControlScheduleCCGet(this.applHost, {
@@ -138,6 +140,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.ChangedGet,
+			nameof(ClimateControlScheduleCommand),
 		);
 
 		const cc = new ClimateControlScheduleCCChangedGet(this.applHost, {
@@ -157,6 +160,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.OverrideGet,
+			nameof(ClimateControlScheduleCommand),
 		);
 
 		const cc = new ClimateControlScheduleCCOverrideGet(this.applHost, {
@@ -184,6 +188,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.OverrideSet,
+			nameof(ClimateControlScheduleCommand),
 		);
 
 		const cc = new ClimateControlScheduleCCOverrideSet(this.applHost, {

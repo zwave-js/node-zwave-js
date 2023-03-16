@@ -475,6 +475,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Get,
+			nameof(ConfigurationCommand),
 		);
 
 		const { valueBitMask, allowUnexpectedResponse } = options ?? {};
@@ -563,6 +564,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
 				ConfigurationCommand.Get,
+				nameof(ConfigurationCommand),
 			);
 
 			const _values = new Map<number, ConfigValue>();
@@ -614,6 +616,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
+			nameof(ConfigurationCommand),
 		);
 
 		const normalized = normalizeConfigurationCCAPISetOptions(
@@ -693,6 +696,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
 				ConfigurationCommand.Set,
+				nameof(ConfigurationCommand),
 			);
 			for (const {
 				parameter,
@@ -726,6 +730,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
+			nameof(ConfigurationCommand),
 		);
 
 		const cc = new ConfigurationCCSet(this.applHost, {
@@ -759,6 +764,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
 				ConfigurationCommand.Set,
+				nameof(ConfigurationCommand),
 			);
 			const CCs = distinct(parameters).map(
 				(parameter) =>
@@ -783,6 +789,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.DefaultReset,
+			nameof(ConfigurationCommand),
 		);
 
 		const cc = new ConfigurationCCDefaultReset(this.applHost, {

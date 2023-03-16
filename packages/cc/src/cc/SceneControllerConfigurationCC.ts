@@ -210,6 +210,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
 			SceneControllerConfigurationCommand.Set,
+			nameof(SceneControllerConfigurationCommand),
 		);
 
 		return this.set(groupId, 0, new Duration(0, "seconds"));
@@ -224,6 +225,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
 			SceneControllerConfigurationCommand.Set,
+			nameof(SceneControllerConfigurationCommand),
 		);
 
 		if (!this.endpoint.virtual) {
@@ -270,6 +272,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
 			SceneControllerConfigurationCommand.Get,
+			nameof(SceneControllerConfigurationCommand),
 		);
 
 		const cc = new SceneControllerConfigurationCCGet(this.applHost, {
@@ -304,6 +307,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
 			SceneControllerConfigurationCommand.Get,
+			nameof(SceneControllerConfigurationCommand),
 		);
 
 		if (groupId === 0) {

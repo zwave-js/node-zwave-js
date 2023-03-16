@@ -101,6 +101,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			BinarySensorCommand,
 			BinarySensorCommand.Get,
+			nameof(BinarySensorCommand),
 		);
 
 		const cc = new BinarySensorCCGet(this.applHost, {
@@ -121,6 +122,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			BinarySensorCommand,
 			BinarySensorCommand.SupportedGet,
+			nameof(BinarySensorCommand),
 		);
 
 		const cc = new BinarySensorCCSupportedGet(this.applHost, {

@@ -146,6 +146,7 @@ export class WakeUpCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			WakeUpCommand,
 			WakeUpCommand.IntervalCapabilitiesGet,
+			nameof(WakeUpCommand),
 		);
 
 		const cc = new WakeUpCCIntervalCapabilitiesGet(this.applHost, {
@@ -188,6 +189,7 @@ export class WakeUpCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			WakeUpCommand,
 			WakeUpCommand.NoMoreInformation,
+			nameof(WakeUpCommand),
 		);
 
 		const cc = new WakeUpCCNoMoreInformation(this.applHost, {

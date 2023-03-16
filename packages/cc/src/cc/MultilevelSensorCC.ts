@@ -219,6 +219,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.Get,
+			nameof(MultilevelSensorCommand),
 		);
 
 		// Figure out the preferred scale if none was given
@@ -284,6 +285,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedSensor,
+			nameof(MultilevelSensorCommand),
 		);
 
 		const cc = new MultilevelSensorCCGetSupportedSensor(this.applHost, {
@@ -305,6 +307,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedScale,
+			nameof(MultilevelSensorCommand),
 		);
 
 		const cc = new MultilevelSensorCCGetSupportedScale(this.applHost, {
@@ -329,6 +332,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.Report,
+			nameof(MultilevelSensorCommand),
 		);
 
 		const cc = new MultilevelSensorCCReport(this.applHost, {

@@ -141,6 +141,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			AlarmSensorCommand,
 			AlarmSensorCommand.SupportedGet,
+			nameof(AlarmSensorCommand),
 		);
 
 		const cc = new AlarmSensorCCSupportedGet(this.applHost, {

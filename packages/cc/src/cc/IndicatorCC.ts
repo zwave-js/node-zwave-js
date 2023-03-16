@@ -310,6 +310,7 @@ export class IndicatorCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IndicatorCommand,
 			IndicatorCommand.SupportedGet,
+			nameof(IndicatorCommand),
 		);
 
 		const cc = new IndicatorCCSupportedGet(this.applHost, {
@@ -370,6 +371,7 @@ export class IndicatorCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			IndicatorCommand,
 			IndicatorCommand.DescriptionGet,
+			nameof(IndicatorCommand),
 		);
 
 		const cc = new IndicatorCCDescriptionGet(this.applHost, {

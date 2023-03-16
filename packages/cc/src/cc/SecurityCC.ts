@@ -91,11 +91,13 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			this.assertSupportsCommand(
 				SecurityCommand,
 				SecurityCommand.CommandEncapsulation,
+				nameof(SecurityCommand),
 			);
 		} else {
 			this.assertSupportsCommand(
 				SecurityCommand,
 				SecurityCommand.CommandEncapsulationNonceGet,
+				nameof(SecurityCommand),
 			);
 		}
 
@@ -153,6 +155,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			SecurityCommand,
 			SecurityCommand.NonceReport,
+			nameof(SecurityCommand),
 		);
 
 		if (!this.applHost.securityManager) {
@@ -216,6 +219,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			SecurityCommand,
 			SecurityCommand.SchemeInherit,
+			nameof(SecurityCommand),
 		);
 
 		const cc = new SecurityCCSchemeInherit(this.applHost, {
@@ -230,6 +234,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			SecurityCommand,
 			SecurityCommand.NetworkKeySet,
+			nameof(SecurityCommand),
 		);
 
 		const keySet = new SecurityCCNetworkKeySet(this.applHost, {
@@ -251,6 +256,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			SecurityCommand,
 			SecurityCommand.CommandsSupportedGet,
+			nameof(SecurityCommand),
 		);
 
 		const cc = new SecurityCCCommandsSupportedGet(this.applHost, {

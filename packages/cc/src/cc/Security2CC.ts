@@ -155,6 +155,7 @@ export class Security2CCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.NonceReport,
+			nameof(Security2Command),
 		);
 
 		this.assertPhysicalEndpoint(this.endpoint);
@@ -307,6 +308,7 @@ export class Security2CCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.CommandsSupportedGet,
+			nameof(Security2Command),
 		);
 
 		let cc: CommandClass = new Security2CCCommandsSupportedGet(
@@ -380,6 +382,7 @@ export class Security2CCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.KEXReport,
+			nameof(Security2Command),
 		);
 
 		const cc = new Security2CCKEXReport(this.applHost, {
@@ -407,6 +410,7 @@ export class Security2CCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.PublicKeyReport,
+			nameof(Security2Command),
 		);
 
 		const cc = new Security2CCPublicKeyReport(this.applHost, {
@@ -425,6 +429,7 @@ export class Security2CCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.NetworkKeyReport,
+			nameof(Security2Command),
 		);
 
 		const cc = new Security2CCNetworkKeyReport(this.applHost, {
@@ -440,6 +445,7 @@ export class Security2CCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.TransferEnd,
+			nameof(Security2Command),
 		);
 
 		const cc = new Security2CCTransferEnd(this.applHost, {

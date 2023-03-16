@@ -93,6 +93,7 @@ export class SceneActivationCCAPI extends CCAPI {
 		this.assertSupportsCommand(
 			SceneActivationCommand,
 			SceneActivationCommand.Set,
+			nameof(SceneActivationCommand),
 		);
 
 		const cc = new SceneActivationCCSet(this.applHost, {

@@ -407,6 +407,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UsersNumberGet,
+			nameof(UserCodeCommand),
 		);
 
 		const cc = new UserCodeCCUsersNumberGet(this.applHost, {
@@ -439,6 +440,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			this.assertSupportsCommand(
 				UserCodeCommand,
 				UserCodeCommand.ExtendedUserCodeGet,
+				nameof(UserCodeCommand),
 			);
 
 			const cc = new UserCodeCCExtendedUserCodeGet(this.applHost, {
@@ -524,6 +526,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.ExtendedUserCodeSet,
+			nameof(UserCodeCommand),
 		);
 
 		const numUsers = UserCodeCC.getSupportedUsersCached(
@@ -663,6 +666,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.CapabilitiesGet,
+			nameof(UserCodeCommand),
 		);
 
 		const cc = new UserCodeCCCapabilitiesGet(this.applHost, {
@@ -692,6 +696,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.KeypadModeGet,
+			nameof(UserCodeCommand),
 		);
 
 		const cc = new UserCodeCCKeypadModeGet(this.applHost, {
@@ -713,6 +718,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.KeypadModeSet,
+			nameof(UserCodeCommand),
 		);
 
 		const supportedModes = UserCodeCC.getSupportedKeypadModesCached(
@@ -748,6 +754,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeGet,
+			nameof(UserCodeCommand),
 		);
 
 		const cc = new UserCodeCCMasterCodeGet(this.applHost, {
@@ -769,6 +776,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeSet,
+			nameof(UserCodeCommand),
 		);
 
 		const supportedASCIIChars = UserCodeCC.getSupportedASCIICharsCached(
@@ -815,6 +823,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UserCodeChecksumGet,
+			nameof(UserCodeCommand),
 		);
 
 		const cc = new UserCodeCCUserCodeChecksumGet(this.applHost, {
