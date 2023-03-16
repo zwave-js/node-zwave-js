@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	encodeBitMask,
+	getDSTInfo,
 	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
@@ -464,22 +465,20 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 			});
 		}
 
-		if (api.supportsCommand(ScheduleEntryLockCommand.TimeOffsetGet)) {
+		// If the timezone is not configured with the Time CC, do it here
+		if (
+			api.supportsCommand(ScheduleEntryLockCommand.TimeOffsetSet) &&
+			(!endpoint.supportsCC(CommandClasses.Time) ||
+				endpoint.getCCVersion(CommandClasses.Time) < 2)
+		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: "Querying configured time zone...",
+				message: "setting timezone information...",
 				direction: "outbound",
 			});
-			const tzResp = await api.getTimezone();
-			if (tzResp) {
-				applHost.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `received configured time zone:
-standard offset: ${tzResp.standardOffset} minutes
-dst offset:      ${tzResp.dstOffset} minutes`,
-					direction: "inbound",
-				});
-			}
+			// Set the correct timezone on this node
+			const timezone = getDSTInfo();
+			await api.setTimezone(timezone);
 		}
 
 		// Remember that the interview is complete
