@@ -223,7 +223,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Light Sensor: Intensity Differential Report",
+			"label": "Light Sensor: Illumination Differential Report",
 			"valueSize": 1,
 			"unit": "lux",
 			"minValue": 1,
