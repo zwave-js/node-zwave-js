@@ -11,8 +11,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "2.4.5",
+		"max": "2.4.7"
 	},
 	"paramInformation": [
 		{
@@ -58,14 +58,14 @@
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable / Disable Save Positioning Percentage",			
+			"label": "Enable / Disable Save Positioning Percentage",
 			"defaultValue": 1
 		},
 		{
 			"#": "5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Over Current Protection",
-			"description": "Triggered when module goes over current limit.",			
+			"description": "Triggered when module goes over current limit.",
 			"defaultValue": 1
 		},
 		{
@@ -122,12 +122,12 @@
 		{
 			"#": "8",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",			
+			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",
 			"defaultValue": 1
 		},
 		{
 			"#": "9",
-			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",			
+			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -153,7 +153,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Power Change Report Threshold",			
+			"label": "Power Change Report Threshold",
 			"unit": "W",
 			"valueSize": 1,
 			"minValue": 0,
@@ -169,7 +169,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Current Change Report Threshold",			
+			"label": "Current Change Report Threshold",
 			"unit": "0.1A",
 			"valueSize": 1,
 			"minValue": 0,

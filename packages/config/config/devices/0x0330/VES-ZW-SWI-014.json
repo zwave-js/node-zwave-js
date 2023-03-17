@@ -10,8 +10,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "1.2.5",
+		"max": "1.2.7"
 	},
 	"paramInformation": [
 		{
@@ -28,7 +28,7 @@
 			"#": "5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Over Current Protection",
-			"description": "Triggered when module goes over current limit.",			
+			"description": "Triggered when module goes over current limit.",
 			"defaultValue": 1
 		},
 		{
@@ -65,12 +65,12 @@
 		{
 			"#": "8",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",			
+			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",
 			"defaultValue": 1
 		},
 		{
 			"#": "9",
-			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",			
+			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

@@ -11,8 +11,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "1.21",
+		"max": "1.24"
 	},
 	"paramInformation": [
 		{
@@ -22,7 +22,7 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Basic Report on State Change",			
+			"label": "Send Basic Report on State Change",
 			"defaultValue": 1
 		},
 		{
@@ -73,7 +73,7 @@
 		{
 			"#": "9",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Use External Switch for Inclusion/Exclusion",			
+			"label": "Use External Switch for Inclusion/Exclusion",
 			"defaultValue": 1
 		},
 		{
@@ -132,7 +132,7 @@
 			"#": "13",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Over Current Protection",
-			"description": "Triggered at over 2.1A for 20 seconds continuously.",			
+			"description": "Triggered at over 2.1A for 20 seconds continuously.",
 			"defaultValue": 1
 		},
 		{
@@ -241,7 +241,7 @@
 			"#": "32",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"label": "Startup Brightness",
-			"description": "When the light is turned from off to on, if the target brightness is lower than the startup brightness, the brightness will first go to the startup brightness then fall to the target brightness.",			
+			"description": "When the light is turned from off to on, if the target brightness is lower than the startup brightness, the brightness will first go to the startup brightness then fall to the target brightness.",
 			"defaultValue": 0
 		}
 	],

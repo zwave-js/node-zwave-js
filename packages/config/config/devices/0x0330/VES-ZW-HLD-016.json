@@ -10,8 +10,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "2.2.5",
+		"max": "2.2.7"
 	},
 	"paramInformation": [
 		{
@@ -21,14 +21,14 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Basic Report on State Change",			
+			"label": "Send Basic Report on State Change",
 			"defaultValue": 1
 		},
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Over Current Protection",
-			"description": "Triggered at over 16A.",			
+			"description": "Triggered at over 16A.",
 			"defaultValue": 1
 		},
 		{

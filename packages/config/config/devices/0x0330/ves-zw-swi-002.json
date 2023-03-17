@@ -11,8 +11,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "1.4",
+		"max": "1.7"
 	},
 	"paramInformation": [
 		{
@@ -22,13 +22,13 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Basic Report on State Change",			
+			"label": "Send Basic Report on State Change",
 			"defaultValue": 1
 		},
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Use External Switch for Inclusion/Exclusion",			
+			"label": "Use External Switch for Inclusion/Exclusion",
 			"defaultValue": 1
 		},
 		{
