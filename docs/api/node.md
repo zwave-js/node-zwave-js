@@ -576,6 +576,22 @@ isFirmwareUpdateInProgress(): boolean;
 
 Return whether a firmware update is in progress for this node.
 
+### `setDateAndTime`
+
+```ts
+setDateAndTime(now: Date = new Date()): Promise<boolean>
+```
+
+As configuring the date, time and timezone on Z-Wave devices is annoyingly spread out across different versions of different CCs, this is a convenience method to do this as simply as possible.
+It optionally takes the date to set (default: now) and returns whether the operation was successful.
+
+The following CCs will be used (when supported or necessary) in this process:
+
+-   Time Parameters CC
+-   Clock CC
+-   Time CC
+-   Schedule Entry Lock CC (for setting the timezone)
+
 ## ZWaveNode properties
 
 ### `id`
