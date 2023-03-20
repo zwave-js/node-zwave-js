@@ -12,6 +12,7 @@ import {
 	getCCName,
 	IVirtualEndpoint,
 	MulticastDestination,
+	SecurityClass,
 	SendCommandOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -67,11 +68,18 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 	/** Tests if this endpoint supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
 		// A virtual endpoints supports a CC if any of the physical endpoints it targets supports the CC non-securely
-		// Security S0 does not support broadcast / multicast!
-		return this.node.physicalNodes.some((n) => {
-			const endpoint = n.getEndpoint(this.index);
-			return endpoint?.supportsCC(cc) && !endpoint?.isCCSecure(cc);
-		});
+		return (
+			this.node.physicalNodes
+				// Security S0 does not support broadcast / multicast!
+				.filter(
+					(n) =>
+						n.getHighestSecurityClass() !== SecurityClass.S0_Legacy,
+				)
+				.some((n) => {
+					const endpoint = n.getEndpoint(this.index);
+					return endpoint?.supportsCC(cc);
+				})
+		);
 	}
 
 	/**

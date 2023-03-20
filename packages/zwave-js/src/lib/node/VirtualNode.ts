@@ -4,6 +4,7 @@ import {
 	isZWaveError,
 	IVirtualNode,
 	normalizeValueID,
+	SecurityClass,
 	SendCommandOptions,
 	TranslatedValueID,
 	ValueID,
@@ -128,15 +129,14 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 	 * control the physical node(s) this virtual node represents.
 	 */
 	public getDefinedValueIDs(): VirtualValueID[] {
-		// If all nodes are secure, we can't use broadcast/multicast commands
-		if (this.physicalNodes.every((n) => n.isSecure === true)) return [];
-
 		// In order to compare value ids, we need them to be strings
 		const ret = new Map<string, VirtualValueID>();
 
 		for (const pNode of this.physicalNodes) {
-			// Secure nodes cannot be used for broadcast
-			if (pNode.isSecure === true) continue;
+			// Nodes using Security S0 cannot be used for broadcast
+			if (pNode.getHighestSecurityClass() === SecurityClass.S0_Legacy) {
+				continue;
+			}
 
 			// Take only the actuator values
 			const valueIDs: TranslatedValueID[] = pNode
