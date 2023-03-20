@@ -175,7 +175,7 @@ const CLI: React.FC = () => {
 			showSuccess("Script executed successfully!");
 		} catch (e) {
 			showError(
-				`Error during script execution: ${getErrorMessage(e, true)}`,
+				`Error during script execution: ${getErrorMessage(e, false)}`,
 			);
 			return;
 		}
