@@ -12,8 +12,7 @@ import {
 	getCCName,
 	IVirtualEndpoint,
 	MulticastDestination,
-	SecurityClass,
-	SendCommandOptions,
+	securityClassIsS2,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -21,6 +20,7 @@ import { staticExtends } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "./Endpoint";
+import { createMultiCCAPIWrapper } from "./MultiCCAPIWrapper";
 import type { VirtualNode } from "./VirtualNode";
 
 /**
@@ -37,8 +37,6 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 		protected readonly driver: Driver,
 		/** The index of this endpoint. 0 for the root device, 1+ otherwise */
 		public readonly index: number,
-		/** Default command options to use for the CC API */
-		private defaultCommandOptions?: SendCommandOptions,
 	) {
 		if (node) this._node = node;
 	}
@@ -68,18 +66,10 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 	/** Tests if this endpoint supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
 		// A virtual endpoints supports a CC if any of the physical endpoints it targets supports the CC non-securely
-		return (
-			this.node.physicalNodes
-				// Security S0 does not support broadcast / multicast!
-				.filter(
-					(n) =>
-						n.getHighestSecurityClass() !== SecurityClass.S0_Legacy,
-				)
-				.some((n) => {
-					const endpoint = n.getEndpoint(this.index);
-					return endpoint?.supportsCC(cc);
-				})
-		);
+		return this.node.physicalNodes.some((n) => {
+			const endpoint = n.getEndpoint(this.index);
+			return endpoint?.supportsCC(cc);
+		});
 	}
 
 	/**
@@ -100,13 +90,29 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 	 * @param ccId The command class to create an API instance for
 	 */
 	public createAPI(ccId: CommandClasses): CCAPI {
-		let ret = CCAPI.create(ccId, this.driver, this);
-		if (this.defaultCommandOptions) {
-			ret = ret.withOptions(this.defaultCommandOptions);
+		// For mixed security classes, we need to create a wrapper
+		// that handles calling multiple API instances
+		if (this.node.hasMixedSecurityClasses) {
+			const apiInstances = [
+				...this.node.nodesBySecurityClass.entries(),
+			].map(([secClass, nodes]) => {
+				if (securityClassIsS2(secClass)) {
+					// The API for S2 needs to know the multicast group ID
+					return CCAPI.create(ccId, this.driver, this).withOptions({
+						s2MulticastGroupId:
+							this.driver.securityManager2?.createMulticastGroup(
+								nodes.map((n) => n.id),
+								secClass,
+							),
+					});
+				} else {
+					return CCAPI.create(ccId, this.driver, this);
+				}
+			});
+			return createMultiCCAPIWrapper(apiInstances);
+		} else {
+			return CCAPI.create(ccId, this.driver, this);
 		}
-
-		// Trust me on this, TypeScript :)
-		return ret as any;
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();

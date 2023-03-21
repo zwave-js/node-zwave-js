@@ -646,7 +646,7 @@ When controlling multiple nodes, a "waterfall" effect can often be observed, bec
 >
 > -   True broadcast is only possible for insecure nodes. Secure nodes will not react to broadcasts.
 > -   Nodes that are included via `Security S0` can only be controlled using singlecast.
-> -   When controlling nodes with mixed security classes, each group of nodes must be targeted individually. It is not possible to send a single command that both secure and insecure nodes will understand.
+> -   When controlling nodes with mixed security classes, each group of nodes must be targeted individually. It is not possible to send a single command that both secure and insecure nodes will understand. This happens automatically though.
 
 > [!NOTE]
 > Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details on the available methods and properties.
@@ -654,29 +654,24 @@ When controlling multiple nodes, a "waterfall" effect can often be observed, bec
 #### Multicast
 
 ```ts
-getMulticastGroups(nodeIDs: number[]): VirtualNode[]
+getMulticastGroup(nodeIDs: number[]): VirtualNode
 ```
 
-Creates one or more virtual nodes that can be used to send commands to multiple supporting nodes with as few multicast messages as possible. Nodes are grouped by security class automatically, and get ignored if they cannot be controlled via multicast. You can target individual endpoints as usual.
+Creates a virtual node that can be used to send commands to multiple supporting nodes with as few multicast messages as possible. Nodes are grouped by security class automatically, and get ignored if they cannot be controlled via multicast. You can target individual endpoints as usual.
 
 > [!NOTE]
-> This will actually send **broadcast** frames, since it has been found that some (all?) devices interpret S2 multicast frames as the S2 singlecast followup, causing them to respond incorrectly.
+> This may actually send **broadcast** frames, since it has been found that some (all?) devices interpret S2 multicast frames as the S2 singlecast followup, causing them to respond incorrectly.
 
 #### Broadcast
 
 ```ts
-getBroadcastNodeInsecure(): VirtualNode
+getBroadcastNode(): VirtualNode
 ```
 
-Returns a reference to the (virtual) broadcast node. This can be used to send a command to all supporting insecure nodes in the network with a single message. You can target individual endpoints as usual.
+Returns a reference to the (virtual) broadcast node. This can be used to send a command to all nodes in the network with a single message. You can target individual endpoints as usual.
 
-It is recommended to use the following method instead, which automatically groups nodes by security class and ignores those that cannot be controlled via broadcast.
-
-Note that this will do the same as `getMulticastGroups` if the network has mixed security classes.
-
-```ts
-getBroadcastNodes(): VirtualNode[]
-```
+> [!NOTE]
+> When the network contains devices with mixed security classes, this will do the same as `getMulticastGroup` instead.
 
 ### Configuring the Z-Wave radio
 

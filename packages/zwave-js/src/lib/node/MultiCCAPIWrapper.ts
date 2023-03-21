@@ -1,3 +1,4 @@
+import type { CCAPI, SetValueImplementation } from "@zwave-js/cc";
 import {
 	Duration,
 	isSupervisionResult,
@@ -9,7 +10,6 @@ import {
 	type SendCommandOptions,
 	type ValueID,
 } from "@zwave-js/core/safe";
-import type { CCAPI, SetValueImplementation } from "./API";
 
 /** Creates a wrapper that looks like an instance of a specific CC API, but can handle multiple instances of that API */
 export function createMultiCCAPIWrapper<T extends CCAPI>(apiInstances: T[]): T {
