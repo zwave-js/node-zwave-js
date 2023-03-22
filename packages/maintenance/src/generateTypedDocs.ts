@@ -21,10 +21,10 @@ import {
 	PropertySignatureStructure,
 	SourceFile,
 	SyntaxKind,
-	ts,
 	Type,
 	TypeFormatFlags,
 	TypeLiteralNode,
+	ts,
 } from "ts-morph";
 import { isMainThread } from "worker_threads";
 import { formatWithPrettier } from "./prettier";
@@ -343,7 +343,7 @@ async function processCCDocFile(
 	const ccId = getCommandClassFromClassDeclaration(
 		// FIXME: there seems to be some discrepancy between ts-morph's bundled typescript and our typescript
 		file.compilerNode as any,
-		APIClass.compilerNode,
+		APIClass.compilerNode as any,
 	);
 	if (ccId == undefined) return;
 	const ccName = getCCName(ccId);
