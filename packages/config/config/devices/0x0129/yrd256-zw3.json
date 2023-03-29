@@ -15,8 +15,8 @@
 			"zwaveAllianceId": 3882
 		},
 		{
-			"productType": "0x4dd5",
-			"productId": "0x8109",
+			"productType": "0x8109",
+			"productId": "0x4dd5",
 			"zwaveAllianceId": 3882
 		}
 	],
