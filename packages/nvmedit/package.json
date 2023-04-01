@@ -81,7 +81,7 @@
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
-    "esbuild-register": "^3.3.3",
+    "esbuild-register": "^3.4.2",
     "prettier": "^2.8.4",
     "typescript": "4.9.4"
   }

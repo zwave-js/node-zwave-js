@@ -93,7 +93,7 @@
     "comment-json": "^4.2.3",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
-    "esbuild-register": "^3.3.3",
+    "esbuild-register": "^3.4.2",
     "js-levenshtein": "^1.1.6",
     "pegjs": "^0.10.0",
     "prettier": "^2.8.4",
