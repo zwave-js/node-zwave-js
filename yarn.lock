@@ -1149,6 +1149,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@serialport/bindings-interface@npm:1.2.2":
+  version: 1.2.2
+  resolution: "@serialport/bindings-interface@npm:1.2.2"
+  checksum: 66154b9abe8b3cfc466431f2197ca1d6ed832e121bab15aed9ffcbda5c1d3bc0d11be3cb5c343d3cfc2b0ea69a393900c5be6a77fe9ec646e3004bf6d6a3756d
+  languageName: node
+  linkType: hard
+
 "@serialport/parser-byte-length@npm:10.3.0":
   version: 10.3.0
   resolution: "@serialport/parser-byte-length@npm:10.3.0"
@@ -1221,13 +1228,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/stream@npm:10.3.0, @serialport/stream@npm:^10.3.0":
+"@serialport/stream@npm:10.3.0":
   version: 10.3.0
   resolution: "@serialport/stream@npm:10.3.0"
   dependencies:
     "@serialport/bindings-interface": 1.2.1
     debug: ^4.3.2
   checksum: b6e21cab78a76c9b589259d23adc0a82f8c8df552e53965ccc9f5292aaf7e57a4d7de4e65ae0e475da4506254fb21f51c46c8617dff8d090e5576134c8a42885
+  languageName: node
+  linkType: hard
+
+"@serialport/stream@npm:^10.5.0":
+  version: 10.5.0
+  resolution: "@serialport/stream@npm:10.5.0"
+  dependencies:
+    "@serialport/bindings-interface": 1.2.2
+    debug: ^4.3.2
+  checksum: d286977d62b5e993c63dc8652fc0114bc5a56d41f2a7b109f9d822f517e695d757408f19021a90f27d9b06b1a74843073fd48f7cce487aaf72a7e231409610ef
   languageName: node
   linkType: hard
 
@@ -1968,7 +1985,7 @@ __metadata:
     "@sentry/node": ^7.12.1
     "@serialport/binding-mock": ^10.2.2
     "@serialport/bindings-interface": "*"
-    "@serialport/stream": ^10.3.0
+    "@serialport/stream": ^10.5.0
     "@types/node": ^14.18.36
     "@types/sinon": ^10.0.13
     "@zwave-js/core": "workspace:*"
