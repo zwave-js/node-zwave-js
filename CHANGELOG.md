@@ -4,6 +4,24 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added convenience method to set time, date and timezone on nodes (#5584)
+
+### Bugfixes
+* Added the `Door state (simple)` value, which has the old behavior of the `Door state` value with just two states and can be turned into a binary sensor (#5614)
+* Node statistics are now only updated using valid TX reports (#5613)
+* During interview of `Schedule Entry Lock CC`, set timezone if necessary and supported (#5585)
+* Value timestamps are no longer updated for optimistic value updates caused by the driver itself (#5581)
+* Communication with nodes using Security S2 will always use S2 now, even if the respective CC may also be supported insecurely (#5579)
+
+### Config file changes
+* Add Vesternet branded Z-Wave devices (#5567)
+* Add product ID `0x1351` for MCOHome A8-9 (#5595)
+
+### Changes under the hood
+* Config files may now have overlapping firmware version ranges, e.g. for white-labeling specific firmware versions, but only if one of them is marked as `preferred` (#5617, #5619)
+
 ## 10.12.0 (2023-03-15)
 ### Features
 * Background RSSI is now measured frequently while the controller is idle and exposed as controller statistics (#5545, #5568)
