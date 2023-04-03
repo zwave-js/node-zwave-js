@@ -52,14 +52,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/jsonl-db@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/jsonl-db@npm:3.0.0"
+"@alcalzone/jsonl-db@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@alcalzone/jsonl-db@npm:3.1.0"
   dependencies:
     "@alcalzone/proper-lockfile": ^4.1.3-0
     alcalzone-shared: ^4.0.8
     fs-extra: ^10.1.0
-  checksum: e0c50a59faa6d19c6b5055cfafab0d69547a0d7a735bec2b976c15f959887944303d92b36caa69150d592b028dde2a8aac64cd2d70ed9a9a652f9ed27483326a
+  checksum: 7ca8b6ba7ba92abc59e2ef6affecaeeb0797d20756904f08e906882e15173b6a2c975fc170355ac9b2ac57c07fd1e37a09c70c4a1a1c35249ab51b425514a04d
   languageName: node
   linkType: hard
 
@@ -1733,7 +1733,7 @@ __metadata:
     fs-extra: ^10.1.0
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -1761,7 +1761,7 @@ __metadata:
     comment-json: ^4.2.3
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     fs-extra: ^10.1.0
     js-levenshtein: ^1.1.6
     json-logic-js: ^2.0.2
@@ -1771,7 +1771,7 @@ __metadata:
     semver: ^7.3.7
     sinon: ^14.0.0
     ts-pegjs: ^0.3.1
-    typescript: 4.9.4
+    typescript: 4.9.5
     winston: ^3.8.2
     xml2js: ^0.4.23
     yargs: ^17.5.1
@@ -1782,7 +1782,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
-    "@alcalzone/jsonl-db": ^3.0.0
+    "@alcalzone/jsonl-db": ^3.1.0
     "@microsoft/api-extractor": "*"
     "@types/node": ^14.18.36
     "@types/sinon": ^10.0.13
@@ -1794,14 +1794,14 @@ __metadata:
     dayjs: ^1.11.5
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     logform: ^2.4.2
     nrf-intel-hex: ^1.3.0
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
     sinon: ^14.0.0
     triple-beam: "*"
-    typescript: 4.9.4
+    typescript: 4.9.5
     winston: ^3.8.2
     winston-daily-rotate-file: ^4.7.1
     winston-transport: ^4.5.0
@@ -1819,7 +1819,7 @@ __metadata:
     del-cli: ^5.0.0
     fs-extra: ^10.1.0
     prettier: ^2.8.4
-    typescript: 4.9.4
+    typescript: 4.9.5
     yargs: ^17.5.1
     zwave-js: "workspace:*"
   bin:
@@ -1839,7 +1839,7 @@ __metadata:
     alcalzone-shared: ^4.0.8
     del-cli: ^5.0.0
     prettier: ^2.8.4
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -1860,7 +1860,7 @@ __metadata:
     clipboardy: ^2.3.0
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     execa: ^5.1.1
     fs-extra: ^10.1.0
     globrex: ^0.1.2
@@ -1868,7 +1868,7 @@ __metadata:
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
     ts-morph: ^17.0.1
-    typescript: 4.9.4
+    typescript: 4.9.5
     yargs: ^17.5.1
   languageName: unknown
   linkType: soft
@@ -1888,12 +1888,12 @@ __metadata:
     ava: ^4.3.3
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     fs-extra: ^10.1.0
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
     semver: ^7.3.7
-    typescript: 4.9.4
+    typescript: 4.9.5
     yargs: ^17.5.1
   bin:
     nvmedit: bin/nvmedit.js
@@ -1907,7 +1907,7 @@ __metadata:
     "@actions/core": ^1.9.1
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.3
-    "@alcalzone/jsonl-db": ^3.0.0
+    "@alcalzone/jsonl-db": ^3.1.0
     "@alcalzone/monopack": ^1.2.0
     "@alcalzone/release-script": ~3.5.9
     "@commitlint/cli": ^17.1.2
@@ -1940,7 +1940,7 @@ __metadata:
     cz-conventional-changelog: ^3.3.0
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     eslint: ^8.35.0
     eslint-config-prettier: ^8.6.0
     eslint-plugin-prettier: ^4.2.1
@@ -1955,7 +1955,7 @@ __metadata:
     ts-nameof: ^5.0.0
     ts-patch: ^2.1.0
     turbo: 1.7.4
-    typescript: 4.9.4
+    typescript: 4.9.5
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -1979,11 +1979,11 @@ __metadata:
     ava: ^4.3.3
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     prettier: ^2.8.4
     serialport: ^10.4.0
     sinon: ^14.0.0
-    typescript: 4.9.4
+    typescript: 4.9.5
     winston: ^3.8.2
   languageName: unknown
   linkType: soft
@@ -2000,11 +2000,11 @@ __metadata:
     ava: ^4.3.3
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     fs-extra: ^10.1.0
     prettier: ^2.8.4
     sinon: ^14.0.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -2022,10 +2022,10 @@ __metadata:
     ansi-colors: ^4.1.3
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     prettier: ^2.8.4
     triple-beam: "*"
-    typescript: 4.9.4
+    typescript: 4.9.5
     winston-transport: ^4.5.0
   languageName: unknown
   linkType: soft
@@ -2042,7 +2042,7 @@ __metadata:
     fs-extra: ^10.1.0
     prettier: ^2.8.4
     tsutils: ^3.21.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -3777,12 +3777,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-register@npm:^3.3.3":
-  version: 3.3.3
-  resolution: "esbuild-register@npm:3.3.3"
+"esbuild-register@npm:^3.4.2":
+  version: 3.4.2
+  resolution: "esbuild-register@npm:3.4.2"
+  dependencies:
+    debug: ^4.3.4
   peerDependencies:
     esbuild: ">=0.12 <1"
-  checksum: f43fecb9f5c48fcf859a0b3681368af8987c299c822da9a996b90f453b9b2226b9a90c7dbaec0968a86b53ee524af0d8b4ed828866c29bfede5c176834bc0f2b
+  checksum: f65d1ccb58b1ccbba376efb1fc023abe22731d9b79eead1b0120e57d4413318f063696257a5af637b527fa1d3f009095aa6edb1bf6ff69d637a9ab281fb727b3
   languageName: node
   linkType: hard
 
@@ -8363,13 +8365,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.9.4":
-  version: 4.9.4
-  resolution: "typescript@npm:4.9.4"
+"typescript@npm:4.9.5":
+  version: 4.9.5
+  resolution: "typescript@npm:4.9.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: e782fb9e0031cb258a80000f6c13530288c6d63f1177ed43f770533fdc15740d271554cdae86701c1dd2c83b082cea808b07e97fd68b38a172a83dbf9e0d0ef9
+  checksum: ee000bc26848147ad423b581bd250075662a354d84f0e06eb76d3b892328d8d4440b7487b5a83e851b12b255f55d71835b008a66cbf8f255a11e4400159237db
   languageName: node
   linkType: hard
 
@@ -8403,13 +8405,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.9.4#~builtin<compat/typescript>":
-  version: 4.9.4
-  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=ad5954"
+"typescript@patch:typescript@4.9.5#~builtin<compat/typescript>":
+  version: 4.9.5
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 1caaea6cb7f813e64345190fddc4e6c924d0b698ab81189b503763c4a18f7f5501c69362979d36e19c042d89d936443e768a78b0675690b35eb663d19e0eae71
+  checksum: 8f6260acc86b56bfdda6004bc53f32ea548f543e8baef7071c8e34d29d292f3e375c8416556c8de10b24deef6933cd1c16a8233dc84a3dd43a13a13265d0faab
   languageName: node
   linkType: hard
 
@@ -8835,7 +8837,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
-    "@alcalzone/jsonl-db": ^3.0.0
+    "@alcalzone/jsonl-db": ^3.1.0
     "@alcalzone/pak": ^0.8.1
     "@esm2cjs/got": ^12.5.3
     "@esm2cjs/p-queue": ^7.3.0
@@ -8865,7 +8867,7 @@ __metadata:
     ava: ^4.3.3
     del-cli: ^5.0.0
     esbuild: 0.15.7
-    esbuild-register: ^3.3.3
+    esbuild-register: ^3.4.2
     execa: ^5.1.1
     fs-extra: ^10.1.0
     mockdate: ^3.0.5
@@ -8877,7 +8879,7 @@ __metadata:
     serialport: ^10.4.0
     sinon: ^14.0.0
     source-map-support: ^0.5.21
-    typescript: 4.9.4
+    typescript: 4.9.5
     winston: ^3.8.2
     xstate: 4.29.0
   languageName: unknown

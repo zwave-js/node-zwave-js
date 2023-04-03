@@ -228,3 +228,175 @@ integrationTest(
 		},
 	},
 );
+
+integrationTest("The 'simple' Door state value works correctly", {
+	// debug: true,
+
+	nodeCapabilities: {
+		commandClasses: [
+			CommandClasses.Version,
+			{
+				ccId: CommandClasses.Notification,
+				isSupported: true,
+				version: 8,
+			},
+		],
+	},
+
+	customSetup: async (driver, controller, mockNode) => {
+		// Node supports the Access Control notifications Window open and Window closed
+		const respondToNotificationSupportedGet: MockNodeBehavior = {
+			async onControllerFrame(controller, self, frame) {
+				if (
+					frame.type === MockZWaveFrameType.Request &&
+					frame.payload instanceof NotificationCCSupportedGet
+				) {
+					const cc = new NotificationCCSupportedReport(self.host, {
+						nodeId: controller.host.ownNodeId,
+						supportsV1Alarm: false,
+						supportedNotificationTypes: [0x06],
+					});
+					await self.sendToController(
+						createMockZWaveRequestFrame(cc, {
+							ackRequested: false,
+						}),
+					);
+					return true;
+				}
+				return false;
+			},
+		};
+		mockNode.defineBehavior(respondToNotificationSupportedGet);
+
+		const respondToNotificationEventSupportedGet: MockNodeBehavior = {
+			async onControllerFrame(controller, self, frame) {
+				if (
+					frame.type === MockZWaveFrameType.Request &&
+					frame.payload instanceof NotificationCCEventSupportedGet &&
+					frame.payload.notificationType === 0x06
+				) {
+					const cc = new NotificationCCEventSupportedReport(
+						self.host,
+						{
+							nodeId: controller.host.ownNodeId,
+							notificationType: 0x06,
+							supportedEvents: [0x16, 0x17],
+						},
+					);
+					await self.sendToController(
+						createMockZWaveRequestFrame(cc, {
+							ackRequested: false,
+						}),
+					);
+					return true;
+				}
+				return false;
+			},
+		};
+		mockNode.defineBehavior(respondToNotificationEventSupportedGet);
+	},
+
+	testBody: async (t, driver, node, mockController, mockNode) => {
+		await node.commandClasses.Notification.getSupportedEvents(0x06);
+
+		const valueIDs = node.getDefinedValueIDs();
+		const simpleVID = valueIDs.find(
+			(vid) =>
+				vid.commandClass === CommandClasses.Notification &&
+				vid.propertyKey === "Door state (simple)",
+		);
+		t.truthy(simpleVID);
+
+		const meta = node.getValueMetadata(simpleVID!);
+		t.like(meta, {
+			ccSpecific: { notificationType: 6 },
+			label: "Door state (simple)",
+			readable: true,
+			states: {
+				[0x16]: "Window/door is open",
+				[0x17]: "Window/door is closed",
+			},
+			type: "number",
+			writeable: false,
+		});
+
+		// Send notifications to the node
+		const valueWithEnum = NotificationCCValues.notificationVariable(
+			"Access Control",
+			"Door state",
+		);
+		const valueSimple = NotificationCCValues.doorStateSimple;
+
+		let cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+			eventParameters: Buffer.from([0x01]), // ... in tilt position
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(valueWithEnum.id), 0x1601);
+		t.is(node.getValue(valueSimple.id), 0x16);
+
+		// ===
+
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+			eventParameters: Buffer.from([0x00]), // ... in regular position
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(valueWithEnum.id), 0x1600);
+		t.is(node.getValue(valueSimple.id), 0x16);
+
+		// ===
+
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(valueWithEnum.id), 0x16);
+		t.is(node.getValue(valueSimple.id), 0x16);
+
+		// ===
+
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x17, // Window/door is closed
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(valueWithEnum.id), 0x17);
+		t.is(node.getValue(valueSimple.id), 0x17);
+	},
+});

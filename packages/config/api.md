@@ -235,6 +235,7 @@ export class ConditionalDeviceConfig {
     readonly metadata?: ConditionalDeviceMetadata;
     // (undocumented)
     readonly paramInformation?: ConditionalParamInfoMap;
+    readonly preferred: boolean;
     readonly proprietary?: Record<string, unknown>;
 }
 
@@ -463,7 +464,8 @@ export class DeviceConfig {
     isEmbedded: boolean, manufacturer: string, manufacturerId: number, label: string, description: string, devices: readonly {
         productType: number;
         productId: number;
-    }[], firmwareVersion: FirmwareVersionRange, endpoints?: ReadonlyMap<number, EndpointConfig> | undefined, associations?: ReadonlyMap<number, AssociationConfig> | undefined, paramInformation?: ParamInfoMap | undefined,
+    }[], firmwareVersion: FirmwareVersionRange,
+    preferred: boolean, endpoints?: ReadonlyMap<number, EndpointConfig> | undefined, associations?: ReadonlyMap<number, AssociationConfig> | undefined, paramInformation?: ParamInfoMap | undefined,
     proprietary?: Record<string, unknown> | undefined,
     compat?: CompatConfig | undefined,
     metadata?: DeviceMetadata | undefined);
@@ -500,6 +502,7 @@ export class DeviceConfig {
     readonly metadata?: DeviceMetadata | undefined;
     // (undocumented)
     readonly paramInformation?: ParamInfoMap | undefined;
+    readonly preferred: boolean;
     readonly proprietary?: Record<string, unknown> | undefined;
 }
 
@@ -518,6 +521,8 @@ export interface DeviceConfigIndexEntry {
     firmwareVersion: FirmwareVersionRange;
     // (undocumented)
     manufacturerId: string;
+    // (undocumented)
+    preferred?: true;
     // (undocumented)
     productId: string;
     // (undocumented)
@@ -606,6 +611,8 @@ export interface FulltextDeviceConfigIndexEntry {
     manufacturer: string;
     // (undocumented)
     manufacturerId: string;
+    // (undocumented)
+    preferred?: true;
     // (undocumented)
     productId: string;
     // (undocumented)

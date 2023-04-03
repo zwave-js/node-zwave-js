@@ -4399,6 +4399,7 @@ export class DeviceResetLocallyCC extends CommandClass {
 //
 // @public (undocumented)
 export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {
+    constructor(host: ZWaveHost_2, options: CommandClassOptions);
 }
 
 // Warning: (ae-missing-release-tag) "DeviceResetLocallyCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11991,6 +11992,43 @@ export const NotificationCCValues: Readonly<{
             readonly supportsEndpoints: false;
         };
     };
+    doorStateSimple: {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: "Access Control";
+            propertyKey: "Door state (simple)";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "Access Control";
+            readonly propertyKey: "Door state (simple)";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly label: "Door state (simple)";
+            readonly states: {
+                readonly 22: "Window/door is open";
+                readonly 23: "Window/door is closed";
+            };
+            readonly ccSpecific: {
+                readonly notificationType: 6;
+            };
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly options: {
+            readonly internal: false;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
+        };
+    };
     alarmLevel: {
         readonly id: {
             commandClass: CommandClasses.Notification;
@@ -16930,11 +16968,14 @@ export class VersionCCCommandClassGet extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCCommandClassReport extends VersionCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "VersionCCCommandClassReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: VersionCCCommandClassReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
-    get ccVersion(): number;
+    ccVersion: number;
     // (undocumented)
-    get requestedCC(): CommandClasses;
+    requestedCC: CommandClasses;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }

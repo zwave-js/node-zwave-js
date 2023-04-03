@@ -2261,18 +2261,51 @@ export class Driver
 		nodeId: number,
 		endpointIndex: number = 0,
 	): boolean {
+		// This is obvious
+		if (
+			ccId === CommandClasses.Security ||
+			ccId === CommandClasses["Security 2"]
+		) {
+			return true;
+		}
+
 		const node = this.controller.nodes.get(nodeId);
-		const endpoint = node?.getEndpoint(endpointIndex);
-		return (
-			node?.isSecure !== false &&
-			// Special case for Basic CC, which we sometimes hide:
-			// A securely included node MAY support the Basic Command Class at the highest security level but it
-			// MUST NOT support the Basic Command Class at any lower security level or non-securely.
-			(ccId === CommandClasses.Basic ||
-				// For all other CCs check if the CC is marked as secure
-				!!(endpoint ?? node)?.isCCSecure(ccId)) &&
-			!!(this.securityManager || this.securityManager2)
-		);
+		// Node is unknown, don't use secure communication
+		if (!node) return false;
+
+		const endpoint = node.getEndpoint(endpointIndex);
+
+		const securityClass = node.getHighestSecurityClass();
+		// Node is not secure, don't use secure communication
+		if (securityClass === undefined || securityClass === SecurityClass.None)
+			return false;
+
+		// Special case for Basic CC, which we sometimes hide:
+		// A securely included node MAY support the Basic Command Class at the highest security level but it
+		// MUST NOT support the Basic Command Class at any lower security level or non-securely.
+		const isBasicCC = ccId === CommandClasses.Basic;
+
+		// Security S2 specs also mandate that all non-securely supported CCs MUST also be supported securely
+		// so we can just shortcut if the node is using S2
+		if (securityClassIsS2(securityClass)) {
+			// Use secure communication if the CC is supported. This avoids silly things like S2-encapsulated pings
+			return (
+				!!this.securityManager2 &&
+				(isBasicCC || (endpoint ?? node).supportsCC(ccId))
+			);
+		}
+
+		// Security S0 can be a little more complicated, with secure and non-secure endpoints
+		if (securityClass === SecurityClass.S0_Legacy) {
+			// Therefore actually check if the CC is marked as secure
+			return (
+				!!this.securityManager &&
+				(isBasicCC || (endpoint ?? node).isCCSecure(ccId))
+			);
+		}
+
+		// We shouldn't be here
+		return false;
 	}
 
 	/** @internal Required for ZWaveApplicationHost */
@@ -3678,18 +3711,6 @@ ${handlers.length} left`,
 		if (isCommandClassContainer(msg)) {
 			// For further actions, we are only interested in the innermost CC
 			this.unwrapCommands(msg);
-
-			const node = this.getNodeUnsafe(msg);
-			// If we receive an encrypted message but assume the node is insecure, change our assumption
-			if (
-				node?.isSecure === false &&
-				(msg.command.ccId === CommandClasses.Security ||
-					msg.command.isEncapsulatedWith(CommandClasses.Security))
-			) {
-				node.securityClasses.set(SecurityClass.S0_Legacy, true);
-				// Force a new interview
-				void node.refreshInfo();
-			}
 		}
 
 		// Otherwise go through the static handlers
@@ -5178,11 +5199,16 @@ ${handlers.length} left`,
 					// and up to 30s if we recently queried the RSSI
 					30_000 - (Date.now() - this.lastBackgroundRSSITimestamp),
 				);
-				this.pollBackgroundRSSITimer = setTimeout(() => {
+				this.pollBackgroundRSSITimer = setTimeout(async () => {
+					// Due to the timeout, the driver might have been destroyed in the meantime
+					if (!this.ready) return;
+
 					this.lastBackgroundRSSITimestamp = Date.now();
-					void this.controller.getBackgroundRSSI().catch(() => {
+					try {
+						await this.controller.getBackgroundRSSI();
+					} catch {
 						// ignore errors
-					});
+					}
 				}, timeout).unref();
 			} else {
 				clearTimeout(this.pollBackgroundRSSITimer);

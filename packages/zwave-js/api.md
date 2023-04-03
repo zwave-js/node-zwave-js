@@ -602,9 +602,12 @@ export type InclusionOptions = {
 // Warning: (ae-missing-release-tag) "InclusionResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export interface InclusionResult {
-    lowSecurity?: boolean;
-}
+export type InclusionResult = {
+    lowSecurity?: false;
+} | {
+    lowSecurity: true;
+    lowSecurityReason: SecurityBootstrapFailure;
+};
 
 // Warning: (ae-missing-release-tag) "InclusionState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -850,6 +853,21 @@ export { Scale }
 //
 // @public (undocumented)
 export type SDKVersion = `${number}.${number}` | `${number}.${number}.${number}`;
+
+// Warning: (ae-missing-release-tag) "SecurityBootstrapFailure" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum SecurityBootstrapFailure {
+    NodeCanceled = 5,
+    NoKeysConfigured = 1,
+    ParameterMismatch = 4,
+    S2IncorrectPIN = 6,
+    S2NoUserCallbacks = 2,
+    S2WrongSecurityLevel = 7,
+    Timeout = 3,
+    Unknown = 8,
+    UserCanceled = 0
+}
 
 export { SendMessageOptions }
 
@@ -1287,6 +1305,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     requestNodeInfo(): Promise<NodeUpdatePayload>;
     // (undocumented)
     get sdkVersion(): string | undefined;
+    setDateAndTime(now?: Date): Promise<boolean>;
     // (undocumented)
     setSecurityClass(securityClass: SecurityClass_2, granted: boolean): void;
     setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;

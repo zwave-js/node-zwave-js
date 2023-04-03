@@ -5,6 +5,7 @@ import {
 	RssiError,
 	rssiToString,
 	stripUndefined,
+	TransmitStatus,
 	TXReport,
 } from "@zwave-js/core/safe";
 import { AssignPriorityReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPriorityReturnRouteMessages";
@@ -274,6 +275,9 @@ export function hasTXReport(
 	return (
 		(msg instanceof SendDataRequestTransmitReport ||
 			msg instanceof SendDataBridgeRequestTransmitReport) &&
+		// Only OK and NoAck have meaningful data in the TX report
+		(msg.transmitStatus === TransmitStatus.OK ||
+			msg.transmitStatus === TransmitStatus.NoAck) &&
 		!!msg.txReport
 	);
 }

@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/repo",
-  "version": "10.11.1",
+  "version": "10.12.0",
   "private": true,
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
@@ -31,7 +31,7 @@
     "@actions/core": "^1.9.1",
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.0.3",
-    "@alcalzone/jsonl-db": "^3.0.0",
+    "@alcalzone/jsonl-db": "^3.1.0",
     "@alcalzone/monopack": "^1.2.0",
     "@alcalzone/release-script": "~3.5.9",
     "@commitlint/cli": "^17.1.2",
@@ -64,7 +64,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
-    "esbuild-register": "^3.3.3",
+    "esbuild-register": "^3.4.2",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -79,7 +79,7 @@
     "ts-nameof": "^5.0.0",
     "ts-patch": "^2.1.0",
     "turbo": "1.7.4",
-    "typescript": "4.9.4",
+    "typescript": "4.9.5",
     "zwave-js": "workspace:*"
   },
   "resolutions": {

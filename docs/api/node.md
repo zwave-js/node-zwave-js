@@ -50,9 +50,9 @@ Metadata in `zwave-js` can be separated into a **static** and a **dynamic** part
 getValueTimestamp(valueId: ValueID): number | undefined
 ```
 
-Returns when the given value was last updated in the local cache. Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md#ValueID).
+Returns when the given value was last updated by the node. This includes unsolicited updates, responses to GET-type requests and successful supervised SET-type requests.
 
-The method either returns the stored timestamp if it was found, and `undefined` otherwise.
+Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md#ValueID). The method either returns the stored timestamp if it was found, and `undefined` otherwise.
 
 > [!NOTE]
 > This does **not** communicate with the node.
@@ -312,6 +312,9 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 -   `"hec"` - An encrypted Intel HEX firmware file
 -   `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
+> [!ATTENTION] At the moment, only some `.exe` files contain `firmwareTarget` information. **All** other formats only contain the firmware `data`.
+> This means that the `firmwareTarget` property usually needs to be provided, unless it is `0`.
+
 You can use the helper method `guessFirmwareFileFormat` to guess which firmware format a file has based on the file extension and contents.
 
 ```ts
@@ -335,6 +338,10 @@ try {
 	actualFirmware = extractFirmware(rawData, format);
 } catch (e) {
 	// handle the error, then abort the update
+}
+
+if (actualFirmware.firmwareTarget == undefined) {
+	actualFirmware.firmwareTarget = getFirmwareTargetSomehow();
 }
 
 // try the update
@@ -568,6 +575,22 @@ isFirmwareUpdateInProgress(): boolean;
 ```
 
 Return whether a firmware update is in progress for this node.
+
+### `setDateAndTime`
+
+```ts
+setDateAndTime(now: Date = new Date()): Promise<boolean>
+```
+
+As configuring the date, time and timezone on Z-Wave devices is annoyingly spread out across different versions of different CCs, this is a convenience method to do this as simply as possible.
+It optionally takes the date to set (default: now) and returns whether the operation was successful.
+
+The following CCs will be used (when supported or necessary) in this process:
+
+-   Time Parameters CC
+-   Clock CC
+-   Time CC
+-   Schedule Entry Lock CC (for setting the timezone)
 
 ## ZWaveNode properties
 

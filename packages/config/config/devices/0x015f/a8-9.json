@@ -6,12 +6,16 @@
 	"devices": [
 		{
 			"productType": "0xa803",
-			"productId": "0x135a",
-			"zwaveAllianceId": [3456, 3995]
+			"productId": "0x1351"
 		},
 		{
 			"productType": "0xa803",
 			"productId": "0x1352"
+		},
+		{
+			"productType": "0xa803",
+			"productId": "0x135a",
+			"zwaveAllianceId": [3456, 3995]
 		}
 	],
 	"firmwareVersion": {
