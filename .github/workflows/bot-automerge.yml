@@ -45,8 +45,10 @@ jobs:
           gh pr merge --auto --squash "$PR_URL"
 
   bot-reenable-automerge:
+    # Don't run in forks
     if: |
-      github.event_name == 'pull_request'
+      github.event_name == 'pull_request' &&
+      github.repository == 'zwave-js/node-zwave-js'
 
     runs-on: [ubuntu-latest]
     strategy:
