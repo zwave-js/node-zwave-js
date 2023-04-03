@@ -128,3 +128,14 @@ export async function syncExternalConfigDir(
 
 	return { success: true, version: externalVersion };
 }
+
+export function versionInRange(
+	version: string,
+	min: string,
+	max: string,
+): boolean {
+	return (
+		semver.gte(padVersion(version), padVersion(min)) &&
+		semver.lte(padVersion(version), padVersion(max))
+	);
+}
