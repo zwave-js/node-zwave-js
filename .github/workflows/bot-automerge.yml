@@ -48,7 +48,7 @@ jobs:
     # Don't run in forks
     if: |
       github.event_name == 'pull_request' &&
-      github.repository == 'zwave-js/node-zwave-js'
+      github.event.pull_request.head.repo.name == github.repository
 
     runs-on: [ubuntu-latest]
     strategy:
