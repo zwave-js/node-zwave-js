@@ -52,7 +52,7 @@
 		{
 			"#": "10",
 			"label": "Power Change Report Threshold",
-			"unit": "1W",
+			"unit": "W",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -68,7 +68,7 @@
 		{
 			"#": "11",
 			"label": "Current Change Report Threshold",
-			"unit": "0.1A",
+			"unit": "0.1 A",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -84,7 +84,7 @@
 		{
 			"#": "12",
 			"label": "Voltage Change Report Threshold",
-			"unit": "1V",
+			"unit": "V",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

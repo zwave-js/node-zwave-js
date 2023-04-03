@@ -18,7 +18,7 @@
 		{
 			"#": "2",
 			"label": "Send Multi Level Report On State Change",
-			"unit": "1%",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -34,7 +34,6 @@
 		{
 			"#": "3",
 			"label": "Working Mode",
-			"description": "Change mode of device",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -46,11 +45,11 @@
 					"value": 0
 				},
 				{
-					"label": "Shutter Mode Without Positioning",
+					"label": "Shutter mode without positioning",
 					"value": 1
 				},
 				{
-					"label": "Shutter Mode With Positioning",
+					"label": "Shutter mode with positioning",
 					"value": 2
 				}
 			]
@@ -58,7 +57,7 @@
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable / Disable Save Positioning Percentage",
+			"label": "Save Positioning Percentage",
 			"defaultValue": 1
 		},
 		{
@@ -79,11 +78,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Not Calibrated",
+					"label": "Not calibrated",
 					"value": 0
 				},
 				{
-					"label": "Calibrate / Calibrated",
+					"label": "Calibrate / calibrated",
 					"value": 1
 				}
 			]
@@ -122,12 +121,12 @@
 		{
 			"#": "8",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",
+			"label": "Inclusion / Exclusion Using External Switch On Input S1",
 			"defaultValue": 1
 		},
 		{
 			"#": "9",
-			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",
+			"label": "Send Central Scene Commands In Response To Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -170,7 +169,7 @@
 		{
 			"#": "11",
 			"label": "Current Change Report Threshold",
-			"unit": "0.1A",
+			"unit": "0.1 A",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -203,7 +202,7 @@
 			"#": "13",
 			"label": "Slats Rotation Time",
 			"description": "Only valid in Shutter Mode with positioning. Time taken to rotate slats before blind starts to move.",
-			"unit": "0.1S",
+			"unit": "0.1 seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 250,

@@ -65,12 +65,12 @@
 		{
 			"#": "8",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable Inclusion / Exclusion Using External Switch On Input S1",
+			"label": "Inclusion / Exclusion Using External Switch On Input S1",
 			"defaultValue": 1
 		},
 		{
 			"#": "9",
-			"label": "Enable / Disable Sending Of Central Scene Commands In Response To Inputs",
+			"label": "Send Central Scene Commands In Response To Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -113,7 +113,7 @@
 		{
 			"#": "11",
 			"label": "Current Change Report Threshold",
-			"unit": "0.1A",
+			"unit": "0.1 A",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
