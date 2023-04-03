@@ -42,6 +42,7 @@ export interface DeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	preferred?: true;
 	rootDir?: string;
 	filename: string;
 }
@@ -54,6 +55,7 @@ export interface FulltextDeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	preferred?: true;
 	rootDir?: string;
 	filename: string;
 }
@@ -275,6 +277,7 @@ export async function generatePriorityDeviceIndex(
 					productType: formatId(dev.productType),
 					productId: formatId(dev.productId),
 					firmwareVersion: config.firmwareVersion,
+					...(config.preferred ? { preferred: true as const } : {}),
 					rootDir: deviceConfigPriorityDir,
 				})),
 			logger,
@@ -311,6 +314,7 @@ export async function loadDeviceIndexInternal(
 				productType: formatId(dev.productType),
 				productId: formatId(dev.productId),
 				firmwareVersion: config.firmwareVersion,
+				...(config.preferred ? { preferred: true as const } : {}),
 			})),
 		logger,
 	);
@@ -337,6 +341,7 @@ export async function loadFulltextDeviceIndexInternal(
 				productType: formatId(dev.productType),
 				productId: formatId(dev.productId),
 				firmwareVersion: config.firmwareVersion,
+				...(config.preferred ? { preferred: true as const } : {}),
 				rootDir: embeddedDevicesDir,
 			})),
 		logger,
@@ -440,6 +445,18 @@ firmwareVersion is malformed or invalid. Must be x.y or x.y.z where x, y, and z 
 			const { min, max } = definition.firmwareVersion;
 			this.firmwareVersion = { min, max };
 		}
+
+		if (
+			definition.preferred != undefined &&
+			definition.preferred !== true
+		) {
+			throwInvalidConfig(
+				`device`,
+				`packages/config/config/devices/${filename}:
+preferred must be true or omitted`,
+			);
+		}
+		this.preferred = !!definition.preferred;
 
 		if (definition.endpoints != undefined) {
 			const endpoints = new Map<number, ConditionalEndpointConfig>();
@@ -704,6 +721,8 @@ metadata is not an object`,
 		productId: number;
 	}[];
 	public readonly firmwareVersion: FirmwareVersionRange;
+	/** Mark this configuration as preferred over other config files with an overlapping firmware range */
+	public readonly preferred: boolean;
 	public readonly endpoints?: ReadonlyMap<number, ConditionalEndpointConfig>;
 	public readonly associations?: ReadonlyMap<
 		number,
@@ -735,6 +754,7 @@ metadata is not an object`,
 			evaluateDeep(this.description, deviceId),
 			this.devices,
 			this.firmwareVersion,
+			this.preferred,
 			evaluateDeep(this.endpoints, deviceId),
 			evaluateDeep(this.associations, deviceId),
 			evaluateDeep(this.paramInformation, deviceId),
@@ -777,6 +797,8 @@ export class DeviceConfig {
 			productId: number;
 		}[],
 		public readonly firmwareVersion: FirmwareVersionRange,
+		/** Mark this configuration as preferred over other config files with an overlapping firmware range */
+		public readonly preferred: boolean,
 		public readonly endpoints?: ReadonlyMap<number, EndpointConfig>,
 		public readonly associations?: ReadonlyMap<number, AssociationConfig>,
 		public readonly paramInformation?: ParamInfoMap,
