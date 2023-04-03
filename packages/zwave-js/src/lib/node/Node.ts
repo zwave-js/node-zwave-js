@@ -3537,6 +3537,12 @@ protocol version:      ${this.protocolVersion}`;
 	private handleKnownNotification(command: NotificationCCReport): void {
 		const lockEvents = [0x01, 0x03, 0x05, 0x09];
 		const unlockEvents = [0x02, 0x04, 0x06];
+		const doorStatusEvents = [
+			// Actual status
+			0x16, 0x17,
+			// Synthetic status with enum
+			0x1600, 0x1601,
+		];
 		if (
 			// Access Control, manual/keypad/rf/auto (un)lock operation
 			command.notificationType === 0x06 &&
@@ -3569,6 +3575,24 @@ protocol version:      ${this.protocolVersion}`;
 					isLocked,
 				);
 			}
+		} else if (
+			command.notificationType === 0x06 &&
+			doorStatusEvents.includes(command.notificationEvent as number)
+		) {
+			// https://github.com/zwave-js/node-zwave-js/pull/5394 added support for
+			// notification enums. Unfortunately, there's no way to discover which nodes
+			// actually support them, which makes working with the Door state variable
+			// very cumbersome. Also, this is currently the only notification where the enum values
+			// extend the state value.
+			// To work around this, we hard-code a notification value for the door status
+			// which only includes the "legacy" states for open/closed.
+
+			this.valueDB.setValue(
+				NotificationCCValues.doorStateSimple.endpoint(
+					command.endpointIndex,
+				),
+				command.notificationEvent === 0x17 ? 0x17 : 0x16,
+			);
 		}
 	}
 
