@@ -1,0 +1,25 @@
+{
+	"manufacturer": "Vesternet",
+	"manufacturerId": "0x0330",
+	"label": "VES-ZW-WAL-009",
+	"description": "Wall Controller - 8 Button",
+	"devices": [
+		{
+			"productType": "0x0300",
+			"productId": "0xa305",
+			"zwaveAllianceId": 3334
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.27",
+		"max": "1.29"
+	},
+	// This device is a re-branded "Sunricher Wall Mounted Switch 8"
+	"preferred": true,
+	"metadata": {
+		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Press and hold down both | and O buttons on the top row for over 3 seconds until the LED indicator turns on. After approximately 10 seconds the LED indicator will blink 6 times to indicate successful inclusion.",
+		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Press and hold down both | and O buttons on the top row for over 3 seconds until the LED indicator turns on. After approximately 7 seconds the LED indicator will blink 4 times to indicate successful exclusion.",
+		"reset": "Press and hold down both | and O buttons on the top row for over 10 seconds until the LED indicator turns on. Release both | and O buttons and the LED indicator will blink 4 times to indicate successful factory reset.",
+		"manual": "https://cdn.shopify.com/s/files/1/0066/8149/3559/files/VES-ZW-WAL-009.pdf"
+	}
+}

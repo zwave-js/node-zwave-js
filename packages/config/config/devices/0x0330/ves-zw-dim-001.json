@@ -6,12 +6,13 @@
 	"devices": [
 		{
 			"productType": "0x0200",
-			"productId": "0xd00c"
+			"productId": "0xd00c",
+			"zwaveAllianceId": 3331
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "1.21",
+		"max": "1.24"
 	},
 	"paramInformation": [
 		{
@@ -20,8 +21,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Send Basic Report on State Change",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Basic Report on State Change",
 			"defaultValue": 1
 		},
 		{
@@ -71,8 +72,8 @@
 		},
 		{
 			"#": "9",
-			"label": "Use External Switch for Inclusion/Exclusion",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Use External Switch for Inclusion/Exclusion",
 			"defaultValue": 1
 		},
 		{
@@ -129,14 +130,14 @@
 		},
 		{
 			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Over Current Protection",
 			"description": "Triggered at over 2.1A for 20 seconds continuously.",
-			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
 		{
 			"#": "14",
-			"label": "Power Report Absolute Threshold",
+			"label": "Power Report: Change Threshold",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -146,7 +147,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Power Report Percentage Threshold",
+			"label": "Power Report: Relative Change Threshold",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -238,9 +239,9 @@
 		},
 		{
 			"#": "32",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"label": "Startup Brightness",
 			"description": "When the light is turned from off to on, if the target brightness is lower than the startup brightness, the brightness will first go to the startup brightness then fall to the target brightness.",
-			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"defaultValue": 0
 		}
 	],
