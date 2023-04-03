@@ -1086,10 +1086,15 @@ Consider converting this parameter to unsigned using ${white(
 			// Ensure that the firmware version ranges do not overlap,
 			// except if one is preferred and the other isn't
 			if (
-				!versionInRange(me.min, other.min, other.max) &&
-				!versionInRange(me.max, other.min, other.max) &&
-				entry.preferred !== index[firstIndex].preferred
+				versionInRange(me.min, other.min, other.max) ||
+				versionInRange(me.max, other.min, other.max) ||
+				versionInRange(other.min, me.min, me.max) ||
+				versionInRange(other.max, me.min, me.max)
 			) {
+				if (entry.preferred !== index[firstIndex].preferred) {
+					continue;
+				}
+			} else {
 				continue;
 			}
 		}
