@@ -4879,6 +4879,8 @@ protocol version:      ${this.protocolVersion}`;
 
 			for (let i = 1; i <= healthCheckTestFrameCount; i++) {
 				const start = Date.now();
+				// Reset TX report before each ping
+				txReport = undefined as any;
 				const pingResult = await pingAPI.send().then(
 					() => true,
 					() => false,
