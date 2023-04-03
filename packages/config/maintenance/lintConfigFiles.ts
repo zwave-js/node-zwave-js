@@ -1083,10 +1083,12 @@ Consider converting this parameter to unsigned using ${white(
 		if (typeof other === "boolean" || typeof me === "boolean") {
 			if (other !== me) continue;
 		} else {
-			// Ensure that the firmware version ranges do not overlap
+			// Ensure that the firmware version ranges do not overlap,
+			// except if one is preferred and the other isn't
 			if (
 				!versionInRange(me.min, other.min, other.max) &&
-				!versionInRange(me.max, other.min, other.max)
+				!versionInRange(me.max, other.min, other.max) &&
+				entry.preferred !== index[firstIndex].preferred
 			) {
 				continue;
 			}
@@ -1095,7 +1097,8 @@ Consider converting this parameter to unsigned using ${white(
 		addError(
 			entry.filename,
 			`Duplicate config file detected for device (manufacturer id = ${entry.manufacturerId}, product type = ${entry.productType}, product id = ${entry.productId}, firmware range ${me.min} to ${me.max})
-The first occurrence of this device is in file config/devices/${index[firstIndex].filename}, firmware range ${other.min} to ${other.max}`,
+The first occurrence of this device is in file config/devices/${index[firstIndex].filename}, firmware range ${other.min} to ${other.max}.
+If this is intended, consider marking one of the config files as preferred or split files by firmware version.`,
 		);
 	}
 
