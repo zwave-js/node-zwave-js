@@ -20,7 +20,11 @@ import {
 } from "../src/devices/DeviceConfig";
 import type { DeviceID } from "../src/devices/shared";
 import { parseLogic } from "../src/Logic";
-import { configDir, getDeviceEntryPredicate } from "../src/utils";
+import {
+	configDir,
+	getDeviceEntryPredicate,
+	versionInRange,
+} from "../src/utils";
 
 const configManager = new ConfigManager();
 
@@ -1079,13 +1083,19 @@ Consider converting this parameter to unsigned using ${white(
 		if (typeof other === "boolean" || typeof me === "boolean") {
 			if (other !== me) continue;
 		} else {
-			if (other.min !== me.min || other.max !== me.max) continue;
+			// Ensure that the firmware version ranges do not overlap
+			if (
+				!versionInRange(me.min, other.min, other.max) &&
+				!versionInRange(me.max, other.min, other.max)
+			) {
+				continue;
+			}
 		}
 		// This is a duplicate!
 		addError(
 			entry.filename,
-			`Duplicate config file detected for device (manufacturer id = ${entry.manufacturerId}, product type = ${entry.productType}, product id = ${entry.productId})
-The first occurrence of this device is in file config/devices/${index[firstIndex].filename}`,
+			`Duplicate config file detected for device (manufacturer id = ${entry.manufacturerId}, product type = ${entry.productType}, product id = ${entry.productId}, firmware range ${me.min} to ${me.max})
+The first occurrence of this device is in file config/devices/${index[firstIndex].filename}, firmware range ${other.min} to ${other.max}`,
 		);
 	}
 
