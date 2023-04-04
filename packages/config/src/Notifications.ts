@@ -20,6 +20,7 @@ export type NotificationValueDefinition = (
 	description?: string;
 	label: string;
 	parameter?: NotificationParameter;
+	idleVariables?: number[];
 };
 
 export type NotificationMap = ReadonlyMap<number, Notification>;
@@ -198,11 +199,34 @@ export class NotificationEvent {
 			}
 			this.parameter = new NotificationParameter(definition.params);
 		}
+
+		if (definition.idleVariables != undefined) {
+			if (
+				!isArray(definition.idleVariables) ||
+				!definition.idleVariables.every(
+					(n: any) =>
+						typeof n === "number" ||
+						(typeof n === "string" && hexKeyRegexNDigits.test(n)),
+				)
+			) {
+				throwInvalidConfig(
+					"notifications",
+					`The idleVariables definition of notification event ${num2hex(
+						id,
+					)} must be an array of numbers (may be hexadecimal)`,
+				);
+			}
+			this.idleVariables = definition.idleVariables.map(
+				(n: string | number) =>
+					typeof n === "string" ? parseInt(n, 16) : n,
+			);
+		}
 	}
 	public readonly id: number;
 	public readonly label: string;
 	public readonly description?: string;
 	public readonly parameter?: NotificationParameter;
+	public readonly idleVariables?: number[];
 }
 
 export class NotificationParameter {
