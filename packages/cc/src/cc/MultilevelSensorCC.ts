@@ -90,7 +90,7 @@ export const MultilevelSensorCCValues = Object.freeze({
 
 /**
  * Determine the scale to use to query a sensor reading. Uses the user-preferred scale if given,
- * otherwise falls back to the first supported one.
+ * followed by the most recently used scale, otherwile falls back to the first supported one.
  */
 function getPreferredSensorScale(
 	applHost: ZWaveApplicationHost,
@@ -117,6 +117,22 @@ function getPreferredSensorScale(
 	// If the scale is named, we can then try to use the named preference
 	if (preferred == undefined && scaleGroup.name) {
 		preferred = applHost.options.preferences?.scales[scaleGroup.name];
+	}
+	// Then attempt reading the scale from the corresponding value
+	if (preferred == undefined) {
+		const typeName = applHost.configManager.getSensorTypeName(sensorType);
+		const sensorValue = MultilevelSensorCCValues.value(typeName);
+		const metadata = applHost
+			.tryGetValueDB(nodeId)
+			?.getMetadata(sensorValue.endpoint(endpointIndex));
+		const scale = metadata?.ccSpecific?.scale;
+		if (typeof scale === "number" && supportedScales.includes(scale)) {
+			preferred = scale;
+			applHost.controllerLog.logNode(nodeId, {
+				endpoint: endpointIndex,
+				message: `No scale preference for sensor type ${sensorType}, using the last-used scale ${preferred}`,
+			});
+		}
 	}
 	// Then fall back to the first supported scale
 	if (preferred == undefined) {
