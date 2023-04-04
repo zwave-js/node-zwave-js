@@ -639,7 +639,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				);
 				if (supportedScales?.length) {
 					validatePayload.withReason(
-						`Unsupported sensor type ${scale.label} or corrupted data`,
+						`Unsupported scale ${scale.label} or corrupted data`,
 					)(supportedScales.includes(scale.key));
 				}
 			}
