@@ -489,8 +489,11 @@ export class NotificationCC extends CommandClass {
 				/* ignore */
 			}
 		}
-		// If everything failed, fall back to "pull"
-		return "pull";
+		// If everything failed, e.g. because the node is V1/V2, assume this is a "push" node.
+		// If we assumed "pull", we would have to query the node regularly, which can cause
+		// the node to return old (already handled) notifications.
+		// https://github.com/zwave-js/node-zwave-js/issues/5626
+		return "push";
 	}
 
 	/** Whether the node implements push or pull notifications */
