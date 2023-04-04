@@ -3462,6 +3462,7 @@ protocol version:      ${this.protocolVersion}`;
 			} else if (valueConfig.type === "state") {
 				allowIdleReset = valueConfig.idle;
 			} else {
+				// This is an event
 				this.emit("notification", this, CommandClasses.Notification, {
 					type: command.notificationType,
 					event: value,
@@ -3469,6 +3470,13 @@ protocol version:      ${this.protocolVersion}`;
 					eventLabel: valueConfig.label,
 					parameters: command.eventParameters,
 				});
+
+				// We may need to reset some linked states to idle
+				if (valueConfig.idleVariables?.length) {
+					for (const variable of valueConfig.idleVariables) {
+						setStateIdle(variable);
+					}
+				}
 				return;
 			}
 

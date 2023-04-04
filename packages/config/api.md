@@ -770,6 +770,8 @@ export class NotificationEvent {
     // (undocumented)
     readonly id: number;
     // (undocumented)
+    readonly idleVariables?: number[];
+    // (undocumented)
     readonly label: string;
     // (undocumented)
     readonly parameter?: NotificationParameter;
@@ -843,6 +845,7 @@ export type NotificationValueDefinition = (NotificationStateDefinition | Notific
     description?: string;
     label: string;
     parameter?: NotificationParameter;
+    idleVariables?: number[];
 };
 
 // Warning: (ae-missing-release-tag) "NotificationVariable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
