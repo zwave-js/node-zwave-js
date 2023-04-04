@@ -3,7 +3,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
-		"description": "Calculated by hue color wheel (hue/360*254); 255 = White",
+			"description": "Uses a scaled hue value (realHue / 360 * 254).",
 		"options": [
 			{
 				"label": "Red",
@@ -224,7 +224,7 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"description": "Values 1-60 = seconds; 61-120 = minutes (minus 60); 121-254 = hours (minus 120), 255 = indefinitely",
+		"description": "1-60 = seconds; 61-120 = minutes (minus 60); 121-254 = hours (minus 120)",
 		"options": [
 			{
 				"label": "Indefinitely",
@@ -238,7 +238,6 @@
 		"maxValue": 100,
 		"defaultValue": 0,
 		"unsigned": true,
-		"description": "Values 1-100"
 	},
 	"led_effect_color": {
 		"valueSize": 4,

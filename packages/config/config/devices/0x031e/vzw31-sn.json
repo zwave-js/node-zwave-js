@@ -205,7 +205,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Active Power Reports",
+			"label": "Power Change Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -220,7 +220,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Periodic Power & Energy Reports",
+			"label": "Power & Energy Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -237,7 +237,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Energy Reports",
+			"label": "Energy Change Report Threshold",
 			"valueSize": 2,
 			"unit": "0.01 kWh",
 			"minValue": 0,
@@ -309,8 +309,6 @@
 			"#": "50",
 			"label": "Button Delay Time",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 5,
 			"allowManualEntry": false,
 			"options": [
@@ -365,7 +363,6 @@
 			"label": "Double Down to Min Level",
 			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
-
 		{
 			"#": "53",
 			"label": "Double Up to Param 55 Level",
@@ -415,17 +412,15 @@
 			]
 		},
 		{
-			"#": "59[0x1]",
+			"#": "59[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Forward Local Commands to Associated Devices",
-			"description": "When enabled, device will send commands to associated devices when controlled locally",
+			"label": "Send Local Commands To Associated Devices",
 			"defaultValue": 1
 		},
 		{
-			"#": "59[0x2]",
+			"#": "59[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Forward Remote Commands to Associated Devices",
-			"description": "When enabled, device will send commands to associated devices when controlled via Z-Wave (either from the hub or another Z-Wave device)"
+			"label": "Forward Z-Wave Commands to Associated Devices",
 		},
 		{
 			"#": "64[0xff]",
@@ -615,7 +610,6 @@
 		{
 			"#": "100",
 			"label": "LED Brightness Scaling",
-			"description": "Set the LED lightbar scaling to match Inovelli's VZM31 (Blue Series) or LZW31 (Red Series) brightness.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -624,11 +618,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "VZM31",
+					"label": "Match VZM31 (Blue Series)",
 					"value": 0
 				},
 				{
-					"label": "LZW31",
+					"label": "Match LZW31 (Red Series)",
 					"value": 1
 				}
 			]
