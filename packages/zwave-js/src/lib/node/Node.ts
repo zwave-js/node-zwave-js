@@ -160,6 +160,7 @@ import {
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
+import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
 	DeferredPromise,
@@ -4760,13 +4761,10 @@ protocol version:      ${this.protocolVersion}`;
 			(healthCheckTestFrameCount / 5) * 1000,
 		);
 
-		// Poll the status of the test regularly
-		const pollFrequencyMs =
-			expectedDurationMs >= 60000
-				? 10000
-				: expectedDurationMs >= 10000
-				? 5000
-				: 1000;
+		// Poll the status of the test regularly, but not too frequently. Especially for quick tests, polling too often
+		// increases the likelyhood of us querying the node at the same time it sends an unsolicited update.
+		// If using Security S2, this can cause a desync.
+		const pollFrequencyMs = expectedDurationMs >= 60000 ? 20000 : 5000;
 
 		// Track how often we failed to get a response from the node, so we can abort if the connection is too bad
 		let continuousErrors = 0;
@@ -4989,6 +4987,10 @@ protocol version:      ${this.protocolVersion}`;
 							powerlevel,
 						)}, ${result}/${healthCheckTestFrameCount} pings were acknowledged...`,
 					);
+
+					// Wait a second for things to settle down
+					await wait(1000);
+
 					return failedPingsController === 0;
 				};
 				try {
@@ -5162,6 +5164,10 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 							otherNode.id
 						}...`,
 					);
+
+					// Wait a second for things to settle down
+					await wait(1000);
+
 					return failedPings === 0;
 				};
 
