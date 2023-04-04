@@ -588,6 +588,7 @@ interface NotificationEvent {
 	readonly label: string;
 	readonly description?: string | undefined;
 	readonly parameter?: NotificationParameter | undefined;
+	readonly idleVariables?: number[] | undefined;
 }
 ```
 
