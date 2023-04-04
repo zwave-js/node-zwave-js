@@ -420,7 +420,7 @@
 		{
 			"#": "59[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Forward Z-Wave Commands to Associated Devices",
+			"label": "Forward Z-Wave Commands to Associated Devices"
 		},
 		{
 			"#": "64[0xff]",

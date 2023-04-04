@@ -3,7 +3,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
-			"description": "Uses a scaled hue value (realHue / 360 * 254).",
+		"description": "Uses a scaled hue value (realHue / 360 * 254).",
 		"options": [
 			{
 				"label": "Red",
@@ -64,7 +64,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 255,
-		"description": "Values 0 = Instant; 5-100 = 500 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160); 255 = Sync with Parameter 1",
+		"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
 		"unsigned": true,
 		"options": [
 			{
@@ -98,7 +98,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 255,
-		"description": "Values 0 = Instant; 5-100 = 500 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160); 255 = Sync with Parameter 2",
+		"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
 		"unsigned": true,
 		"options": [
 			{
@@ -132,7 +132,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 255,
-		"description": "Values 0 = Instant; 5-100 = 500 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160); 255 = Sync with Parameter 3",
+		"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
 		"unsigned": true,
 		"options": [
 			{
@@ -166,7 +166,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 255,
-		"description": "Values 0 = Instant; 5-100 = 500 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160); 255 = Sync with Parameter 4",
+		"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
 		"unsigned": true,
 		"options": [
 			{
@@ -237,15 +237,15 @@
 		"minValue": 0,
 		"maxValue": 100,
 		"defaultValue": 0,
-		"unsigned": true,
+		"unsigned": true
 	},
 	"led_effect_color": {
+		"$import": "#hue_color_wheel_white",
 		"valueSize": 4,
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"unsigned": true,
-		"$import": "#hue_color_wheel_white"
+		"unsigned": true
 	},
 	"led_effect_effect": {
 		"valueSize": 4,
