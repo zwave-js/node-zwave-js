@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/shared",
-  "version": "10.11.1",
+  "version": "10.13.0",
   "description": "zwave-js: shared utilities",
   "keywords": [],
   "publishConfig": {

@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.13.0 (2023-04-04)
 ### Features
 * Added convenience method to set time, date and timezone on nodes (#5584)
 * Allow notification events to idle related notification variables. This solves a long-standing issue where locks could appear stuck in "Lock jammed" state, because they never sent an idle notification. (#5630)
