@@ -4,6 +4,19 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added a method on the `ZWaveNode` class to manually idle notifications, e.g. a stuck smoke sensor (#5634)
+
+### Bugfixes
+* Fixed an issue where firmware updates would not start using Security S2 because of the delays caused by delivery verification (#5635)
+* Map "Low Battery" alarms from Yale and Kwikset locks to the "Battery level status", not the "Battery maintenance status" notification variable (#5632)
+* `Battery CC Reports` are now used to idle the "Battery level status" notification variable (#5633)
+* To better align with the specifications, v1 to v7 notification variables are no longer auto-idled (#5634)
+
+### Config file changes
+* Add ZVIDAR Z-CM-V01 (#5612)
+
 ## 10.13.0 (2023-04-04)
 ### Features
 * Added convenience method to set time, date and timezone on nodes (#5584)
