@@ -3334,6 +3334,89 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
+	// Fallback for V2 notifications that don't allow us to predefine the metadata during the interview.
+	// Instead of defining useless values for each possible notification event, we build the metadata on demand
+	private extendNotificationValueMetadata(
+		valueId: ValueID,
+		notificationConfig: Notification,
+		valueConfig: NotificationValueDefinition & { type: "state" },
+	) {
+		const ccVersion = this.driver.getSupportedCCVersionForEndpoint(
+			CommandClasses.Notification,
+			this.nodeId,
+			this.index,
+		);
+		if (ccVersion === 2 || !this.valueDB.hasMetadata(valueId)) {
+			const metadata = getNotificationValueMetadata(
+				this.valueDB.getMetadata(valueId) as
+					| ValueMetadataNumeric
+					| undefined,
+				notificationConfig,
+				valueConfig,
+			);
+			this.valueDB.setMetadata(valueId, metadata);
+		}
+	}
+
+	/**
+	 * Manually resets a single notification value to idle.
+	 */
+	public manuallyIdleNotificationValue(
+		notificationType: number,
+		prevValue: number,
+		endpointIndex: number = 0,
+	): void {
+		if (
+			!this.getEndpoint(endpointIndex)?.supportsCC(
+				CommandClasses.Notification,
+			)
+		) {
+			return;
+		}
+
+		const notificationConfig =
+			this.driver.configManager.lookupNotification(notificationType);
+		if (!notificationConfig) return;
+
+		return this.manuallyIdleNotificationValueInternal(
+			notificationConfig,
+			prevValue,
+			endpointIndex,
+		);
+	}
+
+	/** Manually resets a single notification value to idle */
+	private manuallyIdleNotificationValueInternal(
+		notificationConfig: Notification,
+		prevValue: number,
+		endpointIndex: number,
+	): void {
+		const valueConfig = notificationConfig.lookupValue(prevValue);
+		// Only known variables may be reset to idle
+		if (!valueConfig || valueConfig.type !== "state") return;
+		// Some properties may not be reset to idle
+		if (!valueConfig.idle) return;
+
+		const notificationName = notificationConfig.name;
+		const variableName = valueConfig.variableName;
+		const valueId = NotificationCCValues.notificationVariable(
+			notificationName,
+			variableName,
+		).endpoint(endpointIndex);
+
+		// Make sure the value is actually set to the previous value
+		if (this.valueDB.getValue(valueId) !== prevValue) return;
+
+		// Since the node has reset the notification itself, we don't need the idle reset
+		this.clearNotificationIdleReset(valueId);
+		this.extendNotificationValueMetadata(
+			valueId,
+			notificationConfig,
+			valueConfig,
+		);
+		this.valueDB.setValue(valueId, 0 /* idle */);
+	}
+
 	/**
 	 * Handles the receipt of a Notification Report
 	 */
@@ -3349,25 +3432,6 @@ protocol version:      ${this.protocolVersion}`;
 			}
 			return;
 		}
-
-		// Fallback for V2 notifications that don't allow us to predefine the metadata during the interview.
-		// Instead of defining useless values for each possible notification event, we build the metadata on demand
-		const extendValueMetadata = (
-			valueId: ValueID,
-			notificationConfig: Notification,
-			valueConfig: NotificationValueDefinition & { type: "state" },
-		) => {
-			if (command.version === 2 || !this.valueDB.hasMetadata(valueId)) {
-				const metadata = getNotificationValueMetadata(
-					this.valueDB.getMetadata(valueId) as
-						| ValueMetadataNumeric
-						| undefined,
-					notificationConfig,
-					valueConfig,
-				);
-				this.valueDB.setMetadata(valueId, metadata);
-			}
-		};
 
 		// Look up the received notification in the config
 		const notificationConfig = this.driver.configManager.lookupNotification(
@@ -3385,22 +3449,11 @@ protocol version:      ${this.protocolVersion}`;
 
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
-				const valueConfig = notificationConfig.lookupValue(prevValue);
-				// Only known variables may be reset to idle
-				if (!valueConfig || valueConfig.type !== "state") return;
-				// Some properties may not be reset to idle
-				if (!valueConfig.idle) return;
-
-				const variableName = valueConfig.variableName;
-				const valueId = NotificationCCValues.notificationVariable(
-					notificationName,
-					variableName,
-				).endpoint(command.endpointIndex);
-
-				// Since the node has reset the notification itself, we don't need the idle reset
-				this.clearNotificationIdleReset(valueId);
-				extendValueMetadata(valueId, notificationConfig, valueConfig);
-				this.valueDB.setValue(valueId, 0 /* idle */);
+				this.manuallyIdleNotificationValueInternal(
+					notificationConfig,
+					prevValue,
+					command.endpointIndex,
+				);
 			};
 
 			const value = command.notificationEvent!;
@@ -3460,7 +3513,9 @@ protocol version:      ${this.protocolVersion}`;
 				// We don't know what this notification refers to, so we don't force a reset
 				allowIdleReset = false;
 			} else if (valueConfig.type === "state") {
-				allowIdleReset = valueConfig.idle;
+				// CL:0071.01.52.07.2: A controlling node SHOULD NOT use timeouts to consider a state variable
+				// to be idle [...] for v8 or newer supporting nodes.
+				allowIdleReset = command.version >= 8 && valueConfig.idle;
 			} else {
 				// This is an event
 				this.emit("notification", this, CommandClasses.Notification, {
@@ -3488,7 +3543,11 @@ protocol version:      ${this.protocolVersion}`;
 					valueConfig.variableName,
 				).endpoint(command.endpointIndex);
 
-				extendValueMetadata(valueId, notificationConfig, valueConfig);
+				this.extendNotificationValueMetadata(
+					valueId,
+					notificationConfig,
+					valueConfig,
+				);
 			} else {
 				// Collect unknown values in an "unknown" bucket
 				const unknownValue =

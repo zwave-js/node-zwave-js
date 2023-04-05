@@ -592,6 +592,20 @@ The following CCs will be used (when supported or necessary) in this process:
 -   Time CC
 -   Schedule Entry Lock CC (for setting the timezone)
 
+### `manuallyIdleNotificationValue`
+
+```ts
+manuallyIdleNotificationValue(notificationType: number, prevValue: number, endpointIndex?: number): void;
+```
+
+Many devices using `Notification CC` do not idle their notification values, since this requirement was only introduced in v8 of the Command Class. To alleviate the problem, this method can be used to manually idle the value. It takes the following arguments:
+
+-   `notificationType`: The standardized notification type the value belongs to. If unknown, this can be read from the `ccSpecific.notificationType` property of the corresponding value metadata.
+-   `prevValue`: The value of the notification variable in its non-idle state. This is used to determine which notification variable should be reset to idle. It **must** match the current value, otherwise the value will not be reset.
+-   `endpointIndex`: The (optional) index of the endpoint the notification value belongs to. If omitted, the root endpoint is assumed.
+
+> [!NOTE] This method will only do something if the node supports `Notification CC`, and the selected notification variable has an idle state.
+
 ## ZWaveNode properties
 
 ### `id`
