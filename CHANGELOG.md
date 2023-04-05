@@ -4,10 +4,35 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.13.0 (2023-04-04)
+### Features
+* Added convenience method to set time, date and timezone on nodes (#5584)
+* Allow notification events to idle related notification variables. This solves a long-standing issue where locks could appear stuck in "Lock jammed" state, because they never sent an idle notification. (#5630)
+
+### Bugfixes
+* Added a new `Door state (simple)` notification value, which has the old behavior of the `Door state` value with just two states and can be turned into a binary sensor (#5614)
+* Node statistics are now only updated using valid TX reports (#5613)
+* During interview of `Schedule Entry Lock CC`, set timezone if necessary and supported (#5585)
+* Value timestamps are no longer updated for optimistic value updates caused by the driver itself (#5581)
+* Communication with nodes using Security S2 will always use S2 now, even if the respective CC may also be supported insecurely (#5579)
+* Introduce delays and reduce polling frequency in health checks to avoid collisions causing S2 desync (#5628)
+* Assume Notification CC is operating in push mode, unless proven otherwise (#5627)
+* Fixed a typo in the logs when a Multilevel Sensor Report with an unsupported scale is received and discarded (#5623)
+* When querying a sensor reading, try to reuse the last reported sensor scale before defaulting to the first supported scale (#5622)
+
+### Config file changes
+* Add Vesternet branded Z-Wave devices (#5567)
+* Add product ID `0x1351` for MCOHome A8-9 (#5595)
+* Add fingerprint 0x8109-0x4dd5 to Yale YRD-256-ZW3 (#5604)
+* Disable scale validation for MCOHome MH10-PM2.5-WA/WD (#5624)
+
+### Changes under the hood
+* Config files may now have overlapping firmware version ranges, e.g. for white-labeling specific firmware versions, but only if one of them is marked as `preferred` (#5617, #5619)
+
 ## 10.12.0 (2023-03-15)
 ### Features
 * Background RSSI is now measured frequently while the controller is idle and exposed as controller statistics (#5545, #5568)
-* The last update timestamp of values is now stored and can be read via `Node.getValueTimestamp` (#5554)
+* The last update timestamp of values is now stored and can be read via `Node.getValueTimestamp` (#5556)
 * Values for Battery, Meter, Multilevel Switch and (in some cases) Notification CC are now queried periodically or on device wakeup (#5560)
 * Added a command to shut down the Z-Wave chip for safe removal (#5553)
 * If a node was not included securely, the `"node added"` event now contains information why (#5570)

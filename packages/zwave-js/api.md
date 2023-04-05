@@ -1281,6 +1281,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     protected loadDeviceConfig(): Promise<void>;
     get location(): string | undefined;
     set location(value: string | undefined);
+    manuallyIdleNotificationValue(notificationType: number, prevValue: number, endpointIndex?: number): void;
     // (undocumented)
     get manufacturerId(): number | undefined;
     // (undocumented)
@@ -1305,6 +1306,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     requestNodeInfo(): Promise<NodeUpdatePayload>;
     // (undocumented)
     get sdkVersion(): string | undefined;
+    setDateAndTime(now?: Date): Promise<boolean>;
     // (undocumented)
     setSecurityClass(securityClass: SecurityClass_2, granted: boolean): void;
     setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;

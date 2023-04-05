@@ -237,3 +237,21 @@ test.serial(
 		await testDeviceConfigPriorityDir(t, true);
 	},
 );
+
+test.serial(
+	`config files with the "preferred" flag are preferred`,
+	async (t) => {
+		t.timeout(60000);
+		const { logContainer } = t.context;
+
+		const cm = new ConfigManager({ logContainer });
+		await cm.loadAll();
+
+		// VES-ZW-REM-010 is preferred
+		const preferred = await cm.lookupDevice(0x0330, 0x0300, 0xb302, "1.26");
+		// ZV9001K12-DIM-Z4 is the fallback config for the same IDs
+		const fallback = await cm.lookupDevice(0x0330, 0x0300, 0xb302, "1.0");
+		t.is(preferred?.manufacturer, "Vesternet");
+		t.is(fallback?.manufacturer, "Sunricher");
+	},
+);

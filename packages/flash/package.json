@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/flash",
-  "version": "10.12.0",
+  "version": "10.13.0",
   "description": "zwave-js: firmware flash utility",
   "keywords": [],
   "publishConfig": {
@@ -51,6 +51,6 @@
     "@types/yargs": "^17.0.12",
     "del-cli": "^5.0.0",
     "prettier": "^2.8.4",
-    "typescript": "4.9.4"
+    "typescript": "4.9.5"
   }
 }

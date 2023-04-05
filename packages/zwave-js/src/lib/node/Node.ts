@@ -1,7 +1,8 @@
-import type { CCValueOptions } from "@zwave-js/cc";
 import {
 	CCAPI,
+	CCValueOptions,
 	CentralSceneKeys,
+	ClockCommand,
 	CommandClass,
 	defaultCCValueOptions,
 	DoorLockMode,
@@ -22,10 +23,13 @@ import {
 	PollValueImplementation,
 	Powerlevel,
 	PowerlevelTestStatus,
+	ScheduleEntryLockCommand,
 	SetValueAPIOptions,
 	TimeCCDateGet,
 	TimeCCTimeGet,
 	TimeCCTimeOffsetGet,
+	TimeCommand,
+	TimeParametersCommand,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "@zwave-js/cc";
@@ -122,7 +126,10 @@ import {
 	SecurityClassOwner,
 	SendCommandOptions,
 	sensorCCs,
+	SetValueOptions,
 	SinglecastCC,
+	supervisedCommandFailed,
+	supervisedCommandSucceeded,
 	SupervisionStatus,
 	topologicalSort,
 	TranslatedValueID,
@@ -153,6 +160,7 @@ import {
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
+import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
 	DeferredPromise,
@@ -870,7 +878,7 @@ export class ZWaveNode
 	}
 
 	/**
-	 * Returns when the given value id was last updated
+	 * Returns when the given value id was last updated by an update from the node.
 	 */
 	public getValueTimestamp(valueId: ValueID): number | undefined {
 		return this._valueDB.getTimestamp(valueId);
@@ -1003,13 +1011,19 @@ export class ZWaveNode
 					});
 				}
 
-				this._valueDB.setValue(
-					valueId,
-					value,
-					// We need to emit an event if applications opted in, or if this was a supervised call
-					// because in this case there won't be a verification query which would result in an update
-					emitEvent ? { source: "driver" } : { noEvent: true },
-				);
+				const options: SetValueOptions = {};
+				// We need to emit an event if applications opted in, or if this was a supervised call
+				// because in this case there won't be a verification query which would result in an update
+				if (emitEvent) {
+					options.source = "driver";
+				} else {
+					options.noEvent = true;
+				}
+				// Only update the timestamp of the value for successful supervised commands. Otherwise we don't know
+				// if the command was actually executed. If it wasn't, we'd have a wrong timestamp.
+				options.updateTimestamp = supervisedCommandSucceeded(result);
+
+				this._valueDB.setValue(valueId, value, options);
 			} else if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
 					message: `[setValue] not updating value`,
@@ -3320,6 +3334,89 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
+	// Fallback for V2 notifications that don't allow us to predefine the metadata during the interview.
+	// Instead of defining useless values for each possible notification event, we build the metadata on demand
+	private extendNotificationValueMetadata(
+		valueId: ValueID,
+		notificationConfig: Notification,
+		valueConfig: NotificationValueDefinition & { type: "state" },
+	) {
+		const ccVersion = this.driver.getSupportedCCVersionForEndpoint(
+			CommandClasses.Notification,
+			this.nodeId,
+			this.index,
+		);
+		if (ccVersion === 2 || !this.valueDB.hasMetadata(valueId)) {
+			const metadata = getNotificationValueMetadata(
+				this.valueDB.getMetadata(valueId) as
+					| ValueMetadataNumeric
+					| undefined,
+				notificationConfig,
+				valueConfig,
+			);
+			this.valueDB.setMetadata(valueId, metadata);
+		}
+	}
+
+	/**
+	 * Manually resets a single notification value to idle.
+	 */
+	public manuallyIdleNotificationValue(
+		notificationType: number,
+		prevValue: number,
+		endpointIndex: number = 0,
+	): void {
+		if (
+			!this.getEndpoint(endpointIndex)?.supportsCC(
+				CommandClasses.Notification,
+			)
+		) {
+			return;
+		}
+
+		const notificationConfig =
+			this.driver.configManager.lookupNotification(notificationType);
+		if (!notificationConfig) return;
+
+		return this.manuallyIdleNotificationValueInternal(
+			notificationConfig,
+			prevValue,
+			endpointIndex,
+		);
+	}
+
+	/** Manually resets a single notification value to idle */
+	private manuallyIdleNotificationValueInternal(
+		notificationConfig: Notification,
+		prevValue: number,
+		endpointIndex: number,
+	): void {
+		const valueConfig = notificationConfig.lookupValue(prevValue);
+		// Only known variables may be reset to idle
+		if (!valueConfig || valueConfig.type !== "state") return;
+		// Some properties may not be reset to idle
+		if (!valueConfig.idle) return;
+
+		const notificationName = notificationConfig.name;
+		const variableName = valueConfig.variableName;
+		const valueId = NotificationCCValues.notificationVariable(
+			notificationName,
+			variableName,
+		).endpoint(endpointIndex);
+
+		// Make sure the value is actually set to the previous value
+		if (this.valueDB.getValue(valueId) !== prevValue) return;
+
+		// Since the node has reset the notification itself, we don't need the idle reset
+		this.clearNotificationIdleReset(valueId);
+		this.extendNotificationValueMetadata(
+			valueId,
+			notificationConfig,
+			valueConfig,
+		);
+		this.valueDB.setValue(valueId, 0 /* idle */);
+	}
+
 	/**
 	 * Handles the receipt of a Notification Report
 	 */
@@ -3335,25 +3432,6 @@ protocol version:      ${this.protocolVersion}`;
 			}
 			return;
 		}
-
-		// Fallback for V2 notifications that don't allow us to predefine the metadata during the interview.
-		// Instead of defining useless values for each possible notification event, we build the metadata on demand
-		const extendValueMetadata = (
-			valueId: ValueID,
-			notificationConfig: Notification,
-			valueConfig: NotificationValueDefinition & { type: "state" },
-		) => {
-			if (command.version === 2 || !this.valueDB.hasMetadata(valueId)) {
-				const metadata = getNotificationValueMetadata(
-					this.valueDB.getMetadata(valueId) as
-						| ValueMetadataNumeric
-						| undefined,
-					notificationConfig,
-					valueConfig,
-				);
-				this.valueDB.setMetadata(valueId, metadata);
-			}
-		};
 
 		// Look up the received notification in the config
 		const notificationConfig = this.driver.configManager.lookupNotification(
@@ -3371,22 +3449,11 @@ protocol version:      ${this.protocolVersion}`;
 
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
-				const valueConfig = notificationConfig.lookupValue(prevValue);
-				// Only known variables may be reset to idle
-				if (!valueConfig || valueConfig.type !== "state") return;
-				// Some properties may not be reset to idle
-				if (!valueConfig.idle) return;
-
-				const variableName = valueConfig.variableName;
-				const valueId = NotificationCCValues.notificationVariable(
-					notificationName,
-					variableName,
-				).endpoint(command.endpointIndex);
-
-				// Since the node has reset the notification itself, we don't need the idle reset
-				this.clearNotificationIdleReset(valueId);
-				extendValueMetadata(valueId, notificationConfig, valueConfig);
-				this.valueDB.setValue(valueId, 0 /* idle */);
+				this.manuallyIdleNotificationValueInternal(
+					notificationConfig,
+					prevValue,
+					command.endpointIndex,
+				);
 			};
 
 			const value = command.notificationEvent!;
@@ -3446,8 +3513,11 @@ protocol version:      ${this.protocolVersion}`;
 				// We don't know what this notification refers to, so we don't force a reset
 				allowIdleReset = false;
 			} else if (valueConfig.type === "state") {
-				allowIdleReset = valueConfig.idle;
+				// CL:0071.01.52.07.2: A controlling node SHOULD NOT use timeouts to consider a state variable
+				// to be idle [...] for v8 or newer supporting nodes.
+				allowIdleReset = command.version >= 8 && valueConfig.idle;
 			} else {
+				// This is an event
 				this.emit("notification", this, CommandClasses.Notification, {
 					type: command.notificationType,
 					event: value,
@@ -3455,6 +3525,13 @@ protocol version:      ${this.protocolVersion}`;
 					eventLabel: valueConfig.label,
 					parameters: command.eventParameters,
 				});
+
+				// We may need to reset some linked states to idle
+				if (valueConfig.idleVariables?.length) {
+					for (const variable of valueConfig.idleVariables) {
+						setStateIdle(variable);
+					}
+				}
 				return;
 			}
 
@@ -3466,7 +3543,11 @@ protocol version:      ${this.protocolVersion}`;
 					valueConfig.variableName,
 				).endpoint(command.endpointIndex);
 
-				extendValueMetadata(valueId, notificationConfig, valueConfig);
+				this.extendNotificationValueMetadata(
+					valueId,
+					notificationConfig,
+					valueConfig,
+				);
 			} else {
 				// Collect unknown values in an "unknown" bucket
 				const unknownValue =
@@ -3524,6 +3605,12 @@ protocol version:      ${this.protocolVersion}`;
 	private handleKnownNotification(command: NotificationCCReport): void {
 		const lockEvents = [0x01, 0x03, 0x05, 0x09];
 		const unlockEvents = [0x02, 0x04, 0x06];
+		const doorStatusEvents = [
+			// Actual status
+			0x16, 0x17,
+			// Synthetic status with enum
+			0x1600, 0x1601,
+		];
 		if (
 			// Access Control, manual/keypad/rf/auto (un)lock operation
 			command.notificationType === 0x06 &&
@@ -3556,6 +3643,24 @@ protocol version:      ${this.protocolVersion}`;
 					isLocked,
 				);
 			}
+		} else if (
+			command.notificationType === 0x06 &&
+			doorStatusEvents.includes(command.notificationEvent as number)
+		) {
+			// https://github.com/zwave-js/node-zwave-js/pull/5394 added support for
+			// notification enums. Unfortunately, there's no way to discover which nodes
+			// actually support them, which makes working with the Door state variable
+			// very cumbersome. Also, this is currently the only notification where the enum values
+			// extend the state value.
+			// To work around this, we hard-code a notification value for the door status
+			// which only includes the "legacy" states for open/closed.
+
+			this.valueDB.setValue(
+				NotificationCCValues.doorStateSimple.endpoint(
+					command.endpointIndex,
+				),
+				command.notificationEvent === 0x17 ? 0x17 : 0x16,
+			);
 		}
 	}
 
@@ -4723,13 +4828,10 @@ protocol version:      ${this.protocolVersion}`;
 			(healthCheckTestFrameCount / 5) * 1000,
 		);
 
-		// Poll the status of the test regularly
-		const pollFrequencyMs =
-			expectedDurationMs >= 60000
-				? 10000
-				: expectedDurationMs >= 10000
-				? 5000
-				: 1000;
+		// Poll the status of the test regularly, but not too frequently. Especially for quick tests, polling too often
+		// increases the likelyhood of us querying the node at the same time it sends an unsolicited update.
+		// If using Security S2, this can cause a desync.
+		const pollFrequencyMs = expectedDurationMs >= 60000 ? 20000 : 5000;
 
 		// Track how often we failed to get a response from the node, so we can abort if the connection is too bad
 		let continuousErrors = 0;
@@ -4866,6 +4968,8 @@ protocol version:      ${this.protocolVersion}`;
 
 			for (let i = 1; i <= healthCheckTestFrameCount; i++) {
 				const start = Date.now();
+				// Reset TX report before each ping
+				txReport = undefined as any;
 				const pingResult = await pingAPI.send().then(
 					() => true,
 					() => false,
@@ -4950,6 +5054,10 @@ protocol version:      ${this.protocolVersion}`;
 							powerlevel,
 						)}, ${result}/${healthCheckTestFrameCount} pings were acknowledged...`,
 					);
+
+					// Wait a second for things to settle down
+					await wait(1000);
+
 					return failedPingsController === 0;
 				};
 				try {
@@ -5123,6 +5231,10 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 							otherNode.id
 						}...`,
 					);
+
+					// Wait a second for things to settle down
+					await wait(1000);
+
 					return failedPings === 0;
 				};
 
@@ -5279,5 +5391,81 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			ret.lwr = newStats;
 			return ret;
 		});
+	}
+
+	/**
+	 * Sets the current date, time and timezone (or a subset of those) on the node using one or more of the respective CCs.
+	 * Returns whether the operation was successful.
+	 */
+	public async setDateAndTime(now: Date = new Date()): Promise<boolean> {
+		// There are multiple ways to communicate the current time to a node:
+		// 1. Time Parameters CC
+		// 2. Clock CC
+		// 3. Time CC, but only in response to requests from the node
+		const timeParametersAPI = this.commandClasses["Time Parameters"];
+		const timeAPI = this.commandClasses.Time;
+		const clockAPI = this.commandClasses.Clock;
+		const scheduleEntryLockAPI = this.commandClasses["Schedule Entry Lock"];
+
+		if (
+			timeParametersAPI.isSupported() &&
+			timeParametersAPI.supportsCommand(TimeParametersCommand.Set)
+		) {
+			try {
+				const result = await timeParametersAPI.set(now);
+				if (supervisedCommandFailed(result)) return false;
+			} catch {
+				return false;
+			}
+		} else if (
+			clockAPI.isSupported() &&
+			clockAPI.supportsCommand(ClockCommand.Set)
+		) {
+			try {
+				// Get desired time in local time
+				const hours = now.getHours();
+				const minutes = now.getMinutes();
+				// Sunday is 0 in JS, but 7 in Z-Wave
+				let weekday = now.getDay();
+				if (weekday === 0) weekday = 7;
+
+				const result = await clockAPI.set(hours, minutes, weekday);
+				if (supervisedCommandFailed(result)) return false;
+			} catch {
+				return false;
+			}
+		} else {
+			// No way to set the time
+			return false;
+		}
+
+		// We might also have to change the timezone. That is done with the Time CC.
+		// Or in really strange cases using the Schedule Entry Lock CC
+		const timezone = getDSTInfo(now);
+		if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.TimeOffsetSet)
+		) {
+			try {
+				const result = await timeAPI.setTimezone(timezone);
+				if (supervisedCommandFailed(result)) return false;
+			} catch {
+				return false;
+			}
+		} else if (
+			scheduleEntryLockAPI.isSupported() &&
+			scheduleEntryLockAPI.supportsCommand(
+				ScheduleEntryLockCommand.TimeOffsetSet,
+			)
+		) {
+			try {
+				const result = await scheduleEntryLockAPI.setTimezone(timezone);
+				if (supervisedCommandFailed(result)) return false;
+			} catch {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

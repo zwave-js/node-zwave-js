@@ -45,3 +45,4 @@ packages/*/cache
 test/.*-audit.json
 test/*_logrotate.json
 test/zwavejs_*.log
+.DS_Store

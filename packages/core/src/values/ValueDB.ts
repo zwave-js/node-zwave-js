@@ -187,7 +187,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			}
 
 			this._index.add(dbKey);
-			this._db.set(dbKey, value);
+			this._db.set(dbKey, value, options.updateTimestamp !== false);
 			if (valueId.commandClass >= 0 && options.noEvent !== true) {
 				this.emit(event, cbArg);
 			}

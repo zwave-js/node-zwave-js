@@ -2169,6 +2169,7 @@ export interface SetValueOptions {
     noThrow?: boolean;
     source?: ValueUpdatedArgs["source"];
     stateful?: boolean;
+    updateTimestamp?: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "SimpleReflectionDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

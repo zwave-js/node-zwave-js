@@ -71,6 +71,10 @@
 			"required": ["min", "max"],
 			"additionalProperties": false
 		},
+		"preferred": {
+			"const": true,
+			"description": "Mark this configuration file as preferred over others with overlapping firmware version ranges"
+		},
 		"supportsZWavePlus": {
 			"const": true
 		},
