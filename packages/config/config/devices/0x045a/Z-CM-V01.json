@@ -16,6 +16,8 @@
 	"paramInformation": [
 		{
 			"#": "1",
+			// TODO: It is unknown what this parameter does. If anyone knows,
+			// let us know so we can find a better label for it
 			"label": "Set To Start Holding Hands",
 			"description": "This parameter can be used to set the motor open hand start function",
 			"valueSize": 1,
@@ -45,6 +47,8 @@
 					"label": "Forward",
 					"value": 1
 				},
+				// TODO: The difference between these two is unknown.
+				// If anyone knows, please tell us.
 				{
 					"label": "Opposite",
 					"value": 2
