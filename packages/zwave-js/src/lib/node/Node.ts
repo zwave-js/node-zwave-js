@@ -3513,7 +3513,9 @@ protocol version:      ${this.protocolVersion}`;
 				// We don't know what this notification refers to, so we don't force a reset
 				allowIdleReset = false;
 			} else if (valueConfig.type === "state") {
-				allowIdleReset = valueConfig.idle;
+				// CL:0071.01.52.07.2: A controlling node SHOULD NOT use timeouts to consider a state variable
+				// to be idle [...] for v8 or newer supporting nodes.
+				allowIdleReset = command.version >= 8 && valueConfig.idle;
 			} else {
 				// This is an event
 				this.emit("notification", this, CommandClasses.Notification, {
