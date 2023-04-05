@@ -3967,6 +3967,7 @@ ${handlers.length} left`,
 				cmd = Security2CC.encapsulate(this, cmd, {
 					multicastOutOfSync: !!options.s2MulticastOutOfSync,
 					multicastGroupId: options.s2MulticastGroupId,
+					verifyDelivery: options.s2VerifyDelivery,
 				});
 			}
 

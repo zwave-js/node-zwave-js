@@ -216,9 +216,11 @@ export type SupervisionOptions =
 	  };
 
 export type SendCommandSecurityS2Options = {
-	/** Whether the MOS extension should be included in S2 message encapsulation */
+	/** Whether delivery of non-supervised SET-type commands is verified by waiting for potential Nonce Reports. Default: true */
+	s2VerifyDelivery?: boolean;
+	/** Whether the MOS extension should be included in S2 message encapsulation. */
 	s2MulticastOutOfSync?: boolean;
-	/** The optional multicast group ID to use for S2 message encapsulation */
+	/** The optional multicast group ID to use for S2 message encapsulation. */
 	s2MulticastGroupId?: number;
 };
 
