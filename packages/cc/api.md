@@ -1779,6 +1779,8 @@ export class BatteryCCReport extends BatteryCC {
     // (undocumented)
     readonly overheating: boolean | undefined;
     // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
     readonly rechargeable: boolean | undefined;
     // (undocumented)
     readonly rechargeOrReplace: BatteryReplacementStatus | undefined;
