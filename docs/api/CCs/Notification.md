@@ -93,6 +93,27 @@ async getSupportedEvents(
 -   **min. value:** 0
 -   **max. value:** 255
 
+### `doorStateSimple`
+
+```ts
+{
+	commandClass: CommandClasses.Notification,
+	endpoint: number,
+	property: "Access Control",
+	propertyKey: "Door state (simple)",
+}
+```
+
+-   **label:** Door state (simple)
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
+
 ### `notificationVariable(notificationName: string, variableName: string)`
 
 ```ts

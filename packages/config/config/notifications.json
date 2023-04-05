@@ -533,30 +533,54 @@
 		],
 		"events": {
 			"0x01": {
-				"label": "Manual lock operation"
+				"label": "Manual lock operation",
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x02": {
-				"label": "Manual unlock operation"
+				"label": "Manual unlock operation",
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x03": {
-				"label": "RF lock operation"
+				"label": "RF lock operation",
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x04": {
-				"label": "RF unlock operation"
+				"label": "RF unlock operation",
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x05": {
 				"label": "Keypad lock operation",
 				// parameters contain User Code Report
 				"params": {
 					"type": "commandclass"
-				}
+				},
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x06": {
 				"label": "Keypad unlock operation",
 				// parameters contain User Code Report
 				"params": {
 					"type": "commandclass"
-				}
+				},
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x07": {
 				"label": "Manual not fully locked operation"
@@ -565,7 +589,11 @@
 				"label": "RF not fully locked operation"
 			},
 			"0x09": {
-				"label": "Auto lock locked operation"
+				"label": "Auto lock locked operation",
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x0a": {
 				"label": "Auto lock not fully locked operation"
@@ -608,7 +636,11 @@
 				"params": {
 					"type": "value",
 					"name": "user ID"
-				}
+				},
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x22": {
 				"label": "Unlock operation with User Code",
@@ -616,7 +648,11 @@
 				"params": {
 					"type": "value",
 					"name": "user ID"
-				}
+				},
+				"idleVariables": [
+					// Lock state - Lock jammed
+					"0x0b"
+				]
 			},
 			"0x41": {
 				"label": "Barrier operation (open/close) force has been exceeded"

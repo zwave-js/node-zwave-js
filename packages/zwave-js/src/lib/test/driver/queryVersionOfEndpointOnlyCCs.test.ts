@@ -4,7 +4,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"The version of endpoint-only CCs gets queried during the interview",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			isListening: true,

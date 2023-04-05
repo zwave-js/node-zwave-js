@@ -11992,6 +11992,43 @@ export const NotificationCCValues: Readonly<{
             readonly supportsEndpoints: false;
         };
     };
+    doorStateSimple: {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: "Access Control";
+            propertyKey: "Door state (simple)";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "Access Control";
+            readonly propertyKey: "Door state (simple)";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly label: "Door state (simple)";
+            readonly states: {
+                readonly 22: "Window/door is open";
+                readonly 23: "Window/door is closed";
+            };
+            readonly ccSpecific: {
+                readonly notificationType: 6;
+            };
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly options: {
+            readonly internal: false;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
+        };
+    };
     alarmLevel: {
         readonly id: {
             commandClass: CommandClasses.Notification;
