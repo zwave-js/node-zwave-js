@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.14.0 (2023-04-05)
 ### Features
 * Added a method on the `ZWaveNode` class to manually idle notifications, e.g. a stuck smoke sensor (#5634)
 
