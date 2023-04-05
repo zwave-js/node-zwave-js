@@ -43,6 +43,7 @@ import {
 	BatteryCommand,
 	BatteryReplacementStatus,
 } from "../lib/_Types";
+import { NotificationCCValues } from "./NotificationCC";
 
 export const BatteryCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Battery, {
@@ -439,6 +440,45 @@ export class BatteryCCReport extends BatteryCC {
 			this.disconnected = options.disconnected;
 			this.lowTemperatureStatus = options.lowTemperatureStatus;
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		// Naïve heuristic for a full battery
+		if (this.level >= 90) {
+			// Some devices send Notification CC Reports with battery information,
+			// or this information is mapped from legacy V1 alarm values.
+			// We may need to idle the corresponding values when the battery is full
+			const notificationCCVersion =
+				applHost.getSupportedCCVersionForEndpoint(
+					CommandClasses.Notification,
+					this.nodeId as number,
+					this.endpointIndex,
+				);
+			if (
+				// supported
+				notificationCCVersion > 0 &&
+				// but idling is not required
+				notificationCCVersion < 8
+			) {
+				const batteryLevelStatusValue =
+					NotificationCCValues.notificationVariable(
+						"Power Management",
+						"Battery level status",
+					);
+				// If not undefined and not idle
+				if (this.getValue(applHost, batteryLevelStatusValue)) {
+					this.setValue(
+						applHost,
+						batteryLevelStatusValue,
+						0 /* idle */,
+					);
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@ccValue(BatteryCCValues.level)
