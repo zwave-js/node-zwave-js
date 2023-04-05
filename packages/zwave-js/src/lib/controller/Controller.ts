@@ -2637,7 +2637,11 @@ supported CCs: ${nodeInfo.supportedCCs
 		this.cancelBootstrapS2Promise = createDeferredPromise();
 
 		try {
-			const api = node.commandClasses["Security 2"];
+			const api = node.commandClasses["Security 2"].withOptions({
+				// Do not wait for Nonce Reports after SET-type commands.
+				// Timing is critical here
+				s2VerifyDelivery: false,
+			});
 			const abort = async (failType?: KEXFailType): Promise<void> => {
 				if (failType != undefined) {
 					try {

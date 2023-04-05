@@ -13781,6 +13781,7 @@ export class Security2CC extends CommandClass {
         securityClass?: SecurityClass;
         multicastOutOfSync?: boolean;
         multicastGroupId?: number;
+        verifyDelivery?: boolean;
     }): Security2CCMessageEncapsulation;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
@@ -13898,6 +13899,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly verifyDelivery: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

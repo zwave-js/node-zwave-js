@@ -143,8 +143,13 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 		});
 		// Since the response may take longer than with other commands,
 		// we do not use the built-in waiting functionality, which would block
-		// all other communication
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		// all other communication.
+
+		await this.applHost.sendCommand(cc, {
+			...this.commandOptions,
+			// Do not wait for Nonce Reports
+			s2VerifyDelivery: false,
+		});
 		const { status } =
 			await this.applHost.waitForCommand<FirmwareUpdateMetaDataCCRequestReport>(
 				(cc) =>
@@ -176,7 +181,11 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			isLast: isLastFragment,
 			firmwareData: data,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.applHost.sendCommand(cc, {
+			...this.commandOptions,
+			// Do not wait for Nonce Reports
+			s2VerifyDelivery: false,
+		});
 	}
 
 	/** Activates a previously transferred firmware image */
