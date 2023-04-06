@@ -654,9 +654,21 @@
 		},
 		{
 			"#": "159",
-			"label": "Only One LED Mode",
-			"description": "Only applicable when Parameter 158 is set to On/Off Mode",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"label": "LED Bar in On/Off Mode",
+			"description": "When the device is in On/off mode, use full LED bar or just one LED",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Full LED bar",
+					"value": 0
+				},
+				{
+					"label": "Just one LED",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "160",
