@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.14.1 (2023-04-07)
 ### Bugfixes
 * Revert change to notification auto-idle from v10.14.0 (#5639)
 
