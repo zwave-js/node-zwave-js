@@ -595,10 +595,14 @@ The following CCs will be used (when supported or necessary) in this process:
 ### `manuallyIdleNotificationValue`
 
 ```ts
+manuallyIdleNotificationValue(valueId: ValueID): void;
+```
+
+```ts
 manuallyIdleNotificationValue(notificationType: number, prevValue: number, endpointIndex?: number): void;
 ```
 
-Many devices using `Notification CC` do not idle their notification values, since this requirement was only introduced in v8 of the Command Class. To alleviate the problem, this method can be used to manually idle the value. It takes the following arguments:
+Many devices using `Notification CC` do not idle their notification values, since this requirement was only introduced in v8 of the Command Class. To alleviate the problem, this method can be used to manually idle the value. It takes either the `valueId` of the value to idle or the following arguments:
 
 -   `notificationType`: The standardized notification type the value belongs to. If unknown, this can be read from the `ccSpecific.notificationType` property of the corresponding value metadata.
 -   `prevValue`: The value of the notification variable in its non-idle state. This is used to determine which notification variable should be reset to idle. It **must** match the current value, otherwise the value will not be reset.
