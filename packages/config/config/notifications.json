@@ -568,7 +568,11 @@
 				},
 				"idleVariables": [
 					// Lock state - Lock jammed
-					"0x0b"
+					"0x0b",
+					// Keypad state - Keypad temporary disabled
+					"0x10",
+					// Keypad state - Keypad busy
+					"0x11"
 				]
 			},
 			"0x06": {
@@ -579,7 +583,11 @@
 				},
 				"idleVariables": [
 					// Lock state - Lock jammed
-					"0x0b"
+					"0x0b",
+					// Keypad state - Keypad temporary disabled
+					"0x10",
+					// Keypad state - Keypad busy
+					"0x11"
 				]
 			},
 			"0x07": {
@@ -628,7 +636,13 @@
 				"params": {
 					"type": "value",
 					"name": "user ID"
-				}
+				},
+				"idleVariables": [
+					// Keypad state - Keypad temporary disabled
+					"0x10",
+					// Keypad state - Keypad busy
+					"0x11"
+				]
 			},
 			"0x21": {
 				"label": "Lock operation with User Code",
