@@ -1,0 +1,14 @@
+built/nvmedit/index.js
+deletes these lines:
+	var nvm_1 = require("./nvm3/nvm");
+	var object_1 = require("./nvm3/object");
+	var page_1 = require("./nvm3/page");
+	var NVMParser_1 = require("./nvm500/NVMParser");
+
+built/zwave-js/Controller.js
+deletes this line:
+	var core_1 = require("@zwave-js/core");
+
+built/zwave-js/Driver.js
+deletes:
+	var Driver_2 = require("./lib/log/Driver");
