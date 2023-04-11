@@ -3365,7 +3365,7 @@ protocol version:      ${this.protocolVersion}`;
 
 	public manuallyIdleNotificationValue(
 		notificationType: number,
-		prevValue?: number,
+		prevValue: number,
 		endpointIndex?: number,
 	): void;
 

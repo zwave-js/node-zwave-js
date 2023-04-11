@@ -1283,7 +1283,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     set location(value: string | undefined);
     manuallyIdleNotificationValue(valueId: ValueID_2): void;
     // (undocumented)
-    manuallyIdleNotificationValue(notificationType: number, prevValue?: number, endpointIndex?: number): void;
+    manuallyIdleNotificationValue(notificationType: number, prevValue: number, endpointIndex?: number): void;
     // (undocumented)
     get manufacturerId(): number | undefined;
     // (undocumented)

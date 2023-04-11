@@ -596,9 +596,6 @@ The following CCs will be used (when supported or necessary) in this process:
 
 ```ts
 manuallyIdleNotificationValue(valueId: ValueID): void;
-```
-
-```ts
 manuallyIdleNotificationValue(notificationType: number, prevValue: number, endpointIndex?: number): void;
 ```
 
