@@ -3361,11 +3361,33 @@ protocol version:      ${this.protocolVersion}`;
 	/**
 	 * Manually resets a single notification value to idle.
 	 */
+	public manuallyIdleNotificationValue(valueId: ValueID): void;
+
 	public manuallyIdleNotificationValue(
 		notificationType: number,
 		prevValue: number,
+		endpointIndex?: number,
+	): void;
+
+	public manuallyIdleNotificationValue(
+		notificationTypeOrValueID: number | ValueID,
+		prevValue?: number,
 		endpointIndex: number = 0,
 	): void {
+		let notificationType: number | undefined;
+		if (typeof notificationTypeOrValueID === "number") {
+			notificationType = notificationTypeOrValueID;
+		} else {
+			notificationType = this.valueDB.getMetadata(
+				notificationTypeOrValueID,
+			)?.ccSpecific?.notificationType as number | undefined;
+			if (notificationType === undefined) {
+				return;
+			}
+			prevValue = this.valueDB.getValue(notificationTypeOrValueID);
+			endpointIndex = notificationTypeOrValueID.endpoint ?? 0;
+		}
+
 		if (
 			!this.getEndpoint(endpointIndex)?.supportsCC(
 				CommandClasses.Notification,
@@ -3380,7 +3402,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		return this.manuallyIdleNotificationValueInternal(
 			notificationConfig,
-			prevValue,
+			prevValue!,
 			endpointIndex,
 		);
 	}
