@@ -817,7 +817,8 @@ let IrrigationCCAPI = class IrrigationCCAPI extends API_1.CCAPI {
         return this.shutoffSystem(255);
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 IrrigationCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(safe_1.CommandClasses.Irrigation)
 ], IrrigationCCAPI);

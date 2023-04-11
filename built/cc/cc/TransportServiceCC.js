@@ -64,7 +64,9 @@ function isTransportServiceEncapsulation(command) {
             command.ccCommand === _Types_1.TransportServiceCommand.SubsequentSegment));
 }
 exports.isTransportServiceEncapsulation = isTransportServiceEncapsulation;
-let TransportServiceCCFirstSegment = class TransportServiceCCFirstSegment extends TransportServiceCC {
+let TransportServiceCCFirstSegment = 
+// @expectedCCResponse(TransportServiceCCReport)
+class TransportServiceCCFirstSegment extends TransportServiceCC {
     constructor(host, options) {
         super(host, options);
         if ((0, CommandClass_1.gotDeserializationOptions)(options)) {
@@ -164,7 +166,9 @@ TransportServiceCCFirstSegment = __decorate([
     // @expectedCCResponse(TransportServiceCCReport)
 ], TransportServiceCCFirstSegment);
 exports.TransportServiceCCFirstSegment = TransportServiceCCFirstSegment;
-let TransportServiceCCSubsequentSegment = class TransportServiceCCSubsequentSegment extends TransportServiceCC {
+let TransportServiceCCSubsequentSegment = 
+// @expectedCCResponse(TransportServiceCCReport)
+class TransportServiceCCSubsequentSegment extends TransportServiceCC {
     constructor(host, options) {
         super(host, options);
         if ((0, CommandClass_1.gotDeserializationOptions)(options)) {

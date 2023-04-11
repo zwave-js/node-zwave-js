@@ -173,7 +173,8 @@ let ThermostatSetpointCCAPI = class ThermostatSetpointCCAPI extends API_1.CCAPI 
         return response?.supportedSetpointTypes;
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 ThermostatSetpointCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(safe_1.CommandClasses["Thermostat Setpoint"])
 ], ThermostatSetpointCCAPI);
@@ -657,7 +658,12 @@ ThermostatSetpointCCSupportedReport = __decorate([
     (0, CommandClassDecorators_1.CCCommand)(_Types_1.ThermostatSetpointCommand.SupportedReport)
 ], ThermostatSetpointCCSupportedReport);
 exports.ThermostatSetpointCCSupportedReport = ThermostatSetpointCCSupportedReport;
-let ThermostatSetpointCCSupportedGet = class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
+let ThermostatSetpointCCSupportedGet = 
+/**
+ * Issues a SupportedGet command to the node. Due to inconsistencies in interpretation,
+ * this command should not be used for nodes with CC versions 1 or 2
+ */
+class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
 };
 ThermostatSetpointCCSupportedGet = __decorate([
     (0, CommandClassDecorators_1.CCCommand)(_Types_1.ThermostatSetpointCommand.SupportedGet),

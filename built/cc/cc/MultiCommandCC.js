@@ -88,7 +88,9 @@ MultiCommandCC = __decorate([
     (0, CommandClassDecorators_1.implementedVersion)(1)
 ], MultiCommandCC);
 exports.MultiCommandCC = MultiCommandCC;
-let MultiCommandCCCommandEncapsulation = class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
+let MultiCommandCCCommandEncapsulation = 
+// When sending commands encapsulated in this CC, responses to GET-type commands likely won't be encapsulated
+class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
     constructor(host, options) {
         super(host, options);
         if ((0, CommandClass_1.gotDeserializationOptions)(options)) {

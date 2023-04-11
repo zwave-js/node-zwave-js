@@ -143,7 +143,8 @@ let FibaroCCAPI = class FibaroCCAPI extends ManufacturerProprietaryCC_1.Manufact
         await this.applHost.sendCommand(cc, this.commandOptions);
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 FibaroCCAPI = __decorate([
     (0, Decorators_1.manufacturerProprietaryAPI)(exports.MANUFACTURERID_FIBARO)
 ], FibaroCCAPI);

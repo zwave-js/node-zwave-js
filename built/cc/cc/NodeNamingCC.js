@@ -119,7 +119,8 @@ let NodeNamingAndLocationCCAPI = class NodeNamingAndLocationCCAPI extends API_1.
         return this.applHost.sendCommand(cc, this.commandOptions);
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 NodeNamingAndLocationCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(safe_1.CommandClasses["Node Naming and Location"])
 ], NodeNamingAndLocationCCAPI);

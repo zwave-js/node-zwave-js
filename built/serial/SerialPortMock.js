@@ -14,8 +14,8 @@ class SerialPortMock extends stream_1.SerialPortStream {
         super(opts, openCallback);
     }
 }
-exports.SerialPortMock = SerialPortMock;
 // eslint-disable-next-line @typescript-eslint/unbound-method
 SerialPortMock.list = SerialPortBindingMock_1.MockBinding.list;
 SerialPortMock.binding = SerialPortBindingMock_1.MockBinding;
+exports.SerialPortMock = SerialPortMock;
 //# sourceMappingURL=SerialPortMock.js.map

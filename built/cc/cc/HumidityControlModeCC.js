@@ -106,7 +106,8 @@ let HumidityControlModeCCAPI = class HumidityControlModeCCAPI extends API_1.CCAP
         return response?.supportedModes;
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 HumidityControlModeCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(safe_1.CommandClasses["Humidity Control Mode"])
 ], HumidityControlModeCCAPI);

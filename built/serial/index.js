@@ -17,7 +17,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SerialLogger = void 0;
 var Logger_1 = require("./Logger");
 Object.defineProperty(exports, "SerialLogger", { enumerable: true, get: function () { return Logger_1.SerialLogger; } });
-var Logger_safe_1 = require("./Logger_safe");
 __exportStar(require("./message/Constants"), exports);
 __exportStar(require("./message/INodeQuery"), exports);
 __exportStar(require("./message/Message"), exports);

@@ -488,7 +488,8 @@ let DoorLockCCAPI = class DoorLockCCAPI extends API_1.PhysicalCCAPI {
         }
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 DoorLockCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(safe_1.CommandClasses["Door Lock"])
 ], DoorLockCCAPI);

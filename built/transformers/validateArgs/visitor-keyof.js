@@ -82,7 +82,7 @@ function visitRegularObjectType(type, visitorContext) {
             // keyof { x: T } = x
             const properties = visitorContext.checker.getPropertiesOfType(type);
             const names = properties.map((property) => property.name);
-            const condition = VisitorUtils.createBinaries(names.map((name) => typescript_1.default.createStrictInequality(VisitorUtils.objectIdentifier, typescript_1.default.createStringLiteral(name))), typescript_1.default.SyntaxKind.AmpersandAmpersandToken, typescript_1.default.createTrue());
+            const condition = VisitorUtils.createBinaries(names.map((name) => typescript_1.default.factory.createStrictInequality(VisitorUtils.objectIdentifier, typescript_1.default.factory.createStringLiteral(name))), typescript_1.default.SyntaxKind.AmpersandAmpersandToken, typescript_1.default.factory.createTrue());
             return VisitorUtils.createAssertionFunction(condition, { type: "object-keyof", properties: names }, name, visitorContext);
         });
     }

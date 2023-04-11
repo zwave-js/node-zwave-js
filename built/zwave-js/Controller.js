@@ -15,7 +15,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SerialAPISetupCommand = exports.ControllerFirmwareUpdateStatus = exports.ZWaveFeature = exports.ZWaveController = exports.RssiError = exports.RFRegion = exports.ProtocolDataRate = exports.isRssiError = void 0;
-var core_1 = require("@zwave-js/core");
 var safe_1 = require("@zwave-js/core/safe");
 Object.defineProperty(exports, "isRssiError", { enumerable: true, get: function () { return safe_1.isRssiError; } });
 Object.defineProperty(exports, "ProtocolDataRate", { enumerable: true, get: function () { return safe_1.ProtocolDataRate; } });

@@ -25,7 +25,9 @@ var ApplicationUpdateTypes;
 const { decorator: applicationUpdateType, lookupConstructor: getApplicationUpdateRequestConstructor, lookupValue: getApplicationUpdateType, } = (0, core_1.createSimpleReflectionDecorator)({
     name: "applicationUpdateType",
 });
-let ApplicationUpdateRequest = class ApplicationUpdateRequest extends serial_1.Message {
+let ApplicationUpdateRequest = 
+// this is only received, not sent!
+class ApplicationUpdateRequest extends serial_1.Message {
     constructor(host, options) {
         super(host, options);
         if ((0, serial_1.gotDeserializationOptions)(options)) {

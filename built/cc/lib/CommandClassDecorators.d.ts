@@ -82,7 +82,7 @@ export declare function getCCResponsePredicate<T extends CommandClass>(ccClass: 
  * @publicAPI
  * Defines which CC value definitions belong to a Z-Wave command class
  */
-export declare const ccValues: <TTarget extends CommandClass>(valueDefinition: Record<string, StaticCCValue | DynamicCCValue<any[]>>) => TypedClassDecorator<TTarget>;
+export declare const ccValues: <TTarget extends CommandClass>(valueDefinition: Record<string, StaticCCValue | DynamicCCValue>) => TypedClassDecorator<TTarget>;
 /**
  * @publicAPI
  * Retrieves the CC value definitions which belong to a Z-Wave command class

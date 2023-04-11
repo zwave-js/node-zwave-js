@@ -11,5 +11,4 @@ var Driver_1 = require("./lib/driver/Driver");
 Object.defineProperty(exports, "Driver", { enumerable: true, get: function () { return Driver_1.Driver; } });
 Object.defineProperty(exports, "libName", { enumerable: true, get: function () { return Driver_1.libName; } });
 Object.defineProperty(exports, "libVersion", { enumerable: true, get: function () { return Driver_1.libVersion; } });
-var Driver_2 = require("./lib/log/Driver");
 //# sourceMappingURL=Driver.js.map

@@ -20,7 +20,7 @@ export declare function getManufacturerIdStatic<T extends ManufacturerProprietar
  * @publicAPI
  * Looks up the Manufacturer Proprietary CC constructor for a given Manufacturer ID
  */
-export declare const getManufacturerProprietaryCCConstructor: (manufacturerId: number) => ManufacturerProprietaryCCConstructor<typeof ManufacturerProprietaryCC> | undefined;
+export declare const getManufacturerProprietaryCCConstructor: (manufacturerId: number) => ManufacturerProprietaryCCConstructor | undefined;
 /**
  * @publicAPI
  * Defines the manufacturer ID a Proprietary CC API implementation belongs to

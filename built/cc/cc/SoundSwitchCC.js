@@ -224,7 +224,8 @@ let SoundSwitchCCAPI = class SoundSwitchCCAPI extends API_1.CCAPI {
         }
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 SoundSwitchCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(safe_1.CommandClasses["Sound Switch"])
 ], SoundSwitchCCAPI);

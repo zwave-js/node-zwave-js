@@ -465,7 +465,10 @@ FirmwareUpdateMetaDataCCRequestReport = __decorate([
     (0, CommandClassDecorators_1.CCCommand)(_Types_1.FirmwareUpdateMetaDataCommand.RequestReport)
 ], FirmwareUpdateMetaDataCCRequestReport);
 exports.FirmwareUpdateMetaDataCCRequestReport = FirmwareUpdateMetaDataCCRequestReport;
-let FirmwareUpdateMetaDataCCRequestGet = class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC {
+let FirmwareUpdateMetaDataCCRequestGet = 
+// This would expect a FirmwareUpdateMetaDataCCRequestReport, but the response may take
+// a while to come. We don't want to block communication, so we don't expect a response here
+class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC {
     constructor(host, options) {
         super(host, options);
         if ((0, CommandClass_1.gotDeserializationOptions)(options)) {
@@ -536,7 +539,9 @@ FirmwareUpdateMetaDataCCRequestGet = __decorate([
     // a while to come. We don't want to block communication, so we don't expect a response here
 ], FirmwareUpdateMetaDataCCRequestGet);
 exports.FirmwareUpdateMetaDataCCRequestGet = FirmwareUpdateMetaDataCCRequestGet;
-let FirmwareUpdateMetaDataCCGet = class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
+let FirmwareUpdateMetaDataCCGet = 
+// This is sent to us from the node, so we expect no response
+class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
     constructor(host, options) {
         super(host, options);
         (0, safe_1.validatePayload)(this.payload.length >= 3);
@@ -558,7 +563,9 @@ FirmwareUpdateMetaDataCCGet = __decorate([
     // This is sent to us from the node, so we expect no response
 ], FirmwareUpdateMetaDataCCGet);
 exports.FirmwareUpdateMetaDataCCGet = FirmwareUpdateMetaDataCCGet;
-let FirmwareUpdateMetaDataCCReport = class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
+let FirmwareUpdateMetaDataCCReport = 
+// We send this in reply to the Get command and expect no response
+class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
     constructor(host, options) {
         super(host, options);
         if ((0, CommandClass_1.gotDeserializationOptions)(options)) {

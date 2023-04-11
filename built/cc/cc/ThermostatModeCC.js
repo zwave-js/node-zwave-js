@@ -127,7 +127,8 @@ let ThermostatModeCCAPI = class ThermostatModeCCAPI extends API_1.CCAPI {
         return response?.supportedModes;
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 ThermostatModeCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(safe_1.CommandClasses["Thermostat Mode"])
 ], ThermostatModeCCAPI);

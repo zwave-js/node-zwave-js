@@ -15,7 +15,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Logger_safe_1 = require("./Logger_safe");
 __exportStar(require("./message/Constants"), exports);
 __exportStar(require("./message/SuccessIndicator"), exports);
 __exportStar(require("./MessageHeaders"), exports);

@@ -732,7 +732,8 @@ let UserCodeCCAPI = class UserCodeCCAPI extends API_1.PhysicalCCAPI {
         return response?.userCodeChecksum;
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 UserCodeCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(safe_1.CommandClasses["User Code"])
 ], UserCodeCCAPI);

@@ -648,7 +648,8 @@ let ColorSwitchCCAPI = class ColorSwitchCCAPI extends API_1.CCAPI {
         return false; // Color Switch CC handles updating the value DB itself
     }
 };
-_a = API_1.SET_VALUE, _b = API_1.POLL_VALUE;
+_a = API_1.SET_VALUE;
+_b = API_1.POLL_VALUE;
 ColorSwitchCCAPI = __decorate([
     (0, CommandClassDecorators_1.API)(core_1.CommandClasses["Color Switch"])
 ], ColorSwitchCCAPI);
