@@ -1689,35 +1689,61 @@ protocol version:      ${this.protocolVersion}`;
 			return;
 		}
 
-		this.driver.controllerLog.logNode(this.id, {
-			message: "querying node info...",
-			direction: "outbound",
-		});
-		try {
-			const nodeInfo = await this.requestNodeInfo();
-			const logLines: string[] = ["node info received", "supported CCs:"];
-			for (const cc of nodeInfo.supportedCCs) {
-				const ccName = CommandClasses[cc];
-				logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
-			}
+		// If we incorrectly assumed a sleeping node to be awake, this step will fail.
+		// In order to fail the interview, we retry here
+		for (let attempts = 1; attempts <= 2; attempts++) {
 			this.driver.controllerLog.logNode(this.id, {
-				message: logLines.join("\n"),
-				direction: "inbound",
+				message: "querying node info...",
+				direction: "outbound",
 			});
-			this.updateNodeInfo(nodeInfo);
-		} catch (e) {
-			if (
-				isZWaveError(e) &&
-				(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-					e.code === ZWaveErrorCodes.Controller_CallbackNOK)
-			) {
-				this.driver.controllerLog.logNode(
-					this.id,
-					`Querying the node info failed`,
-					"error",
-				);
+			try {
+				const nodeInfo = await this.requestNodeInfo();
+				const logLines: string[] = [
+					"node info received",
+					"supported CCs:",
+				];
+				for (const cc of nodeInfo.supportedCCs) {
+					const ccName = CommandClasses[cc];
+					logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
+				}
+				this.driver.controllerLog.logNode(this.id, {
+					message: logLines.join("\n"),
+					direction: "inbound",
+				});
+				this.updateNodeInfo(nodeInfo);
+				break;
+			} catch (e) {
+				if (isZWaveError(e)) {
+					if (
+						attempts === 1 &&
+						this.canSleep &&
+						this.status !== NodeStatus.Asleep &&
+						e.code === ZWaveErrorCodes.Controller_CallbackNOK
+					) {
+						this.driver.controllerLog.logNode(
+							this.id,
+							`Querying the node info failed, the node is probably asleep. Retrying after wakeup...`,
+							"error",
+						);
+						// We assumed the node to be awake, but it is not.
+						this.markAsAsleep();
+						// Retry the query when the node wakes up
+						continue;
+					}
+
+					if (
+						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+						e.code === ZWaveErrorCodes.Controller_CallbackNOK
+					) {
+						this.driver.controllerLog.logNode(
+							this.id,
+							`Querying the node info failed`,
+							"error",
+						);
+					}
+					throw e;
+				}
 			}
-			throw e;
 		}
 
 		this.setInterviewStage(InterviewStage.NodeInfo);
