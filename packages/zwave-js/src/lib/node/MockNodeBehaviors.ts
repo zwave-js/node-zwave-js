@@ -25,6 +25,7 @@ import {
 	MockNodeBehavior,
 	MockZWaveFrameType,
 } from "@zwave-js/testing";
+import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
@@ -269,5 +270,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToZWavePlusCCGet,
 		respondToS0ZWavePlusCCGet,
 		respondToS2ZWavePlusCCGet,
+
+		...NotificationCCBehaviors,
 	];
 }
