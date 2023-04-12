@@ -5,5 +5,5 @@ export { FunctionType, Message, MessageType } from "@zwave-js/serial";
 export type { MessageOptions, ResponsePredicate, ResponseRole, } from "@zwave-js/serial";
 export { Driver, libName, libVersion } from "./lib/driver/Driver";
 export type { EditableZWaveOptions, ZWaveOptions, } from "./lib/driver/ZWaveOptions";
-export { DriverLogContext } from "./lib/log/Driver";
+export type { DriverLogContext } from "./lib/log/Driver";
 //# sourceMappingURL=Driver.d.ts.map

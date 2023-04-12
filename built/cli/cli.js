@@ -89138,7 +89138,9 @@ var Cell2 = ({
           stage < import_safe2.InterviewStage.Complete && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Text, {
             color: "greenBright",
             children: [
-              " ",
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(build_default, {
+                type: "dots"
+              }),
               " "
             ]
           }),

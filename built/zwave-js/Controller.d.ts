@@ -1,4 +1,4 @@
-export { ControllerLogContext, ControllerNodeLogContext, ControllerSelfLogContext, ControllerValueLogContext, } from "@zwave-js/core";
+export type { ControllerLogContext, ControllerNodeLogContext, ControllerSelfLogContext, ControllerValueLogContext, } from "@zwave-js/core";
 export { isRssiError, ProtocolDataRate, RFRegion, RSSI, RssiError, TXReport, } from "@zwave-js/core/safe";
 export { ZWaveController } from "./lib/controller/Controller";
 export type { ControllerEvents } from "./lib/controller/Controller";
