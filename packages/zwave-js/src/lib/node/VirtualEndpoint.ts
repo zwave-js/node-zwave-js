@@ -12,6 +12,7 @@ import {
 	getCCName,
 	IVirtualEndpoint,
 	MulticastDestination,
+	SecurityClass,
 	securityClassIsS2,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -21,7 +22,7 @@ import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "./Endpoint";
 import { createMultiCCAPIWrapper } from "./MultiCCAPIWrapper";
-import type { VirtualNode } from "./VirtualNode";
+import { VirtualNode } from "./VirtualNode";
 
 /**
  * Represents an endpoint of a virtual (broadcast, multicast) Z-Wave node.
@@ -90,28 +91,44 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 	 * @param ccId The command class to create an API instance for
 	 */
 	public createAPI(ccId: CommandClasses): CCAPI {
+		const createCCAPI = (
+			endpoint: IVirtualEndpoint,
+			secClass: SecurityClass,
+		) => {
+			if (
+				securityClassIsS2(secClass) &&
+				// No need to do multicast if there is only one node
+				endpoint.node.physicalNodes.length > 1
+			) {
+				// The API for S2 needs to know the multicast group ID
+				return CCAPI.create(ccId, this.driver, endpoint).withOptions({
+					s2MulticastGroupId:
+						this.driver.securityManager2?.createMulticastGroup(
+							endpoint.node.physicalNodes.map((n) => n.id),
+							secClass,
+						),
+				});
+			} else {
+				return CCAPI.create(ccId, this.driver, endpoint);
+			}
+		};
 		// For mixed security classes, we need to create a wrapper
 		// that handles calling multiple API instances
 		if (this.node.hasMixedSecurityClasses) {
 			const apiInstances = [
 				...this.node.nodesBySecurityClass.entries(),
 			].map(([secClass, nodes]) => {
-				if (securityClassIsS2(secClass)) {
-					// The API for S2 needs to know the multicast group ID
-					return CCAPI.create(ccId, this.driver, this).withOptions({
-						s2MulticastGroupId:
-							this.driver.securityManager2?.createMulticastGroup(
-								nodes.map((n) => n.id),
-								secClass,
-							),
-					});
-				} else {
-					return CCAPI.create(ccId, this.driver, this);
-				}
+				// We need a separate virtual endpoint for each security class, so the API instances
+				// access the correct nodes.
+				const node = new VirtualNode(this.node.id, this.driver, nodes);
+				const endpoint = node.getEndpoint(this.index) ?? node;
+				return createCCAPI(endpoint, secClass);
 			});
 			return createMultiCCAPIWrapper(apiInstances);
 		} else {
-			return CCAPI.create(ccId, this.driver, this);
+			// The node has a single security class, just reuse it
+			const securityClass = [...this.node.nodesBySecurityClass.keys()][0];
+			return createCCAPI(this, securityClass);
 		}
 	}
 
