@@ -1364,6 +1364,11 @@ export const MAX_TRANSPORT_SERVICE_SESSION_ID = 15;
 // @public (undocumented)
 export type Maybe<T> = T | BrandedUnknown<T>;
 
+// Warning: (ae-missing-release-tag) "mergeSupervisionResults" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function mergeSupervisionResults(results: unknown[]): SupervisionResult | undefined;
+
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (ae-missing-release-tag) "messageFitsIntoOneLine" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
