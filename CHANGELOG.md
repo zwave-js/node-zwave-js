@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Simplify working with mixed-security multicast (#5593)
+* Added an overload to `Node.manuallyIdleNotificationValue` which accepts a value ID (#5645)
+
+### Bugfixes
+* Mark sleeping nodes as asleep if querying node info fails (#5648)
+* Idle "Keypad state" notifications on keypad events (#5647)
+
+### Config file changes
+* Mention necessity for re-inclusion after changing endpoint-related config params for Qubino ZMNHAD Relay (#5640)
+
 ## 10.14.1 (2023-04-07)
 ### Bugfixes
 * Revert change to notification auto-idle from v10.14.0 (#5639)
