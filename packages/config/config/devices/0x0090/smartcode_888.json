@@ -177,6 +177,9 @@
 			},
 			{
 				"$import": "templates/kwikset_template.json#alarm_map_low_battery"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_critical_battery"
 			}
 		]
 	},

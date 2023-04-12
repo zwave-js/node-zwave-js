@@ -617,7 +617,7 @@ export class ConfigManager {
 		if (!this.index) await this.loadDeviceIndex();
 
 		// Look up the device in the index
-		const indexEntry = this.index!.find(
+		const indexEntries = this.index!.filter(
 			getDeviceEntryPredicate(
 				manufacturerId,
 				productType,
@@ -625,6 +625,9 @@ export class ConfigManager {
 				firmwareVersion,
 			),
 		);
+		// If there are multiple with overlapping firmware ranges, return the preferred one first
+		const indexEntry =
+			indexEntries.find((e) => !!e.preferred) ?? indexEntries[0];
 
 		if (indexEntry) {
 			const devicesDir = getDevicesPaths(

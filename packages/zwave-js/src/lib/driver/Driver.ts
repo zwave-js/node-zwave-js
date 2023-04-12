@@ -3967,6 +3967,7 @@ ${handlers.length} left`,
 				cmd = Security2CC.encapsulate(this, cmd, {
 					multicastOutOfSync: !!options.s2MulticastOutOfSync,
 					multicastGroupId: options.s2MulticastGroupId,
+					verifyDelivery: options.s2VerifyDelivery,
 				});
 			}
 
@@ -4430,16 +4431,7 @@ ${handlers.length} left`,
 			);
 		}
 		// In any case, return the status
-		if (resp.status === SupervisionStatus.Working) {
-			return {
-				status: resp.status,
-				remainingDuration: resp.duration!,
-			};
-		} else {
-			return {
-				status: resp.status,
-			};
-		}
+		return resp.toSupervisionResult();
 	}
 
 	/**

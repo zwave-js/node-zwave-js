@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/repo",
-  "version": "10.12.0",
+  "version": "10.15.0",
   "private": true,
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
@@ -64,7 +64,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
-    "esbuild-register": "^3.3.3",
+    "esbuild-register": "^3.4.2",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",

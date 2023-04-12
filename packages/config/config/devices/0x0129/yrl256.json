@@ -89,6 +89,9 @@
 				"$import": "templates/yale_template.json#alarm_map_low_battery"
 			},
 			{
+				"$import": "templates/yale_template.json#alarm_map_critical_battery"
+			},
+			{
 				"$import": "templates/yale_template.json#alarm_map_auto_relock"
 			}
 		]

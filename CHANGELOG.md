@@ -4,6 +4,60 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.15.0 (2023-04-12)
+### Features
+* Simplify working with mixed-security multicast (#5593)
+* Added an overload to `Node.manuallyIdleNotificationValue` which accepts a value ID (#5645)
+
+### Bugfixes
+* Mark sleeping nodes as asleep if querying node info fails (#5648)
+* Idle "Keypad state" notifications on keypad events (#5647)
+
+### Config file changes
+* Mention necessity for re-inclusion after changing endpoint-related config params for Qubino ZMNHAD Relay (#5640)
+
+## 10.14.1 (2023-04-07)
+### Bugfixes
+* Revert change to notification auto-idle from v10.14.0 (#5639)
+
+## 10.14.0 (2023-04-05)
+### Features
+* Added a method on the `ZWaveNode` class to manually idle notifications, e.g. a stuck smoke sensor (#5634)
+
+### Bugfixes
+* Fixed an issue where firmware updates would not start using Security S2 because of the delays caused by delivery verification (#5635)
+* Map "Low Battery" alarms from Yale and Kwikset locks to the "Battery level status", not the "Battery maintenance status" notification variable (#5632)
+* `Battery CC Reports` are now used to idle the "Battery level status" notification variable (#5633)
+* ~~To better align with the specifications, v1 to v7 notification variables are no longer auto-idled~~ (#5634)
+
+### Config file changes
+* Add ZVIDAR Z-CM-V01 (#5612)
+
+## 10.13.0 (2023-04-04)
+### Features
+* Added convenience method to set time, date and timezone on nodes (#5584)
+* Allow notification events to idle related notification variables. This solves a long-standing issue where locks could appear stuck in "Lock jammed" state, because they never sent an idle notification. (#5630)
+
+### Bugfixes
+* Added a new `Door state (simple)` notification value, which has the old behavior of the `Door state` value with just two states and can be turned into a binary sensor (#5614)
+* Node statistics are now only updated using valid TX reports (#5613)
+* During interview of `Schedule Entry Lock CC`, set timezone if necessary and supported (#5585)
+* Value timestamps are no longer updated for optimistic value updates caused by the driver itself (#5581)
+* Communication with nodes using Security S2 will always use S2 now, even if the respective CC may also be supported insecurely (#5579)
+* Introduce delays and reduce polling frequency in health checks to avoid collisions causing S2 desync (#5628)
+* Assume Notification CC is operating in push mode, unless proven otherwise (#5627)
+* Fixed a typo in the logs when a Multilevel Sensor Report with an unsupported scale is received and discarded (#5623)
+* When querying a sensor reading, try to reuse the last reported sensor scale before defaulting to the first supported scale (#5622)
+
+### Config file changes
+* Add Vesternet branded Z-Wave devices (#5567)
+* Add product ID `0x1351` for MCOHome A8-9 (#5595)
+* Add fingerprint 0x8109-0x4dd5 to Yale YRD-256-ZW3 (#5604)
+* Disable scale validation for MCOHome MH10-PM2.5-WA/WD (#5624)
+
+### Changes under the hood
+* Config files may now have overlapping firmware version ranges, e.g. for white-labeling specific firmware versions, but only if one of them is marked as `preferred` (#5617, #5619)
+
 ## 10.12.0 (2023-03-15)
 ### Features
 * Background RSSI is now measured frequently while the controller is idle and exposed as controller statistics (#5545, #5568)

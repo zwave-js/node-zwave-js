@@ -1,17 +1,17 @@
 import { BasicCCValues, CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import {
+	actuatorCCs,
+	isZWaveError,
 	IVirtualNode,
-	SendCommandOptions,
+	normalizeValueID,
+	SecurityClass,
 	TranslatedValueID,
 	ValueID,
+	valueIdToString,
 	ValueMetadata,
 	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
-	actuatorCCs,
-	isZWaveError,
-	normalizeValueID,
-	valueIdToString,
 } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
@@ -25,26 +25,61 @@ export interface VirtualValueID extends TranslatedValueID {
 	ccVersion: number;
 }
 
+function groupNodesBySecurityClass(
+	nodes: Iterable<ZWaveNode>,
+): Map<SecurityClass, ZWaveNode[]> {
+	const ret = new Map<SecurityClass, ZWaveNode[]>();
+
+	for (const node of nodes) {
+		const secClass = node.getHighestSecurityClass();
+		if (secClass === SecurityClass.Temporary || secClass == undefined) {
+			continue;
+		}
+
+		if (!ret.has(secClass)) {
+			ret.set(secClass, []);
+		}
+		ret.get(secClass)!.push(node);
+	}
+
+	return ret;
+}
+
 export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 	public constructor(
 		public readonly id: number | undefined,
 		driver: Driver,
 		/** The references to the physical node this virtual node abstracts */
 		physicalNodes: Iterable<ZWaveNode>,
-		/** Default command options to use for the CC API */
-		defaultCommandOptions?: SendCommandOptions,
 	) {
 		// Define this node's intrinsic endpoint as the root device (0)
-		super(undefined, driver, 0, defaultCommandOptions);
+		super(undefined, driver, 0);
 		// Set the reference to this and the physical nodes
 		super.setNode(this);
 		this.physicalNodes = [...physicalNodes].filter(
-			// And avoid including the controller node in the support checks
-			(n) => n.id !== driver.controller.ownNodeId,
+			(n) =>
+				// And avoid including the controller node in the support checks
+				n.id !== driver.controller.ownNodeId &&
+				// And omit nodes using Security S0 which does not support broadcast / multicast
+				n.getHighestSecurityClass() !== SecurityClass.S0_Legacy,
 		);
+		this.nodesBySecurityClass = groupNodesBySecurityClass(
+			this.physicalNodes,
+		);
+
+		// If broadcasting is attempted with mixed security classes, automatically fall back to multicast
+		if (this.hasMixedSecurityClasses) this.id = undefined;
 	}
 
 	public readonly physicalNodes: readonly ZWaveNode[];
+	public readonly nodesBySecurityClass: ReadonlyMap<
+		SecurityClass,
+		readonly ZWaveNode[]
+	>;
+
+	public get hasMixedSecurityClasses(): boolean {
+		return this.nodesBySecurityClass.size > 1;
+	}
 
 	/**
 	 * Updates a value for a given property of a given CommandClass.
@@ -128,15 +163,14 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 	 * control the physical node(s) this virtual node represents.
 	 */
 	public getDefinedValueIDs(): VirtualValueID[] {
-		// If all nodes are secure, we can't use broadcast/multicast commands
-		if (this.physicalNodes.every((n) => n.isSecure === true)) return [];
-
 		// In order to compare value ids, we need them to be strings
 		const ret = new Map<string, VirtualValueID>();
 
 		for (const pNode of this.physicalNodes) {
-			// Secure nodes cannot be used for broadcast
-			if (pNode.isSecure === true) continue;
+			// // Nodes using Security S0 cannot be used for broadcast
+			// if (pNode.getHighestSecurityClass() === SecurityClass.S0_Legacy) {
+			// 	continue;
+			// }
 
 			// Take only the actuator values
 			const valueIDs: TranslatedValueID[] = pNode

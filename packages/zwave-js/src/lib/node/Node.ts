@@ -160,6 +160,7 @@ import {
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
+import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
 	DeferredPromise,
@@ -1688,35 +1689,61 @@ protocol version:      ${this.protocolVersion}`;
 			return;
 		}
 
-		this.driver.controllerLog.logNode(this.id, {
-			message: "querying node info...",
-			direction: "outbound",
-		});
-		try {
-			const nodeInfo = await this.requestNodeInfo();
-			const logLines: string[] = ["node info received", "supported CCs:"];
-			for (const cc of nodeInfo.supportedCCs) {
-				const ccName = CommandClasses[cc];
-				logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
-			}
+		// If we incorrectly assumed a sleeping node to be awake, this step will fail.
+		// In order to fail the interview, we retry here
+		for (let attempts = 1; attempts <= 2; attempts++) {
 			this.driver.controllerLog.logNode(this.id, {
-				message: logLines.join("\n"),
-				direction: "inbound",
+				message: "querying node info...",
+				direction: "outbound",
 			});
-			this.updateNodeInfo(nodeInfo);
-		} catch (e) {
-			if (
-				isZWaveError(e) &&
-				(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-					e.code === ZWaveErrorCodes.Controller_CallbackNOK)
-			) {
-				this.driver.controllerLog.logNode(
-					this.id,
-					`Querying the node info failed`,
-					"error",
-				);
+			try {
+				const nodeInfo = await this.requestNodeInfo();
+				const logLines: string[] = [
+					"node info received",
+					"supported CCs:",
+				];
+				for (const cc of nodeInfo.supportedCCs) {
+					const ccName = CommandClasses[cc];
+					logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
+				}
+				this.driver.controllerLog.logNode(this.id, {
+					message: logLines.join("\n"),
+					direction: "inbound",
+				});
+				this.updateNodeInfo(nodeInfo);
+				break;
+			} catch (e) {
+				if (isZWaveError(e)) {
+					if (
+						attempts === 1 &&
+						this.canSleep &&
+						this.status !== NodeStatus.Asleep &&
+						e.code === ZWaveErrorCodes.Controller_CallbackNOK
+					) {
+						this.driver.controllerLog.logNode(
+							this.id,
+							`Querying the node info failed, the node is probably asleep. Retrying after wakeup...`,
+							"error",
+						);
+						// We assumed the node to be awake, but it is not.
+						this.markAsAsleep();
+						// Retry the query when the node wakes up
+						continue;
+					}
+
+					if (
+						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+						e.code === ZWaveErrorCodes.Controller_CallbackNOK
+					) {
+						this.driver.controllerLog.logNode(
+							this.id,
+							`Querying the node info failed`,
+							"error",
+						);
+					}
+					throw e;
+				}
 			}
-			throw e;
 		}
 
 		this.setInterviewStage(InterviewStage.NodeInfo);
@@ -3333,6 +3360,111 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
+	// Fallback for V2 notifications that don't allow us to predefine the metadata during the interview.
+	// Instead of defining useless values for each possible notification event, we build the metadata on demand
+	private extendNotificationValueMetadata(
+		valueId: ValueID,
+		notificationConfig: Notification,
+		valueConfig: NotificationValueDefinition & { type: "state" },
+	) {
+		const ccVersion = this.driver.getSupportedCCVersionForEndpoint(
+			CommandClasses.Notification,
+			this.nodeId,
+			this.index,
+		);
+		if (ccVersion === 2 || !this.valueDB.hasMetadata(valueId)) {
+			const metadata = getNotificationValueMetadata(
+				this.valueDB.getMetadata(valueId) as
+					| ValueMetadataNumeric
+					| undefined,
+				notificationConfig,
+				valueConfig,
+			);
+			this.valueDB.setMetadata(valueId, metadata);
+		}
+	}
+
+	/**
+	 * Manually resets a single notification value to idle.
+	 */
+	public manuallyIdleNotificationValue(valueId: ValueID): void;
+
+	public manuallyIdleNotificationValue(
+		notificationType: number,
+		prevValue: number,
+		endpointIndex?: number,
+	): void;
+
+	public manuallyIdleNotificationValue(
+		notificationTypeOrValueID: number | ValueID,
+		prevValue?: number,
+		endpointIndex: number = 0,
+	): void {
+		let notificationType: number | undefined;
+		if (typeof notificationTypeOrValueID === "number") {
+			notificationType = notificationTypeOrValueID;
+		} else {
+			notificationType = this.valueDB.getMetadata(
+				notificationTypeOrValueID,
+			)?.ccSpecific?.notificationType as number | undefined;
+			if (notificationType === undefined) {
+				return;
+			}
+			prevValue = this.valueDB.getValue(notificationTypeOrValueID);
+			endpointIndex = notificationTypeOrValueID.endpoint ?? 0;
+		}
+
+		if (
+			!this.getEndpoint(endpointIndex)?.supportsCC(
+				CommandClasses.Notification,
+			)
+		) {
+			return;
+		}
+
+		const notificationConfig =
+			this.driver.configManager.lookupNotification(notificationType);
+		if (!notificationConfig) return;
+
+		return this.manuallyIdleNotificationValueInternal(
+			notificationConfig,
+			prevValue!,
+			endpointIndex,
+		);
+	}
+
+	/** Manually resets a single notification value to idle */
+	private manuallyIdleNotificationValueInternal(
+		notificationConfig: Notification,
+		prevValue: number,
+		endpointIndex: number,
+	): void {
+		const valueConfig = notificationConfig.lookupValue(prevValue);
+		// Only known variables may be reset to idle
+		if (!valueConfig || valueConfig.type !== "state") return;
+		// Some properties may not be reset to idle
+		if (!valueConfig.idle) return;
+
+		const notificationName = notificationConfig.name;
+		const variableName = valueConfig.variableName;
+		const valueId = NotificationCCValues.notificationVariable(
+			notificationName,
+			variableName,
+		).endpoint(endpointIndex);
+
+		// Make sure the value is actually set to the previous value
+		if (this.valueDB.getValue(valueId) !== prevValue) return;
+
+		// Since the node has reset the notification itself, we don't need the idle reset
+		this.clearNotificationIdleReset(valueId);
+		this.extendNotificationValueMetadata(
+			valueId,
+			notificationConfig,
+			valueConfig,
+		);
+		this.valueDB.setValue(valueId, 0 /* idle */);
+	}
+
 	/**
 	 * Handles the receipt of a Notification Report
 	 */
@@ -3348,25 +3480,6 @@ protocol version:      ${this.protocolVersion}`;
 			}
 			return;
 		}
-
-		// Fallback for V2 notifications that don't allow us to predefine the metadata during the interview.
-		// Instead of defining useless values for each possible notification event, we build the metadata on demand
-		const extendValueMetadata = (
-			valueId: ValueID,
-			notificationConfig: Notification,
-			valueConfig: NotificationValueDefinition & { type: "state" },
-		) => {
-			if (command.version === 2 || !this.valueDB.hasMetadata(valueId)) {
-				const metadata = getNotificationValueMetadata(
-					this.valueDB.getMetadata(valueId) as
-						| ValueMetadataNumeric
-						| undefined,
-					notificationConfig,
-					valueConfig,
-				);
-				this.valueDB.setMetadata(valueId, metadata);
-			}
-		};
 
 		// Look up the received notification in the config
 		const notificationConfig = this.driver.configManager.lookupNotification(
@@ -3384,22 +3497,11 @@ protocol version:      ${this.protocolVersion}`;
 
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
-				const valueConfig = notificationConfig.lookupValue(prevValue);
-				// Only known variables may be reset to idle
-				if (!valueConfig || valueConfig.type !== "state") return;
-				// Some properties may not be reset to idle
-				if (!valueConfig.idle) return;
-
-				const variableName = valueConfig.variableName;
-				const valueId = NotificationCCValues.notificationVariable(
-					notificationName,
-					variableName,
-				).endpoint(command.endpointIndex);
-
-				// Since the node has reset the notification itself, we don't need the idle reset
-				this.clearNotificationIdleReset(valueId);
-				extendValueMetadata(valueId, notificationConfig, valueConfig);
-				this.valueDB.setValue(valueId, 0 /* idle */);
+				this.manuallyIdleNotificationValueInternal(
+					notificationConfig,
+					prevValue,
+					command.endpointIndex,
+				);
 			};
 
 			const value = command.notificationEvent!;
@@ -3461,6 +3563,7 @@ protocol version:      ${this.protocolVersion}`;
 			} else if (valueConfig.type === "state") {
 				allowIdleReset = valueConfig.idle;
 			} else {
+				// This is an event
 				this.emit("notification", this, CommandClasses.Notification, {
 					type: command.notificationType,
 					event: value,
@@ -3468,6 +3571,13 @@ protocol version:      ${this.protocolVersion}`;
 					eventLabel: valueConfig.label,
 					parameters: command.eventParameters,
 				});
+
+				// We may need to reset some linked states to idle
+				if (valueConfig.idleVariables?.length) {
+					for (const variable of valueConfig.idleVariables) {
+						setStateIdle(variable);
+					}
+				}
 				return;
 			}
 
@@ -3479,7 +3589,11 @@ protocol version:      ${this.protocolVersion}`;
 					valueConfig.variableName,
 				).endpoint(command.endpointIndex);
 
-				extendValueMetadata(valueId, notificationConfig, valueConfig);
+				this.extendNotificationValueMetadata(
+					valueId,
+					notificationConfig,
+					valueConfig,
+				);
 			} else {
 				// Collect unknown values in an "unknown" bucket
 				const unknownValue =
@@ -3537,6 +3651,12 @@ protocol version:      ${this.protocolVersion}`;
 	private handleKnownNotification(command: NotificationCCReport): void {
 		const lockEvents = [0x01, 0x03, 0x05, 0x09];
 		const unlockEvents = [0x02, 0x04, 0x06];
+		const doorStatusEvents = [
+			// Actual status
+			0x16, 0x17,
+			// Synthetic status with enum
+			0x1600, 0x1601,
+		];
 		if (
 			// Access Control, manual/keypad/rf/auto (un)lock operation
 			command.notificationType === 0x06 &&
@@ -3569,6 +3689,24 @@ protocol version:      ${this.protocolVersion}`;
 					isLocked,
 				);
 			}
+		} else if (
+			command.notificationType === 0x06 &&
+			doorStatusEvents.includes(command.notificationEvent as number)
+		) {
+			// https://github.com/zwave-js/node-zwave-js/pull/5394 added support for
+			// notification enums. Unfortunately, there's no way to discover which nodes
+			// actually support them, which makes working with the Door state variable
+			// very cumbersome. Also, this is currently the only notification where the enum values
+			// extend the state value.
+			// To work around this, we hard-code a notification value for the door status
+			// which only includes the "legacy" states for open/closed.
+
+			this.valueDB.setValue(
+				NotificationCCValues.doorStateSimple.endpoint(
+					command.endpointIndex,
+				),
+				command.notificationEvent === 0x17 ? 0x17 : 0x16,
+			);
 		}
 	}
 
@@ -4736,13 +4874,10 @@ protocol version:      ${this.protocolVersion}`;
 			(healthCheckTestFrameCount / 5) * 1000,
 		);
 
-		// Poll the status of the test regularly
-		const pollFrequencyMs =
-			expectedDurationMs >= 60000
-				? 10000
-				: expectedDurationMs >= 10000
-				? 5000
-				: 1000;
+		// Poll the status of the test regularly, but not too frequently. Especially for quick tests, polling too often
+		// increases the likelyhood of us querying the node at the same time it sends an unsolicited update.
+		// If using Security S2, this can cause a desync.
+		const pollFrequencyMs = expectedDurationMs >= 60000 ? 20000 : 5000;
 
 		// Track how often we failed to get a response from the node, so we can abort if the connection is too bad
 		let continuousErrors = 0;
@@ -4879,6 +5014,8 @@ protocol version:      ${this.protocolVersion}`;
 
 			for (let i = 1; i <= healthCheckTestFrameCount; i++) {
 				const start = Date.now();
+				// Reset TX report before each ping
+				txReport = undefined as any;
 				const pingResult = await pingAPI.send().then(
 					() => true,
 					() => false,
@@ -4963,6 +5100,10 @@ protocol version:      ${this.protocolVersion}`;
 							powerlevel,
 						)}, ${result}/${healthCheckTestFrameCount} pings were acknowledged...`,
 					);
+
+					// Wait a second for things to settle down
+					await wait(1000);
+
 					return failedPingsController === 0;
 				};
 				try {
@@ -5136,6 +5277,10 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 							otherNode.id
 						}...`,
 					);
+
+					// Wait a second for things to settle down
+					await wait(1000);
+
 					return failedPings === 0;
 				};
 

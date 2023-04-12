@@ -3,11 +3,11 @@ import {
 	isCommandClassContainer,
 	MGRPExtension,
 	MPANExtension,
-	Security2CC,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
 	SupervisionCC,
+	SupervisionCCReport,
 	SupervisionCommand,
 } from "@zwave-js/cc";
 import {
@@ -29,9 +29,13 @@ import {
 import {
 	CommandClasses,
 	EncapsulationFlags,
+	mergeSupervisionResults,
 	MessagePriority,
+	NODE_ID_BROADCAST,
 	SendCommandOptions,
 	SPANState,
+	SupervisionResult,
+	SupervisionStatus,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -567,13 +571,11 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		// If we want to make sure that a node understood a SET-type S2-encapsulated message, we either need to use
 		// Supervision and wait for the Supervision Report (handled by the simpleMessageGenerator), or we need to add a
 		// short delay between commands and wait if a NonceReport is received.
-
-		// However, we MUST NOT do this if the encapsulated command is also a Security S2 command, because this means
-		// we're in the middle of S2 bootstrapping, where timing is critical.
+		// However, in situations where timing is critical (e.g. S2 bootstrapping), verifyDelivery is set to false, and we don't do this.
 		let nonceReport: Security2CCNonceReport | undefined;
 		if (
 			isTransmitReport(response) &&
-			!(msg.command.encapsulated instanceof Security2CC) &&
+			msg.command.verifyDelivery &&
 			!msg.command.expectsCCResponse() &&
 			!msg.command.getEncapsulatedCC(
 				CommandClasses.Supervision,
@@ -712,6 +714,8 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 		// Otherwise, the node will increase its MPAN multiple times, going out of sync.
 		const distinctNodeIDs = [...new Set(group.nodeIDs)];
 
+		const supervisionResults: (SupervisionResult | undefined)[] = [];
+
 		// Now do singlecast followups with every node in the group
 		for (const nodeId of distinctNodeIDs) {
 			// Point the CC at the target node
@@ -774,15 +778,49 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 						});
 					}
 				}
+
+				// Collect supervision results if possible
+				if (isCommandClassContainer(scResponse)) {
+					const supervisionReport =
+						scResponse.command.getEncapsulatedCC(
+							CommandClasses.Supervision,
+							SupervisionCommand.Report,
+						) as SupervisionCCReport | undefined;
+
+					supervisionResults.push(
+						supervisionReport?.toSupervisionResult(),
+					);
+				}
 			} catch (e) {
 				driver.driverLog.print(getErrorMessage(e), "error");
 				// TODO: Figure out how we got here, and what to do now.
 				// In any case, keep going with the next nodes
-				// TODO: We should probably respond that there was a failure
+				// Report that there was a failure, so the application can show it
+				supervisionResults.push({
+					status: SupervisionStatus.Fail,
+				});
 			}
 		}
 
-		return response;
+		const finalSupervisionResult =
+			mergeSupervisionResults(supervisionResults);
+		if (finalSupervisionResult) {
+			// We can return return information about the success of this multicast - so we should
+			// TODO: Not sure if we need to "wrap" the response for something. For now, try faking it
+			const cc = new SupervisionCCReport(driver, {
+				nodeId: NODE_ID_BROADCAST,
+				sessionId: 0, // fake
+				moreUpdatesFollow: false, // fake
+				...(finalSupervisionResult as any),
+			});
+			const ret = new (driver.getSendDataSinglecastConstructor())(
+				driver,
+				{ command: cc },
+			);
+			return ret;
+		} else {
+			return response;
+		}
 	};
 
 export function createMessageGenerator<TResponse extends Message = Message>(

@@ -43,7 +43,6 @@ import {
 	ProtocolType,
 	RFRegion,
 	RSSI,
-	S2SecurityClass,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -658,13 +657,19 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/**
 	 * Returns a reference to the (virtual) broadcast node, which allows sending commands to all nodes.
-	 * @deprecated Use {@link getBroadcastNodes} instead, which automatically groups nodes by security class and ignores nodes that cannot be controlled via multicast/broadcast.
+	 * This automatically groups nodes by security class, ignores nodes that cannot be controlled via multicast/broadcast, and will fall back to multicast(s) if necessary.
 	 */
 	public getBroadcastNode(): VirtualNode {
-		return this.getBroadcastNodeInsecure();
+		return new VirtualNode(
+			NODE_ID_BROADCAST,
+			this.driver,
+			this.nodes.values(),
+		);
 	}
 
-	/** Returns a reference to the (virtual) broadcast node, which allows sending commands to all insecure nodes. */
+	/**
+	 * @deprecated This API was a mistake. Use {@link getBroadcastNode} instead.
+	 */
 	public getBroadcastNodeInsecure(): VirtualNode {
 		return new VirtualNode(
 			NODE_ID_BROADCAST,
@@ -674,34 +679,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
-	 * Creates the necessary virtual nodes to be able to send commands to all nodes in the network.
-	 * Nodes are grouped by security class automatically, and get ignored if they cannot be controlled via multicast/broadcast.
+	 * @deprecated This API was a mistake. Use {@link getBroadcastNode} instead.
 	 */
 	public getBroadcastNodes(): VirtualNode[] {
-		const nodesBySecurityClass = this.groupNodesBySecurityClass();
-		nodesBySecurityClass.delete(SecurityClass.S0_Legacy);
-		if (
-			nodesBySecurityClass.size === 1 &&
-			nodesBySecurityClass.has(SecurityClass.None)
-		) {
-			// All nodes are insecure, we can use actual broadcasting
-			return [this.getBroadcastNodeInsecure()];
-		}
-
-		// We have to do multiple multicasts to reach all nodes
-		// Create a virtual node for each security class
-		return [...nodesBySecurityClass].map(([secClass, nodeIDs]) => {
-			if (secClass === SecurityClass.None) {
-				return this.getMulticastGroupInsecure(nodeIDs);
-			} else {
-				return this.getMulticastGroupS2(nodeIDs);
-			}
-		});
+		return [this.getBroadcastNode()];
 	}
 
 	/**
-	 * Creates a virtual node that can be used to send multicast commands to several nodes.
-	 * @deprecated Use {@link getMulticastGroups} instead, which automatically groups nodes by security class and ignores nodes that cannot be controlled via multicast.
+	 * Creates a virtual node that can be used to send one or more multicast commands to several nodes.
+	 * This automatically groups nodes by security class and ignores nodes that cannot be controlled via multicast.
 	 */
 	public getMulticastGroup(nodeIDs: number[]): VirtualNode {
 		if (nodeIDs.length === 0) {
@@ -716,26 +702,17 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
-	 * Creates the necessary virtual nodes to be able to send commands to the given nodes.
-	 * Nodes are grouped by security class automatically, and get ignored if they cannot be controlled via multicast.
+	 * @deprecated This API was a mistake. Use {@link getMulticastGroup} instead.
 	 */
 	public getMulticastGroups(nodeIDs: number[]): VirtualNode[] {
-		const nodesBySecurityClass = this.groupNodesBySecurityClass(nodeIDs);
-		nodesBySecurityClass.delete(SecurityClass.S0_Legacy);
-
-		// Create a virtual node for each security class
-		return [...nodesBySecurityClass].map(([secClass, nodeIDs]) => {
-			if (secClass === SecurityClass.None) {
-				return this.getMulticastGroupInsecure(nodeIDs);
-			} else {
-				return this.getMulticastGroupS2(nodeIDs);
-			}
-		});
+		return [this.getMulticastGroup(nodeIDs)];
 	}
 
 	/**
 	 * Creates a virtual node that can be used to send multicast commands to several insecure nodes.
 	 * All nodes MUST be included insecurely.
+	 *
+	 * @deprecated This API was a mistake. Use {@link getMulticastGroup} instead and don't worry about the security classes.
 	 */
 	public getMulticastGroupInsecure(nodeIDs: number[]): VirtualNode {
 		if (nodeIDs.length === 0) {
@@ -759,6 +736,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	/**
 	 * Creates a virtual node that can be used to send multicast commands to several nodes using Security S2.
 	 * All nodes MUST be included using Security S2 and MUST have the same (highest) security class.
+	 *
+	 * @deprecated This API was a mistake. Use {@link getMulticastGroup} instead and don't worry about the security classes.
 	 */
 	public getMulticastGroupS2(nodeIDs: number[]): VirtualNode {
 		if (nodeIDs.length === 0) {
@@ -790,23 +769,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			if (i > 0 && secClass !== node0Class) throw fail();
 		}
 
-		return new VirtualNode(
-			undefined,
-			this.driver,
-			nodes,
-			// For convenience, we automatically decide whether to use actual multicast
-			// or fall back to singlecast when there's only a single node
-			// in the multicast "group"
-			nodes.length > 1
-				? {
-						s2MulticastGroupId:
-							this.driver.securityManager2.createMulticastGroup(
-								nodeIDs,
-								node0Class as S2SecurityClass,
-							),
-				  }
-				: undefined,
-		);
+		return new VirtualNode(undefined, this.driver, nodes);
 	}
 
 	/** @internal */
@@ -2637,7 +2600,11 @@ supported CCs: ${nodeInfo.supportedCCs
 		this.cancelBootstrapS2Promise = createDeferredPromise();
 
 		try {
-			const api = node.commandClasses["Security 2"];
+			const api = node.commandClasses["Security 2"].withOptions({
+				// Do not wait for Nonce Reports after SET-type commands.
+				// Timing is critical here
+				s2VerifyDelivery: false,
+			});
 			const abort = async (failType?: KEXFailType): Promise<void> => {
 				if (failType != undefined) {
 					try {

@@ -722,6 +722,7 @@ export class Security2CC extends CommandClass {
 			securityClass?: SecurityClass;
 			multicastOutOfSync?: boolean;
 			multicastGroupId?: number;
+			verifyDelivery?: boolean;
 		},
 	): Security2CCMessageEncapsulation {
 		// Determine which extensions must be used on the command
@@ -744,6 +745,7 @@ export class Security2CC extends CommandClass {
 			encapsulated: cc,
 			securityClass: options?.securityClass,
 			extensions,
+			verifyDelivery: options?.verifyDelivery,
 		});
 
 		// Copy the encapsulation flags from the encapsulated command
@@ -760,6 +762,7 @@ interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
 	securityClass?: SecurityClass;
 	extensions?: Security2Extension[];
 	encapsulated?: CommandClass;
+	verifyDelivery?: boolean;
 }
 
 // An S2 encapsulated command may result in a NonceReport to be sent by the node if it couldn't decrypt the message
@@ -1046,6 +1049,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				options.encapsulated.encapsulatingCC = this as any;
 			}
 
+			this.verifyDelivery = options.verifyDelivery !== false;
+
 			this.extensions = options.extensions ?? [];
 			if (
 				typeof this.nodeId !== "number" &&
@@ -1067,6 +1072,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	private authData?: Buffer;
 	private authTag?: Buffer;
 	private ciphertext?: Buffer;
+
+	public readonly verifyDelivery: boolean = true;
 
 	private _sequenceNumber: number | undefined;
 	/**

@@ -173,9 +173,14 @@ function hash(input: string): string {
 }
 
 async function getDiffOutput(): Promise<string> {
-	const gitDiffOutput = (await execa("git", ["diff", "--name-only", "HEAD"]))
+	const gitDiffOutput = (await execa("git", ["status", "--porcelain"]))
 		.stdout;
-	return gitDiffOutput;
+	return gitDiffOutput
+		.split("\n")
+		.map((line) => line.trim().split(" ", 2))
+		.filter(([mod]) => mod !== "D" /* deleted */)
+		.map(([, file]) => file)
+		.join("\n");
 }
 
 export async function resolveDirtyTests(): Promise<void> {

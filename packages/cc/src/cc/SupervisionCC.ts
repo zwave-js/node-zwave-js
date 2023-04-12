@@ -9,6 +9,7 @@ import {
 	MessagePriority,
 	MessageRecord,
 	SinglecastCC,
+	SupervisionResult,
 	SupervisionStatus,
 	TransmitOptions,
 	validatePayload,
@@ -329,6 +330,19 @@ export class SupervisionCCReport extends SupervisionCC {
 			...super.toLogEntry(applHost),
 			message,
 		};
+	}
+
+	public toSupervisionResult(): SupervisionResult {
+		if (this.status === SupervisionStatus.Working) {
+			return {
+				status: this.status,
+				remainingDuration: this.duration!,
+			};
+		} else {
+			return {
+				status: this.status,
+			};
+		}
 	}
 }
 

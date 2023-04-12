@@ -1779,6 +1779,8 @@ export class BatteryCCReport extends BatteryCC {
     // (undocumented)
     readonly overheating: boolean | undefined;
     // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
     readonly rechargeable: boolean | undefined;
     // (undocumented)
     readonly rechargeOrReplace: BatteryReplacementStatus | undefined;
@@ -2869,7 +2871,7 @@ export interface CCValueOptions {
 // Warning: (ae-missing-release-tag) "ccValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export const ccValues: <TTarget extends CommandClass>(valueDefinition: Record<string, StaticCCValue | DynamicCCValue<any[]>>) => TypedClassDecorator_2<TTarget>;
+export const ccValues: <TTarget extends CommandClass>(valueDefinition: Record<string, StaticCCValue | DynamicCCValue>) => TypedClassDecorator_2<TTarget>;
 
 // Warning: (ae-missing-release-tag) "CentralSceneCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6666,7 +6668,7 @@ export const getManufacturerProprietaryAPI: (manufacturerId: number) => APIConst
 // Warning: (ae-missing-release-tag) "getManufacturerProprietaryCCConstructor" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export const getManufacturerProprietaryCCConstructor: (manufacturerId: number) => ManufacturerProprietaryCCConstructor<typeof ManufacturerProprietaryCC> | undefined;
+export const getManufacturerProprietaryCCConstructor: (manufacturerId: number) => ManufacturerProprietaryCCConstructor | undefined;
 
 // Warning: (ae-forgotten-export) The symbol "Security2ExtensionConstructor" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "getS2ExtensionConstructor" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11992,6 +11994,43 @@ export const NotificationCCValues: Readonly<{
             readonly supportsEndpoints: false;
         };
     };
+    doorStateSimple: {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: "Access Control";
+            propertyKey: "Door state (simple)";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "Access Control";
+            readonly propertyKey: "Door state (simple)";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly label: "Door state (simple)";
+            readonly states: {
+                readonly 22: "Window/door is open";
+                readonly 23: "Window/door is closed";
+            };
+            readonly ccSpecific: {
+                readonly notificationType: 6;
+            };
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly options: {
+            readonly internal: false;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
+        };
+    };
     alarmLevel: {
         readonly id: {
             commandClass: CommandClasses.Notification;
@@ -13742,6 +13781,7 @@ export class Security2CC extends CommandClass {
         securityClass?: SecurityClass;
         multicastOutOfSync?: boolean;
         multicastGroupId?: number;
+        verifyDelivery?: boolean;
     }): Security2CCMessageEncapsulation;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
@@ -13859,6 +13899,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly verifyDelivery: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14619,6 +14661,8 @@ export class SupervisionCCReport extends SupervisionCC {
     readonly status: SupervisionStatus;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    toSupervisionResult(): SupervisionResult;
 }
 
 // Warning: (ae-missing-release-tag) "SupervisionCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

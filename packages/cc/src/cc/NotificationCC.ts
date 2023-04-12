@@ -12,6 +12,7 @@ import {
 	Duration,
 	encodeBitMask,
 	isZWaveError,
+	IZWaveEndpoint,
 	IZWaveNode,
 	Maybe,
 	MessageOrCCLogEntry,
@@ -80,6 +81,29 @@ export const NotificationCCValues = Object.freeze({
 			...ValueMetadata.ReadOnlyUInt8,
 			label: "Alarm Level",
 		} as const),
+
+		// Simplification for the Door state variable, where we cannot know
+		// if any of the enum values are supported
+		...V.staticPropertyAndKeyWithName(
+			"doorStateSimple",
+			"Access Control",
+			"Door state (simple)",
+			{
+				// Must be a number for compatibility reasons
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Door state (simple)",
+				states: {
+					[0x16]: "Window/door is open",
+					[0x17]: "Window/door is closed",
+				},
+				ccSpecific: {
+					notificationType: 0x06,
+				},
+			} as const,
+			{
+				autoCreate: shouldAutoCreateSimpleDoorSensorValue,
+			} as const,
+		),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses.Notification, {
@@ -143,6 +167,31 @@ export const NotificationCCValues = Object.freeze({
 		),
 	}),
 });
+
+function shouldAutoCreateSimpleDoorSensorValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	const supportedACEvents = valueDB.getValue<readonly number[]>(
+		NotificationCCValues.supportedNotificationEvents(
+			// Access Control
+			0x06,
+		).endpoint(endpoint.index),
+	);
+	if (!supportedACEvents) return false;
+	return (
+		supportedACEvents.includes(
+			// Window/door is open
+			0x16,
+		) &&
+		supportedACEvents.includes(
+			// Window/door is closed
+			0x17,
+		)
+	);
+}
 
 function lookupNotificationNames(
 	applHost: ZWaveApplicationHost,
@@ -440,8 +489,11 @@ export class NotificationCC extends CommandClass {
 				/* ignore */
 			}
 		}
-		// If everything failed, fall back to "pull"
-		return "pull";
+		// If everything failed, e.g. because the node is V1/V2, assume this is a "push" node.
+		// If we assumed "pull", we would have to query the node regularly, which can cause
+		// the node to return old (already handled) notifications.
+		// https://github.com/zwave-js/node-zwave-js/issues/5626
+		return "push";
 	}
 
 	/** Whether the node implements push or pull notifications */
