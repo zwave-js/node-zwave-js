@@ -1953,7 +1953,7 @@ __metadata:
     semver: ^7.3.7
     source-map-support: ^0.5.21
     ts-nameof: ^5.0.0
-    ts-patch: ./ts-patch-3.0.0-beta2.tgz
+    ts-patch: ">=3.0.0-beta2"
     turbo: 1.7.4
     typescript: 5.0.2
     zwave-js: "workspace:*"
@@ -8132,9 +8132,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-patch@file:./ts-patch-3.0.0-beta2.tgz::locator=%40zwave-js%2Frepo%40workspace%3A.":
+"ts-patch@npm:>=3.0.0-beta2":
   version: 3.0.0-beta2
-  resolution: "ts-patch@file:./ts-patch-3.0.0-beta2.tgz::locator=%40zwave-js%2Frepo%40workspace%3A."
+  resolution: "ts-patch@npm:3.0.0-beta2"
   dependencies:
     chalk: ^4.1.2
     global-prefix: ^3.0.0
@@ -8145,8 +8145,8 @@ __metadata:
   peerDependencies:
     typescript: ">=5.0.0"
   bin:
-    ts-patch: ./bin/ts-patch.js
-    tspc: ./bin/tspc.js
+    ts-patch: bin/ts-patch.js
+    tspc: bin/tspc.js
   checksum: aa00e5aa9d95c7c93b3fc521f9ba6af379c323916c8a127349a402953a3675e2b7a9e3090dc3b531c1879fe08eb4d96de0ae3f3da5740c8cdcbc11cb8a22411f
   languageName: node
   linkType: hard
