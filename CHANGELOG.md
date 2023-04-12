@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.15.0 (2023-04-12)
 ### Features
 * Simplify working with mixed-security multicast (#5593)
 * Added an overload to `Node.manuallyIdleNotificationValue` which accepts a value ID (#5645)

@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/config",
-  "version": "10.14.0",
+  "version": "10.15.0",
   "description": "zwave-js: configuration files",
   "publishConfig": {
     "access": "public",
