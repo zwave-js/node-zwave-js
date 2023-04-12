@@ -1,30 +1,30 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,

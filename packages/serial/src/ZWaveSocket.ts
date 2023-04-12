@@ -1,4 +1,8 @@
-import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
+import {
+	ZWaveError,
+	ZWaveErrorCodes,
+	type ZWaveLogContainer,
+} from "@zwave-js/core";
 import * as net from "net";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
 

@@ -2,9 +2,9 @@ import { pick, type JSONObject } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe";
 import {
-	ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
+	type ConditionalItem,
 } from "./ConditionalItem";
 import type { ConditionalDeviceConfig } from "./DeviceConfig";
 import type { DeviceID } from "./shared";

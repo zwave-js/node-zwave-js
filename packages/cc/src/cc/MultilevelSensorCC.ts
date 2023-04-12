@@ -10,7 +10,6 @@ import type {
 import {
 	CommandClasses,
 	encodeFloatWithScale,
-	Maybe,
 	MessagePriority,
 	parseBitMask,
 	parseFloatWithScale,
@@ -18,16 +17,21 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type Maybe,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
+	MultilevelSensorCommand,
+	type MultilevelSensorValue,
+} from "../lib/_Types";
+import {
 	CCAPI,
 	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -47,7 +51,6 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { MultilevelSensorCommand, MultilevelSensorValue } from "../lib/_Types";
 
 export const MultilevelSensorCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Multilevel Sensor"], {

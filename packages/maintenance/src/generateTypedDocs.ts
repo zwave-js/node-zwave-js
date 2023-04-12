@@ -9,22 +9,22 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import Piscina from "piscina";
 import {
-	CommentRange,
-	ExportedDeclarations,
-	InterfaceDeclaration,
-	InterfaceDeclarationStructure,
-	JSDocTagStructure,
-	MethodDeclaration,
 	Node,
-	OptionalKind,
 	Project,
-	PropertySignatureStructure,
-	SourceFile,
 	SyntaxKind,
-	Type,
 	TypeFormatFlags,
-	TypeLiteralNode,
-	ts,
+	type CommentRange,
+	type ExportedDeclarations,
+	type InterfaceDeclaration,
+	type InterfaceDeclarationStructure,
+	type JSDocTagStructure,
+	type MethodDeclaration,
+	type OptionalKind,
+	type PropertySignatureStructure,
+	type SourceFile,
+	type Type,
+	type TypeLiteralNode,
+	type ts,
 } from "ts-morph";
 import { isMainThread } from "worker_threads";
 import { formatWithPrettier } from "./prettier";

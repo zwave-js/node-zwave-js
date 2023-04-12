@@ -2,14 +2,14 @@ import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
-import { Duplex, PassThrough, Readable, Writable } from "stream";
+import { PassThrough, type Duplex, type Readable, type Writable } from "stream";
 import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import {
-	BootloaderChunk,
-	bootloaderMenuPreamble,
 	BootloaderParser,
 	BootloaderScreenParser,
+	bootloaderMenuPreamble,
+	type BootloaderChunk,
 } from "./parsers/BootloaderParsers";
 import { SerialAPIParser } from "./parsers/SerialAPIParser";
 

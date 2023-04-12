@@ -1,28 +1,28 @@
 import {
 	CommandClasses,
 	Duration,
-	getCCName,
-	Maybe,
-	MessageOrCCLogEntry,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,

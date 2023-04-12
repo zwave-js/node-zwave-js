@@ -1,25 +1,25 @@
 import {
-	APIMethodsOf,
 	CCAPI,
-	CCAPIs,
-	CCConstructor,
-	CCNameOrId,
-	CCToAPI,
 	CommandClass,
 	getCommandClassStatic,
 	normalizeCCNameOrId,
+	type APIMethodsOf,
+	type CCAPIs,
+	type CCConstructor,
+	type CCNameOrId,
+	type CCToAPI,
 } from "@zwave-js/cc";
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import type { IZWaveEndpoint } from "@zwave-js/core";
 import {
-	actuatorCCs,
 	CacheBackedMap,
 	CommandClasses,
-	CommandClassInfo,
-	getCCName,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
+	actuatorCCs,
+	getCCName,
+	type CommandClassInfo,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";

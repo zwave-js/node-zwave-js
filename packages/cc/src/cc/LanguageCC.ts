@@ -7,10 +7,10 @@ import type {
 import {
 	CommandClasses,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";

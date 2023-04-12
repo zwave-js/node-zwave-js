@@ -1,25 +1,25 @@
 import {
 	CommandClasses,
-	Duration,
-	isZWaveError,
-	IVirtualEndpoint,
-	IZWaveEndpoint,
-	IZWaveNode,
-	Maybe,
 	NODE_ID_BROADCAST,
-	SendCommandOptions,
-	stripUndefined,
-	SupervisionResult,
-	TXReport,
-	unknownBoolean,
-	ValueChangeOptions,
-	ValueDB,
-	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isZWaveError,
+	stripUndefined,
+	unknownBoolean,
+	type Duration,
+	type IVirtualEndpoint,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type Maybe,
+	type SendCommandOptions,
+	type SupervisionResult,
+	type TXReport,
+	type ValueChangeOptions,
+	type ValueDB,
+	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
-import { getEnumMemberName, num2hex, OnlyMethods } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex, type OnlyMethods } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	getAPI,

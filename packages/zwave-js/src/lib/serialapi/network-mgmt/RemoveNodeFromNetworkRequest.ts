@@ -1,21 +1,21 @@
 import {
-	CommandClasses,
 	MessagePriority,
 	parseNodeUpdatePayload,
+	type CommandClasses,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
-	expectedCallback,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageType,
+	expectedCallback,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 } from "@zwave-js/serial";
 
 export enum RemoveNodeType {

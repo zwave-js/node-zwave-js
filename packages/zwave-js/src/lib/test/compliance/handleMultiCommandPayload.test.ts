@@ -6,8 +6,8 @@ import {
 	ZWavePlusCCReport,
 } from "@zwave-js/cc";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import path from "path";
 import { integrationTest } from "../integrationTestSuite";

@@ -1,25 +1,25 @@
 import {
 	CommandClasses,
 	MessagePriority,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
 	type Maybe,
 	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	PhysicalCCAPI,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,

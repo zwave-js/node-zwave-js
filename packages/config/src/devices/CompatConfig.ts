@@ -3,10 +3,10 @@ import type {
 	CommandClassInfo,
 	ValueID,
 } from "@zwave-js/core/safe";
-import { JSONObject, pick } from "@zwave-js/shared/safe";
+import { pick, type JSONObject } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegex2Digits, throwInvalidConfig } from "../utils_safe";
-import { ConditionalItem, conditionApplies } from "./ConditionalItem";
+import { conditionApplies, type ConditionalItem } from "./ConditionalItem";
 import type { DeviceID } from "./shared";
 
 export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {

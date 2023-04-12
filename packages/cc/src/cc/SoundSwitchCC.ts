@@ -1,15 +1,15 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
@@ -17,12 +17,12 @@ import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -42,7 +42,7 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { SoundSwitchCommand, ToneId } from "../lib/_Types";
+import { SoundSwitchCommand, type ToneId } from "../lib/_Types";
 
 export const SoundSwitchCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Sound Switch"], {

@@ -1,10 +1,10 @@
 import {
 	BatteryCC,
 	BatteryCCGet,
-	BatteryCCReport,
 	BatteryChargingStatus,
 	BatteryCommand,
 	BatteryReplacementStatus,
+	type BatteryCCReport,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";

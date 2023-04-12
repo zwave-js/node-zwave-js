@@ -9,7 +9,6 @@
 		"removeComments": false,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": false,
-		// "importsNotUsedAsValues": "error",
 		"sourceMap": true,
 		"inlineSourceMap": false,
 		"stripInternal": true,

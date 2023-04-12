@@ -7,13 +7,15 @@ export {
 	jsonToNVM500,
 	migrateNVM,
 	nvm500ToJSON,
+	nvmToJSON,
+} from "./convert";
+export type {
 	NVMJSON,
 	NVMJSONController,
 	NVMJSONControllerRFConfig,
 	NVMJSONNode,
 	NVMJSONNodeWithInfo,
 	NVMJSONVirtualNode,
-	nvmToJSON,
 } from "./convert";
 export {
 	FragmentType,

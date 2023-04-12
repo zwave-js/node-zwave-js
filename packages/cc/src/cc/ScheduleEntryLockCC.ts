@@ -1,33 +1,33 @@
 import {
 	CommandClasses,
-	encodeBitMask,
-	getDSTInfo,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	SupervisionResult,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	getDSTInfo,
+	parseBitMask,
+	validatePayload,
+	type IZWaveEndpoint,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import {
-	AllOrNone,
 	formatDate,
 	formatTime,
 	getEnumMemberName,
 	pick,
+	type AllOrNone,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	CCCommandOptions,
 	CommandClass,
-	CommandClassDeserializationOptions,
 	gotDeserializationOptions,
+	type CCCommandOptions,
+	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -39,18 +39,18 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import { encodeTimezone, parseTimezone } from "../lib/serializers";
 import { V } from "../lib/Values";
 import {
 	ScheduleEntryLockCommand,
-	ScheduleEntryLockDailyRepeatingSchedule,
 	ScheduleEntryLockSetAction,
-	ScheduleEntryLockSlotId,
 	ScheduleEntryLockWeekday,
-	ScheduleEntryLockWeekDaySchedule,
-	ScheduleEntryLockYearDaySchedule,
-	Timezone,
+	type ScheduleEntryLockDailyRepeatingSchedule,
+	type ScheduleEntryLockSlotId,
+	type ScheduleEntryLockWeekDaySchedule,
+	type ScheduleEntryLockYearDaySchedule,
+	type Timezone,
 } from "../lib/_Types";
+import { encodeTimezone, parseTimezone } from "../lib/serializers";
 
 export const ScheduleEntryLockCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Schedule Entry Lock"], {

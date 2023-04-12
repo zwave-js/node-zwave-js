@@ -6,26 +6,26 @@ import {
 	ZWaveProtocolCCRequestNodeInformationFrame,
 } from "@zwave-js/cc/ZWaveProtocolCC";
 import {
-	isZWaveError,
 	NodeType,
 	TransmitOptions,
 	TransmitStatus,
 	ZWaveDataRate,
 	ZWaveErrorCodes,
+	isZWaveError,
 } from "@zwave-js/core";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
-	createMockZWaveRequestFrame,
-	MockControllerBehavior,
-	MockZWaveFrameType,
 	MOCK_FRAME_ACK_TIMEOUT,
+	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
+	type MockControllerBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
-	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
+	type ApplicationUpdateRequest,
 } from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	SerialAPIStartedRequest,

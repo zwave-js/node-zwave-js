@@ -1,19 +1,19 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
+	enumValuesToMetadataStates,
+	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,

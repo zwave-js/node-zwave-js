@@ -2,8 +2,8 @@ import { formatId, padVersion } from "@zwave-js/shared";
 import * as fs from "fs-extra";
 import path from "path";
 import * as semver from "semver";
-import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig";
 import type { ConfigLogger } from "./Logger";
+import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig";
 
 /** The absolute path of the embedded configuration directory */
 export const configDir = path.resolve(__dirname, "../config");

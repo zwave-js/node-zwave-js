@@ -1,19 +1,19 @@
 import {
 	CommandClasses,
 	Duration,
-	enumValuesToMetadataStates,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type IZWaveEndpoint,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -21,13 +21,13 @@ import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	PhysicalCCAPI,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -47,10 +47,10 @@ import {
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
-	DoorHandleStatus,
 	DoorLockCommand,
 	DoorLockMode,
 	DoorLockOperationType,
+	type DoorHandleStatus,
 } from "../lib/_Types";
 
 export const DoorLockCCValues = Object.freeze({

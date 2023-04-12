@@ -1,10 +1,10 @@
 import {
-	actuatorCCs,
 	CommandClasses,
-	IZWaveNode,
 	ZWaveError,
 	ZWaveErrorCodes,
+	actuatorCCs,
 	type IZWaveEndpoint,
+	type IZWaveNode,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
 import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";

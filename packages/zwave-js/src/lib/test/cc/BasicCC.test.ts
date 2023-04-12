@@ -3,9 +3,9 @@ import {
 	BasicCCGet,
 	BasicCCReport,
 	BasicCCSet,
-	BasicCCValues,
 	BasicCommand,
 	getCCValues,
+	type BasicCCValues,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";

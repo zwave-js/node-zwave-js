@@ -6,7 +6,7 @@ import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import test, { type ExecutionContext } from "ava";
 import proxyquire from "proxyquire";
 import sinon from "sinon";
-import { assign, interpret, Machine, State } from "xstate";
+import { Machine, assign, interpret, type State } from "xstate";
 import {
 	SendDataAbort,
 	SendDataRequest,

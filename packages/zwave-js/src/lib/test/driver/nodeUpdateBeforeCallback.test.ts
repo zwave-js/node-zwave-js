@@ -1,8 +1,8 @@
 import { BasicCCGet, BasicCCReport } from "@zwave-js/cc";
 import {
-	createMockZWaveRequestFrame,
-	MockNodeBehavior,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
+	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "path";

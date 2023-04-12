@@ -1,4 +1,8 @@
-import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
+import {
+	ZWaveError,
+	ZWaveErrorCodes,
+	type ZWaveLogContainer,
+} from "@zwave-js/core";
 import { SerialPort } from "serialport";
 import type { DisconnectError } from "./DisconnectError";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";

@@ -1,8 +1,8 @@
 import {
-	CommandClasses,
-	CommandClassInfo,
-	NodeProtocolInfoAndDeviceClass,
 	NodeType,
+	type CommandClassInfo,
+	type CommandClasses,
+	type NodeProtocolInfoAndDeviceClass,
 } from "@zwave-js/core";
 
 export type PartialCCCapabilities =

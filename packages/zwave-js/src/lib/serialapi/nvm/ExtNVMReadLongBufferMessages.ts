@@ -1,20 +1,20 @@
 import {
-	MessageOrCCLogEntry,
 	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 

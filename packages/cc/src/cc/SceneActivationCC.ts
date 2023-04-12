@@ -7,17 +7,17 @@ import type {
 import {
 	CommandClasses,
 	Duration,
-	validatePayload,
 	ValueMetadata,
+	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,

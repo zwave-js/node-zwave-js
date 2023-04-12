@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
 import {
-	IZWaveNode,
 	MAX_SUPERVISION_SESSION_ID,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type IZWaveNode,
 } from "@zwave-js/core";
 import {
 	createThrowingMap,

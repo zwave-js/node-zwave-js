@@ -1,12 +1,12 @@
 import {
-	MessageRecord,
-	protocolDataRateToString,
-	RSSI,
 	RssiError,
+	TransmitStatus,
+	protocolDataRateToString,
 	rssiToString,
 	stripUndefined,
-	TransmitStatus,
-	TXReport,
+	type MessageRecord,
+	type RSSI,
+	type TXReport,
 } from "@zwave-js/core/safe";
 import { AssignPriorityReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPriorityReturnRouteMessages";
 import { AssignPrioritySUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPrioritySUCReturnRouteMessages";

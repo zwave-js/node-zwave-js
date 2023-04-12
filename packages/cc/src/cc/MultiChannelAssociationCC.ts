@@ -5,15 +5,15 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	encodeBitMask,
 	MAX_NODES,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	parseBitMask,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	parseBitMask,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
@@ -35,13 +35,13 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import {
-	AssociationAddress,
-	EndpointAddress,
 	MultiChannelAssociationCommand,
+	type AssociationAddress,
+	type EndpointAddress,
 } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
 import { AssociationCCValues } from "./AssociationCC";
 
 export const MultiChannelAssociationCCValues = Object.freeze({

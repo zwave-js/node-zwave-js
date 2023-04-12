@@ -1,6 +1,6 @@
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 
 /** Allows waiting for something for a given amount of time, after which the expectation will automatically be rejected. */

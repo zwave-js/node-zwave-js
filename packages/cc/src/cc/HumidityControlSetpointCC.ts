@@ -1,31 +1,31 @@
 import type { ConfigManager, Scale } from "@zwave-js/config";
 import {
 	CommandClasses,
-	encodeFloatWithScale,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
+	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
+	encodeFloatWithScale,
 	parseBitMask,
 	parseFloatWithScale,
 	supervisedCommandSucceeded,
-	SupervisionResult,
 	validatePayload,
-	ValueMetadata,
-	ValueMetadataNumeric,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
+	type ValueMetadataNumeric,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -45,10 +45,10 @@ import {
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
-	HumidityControlSetpointCapabilities,
 	HumidityControlSetpointCommand,
 	HumidityControlSetpointType,
-	HumidityControlSetpointValue,
+	type HumidityControlSetpointCapabilities,
+	type HumidityControlSetpointValue,
 } from "../lib/_Types";
 
 export const HumidityControlSetpointCCValues = Object.freeze({

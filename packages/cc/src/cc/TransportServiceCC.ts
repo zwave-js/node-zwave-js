@@ -1,11 +1,11 @@
 import {
-	CommandClasses,
 	CRC16_CCITT,
-	MessageOrCCLogEntry,
-	SinglecastCC,
-	validatePayload,
+	CommandClasses,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type MessageOrCCLogEntry,
+	type SinglecastCC,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";

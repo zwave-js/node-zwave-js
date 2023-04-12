@@ -1,9 +1,9 @@
 import {
-	assign,
-	AssignAction,
-	Interpreter,
 	Machine,
-	StateMachine,
+	assign,
+	type AssignAction,
+	type Interpreter,
+	type StateMachine,
 } from "xstate";
 
 /*

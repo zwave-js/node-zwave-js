@@ -8,8 +8,8 @@ import {
 	json700To500,
 	jsonToNVM500,
 	nvm500ToJSON,
-	NVMJSON,
 	nvmToJSON,
+	type NVMJSON,
 } from "./convert";
 import type { NVM500JSON } from "./nvm500/NVMParser";
 

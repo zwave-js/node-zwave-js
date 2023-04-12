@@ -1,11 +1,11 @@
 import {
 	BasicCCReport,
 	BasicCCValues,
-	CommandClass,
 	InvalidCC,
 	Security2CC,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
+	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityClass,
@@ -13,8 +13,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";

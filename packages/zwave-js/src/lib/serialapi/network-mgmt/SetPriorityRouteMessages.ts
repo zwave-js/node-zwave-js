@@ -1,24 +1,24 @@
 import {
 	MAX_NODES,
 	MAX_REPEATERS,
-	MessageOrCCLogEntry,
 	MessagePriority,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	SuccessIndicator,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 

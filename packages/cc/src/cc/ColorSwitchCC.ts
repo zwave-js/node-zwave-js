@@ -1,20 +1,20 @@
 import {
 	CommandClasses,
 	Duration,
-	isUnsupervisedOrSucceeded,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	validatePayload,
-	ValueDB,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isUnsupervisedOrSucceeded,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
+	type ValueDB,
+	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
@@ -28,14 +28,14 @@ import { clamp } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -57,10 +57,10 @@ import { V } from "../lib/Values";
 import {
 	ColorComponent,
 	ColorComponentMap,
-	ColorKey,
 	ColorSwitchCommand,
-	ColorTable,
 	LevelChangeDirection,
+	type ColorKey,
+	type ColorTable,
 } from "../lib/_Types";
 
 const hexColorRegex =

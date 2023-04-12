@@ -3,8 +3,8 @@ import * as crypto from "crypto";
 // @ts-expect-error There are no type definitions for nrf-intel-hex
 import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CRC16_CCITT } from "./crc";
 import type { Firmware, FirmwareFileFormat } from "./_Types";
+import { CRC16_CCITT } from "./crc";
 
 const firmwareIndicators = {
 	// All aeotec updater exes contain this text

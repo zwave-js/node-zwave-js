@@ -1,4 +1,4 @@
-import { detectPackageManager, PackageManager } from "@alcalzone/pak";
+import { detectPackageManager, type PackageManager } from "@alcalzone/pak";
 import got from "@esm2cjs/got";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getErrorMessage } from "@zwave-js/shared";

@@ -1,8 +1,8 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
 	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";

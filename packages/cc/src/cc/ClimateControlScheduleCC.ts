@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
-	MessageOrCCLogEntry,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
@@ -30,20 +30,20 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
+import {
+	ClimateControlScheduleCommand,
+	ScheduleOverrideType,
+	Weekday,
+	type SetbackState,
+	type Switchpoint,
+} from "../lib/_Types";
 import {
 	decodeSetbackState,
 	decodeSwitchpoint,
 	encodeSetbackState,
 	encodeSwitchpoint,
 } from "../lib/serializers";
-import { V } from "../lib/Values";
-import {
-	ClimateControlScheduleCommand,
-	ScheduleOverrideType,
-	SetbackState,
-	Switchpoint,
-	Weekday,
-} from "../lib/_Types";
 
 export const ClimateControlScheduleCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Climate Control Schedule"], {

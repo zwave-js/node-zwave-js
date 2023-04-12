@@ -1,12 +1,12 @@
 import {
-	CCAPI,
-	SetValueImplementation,
 	SupervisionCCReport,
+	type CCAPI,
+	type SetValueImplementation,
 } from "@zwave-js/cc";
 import {
-	mergeSupervisionResults,
 	ZWaveError,
 	ZWaveErrorCodes,
+	mergeSupervisionResults,
 	type CommandClasses,
 	type SendCommandOptions,
 	type ValueID,

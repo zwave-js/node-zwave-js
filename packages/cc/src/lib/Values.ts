@@ -1,8 +1,8 @@
 import {
-	CommandClasses,
-	IZWaveEndpoint,
-	ValueID,
 	ValueMetadata,
+	type CommandClasses,
+	type IZWaveEndpoint,
+	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import type { Overwrite } from "alcalzone-shared/types";

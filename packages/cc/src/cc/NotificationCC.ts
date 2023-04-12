@@ -1,31 +1,31 @@
 import {
-	Notification,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
 	NotificationParameterWithEnum,
 	NotificationParameterWithValue,
-	NotificationValueDefinition,
+	type Notification,
+	type NotificationValueDefinition,
 } from "@zwave-js/config";
 import { timespan } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
-	encodeBitMask,
-	isZWaveError,
-	IZWaveEndpoint,
-	IZWaveNode,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	SinglecastCC,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
-	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	isZWaveError,
+	parseBitMask,
+	validatePayload,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
+	type ValueMetadataNumeric,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
@@ -34,8 +34,8 @@ import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	CommandClass,
-	gotDeserializationOptions,
 	InvalidCC,
+	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -50,9 +50,9 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
-import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import { NotificationCommand, UserCodeCommand } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
 
 export const NotificationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Notification, {

@@ -1,23 +1,23 @@
 import {
 	CommandClasses,
-	DataRate,
-	encodeBitMask,
-	encodeNodeInformationFrame,
-	encodeNodeProtocolInfoAndDeviceClass,
-	FLiRS,
 	MAX_NODES,
 	MAX_REPEATERS,
-	NodeInformationFrame,
-	NodeProtocolInfoAndDeviceClass,
-	NodeType,
-	parseBitMask,
-	parseNodeInformationFrame,
-	parseNodeProtocolInfoAndDeviceClass,
-	ProtocolVersion,
-	validatePayload,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	encodeNodeInformationFrame,
+	encodeNodeProtocolInfoAndDeviceClass,
+	parseBitMask,
+	parseNodeInformationFrame,
+	parseNodeProtocolInfoAndDeviceClass,
+	validatePayload,
+	type DataRate,
+	type FLiRS,
+	type NodeInformationFrame,
+	type NodeProtocolInfoAndDeviceClass,
+	type NodeType,
+	type ProtocolVersion,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
@@ -33,10 +33,10 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
-	NetworkTransferStatus,
-	parseWakeUpTime,
 	WakeUpTime,
 	ZWaveProtocolCommand,
+	parseWakeUpTime,
+	type NetworkTransferStatus,
 } from "../lib/_Types";
 
 // TODO: Move this enumeration into the _Types.ts file

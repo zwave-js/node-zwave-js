@@ -6,7 +6,7 @@ import {
 import {
 	buffer2hex,
 	getEnumMemberName,
-	TypedClassDecorator,
+	type TypedClassDecorator,
 } from "@zwave-js/shared/safe";
 import "reflect-metadata";
 
