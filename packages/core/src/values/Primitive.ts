@@ -1,4 +1,4 @@
-import { NUM_NODEMASK_BYTES } from "../consts";
+import { MAX_NODES, NUM_NODEMASK_BYTES } from "../consts";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	getBitMaskWidth,
@@ -223,7 +223,7 @@ export function parseNodeBitMask(mask: Buffer): number[] {
 }
 
 export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer {
-	return encodeBitMask(nodeIDs, NUM_NODEMASK_BYTES);
+	return encodeBitMask(nodeIDs, MAX_NODES);
 }
 
 /**
