@@ -1,9 +1,10 @@
-import type { CCAPI, SetValueImplementation } from "@zwave-js/cc";
 import {
-	Duration,
-	isSupervisionResult,
-	SupervisionResult,
-	SupervisionStatus,
+	CCAPI,
+	SetValueImplementation,
+	SupervisionCCReport,
+} from "@zwave-js/cc";
+import {
+	mergeSupervisionResults,
 	ZWaveError,
 	ZWaveErrorCodes,
 	type CommandClasses,
@@ -107,7 +108,14 @@ export function createMultiCCAPIWrapper<T extends CCAPI>(apiInstances: T[]): T {
 							// This may throw when a non-existing method is accessed, but that is desired here
 							(a as any)[prop].call(a, ...args),
 						);
-						const results = await Promise.all(tasks);
+						// This call won't go through the sendSupervisedCommand method, so supervision results are not automatically unwrapped
+						const responses = await Promise.all(tasks);
+						const results = responses.map((r) => {
+							if (r instanceof SupervisionCCReport) {
+								return r.toSupervisionResult();
+							}
+							return undefined;
+						});
 						// The call site may use a GET-type method, which does not make sense in a multicast context
 						// The following will return `undefined` in that case
 						return mergeSupervisionResults(results);
@@ -115,44 +123,4 @@ export function createMultiCCAPIWrapper<T extends CCAPI>(apiInstances: T[]): T {
 			}
 		},
 	});
-}
-
-/** Figures out the final supervision result from an array of things that may be supervision results */
-function mergeSupervisionResults(
-	results: unknown[],
-): SupervisionResult | undefined {
-	const supervisionResults = results.filter(isSupervisionResult);
-	if (!supervisionResults.length) return undefined;
-
-	if (supervisionResults.some((r) => r.status === SupervisionStatus.Fail)) {
-		return {
-			status: SupervisionStatus.Fail,
-		};
-	} else if (
-		supervisionResults.some((r) => r.status === SupervisionStatus.NoSupport)
-	) {
-		return {
-			status: SupervisionStatus.NoSupport,
-		};
-	}
-	const working = supervisionResults.filter(
-		(r): r is SupervisionResult & { status: SupervisionStatus.Working } =>
-			r.status === SupervisionStatus.Working,
-	);
-	if (working.length > 0) {
-		const durations = working.map((r) =>
-			r.remainingDuration.serializeSet(),
-		);
-		const maxDuration =
-			(durations.length > 0 &&
-				Duration.parseReport(Math.max(...durations))) ||
-			new Duration(0, "unknown");
-		return {
-			status: SupervisionStatus.Working,
-			remainingDuration: maxDuration,
-		};
-	}
-	return {
-		status: SupervisionStatus.Success,
-	};
 }

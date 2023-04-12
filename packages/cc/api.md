@@ -14619,6 +14619,8 @@ export class SupervisionCCReport extends SupervisionCC {
     readonly status: SupervisionStatus;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    toSupervisionResult(): SupervisionResult;
 }
 
 // Warning: (ae-missing-release-tag) "SupervisionCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

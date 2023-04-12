@@ -116,7 +116,6 @@ import type { SecurityClass } from '@zwave-js/core/safe';
 import { SecurityClass as SecurityClass_2 } from '@zwave-js/core';
 import { SecurityClassOwner } from '@zwave-js/core';
 import { SendCommandOptions } from '@zwave-js/core';
-import { SendCommandOptions as SendCommandOptions_2 } from '@zwave-js/core/safe';
 import { SendCommandReturnType } from '@zwave-js/core';
 import { SendMessageOptions } from '@zwave-js/core';
 import { SensorType } from '@zwave-js/config';
@@ -941,8 +940,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
     constructor(
     node: VirtualNode | undefined,
     driver: Driver,
-    index: number,
-    defaultCommandOptions?: SendCommandOptions_2 | undefined);
+    index: number);
     get commandClasses(): CCAPIs;
     protected readonly driver: Driver;
     getCCVersion(cc: CommandClasses): number;
@@ -963,8 +961,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 // @public (undocumented)
 export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
     constructor(id: number | undefined, driver: Driver,
-    physicalNodes: Iterable<ZWaveNode>,
-    defaultCommandOptions?: SendCommandOptions);
+    physicalNodes: Iterable<ZWaveNode>);
     getDefinedValueIDs(): VirtualValueID[];
     getEndpoint(index: 0): VirtualEndpoint;
     // (undocumented)
@@ -973,7 +970,11 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
     // (undocumented)
     getEndpointOrThrow(index: number): VirtualEndpoint;
     // (undocumented)
+    get hasMixedSecurityClasses(): boolean;
+    // (undocumented)
     readonly id: number | undefined;
+    // (undocumented)
+    readonly nodesBySecurityClass: ReadonlyMap<SecurityClass_2, readonly ZWaveNode[]>;
     // (undocumented)
     readonly physicalNodes: readonly ZWaveNode[];
     setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;
@@ -1062,19 +1063,28 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         rssiChannel1: RSSI_2;
         rssiChannel2?: RSSI_2;
     }>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getBroadcastNodes"
-    //
-    // @deprecated
     getBroadcastNode(): VirtualNode;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getBroadcastNode"
+    //
+    // @deprecated (undocumented)
     getBroadcastNodeInsecure(): VirtualNode;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getBroadcastNode"
+    //
+    // @deprecated (undocumented)
     getBroadcastNodes(): VirtualNode[];
     getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroups"
+    getMulticastGroup(nodeIDs: number[]): VirtualNode;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroup"
     //
     // @deprecated
-    getMulticastGroup(nodeIDs: number[]): VirtualNode;
     getMulticastGroupInsecure(nodeIDs: number[]): VirtualNode;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroup"
+    //
+    // @deprecated (undocumented)
     getMulticastGroups(nodeIDs: number[]): VirtualNode[];
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroup"
+    //
+    // @deprecated
     getMulticastGroupS2(nodeIDs: number[]): VirtualNode;
     getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined;
     getNodeNeighbors(nodeId: number, onlyRepeaters?: boolean): Promise<readonly number[]>;

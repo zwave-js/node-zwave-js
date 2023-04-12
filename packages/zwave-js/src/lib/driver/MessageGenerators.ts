@@ -8,6 +8,7 @@ import {
 	Security2CCNonceGet,
 	Security2CCNonceReport,
 	SupervisionCC,
+	SupervisionCCReport,
 	SupervisionCommand,
 } from "@zwave-js/cc";
 import {
@@ -29,9 +30,13 @@ import {
 import {
 	CommandClasses,
 	EncapsulationFlags,
+	mergeSupervisionResults,
 	MessagePriority,
+	NODE_ID_BROADCAST,
 	SendCommandOptions,
 	SPANState,
+	SupervisionResult,
+	SupervisionStatus,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -712,6 +717,8 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 		// Otherwise, the node will increase its MPAN multiple times, going out of sync.
 		const distinctNodeIDs = [...new Set(group.nodeIDs)];
 
+		const supervisionResults: (SupervisionResult | undefined)[] = [];
+
 		// Now do singlecast followups with every node in the group
 		for (const nodeId of distinctNodeIDs) {
 			// Point the CC at the target node
@@ -774,15 +781,49 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 						});
 					}
 				}
+
+				// Collect supervision results if possible
+				if (isCommandClassContainer(scResponse)) {
+					const supervisionReport =
+						scResponse.command.getEncapsulatedCC(
+							CommandClasses.Supervision,
+							SupervisionCommand.Report,
+						) as SupervisionCCReport | undefined;
+
+					supervisionResults.push(
+						supervisionReport?.toSupervisionResult(),
+					);
+				}
 			} catch (e) {
 				driver.driverLog.print(getErrorMessage(e), "error");
 				// TODO: Figure out how we got here, and what to do now.
 				// In any case, keep going with the next nodes
-				// TODO: We should probably respond that there was a failure
+				// Report that there was a failure, so the application can show it
+				supervisionResults.push({
+					status: SupervisionStatus.Fail,
+				});
 			}
 		}
 
-		return response;
+		const finalSupervisionResult =
+			mergeSupervisionResults(supervisionResults);
+		if (finalSupervisionResult) {
+			// We can return return information about the success of this multicast - so we should
+			// TODO: Not sure if we need to "wrap" the response for something. For now, try faking it
+			const cc = new SupervisionCCReport(driver, {
+				nodeId: NODE_ID_BROADCAST,
+				sessionId: 0, // fake
+				moreUpdatesFollow: false, // fake
+				...(finalSupervisionResult as any),
+			});
+			const ret = new (driver.getSendDataSinglecastConstructor())(
+				driver,
+				{ command: cc },
+			);
+			return ret;
+		} else {
+			return response;
+		}
 	};
 
 export function createMessageGenerator<TResponse extends Message = Message>(

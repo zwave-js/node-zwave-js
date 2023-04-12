@@ -4430,16 +4430,7 @@ ${handlers.length} left`,
 			);
 		}
 		// In any case, return the status
-		if (resp.status === SupervisionStatus.Working) {
-			return {
-				status: resp.status,
-				remainingDuration: resp.duration!,
-			};
-		} else {
-			return {
-				status: resp.status,
-			};
-		}
+		return resp.toSupervisionResult();
 	}
 
 	/**
