@@ -224,7 +224,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	userAgent?: Record<string, string>;
 
-	/** @internal Used for testing internally */
+	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {
 		serialPortBinding?: typeof SerialPort;
 		/**

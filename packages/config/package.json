@@ -45,7 +45,7 @@
   },
   "scripts": {
     "codegen": "yarn ts maintenance/codegen.ts",
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:zwave": "yarn ts maintenance/lintConfigFiles.ts",

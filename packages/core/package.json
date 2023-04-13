@@ -11,8 +11,7 @@
     ".": "./build/index.js",
     "./package.json": "./package.json",
     "./safe": "./build/index_safe.js",
-    "./test": "./build/index_test.js",
-    "./ava": "./build/index_ava.js"
+    "./test": "./build/index_test.js"
   },
   "types": "build/index.d.ts",
   "typesVersions": {
@@ -22,9 +21,6 @@
       ],
       "test": [
         "build/index_test.d.ts"
-      ],
-      "ava": [
-        "build/index_ava.d.ts"
       ]
     }
   },
@@ -51,7 +47,7 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
