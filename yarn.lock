@@ -8134,7 +8134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-patch@npm:>=3.0.0-beta2":
+"ts-patch@npm:3.0.0-beta2":
   version: 3.0.0-beta2
   resolution: "ts-patch@npm:3.0.0-beta2"
   dependencies:
@@ -8150,6 +8150,25 @@ __metadata:
     ts-patch: bin/ts-patch.js
     tspc: bin/tspc.js
   checksum: aa00e5aa9d95c7c93b3fc521f9ba6af379c323916c8a127349a402953a3675e2b7a9e3090dc3b531c1879fe08eb4d96de0ae3f3da5740c8cdcbc11cb8a22411f
+  languageName: node
+  linkType: hard
+
+"ts-patch@patch:ts-patch@npm%3A3.0.0-beta2#./.yarn/patches/ts-patch-npm-3.0.0-beta2-7566748a19.patch::locator=%40zwave-js%2Frepo%40workspace%3A.":
+  version: 3.0.0-beta2
+  resolution: "ts-patch@patch:ts-patch@npm%3A3.0.0-beta2#./.yarn/patches/ts-patch-npm-3.0.0-beta2-7566748a19.patch::version=3.0.0-beta2&hash=a38ba3&locator=%40zwave-js%2Frepo%40workspace%3A."
+  dependencies:
+    chalk: ^4.1.2
+    global-prefix: ^3.0.0
+    minimist: ^1.2.8
+    resolve: ^1.22.2
+    semver: ^7.3.8
+    strip-ansi: ^6.0.1
+  peerDependencies:
+    typescript: ">=5.0.0"
+  bin:
+    ts-patch: bin/ts-patch.js
+    tspc: bin/tspc.js
+  checksum: 9f8dbc436aec9ad36a837d0b10a97a72d5796eee44e7ef7a8c9bbe2d7d49118f40ff9e0dbe6d07da3e7ff9195d6d80785ebc7dfe9047f3a5adff27cf532949ba
   languageName: node
   linkType: hard
 
