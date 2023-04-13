@@ -40,7 +40,7 @@
 
 		// Specific linting tasks: ESLint
 		"lint:ts": {
-			// "dependsOn": ["^build"],
+			"dependsOn": ["build"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
@@ -54,7 +54,7 @@
 			]
 		},
 		"lint:ts:fix": {
-			"dependsOn": ["^build"],
+			"dependsOn": ["build"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
