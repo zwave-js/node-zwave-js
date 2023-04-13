@@ -130,7 +130,7 @@
     "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
     "codefind": "yarn ts packages/maintenance/src/codefind.ts",
     "extract-api": "FORCE_COLOR=1 yarn turbo run extract-api",
-    "accept-api": "yarn extract-api --force -- --local",
+    "accept-api": "yarn extract-api -- --local",
     "monopack": "yarn exec monopack",
     "check-references": "workspaces-to-typescript-project-references --check && workspaces-to-typescript-project-references --check --tsconfigPath tsconfig.build.json",
     "sync-references": "workspaces-to-typescript-project-references && workspaces-to-typescript-project-references --tsconfigPath tsconfig.build.json && prettier -c '{,packages/*/}{tsconfig,tsconfig.*}.json' -w --loglevel silent"

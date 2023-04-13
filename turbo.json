@@ -114,7 +114,8 @@
 		"extract-api": {
 			"dependsOn": ["build"],
 			"inputs": ["src/**/*.ts", "build/**"],
-			"outputs": [".tmp/api.md", "api.md"]
+			"cache": false
+			// "outputs": [".tmp/api.md", "api.md"]
 		},
 
 		"test:ts": {
