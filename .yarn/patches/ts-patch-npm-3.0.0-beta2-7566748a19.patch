@@ -1,0 +1,1077 @@
+diff --git a/actions/check.js b/actions/check.js
+index 7ae90999344c7727ce06e5422658482ffc8e095e..20a875727318587a24a1f0d64988989dca1b113a 100644
+--- a/actions/check.js
++++ b/actions/check.js
+@@ -16,7 +16,7 @@ function check(moduleNameOrNames, opts) {
+     /* Load Package */
+     const tsPackage = (0, ts_package_1.getTsPackage)(dir);
+     const { packageDir, version } = tsPackage;
+-    targetModuleNames ??= tsPackage.moduleNames;
++    targetModuleNames !== null && targetModuleNames !== void 0 ? targetModuleNames : (targetModuleNames = tsPackage.moduleNames);
+     /* Check Modules */
+     log(`Checking TypeScript ${chalk_1.default.blueBright(`v${version}`)} installation in ${chalk_1.default.blueBright(packageDir)}\r\n`);
+     let res = {};
+diff --git a/actions/check.js.map b/actions/check.js.map
+index f081884e537ccbab9b75475cac813eecba7829ef..39f23e5f0cbb2c146e71045ab0436668c4b36139 100644
+--- a/actions/check.js.map
++++ b/actions/check.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"check.js","sourceRoot":"","sources":["../../../projects/core/src/actions/check.ts"],"names":[],"mappings":";;;;;;AAAA,sCAAiD;AACjD,kDAA0B;AAC1B,8CAA6C;AAE7C,sCAAwC;AACxC,wCAAmE;AAuBnE,SAAgB,KAAK,CAAC,iBAAqC,EAAE,IAAgC;IAC3F,IAAI,iBAAiB,GAAG,iBAAiB,CAAC,CAAC,CAAC,CAAE,iBAAiB,CAAE,CAAC,IAAI,EAAE,CAAC,CAAC,CAAC,SAAS,CAAC;IACrF,MAAM,OAAO,GAAG,IAAA,6BAAmB,EAAC,IAAI,CAAC,CAAC;IAC1C,MAAM,EAAE,MAAM,EAAE,GAAG,EAAE,GAAG,EAAE,GAAG,OAAO,CAAC;IAErC,kBAAkB;IAClB,MAAM,SAAS,GAAG,IAAA,yBAAY,EAAC,GAAG,CAAC,CAAC;IACpC,MAAM,EAAE,UAAU,EAAE,OAAO,EAAE,GAAG,SAAS,CAAC;IAG1C,iBAAiB,KAAK,SAAS,CAAC,WAAW,CAAC;IAE5C,mBAAmB;IACnB,GAAG,CAAC,uBAAuB,eAAK,CAAC,UAAU,CAAC,IAAI,OAAO,EAAE,CAAC,oBAAoB,eAAK,CAAC,UAAU,CAAC,UAAU,CAAC,MAAM,CAAC,CAAC;IAElH,IAAI,GAAG,GAAgB,EAAE,CAAC;IAC1B,KAAK,MAAM,UAAU,IAAI,iBAAiB,EAAE;QAC1C,cAAc;QACd,IAAI,CAAC,SAAS,CAAC,WAAW,CAAC,QAAQ,CAAC,UAAU,CAAC;YAC7C,MAAM,IAAI,mBAAU,CAAC,GAAG,UAAU,wCAAwC,UAAU,EAAE,CAAC,CAAC;QAE1F,YAAY;QACZ,MAAM,QAAQ,GAAG,IAAA,oBAAW,EAAC,SAAS,EAAE,UAAU,EAAE,EAAE,SAAS,EAAE,OAAO,CAAC,SAAS,EAAE,CAAC,CAAC;QACtF,MAAM,EAAE,WAAW,EAAE,GAAG,QAAQ,CAAC,UAAU,CAAC;QAE5C,IAAI,WAAW,KAAK,SAAS,EAAE;YAC7B,MAAM,EAAE,UAAU,EAAE,GAAG,WAAW,CAAC;YACnC,GAAG,CAAC,CAAE,GAAG;gBACP,GAAG,eAAK,CAAC,UAAU,CAAC,UAAU,CAAC,oCAAoC;oBACnE,GAAG,eAAK,CAAC,UAAU,CAAC,CAAC,CAAC,WAAW,CAAC,CAAC,CAAC,YAAY,CAAC,CAAC,WAAW,CAAC,UAAU,CAAC,IAAI,UAAU,CAAC,CAAC,CAAC,eAAe,CAAC,CAAC,CAAC,EAAE,EAAE;aACjH,CAAC,CAAC;SACJ;;YAAM,GAAG,CAAC,CAAE,GAAG,EAAE,GAAG,eAAK,CAAC,UAAU,CAAC,UAAU,CAAC,kBAAkB,CAAE,CAAC,CAAC;QAEvE,GAAG,CAAC,UAAU,CAAC,GAAG,WAAW,CAAC;QAE9B,GAAG,CAAC,EAAE,EAAE,iBAAQ,CAAC,OAAO,CAAC,CAAC;KAC3B;IAED,OAAO,GAAG,CAAC;AACb,CAAC;AAvCD,sBAuCC;AAED,YAAY"}
+\ No newline at end of file
++{"version":3,"file":"check.js","sourceRoot":"","sources":["../../../projects/core/src/actions/check.ts"],"names":[],"mappings":";;;;;;AAAA,sCAAiD;AACjD,kDAA0B;AAC1B,8CAA6C;AAE7C,sCAAwC;AACxC,wCAAmE;AAuBnE,SAAgB,KAAK,CAAC,iBAAqC,EAAE,IAAgC;IAC3F,IAAI,iBAAiB,GAAG,iBAAiB,CAAC,CAAC,CAAC,CAAE,iBAAiB,CAAE,CAAC,IAAI,EAAE,CAAC,CAAC,CAAC,SAAS,CAAC;IACrF,MAAM,OAAO,GAAG,IAAA,6BAAmB,EAAC,IAAI,CAAC,CAAC;IAC1C,MAAM,EAAE,MAAM,EAAE,GAAG,EAAE,GAAG,EAAE,GAAG,OAAO,CAAC;IAErC,kBAAkB;IAClB,MAAM,SAAS,GAAG,IAAA,yBAAY,EAAC,GAAG,CAAC,CAAC;IACpC,MAAM,EAAE,UAAU,EAAE,OAAO,EAAE,GAAG,SAAS,CAAC;IAG1C,iBAAiB,aAAjB,iBAAiB,cAAjB,iBAAiB,IAAjB,iBAAiB,GAAK,SAAS,CAAC,WAAW,EAAC;IAE5C,mBAAmB;IACnB,GAAG,CAAC,uBAAuB,eAAK,CAAC,UAAU,CAAC,IAAI,OAAO,EAAE,CAAC,oBAAoB,eAAK,CAAC,UAAU,CAAC,UAAU,CAAC,MAAM,CAAC,CAAC;IAElH,IAAI,GAAG,GAAgB,EAAE,CAAC;IAC1B,KAAK,MAAM,UAAU,IAAI,iBAAiB,EAAE;QAC1C,cAAc;QACd,IAAI,CAAC,SAAS,CAAC,WAAW,CAAC,QAAQ,CAAC,UAAU,CAAC;YAC7C,MAAM,IAAI,mBAAU,CAAC,GAAG,UAAU,wCAAwC,UAAU,EAAE,CAAC,CAAC;QAE1F,YAAY;QACZ,MAAM,QAAQ,GAAG,IAAA,oBAAW,EAAC,SAAS,EAAE,UAAU,EAAE,EAAE,SAAS,EAAE,OAAO,CAAC,SAAS,EAAE,CAAC,CAAC;QACtF,MAAM,EAAE,WAAW,EAAE,GAAG,QAAQ,CAAC,UAAU,CAAC;QAE5C,IAAI,WAAW,KAAK,SAAS,EAAE;YAC7B,MAAM,EAAE,UAAU,EAAE,GAAG,WAAW,CAAC;YACnC,GAAG,CAAC,CAAE,GAAG;gBACP,GAAG,eAAK,CAAC,UAAU,CAAC,UAAU,CAAC,oCAAoC;oBACnE,GAAG,eAAK,CAAC,UAAU,CAAC,CAAC,CAAC,WAAW,CAAC,CAAC,CAAC,YAAY,CAAC,CAAC,WAAW,CAAC,UAAU,CAAC,IAAI,UAAU,CAAC,CAAC,CAAC,eAAe,CAAC,CAAC,CAAC,EAAE,EAAE;aACjH,CAAC,CAAC;SACJ;;YAAM,GAAG,CAAC,CAAE,GAAG,EAAE,GAAG,eAAK,CAAC,UAAU,CAAC,UAAU,CAAC,kBAAkB,CAAE,CAAC,CAAC;QAEvE,GAAG,CAAC,UAAU,CAAC,GAAG,WAAW,CAAC;QAE9B,GAAG,CAAC,EAAE,EAAE,iBAAQ,CAAC,OAAO,CAAC,CAAC;KAC3B;IAED,OAAO,GAAG,CAAC;AACb,CAAC;AAvCD,sBAuCC;AAED,YAAY"}
+\ No newline at end of file
+diff --git a/cli/cli.js b/cli/cli.js
+index 003e57de28c64bba34bfe9e1ba70267baca3ed89..9e056b2bda456d6c6cd47880cec1311b109d7e86 100644
+--- a/cli/cli.js
++++ b/cli/cli.js
+@@ -42,8 +42,9 @@ const fs_1 = __importDefault(require("fs"));
+ // region: Utils
+ /* ****************************************************************************************************************** */
+ function run(opt) {
++    var _a, _b;
+     /* Parse Input */
+-    const args = (0, minimist_1.default)(opt?.cmdArgs?.split(' ') ?? process.argv.slice(2));
++    const args = (0, minimist_1.default)((_b = (_a = opt === null || opt === void 0 ? void 0 : opt.cmdArgs) === null || _a === void 0 ? void 0 : _a.split(' ')) !== null && _b !== void 0 ? _b : process.argv.slice(2));
+     const cliOptions = (0, options_1.getCliOptions)(args);
+     const cmd = (0, commands_1.getCliCommand)(args);
+     /* Setup */
+diff --git a/cli/cli.js.map b/cli/cli.js.map
+index c0794d4f448850d69915a44a489868703bc9470a..b59cc92b16b7bec2a14d93e04d50eb05c9d2c543 100644
+--- a/cli/cli.js.map
++++ b/cli/cli.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"cli.js","sourceRoot":"","sources":["../../../projects/core/src/cli/cli.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
++{"version":3,"file":"cli.js","sourceRoot":"","sources":["../../../projects/core/src/cli/cli.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/cli/commands.js b/cli/commands.js
+index aa1aa0ae2185e501078aa533a41086a79ad71711..2284ee1b25f139825c3f99068f02d6829a56a8fc 100644
+--- a/cli/commands.js
++++ b/cli/commands.js
+@@ -30,6 +30,7 @@ exports.cliCommandsConfig = {
+ // region: Utils
+ /* ****************************************************************************************************************** */
+ function getCliCommand(args) {
++    var _a;
+     let cmd = args._[0] ? args._[0].toLowerCase() : void 0;
+     /* Handle special cases */
+     if ((args.v) && (!cmd))
+@@ -39,9 +40,9 @@ function getCliCommand(args) {
+     if (!cmd)
+         return cmd;
+     /* Get long command */
+-    cmd = Object
++    cmd = (_a = Object
+         .entries(exports.cliCommandsConfig)
+-        .find(([long, { short }]) => long === cmd || short === cmd)?.[0];
++        .find(([long, { short }]) => long === cmd || short === cmd)) === null || _a === void 0 ? void 0 : _a[0];
+     return cmd;
+ }
+ exports.getCliCommand = getCliCommand;
+diff --git a/cli/commands.js.map b/cli/commands.js.map
+index b28fee7e4d30f92c0ae9834fcf5bed662c492007..dc6d35a393f515487bbdd0dcc4e572c63add2bb2 100644
+--- a/cli/commands.js.map
++++ b/cli/commands.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"commands.js","sourceRoot":"","sources":["../../../projects/core/src/cli/commands.ts"],"names":[],"mappings":";;;;;;AAAA,kDAA0B;AAK1B,wHAAwH;AACxH,iBAAiB;AACjB,wHAAwH;AAExH,gBAAgB;AACH,QAAA,iBAAiB,GAAc;IAC1C,OAAO,EAAE,EAAE,KAAK,EAAE,GAAG,EAAE,OAAO,EAAE,uCAAuC,EAAE;IACzE,SAAS,EAAE,EAAE,KAAK,EAAE,GAAG,EAAE,OAAO,EAAE,oCAAoC,EAAE;IACxE,KAAK,EAAE;QACL,KAAK,EAAE,GAAG,EAAE,OAAO,EACjB,gCAAgC,eAAK,CAAC,UAAU,CAAC,OAAO,CAAC,kCAAkC;KAC9F;IACD,KAAK,EAAE;QACL,KAAK,EAAE,KAAK,CAAC,EAAE,YAAY,EAAE,wBAAwB,EAAE,OAAO,EAC5D,2BAA2B,GAAG,eAAK,CAAC,MAAM,CAAC,YAAY,CAAC;KAC3D;IACD,OAAO,EAAE;QACP,KAAK,EAAE,KAAK,CAAC,EAAE,YAAY,EAAE,wBAAwB,EAAE,OAAO,EAC5D,8BAA8B,GAAG,eAAK,CAAC,MAAM,CAAC,YAAY,CAAC;KAC9D;IACD,aAAa,EAAE,EAAE,OAAO,EAAE,6BAA6B,EAAE;IACzD,OAAO,EAAE,EAAE,KAAK,EAAE,GAAG,EAAE,OAAO,EAAE,cAAc,EAAE;IAChD,IAAI,EAAE,EAAE,KAAK,EAAE,IAAI,EAAE,OAAO,EAAE,gBAAgB,EAAE;CACjD,CAAC;AAEF,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,aAAa,CAAC,IAAyB;IACrD,IAAI,GAAG,GAAuB,IAAI,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,WAAW,EAAE,CAAC,CAAC,CAAC,KAAK,CAAC,CAAC;IAE3E,0BAA0B;IAC1B,IAAI,CAAC,IAAI,CAAC,CAAC,CAAC,IAAI,CAAC,CAAC,GAAG,CAAC;QAAE,OAAO,SAAS,CAAC;IACzC,IAAI,IAAI,CAAC,CAAC;QAAE,OAAO,MAAM,CAAC;IAE1B,IAAI,CAAC,GAAG;QAAE,OAAO,GAAG,CAAC;IAErB,sBAAsB;IACtB,GAAG,GAAG,MAAM;SACT,OAAO,CAAC,yBAAiB,CAAC;SAC1B,IAAI,CAAC,CAAC,CAAE,IAAI,EAAE,EAAE,KAAK,EAAE,CAAE,EAAE,EAAE,CAAC,IAAI,KAAK,GAAG,IAAI,KAAK,KAAK,GAAG,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC;IAErE,OAAO,GAAG,CAAC;AACb,CAAC;AAfD,sCAeC;AAED,YAAY"}
+\ No newline at end of file
++{"version":3,"file":"commands.js","sourceRoot":"","sources":["../../../projects/core/src/cli/commands.ts"],"names":[],"mappings":";;;;;;AAAA,kDAA0B;AAK1B,wHAAwH;AACxH,iBAAiB;AACjB,wHAAwH;AAExH,gBAAgB;AACH,QAAA,iBAAiB,GAAc;IAC1C,OAAO,EAAE,EAAE,KAAK,EAAE,GAAG,EAAE,OAAO,EAAE,uCAAuC,EAAE;IACzE,SAAS,EAAE,EAAE,KAAK,EAAE,GAAG,EAAE,OAAO,EAAE,oCAAoC,EAAE;IACxE,KAAK,EAAE;QACL,KAAK,EAAE,GAAG,EAAE,OAAO,EACjB,gCAAgC,eAAK,CAAC,UAAU,CAAC,OAAO,CAAC,kCAAkC;KAC9F;IACD,KAAK,EAAE;QACL,KAAK,EAAE,KAAK,CAAC,EAAE,YAAY,EAAE,wBAAwB,EAAE,OAAO,EAC5D,2BAA2B,GAAG,eAAK,CAAC,MAAM,CAAC,YAAY,CAAC;KAC3D;IACD,OAAO,EAAE;QACP,KAAK,EAAE,KAAK,CAAC,EAAE,YAAY,EAAE,wBAAwB,EAAE,OAAO,EAC5D,8BAA8B,GAAG,eAAK,CAAC,MAAM,CAAC,YAAY,CAAC;KAC9D;IACD,aAAa,EAAE,EAAE,OAAO,EAAE,6BAA6B,EAAE;IACzD,OAAO,EAAE,EAAE,KAAK,EAAE,GAAG,EAAE,OAAO,EAAE,cAAc,EAAE;IAChD,IAAI,EAAE,EAAE,KAAK,EAAE,IAAI,EAAE,OAAO,EAAE,gBAAgB,EAAE;CACjD,CAAC;AAEF,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,aAAa,CAAC,IAAyB;;IACrD,IAAI,GAAG,GAAuB,IAAI,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,WAAW,EAAE,CAAC,CAAC,CAAC,KAAK,CAAC,CAAC;IAE3E,0BAA0B;IAC1B,IAAI,CAAC,IAAI,CAAC,CAAC,CAAC,IAAI,CAAC,CAAC,GAAG,CAAC;QAAE,OAAO,SAAS,CAAC;IACzC,IAAI,IAAI,CAAC,CAAC;QAAE,OAAO,MAAM,CAAC;IAE1B,IAAI,CAAC,GAAG;QAAE,OAAO,GAAG,CAAC;IAErB,sBAAsB;IACtB,GAAG,GAAG,MAAA,MAAM;SACT,OAAO,CAAC,yBAAiB,CAAC;SAC1B,IAAI,CAAC,CAAC,CAAE,IAAI,EAAE,EAAE,KAAK,EAAE,CAAE,EAAE,EAAE,CAAC,IAAI,KAAK,GAAG,IAAI,KAAK,KAAK,GAAG,CAAC,0CAAG,CAAC,CAAC,CAAC;IAErE,OAAO,GAAG,CAAC;AACb,CAAC;AAfD,sCAeC;AAED,YAAY"}
+\ No newline at end of file
+diff --git a/module/module-source.js b/module/module-source.js
+index 773773ce066c260a9dadbbf25270db7cfaa1af29..c9451ab22d5965e532f8f12e8b02e09d7df6860b 100644
+--- a/module/module-source.js
++++ b/module/module-source.js
+@@ -8,14 +8,16 @@ const module_slice_1 = require("../slice/module-slice");
+ // region: Utils
+ /* ****************************************************************************************************************** */
+ function getModuleSource(tsModule) {
++    var _a;
+     const moduleFile = tsModule.getUnpatchedModuleFile();
+     const { firstSourceFileStart, fileEnd, wrapperPos, bodyPos, sourceFileStarts } = (0, module_slice_1.sliceModule)(moduleFile, tsModule.package.version);
+-    const fileHeaderEnd = wrapperPos?.start ?? firstSourceFileStart;
++    const fileHeaderEnd = (_a = wrapperPos === null || wrapperPos === void 0 ? void 0 : wrapperPos.start) !== null && _a !== void 0 ? _a : firstSourceFileStart;
+     return {
+         fileHeader: (0, source_section_1.createSourceSection)(moduleFile, 'file-header', 0, fileHeaderEnd),
+         bodyHeader: wrapperPos && (0, source_section_1.createSourceSection)(moduleFile, 'body-header', bodyPos.start, firstSourceFileStart, 2),
+         body: sourceFileStarts.map(([srcFileName, startPos], i) => {
+-            const endPos = sourceFileStarts[i + 1]?.[1] ?? bodyPos?.end ?? fileEnd;
++            var _a, _b, _c;
++            const endPos = (_c = (_b = (_a = sourceFileStarts[i + 1]) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : bodyPos === null || bodyPos === void 0 ? void 0 : bodyPos.end) !== null && _c !== void 0 ? _c : fileEnd;
+             return (0, source_section_1.createSourceSection)(moduleFile, 'body', startPos, endPos, wrapperPos != null ? 2 : 0, srcFileName);
+         }),
+         fileFooter: wrapperPos && (0, source_section_1.createSourceSection)(moduleFile, 'file-footer', wrapperPos.end, fileEnd),
+diff --git a/module/module-source.js.map b/module/module-source.js.map
+index 39945aea8d2bdcfca3cf1abb7c6692fe205747f4..90d0b51ece0db2a2defe745f1e7d3843ac2f81b6 100644
+--- a/module/module-source.js.map
++++ b/module/module-source.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"module-source.js","sourceRoot":"","sources":["../../../projects/core/src/module/module-source.ts"],"names":[],"mappings":";;;AAAA,qDAAsE;AAEtE,wDAAoD;AAgBpD,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,eAAe,CAAC,QAAkB;IAChD,MAAM,UAAU,GAAG,QAAQ,CAAC,sBAAsB,EAAE,CAAC;IAErD,MAAM,EAAE,oBAAoB,EAAE,OAAO,EAAE,UAAU,EAAE,OAAO,EAAE,gBAAgB,EAAE,GAC5E,IAAA,0BAAW,EAAC,UAAU,EAAE,QAAQ,CAAC,OAAO,CAAC,OAAO,CAAC,CAAC;IAEpD,MAAM,aAAa,GAAG,UAAU,EAAE,KAAK,IAAI,oBAAoB,CAAC;IAEhE,OAAO;QACL,UAAU,EAAE,IAAA,oCAAmB,EAAC,UAAU,EAAE,aAAa,EAAE,CAAC,EAAE,aAAa,CAAC;QAC5E,UAAU,EAAE,UAAU,IAAI,IAAA,oCAAmB,EAAC,UAAU,EAAE,aAAa,EAAE,OAAO,CAAC,KAAK,EAAE,oBAAoB,EAAE,CAAC,CAAC;QAChH,IAAI,EAAE,gBAAgB,CAAC,GAAG,CAAC,CAAC,CAAE,WAAW,EAAE,QAAQ,CAAE,EAAE,CAAC,EAAE,EAAE;YAC1D,MAAM,MAAM,GAAG,gBAAgB,CAAC,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,IAAI,OAAO,EAAE,GAAG,IAAI,OAAO,CAAC;YACvE,OAAO,IAAA,oCAAmB,EAAC,UAAU,EAAE,MAAM,EAAE,QAAQ,EAAE,MAAM,EAAE,UAAU,IAAI,IAAI,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAA,CAAC,EAAE,WAAW,CAAC,CAAC;QAC3G,CAAC,CAAC;QACF,UAAU,EAAE,UAAU,IAAI,IAAA,oCAAmB,EAAC,UAAU,EAAE,aAAa,EAAE,UAAU,CAAC,GAAG,EAAE,OAAO,CAAC;QACjG,eAAe,EAAE,UAAU,IAAI,IAAI;QACnC,WAAW;YACT,OAAO;gBACL,CAAE,aAAa,EAAE,IAAI,CAAC,UAAU,CAAE;gBAClC,CAAE,aAAa,EAAE,IAAI,CAAC,UAAU,CAAE;gBAClC,GAAG,IAAI,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC,OAAO,EAAE,CAAC,EAAE,EAAE,CAAC,CAAE,MAAM,EAAE,OAAO,CAAqD,CAAC;gBACxG,CAAE,aAAa,EAAE,IAAI,CAAC,UAAU,CAAE;aACnC,CAAC;QACJ,CAAC;KACF,CAAA;AACH,CAAC;AA1BD,0CA0BC;AAED,YAAY"}
+\ No newline at end of file
++{"version":3,"file":"module-source.js","sourceRoot":"","sources":["../../../projects/core/src/module/module-source.ts"],"names":[],"mappings":";;;AAAA,qDAAsE;AAEtE,wDAAoD;AAgBpD,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,eAAe,CAAC,QAAkB;;IAChD,MAAM,UAAU,GAAG,QAAQ,CAAC,sBAAsB,EAAE,CAAC;IAErD,MAAM,EAAE,oBAAoB,EAAE,OAAO,EAAE,UAAU,EAAE,OAAO,EAAE,gBAAgB,EAAE,GAC5E,IAAA,0BAAW,EAAC,UAAU,EAAE,QAAQ,CAAC,OAAO,CAAC,OAAO,CAAC,CAAC;IAEpD,MAAM,aAAa,GAAG,MAAA,UAAU,aAAV,UAAU,uBAAV,UAAU,CAAE,KAAK,mCAAI,oBAAoB,CAAC;IAEhE,OAAO;QACL,UAAU,EAAE,IAAA,oCAAmB,EAAC,UAAU,EAAE,aAAa,EAAE,CAAC,EAAE,aAAa,CAAC;QAC5E,UAAU,EAAE,UAAU,IAAI,IAAA,oCAAmB,EAAC,UAAU,EAAE,aAAa,EAAE,OAAO,CAAC,KAAK,EAAE,oBAAoB,EAAE,CAAC,CAAC;QAChH,IAAI,EAAE,gBAAgB,CAAC,GAAG,CAAC,CAAC,CAAE,WAAW,EAAE,QAAQ,CAAE,EAAE,CAAC,EAAE,EAAE;;YAC1D,MAAM,MAAM,GAAG,MAAA,MAAA,MAAA,gBAAgB,CAAC,CAAC,GAAG,CAAC,CAAC,0CAAG,CAAC,CAAC,mCAAI,OAAO,aAAP,OAAO,uBAAP,OAAO,CAAE,GAAG,mCAAI,OAAO,CAAC;YACvE,OAAO,IAAA,oCAAmB,EAAC,UAAU,EAAE,MAAM,EAAE,QAAQ,EAAE,MAAM,EAAE,UAAU,IAAI,IAAI,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAA,CAAC,EAAE,WAAW,CAAC,CAAC;QAC3G,CAAC,CAAC;QACF,UAAU,EAAE,UAAU,IAAI,IAAA,oCAAmB,EAAC,UAAU,EAAE,aAAa,EAAE,UAAU,CAAC,GAAG,EAAE,OAAO,CAAC;QACjG,eAAe,EAAE,UAAU,IAAI,IAAI;QACnC,WAAW;YACT,OAAO;gBACL,CAAE,aAAa,EAAE,IAAI,CAAC,UAAU,CAAE;gBAClC,CAAE,aAAa,EAAE,IAAI,CAAC,UAAU,CAAE;gBAClC,GAAG,IAAI,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC,OAAO,EAAE,CAAC,EAAE,EAAE,CAAC,CAAE,MAAM,EAAE,OAAO,CAAqD,CAAC;gBACxG,CAAE,aAAa,EAAE,IAAI,CAAC,UAAU,CAAE;aACnC,CAAC;QACJ,CAAC;KACF,CAAA;AACH,CAAC;AA1BD,0CA0BC;AAED,YAAY"}
+\ No newline at end of file
+diff --git a/module/source-section.js b/module/source-section.js
+index 2a9cd43af4fd84457aa35f214f7543957d53f435..3c629f9fdb96b2b55be5fc474e608bf83060456b 100644
+--- a/module/source-section.js
++++ b/module/source-section.js
+@@ -23,7 +23,7 @@ function createSourceSection(moduleFile, sectionName, startPos, endPos, indentLe
+         indentLevel,
+         pos: { start: startPos, end: endPos },
+         get sourceText() {
+-            return sourceText ??= moduleFile.content.slice(startPos, endPos);
++            return sourceText !== null && sourceText !== void 0 ? sourceText : (sourceText = moduleFile.content.slice(startPos, endPos));
+         },
+         getSourceFile() {
+             if (!sourceFile) {
+@@ -39,7 +39,7 @@ function createSourceSection(moduleFile, sectionName, startPos, endPos, indentLe
+             sourceFile = undefined;
+         },
+         getOriginalSourceFile() {
+-            originalSourceFile ??= createSourceFile(this);
++            originalSourceFile !== null && originalSourceFile !== void 0 ? originalSourceFile : (originalSourceFile = createSourceFile(this));
+             return originalSourceFile;
+         },
+         transform(transformers) {
+@@ -51,7 +51,7 @@ function createSourceSection(moduleFile, sectionName, startPos, endPos, indentLe
+         print(printer) {
+             if (!this.hasTransformed)
+                 return this.sourceText;
+-            printer ??= typescript_1.default.createPrinter();
++            printer !== null && printer !== void 0 ? printer : (printer = typescript_1.default.createPrinter());
+             return printer.printFile(this.getSourceFile());
+         }
+     };
+diff --git a/module/source-section.js.map b/module/source-section.js.map
+index cacbd9f56115977e97cf1810b463731684b88086..3f52bb73a636dd954d62ea7d6eb11c2fbf87d89f 100644
+--- a/module/source-section.js.map
++++ b/module/source-section.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"source-section.js","sourceRoot":"","sources":["../../../projects/core/src/module/source-section.ts"],"names":[],"mappings":";;;;;;AAAA,4DAA4B;AAE5B,gDAAwB;AAwBxB,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,mBAAmB,CACjC,UAAsB,EACtB,WAAyC,EACzC,QAAgB,EAChB,MAAc,EACd,cAAsB,CAAC,EACvB,WAAoB;IAIpB,IAAI,UAA8B,CAAC;IACnC,IAAI,kBAA6C,CAAC;IAClD,IAAI,UAAqC,CAAC;IAC1C,IAAI,cAAkC,CAAC;IAEvC,OAAO;QACL,cAAc,EAAE,KAAK;QACrB,oBAAoB,EAAE,KAAK;QAC3B,WAAW;QACX,WAAW;QACX,WAAW;QACX,GAAG,EAAE,EAAE,KAAK,EAAE,QAAQ,EAAE,GAAG,EAAE,MAAM,EAAE;QACrC,IAAI,UAAU;YACZ,OAAO,UAAU,KAAK,UAAU,CAAC,OAAO,CAAC,KAAK,CAAC,QAAQ,EAAE,MAAM,CAAC,CAAC;QACnE,CAAC;QACD,aAAa;YACX,IAAI,CAAC,UAAU,EAAE;gBACf,IAAI,IAAI,CAAC,oBAAoB;oBAAE,OAAO,gBAAgB,CAAC,IAAI,CAAC,CAAC;;oBACxD,OAAO,IAAI,CAAC,qBAAqB,EAAE,CAAC;aAC1C;YACD,OAAO,UAAU,CAAC;QACpB,CAAC;QACD,gBAAgB,CAAC,OAAe;YAC9B,UAAU,GAAG,OAAO,CAAC;YACrB,UAAU,GAAG,SAAS,CAAC;QACzB,CAAC;QACD,qBAAqB;YACnB,kBAAkB,KAAK,gBAAgB,CAAC,IAAI,CAAC,CAAC;YAC9C,OAAO,kBAAkB,CAAC;QAC5B,CAAC;QACD,SAAS,CAAC,YAAoD;YAC5D,MAAM,MAAM,GAAG,oBAAE,CAAC,SAAS,CAAC,IAAI,CAAC,aAAa,EAAE,EAAE,YAAY,CAAC,CAAC;YAChE,UAAU,GAAG,MAAM,CAAC,WAAW,CAAC,CAAC,CAAC,CAAC;YACnC,IAAI,CAAC,cAAc,GAAG,IAAI,CAAC;YAC3B,IAAI,CAAC,WAAW,GAAG,CAAC,CAAC;QACvB,CAAC;QACD,KAAK,CAAC,OAAoB;YACxB,IAAI,CAAC,IAAI,CAAC,cAAc;gBAAE,OAAO,IAAI,CAAC,UAAU,CAAC;YAEjD,OAAO,KAAK,oBAAE,CAAC,aAAa,EAAE,CAAC;YAC/B,OAAO,OAAO,CAAC,SAAS,CAAC,IAAI,CAAC,aAAa,EAAE,CAAC,CAAC;QACjD,CAAC;KACF,CAAA;IAED,SAAS,gBAAgB,CAAC,aAA4B;QACpD,OAAO,oBAAE,CAAC,gBAAgB,CACxB,iBAAiB,EAAE,EACnB,aAAa,CAAC,UAAU,EACxB,oBAAE,CAAC,YAAY,CAAC,MAAM,EACtB,IAAI,EACJ,oBAAE,CAAC,UAAU,CAAC,EAAE,CACjB,CAAC;IACJ,CAAC;IAED,SAAS,iBAAiB;QACxB,IAAI,CAAC,cAAc,EAAE;YACnB,cAAc,GAAG,WAAW,CAAC;YAC7B,IAAI,CAAC,cAAc,EAAE;gBACnB,MAAM,QAAQ,GAAG,cAAI,CAAC,QAAQ,CAAC,UAAU,CAAC,QAAQ,EAAE,cAAI,CAAC,OAAO,CAAC,UAAU,CAAC,QAAQ,CAAC,CAAC,CAAC;gBACvF,cAAc,GAAG,GAAG,QAAQ,IAAI,WAAW,KAAK,CAAC;aAClD;SACF;QACD,OAAO,cAAc,CAAC;IACxB,CAAC;AACH,CAAC;AA1ED,kDA0EC;AAED,YAAY"}
+\ No newline at end of file
++{"version":3,"file":"source-section.js","sourceRoot":"","sources":["../../../projects/core/src/module/source-section.ts"],"names":[],"mappings":";;;;;;AAAA,4DAA4B;AAE5B,gDAAwB;AAwBxB,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,mBAAmB,CACjC,UAAsB,EACtB,WAAyC,EACzC,QAAgB,EAChB,MAAc,EACd,cAAsB,CAAC,EACvB,WAAoB;IAIpB,IAAI,UAA8B,CAAC;IACnC,IAAI,kBAA6C,CAAC;IAClD,IAAI,UAAqC,CAAC;IAC1C,IAAI,cAAkC,CAAC;IAEvC,OAAO;QACL,cAAc,EAAE,KAAK;QACrB,oBAAoB,EAAE,KAAK;QAC3B,WAAW;QACX,WAAW;QACX,WAAW;QACX,GAAG,EAAE,EAAE,KAAK,EAAE,QAAQ,EAAE,GAAG,EAAE,MAAM,EAAE;QACrC,IAAI,UAAU;YACZ,OAAO,UAAU,aAAV,UAAU,cAAV,UAAU,IAAV,UAAU,GAAK,UAAU,CAAC,OAAO,CAAC,KAAK,CAAC,QAAQ,EAAE,MAAM,CAAC,EAAC;QACnE,CAAC;QACD,aAAa;YACX,IAAI,CAAC,UAAU,EAAE;gBACf,IAAI,IAAI,CAAC,oBAAoB;oBAAE,OAAO,gBAAgB,CAAC,IAAI,CAAC,CAAC;;oBACxD,OAAO,IAAI,CAAC,qBAAqB,EAAE,CAAC;aAC1C;YACD,OAAO,UAAU,CAAC;QACpB,CAAC;QACD,gBAAgB,CAAC,OAAe;YAC9B,UAAU,GAAG,OAAO,CAAC;YACrB,UAAU,GAAG,SAAS,CAAC;QACzB,CAAC;QACD,qBAAqB;YACnB,kBAAkB,aAAlB,kBAAkB,cAAlB,kBAAkB,IAAlB,kBAAkB,GAAK,gBAAgB,CAAC,IAAI,CAAC,EAAC;YAC9C,OAAO,kBAAkB,CAAC;QAC5B,CAAC;QACD,SAAS,CAAC,YAAoD;YAC5D,MAAM,MAAM,GAAG,oBAAE,CAAC,SAAS,CAAC,IAAI,CAAC,aAAa,EAAE,EAAE,YAAY,CAAC,CAAC;YAChE,UAAU,GAAG,MAAM,CAAC,WAAW,CAAC,CAAC,CAAC,CAAC;YACnC,IAAI,CAAC,cAAc,GAAG,IAAI,CAAC;YAC3B,IAAI,CAAC,WAAW,GAAG,CAAC,CAAC;QACvB,CAAC;QACD,KAAK,CAAC,OAAoB;YACxB,IAAI,CAAC,IAAI,CAAC,cAAc;gBAAE,OAAO,IAAI,CAAC,UAAU,CAAC;YAEjD,OAAO,aAAP,OAAO,cAAP,OAAO,IAAP,OAAO,GAAK,oBAAE,CAAC,aAAa,EAAE,EAAC;YAC/B,OAAO,OAAO,CAAC,SAAS,CAAC,IAAI,CAAC,aAAa,EAAE,CAAC,CAAC;QACjD,CAAC;KACF,CAAA;IAED,SAAS,gBAAgB,CAAC,aAA4B;QACpD,OAAO,oBAAE,CAAC,gBAAgB,CACxB,iBAAiB,EAAE,EACnB,aAAa,CAAC,UAAU,EACxB,oBAAE,CAAC,YAAY,CAAC,MAAM,EACtB,IAAI,EACJ,oBAAE,CAAC,UAAU,CAAC,EAAE,CACjB,CAAC;IACJ,CAAC;IAED,SAAS,iBAAiB;QACxB,IAAI,CAAC,cAAc,EAAE;YACnB,cAAc,GAAG,WAAW,CAAC;YAC7B,IAAI,CAAC,cAAc,EAAE;gBACnB,MAAM,QAAQ,GAAG,cAAI,CAAC,QAAQ,CAAC,UAAU,CAAC,QAAQ,EAAE,cAAI,CAAC,OAAO,CAAC,UAAU,CAAC,QAAQ,CAAC,CAAC,CAAC;gBACvF,cAAc,GAAG,GAAG,QAAQ,IAAI,WAAW,KAAK,CAAC;aAClD;SACF;QACD,OAAO,cAAc,CAAC;IACxB,CAAC;AACH,CAAC;AA1ED,kDA0EC;AAED,YAAY"}
+\ No newline at end of file
+diff --git a/module/ts-module.js b/module/ts-module.js
+index cd9c311e3d896053c64cbfafeb6b16f99fbcd670..69abc9196d1a89237cb7ed7bc4ae2b46387ab3ef 100644
+--- a/module/ts-module.js
++++ b/module/ts-module.js
+@@ -18,7 +18,8 @@ var TsModule;
+     TsModule.names = ['tsc.js', 'tsserverlibrary.js', 'typescript.js', 'tsserver.js'];
+ })(TsModule = exports.TsModule || (exports.TsModule = {}));
+ function getTsModule(tsPackage, moduleNameOrModuleFile, options) {
+-    const skipCache = options?.skipCache;
++    var _a;
++    const skipCache = options === null || options === void 0 ? void 0 : options.skipCache;
+     /* Get Module File */
+     let moduleFile;
+     let moduleName;
+@@ -44,7 +45,7 @@ function getTsModule(tsPackage, moduleNameOrModuleFile, options) {
+     const dtsPath = fs_1.default.existsSync(maybeDtsFile) ? maybeDtsFile : undefined;
+     const dtsName = dtsPath && path_1.default.basename(dtsPath);
+     /* Get Cache Paths */
+-    const cacheKey = moduleFile.patchDetail?.originalHash || moduleFile.getHash();
++    const cacheKey = ((_a = moduleFile.patchDetail) === null || _a === void 0 ? void 0 : _a.originalHash) || moduleFile.getHash();
+     const backupCachePaths = {
+         js: (0, system_1.getCachePath)(cacheKey, moduleName),
+         dts: dtsName && (0, system_1.getCachePath)(cacheKey, dtsName)
+diff --git a/module/ts-module.js.map b/module/ts-module.js.map
+index 71194b577d5eb69a763903834b947e4a532aba0a..1c84c2e123acb3ec48a2f527df384b2c95b3ce13 100644
+--- a/module/ts-module.js.map
++++ b/module/ts-module.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"ts-module.js","sourceRoot":"","sources":["../../../projects/core/src/module/ts-module.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
++{"version":3,"file":"ts-module.js","sourceRoot":"","sources":["../../../projects/core/src/module/ts-module.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/options.js b/options.js
+index 750c69635c9184c8d4c40686b28d5b94bc2b23a1..760749c0150012181d1e2b0aff60bc97bb6718ed 100644
+--- a/options.js
++++ b/options.js
+@@ -20,12 +20,13 @@ var InstallerOptions;
+  * Parser
+  * ********************************************************************************************************************/
+ function getInstallerOptions(options) {
++    var _a;
+     if (!options && typeof options === "object" && Object.isSealed(options))
+         return options;
+     const res = { ...InstallerOptions.getDefaults(), ...options };
+     return Object.seal({
+         ...res,
+-        logger: res.logger ?? (0, system_1.createLogger)(res.logLevel, res.useColor)
++        logger: (_a = res.logger) !== null && _a !== void 0 ? _a : (0, system_1.createLogger)(res.logLevel, res.useColor)
+     });
+ }
+ exports.getInstallerOptions = getInstallerOptions;
+diff --git a/options.js.map b/options.js.map
+index b77c57f56498314926df6724cb8e1f3e4831f3f7..9180194f204321825214341e50be6a4c35b41ed1 100644
+--- a/options.js.map
++++ b/options.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"options.js","sourceRoot":"","sources":["../../projects/core/src/options.ts"],"names":[],"mappings":";;;AAAA,qCAA0D;AA0B1D,IAAiB,gBAAgB,CAUhC;AAVD,WAAiB,gBAAgB;IAC/B,SAAgB,WAAW;QACzB,OAAO;YACL,QAAQ,EAAE,iBAAQ,CAAC,MAAM;YACzB,QAAQ,EAAE,IAAI;YACd,GAAG,EAAE,OAAO,CAAC,GAAG,EAAE;YAClB,MAAM,EAAE,KAAK;YACb,SAAS,EAAE,KAAK;SACO,CAAA;IAC3B,CAAC;IARe,4BAAW,cAQ1B,CAAA;AACH,CAAC,EAVgB,gBAAgB,GAAhB,wBAAgB,KAAhB,wBAAgB,QAUhC;AAED,YAAY;AAGZ;;wHAEwH;AAExH,SAAgB,mBAAmB,CAAC,OAAmC;IACrE,IAAI,CAAC,OAAO,IAAI,OAAO,OAAO,KAAK,QAAQ,IAAI,MAAM,CAAC,QAAQ,CAAC,OAAO,CAAC;QAAE,OAAO,OAA2B,CAAC;IAE5G,MAAM,GAAG,GAAG,EAAE,GAAG,gBAAgB,CAAC,WAAW,EAAE,EAAE,GAAG,OAAO,EAAmB,CAAC;IAE/E,OAAO,MAAM,CAAC,IAAI,CAAC;QACjB,GAAG,GAAG;QACN,MAAM,EAAE,GAAG,CAAC,MAAM,IAAI,IAAA,qBAAY,EAAC,GAAG,CAAC,QAAQ,EAAE,GAAG,CAAC,QAAQ,CAAC;KAC/D,CAAC,CAAC;AACL,CAAC;AATD,kDASC"}
+\ No newline at end of file
++{"version":3,"file":"options.js","sourceRoot":"","sources":["../../projects/core/src/options.ts"],"names":[],"mappings":";;;AAAA,qCAA0D;AA0B1D,IAAiB,gBAAgB,CAUhC;AAVD,WAAiB,gBAAgB;IAC/B,SAAgB,WAAW;QACzB,OAAO;YACL,QAAQ,EAAE,iBAAQ,CAAC,MAAM;YACzB,QAAQ,EAAE,IAAI;YACd,GAAG,EAAE,OAAO,CAAC,GAAG,EAAE;YAClB,MAAM,EAAE,KAAK;YACb,SAAS,EAAE,KAAK;SACO,CAAA;IAC3B,CAAC;IARe,4BAAW,cAQ1B,CAAA;AACH,CAAC,EAVgB,gBAAgB,GAAhB,wBAAgB,KAAhB,wBAAgB,QAUhC;AAED,YAAY;AAGZ;;wHAEwH;AAExH,SAAgB,mBAAmB,CAAC,OAAmC;;IACrE,IAAI,CAAC,OAAO,IAAI,OAAO,OAAO,KAAK,QAAQ,IAAI,MAAM,CAAC,QAAQ,CAAC,OAAO,CAAC;QAAE,OAAO,OAA2B,CAAC;IAE5G,MAAM,GAAG,GAAG,EAAE,GAAG,gBAAgB,CAAC,WAAW,EAAE,EAAE,GAAG,OAAO,EAAmB,CAAC;IAE/E,OAAO,MAAM,CAAC,IAAI,CAAC;QACjB,GAAG,GAAG;QACN,MAAM,EAAE,MAAA,GAAG,CAAC,MAAM,mCAAI,IAAA,qBAAY,EAAC,GAAG,CAAC,QAAQ,EAAE,GAAG,CAAC,QAAQ,CAAC;KAC/D,CAAC,CAAC;AACL,CAAC;AATD,kDASC"}
+\ No newline at end of file
+diff --git a/patch/get-patched-source.js b/patch/get-patched-source.js
+index da86684d51b72f9c07e81c5cea67bf5e4d0ab44f..f79675aade81561be25e0aeec9af59446f10f6fb 100644
+--- a/patch/get-patched-source.js
++++ b/patch/get-patched-source.js
+@@ -15,17 +15,18 @@ const patch_module_1 = require("./patch-module");
+ // region: Utils
+ /* ****************************************************************************************************************** */
+ function getPatchedSource(tsModule, options) {
++    var _a;
+     const { backupCachePaths, patchedCachePaths } = tsModule;
+     const { log, skipCache } = options || {};
+     /* Write backup if not patched */
+     if (!tsModule.isPatched) {
+         for (const [key, backupPath] of Object.entries(backupCachePaths)) {
+             const srcPath = key === 'dts' ? tsModule.dtsPath : tsModule.modulePath;
+-            if (key === 'dts' && options?.skipDts)
++            if (key === 'dts' && (options === null || options === void 0 ? void 0 : options.skipDts))
+                 continue;
+             if (!srcPath)
+                 continue;
+-            log?.(['~', `Writing backup cache to ${chalk_1.default.blueBright(backupPath)}`], system_1.LogLevel.verbose);
++            log === null || log === void 0 ? void 0 : log(['~', `Writing backup cache to ${chalk_1.default.blueBright(backupPath)}`], system_1.LogLevel.verbose);
+             const cacheDir = path_1.default.dirname(backupPath);
+             (0, utils_1.mkdirIfNotExist)(cacheDir);
+             (0, utils_1.copyFileWithLock)(srcPath, backupPath);
+@@ -33,17 +34,17 @@ function getPatchedSource(tsModule, options) {
+     }
+     /* Get Patched Module */
+     const canUseCache = !skipCache
+-        && !tsModule.moduleFile.patchDetail?.isOutdated
++        && !((_a = tsModule.moduleFile.patchDetail) === null || _a === void 0 ? void 0 : _a.isOutdated)
+         && (!patchedCachePaths.dts || fs_1.default.existsSync(patchedCachePaths.dts))
+         && fs_1.default.existsSync(patchedCachePaths.js);
+     let js;
+     let dts;
+     if (canUseCache) {
+         js = (0, utils_1.readFileWithLock)(patchedCachePaths.js);
+-        dts = !options?.skipDts && patchedCachePaths.dts ? (0, utils_1.readFileWithLock)(patchedCachePaths.dts) : undefined;
++        dts = !(options === null || options === void 0 ? void 0 : options.skipDts) && patchedCachePaths.dts ? (0, utils_1.readFileWithLock)(patchedCachePaths.dts) : undefined;
+     }
+     else {
+-        const res = (0, patch_module_1.patchModule)(tsModule, options?.skipDts);
++        const res = (0, patch_module_1.patchModule)(tsModule, options === null || options === void 0 ? void 0 : options.skipDts);
+         js = res.js;
+         dts = res.dts;
+         /* Write patched cache */
+@@ -51,11 +52,11 @@ function getPatchedSource(tsModule, options) {
+             const cacheDir = path_1.default.dirname(patchedCachePaths.js);
+             for (const [key, patchPath] of Object.entries(patchedCachePaths)) {
+                 const srcPath = key === 'dts' ? dts : js;
+-                if (key === 'dts' && options?.skipDts)
++                if (key === 'dts' && (options === null || options === void 0 ? void 0 : options.skipDts))
+                     continue;
+                 if (!srcPath)
+                     continue;
+-                log?.(['~', `Writing patched cache to ${chalk_1.default.blueBright(patchPath)}`], system_1.LogLevel.verbose);
++                log === null || log === void 0 ? void 0 : log(['~', `Writing patched cache to ${chalk_1.default.blueBright(patchPath)}`], system_1.LogLevel.verbose);
+                 (0, utils_1.mkdirIfNotExist)(cacheDir);
+                 (0, utils_1.writeFileWithLock)(patchPath, srcPath);
+             }
+diff --git a/patch/get-patched-source.js.map b/patch/get-patched-source.js.map
+index d1ce5e02fbc064038f4856d57928d0acc82c9bfe..944a971ca38414eafcfb3cd97a58d67df52a2dd0 100644
+--- a/patch/get-patched-source.js.map
++++ b/patch/get-patched-source.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"get-patched-source.js","sourceRoot":"","sources":["../../../projects/core/src/patch/get-patched-source.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
++{"version":3,"file":"get-patched-source.js","sourceRoot":"","sources":["../../../projects/core/src/patch/get-patched-source.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/patch/transformers/patch-create-program.js b/patch/transformers/patch-create-program.js
+index a76c762fda0efcb0d4b2886d35077f722d32af9a..71f11b1504a301d9fb9af127c268f0bc5fbbfc8e 100644
+--- a/patch/transformers/patch-create-program.js
++++ b/patch/transformers/patch-create-program.js
+@@ -19,7 +19,8 @@ function patchCreateProgramTransformer(context) {
+             throw new Error('Failed to patch createProgram function!');
+         return res;
+         function visitNode(node) {
+-            if (typescript_1.default.isFunctionDeclaration(node) && node.name?.getText() === 'createProgram') {
++            var _a;
++            if (typescript_1.default.isFunctionDeclaration(node) && ((_a = node.name) === null || _a === void 0 ? void 0 : _a.getText()) === 'createProgram') {
+                 const originalCreateProgram = factory.updateFunctionDeclaration(node, node.modifiers, node.asteriskToken, factory.createIdentifier('originalCreateProgram'), node.typeParameters, node.parameters, node.type, node.body);
+                 // function createProgram() { return tsp.originalCreateProgram(...arguments); }
+                 const newCreateProgram = factory.createFunctionDeclaration(undefined, undefined, 'createProgram', undefined, [], undefined, factory.createBlock([
+diff --git a/patch/transformers/patch-create-program.js.map b/patch/transformers/patch-create-program.js.map
+index 09efc75558844a9710922bc1d6883329de44028f..dd7ab236f331d6cc34e5c06e4d13dd5db89b2c87 100644
+--- a/patch/transformers/patch-create-program.js.map
++++ b/patch/transformers/patch-create-program.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"patch-create-program.js","sourceRoot":"","sources":["../../../../projects/core/src/patch/transformers/patch-create-program.ts"],"names":[],"mappings":";;;;;;AAAA,4DAA4B;AAG5B,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,6BAA6B,CAAC,OAAiC;IAC7E,MAAM,EAAE,OAAO,EAAE,GAAG,OAAO,CAAC;IAE5B,IAAI,YAAY,GAAG,KAAK,CAAC;IAEzB,OAAO,CAAC,UAAyB,EAAE,EAAE;QACnC,IAAI,UAAU,CAAC,QAAQ,KAAK,yBAAyB;YACnD,MAAM,IAAI,KAAK,CAAC,qEAAqE,CAAC,CAAC;QAEzF,MAAM,GAAG,GAAG,OAAO,CAAC,gBAAgB,CAAC,UAAU,EAAE,oBAAE,CAAC,UAAU,CAAC,UAAU,CAAC,UAAU,EAAE,SAAS,CAA8B,CAAC,CAAC;QAE/H,IAAI,CAAC,YAAY;YAAE,MAAM,IAAI,KAAK,CAAC,yCAAyC,CAAC,CAAC;QAE9E,OAAO,GAAG,CAAC;QAEX,SAAS,SAAS,CAAC,IAAkB;YACnC,IAAI,oBAAE,CAAC,qBAAqB,CAAC,IAAI,CAAC,IAAI,IAAI,CAAC,IAAI,EAAE,OAAO,EAAE,KAAK,eAAe,EAAE;gBAC9E,MAAM,qBAAqB,GAAG,OAAO,CAAC,yBAAyB,CAC7D,IAAI,EACJ,IAAI,CAAC,SAAS,EACd,IAAI,CAAC,aAAa,EAClB,OAAO,CAAC,gBAAgB,CAAC,uBAAuB,CAAC,EACjD,IAAI,CAAC,cAAc,EACnB,IAAI,CAAC,UAAU,EACf,IAAI,CAAC,IAAI,EACT,IAAI,CAAC,IAAI,CACV,CAAC;gBAEF,+EAA+E;gBAC/E,MAAM,gBAAgB,GAAG,OAAO,CAAC,yBAAyB,CACxD,SAAS,EACT,SAAS,EACT,eAAe,EACf,SAAS,EACT,EAAE,EACF,SAAS,EACT,OAAO,CAAC,WAAW,CAAC;oBAClB,OAAO,CAAC,qBAAqB,CAC3B,OAAO,CAAC,oBAAoB,CAC1B,OAAO,CAAC,8BAA8B,CACpC,OAAO,CAAC,gBAAgB,CAAC,KAAK,CAAC,EAC/B,OAAO,CAAC,gBAAgB,CAAC,eAAe,CAAC,CAC1C,EACD,SAAS,EACT,CAAE,OAAO,CAAC,mBAAmB,CAAC,OAAO,CAAC,gBAAgB,CAAC,WAAW,CAAC,CAAC,CAAE,CACvE,CACF;iBACF,CAAC,CACH,CAAC;gBAEF,YAAY,GAAG,IAAI,CAAC;gBAEpB,OAAO,CAAE,gBAAgB,EAAE,qBAAqB,CAAE,CAAC;aACpD;YAED,OAAO,IAAI,CAAC;QACd,CAAC;IACH,CAAC,CAAA;AACH,CAAC;AA1DD,sEA0DC;AAED,YAAY"}
+\ No newline at end of file
++{"version":3,"file":"patch-create-program.js","sourceRoot":"","sources":["../../../../projects/core/src/patch/transformers/patch-create-program.ts"],"names":[],"mappings":";;;;;;AAAA,4DAA4B;AAG5B,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,6BAA6B,CAAC,OAAiC;IAC7E,MAAM,EAAE,OAAO,EAAE,GAAG,OAAO,CAAC;IAE5B,IAAI,YAAY,GAAG,KAAK,CAAC;IAEzB,OAAO,CAAC,UAAyB,EAAE,EAAE;QACnC,IAAI,UAAU,CAAC,QAAQ,KAAK,yBAAyB;YACnD,MAAM,IAAI,KAAK,CAAC,qEAAqE,CAAC,CAAC;QAEzF,MAAM,GAAG,GAAG,OAAO,CAAC,gBAAgB,CAAC,UAAU,EAAE,oBAAE,CAAC,UAAU,CAAC,UAAU,CAAC,UAAU,EAAE,SAAS,CAA8B,CAAC,CAAC;QAE/H,IAAI,CAAC,YAAY;YAAE,MAAM,IAAI,KAAK,CAAC,yCAAyC,CAAC,CAAC;QAE9E,OAAO,GAAG,CAAC;QAEX,SAAS,SAAS,CAAC,IAAkB;;YACnC,IAAI,oBAAE,CAAC,qBAAqB,CAAC,IAAI,CAAC,IAAI,CAAA,MAAA,IAAI,CAAC,IAAI,0CAAE,OAAO,EAAE,MAAK,eAAe,EAAE;gBAC9E,MAAM,qBAAqB,GAAG,OAAO,CAAC,yBAAyB,CAC7D,IAAI,EACJ,IAAI,CAAC,SAAS,EACd,IAAI,CAAC,aAAa,EAClB,OAAO,CAAC,gBAAgB,CAAC,uBAAuB,CAAC,EACjD,IAAI,CAAC,cAAc,EACnB,IAAI,CAAC,UAAU,EACf,IAAI,CAAC,IAAI,EACT,IAAI,CAAC,IAAI,CACV,CAAC;gBAEF,+EAA+E;gBAC/E,MAAM,gBAAgB,GAAG,OAAO,CAAC,yBAAyB,CACxD,SAAS,EACT,SAAS,EACT,eAAe,EACf,SAAS,EACT,EAAE,EACF,SAAS,EACT,OAAO,CAAC,WAAW,CAAC;oBAClB,OAAO,CAAC,qBAAqB,CAC3B,OAAO,CAAC,oBAAoB,CAC1B,OAAO,CAAC,8BAA8B,CACpC,OAAO,CAAC,gBAAgB,CAAC,KAAK,CAAC,EAC/B,OAAO,CAAC,gBAAgB,CAAC,eAAe,CAAC,CAC1C,EACD,SAAS,EACT,CAAE,OAAO,CAAC,mBAAmB,CAAC,OAAO,CAAC,gBAAgB,CAAC,WAAW,CAAC,CAAC,CAAE,CACvE,CACF;iBACF,CAAC,CACH,CAAC;gBAEF,YAAY,GAAG,IAAI,CAAC;gBAEpB,OAAO,CAAE,gBAAgB,EAAE,qBAAqB,CAAE,CAAC;aACpD;YAED,OAAO,IAAI,CAAC;QACd,CAAC;IACH,CAAC,CAAA;AACH,CAAC;AA1DD,sEA0DC;AAED,YAAY"}
+\ No newline at end of file
+diff --git a/resources/module-patch.js b/resources/module-patch.js
+index abde3ee4c6e01ef616f9a134dc130cdd34ed3e51..45392d58c2f4c816473354c96913e7c04e0e31a6 100644
+--- a/resources/module-patch.js
++++ b/resources/module-patch.js
+@@ -1,102 +1,29 @@
+ var tsp = (function () {
+     "use strict";
+-    var __assign = (this && this.__assign) || function () {
+-        __assign = Object.assign || function (t) {
+-            for (var s, i = 1, n = arguments.length; i < n; i++) {
+-                s = arguments[i];
+-                for (var p in s)
+-                    if (Object.prototype.hasOwnProperty.call(s, p))
+-                        t[p] = s[p];
+-            }
+-            return t;
+-        };
+-        return __assign.apply(this, arguments);
+-    };
+-    var __read = (this && this.__read) || function (o, n) {
+-        var m = typeof Symbol === "function" && o[Symbol.iterator];
+-        if (!m)
+-            return o;
+-        var i = m.call(o), r, ar = [], e;
+-        try {
+-            while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+-                ar.push(r.value);
+-        }
+-        catch (error) {
+-            e = { error: error };
+-        }
+-        finally {
+-            try {
+-                if (r && !r.done && (m = i["return"]))
+-                    m.call(i);
+-            }
+-            finally {
+-                if (e)
+-                    throw e.error;
+-            }
+-        }
+-        return ar;
+-    };
+-    var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+-        if (pack || arguments.length === 2)
+-            for (var i = 0, l = from.length, ar; i < l; i++) {
+-                if (ar || !(i in from)) {
+-                    if (!ar)
+-                        ar = Array.prototype.slice.call(from, 0, i);
+-                    ar[i] = from[i];
+-                }
+-            }
+-        return to.concat(ar || Array.prototype.slice.call(from));
+-    };
+-    var __values = (this && this.__values) || function (o) {
+-        var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+-        if (m)
+-            return m.call(o);
+-        if (o && typeof o.length === "number")
+-            return {
+-                next: function () {
+-                    if (o && i >= o.length)
+-                        o = void 0;
+-                    return { value: o && o[i++], done: !o };
+-                }
+-            };
+-        throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+-    };
+-    var __rest = (this && this.__rest) || function (s, e) {
+-        var t = {};
+-        for (var p in s)
+-            if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+-                t[p] = s[p];
+-        if (s != null && typeof Object.getOwnPropertySymbols === "function")
+-            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+-                if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+-                    t[p[i]] = s[p[i]];
+-            }
+-        return t;
+-    };
+     var tsp;
+     (function (tsp) {
+-        var activeProgramTransformers = new Set();
+-        var dirname = require("path").dirname;
++        const activeProgramTransformers = new Set();
++        const { dirname } = require("path");
+         function getProjectDir(compilerOptions) {
+             return compilerOptions.configFilePath && dirname(compilerOptions.configFilePath);
+         }
+         function getProjectConfig(compilerOptions, rootFileNames) {
+-            var configFilePath = compilerOptions.configFilePath;
+-            var projectDir = getProjectDir(compilerOptions);
++            let configFilePath = compilerOptions.configFilePath;
++            let projectDir = getProjectDir(compilerOptions);
+             if (configFilePath === undefined) {
+-                var baseDir = (rootFileNames.length > 0) ? dirname(rootFileNames[0]) : projectDir !== null && projectDir !== void 0 ? projectDir : process.cwd();
++                const baseDir = (rootFileNames.length > 0) ? dirname(rootFileNames[0]) : projectDir !== null && projectDir !== void 0 ? projectDir : process.cwd();
+                 configFilePath = tsp.shim.findConfigFile(baseDir, tsp.shim.sys.fileExists);
+                 if (configFilePath) {
+-                    var config = readConfig(configFilePath);
+-                    compilerOptions = __assign(__assign({}, config.options), compilerOptions);
++                    const config = readConfig(configFilePath);
++                    compilerOptions = { ...config.options, ...compilerOptions };
+                     projectDir = getProjectDir(compilerOptions);
+                 }
+             }
+-            return ({ projectDir: projectDir, compilerOptions: compilerOptions });
++            return ({ projectDir, compilerOptions });
+         }
+         function readConfig(configFileNamePath) {
+-            var projectDir = dirname(configFileNamePath);
+-            var result = tsp.shim.readConfigFile(configFileNamePath, tsp.shim.sys.readFile);
++            const projectDir = dirname(configFileNamePath);
++            const result = tsp.shim.readConfigFile(configFileNamePath, tsp.shim.sys.readFile);
+             if (result.error)
+                 throw new Error("Error in tsconfig.json: " + result.error.messageText);
+             return tsp.shim.parseJsonConfigFileContent(result.config, tsp.shim.sys, projectDir, undefined, configFileNamePath);
+@@ -105,16 +32,18 @@ var tsp = (function () {
+             if (!plugins)
+                 return [];
+             if ((plugins.length === 1) && plugins[0].customTransformers) {
+-                var _a = plugins[0].customTransformers, _b = _a.before, before = _b === void 0 ? [] : _b, _c = _a.after, after = _c === void 0 ? [] : _c;
+-                return __spreadArray(__spreadArray([], __read(before.map(function (item) { return ({ transform: item }); })), false), __read(after.map(function (item) { return ({ transform: item, after: true }); })), false);
++                const { before = [], after = [] } = plugins[0].customTransformers;
++                return [
++                    ...before.map((item) => ({ transform: item })),
++                    ...after.map((item) => ({ transform: item, after: true })),
++                ];
+             }
+             return plugins;
+         }
+         function createProgram(rootNamesOrOptions, options, host, oldProgram, configFileParsingDiagnostics) {
+-            var e_1, _a, e_2, _b;
+-            var _c;
+-            var rootNames;
+-            var createOpts = !Array.isArray(rootNamesOrOptions) ? rootNamesOrOptions : void 0;
++            var _a;
++            let rootNames;
++            const createOpts = !Array.isArray(rootNamesOrOptions) ? rootNamesOrOptions : void 0;
+             if (createOpts) {
+                 rootNames = createOpts.rootNames;
+                 options = createOpts.options;
+@@ -126,94 +55,40 @@ var tsp = (function () {
+                 options = options;
+                 rootNames = rootNamesOrOptions;
+             }
+-            var projectConfig = getProjectConfig(options, rootNames);
++            const projectConfig = getProjectConfig(options, rootNames);
+             if (["tsc", "tsserver", "tsserverlibrary"].includes(tsp.currentLibrary)) {
+                 options = projectConfig.compilerOptions;
+                 if (createOpts)
+                     createOpts.options = options;
+             }
+-            var program = createOpts ?
++            let program = createOpts ?
+                 tsp.shim.originalCreateProgram(createOpts) :
+                 tsp.shim.originalCreateProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics);
+-            var plugins = preparePluginsFromCompilerOptions(options.plugins);
+-            var pluginCreator = new tsp.PluginCreator(plugins, (_c = projectConfig.projectDir) !== null && _c !== void 0 ? _c : process.cwd());
+-            var programTransformers = new Map(pluginCreator.getProgramTransformers());
+-            try {
+-                for (var _d = __values(pluginCreator.getProgramTransformers()), _e = _d.next(); !_e.done; _e = _d.next()) {
+-                    var _f = __read(_e.value, 1), transformer = _f[0];
+-                    if (activeProgramTransformers.has(transformer))
+-                        programTransformers.delete(transformer);
+-                    else
+-                        activeProgramTransformers.add(transformer);
+-                }
+-            }
+-            catch (e_1_1) {
+-                e_1 = { error: e_1_1 };
+-            }
+-            finally {
+-                try {
+-                    if (_e && !_e.done && (_a = _d.return))
+-                        _a.call(_d);
+-                }
+-                finally {
+-                    if (e_1)
+-                        throw e_1.error;
+-                }
+-            }
+-            try {
+-                for (var programTransformers_1 = __values(programTransformers), programTransformers_1_1 = programTransformers_1.next(); !programTransformers_1_1.done; programTransformers_1_1 = programTransformers_1.next()) {
+-                    var _g = __read(programTransformers_1_1.value, 2), programTransformer = _g[0], config = _g[1];
+-                    var newProgram = programTransformer(program, host, config, { ts: ts });
+-                    if (typeof (newProgram === null || newProgram === void 0 ? void 0 : newProgram["emit"]) === "function")
+-                        program = newProgram;
+-                }
+-            }
+-            catch (e_2_1) {
+-                e_2 = { error: e_2_1 };
++            const plugins = preparePluginsFromCompilerOptions(options.plugins);
++            const pluginCreator = new tsp.PluginCreator(plugins, (_a = projectConfig.projectDir) !== null && _a !== void 0 ? _a : process.cwd());
++            const programTransformers = new Map(pluginCreator.getProgramTransformers());
++            for (const [transformer] of pluginCreator.getProgramTransformers()) {
++                if (activeProgramTransformers.has(transformer))
++                    programTransformers.delete(transformer);
++                else
++                    activeProgramTransformers.add(transformer);
+             }
+-            finally {
+-                try {
+-                    if (programTransformers_1_1 && !programTransformers_1_1.done && (_b = programTransformers_1.return))
+-                        _b.call(programTransformers_1);
+-                }
+-                finally {
+-                    if (e_2)
+-                        throw e_2.error;
+-                }
++            for (const [programTransformer, config] of programTransformers) {
++                const newProgram = programTransformer(program, host, config, { ts: ts });
++                if (typeof (newProgram === null || newProgram === void 0 ? void 0 : newProgram["emit"]) === "function")
++                    program = newProgram;
+             }
+-            programTransformers.forEach(function (c, transformer) { return activeProgramTransformers.delete(transformer); });
++            programTransformers.forEach((c, transformer) => activeProgramTransformers.delete(transformer));
+             if (!program.originalEmit) {
+                 program.originalEmit = program.emit;
+                 program.emit = newEmit;
+             }
+-            function newEmit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) {
+-                var e_3, _a;
+-                var additionalArgs = [];
+-                for (var _i = 5; _i < arguments.length; _i++) {
+-                    additionalArgs[_i - 5] = arguments[_i];
+-                }
+-                var transformers = pluginCreator.createTransformers({ program: program }, customTransformers);
+-                var result = program.originalEmit.apply(program, __spreadArray([targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, transformers], __read(additionalArgs), false));
+-                try {
+-                    for (var _b = __values(tsp.diagnosticMap.get(program) || []), _c = _b.next(); !_c.done; _c = _b.next()) {
+-                        var diagnostic = _c.value;
+-                        if (!result.diagnostics.includes(diagnostic))
+-                            result.diagnostics.push(diagnostic);
+-                    }
+-                }
+-                catch (e_3_1) {
+-                    e_3 = { error: e_3_1 };
+-                }
+-                finally {
+-                    try {
+-                        if (_c && !_c.done && (_a = _b.return))
+-                            _a.call(_b);
+-                    }
+-                    finally {
+-                        if (e_3)
+-                            throw e_3.error;
+-                    }
+-                }
++            function newEmit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, ...additionalArgs) {
++                const transformers = pluginCreator.createTransformers({ program }, customTransformers);
++                const result = program.originalEmit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, transformers, ...additionalArgs);
++                for (const diagnostic of tsp.diagnosticMap.get(program) || [])
++                    if (!result.diagnostics.includes(diagnostic))
++                        result.diagnostics.push(diagnostic);
+                 return result;
+             }
+             return program;
+@@ -222,144 +97,92 @@ var tsp = (function () {
+     })(tsp || (tsp = {}));
+     var tsp;
+     (function (tsp) {
+-        var path = require("path");
+-        var tsNodeIncluded = false;
+-        var requireStack = [];
+-        var PluginCreator = (function () {
+-            function PluginCreator(configs, resolveBaseDir) {
+-                var e_4, _a;
+-                if (resolveBaseDir === void 0) {
+-                    resolveBaseDir = process.cwd();
+-                }
++        const path = require("path");
++        let tsNodeIncluded = false;
++        const requireStack = [];
++        class PluginCreator {
++            constructor(configs, resolveBaseDir = process.cwd()) {
+                 this.configs = configs;
+                 this.resolveBaseDir = resolveBaseDir;
+                 PluginCreator.validateConfigs(configs);
+-                try {
+-                    for (var configs_1 = __values(configs), configs_1_1 = configs_1.next(); !configs_1_1.done; configs_1_1 = configs_1.next()) {
+-                        var config = configs_1_1.value;
+-                        if (config["beforeEmit"])
+-                            config.transformProgram = true;
+-                    }
+-                }
+-                catch (e_4_1) {
+-                    e_4 = { error: e_4_1 };
+-                }
+-                finally {
+-                    try {
+-                        if (configs_1_1 && !configs_1_1.done && (_a = configs_1.return))
+-                            _a.call(configs_1);
+-                    }
+-                    finally {
+-                        if (e_4)
+-                            throw e_4.error;
+-                    }
+-                }
++                for (const config of configs)
++                    if (config["beforeEmit"])
++                        config.transformProgram = true;
+             }
+-            PluginCreator.prototype.mergeTransformers = function (into, source) {
+-                var _a, _b, _c;
+-                var slice = function (input) { return (Array.isArray(input) ? input.slice() : [input]); };
++            mergeTransformers(into, source) {
++                const slice = (input) => (Array.isArray(input) ? input.slice() : [input]);
+                 if (source.before)
+-                    (_a = into.before).push.apply(_a, __spreadArray([], __read(slice(source.before)), false));
++                    into.before.push(...slice(source.before));
+                 if (source.after)
+-                    (_b = into.after).push.apply(_b, __spreadArray([], __read(slice(source.after)), false));
++                    into.after.push(...slice(source.after));
+                 if (source.afterDeclarations)
+-                    (_c = into.afterDeclarations).push.apply(_c, __spreadArray([], __read(slice(source.afterDeclarations)), false));
++                    into.afterDeclarations.push(...slice(source.afterDeclarations));
+                 return this;
+-            };
+-            PluginCreator.prototype.createTransformers = function (params, customTransformers) {
+-                var e_5, _a;
+-                var transformers = { before: [], after: [], afterDeclarations: [] };
+-                var _b = __read(("ls" in params) ? [params.ls, params.ls.getProgram()] : [void 0, params.program], 2), ls = _b[0], program = _b[1];
+-                try {
+-                    for (var _c = __values(this.configs), _d = _c.next(); !_d.done; _d = _c.next()) {
+-                        var config = _d.value;
+-                        if (!config.transform || config.transformProgram)
+-                            continue;
+-                        var factory = this.resolveFactory(config);
+-                        if (factory === undefined)
+-                            continue;
+-                        this.mergeTransformers(transformers, PluginCreator.createTransformerFromPattern({ factory: factory, config: config, program: program, ls: ls }));
+-                    }
+-                }
+-                catch (e_5_1) {
+-                    e_5 = { error: e_5_1 };
+-                }
+-                finally {
+-                    try {
+-                        if (_d && !_d.done && (_a = _c.return))
+-                            _a.call(_c);
+-                    }
+-                    finally {
+-                        if (e_5)
+-                            throw e_5.error;
+-                    }
++            }
++            createTransformers(params, customTransformers) {
++                const transformers = { before: [], after: [], afterDeclarations: [] };
++                const [ls, program] = ("ls" in params) ? [params.ls, params.ls.getProgram()] : [void 0, params.program];
++                for (const config of this.configs) {
++                    if (!config.transform || config.transformProgram)
++                        continue;
++                    const factory = this.resolveFactory(config);
++                    if (factory === undefined)
++                        continue;
++                    this.mergeTransformers(transformers, PluginCreator.createTransformerFromPattern({ factory: factory, config, program, ls }));
+                 }
+                 if (customTransformers)
+                     this.mergeTransformers(transformers, customTransformers);
+                 return transformers;
+-            };
+-            PluginCreator.prototype.getProgramTransformers = function () {
+-                var e_6, _a;
+-                var res = [];
+-                try {
+-                    for (var _b = __values(this.configs), _c = _b.next(); !_c.done; _c = _b.next()) {
+-                        var config = _c.value;
+-                        if (!config.transform || !config.transformProgram)
+-                            continue;
+-                        var factory = this.resolveFactory(config);
+-                        if (factory === undefined)
+-                            continue;
+-                        res.push([factory, config]);
+-                    }
+-                }
+-                catch (e_6_1) {
+-                    e_6 = { error: e_6_1 };
+-                }
+-                finally {
+-                    try {
+-                        if (_c && !_c.done && (_a = _b.return))
+-                            _a.call(_b);
+-                    }
+-                    finally {
+-                        if (e_6)
+-                            throw e_6.error;
+-                    }
++            }
++            getProgramTransformers() {
++                const res = [];
++                for (const config of this.configs) {
++                    if (!config.transform || !config.transformProgram)
++                        continue;
++                    const factory = this.resolveFactory(config);
++                    if (factory === undefined)
++                        continue;
++                    res.push([factory, config]);
+                 }
+                 return res;
+-            };
+-            PluginCreator.prototype.resolveFactory = function (config) {
++            }
++            resolveFactory(config) {
+                 var _a;
+-                var tsConfig = config.tsConfig && path.resolve(this.resolveBaseDir, config.tsConfig);
+-                var transform = config.transform;
+-                var importKey = config.import || "default";
+-                var tsConfigCleanup;
++                const tsConfig = config.tsConfig && path.resolve(this.resolveBaseDir, config.tsConfig);
++                const transform = config.transform;
++                const importKey = config.import || "default";
++                let tsConfigCleanup;
+                 if (transform.match(/\.ts$/)) {
+                     if (tsNodeIncluded && (tsConfig !== this.currentProject))
+                         tsNodeIncluded = false;
+                     this.currentProject = tsConfig;
+                     if (!tsNodeIncluded) {
+                         try {
+-                            require("ts-node").register(__assign(__assign({ transpileOnly: true }, (tsConfig ? { project: tsConfig } : { skipProject: true })), { compilerOptions: {
++                            require("ts-node").register({
++                                transpileOnly: true,
++                                ...(tsConfig ? { project: tsConfig } : { skipProject: true }),
++                                compilerOptions: {
+                                     target: "ES2018",
+                                     jsx: "react",
+                                     esModuleInterop: true,
+                                     module: "commonjs",
+-                                } }));
++                                }
++                            });
+                             tsNodeIncluded = true;
+                         }
+                         catch (e) {
+                             if (e.code === "MODULE_NOT_FOUND")
+-                                throw new Error("Cannot use a typescript-based transformer without ts-node installed. " +
+-                                    "Either add ts-node as a (dev)-dependency or install globally.");
++                                throw new Error(`Cannot use a typescript-based transformer without ts-node installed. ` +
++                                    `Either add ts-node as a (dev)-dependency or install globally.`);
+                             else
+                                 throw e;
+                         }
+                     }
+-                    var tsConfigData = tsConfig && tsp.shim.readConfigFile(tsConfig, tsp.shim.sys.readFile).config;
++                    const tsConfigData = tsConfig && tsp.shim.readConfigFile(tsConfig, tsp.shim.sys.readFile).config;
+                     if ((_a = tsConfigData === null || tsConfigData === void 0 ? void 0 : tsConfigData.compilerOptions) === null || _a === void 0 ? void 0 : _a.paths) {
+                         try {
+-                            var tsConfigPaths = require("tsconfig-paths");
+-                            var absoluteBaseUrl = tsConfigPaths.loadConfig(tsConfig).absoluteBaseUrl;
++                            const tsConfigPaths = require("tsconfig-paths");
++                            const { absoluteBaseUrl } = tsConfigPaths.loadConfig(tsConfig);
+                             tsConfigCleanup = tsConfigPaths.register({
+                                 baseUrl: absoluteBaseUrl,
+                                 paths: tsConfigData.compilerOptions.paths
+@@ -367,64 +190,45 @@ var tsp = (function () {
+                         }
+                         catch (e) {
+                             if (e.code === "MODULE_NOT_FOUND")
+-                                console.warn("Paths specified in transformer tsconfig.json, but they may not be able to be resolved. " +
+-                                    "If not, try adding 'tsconfig-paths' as a dev dependency");
++                                console.warn(`Paths specified in transformer tsconfig.json, but they may not be able to be resolved. ` +
++                                    `If not, try adding 'tsconfig-paths' as a dev dependency`);
+                             else
+                                 throw e;
+                         }
+                     }
+                 }
+-                var modulePath = require.resolve(transform, { paths: [this.resolveBaseDir] });
++                const modulePath = require.resolve(transform, { paths: [this.resolveBaseDir] });
+                 if (requireStack.indexOf(modulePath) > -1)
+                     return;
+                 requireStack.push(modulePath);
+-                var commonjsModule = require(modulePath);
++                const commonjsModule = require(modulePath);
+                 requireStack.pop();
+                 tsConfigCleanup === null || tsConfigCleanup === void 0 ? void 0 : tsConfigCleanup();
+-                var factoryModule = (typeof commonjsModule === "function") ? { default: commonjsModule } : commonjsModule;
+-                var factory = factoryModule[importKey];
++                const factoryModule = (typeof commonjsModule === "function") ? { default: commonjsModule } : commonjsModule;
++                const factory = factoryModule[importKey];
+                 if (!factory)
+-                    throw new Error("tsconfig.json > plugins: \"".concat(transform, "\" does not have an export \"").concat(importKey, "\": ") +
++                    throw new Error(`tsconfig.json > plugins: "${transform}" does not have an export "${importKey}": ` +
+                         require("util").inspect(factoryModule));
+                 if (typeof factory !== "function") {
+-                    throw new Error("tsconfig.json > plugins: \"".concat(transform, "\" export \"").concat(importKey, "\" is not a plugin: ") +
++                    throw new Error(`tsconfig.json > plugins: "${transform}" export "${importKey}" is not a plugin: ` +
+                         require("util").inspect(factory));
+                 }
+                 return factory;
+-            };
+-            PluginCreator.validateConfigs = function (configs) {
+-                var e_7, _a;
+-                try {
+-                    for (var configs_2 = __values(configs), configs_2_1 = configs_2.next(); !configs_2_1.done; configs_2_1 = configs_2.next()) {
+-                        var config = configs_2_1.value;
+-                        if (!config.name && !config.transform)
+-                            throw new Error("tsconfig.json plugins error: transform must be present");
+-                    }
+-                }
+-                catch (e_7_1) {
+-                    e_7 = { error: e_7_1 };
+-                }
+-                finally {
+-                    try {
+-                        if (configs_2_1 && !configs_2_1.done && (_a = configs_2.return))
+-                            _a.call(configs_2);
+-                    }
+-                    finally {
+-                        if (e_7)
+-                            throw e_7.error;
+-                    }
+-                }
+-            };
+-            PluginCreator.createTransformerFromPattern = function (_a) {
+-                var factory = _a.factory, config = _a.config, program = _a.program, ls = _a.ls;
+-                var transform = config.transform, after = config.after, afterDeclarations = config.afterDeclarations, name = config.name, type = config.type, transformProgram = config.transformProgram, cleanConfig = __rest(config, ["transform", "after", "afterDeclarations", "name", "type", "transformProgram"]);
++            }
++            static validateConfigs(configs) {
++                for (const config of configs)
++                    if (!config.name && !config.transform)
++                        throw new Error("tsconfig.json plugins error: transform must be present");
++            }
++            static createTransformerFromPattern({ factory, config, program, ls }) {
++                const { transform, after, afterDeclarations, name, type, transformProgram, ...cleanConfig } = config;
+                 if (!transform)
+                     throw new Error("Not a valid config entry: \"transform\" key not found");
+-                var ret;
++                let ret;
+                 switch (config.type) {
+                     case "ls":
+                         if (!ls)
+-                            throw new Error("Plugin ".concat(transform, " needs a LanguageService"));
++                            throw new Error(`Plugin ${transform} needs a LanguageService`);
+                         ret = factory(ls, cleanConfig);
+                         break;
+                     case "config":
+@@ -438,39 +242,38 @@ var tsp = (function () {
+                         break;
+                     case undefined:
+                     case "program":
+-                        var _b = tsp.diagnosticExtrasFactory(program), addDiagnostic = _b.addDiagnostic, removeDiagnostic = _b.removeDiagnostic, diagnostics = _b.diagnostics;
++                        const { addDiagnostic, removeDiagnostic, diagnostics } = tsp.diagnosticExtrasFactory(program);
+                         ret = factory(program, cleanConfig, {
+                             ts: ts,
+-                            addDiagnostic: addDiagnostic,
+-                            removeDiagnostic: removeDiagnostic,
+-                            diagnostics: diagnostics,
++                            addDiagnostic,
++                            removeDiagnostic,
++                            diagnostics,
+                             library: tsp.currentLibrary
+                         });
+                         break;
+                     case "raw":
+-                        ret = function (ctx) { return factory(ctx, program, cleanConfig); };
++                        ret = (ctx) => factory(ctx, program, cleanConfig);
+                         break;
+                     default:
+-                        throw new Error("Invalid plugin type found in tsconfig.json: '".concat(config.type, "'"));
++                        throw new Error(`Invalid plugin type found in tsconfig.json: '${config.type}'`);
+                 }
+                 if (typeof ret === "function")
+                     return after ? ({ after: ret }) :
+                         afterDeclarations ? ({ afterDeclarations: ret }) :
+                             { before: ret };
+                 return ret;
+-            };
+-            return PluginCreator;
+-        }());
++            }
++        }
+         tsp.PluginCreator = PluginCreator;
+     })(tsp || (tsp = {}));
+     var tsp;
+     (function (tsp) {
+         tsp.diagnosticMap = new WeakMap();
+         function diagnosticExtrasFactory(program) {
+-            var diagnostics = tsp.diagnosticMap.get(program) || tsp.diagnosticMap.set(program, []).get(program);
+-            var addDiagnostic = function (diag) { return diagnostics.push(diag); };
+-            var removeDiagnostic = function (index) { diagnostics.splice(index, 1); };
+-            return { addDiagnostic: addDiagnostic, removeDiagnostic: removeDiagnostic, diagnostics: diagnostics };
++            const diagnostics = tsp.diagnosticMap.get(program) || tsp.diagnosticMap.set(program, []).get(program);
++            const addDiagnostic = (diag) => diagnostics.push(diag);
++            const removeDiagnostic = (index) => { diagnostics.splice(index, 1); };
++            return { addDiagnostic, removeDiagnostic, diagnostics };
+         }
+         tsp.diagnosticExtrasFactory = diagnosticExtrasFactory;
+     })(tsp || (tsp = {}));
+diff --git a/slice/ts5.js b/slice/ts5.js
+index d941cf4874bd3b328fee6e3c8047b32e317835ba..2ebced0b8aaacb14061e0cfcd18981c3be6c5b37 100644
+--- a/slice/ts5.js
++++ b/slice/ts5.js
+@@ -16,7 +16,7 @@ function sliceTs5(moduleFile) {
+     /* Find Wrapper or First File */
+     let matcher = /^(?:\s*\/\/\s*src\/)|(?:var\s+ts\s*=.+)/gm;
+     const firstMatch = matcher.exec(content);
+-    if (!firstMatch?.[0])
++    if (!(firstMatch === null || firstMatch === void 0 ? void 0 : firstMatch[0]))
+         throw module_slice_1.ModuleSlice.createError();
+     /* Handle wrapped */
+     if (firstMatch[0].startsWith('var')) {
+@@ -26,14 +26,14 @@ function sliceTs5(moduleFile) {
+         matcher = /^\s*\/\/\s*src\//gm;
+         matcher.lastIndex = wrapperStart;
+         const firstFileMatch = matcher.exec(content);
+-        if (!firstFileMatch?.[0])
++        if (!(firstFileMatch === null || firstFileMatch === void 0 ? void 0 : firstFileMatch[0]))
+             throw module_slice_1.ModuleSlice.createError();
+         firstSourceFileStart = firstFileMatch.index;
+         /* Find Wrapper end */
+         matcher = /^}\)\(\)\s*;?/gm;
+         matcher.lastIndex = firstFileMatch.index;
+         const wrapperEndMatch = matcher.exec(content);
+-        if (!wrapperEndMatch?.[0])
++        if (!(wrapperEndMatch === null || wrapperEndMatch === void 0 ? void 0 : wrapperEndMatch[0]))
+             throw module_slice_1.ModuleSlice.createError();
+         bodyEnd = wrapperEndMatch.index - 1;
+         wrapperEnd = wrapperEndMatch.index + wrapperEndMatch[0].length;
+diff --git a/slice/ts5.js.map b/slice/ts5.js.map
+index 346b69231edc61a4923af407fec022e122290f3f..33060886c99fe526695938991589e04e18367af7 100644
+--- a/slice/ts5.js.map
++++ b/slice/ts5.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"ts5.js","sourceRoot":"","sources":["../../../projects/core/src/slice/ts5.ts"],"names":[],"mappings":";;;AACA,iDAA6C;AAG7C,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,QAAQ,CAAC,UAAsB;IAC7C,IAAI,oBAA4B,CAAC;IACjC,IAAI,YAAgC,CAAC;IACrC,IAAI,UAA8B,CAAC;IACnC,IAAI,SAAiB,CAAC;IACtB,IAAI,OAAe,CAAC;IACpB,IAAI,gBAAgB,GAAyC,EAAE,CAAC;IAEhE,MAAM,EAAE,OAAO,EAAE,GAAG,UAAU,CAAC;IAE/B,gCAAgC;IAChC,IAAI,OAAO,GAAG,2CAA2C,CAAC;IAE1D,MAAM,UAAU,GAAG,OAAO,CAAC,IAAI,CAAC,OAAO,CAAC,CAAC;IACzC,IAAI,CAAC,UAAU,EAAE,CAAC,CAAC,CAAC;QAAE,MAAM,0BAAW,CAAC,WAAW,EAAE,CAAC;IAEtD,oBAAoB;IACpB,IAAI,UAAU,CAAC,CAAC,CAAC,CAAC,UAAU,CAAC,KAAK,CAAC,EAAE;QACnC,YAAY,GAAG,UAAU,CAAC,KAAK,CAAC;QAChC,SAAS,GAAG,UAAU,CAAC,KAAK,GAAG,UAAU,CAAC,CAAC,CAAC,CAAC,MAAM,GAAG,CAAC,CAAC;QAExD,qBAAqB;QACrB,OAAO,GAAG,oBAAoB,CAAC;QAC/B,OAAO,CAAC,SAAS,GAAG,YAAY,CAAC;QAEjC,MAAM,cAAc,GAAG,OAAO,CAAC,IAAI,CAAC,OAAO,CAAC,CAAC;QAC7C,IAAI,CAAC,cAAc,EAAE,CAAC,CAAC,CAAC;YAAE,MAAM,0BAAW,CAAC,WAAW,EAAE,CAAC;QAE1D,oBAAoB,GAAG,cAAc,CAAC,KAAK,CAAC;QAE5C,sBAAsB;QACtB,OAAO,GAAG,iBAAiB,CAAC;QAC5B,OAAO,CAAC,SAAS,GAAG,cAAc,CAAC,KAAK,CAAC;QACzC,MAAM,eAAe,GAAG,OAAO,CAAC,IAAI,CAAC,OAAO,CAAC,CAAC;QAC9C,IAAI,CAAC,eAAe,EAAE,CAAC,CAAC,CAAC;YAAE,MAAM,0BAAW,CAAC,WAAW,EAAE,CAAC;QAE3D,OAAO,GAAG,eAAe,CAAC,KAAK,GAAG,CAAC,CAAC;QACpC,UAAU,GAAG,eAAe,CAAC,KAAK,GAAG,eAAe,CAAC,CAAC,CAAC,CAAC,MAAM,CAAC;KAChE;IACD,wBAAwB;SACnB;QACH,oBAAoB,GAAG,UAAU,CAAC,KAAK,CAAC;QACxC,SAAS,GAAG,UAAU,CAAC,KAAK,GAAG,UAAU,CAAC,CAAC,CAAC,CAAC,MAAM,CAAC;QACpD,OAAO,GAAG,OAAO,CAAC,MAAM,CAAC;KAC1B;IAED,+BAA+B;IAC/B,OAAO,GAAG,yBAAyB,CAAC;IACpC,OAAO,CAAC,SAAS,GAAG,oBAAoB,CAAC;IACzC,KAAK,IAAI,KAAK,GAAG,OAAO,CAAC,IAAI,CAAC,OAAO,CAAC,EAAE,KAAK,IAAI,IAAI,EAAE,KAAK,GAAG,OAAO,CAAC,IAAI,CAAC,OAAO,CAAC,EAAE;QACpF,gBAAgB,CAAC,IAAI,CAAC,CAAE,KAAK,CAAC,CAAC,CAAC,EAAE,KAAK,CAAC,KAAK,CAAE,CAAC,CAAC;KAClD;IAED,OAAO;QACL,UAAU;QACV,oBAAoB;QACpB,UAAU,EAAE,YAAY,IAAI,IAAI,CAAC,CAAC,CAAC,EAAE,KAAK,EAAE,YAAY,EAAE,GAAG,EAAE,UAAW,EAAE,CAAC,CAAC,CAAC,SAAS;QACxF,OAAO,EAAE,OAAO,CAAC,MAAM;QACvB,OAAO,EAAE,EAAE,KAAK,EAAE,SAAS,EAAE,GAAG,EAAE,OAAO,EAAE;QAC3C,gBAAgB;KACjB,CAAC;AACJ,CAAC;AA7DD,4BA6DC;AAED,YAAY"}
+\ No newline at end of file
++{"version":3,"file":"ts5.js","sourceRoot":"","sources":["../../../projects/core/src/slice/ts5.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/system/errors.js b/system/errors.js
+index c0feb7c7a136b4957fd36fa595497e4c3890ddcf..e2630fcbbcea4074758e20d43c8cadd6862f3783 100644
+--- a/system/errors.js
++++ b/system/errors.js
+@@ -8,35 +8,55 @@ class TspError extends Error {
+ }
+ exports.TspError = TspError;
+ class WrongTSVersion extends TspError {
+-    name = 'WrongTSVersion';
++    constructor() {
++        super(...arguments);
++        this.name = 'WrongTSVersion';
++    }
+ }
+ exports.WrongTSVersion = WrongTSVersion;
+ class FileNotFound extends TspError {
+-    name = 'FileNotFound';
++    constructor() {
++        super(...arguments);
++        this.name = 'FileNotFound';
++    }
+ }
+ exports.FileNotFound = FileNotFound;
+ class PackageError extends TspError {
+-    name = 'PackageError';
++    constructor() {
++        super(...arguments);
++        this.name = 'PackageError';
++    }
+ }
+ exports.PackageError = PackageError;
+ class PatchError extends TspError {
+-    name = 'PatchError';
++    constructor() {
++        super(...arguments);
++        this.name = 'PatchError';
++    }
+ }
+ exports.PatchError = PatchError;
+ class PersistenceError extends TspError {
+-    name = 'PersistenceError';
++    constructor() {
++        super(...arguments);
++        this.name = 'PersistenceError';
++    }
+ }
+ exports.PersistenceError = PersistenceError;
+ class OptionsError extends TspError {
+-    name = 'OptionsError';
++    constructor() {
++        super(...arguments);
++        this.name = 'OptionsError';
++    }
+ }
+ exports.OptionsError = OptionsError;
+ class NPMError extends TspError {
+-    name = 'NPMError';
++    constructor() {
++        super(...arguments);
++        this.name = 'NPMError';
++    }
+ }
+ exports.NPMError = NPMError;
+ class RestoreError extends TspError {
+-    filename;
+     constructor(filename, message) {
+         super(`Error restoring: ${filename}${message ? ' - ' + message : ''}`);
+         this.filename = filename;
+@@ -45,7 +65,6 @@ class RestoreError extends TspError {
+ }
+ exports.RestoreError = RestoreError;
+ class BackupError extends TspError {
+-    filename;
+     constructor(filename, message) {
+         super(`Error backing up ${filename}${message ? ' - ' + message : ''}`);
+         this.filename = filename;
+@@ -54,7 +73,6 @@ class BackupError extends TspError {
+ }
+ exports.BackupError = BackupError;
+ class FileWriteError extends TspError {
+-    filename;
+     constructor(filename, message) {
+         super(`Error while trying to write to ${filename}${message ? `: ${message}` : ''}`);
+         this.filename = filename;
+diff --git a/system/errors.js.map b/system/errors.js.map
+index 2b0980928f63cafcd8617555d5b4e2551ec57f9c..835a76836e1b72677f32c0e91c29471937b25462 100644
+--- a/system/errors.js.map
++++ b/system/errors.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"errors.js","sourceRoot":"","sources":["../../../projects/core/src/system/errors.ts"],"names":[],"mappings":";AAAA;;wHAEwH;;;AAExH,MAAa,QAAS,SAAQ,KAAK;CAAI;AAAvC,4BAAuC;AAEvC,MAAa,cAAe,SAAQ,QAAQ;IAAE,IAAI,GAAG,gBAAgB,CAAA;CAAC;AAAtE,wCAAsE;AAEtE,MAAa,YAAa,SAAQ,QAAQ;IAAE,IAAI,GAAG,cAAc,CAAA;CAAC;AAAlE,oCAAkE;AAElE,MAAa,YAAa,SAAQ,QAAQ;IAAE,IAAI,GAAG,cAAc,CAAA;CAAC;AAAlE,oCAAkE;AAElE,MAAa,UAAW,SAAQ,QAAQ;IAAE,IAAI,GAAG,YAAY,CAAA;CAAC;AAA9D,gCAA8D;AAE9D,MAAa,gBAAiB,SAAQ,QAAQ;IAAE,IAAI,GAAG,kBAAkB,CAAA;CAAC;AAA1E,4CAA0E;AAE1E,MAAa,YAAa,SAAQ,QAAQ;IAAE,IAAI,GAAG,cAAc,CAAA;CAAC;AAAlE,oCAAkE;AAElE,MAAa,QAAS,SAAQ,QAAQ;IAAE,IAAI,GAAG,UAAU,CAAA;CAAC;AAA1D,4BAA0D;AAE1D,MAAa,YAAa,SAAQ,QAAQ;IACrB;IAAnB,YAAmB,QAAgB,EAAE,OAAe;QAClD,KAAK,CAAC,oBAAoB,QAAQ,GAAG,OAAO,CAAC,CAAC,CAAC,KAAK,GAAG,OAAO,CAAC,CAAC,CAAC,EAAE,EAAE,CAAC,CAAC;QADtD,aAAQ,GAAR,QAAQ,CAAQ;QAEjC,IAAI,CAAC,IAAI,GAAG,cAAc,CAAC;IAC7B,CAAC;CACF;AALD,oCAKC;AAED,MAAa,WAAY,SAAQ,QAAQ;IACpB;IAAnB,YAAmB,QAAgB,EAAE,OAAe;QAClD,KAAK,CAAC,oBAAoB,QAAQ,GAAG,OAAO,CAAC,CAAC,CAAC,KAAK,GAAG,OAAO,CAAC,CAAC,CAAC,EAAE,EAAE,CAAC,CAAC;QADtD,aAAQ,GAAR,QAAQ,CAAQ;QAEjC,IAAI,CAAC,IAAI,GAAG,aAAa,CAAC;IAC5B,CAAC;CACF;AALD,kCAKC;AAED,MAAa,cAAe,SAAQ,QAAQ;IACvB;IAAnB,YAAmB,QAAgB,EAAE,OAAgB;QACnD,KAAK,CAAC,kCAAkC,QAAQ,GAAG,OAAO,CAAC,CAAC,CAAC,KAAK,OAAO,EAAE,CAAC,CAAC,CAAC,EAAE,EAAE,CAAC,CAAC;QADnE,aAAQ,GAAR,QAAQ,CAAQ;IAEnC,CAAC;CACF;AAJD,wCAIC"}
+\ No newline at end of file
++{"version":3,"file":"errors.js","sourceRoot":"","sources":["../../../projects/core/src/system/errors.ts"],"names":[],"mappings":";AAAA;;wHAEwH;;;AAExH,MAAa,QAAS,SAAQ,KAAK;CAAI;AAAvC,4BAAuC;AAEvC,MAAa,cAAe,SAAQ,QAAQ;IAA5C;;QAA8C,SAAI,GAAG,gBAAgB,CAAA;IAAA,CAAC;CAAA;AAAtE,wCAAsE;AAEtE,MAAa,YAAa,SAAQ,QAAQ;IAA1C;;QAA4C,SAAI,GAAG,cAAc,CAAA;IAAA,CAAC;CAAA;AAAlE,oCAAkE;AAElE,MAAa,YAAa,SAAQ,QAAQ;IAA1C;;QAA4C,SAAI,GAAG,cAAc,CAAA;IAAA,CAAC;CAAA;AAAlE,oCAAkE;AAElE,MAAa,UAAW,SAAQ,QAAQ;IAAxC;;QAA0C,SAAI,GAAG,YAAY,CAAA;IAAA,CAAC;CAAA;AAA9D,gCAA8D;AAE9D,MAAa,gBAAiB,SAAQ,QAAQ;IAA9C;;QAAgD,SAAI,GAAG,kBAAkB,CAAA;IAAA,CAAC;CAAA;AAA1E,4CAA0E;AAE1E,MAAa,YAAa,SAAQ,QAAQ;IAA1C;;QAA4C,SAAI,GAAG,cAAc,CAAA;IAAA,CAAC;CAAA;AAAlE,oCAAkE;AAElE,MAAa,QAAS,SAAQ,QAAQ;IAAtC;;QAAwC,SAAI,GAAG,UAAU,CAAA;IAAA,CAAC;CAAA;AAA1D,4BAA0D;AAE1D,MAAa,YAAa,SAAQ,QAAQ;IACxC,YAAmB,QAAgB,EAAE,OAAe;QAClD,KAAK,CAAC,oBAAoB,QAAQ,GAAG,OAAO,CAAC,CAAC,CAAC,KAAK,GAAG,OAAO,CAAC,CAAC,CAAC,EAAE,EAAE,CAAC,CAAC;QADtD,aAAQ,GAAR,QAAQ,CAAQ;QAEjC,IAAI,CAAC,IAAI,GAAG,cAAc,CAAC;IAC7B,CAAC;CACF;AALD,oCAKC;AAED,MAAa,WAAY,SAAQ,QAAQ;IACvC,YAAmB,QAAgB,EAAE,OAAe;QAClD,KAAK,CAAC,oBAAoB,QAAQ,GAAG,OAAO,CAAC,CAAC,CAAC,KAAK,GAAG,OAAO,CAAC,CAAC,CAAC,EAAE,EAAE,CAAC,CAAC;QADtD,aAAQ,GAAR,QAAQ,CAAQ;QAEjC,IAAI,CAAC,IAAI,GAAG,aAAa,CAAC;IAC5B,CAAC;CACF;AALD,kCAKC;AAED,MAAa,cAAe,SAAQ,QAAQ;IAC1C,YAAmB,QAAgB,EAAE,OAAgB;QACnD,KAAK,CAAC,kCAAkC,QAAQ,GAAG,OAAO,CAAC,CAAC,CAAC,KAAK,OAAO,EAAE,CAAC,CAAC,CAAC,EAAE,EAAE,CAAC,CAAC;QADnE,aAAQ,GAAR,QAAQ,CAAQ;IAEnC,CAAC;CACF;AAJD,wCAIC"}
+\ No newline at end of file
+diff --git a/ts-package.js b/ts-package.js
+index 23bfa1c99f34f113aa253f9ed7249d161e3552f2..12704e42375f348243940b9ec31dc5f0a989f943 100644
+--- a/ts-package.js
++++ b/ts-package.js
+@@ -25,7 +25,7 @@ function getTsPackage(dir = process.cwd()) {
+         try {
+             packageDir = typeof d === 'function' ? d() : d;
+         }
+-        catch {
++        catch (_a) {
+             break;
+         }
+         /* Parse package.json data */
+diff --git a/ts-package.js.map b/ts-package.js.map
+index 67bc01199eb78c82ef8d714989f39f3076b1756c..4363f52d5ef9a2ecdd7f17107e2e69c7f4520600 100644
+--- a/ts-package.js.map
++++ b/ts-package.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"ts-package.js","sourceRoot":"","sources":["../../projects/core/src/ts-package.ts"],"names":[],"mappings":";;;;;;AAAA,4CAAoB;AACpB,gDAAwB;AACxB,sDAA8B;AAC9B,qCAAwC;AACxC,qCAAoC;AAwBpC,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH;;GAEG;AACH,SAAgB,YAAY,CAAC,MAAc,OAAO,CAAC,GAAG,EAAE;IACtD,IAAI,CAAC,YAAE,CAAC,UAAU,CAAC,GAAG,CAAC;QAAE,MAAM,IAAI,qBAAY,CAAC,GAAG,GAAG,2BAA2B,CAAC,CAAC;IAEnF,MAAM,mBAAmB,GAAG,CAAE,GAAG,EAAE,GAAG,EAAE,CAAC,cAAI,CAAC,OAAO,CAAC,iBAAO,CAAC,IAAI,CAAC,yBAAyB,EAAE,EAAE,OAAO,EAAE,GAAG,EAAE,CAAC,CAAC,CAAE,CAAC;IAEnH,KAAK,MAAM,CAAC,IAAI,mBAAmB,EAAE;QACnC,IAAI,UAAkB,CAAC;QACvB,IAAI;YACF,UAAU,GAAG,OAAO,CAAC,KAAK,UAAU,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC;SAChD;QAAC,MAAM;YACN,MAAM;SACP;QAED,6BAA6B;QAC7B,MAAM,WAAW,GAAG,cAAI,CAAC,IAAI,CAAC,UAAU,EAAE,cAAc,CAAC,CAAC;QAC1D,IAAI,CAAC,YAAE,CAAC,UAAU,CAAC,WAAW,CAAC;YAAE,SAAS;QAE1C,MAAM,EAAE,IAAI,EAAE,OAAO,EAAE,GAAG,CAAC,GAAG,EAAE;YAC9B,IAAI;gBACF,OAAO,IAAI,CAAC,KAAK,CAAC,YAAE,CAAC,YAAY,CAAC,WAAW,EAAE,MAAM,CAAC,CAAC,CAAC;aACzD;YACD,OAAO,CAAC,EAAE;gBACR,MAAM,IAAI,qBAAY,CAAC,gCAAgC,WAAW,EAAE,CAAC,CAAC;aACvE;QACH,CAAC,CAAC,EAAE,CAAC;QAEL,cAAc;QACd,IAAI,IAAI,KAAK,YAAY,EAAE;YACzB,MAAM,CAAE,MAAM,EAAE,MAAM,CAAE,GAAG,OAAO,CAAC,KAAK,CAAC,GAAG,CAAC,CAAA;YAC7C,MAAM,MAAM,GAAG,cAAI,CAAC,IAAI,CAAC,UAAU,EAAE,KAAK,CAAC,CAAC;YAC5C,MAAM,QAAQ,GAAG,cAAI,CAAC,OAAO,CAAC,UAAU,EAAE,gBAAgB,CAAC,CAAC;YAE5D,8CAA8C;YAC9C,MAAM,WAAW,GAAoB,EAAE,CAAC;YACxC,KAAK,MAAM,QAAQ,IAAI,YAAE,CAAC,WAAW,CAAC,MAAM,CAAC;gBAC3C,IAAwB,iBAAQ,CAAC,KAAM,CAAC,QAAQ,CAAC,QAAQ,CAAC;oBAAE,WAAW,CAAC,IAAI,CAAC,QAAyB,CAAC,CAAC;YAE1G,MAAM,GAAG,GAAc;gBACrB,OAAO;gBACP,QAAQ,EAAE,CAAC,MAAM;gBACjB,QAAQ,EAAE,CAAC,MAAM;gBACjB,WAAW;gBACX,UAAU;gBACV,WAAW;gBACX,QAAQ;gBACR,MAAM;gBACN,WAAW,EAAE,IAAI,GAAG,EAAE;gBAEtB,aAAa,EAAE,CAAC,UAAyB,EAAE,EAAE;oBAC3C,OAAO,cAAI,CAAC,IAAI,CAAC,MAAM,EAAE,UAAoB,CAAC,CAAC;gBACjD,CAAC;aACF,CAAA;YAED,OAAO,GAAG,CAAC;SACZ;KACF;IAED,MAAM,IAAI,qBAAY,CAAC,0CAA0C,GAAG,EAAE,CAAC,CAAC;AAC1E,CAAC;AA1DD,oCA0DC;AAED,YAAY"}
+\ No newline at end of file
++{"version":3,"file":"ts-package.js","sourceRoot":"","sources":["../../projects/core/src/ts-package.ts"],"names":[],"mappings":";;;;;;AAAA,4CAAoB;AACpB,gDAAwB;AACxB,sDAA8B;AAC9B,qCAAwC;AACxC,qCAAoC;AAwBpC,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH;;GAEG;AACH,SAAgB,YAAY,CAAC,MAAc,OAAO,CAAC,GAAG,EAAE;IACtD,IAAI,CAAC,YAAE,CAAC,UAAU,CAAC,GAAG,CAAC;QAAE,MAAM,IAAI,qBAAY,CAAC,GAAG,GAAG,2BAA2B,CAAC,CAAC;IAEnF,MAAM,mBAAmB,GAAG,CAAE,GAAG,EAAE,GAAG,EAAE,CAAC,cAAI,CAAC,OAAO,CAAC,iBAAO,CAAC,IAAI,CAAC,yBAAyB,EAAE,EAAE,OAAO,EAAE,GAAG,EAAE,CAAC,CAAC,CAAE,CAAC;IAEnH,KAAK,MAAM,CAAC,IAAI,mBAAmB,EAAE;QACnC,IAAI,UAAkB,CAAC;QACvB,IAAI;YACF,UAAU,GAAG,OAAO,CAAC,KAAK,UAAU,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC;SAChD;QAAC,WAAM;YACN,MAAM;SACP;QAED,6BAA6B;QAC7B,MAAM,WAAW,GAAG,cAAI,CAAC,IAAI,CAAC,UAAU,EAAE,cAAc,CAAC,CAAC;QAC1D,IAAI,CAAC,YAAE,CAAC,UAAU,CAAC,WAAW,CAAC;YAAE,SAAS;QAE1C,MAAM,EAAE,IAAI,EAAE,OAAO,EAAE,GAAG,CAAC,GAAG,EAAE;YAC9B,IAAI;gBACF,OAAO,IAAI,CAAC,KAAK,CAAC,YAAE,CAAC,YAAY,CAAC,WAAW,EAAE,MAAM,CAAC,CAAC,CAAC;aACzD;YACD,OAAO,CAAC,EAAE;gBACR,MAAM,IAAI,qBAAY,CAAC,gCAAgC,WAAW,EAAE,CAAC,CAAC;aACvE;QACH,CAAC,CAAC,EAAE,CAAC;QAEL,cAAc;QACd,IAAI,IAAI,KAAK,YAAY,EAAE;YACzB,MAAM,CAAE,MAAM,EAAE,MAAM,CAAE,GAAG,OAAO,CAAC,KAAK,CAAC,GAAG,CAAC,CAAA;YAC7C,MAAM,MAAM,GAAG,cAAI,CAAC,IAAI,CAAC,UAAU,EAAE,KAAK,CAAC,CAAC;YAC5C,MAAM,QAAQ,GAAG,cAAI,CAAC,OAAO,CAAC,UAAU,EAAE,gBAAgB,CAAC,CAAC;YAE5D,8CAA8C;YAC9C,MAAM,WAAW,GAAoB,EAAE,CAAC;YACxC,KAAK,MAAM,QAAQ,IAAI,YAAE,CAAC,WAAW,CAAC,MAAM,CAAC;gBAC3C,IAAwB,iBAAQ,CAAC,KAAM,CAAC,QAAQ,CAAC,QAAQ,CAAC;oBAAE,WAAW,CAAC,IAAI,CAAC,QAAyB,CAAC,CAAC;YAE1G,MAAM,GAAG,GAAc;gBACrB,OAAO;gBACP,QAAQ,EAAE,CAAC,MAAM;gBACjB,QAAQ,EAAE,CAAC,MAAM;gBACjB,WAAW;gBACX,UAAU;gBACV,WAAW;gBACX,QAAQ;gBACR,MAAM;gBACN,WAAW,EAAE,IAAI,GAAG,EAAE;gBAEtB,aAAa,EAAE,CAAC,UAAyB,EAAE,EAAE;oBAC3C,OAAO,cAAI,CAAC,IAAI,CAAC,MAAM,EAAE,UAAoB,CAAC,CAAC;gBACjD,CAAC;aACF,CAAA;YAED,OAAO,GAAG,CAAC;SACZ;KACF;IAED,MAAM,IAAI,qBAAY,CAAC,0CAA0C,GAAG,EAAE,CAAC,CAAC;AAC1E,CAAC;AA1DD,oCA0DC;AAED,YAAY"}
+\ No newline at end of file
+diff --git a/tsconfig.tsbuildinfo b/tsconfig.tsbuildinfo
+index 5ef4b822ba14235e465aff3745060d59d43d0d9f..19a286d029036c7ee8546e4ca23179dcacf37d94 100644
+--- a/tsconfig.tsbuildinfo
++++ b/tsconfig.tsbuildinfo
+@@ -1 +1 @@
+-{"program":{"fileNames":["../node_modules/typescript/lib/lib.es5.d.ts","../node_modules/typescript/lib/lib.es2015.d.ts","../node_modules/typescript/lib/lib.es2016.d.ts","../node_modules/typescript/lib/lib.es2017.d.ts","../node_modules/typescript/lib/lib.es2018.d.ts","../node_modules/typescript/lib/lib.es2019.d.ts","../node_modules/typescript/lib/lib.es2020.d.ts","../node_modules/typescript/lib/lib.es2015.core.d.ts","../node_modules/typescript/lib/lib.es2015.collection.d.ts","../node_modules/typescript/lib/lib.es2015.generator.d.ts","../node_modules/typescript/lib/lib.es2015.iterable.d.ts","../node_modules/typescript/lib/lib.es2015.promise.d.ts","../node_modules/typescript/lib/lib.es2015.proxy.d.ts","../node_modules/typescript/lib/lib.es2015.reflect.d.ts","../node_modules/typescript/lib/lib.es2015.symbol.d.ts","../node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts","../node_modules/typescript/lib/lib.es2016.array.include.d.ts","../node_modules/typescript/lib/lib.es2017.object.d.ts","../node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts","../node_modules/typescript/lib/lib.es2017.string.d.ts","../node_modules/typescript/lib/lib.es2017.intl.d.ts","../node_modules/typescript/lib/lib.es2017.typedarrays.d.ts","../node_modules/typescript/lib/lib.es2018.asyncgenerator.d.ts","../node_modules/typescript/lib/lib.es2018.asynciterable.d.ts","../node_modules/typescript/lib/lib.es2018.intl.d.ts","../node_modules/typescript/lib/lib.es2018.promise.d.ts","../node_modules/typescript/lib/lib.es2018.regexp.d.ts","../node_modules/typescript/lib/lib.es2019.array.d.ts","../node_modules/typescript/lib/lib.es2019.object.d.ts","../node_modules/typescript/lib/lib.es2019.string.d.ts","../node_modules/typescript/lib/lib.es2019.symbol.d.ts","../node_modules/typescript/lib/lib.es2019.intl.d.ts","../node_modules/typescript/lib/lib.es2020.bigint.d.ts","../node_modules/typescript/lib/lib.es2020.date.d.ts","../node_modules/typescript/lib/lib.es2020.promise.d.ts","../node_modules/typescript/lib/lib.es2020.sharedmemory.d.ts","../node_modules/typescript/lib/lib.es2020.string.d.ts","../node_modules/typescript/lib/lib.es2020.symbol.wellknown.d.ts","../node_modules/typescript/lib/lib.es2020.intl.d.ts","../node_modules/typescript/lib/lib.es2020.number.d.ts","../node_modules/typescript/lib/lib.esnext.intl.d.ts","../node_modules/typescript/lib/lib.decorators.d.ts","../node_modules/typescript/lib/lib.decorators.legacy.d.ts","../node_modules/typescript/lib/typescript.d.ts","../projects/core/shared/plugin-types.ts","../projects/core/src/config.ts","../projects/core/src/utils/general.ts","../node_modules/@types/resolve/index.d.ts","../node_modules/@types/semver/classes/semver.d.ts","../node_modules/@types/semver/functions/parse.d.ts","../node_modules/@types/semver/functions/valid.d.ts","../node_modules/@types/semver/functions/clean.d.ts","../node_modules/@types/semver/functions/inc.d.ts","../node_modules/@types/semver/functions/diff.d.ts","../node_modules/@types/semver/functions/major.d.ts","../node_modules/@types/semver/functions/minor.d.ts","../node_modules/@types/semver/functions/patch.d.ts","../node_modules/@types/semver/functions/prerelease.d.ts","../node_modules/@types/semver/functions/compare.d.ts","../node_modules/@types/semver/functions/rcompare.d.ts","../node_modules/@types/semver/functions/compare-loose.d.ts","../node_modules/@types/semver/functions/compare-build.d.ts","../node_modules/@types/semver/functions/sort.d.ts","../node_modules/@types/semver/functions/rsort.d.ts","../node_modules/@types/semver/functions/gt.d.ts","../node_modules/@types/semver/functions/lt.d.ts","../node_modules/@types/semver/functions/eq.d.ts","../node_modules/@types/semver/functions/neq.d.ts","../node_modules/@types/semver/functions/gte.d.ts","../node_modules/@types/semver/functions/lte.d.ts","../node_modules/@types/semver/functions/cmp.d.ts","../node_modules/@types/semver/functions/coerce.d.ts","../node_modules/@types/semver/classes/comparator.d.ts","../node_modules/@types/semver/classes/range.d.ts","../node_modules/@types/semver/functions/satisfies.d.ts","../node_modules/@types/semver/ranges/max-satisfying.d.ts","../node_modules/@types/semver/ranges/min-satisfying.d.ts","../node_modules/@types/semver/ranges/to-comparators.d.ts","../node_modules/@types/semver/ranges/min-version.d.ts","../node_modules/@types/semver/ranges/valid.d.ts","../node_modules/@types/semver/ranges/outside.d.ts","../node_modules/@types/semver/ranges/gtr.d.ts","../node_modules/@types/semver/ranges/ltr.d.ts","../node_modules/@types/semver/ranges/intersects.d.ts","../node_modules/@types/semver/ranges/simplify.d.ts","../node_modules/@types/semver/ranges/subset.d.ts","../node_modules/@types/semver/internals/identifiers.d.ts","../node_modules/@types/semver/index.d.ts","../projects/core/src/patch/patch-detail.ts","../projects/core/src/module/module-file.ts","../projects/core/src/module/source-section.ts","../projects/core/src/slice/ts5.ts","../projects/core/src/slice/module-slice.ts","../projects/core/src/module/module-source.ts","../projects/core/src/module/ts-module.ts","../node_modules/chalk/index.d.ts","../projects/core/src/patch/transformers/fix-ts-early-return.ts","../projects/core/src/patch/transformers/patch-create-program.ts","../projects/core/src/patch/transformers/patch-emitter.ts","../projects/core/src/patch/transformers/merge-statements.ts","../projects/core/src/patch/transformers/add-original-create-program.ts","../projects/core/src/patch/transformers/hook-tsc-exec.ts","../projects/core/src/patch/transformers/index.ts","../projects/core/src/patch/patch-module.ts","../projects/core/src/patch/get-patched-source.ts","../projects/core/src/module/get-live-module.ts","../projects/core/src/module/index.ts","../projects/core/src/ts-package.ts","../projects/core/src/utils/file-utils.ts","../projects/core/src/utils/find-cache-dir.ts","../projects/core/src/utils/index.ts","../projects/core/src/system/cache.ts","../projects/core/src/system/errors.ts","../node_modules/strip-ansi/index.d.ts","../projects/core/src/system/logger.ts","../projects/core/src/system/types.ts","../projects/core/src/system/index.ts","../projects/core/src/options.ts","../projects/core/src/actions/patch.ts","../projects/core/src/actions/unpatch.ts","../projects/core/src/actions/check.ts","../projects/core/src/actions/install.ts","../projects/core/src/actions/uninstall.ts","../projects/core/src/actions/index.ts","../projects/core/src/index.ts","../node_modules/@types/minimist/index.d.ts","../projects/core/src/cli/options.ts","../projects/core/src/cli/commands.ts","../projects/core/src/cli/help-menu.ts","../projects/core/src/cli/cli.ts","../projects/core/src/bin/ts-patch.ts","../projects/core/src/bin/tspc.ts","../node_modules/@babel/types/lib/index.d.ts","../node_modules/@types/babel__generator/index.d.ts","../node_modules/@babel/parser/typings/babel-parser.d.ts","../node_modules/@types/babel__template/index.d.ts","../node_modules/@types/babel__traverse/index.d.ts","../node_modules/@types/babel__core/index.d.ts","../node_modules/@types/node/assert.d.ts","../node_modules/@types/node/assert/strict.d.ts","../node_modules/@types/node/globals.d.ts","../node_modules/@types/node/async_hooks.d.ts","../node_modules/@types/node/buffer.d.ts","../node_modules/@types/node/child_process.d.ts","../node_modules/@types/node/cluster.d.ts","../node_modules/@types/node/console.d.ts","../node_modules/@types/node/constants.d.ts","../node_modules/@types/node/crypto.d.ts","../node_modules/@types/node/dgram.d.ts","../node_modules/@types/node/diagnostics_channel.d.ts","../node_modules/@types/node/dns.d.ts","../node_modules/@types/node/dns/promises.d.ts","../node_modules/@types/node/domain.d.ts","../node_modules/@types/node/events.d.ts","../node_modules/@types/node/fs.d.ts","../node_modules/@types/node/fs/promises.d.ts","../node_modules/@types/node/http.d.ts","../node_modules/@types/node/http2.d.ts","../node_modules/@types/node/https.d.ts","../node_modules/@types/node/inspector.d.ts","../node_modules/@types/node/module.d.ts","../node_modules/@types/node/net.d.ts","../node_modules/@types/node/os.d.ts","../node_modules/@types/node/path.d.ts","../node_modules/@types/node/perf_hooks.d.ts","../node_modules/@types/node/process.d.ts","../node_modules/@types/node/punycode.d.ts","../node_modules/@types/node/querystring.d.ts","../node_modules/@types/node/readline.d.ts","../node_modules/@types/node/repl.d.ts","../node_modules/@types/node/stream.d.ts","../node_modules/@types/node/stream/promises.d.ts","../node_modules/@types/node/stream/consumers.d.ts","../node_modules/@types/node/stream/web.d.ts","../node_modules/@types/node/string_decoder.d.ts","../node_modules/@types/node/test.d.ts","../node_modules/@types/node/timers.d.ts","../node_modules/@types/node/timers/promises.d.ts","../node_modules/@types/node/tls.d.ts","../node_modules/@types/node/trace_events.d.ts","../node_modules/@types/node/tty.d.ts","../node_modules/@types/node/url.d.ts","../node_modules/@types/node/util.d.ts","../node_modules/@types/node/v8.d.ts","../node_modules/@types/node/vm.d.ts","../node_modules/@types/node/wasi.d.ts","../node_modules/@types/node/worker_threads.d.ts","../node_modules/@types/node/zlib.d.ts","../node_modules/@types/node/globals.global.d.ts","../node_modules/@types/node/index.d.ts","../node_modules/@types/minimatch/index.d.ts","../node_modules/@types/glob/index.d.ts","../node_modules/@types/graceful-fs/index.d.ts","../node_modules/@types/istanbul-lib-coverage/index.d.ts","../node_modules/@types/istanbul-lib-report/index.d.ts","../node_modules/@types/istanbul-reports/index.d.ts","../node_modules/@jest/expect-utils/build/index.d.ts","../node_modules/@sinclair/typebox/typebox.d.ts","../node_modules/@jest/schemas/build/index.d.ts","../node_modules/pretty-format/build/index.d.ts","../node_modules/jest-diff/build/index.d.ts","../node_modules/jest-matcher-utils/build/index.d.ts","../node_modules/expect/build/index.d.ts","../node_modules/@types/jest/index.d.ts","../node_modules/@types/json5/index.d.ts","../node_modules/@types/mock-fs/lib/item.d.ts","../node_modules/@types/mock-fs/lib/file.d.ts","../node_modules/@types/mock-fs/lib/directory.d.ts","../node_modules/@types/mock-fs/lib/symlink.d.ts","../node_modules/@types/mock-fs/lib/filesystem.d.ts","../node_modules/@types/mock-fs/index.d.ts","../node_modules/@types/normalize-package-data/index.d.ts","../node_modules/@types/prettier/index.d.ts","../node_modules/@types/shelljs/index.d.ts","../node_modules/@types/stack-utils/index.d.ts","../node_modules/@types/yargs-parser/index.d.ts","../node_modules/@types/yargs/index.d.ts"],"fileInfos":[{"version":"6a6b471e7e43e15ef6f8fe617a22ce4ecb0e34efa6c3dfcfe7cebd392bcca9d2","affectsGlobalScope":true},"45b7ab580deca34ae9729e97c13cfd999df04416a79116c3bfb483804f85ded4","dc48272d7c333ccf58034c0026162576b7d50ea0e69c3b9292f803fc20720fd5","27147504487dc1159369da4f4da8a26406364624fa9bc3db632f7d94a5bae2c3","5e1c4c362065a6b95ff952c0eab010f04dcd2c3494e813b493ecfd4fcb9fc0d8","68d73b4a11549f9c0b7d352d10e91e5dca8faa3322bfb77b661839c42b1ddec7","5efce4fc3c29ea84e8928f97adec086e3dc876365e0982cc8479a07954a3efd4",{"version":"f296963760430fb65b4e5d91f0ed770a91c6e77455bacf8fa23a1501654ede0e","affectsGlobalScope":true},{"version":"5114a95689b63f96b957e00216bc04baf9e1a1782aa4d8ee7e5e9acbf768e301","affectsGlobalScope":true},{"version":"4443e68b35f3332f753eacc66a04ac1d2053b8b035a0e0ac1d455392b5e243b3","affectsGlobalScope":true},{"version":"ab22100fdd0d24cfc2cc59d0a00fc8cf449830d9c4030dc54390a46bd562e929","affectsGlobalScope":true},{"version":"f7bd636ae3a4623c503359ada74510c4005df5b36de7f23e1db8a5c543fd176b","affectsGlobalScope":true},{"version":"ce691fb9e5c64efb9547083e4a34091bcbe5bdb41027e310ebba8f7d96a98671","affectsGlobalScope":true},{"version":"8d697a2a929a5fcb38b7a65594020fcef05ec1630804a33748829c5ff53640d0","affectsGlobalScope":true},{"version":"0c20f4d2358eb679e4ae8a4432bdd96c857a2960fd6800b21ec4008ec59d60ea","affectsGlobalScope":true},{"version":"36ae84ccc0633f7c0787bc6108386c8b773e95d3b052d9464a99cd9b8795fbec","affectsGlobalScope":true},{"version":"82d0d8e269b9eeac02c3bd1c9e884e85d483fcb2cd168bccd6bc54df663da031","affectsGlobalScope":true},{"version":"b8deab98702588840be73d67f02412a2d45a417a3c097b2e96f7f3a42ac483d1","affectsGlobalScope":true},{"version":"4738f2420687fd85629c9efb470793bb753709c2379e5f85bc1815d875ceadcd","affectsGlobalScope":true},{"version":"2f11ff796926e0832f9ae148008138ad583bd181899ab7dd768a2666700b1893","affectsGlobalScope":true},{"version":"376d554d042fb409cb55b5cbaf0b2b4b7e669619493c5d18d5fa8bd67273f82a","affectsGlobalScope":true},{"version":"9fc46429fbe091ac5ad2608c657201eb68b6f1b8341bd6d670047d32ed0a88fa","affectsGlobalScope":true},{"version":"61c37c1de663cf4171e1192466e52c7a382afa58da01b1dc75058f032ddf0839","affectsGlobalScope":true},{"version":"c4138a3dd7cd6cf1f363ca0f905554e8d81b45844feea17786cdf1626cb8ea06","affectsGlobalScope":true},{"version":"6ff3e2452b055d8f0ec026511c6582b55d935675af67cdb67dd1dc671e8065df","affectsGlobalScope":true},{"version":"03de17b810f426a2f47396b0b99b53a82c1b60e9cba7a7edda47f9bb077882f4","affectsGlobalScope":true},{"version":"8184c6ddf48f0c98429326b428478ecc6143c27f79b79e85740f17e6feb090f1","affectsGlobalScope":true},{"version":"261c4d2cf86ac5a89ad3fb3fafed74cbb6f2f7c1d139b0540933df567d64a6ca","affectsGlobalScope":true},{"version":"6af1425e9973f4924fca986636ac19a0cf9909a7e0d9d3009c349e6244e957b6","affectsGlobalScope":true},{"version":"576711e016cf4f1804676043e6a0a5414252560eb57de9faceee34d79798c850","affectsGlobalScope":true},{"version":"89c1b1281ba7b8a96efc676b11b264de7a8374c5ea1e6617f11880a13fc56dc6","affectsGlobalScope":true},{"version":"15a630d6817718a2ddd7088c4f83e4673fde19fa992d2eae2cf51132a302a5d3","affectsGlobalScope":true},{"version":"b7e9f95a7387e3f66be0ed6db43600c49cec33a3900437ce2fd350d9b7cb16f2","affectsGlobalScope":true},{"version":"01e0ee7e1f661acedb08b51f8a9b7d7f959e9cdb6441360f06522cc3aea1bf2e","affectsGlobalScope":true},{"version":"ac17a97f816d53d9dd79b0d235e1c0ed54a8cc6a0677e9a3d61efb480b2a3e4e","affectsGlobalScope":true},{"version":"bf14a426dbbf1022d11bd08d6b8e709a2e9d246f0c6c1032f3b2edb9a902adbe","affectsGlobalScope":true},{"version":"ec0104fee478075cb5171e5f4e3f23add8e02d845ae0165bfa3f1099241fa2aa","affectsGlobalScope":true},{"version":"2b72d528b2e2fe3c57889ca7baef5e13a56c957b946906d03767c642f386bbc3","affectsGlobalScope":true},{"version":"9cc66b0513ad41cb5f5372cca86ef83a0d37d1c1017580b7dace3ea5661836df","affectsGlobalScope":true},{"version":"368af93f74c9c932edd84c58883e736c9e3d53cec1fe24c0b0ff451f529ceab1","affectsGlobalScope":true},{"version":"307c8b7ebbd7f23a92b73a4c6c0a697beca05b06b036c23a34553e5fe65e4fdc","affectsGlobalScope":true},{"version":"189c0703923150aa30673fa3de411346d727cc44a11c75d05d7cf9ef095daa22","affectsGlobalScope":true},{"version":"782dec38049b92d4e85c1585fbea5474a219c6984a35b004963b00beb1aab538","affectsGlobalScope":true},"912546438ad2d8d3fb9246b35b033f793d17be6daa02fb9274b7b82812866fde",{"version":"6e1cdbd8c0faaf652478d45f51e618f5ff36f6b9110ad926b03c154b5480ca11","signature":"417ab29f4f4ceae790bfccb823b3c18dc8626781ff4ed46829d70b516bdae23d"},{"version":"fdc0dccb68372733b38b3e1a2db9550cae6211373b47532b373e5db5439c0440","signature":"d4889c47c8d96ad2a8e4db15e14f30b835ed3b528b1f5319d207779572f15c7e"},{"version":"f80da2af872fd6a14bbc4d18ef07745f6722311d5f5c2ad206c780e819c369cc","signature":"4c5201db05e37c1f947dd7a8338240f6cd167dfd191aa0b8a9d2a36c57d28b91"},"8baa5d0febc68db886c40bf341e5c90dc215a90cd64552e47e8184be6b7e3358","2b93035328f7778d200252681c1d86285d501ed424825a18f81e4c3028aa51d9","2ac9c8332c5f8510b8bdd571f8271e0f39b0577714d5e95c1e79a12b2616f069","42c21aa963e7b86fa00801d96e88b36803188018d5ad91db2a9101bccd40b3ff","d31eb848cdebb4c55b4893b335a7c0cca95ad66dee13cbb7d0893810c0a9c301","77c1d91a129ba60b8c405f9f539e42df834afb174fe0785f89d92a2c7c16b77a","7a9e0a564fee396cacf706523b5aeed96e04c6b871a8bebefad78499fbffc5bc","906c751ef5822ec0dadcea2f0e9db64a33fb4ee926cc9f7efa38afe5d5371b2a","5387c049e9702f2d2d7ece1a74836a14b47fbebe9bbeb19f94c580a37c855351","c68391fb9efad5d99ff332c65b1606248c4e4a9f1dd9a087204242b56c7126d6","e9cf02252d3a0ced987d24845dcb1f11c1be5541f17e5daa44c6de2d18138d0c","e8b02b879754d85f48489294f99147aeccc352c760d95a6fe2b6e49cd400b2fe","9f6908ab3d8a86c68b86e38578afc7095114e66b2fc36a2a96e9252aac3998e0","0eedb2344442b143ddcd788f87096961cd8572b64f10b4afc3356aa0460171c6","71405cc70f183d029cc5018375f6c35117ffdaf11846c35ebf85ee3956b1b2a6","c68baff4d8ba346130e9753cefe2e487a16731bf17e05fdacc81e8c9a26aae9d","2cd15528d8bb5d0453aa339b4b52e0696e8b07e790c153831c642c3dea5ac8af","479d622e66283ffa9883fbc33e441f7fc928b2277ff30aacbec7b7761b4e9579","ade307876dc5ca267ca308d09e737b611505e015c535863f22420a11fffc1c54","f8cdefa3e0dee639eccbe9794b46f90291e5fd3989fcba60d2f08fde56179fb9","86c5a62f99aac7053976e317dbe9acb2eaf903aaf3d2e5bb1cafe5c2df7b37a8","2b300954ce01a8343866f737656e13243e86e5baef51bd0631b21dcef1f6e954","a2d409a9ffd872d6b9d78ead00baa116bbc73cfa959fce9a2f29d3227876b2a1","b288936f560cd71f4a6002953290de9ff8dfbfbf37f5a9391be5c83322324898","61178a781ef82e0ff54f9430397e71e8f365fc1e3725e0e5346f2de7b0d50dfa","6a6ccb37feb3aad32d9be026a3337db195979cd5727a616fc0f557e974101a54","c649ea79205c029a02272ef55b7ab14ada0903db26144d2205021f24727ac7a3","38e2b02897c6357bbcff729ef84c736727b45cc152abe95a7567caccdfad2a1d","d6610ea7e0b1a7686dba062a1e5544dd7d34140f4545305b7c6afaebfb348341","3dee35db743bdba2c8d19aece7ac049bde6fa587e195d86547c882784e6ba34c","b15e55c5fa977c2f25ca0b1db52cfa2d1fd4bf0baf90a8b90d4a7678ca462ff1","f41d30972724714763a2698ae949fbc463afb203b5fa7c4ad7e4de0871129a17","843dd7b6a7c6269fd43827303f5cbe65c1fecabc30b4670a50d5a15d57daeeb9","f06d8b8567ee9fd799bf7f806efe93b67683ef24f4dea5b23ef12edff4434d9d","6017384f697ff38bc3ef6a546df5b230c3c31329db84cbfe686c83bec011e2b2","e1a5b30d9248549ca0c0bb1d653bafae20c64c4aa5928cc4cd3017b55c2177b0","a593632d5878f17295bd53e1c77f27bf4c15212822f764a2bfc1702f4b413fa0","a868a534ba1c2ca9060b8a13b0ffbbbf78b4be7b0ff80d8c75b02773f7192c29","da7545aba8f54a50fde23e2ede00158dc8112560d934cee58098dfb03aae9b9d","34baf65cfee92f110d6653322e2120c2d368ee64b3c7981dff08ed105c4f19b0","6aee496bf0ecfbf6731aa8cca32f4b6e92cdc0a444911a7d88410408a45ecc5d",{"version":"15ca002d9f604e8b65e7b86ecb1a01f424fc6038f33cdae16d0b8cc163ca56b4","signature":"7871aad7a8a23aab6284233937a178055397f658a5e97a35e07474a3efda764c"},{"version":"5002ff997079b78f6aebaedbe9d1877c646f11b861b5cdc3357c6e1a3444eae2","signature":"d0f3138d6256e8a71fe965bb291c2f24e6cab7878a558d14de8fcd6749b41a7d"},{"version":"80fe2077fd00bc5781a62808e294b0cc24aa1dfbec45ddc037ac90da50e40973","signature":"b1c4e21cc9238721f0b0183b9b7adb6ca5e4b4dbfbbb089c3a6f1dd43ea84672"},{"version":"4c5e4f0a668b114ad8aa6b8f92acbde9141865939b85607132a41cb9ac83491a","signature":"f84ca38fa8bbe18f586357a8aba9ea82e63e15f5ac0d6400cd2a83fb9e53912f"},{"version":"533612239b76d1df19a04922c59a6be2d13dbf5548d31b126381a85b88e92c39","signature":"767a9fbf6bee45e3fc9eeb42f1928065a12774dcd1a0d480e122a4480f442b9f"},{"version":"59d59e7486abd9b233756249c564aff9d02329c0c03fddf7f6c3e29ed4ba21b0","signature":"93a8ad09222bdd05bb1487aca6d7d655ab86d95f84a1f3b233a9a6609031a161"},{"version":"467dbe62e92b04e31812e6c3f48b958e68e0d2ac526e37dd10da7ec15c161eb2","signature":"4212d379481d94c7b5f0f7d79f79686cdccdddc42e7a4fb1e5bb8f0a72375467"},"0d14fa22c41fdc7277e6f71473b20ebc07f40f00e38875142335d5b63cdfc9d2",{"version":"328506821e11d299b58510e824e55620fc3de4c999bfa7f279a27cd552425135","signature":"7483feda871a4ab53e5cc952c82a057e1f165b9cfe888e8186a3df82a4dbcc21"},{"version":"96191d7f4f8e713da3705a56f7e4a3b4b02b49cc1e28423a79dde09d7b011fd0","signature":"555ce436f5841901a223f94c0a69fac2b9a21b089c4b184c32ed32c5de887153"},{"version":"8b4d8b15ea9afc9ab079b11ae3b6b8189c9df51a498e119fcc595e3789252cf5","signature":"615cd5bf87480049728499144080e8bcc9f35e3ddfbc3a8a4b783a3dde8e5f7e"},{"version":"f7e9f5ef7d6281c7a825b4ecec2d2362e03131b0db1c28fe60363d5980ebfd37","signature":"4919fce6d3925882612289789d214f6c2fc56efe42464b4bbbc427389fb46914"},{"version":"91984fc9394dc10ee8ad6668e57b1c27417718c4c085eb63c354c6efcbaa9756","signature":"ce0f62b022746280e30cd552626c6268efcd1de9b8dd6ee774749686a6b6a1c7"},{"version":"1829507795f9c69e2dc9587535e5cea2452ad8b2e37f26d3021b4eb182ce66ac","signature":"983496637800ae3585034a1d958b12a307dc7e38eaf3c31ace369b46589962d4"},{"version":"f6a2059974d97157225c31ab25e8dd86bde0db5142d1b0f9b40a36b3daa53bff","signature":"afb33bbcc9f3088d4cb2766af1a3e7735b444c27eb2d5ab6ff849701d27e16a9"},{"version":"0dcd8e18fe833842ffc5bd3468cfc382f7634d2e373159a2df93f345265a8585","signature":"927c69598a94d13a277f40bbcde0f39d1bf3499e58e0b8a5892a63f50eda5250"},{"version":"3ae319913b91c3cbd548607e125b4888f31923dc969e3aabc34187893cf0ca7f","signature":"31481f7ad0b50ccf0e4249b4c6220a8de8b391641a28ebe9e388825a2624e005"},{"version":"c082a69144552bcdb6dc91dd876ba20a78ff19e7f5f8f57828ed6b6fd088f32a","signature":"11faf63611205e2f8b45b1efa5593dc2330afd703f34cb16a5fc974f517921b2"},"aa6e41bcb9a7af18b8868f079f1e81b0602f301e3690b3f4b535ec999154ac97",{"version":"7aa2d9b0be31b58a676f57dc560175ce73167f037df37d902c746a914bf31e31","signature":"cc02ea07878296b5f0ef0544db77dd06e2c398a4a606acd434dafc619a1c5e83"},{"version":"4ce5f2f55f0e75054ab7e02844adbe675330d9712ec39225e7701d8b2a4c1a54","signature":"59a5044b0a35bbceb68762339fbaf63c6e9510b95438e48d298ab4c001a6fcce"},{"version":"e4f334980f22f184777d6a3b2b41c447cfc05bc1f7c77f37dd3807d545ad7eec","signature":"68a564632bfb886a201fc38c0bdf469211352d0292fa09fbaf9893df12bb913b"},"8498f449d13ef1685ff5745ee9af8bc4b96789b16e9eeb12274f0611fa8264ae",{"version":"1590674310d33db93452e06ab18e8a2bb4c538fb04b14f90783ef1cc23b17642","signature":"7145912e90bd4170aa235363b9ef04cd62f71d4f35a3a7d61ae4e716d6205ace"},{"version":"d91efb224684b04ac9cee0546b7c4359f573e216abc516a018de66d8b02261d8","signature":"9c24e5aeee0739f8a679f05055e63f0f8a1468f5a4b7faa6bc642d2226bcb8c3"},"4b0f7f88fc46a672cb59eeb2782af271c203600d602f57a717ef07f96092caf8",{"version":"237aa0d69f2b6cb8307e36c65c2991bdce89b17268bc1cd966a196563ea99b9e","signature":"23987a3f38a2536215400e347f78e8cefd39e8354c0850a555636df54431b54a"},{"version":"bf7c720bb3e26b51672771462cfe677b5ec5220e63e969629c201373a6109aee","signature":"b776f0d5cd3a213fa2c44d4c6de8dfe5a6e8692c22c1ed00c63e0317ad740026"},"0d37f7ab4b1cc51b0a5a6dd5efb32d6267f82e62bb7322ee56a83d5d0a956f43",{"version":"7e0319a69efafc56d1c276fbf38f71487751ad3b21774e5ef998e524ce7d26ae","signature":"9443fbbe7449d866f00aa520daf387fc032c49b14d591ac9be1ef6c7f5becac3"},{"version":"4343c3cfa3ce83cf9bca6d22b75cc322fdf03b910eafae6a87b16b3734d39640","signature":"2c83d69c414338dbe80f701f3ff379c3185bf032d1996dc9b512bf24f6a28eae"},{"version":"a3a769c2d53729359bac2b87fa3776158022207016c4410f21e3c617f666d9bd","signature":"647d1c285d24531d57f19999e51fbf9703c2ccf2238a5128cdce4ae743dca2b4"},{"version":"1dd164b7e5e0be2240797a21b8afb8f08082f35441fb50b8297dab72c5a84f63","signature":"3763e94cc3766888acdf45e6e8245cd10d3a312210e974d5eb575dba61407173"},{"version":"1ff4837d722650c47078c8966cebe60077437a78dbb2c1743f5c53e615207dea","signature":"f0654dfeb62dea5132a331aaad08dab6a3645914a0b5016d2787666bd4d7fce9"},{"version":"f129c815cc325f8a15fa10f96cc35dd83c71267071f1c2532623f5525774a105","signature":"4125b0891a0e984e4e960c2008fd58f4a06193f9eacb2bddeb017dcee3a5b748"},{"version":"c48373af70eec89718e17f8f2cb16b51b6e99ee738980195e678d06a8f2eb323","signature":"dad05ca7d099aec05e9a14f6319e5e33e6b2348f471f5ef0b41ea81e8ed3a727"},{"version":"cb3861ed806429de2c6b68a50d6c3c39fc46ac16590b382ad6a0a5a5d0b7e0ad","signature":"46a49b1cf2d8c32fb8e8a7d3bbfa4bacd1ddffd212a601ac84912fe72111b28c"},"209e814e8e71aec74f69686a9506dd7610b97ab59dcee9446266446f72a76d05",{"version":"8aa095e7ddb3e17212bcf8c69fe1695abc41710afc57edd2c63812b968252b53","signature":"18ae3ef5b87757ea64dfd5079baff7a245755e8a2bbf368bccd706e5f898d467"},{"version":"5ced7c149952b7cb0431c4d6be199c7dce4dbdcee61616c6e8de5e5ff5d3ca58","signature":"4ff9d90fdef2b0f8fa15228af191df240b9d75fca4f6b0caf3fbd0b58a882c83"},{"version":"0aa7b42119ad128391fa95fae4ba1dc61179761f4b57213e861ac6a992e7d8da","signature":"ad5164707f495f80447f93d3595769d70153ef73fc134bc92ffaa47167bb8dd7"},{"version":"981e1264bbe0a60bcf0809f6c84f192503cfad8a6365ae82bef8a6c4a6197a09","signature":"e255357a744c71f9fb988546969b44cea9ccafb327351f3dca99dbaad3660818"},{"version":"dcb3a4d0282e43a267e61644f5a09d08a196dad8b21b2849c8a624282a2d1030","signature":"8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"},{"version":"5170ecc4efac99d804d212af7bfa2abc55d027cf4a3760e17ece398363ad5aca","signature":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","affectsGlobalScope":true},"3078727fed04c123165efdb42deeac5dceaa42ac62216ca13cb809dc7e13415f","cc957354aa3c94c9961ebf46282cfde1e81d107fc5785a61f62c67f1dd3ac2eb","b4f76b34637d79cefad486127115fed843762c69512d7101b7096e1293699679","93de1c6dab503f053efe8d304cb522bb3a89feab8c98f307a674a4fae04773e9","dae3d1adc67ac3dbd1cd471889301339ec439837b5df565982345be20c8fca9a","b6ddf3a46ccfa4441d8be84d2e9bf3087573c48804196faedbd4a25b60631beb","4911d4c3a7f7c11bad0e2cec329a19a385d10ea83b0b69c76e032359e388f624","a69c09dbea52352f479d3e7ac949fde3d17b195abe90b045d619f747b38d6d1a",{"version":"f754e6212ba82c380850516dcb82419f0e02859e53da986b2fd1942c59b96111","affectsGlobalScope":true},"56d13f223ab40f71840795f5bef2552a397a70666ee60878222407f3893fb8d0",{"version":"4ffef5c4698e94e49dcf150e3270bad2b24a2aeab48b24acbe7c1366edff377d","affectsGlobalScope":true},"2534e46a52653b55dfb5a41ce427ec430c4afbaaf3bfcb1ae09b185c5d6bf169","afc6e96061af46bcff47246158caee7e056f5288783f2d83d6858cd25be1c565",{"version":"34f5bcac12b36d70304b73de5f5aab3bb91bd9919f984be80579ebcad03a624e","affectsGlobalScope":true},"82408ed3e959ddc60d3e9904481b5a8dc16469928257af22a3f7d1a3bc7fd8c4","67458ffec915caad7ead57f00786c301b37ce7ff1a90506b797f4691337c536c","f50c975ab7b50e25a69e3d8a3773894125b44e9698924105f23b812bf7488baf","73e88763806a21b32aff5a66d4930124606bc5e77f796ea3ff8b6878ff787fa8","18f177e442b4cdbc5efb82e7c344201a11e4a4342ff1f19f8765b849e254e2ec","0af3121e68297b2247dd331c0d24dba599e50736a7517a5622d5591aae4a3122","06ccebc2c2db57d6bdbca63b71c4ae5e6ddc42d972fd8f122d4c1a28aa111b25",{"version":"81e8508d1e82278f5d3fee936f267e00c308af36219bfcee2631f9513c9c4017","affectsGlobalScope":true},"413a4be7f94f631235bbc83dad36c4d15e5a2ff02bca1efdbd03636d6454631b","20c468256fd68d3ef1fa53526e76d51d6aa91711e84d72c0343589b99238287e","4198acced75d48a039c078734c4efca7788ff8c78609c270a2b63ec20e3e1676","0034f55fd438f31ba1f0b340dceef3b77d9a89f5218e5875a990b4eff2a5714d","288dd0c774a5c6e3964084c7a2bc8cc6b746d70f44a9892d028d04f915cf7ebc","d61c7c41eb1960b1285e242fd102c162b65c0522985b839fadda59874308a170",{"version":"e630e5528e899219ae319e83bef54bf3bcb91b01d76861ecf881e8e614b167f0","affectsGlobalScope":true},"f7011a8d17a06e60dc591fd89b7bf40507d36a5a4d5913fa0eff4e18da001759","abc1c425b2ad6720433f40f1877abfa4223f0f3dd486c9c28c492179ca183cb6","fb0989383c6109f20281b3d31265293daefdd76d0d30551782c1654e93704f48","a4210a84a82b3e7a8cec5b2f3616e46d523f4f10cc1576d8f2fb89d0987b341e",{"version":"8207e7e6db9aa5fc7e61c8f17ba74cf9c115d26f51f91ee93f790815a7ea9dfb","affectsGlobalScope":true},"9f1069b9e2c051737b1f9b4f1baf50e4a63385a6a89c32235549ae87fc3d5492","22d48bfb37261136423ac687f1fa7bd4dda3083f767416d409a8260cf92bc8fc","29c2706fa0cc49a2bd90c83234da33d08bb9554ecec675e91c1f85087f5a5324","0acbf26bf958f9e80c1ffa587b74749d2697b75b484062d36e103c137c562bc3","26f686c658456d460b38e819bc7c0c27e752b08d998aa3dda71bd4fc73434471","1b952304137851e45bc009785de89ada562d9376177c97e37702e39e60c2f1ff","698ab660b477b9c2cd5ccbd99e7e7df8b4a6134c1f5711fa615ed7aab51cb7f7","33eee034727baf564056b4ea719075c23d3b4767d0b5f9c6933b81f3d77774d2","c33a6ea7147af60d8e98f1ac127047f4b0d4e2ce28b8f08ff3de07ca7cc00637","a4471d2bdba495b2a6a30b8765d5e0282fa7009d88345a9528f73c37869d3b93",{"version":"aee7013623e7632fba449d4df1da92925b27d9b816cb05546044dbfe54c88ef4","affectsGlobalScope":true},"e10177274a35a9d07c825615340b2fcde2f610f53f3fb40269fd196b4288dda6","c9d70d3d7191a66a81cb554557f8ed1cf736ea8397c44a864fe52689de18865a","998a3de5237518c0b3ac00a11b3b4417affb008aa20aedee52f3fdae3cb86151","ad41008ffe077206e1811fc873f4d9005b5fd7f6ab52bb6118fef600815a5cb4",{"version":"1aad825534c73852a1f3275e527d729a2c0640f539198fdfdfeb83b839851910","affectsGlobalScope":true},"badae0df9a8016ac36994b0a0e7b82ba6aaa3528e175a8c3cb161e4683eec03e","c3db860bcaaaeb3bbc23f353bbda1f8ab82756c8d5e973bebb3953cb09ea68f2","235a53595bd20b0b0eeb1a29cb2887c67c48375e92f03749b2488fbd46d0b1a0","bc09393cd4cd13f69cf1366d4236fbae5359bb550f0de4e15767e9a91d63dfb1","9c266243b01545e11d2733a55ad02b4c00ecdbda99c561cd1674f96e89cdc958","c71155c05fc76ff948a4759abc1cb9feec036509f500174bc18dad4c7827a60c",{"version":"ab9b9a36e5284fd8d3bf2f7d5fcbc60052f25f27e4d20954782099282c60d23e","affectsGlobalScope":true},"88003d9ab15507806f41b120be6d407c1afe566c2f6689ebe3a034dd5ec0c8dc","963d59066dd6742da1918a6213a209bcc205b8ee53b1876ee2b4e6d80f97c85e","9c5c92b7fb8c38ff1b46df69701f2d1ea8e2d6468e3cd8f73d8af5e6f7864576","bf88ef4208a770ca39a844b182b3695df536326ea566893fdc5b8418702a331e","8b06ac3faeacb8484d84ddb44571d8f410697f98d7bfa86c0fda60373a9f5215","7eb06594824ada538b1d8b48c3925a83e7db792f47a081a62cf3e5c4e23cf0ee","f5638f7c2f12a9a1a57b5c41b3c1ea7db3876c003bab68e6a57afd6bcc169af0","763e521cf114b80e0dd0e21ca49b9f8ae62e8999555a5e7bade8ce36b33001c2","3054ef91b855e005b9c4681399e9d64d2a7b07a22d539314d794f09e53b876a7","ffcc5500e77223169833fc6eb59b3a507944a1f89574e0a1276b0ea7fc22c4a4","22f13de9e2fe5f0f4724797abd3d34a1cdd6e47ef81fc4933fea3b8bf4ad524b","e3ba509d3dce019b3190ceb2f3fc88e2610ab717122dabd91a9efaa37804040d","cda0cb09b995489b7f4c57f168cd31b83dcbaa7aad49612734fb3c9c73f6e4f2","f72f8428f3c1caa22e9c247d046603b85b442c0dae7b77a7a0bc092c18867cb7",{"version":"195f63105abc03e72b6a176e3e34dfb5ac932b55db378fdc7874b1617e24b465","affectsGlobalScope":true},"96d14f21b7652903852eef49379d04dbda28c16ed36468f8c9fa08f7c14c9538","b95f2a78de34a873c6dd76dc538b7a5fec77da6a0e0e7efc7aa58f58ddfce270","1231f32d791b0fcc13e0c836543b34e83dea6e0b494ee35194a66a50dd25427e","66880e558be5ee57d23c12ffd0a90bf07840e088f8fa9b608fadeaf45af78969","058186f212307a621cd51160e2124c26208649600b4f0a27835f1d1caae81e65","c2bfeeadb18ba18386d7549a69c2049e57f31758b71343543a5c27919197b0fa","63b0be497f88d815c410b76985b798132d6c470199f2f31e1390a48480619758","6fa0008bf91a4cc9c8963bace4bba0bd6865cbfa29c3e3ccc461155660fb113a","bc88e4049153bc4dddb4503ed7e624eb141edfa9064b3659d6c86e900fe9e621","639158c94f9813ac0ef48abc5e24788b5acce74e961ad6d9ac30c18273965bfe","b0d10e46cfe3f6c476b69af02eaa38e4ccc7430221ce3109ae84bb9fb8282298","70e9a18da08294f75bf23e46c7d69e67634c0765d355887b9b41f0d959e1426e","e9eb1b173aa166892f3eddab182e49cfe59aa2e14d33aedb6b49d175ed6a3750"],"root":[[45,47],[89,95],[97,113],[115,125],[127,132]],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declaration":true,"esModuleInterop":true,"module":1,"newLine":1,"noImplicitReturns":true,"noUnusedLocals":false,"outDir":"./","sourceMap":true,"strict":true,"target":9,"useUnknownInCatchVariables":false},"fileIdsList":[[133,183],[183],[183,198],[133,134,135,136,137,183],[133,135,183],[154,155,183,190,191],[155,183,190],[183,194],[183,195],[183,200,203],[183,207,208,209,210],[183,206],[183,190,206],[183,206,207,208,209],[139,183],[142,183],[143,148,174,183],[144,154,155,162,171,182,183],[144,145,154,162,183],[146,183],[147,148,155,163,183],[148,171,179,183],[149,151,154,162,183],[150,183],[151,152,183],[153,154,183],[154,183],[154,155,156,171,182,183],[154,155,156,171,183],[157,162,171,182,183],[154,155,157,158,162,171,179,182,183],[157,159,171,179,182,183],[139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189],[154,160,183],[161,182,183],[151,154,162,171,183],[163,183],[164,183],[142,165,183],[166,181,183,187],[167,183],[168,183],[154,169,183],[169,170,183,185],[143,154,171,172,173,183],[143,171,173,183],[171,172,183],[174,183],[175,183],[154,177,178,183],[177,178,183],[148,162,179,183],[180,183],[162,181,183],[143,157,168,182,183],[148,183],[171,183,184],[183,185],[183,186],[143,148,154,156,165,171,182,183,185,187],[171,183,188],[49,88,183],[49,73,88,183],[88,183],[49,183],[49,74,88,183],[49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,183],[74,88,183],[144,183,190,192],[183,216],[183,197,202],[183,200],[96,183,201],[183,199],[44,183],[89,96,107,108,117,118,183],[119,120,121,122,123,183],[46,96,125,183],[96,105,107,108,111,117,118,164,183],[46,96,118,120,183],[96,107,108,111,117,118,155,164,183],[130,183],[46,96,108,117,124,126,127,128,129,155,183],[96,126,130,183],[96,114,127,128,183],[111,117,118,126,130,183],[44,155,164,183],[45,107,118,124,183],[95,105,108,164,183],[90,94,95,106,183],[89,111,155,164,183],[91,93,95,183],[44,90,164,183],[46,90,94,108,117,155,164,183],[111,117,183],[96,104,107,111,117,155,164,183],[46,88,107,111,183],[44,46,89,91,103,107,111,117,155,183],[44,46,183],[97,98,99,100,101,102,183],[88,92,107,117,183],[93,107,183],[46,111,155,163,164,183],[112,113,115,116,183],[96,114,183],[48,107,117,155,164,183],[47,108,117,155,164,183],[155,164,166,183],[47,109,110,183],[44],[89,118],[119,120,121,122,123],[125],[118],[125,126],[126,130],[118,126,130],[45,107,118,124],[95],[89],[91,95],[44,90],[90,94,108],[117],[107,117],[107],[97,98,99,100,101,102],[93,107]],"referencedMap":[[135,1],[133,2],[197,2],[199,3],[198,2],[138,4],[134,1],[136,5],[137,1],[192,6],[193,7],[194,2],[195,8],[196,9],[204,10],[205,2],[191,2],[126,2],[211,11],[208,12],[207,13],[210,14],[206,2],[209,12],[139,15],[140,15],[142,16],[143,17],[144,18],[145,19],[146,20],[147,21],[148,22],[149,23],[150,24],[151,25],[152,25],[153,26],[154,27],[155,28],[156,29],[141,2],[189,2],[157,30],[158,31],[159,32],[190,33],[160,34],[161,35],[162,36],[163,37],[164,38],[165,39],[166,40],[167,41],[168,42],[169,43],[170,44],[171,45],[173,46],[172,47],[174,48],[175,49],[176,2],[177,50],[178,51],[179,52],[180,53],[181,54],[182,55],[183,56],[184,57],[185,58],[186,59],[187,60],[188,61],[212,2],[213,2],[48,2],[73,62],[74,63],[49,64],[52,64],[71,62],[72,62],[62,62],[61,65],[59,62],[54,62],[67,62],[65,62],[69,62],[53,62],[66,62],[70,62],[55,62],[56,62],[68,62],[50,62],[57,62],[58,62],[60,62],[64,62],[75,66],[63,62],[51,62],[88,67],[87,2],[82,66],[84,68],[83,66],[76,66],[77,66],[79,66],[81,66],[85,68],[86,68],[78,68],[80,68],[214,69],[215,2],[216,2],[217,70],[96,2],[203,71],[201,72],[202,73],[200,74],[114,2],[42,2],[43,2],[9,2],[8,2],[2,2],[10,2],[11,2],[12,2],[13,2],[14,2],[15,2],[16,2],[17,2],[3,2],[4,2],[21,2],[18,2],[19,2],[20,2],[22,2],[23,2],[24,2],[5,2],[25,2],[26,2],[27,2],[28,2],[6,2],[32,2],[29,2],[30,2],[31,2],[33,2],[7,2],[34,2],[39,2],[40,2],[35,2],[36,2],[37,2],[38,2],[1,2],[41,2],[44,2],[45,75],[121,76],[124,77],[122,78],[119,79],[123,80],[120,81],[131,82],[132,2],[130,83],[128,84],[129,85],[127,86],[46,87],[125,88],[106,89],[107,90],[90,91],[94,92],[91,93],[95,94],[118,95],[105,96],[89,97],[104,98],[101,75],[97,75],[102,99],[103,100],[100,75],[98,75],[99,75],[93,101],[92,102],[112,103],[113,2],[117,104],[115,105],[116,2],[108,106],[109,107],[110,108],[47,56],[111,109]],"exportedModulesMap":[[135,1],[133,2],[197,2],[199,3],[198,2],[138,4],[134,1],[136,5],[137,1],[192,6],[193,7],[194,2],[195,8],[196,9],[204,10],[205,2],[191,2],[126,2],[211,11],[208,12],[207,13],[210,14],[206,2],[209,12],[139,15],[140,15],[142,16],[143,17],[144,18],[145,19],[146,20],[147,21],[148,22],[149,23],[150,24],[151,25],[152,25],[153,26],[154,27],[155,28],[156,29],[141,2],[189,2],[157,30],[158,31],[159,32],[190,33],[160,34],[161,35],[162,36],[163,37],[164,38],[165,39],[166,40],[167,41],[168,42],[169,43],[170,44],[171,45],[173,46],[172,47],[174,48],[175,49],[176,2],[177,50],[178,51],[179,52],[180,53],[181,54],[182,55],[183,56],[184,57],[185,58],[186,59],[187,60],[188,61],[212,2],[213,2],[48,2],[73,62],[74,63],[49,64],[52,64],[71,62],[72,62],[62,62],[61,65],[59,62],[54,62],[67,62],[65,62],[69,62],[53,62],[66,62],[70,62],[55,62],[56,62],[68,62],[50,62],[57,62],[58,62],[60,62],[64,62],[75,66],[63,62],[51,62],[88,67],[87,2],[82,66],[84,68],[83,66],[76,66],[77,66],[79,66],[81,66],[85,68],[86,68],[78,68],[80,68],[214,69],[215,2],[216,2],[217,70],[96,2],[203,71],[201,72],[202,73],[200,74],[114,2],[42,2],[43,2],[9,2],[8,2],[2,2],[10,2],[11,2],[12,2],[13,2],[14,2],[15,2],[16,2],[17,2],[3,2],[4,2],[21,2],[18,2],[19,2],[20,2],[22,2],[23,2],[24,2],[5,2],[25,2],[26,2],[27,2],[28,2],[6,2],[32,2],[29,2],[30,2],[31,2],[33,2],[7,2],[34,2],[39,2],[40,2],[35,2],[36,2],[37,2],[38,2],[1,2],[41,2],[44,2],[45,110],[121,111],[124,112],[122,113],[119,114],[123,114],[120,114],[130,115],[128,116],[127,117],[46,110],[125,118],[106,119],[107,90],[90,120],[94,121],[91,122],[95,123],[118,124],[105,125],[89,126],[104,126],[101,110],[97,110],[102,110],[103,127],[100,110],[98,110],[99,110],[93,125],[92,128],[117,104],[108,126],[111,109]],"semanticDiagnosticsPerFile":[135,133,197,199,198,138,134,136,137,192,193,194,195,196,204,205,191,126,211,208,207,210,206,209,139,140,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,141,189,157,158,159,190,160,161,162,163,164,165,166,167,168,169,170,171,173,172,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,212,213,48,73,74,49,52,71,72,62,61,59,54,67,65,69,53,66,70,55,56,68,50,57,58,60,64,75,63,51,88,87,82,84,83,76,77,79,81,85,86,78,80,214,215,216,217,96,203,201,202,200,114,42,43,9,8,2,10,11,12,13,14,15,16,17,3,4,21,18,19,20,22,23,24,5,25,26,27,28,6,32,29,30,31,33,7,34,39,40,35,36,37,38,1,41,44,45,121,124,122,119,123,120,131,132,130,128,129,127,46,125,106,107,90,94,91,95,118,105,89,104,101,97,102,103,100,98,99,93,92,112,113,117,115,116,108,109,110,47,111],"latestChangedDtsFile":"./src/bin/tspc.d.ts"},"version":"5.0.4"}
+\ No newline at end of file
++{"program":{"fileNames":["../node_modules/typescript/lib/lib.es5.d.ts","../node_modules/typescript/lib/lib.es2015.d.ts","../node_modules/typescript/lib/lib.es2016.d.ts","../node_modules/typescript/lib/lib.es2017.d.ts","../node_modules/typescript/lib/lib.es2018.d.ts","../node_modules/typescript/lib/lib.es2019.d.ts","../node_modules/typescript/lib/lib.es2020.d.ts","../node_modules/typescript/lib/lib.es2015.core.d.ts","../node_modules/typescript/lib/lib.es2015.collection.d.ts","../node_modules/typescript/lib/lib.es2015.generator.d.ts","../node_modules/typescript/lib/lib.es2015.iterable.d.ts","../node_modules/typescript/lib/lib.es2015.promise.d.ts","../node_modules/typescript/lib/lib.es2015.proxy.d.ts","../node_modules/typescript/lib/lib.es2015.reflect.d.ts","../node_modules/typescript/lib/lib.es2015.symbol.d.ts","../node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts","../node_modules/typescript/lib/lib.es2016.array.include.d.ts","../node_modules/typescript/lib/lib.es2017.object.d.ts","../node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts","../node_modules/typescript/lib/lib.es2017.string.d.ts","../node_modules/typescript/lib/lib.es2017.intl.d.ts","../node_modules/typescript/lib/lib.es2017.typedarrays.d.ts","../node_modules/typescript/lib/lib.es2018.asyncgenerator.d.ts","../node_modules/typescript/lib/lib.es2018.asynciterable.d.ts","../node_modules/typescript/lib/lib.es2018.intl.d.ts","../node_modules/typescript/lib/lib.es2018.promise.d.ts","../node_modules/typescript/lib/lib.es2018.regexp.d.ts","../node_modules/typescript/lib/lib.es2019.array.d.ts","../node_modules/typescript/lib/lib.es2019.object.d.ts","../node_modules/typescript/lib/lib.es2019.string.d.ts","../node_modules/typescript/lib/lib.es2019.symbol.d.ts","../node_modules/typescript/lib/lib.es2019.intl.d.ts","../node_modules/typescript/lib/lib.es2020.bigint.d.ts","../node_modules/typescript/lib/lib.es2020.date.d.ts","../node_modules/typescript/lib/lib.es2020.promise.d.ts","../node_modules/typescript/lib/lib.es2020.sharedmemory.d.ts","../node_modules/typescript/lib/lib.es2020.string.d.ts","../node_modules/typescript/lib/lib.es2020.symbol.wellknown.d.ts","../node_modules/typescript/lib/lib.es2020.intl.d.ts","../node_modules/typescript/lib/lib.es2020.number.d.ts","../node_modules/typescript/lib/lib.esnext.intl.d.ts","../node_modules/typescript/lib/lib.decorators.d.ts","../node_modules/typescript/lib/lib.decorators.legacy.d.ts","../node_modules/typescript/lib/typescript.d.ts","../projects/core/shared/plugin-types.ts","../projects/core/src/config.ts","../projects/core/src/utils/general.ts","../node_modules/@types/resolve/index.d.ts","../node_modules/@types/semver/classes/semver.d.ts","../node_modules/@types/semver/functions/parse.d.ts","../node_modules/@types/semver/functions/valid.d.ts","../node_modules/@types/semver/functions/clean.d.ts","../node_modules/@types/semver/functions/inc.d.ts","../node_modules/@types/semver/functions/diff.d.ts","../node_modules/@types/semver/functions/major.d.ts","../node_modules/@types/semver/functions/minor.d.ts","../node_modules/@types/semver/functions/patch.d.ts","../node_modules/@types/semver/functions/prerelease.d.ts","../node_modules/@types/semver/functions/compare.d.ts","../node_modules/@types/semver/functions/rcompare.d.ts","../node_modules/@types/semver/functions/compare-loose.d.ts","../node_modules/@types/semver/functions/compare-build.d.ts","../node_modules/@types/semver/functions/sort.d.ts","../node_modules/@types/semver/functions/rsort.d.ts","../node_modules/@types/semver/functions/gt.d.ts","../node_modules/@types/semver/functions/lt.d.ts","../node_modules/@types/semver/functions/eq.d.ts","../node_modules/@types/semver/functions/neq.d.ts","../node_modules/@types/semver/functions/gte.d.ts","../node_modules/@types/semver/functions/lte.d.ts","../node_modules/@types/semver/functions/cmp.d.ts","../node_modules/@types/semver/functions/coerce.d.ts","../node_modules/@types/semver/classes/comparator.d.ts","../node_modules/@types/semver/classes/range.d.ts","../node_modules/@types/semver/functions/satisfies.d.ts","../node_modules/@types/semver/ranges/max-satisfying.d.ts","../node_modules/@types/semver/ranges/min-satisfying.d.ts","../node_modules/@types/semver/ranges/to-comparators.d.ts","../node_modules/@types/semver/ranges/min-version.d.ts","../node_modules/@types/semver/ranges/valid.d.ts","../node_modules/@types/semver/ranges/outside.d.ts","../node_modules/@types/semver/ranges/gtr.d.ts","../node_modules/@types/semver/ranges/ltr.d.ts","../node_modules/@types/semver/ranges/intersects.d.ts","../node_modules/@types/semver/ranges/simplify.d.ts","../node_modules/@types/semver/ranges/subset.d.ts","../node_modules/@types/semver/internals/identifiers.d.ts","../node_modules/@types/semver/index.d.ts","../projects/core/src/patch/patch-detail.ts","../projects/core/src/module/module-file.ts","../projects/core/src/module/source-section.ts","../projects/core/src/slice/ts5.ts","../projects/core/src/slice/module-slice.ts","../projects/core/src/module/module-source.ts","../projects/core/src/module/ts-module.ts","../node_modules/chalk/index.d.ts","../projects/core/src/patch/transformers/fix-ts-early-return.ts","../projects/core/src/patch/transformers/patch-create-program.ts","../projects/core/src/patch/transformers/patch-emitter.ts","../projects/core/src/patch/transformers/merge-statements.ts","../projects/core/src/patch/transformers/add-original-create-program.ts","../projects/core/src/patch/transformers/hook-tsc-exec.ts","../projects/core/src/patch/transformers/index.ts","../projects/core/src/patch/patch-module.ts","../projects/core/src/patch/get-patched-source.ts","../projects/core/src/module/get-live-module.ts","../projects/core/src/module/index.ts","../projects/core/src/ts-package.ts","../projects/core/src/utils/file-utils.ts","../projects/core/src/utils/find-cache-dir.ts","../projects/core/src/utils/index.ts","../projects/core/src/system/cache.ts","../projects/core/src/system/errors.ts","../node_modules/strip-ansi/index.d.ts","../projects/core/src/system/logger.ts","../projects/core/src/system/types.ts","../projects/core/src/system/index.ts","../projects/core/src/options.ts","../projects/core/src/actions/patch.ts","../projects/core/src/actions/unpatch.ts","../projects/core/src/actions/check.ts","../projects/core/src/actions/install.ts","../projects/core/src/actions/uninstall.ts","../projects/core/src/actions/index.ts","../projects/core/src/index.ts","../node_modules/@types/minimist/index.d.ts","../projects/core/src/cli/options.ts","../projects/core/src/cli/commands.ts","../projects/core/src/cli/help-menu.ts","../projects/core/src/cli/cli.ts","../projects/core/src/bin/ts-patch.ts","../projects/core/src/bin/tspc.ts","../node_modules/@babel/types/lib/index.d.ts","../node_modules/@types/babel__generator/index.d.ts","../node_modules/@babel/parser/typings/babel-parser.d.ts","../node_modules/@types/babel__template/index.d.ts","../node_modules/@types/babel__traverse/index.d.ts","../node_modules/@types/babel__core/index.d.ts","../node_modules/@types/node/assert.d.ts","../node_modules/@types/node/assert/strict.d.ts","../node_modules/@types/node/globals.d.ts","../node_modules/@types/node/async_hooks.d.ts","../node_modules/@types/node/buffer.d.ts","../node_modules/@types/node/child_process.d.ts","../node_modules/@types/node/cluster.d.ts","../node_modules/@types/node/console.d.ts","../node_modules/@types/node/constants.d.ts","../node_modules/@types/node/crypto.d.ts","../node_modules/@types/node/dgram.d.ts","../node_modules/@types/node/diagnostics_channel.d.ts","../node_modules/@types/node/dns.d.ts","../node_modules/@types/node/dns/promises.d.ts","../node_modules/@types/node/domain.d.ts","../node_modules/@types/node/events.d.ts","../node_modules/@types/node/fs.d.ts","../node_modules/@types/node/fs/promises.d.ts","../node_modules/@types/node/http.d.ts","../node_modules/@types/node/http2.d.ts","../node_modules/@types/node/https.d.ts","../node_modules/@types/node/inspector.d.ts","../node_modules/@types/node/module.d.ts","../node_modules/@types/node/net.d.ts","../node_modules/@types/node/os.d.ts","../node_modules/@types/node/path.d.ts","../node_modules/@types/node/perf_hooks.d.ts","../node_modules/@types/node/process.d.ts","../node_modules/@types/node/punycode.d.ts","../node_modules/@types/node/querystring.d.ts","../node_modules/@types/node/readline.d.ts","../node_modules/@types/node/repl.d.ts","../node_modules/@types/node/stream.d.ts","../node_modules/@types/node/stream/promises.d.ts","../node_modules/@types/node/stream/consumers.d.ts","../node_modules/@types/node/stream/web.d.ts","../node_modules/@types/node/string_decoder.d.ts","../node_modules/@types/node/test.d.ts","../node_modules/@types/node/timers.d.ts","../node_modules/@types/node/timers/promises.d.ts","../node_modules/@types/node/tls.d.ts","../node_modules/@types/node/trace_events.d.ts","../node_modules/@types/node/tty.d.ts","../node_modules/@types/node/url.d.ts","../node_modules/@types/node/util.d.ts","../node_modules/@types/node/v8.d.ts","../node_modules/@types/node/vm.d.ts","../node_modules/@types/node/wasi.d.ts","../node_modules/@types/node/worker_threads.d.ts","../node_modules/@types/node/zlib.d.ts","../node_modules/@types/node/globals.global.d.ts","../node_modules/@types/node/index.d.ts","../node_modules/@types/minimatch/index.d.ts","../node_modules/@types/glob/index.d.ts","../node_modules/@types/graceful-fs/index.d.ts","../node_modules/@types/istanbul-lib-coverage/index.d.ts","../node_modules/@types/istanbul-lib-report/index.d.ts","../node_modules/@types/istanbul-reports/index.d.ts","../node_modules/@jest/expect-utils/build/index.d.ts","../node_modules/@sinclair/typebox/typebox.d.ts","../node_modules/@jest/schemas/build/index.d.ts","../node_modules/pretty-format/build/index.d.ts","../node_modules/jest-diff/build/index.d.ts","../node_modules/jest-matcher-utils/build/index.d.ts","../node_modules/expect/build/index.d.ts","../node_modules/@types/jest/index.d.ts","../node_modules/@types/json5/index.d.ts","../node_modules/@types/mock-fs/lib/item.d.ts","../node_modules/@types/mock-fs/lib/file.d.ts","../node_modules/@types/mock-fs/lib/directory.d.ts","../node_modules/@types/mock-fs/lib/symlink.d.ts","../node_modules/@types/mock-fs/lib/filesystem.d.ts","../node_modules/@types/mock-fs/index.d.ts","../node_modules/@types/normalize-package-data/index.d.ts","../node_modules/@types/prettier/index.d.ts","../node_modules/@types/shelljs/index.d.ts","../node_modules/@types/stack-utils/index.d.ts","../node_modules/@types/yargs-parser/index.d.ts","../node_modules/@types/yargs/index.d.ts"],"fileInfos":[{"version":"6a6b471e7e43e15ef6f8fe617a22ce4ecb0e34efa6c3dfcfe7cebd392bcca9d2","affectsGlobalScope":true},"45b7ab580deca34ae9729e97c13cfd999df04416a79116c3bfb483804f85ded4","dc48272d7c333ccf58034c0026162576b7d50ea0e69c3b9292f803fc20720fd5","27147504487dc1159369da4f4da8a26406364624fa9bc3db632f7d94a5bae2c3","5e1c4c362065a6b95ff952c0eab010f04dcd2c3494e813b493ecfd4fcb9fc0d8","68d73b4a11549f9c0b7d352d10e91e5dca8faa3322bfb77b661839c42b1ddec7","5efce4fc3c29ea84e8928f97adec086e3dc876365e0982cc8479a07954a3efd4",{"version":"f296963760430fb65b4e5d91f0ed770a91c6e77455bacf8fa23a1501654ede0e","affectsGlobalScope":true},{"version":"5114a95689b63f96b957e00216bc04baf9e1a1782aa4d8ee7e5e9acbf768e301","affectsGlobalScope":true},{"version":"4443e68b35f3332f753eacc66a04ac1d2053b8b035a0e0ac1d455392b5e243b3","affectsGlobalScope":true},{"version":"ab22100fdd0d24cfc2cc59d0a00fc8cf449830d9c4030dc54390a46bd562e929","affectsGlobalScope":true},{"version":"f7bd636ae3a4623c503359ada74510c4005df5b36de7f23e1db8a5c543fd176b","affectsGlobalScope":true},{"version":"ce691fb9e5c64efb9547083e4a34091bcbe5bdb41027e310ebba8f7d96a98671","affectsGlobalScope":true},{"version":"8d697a2a929a5fcb38b7a65594020fcef05ec1630804a33748829c5ff53640d0","affectsGlobalScope":true},{"version":"0c20f4d2358eb679e4ae8a4432bdd96c857a2960fd6800b21ec4008ec59d60ea","affectsGlobalScope":true},{"version":"36ae84ccc0633f7c0787bc6108386c8b773e95d3b052d9464a99cd9b8795fbec","affectsGlobalScope":true},{"version":"82d0d8e269b9eeac02c3bd1c9e884e85d483fcb2cd168bccd6bc54df663da031","affectsGlobalScope":true},{"version":"b8deab98702588840be73d67f02412a2d45a417a3c097b2e96f7f3a42ac483d1","affectsGlobalScope":true},{"version":"4738f2420687fd85629c9efb470793bb753709c2379e5f85bc1815d875ceadcd","affectsGlobalScope":true},{"version":"2f11ff796926e0832f9ae148008138ad583bd181899ab7dd768a2666700b1893","affectsGlobalScope":true},{"version":"376d554d042fb409cb55b5cbaf0b2b4b7e669619493c5d18d5fa8bd67273f82a","affectsGlobalScope":true},{"version":"9fc46429fbe091ac5ad2608c657201eb68b6f1b8341bd6d670047d32ed0a88fa","affectsGlobalScope":true},{"version":"61c37c1de663cf4171e1192466e52c7a382afa58da01b1dc75058f032ddf0839","affectsGlobalScope":true},{"version":"c4138a3dd7cd6cf1f363ca0f905554e8d81b45844feea17786cdf1626cb8ea06","affectsGlobalScope":true},{"version":"6ff3e2452b055d8f0ec026511c6582b55d935675af67cdb67dd1dc671e8065df","affectsGlobalScope":true},{"version":"03de17b810f426a2f47396b0b99b53a82c1b60e9cba7a7edda47f9bb077882f4","affectsGlobalScope":true},{"version":"8184c6ddf48f0c98429326b428478ecc6143c27f79b79e85740f17e6feb090f1","affectsGlobalScope":true},{"version":"261c4d2cf86ac5a89ad3fb3fafed74cbb6f2f7c1d139b0540933df567d64a6ca","affectsGlobalScope":true},{"version":"6af1425e9973f4924fca986636ac19a0cf9909a7e0d9d3009c349e6244e957b6","affectsGlobalScope":true},{"version":"576711e016cf4f1804676043e6a0a5414252560eb57de9faceee34d79798c850","affectsGlobalScope":true},{"version":"89c1b1281ba7b8a96efc676b11b264de7a8374c5ea1e6617f11880a13fc56dc6","affectsGlobalScope":true},{"version":"15a630d6817718a2ddd7088c4f83e4673fde19fa992d2eae2cf51132a302a5d3","affectsGlobalScope":true},{"version":"b7e9f95a7387e3f66be0ed6db43600c49cec33a3900437ce2fd350d9b7cb16f2","affectsGlobalScope":true},{"version":"01e0ee7e1f661acedb08b51f8a9b7d7f959e9cdb6441360f06522cc3aea1bf2e","affectsGlobalScope":true},{"version":"ac17a97f816d53d9dd79b0d235e1c0ed54a8cc6a0677e9a3d61efb480b2a3e4e","affectsGlobalScope":true},{"version":"bf14a426dbbf1022d11bd08d6b8e709a2e9d246f0c6c1032f3b2edb9a902adbe","affectsGlobalScope":true},{"version":"ec0104fee478075cb5171e5f4e3f23add8e02d845ae0165bfa3f1099241fa2aa","affectsGlobalScope":true},{"version":"2b72d528b2e2fe3c57889ca7baef5e13a56c957b946906d03767c642f386bbc3","affectsGlobalScope":true},{"version":"9cc66b0513ad41cb5f5372cca86ef83a0d37d1c1017580b7dace3ea5661836df","affectsGlobalScope":true},{"version":"368af93f74c9c932edd84c58883e736c9e3d53cec1fe24c0b0ff451f529ceab1","affectsGlobalScope":true},{"version":"307c8b7ebbd7f23a92b73a4c6c0a697beca05b06b036c23a34553e5fe65e4fdc","affectsGlobalScope":true},{"version":"189c0703923150aa30673fa3de411346d727cc44a11c75d05d7cf9ef095daa22","affectsGlobalScope":true},{"version":"782dec38049b92d4e85c1585fbea5474a219c6984a35b004963b00beb1aab538","affectsGlobalScope":true},"bc0e7dc92c1041153942c4723e589a4d8fe6cc70fb371e7b922f3fcd5f7f1c09",{"version":"6e1cdbd8c0faaf652478d45f51e618f5ff36f6b9110ad926b03c154b5480ca11","signature":"417ab29f4f4ceae790bfccb823b3c18dc8626781ff4ed46829d70b516bdae23d"},{"version":"fdc0dccb68372733b38b3e1a2db9550cae6211373b47532b373e5db5439c0440","signature":"d4889c47c8d96ad2a8e4db15e14f30b835ed3b528b1f5319d207779572f15c7e"},{"version":"f80da2af872fd6a14bbc4d18ef07745f6722311d5f5c2ad206c780e819c369cc","signature":"4c5201db05e37c1f947dd7a8338240f6cd167dfd191aa0b8a9d2a36c57d28b91"},"8baa5d0febc68db886c40bf341e5c90dc215a90cd64552e47e8184be6b7e3358","2b93035328f7778d200252681c1d86285d501ed424825a18f81e4c3028aa51d9","2ac9c8332c5f8510b8bdd571f8271e0f39b0577714d5e95c1e79a12b2616f069","42c21aa963e7b86fa00801d96e88b36803188018d5ad91db2a9101bccd40b3ff","d31eb848cdebb4c55b4893b335a7c0cca95ad66dee13cbb7d0893810c0a9c301","77c1d91a129ba60b8c405f9f539e42df834afb174fe0785f89d92a2c7c16b77a","7a9e0a564fee396cacf706523b5aeed96e04c6b871a8bebefad78499fbffc5bc","906c751ef5822ec0dadcea2f0e9db64a33fb4ee926cc9f7efa38afe5d5371b2a","5387c049e9702f2d2d7ece1a74836a14b47fbebe9bbeb19f94c580a37c855351","c68391fb9efad5d99ff332c65b1606248c4e4a9f1dd9a087204242b56c7126d6","e9cf02252d3a0ced987d24845dcb1f11c1be5541f17e5daa44c6de2d18138d0c","e8b02b879754d85f48489294f99147aeccc352c760d95a6fe2b6e49cd400b2fe","9f6908ab3d8a86c68b86e38578afc7095114e66b2fc36a2a96e9252aac3998e0","0eedb2344442b143ddcd788f87096961cd8572b64f10b4afc3356aa0460171c6","71405cc70f183d029cc5018375f6c35117ffdaf11846c35ebf85ee3956b1b2a6","c68baff4d8ba346130e9753cefe2e487a16731bf17e05fdacc81e8c9a26aae9d","2cd15528d8bb5d0453aa339b4b52e0696e8b07e790c153831c642c3dea5ac8af","479d622e66283ffa9883fbc33e441f7fc928b2277ff30aacbec7b7761b4e9579","ade307876dc5ca267ca308d09e737b611505e015c535863f22420a11fffc1c54","f8cdefa3e0dee639eccbe9794b46f90291e5fd3989fcba60d2f08fde56179fb9","86c5a62f99aac7053976e317dbe9acb2eaf903aaf3d2e5bb1cafe5c2df7b37a8","2b300954ce01a8343866f737656e13243e86e5baef51bd0631b21dcef1f6e954","a2d409a9ffd872d6b9d78ead00baa116bbc73cfa959fce9a2f29d3227876b2a1","b288936f560cd71f4a6002953290de9ff8dfbfbf37f5a9391be5c83322324898","61178a781ef82e0ff54f9430397e71e8f365fc1e3725e0e5346f2de7b0d50dfa","6a6ccb37feb3aad32d9be026a3337db195979cd5727a616fc0f557e974101a54","c649ea79205c029a02272ef55b7ab14ada0903db26144d2205021f24727ac7a3","38e2b02897c6357bbcff729ef84c736727b45cc152abe95a7567caccdfad2a1d","d6610ea7e0b1a7686dba062a1e5544dd7d34140f4545305b7c6afaebfb348341","3dee35db743bdba2c8d19aece7ac049bde6fa587e195d86547c882784e6ba34c","b15e55c5fa977c2f25ca0b1db52cfa2d1fd4bf0baf90a8b90d4a7678ca462ff1","f41d30972724714763a2698ae949fbc463afb203b5fa7c4ad7e4de0871129a17","843dd7b6a7c6269fd43827303f5cbe65c1fecabc30b4670a50d5a15d57daeeb9","f06d8b8567ee9fd799bf7f806efe93b67683ef24f4dea5b23ef12edff4434d9d","6017384f697ff38bc3ef6a546df5b230c3c31329db84cbfe686c83bec011e2b2","e1a5b30d9248549ca0c0bb1d653bafae20c64c4aa5928cc4cd3017b55c2177b0","a593632d5878f17295bd53e1c77f27bf4c15212822f764a2bfc1702f4b413fa0","a868a534ba1c2ca9060b8a13b0ffbbbf78b4be7b0ff80d8c75b02773f7192c29","da7545aba8f54a50fde23e2ede00158dc8112560d934cee58098dfb03aae9b9d","34baf65cfee92f110d6653322e2120c2d368ee64b3c7981dff08ed105c4f19b0","6aee496bf0ecfbf6731aa8cca32f4b6e92cdc0a444911a7d88410408a45ecc5d",{"version":"15ca002d9f604e8b65e7b86ecb1a01f424fc6038f33cdae16d0b8cc163ca56b4","signature":"7871aad7a8a23aab6284233937a178055397f658a5e97a35e07474a3efda764c"},{"version":"5002ff997079b78f6aebaedbe9d1877c646f11b861b5cdc3357c6e1a3444eae2","signature":"d0f3138d6256e8a71fe965bb291c2f24e6cab7878a558d14de8fcd6749b41a7d"},{"version":"80fe2077fd00bc5781a62808e294b0cc24aa1dfbec45ddc037ac90da50e40973","signature":"b1c4e21cc9238721f0b0183b9b7adb6ca5e4b4dbfbbb089c3a6f1dd43ea84672"},{"version":"4c5e4f0a668b114ad8aa6b8f92acbde9141865939b85607132a41cb9ac83491a","signature":"f84ca38fa8bbe18f586357a8aba9ea82e63e15f5ac0d6400cd2a83fb9e53912f"},{"version":"533612239b76d1df19a04922c59a6be2d13dbf5548d31b126381a85b88e92c39","signature":"767a9fbf6bee45e3fc9eeb42f1928065a12774dcd1a0d480e122a4480f442b9f"},{"version":"59d59e7486abd9b233756249c564aff9d02329c0c03fddf7f6c3e29ed4ba21b0","signature":"93a8ad09222bdd05bb1487aca6d7d655ab86d95f84a1f3b233a9a6609031a161"},{"version":"467dbe62e92b04e31812e6c3f48b958e68e0d2ac526e37dd10da7ec15c161eb2","signature":"4212d379481d94c7b5f0f7d79f79686cdccdddc42e7a4fb1e5bb8f0a72375467"},"0d14fa22c41fdc7277e6f71473b20ebc07f40f00e38875142335d5b63cdfc9d2",{"version":"328506821e11d299b58510e824e55620fc3de4c999bfa7f279a27cd552425135","signature":"7483feda871a4ab53e5cc952c82a057e1f165b9cfe888e8186a3df82a4dbcc21"},{"version":"96191d7f4f8e713da3705a56f7e4a3b4b02b49cc1e28423a79dde09d7b011fd0","signature":"555ce436f5841901a223f94c0a69fac2b9a21b089c4b184c32ed32c5de887153"},{"version":"8b4d8b15ea9afc9ab079b11ae3b6b8189c9df51a498e119fcc595e3789252cf5","signature":"615cd5bf87480049728499144080e8bcc9f35e3ddfbc3a8a4b783a3dde8e5f7e"},{"version":"f7e9f5ef7d6281c7a825b4ecec2d2362e03131b0db1c28fe60363d5980ebfd37","signature":"4919fce6d3925882612289789d214f6c2fc56efe42464b4bbbc427389fb46914"},{"version":"91984fc9394dc10ee8ad6668e57b1c27417718c4c085eb63c354c6efcbaa9756","signature":"ce0f62b022746280e30cd552626c6268efcd1de9b8dd6ee774749686a6b6a1c7"},{"version":"1829507795f9c69e2dc9587535e5cea2452ad8b2e37f26d3021b4eb182ce66ac","signature":"983496637800ae3585034a1d958b12a307dc7e38eaf3c31ace369b46589962d4"},{"version":"f6a2059974d97157225c31ab25e8dd86bde0db5142d1b0f9b40a36b3daa53bff","signature":"afb33bbcc9f3088d4cb2766af1a3e7735b444c27eb2d5ab6ff849701d27e16a9"},{"version":"0dcd8e18fe833842ffc5bd3468cfc382f7634d2e373159a2df93f345265a8585","signature":"927c69598a94d13a277f40bbcde0f39d1bf3499e58e0b8a5892a63f50eda5250"},{"version":"3ae319913b91c3cbd548607e125b4888f31923dc969e3aabc34187893cf0ca7f","signature":"31481f7ad0b50ccf0e4249b4c6220a8de8b391641a28ebe9e388825a2624e005"},{"version":"c082a69144552bcdb6dc91dd876ba20a78ff19e7f5f8f57828ed6b6fd088f32a","signature":"11faf63611205e2f8b45b1efa5593dc2330afd703f34cb16a5fc974f517921b2"},"aa6e41bcb9a7af18b8868f079f1e81b0602f301e3690b3f4b535ec999154ac97",{"version":"7aa2d9b0be31b58a676f57dc560175ce73167f037df37d902c746a914bf31e31","signature":"cc02ea07878296b5f0ef0544db77dd06e2c398a4a606acd434dafc619a1c5e83"},{"version":"4ce5f2f55f0e75054ab7e02844adbe675330d9712ec39225e7701d8b2a4c1a54","signature":"59a5044b0a35bbceb68762339fbaf63c6e9510b95438e48d298ab4c001a6fcce"},{"version":"e4f334980f22f184777d6a3b2b41c447cfc05bc1f7c77f37dd3807d545ad7eec","signature":"68a564632bfb886a201fc38c0bdf469211352d0292fa09fbaf9893df12bb913b"},"8498f449d13ef1685ff5745ee9af8bc4b96789b16e9eeb12274f0611fa8264ae",{"version":"1590674310d33db93452e06ab18e8a2bb4c538fb04b14f90783ef1cc23b17642","signature":"7145912e90bd4170aa235363b9ef04cd62f71d4f35a3a7d61ae4e716d6205ace"},{"version":"d91efb224684b04ac9cee0546b7c4359f573e216abc516a018de66d8b02261d8","signature":"9c24e5aeee0739f8a679f05055e63f0f8a1468f5a4b7faa6bc642d2226bcb8c3"},"4b0f7f88fc46a672cb59eeb2782af271c203600d602f57a717ef07f96092caf8",{"version":"237aa0d69f2b6cb8307e36c65c2991bdce89b17268bc1cd966a196563ea99b9e","signature":"23987a3f38a2536215400e347f78e8cefd39e8354c0850a555636df54431b54a"},{"version":"bf7c720bb3e26b51672771462cfe677b5ec5220e63e969629c201373a6109aee","signature":"b776f0d5cd3a213fa2c44d4c6de8dfe5a6e8692c22c1ed00c63e0317ad740026"},"0d37f7ab4b1cc51b0a5a6dd5efb32d6267f82e62bb7322ee56a83d5d0a956f43",{"version":"7e0319a69efafc56d1c276fbf38f71487751ad3b21774e5ef998e524ce7d26ae","signature":"9443fbbe7449d866f00aa520daf387fc032c49b14d591ac9be1ef6c7f5becac3"},{"version":"4343c3cfa3ce83cf9bca6d22b75cc322fdf03b910eafae6a87b16b3734d39640","signature":"2c83d69c414338dbe80f701f3ff379c3185bf032d1996dc9b512bf24f6a28eae"},{"version":"a3a769c2d53729359bac2b87fa3776158022207016c4410f21e3c617f666d9bd","signature":"647d1c285d24531d57f19999e51fbf9703c2ccf2238a5128cdce4ae743dca2b4"},{"version":"1dd164b7e5e0be2240797a21b8afb8f08082f35441fb50b8297dab72c5a84f63","signature":"3763e94cc3766888acdf45e6e8245cd10d3a312210e974d5eb575dba61407173"},{"version":"1ff4837d722650c47078c8966cebe60077437a78dbb2c1743f5c53e615207dea","signature":"f0654dfeb62dea5132a331aaad08dab6a3645914a0b5016d2787666bd4d7fce9"},{"version":"f129c815cc325f8a15fa10f96cc35dd83c71267071f1c2532623f5525774a105","signature":"4125b0891a0e984e4e960c2008fd58f4a06193f9eacb2bddeb017dcee3a5b748"},{"version":"c48373af70eec89718e17f8f2cb16b51b6e99ee738980195e678d06a8f2eb323","signature":"dad05ca7d099aec05e9a14f6319e5e33e6b2348f471f5ef0b41ea81e8ed3a727"},{"version":"cb3861ed806429de2c6b68a50d6c3c39fc46ac16590b382ad6a0a5a5d0b7e0ad","signature":"46a49b1cf2d8c32fb8e8a7d3bbfa4bacd1ddffd212a601ac84912fe72111b28c"},"209e814e8e71aec74f69686a9506dd7610b97ab59dcee9446266446f72a76d05",{"version":"8aa095e7ddb3e17212bcf8c69fe1695abc41710afc57edd2c63812b968252b53","signature":"18ae3ef5b87757ea64dfd5079baff7a245755e8a2bbf368bccd706e5f898d467"},{"version":"5ced7c149952b7cb0431c4d6be199c7dce4dbdcee61616c6e8de5e5ff5d3ca58","signature":"4ff9d90fdef2b0f8fa15228af191df240b9d75fca4f6b0caf3fbd0b58a882c83"},{"version":"0aa7b42119ad128391fa95fae4ba1dc61179761f4b57213e861ac6a992e7d8da","signature":"ad5164707f495f80447f93d3595769d70153ef73fc134bc92ffaa47167bb8dd7"},{"version":"981e1264bbe0a60bcf0809f6c84f192503cfad8a6365ae82bef8a6c4a6197a09","signature":"e255357a744c71f9fb988546969b44cea9ccafb327351f3dca99dbaad3660818"},{"version":"dcb3a4d0282e43a267e61644f5a09d08a196dad8b21b2849c8a624282a2d1030","signature":"8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"},{"version":"5170ecc4efac99d804d212af7bfa2abc55d027cf4a3760e17ece398363ad5aca","signature":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","affectsGlobalScope":true},"3078727fed04c123165efdb42deeac5dceaa42ac62216ca13cb809dc7e13415f","cc957354aa3c94c9961ebf46282cfde1e81d107fc5785a61f62c67f1dd3ac2eb","b4f76b34637d79cefad486127115fed843762c69512d7101b7096e1293699679","93de1c6dab503f053efe8d304cb522bb3a89feab8c98f307a674a4fae04773e9","dae3d1adc67ac3dbd1cd471889301339ec439837b5df565982345be20c8fca9a","b6ddf3a46ccfa4441d8be84d2e9bf3087573c48804196faedbd4a25b60631beb","4911d4c3a7f7c11bad0e2cec329a19a385d10ea83b0b69c76e032359e388f624","a69c09dbea52352f479d3e7ac949fde3d17b195abe90b045d619f747b38d6d1a",{"version":"f754e6212ba82c380850516dcb82419f0e02859e53da986b2fd1942c59b96111","affectsGlobalScope":true},"56d13f223ab40f71840795f5bef2552a397a70666ee60878222407f3893fb8d0",{"version":"4ffef5c4698e94e49dcf150e3270bad2b24a2aeab48b24acbe7c1366edff377d","affectsGlobalScope":true},"2534e46a52653b55dfb5a41ce427ec430c4afbaaf3bfcb1ae09b185c5d6bf169","afc6e96061af46bcff47246158caee7e056f5288783f2d83d6858cd25be1c565",{"version":"34f5bcac12b36d70304b73de5f5aab3bb91bd9919f984be80579ebcad03a624e","affectsGlobalScope":true},"82408ed3e959ddc60d3e9904481b5a8dc16469928257af22a3f7d1a3bc7fd8c4","67458ffec915caad7ead57f00786c301b37ce7ff1a90506b797f4691337c536c","f50c975ab7b50e25a69e3d8a3773894125b44e9698924105f23b812bf7488baf","73e88763806a21b32aff5a66d4930124606bc5e77f796ea3ff8b6878ff787fa8","18f177e442b4cdbc5efb82e7c344201a11e4a4342ff1f19f8765b849e254e2ec","0af3121e68297b2247dd331c0d24dba599e50736a7517a5622d5591aae4a3122","06ccebc2c2db57d6bdbca63b71c4ae5e6ddc42d972fd8f122d4c1a28aa111b25",{"version":"81e8508d1e82278f5d3fee936f267e00c308af36219bfcee2631f9513c9c4017","affectsGlobalScope":true},"413a4be7f94f631235bbc83dad36c4d15e5a2ff02bca1efdbd03636d6454631b","20c468256fd68d3ef1fa53526e76d51d6aa91711e84d72c0343589b99238287e","4198acced75d48a039c078734c4efca7788ff8c78609c270a2b63ec20e3e1676","0034f55fd438f31ba1f0b340dceef3b77d9a89f5218e5875a990b4eff2a5714d","288dd0c774a5c6e3964084c7a2bc8cc6b746d70f44a9892d028d04f915cf7ebc","d61c7c41eb1960b1285e242fd102c162b65c0522985b839fadda59874308a170",{"version":"e630e5528e899219ae319e83bef54bf3bcb91b01d76861ecf881e8e614b167f0","affectsGlobalScope":true},"f7011a8d17a06e60dc591fd89b7bf40507d36a5a4d5913fa0eff4e18da001759","abc1c425b2ad6720433f40f1877abfa4223f0f3dd486c9c28c492179ca183cb6","fb0989383c6109f20281b3d31265293daefdd76d0d30551782c1654e93704f48","a4210a84a82b3e7a8cec5b2f3616e46d523f4f10cc1576d8f2fb89d0987b341e",{"version":"8207e7e6db9aa5fc7e61c8f17ba74cf9c115d26f51f91ee93f790815a7ea9dfb","affectsGlobalScope":true},"9f1069b9e2c051737b1f9b4f1baf50e4a63385a6a89c32235549ae87fc3d5492","22d48bfb37261136423ac687f1fa7bd4dda3083f767416d409a8260cf92bc8fc","29c2706fa0cc49a2bd90c83234da33d08bb9554ecec675e91c1f85087f5a5324","0acbf26bf958f9e80c1ffa587b74749d2697b75b484062d36e103c137c562bc3","26f686c658456d460b38e819bc7c0c27e752b08d998aa3dda71bd4fc73434471","1b952304137851e45bc009785de89ada562d9376177c97e37702e39e60c2f1ff","698ab660b477b9c2cd5ccbd99e7e7df8b4a6134c1f5711fa615ed7aab51cb7f7","33eee034727baf564056b4ea719075c23d3b4767d0b5f9c6933b81f3d77774d2","c33a6ea7147af60d8e98f1ac127047f4b0d4e2ce28b8f08ff3de07ca7cc00637","a4471d2bdba495b2a6a30b8765d5e0282fa7009d88345a9528f73c37869d3b93",{"version":"aee7013623e7632fba449d4df1da92925b27d9b816cb05546044dbfe54c88ef4","affectsGlobalScope":true},"e10177274a35a9d07c825615340b2fcde2f610f53f3fb40269fd196b4288dda6","c9d70d3d7191a66a81cb554557f8ed1cf736ea8397c44a864fe52689de18865a","998a3de5237518c0b3ac00a11b3b4417affb008aa20aedee52f3fdae3cb86151","ad41008ffe077206e1811fc873f4d9005b5fd7f6ab52bb6118fef600815a5cb4",{"version":"1aad825534c73852a1f3275e527d729a2c0640f539198fdfdfeb83b839851910","affectsGlobalScope":true},"badae0df9a8016ac36994b0a0e7b82ba6aaa3528e175a8c3cb161e4683eec03e","c3db860bcaaaeb3bbc23f353bbda1f8ab82756c8d5e973bebb3953cb09ea68f2","235a53595bd20b0b0eeb1a29cb2887c67c48375e92f03749b2488fbd46d0b1a0","bc09393cd4cd13f69cf1366d4236fbae5359bb550f0de4e15767e9a91d63dfb1","9c266243b01545e11d2733a55ad02b4c00ecdbda99c561cd1674f96e89cdc958","c71155c05fc76ff948a4759abc1cb9feec036509f500174bc18dad4c7827a60c",{"version":"ab9b9a36e5284fd8d3bf2f7d5fcbc60052f25f27e4d20954782099282c60d23e","affectsGlobalScope":true},"88003d9ab15507806f41b120be6d407c1afe566c2f6689ebe3a034dd5ec0c8dc","963d59066dd6742da1918a6213a209bcc205b8ee53b1876ee2b4e6d80f97c85e","9c5c92b7fb8c38ff1b46df69701f2d1ea8e2d6468e3cd8f73d8af5e6f7864576","bf88ef4208a770ca39a844b182b3695df536326ea566893fdc5b8418702a331e","8b06ac3faeacb8484d84ddb44571d8f410697f98d7bfa86c0fda60373a9f5215","7eb06594824ada538b1d8b48c3925a83e7db792f47a081a62cf3e5c4e23cf0ee","f5638f7c2f12a9a1a57b5c41b3c1ea7db3876c003bab68e6a57afd6bcc169af0","763e521cf114b80e0dd0e21ca49b9f8ae62e8999555a5e7bade8ce36b33001c2","3054ef91b855e005b9c4681399e9d64d2a7b07a22d539314d794f09e53b876a7","ffcc5500e77223169833fc6eb59b3a507944a1f89574e0a1276b0ea7fc22c4a4","22f13de9e2fe5f0f4724797abd3d34a1cdd6e47ef81fc4933fea3b8bf4ad524b","e3ba509d3dce019b3190ceb2f3fc88e2610ab717122dabd91a9efaa37804040d","cda0cb09b995489b7f4c57f168cd31b83dcbaa7aad49612734fb3c9c73f6e4f2","f72f8428f3c1caa22e9c247d046603b85b442c0dae7b77a7a0bc092c18867cb7",{"version":"195f63105abc03e72b6a176e3e34dfb5ac932b55db378fdc7874b1617e24b465","affectsGlobalScope":true},"96d14f21b7652903852eef49379d04dbda28c16ed36468f8c9fa08f7c14c9538","b95f2a78de34a873c6dd76dc538b7a5fec77da6a0e0e7efc7aa58f58ddfce270","1231f32d791b0fcc13e0c836543b34e83dea6e0b494ee35194a66a50dd25427e","66880e558be5ee57d23c12ffd0a90bf07840e088f8fa9b608fadeaf45af78969","058186f212307a621cd51160e2124c26208649600b4f0a27835f1d1caae81e65","c2bfeeadb18ba18386d7549a69c2049e57f31758b71343543a5c27919197b0fa","63b0be497f88d815c410b76985b798132d6c470199f2f31e1390a48480619758","6fa0008bf91a4cc9c8963bace4bba0bd6865cbfa29c3e3ccc461155660fb113a","bc88e4049153bc4dddb4503ed7e624eb141edfa9064b3659d6c86e900fe9e621","639158c94f9813ac0ef48abc5e24788b5acce74e961ad6d9ac30c18273965bfe","b0d10e46cfe3f6c476b69af02eaa38e4ccc7430221ce3109ae84bb9fb8282298","70e9a18da08294f75bf23e46c7d69e67634c0765d355887b9b41f0d959e1426e","e9eb1b173aa166892f3eddab182e49cfe59aa2e14d33aedb6b49d175ed6a3750"],"root":[[45,47],[89,95],[97,113],[115,125],[127,132]],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declaration":true,"esModuleInterop":true,"module":1,"newLine":1,"noImplicitReturns":true,"noUnusedLocals":false,"outDir":"./","sourceMap":true,"strict":true,"target":5,"useUnknownInCatchVariables":false},"fileIdsList":[[133,183],[183],[183,198],[133,134,135,136,137,183],[133,135,183],[154,155,183,190,191],[155,183,190],[183,194],[183,195],[183,200,203],[183,207,208,209,210],[183,206],[183,190,206],[183,206,207,208,209],[139,183],[142,183],[143,148,174,183],[144,154,155,162,171,182,183],[144,145,154,162,183],[146,183],[147,148,155,163,183],[148,171,179,183],[149,151,154,162,183],[150,183],[151,152,183],[153,154,183],[154,183],[154,155,156,171,182,183],[154,155,156,171,183],[157,162,171,182,183],[154,155,157,158,162,171,179,182,183],[157,159,171,179,182,183],[139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189],[154,160,183],[161,182,183],[151,154,162,171,183],[163,183],[164,183],[142,165,183],[166,181,183,187],[167,183],[168,183],[154,169,183],[169,170,183,185],[143,154,171,172,173,183],[143,171,173,183],[171,172,183],[174,183],[175,183],[154,177,178,183],[177,178,183],[148,162,179,183],[180,183],[162,181,183],[143,157,168,182,183],[148,183],[171,183,184],[183,185],[183,186],[143,148,154,156,165,171,182,183,185,187],[171,183,188],[49,88,183],[49,73,88,183],[88,183],[49,183],[49,74,88,183],[49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,183],[74,88,183],[144,183,190,192],[183,216],[183,197,202],[183,200],[96,183,201],[183,199],[44,183],[89,96,107,108,117,118,183],[119,120,121,122,123,183],[46,96,125,183],[96,105,107,108,111,117,118,164,183],[46,96,118,120,183],[96,107,108,111,117,118,155,164,183],[130,183],[46,96,108,117,124,126,127,128,129,155,183],[96,126,130,183],[96,114,127,128,183],[111,117,118,126,130,183],[44,155,164,183],[45,107,118,124,183],[95,105,108,164,183],[90,94,95,106,183],[89,111,155,164,183],[91,93,95,183],[44,90,164,183],[46,90,94,108,117,155,164,183],[111,117,183],[96,104,107,111,117,155,164,183],[46,88,107,111,183],[44,46,89,91,103,107,111,117,155,183],[44,46,183],[97,98,99,100,101,102,183],[88,92,107,117,183],[93,107,183],[46,111,155,163,164,183],[112,113,115,116,183],[96,114,183],[48,107,117,155,164,183],[47,108,117,155,164,183],[155,164,166,183],[47,109,110,183],[44],[89,118],[119,120,121,122,123],[125],[118],[125,126],[126,130],[118,126,130],[45,107,118,124],[95],[89],[91,95],[44,90],[90,94,108],[117],[107,117],[107],[97,98,99,100,101,102],[93,107]],"referencedMap":[[135,1],[133,2],[197,2],[199,3],[198,2],[138,4],[134,1],[136,5],[137,1],[192,6],[193,7],[194,2],[195,8],[196,9],[204,10],[205,2],[191,2],[126,2],[211,11],[208,12],[207,13],[210,14],[206,2],[209,12],[139,15],[140,15],[142,16],[143,17],[144,18],[145,19],[146,20],[147,21],[148,22],[149,23],[150,24],[151,25],[152,25],[153,26],[154,27],[155,28],[156,29],[141,2],[189,2],[157,30],[158,31],[159,32],[190,33],[160,34],[161,35],[162,36],[163,37],[164,38],[165,39],[166,40],[167,41],[168,42],[169,43],[170,44],[171,45],[173,46],[172,47],[174,48],[175,49],[176,2],[177,50],[178,51],[179,52],[180,53],[181,54],[182,55],[183,56],[184,57],[185,58],[186,59],[187,60],[188,61],[212,2],[213,2],[48,2],[73,62],[74,63],[49,64],[52,64],[71,62],[72,62],[62,62],[61,65],[59,62],[54,62],[67,62],[65,62],[69,62],[53,62],[66,62],[70,62],[55,62],[56,62],[68,62],[50,62],[57,62],[58,62],[60,62],[64,62],[75,66],[63,62],[51,62],[88,67],[87,2],[82,66],[84,68],[83,66],[76,66],[77,66],[79,66],[81,66],[85,68],[86,68],[78,68],[80,68],[214,69],[215,2],[216,2],[217,70],[96,2],[203,71],[201,72],[202,73],[200,74],[114,2],[42,2],[43,2],[9,2],[8,2],[2,2],[10,2],[11,2],[12,2],[13,2],[14,2],[15,2],[16,2],[17,2],[3,2],[4,2],[21,2],[18,2],[19,2],[20,2],[22,2],[23,2],[24,2],[5,2],[25,2],[26,2],[27,2],[28,2],[6,2],[32,2],[29,2],[30,2],[31,2],[33,2],[7,2],[34,2],[39,2],[40,2],[35,2],[36,2],[37,2],[38,2],[1,2],[41,2],[44,2],[45,75],[121,76],[124,77],[122,78],[119,79],[123,80],[120,81],[131,82],[132,2],[130,83],[128,84],[129,85],[127,86],[46,87],[125,88],[106,89],[107,90],[90,91],[94,92],[91,93],[95,94],[118,95],[105,96],[89,97],[104,98],[101,75],[97,75],[102,99],[103,100],[100,75],[98,75],[99,75],[93,101],[92,102],[112,103],[113,2],[117,104],[115,105],[116,2],[108,106],[109,107],[110,108],[47,56],[111,109]],"exportedModulesMap":[[135,1],[133,2],[197,2],[199,3],[198,2],[138,4],[134,1],[136,5],[137,1],[192,6],[193,7],[194,2],[195,8],[196,9],[204,10],[205,2],[191,2],[126,2],[211,11],[208,12],[207,13],[210,14],[206,2],[209,12],[139,15],[140,15],[142,16],[143,17],[144,18],[145,19],[146,20],[147,21],[148,22],[149,23],[150,24],[151,25],[152,25],[153,26],[154,27],[155,28],[156,29],[141,2],[189,2],[157,30],[158,31],[159,32],[190,33],[160,34],[161,35],[162,36],[163,37],[164,38],[165,39],[166,40],[167,41],[168,42],[169,43],[170,44],[171,45],[173,46],[172,47],[174,48],[175,49],[176,2],[177,50],[178,51],[179,52],[180,53],[181,54],[182,55],[183,56],[184,57],[185,58],[186,59],[187,60],[188,61],[212,2],[213,2],[48,2],[73,62],[74,63],[49,64],[52,64],[71,62],[72,62],[62,62],[61,65],[59,62],[54,62],[67,62],[65,62],[69,62],[53,62],[66,62],[70,62],[55,62],[56,62],[68,62],[50,62],[57,62],[58,62],[60,62],[64,62],[75,66],[63,62],[51,62],[88,67],[87,2],[82,66],[84,68],[83,66],[76,66],[77,66],[79,66],[81,66],[85,68],[86,68],[78,68],[80,68],[214,69],[215,2],[216,2],[217,70],[96,2],[203,71],[201,72],[202,73],[200,74],[114,2],[42,2],[43,2],[9,2],[8,2],[2,2],[10,2],[11,2],[12,2],[13,2],[14,2],[15,2],[16,2],[17,2],[3,2],[4,2],[21,2],[18,2],[19,2],[20,2],[22,2],[23,2],[24,2],[5,2],[25,2],[26,2],[27,2],[28,2],[6,2],[32,2],[29,2],[30,2],[31,2],[33,2],[7,2],[34,2],[39,2],[40,2],[35,2],[36,2],[37,2],[38,2],[1,2],[41,2],[44,2],[45,110],[121,111],[124,112],[122,113],[119,114],[123,114],[120,114],[130,115],[128,116],[127,117],[46,110],[125,118],[106,119],[107,90],[90,120],[94,121],[91,122],[95,123],[118,124],[105,125],[89,126],[104,126],[101,110],[97,110],[102,110],[103,127],[100,110],[98,110],[99,110],[93,125],[92,128],[117,104],[108,126],[111,109]],"semanticDiagnosticsPerFile":[135,133,197,199,198,138,134,136,137,192,193,194,195,196,204,205,191,126,211,208,207,210,206,209,139,140,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,141,189,157,158,159,190,160,161,162,163,164,165,166,167,168,169,170,171,173,172,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,212,213,48,73,74,49,52,71,72,62,61,59,54,67,65,69,53,66,70,55,56,68,50,57,58,60,64,75,63,51,88,87,82,84,83,76,77,79,81,85,86,78,80,214,215,216,217,96,203,201,202,200,114,42,43,9,8,2,10,11,12,13,14,15,16,17,3,4,21,18,19,20,22,23,24,5,25,26,27,28,6,32,29,30,31,33,7,34,39,40,35,36,37,38,1,41,44,45,121,124,122,119,123,120,131,132,130,128,129,127,46,125,106,107,90,94,91,95,118,105,89,104,101,97,102,103,100,98,99,93,92,112,113,117,115,116,108,109,110,47,111],"latestChangedDtsFile":"./src/bin/tspc.d.ts"},"version":"5.0.4"}
+\ No newline at end of file
+diff --git a/utils/find-cache-dir.js b/utils/find-cache-dir.js
+index 738587d4123e948cc595a4ea18d1bcbf96d99321..4b07d808f87073c86c01518d861f8d223e01e24c 100644
+--- a/utils/find-cache-dir.js
++++ b/utils/find-cache-dir.js
+@@ -33,7 +33,7 @@ const isWritable = (path) => {
+         node_fs_1.default.accessSync(path, node_fs_1.default.constants.W_OK);
+         return true;
+     }
+-    catch {
++    catch (_a) {
+         return false;
+     }
+ };
+diff --git a/utils/find-cache-dir.js.map b/utils/find-cache-dir.js.map
+index 41ef9aacd6075bc73add7faff593bbf46f8f0020..12edf2de54bede8f455307e285a026e30546bbaa 100644
+--- a/utils/find-cache-dir.js.map
++++ b/utils/find-cache-dir.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"find-cache-dir.js","sourceRoot":"","sources":["../../../projects/core/src/utils/find-cache-dir.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
++{"version":3,"file":"find-cache-dir.js","sourceRoot":"","sources":["../../../projects/core/src/utils/find-cache-dir.ts"],"names":[],"mappings":";AAAA;;;;;;;;;;;;;;;;GAgBG;;;;;;AAEH,gEAAmC;AACnC,0DAA6B;AAC7B,sDAAyB;AAazB,YAAY;AAGZ,wHAAwH;AACxH,kBAAkB;AAClB,wHAAwH;AAExH,MAAM,UAAU,GAAG,CAAC,IAAY,EAAE,EAAE;IAClC,IAAI;QACF,iBAAE,CAAC,UAAU,CAAC,IAAI,EAAE,iBAAE,CAAC,SAAS,CAAC,IAAI,CAAC,CAAC;QACvC,OAAO,IAAI,CAAC;KACb;IACD,WAAM;QACJ,OAAO,KAAK,CAAC;KACd;AACH,CAAC,CAAC;AAEF,SAAS,YAAY,CAAC,SAAiB,EAAE,OAAY;IACnD,IAAI,OAAO,CAAC,MAAM,EAAE;QAClB,iBAAE,CAAC,SAAS,CAAC,SAAS,EAAE,EAAE,SAAS,EAAE,IAAI,EAAE,CAAC,CAAC;KAC9C;IAED,OAAO,SAAS,CAAC;AACnB,CAAC;AAED,SAAS,sBAAsB,CAAC,SAAiB;IAC/C,MAAM,WAAW,GAAG,mBAAI,CAAC,IAAI,CAAC,SAAS,EAAE,cAAc,CAAC,CAAC;IAEzD,IACE,CAAC,UAAU,CAAC,WAAW,CAAC;WACrB,CAAC,iBAAE,CAAC,UAAU,CAAC,WAAW,CAAC,IAAI,CAAC,UAAU,CAAC,mBAAI,CAAC,IAAI,CAAC,SAAS,CAAC,CAAC,CAAC,EACpE;QACA,OAAO;KACR;IAED,OAAO,WAAW,CAAC;AACrB,CAAC;AAED,SAAS,qBAAqB,CAAC,SAAiB;IAC9C,MAAM,WAAW,GAAG,IAAI,GAAG,EAAU,CAAC;IACtC,IAAI,WAAW,GAAG,mBAAI,CAAC,OAAO,CAAC,SAAS,CAAC,CAAC;IAE1C,OAAO,IAAI,EAAE;QACX,MAAM,eAAe,GAAG,mBAAI,CAAC,IAAI,CAAC,WAAW,EAAE,cAAc,CAAC,CAAC;QAE/D,IAAI,iBAAE,CAAC,UAAU,CAAC,eAAe,CAAC,EAAE;YAClC,OAAO,mBAAI,CAAC,OAAO,CAAC,eAAe,CAAC,CAAC;SACtC;QAED,wCAAwC;QACxC,WAAW,CAAC,GAAG,CAAC,WAAW,CAAC,CAAC;QAE7B,+BAA+B;QAC/B,MAAM,UAAU,GAAG,mBAAI,CAAC,OAAO,CAAC,WAAW,CAAC,CAAC;QAE7C,4BAA4B;QAC5B,IAAI,WAAW,CAAC,GAAG,CAAC,UAAU,CAAC,IAAI,UAAU,KAAK,WAAW,EAAE;YAC7D,OAAO,IAAI,CAAC;SACb;QAED,WAAW,GAAG,UAAU,CAAC;KAC1B;AACH,CAAC;AAED,YAAY;AAGZ,wHAAwH;AACxH,gBAAgB;AAChB,wHAAwH;AAExH,SAAgB,kBAAkB,CAAC,OAA4B;IAC7D,kCAAkC;IAClC,IAAI,sBAAO,CAAC,GAAG,CAAC,SAAS,IAAI,CAAC,CAAE,MAAM,EAAE,OAAO,EAAE,GAAG,EAAE,GAAG,CAAE,CAAC,QAAQ,CAAC,sBAAO,CAAC,GAAG,CAAC,SAAS,CAAC;QACzF,OAAO,YAAY,CAAC,mBAAI,CAAC,IAAI,CAAC,sBAAO,CAAC,GAAG,CAAC,SAAS,EAAE,OAAO,CAAC,IAAI,CAAC,EAAE,OAAO,CAAC,CAAC;IAE/E,sBAAsB;IACtB,MAAM,QAAQ,GAAG,OAAO,CAAC,GAAG,IAAI,sBAAO,CAAC,GAAG,EAAE,CAAC;IAC9C,MAAM,MAAM,GAAG,qBAAqB,CAAC,QAAQ,CAAC,CAAC;IAC/C,IAAI,CAAC,MAAM;QAAE,OAAO,SAAS,CAAC;IAE9B,2BAA2B;IAC3B,MAAM,WAAW,GAAG,sBAAsB,CAAC,MAAM,CAAC,CAAC;IACnD,IAAI,CAAC,WAAW;QAAE,OAAO,SAAS,CAAC;IAEnC,OAAO,YAAY,CAAC,mBAAI,CAAC,IAAI,CAAC,MAAM,EAAE,cAAc,EAAE,QAAQ,EAAE,OAAO,CAAC,IAAI,CAAC,EAAE,OAAO,CAAC,CAAC;AAC1F,CAAC;AAfD,gDAeC;AAED,YAAY"}
+\ No newline at end of file
