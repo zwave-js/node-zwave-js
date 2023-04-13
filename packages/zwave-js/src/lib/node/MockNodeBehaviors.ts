@@ -26,6 +26,7 @@ import {
 	MockZWaveFrameType,
 } from "@zwave-js/testing";
 import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
+import { behaviors as SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
@@ -272,5 +273,6 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToS2ZWavePlusCCGet,
 
 		...NotificationCCBehaviors,
+		...SoundSwitchCCBehaviors,
 	];
 }
