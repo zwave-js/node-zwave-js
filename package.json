@@ -38,6 +38,7 @@
     "@commitlint/config-conventional": "^17.4.4",
     "@esm2cjs/p-queue": "^7.3.0",
     "@microsoft/api-extractor": "^7.33.7",
+    "@monorepo-utils/workspaces-to-typescript-project-references": "^2.9.0",
     "@tsconfig/node14": "^1.0.3",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^14.18.36",
@@ -130,7 +131,9 @@
     "codefind": "yarn ts packages/maintenance/src/codefind.ts",
     "extract-api": "FORCE_COLOR=1 yarn turbo run extract-api",
     "accept-api": "yarn extract-api --force -- --local",
-    "monopack": "yarn exec monopack"
+    "monopack": "yarn exec monopack",
+    "check-references": "workspaces-to-typescript-project-references --check && workspaces-to-typescript-project-references --check --tsconfigPath tsconfig.build.json",
+    "sync-references": "workspaces-to-typescript-project-references && workspaces-to-typescript-project-references --tsconfigPath tsconfig.build.json && prettier -c '{,packages/*/}{tsconfig,tsconfig.*}.json' -w --loglevel silent"
   },
   "readme": "README.md",
   "config": {

@@ -5,6 +5,7 @@
 		"rootDir": "src",
 		"outDir": "build"
 	},
+	"references": [],
 	"include": ["src/**/*.ts"],
 	"exclude": ["src/**/*.test.ts"]
 }

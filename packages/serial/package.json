@@ -3,18 +3,7 @@
   "version": "10.15.0",
   "description": "zwave-js: Serialport driver",
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "mock": [
-          "build/index_mock.d.ts"
-        ],
-        "safe": [
-          "build/index_safe.d.ts"
-        ]
-      }
-    }
+    "access": "public"
   },
   "main": "build/index.js",
   "exports": {
@@ -23,14 +12,14 @@
     "./mock": "./build/index_mock.js",
     "./safe": "./build/index_safe.js"
   },
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "mock": [
-        "src/index_mock.ts"
+        "build/index_mock.d.ts"
       ],
       "safe": [
-        "src/index_safe.ts"
+        "build/index_safe.d.ts"
       ]
     }
   },

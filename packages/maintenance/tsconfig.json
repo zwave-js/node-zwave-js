@@ -6,6 +6,14 @@
 		"newLine": "lf",
 		"resolveJsonModule": true
 	},
+	"references": [
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../shared"
+		}
+	],
 	"include": ["src/**/*.ts", "src/**/*.json"],
 	"exclude": ["build/**", "node_modules/**"]
 }

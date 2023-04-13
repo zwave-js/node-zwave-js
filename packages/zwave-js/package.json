@@ -3,37 +3,6 @@
   "version": "10.15.0",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
-  "publishConfig": {
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "Controller": [
-          "./build/Controller.d.ts"
-        ],
-        "Driver": [
-          "./build/Driver.d.ts"
-        ],
-        "Error": [
-          "./build/Error.d.ts"
-        ],
-        "Node": [
-          "./build/Node.d.ts"
-        ],
-        "Testing": [
-          "./build/Testing.d.ts"
-        ],
-        "Utils": [
-          "./build/Utils.d.ts"
-        ],
-        "Values": [
-          "./build/Values.d.ts"
-        ],
-        "safe": [
-          "./build/index_safe.d.ts"
-        ]
-      }
-    }
-  },
   "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
@@ -47,32 +16,32 @@
     "./Values": "./build/Values.js",
     "./safe": "./build/index_safe.js"
   },
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "Controller": [
-        "./src/Controller.ts"
+        "./build/Controller.d.ts"
       ],
       "Driver": [
-        "./src/Driver.ts"
+        "./build/Driver.d.ts"
       ],
       "Error": [
-        "./src/Error.ts"
+        "./build/Error.d.ts"
       ],
       "Node": [
-        "./src/Node.ts"
+        "./build/Node.d.ts"
       ],
       "Testing": [
-        "./src/Testing.ts"
+        "./build/Testing.d.ts"
       ],
       "Utils": [
-        "./src/Utils.ts"
+        "./build/Utils.d.ts"
       ],
       "Values": [
-        "./src/Values.ts"
+        "./build/Values.d.ts"
       ],
       "safe": [
-        "./src/index_safe.ts"
+        "./build/index_safe.d.ts"
       ]
     }
   },

@@ -4,19 +4,7 @@
   "description": "zwave-js: Command Classes",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "safe": [
-          "build/index_safe.d.ts"
-        ],
-        "*": [
-          "build/cc/*.d.ts",
-          "build/index.d.ts"
-        ]
-      }
-    }
+    "access": "public"
   },
   "main": "build/index.js",
   "exports": {
@@ -25,15 +13,15 @@
     "./safe": "./build/index_safe.js",
     "./*": "./build/cc/*.js"
   },
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "src/index_safe.ts"
+        "build/index_safe.d.ts"
       ],
       "*": [
-        "src/cc/*.ts",
-        "src/index.ts"
+        "build/cc/*.d.ts",
+        "build/index.d.ts"
       ]
     }
   },

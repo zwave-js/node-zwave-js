@@ -4,21 +4,7 @@
   "description": "zwave-js: core components",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "safe": [
-          "build/index_safe.d.ts"
-        ],
-        "test": [
-          "build/index_test.d.ts"
-        ],
-        "ava": [
-          "build/index_ava.d.ts"
-        ]
-      }
-    }
+    "access": "public"
   },
   "main": "build/index.js",
   "exports": {
@@ -28,17 +14,17 @@
     "./test": "./build/index_test.js",
     "./ava": "./build/index_ava.js"
   },
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "src/index_safe.ts"
+        "build/index_safe.d.ts"
       ],
       "test": [
-        "src/index_test.ts"
+        "build/index_test.d.ts"
       ],
       "ava": [
-        "src/index_ava.ts"
+        "build/index_ava.d.ts"
       ]
     }
   },

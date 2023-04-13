@@ -4,11 +4,10 @@
   "description": "zwave-js: testing utilities",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts"
+    "access": "public"
   },
   "main": "build/index.js",
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],

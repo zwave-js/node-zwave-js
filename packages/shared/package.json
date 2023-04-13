@@ -4,15 +4,7 @@
   "description": "zwave-js: shared utilities",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "safe": [
-          "build/index_safe.d.ts"
-        ]
-      }
-    }
+    "access": "public"
   },
   "main": "build/index.js",
   "exports": {
@@ -20,11 +12,11 @@
     "./package.json": "./package.json",
     "./safe": "./build/index_safe.js"
   },
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "src/index_safe.ts"
+        "build/index_safe.d.ts"
       ]
     }
   },
