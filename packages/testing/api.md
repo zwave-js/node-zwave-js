@@ -17,6 +17,18 @@ import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
 
+// Warning: (ae-missing-release-tag) "CCIdToCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> = T extends keyof CCSpecificCapabilities ? CCSpecificCapabilities[T] : never;
+
+// Warning: (ae-missing-release-tag) "CCSpecificCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CCSpecificCapabilities = {
+    [CommandClasses.Notification]: NotificationCCCapabilities;
+};
+
 // Warning: (ae-missing-release-tag) "createMockZWaveAckFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -164,6 +176,8 @@ export class MockNode {
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectControllerFrame<T extends MockZWaveFrame = MockZWaveFrame>(timeout: number, predicate: (msg: MockZWaveFrame) => msg is T): Promise<T>;
     // (undocumented)
+    getCCCapabilities<T extends CommandClasses>(ccId: T, endpointIndex?: number): Partial<CCIdToCapabilities<T>> | undefined;
+    // (undocumented)
     readonly host: ZWaveHost;
     // (undocumented)
     readonly id: number;
@@ -236,9 +250,22 @@ export interface MockZWaveRequestFrame {
     type: MockZWaveFrameType.Request;
 }
 
-// Warnings were encountered during analysis:
+// Warning: (ae-missing-release-tag) "NotificationCCCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// src/MockNode.ts:54:3 - (ae-forgotten-export) The symbol "PartialCCCapabilities" needs to be exported by the entry point index.d.ts
+// @public (undocumented)
+export interface NotificationCCCapabilities {
+    // (undocumented)
+    notificationTypesAndEvents: Record<number, number[]>;
+    // (undocumented)
+    supportsV1Alarm: false;
+}
+
+// Warning: (ae-missing-release-tag) "PartialCCCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> = T | ({
+    ccId: T;
+} & Partial<CommandClassInfo> & Partial<CCIdToCapabilities<T>>);
 
 // (No @packageDocumentation comment for this package)
 

@@ -4,12 +4,12 @@ import {
 	NodeProtocolInfoAndDeviceClass,
 	NodeType,
 } from "@zwave-js/core";
+import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 
-export type PartialCCCapabilities =
-	| ({
-			ccId: CommandClasses;
-	  } & Partial<CommandClassInfo>)
-	| CommandClasses;
+export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> =
+	| T
+	| ({ ccId: T } & Partial<CommandClassInfo> &
+			Partial<CCIdToCapabilities<T>>);
 
 export interface MockNodeCapabilities extends NodeProtocolInfoAndDeviceClass {
 	firmwareVersion: string;
