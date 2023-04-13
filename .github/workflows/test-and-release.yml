@@ -48,7 +48,7 @@ jobs:
 
     - name: Compile TypeScript code
       run: |
-        yarn clean $TURBO_FLAGS
+        # yarn clean $TURBO_FLAGS
         yarn build $TURBO_FLAGS
 
     - name: Save Turbo Cache between jobs
