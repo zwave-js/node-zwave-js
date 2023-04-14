@@ -585,12 +585,12 @@
 	"air_quality_actions_notify_transitions": {
 		// param 74b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "TAir Quality Actions: Notify Transitions"
+		"label": "Air Quality Actions: Notify Transitions"
 	},
 	"temperature_high_entry_level": {
 		// param 80
 		"label": "Temperature High Entry Level",
-		"unit": "Tenths of a Degree",
+		"unit": "0.1 °(C/F)",
 		"valueSize": 2,
 		"minValue": -400,
 		"maxValue": 1850,
@@ -599,7 +599,7 @@
 	"temperature_low_entry_level": {
 		// param 81
 		"label": "Temperature Low Entry Level",
-		"unit": "Tenths of a Degree",
+		"unit": "0.1 °(C/F)",
 		"valueSize": 2,
 		"minValue": -400,
 		"maxValue": 1850,
@@ -616,7 +616,7 @@
 	"temperature_low_exit_level": {
 		// param 83
 		"label": "Temperature Low Exit Level",
-		"unit": "Tenths of a Degree",
+		"unit": "0.1 °(C/F)",
 		"valueSize": 2,
 		"minValue": -400,
 		"maxValue": 1850,
@@ -655,7 +655,7 @@
 	"temperature_change_report": {
 		// param 87
 		"label": "Temperature Change Report",
-		"unit": "Tenths of a degree",
+		"unit": "0.1 °(C/F)",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -795,7 +795,7 @@
 	"pressure_high_entry_level": {
 		// param 104
 		"label": "Pressure High Entry Level",
-		"unit": "Tenths",
+		"unit": "0.1 (kPa/inHg)",
 		"valueSize": 2,
 		"minValue": 88,
 		"maxValue": 1100,
@@ -805,7 +805,7 @@
 	"pressure_low_entry_level": {
 		// param 105
 		"label": "Pressure Low Entry Level",
-		"unit": "Tenths",
+		"unit": "0.1 (kPa/inHg)",
 		"valueSize": 2,
 		"minValue": 88,
 		"maxValue": 1100,
@@ -815,7 +815,7 @@
 	"pressure_high_exit_level": {
 		// param 106
 		"label": "Pressure High Exit Level",
-		"unit": "Tenths",
+		"unit": "0.1 (kPa/inHg)",
 		"valueSize": 2,
 		"minValue": 88,
 		"maxValue": 1100,
@@ -825,7 +825,7 @@
 	"pressure_low_exit_level": {
 		// param 107
 		"label": "Pressure Low Exit Level",
-		"unit": "Tenths",
+		"unit": "0.1 (kPa/inHg)",
 		"valueSize": 2,
 		"minValue": 88,
 		"maxValue": 1100,
@@ -865,7 +865,7 @@
 	"pressure_change_report": {
 		// param 111
 		"label": "Pressure Change Report",
-		"unit": "Tenths",
+		"unit": "0.1 (kPa/inHg)",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1003,7 +1003,7 @@
 				"value": 0
 			},
 			{
-				"label": "Inches of mercury (in Hg)",
+				"label": "Inches of mercury (inHg)",
 				"value": 1
 			}
 		]
