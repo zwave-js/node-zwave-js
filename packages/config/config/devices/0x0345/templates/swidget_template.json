@@ -1,8 +1,7 @@
 {
-	"power_1_high_entry_value": {
+	"primary_power_high_entry_value": {
 		// param 1
-		"label": "Power 1 High Entry Value",
-		"description": "Used to set the power value for Power 1 (the controlled load) that indicates entry into a Power 1 Low power state.",
+		"label": "Primary Power High Entry Threshold",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -10,10 +9,9 @@
 		"unsigned": true,
 		"defaultValue": 2400
 	},
-	"power_1_low_entry_value": {
+	"primary_power_low_entry_value": {
 		// param 2
-		"label": "Power 1 Low Entry Value",
-		"description": "Used to set the power value for Power 1 (the controlled load) that indicates exit from a Power 1 High state.",
+		"label": "Primary Power Low Entry Value",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -21,10 +19,9 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_1_high_exit_value": {
+	"primary_power_high_exit_value": {
 		// param 3
-		"label": "Power 1 High Exit Value",
-		"description": "Used to set the power value for Power 1 (the controlled load) that indicates exit from a Power 1 High state.",
+		"label": "Primary Power High Exit Value",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -32,10 +29,9 @@
 		"unsigned": true,
 		"defaultValue": 2400
 	},
-	"power_1_low_exit_value": {
+	"primary_power_low_exit_value": {
 		// param 4
-		"label": "Power 1 Low Exit Value",
-		"description": "Used to set the power value for Power 1 (the controlled load) that indicates exit from a Power 1 Low power state.",
+		"label": "Primary Power Low Exit Value",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -43,10 +39,9 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_1_high_delay": {
+	"primary_power_high_delay": {
 		//param 5
-		"label": "Power 1 High Delay",
-		"description": "Used to set the time duration that Power 1 High state change power level conditions must exist before Power 1 High state entry and/or exit is registered, and the associated actions are executed.",
+		"label": "Primary Power High Delay",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -54,10 +49,9 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_1_low_delay": {
+	"primary_power_low_delay": {
 		//param 6
-		"label": "Power 1 Low Delay",
-		"description": "Used to set the time duration that Power 1 Low state change power level condition must exist before Power 1 Low state entry and/or exit is registered, and the associated actions are executed.",
+		"label": "Primary Power Low Delay",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -65,10 +59,9 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_1_periodic_report": {
+	"primary_power_periodic_report": {
 		// param 7
-		"label": "Power 1 Periodic Report",
-		"description": "Used to set the time in seconds between sending Power 1 METER REPORTs to the Lifeline.",
+		"label": "Primary Power Periodic Report",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -76,10 +69,9 @@
 		"unsigned": true,
 		"defaultValue": 3600
 	},
-	"power_1_change_report": {
+	"primary_power_change_report": {
 		// param 8
-		"label": "Power 1 Change Report",
-		"description": "Used to set the power in Watts that a reported reading of Power 1 must change by since the last reported value before a new METER REPORT is sent to the Lifeline.",
+		"label": "Primary Power Change Report",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -87,10 +79,9 @@
 		"unsigned": true,
 		"defaultValue": 10
 	},
-	"power_1_renotification_delay": {
+	"primary_power_renotification_delay": {
 		// param 9
-		"label": "Power 1 Renotification Delay",
-		"description": "Used to set the time in seconds between sending repeated Power 1 METER REPORTs to the Lifeline while in a Power 1 Low or High state.",
+		"label": "Primary Power Renotification Delay",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -98,134 +89,115 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_1_high_entry_set_value": {
+	"primary_power_high_entry_set_value": {
 		// param 10
-		"label": "Power 1 High Entry SET value",
-		"description": "BASIC SET value sent to associated nodes on entry into Power 1 High state.",
+		"label": "Primary Power High Entry Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
 		"defaultValue": 255
 	},
-	"power_1_high_exit_set_value": {
+	"primary_power_high_exit_set_value": {
 		// param 11
-		"label": "Power 1 High Exit SET value",
-		"description": "BASIC SET value sent to associated nodes on exit from Power 1 High state.",
+		"label": "Primary Power High Exit Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_1_low_entry_set_value": {
+	"primary_power_low_entry_set_value": {
 		// param 12
-		"label": "Power 1 Low Entry SET Value",
-		"description": "BASIC SET value sent to associated nodes on entry into Power 1 Low state.",
+		"label": "Primary Power Low Entry Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
 		"defaultValue": 255
 	},
-	"power_1_low_exit_set_value": {
+	"primary_power_low_exit_set_value": {
 		// param 13
-		"label": "Power 1 Low Exit SET Value",
-		"description": "BASIC SET value sent to associated nodes on exit from Power 1 Low state.",
+		"label": "Primary Power Low Exit Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_1_high_actions_control_associations_on_entry": {
+	"primary_power_high_actions_control_associations_on_entry": {
 		// param 14b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with “Power 1 High Entry SET Value” to “Power 1 High” association group on Power 1 High state entry."
+		"label": "Primary Power High Actions: Control Associations on Entry"
 	},
-	"power_1_high_actions_control_associations_on_exit": {
+	"primary_power_high_actions_control_associations_on_exit": {
 		// param 14b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with “Power 1 High Exit SET Value” to “Power 1 High” association group on Power 1 High state exit."
+		"label": "Primary Power High Actions: Control Associations on Exit"
 	},
-	"power_1_high_actions_control_host_on_entry": {
+	"primary_power_high_actions_control_host_on_entry": {
 		// param 14b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with “Power 1 High Entry SET Value” on host device on Power 1 High state entry."
+		"label": "Primary Power High Actions: Control Host on Entry"
 	},
-	"power_1_high_actions_control_host_on_exit": {
+	"primary_power_high_actions_control_host_on_exit": {
 		// param 14b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with “Power 1 High Exit SET Value” on host device on Power 1 High state exit."
+		"label": "Primary Power High Actions: Control Host on Exit"
 	},
-	"power_1_high_actions_report_transitions": {
+	"primary_power_high_actions_report_transitions": {
 		// param 14b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: REPORT TRANSITIONS",
-		"description": "If set, send METER REPORT to Lifeline on Power 1 High state entry and exit."
+		"label": "Primary Power High Actions: Report Transitions"
 	},
-	"power_1_high_actions_apply_entry_delay": {
+	"primary_power_high_actions_apply_entry_delay": {
 		// param 14b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply “Power 1 High Delay” for Power 1 High state entry."
+		"label": "Primary Power High Actions: Apply Entry Delay"
 	},
-	"power_1_high_actions_apply_exit_delay": {
+	"primary_power_high_actions_apply_exit_delay": {
 		// param 14b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 High Actions: APPLY EXIT DELAY",
-		"description": "If set, apply “Power 1 High Delay” for Power 1 High state exit."
+		"label": "Primary Power High Actions: Apply Exit Delay"
 	},
-	"power_1_low_actions_control_associations_on_entry": {
+	"primary_power_low_actions_control_associations_on_entry": {
 		// param 15b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 Low Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with “Power 1 Low Entry SET Value” to “Power 1 Low” association group on Power 1 Low state entry."
+		"label": "Primary Power Low Actions: Control Associations on Entry"
 	},
-	"power_1_low_actions_control_associations_on_exit": {
+	"primary_power_low_actions_control_associations_on_exit": {
 		// param 15b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 Low Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, execute BASIC SET with “Power 1 Low Entry SET Value” on host device on Power 1 Low state entry."
+		"label": "Primary Power Low Actions: Control Associations on Exit"
 	},
-	"power_1_low_actions_control_host_on_entry": {
+	"primary_power_low_actions_control_host_on_entry": {
 		// param 15b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 Low Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with “Power 1 Low Entry SET Value” on host device on Power 1 Low state entry."
+		"label": "Primary Power Low Actions: Control Host on Entry"
 	},
-	"power_1_low_actions_control_host_on_exit": {
+	"primary_power_low_actions_control_host_on_exit": {
 		// param 15b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 Low Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with “Power Low Exit SET Value” on host device on Power 1 Low state exit."
+		"label": "Primary Power Low Actions: Control Associations on Exit"
 	},
-	"power_1_low_actions_report_transitions": {
+	"primary_power_low_actions_report_transitions": {
 		// param 15b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 Low Actions: REPORT TRANSITIONS",
-		"description": "If set, send METER REPORT to Lifeline on low-power state entry and exit."
+		"label": "Primary Power Low Actions: Report Transitions"
 	},
-	"power_1_low_actions_apply_entry_delay": {
+	"primary_power_low_actions_apply_entry_delay": {
 		// param 15b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 Low Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply “Power 1 Low Delay” for Power 1 Low state entry."
+		"label": "Primary Power Low Actions: Apply Entry Delay"
 	},
-	"power_1_low_actions_apply_exit_delay": {
+	"primary_power_low_actions_apply_exit_delay": {
 		// param 15b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 1 Low Actions: APPLY EXIT DELAY",
-		"description": "If set, apply “Power 1 Low Delay” for Power 1 Low state exit."
+		"label": "Primary Power Low Actions: Apply Exit Delay"
 	},
-	"power_2_high_entry_value": {
+	"secondary_power_high_entry_value": {
 		// param 24
-		"label": "Power 2 High Entry Value",
-		"description": "Used to set the power value for Power 2 that indicates entry into a Power 2 High state.",
+		"label": "Secondary Power High Entry Value",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -233,10 +205,9 @@
 		"unsigned": true,
 		"defaultValue": 2400
 	},
-	"power_2_low_entry_value": {
+	"secondary_power_low_entry_value": {
 		// param 25
-		"label": "Power 2 Low Entry Value",
-		"description": "Used to set the power value for Power 2 that indicates entry into a Power 2 Low power state.",
+		"label": "Secondary Power Low Entry Value",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -244,10 +215,9 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_2_high_exit_value": {
+	"secondary_power_high_exit_value": {
 		// param 26
-		"label": "Power 2 High Exit Value",
-		"description": "Used to set the power value for Power 2 that indicates exit from a Power 2 High state.",
+		"label": "Secondary Power High Exit Value",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -255,10 +225,9 @@
 		"unsigned": true,
 		"defaultValue": 2400
 	},
-	"power_2_low_exit_value": {
+	"secondary_power_low_exit_value": {
 		// param 27
-		"label": "Power 2 Low Exit Value",
-		"description": "Used to set the power value for Power 2 that indicates exit from a Power 2 Low state.",
+		"label": "Secondary Power Low Exit Value",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -266,10 +235,9 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_2_high_delay": {
+	"secondary_power_high_delay": {
 		// param 28
-		"label": "Power 2 High Delay",
-		"description": "Used to set the time duration that Power 2 High state change power level conditions must exist before Power 2 High state entry and/or exit is registered, and the associated actions are executed.",
+		"label": "Secondary Power High Delay",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -277,10 +245,9 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_2_low_delay": {
+	"secondary_power_low_delay": {
 		// param 29
-		"label": "Power 2 Low Delay",
-		"description": "Used to set the time duration that Power 2 Low state change power level conditions must exist before Power 2 Low state entry and/or exit is registered, and the associated actions are executed.",
+		"label": "Secondary Power Low Delay",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -288,10 +255,9 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_2_periodic_report": {
+	"secondary_power_periodic_report": {
 		// param 30
-		"label": "Power 2 Periodic Report",
-		"description": "Used to set the time in seconds between sending Power 2 METER REPORTs to the Lifeline.",
+		"label": "Secondary Power Periodic Report",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -299,10 +265,9 @@
 		"unsigned": true,
 		"defaultValue": 3600
 	},
-	"power_2_change_report": {
+	"secondary_power_change_report": {
 		// param 31
-		"label": "Power 2 Change Report",
-		"description": "Used to set the power in Watts that a reported reading of Power 2 must change by since the last reported value before a new METER REPORT is sent to the Lifeline.",
+		"label": "Secondary Power Change Report",
 		"unit": "W",
 		"valueSize": 2,
 		"minValue": 0,
@@ -310,10 +275,9 @@
 		"unsigned": true,
 		"defaultValue": 10
 	},
-	"power_2_renotification_delay": {
+	"secondary_power_renotification_delay": {
 		// param 32
-		"label": "Power 2 Renotification Delay",
-		"description": "Used to set the time in seconds between sending repeated Power 2 METER REPORTs to the Lifeline while in a Power 2 Low or High state.",
+		"label": "Secondary Power Renotification Delay",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -321,140 +285,120 @@
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_2_high_entry_set_value": {
+	"secondary_power_high_entry_set_value": {
 		// param 33
-		"label": "Power 2 High Entry SET value",
-		"description": "BASIC SET value sent to associated nodes on entry into Power 2 High state.",
+		"label": "Secondary Power High Entry Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
 		"defaultValue": 255
 	},
-	"power_2_high_exit_set_value": {
+	"secondary_power_high_exit_set_value": {
 		// param 34
-		"label": "Power 2 High Exit SET value",
-		"description": "BASIC SET value sent to associated nodes on exit from Power 2 High state.",
+		"label": "Secondary Power High Exit Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_2_low_entry_set_value": {
+	"secondary_power_low_entry_set_value": {
 		// param 35
-		"label": "Power 2 Low Entry SET value",
-		"description": "BASIC SET value sent to associated nodes on entry into Power 2 Low state.",
+		"label": "Secondary Power Low Entry Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
 		"defaultValue": 255
 	},
-	"power_2_low_exit_set_value": {
+	"secondary_power_low_exit_set_value": {
 		// param 36
-		"label": "Power 2 Low Exit SET Value",
-		"description": "BASIC SET value sent to associated nodes on exit from Power 2 Low state.",
+		"label": "Secondary Power Low Exit Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"unsigned": true,
 		"defaultValue": 0
 	},
-	"power_2_high_actions_control_associations_on_entry": {
+	"secondary_power_high_actions_control_associations_on_entry": {
 		// param 37b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with “Power 2 High Entry SET Value” to “Power 2 High” association group on Power 2 High state entry."
+		"label": "Secondary Power High Actions: Control Associations on Entry"
 	},
-	"power_2_high_actions_control_associations_on_exit": {
+	"secondary_power_high_actions_control_associations_on_exit": {
 		// param 37b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with “Power 2 High Exit SET Value” to “Power 2 High” association group on Power 2 High state exit."
+		"label": "Secondary Power High Actions: Control Associations on Exit"
 	},
-	"power_2_high_actions_control_host_on_entry": {
+	"secondary_power_high_actions_control_host_on_entry": {
 		// param 37b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with “Power 2 High Entry SET Value” on host device on Power 2 High state entry."
+		"label": "Secondary Power High Actions: Control Host on Entry"
 	},
-	"power_2_high_actions_control_host_on_exit": {
+	"secondary_power_high_actions_control_host_on_exit": {
 		// param 37b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with “Power 2 High Exit SET Value” on host device on Power 2 High state exit."
+		"label": "Secondary Power High Actions: Control Host on Exit"
 	},
-	"power_2_high_actions_report_transitions": {
+	"secondary_power_high_actions_report_transitions": {
 		// param 37b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: REPORT TRANSITIONS",
-		"description": "If set, send METER REPORT to Lifeline on Power 2 High state entry and exit."
+		"label": "Secondary Power High Actions: Report Transitions"
 	},
-	"power_2_high_actions_apply_entry_delay": {
+	"secondary_power_high_actions_apply_entry_delay": {
 		// param 37b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply “Power 2 High Delay” for Power 2 High state entry."
+		"label": "Secondary Power High Actions: Apply Entry Delay"
 	},
-	"power_2_high_actions_apply_exit_delay": {
+	"secondary_power_high_actions_apply_exit_delay": {
 		// param 37b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 High Actions: APPLY EXIT DELAY",
-		"description": "If set, apply “Power 2 High Delay” for Power 2 High state exit."
+		"label": "Secondary Power High Actions: Apply Exit Delay"
 	},
-	"power_2_low_actions_control_associations_on_entry": {
+	"secondary_power_low_actions_control_associations_on_entry": {
 		// param 38b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with “Power 2Low Entry SET Value” to “Power 2 Low” association group on Power 2 Low state entry."
+		"label": "Secondary Power Low Actions: Control Associations on Entry"
 	},
-	"power_2_low_actions_control_associations_on_exit": {
+	"secondary_power_low_actions_control_associations_on_exit": {
 		// param 38b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with “Power 2 Low Exit SET Value” to “Power 2 Low” association group on Power 2 Low state exit."
+		"label": "Secondary Power Low Actions: Control Associations on Exit"
 	},
-	"power_2_low_actions_control_host_on_entry": {
+	"secondary_power_low_actions_control_host_on_entry": {
 		// param 38b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with “Power 2 Low Entry SET Value” on host device on Power 2 Low state entry."
+		"label": "Secondary Power Low Actions: Control Host on Entry"
 	},
-	"power_2_low_actions_control_host_on_exit": {
+	"secondary_power_low_actions_control_host_on_exit": {
 		// param 38b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with “Power 2 Low Exit SET Value” on host device on Power 2 Low state exit."
+		"label": "Secondary Power Low Actions: Control Host on Exit"
 	},
-	"power_2_low_actions_report_transitions": {
+	"secondary_power_low_actions_report_transitions": {
 		// param 38b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: REPORT TRANSITIONS",
-		"description": "If set, send METER REPORT to Lifeline on Power 2 Low state entry and exit."
+		"label": "Secondary Power Low Actions: Report Transitions"
 	},
-	"power_2_low_actions_apply_entry_delay": {
+	"secondary_power_low_actions_apply_entry_delay": {
 		// param 38b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply “Power 2 Low Delay” for Power 2 Low state entry."
+		"label": "Secondary Power Low Actions: Apply Entry Delay"
 	},
-	"power_2_low_actions_apply_exit_delay": {
+	"secondary_power_low_actions_apply_exit_delay": {
 		// param 38b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Power 2 Low Actions: APPLY EXIT DELAY",
-		"description": "If set, apply “Power 2 Low Delay” for Power 2 Low state exit."
+		"label": "Secondary Power Low Actions: Apply Exit Delay"
 	},
-	"motion_sensitivity_level":{
+	"motion_sensitivity_level": {
 		// param 48
 		"$import": "~/templates/master_template.json#base_0-100_nounit",
-		"label": "Motion Sensitivity Level",
-		"description": "Used to set the sensitivity of the motion detection system."
+		"label": "Motion Sensitivity Level"
 	},
 	"motion_renotification_delay": {
 		// param 49
 		"label": "Motion Renotification Delay",
-		"description": "Used to set the time in seconds between optionally resending NOTIFICATION REPORT",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
@@ -464,7 +408,6 @@
 	"motion_reset_delay": {
 		// param 50
 		"label": "Motion Reset Delay",
-		"description": "Used to set the time in seconds between optionally resending NOTIFICATION REPORT",
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 65535,
@@ -473,8 +416,7 @@
 	},
 	"motion_detected_entry_set_value": {
 		// param 51
-		"label": "Motion Detected Entry SET Value",
-		"description": "BASIC SET value sent to associated nodes on entry into motion detected state (Occupied)",
+		"label": "Motion Detected Entry Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -483,8 +425,7 @@
 	},
 	"motion_detected_exit_set_value": {
 		// param 52
-		"label": "Motion Detected Exit SET Value",
-		"description": "BASIC SET value sent to associated nodes on exit from motion detected state (Vacant)",
+		"label": "Motion Detected Exit Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -494,58 +435,49 @@
 	"motion_actions_control_associations_on_entry": {
 		// param 53b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Motion Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with “Motion Detected Entry SET Value” to “Motion” association group on entry into motion detected state (Occupied)"
+		"label": "Motion Actions: Control Associations on Entry"
 	},
 	"motion_actions_control_associations_on_exit": {
 		// param 54b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Motion Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with “Motion Detected Exit SET Value” to “Motion” association group on exit from motion detected state (Vacant)"
+		"label": "Motion Actions: Control Associations on Exit"
 	},
 	"motion_actions_control_host_on_entry": {
 		// param 54b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Motion Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with “Motion Detected Entry SET Value” on host device on entry into motion detected state (Occupied)"
+		"label": "Motion Actions: Control Host on Entry"
 	},
 	"motion_actions_control_host_on_exit": {
 		// param 54b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Motion Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with “Motion Detected Exit SET Value” on host device on exit from motion detected state (Vacant)."
+		"label": "Motion Actions: Control Host on Exit"
 	},
 	"motion_actions_report_transitions": {
 		// param 54b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Motion Actions: NOTIFY TRANSITIONS",
-		"description": "If set, execute BASIC SET with “Motion Detected Exit SET Value” on host device on exit from motion detected state (Vacant)."
+		"label": "Motion Actions: Notify Transitions"
 	},
-    "air_quality_level_1_index": {
+	"air_quality_level_1_index": {
 		// param 64
 		"label": "Air Quality Level 1 Index",
-		"description": "Used to set the index value representing the upper limit for the 'Clean' air state.",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 500,
 		"unsigned": true,
 		"defaultValue": 100
-
 	},
-    "air_quality_level_2_index": {
+	"air_quality_level_2_index": {
 		// param 65
 		"label": "Air Quality Level 2 Index",
-		"description": "Used to set the index value representing the upper limit for the 'Clean' air state.",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 500,
 		"unsigned": true,
 		"defaultValue": 175
 	},
-    "air_quality_level_3_index": {
+	"air_quality_level_3_index": {
 		// param 66
 		"label": "Air Quality Level 3 Index",
-		"description": "Used to set the index value representing the upper limit for the 'Moderately Polluted' air state.",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 500,
@@ -555,7 +487,6 @@
 	"air_quality_alert_level": {
 		// pram 67
 		"label": "Air Quality Alert Level",
-		"description": "Used to set the air quality level that will trigger Air Quality Alert State actions",
 		"valueSize": 1,
 		"minValue": 1,
 		"maxValue": 3,
@@ -580,7 +511,6 @@
 	"air_quality_alert_delay": {
 		// param 68
 		"label": "Air Quality Alert Delay",
-		"description": "Delay after detection of a level change before acting on change of air quality state",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
@@ -590,7 +520,6 @@
 	"air_quality_renotification_delay": {
 		// param 69
 		"label": "Air Quality Renotification Delay",
-		"description": "Used to set the time in seconds between optionally resending NOTIFICATION REPORT",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
@@ -600,7 +529,6 @@
 	"air_quality_voc_periodic_report": {
 		// param 70
 		"label": "Air Quality VOC Periodic Report",
-		"description": "Used to set the time in seconds between sending a periodic “Volatile Organic Compound level” MULTILEVEL SENSOR REPORT to the Lifeline.",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
@@ -610,7 +538,6 @@
 	"air_quality_co2_periodic_report": {
 		// param 71
 		"label": "Air Quality CO2 Periodic Report",
-		"description": "Used to set the time in seconds between sending a periodic 'Carbon Dioxide CO2-level' MULTILEVEL SENSOR REPORT to the Lifeline.",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
@@ -619,8 +546,7 @@
 	},
 	"air_quality_alert_entry_set_value": {
 		// param 72
-		"label": "Air Quality Alert Entry SET Value",
-		"description": "BASIC SET value sent to associated nodes on entry into air quality alert state.",
+		"label": "Air Quality Alert Entry Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -629,8 +555,7 @@
 	},
 	"air_quality_alert_exit_set_value": {
 		// param 73
-		"label": "Air Quality Alert Exit SET Value",
-		"description": "BASIC SET value sent to associated nodes on exit from air quality alert state.",
+		"label": "Air Quality Alert Exit Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -640,37 +565,31 @@
 	"air_quality_actions_control_associations_on_entry": {
 		// param 74b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Air Quality Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with 'Air Quality Alert Entry SET Value' to 'Air Quality' association group on entry into air quality alert state."
+		"label": "Air Quality Actions: Control Associations on Entry"
 	},
 	"air_quality_actions_control_associations_on_exit": {
 		// param 74b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Air Quality Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with 'Air Quality Alert Exit SET Value' to 'Air Quality' association group on entry into air quality alert state."
+		"label": "Air Quality Actions: Control Associations on Exit"
 	},
 	"air_quality_actions_control_host_on_entry": {
 		// param 74b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Air Quality Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with 'Air Quality Alert Entry SET Value' to 'Air Quality' association group on entry into air quality alert state."
+		"label": "Air Quality Actions: Control Host on Entry"
 	},
 	"air_quality_actions_host_on_exit": {
 		// param 74b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Air Quality Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with 'Air Quality Alert Exit SET Value' to 'Air Quality' association group on entry into air quality alert state."
+		"label": "Air Quality Actions: Control Host on Exit"
 	},
 	"air_quality_actions_notify_transitions": {
 		// param 74b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "TAir Quality Actions: NOTIFY TRANSITIONS",
-		"description": "If set, send NOTIFICATION REPORT (Home Health: VOC Level Status Event) to Lifeline with updated pollution level value on change of air quality state and during the renotification period while in air quality alert state (if enabled)."
+		"label": "TAir Quality Actions: Notify Transitions"
 	},
 	"temperature_high_entry_level": {
 		// param 80
 		"label": "Temperature High Entry Level",
-		"description": "Used to set the temperature value that indicates entry into a high/over temperature state.",
 		"unit": "Tenths of a Degree",
 		"valueSize": 2,
 		"minValue": -400,
@@ -680,7 +599,6 @@
 	"temperature_low_entry_level": {
 		// param 81
 		"label": "Temperature Low Entry Level",
-		"description": "Used to set the temperature value that indicates entry into a low/under temperature state.",
 		"unit": "Tenths of a Degree",
 		"valueSize": 2,
 		"minValue": -400,
@@ -690,7 +608,6 @@
 	"temperature_high_exit_level": {
 		// param 82
 		"label": "Temperature High Exit Level",
-		"description": "Used to set the temperature value that indicates exit from a high/over temperature state.",
 		"valueSize": 2,
 		"minValue": -400,
 		"maxValue": 1850,
@@ -699,7 +616,6 @@
 	"temperature_low_exit_level": {
 		// param 83
 		"label": "Temperature Low Exit Level",
-		"description": "Used to set the temperature value that indicates exit from a low/under temperature or under-temperature state.",
 		"unit": "Tenths of a Degree",
 		"valueSize": 2,
 		"minValue": -400,
@@ -709,7 +625,6 @@
 	"temperature_high_delay": {
 		// param 84
 		"label": "Temperature High Delay",
-		"description": "Used to set the time duration that high-power state change conditions must exist before high state entry and/or exit is registered, and the associated actions are executed.",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -720,7 +635,6 @@
 	"temperature_low_delay": {
 		// pram 85
 		"label": "Temperature Low Delay",
-		"description": "Used to set the time duration that low-power state change conditions must exist before low state entry and/or exit is registered, and the associated actions are executed.",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -731,7 +645,6 @@
 	"temperature_periodic_report": {
 		// param 86
 		"label": "Temperature Periodic Report",
-		"description": "Used to set the time in seconds between sending a periodic MULTILEVEL SENSOR REPORT to the Lifeline",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -742,7 +655,6 @@
 	"temperature_change_report": {
 		// param 87
 		"label": "Temperature Change Report",
-		"description": "Used to set the temperature in degrees that a reported reading must change by to trigger a new temperature MULTILEVEL SENSOR REPORT to the Lifeline",
 		"unit": "Tenths of a degree",
 		"valueSize": 1,
 		"minValue": 0,
@@ -753,7 +665,6 @@
 	"temperature_renotification_delay": {
 		// param 88
 		"label": "Temperature Renotification Delay",
-		"description": "Used to set the time in seconds between sending repeated temperature MULTILEVEL SENSOR REPORT messages to the Lifeline while in a low/under or high/over temperature state. If set to 0 (disabled) then normal change and periodic reporting still apply",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -763,8 +674,7 @@
 	},
 	"temperature_high_entry_set_value": {
 		// param 89
-		"label": "Temperature High Entry SET Value",
-		"description": "BASIC SET value sent to associated nodes on entry into high/over-temperature state",
+		"label": "Temperature High Entry Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -773,8 +683,7 @@
 	},
 	"temperature_high_exit_set_value": {
 		// param 90
-		"label": "Temperature High Exit SET Value",
-		"description": "BASIC SET value sent to associated nodes on exit from high/over-temperature state",
+		"label": "Temperature High Exit Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -783,8 +692,7 @@
 	},
 	"temperature_low_entry_set_value": {
 		// param 91
-		"label": "Temperature Low Entry SET Value",
-		"description": "BASIC SET value sent to associated nodes on entry into low/under temperature state",
+		"label": "Temperature Low Entry Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -793,8 +701,7 @@
 	},
 	"temperature_low_exit_set_value": {
 		// param 92
-		"label": "Temperature Low Exit SET Value",
-		"description": "BASIC SET value sent to associated nodes on exit from low/under temperature state",
+		"label": "Temperature Low Exit Set Value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -804,97 +711,81 @@
 	"temperature_high_actions_control_associations_on_entry": {
 		// param 93b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature High Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with 'Temperature High Entry SET Value' to 'Temperature High' association group on high/over temperature state entry"
+		"label": "Temperature High Actions: Control Associations on Entry"
 	},
 	"temperature_high_actions_control_associations_on_exit": {
 		// param 93b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature High Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with 'Temperature High Exit SET Value' to 'Temperature High' association group on high/over temperature state exit"
+		"label": "Temperature High Actions: Control Associations on Exit"
 	},
 	"temperature_high_actions_control_host_on_entry": {
 		// param 93b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature High Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with 'Temperature High Entry SET Value' on host device on high/over temperature state entry"
+		"label": "Temperature High Actions: Control Host on Entry"
 	},
 	"temperature_high_actions_control_host_on_exit": {
 		// param 93b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature High Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with 'Temperature High Exit SET Value' on host device on high/over temperature state exit."
+		"label": "Temperature High Actions: Control Host on Exit"
 	},
 	"temperature_high_actions_report_transitions": {
 		// param 93b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature High Actions: REPORT TRANSITIONS",
-		"description": "If set, send temperature MULTILEVEL SENSOR REPORT to Lifeline on high/over temperature state entry and exit"
+		"label": "Temperature High Actions: Report Transitions"
 	},
 	"temperature_high_actions_notify_transitions": {
 		// param 93b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature High Actions: NOTIFY TRANSITIONS",
-		"description": "If set, send NOTIFICATION REPORT to Lifeline on high/over temperature state entry (Heat Alarm: Overheat), high/over temperature state exit (Heat Alarm: Idle), and during the Renotification Period (if enabled)"
+		"label": "Temperature High Actions: Notify Transitions"
 	},
 	"temperature_high_actions_apply_entry_delay": {
 		// param 93b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature High Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply Temperature High Delay for high/over temperature entry"
+		"label": "Temperature High Actions: Apply Entry Delay"
 	},
 	"temperature_high_actions_apply_exit_delay": {
 		// param 93b7
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature High Actions: APPLY EXIT DELAY",
-		"description": "If set, apply Temperature High Delay for high/over temperature exit"
+		"label": "Temperature High Actions: Apply Exit Delay"
 	},
 	"temperature_low_actions_control_associations_on_entry": {
 		// param 94b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature Low Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with 'Temperature Low Entry SET Value' to 'Temperature Low' association group on low/under temperature state entry"
+		"label": "Temperature Low Actions: Control Associations on Entry"
 	},
 	"temperature_low_actions_control_associations_on_exit": {
 		//param 94b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature Low Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with 'Temperature Low Exit SET Value' to 'Temperature Low' association group on low/under temperature state exit"
+		"label": "Temperature Low Actions: Control Associations on Exit"
 	},
 	"temperature_low_actions_control_host_on_entry": {
 		// param 94b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature Low Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with 'Temperature Low Entry SET Value' on host device on low/under temperature state entry"
+		"label": "Temperature Low Actions: Control Host on Entry"
 	},
 	"temperature_low_actions_control_host_on_exit": {
 		// param 94b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature Low Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with 'Temperature Low Exit SET Value' on host device on low/under temperature state exit"
+		"label": "Temperature Low Actions: Control Host on Exit"
 	},
 	"temperature_low_actions_report_transitions": {
 		// param 94b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature Low Actions: REPORT TRANSITIONS",
-		"description": "If set, send Temperature MULTILEVEL SENSOR REPORT to Lifeline on high/over temperature state entry and exit"
+		"label": "Temperature Low Actions: Report Transitions"
 	},
 	"temperature_low_actions_notify_transitions": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature Low Actions: NOTIFY TRANSITIONS",
-		"description": "If set, send NOTIFICATION REPORT to Lifeline on low/under temperature state entry (Heat Alarm: Underheat), low/under temperature state exit (Heat Alarm: Idle), and during the Renotification Period (if enabled)"
+		"label": "Temperature Low Actions: Notify Transitions"
 	},
 	"temperature_low_actions_apply_entry_delay": {
 		// param 94b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature Low Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply Temperature Low Delay for high/over temperature entry"
+		"label": "Temperature Low Actions: Apply Entry Delay"
 	},
 	"temperature_low_actions_apply_exit_delay": {
 		// param 94b7
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Temperature Low Actions: APPLY EXIT DELAY",
-		"description": "If set, apply Temperature Low Delay for high/over temperature exit"
+		"label": "Temperature Low Actions: Apply Exit Delay"
 	},
 	"temperature_units": {
 		// param 95
@@ -904,7 +795,6 @@
 	"pressure_high_entry_level": {
 		// param 104
 		"label": "Pressure High Entry Level",
-		"description": "Used to set the pressure value that indicates entry into a high/over pressure state.",
 		"unit": "Tenths",
 		"valueSize": 2,
 		"minValue": 88,
@@ -915,7 +805,6 @@
 	"pressure_low_entry_level": {
 		// param 105
 		"label": "Pressure Low Entry Level",
-		"description": "Used to set the pressure value that indicates entry into a low/under pressure state.",
 		"unit": "Tenths",
 		"valueSize": 2,
 		"minValue": 88,
@@ -926,7 +815,6 @@
 	"pressure_high_exit_level": {
 		// param 106
 		"label": "Pressure High Exit Level",
-		"description": "Used to set the pressure value that indicates exit from a high/over pressure state.",
 		"unit": "Tenths",
 		"valueSize": 2,
 		"minValue": 88,
@@ -937,7 +825,6 @@
 	"pressure_low_exit_level": {
 		// param 107
 		"label": "Pressure Low Exit Level",
-		"description": "Used to set the pressure value that indicates exit from a low/under pressure or under-pressure state.",
 		"unit": "Tenths",
 		"valueSize": 2,
 		"minValue": 88,
@@ -948,7 +835,6 @@
 	"pressure_high_delay": {
 		// param 108
 		"label": "Pressure High Delay",
-		"description": "Used to set the time duration that high/over pressure state change conditions must exist before high state entry and/or exit is registered, and the associated actions are executed.",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -959,7 +845,6 @@
 	"pressure_low_delay": {
 		// param 109
 		"label": "Pressure Low Delay",
-		"description": "Used to set the time duration that low/under pressure state change conditions must exist before low state entry and/or exit is registered, and the associated actions are executed",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -970,7 +855,6 @@
 	"pressure_periodic_report": {
 		// param 110
 		"label": "Pressure Periodic Report",
-		"description": "Used to set the time in seconds between sending a periodic MULTILEVEL SENSOR REPORT to the Lifeline",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -981,7 +865,6 @@
 	"pressure_change_report": {
 		// param 111
 		"label": "Pressure Change Report",
-		"description": "Used to set the pressure in degrees that a reported reading must change by to trigger a new pressure Multilevel Sensor Report to the Lifeline",
 		"unit": "Tenths",
 		"valueSize": 1,
 		"minValue": 0,
@@ -992,7 +875,6 @@
 	"pressure_renotification_delay": {
 		// param 112
 		"label": "Pressure Renotification Delay",
-		"description": "Used to set the time in seconds between sending repeated pressure Multilevel Sensor Report messages to the Lifeline while in a low/under or high/over pressure state. If set to 0 (disabled) then normal change and periodic reporting still apply.",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -1002,8 +884,7 @@
 	},
 	"pressure_high_entry_set_value": {
 		// param 113
-		"label": "Pressure High Entry SET value",
-		"description": "BASIC SET value sent to associated nodes on entry into high/over-pressure state.",
+		"label": "Pressure High Entry Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1012,8 +893,7 @@
 	},
 	"pressure_high_exit_set_value": {
 		// param 114
-		"label": "Pressure High Exit SET value",
-		"description": "BASIC SET value sent to associated nodes on exit from high/over-pressure state",
+		"label": "Pressure High Exit Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1022,8 +902,7 @@
 	},
 	"pressure_low_entry_set_value": {
 		// param 115
-		"label": "Pressure Low Entry SET value",
-		"description": "BASIC SET value sent to associated nodes on exit from low/under pressure state.",
+		"label": "Pressure Low Entry Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1032,8 +911,7 @@
 	},
 	"pressure_low_exit_set_value": {
 		// param 116
-		"label": "Pressure Low Exit SET value",
-		"description": "BASIC SET value sent to associated nodes on exit from low/under pressure state.",
+		"label": "Pressure Low Exit Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1043,86 +921,72 @@
 	"pressure_high_actions_control_associations_on_entry": {
 		// param 117b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure High Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with 'Pressure High Entry SET Value' to 'Pressure High' association group on high/over pressure state entry"
+		"label": "Pressure High Actions: Control Associations on Entry"
 	},
 	"pressure_high_actions_control_associations_on_exit": {
 		// param 117b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure High Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with 'Pressure High Exit SET Value' to 'Pressure High' association group on high/over pressure state exit"
+		"label": "Pressure High Actions: Control Associations on Exit"
 	},
 	"pressure_high-actions_control_host_on_entry": {
 		// param 117b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure High Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with 'Pressure High Entry SET Value' on host device on high/over pressure state entry"
+		"label": "Pressure High Actions: Control Host on Entry"
 	},
 	"pressure_high_actions_control_host_on_exit": {
 		// param 117b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure High Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with 'Pressure High Exit SET Value' on host device on high/over pressure state exit."
+		"label": "Pressure High Actions: Control Host on Exit"
 	},
 	"pressure_high_actions_report_transitions": {
 		// param 117b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure High Actions: REPORT TRANSITIONS",
-		"description": "If set, send pressure MULTILEVEL SENSOR REPORT to Lifeline on high/over pressure state entry and exit"
+		"label": "Pressure High Actions: Report Transitions"
 	},
 	"pressure_high-actions_apply_entry_delay": {
 		// param 117b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure High Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply Pressure High Delay for high/over pressure entry"
+		"label": "Pressure High Actions: Apply ENtry Delay"
 	},
 	"pressure_high_actions_apply_exit_delay": {
 		// param 117b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure High Actions: APPLY EXIT DELAY",
-		"description": "If set, apply Pressure High Delay for high/over pressure exit"
+		"label": "Pressure High Actions: Apply Exit Delay"
 	},
 	"pressure_low_actions_control_associations_on_entry": {
 		// param 118b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure Low Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with 'Pressure Low Exit SET Value' to 'Pressure Low' association group on low/under pressure state entry"
+		"label": "Pressure Low Actions: Control Associations on Entry"
 	},
 	"pressure_low_actions_control_associations_on_exit": {
 		// param 118b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure Low Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with 'Pressure Low Exit SET Value' to 'Pressure Low' association group on low/under pressure state exit"
+		"label": "Pressure Low Actions: Control Associations on Exit"
 	},
 	"pressure_low_actions_control_host_on_entry": {
 		// param 118b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure Low Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with 'Pressure Low Entry SET Value' on host device on low/under pressure state entry"
+		"label": "Pressure Low Actions: Control Host on Entry"
 	},
 	"pressure_low_actions_control_host_on_exit": {
 		// param 118b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure Low Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with 'Pressure Low Exit SET Value' on host device on low/under pressure state exit."
+		"label": "Pressure Low Actions: Control Host on Exit"
 	},
 	"pressure_low_actions_report_transitions": {
 		// param 118b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure Low Actions: REPORT TRANSITIONS",
-		"description": "If set, send pressure MULTILEVEL SENSOR REPORT to Lifeline on high/over pressure state entry and exit"
+		"label": "Pressure Low Actions: Report Transitions"
 	},
 	"pressure_low_actions_apply_entry_delay": {
 		// param 118b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure Low Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply Pressure Low Delay for low/under pressure state entry"
+		"label": "Pressure Low Actions: Apply Entry Delay"
 	},
 	"pressure_low_actions_apply_exit_delay": {
 		// param 118b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Pressure Low Actions: APPLY EXIT DELAY",
-		"description": "If set, apply Pressure Low Delay for low/under pressure state exit."
+		"label": "Pressure Low Actions: Apply Exit Delay"
 	},
 	"pressure_units": {
 		// param 119
@@ -1147,7 +1011,6 @@
 	"humidity_high_entry_level": {
 		// param 128
 		"label": "Humidity High Entry Level",
-		"description": "Used to set the humidity value that indicates entry into a high/over humidity state.",
 		"unit": "%",
 		"valueSize": 1,
 		"minValue": 0,
@@ -1158,7 +1021,6 @@
 	"humidity_low_entry_level": {
 		// param 129
 		"label": "Humidity Low Entry Level",
-		"description": "Used to set the humidity value that indicates entry into a low/under humidity state.",
 		"unit": "%",
 		"valueSize": 1,
 		"minValue": 0,
@@ -1169,7 +1031,6 @@
 	"humidity_high_exit_level": {
 		// param 130
 		"label": "Humidity High Exit Level",
-		"description": "Used to set the humidity value that indicates exit from a high/over humidity state.",
 		"unit": "%",
 		"valueSize": 1,
 		"minValue": 0,
@@ -1180,7 +1041,6 @@
 	"humidity_low_exit_level": {
 		// param 131
 		"label": "Humidity Low Exit Level",
-		"description": "Used to set the humidity value that indicates exit from a low/under humidity or under-humidity state.",
 		"unit": "%",
 		"valueSize": 1,
 		"minValue": 0,
@@ -1191,7 +1051,6 @@
 	"humidity_high_delay": {
 		// param 132
 		"label": "Humidity High Delay",
-		"description": "Used to set the time duration that high/over humidity state change conditions must exist before high state entry and/or exit is registered, and the associated actions are executed.",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -1202,7 +1061,6 @@
 	"humidity_low_delay": {
 		// param 133
 		"label": "Humidity Low Delay",
-		"description": "Used to set the time duration that low/under humidity state change conditions must exist before low state entry and/or exit is registered, and the associated actions are executed",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -1213,7 +1071,6 @@
 	"humidity_periodic_report": {
 		// param 134
 		"label": "Humidity Periodic Report",
-		"description": "Used to set the time in seconds between sending a periodic MULTILEVEL SENSOR REPORT to the Lifeline",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -1224,7 +1081,6 @@
 	"humidity_change_report": {
 		// param 135
 		"label": "Humidity Change Report",
-		"description": "Used to set the humidity in degrees that a reported reading must change by to trigger a new humidity Multilevel Sensor Report to the Lifeline",
 		"unit": "%",
 		"valueSize": 1,
 		"minValue": 0,
@@ -1235,7 +1091,6 @@
 	"humidity_renotification_delay": {
 		// param 136
 		"label": "Humidity Renotification Delay",
-		"description": "Used to set the time in seconds between sending repeated humidity Multilevel Sensor Report messages to the Lifeline while in a low/under or high/over humidity state. If set to 0 (disabled) then normal change and periodic reporting still apply.",
 		"unit": "seconds",
 		"valueSize": 2,
 		"minValue": 0,
@@ -1245,8 +1100,7 @@
 	},
 	"humidity_high_entry_set_value": {
 		// param 137
-		"label": "Humidity High Entry SET value",
-		"description": "BASIC SET value sent to associated nodes on entry into high/over-humidity state.",
+		"label": "Humidity High Entry Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1255,8 +1109,7 @@
 	},
 	"humidity_high_exit_set_value": {
 		// param 138
-		"label": "Humidity High Exit SET value",
-		"description": "BASIC SET value sent to associated nodes on exit from high/over-humidity state",
+		"label": "Humidity High Exit Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1265,8 +1118,7 @@
 	},
 	"humidity_low_entry_set_value": {
 		// param 139
-		"label": "Humidity Low Entry SET value",
-		"description": "BASIC SET value sent to associated nodes on exit from low/under humidity state.",
+		"label": "Humidity Low Entry Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1275,8 +1127,7 @@
 	},
 	"humidity_low_exit_set_value": {
 		// param 140
-		"label": "Humidity Low Exit SET value",
-		"description": "BASIC SET value sent to associated nodes on exit from low/under humidity state.",
+		"label": "Humidity Low Exit Set value",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -1286,7 +1137,6 @@
 	"humidity_baseline": {
 		// param 141
 		"label": "Humidity Baseline",
-		"description": "Humidity calculated over a 24-hour period.",
 		"unit": "%",
 		"valueSize": 1,
 		"minValue": 0,
@@ -1297,103 +1147,86 @@
 	"humidity_high_actions_control_associations_on_entry": {
 		// param 142b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity High Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with 'Humidity High Entry SET Value' to 'Humidity High' association group on high/over humidity state entry"
+		"label": "Humidity High Actions: Control Associations on Entry"
 	},
 	"humidity_high_actions_control_associations_on_exit": {
 		// param 142b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity High Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with 'Humidity High Exit SET Value' to 'Humidity High' association group on high/over humidity state exit"
+		"label": "Humidity High Actions: Control Associations on Exit"
 	},
 	"humidity_high-actions_control_host_on_entry": {
 		// param 142b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity High Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with 'Humidity High Entry SET Value' on host device on high/over humidity state entry"
+		"label": "Humidity High Actions: Control Host on Entry"
 	},
 	"humidity_high_actions_control_host_on_exit": {
 		// param 142b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity High Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with 'Humidity High Exit SET Value' on host device on high/over humidity state exit."
+		"label": "Humidity High Actions: Control Host on Exit"
 	},
 	"humidity_high_actions_report_transitions": {
 		// param 142b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity High Actions: REPORT TRANSITIONS",
-		"description": "If set, send humidity MULTILEVEL SENSOR REPORT to Lifeline on high/over humidity state entry and exit"
+		"label": "Humidity High Actions: Report Transitions"
 	},
 	"humidity_high-actions_apply_entry_delay": {
 		// param 142b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity High Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply Humidity High Delay for high/over humidity entry"
+		"label": "Humidity High Actions: Apply Entry Delay"
 	},
 	"humidity_high_actions_apply_exit_delay": {
 		// param 142b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity High Actions: APPLY EXIT DELAY",
-		"description": "If set, apply Humidity High Delay for high/over humidity exit"
+		"label": "Humidity High Actions: Apply Exit Delay"
 	},
 	"humidity_high_actions_baseline_mode": {
 		// param 142b7
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity High Actions: BASELINE MODE",
-		"description": "If set, use humidity averaging for high/over humidity range checks"
+		"label": "Humidity High Actions: Baseline Mode"
 	},
 	"humidity_low_actions_control_associations_on_entry": {
 		// param 143b0
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity Low Actions: CONTROL ASSOCIATIONS ON ENTRY",
-		"description": "If set, send BASIC SET with 'Humidity Low Exit SET Value' to 'Humidity Low' association group on low/under humidity state entry"
+		"label": "Humidity Low Actions: Control Associations on Entry"
 	},
 	"humidity_low_actions_control_associations_on_exit": {
 		// param 143b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity Low Actions: CONTROL ASSOCIATIONS ON EXIT",
-		"description": "If set, send BASIC SET with 'Humidity Low Exit SET Value' to 'Humidity Low' association group on low/under humidity state exit"
+		"label": "Humidity Low Actions: Control Assoications on Exit"
 	},
 	"humidity_low_actions_control_host_on_entry": {
 		// param 143b2
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity Low Actions: CONTROL HOST ON ENTRY",
-		"description": "If set, execute BASIC SET with 'Humidity Low Entry SET Value' on host device on low/under humidity state entry"
+		"label": "Humidity Low Actions: Control Host on Entry"
 	},
 	"humidity_low_actions_control_host_on_exit": {
 		// param 143b3
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity Low Actions: CONTROL HOST ON EXIT",
-		"description": "If set, execute BASIC SET with 'Humidity Low Exit SET Value' on host device on low/under humidity state exit."
+		"label": "Humidity Low Actions: Control Host on Exit"
 	},
 	"humidity_low_actions_report_transitions": {
 		// param 143b4
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity Low Actions: REPORT TRANSITIONS",
-		"description": "If set, send humidity MULTILEVEL SENSOR REPORT to Lifeline on high/over humidity state entry and exit"
+		"label": "Humidity Low Actions: Report Transitions"
 	},
 	"humidity_low_actions_apply_entry_delay": {
 		// param 143b5
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity Low Actions: APPLY ENTRY DELAY",
-		"description": "If set, apply Humidity Low Delay for low/under humidity state entry"
+		"label": "Humidity Low Actions: Apply Entry Delay"
 	},
 	"humidity_low_actions_apply_exit_delay": {
 		// param 143b6
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity Low Actions: APPLY EXIT DELAY",
-		"description": "If set, apply Humidity Low Delay for low/under humidity state exit."
+		"label": "Humidity Low Actions: Apply Exit Delay"
 	},
 	"humidity_low_actions_baseline_mode": {
 		// param 143b7
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Humidity Low Actions: BASELINE MODE",
-		"description": "If set, use humidity averaging for low/over humidity range checks"
+		"label": "Humidity Low Actions: Baseline Mode"
 	},
 	"system_status": {
 		// param 152
 		"label": "System Status",
-		"description": "Used to provide status information for system troubleshooting.",
 		"valueSize": 4,
 		"minValue": 0,
 		"maxValue": 4294967295,
@@ -1404,7 +1237,6 @@
 	"system_led_brightness": {
 		// param 153
 		"label": "System LED Brightness",
-		"description": "Used to set the power output to the system LED to control on brightness level.",
 		"unit": "%",
 		"valueSize": 1,
 		"minValue": 0,
@@ -1414,7 +1246,7 @@
 	},
 	"led_invert": {
 		// param 154 b0
-		"label": "LED invert",
+		"label": "LED indicator invert",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
@@ -1433,7 +1265,7 @@
 	},
 	"switch_host_control_flags_3_way_mode": {
 		// param 168b0
-		"label": "Switch Host Control Flags: 3-Way Mode",
+		"label": "3-Way Mode",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
@@ -1452,18 +1284,18 @@
 	},
 	"switch_host_control_flags_on_off_invert": {
 		// param 168b1
-		"label": "Switch Host Control Flags: On/Off Invert",
+		"label": "Invert Host State",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 0,
 		"options": [
 			{
-				"label": "host output is reported on when energized, off when de-energized. Commands to host are not inverted.",
+				"label": "Not inverted",
 				"value": 0
 			},
 			{
-				"label": "host output is reported off when energized, on when de-energized. Commands to host are inverted to match.",
+				"label": "Inverted",
 				"value": 1
 			}
 		]
@@ -1476,8 +1308,7 @@
 		"minValue": 20,
 		"maxValue": 80,
 		"defaultValue": 42,
-		"unsigned": true,
-		"description": "Used to set the minimum power output to the dimmer on the lowest setting above ‘off’."
+		"unsigned": true
 	},
 	"dimmer_maximum_brightness": {
 		// param 193
@@ -1487,8 +1318,7 @@
 		"minValue": 80,
 		"maxValue": 100,
 		"defaultValue": 100,
-		"unsigned": true,
-		"description": "Used to set the maximum power output to the dimmer on the highest ‘on’ setting."
+		"unsigned": true
 	},
 	"dimmer_default_brightness": {
 		// param 194
@@ -1498,7 +1328,6 @@
 		"minValue": 0,
 		"maxValue": 100,
 		"defaultValue": 80,
-		"unsigned": true,
-		"description": "Used to set the power output to the dimmer when it is initially turned on by the manual switch."
+		"unsigned": true
 	}
 }
