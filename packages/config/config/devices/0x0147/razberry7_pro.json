@@ -2,7 +2,7 @@
 	"manufacturer": "Z-Wave.me",
 	"manufacturerId": "0x0147",
 	"label": "RaZberry 7 Pro",
-	"description": "Z-Wave Shield for Raspberry Pi",
+	"description": "Z-Wave Shield with External Antenna",
 	"devices": [
 		{
 			"productType": "0x0401",
