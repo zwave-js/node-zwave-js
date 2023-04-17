@@ -17,6 +17,11 @@ import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
 
+// Warning: (ae-missing-release-tag) "ccCaps" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function ccCaps<T extends CommandClasses>(caps: PartialCCCapabilities<T>): PartialCCCapabilities<T>;
+
 // Warning: (ae-missing-release-tag) "CCIdToCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -27,6 +32,7 @@ export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> = T ex
 // @public (undocumented)
 export type CCSpecificCapabilities = {
     [CommandClasses.Notification]: NotificationCCCapabilities;
+    [121]: SoundSwitchCCCapabilities;
 };
 
 // Warning: (ae-missing-release-tag) "createMockZWaveAckFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -266,6 +272,21 @@ export interface NotificationCCCapabilities {
 export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> = T | ({
     ccId: T;
 } & Partial<CommandClassInfo> & Partial<CCIdToCapabilities<T>>);
+
+// Warning: (ae-missing-release-tag) "SoundSwitchCCCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SoundSwitchCCCapabilities {
+    // (undocumented)
+    defaultToneId: number;
+    // (undocumented)
+    defaultVolume: number;
+    // (undocumented)
+    tones: {
+        name: string;
+        duration: number;
+    }[];
+}
 
 // (No @packageDocumentation comment for this package)
 

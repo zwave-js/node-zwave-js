@@ -11,6 +11,13 @@ export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> =
 	| ({ ccId: T } & Partial<CommandClassInfo> &
 			Partial<CCIdToCapabilities<T>>);
 
+/** Helper function to infer the correct properties for mock CC capabilities */
+export function ccCaps<T extends CommandClasses>(
+	caps: PartialCCCapabilities<T>,
+): PartialCCCapabilities<T> {
+	return caps;
+}
+
 export interface MockNodeCapabilities extends NodeProtocolInfoAndDeviceClass {
 	firmwareVersion: string;
 	manufacturerId: number;
