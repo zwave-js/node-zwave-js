@@ -28,5 +28,6 @@ esbuild src/cli.tsx \
     --sourcemap \
     --external:zwave-js \
     --external:react-devtools-core \
+    --external:yoga-wasm-web \
     --banner:js="import { createRequire } from 'module'; var require = require || createRequire(import.meta.url);"
     # Fix esbuild not being able to do dynamic require() in ESM mode

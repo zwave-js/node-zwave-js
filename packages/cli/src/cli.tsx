@@ -1,8 +1,9 @@
 import { getErrorMessage } from "@zwave-js/shared";
-import { Box, Line, render, Spacer, Text, useInput } from "ink";
+import { Box, render, Spacer, Text, useInput } from "ink";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Driver } from "zwave-js";
 import { Frame } from "./components/Frame.js";
+import { Line } from "./components/Line.js";
 import { Log } from "./components/Log.js";
 import {
 	InlineQuery,

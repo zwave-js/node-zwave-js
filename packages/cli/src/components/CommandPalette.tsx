@@ -1,7 +1,8 @@
-import { Box, Line } from "ink";
+import { Box } from "ink";
 import React from "react";
 import { Frame } from "./Frame.js";
 import { HotkeyLabel, HotkeyLabelProps } from "./HotkeyLabel.js";
+import { Line } from "./Line.js";
 
 export interface CommandPaletteProps {
 	label?: React.ReactNode;

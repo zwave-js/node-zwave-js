@@ -52,6 +52,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alcalzone/ansi-tokenize@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@alcalzone/ansi-tokenize@npm:0.1.1"
+  dependencies:
+    ansi-styles: ^6.2.1
+    is-fullwidth-code-point: ^4.0.0
+  checksum: 73c453cf280cf00f4feee4de389e987a86be27d1c35279edb6b09d0d67ebd69250eaa6bb27083cf7315dca59bebb550a28fac330e5b29ac6b752f7f1644ee026
+  languageName: node
+  linkType: hard
+
 "@alcalzone/ink-table@npm:~1.1.0":
   version: 1.1.0
   resolution: "@alcalzone/ink-table@npm:1.1.0"
@@ -1644,13 +1654,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yoga-layout@npm:1.9.2":
-  version: 1.9.2
-  resolution: "@types/yoga-layout@npm:1.9.2"
-  checksum: dbc3d6ab997d50fe1fcca5dd6822982c8fe586145ab648e0e97c3bc4ebc93d0b40c9edd75febaba374d61f60c1379b639f6be652965c776a901bf1068f2eac87
-  languageName: node
-  linkType: hard
-
 "@typescript-eslint/eslint-plugin@npm:^5.48.0":
   version: 5.48.0
   resolution: "@typescript-eslint/eslint-plugin@npm:5.48.0"
@@ -1833,7 +1836,7 @@ __metadata:
     del-cli: ^5.0.0
     esbuild: 0.15.7
     esbuild-register: ^3.4.2
-    ink: "https://github.com/AlCalzone/ink#lines-stable"
+    ink: "https://github.com/AlCalzone/ink#pixels-stable"
     ink-select-input: ^5.0.0
     ink-spinner: ^5.0.0
     ink-text-input: ^5.0.0
@@ -1843,6 +1846,7 @@ __metadata:
     react-devtools-core: ^4.27.2
     typescript: 4.9.5
     winston: ^3.8.2
+    yoga-wasm-web: ~0.3.3
     zwave-js: "workspace:*"
   bin:
     cli: bin/cli.js
@@ -2332,11 +2336,11 @@ __metadata:
   linkType: hard
 
 "ansi-escapes@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "ansi-escapes@npm:6.0.0"
+  version: 6.1.0
+  resolution: "ansi-escapes@npm:6.1.0"
   dependencies:
     type-fest: ^3.0.0
-  checksum: 1ddc0b27b1d040c3c703c9cd80ee0a103817e2f9fa8f1adf0c66e970b57543ec60effdb0bd1a396ed7182bca3b1a0d8fda60ec61fee862d353db81b1c3650a78
+  checksum: 7ce5d9cefd3d7345dc00161aea2ea9ad5fb3dd66658d4e8731ea047be838d755100f0823a05523d0e518e8e080746fc0a45d3ea3053099376bdd572efaedc7c1
   languageName: node
   linkType: hard
 
@@ -2397,6 +2401,13 @@ __metadata:
   version: 6.1.1
   resolution: "ansi-styles@npm:6.1.1"
   checksum: f2b1ed658ead23caf77effe7b875960cacd70d1ebe47c830e191358b242d688cf52a28d55ef9b19d102f792e8c1dec34bd865db264f1c7f4f63dd3a5fa84677e
+  languageName: node
+  linkType: hard
+
+"ansi-styles@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "ansi-styles@npm:6.2.1"
+  checksum: ef940f2f0ced1a6347398da88a91da7930c33ecac3c77b72c5905f8b8fe402c52e6fde304ff5347f616e27a742da3f1dc76de98f6866c69251ad0b07a66776d9
   languageName: node
   linkType: hard
 
@@ -3771,13 +3782,6 @@ __metadata:
   version: 0.11.0
   resolution: "emittery@npm:0.11.0"
   checksum: fba43607e6184a9e318541c1613b742e4d4753bab4fd27f17b93127172f62aa34da8096c78c290dd1a65f12a63abe5ae6765a1d555194d60e5f42eed8548c23d
-  languageName: node
-  linkType: hard
-
-"emoji-regex@npm:^10.2.1":
-  version: 10.2.1
-  resolution: "emoji-regex@npm:10.2.1"
-  checksum: 1aa2d16881c56531fdfc03d0b36f5c2b6221cc4097499a5665b88b711dc3fb4d5b8804f0ca6f00c56e5dcf89bac75f0487eee85da1da77df3a33accc6ecbe426
   languageName: node
   linkType: hard
 
@@ -5318,10 +5322,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ink@https://github.com/AlCalzone/ink#lines-stable":
-  version: 4.0.0
-  resolution: "ink@https://github.com/AlCalzone/ink.git#commit=770eb7cddb36a326713bef20c2685a5203d92dfc"
+"ink@https://github.com/AlCalzone/ink#pixels-stable":
+  version: 4.1.0
+  resolution: "ink@https://github.com/AlCalzone/ink.git#commit=4a0a9b2a8e5c1e21474c31e2743077f3e5301b07"
   dependencies:
+    "@alcalzone/ansi-tokenize": ^0.1.1
     ansi-escapes: ^6.0.0
     auto-bind: ^5.0.1
     chalk: ^5.2.0
@@ -5329,22 +5334,23 @@ __metadata:
     cli-cursor: ^4.0.0
     cli-truncate: ^3.1.0
     code-excerpt: ^4.0.0
-    emoji-regex: ^10.2.1
     indent-string: ^5.0.0
     is-ci: ^3.0.1
+    is-lower-case: ^2.0.2
+    is-upper-case: ^2.0.2
     lodash: ^4.17.21
     patch-console: ^2.0.0
     react-reconciler: ^0.29.0
     scheduler: ^0.23.0
     signal-exit: ^3.0.7
-    slice-ansi: ^5.0.0
+    slice-ansi: ^6.0.0
     stack-utils: ^2.0.6
     string-width: ^5.1.2
     type-fest: ^0.12.0
     widest-line: ^4.0.1
     wrap-ansi: ^8.1.0
     ws: ^8.12.0
-    yoga-layout-prebuilt: ^1.9.6
+    yoga-wasm-web: ~0.3.3
   peerDependencies:
     "@types/react": ">=18.0.0"
     react: ">=18.0.0"
@@ -5354,7 +5360,7 @@ __metadata:
       optional: true
     react-devtools-core:
       optional: true
-  checksum: 4055659133de0390b557fc492edbab3f62edf1a4899ef932096dcddf2fac4609f18ce2a1ce6c013fa4825d7aae4ea506c9e3e30db344901afebf82aabd7a8002
+  checksum: 2e8ff8b42621b70334943cbda64242ea96a4fac8906a204aaa8c3cbbe71f58eb21a1690e27eedd7621f571249ea07eab2f74c25be01756b0e18f6360fc3b50c1
   languageName: node
   linkType: hard
 
@@ -5578,6 +5584,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-lower-case@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "is-lower-case@npm:2.0.2"
+  dependencies:
+    tslib: ^2.0.3
+  checksum: ba57dd1201e15fd9b590654736afccf1b3b68e919f40c23ef13b00ebcc639b1d9c2f81fe86415bff3e8eccffec459786c9ac9dc8f3a19cfa4484206c411c1d7d
+  languageName: node
+  linkType: hard
+
 "is-number@npm:^7.0.0":
   version: 7.0.0
   resolution: "is-number@npm:7.0.0"
@@ -5682,6 +5697,15 @@ __metadata:
   version: 1.3.0
   resolution: "is-unicode-supported@npm:1.3.0"
   checksum: 20a1fc161afafaf49243551a5ac33b6c4cf0bbcce369fcd8f2951fbdd000c30698ce320de3ee6830497310a8f41880f8066d440aa3eb0a853e2aa4836dd89abc
+  languageName: node
+  linkType: hard
+
+"is-upper-case@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "is-upper-case@npm:2.0.2"
+  dependencies:
+    tslib: ^2.0.3
+  checksum: cf4fd43c00c2e72cd5cff911923070b89f0933b464941bd782e2315385f80b5a5acd772db3b796542e5e3cfed735f4dffd88c54d62db1ebfc5c3daa7b1af2bc6
   languageName: node
   linkType: hard
 
@@ -7984,6 +8008,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"slice-ansi@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "slice-ansi@npm:6.0.0"
+  dependencies:
+    ansi-styles: ^6.2.1
+    is-fullwidth-code-point: ^4.0.0
+  checksum: d0510f02af166eff9948e7cf88985c33d9ded6de0e39908b67b5e29f802c88025c27d7e1801ce1d1d1ec311fb539538086cd2a4193d2e8f735e6c5c0e63486dd
+  languageName: node
+  linkType: hard
+
 "smart-buffer@npm:^4.1.0":
   version: 4.1.0
   resolution: "smart-buffer@npm:4.1.0"
@@ -8595,6 +8629,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:^2.0.3":
+  version: 2.5.0
+  resolution: "tslib@npm:2.5.0"
+  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^2.1.0":
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
@@ -8763,7 +8804,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^3.0.0, type-fest@npm:^3.6.1":
+"type-fest@npm:^3.0.0":
+  version: 3.8.0
+  resolution: "type-fest@npm:3.8.0"
+  checksum: f9a9ef00378dddd6af2be5cbb67ce4c3a61f6696c5f3ae88815c98266865766118343d928faec8a0efc012efe1d080f59bf62d8fdc382bf285f45d02dbc8fb66
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^3.6.1":
   version: 3.6.1
   resolution: "type-fest@npm:3.6.1"
   checksum: f7e39bf6b74a883661ec8642707f49c33cfcdc6221e1ba36b1d329c1cf301d87351b3ca0839b894cbfe47dc62140c0ce47e69c88f76800b678e0b67b7fe826e6
@@ -9271,21 +9319,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yoga-layout-prebuilt@npm:1.10.0":
-  version: 1.10.0
-  resolution: "yoga-layout-prebuilt@npm:1.10.0"
-  dependencies:
-    "@types/yoga-layout": 1.9.2
-  checksum: 6954c7c7b04c585a1c974391bea4734611adb85702b5e9131549a1d3dc5b94e69bcfea34121cdaeb5e702663bf290fcce5374910128e54d1031503a57c062865
-  languageName: node
-  linkType: hard
-
-"yoga-layout-prebuilt@patch:yoga-layout-prebuilt@npm%3A1.10.0#./.yarn/patches/yoga-layout-prebuilt-npm-1.10.0-855b15449f.patch::locator=%40zwave-js%2Frepo%40workspace%3A.":
-  version: 1.10.0
-  resolution: "yoga-layout-prebuilt@patch:yoga-layout-prebuilt@npm%3A1.10.0#./.yarn/patches/yoga-layout-prebuilt-npm-1.10.0-855b15449f.patch::version=1.10.0&hash=e91576&locator=%40zwave-js%2Frepo%40workspace%3A."
-  dependencies:
-    "@types/yoga-layout": 1.9.2
-  checksum: 821f9b799915d25c9ad1086855e30312b1328d724baa377e2b2dffc994c54900a486b6a1bd2e41d5dc644000a1028b90ad530e2d60f56405423d3bfbc0c02a81
+"yoga-wasm-web@npm:~0.3.3":
+  version: 0.3.3
+  resolution: "yoga-wasm-web@npm:0.3.3"
+  checksum: ff65192a832975ff531a1b6eae160c2da859c250feaa58b6389b684f9b48f53fda849a7ea49d12d241198309e671e6bd230a44e7155af9573d7843ac48831c98
   languageName: node
   linkType: hard
 

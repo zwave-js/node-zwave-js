@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("../build/cli.js");
+await import("../build/cli.js");
