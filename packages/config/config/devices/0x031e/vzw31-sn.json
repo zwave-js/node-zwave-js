@@ -10,12 +10,6 @@
 			"zwaveAllianceId": 4764
 		}
 	],
-	"metadata": {
-		"inclusion": "Triple-click config button",
-		"exclusion": "Triple-click config button",
-		"reset": "Simultaniously hold the config button and the up button until the LED bar turns red.  Release the buttons and the switch will reset to factory defaults.",
-		"manual": "https://community.inovelli.com/t/resources-red-series-smart-2-1-switch-on-off-dimmer-manual/13706"
-	},
 	"firmwareVersion": {
 		"min": "0.3",
 		"max": "255.255"
@@ -25,7 +19,7 @@
 			"#": "1",
 			"$if": "firmwareVersion < 0.4",
 			"label": "Dimming Speed - Up (Remote)",
-			"description": "Values 0 = Instant; 5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
+			"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,
@@ -61,7 +55,7 @@
 		{
 			"#": "1",
 			"label": "Dimming Speed - Up (Remote)",
-			"description": "Values 0 = Instant; 5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
+			"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,
@@ -96,38 +90,38 @@
 		},
 		{
 			"#": "2",
-			"label": "Dimming Speed - Up (Local)",
-			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_1"
+			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_1",
+			"label": "Dimming Speed - Up (Local)"
 		},
 		{
 			"#": "3",
-			"label": "Ramp Rate - Off to On (Remote)",
-			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_1"
+			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_1",
+			"label": "Ramp Rate - Off to On (Remote)"
 		},
 		{
 			"#": "4",
-			"label": "Ramp Rate - Off to On (Local)",
-			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_3"
+			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_3",
+			"label": "Ramp Rate - Off to On (Local)"
 		},
 		{
 			"#": "5",
-			"label": "Dimming Speed - Down (Remote)",
-			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_1"
+			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_1",
+			"label": "Dimming Speed - Down (Remote)"
 		},
 		{
 			"#": "6",
-			"label": "Dimming Speed - Down (Local)",
-			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_2"
+			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_2",
+			"label": "Dimming Speed - Down (Local)"
 		},
 		{
 			"#": "7",
-			"label": "Ramp Rate - On to Off (Remote)",
-			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_3"
+			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_3",
+			"label": "Ramp Rate - On to Off (Remote)"
 		},
 		{
 			"#": "8",
-			"label": "Ramp Rate - On to Off (Local)",
-			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_4"
+			"$import": "templates/inovelli_templates.json#dimming_speed_0_255_sync_4",
+			"label": "Ramp Rate - On to Off (Local)"
 		},
 		{
 			"#": "9",
@@ -149,8 +143,8 @@
 		},
 		{
 			"#": "11",
-			"label": "Invert Switch",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Invert Switch"
 		},
 		{
 			"#": "12",
@@ -170,18 +164,18 @@
 		},
 		{
 			"#": "13",
-			"label": "Default Level (Local)",
-			"$import": "templates/inovelli_templates.json#level_1-99_0_previous"
+			"$import": "templates/inovelli_templates.json#level_1-99_0_previous",
+			"label": "Default Level (Local)"
 		},
 		{
 			"#": "14",
-			"label": "Default Level (Remote)",
-			"$import": "templates/inovelli_templates.json#level_1-99_0_previous"
+			"$import": "templates/inovelli_templates.json#level_1-99_0_previous",
+			"label": "Default Level (Remote)"
 		},
 		{
 			"#": "15",
-			"label": "State After Power Restored",
 			"$import": "templates/inovelli_templates.json#level_0-99_100_previous",
+			"label": "State After Power Restored",
 			"defaultValue": 100
 		},
 		{
@@ -221,13 +215,13 @@
 		{
 			"#": "19",
 			"label": "Power & Energy Report Interval",
+			"description": "Allowable range: 30-32767",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600,
 			"unsigned": true,
-			"description": "Allowable range: 30-32767",
 			"options": [
 				{
 					"label": "Disabled",
@@ -301,9 +295,9 @@
 		},
 		{
 			"#": "25",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Increase Output Power (Non-Neutral)",
-			"description": "Increase output power when in non-neutral mode. (May cause problems with high level flicker or aux switch detection. Adjust maximum level if you are having problems.)",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Increase output power when in non-neutral mode. (May cause problems with high level flicker or aux switch detection. Adjust maximum level if you are having problems.)"
 		},
 		{
 			"#": "50",
@@ -348,43 +342,43 @@
 		},
 		{
 			"#": "52",
-			"label": "Smart Bulb Mode",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Smart Bulb Mode"
 		},
 		{
 			"#": "53",
 			"$if": "firmwareVersion < 0.11",
-			"label": "Double Up to Max Level",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double Up to Max Level"
 		},
 		{
 			"#": "54",
 			"$if": "firmwareVersion < 0.11",
-			"label": "Double Down to Min Level",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double Down to Min Level"
 		},
 		{
 			"#": "53",
-			"label": "Double Up to Param 55 Level",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double Up to Param 55 Level"
 		},
 		{
 			"#": "54",
-			"label": "Double Down to Param 56 Level",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double Down to Param 56 Level"
 		},
 		{
 			"#": "55",
 			"$if": "firmwareVersion >= 0.11",
-			"label": "Double Up Level",
 			"$import": "~/templates/master_template.json#base_1-99_nounit",
+			"label": "Double Up Level",
 			"defaultValue": 99
 		},
 		{
 			"#": "56",
 			"$if": "firmwareVersion >= 0.11",
-			"label": "Double Down Level",
-			"$import": "~/templates/master_template.json#base_0-99_nounit"
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Double Down Level"
 		},
 		{
 			"#": "58",
@@ -424,188 +418,188 @@
 		},
 		{
 			"#": "64[0xff]",
-			"label": "LED1 Strip Effect - Duration",
-			"$import": "templates/inovelli_templates.json#led_effect_duration"
+			"$import": "templates/inovelli_templates.json#led_effect_duration",
+			"label": "LED1 Strip Effect - Duration"
 		},
 		{
 			"#": "64[0xff00]",
-			"label": "LED1 Strip Effect - Level",
-			"$import": "templates/inovelli_templates.json#led_effect_level"
+			"$import": "templates/inovelli_templates.json#led_effect_level",
+			"label": "LED1 Strip Effect - Level"
 		},
 		{
 			"#": "64[0xff0000]",
-			"label": "LED1 Strip Effect - Color",
-			"$import": "templates/inovelli_templates.json#led_effect_color"
+			"$import": "templates/inovelli_templates.json#led_effect_color",
+			"label": "LED1 Strip Effect - Color"
 		},
 		{
 			"#": "64[0xff000000]",
-			"label": "LED1 Strip Effect - Effect",
-			"$import": "templates/inovelli_templates.json#led_effect_effect"
+			"$import": "templates/inovelli_templates.json#led_effect_effect",
+			"label": "LED1 Strip Effect - Effect"
 		},
 		{
 			"#": "69[0xff]",
-			"label": "LED2 Strip Effect - Duration",
-			"$import": "templates/inovelli_templates.json#led_effect_duration"
+			"$import": "templates/inovelli_templates.json#led_effect_duration",
+			"label": "LED2 Strip Effect - Duration"
 		},
 		{
 			"#": "69[0xff00]",
-			"label": "LED2 Strip Effect - Level",
-			"$import": "templates/inovelli_templates.json#led_effect_level"
+			"$import": "templates/inovelli_templates.json#led_effect_level",
+			"label": "LED2 Strip Effect - Level"
 		},
 		{
 			"#": "69[0xff0000]",
-			"label": "LED2 Strip Effect - Color",
-			"$import": "templates/inovelli_templates.json#led_effect_color"
+			"$import": "templates/inovelli_templates.json#led_effect_color",
+			"label": "LED2 Strip Effect - Color"
 		},
 		{
 			"#": "69[0xff000000]",
-			"label": "LED2 Strip Effect - Effect",
-			"$import": "templates/inovelli_templates.json#led_effect_effect"
+			"$import": "templates/inovelli_templates.json#led_effect_effect",
+			"label": "LED2 Strip Effect - Effect"
 		},
 		{
 			"#": "74[0xff]",
-			"label": "LED3 Strip Effect - Duration",
-			"$import": "templates/inovelli_templates.json#led_effect_duration"
+			"$import": "templates/inovelli_templates.json#led_effect_duration",
+			"label": "LED3 Strip Effect - Duration"
 		},
 		{
 			"#": "74[0xff00]",
-			"label": "LED3 Strip Effect - Level",
-			"$import": "templates/inovelli_templates.json#led_effect_level"
+			"$import": "templates/inovelli_templates.json#led_effect_level",
+			"label": "LED3 Strip Effect - Level"
 		},
 		{
 			"#": "74[0xff0000]",
-			"label": "LED3 Strip Effect - Color",
-			"$import": "templates/inovelli_templates.json#led_effect_color"
+			"$import": "templates/inovelli_templates.json#led_effect_color",
+			"label": "LED3 Strip Effect - Color"
 		},
 		{
 			"#": "74[0xff000000]",
-			"label": "LED3 Strip Effect - Effect",
-			"$import": "templates/inovelli_templates.json#led_effect_effect"
+			"$import": "templates/inovelli_templates.json#led_effect_effect",
+			"label": "LED3 Strip Effect - Effect"
 		},
 		{
 			"#": "79[0xff]",
-			"label": "LED4 Strip Effect - Duration",
-			"$import": "templates/inovelli_templates.json#led_effect_duration"
+			"$import": "templates/inovelli_templates.json#led_effect_duration",
+			"label": "LED4 Strip Effect - Duration"
 		},
 		{
 			"#": "79[0xff00]",
-			"label": "LED4 Strip Effect - Level",
-			"$import": "templates/inovelli_templates.json#led_effect_level"
+			"$import": "templates/inovelli_templates.json#led_effect_level",
+			"label": "LED4 Strip Effect - Level"
 		},
 		{
 			"#": "79[0xff0000]",
-			"label": "LED4 Strip Effect - Color",
-			"$import": "templates/inovelli_templates.json#led_effect_color"
+			"$import": "templates/inovelli_templates.json#led_effect_color",
+			"label": "LED4 Strip Effect - Color"
 		},
 		{
 			"#": "79[0xff000000]",
-			"label": "LED4 Strip Effect - Effect",
-			"$import": "templates/inovelli_templates.json#led_effect_effect"
+			"$import": "templates/inovelli_templates.json#led_effect_effect",
+			"label": "LED4 Strip Effect - Effect"
 		},
 		{
 			"#": "84[0xff]",
-			"label": "LED5 Strip Effect - Duration",
-			"$import": "templates/inovelli_templates.json#led_effect_duration"
+			"$import": "templates/inovelli_templates.json#led_effect_duration",
+			"label": "LED5 Strip Effect - Duration"
 		},
 		{
 			"#": "84[0xff00]",
-			"label": "LED5 Strip Effect - Level",
-			"$import": "templates/inovelli_templates.json#led_effect_level"
+			"$import": "templates/inovelli_templates.json#led_effect_level",
+			"label": "LED5 Strip Effect - Level"
 		},
 		{
 			"#": "84[0xff0000]",
-			"label": "LED5 Strip Effect - Color",
-			"$import": "templates/inovelli_templates.json#led_effect_color"
+			"$import": "templates/inovelli_templates.json#led_effect_color",
+			"label": "LED5 Strip Effect - Color"
 		},
 		{
 			"#": "84[0xff000000]",
-			"label": "LED5 Strip Effect - Effect",
-			"$import": "templates/inovelli_templates.json#led_effect_effect"
+			"$import": "templates/inovelli_templates.json#led_effect_effect",
+			"label": "LED5 Strip Effect - Effect"
 		},
 		{
 			"#": "89[0xff]",
-			"label": "LED6 Strip Effect - Duration",
-			"$import": "templates/inovelli_templates.json#led_effect_duration"
+			"$import": "templates/inovelli_templates.json#led_effect_duration",
+			"label": "LED6 Strip Effect - Duration"
 		},
 		{
 			"#": "89[0xff00]",
-			"label": "LED6 Strip Effect - Level",
-			"$import": "templates/inovelli_templates.json#led_effect_level"
+			"$import": "templates/inovelli_templates.json#led_effect_level",
+			"label": "LED6 Strip Effect - Level"
 		},
 		{
 			"#": "89[0xff0000]",
-			"label": "LED6 Strip Effect - Color",
-			"$import": "templates/inovelli_templates.json#led_effect_color"
+			"$import": "templates/inovelli_templates.json#led_effect_color",
+			"label": "LED6 Strip Effect - Color"
 		},
 		{
 			"#": "89[0xff000000]",
-			"label": "LED6 Strip Effect - Effect",
-			"$import": "templates/inovelli_templates.json#led_effect_effect"
+			"$import": "templates/inovelli_templates.json#led_effect_effect",
+			"label": "LED6 Strip Effect - Effect"
 		},
 		{
 			"#": "94[0xff]",
-			"label": "LED7 Strip Effect - Duration",
-			"$import": "templates/inovelli_templates.json#led_effect_duration"
+			"$import": "templates/inovelli_templates.json#led_effect_duration",
+			"label": "LED7 Strip Effect - Duration"
 		},
 		{
 			"#": "94[0xff00]",
-			"label": "LED7 Strip Effect - Level",
-			"$import": "templates/inovelli_templates.json#led_effect_level"
+			"$import": "templates/inovelli_templates.json#led_effect_level",
+			"label": "LED7 Strip Effect - Level"
 		},
 		{
 			"#": "94[0xff0000]",
-			"label": "LED7 Strip Effect - Color",
-			"$import": "templates/inovelli_templates.json#led_effect_color"
+			"$import": "templates/inovelli_templates.json#led_effect_color",
+			"label": "LED7 Strip Effect - Color"
 		},
 		{
 			"#": "94[0xff000000]",
-			"label": "LED7 Strip Effect - Effect",
-			"$import": "templates/inovelli_templates.json#led_effect_effect"
+			"$import": "templates/inovelli_templates.json#led_effect_effect",
+			"label": "LED7 Strip Effect - Effect"
 		},
 		{
 			"#": "95",
-			"label": "Default All LED Strip Color When On",
 			"$import": "templates/inovelli_templates.json#hue_color_wheel_white",
+			"label": "Default All LED Strip Color When On",
 			"valueSize": 1,
 			"defaultValue": 170
 		},
 		{
 			"#": "96",
-			"label": "Default All LED Strip Color When Off",
 			"$import": "templates/inovelli_templates.json#hue_color_wheel_white",
+			"label": "Default All LED Strip Color When Off",
 			"valueSize": 1,
 			"defaultValue": 170
 		},
 		{
 			"#": "97",
-			"label": "Default All LED Strip Brightness When On",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Default All LED Strip Brightness When On",
 			"defaultValue": 33
 		},
 		{
 			"#": "98",
-			"label": "Default All LED Strip Brightness When Off",
-			"$import": "~/templates/master_template.json#base_0-100_nounit"
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Default All LED Strip Brightness When Off"
 		},
 		{
 			"#": "99[0xff]",
-			"label": "All LED Strip Effect - Duration",
-			"$import": "templates/inovelli_templates.json#led_effect_duration"
+			"$import": "templates/inovelli_templates.json#led_effect_duration",
+			"label": "All LED Strip Effect - Duration"
 		},
 		{
 			"#": "99[0xff00]",
-			"label": "All LED Strip Effect - Level",
-			"$import": "templates/inovelli_templates.json#led_effect_level"
+			"$import": "templates/inovelli_templates.json#led_effect_level",
+			"label": "All LED Strip Effect - Level"
 		},
 		{
 			"#": "99[0xff0000]",
-			"label": "All LED Strip Effect - Color",
-			"$import": "templates/inovelli_templates.json#led_effect_color"
+			"$import": "templates/inovelli_templates.json#led_effect_color",
+			"label": "All LED Strip Effect - Color"
 		},
 		{
 			"#": "99[0xff000000]",
-			"label": "All LED Strip Effect - Effect",
-			"$import": "templates/inovelli_templates.json#all_led_effect_effect"
+			"$import": "templates/inovelli_templates.json#all_led_effect_effect",
+			"label": "All LED Strip Effect - Effect"
 		},
 		{
 			"#": "100",
@@ -629,9 +623,9 @@
 		},
 		{
 			"#": "123",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Aux Switch Scenes",
-			"description": "Send different scene numbers when the Aux switch is clicked",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Send different scene numbers when the Aux switch is clicked"
 		},
 		{
 			"#": "158",
@@ -672,8 +666,8 @@
 		},
 		{
 			"#": "160",
-			"label": "Firmware Progress LED",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Firmware Progress LED",
 			"defaultValue": 1
 		},
 		{
@@ -697,9 +691,15 @@
 		},
 		{
 			"#": "162",
-			"label": "Double-tap Config to Clear Notification",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Double-tap Config to Clear Notification",
 			"defaultValue": 0
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Triple-click config button",
+		"exclusion": "Triple-click config button",
+		"reset": "Simultaniously hold the config button and the up button until the LED bar turns red.  Release the buttons and the switch will reset to factory defaults.",
+		"manual": "https://community.inovelli.com/t/resources-red-series-smart-2-1-switch-on-off-dimmer-manual/13706"
+	}
 }
