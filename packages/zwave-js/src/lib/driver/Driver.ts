@@ -2245,7 +2245,7 @@ export class Driver
 		}
 		throw new ZWaveError(
 			"Cannot retrieve the version of a CC that is not implemented",
-			ZWaveErrorCodes.CC_NotSupported,
+			ZWaveErrorCodes.CC_NotImplemented,
 		);
 	}
 
