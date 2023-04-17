@@ -17,10 +17,8 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Temperature Report Unit",
-			"description": "Select the temperature report unit, celsius or fahrenheit",
+			"label": "Temperature Unit",
 			"valueSize": 1,
-			"unit": "°C",
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -38,18 +36,16 @@
 		{
 			"#": "2",
 			"label": "Temperature Report Threshold",
-			"description": "In 0.1 celsius increments",
 			"valueSize": 1,
-			"unit": "°C",
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
+			"unit": "0.1 (°C/°F)",
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 10,
 			"unsigned": true
 		},
 		{
 			"#": "3",
 			"label": "Humidity Report Threshold",
-			"description": "Range from 1 to 50 percent",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 1,
@@ -60,13 +56,19 @@
 		{
 			"#": "4",
 			"label": "Luminance Report Threshold",
-			"description": "Range from 0 to 50 percent",
+			"description": "Allowable range: 0, 5-50",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 10,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		}
 	],
 	"metadata": {
