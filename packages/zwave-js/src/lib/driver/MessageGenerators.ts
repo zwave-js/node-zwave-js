@@ -111,10 +111,28 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 	) {
 		// Make sure we can send this message
 		if (isSendData(msg) && exceedsMaxPayloadLength(msg)) {
-			throw new ZWaveError(
-				"Cannot send this message because it would exceed the maximum payload length!",
-				ZWaveErrorCodes.Controller_MessageTooLarge,
-			);
+			// We use explorer frames by default, but this reduces the maximum payload length by 2 bytes compared to AUTO_ROUTE
+			// Try disabling explorer frames for this message and see if it fits now.
+			const fail = () => {
+				throw new ZWaveError(
+					"Cannot send this message because it would exceed the maximum payload length!",
+					ZWaveErrorCodes.Controller_MessageTooLarge,
+				);
+			};
+			if (msg.transmitOptions & TransmitOptions.Explore) {
+				msg.transmitOptions &= ~TransmitOptions.Explore;
+				if (exceedsMaxPayloadLength(msg)) {
+					// Still too large
+					throw fail();
+				}
+				driver.controllerLog.logNode(msg.getNodeId()!, {
+					message:
+						"Disabling explorer frames for this message due to its size",
+					level: "warn",
+				});
+			} else {
+				throw fail();
+			}
 		}
 
 		// Pass this message to the send thread and wait for it to be sent
