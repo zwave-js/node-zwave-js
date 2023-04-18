@@ -2593,6 +2593,10 @@ export interface CCAPIs {
     //
     // (undocumented)
     "Door Lock": DoorLockCCAPI;
+    // Warning: (ae-forgotten-export) The symbol "EnergyProductionCCAPI" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    "Energy Production": EnergyProductionCCAPI;
     // Warning: (ae-forgotten-export) The symbol "EntryControlCCAPI" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -5571,6 +5575,114 @@ export interface EndpointAddress {
     nodeId: number;
 }
 
+// Warning: (ae-missing-release-tag) "EnergyProductionCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnergyProductionCC extends CommandClass {
+    // (undocumented)
+    ccCommand: EnergyProductionCommand;
+    // (undocumented)
+    interview(applHost: ZWaveApplicationHost): Promise<void>;
+    // (undocumented)
+    refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
+}
+
+// Warning: (ae-missing-release-tag) "EnergyProductionCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnergyProductionCCGet extends EnergyProductionCC {
+    // Warning: (ae-forgotten-export) The symbol "EnergyProductionCCGetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | EnergyProductionCCGetOptions);
+    // (undocumented)
+    parameter: EnergyProductionParameter;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "EnergyProductionCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnergyProductionCCReport extends EnergyProductionCC {
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions);
+    // (undocumented)
+    readonly parameter: EnergyProductionParameter;
+    // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost): boolean;
+    // (undocumented)
+    readonly scale: EnergyProductionScale;
+    // (undocumented)
+    readonly value: number;
+}
+
+// Warning: (ae-missing-release-tag) "EnergyProductionCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const EnergyProductionCCValues: Readonly<{
+    value: ((parameter: EnergyProductionParameter) => {
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Energy Production"];
+            readonly endpoint: number;
+            readonly property: "value";
+            readonly propertyKey: EnergyProductionParameter;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Energy Production"];
+            property: "value";
+            propertyKey: EnergyProductionParameter;
+        };
+        readonly meta: {
+            readonly label: string;
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly internal: false;
+            readonly minVersion: 1;
+            readonly secret: false;
+            readonly stateful: true;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+        };
+    };
+}>;
+
+// Warning: (ae-missing-release-tag) "EnergyProductionCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum EnergyProductionCommand {
+    // (undocumented)
+    Get = 2,
+    // (undocumented)
+    Report = 3
+}
+
+// Warning: (ae-missing-release-tag) "EnergyProductionParameter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum EnergyProductionParameter {
+    // (undocumented)
+    "Production Today" = 2,
+    // (undocumented)
+    "Production Total" = 1,
+    // (undocumented)
+    "Total Time" = 3,
+    // (undocumented)
+    Power = 0
+}
+
+// Warning: (ae-missing-release-tag) "EnergyProductionScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EnergyProductionScale {
+    // (undocumented)
+    key: number;
+    // (undocumented)
+    unit: string;
+}
+
 // Warning: (ae-missing-release-tag) "EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6597,6 +6709,11 @@ export function getCommandClass(cc: CommandClass | CCAPI): CommandClasses_2;
 //
 // @public
 export function getCommandClassStatic<T extends CCConstructor<CommandClass>>(classConstructor: T): CommandClasses_2;
+
+// Warning: (ae-missing-release-tag) "getEnergyProductionScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getEnergyProductionScale(parameter: EnergyProductionParameter, key: number): EnergyProductionScale;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "getExpectedCCResponse" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

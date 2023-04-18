@@ -148,6 +148,12 @@ export {
 	DoorLockLoggingCCValues,
 } from "./DoorLockLoggingCC";
 export {
+	EnergyProductionCC,
+	EnergyProductionCCGet,
+	EnergyProductionCCReport,
+	EnergyProductionCCValues,
+} from "./EnergyProductionCC";
+export {
 	EntryControlCC,
 	EntryControlCCConfigurationGet,
 	EntryControlCCConfigurationReport,

@@ -537,6 +537,7 @@ type CCNameMap = {
 	Configuration: (typeof CommandClasses)["Configuration"];
 	"Door Lock": (typeof CommandClasses)["Door Lock"];
 	"Door Lock Logging": (typeof CommandClasses)["Door Lock Logging"];
+	"Energy Production": (typeof CommandClasses)["Energy Production"];
 	"Entry Control": (typeof CommandClasses)["Entry Control"];
 	"Firmware Update Meta Data": (typeof CommandClasses)["Firmware Update Meta Data"];
 	"Humidity Control Mode": (typeof CommandClasses)["Humidity Control Mode"];
@@ -674,6 +675,7 @@ export interface CCAPIs {
 	Configuration: import("../cc/ConfigurationCC").ConfigurationCCAPI;
 	"Door Lock": import("../cc/DoorLockCC").DoorLockCCAPI;
 	"Door Lock Logging": import("../cc/DoorLockLoggingCC").DoorLockLoggingCCAPI;
+	"Energy Production": import("../cc/EnergyProductionCC").EnergyProductionCCAPI;
 	"Entry Control": import("../cc/EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
 	"Humidity Control Mode": import("../cc/HumidityControlModeCC").HumidityControlModeCCAPI;
