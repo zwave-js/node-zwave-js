@@ -84,6 +84,7 @@
         -   [User Code CC](api/CCs/UserCode.md)
         -   [Version CC](api/CCs/Version.md)
         -   [Wake Up CC](api/CCs/WakeUp.md)
+        -   [Window Covering CC](api/CCs/WindowCovering.md)
         -   [Z-Wave Plus Info CC](api/CCs/ZWavePlus.md)
 
 -   Advanced usage

@@ -69,4 +69,5 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [User Code CC](api/CCs/UserCode.md) · `0x63`
 -   [Version CC](api/CCs/Version.md) · `0x86`
 -   [Wake Up CC](api/CCs/WakeUp.md) · `0x84`
+-   [Window Covering CC](api/CCs/WindowCovering.md) · `0x6a`
 -   [Z-Wave Plus Info CC](api/CCs/ZWavePlus.md) · `0x5e`
