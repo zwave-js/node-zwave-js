@@ -51,18 +51,14 @@ export const EnergyProductionCCValues = Object.freeze({
 			(parameter: EnergyProductionParameter) => parameter,
 			({ property, propertyKey }) =>
 				property === "value" && typeof propertyKey === "number",
-			(parameter: EnergyProductionParameter, scale: number) =>
+			(parameter: EnergyProductionParameter) =>
 				({
 					...ValueMetadata.ReadOnlyNumber,
 					label: getEnumMemberName(
 						EnergyProductionParameter,
 						parameter,
 					),
-					unit: getEnergyProductionScale(parameter, scale).unit,
-					ccSpecific: {
-						parameter,
-						scale,
-					},
+					// unit and ccSpecific are set dynamically
 				} as const satisfies ValueMetadataNumeric),
 		),
 	}),
@@ -191,6 +187,23 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 	public readonly parameter: EnergyProductionParameter;
 	public readonly scale: EnergyProductionScale;
 	public readonly value: number;
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		const valueValue = EnergyProductionCCValues.value(this.parameter);
+		this.setMetadata(applHost, valueValue, {
+			...valueValue.meta,
+			unit: this.scale.unit,
+			ccSpecific: {
+				parameter: this.parameter,
+				scale: this.scale.key,
+			},
+		});
+		this.setValue(applHost, valueValue, this.value);
+
+		return true;
+	}
 }
 
 interface EnergyProductionCCGetOptions extends CCCommandOptions {

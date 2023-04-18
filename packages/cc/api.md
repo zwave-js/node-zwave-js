@@ -5607,6 +5607,8 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
     // (undocumented)
     readonly parameter: EnergyProductionParameter;
     // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost): boolean;
+    // (undocumented)
     readonly scale: EnergyProductionScale;
     // (undocumented)
     readonly value: number;
@@ -5630,11 +5632,6 @@ export const EnergyProductionCCValues: Readonly<{
         };
         readonly meta: {
             readonly label: string;
-            readonly unit: string;
-            readonly ccSpecific: {
-                readonly parameter: EnergyProductionParameter;
-                readonly scale: number;
-            };
             readonly writeable: false;
             readonly type: "number";
             readonly readable: true;
