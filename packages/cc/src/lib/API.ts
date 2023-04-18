@@ -580,6 +580,7 @@ type CCNameMap = {
 	"User Code": (typeof CommandClasses)["User Code"];
 	Version: (typeof CommandClasses)["Version"];
 	"Wake Up": (typeof CommandClasses)["Wake Up"];
+	"Window Covering": (typeof CommandClasses)["Window Covering"];
 	"Z-Wave Plus Info": (typeof CommandClasses)["Z-Wave Plus Info"];
 };
 export type CCToName<CC extends CommandClasses> = {
@@ -718,5 +719,6 @@ export interface CCAPIs {
 	"User Code": import("../cc/UserCodeCC").UserCodeCCAPI;
 	Version: import("../cc/VersionCC").VersionCCAPI;
 	"Wake Up": import("../cc/WakeUpCC").WakeUpCCAPI;
+	"Window Covering": import("../cc/WindowCoveringCC").WindowCoveringCCAPI;
 	"Z-Wave Plus Info": import("../cc/ZWavePlusCC").ZWavePlusCCAPI;
 }

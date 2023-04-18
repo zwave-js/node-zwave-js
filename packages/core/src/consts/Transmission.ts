@@ -335,7 +335,7 @@ export function mergeSupervisionResults(
 		const maxDuration =
 			(durations.length > 0 &&
 				Duration.parseReport(Math.max(...durations))) ||
-			new Duration(0, "unknown");
+			Duration.unknown();
 		return {
 			status: SupervisionStatus.Working,
 			remainingDuration: maxDuration,

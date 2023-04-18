@@ -2717,6 +2717,10 @@ export interface CCAPIs {
     //
     // (undocumented)
     "Wake Up": WakeUpCCAPI;
+    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCAPI" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    "Window Covering": WindowCoveringCCAPI;
     // Warning: (ae-forgotten-export) The symbol "ZWavePlusCCAPI" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -17780,6 +17784,309 @@ export enum Weekday {
     Unknown = 0,
     // (undocumented)
     Wednesday = 3
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WindowCoveringCC extends CommandClass {
+    // (undocumented)
+    ccCommand: WindowCoveringCommand;
+    // (undocumented)
+    interview(applHost: ZWaveApplicationHost): Promise<void>;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WindowCoveringCCGet extends WindowCoveringCC {
+    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCGetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCGetOptions);
+    // (undocumented)
+    parameter: WindowCoveringParameter;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WindowCoveringCCReport extends WindowCoveringCC {
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions);
+    // (undocumented)
+    readonly currentValue: number;
+    // (undocumented)
+    readonly duration: Duration_2;
+    // (undocumented)
+    readonly parameter: WindowCoveringParameter;
+    // (undocumented)
+    readonly targetValue: number;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WindowCoveringCCSet extends WindowCoveringCC {
+    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCSetOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCSetOptions);
+    // (undocumented)
+    duration: Duration_2 | undefined;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    targetValues: {
+        parameter: WindowCoveringParameter;
+        value: number;
+    }[];
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCStartLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
+    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCStartLevelChangeOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCStartLevelChangeOptions);
+    // (undocumented)
+    direction: keyof typeof LevelChangeDirection;
+    // (undocumented)
+    duration: Duration_2 | undefined;
+    // (undocumented)
+    parameter: WindowCoveringParameter;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCStopLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
+    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCStopLevelChangeOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCStopLevelChangeOptions);
+    // (undocumented)
+    parameter: WindowCoveringParameter;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WindowCoveringCCSupportedGet extends WindowCoveringCC {
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCSupportedReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions);
+    // (undocumented)
+    readonly supportedParameters: readonly WindowCoveringParameter[];
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const WindowCoveringCCValues: Readonly<{
+    duration: ((parameter: WindowCoveringParameter) => {
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "duration";
+            readonly propertyKey: WindowCoveringParameter;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "duration";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly meta: {
+            readonly label: `Remaining duration - ${string}`;
+            readonly ccSpecific: {
+                readonly parameter: WindowCoveringParameter;
+            };
+            readonly writeable: false;
+            readonly type: "duration";
+            readonly readable: true;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly internal: false;
+            readonly minVersion: 1;
+            readonly secret: false;
+            readonly stateful: true;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+        };
+    };
+    targetValue: ((parameter: WindowCoveringParameter) => {
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "targetValue";
+            readonly propertyKey: WindowCoveringParameter;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "targetValue";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly meta: {
+            readonly label: `Target value - ${string}`;
+            readonly writeable: boolean;
+            readonly ccSpecific: {
+                readonly parameter: WindowCoveringParameter;
+            };
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly max: 99;
+            readonly min: 0;
+            readonly type: "number";
+            readonly readable: true;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly internal: false;
+            readonly minVersion: 1;
+            readonly secret: false;
+            readonly stateful: true;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+        };
+    };
+    currentValue: ((parameter: WindowCoveringParameter) => {
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "currentValue";
+            readonly propertyKey: WindowCoveringParameter;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "currentValue";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly meta: {
+            readonly label: string;
+            readonly ccSpecific: {
+                parameter: WindowCoveringParameter;
+            };
+            readonly writeable: false;
+            readonly max: 99;
+            readonly min: 0;
+            readonly type: "number";
+            readonly readable: true;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly internal: false;
+            readonly minVersion: 1;
+            readonly secret: false;
+            readonly stateful: true;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+        };
+    };
+    supportedParameters: {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "supportedParameters";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "supportedParameters";
+        };
+        readonly is: (valueId: ValueID) => boolean;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+}>;
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum WindowCoveringCommand {
+    // (undocumented)
+    Get = 3,
+    // (undocumented)
+    Report = 4,
+    // (undocumented)
+    Set = 5,
+    // (undocumented)
+    StartLevelChange = 6,
+    // (undocumented)
+    StopLevelChange = 7,
+    // (undocumented)
+    SupportedGet = 1,
+    // (undocumented)
+    SupportedReport = 2
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringParameter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum WindowCoveringParameter {
+    // (undocumented)
+    "Horizontal Slats Angle (no position)" = 22,
+    // (undocumented)
+    "Horizontal Slats Angle" = 23,
+    // (undocumented)
+    "Inbound Bottom (no position)" = 16,
+    // (undocumented)
+    "Inbound Bottom" = 17,
+    // (undocumented)
+    "Inbound Left (no position)" = 4,
+    // (undocumented)
+    "Inbound Left" = 5,
+    // (undocumented)
+    "Inbound Left/Right (no position)" = 8,
+    // (undocumented)
+    "Inbound Left/Right" = 9,
+    // (undocumented)
+    "Inbound Right (no position)" = 6,
+    // (undocumented)
+    "Inbound Right" = 7,
+    // (undocumented)
+    "Inbound Top (no position)" = 18,
+    // (undocumented)
+    "Inbound Top" = 19,
+    // (undocumented)
+    "Inbound Top/Bottom (no position)" = 20,
+    // (undocumented)
+    "Inbound Top/Bottom" = 21,
+    // (undocumented)
+    "Outbound Bottom (no position)" = 12,
+    // (undocumented)
+    "Outbound Bottom" = 13,
+    // (undocumented)
+    "Outbound Left (no position)" = 0,
+    // (undocumented)
+    "Outbound Left" = 1,
+    // (undocumented)
+    "Outbound Right (no position)" = 2,
+    // (undocumented)
+    "Outbound Right" = 3,
+    // (undocumented)
+    "Outbound Top (no position)" = 14,
+    // (undocumented)
+    "Outbound Top" = 15,
+    // (undocumented)
+    "Vertical Slats Angle (no position)" = 10,
+    // (undocumented)
+    "Vertical Slats Angle" = 11
 }
 
 // Warning: (ae-missing-release-tag) "WithTXReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

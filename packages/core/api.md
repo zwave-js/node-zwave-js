@@ -745,6 +745,8 @@ export interface DSTInfo {
 // @public
 export class Duration {
     constructor(value: number, unit: DurationUnit);
+    // (undocumented)
+    static default(): Duration;
     static from(input: "default"): Duration;
     // (undocumented)
     static from(input?: Duration | string): Duration | undefined;
@@ -761,6 +763,8 @@ export class Duration {
     toString(): string;
     // (undocumented)
     unit: DurationUnit;
+    // (undocumented)
+    static unknown(): Duration;
     // (undocumented)
     get value(): number;
     set value(v: number);

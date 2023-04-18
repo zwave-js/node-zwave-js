@@ -31,11 +31,19 @@ export class Duration {
 		this._value = clamp(v, 0, 127);
 	}
 
+	public static unknown(): Duration {
+		return new Duration(0, "unknown");
+	}
+
+	public static default(): Duration {
+		return new Duration(0, "default");
+	}
+
 	/** Parses a duration as represented in Report commands */
 	public static parseReport(payload?: number): Duration | undefined {
 		if (payload == undefined) return undefined;
 		if (payload === 0xff) return undefined; // reserved value
-		if (payload === 0xfe) return new Duration(0, "unknown");
+		if (payload === 0xfe) return Duration.unknown();
 		const isMinutes = !!(payload & 0b1000_0000);
 		const value = (payload & 0b0111_1111) + (isMinutes ? 1 : 0); // minutes start at 1
 		return new Duration(value, isMinutes ? "minutes" : "seconds");
@@ -44,7 +52,7 @@ export class Duration {
 	/** Parses a duration as represented in Set commands */
 	public static parseSet(payload?: number): Duration | undefined {
 		if (payload == undefined) return undefined;
-		if (payload === 0xff) return new Duration(0, "default");
+		if (payload === 0xff) return Duration.default();
 		const isMinutes = !!(payload & 0b1000_0000);
 		const value = (payload & 0b0111_1111) + (isMinutes ? 1 : 0); // minutes start at 1
 		return new Duration(value, isMinutes ? "minutes" : "seconds");
@@ -57,7 +65,7 @@ export class Duration {
 	public static parseString(text: string): Duration | undefined {
 		if (!text.length) return undefined;
 
-		if (text === "default") return new Duration(0, "default");
+		if (text === "default") return Duration.default();
 		// unknown durations shouldn't be parsed from strings because they are only ever reported
 
 		// Try to parse the numeric parts from a duration
