@@ -11890,7 +11890,7 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11924,7 +11924,7 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11956,7 +11956,7 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11984,7 +11984,7 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
     }) & {
-        is: (valueId: ValueID) => boolean;
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -12006,7 +12006,7 @@ export const NotificationCCValues: Readonly<{
             readonly property: "Access Control";
             readonly propertyKey: "Door state (simple)";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Door state (simple)";
             readonly states: {
@@ -12041,7 +12041,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "alarmLevel";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Alarm Level";
             readonly writeable: false;
@@ -12069,7 +12069,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "alarmType";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Alarm Type";
             readonly writeable: false;
@@ -12097,7 +12097,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "lastRefresh";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12122,7 +12122,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "notificationMode";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12147,7 +12147,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportedNotificationTypes";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12172,7 +12172,7 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "supportsV1Alarm";
         };
-        readonly is: (valueId: ValueID) => boolean;
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
