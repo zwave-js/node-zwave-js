@@ -1023,7 +1023,6 @@ export enum MultilevelSwitchCommand {
 export enum LevelChangeDirection {
 	"up" = 0b0,
 	"down" = 0b1,
-	// "none" = 0b11,
 }
 
 export enum SwitchType {

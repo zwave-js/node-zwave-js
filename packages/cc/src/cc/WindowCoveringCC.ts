@@ -3,6 +3,8 @@ import {
 	Duration,
 	parseBitMask,
 	validatePayload,
+	ZWaveError,
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { CCAPI } from "../lib/API";
@@ -22,7 +24,11 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { WindowCoveringCommand, WindowCoveringParameter } from "../lib/_Types";
+import {
+	LevelChangeDirection,
+	WindowCoveringCommand,
+	WindowCoveringParameter,
+} from "../lib/_Types";
 
 // TODO: Move this enumeration into the src/lib/_Types.ts file
 // All additional type definitions (except CC constructor options) must be defined there too
@@ -124,6 +130,148 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.parameter = this.payload[0];
+		} else {
+			this.parameter = options.parameter;
+		}
+	}
+
+	public parameter: WindowCoveringParameter;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.parameter]);
+		return super.serialize();
+	}
+}
+
+export type WindowCoveringCCSetOptions = Partial<
+	Record<WindowCoveringParameter, number>
+> & {
+	duration?: Duration | string;
+};
+
+@CCCommand(WindowCoveringCommand.Set)
+@expectedCCResponse(WindowCoveringCCReport)
+export class WindowCoveringCCSet extends WindowCoveringCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & WindowCoveringCCSetOptions),
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			const parameters: Partial<Record<WindowCoveringParameter, number>> =
+				{};
+			for (const [key, value] of Object.entries(options)) {
+				if (
+					key in WindowCoveringParameter &&
+					!Number.isNaN(Number(value))
+				) {
+					(parameters as any)[key] = value;
+				}
+			}
+			this.parameters = parameters;
+			this.duration = Duration.from(options.duration);
+		}
+	}
+
+	public parameters: Partial<Record<WindowCoveringParameter, number>>;
+	public duration: Duration | undefined;
+
+	public serialize(): Buffer {
+		const parameterEntries = Object.entries(this.parameters).map(
+			([key, value]) => ({
+				key: +key,
+				value,
+			}),
+		);
+		const numEntries = parameterEntries.length & 0b11111;
+		this.payload = Buffer.allocUnsafe(2 + numEntries * 2);
+
+		this.payload[0] = numEntries;
+		for (let i = 0; i < numEntries; i++) {
+			const offset = 1 + i * 2;
+			this.payload[offset] = parameterEntries[i].key;
+			this.payload[offset + 1] = parameterEntries[i].value;
+		}
+
+		this.payload[this.payload.length - 1] = (
+			this.duration ?? Duration.default()
+		).serializeSet();
+
+		return super.serialize();
+	}
+}
+
+interface WindowCoveringCCStartLevelChangeOptions extends CCCommandOptions {
+	parameter: WindowCoveringParameter;
+	direction: keyof typeof LevelChangeDirection;
+	duration?: Duration | string;
+}
+
+@CCCommand(WindowCoveringCommand.StartLevelChange)
+@expectedCCResponse(WindowCoveringCCReport)
+export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| WindowCoveringCCStartLevelChangeOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.parameter = options.parameter;
+			this.direction = options.direction;
+			this.duration = Duration.from(options.duration);
+		}
+	}
+
+	public parameter: WindowCoveringParameter;
+	public direction: keyof typeof LevelChangeDirection;
+	public duration: Duration | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.direction === "up" ? 0b0100_0000 : 0b0000_0000,
+			this.parameter,
+			(this.duration ?? Duration.default()).serializeSet(),
+		]);
+		return super.serialize();
+	}
+}
+
+interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
+	parameter: WindowCoveringParameter;
+}
+
+@CCCommand(WindowCoveringCommand.StopLevelChange)
+@expectedCCResponse(WindowCoveringCCReport)
+export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| WindowCoveringCCStopLevelChangeOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
 		} else {
 			this.parameter = options.parameter;
 		}
