@@ -276,19 +276,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Load only",
+					"label": "Single pole",
 					"value": 0
 				},
 				{
-					"label": "Double control",
+					"label": "Multi-way with dumb/toggle switch",
 					"value": 1
 				},
 				{
-					"label": "AUX",
+					"label": "Multi-way with aux switch",
 					"value": 2
 				},
 				{
-					"label": "Single full wave (on/off mode only)",
+					"label": "Single pole full sine wave (on/off mode only)",
 					"value": 3
 				}
 			]
