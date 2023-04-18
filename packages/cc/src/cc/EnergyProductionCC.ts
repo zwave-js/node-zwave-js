@@ -5,7 +5,6 @@ import {
 	parseFloatWithScale,
 	validatePayload,
 	ValueMetadata,
-	ValueMetadataNumeric,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
@@ -59,7 +58,7 @@ export const EnergyProductionCCValues = Object.freeze({
 						parameter,
 					),
 					// unit and ccSpecific are set dynamically
-				} as const satisfies ValueMetadataNumeric),
+				} as const),
 		),
 	}),
 });
@@ -210,8 +209,18 @@ interface EnergyProductionCCGetOptions extends CCCommandOptions {
 	parameter: EnergyProductionParameter;
 }
 
+function testResponseForEnergyProductionGet(
+	sent: EnergyProductionCCGet,
+	received: EnergyProductionCCReport,
+) {
+	return received.parameter === sent.parameter;
+}
+
 @CCCommand(EnergyProductionCommand.Get)
-@expectedCCResponse(EnergyProductionCCReport)
+@expectedCCResponse(
+	EnergyProductionCCReport,
+	testResponseForEnergyProductionGet,
+)
 export class EnergyProductionCCGet extends EnergyProductionCC {
 	public constructor(
 		host: ZWaveHost,

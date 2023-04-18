@@ -1603,12 +1603,6 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 
 export * from "@zwave-js/cc";
 
-// Warnings were encountered during analysis:
-//
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/EnergyProductionCC.ts:62:16 - (TS2304) Cannot find name 'satisfies'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/EnergyProductionCC.ts:62:26 - (TS2554) Expected 4-6 arguments, but got 7.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/EnergyProductionCC.ts:62:26 - (TS2693) 'ValueMetadataNumeric' only refers to a type, but is being used as a value here.
-
 // (No @packageDocumentation comment for this package)
 
 ```
