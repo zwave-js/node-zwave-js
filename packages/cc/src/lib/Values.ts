@@ -590,6 +590,7 @@ export interface CCValues {
 	Configuration: typeof import("../cc/ConfigurationCC").ConfigurationCCValues;
 	"Door Lock": typeof import("../cc/DoorLockCC").DoorLockCCValues;
 	"Door Lock Logging": typeof import("../cc/DoorLockLoggingCC").DoorLockLoggingCCValues;
+	"Energy Production": typeof import("../cc/EnergyProductionCC").EnergyProductionCCValues;
 	"Entry Control": typeof import("../cc/EntryControlCC").EntryControlCCValues;
 	"Firmware Update Meta Data": typeof import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCValues;
 	"Humidity Control Mode": typeof import("../cc/HumidityControlModeCC").HumidityControlModeCCValues;

@@ -500,6 +500,67 @@ export enum DoorLockOperationType {
 
 export type DoorHandleStatus = [boolean, boolean, boolean, boolean];
 
+export enum EnergyProductionCommand {
+	Get = 0x02,
+	Report = 0x03,
+}
+
+export enum EnergyProductionParameter {
+	Power = 0x00,
+	"Production Total" = 0x01,
+	"Production Today" = 0x02,
+	"Total Time" = 0x03,
+}
+
+export interface EnergyProductionScale {
+	key: number;
+	unit: string;
+}
+
+export function getEnergyProductionScale(
+	parameter: EnergyProductionParameter,
+	key: number,
+): EnergyProductionScale {
+	if (parameter === EnergyProductionParameter.Power && key === 0x00) {
+		return {
+			key,
+			unit: "W",
+		};
+	} else if (
+		parameter === EnergyProductionParameter["Production Total"] &&
+		key === 0x00
+	) {
+		return {
+			key,
+			unit: "Wh",
+		};
+	} else if (
+		parameter === EnergyProductionParameter["Production Today"] &&
+		key === 0x00
+	) {
+		return {
+			key,
+			unit: "Wh",
+		};
+	} else if (parameter === EnergyProductionParameter["Total Time"]) {
+		if (key === 0x00) {
+			return {
+				key,
+				unit: "seconds",
+			};
+		} else if (key === 0x01) {
+			return {
+				key,
+				unit: "hours",
+			};
+		}
+	}
+	return {
+		key,
+		unit: "unknown",
+	};
+}
+
 export enum EntryControlEventTypes {
 	Caching = 0x00,
 	CachedKeys = 0x01,
