@@ -22,6 +22,7 @@ import {
 	SinglecastCC,
 	SupervisionResult,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 	ValueMetadataNumeric,
 	ZWaveError,
@@ -31,7 +32,13 @@ import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import {
+	CCAPI,
+	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "../lib/API";
 import {
 	CommandClass,
 	gotDeserializationOptions,
@@ -224,6 +231,28 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		const valueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpoint.index,
+			property,
+			propertyKey,
+		};
+		if (NotificationCCValues.notificationVariable.is(valueId)) {
+			const notificationType: number | undefined =
+				this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific
+					?.notificationType;
+			if (notificationType != undefined) {
+				return this.getInternal({ notificationType });
+			}
+		}
+
+		throwUnsupportedProperty(this.ccId, property);
+	};
 
 	/**
 	 * @internal
