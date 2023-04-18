@@ -169,18 +169,31 @@ export class CommandClass implements ICommandClass {
 		if (this instanceof InvalidCC) return;
 
 		if (options.origin !== MessageOrigin.Host && this.isSinglecast()) {
-			// For singlecast CCs, set the CC version as high as possible
-			this.version = this.host.getSafeCCVersionForNode(
-				this.ccId,
-				this.nodeId,
-				this.endpointIndex,
-			);
-			// But remember which version the node supports
-			this._knownVersion = this.host.getSupportedCCVersionForEndpoint(
-				this.ccId,
-				this.nodeId,
-				this.endpointIndex,
-			);
+			try {
+				// For singlecast CCs, set the CC version as high as possible
+				this.version = this.host.getSafeCCVersionForNode(
+					this.ccId,
+					this.nodeId,
+					this.endpointIndex,
+				);
+				// But remember which version the node supports
+				this._knownVersion = this.host.getSupportedCCVersionForEndpoint(
+					this.ccId,
+					this.nodeId,
+					this.endpointIndex,
+				);
+			} catch (e) {
+				if (
+					isZWaveError(e) &&
+					e.code === ZWaveErrorCodes.CC_NotImplemented
+				) {
+					// Someone tried to create a CC that is not implemented. Just set all versions to 0.
+					this.version = 0;
+					this._knownVersion = 0;
+				} else {
+					throw e;
+				}
+			}
 
 			// Send secure commands if necessary
 			this.toggleEncapsulationFlag(
