@@ -1,12 +1,16 @@
 import {
 	CommandClasses,
 	Duration,
+	Maybe,
 	parseBitMask,
+	SupervisionResult,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { pick } from "@zwave-js/shared/safe";
+import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
 	CCCommandOptions,
@@ -48,7 +52,120 @@ export const WindowCoveringCCValues = Object.freeze({
 
 @API(CommandClasses["Window Covering"])
 export class WindowCoveringCCAPI extends CCAPI {
-	// TODO: Implementation
+	public supportsCommand(cmd: WindowCoveringCommand): Maybe<boolean> {
+		switch (cmd) {
+			case WindowCoveringCommand.Get:
+			case WindowCoveringCommand.Set:
+			case WindowCoveringCommand.SupportedGet:
+			case WindowCoveringCommand.StartLevelChange:
+			case WindowCoveringCommand.StopLevelChange:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
+	public async getSupported(): Promise<
+		readonly WindowCoveringParameter[] | undefined
+	> {
+		this.assertSupportsCommand(
+			WindowCoveringCommand,
+			WindowCoveringCommand.SupportedGet,
+		);
+
+		const cc = new WindowCoveringCCSupportedGet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response =
+			await this.applHost.sendCommand<WindowCoveringCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
+		return response?.supportedParameters;
+	}
+
+	@validateArgs({ strictEnums: true })
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async get(parameter: WindowCoveringParameter) {
+		this.assertSupportsCommand(
+			WindowCoveringCommand,
+			WindowCoveringCommand.Get,
+		);
+
+		const cc = new WindowCoveringCCGet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			parameter,
+		});
+		const response =
+			await this.applHost.sendCommand<WindowCoveringCCReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return pick(response, ["currentValue", "targetValue", "duration"]);
+		}
+	}
+
+	@validateArgs()
+	public async set(
+		parameters: Partial<Record<WindowCoveringParameter, number>>,
+		duration?: Duration | string,
+	): Promise<SupervisionResult | undefined> {
+		this.assertSupportsCommand(
+			WindowCoveringCommand,
+			WindowCoveringCommand.StartLevelChange,
+		);
+
+		const cc = new WindowCoveringCCSet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...parameters,
+			duration,
+		});
+
+		return this.applHost.sendCommand(cc);
+	}
+
+	@validateArgs({ strictEnums: true })
+	public async startLevelChange(
+		parameter: WindowCoveringParameter,
+		direction: keyof typeof LevelChangeDirection,
+		duration?: Duration | string,
+	): Promise<SupervisionResult | undefined> {
+		this.assertSupportsCommand(
+			WindowCoveringCommand,
+			WindowCoveringCommand.StartLevelChange,
+		);
+
+		const cc = new WindowCoveringCCStartLevelChange(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			parameter,
+			direction,
+			duration,
+		});
+
+		return this.applHost.sendCommand(cc);
+	}
+
+	@validateArgs({ strictEnums: true })
+	public async stopLevelChange(
+		parameter: WindowCoveringParameter,
+	): Promise<SupervisionResult | undefined> {
+		this.assertSupportsCommand(
+			WindowCoveringCommand,
+			WindowCoveringCommand.StopLevelChange,
+		);
+
+		const cc = new WindowCoveringCCStopLevelChange(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			parameter,
+		});
+
+		return this.applHost.sendCommand(cc);
+	}
 }
 
 @commandClass(CommandClasses["Window Covering"])
@@ -78,7 +195,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 	}
 
 	@ccValue(WindowCoveringCCValues.supportedParameters)
-	public readonly supportedParameters: readonly WindowCoveringCommand[];
+	public readonly supportedParameters: readonly WindowCoveringParameter[];
 }
 
 @CCCommand(WindowCoveringCommand.SupportedGet)
@@ -209,7 +326,8 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 	}
 }
 
-interface WindowCoveringCCStartLevelChangeOptions extends CCCommandOptions {
+export interface WindowCoveringCCStartLevelChangeOptions
+	extends CCCommandOptions {
 	parameter: WindowCoveringParameter;
 	direction: keyof typeof LevelChangeDirection;
 	duration?: Duration | string;
