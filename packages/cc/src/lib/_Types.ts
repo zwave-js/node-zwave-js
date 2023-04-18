@@ -1509,6 +1509,43 @@ export enum WakeUpCommand {
 	IntervalCapabilitiesReport = 0x0a,
 }
 
+export enum WindowCoveringCommand {
+	SupportedGet = 0x01,
+	SupportedReport = 0x02,
+	Get = 0x03,
+	Report = 0x04,
+	Set = 0x05,
+	StartLevelChange = 0x06,
+	StopLevelChange = 0x07,
+}
+
+export enum WindowCoveringParameter {
+	"Outbound Left (no position)",
+	"Outbound Left",
+	"Outbound Right (no position)",
+	"Outbound Right",
+	"Inbound Left (no position)",
+	"Inbound Left",
+	"Inbound Right (no position)",
+	"Inbound Right",
+	"Inbound Left/Right (no position)",
+	"Inbound Left/Right",
+	"Vertical Slats Angle (no position)",
+	"Vertical Slats Angle",
+	"Outbound Bottom (no position)",
+	"Outbound Bottom",
+	"Outbound Top (no position)",
+	"Outbound Top",
+	"Inbound Bottom (no position)",
+	"Inbound Bottom",
+	"Inbound Top (no position)",
+	"Inbound Top",
+	"Inbound Top/Bottom (no position)",
+	"Inbound Top/Bottom",
+	"Horizontal Slats Angle (no position)",
+	"Horizontal Slats Angle",
+}
+
 export enum ZWavePlusCommand {
 	Get = 0x01,
 	Report = 0x02,

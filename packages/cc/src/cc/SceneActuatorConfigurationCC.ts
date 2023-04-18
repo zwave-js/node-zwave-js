@@ -395,8 +395,7 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 		if (this.sceneId !== 0) {
 			this.level = this.payload[1];
 			this.dimmingDuration =
-				Duration.parseReport(this.payload[2]) ??
-				new Duration(0, "unknown");
+				Duration.parseReport(this.payload[2]) ?? Duration.unknown();
 		}
 	}
 
