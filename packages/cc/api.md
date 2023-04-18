@@ -17711,13 +17711,16 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 // @public (undocumented)
 export class WindowCoveringCCSet extends WindowCoveringCC {
     // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCSetOptions" needs to be exported by the entry point index.d.ts
-    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | (CCCommandOptions & WindowCoveringCCSetOptions));
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCSetOptions);
     // (undocumented)
     duration: Duration_2 | undefined;
     // (undocumented)
-    parameters: Partial<Record<WindowCoveringParameter, number>>;
-    // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    targetValues: {
+        parameter: WindowCoveringParameter;
+        value: number;
+    }[];
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCStartLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

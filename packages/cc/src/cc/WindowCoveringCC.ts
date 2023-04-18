@@ -155,7 +155,10 @@ export class WindowCoveringCCAPI extends CCAPI {
 		}
 
 		const duration = Duration.from(options?.transitionDuration);
-		const result = await this.set({ [propertyKey]: value }, duration);
+		const result = await this.set(
+			[{ parameter: propertyKey, value }],
+			duration,
+		);
 
 		return result;
 	};
@@ -228,7 +231,10 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 	@validateArgs()
 	public async set(
-		parameters: Partial<Record<WindowCoveringParameter, number>>,
+		targetValues: {
+			parameter: WindowCoveringParameter;
+			value: number;
+		}[],
 		duration?: Duration | string,
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
@@ -239,7 +245,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 		const cc = new WindowCoveringCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			...parameters,
+			targetValues,
 			duration,
 		});
 
@@ -461,11 +467,13 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 	}
 }
 
-export type WindowCoveringCCSetOptions = Partial<
-	Record<WindowCoveringParameter, number>
-> & {
+export interface WindowCoveringCCSetOptions extends CCCommandOptions {
+	targetValues: {
+		parameter: WindowCoveringParameter;
+		value: number;
+	}[];
 	duration?: Duration | string;
-};
+}
 
 @CCCommand(WindowCoveringCommand.Set)
 @expectedCCResponse(WindowCoveringCCReport)
@@ -474,7 +482,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
-			| (CCCommandOptions & WindowCoveringCCSetOptions),
+			| WindowCoveringCCSetOptions,
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
@@ -484,39 +492,26 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const parameters: Partial<Record<WindowCoveringParameter, number>> =
-				{};
-			for (const [key, value] of Object.entries(options)) {
-				if (
-					key in WindowCoveringParameter &&
-					!Number.isNaN(Number(value))
-				) {
-					(parameters as any)[key] = value;
-				}
-			}
-			this.parameters = parameters;
+			this.targetValues = options.targetValues;
 			this.duration = Duration.from(options.duration);
 		}
 	}
 
-	public parameters: Partial<Record<WindowCoveringParameter, number>>;
+	public targetValues: {
+		parameter: WindowCoveringParameter;
+		value: number;
+	}[];
 	public duration: Duration | undefined;
 
 	public serialize(): Buffer {
-		const parameterEntries = Object.entries(this.parameters).map(
-			([key, value]) => ({
-				key: +key,
-				value,
-			}),
-		);
-		const numEntries = parameterEntries.length & 0b11111;
+		const numEntries = this.targetValues.length & 0b11111;
 		this.payload = Buffer.allocUnsafe(2 + numEntries * 2);
 
 		this.payload[0] = numEntries;
 		for (let i = 0; i < numEntries; i++) {
 			const offset = 1 + i * 2;
-			this.payload[offset] = parameterEntries[i].key;
-			this.payload[offset + 1] = parameterEntries[i].value;
+			this.payload[offset] = this.targetValues[i].parameter;
+			this.payload[offset + 1] = this.targetValues[i].value;
 		}
 
 		this.payload[this.payload.length - 1] = (
