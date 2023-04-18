@@ -612,6 +612,17 @@ export {
 	WakeUpCCWakeUpNotification,
 } from "./WakeUpCC";
 export {
+	WindowCoveringCC,
+	WindowCoveringCCGet,
+	WindowCoveringCCReport,
+	WindowCoveringCCSet,
+	WindowCoveringCCStartLevelChange,
+	WindowCoveringCCStopLevelChange,
+	WindowCoveringCCSupportedGet,
+	WindowCoveringCCSupportedReport,
+	WindowCoveringCCValues,
+} from "./WindowCoveringCC";
+export {
 	ZWavePlusCC,
 	ZWavePlusCCGet,
 	ZWavePlusCCReport,

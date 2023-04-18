@@ -624,5 +624,6 @@ export interface CCValues {
 	"User Code": typeof import("../cc/UserCodeCC").UserCodeCCValues;
 	Version: typeof import("../cc/VersionCC").VersionCCValues;
 	"Wake Up": typeof import("../cc/WakeUpCC").WakeUpCCValues;
+	"Window Covering": typeof import("../cc/WindowCoveringCC").WindowCoveringCCValues;
 	"Z-Wave Plus Info": typeof import("../cc/ZWavePlusCC").ZWavePlusCCValues;
 }

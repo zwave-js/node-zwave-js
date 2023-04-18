@@ -2,16 +2,28 @@ import {
 	CommandClasses,
 	Duration,
 	Maybe,
+	MessagePriority,
 	parseBitMask,
 	SupervisionResult,
 	validatePayload,
+	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import { pick } from "@zwave-js/shared/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI } from "../lib/API";
+import {
+	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	SetValueImplementation,
+	SET_VALUE,
+	throwMissingPropertyKey,
+	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
+	throwWrongValueType,
+} from "../lib/API";
 import {
 	CCCommandOptions,
 	CommandClass,
@@ -34,8 +46,6 @@ import {
 	WindowCoveringParameter,
 } from "../lib/_Types";
 
-// TODO: Move this enumeration into the src/lib/_Types.ts file
-// All additional type definitions (except CC constructor options) must be defined there too
 export const WindowCoveringCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Window Covering"], {
 		...V.staticProperty(
@@ -46,7 +56,64 @@ export const WindowCoveringCCValues = Object.freeze({
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses["Window Covering"], {
-		// Dynamic CC values go here
+		...V.dynamicPropertyAndKeyWithName(
+			"currentValue",
+			"currentValue",
+			(parameter: WindowCoveringParameter) => parameter,
+			({ property, propertyKey }) =>
+				property === "currentValue" && typeof propertyKey === "number",
+			(parameter: WindowCoveringParameter) => ({
+				...ValueMetadata.ReadOnlyLevel,
+				label: `Current value - ${getEnumMemberName(
+					WindowCoveringParameter,
+					parameter,
+				)}`,
+				ccSpecific: {
+					parameter,
+				},
+			}),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"targetValue",
+			"targetValue",
+			(parameter: WindowCoveringParameter) => parameter,
+			({ property, propertyKey }) =>
+				property === "targetValue" && typeof propertyKey === "number",
+			(parameter: WindowCoveringParameter) =>
+				({
+					...ValueMetadata.Level,
+					label: `Target value - ${getEnumMemberName(
+						WindowCoveringParameter,
+						parameter,
+					)}`,
+					// Only odd-numbered parameters have position support and are writable
+					writeable: parameter % 2 === 1,
+					ccSpecific: {
+						parameter,
+					},
+					valueChangeOptions: ["transitionDuration"],
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"duration",
+			"duration",
+			(parameter: WindowCoveringParameter) => parameter,
+			({ property, propertyKey }) =>
+				property === "duration" && typeof propertyKey === "number",
+			(parameter: WindowCoveringParameter) =>
+				({
+					...ValueMetadata.ReadOnlyDuration,
+					label: `Remaining duration - ${getEnumMemberName(
+						WindowCoveringParameter,
+						parameter,
+					)}`,
+					ccSpecific: {
+						parameter,
+					},
+				} as const),
+		),
 	}),
 });
 
@@ -63,6 +130,58 @@ export class WindowCoveringCCAPI extends CCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+		options,
+	) => {
+		if (property !== "targetValue") {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+
+		if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		} else if (
+			typeof propertyKey !== "number" ||
+			// Only odd-numbered parameters have position support and are writable
+			propertyKey % 2 === 0
+		) {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+
+		if (typeof value !== "number") {
+			throwWrongValueType(this.ccId, property, "number", typeof value);
+		}
+
+		const duration = Duration.from(options?.transitionDuration);
+		const result = await this.set({ [propertyKey]: value }, duration);
+
+		return result;
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "currentValue":
+			case "targetValue":
+			case "duration":
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				return (await this.get(propertyKey))?.[property];
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
 
 	public async getSupported(): Promise<
 		readonly WindowCoveringParameter[] | undefined
@@ -173,6 +292,75 @@ export class WindowCoveringCCAPI extends CCAPI {
 @ccValues(WindowCoveringCCValues)
 export class WindowCoveringCC extends CommandClass {
 	declare ccCommand: WindowCoveringCommand;
+
+	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+		const node = this.getNode(applHost)!;
+		const endpoint = this.getEndpoint(applHost)!;
+		const api = CCAPI.create(
+			CommandClasses["Window Covering"],
+			applHost,
+			endpoint,
+		).withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		applHost.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		applHost.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying supported window covering parameters...",
+			direction: "outbound",
+		});
+		const supported = await api.getSupported();
+		if (supported?.length) {
+			const logMessage = `supported window covering parameters:
+${supported
+	.map((p) => `· ${getEnumMemberName(WindowCoveringParameter, p)}`)
+	.join("\n")}`;
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+
+			// Create metadata for all supported parameters
+			for (const param of supported) {
+				this.setMetadata(
+					applHost,
+					WindowCoveringCCValues.currentValue(param),
+				);
+				this.setMetadata(
+					applHost,
+					WindowCoveringCCValues.targetValue(param),
+				);
+				this.setMetadata(
+					applHost,
+					WindowCoveringCCValues.duration(param),
+				);
+
+				// And for the odd parameters (with position support),
+				// query the position
+				if (param % 2 === 1) {
+					applHost.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying position for parameter ${getEnumMemberName(
+							WindowCoveringParameter,
+							param,
+						)}...`,
+						direction: "outbound",
+					});
+					await api.get(param);
+				}
+			}
+		}
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(applHost, true);
+	}
 }
 
 @CCCommand(WindowCoveringCommand.SupportedReport)
@@ -218,8 +406,21 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 	}
 
 	public readonly parameter: WindowCoveringParameter;
+
+	@ccValue(
+		WindowCoveringCCValues.currentValue,
+		(self: WindowCoveringCCReport) => [self.parameter] as const,
+	)
 	public readonly currentValue: number;
+	@ccValue(
+		WindowCoveringCCValues.targetValue,
+		(self: WindowCoveringCCReport) => [self.parameter] as const,
+	)
 	public readonly targetValue: number;
+	@ccValue(
+		WindowCoveringCCValues.duration,
+		(self: WindowCoveringCCReport) => [self.parameter] as const,
+	)
 	public readonly duration: Duration;
 }
 
