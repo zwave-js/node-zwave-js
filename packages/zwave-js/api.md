@@ -119,6 +119,7 @@ import { SendCommandOptions } from '@zwave-js/core';
 import { SendCommandReturnType } from '@zwave-js/core';
 import { SendMessageOptions } from '@zwave-js/core';
 import { SensorType } from '@zwave-js/config';
+import type { SerialPort } from 'serialport';
 import { SetbackState } from '@zwave-js/cc';
 import { SetValueAPIOptions } from '@zwave-js/cc';
 import { SinglecastCC } from '@zwave-js/core';
@@ -154,6 +155,7 @@ import type { ZWaveHostOptions } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
 import { ZWavePlusNodeType } from '@zwave-js/cc';
 import { ZWavePlusRoleType } from '@zwave-js/cc';
+import type { ZWaveSerialPortBase } from '@zwave-js/serial';
 import { ZWaveSerialPortImplementation } from '@zwave-js/serial';
 
 export { buffer2hex }
@@ -1588,6 +1590,14 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         lockDir?: string;
         deviceConfigPriorityDir?: string;
         throttle: "fast" | "normal" | "slow";
+    };
+    testingHooks?: {
+        serialPortBinding?: typeof SerialPort;
+        onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+        skipControllerIdentification?: boolean;
+        skipNodeInterview?: boolean;
+        skipBootloaderCheck?: boolean;
+        loadConfiguration?: boolean;
     };
     timeouts: {
         ack: number;

@@ -5,6 +5,38 @@
 		"rootDir": "src",
 		"outDir": "build"
 	},
+	"references": [
+		{
+			"path": "../cc/tsconfig.build.json"
+		},
+		{
+			"path": "../config/tsconfig.build.json"
+		},
+		{
+			"path": "../core/tsconfig.build.json"
+		},
+		{
+			"path": "../host/tsconfig.build.json"
+		},
+		{
+			"path": "../nvmedit/tsconfig.build.json"
+		},
+		{
+			"path": "../serial/tsconfig.build.json"
+		},
+		{
+			"path": "../shared/tsconfig.build.json"
+		},
+		{
+			"path": "../testing/tsconfig.build.json"
+		},
+		{
+			"path": "../maintenance/tsconfig.build.json"
+		},
+		{
+			"path": "../transformers/tsconfig.build.json"
+		}
+	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["src/lib/test", "src/**/*.test.ts", "src/**/*.test.ava.ts"]
 }

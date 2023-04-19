@@ -2,6 +2,20 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {},
+	"references": [
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../host"
+		},
+		{
+			"path": "../serial"
+		},
+		{
+			"path": "../shared"
+		}
+	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

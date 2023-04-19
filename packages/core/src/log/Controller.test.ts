@@ -5,7 +5,7 @@ import {
 	assertLogInfo,
 	assertMessage,
 	SpyTransport,
-} from "../test/SpyTransportAva";
+} from "../test/SpyTransport";
 import { ControllerLogger } from "./Controller";
 import { createDefaultTransportFormat, ZWaveLogContainer } from "./shared";
 

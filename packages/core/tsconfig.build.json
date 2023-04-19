@@ -7,6 +7,11 @@
 		// Some @internal members need to be accessed from other modules in this monorepo
 		"stripInternal": false
 	},
+	"references": [
+		{
+			"path": "../shared/tsconfig.build.json"
+		}
+	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["src/**/*.test.ts"]
 }
