@@ -5626,22 +5626,22 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 // @public (undocumented)
 export const EnergyProductionCCValues: Readonly<{
     value: ((parameter: EnergyProductionParameter) => {
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Energy Production"];
-            readonly endpoint: number;
-            readonly property: "value";
-            readonly propertyKey: EnergyProductionParameter;
+        readonly meta: {
+            readonly label: string;
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
         };
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Energy Production"];
             property: "value";
             propertyKey: EnergyProductionParameter;
         };
-        readonly meta: {
-            readonly label: string;
-            readonly writeable: false;
-            readonly type: "number";
-            readonly readable: true;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Energy Production"];
+            readonly endpoint: number;
+            readonly property: "value";
+            readonly propertyKey: EnergyProductionParameter;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -17896,17 +17896,6 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 // @public (undocumented)
 export const WindowCoveringCCValues: Readonly<{
     duration: ((parameter: WindowCoveringParameter) => {
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "duration";
-            readonly propertyKey: WindowCoveringParameter;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "duration";
-            propertyKey: WindowCoveringParameter;
-        };
         readonly meta: {
             readonly label: `Remaining duration - ${string}`;
             readonly ccSpecific: {
@@ -17915,6 +17904,17 @@ export const WindowCoveringCCValues: Readonly<{
             readonly writeable: false;
             readonly type: "duration";
             readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "duration";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "duration";
+            readonly propertyKey: WindowCoveringParameter;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -17928,17 +17928,6 @@ export const WindowCoveringCCValues: Readonly<{
         };
     };
     targetValue: ((parameter: WindowCoveringParameter) => {
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "targetValue";
-            readonly propertyKey: WindowCoveringParameter;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "targetValue";
-            propertyKey: WindowCoveringParameter;
-        };
         readonly meta: {
             readonly label: `Target value - ${string}`;
             readonly writeable: boolean;
@@ -17950,6 +17939,17 @@ export const WindowCoveringCCValues: Readonly<{
             readonly min: 0;
             readonly type: "number";
             readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "targetValue";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "targetValue";
+            readonly propertyKey: WindowCoveringParameter;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -17963,17 +17963,6 @@ export const WindowCoveringCCValues: Readonly<{
         };
     };
     currentValue: ((parameter: WindowCoveringParameter) => {
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "currentValue";
-            readonly propertyKey: WindowCoveringParameter;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "currentValue";
-            propertyKey: WindowCoveringParameter;
-        };
         readonly meta: {
             readonly label: string;
             readonly ccSpecific: {
@@ -17984,6 +17973,17 @@ export const WindowCoveringCCValues: Readonly<{
             readonly min: 0;
             readonly type: "number";
             readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "currentValue";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "currentValue";
+            readonly propertyKey: WindowCoveringParameter;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
