@@ -166,8 +166,10 @@ export function getTransformedSource(
 		}
 	}
 
-	// Remove exports keyword
+	// Remove exports and declare keywords
 	if (Node.isModifierable(node)) {
+		node = node.toggleModifier("declare", false);
+		// @ts-expect-error
 		node = node.toggleModifier("export", false);
 	}
 
