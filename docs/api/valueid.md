@@ -173,7 +173,6 @@ type BinarySensorValueMetadata = ValueMetadata & {
 type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
-		// only present on V2+ indicators:
 		propertyId?: number;
 	};
 };
