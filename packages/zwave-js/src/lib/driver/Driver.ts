@@ -1427,11 +1427,6 @@ export class Driver
 		this._nodesReady.clear();
 		this._nodesReadyEventEmitted = false;
 
-		// If we only have sleeping nodes or a controller-only network, the send
-		// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
-		// So do it manually.
-		this.handleSendThreadIdleChange(true);
-
 		if (!this.options.testingHooks?.skipNodeInterview) {
 			// Now interview all nodes
 			// First complete the controller interview
@@ -1475,6 +1470,11 @@ export class Driver
 				})();
 			}
 		}
+
+		// If we only have sleeping nodes or a controller-only network, the send
+		// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
+		// So do it manually.
+		this.handleSendThreadIdleChange(this.sendThreadIdle);
 	}
 
 	private autoRefreshNodeValueTimers = new Map<number, NodeJS.Timeout>();
