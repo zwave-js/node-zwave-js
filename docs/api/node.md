@@ -676,28 +676,25 @@ This property tracks the current status of the node interview. It contains a val
 ```ts
 enum InterviewStage {
 	/** The interview process hasn't started for this node */
-	None,
+	None = 0,
 	/** The node's protocol information has been queried from the controller */
-	ProtocolInfo,
+	ProtocolInfo = 1,
 	/** The node has been queried for supported and controlled command classes */
-	NodeInfo,
-
+	NodeInfo = 2,
 	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.
 	 */
-	CommandClasses,
-
+	CommandClasses = 3,
 	/**
 	 * Device information for the node has been loaded from a config file.
 	 * If defined, some of the reported information will be overwritten based on the
 	 * config file contents.
 	 */
-	OverwriteConfig,
-
+	OverwriteConfig = 4,
 	/** The interview process has finished */
-	Complete,
+	Complete = 5,
 }
 ```
 
@@ -780,8 +777,8 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node typ
 
 ```ts
 enum ZWavePlusNodeType {
-	Node = 0x00, // ZWave+ Node
-	IPGateway = 0x02, // ZWave+ for IP Gateway
+	Node = 0,
+	IPGateway = 2,
 }
 ```
 
@@ -1263,9 +1260,9 @@ with
 
 ```ts
 enum PowerlevelTestStatus {
-	Failed = 0x00,
-	Success = 0x01,
-	"In Progress" = 0x02,
+	Failed = 0,
+	Success = 1,
+	"In Progress" = 2,
 }
 ```
 
