@@ -4130,7 +4130,8 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCNameReport extends ConfigurationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCNameReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCNameReportOptions);
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
@@ -4138,13 +4139,15 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
     // (undocumented)
     mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: ConfigurationCCNameReport[]): void;
     // (undocumented)
-    get name(): string;
+    name: string;
     // (undocumented)
-    get parameter(): number;
+    readonly parameter: number;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    get reportsToFollow(): number;
+    readonly reportsToFollow: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -6766,6 +6769,11 @@ export function getImplementedVersion<T extends CommandClass>(cc: T | CommandCla
 //
 // @public
 export function getImplementedVersionStatic<T extends CCConstructor<CommandClass>>(classConstructor: T): number;
+
+// Warning: (ae-missing-release-tag) "getInnermostCommandClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getInnermostCommandClass(cc: CommandClass): CommandClass;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "getManufacturerId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -369,8 +369,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     waitForCommand<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, timeout: number): Promise<T>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "waitForCommand"
-    waitForMessage<T extends Message>(predicate: (msg: Message) => boolean, timeout: number): Promise<T>;
+    waitForMessage<T extends Message>(predicate: (msg: Message) => boolean, timeout: number, refreshPredicate?: (msg: Message) => boolean): Promise<T>;
 }
 
 // Warning: (ae-missing-release-tag) "DriverLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

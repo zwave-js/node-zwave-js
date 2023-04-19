@@ -1,5 +1,6 @@
 import {
 	CommandClass,
+	getInnermostCommandClass,
 	isCommandClassContainer,
 	MGRPExtension,
 	MPANExtension,
@@ -71,15 +72,39 @@ export type MessageGeneratorImplementation = (
 	additionalCommandTimeoutMs?: number,
 ) => AsyncGenerator<Message, Message, Message>;
 
+function maybePartialNodeUpdate(sent: Message, received: Message): boolean {
+	// Some commands are returned in multiple segments, which may take longer than
+	// the configured timeout.
+	if (!isCommandClassContainer(sent) || !isCommandClassContainer(received)) {
+		return false;
+	}
+
+	if (sent.getNodeId() !== received.getNodeId()) return false;
+
+	if (received.command.ccId === CommandClasses["Transport Service"]) {
+		// We don't know what's in there. It may be the expected update
+		return true;
+	}
+
+	// Let the sent CC test if the received one is a match.
+	// These predicates don't check if the received CC is complete, we can use them here.
+	// This also doesn't check for correct encapsulation, but that is good enough to refresh the timer.
+	const sentCommand = getInnermostCommandClass(sent.command);
+	const receivedCommand = getInnermostCommandClass(received.command);
+	return sentCommand.isExpectedCCResponse(receivedCommand);
+}
+
 export async function waitForNodeUpdate<T extends Message>(
 	driver: Driver,
 	msg: Message,
 	timeoutMs: number,
 ): Promise<T> {
 	try {
-		return await driver.waitForMessage<T>((received) => {
-			return msg.isExpectedNodeUpdate(received);
-		}, timeoutMs);
+		return await driver.waitForMessage<T>(
+			(received) => msg.isExpectedNodeUpdate(received),
+			timeoutMs,
+			(received) => maybePartialNodeUpdate(msg, received),
+		);
 	} catch (e) {
 		throw new ZWaveError(
 			`Timed out while waiting for a response from the node`,
