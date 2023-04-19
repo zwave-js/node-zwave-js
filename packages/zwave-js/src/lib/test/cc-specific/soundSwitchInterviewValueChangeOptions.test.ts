@@ -6,7 +6,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"The toneId value should have value change options after SoundSwitchCC interview",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			commandClasses: [

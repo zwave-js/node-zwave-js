@@ -1469,6 +1469,11 @@ export class Driver
 					}
 				})();
 			}
+
+			// If we only have sleeping nodes or a controller-only network, the send
+			// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
+			// So do it manually.
+			this.handleSendThreadIdleChange(this.sendThreadIdle);
 		}
 	}
 
