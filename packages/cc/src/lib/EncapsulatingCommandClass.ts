@@ -49,6 +49,14 @@ export function isEncapsulatingCommandClass(
 	return false;
 }
 
+export function getInnermostCommandClass(cc: CommandClass): CommandClass {
+	if (isEncapsulatingCommandClass(cc)) {
+		return getInnermostCommandClass(cc.encapsulated);
+	} else {
+		return cc;
+	}
+}
+
 /** Defines the static side of an encapsulating command class */
 export interface MultiEncapsulatingCommandClassStatic {
 	new (
