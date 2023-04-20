@@ -1733,7 +1733,7 @@ __metadata:
     fs-extra: ^10.1.0
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
-    typescript: 5.0.2
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -1771,7 +1771,7 @@ __metadata:
     semver: ^7.3.7
     sinon: ^14.0.0
     ts-pegjs: ^0.3.1
-    typescript: 5.0.2
+    typescript: 5.0.4
     winston: ^3.8.2
     xml2js: ^0.5.0
     yargs: ^17.5.1
@@ -1801,7 +1801,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     sinon: ^14.0.0
     triple-beam: "*"
-    typescript: 5.0.2
+    typescript: 5.0.4
     winston: ^3.8.2
     winston-daily-rotate-file: ^4.7.1
     winston-transport: ^4.5.0
@@ -1819,7 +1819,7 @@ __metadata:
     del-cli: ^5.0.0
     fs-extra: ^10.1.0
     prettier: ^2.8.4
-    typescript: 5.0.2
+    typescript: 5.0.4
     yargs: ^17.5.1
     zwave-js: "workspace:*"
   bin:
@@ -1839,7 +1839,7 @@ __metadata:
     alcalzone-shared: ^4.0.8
     del-cli: ^5.0.0
     prettier: ^2.8.4
-    typescript: 5.0.2
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -1868,7 +1868,7 @@ __metadata:
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
     ts-morph: ^17.0.1
-    typescript: 5.0.2
+    typescript: 5.0.4
     yargs: ^17.5.1
   languageName: unknown
   linkType: soft
@@ -1893,7 +1893,7 @@ __metadata:
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
     semver: ^7.3.7
-    typescript: 5.0.2
+    typescript: 5.0.4
     yargs: ^17.5.1
   bin:
     nvmedit: bin/nvmedit.js
@@ -1953,9 +1953,9 @@ __metadata:
     semver: ^7.3.7
     source-map-support: ^0.5.21
     ts-nameof: ^5.0.0
-    ts-patch: ">=3.0.0-beta2"
+    ts-patch: 3.0.0-rc2
     turbo: 1.7.4
-    typescript: 5.0.2
+    typescript: 5.0.4
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -1983,7 +1983,7 @@ __metadata:
     prettier: ^2.8.4
     serialport: ^10.4.0
     sinon: ^14.0.0
-    typescript: 5.0.2
+    typescript: 5.0.4
     winston: ^3.8.2
   languageName: unknown
   linkType: soft
@@ -2004,7 +2004,7 @@ __metadata:
     fs-extra: ^10.1.0
     prettier: ^2.8.4
     sinon: ^14.0.0
-    typescript: 5.0.2
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -2025,7 +2025,7 @@ __metadata:
     esbuild-register: ^3.4.2
     prettier: ^2.8.4
     triple-beam: "*"
-    typescript: 5.0.2
+    typescript: 5.0.4
     winston-transport: ^4.5.0
   languageName: unknown
   linkType: soft
@@ -2042,7 +2042,7 @@ __metadata:
     fs-extra: ^10.1.0
     prettier: ^2.8.4
     tsutils: ^3.21.0
-    typescript: 5.0.2
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -8134,9 +8134,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-patch@npm:3.0.0-beta2":
-  version: 3.0.0-beta2
-  resolution: "ts-patch@npm:3.0.0-beta2"
+"ts-patch@npm:3.0.0-rc2":
+  version: 3.0.0-rc2
+  resolution: "ts-patch@npm:3.0.0-rc2"
   dependencies:
     chalk: ^4.1.2
     global-prefix: ^3.0.0
@@ -8144,31 +8144,10 @@ __metadata:
     resolve: ^1.22.2
     semver: ^7.3.8
     strip-ansi: ^6.0.1
-  peerDependencies:
-    typescript: ">=5.0.0"
   bin:
     ts-patch: bin/ts-patch.js
     tspc: bin/tspc.js
-  checksum: aa00e5aa9d95c7c93b3fc521f9ba6af379c323916c8a127349a402953a3675e2b7a9e3090dc3b531c1879fe08eb4d96de0ae3f3da5740c8cdcbc11cb8a22411f
-  languageName: node
-  linkType: hard
-
-"ts-patch@patch:ts-patch@npm%3A3.0.0-beta2#./.yarn/patches/ts-patch-npm-3.0.0-beta2-7566748a19.patch::locator=%40zwave-js%2Frepo%40workspace%3A.":
-  version: 3.0.0-beta2
-  resolution: "ts-patch@patch:ts-patch@npm%3A3.0.0-beta2#./.yarn/patches/ts-patch-npm-3.0.0-beta2-7566748a19.patch::version=3.0.0-beta2&hash=a38ba3&locator=%40zwave-js%2Frepo%40workspace%3A."
-  dependencies:
-    chalk: ^4.1.2
-    global-prefix: ^3.0.0
-    minimist: ^1.2.8
-    resolve: ^1.22.2
-    semver: ^7.3.8
-    strip-ansi: ^6.0.1
-  peerDependencies:
-    typescript: ">=5.0.0"
-  bin:
-    ts-patch: bin/ts-patch.js
-    tspc: bin/tspc.js
-  checksum: 9f8dbc436aec9ad36a837d0b10a97a72d5796eee44e7ef7a8c9bbe2d7d49118f40ff9e0dbe6d07da3e7ff9195d6d80785ebc7dfe9047f3a5adff27cf532949ba
+  checksum: e0c57b3147744dae16481fe0e095e7fc541a550b5294b9b1dd5a3d9fc16daa4715683747b3de3937987bf82d12b229409e3dbbb07146160dc0b666f15fd57a4b
   languageName: node
   linkType: hard
 
@@ -8353,13 +8332,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.0.2":
-  version: 5.0.2
-  resolution: "typescript@npm:5.0.2"
+"typescript@npm:5.0.4":
+  version: 5.0.4
+  resolution: "typescript@npm:5.0.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: bef1dcd166acfc6934b2ec4d72f93edb8961a5fab36b8dd2aaf6f4f4cd5c0210f2e0850aef4724f3b4913d5aef203a94a28ded731b370880c8bcff7e4ff91fc1
+  checksum: 82b94da3f4604a8946da585f7d6c3025fff8410779e5bde2855ab130d05e4fd08938b9e593b6ebed165bda6ad9292b230984f10952cf82f0a0ca07bbeaa08172
   languageName: node
   linkType: hard
 
@@ -8393,13 +8372,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.0.2#~builtin<compat/typescript>":
-  version: 5.0.2
-  resolution: "typescript@patch:typescript@npm%3A5.0.2#~builtin<compat/typescript>::version=5.0.2&hash=85af82"
+"typescript@patch:typescript@5.0.4#~builtin<compat/typescript>":
+  version: 5.0.4
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=85af82"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: b63cb742fbb9aeb3085e002ad8f10d5fd963606aa4d6b3b65b4e76c396ff09739f03b5dbae08e1698c3bce9d5619d3f67aeb7ee470ed4016bd345b3cfe37b54a
+  checksum: bb309d320c59a26565fb3793dba550576ab861018ff3fd1b7fccabbe46ae4a35546bc45f342c0a0b6f265c801ccdf64ffd68f548f117ceb7f0eac4b805cd52a9
   languageName: node
   linkType: hard
 
@@ -8867,7 +8846,7 @@ __metadata:
     serialport: ^10.4.0
     sinon: ^14.0.0
     source-map-support: ^0.5.21
-    typescript: 5.0.2
+    typescript: 5.0.4
     winston: ^3.8.2
     xstate: 4.29.0
   languageName: unknown

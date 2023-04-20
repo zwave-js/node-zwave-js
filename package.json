@@ -77,15 +77,14 @@
     "semver": "^7.3.7",
     "source-map-support": "^0.5.21",
     "ts-nameof": "^5.0.0",
-    "ts-patch": ">=3.0.0-beta2",
+    "ts-patch": "3.0.0-rc2",
     "turbo": "1.7.4",
-    "typescript": "5.0.2",
+    "typescript": "5.0.4",
     "zwave-js": "workspace:*"
   },
   "resolutions": {
     "minimist": "^1.2.6",
-    "colors": "1.4.0",
-    "ts-patch@>=3.0.0-beta2": "patch:ts-patch@npm%3A3.0.0-beta2#./.yarn/patches/ts-patch-npm-3.0.0-beta2-7566748a19.patch"
+    "colors": "1.4.0"
   },
   "scripts": {
     "w": "yarn ts maintenance/watch.ts",
