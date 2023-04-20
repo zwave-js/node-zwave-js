@@ -1,0 +1,15 @@
+// tsconfig for building - only applies to the src directory
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"composite": false,
+		"outDir": "test/build",
+		"declaration": false,
+		"declarationMap": false,
+		"sourceMap": false,
+		"plugins": [{ "transform": "./build" }],
+		"incremental": false,
+		"experimentalDecorators": true
+	},
+	"include": ["test/fixtures/repro.ts"]
+}
