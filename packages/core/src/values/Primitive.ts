@@ -204,7 +204,7 @@ export function parseBitMask(mask: Buffer, startValue: number = 1): number[] {
 /** Serializes a numeric array with a given maximum into a bit mask */
 export function encodeBitMask(
 	values: readonly number[],
-	maxValue: number,
+	maxValue: number = Math.max(...values),
 	startValue: number = 1,
 ): Buffer {
 	const numBytes = Math.ceil((maxValue - startValue + 1) / 8);

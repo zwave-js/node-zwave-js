@@ -33,6 +33,7 @@ export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> = T ex
 export type CCSpecificCapabilities = {
     [CommandClasses.Notification]: NotificationCCCapabilities;
     [121]: SoundSwitchCCCapabilities;
+    [106]: WindowCoveringCCCapabilities;
 };
 
 // Warning: (ae-missing-release-tag) "createMockZWaveAckFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -286,6 +287,14 @@ export interface SoundSwitchCCCapabilities {
         name: string;
         duration: number;
     }[];
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WindowCoveringCCCapabilities {
+    // (undocumented)
+    supportedParameters: number[];
 }
 
 // (No @packageDocumentation comment for this package)

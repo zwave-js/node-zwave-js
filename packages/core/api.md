@@ -802,7 +802,7 @@ export function encodeApplicationNodeInformation(nif: ApplicationNodeInformation
 // Warning: (ae-missing-release-tag) "encodeBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function encodeBitMask(values: readonly number[], maxValue: number, startValue?: number): Buffer;
+export function encodeBitMask(values: readonly number[], maxValue?: number, startValue?: number): Buffer;
 
 // Warning: (ae-missing-release-tag) "encodeBoolean" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

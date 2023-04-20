@@ -27,6 +27,7 @@ import {
 } from "@zwave-js/testing";
 import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { behaviors as SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
+import { behaviors as WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
@@ -274,5 +275,6 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 
 		...NotificationCCBehaviors,
 		...SoundSwitchCCBehaviors,
+		...WindowCoveringCCBehaviors,
 	];
 }
