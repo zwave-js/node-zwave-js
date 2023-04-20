@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	encodeBitMask,
 	Maybe,
 	MessagePriority,
 	parseBitMask,
@@ -603,29 +604,67 @@ ${supported
 		// Remember that the interview is complete
 		this.setInterviewComplete(applHost, true);
 	}
+
+	public translatePropertyKey(
+		_applHost: ZWaveApplicationHost,
+		_property: string | number,
+		propertyKey: string | number,
+	): string | undefined {
+		if (typeof propertyKey === "number") {
+			return getEnumMemberName(WindowCoveringParameter, propertyKey);
+		}
+		return super.translatePropertyKey(_applHost, _property, propertyKey);
+	}
+}
+
+export interface WindowCoveringCCSupportedReportOptions
+	extends CCCommandOptions {
+	supportedParameters: readonly WindowCoveringParameter[];
 }
 
 @CCCommand(WindowCoveringCommand.SupportedReport)
 export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| WindowCoveringCCSupportedReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
 
-		const numBitmaskBytes = this.payload[0] & 0b1111;
-		validatePayload(this.payload.length >= 1 + numBitmaskBytes);
-		const bitmask = this.payload.slice(1, 1 + numBitmaskBytes);
+			const numBitmaskBytes = this.payload[0] & 0b1111;
+			validatePayload(this.payload.length >= 1 + numBitmaskBytes);
+			const bitmask = this.payload.slice(1, 1 + numBitmaskBytes);
 
-		this.supportedParameters = parseBitMask(
-			bitmask,
-			WindowCoveringParameter["Outbound Left (no position)"],
-		);
+			this.supportedParameters = parseBitMask(
+				bitmask,
+				WindowCoveringParameter["Outbound Left (no position)"],
+			);
+		} else {
+			this.supportedParameters = options.supportedParameters;
+		}
 	}
 
 	@ccValue(WindowCoveringCCValues.supportedParameters)
 	public readonly supportedParameters: readonly WindowCoveringParameter[];
+
+	public serialize(): Buffer {
+		const bitmask = encodeBitMask(
+			this.supportedParameters,
+			undefined,
+			WindowCoveringParameter["Outbound Left (no position)"],
+		).slice(0, 15);
+		const numBitmaskBytes = bitmask.length & 0b1111;
+
+		this.payload = Buffer.concat([
+			Buffer.from([numBitmaskBytes]),
+			bitmask.slice(0, numBitmaskBytes),
+		]);
+
+		return super.serialize();
+	}
 }
 
 @CCCommand(WindowCoveringCommand.SupportedGet)

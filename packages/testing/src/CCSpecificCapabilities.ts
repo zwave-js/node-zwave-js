@@ -14,9 +14,15 @@ export interface SoundSwitchCCCapabilities {
 	}[];
 }
 
+export interface WindowCoveringCCCapabilities {
+	// FIXME: This should be WindowCoveringParameter[], but that would introduce a dependency cycle
+	supportedParameters: number[];
+}
+
 export type CCSpecificCapabilities = {
 	[CommandClasses.Notification]: NotificationCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
+	[106 /* Window Covering */]: WindowCoveringCCCapabilities;
 };
 
 export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> =
