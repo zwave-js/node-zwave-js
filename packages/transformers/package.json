@@ -29,7 +29,7 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "pretest": "del-cli \"test/fixtures/*.js\" && tsc -p tsconfig.test.json && cpy \"test/build/test/fixtures/*.js\" test/fixtures && del-cli test/build",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",

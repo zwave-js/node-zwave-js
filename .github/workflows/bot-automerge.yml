@@ -45,11 +45,12 @@ jobs:
           gh pr merge --auto --squash "$PR_URL"
 
   bot-reenable-automerge:
-    # Don't run in forks
+    # Don't run in forks, don't run for drafts
     if: |
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.user.login != 'dependabot[bot]'
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.event.pull_request.draft == false
 
     runs-on: [ubuntu-latest]
     strategy:

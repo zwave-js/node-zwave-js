@@ -41,6 +41,7 @@
         -   [CRC-16 Encapsulation CC](api/CCs/CRC16.md)
         -   [Door Lock CC](api/CCs/DoorLock.md)
         -   [Door Lock Logging CC](api/CCs/DoorLockLogging.md)
+        -   [Energy Production CC](api/CCs/EnergyProduction.md)
         -   [Entry Control CC](api/CCs/EntryControl.md)
         -   [Firmware Update Meta Data CC](api/CCs/FirmwareUpdateMetaData.md)
         -   [Humidity Control Mode CC](api/CCs/HumidityControlMode.md)
@@ -83,6 +84,7 @@
         -   [User Code CC](api/CCs/UserCode.md)
         -   [Version CC](api/CCs/Version.md)
         -   [Wake Up CC](api/CCs/WakeUp.md)
+        -   [Window Covering CC](api/CCs/WindowCovering.md)
         -   [Z-Wave Plus Info CC](api/CCs/ZWavePlus.md)
 
 -   Advanced usage

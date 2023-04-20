@@ -23,6 +23,9 @@ import {
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";
 
+// Integration tests need to run in serial, or they might block the serial port on CI
+const testSerial = test.serial.bind(test);
+
 function prepareDriver(
 	cacheDir: string = path.join(__dirname, "cache"),
 	logToFile: boolean = false,
@@ -202,11 +205,11 @@ function suite(
 	}
 
 	(modifier === "only"
-		? test.only
+		? testSerial.only
 		: modifier === "skip"
-		? test.skip
-		: test
-	).bind(test)(name, async (t) => {
+		? testSerial.skip
+		: testSerial
+	).bind(testSerial)(name, async (t) => {
 		t.timeout(30000);
 		t.teardown(async () => {
 			// Give everything a chance to settle before destroying the driver.

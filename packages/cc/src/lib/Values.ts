@@ -590,6 +590,7 @@ export interface CCValues {
 	Configuration: typeof import("../cc/ConfigurationCC").ConfigurationCCValues;
 	"Door Lock": typeof import("../cc/DoorLockCC").DoorLockCCValues;
 	"Door Lock Logging": typeof import("../cc/DoorLockLoggingCC").DoorLockLoggingCCValues;
+	"Energy Production": typeof import("../cc/EnergyProductionCC").EnergyProductionCCValues;
 	"Entry Control": typeof import("../cc/EntryControlCC").EntryControlCCValues;
 	"Firmware Update Meta Data": typeof import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCValues;
 	"Humidity Control Mode": typeof import("../cc/HumidityControlModeCC").HumidityControlModeCCValues;
@@ -624,5 +625,6 @@ export interface CCValues {
 	"User Code": typeof import("../cc/UserCodeCC").UserCodeCCValues;
 	Version: typeof import("../cc/VersionCC").VersionCCValues;
 	"Wake Up": typeof import("../cc/WakeUpCC").WakeUpCCValues;
+	"Window Covering": typeof import("../cc/WindowCoveringCC").WindowCoveringCCValues;
 	"Z-Wave Plus Info": typeof import("../cc/ZWavePlusCC").ZWavePlusCCValues;
 }

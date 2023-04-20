@@ -148,6 +148,12 @@ export {
 	DoorLockLoggingCCValues,
 } from "./DoorLockLoggingCC";
 export {
+	EnergyProductionCC,
+	EnergyProductionCCGet,
+	EnergyProductionCCReport,
+	EnergyProductionCCValues,
+} from "./EnergyProductionCC";
+export {
 	EntryControlCC,
 	EntryControlCCConfigurationGet,
 	EntryControlCCConfigurationReport,
@@ -590,6 +596,17 @@ export {
 	WakeUpCCValues,
 	WakeUpCCWakeUpNotification,
 } from "./WakeUpCC";
+export {
+	WindowCoveringCC,
+	WindowCoveringCCGet,
+	WindowCoveringCCReport,
+	WindowCoveringCCSet,
+	WindowCoveringCCStartLevelChange,
+	WindowCoveringCCStopLevelChange,
+	WindowCoveringCCSupportedGet,
+	WindowCoveringCCSupportedReport,
+	WindowCoveringCCValues,
+} from "./WindowCoveringCC";
 export {
 	ZWavePlusCC,
 	ZWavePlusCCGet,

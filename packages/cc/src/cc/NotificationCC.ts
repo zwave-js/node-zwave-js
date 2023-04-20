@@ -10,14 +10,14 @@ import { timespan } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
+	encodeBitMask,
+	isZWaveError,
 	MessagePriority,
+	parseBitMask,
+	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-	encodeBitMask,
-	isZWaveError,
-	parseBitMask,
-	validatePayload,
 	type IZWaveEndpoint,
 	type IZWaveNode,
 	type Maybe,
@@ -25,17 +25,24 @@ import {
 	type MessageRecord,
 	type SinglecastCC,
 	type SupervisionResult,
+	type ValueID,
 	type ValueMetadataNumeric,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import {
+	CCAPI,
+	PhysicalCCAPI,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+	type PollValueImplementation,
+} from "../lib/API";
 import {
 	CommandClass,
-	InvalidCC,
 	gotDeserializationOptions,
+	InvalidCC,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -50,9 +57,9 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
+import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import { NotificationCommand, UserCodeCommand } from "../lib/_Types";
-import * as ccUtils from "../lib/utils";
 
 export const NotificationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Notification, {
@@ -224,6 +231,28 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		const valueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpoint.index,
+			property,
+			propertyKey,
+		};
+		if (NotificationCCValues.notificationVariable.is(valueId)) {
+			const notificationType: number | undefined =
+				this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific
+					?.notificationType;
+			if (notificationType != undefined) {
+				return this.getInternal({ notificationType });
+			}
+		}
+
+		throwUnsupportedProperty(this.ccId, property);
+	};
 
 	/**
 	 * @internal

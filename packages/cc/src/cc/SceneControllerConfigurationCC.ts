@@ -130,7 +130,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 							propertyKey,
 						).endpoint(this.endpoint.index),
 					) ??
-					new Duration(0, "default");
+					Duration.default();
 				return this.set(propertyKey, value, dimmingDuration);
 			}
 		} else if (property === "dimmingDuration") {
@@ -479,8 +479,7 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 			this.sceneId = options.sceneId;
 			// if dimmingDuration was missing, use default duration.
 			this.dimmingDuration =
-				Duration.from(options.dimmingDuration) ??
-				new Duration(0, "default");
+				Duration.from(options.dimmingDuration) ?? Duration.default();
 		}
 	}
 
@@ -520,7 +519,7 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 		this.groupId = this.payload[0];
 		this.sceneId = this.payload[1];
 		this.dimmingDuration =
-			Duration.parseReport(this.payload[2]) ?? new Duration(0, "unknown");
+			Duration.parseReport(this.payload[2]) ?? Duration.unknown();
 	}
 
 	public readonly groupId: number;

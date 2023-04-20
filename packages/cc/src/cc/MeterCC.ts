@@ -655,7 +655,7 @@ export class MeterCCReport extends MeterCC {
 			this._rateType,
 			this.scale,
 		);
-		this.ensureMetadata(applHost, valueValue, {
+		this.setMetadata(applHost, valueValue, {
 			...valueValue.meta,
 			label: getValueLabel(
 				applHost.configManager,
@@ -664,6 +664,11 @@ export class MeterCCReport extends MeterCC {
 				this._rateType,
 			),
 			unit: scale.label,
+			ccSpecific: {
+				meterType: this._type,
+				scale: this.scale,
+				rateType: this._rateType,
+			},
 		});
 		this.setValue(applHost, valueValue, this._value);
 

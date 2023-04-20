@@ -5,6 +5,17 @@
 		"rootDir": "src",
 		"outDir": "build"
 	},
+	"references": [
+		{
+			"path": "../config/tsconfig.build.json"
+		},
+		{
+			"path": "../core/tsconfig.build.json"
+		},
+		{
+			"path": "../shared/tsconfig.build.json"
+		}
+	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["src/**/*.test.ts"]
 }

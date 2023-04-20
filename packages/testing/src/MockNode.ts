@@ -9,6 +9,7 @@ import {
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";
+import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 import type { MockController } from "./MockController";
 import {
 	getDefaultMockEndpointCapabilities,
@@ -401,6 +402,24 @@ export class MockNode {
 	/** Forgets all recorded frames sent to the controller */
 	public clearSentControllerFrames(): void {
 		this.sentControllerFrames = [];
+	}
+
+	public getCCCapabilities<T extends CommandClasses>(
+		ccId: T,
+		endpointIndex?: number,
+	): Partial<CCIdToCapabilities<T>> | undefined {
+		let ccInfo: CommandClassInfo | undefined;
+		if (endpointIndex) {
+			const endpoint = this.endpoints.get(endpointIndex);
+			ccInfo = endpoint?.implementedCCs.get(ccId);
+		} else {
+			ccInfo = this.implementedCCs.get(ccId);
+		}
+		if (ccInfo) {
+			const { isSupported, isControlled, version, secure, ...ret } =
+				ccInfo;
+			return ret;
+		}
 	}
 }
 

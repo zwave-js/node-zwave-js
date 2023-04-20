@@ -382,6 +382,7 @@ interface AwaitedThing<T> {
 	handler: (thing: T) => void;
 	timeout?: NodeJS.Timeout;
 	predicate: (msg: T) => boolean;
+	refreshPredicate?: (msg: T) => boolean;
 }
 
 type AwaitedMessageEntry = AwaitedThing<Message>;
@@ -1469,6 +1470,11 @@ export class Driver
 					}
 				})();
 			}
+
+			// If we only have sleeping nodes or a controller-only network, the send
+			// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
+			// So do it manually.
+			this.handleSendThreadIdleChange(this.sendThreadIdle);
 		}
 	}
 
@@ -2245,7 +2251,7 @@ export class Driver
 		}
 		throw new ZWaveError(
 			"Cannot retrieve the version of a CC that is not implemented",
-			ZWaveErrorCodes.CC_NotSupported,
+			ZWaveErrorCodes.CC_NotImplemented,
 		);
 	}
 
@@ -2889,7 +2895,17 @@ export class Driver
 				}
 
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
-				if (!this.assemblePartialCCs(msg)) return;
+				if (!this.assemblePartialCCs(msg)) {
+					// Check if a message timer needs to be refreshed.
+					for (const entry of this.awaitedMessages) {
+						if (entry.refreshPredicate?.(msg)) {
+							entry.timeout?.refresh();
+							// Since this is a partial message there may be no clear 1:1 match.
+							// Therefore we loop through all awaited messages
+						}
+					}
+					return;
+				}
 
 				// Make sure we are allowed to handle this command
 				if (this.shouldDiscardCC(msg.command)) {
@@ -4505,16 +4521,19 @@ ${handlers.length} left`,
 	 *
 	 * **Note:** To wait for a certain CommandClass, better use {@link waitForCommand}.
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
-	 * @param predicate A predicate function to test all incoming messages
+	 * @param predicate A predicate function to test all incoming messages.
+	 * @param refreshPredicate A predicate function to test partial messages. If this returns `true` for a message, the timer will be restarted.
 	 */
 	public waitForMessage<T extends Message>(
 		predicate: (msg: Message) => boolean,
 		timeout: number,
+		refreshPredicate?: (msg: Message) => boolean,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<Message>();
 			const entry: AwaitedMessageEntry = {
 				predicate,
+				refreshPredicate,
 				handler: (msg) => promise.resolve(msg),
 				timeout: undefined,
 			};

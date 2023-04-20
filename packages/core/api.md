@@ -745,6 +745,8 @@ export interface DSTInfo {
 // @public
 export class Duration {
     constructor(value: number, unit: DurationUnit);
+    // (undocumented)
+    static default(): Duration;
     static from(input: "default"): Duration;
     // (undocumented)
     static from(input?: Duration | string): Duration | undefined;
@@ -761,6 +763,8 @@ export class Duration {
     toString(): string;
     // (undocumented)
     unit: DurationUnit;
+    // (undocumented)
+    static unknown(): Duration;
     // (undocumented)
     get value(): number;
     set value(v: number);
@@ -798,7 +802,7 @@ export function encodeApplicationNodeInformation(nif: ApplicationNodeInformation
 // Warning: (ae-missing-release-tag) "encodeBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function encodeBitMask(values: readonly number[], maxValue: number, startValue?: number): Buffer;
+export function encodeBitMask(values: readonly number[], maxValue?: number, startValue?: number): Buffer;
 
 // Warning: (ae-missing-release-tag) "encodeBoolean" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

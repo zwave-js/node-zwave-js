@@ -3875,7 +3875,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		return {
 			firmwareUpgradable: true,
-			firmwareTargets: [0, ...additionalFirmwareIDs],
+			firmwareTargets: distinct([0, ...additionalFirmwareIDs]),
 			continuesToFunction,
 			supportsActivation,
 		};

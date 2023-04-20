@@ -2,6 +2,17 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {},
+	"references": [
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../shared"
+		},
+		{
+			"path": "../maintenance"
+		}
+	],
 	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

@@ -1,6 +1,7 @@
 {
 	"extends": "@tsconfig/node14/tsconfig.json",
 	"compilerOptions": {
+		"composite": true,
 		"incremental": true,
 		"declaration": true,
 		"declarationMap": true,

@@ -376,9 +376,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 				this.payload,
 				Buffer.from([
 					encodeBoolean(this.targetValue),
-					(
-						this.duration ?? new Duration(0, "default")
-					).serializeReport(),
+					(this.duration ?? Duration.default()).serializeReport(),
 				]),
 			]);
 		}

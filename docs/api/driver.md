@@ -593,10 +593,10 @@ enum RssiError {
 
 ```ts
 enum ProtocolDataRate {
-	ZWave_9k6 = 0x01,
-	ZWave_40k = 0x02,
-	ZWave_100k = 0x03,
-	LongRange_100k = 0x04,
+	ZWave_9k6 = 1,
+	ZWave_40k = 2,
+	ZWave_100k = 3,
+	LongRange_100k = 4,
 }
 ```
 
@@ -843,6 +843,36 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
 	 */
 	userAgent?: Record<string, string>;
+
+	/** DO NOT USE! Used for testing internally */
+	testingHooks?: {
+		serialPortBinding?: typeof SerialPort;
+		/**
+		 * A hook that allows accessing the serial port instance after opening
+		 * and before interacting with it.
+		 */
+		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+
+		/**
+		 * Set this to true to skip the controller identification sequence.
+		 */
+		skipControllerIdentification?: boolean;
+
+		/**
+		 * Set this to true to skip the interview of all nodes.
+		 */
+		skipNodeInterview?: boolean;
+
+		/**
+		 * Set this to true to skip checking if the controller is in bootloader mode
+		 */
+		skipBootloaderCheck?: boolean;
+
+		/**
+		 * Set this to false to skip loading the configuration files. Default: `true`..
+		 */
+		loadConfiguration?: boolean;
+	};
 }
 ````
 

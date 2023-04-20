@@ -4,11 +4,10 @@
   "description": "zwave-js: testing utilities",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts"
+    "access": "public"
   },
   "main": "build/index.js",
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
@@ -32,7 +31,7 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",

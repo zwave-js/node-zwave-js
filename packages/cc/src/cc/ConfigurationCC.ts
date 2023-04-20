@@ -2077,23 +2077,42 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 	}
 }
 
+export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
+	parameter: number;
+	name: string;
+	reportsToFollow: number;
+}
+
 @CCCommand(ConfigurationCommand.NameReport)
 export class ConfigurationCCNameReport extends ConfigurationCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ConfigurationCCNameReportOptions,
 	) {
 		super(host, options);
-		// Parameter and # of reports must be present
-		validatePayload(this.payload.length >= 3);
-		this._parameter = this.payload.readUInt16BE(0);
-		this._reportsToFollow = this.payload[2];
-		if (this._reportsToFollow > 0) {
-			// If more reports follow, the info must at least be one byte
-			validatePayload(this.payload.length >= 4);
+
+		if (gotDeserializationOptions(options)) {
+			// Parameter and # of reports must be present
+			validatePayload(this.payload.length >= 3);
+			this.parameter = this.payload.readUInt16BE(0);
+			this.reportsToFollow = this.payload[2];
+			if (this.reportsToFollow > 0) {
+				// If more reports follow, the info must at least be one byte
+				validatePayload(this.payload.length >= 4);
+			}
+			this.name = this.payload.slice(3).toString("utf8");
+		} else {
+			this.parameter = options.parameter;
+			this.name = options.name;
+			this.reportsToFollow = options.reportsToFollow;
 		}
-		this._name = this.payload.slice(3).toString("utf8");
 	}
+
+	public readonly parameter: number;
+	public name: string;
+	public readonly reportsToFollow: number;
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
@@ -2104,28 +2123,23 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return true;
 	}
 
-	private _parameter: number;
-	public get parameter(): number {
-		return this._parameter;
-	}
+	public serialize(): Buffer {
+		const nameBuffer = Buffer.from(this.name, "utf8");
+		this.payload = Buffer.allocUnsafe(3 + nameBuffer.length);
+		this.payload.writeUInt16BE(this.parameter, 0);
+		this.payload[2] = this.reportsToFollow;
+		nameBuffer.copy(this.payload, 3);
 
-	private _name: string;
-	public get name(): string {
-		return this._name;
-	}
-
-	private _reportsToFollow: number;
-	public get reportsToFollow(): number {
-		return this._reportsToFollow;
+		return super.serialize();
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		// Distinguish sessions by the parameter number
-		return { parameter: this._parameter };
+		return { parameter: this.parameter };
 	}
 
 	public expectMoreMessages(): boolean {
-		return this._reportsToFollow > 0;
+		return this.reportsToFollow > 0;
 	}
 
 	public mergePartialCCs(
@@ -2133,8 +2147,8 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		partials: ConfigurationCCNameReport[],
 	): void {
 		// Concat the name
-		this._name = [...partials, this]
-			.map((report) => report._name)
+		this.name = [...partials, this]
+			.map((report) => report.name)
 			.reduce((prev, cur) => prev + cur, "");
 	}
 
@@ -2159,11 +2173,8 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload.readUInt16BE(0);
 		} else {
 			this.parameter = options.parameter;
 		}

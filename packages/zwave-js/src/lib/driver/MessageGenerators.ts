@@ -1,4 +1,6 @@
 import {
+	getInnermostCommandClass,
+	isCommandClassContainer,
 	MGRPExtension,
 	MPANExtension,
 	Security2CCMessageEncapsulation,
@@ -7,7 +9,6 @@ import {
 	SupervisionCC,
 	SupervisionCCReport,
 	SupervisionCommand,
-	isCommandClassContainer,
 	type CommandClass,
 } from "@zwave-js/cc";
 import {
@@ -29,6 +30,7 @@ import {
 import {
 	CommandClasses,
 	EncapsulationFlags,
+	mergeSupervisionResults,
 	MessagePriority,
 	NODE_ID_BROADCAST,
 	SPANState,
@@ -36,7 +38,6 @@ import {
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
-	mergeSupervisionResults,
 	type SendCommandOptions,
 	type SupervisionResult,
 } from "@zwave-js/core";
@@ -71,15 +72,39 @@ export type MessageGeneratorImplementation = (
 	additionalCommandTimeoutMs?: number,
 ) => AsyncGenerator<Message, Message, Message>;
 
+function maybePartialNodeUpdate(sent: Message, received: Message): boolean {
+	// Some commands are returned in multiple segments, which may take longer than
+	// the configured timeout.
+	if (!isCommandClassContainer(sent) || !isCommandClassContainer(received)) {
+		return false;
+	}
+
+	if (sent.getNodeId() !== received.getNodeId()) return false;
+
+	if (received.command.ccId === CommandClasses["Transport Service"]) {
+		// We don't know what's in there. It may be the expected update
+		return true;
+	}
+
+	// Let the sent CC test if the received one is a match.
+	// These predicates don't check if the received CC is complete, we can use them here.
+	// This also doesn't check for correct encapsulation, but that is good enough to refresh the timer.
+	const sentCommand = getInnermostCommandClass(sent.command);
+	const receivedCommand = getInnermostCommandClass(received.command);
+	return sentCommand.isExpectedCCResponse(receivedCommand);
+}
+
 export async function waitForNodeUpdate<T extends Message>(
 	driver: Driver,
 	msg: Message,
 	timeoutMs: number,
 ): Promise<T> {
 	try {
-		return await driver.waitForMessage<T>((received) => {
-			return msg.isExpectedNodeUpdate(received);
-		}, timeoutMs);
+		return await driver.waitForMessage<T>(
+			(received) => msg.isExpectedNodeUpdate(received),
+			timeoutMs,
+			(received) => maybePartialNodeUpdate(msg, received),
+		);
 	} catch (e) {
 		throw new ZWaveError(
 			`Timed out while waiting for a response from the node`,
@@ -111,10 +136,28 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 	) {
 		// Make sure we can send this message
 		if (isSendData(msg) && exceedsMaxPayloadLength(msg)) {
-			throw new ZWaveError(
-				"Cannot send this message because it would exceed the maximum payload length!",
-				ZWaveErrorCodes.Controller_MessageTooLarge,
-			);
+			// We use explorer frames by default, but this reduces the maximum payload length by 2 bytes compared to AUTO_ROUTE
+			// Try disabling explorer frames for this message and see if it fits now.
+			const fail = () => {
+				throw new ZWaveError(
+					"Cannot send this message because it would exceed the maximum payload length!",
+					ZWaveErrorCodes.Controller_MessageTooLarge,
+				);
+			};
+			if (msg.transmitOptions & TransmitOptions.Explore) {
+				msg.transmitOptions &= ~TransmitOptions.Explore;
+				if (exceedsMaxPayloadLength(msg)) {
+					// Still too large
+					throw fail();
+				}
+				driver.controllerLog.logNode(msg.getNodeId()!, {
+					message:
+						"Disabling explorer frames for this message due to its size",
+					level: "warn",
+				});
+			} else {
+				throw fail();
+			}
 		}
 
 		// Pass this message to the send thread and wait for it to be sent

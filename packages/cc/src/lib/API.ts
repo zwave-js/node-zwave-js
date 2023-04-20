@@ -537,6 +537,7 @@ type CCNameMap = {
 	Configuration: (typeof CommandClasses)["Configuration"];
 	"Door Lock": (typeof CommandClasses)["Door Lock"];
 	"Door Lock Logging": (typeof CommandClasses)["Door Lock Logging"];
+	"Energy Production": (typeof CommandClasses)["Energy Production"];
 	"Entry Control": (typeof CommandClasses)["Entry Control"];
 	"Firmware Update Meta Data": (typeof CommandClasses)["Firmware Update Meta Data"];
 	"Humidity Control Mode": (typeof CommandClasses)["Humidity Control Mode"];
@@ -579,6 +580,7 @@ type CCNameMap = {
 	"User Code": (typeof CommandClasses)["User Code"];
 	Version: (typeof CommandClasses)["Version"];
 	"Wake Up": (typeof CommandClasses)["Wake Up"];
+	"Window Covering": (typeof CommandClasses)["Window Covering"];
 	"Z-Wave Plus Info": (typeof CommandClasses)["Z-Wave Plus Info"];
 };
 export type CCToName<CC extends CommandClasses> = {
@@ -674,6 +676,7 @@ export interface CCAPIs {
 	Configuration: import("../cc/ConfigurationCC").ConfigurationCCAPI;
 	"Door Lock": import("../cc/DoorLockCC").DoorLockCCAPI;
 	"Door Lock Logging": import("../cc/DoorLockLoggingCC").DoorLockLoggingCCAPI;
+	"Energy Production": import("../cc/EnergyProductionCC").EnergyProductionCCAPI;
 	"Entry Control": import("../cc/EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
 	"Humidity Control Mode": import("../cc/HumidityControlModeCC").HumidityControlModeCCAPI;
@@ -716,5 +719,6 @@ export interface CCAPIs {
 	"User Code": import("../cc/UserCodeCC").UserCodeCCAPI;
 	Version: import("../cc/VersionCC").VersionCCAPI;
 	"Wake Up": import("../cc/WakeUpCC").WakeUpCCAPI;
+	"Window Covering": import("../cc/WindowCoveringCC").WindowCoveringCCAPI;
 	"Z-Wave Plus Info": import("../cc/ZWavePlusCC").ZWavePlusCCAPI;
 }
