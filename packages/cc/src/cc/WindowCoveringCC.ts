@@ -46,6 +46,66 @@ import {
 	WindowCoveringParameter,
 } from "../lib/_Types";
 
+function parameterToMetadataStates(
+	parameter: WindowCoveringParameter,
+	isTargetValue: boolean,
+): Record<number, string> | undefined {
+	switch (parameter) {
+		case WindowCoveringParameter["Vertical Slats Angle (no position)"]:
+			if (isTargetValue) return undefined;
+			return {
+				0: "Closing (right)",
+				50: "Opening",
+				99: "Closing (left)",
+			};
+		case WindowCoveringParameter["Vertical Slats Angle"]:
+			return {
+				0: "Closed (right)",
+				50: "Open",
+				99: "Closed (left)",
+			};
+
+		case WindowCoveringParameter["Horizontal Slats Angle (no position)"]:
+			if (isTargetValue) return undefined;
+			return {
+				0: "Closing (up)",
+				50: "Opening",
+				99: "Closing (down)",
+			};
+		case WindowCoveringParameter["Horizontal Slats Angle"]:
+			return {
+				0: "Closed (up)",
+				50: "Open",
+				99: "Closed (down)",
+			};
+	}
+
+	if (parameter % 2 === 1) {
+		// Odd-numbered parameters have position support
+		return {
+			0: "Closed",
+			99: "Open",
+		};
+	} else {
+		if (isTargetValue) return undefined;
+		return {
+			0: "Closing",
+			99: "Opening",
+		};
+	}
+}
+
+function isTiltParameter(parameter: WindowCoveringParameter): boolean {
+	return (
+		parameter === WindowCoveringParameter["Vertical Slats Angle"] ||
+		parameter ===
+			WindowCoveringParameter["Vertical Slats Angle (no position)"] ||
+		parameter === WindowCoveringParameter["Horizontal Slats Angle"] ||
+		parameter ===
+			WindowCoveringParameter["Horizontal Slats Angle (no position)"]
+	);
+}
+
 export const WindowCoveringCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Window Covering"], {
 		...V.staticProperty(
@@ -62,16 +122,20 @@ export const WindowCoveringCCValues = Object.freeze({
 			(parameter: WindowCoveringParameter) => parameter,
 			({ property, propertyKey }) =>
 				property === "currentValue" && typeof propertyKey === "number",
-			(parameter: WindowCoveringParameter) => ({
-				...ValueMetadata.ReadOnlyLevel,
-				label: `Current value - ${getEnumMemberName(
-					WindowCoveringParameter,
-					parameter,
-				)}`,
-				ccSpecific: {
-					parameter,
-				},
-			}),
+			(parameter: WindowCoveringParameter) => {
+				const states = parameterToMetadataStates(parameter, false);
+				return {
+					...ValueMetadata.ReadOnlyLevel,
+					label: `Current value - ${getEnumMemberName(
+						WindowCoveringParameter,
+						parameter,
+					)}`,
+					...(states ? { states } : {}),
+					ccSpecific: {
+						parameter,
+					},
+				} as const;
+			},
 		),
 
 		...V.dynamicPropertyAndKeyWithName(
@@ -80,8 +144,9 @@ export const WindowCoveringCCValues = Object.freeze({
 			(parameter: WindowCoveringParameter) => parameter,
 			({ property, propertyKey }) =>
 				property === "targetValue" && typeof propertyKey === "number",
-			(parameter: WindowCoveringParameter) =>
-				({
+			(parameter: WindowCoveringParameter) => {
+				const states = parameterToMetadataStates(parameter, false);
+				return {
 					...ValueMetadata.Level,
 					label: `Target value - ${getEnumMemberName(
 						WindowCoveringParameter,
@@ -89,11 +154,13 @@ export const WindowCoveringCCValues = Object.freeze({
 					)}`,
 					// Only odd-numbered parameters have position support and are writable
 					writeable: parameter % 2 === 1,
+					...(states ? { states } : {}),
 					ccSpecific: {
 						parameter,
 					},
 					valueChangeOptions: ["transitionDuration"],
-				} as const),
+				} as const;
+			},
 		),
 
 		...V.dynamicPropertyAndKeyWithName(
@@ -113,6 +180,116 @@ export const WindowCoveringCCValues = Object.freeze({
 						parameter,
 					},
 				} as const),
+		),
+
+		// Convenience values to control the different parameters
+		// Open all parameters
+		...V.dynamicPropertyAndKeyWithName(
+			"open",
+			"open",
+			(parameter: WindowCoveringParameter) => parameter,
+			({ property, propertyKey }) =>
+				property === "open" && typeof propertyKey === "number",
+			(parameter: WindowCoveringParameter) =>
+				({
+					...ValueMetadata.WriteOnlyBoolean,
+					label: `Open - ${getEnumMemberName(
+						WindowCoveringParameter,
+						parameter,
+					)}`,
+					ccSpecific: {
+						parameter,
+					},
+					valueChangeOptions: ["transitionDuration"],
+				} as const),
+		),
+
+		// Close positional parameters
+		...V.dynamicPropertyAndKeyWithName(
+			"positionClose",
+			"close",
+			(parameter: WindowCoveringParameter) => parameter,
+			({ property, propertyKey }) =>
+				property === "close" &&
+				typeof propertyKey === "number" &&
+				!isTiltParameter(propertyKey),
+			(parameter: WindowCoveringParameter) =>
+				({
+					...ValueMetadata.WriteOnlyBoolean,
+					label: `Close - ${getEnumMemberName(
+						WindowCoveringParameter,
+						parameter,
+					)}`,
+					ccSpecific: {
+						parameter,
+					},
+					valueChangeOptions: ["transitionDuration"],
+				} as const),
+		),
+
+		// Close vertical slats to the right, horizontal to the top
+		...V.dynamicPropertyAndKeyWithName(
+			"tiltClose0",
+			"close0",
+			(parameter: WindowCoveringParameter) => parameter,
+			({ property, propertyKey }) =>
+				property === "close0" &&
+				typeof propertyKey === "number" &&
+				isTiltParameter(propertyKey),
+			(parameter: WindowCoveringParameter) => {
+				const direction =
+					parameter ===
+						WindowCoveringParameter["Vertical Slats Angle"] ||
+					parameter ===
+						WindowCoveringParameter[
+							"Vertical Slats Angle (no position)"
+						]
+						? "Right"
+						: "Up";
+				return {
+					...ValueMetadata.WriteOnlyBoolean,
+					label: `Close ${direction} - ${getEnumMemberName(
+						WindowCoveringParameter,
+						parameter,
+					)}`,
+					ccSpecific: {
+						parameter,
+					},
+					valueChangeOptions: ["transitionDuration"],
+				} as const;
+			},
+		),
+		// Close vertical slats to the left, horizontal to the bottom
+		...V.dynamicPropertyAndKeyWithName(
+			"tiltClose99",
+			"close99",
+			(parameter: WindowCoveringParameter) => parameter,
+			({ property, propertyKey }) =>
+				property === "close99" &&
+				typeof propertyKey === "number" &&
+				isTiltParameter(propertyKey),
+			(parameter: WindowCoveringParameter) => {
+				const direction =
+					parameter ===
+						WindowCoveringParameter["Vertical Slats Angle"] ||
+					parameter ===
+						WindowCoveringParameter[
+							"Vertical Slats Angle (no position)"
+						]
+						? "Left"
+						: "Down";
+				return {
+					...ValueMetadata.WriteOnlyBoolean,
+					label: `Close ${direction} - ${getEnumMemberName(
+						WindowCoveringParameter,
+						parameter,
+					)}`,
+					ccSpecific: {
+						parameter,
+					},
+					valueChangeOptions: ["transitionDuration"],
+				} as const;
+			},
 		),
 	}),
 });
@@ -136,31 +313,72 @@ export class WindowCoveringCCAPI extends CCAPI {
 		value,
 		options,
 	) => {
-		if (property !== "targetValue") {
+		const valueId = {
+			commandClass: this.ccId,
+			property,
+			propertyKey,
+		};
+
+		if (WindowCoveringCCValues.targetValue.is(valueId)) {
+			if (
+				typeof propertyKey !== "number" ||
+				// Only odd-numbered parameters have position support and are writable
+				propertyKey % 2 === 0
+			) {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey!);
+			}
+
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+
+			const duration = Duration.from(options?.transitionDuration);
+			const result = await this.set(
+				[{ parameter: propertyKey, value }],
+				duration,
+			);
+
+			return result;
+		} else if (
+			WindowCoveringCCValues.open.is(valueId) ||
+			WindowCoveringCCValues.tiltClose99.is(valueId)
+		) {
+			if (!value) {
+				throwWrongValueType(this.ccId, property, "true", typeof value);
+			}
+
+			// Opening a positional parameter is the same as closing a tilt parameter to one side
+			const duration = Duration.from(options?.transitionDuration);
+			const result = await this.set(
+				[{ parameter: propertyKey as number, value: 99 }],
+				duration,
+			);
+
+			return result;
+		} else if (
+			WindowCoveringCCValues.positionClose.is(valueId) ||
+			WindowCoveringCCValues.tiltClose0.is(valueId)
+		) {
+			if (!!value) {
+				throwWrongValueType(this.ccId, property, "false", typeof value);
+			}
+
+			// Closing a positional parameter is the same as closing a tilt parameter to the other side
+			const duration = Duration.from(options?.transitionDuration);
+			const result = await this.set(
+				[{ parameter: propertyKey as number, value: 0 }],
+				duration,
+			);
+
+			return result;
+		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
-
-		if (propertyKey == undefined) {
-			throwMissingPropertyKey(this.ccId, property);
-		} else if (
-			typeof propertyKey !== "number" ||
-			// Only odd-numbered parameters have position support and are writable
-			propertyKey % 2 === 0
-		) {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-
-		const duration = Duration.from(options?.transitionDuration);
-		const result = await this.set(
-			[{ parameter: propertyKey, value }],
-			duration,
-		);
-
-		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -335,6 +553,7 @@ ${supported
 
 			// Create metadata for all supported parameters
 			for (const param of supported) {
+				// Default values
 				this.setMetadata(
 					applHost,
 					WindowCoveringCCValues.currentValue(param),
@@ -348,8 +567,25 @@ ${supported
 					WindowCoveringCCValues.duration(param),
 				);
 
-				// And for the odd parameters (with position support),
-				// query the position
+				// Convenience values
+				this.setMetadata(applHost, WindowCoveringCCValues.open(param));
+				if (isTiltParameter(param)) {
+					this.setMetadata(
+						applHost,
+						WindowCoveringCCValues.tiltClose0(param),
+					);
+					this.setMetadata(
+						applHost,
+						WindowCoveringCCValues.tiltClose99(param),
+					);
+				} else {
+					this.setMetadata(
+						applHost,
+						WindowCoveringCCValues.positionClose(param),
+					);
+				}
+
+				// And for the odd parameters (with position support), query the position
 				if (param % 2 === 1) {
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
