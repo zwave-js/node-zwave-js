@@ -1,0 +1,183 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bridge_6_6x = void 0;
+const safe_1 = require("@zwave-js/core/safe");
+const consts_1 = require("../../consts");
+const shared_1 = require("../shared");
+const NVM_Layout_Bridge_6_6x = [
+    { name: "nvmTotalEnd", type: shared_1.NVMEntryType.Word, count: 1 },
+    { name: "nvmZWlibrarySize", type: shared_1.NVMEntryType.NVMModuleSize, count: 1 },
+    { name: "NVM_INTERNAL_RESERVED_1_far", type: shared_1.NVMEntryType.Byte, count: 4 },
+    {
+        name: "EX_NVM_HOME_ID_far",
+        type: shared_1.NVMEntryType.DWord,
+        count: 1,
+    },
+    { name: "NVM_INTERNAL_RESERVED_2_far", type: shared_1.NVMEntryType.Byte, count: 4 },
+    { name: "NVM_HOMEID_far", type: shared_1.NVMEntryType.DWord, count: 1 },
+    { name: "NVM_NODEID_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    { name: "NVM_CONFIGURATION_VALID_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    {
+        name: "NVM_CONFIGURATION_REALLYVALID_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: 1,
+    },
+    { name: "NVM_INTERNAL_RESERVED_3_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    {
+        name: "NVM_PREFERRED_REPEATERS_far",
+        type: shared_1.NVMEntryType.NodeMask,
+        size: safe_1.NUM_NODEMASK_BYTES + 3,
+        count: 1,
+    },
+    {
+        name: "NVM_PENDING_DISCOVERY_far",
+        type: shared_1.NVMEntryType.NodeMask,
+        size: safe_1.NUM_NODEMASK_BYTES + 3,
+        count: 1,
+    },
+    {
+        name: "NVM_RTC_TIMERS_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: shared_1.TOTAL_RTC_TIMER_MAX * shared_1.RTC_TIMER_SIZE,
+    },
+    {
+        name: "EX_NVM_NODE_TABLE_START_far",
+        type: shared_1.NVMEntryType.NodeInfo,
+        count: safe_1.MAX_NODES,
+    },
+    {
+        name: "EX_NVM_ROUTING_TABLE_START_far",
+        type: shared_1.NVMEntryType.NodeMask,
+        count: safe_1.MAX_NODES,
+    },
+    {
+        name: "EX_NVM_LAST_USED_NODE_ID_START_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: 1,
+    },
+    {
+        name: "EX_NVM_STATIC_CONTROLLER_NODE_ID_START_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: 1,
+    },
+    {
+        name: "EX_NVM_PENDING_UPDATE_far",
+        type: shared_1.NVMEntryType.NodeMask,
+        count: 1,
+    },
+    { name: "EX_NVM_SUC_ACTIVE_START_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    {
+        name: "EX_NVM_SUC_NODE_LIST_START_far",
+        type: shared_1.NVMEntryType.SUCUpdateEntry,
+        count: consts_1.SUC_MAX_UPDATES,
+    },
+    {
+        name: "EX_NVM_SUC_CONTROLLER_LIST_START_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: shared_1.SUC_CONTROLLER_LIST_SIZE,
+    },
+    {
+        name: "EX_NVM_SUC_LAST_INDEX_START_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: 1,
+    },
+    {
+        name: "EX_NVM_SUC_ROUTING_SLAVE_LIST_START_far",
+        type: shared_1.NVMEntryType.NodeMask,
+        count: 1,
+    },
+    {
+        name: "EX_NVM_ZENSOR_TABLE_START_far",
+        type: shared_1.NVMEntryType.NodeMask,
+        count: 1,
+    },
+    {
+        name: "EX_NVM_BRIDGE_NODEPOOL_START_far",
+        type: shared_1.NVMEntryType.NodeMask,
+        count: 1,
+    },
+    {
+        name: "EX_NVM_CONTROLLER_CONFIGURATION_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: 1,
+    },
+    { name: "EX_NVM_MAX_NODE_ID_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    { name: "EX_NVM_RESERVED_ID_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    {
+        name: "EX_NVM_ROUTECACHE_START_far",
+        type: shared_1.NVMEntryType.Route,
+        count: safe_1.MAX_NODES,
+    },
+    {
+        name: "EX_NVM_ROUTECACHE_NLWR_SR_START_far",
+        type: shared_1.NVMEntryType.Route,
+        count: safe_1.MAX_NODES,
+    },
+    { name: "EX_NVM_ROUTECACHE_MAGIC_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    {
+        name: "EX_NVM_ROUTECACHE_APP_LOCK_far",
+        type: shared_1.NVMEntryType.NodeMask,
+        count: 1,
+    },
+    {
+        name: "nvmZWlibraryDescriptor",
+        type: shared_1.NVMEntryType.NVMModuleDescriptor,
+        count: 1,
+    },
+    {
+        name: "nvmApplicationSize",
+        type: shared_1.NVMEntryType.NVMModuleSize,
+        // The Bridge API saves an additional node mask for the virtual nodes in the
+        // previous module, so we can use this offset to distinguish between the two.
+        offset: 0x2fde,
+        count: 1,
+    },
+    { name: "EEOFFSET_MAGIC_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    { name: "EEOFFSET_CMDCLASS_LEN_far", type: shared_1.NVMEntryType.Byte, count: 1 },
+    {
+        name: "EEOFFSET_CMDCLASS_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: shared_1.APPL_NODEPARM_MAX,
+    },
+    {
+        name: "EEOFFSET_WATCHDOG_STARTED_far",
+        type: shared_1.NVMEntryType.Byte,
+        count: 1,
+    },
+    {
+        name: "nvmApplicationDescriptor",
+        type: shared_1.NVMEntryType.NVMModuleDescriptor,
+        count: 1,
+    },
+    {
+        name: "nvmHostApplicationSize",
+        type: shared_1.NVMEntryType.NVMModuleSize,
+        count: 1,
+    },
+    {
+        name: "EEOFFSET_HOST_OFFSET_START_far",
+        type: shared_1.NVMEntryType.Buffer,
+        size: shared_1.NVM_SERIALAPI_HOST_SIZE,
+        count: 1,
+    },
+    {
+        name: "nvmHostApplicationDescriptor",
+        type: shared_1.NVMEntryType.NVMModuleDescriptor,
+        count: 1,
+    },
+    { name: "nvmDescriptorSize", type: shared_1.NVMEntryType.NVMModuleSize, count: 1 },
+    { name: "nvmDescriptor", type: shared_1.NVMEntryType.NVMDescriptor, count: 1 },
+    {
+        name: "nvmDescriptorDescriptor",
+        type: shared_1.NVMEntryType.NVMModuleDescriptor,
+        count: 1,
+    },
+    { name: "nvmModuleSizeEndMarker", type: shared_1.NVMEntryType.Word, count: 1 },
+];
+exports.Bridge_6_6x = {
+    name: "Bridge 6.6x",
+    library: "bridge",
+    protocolVersions: ["4.33", "4.62"],
+    layout: NVM_Layout_Bridge_6_6x,
+};
+//# sourceMappingURL=Bridge_6_6x.js.map
