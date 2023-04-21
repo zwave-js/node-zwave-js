@@ -213,6 +213,12 @@
 			"defaultValue": 1
 		},
 		{
+			"#": "9",
+			"$if": "firmwareVersion >= 1.8",
+			"$import": "templates/logic_group_template.json#turn_on_level",
+			"defaultValue": 0
+		},
+		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enhanced LED Control"
