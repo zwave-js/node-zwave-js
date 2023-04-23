@@ -72,7 +72,7 @@
 			"options": [
 				{
 					"label": "Chime Will Not Play",
-					"value": 255
+					"value": -1
 				},
 				{
 					"label": "Does Not Stop",
