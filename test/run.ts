@@ -1,7 +1,9 @@
 import { wait as _wait } from "alcalzone-shared/async";
+import fs from "fs";
+import net from "net";
 import path from "path";
 import "reflect-metadata";
-import { Driver } from "zwave-js";
+import { Driver, InclusionStrategy } from "zwave-js";
 
 const wait = _wait;
 
@@ -9,17 +11,17 @@ process.on("unhandledRejection", (_r) => {
 	debugger;
 });
 
-const port = "tcp://Z-Net-R2v2:2001";
+const port = "tcp://Z-NET-R2v2.local:2001";
 // 500/700 series
 // const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 // 800 series
 // const port = os.platform() === "win32" ? "COM5" : "/dev/ttyACM0";
 
 const driver = new Driver(port, {
-	// logConfig: {
-	// 	logToFile: true,
-	// 	forceConsole: true,
-	// },
+	logConfig: {
+		logToFile: true,
+		forceConsole: true,
+	},
 	// testingHooks: {
 	// 	skipNodeInterview: true,
 	// },
@@ -57,3 +59,92 @@ void driver.start();
 // 	applicationName: "test",
 // 	applicationVersion: "0.0.1",
 // });
+
+// Listen on a named pipe to accept commands via CLI
+const cmdServer = net.createServer((socket) => {
+	socket.on("data", async (chunk) => {
+		const cmd = chunk.toString("utf8").trim();
+
+		if (cmd === "clear-log") {
+			fs.writeFileSync(path.join(__dirname, "zwavejs_current.log"), "");
+		} else if (cmd === "factory-reset") {
+			console.error("Factory reset and re-include...");
+			await driver.hardReset();
+			driver.once("all nodes ready", async () => {
+				await wait(1500);
+				await driver.controller.beginInclusion({
+					strategy: InclusionStrategy.Default,
+					userCallbacks: {
+						async abort() {},
+						async grantSecurityClasses(requested) {
+							return requested;
+						},
+						async validateDSKAndEnterPIN(dsk) {
+							return "34080";
+						},
+					},
+				});
+			});
+		} else if (cmd === "seq-reset") {
+			console.error("Resetting sequence numbers...");
+			// eslint-disable-next-line
+			driver["_securityManager2"]["peerSequenceNumbers"].clear();
+		} else if (cmd.startsWith("include")) {
+			const pin = cmd.split(" ")[1];
+			await driver.controller.beginInclusion({
+				strategy: InclusionStrategy.Default,
+				userCallbacks: {
+					async abort() {},
+					async grantSecurityClasses(requested) {
+						return requested;
+					},
+					async validateDSKAndEnterPIN(dsk) {
+						return pin;
+					},
+				},
+			});
+		} else if (cmd === "exclude") {
+			await driver.controller.beginExclusion();
+		} else if (cmd.startsWith("remove-failed")) {
+			const [nodeId] = cmd
+				.split(" ")
+				.slice(1)
+				.map((s) => parseInt(s));
+			await driver.controller.removeFailedNode(nodeId);
+		} else if (cmd.startsWith("basic-set")) {
+			const [nodeId, value] = cmd
+				.split(" ")
+				.slice(1)
+				.map((s) => parseInt(s));
+			await driver.controller.nodes
+				.getOrThrow(nodeId)
+				.commandClasses.Basic.set(value);
+		} else if (cmd.startsWith("basic-get")) {
+			const [nodeId] = cmd
+				.split(" ")
+				.slice(1)
+				.map((s) => parseInt(s));
+			await driver.controller.nodes
+				.getOrThrow(nodeId)
+				.commandClasses.Basic.get();
+		} else if (cmd.startsWith("binaryswitch-set")) {
+			const [nodeId, value] = cmd.split(" ").slice(1);
+			await driver.controller.nodes
+				.getOrThrow(+nodeId)
+				.commandClasses["Binary Switch"].set(value === "true");
+		} else if (cmd.startsWith("re-interview")) {
+			const [nodeId] = cmd
+				.split(" ")
+				.slice(1)
+				.map((s) => parseInt(s));
+			await driver.controller.nodes.getOrThrow(nodeId).refreshInfo();
+		}
+	});
+});
+fs.rmSync("/tmp/zwave-js-test.sock", { force: true });
+cmdServer.listen("/tmp/zwave-js-test.sock");
+
+process.on("exit", async () => {
+	cmdServer.close();
+	fs.rmSync("/tmp/zwave-js-test.sock", { force: true });
+});
