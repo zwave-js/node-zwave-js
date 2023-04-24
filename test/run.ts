@@ -11,15 +11,15 @@ process.on("unhandledRejection", (_r) => {
 });
 
 // 500/700 series
-const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
+const port = os.platform() === "win32" ? "COM5" : "/dev/ttyACM0";
 // 800 series
 // const port = os.platform() === "win32" ? "COM5" : "/dev/ttyACM0";
 
 const driver = new Driver(port, {
-	// logConfig: {
-	// 	logToFile: true,
-	// 	forceConsole: true,
-	// },
+	logConfig: {
+		logToFile: true,
+		forceConsole: true,
+	},
 	// testingHooks: {
 	// 	skipNodeInterview: true,
 	// },
@@ -57,3 +57,9 @@ void driver.start();
 // 	applicationName: "test",
 // 	applicationVersion: "0.0.1",
 // });
+
+process.on("SIGUSR1", () => {
+	console.error("Resetting sequence numbers...");
+	// eslint-disable-next-line
+	driver["_securityManager2"]["peerSequenceNumbers"].clear();
+});
