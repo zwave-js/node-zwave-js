@@ -204,7 +204,8 @@ export class ZWaveLogContainer extends winston.Container {
 				this.fileTransport = this.createFileTransport();
 			}
 			ret.push(this.fileTransport);
-		} else if (!isUnitTest && (isTTY || this.logConfig.forceConsole)) {
+		}
+		if (!isUnitTest && (isTTY || this.logConfig.forceConsole)) {
 			if (!this.consoleTransport) {
 				this.consoleTransport = this.createConsoleTransport();
 			}
