@@ -14,6 +14,7 @@ export * from "./log/Controller";
 export * from "./log/shared";
 export * from "./log/shared_safe";
 export * from "./security/crypto";
+export * from "./security/ctr_drbg";
 export * from "./security/DSK";
 export * from "./security/Manager";
 export * from "./security/Manager2";

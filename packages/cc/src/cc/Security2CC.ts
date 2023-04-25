@@ -1020,6 +1020,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			for (let i = 0; i < DECRYPT_ATTEMPTS; i++) {
 				({ plaintext, authOK, key, iv } = decrypt());
 				if (!!authOK && !!plaintext) break;
+				// No need to try further SPANs if we just got the sender's EI
+				if (!!this.getSenderEI()) break;
 			}
 
 			// If authentication fails, do so with an error code that instructs the
