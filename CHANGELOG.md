@@ -4,6 +4,41 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Implement `pollValue` for `Notification CC` (for pull-mode nodes) (#5676)
+* Add support for `Energy Production CC` (#5677)
+* Add support for `Window Covering CC` (#5679, #5687)
+
+### Bugfixes
+* When a command is too large for explorer frames, and Transport Service CC is not supported, the driver will now attempt to send the command without using explorer frames, instead of failing immediately (#5662)
+* Ensure devices don't report duplicate firmware targets (#5670)
+* Always write metadata for `Meter CC` reports and add `ccSpecific` info (#5675)
+* Sending raw, non-implemented CCs no longer throws while attempting to determine the version (#5674)
+* RSSI background measurements are now also scheduled in networks without always-listening nodes (#5681)
+* Possibly matching partial responses to a command now refresh the timeout (#5683)
+* Logging to file and logging to the console at the same time is now possible (#5696)
+* Fixed some spec-compliance issues related to NIF, Security S2 and Version CC (#5697, #5704, #5706)
+* Respond to queries for the commands supported via S0 (#5701)
+* When receiving an S2 encapsulated singlecast command with the sender's entropy, decryption is now only attempted once (#5699)
+* Fixed a crash that could happen when receiving a secure command before the controller was interviewed on startup (#5698)
+
+### Config file changes
+* Correct link to manual for Aeotec ZWA011 (#5657)
+* Disable Supervision CC for Homeseer HS-FLS100 (#5663)
+* Add Swidget Z-Wave inserts (#5498)
+* Add non-pro variant of the RaZberry 7 (#5673)
+* Define config parameters for Zipato ZD2301EU-5 (#5559)
+* Add alarm mappings to Weiser GED1455 SmartCode 5 (#5667)
+* Add kVar and kVarh to Aeotec Home Energy Meter Gen 5 (#5589)
+* Add config file for Shenzhen Neo PIR Motion, Temperature & Light Sensor (#5582)
+* Re-enable Supervision on Zooz ZSE29 FW2.2+ (#5671)
+* Add Inovelli VZW31-SN (#5629)
+
+### Changes under the hood
+* Refactored some integration tests (#5655, #5659)
+* The build process uses TypeScript project references again (#5658, #5685)
+
 ## 10.15.0 (2023-04-12)
 ### Features
 * Simplify working with mixed-security multicast (#5593)
