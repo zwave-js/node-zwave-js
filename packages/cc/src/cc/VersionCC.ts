@@ -210,6 +210,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			case VersionCommand.Get:
 			case VersionCommand.Report:
 			case VersionCommand.CommandClassGet:
+			case VersionCommand.CommandClassReport:
 				return true; // This is mandatory
 			case VersionCommand.CapabilitiesGet:
 				// The API might have been created before the versions were determined,
@@ -288,6 +289,22 @@ export class VersionCCAPI extends PhysicalCCAPI {
 				this.commandOptions,
 			);
 		return response?.ccVersion;
+	}
+
+	@validateArgs()
+	public async reportCCVersion(requestedCC: CommandClasses): Promise<void> {
+		this.assertSupportsCommand(
+			VersionCommand,
+			VersionCommand.CommandClassReport,
+		);
+
+		const cc = new VersionCCCommandClassReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			requestedCC,
+			ccVersion: getImplementedVersion(requestedCC),
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

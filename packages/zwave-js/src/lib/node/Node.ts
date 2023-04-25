@@ -84,7 +84,11 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
-import { VersionCCGet, VersionCCValues } from "@zwave-js/cc/VersionCC";
+import {
+	VersionCCCommandClassGet,
+	VersionCCGet,
+	VersionCCValues,
+} from "@zwave-js/cc/VersionCC";
 import {
 	WakeUpCCValues,
 	WakeUpCCWakeUpNotification,
@@ -2681,6 +2685,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleZWavePlusGet(command);
 		} else if (command instanceof VersionCCGet) {
 			return this.handleVersionGet(command);
+		} else if (command instanceof VersionCCCommandClassGet) {
+			return this.handleVersionCommandClassGet(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -3356,6 +3362,17 @@ protocol version:      ${this.protocolVersion}`;
 			protocolVersion: this.driver.controller.protocolVersion!,
 			firmwareVersions: [this.driver.controller.firmwareVersion!],
 		});
+	}
+
+	private async handleVersionCommandClassGet(
+		command: VersionCCCommandClassGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		await endpoint.commandClasses.Version.withOptions({
+			// Answer with the same encapsulation as asked
+			encapsulationFlags: command.encapsulationFlags,
+		}).reportCCVersion(command.requestedCC);
 	}
 
 	private async handleSecurityCommandsSupportedGet(
