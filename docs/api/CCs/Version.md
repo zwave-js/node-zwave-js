@@ -24,6 +24,12 @@ async getCCVersion(
 ): Promise<number | undefined>;
 ```
 
+### `reportCCVersion`
+
+```ts
+async reportCCVersion(requestedCC: CommandClasses): Promise<void>;
+```
+
 ### `getCapabilities`
 
 ```ts
