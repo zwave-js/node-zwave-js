@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.16.0 (2023-04-25)
 ### Features
 * Implement `pollValue` for `Notification CC` (for pull-mode nodes) (#5676)
 * Add support for `Energy Production CC` (#5677)
