@@ -3621,7 +3621,7 @@ ${handlers.length} left`,
 		// the command from a supporting node if not received at the highest common
 		// security level between the controlling node and the sending S2 node.
 
-		const node = this.controller.nodes.get(cc.nodeId as number);
+		const node = this._controller?.nodes.get(cc.nodeId as number);
 		if (!node) {
 			// Node does not exist, don't accept the CC
 			this.controllerLog.logNode(
