@@ -101,7 +101,9 @@ function validateSequenceNumber(
 	this: Security2CC,
 	sequenceNumber: number,
 ): number | undefined {
-	validatePayload.withReason("Duplicate command")(
+	validatePayload.withReason(
+		`Duplicate command (sequence number ${sequenceNumber})`,
+	)(
 		!this.host.securityManager2!.isDuplicateSinglecast(
 			this.nodeId as number,
 			sequenceNumber,
@@ -333,6 +335,22 @@ export class Security2CCAPI extends CCAPI {
 				},
 			);
 		return response?.supportedCCs;
+	}
+
+	public async reportSupportedCommands(
+		supportedCCs: CommandClasses[],
+	): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.CommandsSupportedReport,
+		);
+
+		const cc = new Security2CCCommandsSupportedReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			supportedCCs,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
