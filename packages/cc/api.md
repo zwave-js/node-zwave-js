@@ -14259,9 +14259,10 @@ export class SecurityCCCommandsSupportedGet extends SecurityCC {
 //
 // @public (undocumented)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "SecurityCCCommandsSupportedReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SecurityCCCommandsSupportedReportOptions);
     // (undocumented)
-    get controlledCCs(): CommandClasses_2[];
+    controlledCCs: CommandClasses_2[];
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
@@ -14271,7 +14272,9 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
     // (undocumented)
     readonly reportsToFollow: number;
     // (undocumented)
-    get supportedCCs(): CommandClasses_2[];
+    serialize(): Buffer;
+    // (undocumented)
+    supportedCCs: CommandClasses_2[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }

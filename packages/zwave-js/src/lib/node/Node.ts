@@ -80,6 +80,7 @@ import {
 	Security2CCNonceReport,
 } from "@zwave-js/cc/Security2CC";
 import {
+	SecurityCCCommandsSupportedGet,
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
@@ -2654,6 +2655,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleSecurityNonceGet();
 		} else if (command instanceof SecurityCCNonceReport) {
 			return this.handleSecurityNonceReport(command);
+		} else if (command instanceof SecurityCCCommandsSupportedGet) {
+			return this.handleSecurityCommandsSupportedGet(command);
 		} else if (command instanceof Security2CCNonceGet) {
 			return this.handleSecurity2NonceGet();
 		} else if (command instanceof Security2CCNonceReport) {
@@ -3353,6 +3356,29 @@ protocol version:      ${this.protocolVersion}`;
 			protocolVersion: this.driver.controller.protocolVersion!,
 			firmwareVersions: [this.driver.controller.firmwareVersion!],
 		});
+	}
+
+	private async handleSecurityCommandsSupportedGet(
+		command: SecurityCCCommandsSupportedGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		if (this.getHighestSecurityClass() === SecurityClass.S0_Legacy) {
+			const { supportedCCs } = determineNIF();
+			await endpoint.commandClasses.Security.reportSupportedCommands(
+				supportedCCs,
+				// The list of controlled CCs is long. We would need to split this
+				// into multiple reports.
+				// FIXME: Do that
+				[],
+			);
+		} else {
+			// S0 is not the highest class. Return an empty list
+			await endpoint.commandClasses.Security.reportSupportedCommands(
+				[],
+				[],
+			);
+		}
 	}
 
 	private async handleSecurity2CommandsSupportedGet(
