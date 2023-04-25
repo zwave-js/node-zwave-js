@@ -647,6 +647,25 @@ export interface CreateValuelessReflectionDecoratorOptions {
     name: string;
 }
 
+// Warning: (ae-missing-release-tag) "CtrDRBG" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CtrDRBG {
+    constructor(bits: 128, derivation: boolean, entropy?: Buffer, nonce?: Buffer, pers?: Buffer);
+    // (undocumented)
+    derive(...input: Buffer[]): Buffer;
+    // (undocumented)
+    generate(len: number, add?: Buffer): Buffer;
+    // (undocumented)
+    init(entropy: Buffer, nonce?: Buffer, pers?: Buffer): this;
+    // (undocumented)
+    reseed(entropy: Buffer, add?: Buffer): this;
+    // (undocumented)
+    serialize(...input: Buffer[]): Buffer;
+    // (undocumented)
+    update(seed?: Buffer): this;
+}
+
 // Warning: (ae-missing-release-tag) "DataDirection" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3201,7 +3220,6 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
-// src/security/Manager2.ts:65:4 - (ae-forgotten-export) The symbol "CtrDRBG" needs to be exported by the entry point index.d.ts
 // src/security/QR.ts:98:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)
