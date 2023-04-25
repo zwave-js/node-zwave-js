@@ -21,8 +21,14 @@ export function determineNIF(): {
 	const implementedCCs = allCCs.filter((cc) => getImplementedVersion(cc) > 0);
 
 	// Encapsulation CCs are always supported
-	const implementedEncapsulationCCs = encapsulationCCs.filter((cc) =>
-		implementedCCs.includes(cc),
+	const implementedEncapsulationCCs = encapsulationCCs.filter(
+		(cc) =>
+			implementedCCs.includes(cc) &&
+			// A node MUST advertise support for Multi Channel Command Class only if it implements End Points.
+			// A node able to communicate using the Multi Channel encapsulation but implementing no End Point
+			// MUST NOT advertise support for the Multi Channel Command Class.
+			// --> We do not implement end points
+			cc !== CommandClasses["Multi Channel"],
 	);
 
 	const implementedActuatorCCs = actuatorCCs.filter((cc) =>

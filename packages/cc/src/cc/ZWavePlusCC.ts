@@ -152,6 +152,42 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 				message: logMessage,
 				direction: "inbound",
 			});
+
+			if (zwavePlusResponse.zwavePlusVersion >= 2) {
+				// A Z-Wave Plus v2 node MUST support:
+				// - Association, version 2
+				// - Association Group Information
+				// - Device Reset Locally
+				// - Firmware Update Meta Data, version 5
+				// - Indicator, version 3
+				// - Manufacturer Specific
+				// - Multi Channel Association, version 3
+				// - Powerlevel
+				// - Security 2
+				// - Supervision
+				// - Transport Service, version 2
+				// - Version, version 2
+				// - Z-Wave Plus Info, version 2
+
+				// It has been found that some devices are not advertising all of these (looking at you CTT!),
+				// so we force-add support here:
+				for (const cc of [
+					CommandClasses.Association,
+					CommandClasses["Association Group Information"],
+					CommandClasses["Device Reset Locally"],
+					CommandClasses["Firmware Update Meta Data"],
+					CommandClasses.Indicator,
+					CommandClasses["Manufacturer Specific"],
+					CommandClasses["Multi Channel Association"],
+					CommandClasses.Powerlevel,
+					CommandClasses.Security,
+					CommandClasses.Supervision,
+					CommandClasses["Transport Service"],
+					CommandClasses.Version,
+				]) {
+					node.addCC(cc, { isSupported: true });
+				}
+			}
 		}
 
 		// Remember that the interview is complete

@@ -9,6 +9,8 @@ import {
 	unknownBoolean,
 	validatePayload,
 	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
 	ZWaveLibraryTypes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -206,6 +208,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case VersionCommand.Get:
+			case VersionCommand.Report:
 			case VersionCommand.CommandClassGet:
 				return true; // This is mandatory
 			case VersionCommand.CapabilitiesGet:
@@ -251,6 +254,18 @@ export class VersionCCAPI extends PhysicalCCAPI {
 				"hardwareVersion",
 			]);
 		}
+	}
+
+	@validateArgs()
+	public async sendReport(options: VersionCCReportOptions): Promise<void> {
+		this.assertSupportsCommand(VersionCommand, VersionCommand.Report);
+
+		const cc = new VersionCCReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -526,27 +541,64 @@ export class VersionCC extends CommandClass {
 	}
 }
 
+export interface VersionCCReportOptions {
+	libraryType: ZWaveLibraryTypes;
+	protocolVersion: string;
+	firmwareVersions: string[];
+	hardwareVersion?: number;
+}
+
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (VersionCCReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 5);
-		this.libraryType = this.payload[0];
-		this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
-		this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
-		if (this.version >= 2 && this.payload.length >= 7) {
-			this.hardwareVersion = this.payload[5];
-			const additionalFirmwares = this.payload[6];
-			validatePayload(this.payload.length >= 7 + 2 * additionalFirmwares);
-			for (let i = 0; i < additionalFirmwares; i++) {
-				this.firmwareVersions.push(
-					`${this.payload[7 + 2 * i]}.${this.payload[7 + 2 * i + 1]}`,
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 5);
+			this.libraryType = this.payload[0];
+			this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
+			this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
+			if (this.version >= 2 && this.payload.length >= 7) {
+				this.hardwareVersion = this.payload[5];
+				const additionalFirmwares = this.payload[6];
+				validatePayload(
+					this.payload.length >= 7 + 2 * additionalFirmwares,
+				);
+				for (let i = 0; i < additionalFirmwares; i++) {
+					this.firmwareVersions.push(
+						`${this.payload[7 + 2 * i]}.${
+							this.payload[7 + 2 * i + 1]
+						}`,
+					);
+				}
+			}
+		} else {
+			if (!/^\d+\.\d+(\.\d+)?$/.test(options.protocolVersion)) {
+				throw new ZWaveError(
+					`protocolVersion must be a string in the format "major.minor", received "${options.protocolVersion}"`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			} else if (
+				!options.firmwareVersions.every((fw) =>
+					/^\d+\.\d+(\.\d+)?$/.test(fw),
+				)
+			) {
+				throw new ZWaveError(
+					`firmwareVersions must be an array of strings in the format "major.minor", received "${JSON.stringify(
+						options.firmwareVersions,
+					)}"`,
+					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
+			this.libraryType = options.libraryType;
+			this.protocolVersion = options.protocolVersion;
+			this.firmwareVersions = options.firmwareVersions;
+			this.hardwareVersion = options.hardwareVersion;
 		}
 	}
 
@@ -561,6 +613,43 @@ export class VersionCCReport extends VersionCC {
 
 	@ccValue(VersionCCValues.hardwareVersion)
 	public readonly hardwareVersion: number | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.libraryType,
+			...this.protocolVersion
+				.split(".")
+				.map((n) => parseInt(n))
+				.slice(0, 2),
+			...this.firmwareVersions[0]
+				.split(".")
+				.map((n) => parseInt(n))
+				.slice(0, 2),
+		]);
+		if (this.version >= 2) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([
+					// The value 0x00 SHOULD NOT be used for the Hardware Version
+					this.hardwareVersion ?? 0x01,
+				]),
+			]);
+			if (this.firmwareVersions.length > 1) {
+				const firmwaresBuffer = Buffer.allocUnsafe(
+					(this.firmwareVersions.length - 1) * 2,
+				);
+				for (let i = 1; i < this.firmwareVersions.length; i++) {
+					const [major, minor] = this.firmwareVersions[i]
+						.split(".")
+						.map((n) => parseInt(n));
+					firmwaresBuffer[2 * (i - 1)] = major;
+					firmwaresBuffer[2 * (i - 1) + 1] = minor;
+				}
+			}
+		}
+
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {

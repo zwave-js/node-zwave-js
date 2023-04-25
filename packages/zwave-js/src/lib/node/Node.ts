@@ -75,6 +75,7 @@ import {
 import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
 import {
+	Security2CCCommandsSupportedGet,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
 } from "@zwave-js/cc/Security2CC";
@@ -82,7 +83,7 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
-import { VersionCCValues } from "@zwave-js/cc/VersionCC";
+import { VersionCCGet, VersionCCValues } from "@zwave-js/cc/VersionCC";
 import {
 	WakeUpCCValues,
 	WakeUpCCWakeUpNotification,
@@ -144,6 +145,7 @@ import {
 	ValueUpdatedArgs,
 	ZWaveError,
 	ZWaveErrorCodes,
+	ZWaveLibraryTypes,
 } from "@zwave-js/core";
 import type { NodeSchedulePollOptions } from "@zwave-js/host";
 import type { Message } from "@zwave-js/serial";
@@ -171,6 +173,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import { isDeepStrictEqual } from "util";
+import { determineNIF } from "../controller/NodeInformationFrame";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
@@ -2630,6 +2633,11 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		}
 
+		// If we're being queried by another node, treat this as a sign that the other node is awake
+		if (command.constructor.name.endsWith("Get")) {
+			this.markAsAwake();
+		}
+
 		if (command instanceof BasicCC) {
 			return this.handleBasicCommand(command);
 		} else if (command instanceof MultilevelSwitchCC) {
@@ -2650,6 +2658,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleSecurity2NonceGet();
 		} else if (command instanceof Security2CCNonceReport) {
 			return this.handleSecurity2NonceReport(command);
+		} else if (command instanceof Security2CCCommandsSupportedGet) {
+			return this.handleSecurity2CommandsSupportedGet(command);
 		} else if (command instanceof HailCC) {
 			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
@@ -2666,6 +2676,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleTimeOffsetGet(command);
 		} else if (command instanceof ZWavePlusCCGet) {
 			return this.handleZWavePlusGet(command);
+		} else if (command instanceof VersionCCGet) {
+			return this.handleVersionGet(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -3314,9 +3326,6 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	private async handleZWavePlusGet(command: ZWavePlusCCGet): Promise<void> {
-		// treat this as a sign that the node is awake
-		this.markAsAwake();
-
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		await endpoint.commandClasses["Z-Wave Plus Info"]
@@ -3331,6 +3340,29 @@ protocol version:      ${this.protocolVersion}`;
 				installerIcon: 0x0500, // Generic Gateway
 				userIcon: 0x0500, // Generic Gateway
 			});
+	}
+
+	private async handleVersionGet(command: VersionCCGet): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		await endpoint.commandClasses.Version.withOptions({
+			// Answer with the same encapsulation as asked
+			encapsulationFlags: command.encapsulationFlags,
+		}).sendReport({
+			libraryType: ZWaveLibraryTypes["Static Controller"],
+			protocolVersion: this.driver.controller.protocolVersion!,
+			firmwareVersions: [this.driver.controller.firmwareVersion!],
+		});
+	}
+
+	private async handleSecurity2CommandsSupportedGet(
+		command: Security2CCCommandsSupportedGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		await endpoint.commandClasses["Security 2"].reportSupportedCommands(
+			determineNIF().supportedCCs,
+		);
 	}
 
 	/**
@@ -3765,9 +3797,6 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	private async handleTimeGet(command: TimeCCTimeGet): Promise<void> {
-		// treat this as a sign that the node is awake
-		this.markAsAwake();
-
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		const now = new Date();
@@ -3786,9 +3815,6 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	private async handleDateGet(command: TimeCCDateGet): Promise<void> {
-		// treat this as a sign that the node is awake
-		this.markAsAwake();
-
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		const now = new Date();
@@ -3809,9 +3835,6 @@ protocol version:      ${this.protocolVersion}`;
 	private async handleTimeOffsetGet(
 		command: TimeCCTimeOffsetGet,
 	): Promise<void> {
-		// treat this as a sign that the node is awake
-		this.markAsAwake();
-
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		const timezone = getDSTInfo(new Date());

@@ -3205,7 +3205,8 @@ export class Driver
 
 			return true;
 		} else if (
-			e.code === ZWaveErrorCodes.Security2CC_CannotDecodeMulticast &&
+			(e.code === ZWaveErrorCodes.Security2CC_NoMPAN ||
+				e.code === ZWaveErrorCodes.Security2CC_CannotDecodeMulticast) &&
 			isCommandClassContainer(msg)
 		) {
 			// Decoding the command failed because the MPAN used by the other node

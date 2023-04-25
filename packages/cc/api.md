@@ -17126,7 +17126,8 @@ export class VersionCCGet extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCReport extends VersionCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "VersionCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (VersionCCReportOptions & CCCommandOptions));
     // (undocumented)
     readonly firmwareVersions: string[];
     // (undocumented)
@@ -17135,6 +17136,8 @@ export class VersionCCReport extends VersionCC {
     readonly libraryType: ZWaveLibraryTypes;
     // (undocumented)
     readonly protocolVersion: string;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
