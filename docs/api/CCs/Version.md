@@ -10,6 +10,12 @@
 async get(): Promise<Pick<VersionCCReport, "libraryType" | "protocolVersion" | "firmwareVersions" | "hardwareVersion"> | undefined>;
 ```
 
+### `sendReport`
+
+```ts
+async sendReport(options: VersionCCReportOptions): Promise<void>;
+```
+
 ### `getCCVersion`
 
 ```ts

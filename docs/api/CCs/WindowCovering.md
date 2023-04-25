@@ -61,7 +61,7 @@ async stopLevelChange(
 }
 ```
 
--   **label:** _(dynamic)_
+-   **label:** `Current value - ${string}`
 -   **min. CC version:** 1
 -   **readable:** true
 -   **writeable:** false
@@ -90,6 +90,44 @@ async stopLevelChange(
 -   **secret:** false
 -   **value type:** `"duration"`
 
+### `open(parameter: WindowCoveringParameter)`
+
+```ts
+{
+	commandClass: CommandClasses["Window Covering"],
+	endpoint: number,
+	property: "open",
+	propertyKey: WindowCoveringParameter,
+}
+```
+
+-   **label:** `Open - ${string}`
+-   **min. CC version:** 1
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
+
+### `positionClose(parameter: WindowCoveringParameter)`
+
+```ts
+{
+	commandClass: CommandClasses["Window Covering"],
+	endpoint: number,
+	property: "close",
+	propertyKey: WindowCoveringParameter,
+}
+```
+
+-   **label:** `Close - ${string}`
+-   **min. CC version:** 1
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
+
 ### `targetValue(parameter: WindowCoveringParameter)`
 
 ```ts
@@ -110,3 +148,41 @@ async stopLevelChange(
 -   **value type:** `"number"`
 -   **min. value:** 0
 -   **max. value:** 99
+
+### `tiltClose0(parameter: WindowCoveringParameter)`
+
+```ts
+{
+	commandClass: CommandClasses["Window Covering"],
+	endpoint: number,
+	property: "close0",
+	propertyKey: WindowCoveringParameter,
+}
+```
+
+-   **label:** `Close Right - ${string}` | `Close Up - ${string}`
+-   **min. CC version:** 1
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
+
+### `tiltClose99(parameter: WindowCoveringParameter)`
+
+```ts
+{
+	commandClass: CommandClasses["Window Covering"],
+	endpoint: number,
+	property: "close99",
+	propertyKey: WindowCoveringParameter,
+}
+```
+
+-   **label:** `Close Left - ${string}` | `Close Down - ${string}`
+-   **min. CC version:** 1
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
