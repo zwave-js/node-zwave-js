@@ -90,6 +90,14 @@ export function getExtensionType<T extends Security2Extension>(
 	return ret;
 }
 
+/** Tests if the extension may be accepted */
+export function isValidExtension(ext: Security2Extension): boolean {
+	if (ext.critical && !(ext.type in S2ExtensionType)) {
+		return false;
+	}
+	return true;
+}
+
 interface Security2ExtensionCreationOptions {
 	critical: boolean;
 	payload?: Buffer;

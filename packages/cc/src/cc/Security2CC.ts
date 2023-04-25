@@ -33,7 +33,12 @@ import {
 	NODE_ID_BROADCAST,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
+import {
+	buffer2hex,
+	getEnumMemberName,
+	num2hex,
+	pick,
+} from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
 import { CCAPI } from "../lib/API";
 import {
@@ -51,6 +56,7 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
+	isValidExtension,
 	MGRPExtension,
 	MOSExtension,
 	MPANExtension,
@@ -877,6 +883,13 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					const ext = Security2Extension.from(
 						buffer.slice(offset, offset + extensionLength),
 					);
+					if (!isValidExtension(ext)) {
+						validatePayload.fail(
+							`Unknown S2 extension ${num2hex(
+								ext.type,
+							)} with critical flag`,
+						);
+					}
 					this.extensions.push(ext);
 					offset += extensionLength;
 					// Check if that was the last extension
@@ -921,7 +934,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					this._sequenceNumber,
 				);
 
-				// When a node removes a singlecast message after a multicast group was marked out of sync,
+				// When a node receives a singlecast message after a multicast group was marked out of sync,
 				// it must forget about the group.
 				if (ctx.groupId == undefined) {
 					this.host.securityManager2.resetOutOfSyncMPANs(
@@ -1126,19 +1139,27 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	private getDestinationIDTX(): number {
 		if (this.isSinglecast()) return this.nodeId;
 
-		const mgrpExtension = this.extensions.find(
-			(e): e is MGRPExtension => e instanceof MGRPExtension,
-		);
-		if (mgrpExtension) return mgrpExtension.groupId;
-
-		throw new ZWaveError(
-			"Multicast Security S2 encapsulation requires the MGRP extension",
-			ZWaveErrorCodes.Security2CC_MissingExtension,
-		);
+		const ret = this.getMulticastGroupId();
+		if (ret == undefined) {
+			throw new ZWaveError(
+				"Multicast Security S2 encapsulation requires the MGRP extension",
+				ZWaveErrorCodes.Security2CC_MissingExtension,
+			);
+		}
+		return ret;
 	}
 
 	private getDestinationIDRX(): number {
-		return this.getMulticastGroupId() ?? this.host.ownNodeId;
+		if (this.isSinglecast()) return this.host.ownNodeId;
+
+		const ret = this.getMulticastGroupId();
+		if (ret == undefined) {
+			throw new ZWaveError(
+				"Multicast Security S2 encapsulation requires the MGRP extension",
+				ZWaveErrorCodes.Security2CC_MissingExtension,
+			);
+		}
+		return ret;
 	}
 
 	private getMGRPExtension(): MGRPExtension | undefined {
