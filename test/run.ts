@@ -1,5 +1,4 @@
 import { wait as _wait } from "alcalzone-shared/async";
-import os from "os";
 import path from "path";
 import "reflect-metadata";
 import { Driver } from "zwave-js";
@@ -10,8 +9,9 @@ process.on("unhandledRejection", (_r) => {
 	debugger;
 });
 
+const port = "tcp://Z-Net-R2v2:2001";
 // 500/700 series
-const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
+// const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 // 800 series
 // const port = os.platform() === "win32" ? "COM5" : "/dev/ttyACM0";
 
