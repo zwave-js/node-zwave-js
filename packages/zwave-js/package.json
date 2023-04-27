@@ -46,8 +46,12 @@
     }
   },
   "files": [
+    "bin/",
     "build/**/*.{js,d.ts,map}"
   ],
+  "bin": {
+    "mock-server": "bin/mock-server.js"
+  },
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"
