@@ -215,8 +215,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 1.8",
-			"$import": "templates/logic_group_template.json#turn_on_level",
-			"defaultValue": 0
+			"$import": "templates/logic_group_template.json#default_brightness"
 		},
 		{
 			"#": "10",
@@ -225,9 +224,7 @@
 		},
 		{
 			"#": "11",
-			"$import": "templates/logic_group_template.json#button_debounce",
-			"unit": "10 ms",
-			"defaultValue": 5
+			"$import": "templates/logic_group_template.json#button_debounce"
 		},
 		{
 			"#": "12",

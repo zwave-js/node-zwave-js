@@ -527,9 +527,9 @@
 			}
 		]
 	},
-	"turn_on_level": {
-		"label": "Light level at turn on",
-		"description":"The function sets the light level at turn on with three value options: 0 (default), 1-99 (next turn on only), and 129-228 (each turn on by subtracting 128 from parameter value).",
+	"default_brightness": {
+		"label": "Default Brightness",
+		"description": "Next turn on only: 1-99. Every turn on: 129-228 (target brightness + 128)",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 228,
