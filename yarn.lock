@@ -8993,5 +8993,7 @@ __metadata:
     typescript: 4.9.5
     winston: ^3.8.2
     xstate: 4.29.0
+  bin:
+    mock-server: bin/mock-server.js
   languageName: unknown
   linkType: soft
