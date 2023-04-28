@@ -535,7 +535,6 @@
 		"maxValue": 228,
 		"defaultValue": 0,
 		"unsigned": true,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "No effect",
