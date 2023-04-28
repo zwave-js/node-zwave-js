@@ -56,8 +56,15 @@
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
 		},
 		{
+			"#": "10",
+			"$if": "firmwareVersion >= 1.30",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Power (W) Reporting",
+			"defaultValue": 0
+		},
+		{
 			"#": "5",
-			"label": "Power Wattage Reporting Threshold",
+			"label": "Power (W) Reporting Threshold",
 			"unit": "W",
 			"valueSize": 1,
 			"minValue": 5,
@@ -67,7 +74,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Power Wattage Reporting Frequency",
+			"label": "Power (W) Reporting Interval",
 			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -76,8 +83,15 @@
 			"unsigned": true
 		},
 		{
+			"#": "11",
+			"$if": "firmwareVersion >= 1.30",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Current (A) Reporting",
+			"defaultValue": 0
+		},
+		{
 			"#": "7",
-			"label": "Electrical Current Reporting Threshold",
+			"label": "Current (A) Reporting Threshold",
 			"unit": "0.1 A",
 			"valueSize": 1,
 			"minValue": 1,
@@ -86,8 +100,19 @@
 			"unsigned": true
 		},
 		{
+			"#": "12",
+			"$if": "firmwareVersion >= 1.30",
+			"label": "Current (A) Reporting Interval",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
 			"#": "8",
-			"label": "Energy Reporting Threshold",
+			"label": "Energy (kWh) Reporting Threshold",
 			"unit": "0.01 kWh",
 			"valueSize": 1,
 			"minValue": 1,
@@ -96,40 +121,21 @@
 			"unsigned": true
 		},
 		{
-			"#": "10",
-			"$if": "firmwareVersion >= 1.3",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Power/Energy Monitoring",
-			"defaultValue": 0
-		},
-		{
-			"#": "11",
-			"$if": "firmwareVersion >= 1.3",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Electrical Current Monitoring",
-			"defaultValue": 0
-		},
-		{
-			"#": "12",
-			"$if": "firmwareVersion >= 1.3",
-			"label": "Electrical Current (A) Report Frequency",
-			"unit": "minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60,
-			"unsigned": true
-		},
-		{
 			"#": "13",
-			"$if": "firmwareVersion >= 1.3",
-			"label": "Voltage Report (V) Frequency",
+			"$if": "firmwareVersion >= 1.30",
+			"label": "Voltage Report (V) Interval",
 			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 60,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		}
 	]
 }
