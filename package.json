@@ -35,7 +35,7 @@
     "@alcalzone/monopack": "^1.2.0",
     "@alcalzone/release-script": "~3.5.9",
     "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.4.4",
+    "@commitlint/config-conventional": "^17.6.1",
     "@esm2cjs/p-queue": "^7.3.0",
     "@microsoft/api-extractor": "^7.33.7",
     "@monorepo-utils/workspaces-to-typescript-project-references": "^2.9.0",
