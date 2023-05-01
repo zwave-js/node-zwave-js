@@ -42,7 +42,7 @@
     "@types/clipboardy": "^2.0.1",
     "@types/fs-extra": "^9.0.13",
     "@types/globrex": "^0.1.2",
-    "@types/node": "^14.18.36",
+    "@types/node": "^14.18.43",
     "@types/prettier": "^2.7.2",
     "@types/yargs": "^17.0.12",
     "@zwave-js/core": "workspace:*",
