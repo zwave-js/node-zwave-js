@@ -262,12 +262,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/config-conventional@npm:^17.4.4":
-  version: 17.4.4
-  resolution: "@commitlint/config-conventional@npm:17.4.4"
+"@commitlint/config-conventional@npm:^17.6.1":
+  version: 17.6.1
+  resolution: "@commitlint/config-conventional@npm:17.6.1"
   dependencies:
     conventional-changelog-conventionalcommits: ^5.0.0
-  checksum: 679d92509fe6e53ee0cc4202f8069d88360c4f9dbd7ab74114bb28278a196da517ef711dfe69893033a66e54ffc29e8df2ccf63cfd746a89c82a053949473c4b
+  checksum: a854bae11f76b22e188af2fabe4048b5054f56b7f270e6364ab1ed807670fa38192e1a2628d626a9b759785f64874a0b33b560080b34208f69f401ef70d91562
   languageName: node
   linkType: hard
 
@@ -1938,7 +1938,7 @@ __metadata:
     "@alcalzone/monopack": ^1.2.0
     "@alcalzone/release-script": ~3.5.9
     "@commitlint/cli": ^17.1.2
-    "@commitlint/config-conventional": ^17.4.4
+    "@commitlint/config-conventional": ^17.6.1
     "@esm2cjs/p-queue": ^7.3.0
     "@microsoft/api-extractor": ^7.33.7
     "@monorepo-utils/workspaces-to-typescript-project-references": ^2.9.0
