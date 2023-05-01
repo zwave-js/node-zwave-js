@@ -46,7 +46,7 @@
     "@types/source-map-support": "^0.5.6",
     "@types/ts-nameof": "^4.2.2",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
-    "@typescript-eslint/parser": "^5.48.0",
+    "@typescript-eslint/parser": "^5.59.1",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
