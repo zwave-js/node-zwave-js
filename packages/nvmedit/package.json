@@ -51,7 +51,7 @@
     "fs-extra": "^10.1.0",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.7",
-    "yargs": "^17.5.1"
+    "yargs": "^17.7.1"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
@@ -69,7 +69,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^14.18.36",
     "@types/semver": "^7.3.12",
-    "@types/yargs": "^17.0.12",
+    "@types/yargs": "^17.0.24",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.7",
