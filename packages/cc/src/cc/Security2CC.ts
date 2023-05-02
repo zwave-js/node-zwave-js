@@ -65,8 +65,10 @@ import {
 } from "../lib/Security2/Extension";
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "../lib/Security2/shared";
 import { Security2Command } from "../lib/_Types";
+import { CRC16CC } from "./CRC16CC";
 import { MultiChannelCC } from "./MultiChannelCC";
 import { SecurityCC } from "./SecurityCC";
+import { TransportServiceCC } from "./TransportServiceCC";
 
 function securityClassToBitMask(key: SecurityClass): Buffer {
 	return encodeBitMask(
@@ -699,8 +701,14 @@ export class Security2CC extends CommandClass {
 		if (!(cc.encapsulationFlags & EncapsulationFlags.Security)) {
 			return false;
 		}
-		// S0 -> no S2 encapsulation
-		if (cc instanceof SecurityCC) return false;
+		// S0, CRC16, Transport Service -> no S2 encapsulation
+		if (
+			cc instanceof SecurityCC ||
+			cc instanceof CRC16CC ||
+			cc instanceof TransportServiceCC
+		) {
+			return false;
+		}
 		// S2: check command
 		if (cc instanceof Security2CC) {
 			// These S2 commands need additional encapsulation
@@ -734,7 +742,7 @@ export class Security2CC extends CommandClass {
 			return false;
 		}
 
-		// Everything that's not an S0 or S2 CC needs to be encapsulated if the CC is secure
+		// Everything else needs to be encapsulated if the CC is secure
 		return true;
 	}
 

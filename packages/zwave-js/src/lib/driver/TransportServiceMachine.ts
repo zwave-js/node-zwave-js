@@ -24,10 +24,14 @@ export interface TransportServiceRXStateSchema {
 /* eslint-enable @typescript-eslint/ban-types */
 
 export interface TransportServiceRXContext {
-	receivedSegments: boolean[];
+	receivedBytes: boolean[];
 }
 
-export type TransportServiceRXEvent = { type: "segment"; index: number };
+export type TransportServiceRXEvent = {
+	type: "segment";
+	offset: number;
+	length: number;
+};
 
 export type TransportServiceRXMachine = StateMachine<
 	TransportServiceRXContext,
@@ -45,19 +49,22 @@ export type TransportServiceRXInterpreter = Interpreter<
 >;
 
 export type TransportServiceRXMachineParams = {
-	numSegments: number;
+	datagramSize: number;
+	firstSegmentSize: number;
 	missingSegmentTimeout: number;
 };
 
 const receiveSegment: AssignAction<TransportServiceRXContext, any> = assign(
-	(ctx, evt) => {
-		ctx.receivedSegments[evt.index] = true;
+	(ctx, evt: TransportServiceRXEvent) => {
+		for (let i = evt.offset; i < evt.offset + evt.length; i++) {
+			ctx.receivedBytes[i] = true;
+		}
 		return ctx;
 	},
 );
 
 export interface TransportServiceRXServiceImplementations {
-	requestMissingSegment(index: number): Promise<void>;
+	requestMissingSegment(offset: number): Promise<void>;
 	sendSegmentsComplete(): Promise<void>;
 }
 
@@ -74,13 +81,15 @@ export function createTransportServiceRXMachine(
 			id: "TransportServiceRX",
 			initial: "waitingForSegment",
 			context: {
-				receivedSegments: [
+				receivedBytes: [
 					// When the machine is started, we've already received the first segment
-					true,
+					...(new Array(params.firstSegmentSize).fill(
+						true,
+					) as boolean[]),
 					// The rest of the segments are still missing
-					...Array.from<boolean>({
-						length: params.numSegments - 1,
-					}).fill(false),
+					...(new Array(
+						params.datagramSize - params.firstSegmentSize,
+					).fill(false) as boolean[]),
 				],
 			},
 			states: {
@@ -158,7 +167,7 @@ export function createTransportServiceRXMachine(
 			services: {
 				requestMissingSegment: (ctx) => {
 					return implementations.requestMissingSegment(
-						ctx.receivedSegments.indexOf(false),
+						ctx.receivedBytes.indexOf(false),
 					);
 				},
 				sendSegmentsComplete: () => {
@@ -166,10 +175,12 @@ export function createTransportServiceRXMachine(
 				},
 			},
 			guards: {
-				isComplete: (ctx) => ctx.receivedSegments.every(Boolean),
+				isComplete: (ctx) => {
+					return ctx.receivedBytes.every(Boolean);
+				},
 				hasHole: (ctx) =>
-					ctx.receivedSegments.lastIndexOf(true) >
-					ctx.receivedSegments.indexOf(false),
+					ctx.receivedBytes.lastIndexOf(true) >
+					ctx.receivedBytes.indexOf(false),
 			},
 			delays: {
 				missingSegment: params.missingSegmentTimeout,

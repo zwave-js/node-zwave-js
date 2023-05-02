@@ -3444,17 +3444,16 @@ export class Driver
 
 			const RXStateMachine = createTransportServiceRXMachine(
 				{
-					requestMissingSegment: async (index: number) => {
+					requestMissingSegment: async (offset: number) => {
 						this.controllerLog.logNode(command.nodeId, {
-							message: `Transport Service RX session #${command.sessionId}: Segment ${index} missing - requesting it...`,
+							message: `Transport Service RX session #${command.sessionId}: Segment with offset ${offset} missing - requesting it...`,
 							level: "debug",
 							direction: "outbound",
 						});
 						const cc = new TransportServiceCCSegmentRequest(this, {
 							nodeId: command.nodeId,
 							sessionId: command.sessionId,
-							datagramOffset:
-								index * transportSession!.fragmentSize,
+							datagramOffset: offset,
 						});
 						await this.sendCommand(cc, {
 							maxSendAttempts: 1,
@@ -3481,9 +3480,8 @@ export class Driver
 					// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
 					missingSegmentTimeout:
 						TransportServiceTimeouts.requestMissingSegmentR2,
-					numSegments: Math.ceil(
-						command.datagramSize / command.partialDatagram.length,
-					),
+					datagramSize: command.datagramSize,
+					firstSegmentSize: command.partialDatagram.length,
 				},
 			);
 
@@ -3510,9 +3508,8 @@ export class Driver
 			if (transportSession) {
 				transportSession.interpreter.send({
 					type: "segment",
-					index: Math.floor(
-						command.datagramOffset / transportSession.fragmentSize,
-					),
+					offset: command.datagramOffset,
+					length: command.partialDatagram.length,
 				});
 			} else {
 				// This belongs to a session we don't know... tell the sending node to try again
