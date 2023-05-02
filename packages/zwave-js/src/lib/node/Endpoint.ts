@@ -218,6 +218,16 @@ export class Endpoint implements IZWaveEndpoint {
 		return !!this._implementedCommandClasses.get(cc)?.isControlled;
 	}
 
+	/** Adds Basic CC to the supported CCs if no other actuator CCs are supported */
+	public maybeAddBasicCCAsFallback(): void {
+		if (
+			!this.supportsCC(CommandClasses.Basic) &&
+			!actuatorCCs.some((cc) => this.supportsCC(cc))
+		) {
+			this.addCC(CommandClasses.Basic, { isSupported: true });
+		}
+	}
+
 	/** Removes the BasicCC from the supported CCs if any other actuator CCs are supported */
 	public hideBasicCCInFavorOfActuatorCCs(): void {
 		// This behavior is defined in SDS14223

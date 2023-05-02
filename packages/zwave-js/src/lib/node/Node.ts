@@ -2023,6 +2023,10 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
+		// Basic CC MUST only be used/interviewed when no other actuator CC is supported. If Basic CC is not in the NIF
+		// or list of supported CCs, we need to add it here manually, so its version can get queried.
+		this.maybeAddBasicCCAsFallback();
+
 		if (this.supportsCC(CommandClasses.Version)) {
 			this.driver.controllerLog.logNode(
 				this.nodeId,
@@ -2289,6 +2293,10 @@ protocol version:      ${this.protocolVersion}`;
 					});
 				}
 			}
+
+			// Basic CC MUST only be used/interviewed when no other actuator CC is supported. If Basic CC is not in the NIF
+			// or list of supported CCs, we need to add it here manually, so its version can get queried.
+			this.maybeAddBasicCCAsFallback();
 
 			// This intentionally checks for Version CC support on the root device.
 			// Endpoints SHOULD not support this CC, but we still need to query their
