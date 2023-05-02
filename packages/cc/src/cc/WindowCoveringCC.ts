@@ -353,10 +353,12 @@ export class WindowCoveringCCAPI extends CCAPI {
 				throwWrongValueType(this.ccId, property, "true", typeof value);
 			}
 
-			// Opening a positional parameter is the same as closing a tilt parameter to one side
+			// Opening a positional parameter is the same as closing a tilt parameter to one side (99)
+			// Opening a tilt parameter means setting it to 50
 			const duration = Duration.from(options?.transitionDuration);
+			const parameter = propertyKey as number;
 			const result = await this.set(
-				[{ parameter: propertyKey as number, value: 99 }],
+				[{ parameter, value: isTiltParameter(parameter) ? 50 : 99 }],
 				duration,
 			);
 
@@ -365,8 +367,8 @@ export class WindowCoveringCCAPI extends CCAPI {
 			WindowCoveringCCValues.positionClose.is(valueId) ||
 			WindowCoveringCCValues.tiltClose0.is(valueId)
 		) {
-			if (!!value) {
-				throwWrongValueType(this.ccId, property, "false", typeof value);
+			if (!value) {
+				throwWrongValueType(this.ccId, property, "true", typeof value);
 			}
 
 			// Closing a positional parameter is the same as closing a tilt parameter to the other side
@@ -751,7 +753,6 @@ export interface WindowCoveringCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(WindowCoveringCommand.Set)
-@expectedCCResponse(WindowCoveringCCReport)
 export class WindowCoveringCCSet extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
@@ -805,7 +806,6 @@ export interface WindowCoveringCCStartLevelChangeOptions
 }
 
 @CCCommand(WindowCoveringCommand.StartLevelChange)
-@expectedCCResponse(WindowCoveringCCReport)
 export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
@@ -846,7 +846,6 @@ interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
 }
 
 @CCCommand(WindowCoveringCommand.StopLevelChange)
-@expectedCCResponse(WindowCoveringCCReport)
 export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
