@@ -427,6 +427,7 @@ export class Endpoint implements IZWaveEndpoint {
     get installerIcon(): number | undefined;
     invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : Omit<CCNameOrId, CommandClasses_2> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     isCCSecure(cc: CommandClasses_2): boolean;
+    maybeAddBasicCCAsFallback(): void;
     readonly nodeId: number;
     removeCC(cc: CommandClasses_2): void;
     protected reset(): void;
