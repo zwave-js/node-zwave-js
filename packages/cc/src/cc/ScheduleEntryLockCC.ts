@@ -1496,7 +1496,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 			validatePayload(this.payload.length >= 2);
 			this.userId = this.payload[0];
 			this.slotId = this.payload[1];
-			if (this.payload.length >= 7) {
+			// Only parse the schedule if it is present and some weekday is selected
+			if (this.payload.length >= 7 && this.payload[2] !== 0) {
 				this.weekdays = parseBitMask(
 					this.payload.slice(2, 3),
 					ScheduleEntryLockWeekday.Sunday,
