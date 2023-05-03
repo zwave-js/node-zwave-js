@@ -173,11 +173,16 @@ export class ZWaveSerialPortBase extends PassThrough {
 					: ZWaveSerialMode.SerialAPI;
 			}
 
-			if (this.mode === ZWaveSerialMode.Bootloader) {
-				this.bootloaderScreenParser.write(data);
-			} else {
-				this.parser.write(data);
-			}
+			// On Windows, writing to the parsers immediately seems to lag the event loop
+			// long enough that the state machine sometimes has not transitioned to the next state yet.
+			// By using setImmediate, we "break" the work into manageable chunks.
+			setImmediate(() => {
+				if (this.mode === ZWaveSerialMode.Bootloader) {
+					this.bootloaderScreenParser.write(data);
+				} else {
+					this.parser.write(data);
+				}
+			});
 		});
 
 		// When something is piped to us, pipe it to the serial port instead
