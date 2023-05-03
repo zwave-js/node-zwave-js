@@ -353,6 +353,10 @@ If a device reports support for a CCs but does not correctly support it, this ca
 }
 ```
 
+### `disableAutoRefresh`
+
+Several command classes are refreshed regularly (every couple of hours) if they do not report all of their values automatically. It has been found that some devices respond with invalid reports when queried. By setting `disableAutoRefresh` to `true`, this feature can be disabled.
+
 ### `disableBasicMapping`
 
 By default, received `Basic CC::Report` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.

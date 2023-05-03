@@ -115,6 +115,8 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     // (undocumented)
     readonly condition?: string | undefined;
     // (undocumented)
+    readonly disableAutoRefresh?: boolean;
+    // (undocumented)
     readonly disableBasicMapping?: boolean;
     // (undocumented)
     readonly disableStrictEntryControlDataValidation?: boolean;
