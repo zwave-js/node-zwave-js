@@ -4,6 +4,29 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Implemented a `mock-server` binary to expose a simulated controller via TCP for application testing (#5714)
+
+### Bugfixes
+* Several fixes and polishing for `Window Covering CC` (#5735, #5741)
+* Fixed a race condition on Windows systems between the serial port and state machine that could cause the communication with the Z-Wave stick to fail (#5737)
+* When no other actuator CCs are supported, `Basic CC` is now queried even if not advertised (#5730)
+* The daily Entry Lock schedule is now only parsed if any weekday is selected (#5732)
+* Support inicoming `Transport Service CCs` with unequal fragment sizes (#5731)
+* Do not encapsulate CRC16 or Transport Service in Security S0/S2 (#5731)
+* Disconnects of TCP sockets are detected again (#5715)
+
+### Config file changes
+* Disable periodic refresh for Shenzhen Neo NAS-PD03Z (#5739)
+* Add missing parameter 9 to Logic Group ZDB5100 (#5690)
+* Add new parameters 10-13 to Zooz ZEN04 (#5689)
+* Force-add Battery CC support for EcoNet Controls EV100 (#5712)
+
+### Changes under the hood
+* Fixed the `watch` task on Windows systems
+* Add compat flag to disable periodic value refreshes (#5738)
+
 ## 10.16.0 (2023-04-25)
 ### Features
 * Implement `pollValue` for `Notification CC` (for pull-mode nodes) (#5676)
