@@ -253,7 +253,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		return this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async stopLevelChange(): Promise<SupervisionResult | undefined> {
@@ -267,7 +267,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 
-		return this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getSupported(): Promise<SwitchType | undefined> {

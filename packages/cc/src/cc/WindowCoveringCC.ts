@@ -2,10 +2,15 @@ import {
 	CommandClasses,
 	Duration,
 	encodeBitMask,
+	isSupervisionResult,
 	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	MessageRecord,
 	parseBitMask,
+	supervisedCommandSucceeded,
 	SupervisionResult,
+	SupervisionStatus,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -39,6 +44,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -320,6 +326,8 @@ export class WindowCoveringCCAPI extends CCAPI {
 			propertyKey,
 		};
 
+		let targetValue: number;
+
 		if (WindowCoveringCCValues.targetValue.is(valueId)) {
 			if (
 				typeof propertyKey !== "number" ||
@@ -338,31 +346,28 @@ export class WindowCoveringCCAPI extends CCAPI {
 				);
 			}
 
-			const duration = Duration.from(options?.transitionDuration);
-			const result = await this.set(
-				[{ parameter: propertyKey, value }],
-				duration,
-			);
-
-			return result;
+			targetValue = value;
 		} else if (
-			WindowCoveringCCValues.open.is(valueId) ||
+			// Opening a positional parameter is the same as closing a tilt parameter to one side (99)
+			(WindowCoveringCCValues.open.is(valueId) &&
+				!isTiltParameter(propertyKey as number)) ||
 			WindowCoveringCCValues.tiltClose99.is(valueId)
 		) {
 			if (!value) {
 				throwWrongValueType(this.ccId, property, "true", typeof value);
 			}
 
-			// Opening a positional parameter is the same as closing a tilt parameter to one side (99)
+			targetValue = 99;
+		} else if (
 			// Opening a tilt parameter means setting it to 50
-			const duration = Duration.from(options?.transitionDuration);
-			const parameter = propertyKey as number;
-			const result = await this.set(
-				[{ parameter, value: isTiltParameter(parameter) ? 50 : 99 }],
-				duration,
-			);
+			WindowCoveringCCValues.open.is(valueId) &&
+			isTiltParameter(propertyKey as number)
+		) {
+			if (!value) {
+				throwWrongValueType(this.ccId, property, "true", typeof value);
+			}
 
-			return result;
+			targetValue = 50;
 		} else if (
 			WindowCoveringCCValues.positionClose.is(valueId) ||
 			WindowCoveringCCValues.tiltClose0.is(valueId)
@@ -372,16 +377,88 @@ export class WindowCoveringCCAPI extends CCAPI {
 			}
 
 			// Closing a positional parameter is the same as closing a tilt parameter to the other side
-			const duration = Duration.from(options?.transitionDuration);
-			const result = await this.set(
-				[{ parameter: propertyKey as number, value: 0 }],
-				duration,
-			);
-
-			return result;
+			targetValue = 0;
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
+
+		const parameter = propertyKey as number;
+
+		const currentValueValueId = WindowCoveringCCValues.currentValue(
+			parameter,
+		).endpoint(this.endpoint.index);
+		const targetValueValueId = WindowCoveringCCValues.targetValue(
+			parameter,
+		).endpoint(this.endpoint.index);
+
+		// If we have set the value via one of the convenience properties,
+		// we need to update the targetValue value ID
+		if (targetValue !== value) {
+			this.tryGetValueDB()?.setValue(targetValueValueId, targetValue);
+		}
+
+		const duration = Duration.from(options?.transitionDuration);
+		// Window Covering commands may take some time to be executed.
+		// Therefore we try to supervise the command execution and delay the
+		// optimistic update until the final result is received.
+		const result = await this.withOptions({
+			requestStatusUpdates: true,
+			onUpdate: (update) => {
+				if (update.status === SupervisionStatus.Success) {
+					this.tryGetValueDB()?.setValue(
+						currentValueValueId,
+						targetValue,
+					);
+				} else if (update.status === SupervisionStatus.Fail) {
+					// The transition failed, so now we don't know the status
+					// Refresh the current value
+
+					// eslint-disable-next-line @typescript-eslint/no-empty-function
+					void this.get(parameter).catch(() => {});
+				}
+			},
+		}).set(
+			[{ parameter: propertyKey as number, value: targetValue }],
+			duration,
+		);
+
+		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+		// so UIs have immediate feedback
+		const shouldUpdateOptimistically =
+			// For unsupervised commands, make the choice to update optimistically dependent on the driver options
+			(!this.applHost.options.disableOptimisticValueUpdate &&
+				result == undefined) ||
+			(isSupervisionResult(result) &&
+				result.status === SupervisionStatus.Success);
+
+		if (this.isSinglecast()) {
+			// Only update currentValue for valid target values
+			if (
+				shouldUpdateOptimistically &&
+				targetValue >= 0 &&
+				targetValue <= 99
+			) {
+				this.tryGetValueDB()?.setValue(
+					currentValueValueId,
+					targetValue,
+				);
+			}
+
+			// Verify the current value after a delay, unless...
+			// ...the command was supervised and successful
+			// ...and we know the actual value
+			if (!supervisedCommandSucceeded(result)) {
+				this.schedulePoll(
+					{
+						property: currentValueValueId.property,
+						propertyKey: currentValueValueId.propertyKey,
+					},
+					targetValue,
+					{ duration },
+				);
+			}
+		}
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -470,7 +547,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -492,7 +569,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -510,7 +587,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			parameter,
 		});
 
-		return this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -667,6 +744,23 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"supported parameters": this.supportedParameters
+					.map(
+						(p) =>
+							`\n· ${getEnumMemberName(
+								WindowCoveringParameter,
+								p,
+							)}`,
+					)
+					.join(""),
+			},
+		};
+	}
 }
 
 @CCCommand(WindowCoveringCommand.SupportedGet)
@@ -705,6 +799,21 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 		(self: WindowCoveringCCReport) => [self.parameter] as const,
 	)
 	public readonly duration: Duration;
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+				"current value": this.currentValue,
+				"target value": this.targetValue,
+				duration: this.duration.toString(),
+			},
+		};
+	}
 }
 
 interface WindowCoveringCCGetOptions extends CCCommandOptions {
@@ -742,6 +851,18 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+			},
+		};
+	}
 }
 
 export interface WindowCoveringCCSetOptions extends CCCommandOptions {
@@ -753,6 +874,7 @@ export interface WindowCoveringCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(WindowCoveringCommand.Set)
+@useSupervision()
 export class WindowCoveringCCSet extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
@@ -796,6 +918,21 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		for (const { parameter, value } of this.targetValues) {
+			message[getEnumMemberName(WindowCoveringParameter, parameter)] =
+				value;
+		}
+		if (this.duration) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 export interface WindowCoveringCCStartLevelChangeOptions
@@ -806,6 +943,7 @@ export interface WindowCoveringCCStartLevelChangeOptions
 }
 
 @CCCommand(WindowCoveringCommand.StartLevelChange)
+@useSupervision()
 export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
@@ -839,6 +977,23 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			parameter: getEnumMemberName(
+				WindowCoveringParameter,
+				this.parameter,
+			),
+			direction: this.direction,
+		};
+		if (this.duration) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
@@ -846,6 +1001,7 @@ interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
 }
 
 @CCCommand(WindowCoveringCommand.StopLevelChange)
+@useSupervision()
 export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
@@ -870,5 +1026,17 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+			},
+		};
 	}
 }
