@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.17.0 (2023-05-03)
 ### Features
 * Implemented a `mock-server` binary to expose a simulated controller via TCP for application testing (#5714)
 
