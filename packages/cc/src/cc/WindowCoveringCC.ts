@@ -3,7 +3,9 @@ import {
 	Duration,
 	encodeBitMask,
 	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	MessageRecord,
 	parseBitMask,
 	SupervisionResult,
 	validatePayload,
@@ -346,19 +348,33 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 			return result;
 		} else if (
-			WindowCoveringCCValues.open.is(valueId) ||
+			// Opening a positional parameter is the same as closing a tilt parameter to one side (99)
+			(WindowCoveringCCValues.open.is(valueId) &&
+				!isTiltParameter(propertyKey as number)) ||
 			WindowCoveringCCValues.tiltClose99.is(valueId)
 		) {
 			if (!value) {
 				throwWrongValueType(this.ccId, property, "true", typeof value);
 			}
 
-			// Opening a positional parameter is the same as closing a tilt parameter to one side (99)
 			// Opening a tilt parameter means setting it to 50
 			const duration = Duration.from(options?.transitionDuration);
 			const parameter = propertyKey as number;
+			const result = await this.set([{ parameter, value: 99 }], duration);
+
+			return result;
+		} else if (
+			// Opening a tilt parameter means setting it to 50
+			WindowCoveringCCValues.open.is(valueId) &&
+			isTiltParameter(propertyKey as number)
+		) {
+			if (!value) {
+				throwWrongValueType(this.ccId, property, "true", typeof value);
+			}
+
+			const duration = Duration.from(options?.transitionDuration);
 			const result = await this.set(
-				[{ parameter, value: isTiltParameter(parameter) ? 50 : 99 }],
+				[{ parameter: propertyKey as number, value: 50 }],
 				duration,
 			);
 
@@ -667,6 +683,23 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"supported parameters": this.supportedParameters
+					.map(
+						(p) =>
+							`\n· ${getEnumMemberName(
+								WindowCoveringParameter,
+								p,
+							)}`,
+					)
+					.join(""),
+			},
+		};
+	}
 }
 
 @CCCommand(WindowCoveringCommand.SupportedGet)
@@ -705,6 +738,21 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 		(self: WindowCoveringCCReport) => [self.parameter] as const,
 	)
 	public readonly duration: Duration;
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+				"current value": this.currentValue,
+				"target value": this.targetValue,
+				duration: this.duration.toString(),
+			},
+		};
+	}
 }
 
 interface WindowCoveringCCGetOptions extends CCCommandOptions {
@@ -741,6 +789,18 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+			},
+		};
 	}
 }
 
@@ -796,6 +856,21 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		for (const { parameter, value } of this.targetValues) {
+			message[getEnumMemberName(WindowCoveringParameter, parameter)] =
+				value;
+		}
+		if (this.duration) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 export interface WindowCoveringCCStartLevelChangeOptions
@@ -839,6 +914,23 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			parameter: getEnumMemberName(
+				WindowCoveringParameter,
+				this.parameter,
+			),
+			direction: this.direction,
+		};
+		if (this.duration) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
@@ -870,5 +962,17 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+			},
+		};
 	}
 }
