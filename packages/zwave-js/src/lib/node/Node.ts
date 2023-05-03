@@ -3070,7 +3070,7 @@ protocol version:      ${this.protocolVersion}`;
 		// Some legacy devices expect us to query them on wake up in order to function correctly
 		if (this._deviceConfig?.compat?.queryOnWakeup) {
 			void this.compatDoWakeupQueries();
-		} else {
+		} else if (!this._deviceConfig?.compat?.disableAutoRefresh) {
 			// For other devices we may have to refresh their values from time to time
 			void this.autoRefreshValues().catch(() => {
 				// ignore

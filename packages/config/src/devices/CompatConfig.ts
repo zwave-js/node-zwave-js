@@ -62,12 +62,24 @@ error in compat option queryOnWakeup`,
 			) as any;
 		}
 
+		if (definition.disableAutoRefresh != undefined) {
+			if (definition.disableAutoRefresh !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option disableAutoRefresh must be true or omitted`,
+				);
+			}
+
+			this.disableAutoRefresh = definition.disableAutoRefresh;
+		}
+
 		if (definition.disableBasicMapping != undefined) {
 			if (definition.disableBasicMapping !== true) {
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option disableBasicMapping`,
+compat option disableBasicMapping must be true or omitted`,
 				);
 			}
 
@@ -79,7 +91,7 @@ error in compat option disableBasicMapping`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option disableStrictEntryControlDataValidation`,
+compat option disableStrictEntryControlDataValidation must be true or omitted`,
 				);
 			}
 
@@ -92,7 +104,7 @@ error in compat option disableStrictEntryControlDataValidation`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option disableStrictMeasurementValidation`,
+compat option disableStrictMeasurementValidation must be true or omitted`,
 				);
 			}
 
@@ -105,7 +117,7 @@ error in compat option disableStrictMeasurementValidation`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option enableBasicSetMapping`,
+compat option enableBasicSetMapping must be true or omitted`,
 				);
 			}
 
@@ -117,7 +129,7 @@ error in compat option enableBasicSetMapping`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option forceNotificationIdleReset`,
+compat option forceNotificationIdleReset must be true or omitted`,
 				);
 			}
 
@@ -536,6 +548,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 		CommandClasses,
 		"*" | readonly number[]
 	>;
+	public readonly disableAutoRefresh?: boolean;
 	public readonly disableBasicMapping?: boolean;
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly disableStrictMeasurementValidation?: boolean;
@@ -576,6 +589,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 			"alarmMapping",
 			"addCCs",
 			"removeCCs",
+			"disableAutoRefresh",
 			"disableBasicMapping",
 			"disableStrictEntryControlDataValidation",
 			"disableStrictMeasurementValidation",
