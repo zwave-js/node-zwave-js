@@ -61,13 +61,13 @@
     "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^14.18.43",
-    "@types/sinon": "^10.0.13",
+    "@types/sinon": "^10.0.14",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
-    "esbuild": "0.15.7",
+    "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.4",
-    "sinon": "^14.0.0",
+    "prettier": "^2.8.8",
+    "sinon": "^14.0.2",
     "typescript": "4.9.5"
   }
 }
