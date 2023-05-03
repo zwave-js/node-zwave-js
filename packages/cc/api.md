@@ -17822,6 +17822,8 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
     parameter: WindowCoveringParameter;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17837,6 +17839,8 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
     readonly parameter: WindowCoveringParameter;
     // (undocumented)
     readonly targetValue: number;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17854,6 +17858,8 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
         parameter: WindowCoveringParameter;
         value: number;
     }[];
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCStartLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17870,6 +17876,8 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
     parameter: WindowCoveringParameter;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCStopLevelChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17882,6 +17890,8 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
     parameter: WindowCoveringParameter;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCSupportedGet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17900,6 +17910,8 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
     serialize(): Buffer;
     // (undocumented)
     readonly supportedParameters: readonly WindowCoveringParameter[];
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
