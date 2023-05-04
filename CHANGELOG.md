@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.17.1 (2023-05-04)
+### Bugfixes
+* Fixed a startup crash that happens when the controller returns an empty list of nodes (#5745)
+
 ## 10.17.0 (2023-05-03)
 ### Features
 * Implemented a `mock-server` binary to expose a simulated controller via TCP for application testing (#5714)
