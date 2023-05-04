@@ -400,9 +400,10 @@ export class VersionCC extends CommandClass {
 		});
 
 		const queryCCVersion = async (cc: CommandClasses): Promise<void> => {
-			// only query the ones we support a version > 1 for
+			// Only query CCs we support. Theoretically we could skip queries where we support only V1,
+			// but there are Z-Wave certification tests that require us to query all CCs
 			const maxImplemented = getImplementedVersion(cc);
-			if (maxImplemented <= 1) {
+			if (maxImplemented === 0) {
 				applHost.controllerLog.logNode(
 					node.id,
 					`  skipping query for ${CommandClasses[cc]} (${num2hex(
