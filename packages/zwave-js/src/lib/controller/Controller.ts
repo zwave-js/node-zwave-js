@@ -631,30 +631,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._healNetworkActive;
 	}
 
-	private groupNodesBySecurityClass(
-		nodeIDs?: number[],
-	): Map<SecurityClass, number[]> {
-		const ret = new Map<SecurityClass, number[]>();
-
-		const nodes = nodeIDs
-			? nodeIDs.map((id) => this._nodes.getOrThrow(id))
-			: [...this._nodes.values()];
-
-		for (const node of nodes) {
-			const secClass = node.getHighestSecurityClass();
-			if (secClass === SecurityClass.Temporary || secClass == undefined) {
-				continue;
-			}
-
-			if (!ret.has(secClass)) {
-				ret.set(secClass, []);
-			}
-			ret.get(secClass)!.push(node.id);
-		}
-
-		return ret;
-	}
-
 	/**
 	 * Returns a reference to the (virtual) broadcast node, which allows sending commands to all nodes.
 	 * This automatically groups nodes by security class, ignores nodes that cannot be controlled via multicast/broadcast, and will fall back to multicast(s) if necessary.
@@ -1226,6 +1202,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this.driver.metadataDB!,
 		]);
 		// create an empty entry in the nodes map so we can initialize them afterwards
+		const nodeIds = [...initData.nodeIds];
+		if (nodeIds.length === 0) {
+			this.driver.controllerLog.print(
+				`Controller reports no nodes in its network. This could be an indication of a corrupted controller memory.`,
+				"warn",
+			);
+			nodeIds.push(this._ownNodeId!);
+		}
+
 		for (const nodeId of initData.nodeIds) {
 			this._nodes.set(
 				nodeId,
