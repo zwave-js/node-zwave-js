@@ -472,6 +472,17 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
+		// Two-byte parameter numbers can only be read using the BulkGet command
+		if (parameter > 255) {
+			const result = await this.getBulk([
+				{
+					parameter,
+					bitMask: options?.valueBitMask,
+				},
+			]);
+			return result.find((r) => r.parameter === parameter)?.value;
+		}
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Get,
@@ -611,6 +622,11 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async set(
 		options: ConfigurationCCAPISetOptions,
 	): Promise<SupervisionResult | undefined> {
+		// Two-byte parameter numbers can only be set using the BulkSet command
+		if (options.parameter > 255) {
+			return this.setBulk([options]);
+		}
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -723,6 +739,11 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async reset(
 		parameter: number,
 	): Promise<SupervisionResult | undefined> {
+		// Two-byte parameter numbers can only be reset using the BulkSet command
+		if (parameter > 255) {
+			return this.resetBulk([parameter]);
+		}
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -743,7 +764,9 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
 	@validateArgs()
-	public async resetBulk(parameters: number[]): Promise<void> {
+	public async resetBulk(
+		parameters: number[],
+	): Promise<SupervisionResult | undefined> {
 		if (
 			isConsecutiveArray(parameters) &&
 			this.supportsCommand(ConfigurationCommand.BulkSet)
@@ -754,7 +777,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				parameters,
 				resetToDefault: true,
 			});
-			await this.applHost.sendCommand(cc, this.commandOptions);
+			return this.applHost.sendCommand(cc, this.commandOptions);
 		} else {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
