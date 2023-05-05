@@ -612,13 +612,6 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		)?.compat?.disableStrictMeasurementValidation;
 
 		if (measurementValidation) {
-			validatePayload.withReason(
-				`Unknown sensor type ${num2hex(this.type)} or corrupted data`,
-			)(!!sensorType);
-			validatePayload.withReason(
-				`Unknown scale ${num2hex(this.scale)} or corrupted data`,
-			)(scale.label !== getDefaultScale(this.scale).label);
-
 			// Filter out unsupported sensor types and scales if possible
 			if (this.version >= 5) {
 				const supportedSensorTypes = this.getValue<number[]>(
@@ -642,6 +635,17 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 						`Unsupported scale ${scale.label} or corrupted data`,
 					)(supportedScales.includes(scale.key));
 				}
+			} else {
+				// We support a higher CC version than the device, so any types and scales it uses should be known to us
+				// Filter out unknown ones.
+				validatePayload.withReason(
+					`Unknown sensor type ${num2hex(
+						this.type,
+					)} or corrupted data`,
+				)(!!sensorType);
+				validatePayload.withReason(
+					`Unknown scale ${num2hex(this.scale)} or corrupted data`,
+				)(scale.label !== getDefaultScale(this.scale).label);
 			}
 		}
 
