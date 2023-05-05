@@ -2864,6 +2864,11 @@ export class Driver
 			msg = undefined;
 		}
 
+		// If we receive a CC from a node while the controller is not ready yet,
+		// we can't do anything with it, but logging it may assume that it can access the controller.
+		// To prevent this problem, we just ignore CCs until the controller is ready
+		if (!this._controller && isCommandClassContainer(msg)) return;
+
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
 			let wasMessageLogged = false;
