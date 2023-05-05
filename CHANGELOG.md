@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.18.0 (2023-05-05)
+### Features
+* Expose methods to read cached user code and user ID status (#5759)
+
+### Bugfixes
+* Use the correct commands to read and write config parameters above 255 (#5761)
+* Only discard unknown Multilevel Sensor readings on V4 and lower (#5760)
+* Fixed a crash that could happen when receiving certain CCs while the controller is not yet interviewed (#5758)
+* Improve the "unnecessary endpoint" heuristic that is used to ignore endpoints (#5747)
+* In accordance with the specification, the versions of all supported CCs are now queried during the interview, even if they only exist in version 1 (#5746)
+
 ## 10.17.1 (2023-05-04)
 ### Bugfixes
 * Fixed a startup crash that happens when the controller returns an empty list of nodes (#5745)
