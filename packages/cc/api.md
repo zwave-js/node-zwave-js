@@ -16344,6 +16344,8 @@ export class UserCodeCC extends CommandClass {
     static getSupportedKeypadModesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): KeypadMode[] | undefined;
     static getSupportedUserIDStatusesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): UserIDStatus[] | undefined;
     static getSupportedUsersCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number | undefined;
+    static getUserCodeCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, userId: number): string | Buffer | undefined;
+    static getUserIdStatusCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, userId: number): UserIDStatus | undefined;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
