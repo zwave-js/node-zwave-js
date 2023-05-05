@@ -76,7 +76,9 @@ WARNING: This will throw on legacy devices (ConfigurationCC v3 and below).
 ### `resetBulk`
 
 ```ts
-async resetBulk(parameters: number[]): Promise<void>;
+async resetBulk(
+	parameters: number[],
+): Promise<SupervisionResult | undefined>;
 ```
 
 Resets multiple configuration parameters to their default value. Uses BulkSet if supported, otherwise falls back to individual Set commands.
