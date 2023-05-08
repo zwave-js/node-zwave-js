@@ -339,21 +339,6 @@ export class SoundSwitchCC extends CommandClass {
 		});
 
 		applHost.controllerLog.logNode(node.id, {
-			message: "requesting current sound configuration...",
-			direction: "outbound",
-		});
-		const config = await api.getConfiguration();
-		if (config) {
-			const logMessage = `received current sound configuration:
-default tone ID: ${config.defaultToneId}
-default volume: ${config.defaultVolume}`;
-			applHost.controllerLog.logNode(node.id, {
-				message: logMessage,
-				direction: "inbound",
-			});
-		}
-
-		applHost.controllerLog.logNode(node.id, {
 			message: "requesting tone count...",
 			direction: "outbound",
 		});
@@ -371,6 +356,21 @@ default volume: ${config.defaultVolume}`;
 				level: "warn",
 			});
 			return;
+		}
+
+		applHost.controllerLog.logNode(node.id, {
+			message: "requesting current sound configuration...",
+			direction: "outbound",
+		});
+		const config = await api.getConfiguration();
+		if (config) {
+			const logMessage = `received current sound configuration:
+default tone ID: ${config.defaultToneId}
+default volume: ${config.defaultVolume}`;
+			applHost.controllerLog.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
 		}
 
 		const metadataStates: Record<number, string> = {
