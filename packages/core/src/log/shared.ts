@@ -199,13 +199,29 @@ export class ZWaveLogContainer extends winston.Container {
 
 	private getInternalTransports(): Transport[] {
 		const ret: Transport[] = [];
-		if (this.logConfig.enabled && this.logConfig.logToFile) {
+
+		// If logging is disabled, don't log to any of the default transports
+		if (!this.logConfig.enabled) {
+			return ret;
+		}
+
+		// Log to file only when opted in
+		if (this.logConfig.logToFile) {
 			if (!this.fileTransport) {
 				this.fileTransport = this.createFileTransport();
 			}
 			ret.push(this.fileTransport);
 		}
-		if (!isUnitTest && (isTTY || this.logConfig.forceConsole)) {
+
+		// Console logs can be noise, so only log to console...
+		if (
+			// when in production
+			!isUnitTest &&
+			// and stdout is a TTY while we're not already logging to a file
+			((isTTY && !this.logConfig.logToFile) ||
+				// except when the user explicitly wants to
+				this.logConfig.forceConsole)
+		) {
 			if (!this.consoleTransport) {
 				this.consoleTransport = this.createConsoleTransport();
 			}
