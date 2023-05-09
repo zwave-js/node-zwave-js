@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "24",
-			"$import": "templates/zooz_template.json#association_reports"
+			"$import": "templates/zooz_template.json#association_reports_binary"
 		}
 	],
 	"metadata": {

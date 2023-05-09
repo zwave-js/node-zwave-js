@@ -207,7 +207,7 @@
 			}
 		]
 	},
-	"association_reports": {
+	"association_reports_binary": {
 		"label": "Association Reports",
 		"valueSize": 1,
 		"minValue": 0,
@@ -222,6 +222,25 @@
 			},
 			{
 				"label": "Binary Switch CC report (Z-Wave / Manual)",
+				"value": 1
+			}
+		]
+	},
+	"association_reports_multilevel": {
+		"label": "Association Reports",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Multilevel Switch CC report (Z-Wave); Basic CC Set (Manual)",
+				"value": 0
+			},
+			{
+				"label": "Multilevel Switch CC report (Z-Wave / Manual)",
 				"value": 1
 			}
 		]
@@ -282,6 +301,38 @@
 			{
 				"label": "Instant off",
 				"value": 0
+			}
+		]
+	},
+	"zwave_on_dimmer_ramp_rate_match_manual": {
+		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"label": "Ramp Rate On (Z-Wave)",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant on",
+				"value": 0
+			},
+			{
+				"label": "Match ramp rate for manual control",
+				"value": 100
+			}
+		]
+	},
+	"zwave_off_dimmer_ramp_rate_match_manual": {
+		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"label": "Ramp Rate Off (Z-Wave)",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant off",
+				"value": 0
+			},
+			{
+				"label": "Match ramp rate for manual control",
+				"value": 100
 			}
 		]
 	},
