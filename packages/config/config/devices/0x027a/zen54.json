@@ -92,15 +92,15 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit"
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit_5x_long"
 		},
 		{
 			"#": "9",
-			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit"
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit_5x_long"
 		},
 		{
 			"#": "10",
-			"$import": "templates/zooz_template.json#auto_timer_unit_select"
+			"$import": "templates/zooz_template.json#auto_timer_unit_select_min_sec"
 		},
 		{
 			"#": "11",

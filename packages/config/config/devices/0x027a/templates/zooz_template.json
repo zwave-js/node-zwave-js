@@ -1,5 +1,6 @@
 {
-	"auto_timer_base": {
+	// Auto-On/Off-Timers for ZEN3x and ZEN7x
+	"auto_timer_base_3x_7x": {
 		"valueSize": 4,
 		"unit": "minutes",
 		"minValue": 0,
@@ -13,7 +14,17 @@
 			}
 		]
 	},
-	"auto_timer_base_seconds": {
+	"auto_off_timer_3x_7x": {
+		"label": "Auto Turn-Off Timer",
+		"$import": "#auto_timer_base_3x_7x"
+	},
+	"auto_on_timer_3x_7x": {
+		"label": "Auto Turn-On Timer",
+		"$import": "#auto_timer_base_3x_7x"
+	},
+
+	// Auto-On/Off-Timers for ZEN5x with fixed time unit
+	"auto_timer_base_5x": {
 		"valueSize": 4,
 		"unit": "seconds",
 		"minValue": 0,
@@ -27,29 +38,68 @@
 			}
 		]
 	},
-	"auto_off_timer": {
+	"auto_off_timer_5x": {
 		"label": "Auto Turn-Off Timer",
-		"$import": "#auto_timer_base"
+		"$import": "#auto_timer_base_5x"
 	},
-	"auto_on_timer": {
+	"auto_on_timer_5x": {
 		"label": "Auto Turn-On Timer",
-		"$import": "#auto_timer_base"
+		"$import": "#auto_timer_base_5x"
 	},
-	"auto_timer_variable_unit_base": {
-		"$import": "#auto_timer_base",
+
+	// Auto-On/Off-Timers for ZEN5x with variable time unit and 2-byte value
+	"auto_timer_variable_unit_base_5x_short": {
+		"description": "Unit is minutes or seconds, depending on time unit parameter",
 		"valueSize": 2,
 		"unit": "min/sec",
-		"description": "Unit is minutes or seconds, depending on time unit parameter"
+		"minValue": 0,
+		"maxValue": 65535,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
 	},
-	"auto_off_timer_variable_unit": {
+	"auto_off_timer_variable_unit_5x_short": {
 		"label": "Auto Turn-Off Timer",
-		"$import": "#auto_timer_variable_unit_base"
+		"$import": "#auto_timer_variable_unit_base_5x_short"
 	},
-	"auto_on_timer_variable_unit": {
+	"auto_on_timer_variable_unit_5x_short": {
 		"label": "Auto Turn-On Timer",
-		"$import": "#auto_timer_variable_unit_base"
+		"$import": "#auto_timer_variable_unit_base_5x_short"
 	},
-	"auto_timer_unit_select": {
+
+	// Auto-On/Off-Timers for ZEN5x with variable time unit and 4-byte value
+	"auto_timer_variable_unit_base_5x_long": {
+		"description": "Unit is minutes or seconds, depending on time unit parameter",
+		"valueSize": 4,
+		"unit": "min/sec",
+		"minValue": 0,
+		"maxValue": 4294967295,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"auto_off_timer_variable_unit_5x_long": {
+		"label": "Auto Turn-Off Timer",
+		"$import": "#auto_timer_variable_unit_base_5x_long"
+	},
+	"auto_on_timer_variable_unit_5x_long": {
+		"label": "Auto Turn-On Timer",
+		"$import": "#auto_timer_variable_unit_base_5x_long"
+	},
+
+	// Different variants of the auto-timer unit selectors
+	"auto_timer_unit_select_min_sec": {
+		"label": "Auto Timer Unit",
 		"valueSize": 1,
 		"minValue": 1,
 		"maxValue": 2,
@@ -64,9 +114,28 @@
 				"label": "Seconds",
 				"value": 2
 			}
-		],
-		"label": "Auto Timer Unit"
+		]
 	},
+	"auto_timer_unit_select_sec_min": {
+		"label": "Auto Timer Unit",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Seconds",
+				"value": 1
+			},
+			{
+				"label": "Minutes",
+				"value": 2
+			}
+		]
+	},
+
+	// Auto-On/Off-Timers for other series with fixed time unit
 	"auto_timer_duration_base": {
 		"valueSize": 4,
 		"unit": "minutes",
@@ -83,14 +152,7 @@
 		"label": "Auto Turn-On Timer Duration",
 		"$import": "#auto_timer_duration_base"
 	},
-	"auto_off_timer_seconds": {
-		"label": "Auto Turn-Off Timer",
-		"$import": "#auto_timer_base_seconds"
-	},
-	"auto_on_timer_seconds": {
-		"label": "Auto Turn-On Timer",
-		"$import": "#auto_timer_base_seconds"
-	},
+
 	"enable_scene_control": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable/Disable Scene Control",
