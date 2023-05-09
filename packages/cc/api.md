@@ -352,6 +352,11 @@ export type APIMethodsOf<CC extends CCNameOrId> = Omit<OnlyMethods<CCToAPI<CC>>,
 // @public (undocumented)
 export function assertValidCCs(container: ICommandClassContainer): void;
 
+// Warning: (ae-missing-release-tag) "assignLifelineIssueingCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+function assignLifelineIssueingCommand(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, ccId: CommandClasses, ccCommand: number): Promise<void>;
+
 // Warning: (ae-missing-release-tag) "AssociationAddress" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5696,6 +5701,8 @@ export interface EnergyProductionScale {
 export class EntryControlCC extends CommandClass {
     // (undocumented)
     ccCommand: EntryControlCommand;
+    // (undocumented)
+    determineRequiredCCInterviews(): readonly CommandClasses[];
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
@@ -17027,7 +17034,8 @@ declare namespace utils {
         getAllAssociationGroups,
         addAssociations,
         removeAssociations,
-        configureLifelineAssociations
+        configureLifelineAssociations,
+        assignLifelineIssueingCommand
     }
 }
 export { utils }
