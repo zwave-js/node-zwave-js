@@ -298,11 +298,11 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Multilevel Switch CC report (Z-Wave); Basic CC Set (Manual)",
+				"label": "Multilevel Switch CC Report (Z-Wave); Basic CC Report (Manual)",
 				"value": 0
 			},
 			{
-				"label": "Multilevel Switch CC report (Z-Wave / Manual)",
+				"label": "Multilevel Switch CC Report (Z-Wave / Manual)",
 				"value": 1
 			}
 		]
@@ -645,6 +645,27 @@
 		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 		"label": "Local Programming",
 		"description": "Controls programming (eg. including/excluding) device through physical inputs, allowing the according input sequence to be used for scene control instead. Factory reset remains available."
+	},
+	"local_zwave_control": {
+		"label": "Local/Z-Wave Control",
+		"description": "Reports are always sent to the hub, regardless of this setting.",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Local control disabled, Z-Wave control enabled",
+				"value": 0
+			},
+			{
+				"label": "Local and Z-Wave control enabled",
+				"value": 1
+			},
+			{
+				"label": "Local and Z-Wave control disabled",
+				"value": 2
+			}
+		]
 	},
 	"3way_switch_type": {
 		"label": "3-Way Switch Type",

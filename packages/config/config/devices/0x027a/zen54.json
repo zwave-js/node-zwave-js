@@ -104,25 +104,8 @@
 		},
 		{
 			"#": "11",
-			"label": "Smart Bulb Mode: Local/Z-Wave Control",
-			"description": "Reports are always sent to the hub, regardless of this setting.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Local control disabled, Z-Wave control enabled",
-					"value": 0
-				},
-				{
-					"label": "Local and Z-Wave control enabled",
-					"value": 1
-				},
-				{
-					"label": "Local and Z-Wave control disabled",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#local_zwave_control",
+			"label": "Smart Bulb Mode: Local/Z-Wave Control"
 		},
 		{
 			"#": "13",
