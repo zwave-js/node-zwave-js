@@ -13,6 +13,20 @@
 			}
 		]
 	},
+	"auto_timer_base_seconds": {
+		"valueSize": 4,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 4294967295,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
 	"auto_off_timer": {
 		"label": "Auto Turn-Off Timer",
 		"$import": "#auto_timer_base"
@@ -68,6 +82,14 @@
 	"auto_on_timer_duration": {
 		"label": "Auto Turn-On Timer Duration",
 		"$import": "#auto_timer_duration_base"
+	},
+	"auto_off_timer_seconds": {
+		"label": "Auto Turn-Off Timer",
+		"$import": "#auto_timer_base_seconds"
+	},
+	"auto_on_timer_seconds": {
+		"label": "Auto Turn-On Timer",
+		"$import": "#auto_timer_base_seconds"
 	},
 	"enable_scene_control": {
 		"$import": "~/templates/master_template.json#base_enable_disable",

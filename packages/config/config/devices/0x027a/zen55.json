@@ -1,0 +1,185 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN55 LR",
+	"description": "DC Signal Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0110"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Turn On Relay On Alarm",
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"$import": "templates/zooz_template.json#auto_off_timer_seconds"
+		},
+		{
+			"#": "4",
+			"$import": "templates/zooz_template.json#auto_on_timer_seconds"
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "6",
+			"label": "Group 2 (Smoke Alarm): Basic Set Configuration",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Smoke Detected: 0xff (On), No Smoke: 0x00 (Off)",
+					"value": 0
+				},
+				{
+					"label": "Smoke Detected: 0x00 (Off), No Smoke: 0xff (On)",
+					"value": 1
+				},
+				{
+					"label": "Smoke Detected: 0xff (On), No Smoke: no command",
+					"value": 2
+				},
+				{
+					"label": "Smoke Detected: 0x00 (Off), No Smoke: no command",
+					"value": 3
+				},
+				{
+					"label": "Smoke Detected: no command, No Smoke: 0x00 (Off)",
+					"value": 4
+				},
+				{
+					"label": "Smoke Detected: no command, No Smoke: 0xff (On)",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Group 3 (CO Alarm): Basic Set Configuration",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "CO Detected: 0xff (On), No CO: 0x00 (Off)",
+					"value": 0
+				},
+				{
+					"label": "CO Detected: 0x00 (Off), No CO: 0xff (On)",
+					"value": 1
+				},
+				{
+					"label": "CO Detected: 0xff (On), No CO: no command",
+					"value": 2
+				},
+				{
+					"label": "CO Detected: 0x00 (Off), No CO: no command",
+					"value": 3
+				},
+				{
+					"label": "CO Detected: no command, No CO: 0x00 (Off)",
+					"value": 4
+				},
+				{
+					"label": "CO Detected: no command, No CO: 0xff (On)",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Enabled Features",
+			"description": "After changing this parameter, the device must be excluded and re-included",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Smoke & CO Sensor",
+					"value": 1
+				},
+				{
+					"label": "CO Sensor",
+					"value": 2
+				},
+				{
+					"label": "Smoke Sensor",
+					"value": 3
+				},
+				{
+					"label": "Relay, Smoke & CO Sensor",
+					"value": 4
+				},
+				{
+					"label": "Relay & CO Sensor",
+					"value": 5
+				},
+				{
+					"label": "Relay & Smoke Sensor",
+					"value": 6
+				},
+				{
+					"label": "Relay",
+					"value": 7
+				}
+			]
+		},
+		{
+			"$if": "firmwareVersion >= 1.10",
+			"#": "9[0x01]",
+			"label": "Report Type: Signal Sensor",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Binary Switch Report",
+					"value": 0
+				},
+				{
+					"label": "Basic Report",
+					"value": 1
+				}
+			]
+		},
+		{
+			"$if": "firmwareVersion >= 1.10",
+			"#": "9[0x02]",
+			"label": "Report Type: Z-Wave",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Binary Switch Report",
+					"value": 0
+				},
+				{
+					"label": "Basic Report",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"$import": "templates/zooz_template.json#zen5x_metadata",
+		"manual": "https://cdn.shopify.com/s/files/1/0218/7704/files/zooz-800-lr-dc-signal-sensor-zen55-manual.pdf"
+	}
+}
