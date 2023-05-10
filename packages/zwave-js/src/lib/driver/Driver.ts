@@ -23,6 +23,7 @@ import {
 	Security2Command,
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
+	SecurityCommand,
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
@@ -3619,9 +3620,12 @@ ${handlers.length} left`,
 	 * This method expects `cc` to be unwrapped.
 	 */
 	private shouldDiscardCC(cc: CommandClass): boolean {
-		// For Command Classes supported securely, a controlling node MUST discard
-		// the command from a supporting node if not received at the highest common
-		// security level between the controlling node and the sending S2 node.
+		// With Security S0, some commands may be accepted without encryption, some require it
+		// With Security S2, a node MUST support its command classes only when communication is using its
+		// highest Security Class granted during security bootstrapping.
+
+		// We already discard lower S2 keys when decrypting, so all that's left here to check is if the
+		// CC is encrypted at all.
 
 		const node = this._controller?.nodes.get(cc.nodeId as number);
 		if (!node) {
@@ -3634,33 +3638,63 @@ ${handlers.length} left`,
 			return true;
 		}
 
-		switch (node.getHighestSecurityClass()) {
-			case SecurityClass.None:
-			case SecurityClass.Temporary:
-				return false;
+		const secClass = node.getHighestSecurityClass();
+		if (
+			secClass === SecurityClass.None ||
+			secClass === SecurityClass.Temporary
+		) {
+			return false;
 		}
 
-		let isSecure = false;
-		let requiresSecurity = false;
-		while (true) {
-			if (isEncapsulatingCommandClass(cc)) {
-				if (
-					cc.ccId === CommandClasses.Security ||
-					cc.ccId === CommandClasses["Security 2"]
-				) {
-					isSecure = true;
+		const expectedSecurityCC = securityClassIsS2(secClass)
+			? CommandClasses["Security 2"]
+			: secClass === SecurityClass.S0_Legacy
+			? CommandClasses.Security
+			: undefined;
+
+		const acceptAnyways = (cmd: CommandClass): boolean => {
+			// Some CCs are always accepted, regardless of security class
+			if (cmd instanceof SecurityCC) {
+				switch (cmd.ccCommand) {
+					// Cannot be sent encapsulated:
+					case SecurityCommand.NonceGet:
+					case SecurityCommand.NonceReport:
+					case SecurityCommand.SchemeGet:
+					case SecurityCommand.SchemeReport:
+						return true;
+
+					// Needs to be accepted to be able interview/respond to S0 queries
+					case SecurityCommand.CommandsSupportedGet:
+					case SecurityCommand.CommandsSupportedReport:
+						return cmd.isEncapsulatedWith(
+							CommandClasses.Security,
+							SecurityCommand.CommandEncapsulation,
+						);
 				}
+			}
+			return false;
+		};
+
+		let isSecure = false;
+		let requiresSecurity = securityClassIsS2(secClass);
+		while (true) {
+			if (cc.ccId === expectedSecurityCC || acceptAnyways(cc)) {
+				isSecure = true;
+			}
+
+			if (isEncapsulatingCommandClass(cc)) {
 				cc = cc.encapsulated;
 			} else if (isMultiEncapsulatingCommandClass(cc)) {
-				requiresSecurity = cc.encapsulated.some((cmd) =>
+				requiresSecurity ||= cc.encapsulated.some((cmd) =>
 					node.isCCSecure(cmd.ccId),
 				);
 				break;
 			} else {
-				requiresSecurity =
+				requiresSecurity ||=
 					node.isCCSecure(cc.ccId) &&
 					cc.ccId !== CommandClasses.Security &&
 					cc.ccId !== CommandClasses["Security 2"];
+
 				break;
 			}
 		}
@@ -3668,11 +3702,12 @@ ${handlers.length} left`,
 			// none found, don't accept the CC
 			this.controllerLog.logNode(
 				cc.nodeId as number,
-				`command must be encrypted but was received without Security encapsulation - discarding it...`,
+				`command was received at a lower security level than expected - discarding it...`,
 				"warn",
 			);
 			return true;
 		}
+
 		return false;
 	}
 
