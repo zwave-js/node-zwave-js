@@ -11,7 +11,7 @@
 	],
 	"firmwareVersion": {
 		"min": "2.2.5",
-		"max": "2.2.7"
+		"max": "2.4"
 	},
 	"paramInformation": [
 		{
