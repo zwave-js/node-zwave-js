@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	encodeBitMask,
 	getDSTInfo,
+	isUnsupervisedOrSucceeded,
 	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
@@ -44,6 +45,7 @@ import { V } from "../lib/Values";
 import {
 	ScheduleEntryLockCommand,
 	ScheduleEntryLockDailyRepeatingSchedule,
+	ScheduleEntryLockScheduleKind,
 	ScheduleEntryLockSetAction,
 	ScheduleEntryLockSlotId,
 	ScheduleEntryLockWeekday,
@@ -51,6 +53,7 @@ import {
 	ScheduleEntryLockYearDaySchedule,
 	Timezone,
 } from "../lib/_Types";
+import { UserCodeCC } from "./UserCodeCC";
 
 export const ScheduleEntryLockCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Schedule Entry Lock"], {
@@ -60,7 +63,77 @@ export const ScheduleEntryLockCCValues = Object.freeze({
 			internal: true,
 		}),
 	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Schedule Entry Lock"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"userEnabled",
+			"userEnabled",
+			(userId: number) => userId,
+			({ property, propertyKey }) =>
+				property === "userEnabled" && typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"scheduleKind",
+			"scheduleKind",
+			(userId: number) => userId,
+			({ property, propertyKey }) =>
+				property === "scheduleKind" && typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+	}),
 });
+
+/** Updates the schedule kind assumed to be active for user in the cache */
+function setUserCodeScheduleKindCached(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+	userId: number,
+	scheduleKind: ScheduleEntryLockScheduleKind,
+): void {
+	applHost
+		.getValueDB(endpoint.nodeId)
+		.setValue(
+			ScheduleEntryLockCCValues.scheduleKind(userId).endpoint(
+				endpoint.index,
+			),
+			scheduleKind,
+		);
+}
+
+/** Updates whether scheduling is active for one or all user(s) in the cache */
+function setUserCodeScheduleEnabledCached(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+	userId: number | undefined,
+	enabled: boolean,
+): void {
+	const setEnabled = (userId: number) => {
+		applHost
+			.getValueDB(endpoint.nodeId)
+			.setValue(
+				ScheduleEntryLockCCValues.userEnabled(userId).endpoint(
+					endpoint.index,
+				),
+				enabled,
+			);
+	};
+
+	if (userId == undefined) {
+		// Enable/disable all users
+		const numUsers =
+			UserCodeCC.getSupportedUsersCached(applHost, endpoint) ?? 0;
+
+		for (let userId = 1; userId <= numUsers; userId++) {
+			setEnabled(userId);
+		}
+	} else {
+		setEnabled(userId);
+	}
+}
 
 @API(CommandClasses["Schedule Entry Lock"])
 export class ScheduleEntryLockCCAPI extends CCAPI {
@@ -96,6 +169,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		enabled: boolean,
 		userId?: number,
 	): Promise<SupervisionResult | undefined> {
+		let result: SupervisionResult | undefined;
 		if (userId != undefined) {
 			this.assertSupportsCommand(
 				ScheduleEntryLockCommand,
@@ -109,7 +183,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				enabled,
 			});
 
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			result = await this.applHost.sendCommand(cc, this.commandOptions);
 		} else {
 			this.assertSupportsCommand(
 				ScheduleEntryLockCommand,
@@ -122,8 +196,20 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				enabled,
 			});
 
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			result = await this.applHost.sendCommand(cc, this.commandOptions);
 		}
+
+		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
+			// Remember the new state in the cache
+			setUserCodeScheduleEnabledCached(
+				this.applHost,
+				this.endpoint,
+				userId,
+				enabled,
+			);
+		}
+
+		return result;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -191,7 +277,30 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				  }),
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+
+		// Editing (but not erasing) a schedule will enable scheduling for that user
+		// and switch it to the current scheduling kind
+		if (
+			!!schedule &&
+			this.isSinglecast() &&
+			isUnsupervisedOrSucceeded(result)
+		) {
+			setUserCodeScheduleEnabledCached(
+				this.applHost,
+				this.endpoint,
+				slot.userId,
+				true,
+			);
+			setUserCodeScheduleKindCached(
+				this.applHost,
+				this.endpoint,
+				slot.userId,
+				ScheduleEntryLockScheduleKind.WeekDay,
+			);
+		}
+
+		return result;
 	}
 
 	@validateArgs()
@@ -263,7 +372,30 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				  }),
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+
+		// Editing (but not erasing) a schedule will enable scheduling for that user
+		// and switch it to the current scheduling kind
+		if (
+			!!schedule &&
+			this.isSinglecast() &&
+			isUnsupervisedOrSucceeded(result)
+		) {
+			setUserCodeScheduleEnabledCached(
+				this.applHost,
+				this.endpoint,
+				slot.userId,
+				true,
+			);
+			setUserCodeScheduleKindCached(
+				this.applHost,
+				this.endpoint,
+				slot.userId,
+				ScheduleEntryLockScheduleKind.YearDay,
+			);
+		}
+
+		return result;
 	}
 
 	@validateArgs()
@@ -344,7 +476,30 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			},
 		);
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+
+		// Editing (but not erasing) a schedule will enable scheduling for that user
+		// and switch it to the current scheduling kind
+		if (
+			!!schedule &&
+			this.isSinglecast() &&
+			isUnsupervisedOrSucceeded(result)
+		) {
+			setUserCodeScheduleEnabledCached(
+				this.applHost,
+				this.endpoint,
+				slot.userId,
+				true,
+			);
+			setUserCodeScheduleKindCached(
+				this.applHost,
+				this.endpoint,
+				slot.userId,
+				ScheduleEntryLockScheduleKind.DailyRepeating,
+			);
+		}
+
+		return result;
 	}
 
 	@validateArgs()
@@ -540,6 +695,50 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 					),
 				) || 0
 		);
+	}
+
+	/**
+	 * Returns whether scheduling for a given user ID (most likely) enabled. Since the Schedule Entry Lock CC
+	 * provides no way to query the enabled state, Z-Wave JS tracks this in its own cache.
+	 *
+	 * This only works AFTER the interview process and is likely to be wrong if a device
+	 * with existing schedules is queried. To be sure, disable scheduling for all users and enable
+	 * only the desired ones.
+	 */
+	public static getUserCodeScheduleEnabledCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		userId: number,
+	): boolean {
+		return !!applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				ScheduleEntryLockCCValues.userEnabled(userId).endpoint(
+					endpoint.index,
+				),
+			);
+	}
+
+	/**
+	 * Returns which scheduling kind is (most likely) enabled for a given user ID . Since the Schedule Entry Lock CC
+	 * provides no way to query the current state, Z-Wave JS tracks this in its own cache.
+	 *
+	 * This only works AFTER the interview process and is likely to be wrong if a device
+	 * with existing schedules is queried. To be sure, edit a schedule of the desired kind
+	 * which will automatically switch the user to that scheduling kind.
+	 */
+	public static getUserCodeScheduleKindCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		userId: number,
+	): ScheduleEntryLockScheduleKind | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue<ScheduleEntryLockScheduleKind>(
+				ScheduleEntryLockCCValues.scheduleKind(userId).endpoint(
+					endpoint.index,
+				),
+			);
 	}
 }
 
