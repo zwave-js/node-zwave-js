@@ -1,5 +1,5 @@
 // @ts-check
-const { CommandClasses } = require("@zwave-js/core");
+const { CommandClasses, ConfigValueFormat } = require("@zwave-js/core");
 const { ccCaps } = require("@zwave-js/testing");
 
 module.exports.default = {
@@ -10,12 +10,30 @@ module.exports.default = {
 				commandClasses: [
 					CommandClasses.Version,
 					ccCaps({
-						ccId: CommandClasses["Window Covering"],
+						ccId: CommandClasses.Configuration,
 						isSupported: true,
-						version: 1,
-						supportedParameters: new Array(24)
-							.fill(0)
-							.map((_, i) => i),
+						version: 4,
+						parameters: [
+							{
+								"#": 10,
+								valueSize: 1,
+								format: ConfigValueFormat.SignedInteger,
+								minValue: -128,
+								maxValue: 0,
+								defaultValue: 0,
+								name: "Test Param 1",
+							},
+							{
+								"#": 255,
+								valueSize: 1,
+								format: ConfigValueFormat.BitField,
+								minValue: new Set([]),
+								maxValue: new Set([1, 4, 7]),
+								defaultValue: new Set([1]),
+								name: "Test Param 2",
+								info: "This is a description",
+							},
+						],
 					}),
 				],
 			},

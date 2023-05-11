@@ -1,4 +1,23 @@
-import { CommandClasses } from "@zwave-js/core";
+import { CommandClasses, ConfigValue, ConfigValueFormat } from "@zwave-js/core";
+
+export interface ConfigurationCCCapabilities {
+	// We don't have bulk support implemented in the mocks
+	bulkSupport?: false;
+
+	parameters: {
+		"#": number;
+		valueSize: number;
+		name?: string;
+		info?: string;
+		format?: ConfigValueFormat;
+		minValue?: ConfigValue;
+		maxValue?: ConfigValue;
+		defaultValue?: ConfigValue;
+		readonly?: boolean;
+		isAdvanced?: boolean;
+		altersCapabilities?: boolean;
+	}[];
+}
 
 export interface NotificationCCCapabilities {
 	supportsV1Alarm: false;
@@ -20,6 +39,7 @@ export interface WindowCoveringCCCapabilities {
 }
 
 export type CCSpecificCapabilities = {
+	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
 	[106 /* Window Covering */]: WindowCoveringCCCapabilities;

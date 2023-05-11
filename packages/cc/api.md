@@ -4099,21 +4099,24 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCInfoReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCInfoReportOptions);
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
-    get info(): string;
+    info: string;
     // (undocumented)
     mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: ConfigurationCCInfoReport[]): void;
     // (undocumented)
-    get parameter(): number;
+    readonly parameter: number;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    get reportsToFollow(): number;
+    readonly reportsToFollow: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -4174,50 +4177,56 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCPropertiesReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCPropertiesReportOptions);
     // (undocumented)
-    get altersCapabilities(): boolean | undefined;
+    altersCapabilities: boolean | undefined;
     // (undocumented)
-    get defaultValue(): ConfigValue | undefined;
+    defaultValue: ConfigValue | undefined;
     // (undocumented)
-    get isAdvanced(): boolean | undefined;
+    isAdvanced: boolean | undefined;
     // (undocumented)
-    get isReadonly(): boolean | undefined;
+    isReadonly: boolean | undefined;
     // (undocumented)
-    get maxValue(): ConfigValue | undefined;
+    maxValue: ConfigValue | undefined;
     // (undocumented)
-    get minValue(): ConfigValue | undefined;
+    minValue: ConfigValue | undefined;
     // (undocumented)
-    get nextParameter(): number;
+    nextParameter: number;
     // (undocumented)
-    get noBulkSupport(): boolean | undefined;
+    noBulkSupport: boolean | undefined;
     // (undocumented)
-    get parameter(): number;
+    parameter: number;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
-    get valueFormat(): ConfigValueFormat;
+    valueFormat: ConfigValueFormat;
     // (undocumented)
-    get valueSize(): number;
+    valueSize: number;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConfigurationCCReport extends ConfigurationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCReportOptions);
     // (undocumented)
-    get parameter(): number;
+    parameter: number;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
-    get value(): ConfigValue;
+    value: ConfigValue;
     // (undocumented)
-    get valueSize(): number;
+    valueSize: number;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
