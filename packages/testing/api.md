@@ -8,6 +8,8 @@
 
 import { CommandClasses } from '@zwave-js/core';
 import { CommandClassInfo } from '@zwave-js/core';
+import { ConfigValue } from '@zwave-js/core';
+import { ConfigValueFormat } from '@zwave-js/core';
 import { FunctionType } from '@zwave-js/serial/safe';
 import { ICommandClass } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
@@ -31,10 +33,33 @@ export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> = T ex
 //
 // @public (undocumented)
 export type CCSpecificCapabilities = {
+    [CommandClasses.Configuration]: ConfigurationCCCapabilities;
     [CommandClasses.Notification]: NotificationCCCapabilities;
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
 };
+
+// Warning: (ae-missing-release-tag) "ConfigurationCCCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCCapabilities {
+    // (undocumented)
+    bulkSupport?: false;
+    // (undocumented)
+    parameters: {
+        "#": number;
+        valueSize: number;
+        name?: string;
+        info?: string;
+        format?: ConfigValueFormat;
+        minValue?: ConfigValue;
+        maxValue?: ConfigValue;
+        defaultValue?: ConfigValue;
+        readonly?: boolean;
+        isAdvanced?: boolean;
+        altersCapabilities?: boolean;
+    }[];
+}
 
 // Warning: (ae-missing-release-tag) "createMockZWaveAckFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
