@@ -13316,11 +13316,11 @@ export class ScheduleEntryLockCC extends CommandClass {
     static getNumWeekDaySlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
     static getNumYearDaySlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
     // (undocumented)
-    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.WeekDay, userId: number, slotId: number): ScheduleEntryLockWeekDaySchedule | undefined;
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.WeekDay, userId: number, slotId: number): ScheduleEntryLockWeekDaySchedule | false | undefined;
     // (undocumented)
-    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.YearDay, userId: number, slotId: number): ScheduleEntryLockYearDaySchedule | undefined;
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.YearDay, userId: number, slotId: number): ScheduleEntryLockYearDaySchedule | false | undefined;
     // (undocumented)
-    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating, userId: number, slotId: number): ScheduleEntryLockDailyRepeatingSchedule | undefined;
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating, userId: number, slotId: number): ScheduleEntryLockDailyRepeatingSchedule | false | undefined;
     static getUserCodeScheduleEnabledCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, userId: number): boolean;
     static getUserCodeScheduleKindCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, userId: number): ScheduleEntryLockScheduleKind | undefined;
     // (undocumented)

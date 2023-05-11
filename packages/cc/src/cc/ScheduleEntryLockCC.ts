@@ -120,6 +120,7 @@ function persistSchedule(
 		| ScheduleEntryLockWeekDaySchedule
 		| ScheduleEntryLockYearDaySchedule
 		| ScheduleEntryLockDailyRepeatingSchedule
+		| false
 		| undefined,
 ): void {
 	const scheduleValue = ScheduleEntryLockCCValues.schedule(
@@ -128,7 +129,7 @@ function persistSchedule(
 		slotId,
 	);
 
-	if (schedule) {
+	if (schedule != undefined) {
 		this.setValue(applHost, scheduleValue, schedule);
 	} else {
 		this.removeValue(applHost, scheduleValue);
@@ -352,7 +353,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				ScheduleEntryLockScheduleKind.WeekDay,
 				slot.userId,
 				slot.slotId,
-				schedule,
+				schedule ?? false,
 			);
 		}
 
@@ -455,7 +456,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				ScheduleEntryLockScheduleKind.YearDay,
 				slot.userId,
 				slot.slotId,
-				schedule,
+				schedule ?? false,
 			);
 		}
 
@@ -567,7 +568,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				ScheduleEntryLockScheduleKind.DailyRepeating,
 				slot.userId,
 				slot.slotId,
-				schedule,
+				schedule ?? false,
 			);
 		}
 
@@ -819,7 +820,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		scheduleKind: ScheduleEntryLockScheduleKind.WeekDay,
 		userId: number,
 		slotId: number,
-	): ScheduleEntryLockWeekDaySchedule | undefined;
+	): ScheduleEntryLockWeekDaySchedule | false | undefined;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
@@ -827,7 +828,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		scheduleKind: ScheduleEntryLockScheduleKind.YearDay,
 		userId: number,
 		slotId: number,
-	): ScheduleEntryLockYearDaySchedule | undefined;
+	): ScheduleEntryLockYearDaySchedule | false | undefined;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
@@ -835,11 +836,13 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating,
 		userId: number,
 		slotId: number,
-	): ScheduleEntryLockDailyRepeatingSchedule | undefined;
+	): ScheduleEntryLockDailyRepeatingSchedule | false | undefined;
 
 	/**
 	 * Returns the assumed state of a schedule. Since the Schedule Entry Lock CC
 	 * provides no way to query the current state, Z-Wave JS tracks this in its own cache.
+	 *
+	 * A return value of `false` means the slot is empty, a return value of `undefined` means the information is not cached yet.
 	 *
 	 * This only works AFTER the interview process.
 	 */
@@ -853,6 +856,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		| ScheduleEntryLockWeekDaySchedule
 		| ScheduleEntryLockYearDaySchedule
 		| ScheduleEntryLockDailyRepeatingSchedule
+		| false
 		| undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1204,7 +1208,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
 						stopHour: this.stopHour!,
 						stopMinute: this.stopMinute!,
 				  }
-				: undefined,
+				: false,
 		);
 
 		return true;
@@ -1531,7 +1535,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
 						stopHour: this.stopHour!,
 						stopMinute: this.stopMinute!,
 				  }
-				: undefined,
+				: false,
 		);
 
 		return true;
@@ -1918,7 +1922,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 						durationHour: this.durationHour!,
 						durationMinute: this.durationMinute!,
 				  }
-				: undefined,
+				: false,
 		);
 
 		return true;
