@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.19.0 (2023-05-11)
 ### Features
 * `Schedule Entry Lock CC`: schedules, enabled users, and the active scheduling kind for each user are now cached and can be read from the cache (#5787)
 
