@@ -1448,6 +1448,7 @@ export interface ConfigurationCCReportOptions extends CCCommandOptions {
 	parameter: number;
 	value: ConfigValue;
 	valueSize: number;
+	valueFormat?: ConfigValueFormat;
 }
 
 @CCCommand(ConfigurationCommand.Report)
@@ -1482,8 +1483,14 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			this.parameter = options.parameter;
 			this.value = options.value;
 			this.valueSize = options.valueSize;
+			this.valueFormat = options.valueFormat;
 		}
 	}
+
+	public parameter: number;
+	public value: ConfigValue;
+	public valueSize: number;
+	private valueFormat?: ConfigValueFormat; // only used for serialization
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
@@ -1569,10 +1576,6 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return true;
 	}
 
-	public parameter: number;
-	public value: ConfigValue;
-	public valueSize: number;
-
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.parameter, this.valueSize & 0b111]),
@@ -1580,7 +1583,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		]);
 		const valueFormat =
 			typeof this.value === "number"
-				? ConfigValueFormat.SignedInteger
+				? this.valueFormat ?? ConfigValueFormat.SignedInteger
 				: ConfigValueFormat.BitField;
 		serializeValue(
 			this.payload,
@@ -1633,11 +1636,9 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.parameter = this.payload[0];
+			this.allowUnexpectedResponse = false;
 		} else {
 			this.parameter = options.parameter;
 			this.allowUnexpectedResponse =
@@ -1686,10 +1687,22 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload[0];
+			this.resetToDefault = !!(this.payload[1] & 0b1000_0000);
+			this.valueSize = this.payload[1] & 0b111;
+
+			// Ensure we received a valid report
+			validatePayload(
+				this.valueSize >= 1,
+				this.valueSize <= 4,
+				this.payload.length >= 2 + this.valueSize,
+			);
+			// Parse the value as signed integer. We don't know the format here.
+			this.value = parseValue(
+				this.payload.slice(2),
+				this.valueSize,
+				ConfigValueFormat.SignedInteger,
 			);
 		} else {
 			this.parameter = options.parameter;
@@ -2339,11 +2352,8 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload.readUInt16BE(0);
 		} else {
 			this.parameter = options.parameter;
 		}
@@ -2624,11 +2634,8 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload.readUInt16BE(0);
 		} else {
 			this.parameter = options.parameter;
 		}
