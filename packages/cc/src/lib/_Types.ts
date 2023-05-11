@@ -1267,6 +1267,12 @@ export interface ScheduleEntryLockWeekDaySchedule {
 	stopMinute: number;
 }
 
+export enum ScheduleEntryLockScheduleKind {
+	WeekDay,
+	YearDay,
+	DailyRepeating,
+}
+
 export enum Security2Command {
 	NonceGet = 0x01,
 	NonceReport = 0x02,
