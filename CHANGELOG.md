@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* `Schedule Entry Lock CC`: schedules, enabled users, and the active scheduling kind for each user are now cached and can be read from the cache (#5787)
+
+### Bugfixes
+* `Sound Switch CC`: configuration is now queried after the tone count to comply with overly strict certification requirements (#5775)
+* Fixed the logic for determining whether driver logs should be printed to `stdout` (#5774)
+* Assign Lifelines for association groups that send specific notifications (#5780)
+* Received commands with lower-than-expected security level are now discarded in more situations (#5783)
+
+### Config file changes
+* Add Zooz ZEN53, 54, 55 (#5779)
+* Extend version range for Vesternet VES-ZW-HLD-016 (#5782)
+
 ## 10.18.0 (2023-05-05)
 ### Features
 * Expose methods to read cached user code and user ID status (#5759)
