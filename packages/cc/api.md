@@ -13316,6 +13316,14 @@ export class ScheduleEntryLockCC extends CommandClass {
     static getNumWeekDaySlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
     static getNumYearDaySlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
     // (undocumented)
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.WeekDay, userId: number, slotId: number): ScheduleEntryLockWeekDaySchedule | undefined;
+    // (undocumented)
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.YearDay, userId: number, slotId: number): ScheduleEntryLockYearDaySchedule | undefined;
+    // (undocumented)
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating, userId: number, slotId: number): ScheduleEntryLockDailyRepeatingSchedule | undefined;
+    static getUserCodeScheduleEnabledCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, userId: number): boolean;
+    static getUserCodeScheduleKindCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, userId: number): ScheduleEntryLockScheduleKind | undefined;
+    // (undocumented)
     interview(applHost: ZWaveApplicationHost): Promise<void>;
 }
 
@@ -13345,6 +13353,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
     durationHour?: number;
     // (undocumented)
     durationMinute?: number;
+    // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost): boolean;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
@@ -13494,6 +13504,90 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 //
 // @public (undocumented)
 export const ScheduleEntryLockCCValues: Readonly<{
+    schedule: ((scheduleKind: ScheduleEntryLockScheduleKind, userId: number, slotId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "schedule";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "schedule";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+    scheduleKind: ((userId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "scheduleKind";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "scheduleKind";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+    userEnabled: ((userId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "userEnabled";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "userEnabled";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
     numDailyRepeatingSlots: {
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
@@ -13594,6 +13688,8 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
     // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCWeekDayScheduleReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleReportOptions);
     // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost): boolean;
+    // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     slotId: number;
@@ -13672,6 +13768,8 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockCC {
     // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCYearDayScheduleReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleReportOptions);
+    // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost): boolean;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
@@ -13801,6 +13899,18 @@ export interface ScheduleEntryLockDailyRepeatingSchedule {
     startMinute: number;
     // (undocumented)
     weekdays: ScheduleEntryLockWeekday[];
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockScheduleKind" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ScheduleEntryLockScheduleKind {
+    // (undocumented)
+    DailyRepeating = 2,
+    // (undocumented)
+    WeekDay = 0,
+    // (undocumented)
+    YearDay = 1
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockSetAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
