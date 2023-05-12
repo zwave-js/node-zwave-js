@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.20.0 (2023-05-12)
 ### Features
 * Add `states` property to `boolean` value metadata to declare which values are accepted (#5792)
 
