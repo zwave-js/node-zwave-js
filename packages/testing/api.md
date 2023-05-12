@@ -37,6 +37,7 @@ export type CCSpecificCapabilities = {
     [CommandClasses.Notification]: NotificationCCCapabilities;
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
+    [144]: EnergyProductionCCCapabilities;
 };
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -70,6 +71,31 @@ export function createMockZWaveAckFrame(options?: Partial<Omit<MockZWaveAckFrame
 //
 // @public (undocumented)
 export function createMockZWaveRequestFrame(payload: ICommandClass, options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): MockZWaveRequestFrame;
+
+// Warning: (ae-missing-release-tag) "EnergyProductionCCCapabilities" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EnergyProductionCCCapabilities {
+    // (undocumented)
+    values: {
+        Power: {
+            value: number;
+            scale: 0;
+        };
+        "Production Total": {
+            value: number;
+            scale: 0;
+        };
+        "Production Today": {
+            value: number;
+            scale: 0;
+        };
+        "Total Time": {
+            value: number;
+            scale: 0 | 1;
+        };
+    };
+}
 
 // Warning: (ae-missing-release-tag) "MOCK_FRAME_ACK_TIMEOUT" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

@@ -38,11 +38,33 @@ export interface WindowCoveringCCCapabilities {
 	supportedParameters: number[];
 }
 
+export interface EnergyProductionCCCapabilities {
+	values: {
+		Power: {
+			value: number;
+			scale: 0;
+		};
+		"Production Total": {
+			value: number;
+			scale: 0;
+		};
+		"Production Today": {
+			value: number;
+			scale: 0;
+		};
+		"Total Time": {
+			value: number;
+			scale: 0 | 1;
+		};
+	};
+}
+
 export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
 	[106 /* Window Covering */]: WindowCoveringCCCapabilities;
+	[144 /* Energy Production */]: EnergyProductionCCCapabilities;
 };
 
 export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> =
