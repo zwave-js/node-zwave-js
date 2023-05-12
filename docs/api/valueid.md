@@ -112,6 +112,10 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	default?: number;
+	states?: {
+		true?: string;
+		false?: string;
+	};
 }
 ```
 
