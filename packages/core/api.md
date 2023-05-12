@@ -441,20 +441,26 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
     // (undocumented)
     default?: ConfigValue;
     // (undocumented)
-    format?: ConfigValueFormat;
+    description?: string;
     // (undocumented)
+    format?: ConfigValueFormat;
+    // @deprecated (undocumented)
     info?: string;
     // (undocumented)
     isAdvanced?: boolean;
     // (undocumented)
     isFromConfig?: boolean;
     // (undocumented)
+    label?: string;
+    // (undocumented)
     max?: ConfigValue;
     // (undocumented)
     min?: ConfigValue;
-    // (undocumented)
+    // @deprecated (undocumented)
     name?: string;
-    // (undocumented)
+    // Warning: (tsdoc-missing-deprecation-message) The @deprecated block must include a deprecation message, e.g. describing the recommended alternative
+    //
+    // @deprecated (undocumented)
     noBulkSupport?: boolean;
     // (undocumented)
     requiresReInclusion?: boolean;
