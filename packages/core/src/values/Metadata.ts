@@ -107,6 +107,11 @@ export interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	/** The default value */
 	default?: number;
+	/** Possible values and their meaning */
+	states?: {
+		true?: string;
+		false?: string;
+	};
 }
 
 const defineBoolean = define<ValueMetadataBoolean>();

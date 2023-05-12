@@ -86,8 +86,11 @@ export const MultilevelSwitchCCValues = Object.freeze({
 
 		...V.staticProperty("restorePrevious", {
 			...ValueMetadata.WriteOnlyBoolean,
-			label: "Restore previous value" as const,
-		}),
+			label: "Restore previous value",
+			states: {
+				true: "Restore",
+			},
+		} as const),
 
 		...V.staticPropertyWithName(
 			"compatEvent",
@@ -139,6 +142,10 @@ export const MultilevelSwitchCCValues = Object.freeze({
 					...ValueMetadata.WriteOnlyBoolean,
 					label: `Perform a level change (${up})`,
 					valueChangeOptions: ["transitionDuration"],
+					states: {
+						true: "Start",
+						false: "Stop",
+					},
 					ccSpecific: { switchType },
 				} as const;
 			},
@@ -169,6 +176,10 @@ export const MultilevelSwitchCCValues = Object.freeze({
 					...ValueMetadata.WriteOnlyBoolean,
 					label: `Perform a level change (${down})`,
 					valueChangeOptions: ["transitionDuration"],
+					states: {
+						true: "Start",
+						false: "Stop",
+					},
 					ccSpecific: { switchType },
 				} as const;
 			},

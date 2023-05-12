@@ -2891,6 +2891,10 @@ export interface ValueMetadataAny {
 // @public (undocumented)
 export interface ValueMetadataBoolean extends ValueMetadataAny {
     default?: number;
+    states?: {
+        true?: string;
+        false?: string;
+    };
     // (undocumented)
     type: "boolean";
 }

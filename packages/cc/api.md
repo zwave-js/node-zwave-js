@@ -1609,6 +1609,9 @@ export const BasicCCValues: Readonly<{
         readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Restore previous value";
+            readonly states: {
+                true: string;
+            };
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
@@ -7721,6 +7724,9 @@ export const IndicatorCCValues: Readonly<{
         readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Identify";
+            readonly states: {
+                readonly true: "Identify";
+            };
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
@@ -8008,6 +8014,10 @@ export const IrrigationCCValues: Readonly<{
     valveRunStartStop: ((valveId: ValveId) => {
         readonly meta: {
             readonly label: `${string}: Start/Stop`;
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
             readonly type: "boolean";
             readonly readable: true;
             readonly writeable: true;
@@ -8527,6 +8537,9 @@ export const IrrigationCCValues: Readonly<{
         readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Shutoff system";
+            readonly states: {
+                readonly true: "Shutoff";
+            };
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
@@ -10110,6 +10123,9 @@ export const MeterCCValues: Readonly<{
     resetSingle: ((meterType: number) => {
         readonly meta: {
             readonly label: `Reset (${string})`;
+            readonly states: {
+                readonly true: "Reset";
+            };
             readonly ccSpecific: {
                 readonly meterType: number;
             };
@@ -10152,6 +10168,9 @@ export const MeterCCValues: Readonly<{
         readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Reset accumulated values";
+            readonly states: {
+                readonly true: "Reset";
+            };
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
@@ -11419,6 +11438,10 @@ export const MultilevelSwitchCCValues: Readonly<{
         readonly meta: {
             readonly label: `Perform a level change (${string})`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
             readonly ccSpecific: {
                 readonly switchType: SwitchType;
             };
@@ -11450,6 +11473,10 @@ export const MultilevelSwitchCCValues: Readonly<{
         readonly meta: {
             readonly label: `Perform a level change (${string})`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
             readonly ccSpecific: {
                 readonly switchType: SwitchType;
             };
@@ -11568,6 +11595,9 @@ export const MultilevelSwitchCCValues: Readonly<{
         readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Restore previous value";
+            readonly states: {
+                readonly true: "Restore";
+            };
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
@@ -18050,6 +18080,9 @@ export const WindowCoveringCCValues: Readonly<{
     tiltClose99: ((parameter: WindowCoveringParameter) => {
         readonly meta: {
             readonly label: `Close Left - ${string}` | `Close Down - ${string}`;
+            readonly states: {
+                readonly true: "Close";
+            };
             readonly ccSpecific: {
                 readonly parameter: WindowCoveringParameter;
             };
@@ -18083,6 +18116,9 @@ export const WindowCoveringCCValues: Readonly<{
     tiltClose0: ((parameter: WindowCoveringParameter) => {
         readonly meta: {
             readonly label: `Close Right - ${string}` | `Close Up - ${string}`;
+            readonly states: {
+                readonly true: "Close";
+            };
             readonly ccSpecific: {
                 readonly parameter: WindowCoveringParameter;
             };
@@ -18116,6 +18152,9 @@ export const WindowCoveringCCValues: Readonly<{
     positionClose: ((parameter: WindowCoveringParameter) => {
         readonly meta: {
             readonly label: `Close - ${string}`;
+            readonly states: {
+                readonly true: "Close";
+            };
             readonly ccSpecific: {
                 readonly parameter: WindowCoveringParameter;
             };
@@ -18149,6 +18188,9 @@ export const WindowCoveringCCValues: Readonly<{
     open: ((parameter: WindowCoveringParameter) => {
         readonly meta: {
             readonly label: `Open - ${string}`;
+            readonly states: {
+                readonly true: "Open";
+            };
             readonly ccSpecific: {
                 readonly parameter: WindowCoveringParameter;
             };

@@ -204,6 +204,9 @@ export const WindowCoveringCCValues = Object.freeze({
 						WindowCoveringParameter,
 						parameter,
 					)}`,
+					states: {
+						true: "Open",
+					},
 					ccSpecific: {
 						parameter,
 					},
@@ -227,6 +230,9 @@ export const WindowCoveringCCValues = Object.freeze({
 						WindowCoveringParameter,
 						parameter,
 					)}`,
+					states: {
+						true: "Close",
+					},
 					ccSpecific: {
 						parameter,
 					},
@@ -259,6 +265,9 @@ export const WindowCoveringCCValues = Object.freeze({
 						WindowCoveringParameter,
 						parameter,
 					)}`,
+					states: {
+						true: "Close",
+					},
 					ccSpecific: {
 						parameter,
 					},
@@ -291,6 +300,9 @@ export const WindowCoveringCCValues = Object.freeze({
 						WindowCoveringParameter,
 						parameter,
 					)}`,
+					states: {
+						true: "Close",
+					},
 					ccSpecific: {
 						parameter,
 					},

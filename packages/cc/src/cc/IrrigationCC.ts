@@ -182,6 +182,9 @@ export const IrrigationCCValues = Object.freeze({
 		...V.staticPropertyWithName("shutoffSystem", "shutoff", {
 			...ValueMetadata.WriteOnlyBoolean,
 			label: `Shutoff system`,
+			states: {
+				true: "Shutoff",
+			},
 		} as const),
 	}),
 
@@ -461,6 +464,10 @@ export const IrrigationCCValues = Object.freeze({
 				({
 					...ValueMetadata.Boolean,
 					label: `${valveIdToMetadataPrefix(valveId)}: Start/Stop`,
+					states: {
+						true: "Start",
+						false: "Stop",
+					},
 				} as const),
 		),
 	}),
