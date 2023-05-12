@@ -2179,6 +2179,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 
 		this.extendParamInformation(applHost, this.parameter, undefined, {
 			name: this.name,
+			label: this.name,
 		});
 		return true;
 	}
@@ -2298,6 +2299,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 
 		this.extendParamInformation(applHost, this.parameter, undefined, {
 			info: this.info,
+			description: this.info,
 		});
 		return true;
 	}
@@ -2497,18 +2499,22 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				this.valueFormat === ConfigValueFormat.UnsignedInteger
 					? "number"
 					: "number[]";
-			const paramInfo: Partial<ConfigurationMetadata> = stripUndefined({
+			const paramInfo = stripUndefined({
 				type: valueType,
-				valueFormat: this.valueFormat,
+				format: this.valueFormat,
 				valueSize: this.valueSize,
-				minValue: this.minValue,
-				maxValue: this.maxValue,
-				defaultValue: this.defaultValue,
+				min: this.minValue,
+				max: this.maxValue,
+				default: this.defaultValue,
 				requiresReInclusion: this.altersCapabilities,
+				readable: true,
 				writeable: !this.isReadonly,
+				allowManualEntry: true,
 				isAdvanced: this.isAdvanced,
 				noBulkSupport: this.noBulkSupport,
-			});
+				isFromConfig: false,
+			} as const satisfies ConfigurationMetadata);
+
 			this.extendParamInformation(
 				applHost,
 				this.parameter,

@@ -164,8 +164,13 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	unit?: string;
 	valueSize?: number;
 	format?: ConfigValueFormat;
+	label?: string;
+	description?: string;
+	/** @deprecated Use the `label` property instead */
 	name?: string;
+	/** @deprecated Use the `description` property instead */
 	info?: string;
+	/** @deprecated */
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	requiresReInclusion?: boolean;
