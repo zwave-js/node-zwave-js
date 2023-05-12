@@ -379,6 +379,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			throw new ZWaveError(
 				`Node ${nodeId} was not found!`,
 				ZWaveErrorCodes.Controller_NodeNotFound,
+				nodeId,
 			);
 		});
 

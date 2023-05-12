@@ -3059,6 +3059,17 @@ export class Driver
 						"warn",
 					);
 					return MessageHeaders.ACK;
+
+				case ZWaveErrorCodes.Controller_NodeNotFound:
+					this.driverLog.print(
+						`Dropping message because ${
+							typeof e.context === "number"
+								? `node ${e.context}`
+								: "the node"
+						} does not exist.`,
+						"warn",
+					);
+					return MessageHeaders.ACK;
 			}
 		} else {
 			if (/database is not open/.test(e.message)) {
