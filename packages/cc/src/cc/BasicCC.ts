@@ -64,6 +64,9 @@ export const BasicCCValues = Object.freeze({
 		...V.staticProperty("restorePrevious", {
 			...ValueMetadata.WriteOnlyBoolean,
 			label: "Restore previous value" as const,
+			states: {
+				true: "Restore",
+			},
 		}),
 
 		// TODO: This should really not be a static CC value, but depend on compat flags:

@@ -67,6 +67,9 @@ export const IndicatorCCValues = Object.freeze({
 			{
 				...ValueMetadata.WriteOnlyBoolean,
 				label: "Identify",
+				states: {
+					true: "Identify",
+				},
 			} as const,
 			{ minVersion: 3 } as const,
 		),
