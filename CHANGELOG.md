@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add `states` property to `boolean` value metadata to declare which values are accepted (#5792)
+
+### Bugfixes
+* Fixed inconsistencies in the metadata of auto-discovered config parameters, which lead to missing labels and value ranges in applications (#5791)
+* Fixed a crash that happens when message cannot be decoded because the node is unknown (#5794)
+
+### Config file changes
+* Add 700 series variant of SimonTech Roller Blind (#5743)
+* Updated Leviton VRS15 metadata (#5764)
+* Correct inclusion instructions for Leviton ZW15R (#5790)
+
+### Changes under the hood
+* Implement mocks for `Configuration CC` (#5788)
+* Implement mocks for `Energy Production CC` (#5789)
+
 ## 10.19.0 (2023-05-11)
 ### Features
 * `Schedule Entry Lock CC`: schedules, enabled users, and the active scheduling kind for each user are now cached and can be read from the cache (#5787)
