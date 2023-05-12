@@ -5624,13 +5624,16 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 //
 // @public (undocumented)
 export class EnergyProductionCCReport extends EnergyProductionCC {
-    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "EnergyProductionCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | EnergyProductionCCReportOptions);
     // (undocumented)
     readonly parameter: EnergyProductionParameter;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost): boolean;
     // (undocumented)
     readonly scale: EnergyProductionScale;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly value: number;
 }
