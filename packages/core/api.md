@@ -2929,6 +2929,7 @@ export interface ValueMetadataDuration extends ValueMetadataAny {
 //
 // @public (undocumented)
 export interface ValueMetadataNumeric extends ValueMetadataAny {
+    allowManualEntry?: boolean;
     default?: number;
     max?: number;
     min?: number;
