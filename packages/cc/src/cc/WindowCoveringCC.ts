@@ -55,62 +55,53 @@ import {
 
 function parameterToMetadataStates(
 	parameter: WindowCoveringParameter,
-	isTargetValue: boolean,
-): Record<number, string> | undefined {
+): Record<number, string> {
 	switch (parameter) {
 		case WindowCoveringParameter["Vertical Slats Angle (no position)"]:
-			if (isTargetValue) return undefined;
-			return {
-				0: "Closing (right)",
-				50: "Opening",
-				99: "Closing (left)",
-			};
 		case WindowCoveringParameter["Vertical Slats Angle"]:
 			return {
-				0: "Closed (right)",
+				0: "Closed (right inside)",
 				50: "Open",
-				99: "Closed (left)",
+				99: "Closed (left inside)",
 			};
 
 		case WindowCoveringParameter["Horizontal Slats Angle (no position)"]:
-			if (isTargetValue) return undefined;
-			return {
-				0: "Closing (up)",
-				50: "Opening",
-				99: "Closing (down)",
-			};
 		case WindowCoveringParameter["Horizontal Slats Angle"]:
 			return {
-				0: "Closed (up)",
+				0: "Closed (up inside)",
 				50: "Open",
-				99: "Closed (down)",
+				99: "Closed (down inside)",
 			};
 	}
 
-	if (parameter % 2 === 1) {
-		// Odd-numbered parameters have position support
-		return {
-			0: "Closed",
-			99: "Open",
-		};
-	} else {
-		if (isTargetValue) return undefined;
-		return {
-			0: "Closing",
-			99: "Opening",
-		};
-	}
+	return {
+		0: "Closed",
+		99: "Open",
+	};
 }
 
-function isTiltParameter(parameter: WindowCoveringParameter): boolean {
-	return (
-		parameter === WindowCoveringParameter["Vertical Slats Angle"] ||
-		parameter ===
-			WindowCoveringParameter["Vertical Slats Angle (no position)"] ||
-		parameter === WindowCoveringParameter["Horizontal Slats Angle"] ||
-		parameter ===
-			WindowCoveringParameter["Horizontal Slats Angle (no position)"]
-	);
+function parameterToLevelChangeLabel(
+	parameter: WindowCoveringParameter,
+	direction: "up" | "down",
+): string {
+	switch (parameter) {
+		// For angle control, both directions are closed, so we specify it explicitly
+		case WindowCoveringParameter["Vertical Slats Angle (no position)"]:
+		case WindowCoveringParameter["Vertical Slats Angle"]:
+			return `Change tilt (${
+				direction === "up" ? "left inside" : "right inside"
+			})`;
+
+		case WindowCoveringParameter["Horizontal Slats Angle (no position)"]:
+		case WindowCoveringParameter["Horizontal Slats Angle"]:
+			// Horizontal slats refer to the position of the inner side of the slats
+			// where a high level (99) actually means they face down
+			return `Change tilt (${
+				direction === "up" ? "down inside" : "up inside"
+			})`;
+	}
+	// For all other parameters, refer to the amount of light that is let in
+	return direction === "up" ? "Open" : "Close";
 }
 
 export const WindowCoveringCCValues = Object.freeze({
@@ -130,17 +121,14 @@ export const WindowCoveringCCValues = Object.freeze({
 			({ property, propertyKey }) =>
 				property === "currentValue" && typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
-				const states = parameterToMetadataStates(parameter, false);
 				return {
 					...ValueMetadata.ReadOnlyLevel,
 					label: `Current value - ${getEnumMemberName(
 						WindowCoveringParameter,
 						parameter,
 					)}`,
-					...(states ? { states } : {}),
-					ccSpecific: {
-						parameter,
-					},
+					states: parameterToMetadataStates(parameter),
+					ccSpecific: { parameter },
 				} as const;
 			},
 		),
@@ -152,7 +140,8 @@ export const WindowCoveringCCValues = Object.freeze({
 			({ property, propertyKey }) =>
 				property === "targetValue" && typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
-				const states = parameterToMetadataStates(parameter, false);
+				// Only odd-numbered parameters have position support and are writable
+				const writeable = parameter % 2 === 1;
 				return {
 					...ValueMetadata.Level,
 					label: `Target value - ${getEnumMemberName(
@@ -161,10 +150,9 @@ export const WindowCoveringCCValues = Object.freeze({
 					)}`,
 					// Only odd-numbered parameters have position support and are writable
 					writeable: parameter % 2 === 1,
-					...(states ? { states } : {}),
-					ccSpecific: {
-						parameter,
-					},
+					states: parameterToMetadataStates(parameter),
+					allowManualEntry: writeable,
+					ccSpecific: { parameter },
 					valueChangeOptions: ["transitionDuration"],
 				} as const;
 			},
@@ -189,124 +177,57 @@ export const WindowCoveringCCValues = Object.freeze({
 				} as const),
 		),
 
-		// Convenience values to control the different parameters
-		// Open all parameters
 		...V.dynamicPropertyAndKeyWithName(
-			"open",
-			"open",
+			"levelChangeUp",
+			// The direction refers to the change in level, not the physical location
+			"levelChangeUp",
 			(parameter: WindowCoveringParameter) => parameter,
 			({ property, propertyKey }) =>
-				property === "open" && typeof propertyKey === "number",
-			(parameter: WindowCoveringParameter) =>
-				({
-					...ValueMetadata.WriteOnlyBoolean,
-					label: `Open - ${getEnumMemberName(
-						WindowCoveringParameter,
-						parameter,
-					)}`,
-					states: {
-						true: "Open",
-					},
-					ccSpecific: {
-						parameter,
-					},
-					valueChangeOptions: ["transitionDuration"],
-				} as const),
-		),
-
-		// Close positional parameters
-		...V.dynamicPropertyAndKeyWithName(
-			"positionClose",
-			"close",
-			(parameter: WindowCoveringParameter) => parameter,
-			({ property, propertyKey }) =>
-				property === "close" &&
-				typeof propertyKey === "number" &&
-				!isTiltParameter(propertyKey),
-			(parameter: WindowCoveringParameter) =>
-				({
-					...ValueMetadata.WriteOnlyBoolean,
-					label: `Close - ${getEnumMemberName(
-						WindowCoveringParameter,
-						parameter,
-					)}`,
-					states: {
-						true: "Close",
-					},
-					ccSpecific: {
-						parameter,
-					},
-					valueChangeOptions: ["transitionDuration"],
-				} as const),
-		),
-
-		// Close vertical slats to the right, horizontal to the top
-		...V.dynamicPropertyAndKeyWithName(
-			"tiltClose0",
-			"close0",
-			(parameter: WindowCoveringParameter) => parameter,
-			({ property, propertyKey }) =>
-				property === "close0" &&
-				typeof propertyKey === "number" &&
-				isTiltParameter(propertyKey),
+				property === "levelChangeUp" && typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
-				const direction =
-					parameter ===
-						WindowCoveringParameter["Vertical Slats Angle"] ||
-					parameter ===
-						WindowCoveringParameter[
-							"Vertical Slats Angle (no position)"
-						]
-						? "Right"
-						: "Up";
 				return {
 					...ValueMetadata.WriteOnlyBoolean,
-					label: `Close ${direction} - ${getEnumMemberName(
+					label: `${parameterToLevelChangeLabel(
+						parameter,
+						"up",
+					)} - ${getEnumMemberName(
 						WindowCoveringParameter,
 						parameter,
 					)}`,
-					states: {
-						true: "Close",
-					},
-					ccSpecific: {
-						parameter,
-					},
 					valueChangeOptions: ["transitionDuration"],
+					states: {
+						true: "Start",
+						false: "Stop",
+					},
+					ccSpecific: { parameter },
 				} as const;
 			},
 		),
-		// Close vertical slats to the left, horizontal to the bottom
+
 		...V.dynamicPropertyAndKeyWithName(
-			"tiltClose99",
-			"close99",
+			"levelChangeDown",
+			// The direction refers to the change in level, not the physical location
+			"levelChangeDown",
 			(parameter: WindowCoveringParameter) => parameter,
 			({ property, propertyKey }) =>
-				property === "close99" &&
-				typeof propertyKey === "number" &&
-				isTiltParameter(propertyKey),
+				property === "levelChangeDown" &&
+				typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
-				const direction =
-					parameter ===
-						WindowCoveringParameter["Vertical Slats Angle"] ||
-					parameter ===
-						WindowCoveringParameter[
-							"Vertical Slats Angle (no position)"
-						]
-						? "Left"
-						: "Down";
 				return {
 					...ValueMetadata.WriteOnlyBoolean,
-					label: `Close ${direction} - ${getEnumMemberName(
+					label: `${parameterToLevelChangeLabel(
+						parameter,
+						"down",
+					)} - ${getEnumMemberName(
 						WindowCoveringParameter,
 						parameter,
 					)}`,
-					states: {
-						true: "Close",
-					},
-					ccSpecific: {
-						parameter,
-					},
 					valueChangeOptions: ["transitionDuration"],
+					states: {
+						true: "Start",
+						false: "Stop",
+					},
+					ccSpecific: { parameter },
 				} as const;
 			},
 		),
@@ -338,8 +259,6 @@ export class WindowCoveringCCAPI extends CCAPI {
 			propertyKey,
 		};
 
-		let targetValue: number;
-
 		if (WindowCoveringCCValues.targetValue.is(valueId)) {
 			if (
 				typeof propertyKey !== "number" ||
@@ -358,119 +277,92 @@ export class WindowCoveringCCAPI extends CCAPI {
 				);
 			}
 
-			targetValue = value;
+			const parameter = propertyKey;
+			const duration = Duration.from(options?.transitionDuration);
+
+			const currentValueValueId = WindowCoveringCCValues.currentValue(
+				parameter,
+			).endpoint(this.endpoint.index);
+
+			// Window Covering commands may take some time to be executed.
+			// Therefore we try to supervise the command execution and delay the
+			// optimistic update until the final result is received.
+			const result = await this.withOptions({
+				requestStatusUpdates: true,
+				onUpdate: (update) => {
+					if (update.status === SupervisionStatus.Success) {
+						this.tryGetValueDB()?.setValue(
+							currentValueValueId,
+							value,
+						);
+					} else if (update.status === SupervisionStatus.Fail) {
+						// The transition failed, so now we don't know the status
+						// Refresh the current value
+
+						// eslint-disable-next-line @typescript-eslint/no-empty-function
+						void this.get(parameter).catch(() => {});
+					}
+				},
+			}).set([{ parameter, value }], duration);
+
+			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+			// so UIs have immediate feedback
+			const shouldUpdateOptimistically =
+				// For unsupervised commands, make the choice to update optimistically dependent on the driver options
+				(!this.applHost.options.disableOptimisticValueUpdate &&
+					result == undefined) ||
+				(isSupervisionResult(result) &&
+					result.status === SupervisionStatus.Success);
+
+			if (this.isSinglecast()) {
+				// Only update currentValue for valid target values
+				if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
+					this.tryGetValueDB()?.setValue(currentValueValueId, value);
+				}
+
+				// Verify the current value after a delay, unless...
+				// ...the command was supervised and successful
+				// ...and we know the actual value
+				if (!supervisedCommandSucceeded(result)) {
+					this.schedulePoll(
+						{
+							property: currentValueValueId.property,
+							propertyKey: currentValueValueId.propertyKey,
+						},
+						value,
+						{ duration },
+					);
+				}
+			}
+			return result;
 		} else if (
-			// Opening a positional parameter is the same as closing a tilt parameter to one side (99)
-			(WindowCoveringCCValues.open.is(valueId) &&
-				!isTiltParameter(propertyKey as number)) ||
-			WindowCoveringCCValues.tiltClose99.is(valueId)
+			WindowCoveringCCValues.levelChangeUp.is(valueId) ||
+			WindowCoveringCCValues.levelChangeDown.is(valueId)
 		) {
-			if (!value) {
-				throwWrongValueType(this.ccId, property, "true", typeof value);
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"boolean",
+					typeof value,
+				);
 			}
 
-			targetValue = 99;
-		} else if (
-			// Opening a tilt parameter means setting it to 50
-			WindowCoveringCCValues.open.is(valueId) &&
-			isTiltParameter(propertyKey as number)
-		) {
-			if (!value) {
-				throwWrongValueType(this.ccId, property, "true", typeof value);
-			}
+			const parameter = propertyKey as number;
+			const direction = WindowCoveringCCValues.levelChangeUp.is(valueId)
+				? "up"
+				: "down";
 
-			targetValue = 50;
-		} else if (
-			WindowCoveringCCValues.positionClose.is(valueId) ||
-			WindowCoveringCCValues.tiltClose0.is(valueId)
-		) {
-			if (!value) {
-				throwWrongValueType(this.ccId, property, "true", typeof value);
+			if (value) {
+				// Perform the level change
+				const duration = Duration.from(options?.transitionDuration);
+				return this.startLevelChange(parameter, direction, duration);
+			} else {
+				return this.stopLevelChange(parameter);
 			}
-
-			// Closing a positional parameter is the same as closing a tilt parameter to the other side
-			targetValue = 0;
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
-
-		const parameter = propertyKey as number;
-
-		const currentValueValueId = WindowCoveringCCValues.currentValue(
-			parameter,
-		).endpoint(this.endpoint.index);
-		const targetValueValueId = WindowCoveringCCValues.targetValue(
-			parameter,
-		).endpoint(this.endpoint.index);
-
-		// If we have set the value via one of the convenience properties,
-		// we need to update the targetValue value ID
-		if (targetValue !== value) {
-			this.tryGetValueDB()?.setValue(targetValueValueId, targetValue);
-		}
-
-		const duration = Duration.from(options?.transitionDuration);
-		// Window Covering commands may take some time to be executed.
-		// Therefore we try to supervise the command execution and delay the
-		// optimistic update until the final result is received.
-		const result = await this.withOptions({
-			requestStatusUpdates: true,
-			onUpdate: (update) => {
-				if (update.status === SupervisionStatus.Success) {
-					this.tryGetValueDB()?.setValue(
-						currentValueValueId,
-						targetValue,
-					);
-				} else if (update.status === SupervisionStatus.Fail) {
-					// The transition failed, so now we don't know the status
-					// Refresh the current value
-
-					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					void this.get(parameter).catch(() => {});
-				}
-			},
-		}).set(
-			[{ parameter: propertyKey as number, value: targetValue }],
-			duration,
-		);
-
-		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-		// so UIs have immediate feedback
-		const shouldUpdateOptimistically =
-			// For unsupervised commands, make the choice to update optimistically dependent on the driver options
-			(!this.applHost.options.disableOptimisticValueUpdate &&
-				result == undefined) ||
-			(isSupervisionResult(result) &&
-				result.status === SupervisionStatus.Success);
-
-		if (this.isSinglecast()) {
-			// Only update currentValue for valid target values
-			if (
-				shouldUpdateOptimistically &&
-				targetValue >= 0 &&
-				targetValue <= 99
-			) {
-				this.tryGetValueDB()?.setValue(
-					currentValueValueId,
-					targetValue,
-				);
-			}
-
-			// Verify the current value after a delay, unless...
-			// ...the command was supervised and successful
-			// ...and we know the actual value
-			if (!supervisedCommandSucceeded(result)) {
-				this.schedulePoll(
-					{
-						property: currentValueValueId.property,
-						propertyKey: currentValueValueId.propertyKey,
-					},
-					targetValue,
-					{ duration },
-				);
-			}
-		}
-		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -659,23 +551,15 @@ ${supported
 					WindowCoveringCCValues.duration(param),
 				);
 
-				// Convenience values
-				this.setMetadata(applHost, WindowCoveringCCValues.open(param));
-				if (isTiltParameter(param)) {
-					this.setMetadata(
-						applHost,
-						WindowCoveringCCValues.tiltClose0(param),
-					);
-					this.setMetadata(
-						applHost,
-						WindowCoveringCCValues.tiltClose99(param),
-					);
-				} else {
-					this.setMetadata(
-						applHost,
-						WindowCoveringCCValues.positionClose(param),
-					);
-				}
+				// Level change values
+				this.setMetadata(
+					applHost,
+					WindowCoveringCCValues.levelChangeUp(param),
+				);
+				this.setMetadata(
+					applHost,
+					WindowCoveringCCValues.levelChangeDown(param),
+				);
 
 				// And for the odd parameters (with position support), query the position
 				if (param % 2 === 1) {
