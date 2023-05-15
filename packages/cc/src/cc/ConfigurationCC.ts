@@ -12,6 +12,7 @@ import {
 	IVirtualEndpoint,
 	IZWaveEndpoint,
 	Maybe,
+	mergeSupervisionResults,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
@@ -20,6 +21,7 @@ import {
 	stripUndefined,
 	supervisedCommandSucceeded,
 	SupervisionResult,
+	SupervisionStatus,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -704,12 +706,37 @@ export class ConfigurationCCAPI extends CCAPI {
 				values: allParams.map((v) => v.value as number),
 				handshake: true,
 			});
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			// The handshake flag is set, so we expect a BulkReport in response
+			const result =
+				await this.applHost.sendCommand<ConfigurationCCBulkReport>(
+					cc,
+					this.commandOptions,
+				);
+
+			// If we did receive a response, we also received the updated parameters,
+			// so if any one was not accepted, we know by looking at the values.
+			// Translate the result into a SupervisionResult by comparing the values
+			if (result) {
+				const sentValues = cc.values;
+				const receivedValues = [...result.values.values()];
+				const success =
+					sentValues.length === receivedValues.length &&
+					sentValues.every((v, i) => v === receivedValues[i]);
+				return {
+					status: success
+						? SupervisionStatus.Success
+						: SupervisionStatus.Fail,
+				};
+			} else {
+				return undefined;
+			}
 		} else {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
 				ConfigurationCommand.Set,
 			);
+
+			const supervisionResults: (SupervisionResult | undefined)[] = [];
 			for (const {
 				parameter,
 				value,
@@ -724,9 +751,11 @@ export class ConfigurationCCAPI extends CCAPI {
 					valueSize,
 					valueFormat,
 				});
-				// TODO: handle intermediate errors
-				await this.applHost.sendCommand(cc, this.commandOptions);
+				supervisionResults.push(
+					await this.applHost.sendCommand(cc, this.commandOptions),
+				);
 			}
+			return mergeSupervisionResults(supervisionResults);
 		}
 	}
 
