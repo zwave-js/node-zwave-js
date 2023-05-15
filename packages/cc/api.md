@@ -18082,29 +18082,30 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 //
 // @public (undocumented)
 export const WindowCoveringCCValues: Readonly<{
-    tiltClose99: ((parameter: WindowCoveringParameter) => {
+    levelChangeDown: ((parameter: WindowCoveringParameter) => {
         readonly meta: {
-            readonly label: `Close Left - ${string}` | `Close Down - ${string}`;
+            readonly label: `${string} - ${string}`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
             readonly states: {
-                readonly true: "Close";
+                readonly true: "Start";
+                readonly false: "Stop";
             };
             readonly ccSpecific: {
                 readonly parameter: WindowCoveringParameter;
             };
-            readonly valueChangeOptions: readonly ["transitionDuration"];
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
         };
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "close99";
+            property: "levelChangeDown";
             propertyKey: WindowCoveringParameter;
         };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
             readonly endpoint: number;
-            readonly property: "close99";
+            readonly property: "levelChangeDown";
             readonly propertyKey: WindowCoveringParameter;
         };
     }) & {
@@ -18118,101 +18119,30 @@ export const WindowCoveringCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    tiltClose0: ((parameter: WindowCoveringParameter) => {
+    levelChangeUp: ((parameter: WindowCoveringParameter) => {
         readonly meta: {
-            readonly label: `Close Right - ${string}` | `Close Up - ${string}`;
+            readonly label: `${string} - ${string}`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
             readonly states: {
-                readonly true: "Close";
+                readonly true: "Start";
+                readonly false: "Stop";
             };
             readonly ccSpecific: {
                 readonly parameter: WindowCoveringParameter;
             };
-            readonly valueChangeOptions: readonly ["transitionDuration"];
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
         };
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "close0";
+            property: "levelChangeUp";
             propertyKey: WindowCoveringParameter;
         };
         readonly endpoint: (endpoint?: number | undefined) => {
             readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
             readonly endpoint: number;
-            readonly property: "close0";
-            readonly propertyKey: WindowCoveringParameter;
-        };
-    }) & {
-        is: (valueId: ValueID) => boolean;
-        readonly options: {
-            readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
-            readonly stateful: true;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-        };
-    };
-    positionClose: ((parameter: WindowCoveringParameter) => {
-        readonly meta: {
-            readonly label: `Close - ${string}`;
-            readonly states: {
-                readonly true: "Close";
-            };
-            readonly ccSpecific: {
-                readonly parameter: WindowCoveringParameter;
-            };
-            readonly valueChangeOptions: readonly ["transitionDuration"];
-            readonly readable: false;
-            readonly type: "boolean";
-            readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "close";
-            propertyKey: WindowCoveringParameter;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "close";
-            readonly propertyKey: WindowCoveringParameter;
-        };
-    }) & {
-        is: (valueId: ValueID) => boolean;
-        readonly options: {
-            readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
-            readonly stateful: true;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-        };
-    };
-    open: ((parameter: WindowCoveringParameter) => {
-        readonly meta: {
-            readonly label: `Open - ${string}`;
-            readonly states: {
-                readonly true: "Open";
-            };
-            readonly ccSpecific: {
-                readonly parameter: WindowCoveringParameter;
-            };
-            readonly valueChangeOptions: readonly ["transitionDuration"];
-            readonly readable: false;
-            readonly type: "boolean";
-            readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "open";
-            propertyKey: WindowCoveringParameter;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "open";
+            readonly property: "levelChangeUp";
             readonly propertyKey: WindowCoveringParameter;
         };
     }) & {
@@ -18260,12 +18190,16 @@ export const WindowCoveringCCValues: Readonly<{
     };
     targetValue: ((parameter: WindowCoveringParameter) => {
         readonly meta: {
+            readonly label: `Target value - ${string}`;
+            readonly writeable: boolean;
+            readonly states: {
+                [x: number]: string;
+            };
+            readonly allowManualEntry: boolean;
             readonly ccSpecific: {
                 readonly parameter: WindowCoveringParameter;
             };
             readonly valueChangeOptions: readonly ["transitionDuration"];
-            readonly label: `Target value - ${string}`;
-            readonly writeable: boolean;
             readonly max: 99;
             readonly min: 0;
             readonly type: "number";
@@ -18295,10 +18229,13 @@ export const WindowCoveringCCValues: Readonly<{
     };
     currentValue: ((parameter: WindowCoveringParameter) => {
         readonly meta: {
+            readonly label: `Current value - ${string}`;
+            readonly states: {
+                [x: number]: string;
+            };
             readonly ccSpecific: {
                 readonly parameter: WindowCoveringParameter;
             };
-            readonly label: `Current value - ${string}`;
             readonly writeable: false;
             readonly max: 99;
             readonly min: 0;
