@@ -29,13 +29,19 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		nonce: number; // [3000...20000], default: 5000 ms
 
 		/**
-		 * @internal
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
 		 * How long to wait for a poll after setting a value without transition duration
 		 */
 		refreshValue: number;
 
 		/**
-		 * @internal
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
 		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
 		 */
 		refreshValueAfterTransition: number;
