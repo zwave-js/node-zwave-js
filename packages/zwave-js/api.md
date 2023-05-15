@@ -23,6 +23,7 @@ import { Comparable } from 'alcalzone-shared/comparable';
 import { CompareResult } from 'alcalzone-shared/comparable';
 import { ConfigManager } from '@zwave-js/config';
 import { ControllerLogContext } from '@zwave-js/core';
+import { ControllerLogger } from '@zwave-js/core';
 import { ControllerNodeLogContext } from '@zwave-js/core';
 import { ControllerSelfLogContext } from '@zwave-js/core';
 import { ControllerValueLogContext } from '@zwave-js/core';
@@ -31,7 +32,7 @@ import { DataRate } from '@zwave-js/core/safe';
 import { DataRate as DataRate_2 } from '@zwave-js/core';
 import { DeepPartial } from '@zwave-js/shared';
 import type { DeferredPromise } from 'alcalzone-shared/deferred-promise';
-import type { DeviceConfig } from '@zwave-js/config';
+import { DeviceConfig } from '@zwave-js/config';
 import { Duration } from '@zwave-js/core/safe';
 import { DurationUnit } from '@zwave-js/core/safe';
 import { EntryControlDataTypes } from '@zwave-js/cc/safe';
@@ -81,6 +82,7 @@ import { MulticastDestination } from '@zwave-js/core/safe';
 import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_MAX } from '@zwave-js/core/safe';
+import type { NodeSchedulePollOptions } from '@zwave-js/host';
 import { NodeStatus } from '@zwave-js/core/safe';
 import { NodeType } from '@zwave-js/core/safe';
 import { NodeType as NodeType_2 } from '@zwave-js/core';
@@ -115,6 +117,8 @@ import { Scale } from '@zwave-js/config';
 import type { SecurityClass } from '@zwave-js/core/safe';
 import { SecurityClass as SecurityClass_2 } from '@zwave-js/core';
 import { SecurityClassOwner } from '@zwave-js/core';
+import { SecurityManager } from '@zwave-js/core';
+import { SecurityManager2 } from '@zwave-js/core';
 import { SendCommandOptions } from '@zwave-js/core';
 import { SendCommandReturnType } from '@zwave-js/core';
 import { SendMessageOptions } from '@zwave-js/core';
@@ -287,6 +291,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // (undocumented)
     get configVersion(): string;
     get controller(): ZWaveController;
+    get controllerLog(): ControllerLogger;
     // Warning: (ae-forgotten-export) The symbol "SendDataMessage" needs to be exported by the entry point index.d.ts
     createSendDataMessage(command: CommandClass, options?: Omit<SendCommandOptions, keyof SendMessageOptions>): SendDataMessage;
     destroy(): Promise<void>;
@@ -296,6 +301,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     enableStatistics(appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">): void;
     static enumerateSerialPorts(): Promise<string[]>;
     getConservativeWaitTimeAfterFirmwareUpdate(advertisedWaitTime: number | undefined): number;
+    // (undocumented)
+    getDeviceConfig(nodeId: number): DeviceConfig | undefined;
+    // (undocumented)
+    getHighestSecurityClass(nodeId: number): SecurityClass_2 | undefined;
     getLogConfig(): LogConfig;
     readonly getNextCallbackId: () => number;
     readonly getNextSupervisionSessionId: () => number;
@@ -316,16 +325,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     getSupportedCCVersionForEndpoint(cc: CommandClasses_2, nodeId: number, endpointIndex?: number): number;
     getUserAgentStringWithComponents(components?: Record<string, string | null | undefined>): string;
+    getValueDB(nodeId: number): ValueDB;
     hardReset(): Promise<void>;
     // Warning: (ae-forgotten-export) The symbol "Transaction" needs to be exported by the entry point index.d.ts
     hasPendingTransactions(predicate: (t: Transaction) => boolean): boolean;
+    // (undocumented)
+    hasSecurityClass(nodeId: number, securityClass: SecurityClass_2): Maybe<boolean>;
+    get homeId(): number;
     installConfigUpdate(): Promise<boolean>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     isCCSecure(ccId: CommandClasses_2, nodeId: number, endpointIndex?: number): boolean;
+    isControllerNode(nodeId: number): boolean;
     // (undocumented)
     isInBootloader(): boolean;
+    get nodes(): ReadonlyThrowingMap<number, ZWaveNode>;
+    // (undocumented)
+    get options(): Readonly<ZWaveOptions>;
+    get ownNodeId(): number;
     get ready(): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     registerCommandHandler<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, handler: (cc: T) => void): {
@@ -337,6 +355,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (ae-forgotten-export) The symbol "RequestHandler" needs to be exported by the entry point index.d.ts
     registerRequestHandler<T extends Message>(fnType: FunctionType, handler: RequestHandler<T>, oneTime?: boolean): void;
     restoreNetworkStructureFromCache(): Promise<void>;
+    schedulePoll(nodeId: number, valueId: ValueID_2, options: NodeSchedulePollOptions): boolean;
+    get securityManager(): SecurityManager | undefined;
+    get securityManager2(): SecurityManager2 | undefined;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "SupervisionResult"
@@ -346,12 +367,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     sendMessage<TResponse extends Message = Message>(msg: Message, options?: SendMessageOptions): Promise<TResponse>;
     get sendThreadIdle(): boolean;
     setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void;
+    setSecurityClass(nodeId: number, securityClass: SecurityClass_2, granted: boolean): void;
     shutdown(): Promise<boolean>;
     softReset(): Promise<void>;
     start(): Promise<void>;
     get statisticsEnabled(): boolean;
     // (undocumented)
     tryGetEndpoint(cc: CommandClass): Endpoint | undefined;
+    tryGetValueDB(nodeId: number): ValueDB | undefined;
     trySoftReset(): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -1607,6 +1630,8 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         sendDataCallback: number;
         report: number;
         nonce: number;
+        refreshValue: number;
+        refreshValueAfterTransition: number;
         serialAPIStarted: number;
     };
     userAgent?: Record<string, string>;
