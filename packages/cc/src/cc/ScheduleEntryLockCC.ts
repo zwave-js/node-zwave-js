@@ -838,6 +838,20 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		slotId: number,
 	): ScheduleEntryLockDailyRepeatingSchedule | false | undefined;
 
+	// Catch-all overload for applications which haven't narrowed `scheduleKind`
+	public static getScheduleCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		scheduleKind: ScheduleEntryLockScheduleKind,
+		userId: number,
+		slotId: number,
+	):
+		| ScheduleEntryLockWeekDaySchedule
+		| ScheduleEntryLockYearDaySchedule
+		| ScheduleEntryLockDailyRepeatingSchedule
+		| false
+		| undefined;
+
 	/**
 	 * Returns the assumed state of a schedule. Since the Schedule Entry Lock CC
 	 * provides no way to query the current state, Z-Wave JS tracks this in its own cache.
