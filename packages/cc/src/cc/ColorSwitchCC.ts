@@ -917,7 +917,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		}
 		if (this.version >= 2) {
 			this.payload[i] = (
-				this.duration ?? Duration.from("default")
+				this.duration ?? Duration.default()
 			).serializeSet();
 		}
 		return super.serialize();
@@ -996,8 +996,8 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			(this.ignoreStartLevel ? 0b0010_0000 : 0);
 		const payload = [controlByte, this.colorComponent, this.startLevel];
 
-		if (this.version >= 3 && this.duration) {
-			payload.push(this.duration.serializeSet());
+		if (this.version >= 3) {
+			payload.push((this.duration ?? Duration.default()).serializeSet());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
