@@ -335,7 +335,6 @@ export class WindowCoveringCCAPI extends CCAPI {
 				// Window Covering commands may take some time to be executed.
 				// Therefore we try to supervise the command execution and delay the
 				// optimistic update until the final result is received.
-
 				supervisionDelayedUpdates: true,
 				supervisionOnSuccess: () => {
 					this.tryGetValueDB()?.setValue(currentValueValueId, value);

@@ -5,7 +5,6 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	parseBitMask,
-	supervisedCommandSucceeded,
 	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
@@ -20,7 +19,9 @@ import {
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
+	SetValueImplementationHooksFactory,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
@@ -236,14 +237,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 				value === BarrierState.Closed
 					? BarrierState.Closed
 					: BarrierState.Open;
-			const result = await this.set(targetValue);
-
-			// Verify the change after a delay, unless the command was supervised and successful
-			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-				this.schedulePoll({ property }, targetValue);
-			}
-
-			return result;
+			return this.set(targetValue);
 		} else if (property === "signalingState") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
@@ -258,16 +252,103 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			const result = await this.setEventSignaling(propertyKey, value);
-
-			// Verify the change after a short delay, unless the command was supervised and successful
-			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-				this.schedulePoll({ property }, value, { transition: "fast" });
-			}
-
-			return result;
+			return this.setEventSignaling(propertyKey, value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
+		{ property, propertyKey },
+		value,
+		_options,
+	) => {
+		const valueId = {
+			commandClass: this.ccId,
+			property,
+			propertyKey,
+		};
+
+		if (BarrierOperatorCCValues.targetState.is(valueId)) {
+			const currentStateValueId =
+				BarrierOperatorCCValues.currentState.endpoint(
+					this.endpoint.index,
+				);
+
+			const targetValue =
+				value === BarrierState.Closed
+					? BarrierState.Closed
+					: BarrierState.Open;
+
+			return {
+				// Barrier Operator commands may take some time to be executed.
+				// Therefore we try to supervise the command execution and delay the
+				// optimistic update until the final result is received.
+				supervisionDelayedUpdates: true,
+				supervisionOnSuccess: () => {
+					this.tryGetValueDB()?.setValue(
+						currentStateValueId,
+						targetValue,
+					);
+				},
+				supervisionOnFailure: async () => {
+					// The command failed, so now we don't know the status - refresh the current value
+					try {
+						await this.get();
+					} catch {
+						// ignore
+					}
+				},
+
+				optimisticallyUpdateRelatedValues: () => {
+					if (this.isSinglecast()) {
+						this.tryGetValueDB()?.setValue(
+							currentStateValueId,
+							targetValue,
+						);
+					} else if (this.isMulticast()) {
+						// Figure out which nodes were affected by this command
+						const affectedNodes =
+							this.endpoint.node.physicalNodes.filter((node) =>
+								node
+									.getEndpoint(this.endpoint.index)
+									?.supportsCC(this.ccId),
+							);
+						// and optimistically update the currentValue
+						for (const node of affectedNodes) {
+							this.applHost
+								.tryGetValueDB(node.id)
+								?.setValue(currentStateValueId, targetValue);
+						}
+					}
+				},
+
+				verifyChanges: () => {
+					if (this.isSinglecast()) {
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						this.schedulePoll(currentStateValueId, targetValue);
+					} else {
+						// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
+					}
+				},
+			};
+		} else if (BarrierOperatorCCValues.signalingState.is(valueId)) {
+			const subsystemType = propertyKey as SubsystemType;
+			const signalingStateValueId =
+				BarrierOperatorCCValues.signalingState(subsystemType).endpoint(
+					this.endpoint.index,
+				);
+
+			return {
+				verifyChanges: () => {
+					if (this.isSinglecast()) {
+						this.schedulePoll(signalingStateValueId, value, {
+							// Signaling state changes are fast
+							transition: "fast",
+						});
+					}
+				},
+			};
 		}
 	};
 
