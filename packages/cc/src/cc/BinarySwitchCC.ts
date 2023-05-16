@@ -199,8 +199,6 @@ export class BinarySwitchCCAPI extends CCAPI {
 				},
 			};
 		}
-
-		throwUnsupportedProperty(this.ccId, property);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

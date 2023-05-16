@@ -64,7 +64,7 @@ export type SetValueImplementationHooksFactory = (
 	property: ValueIDProperties,
 	value: unknown,
 	options?: SetValueAPIOptions,
-) => SetValueImplementationHooks;
+) => SetValueImplementationHooks | undefined;
 
 /**
  * A generic options bag for the `setValue` API.
