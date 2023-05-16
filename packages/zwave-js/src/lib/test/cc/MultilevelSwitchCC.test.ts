@@ -38,6 +38,7 @@ test("the Set command (V1) should serialize correctly", (t) => {
 		nodeId: 2,
 		targetValue: 55,
 	});
+	cc.version = 1;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultilevelSwitchCommand.Set, // CC Command
@@ -53,6 +54,7 @@ test("the Set command (V2) should serialize correctly", (t) => {
 		targetValue: 55,
 		duration: new Duration(2, "minutes"),
 	});
+	cc.version = 2;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultilevelSwitchCommand.Set, // CC Command
@@ -106,6 +108,7 @@ test("the StartLevelChange command (V1) should serialize correctly (up, ignore s
 		direction: "up",
 		ignoreStartLevel: true,
 	});
+	cc.version = 1;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultilevelSwitchCommand.StartLevelChange, // CC Command
@@ -123,6 +126,7 @@ test("the StartLevelChange command (V1) should serialize correctly (down)", (t) 
 		ignoreStartLevel: false,
 		startLevel: 50,
 	});
+	cc.version = 1;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultilevelSwitchCommand.StartLevelChange, // CC Command
@@ -153,6 +157,7 @@ test("the StartLevelChange command (V2) should serialize correctly (down, with d
 		startLevel: 50,
 		duration: new Duration(3, "seconds"),
 	});
+	cc.version = 2;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultilevelSwitchCommand.StartLevelChange, // CC Command
