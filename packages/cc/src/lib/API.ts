@@ -246,7 +246,7 @@ export class CCAPI {
 	 * @returns `true` if the poll was scheduled, `false` otherwise
 	 */
 	protected schedulePoll(
-		property: ValueIDProperties,
+		{ property, propertyKey }: ValueIDProperties,
 		expectedValue: unknown,
 		{ duration, transition = "slow" }: SchedulePollOptions = {},
 	): boolean {
@@ -268,7 +268,8 @@ export class CCAPI {
 				{
 					commandClass: this.ccId,
 					endpoint: this.endpoint.index,
-					...property,
+					property,
+					propertyKey,
 				},
 				{ timeoutMs, expectedValue },
 			);
@@ -287,7 +288,8 @@ export class CCAPI {
 					{
 						commandClass: this.ccId,
 						endpoint: this.endpoint.index,
-						...property,
+						property,
+						propertyKey,
 					},
 					{ timeoutMs, expectedValue },
 				);

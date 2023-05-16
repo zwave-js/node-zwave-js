@@ -153,13 +153,11 @@ export class BinarySwitchCCAPI extends CCAPI {
 		options,
 	) => {
 		if (property === "targetValue") {
+			const currentValueValueId =
+				BinarySwitchCCValues.currentValue.endpoint(this.endpoint.index);
+
 			return {
 				optimisticallyUpdateRelatedValues: () => {
-					const currentValueValueId =
-						BinarySwitchCCValues.currentValue.endpoint(
-							this.endpoint.index,
-						);
-
 					// After setting targetValue, optimistically update currentValue
 					if (this.isSinglecast()) {
 						this.tryGetValueDB()?.setValue(
@@ -186,7 +184,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 				verifyChanges: () => {
 					if (this.isSinglecast()) {
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-						this.schedulePoll({ property: "currentValue" }, value, {
+						this.schedulePoll(currentValueValueId, value, {
 							duration: Duration.from(
 								options?.transitionDuration,
 							),

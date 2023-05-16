@@ -443,7 +443,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					) {
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 						(this as this).schedulePoll(
-							{ property: "currentValue" },
+							currentValueValueId,
 							value === 255 ? undefined : value,
 							{ duration },
 						);
