@@ -7,7 +7,6 @@ import {
 	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
-	supervisedCommandSucceeded,
 	SupervisionResult,
 	unknownNumber,
 	validatePayload,
@@ -21,7 +20,9 @@ import {
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
+	SetValueImplementationHooksFactory,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API";
@@ -116,65 +117,75 @@ export class BasicCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 
-		const result = await this.set(value);
+		return this.set(value);
+	};
 
-		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-		// so UIs have immediate feedback
-		const shouldUpdateOptimistically =
-			// For unsupervised commands, make the choice to update optimistically dependent on the driver options
-			(!this.applHost.options.disableOptimisticValueUpdate &&
-				result == undefined) ||
-			// TODO: Consider delaying the optimistic update if the result is WORKING
-			supervisedCommandSucceeded(result);
-
-		if (this.isSinglecast()) {
-			// Only update currentValue for valid target values
-			if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
-				this.tryGetValueDB()?.setValue(
-					BasicCCValues.currentValue.endpoint(this.endpoint.index),
-					value,
-				);
-			}
-
-			// Verify the current value after a delay, unless the command was supervised and successful
-			if (!supervisedCommandSucceeded(result)) {
-				// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
-				// that unsolicited updates cancel the scheduled poll
-				if (property === "targetValue") property = "currentValue";
-				this.schedulePoll({ property }, value);
-			}
-		} else if (this.isMulticast()) {
-			// Only update currentValue for valid target values
-			if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
-				// Figure out which nodes were affected by this command
-				const affectedNodes = this.endpoint.node.physicalNodes.filter(
-					(node) =>
-						node
-							.getEndpoint(this.endpoint.index)
-							?.supportsCC(this.ccId),
-				);
-				// and optimistically update the currentValue
-				for (const node of affectedNodes) {
-					this.applHost
-						.tryGetValueDB(node.id)
-						?.setValue(
-							BasicCCValues.currentValue.endpoint(
-								this.endpoint.index,
-							),
-							value,
-						);
-				}
-			} else if (value === 255) {
-				// We generally don't want to poll for multicasts because of how much traffic it can cause
-				// However, when setting the value 255 (ON), we don't know the actual state
-
-				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-				if (property === "targetValue") property = "currentValue";
-				this.schedulePoll({ property }, undefined);
-			}
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
+		{ property },
+		value,
+		_options,
+	) => {
+		// Enable restoring the previous non-zero value
+		if (property === "restorePrevious") {
+			property = "targetValue";
+			value = 255;
 		}
 
-		return result;
+		if (property === "targetValue") {
+			const currentValueValueId = BasicCCValues.currentValue.endpoint(
+				this.endpoint.index,
+			);
+			return {
+				optimisticallyUpdateRelatedValues: () => {
+					// Only update currentValue for valid target values
+					if (
+						typeof value === "number" &&
+						value >= 0 &&
+						value <= 99
+					) {
+						if (this.isSinglecast()) {
+							this.tryGetValueDB()?.setValue(
+								currentValueValueId,
+								value,
+							);
+						} else if (this.isMulticast()) {
+							// Figure out which nodes were affected by this command
+							const affectedNodes =
+								this.endpoint.node.physicalNodes.filter(
+									(node) =>
+										node
+											.getEndpoint(this.endpoint.index)
+											?.supportsCC(this.ccId),
+								);
+							// and optimistically update the currentValue
+							for (const node of affectedNodes) {
+								this.applHost
+									.tryGetValueDB(node.id)
+									?.setValue(currentValueValueId, value);
+							}
+						}
+					}
+				},
+				forceVerifyChanges: () => {
+					// If we don't know the actual value, we need to verify the change, regardless of the supervision result
+					return value === 255;
+				},
+				verifyChanges: () => {
+					if (
+						this.isSinglecast() ||
+						// We generally don't want to poll for multicasts because of how much traffic it can cause
+						// However, when setting the value 255 (ON), we don't know the actual state
+						(this.isMulticast() && value === 255)
+					) {
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						(this as this).schedulePoll(
+							{ property: "currentValue" },
+							value === 255 ? undefined : value,
+						);
+					}
+				},
+			};
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

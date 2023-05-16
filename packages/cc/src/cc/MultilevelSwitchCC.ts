@@ -425,12 +425,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 							for (const node of affectedNodes) {
 								this.applHost
 									.tryGetValueDB(node.id)
-									?.setValue(
-										MultilevelSwitchCCValues.currentValue.endpoint(
-											this.endpoint.index,
-										),
-										value,
-									);
+									?.setValue(currentValueValueId, value);
 							}
 						}
 					}
