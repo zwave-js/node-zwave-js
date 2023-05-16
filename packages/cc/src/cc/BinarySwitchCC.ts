@@ -9,7 +9,6 @@ import {
 	MessageRecord,
 	parseBoolean,
 	parseMaybeBoolean,
-	supervisedCommandSucceeded,
 	SupervisionResult,
 	unknownBoolean,
 	validatePayload,
@@ -23,7 +22,9 @@ import {
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
+	SetValueImplementationHooksFactory,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API";
@@ -143,56 +144,63 @@ export class BinarySwitchCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		const duration = Duration.from(options?.transitionDuration);
-		const result = await this.set(value, duration);
+		return this.set(value, duration);
+	};
 
-		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-		// so UIs have immediate feedback
-		const shouldUpdateOptimistically =
-			// For unsupervised commands, make the choice to update optimistically dependent on the driver options
-			(!this.applHost.options.disableOptimisticValueUpdate &&
-				result == undefined) ||
-			// TODO: Consider delaying the optimistic update if the result is WORKING
-			supervisedCommandSucceeded(result);
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
+		{ property },
+		value,
+		options,
+	) => {
+		if (property === "targetValue") {
+			return {
+				optimisticallyUpdateRelatedValues: () => {
+					const currentValueValueId =
+						BinarySwitchCCValues.currentValue.endpoint(
+							this.endpoint.index,
+						);
 
-		const currentValueValueId = BinarySwitchCCValues.currentValue.endpoint(
-			this.endpoint.index,
-		);
+					// After setting targetValue, optimistically update currentValue
+					if (this.isSinglecast()) {
+						this.tryGetValueDB()?.setValue(
+							currentValueValueId,
+							value,
+						);
+					} else if (this.isMulticast()) {
+						// Figure out which nodes were affected by this command
+						const affectedNodes =
+							this.endpoint.node.physicalNodes.filter((node) =>
+								node
+									.getEndpoint(this.endpoint.index)
+									?.supportsCC(this.ccId),
+							);
+						// and optimistically update the currentValue
+						for (const node of affectedNodes) {
+							this.applHost
+								.tryGetValueDB(node.id)
+								?.setValue(currentValueValueId, value);
+						}
+					}
+				},
 
-		if (this.isSinglecast()) {
-			if (shouldUpdateOptimistically) {
-				this.tryGetValueDB()?.setValue(currentValueValueId, value);
-			}
-
-			// Verify the current value after a delay, unless the command was supervised and successful
-			if (!supervisedCommandSucceeded(result)) {
-				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-				if (property === "targetValue") property = "currentValue";
-				this.schedulePoll({ property }, value, {
-					duration,
-					// on/off "transitions" are usually fast
-					transition: "fast",
-				});
-			}
-		} else if (this.isMulticast()) {
-			if (shouldUpdateOptimistically) {
-				// Figure out which nodes were affected by this command
-				const affectedNodes = this.endpoint.node.physicalNodes.filter(
-					(node) =>
-						node
-							.getEndpoint(this.endpoint.index)
-							?.supportsCC(this.ccId),
-				);
-				// and optimistically update the currentValue
-				for (const node of affectedNodes) {
-					this.applHost
-						.tryGetValueDB(node.id)
-						?.setValue(currentValueValueId, value);
-				}
-			}
-			// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
+				verifyChanges: () => {
+					if (this.isSinglecast()) {
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						this.schedulePoll({ property: "currentValue" }, value, {
+							duration: Duration.from(
+								options?.transitionDuration,
+							),
+							// on/off "transitions" are usually fast
+							transition: "fast",
+						});
+					} else {
+						// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
+					}
+				},
+			};
 		}
 
-		return result;
+		throwUnsupportedProperty(this.ccId, property);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
