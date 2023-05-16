@@ -1020,6 +1020,9 @@ export class ConfigurationCC extends CommandClass {
 			});
 			this.deserializeParamInformationFromConfig(applHost, paramInfo);
 		}
+		const documentedParamNumbers = new Set(
+			Array.from(paramInfo?.keys() ?? []).map((k) => k.parameter),
+		);
 
 		if (this.version >= 3) {
 			applHost.controllerLog.logNode(node.id, {
@@ -1057,14 +1060,17 @@ export class ConfigurationCC extends CommandClass {
 				});
 
 				// Query properties and the next param
-				const props = await api.getProperties(param);
+				const props = await api.getProperties(param).catch(
+					// If querying the properties fails, don't abort the entire interview
+					() => undefined,
+				);
 				if (!props) {
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `Querying parameter #${param} information timed out, skipping interview...`,
+						message: `Querying parameter #${param} information timed out, skipping scan...`,
 						level: "warn",
 					});
-					return;
+					break;
 				}
 				const { nextParameter, ...properties } = props;
 
@@ -1072,15 +1078,24 @@ export class ConfigurationCC extends CommandClass {
 				if (properties.valueSize === 0) {
 					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
 				} else {
-					// Query name and info only if the parameter is supported, but skip the query for bugged devices
 					let name: string | undefined;
-					if (!deviceConfig?.compat?.skipConfigurationNameQuery) {
-						name = await api.getName(param);
-					}
+					// Query the name and info for parameters that are NOT defined in a config file
+					if (!documentedParamNumbers.has(param)) {
+						// Skip the name query for bugged devices
+						if (!deviceConfig?.compat?.skipConfigurationNameQuery) {
+							name = await api.getName(param).catch(
+								// If querying the name fails, don't abort the entire interview
+								() => undefined,
+							);
+						}
 
-					// Skip the info query for bugged devices
-					if (!deviceConfig?.compat?.skipConfigurationInfoQuery) {
-						await api.getInfo(param);
+						// Skip the info query for bugged devices
+						if (!deviceConfig?.compat?.skipConfigurationInfoQuery) {
+							await api.getInfo(param).catch(
+								// If querying the info fails, don't abort the entire interview
+								() => undefined,
+							);
+						}
 					}
 
 					logMessage = `received information for parameter #${param}:`;
