@@ -2,15 +2,12 @@ import {
 	CommandClasses,
 	Duration,
 	encodeBitMask,
-	isSupervisionResult,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
 	parseBitMask,
-	supervisedCommandSucceeded,
 	SupervisionResult,
-	SupervisionStatus,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -24,7 +21,9 @@ import {
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
+	SetValueImplementationHooksFactory,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
@@ -280,61 +279,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			const parameter = propertyKey;
 			const duration = Duration.from(options?.transitionDuration);
 
-			const currentValueValueId = WindowCoveringCCValues.currentValue(
-				parameter,
-			).endpoint(this.endpoint.index);
-
-			// Window Covering commands may take some time to be executed.
-			// Therefore we try to supervise the command execution and delay the
-			// optimistic update until the final result is received.
-			const result = await this.withOptions({
-				requestStatusUpdates: true,
-				onUpdate: (update) => {
-					if (update.status === SupervisionStatus.Success) {
-						this.tryGetValueDB()?.setValue(
-							currentValueValueId,
-							value,
-						);
-					} else if (update.status === SupervisionStatus.Fail) {
-						// The transition failed, so now we don't know the status
-						// Refresh the current value
-
-						// eslint-disable-next-line @typescript-eslint/no-empty-function
-						void this.get(parameter).catch(() => {});
-					}
-				},
-			}).set([{ parameter, value }], duration);
-
-			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-			// so UIs have immediate feedback
-			const shouldUpdateOptimistically =
-				// For unsupervised commands, make the choice to update optimistically dependent on the driver options
-				(!this.applHost.options.disableOptimisticValueUpdate &&
-					result == undefined) ||
-				(isSupervisionResult(result) &&
-					result.status === SupervisionStatus.Success);
-
-			if (this.isSinglecast()) {
-				// Only update currentValue for valid target values
-				if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
-					this.tryGetValueDB()?.setValue(currentValueValueId, value);
-				}
-
-				// Verify the current value after a delay, unless...
-				// ...the command was supervised and successful
-				// ...and we know the actual value
-				if (!supervisedCommandSucceeded(result)) {
-					this.schedulePoll(
-						{
-							property: currentValueValueId.property,
-							propertyKey: currentValueValueId.propertyKey,
-						},
-						value,
-						{ duration },
-					);
-				}
-			}
-			return result;
+			return this.set([{ parameter, value }], duration);
 		} else if (
 			WindowCoveringCCValues.levelChangeUp.is(valueId) ||
 			WindowCoveringCCValues.levelChangeDown.is(valueId)
@@ -362,6 +307,89 @@ export class WindowCoveringCCAPI extends CCAPI {
 			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
+		{ property, propertyKey },
+		value,
+		options,
+	) => {
+		const valueId = {
+			commandClass: this.ccId,
+			property,
+			propertyKey,
+		};
+
+		if (WindowCoveringCCValues.targetValue.is(valueId)) {
+			if (typeof propertyKey !== "number") return;
+			const parameter = propertyKey;
+
+			const duration = Duration.from(options?.transitionDuration);
+
+			const currentValueValueId = WindowCoveringCCValues.currentValue(
+				parameter,
+			).endpoint(this.endpoint.index);
+
+			return {
+				// Window Covering commands may take some time to be executed.
+				// Therefore we try to supervise the command execution and delay the
+				// optimistic update until the final result is received.
+				supervisionDelayedUpdates: true,
+				supervisionOnSuccess: () => {
+					this.tryGetValueDB()?.setValue(currentValueValueId, value);
+				},
+				supervisionOnFailure: async () => {
+					// The transition failed, so now we don't know the status - refresh the current value
+					try {
+						await this.get(parameter);
+					} catch {
+						// ignore
+					}
+				},
+
+				optimisticallyUpdateRelatedValues: () => {
+					// Only update currentValue for valid target values
+					if (
+						typeof value === "number" &&
+						value >= 0 &&
+						value <= 99
+					) {
+						if (this.isSinglecast()) {
+							this.tryGetValueDB()?.setValue(
+								currentValueValueId,
+								value,
+							);
+						} else if (this.isMulticast()) {
+							// Figure out which nodes were affected by this command
+							const affectedNodes =
+								this.endpoint.node.physicalNodes.filter(
+									(node) =>
+										node
+											.getEndpoint(this.endpoint.index)
+											?.supportsCC(this.ccId),
+								);
+							// and optimistically update the currentValue
+							for (const node of affectedNodes) {
+								this.applHost
+									.tryGetValueDB(node.id)
+									?.setValue(currentValueValueId, value);
+							}
+						}
+					}
+				},
+
+				verifyChanges: () => {
+					if (this.isSinglecast()) {
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						this.schedulePoll(currentValueValueId, value, {
+							duration,
+						});
+					} else {
+						// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
+					}
+				},
+			};
 		}
 	};
 

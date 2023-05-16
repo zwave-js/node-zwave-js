@@ -2510,6 +2510,8 @@ export class CCAPI {
     protected [POLL_VALUE]: PollValueImplementation | undefined;
     // (undocumented)
     protected [SET_VALUE]: SetValueImplementation | undefined;
+    // (undocumented)
+    protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory | undefined;
     constructor(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint | IVirtualEndpoint);
     // (undocumented)
     protected readonly applHost: ZWaveApplicationHost;
@@ -2544,8 +2546,9 @@ export class CCAPI {
     };
     isSupported(): boolean;
     get pollValue(): PollValueImplementation | undefined;
-    protected schedulePoll(property: ValueIDProperties, expectedValue: unknown, { duration, transition }?: SchedulePollOptions): boolean;
+    protected schedulePoll({ property, propertyKey }: ValueIDProperties, expectedValue: unknown, { duration, transition }?: SchedulePollOptions): boolean;
     get setValue(): SetValueImplementation | undefined;
+    get setValueHooks(): SetValueImplementationHooksFactory | undefined;
     supportsCommand(command: number): Maybe_2<boolean>;
     protected tryGetValueDB(): ValueDB | undefined;
     get version(): number;
@@ -14540,6 +14543,11 @@ export enum SecurityCommand {
 // @public
 export const SET_VALUE: unique symbol;
 
+// Warning: (ae-missing-release-tag) "SET_VALUE_HOOKS" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const SET_VALUE_HOOKS: unique symbol;
+
 // Warning: (ae-missing-release-tag) "SetbackSpecialState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14572,6 +14580,24 @@ export type SetValueAPIOptions = Partial<ValueChangeOptions>;
 //
 // @public (undocumented)
 export type SetValueImplementation = (property: ValueIDProperties, value: unknown, options?: SetValueAPIOptions) => Promise<SupervisionResult_2 | undefined>;
+
+// Warning: (ae-missing-release-tag) "SetValueImplementationHooks" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SetValueImplementationHooks = AllOrNone_2<{
+    supervisionDelayedUpdates: boolean;
+    supervisionOnSuccess: () => void | Promise<void>;
+    supervisionOnFailure: () => void | Promise<void>;
+}> & {
+    optimisticallyUpdateRelatedValues?: () => void;
+    forceVerifyChanges?: () => boolean;
+    verifyChanges?: () => void | Promise<void>;
+};
+
+// Warning: (ae-missing-release-tag) "SetValueImplementationHooksFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SetValueImplementationHooksFactory = (property: ValueIDProperties, value: unknown, options?: SetValueAPIOptions) => SetValueImplementationHooks | undefined;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "shouldUseSupervision" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
