@@ -308,8 +308,8 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 
 	public serialize(): Buffer {
 		const payload: number[] = [this.targetValue ? 0xff : 0x00];
-		if (this.version >= 2 && this.duration) {
-			payload.push(this.duration.serializeSet());
+		if (this.version >= 2) {
+			payload.push((this.duration ?? Duration.default()).serializeSet());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();

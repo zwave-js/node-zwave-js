@@ -597,8 +597,8 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 
 	public serialize(): Buffer {
 		const payload = [this.targetValue];
-		if (this.version >= 2 && this.duration) {
-			payload.push(this.duration.serializeSet());
+		if (this.version >= 2) {
+			payload.push((this.duration ?? Duration.default()).serializeSet());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
@@ -732,8 +732,8 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			(LevelChangeDirection[this.direction] << 6) |
 			(this.ignoreStartLevel ? 0b0010_0000 : 0);
 		const payload = [controlByte, this.startLevel];
-		if (this.version >= 2 && this.duration) {
-			payload.push(this.duration.serializeSet());
+		if (this.version >= 2) {
+			payload.push((this.duration ?? Duration.default()).serializeSet());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
