@@ -2244,7 +2244,7 @@ export class Driver
 	 * @param nodeId The node for which the CC version should be retrieved
 	 * @param endpointIndex The endpoint in question
 	 */
-	public getSupportedCCVersionForEndpoint(
+	public getSupportedCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex: number = 0,
@@ -2269,12 +2269,12 @@ export class Driver
 	 * @param nodeId The node for which the CC version should be retrieved
 	 * @param endpointIndex The endpoint for which the CC version should be retrieved
 	 */
-	public getSafeCCVersionForNode(
+	public getSafeCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex: number = 0,
 	): number {
-		const supportedVersion = this.getSupportedCCVersionForEndpoint(
+		const supportedVersion = this.getSupportedCCVersion(
 			cc,
 			nodeId,
 			endpointIndex,

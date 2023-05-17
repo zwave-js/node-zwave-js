@@ -413,7 +413,7 @@ export class MultiChannelCC extends CommandClass {
 	):
 		| MultiChannelCCCommandEncapsulation
 		| MultiChannelCCV1CommandEncapsulation {
-		const ccVersion = host.getSafeCCVersionForNode(
+		const ccVersion = host.getSafeCCVersion(
 			CommandClasses["Multi Channel"],
 			cc.nodeId as number,
 		);

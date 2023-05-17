@@ -216,7 +216,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 				// The API might have been created before the versions were determined,
 				// so `this.version` may contains a wrong value
 				return (
-					this.applHost.getSafeCCVersionForNode(
+					this.applHost.getSafeCCVersion(
 						this.ccId,
 						this.endpoint.nodeId,
 						this.endpoint.index,
@@ -474,7 +474,7 @@ export class VersionCC extends CommandClass {
 			// Step 1: Query Version CC version
 			await queryCCVersion(CommandClasses.Version);
 			// The CC instance was created before the versions were determined, so `this.version` contains a wrong value
-			this.version = applHost.getSafeCCVersionForNode(
+			this.version = applHost.getSafeCCVersion(
 				CommandClasses.Version,
 				node.id,
 				this.endpointIndex,

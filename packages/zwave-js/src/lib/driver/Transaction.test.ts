@@ -52,8 +52,8 @@ test("should compare priority, then the timestamp", (t) => {
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},
@@ -150,8 +150,8 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},
@@ -264,8 +264,8 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},
@@ -360,8 +360,8 @@ test("Controller message should be preferred over messages for sleeping nodes", 
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},
@@ -405,8 +405,8 @@ test("should capture a stack trace where it was created", (t) => {
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},

@@ -55,12 +55,8 @@ export class MockController {
 			getNextSupervisionSessionId: createWrappingCounter(
 				MAX_SUPERVISION_SESSION_ID,
 			),
-			getSafeCCVersionForNode: () => 100,
-			getSupportedCCVersionForEndpoint: (
-				cc,
-				nodeId,
-				endpointIndex = 0,
-			) => {
+			getSafeCCVersion: () => 100,
+			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
 					return 0;
 				}

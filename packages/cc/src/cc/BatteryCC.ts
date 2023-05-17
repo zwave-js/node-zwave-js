@@ -450,12 +450,11 @@ export class BatteryCCReport extends BatteryCC {
 			// Some devices send Notification CC Reports with battery information,
 			// or this information is mapped from legacy V1 alarm values.
 			// We may need to idle the corresponding values when the battery is full
-			const notificationCCVersion =
-				applHost.getSupportedCCVersionForEndpoint(
-					CommandClasses.Notification,
-					this.nodeId as number,
-					this.endpointIndex,
-				);
+			const notificationCCVersion = applHost.getSupportedCCVersion(
+				CommandClasses.Notification,
+				this.nodeId as number,
+				this.endpointIndex,
+			);
 			if (
 				// supported
 				notificationCCVersion > 0 &&

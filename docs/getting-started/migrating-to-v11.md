@@ -20,3 +20,10 @@ To make this easier:
 -   `firmwareUpdateOTW` now returns a `Promise<ControllerFirmwareUpdateResult>`
 
 both of which contain the same information as the corresponding `firmware update finished` events.
+
+## Renamed methods on the `ZWaveHost` interface
+
+The `getSafeCCVersionForEndpoint` method has been renamed to `getSafeCCVersion`.  
+The `getSupportedCCVersionForNode` method has been renamed to `getSupportedCCVersion`.
+
+These methods were inconsistently named and none of the other methods that accept a node ID and endpoint index specify that in their name.
