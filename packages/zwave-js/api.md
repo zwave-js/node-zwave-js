@@ -1046,17 +1046,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     backupNVMRaw(onProgress?: (bytesRead: number, total: number) => void): Promise<Buffer>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     beginExclusion(options?: ExclusionOptions): Promise<boolean>;
-    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    //
-    // @deprecated
-    beginExclusion(unprovision: boolean | "inactive"): Promise<boolean>;
     beginHealingNetwork(options?: HealNetworkOptions): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     beginInclusion(options?: InclusionOptions): Promise<boolean>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "firmwareUpdateOTA"
-    //
-    // @deprecated
-    beginOTAFirmwareUpdate(nodeId: number, update: FirmwareUpdateFileInfo): Promise<void>;
     // (undocumented)
     cancelSecureBootstrapS2(reason: KEXFailType): void;
     configureSUC(nodeId: number, enableSUC: boolean, enableSIS: boolean): Promise<boolean>;
@@ -1092,28 +1084,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         rssiChannel2?: RSSI_2;
     }>;
     getBroadcastNode(): VirtualNode;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getBroadcastNode"
-    //
-    // @deprecated (undocumented)
-    getBroadcastNodeInsecure(): VirtualNode;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getBroadcastNode"
-    //
-    // @deprecated (undocumented)
-    getBroadcastNodes(): VirtualNode[];
     getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>;
     getMulticastGroup(nodeIDs: number[]): VirtualNode;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroup"
-    //
-    // @deprecated
-    getMulticastGroupInsecure(nodeIDs: number[]): VirtualNode;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroup"
-    //
-    // @deprecated (undocumented)
-    getMulticastGroups(nodeIDs: number[]): VirtualNode[];
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getMulticastGroup"
-    //
-    // @deprecated
-    getMulticastGroupS2(nodeIDs: number[]): VirtualNode;
     getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined;
     getNodeNeighbors(nodeId: number, onlyRepeaters?: boolean): Promise<readonly number[]>;
     // Warning: (ae-forgotten-export) The symbol "NVMId" needs to be exported by the entry point index.d.ts
@@ -1255,13 +1227,6 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     abortFirmwareUpdate(): Promise<void>;
     // (undocumented)
     get aggregatedEndpointCount(): number | undefined;
-    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    // Warning: (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "updateFirmware"
-    //
-    // @deprecated
-    beginFirmwareUpdate(data: Buffer, target?: number): Promise<void>;
     // (undocumented)
     get canSleep(): boolean | undefined;
     checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number) => void): Promise<LifelineHealthCheckSummary>;
@@ -1407,12 +1372,12 @@ export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 // Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateFinishedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ZWaveNodeFirmwareUpdateFinishedCallback = (node: ZWaveNode, __DEPRECATED__status: FirmwareUpdateStatus, __DEPRECATED__waitTime: number | undefined, result: FirmwareUpdateResult) => void;
+export type ZWaveNodeFirmwareUpdateFinishedCallback = (node: ZWaveNode, result: FirmwareUpdateResult) => void;
 
 // Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateProgressCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ZWaveNodeFirmwareUpdateProgressCallback = (node: ZWaveNode, __DEPRECATED__sentFragments: number, __DEPRECATED__totalFragments: number, progress: FirmwareUpdateProgress) => void;
+export type ZWaveNodeFirmwareUpdateProgressCallback = (node: ZWaveNode, progress: FirmwareUpdateProgress) => void;
 
 // Warning: (ae-missing-release-tag) "ZWaveNodeMetadataUpdatedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

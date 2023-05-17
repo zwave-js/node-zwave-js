@@ -646,24 +646,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
-	 * @deprecated This API was a mistake. Use {@link getBroadcastNode} instead.
-	 */
-	public getBroadcastNodeInsecure(): VirtualNode {
-		return new VirtualNode(
-			NODE_ID_BROADCAST,
-			this.driver,
-			this.nodes.values(),
-		);
-	}
-
-	/**
-	 * @deprecated This API was a mistake. Use {@link getBroadcastNode} instead.
-	 */
-	public getBroadcastNodes(): VirtualNode[] {
-		return [this.getBroadcastNode()];
-	}
-
-	/**
 	 * Creates a virtual node that can be used to send one or more multicast commands to several nodes.
 	 * This automatically groups nodes by security class and ignores nodes that cannot be controlled via multicast.
 	 */
@@ -676,77 +658,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 
 		const nodes = nodeIDs.map((id) => this._nodes.getOrThrow(id));
-		return new VirtualNode(undefined, this.driver, nodes);
-	}
-
-	/**
-	 * @deprecated This API was a mistake. Use {@link getMulticastGroup} instead.
-	 */
-	public getMulticastGroups(nodeIDs: number[]): VirtualNode[] {
-		return [this.getMulticastGroup(nodeIDs)];
-	}
-
-	/**
-	 * Creates a virtual node that can be used to send multicast commands to several insecure nodes.
-	 * All nodes MUST be included insecurely.
-	 *
-	 * @deprecated This API was a mistake. Use {@link getMulticastGroup} instead and don't worry about the security classes.
-	 */
-	public getMulticastGroupInsecure(nodeIDs: number[]): VirtualNode {
-		if (nodeIDs.length === 0) {
-			throw new ZWaveError(
-				"Cannot create an empty multicast group",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
-		const nodes = nodeIDs.map((id) => this._nodes.getOrThrow(id));
-		if (nodes.some((n) => n.isSecure !== false)) {
-			throw new ZWaveError(
-				"All nodes must be included insecurely",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
-		return new VirtualNode(undefined, this.driver, nodes);
-	}
-
-	/**
-	 * Creates a virtual node that can be used to send multicast commands to several nodes using Security S2.
-	 * All nodes MUST be included using Security S2 and MUST have the same (highest) security class.
-	 *
-	 * @deprecated This API was a mistake. Use {@link getMulticastGroup} instead and don't worry about the security classes.
-	 */
-	public getMulticastGroupS2(nodeIDs: number[]): VirtualNode {
-		if (nodeIDs.length === 0) {
-			throw new ZWaveError(
-				"Cannot create an empty multicast group",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
-		if (!this.driver.securityManager2) {
-			throw new ZWaveError(
-				`Security S2 multicast can only be used when the network keys are configured!`,
-				ZWaveErrorCodes.Driver_NoSecurity,
-			);
-		}
-
-		const nodes = nodeIDs.map((id) => this._nodes.getOrThrow(id));
-		const fail = (): never => {
-			throw new ZWaveError(
-				"All nodes must be included using Security S2 and must have the same (highest) security class",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		};
-		const node0Class = nodes[0].getHighestSecurityClass();
-		for (let i = 0; i < nodes.length; i++) {
-			const node = nodes[i];
-			const secClass = node.getHighestSecurityClass();
-			if (!securityClassIsS2(secClass)) throw fail();
-			if (i > 0 && secClass !== node0Class) throw fail();
-		}
-
 		return new VirtualNode(undefined, this.driver, nodes);
 	}
 
@@ -1782,23 +1693,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 *
 	 * @param options Influences the exclusion process and what happens with the Smart Start provisioning list.
 	 */
-	public async beginExclusion(options?: ExclusionOptions): Promise<boolean>;
-
-	/**
-	 * Starts the exclusion process of new nodes.
-	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
-	 *
-	 * @param unprovision Whether the removed node should also be removed from the Smart Start provisioning list.
-	 * A value of `"inactive"` will keep the provisioning entry, but disable it.
-	 *
-	 * @deprecated Use the overload with {@link ExclusionOptions} instead.
-	 */
 	public async beginExclusion(
-		unprovision: boolean | "inactive",
-	): Promise<boolean>;
-
-	public async beginExclusion(
-		options: ExclusionOptions | boolean | "inactive" = {
+		options: ExclusionOptions = {
 			strategy: ExclusionStrategy.DisableProvisioningEntry,
 		},
 	): Promise<boolean> {
@@ -1808,18 +1704,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this._inclusionState === InclusionState.Busy
 		) {
 			return false;
-		}
-
-		if (typeof options === "boolean") {
-			options = {
-				strategy: options
-					? ExclusionStrategy.Unprovision
-					: ExclusionStrategy.ExcludeOnly,
-			};
-		} else if (options === "inactive") {
-			options = {
-				strategy: ExclusionStrategy.DisableProvisioningEntry,
-			};
 		}
 
 		// Leave SmartStart listening mode so we can switch to exclusion mode
@@ -5751,76 +5635,6 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.FWUpdateService_RequestError,
 			);
 		}
-	}
-
-	/**
-	 * Downloads the desired firmware update from the Z-Wave JS firmware update service and starts a firmware update for the given node.
-	 *
-	 * @deprecated Use {@link firmwareUpdateOTA} instead, which properly handles multi-target updates
-	 */
-	public async beginOTAFirmwareUpdate(
-		nodeId: number,
-		update: FirmwareUpdateFileInfo,
-	): Promise<void> {
-		// Don't let two firmware updates happen in parallel
-		if (this.isAnyOTAFirmwareUpdateInProgress()) {
-			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
-			this.driver.controllerLog.print(message, "error");
-			throw new ZWaveError(
-				message,
-				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
-			);
-		}
-		// Don't allow updating firmware when the controller is currently updating its own firmware
-		if (this.isFirmwareUpdateInProgress()) {
-			const message = `Failed to start the update: The controller is currently being updated!`;
-			this.driver.controllerLog.print(message, "error");
-			throw new ZWaveError(
-				message,
-				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
-			);
-		}
-
-		const node = this.nodes.getOrThrow(nodeId);
-
-		let firmware: Firmware;
-		try {
-			this.driver.controllerLog.logNode(
-				nodeId,
-				`Downloading firmware update from ${update.url}...`,
-			);
-			firmware = await downloadFirmwareUpdate(update);
-		} catch (e: any) {
-			let message = `Downloading the firmware update for node ${nodeId} failed:\n`;
-			if (isZWaveError(e)) {
-				// Pass "real" Z-Wave errors through
-				throw new ZWaveError(message + e.message, e.code);
-			} else if (e.response) {
-				// And construct a better error message for HTTP errors
-				if (
-					isObject(e.response.data) &&
-					typeof e.response.data.message === "string"
-				) {
-					message += `${e.response.data.message} `;
-				}
-				message += `[${e.response.status} ${e.response.statusText}]`;
-			} else if (typeof e.message === "string") {
-				message += e.message;
-			} else {
-				message += `Failed to download firmware update!`;
-			}
-
-			throw new ZWaveError(
-				message,
-				ZWaveErrorCodes.FWUpdateService_RequestError,
-			);
-		}
-
-		this.driver.controllerLog.logNode(
-			nodeId,
-			`Firmware update ${update.url} downloaded, installing...`,
-		);
-		await node.beginFirmwareUpdate(firmware.data, firmware.firmwareTarget);
 	}
 
 	/**

@@ -6,7 +6,6 @@ import {
 	CRC16CC,
 	DeviceResetLocallyCCNotification,
 	FirmwareUpdateResult,
-	FirmwareUpdateStatus,
 	getImplementedVersion,
 	ICommandClassContainer,
 	InvalidCC,
@@ -2101,8 +2100,6 @@ export class Driver
 	/** This is called when the firmware on one of a node's firmware targets was updated */
 	private async onNodeFirmwareUpdated(
 		node: ZWaveNode,
-		_status: FirmwareUpdateStatus,
-		_waitTime: number | undefined,
 		result: FirmwareUpdateResult,
 	): Promise<void> {
 		const { success, reInterview } = result;
