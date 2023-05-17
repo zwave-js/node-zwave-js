@@ -277,12 +277,12 @@ type FirmwareUpdateCapabilities =
 ### `updateFirmware`
 
 ```ts
-updateFirmware(updates: Firmware[]): Promise<boolean>
+updateFirmware(updates: Firmware[]): Promise<FirmwareUpdateResult>
 ```
 
 > [!WARNING] Use at your own risk! We don't take any responsibility if your devices don't work after an update.
 
-Performs an OTA firmware update process for this node, applying the provided firmware updates in sequence. The returned Promise will resolve after the process has **COMPLETED** and indicates whether the update was successful. Failure to start any one of the provided updates will throw an error.
+Performs an OTA firmware update process for this node, applying the provided firmware updates in sequence. The returned Promise will resolve after the process has **COMPLETED** and indicates whether the update was successful and includes some additional information. Failure to start any one of the provided updates will throw an error.
 
 This method an array of firmware updates, each of which contains the following properties:
 
@@ -295,6 +295,23 @@ This method an array of firmware updates, each of which contains the following p
 interface Firmware {
 	data: Buffer;
 	firmwareTarget?: number;
+}
+```
+
+The information contained in the returned Promise is the same that is emitted in the `firmware update finished` event.
+
+<!-- #import FirmwareUpdateResult from "@zwave-js/cc" -->
+
+```ts
+interface FirmwareUpdateResult {
+	/** The status returned by the device for this firmware update attempt. For multi-target updates, this will be the status for the last update. */
+	status: FirmwareUpdateStatus;
+	/** Whether the update was successful. This is a simpler interpretation of the `status` field. */
+	success: boolean;
+	/** How long (in seconds) to wait before interacting with the device again */
+	waitTime?: number;
+	/** Whether the device will be re-interviewed. If this is `true`, applications should wait for the `"ready"` event to interact with the device again. */
+	reInterview: boolean;
 }
 ```
 
