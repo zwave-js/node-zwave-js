@@ -306,7 +306,7 @@ export class CCAPI {
 	 */
 	public get version(): number {
 		if (this.isSinglecast() && this.endpoint.nodeId !== NODE_ID_BROADCAST) {
-			return this.applHost.getSafeCCVersionForNode(
+			return this.applHost.getSafeCCVersion(
 				this.ccId,
 				this.endpoint.nodeId,
 				this.endpoint.index,

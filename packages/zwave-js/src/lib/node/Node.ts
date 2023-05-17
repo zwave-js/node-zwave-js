@@ -3522,7 +3522,7 @@ protocol version:      ${this.protocolVersion}`;
 		notificationConfig: Notification,
 		valueConfig: NotificationValueDefinition & { type: "state" },
 	) {
-		const ccVersion = this.driver.getSupportedCCVersionForEndpoint(
+		const ccVersion = this.driver.getSupportedCCVersion(
 			CommandClasses.Notification,
 			this.nodeId,
 			this.index,
