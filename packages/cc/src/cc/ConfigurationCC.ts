@@ -2222,7 +2222,6 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		if (!super.persistValues(applHost)) return false;
 
 		this.extendParamInformation(applHost, this.parameter, undefined, {
-			name: this.name,
 			label: this.name,
 		});
 		return true;
@@ -2342,7 +2341,6 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		if (!super.persistValues(applHost)) return false;
 
 		this.extendParamInformation(applHost, this.parameter, undefined, {
-			info: this.info,
 			description: this.info,
 		});
 		return true;
