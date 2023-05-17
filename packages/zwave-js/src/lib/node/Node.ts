@@ -2096,16 +2096,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
 		// to map the Basic CC to other CCs or expose Basic Set as an event
-		const compat = this._deviceConfig?.compat;
-		if (compat?.treatBasicSetAsEvent) {
-			// To create the compat event value, we need to force a Basic CC interview
-			this.addCC(CommandClasses.Basic, {
-				isSupported: true,
-				version: 1,
-			});
-		} else if (!compat?.disableBasicMapping) {
-			this.hideBasicCCInFavorOfActuatorCCs();
-		}
+		this.modifySupportedCCBeforeInterview(this);
 
 		// We determine the correct interview order of the remaining CCs by topologically sorting two dependency graph
 		// In order to avoid emitting unnecessary value events for the root endpoint,
@@ -2368,11 +2359,8 @@ protocol version:      ${this.protocolVersion}`;
 			// that aren't actually properly supported by the device.
 			this.applyCommandClassesCompatFlag(endpoint.index);
 
-			// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
-			// to map the Basic CC to other CCs or expose Basic Set as an event
-			if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
-				endpoint.hideBasicCCInFavorOfActuatorCCs();
-			}
+			// We need to add/remove some CCs based on other criteria
+			this.modifySupportedCCBeforeInterview(endpoint);
 
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph([
 				CommandClasses.Security,
@@ -2627,6 +2615,39 @@ protocol version:      ${this.protocolVersion}`;
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Updates the supported CCs of the given endpoint depending on compat flags
+	 * and certification requirements
+	 */
+	private modifySupportedCCBeforeInterview(endpoint: Endpoint): void {
+		const compat = this._deviceConfig?.compat;
+
+		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
+		// to map the Basic CC to other CCs or expose Basic Set as an event
+		if (compat?.treatBasicSetAsEvent) {
+			if (endpoint.index === 0) {
+				// To create the compat event value, we need to force a Basic CC interview
+				endpoint.addCC(CommandClasses.Basic, {
+					isSupported: true,
+					version: 1,
+				});
+			}
+		} else if (!compat?.disableBasicMapping) {
+			endpoint.hideBasicCCInFavorOfActuatorCCs();
+		}
+
+		// Window Covering CC:
+		// CL:006A.01.51.01.2: A controlling node MUST NOT interview and provide controlling functionalities for the
+		// Multilevel Switch Command Class for a node (or endpoint) supporting the Window Covering CC, as it is a fully
+		// redundant and less precise application functionality.
+		if (
+			endpoint.supportsCC(CommandClasses["Multilevel Switch"]) &&
+			endpoint.supportsCC(CommandClasses["Window Covering"])
+		) {
+			endpoint.removeCC(CommandClasses["Multilevel Switch"]);
 		}
 	}
 
