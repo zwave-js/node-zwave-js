@@ -171,13 +171,13 @@ export class CommandClass implements ICommandClass {
 		if (options.origin !== MessageOrigin.Host && this.isSinglecast()) {
 			try {
 				// For singlecast CCs, set the CC version as high as possible
-				this.version = this.host.getSafeCCVersionForNode(
+				this.version = this.host.getSafeCCVersion(
 					this.ccId,
 					this.nodeId,
 					this.endpointIndex,
 				);
 				// But remember which version the node supports
-				this._knownVersion = this.host.getSupportedCCVersionForEndpoint(
+				this._knownVersion = this.host.getSupportedCCVersion(
 					this.ccId,
 					this.nodeId,
 					this.endpointIndex,

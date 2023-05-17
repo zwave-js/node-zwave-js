@@ -86,7 +86,7 @@ test("the Report command (v1-v2) should be deserialized correctly", (t) => {
 	const cc = new ThermostatFanModeCCReport(
 		{
 			...host,
-			getSafeCCVersionForNode: () => 1,
+			getSafeCCVersion: () => 1,
 		},
 		{
 			nodeId: 1,

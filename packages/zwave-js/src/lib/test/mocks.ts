@@ -63,8 +63,8 @@ export function createEmptyMockDriver() {
 	const ret = {
 		sendMessage: sinon.stub().callsFake(() => Promise.resolve()),
 		sendCommand: sinon.stub(),
-		getSupportedCCVersionForEndpoint: sinon.stub(),
-		getSafeCCVersionForNode: sinon.stub(),
+		getSupportedCCVersion: sinon.stub(),
+		getSafeCCVersion: sinon.stub(),
 		isCCSecure: sinon.stub().callsFake(() => false),
 		getNextCallbackId: sinon
 			.stub()
@@ -177,7 +177,7 @@ export function createEmptyMockDriver() {
 		const resp = await ret.sendMessage(msg, options);
 		return resp?.command;
 	});
-	ret.getSupportedCCVersionForEndpoint.callsFake(
+	ret.getSupportedCCVersion.callsFake(
 		(ccId: CommandClasses, nodeId: number, endpointIndex: number = 0) => {
 			if (
 				ret.controller?.nodes instanceof Map &&
@@ -192,14 +192,11 @@ export function createEmptyMockDriver() {
 			return 0;
 		},
 	);
-	ret.getSafeCCVersionForNode.callsFake(
+	ret.getSafeCCVersion.callsFake(
 		(ccId: CommandClasses, nodeId: number, endpointIndex: number = 0) => {
 			return (
-				ret.getSupportedCCVersionForEndpoint(
-					ccId,
-					nodeId,
-					endpointIndex,
-				) || getImplementedVersion(ccId)
+				ret.getSupportedCCVersion(ccId, nodeId, endpointIndex) ||
+				getImplementedVersion(ccId)
 			);
 		},
 	);
@@ -376,12 +373,7 @@ export function createTestEndpoint(
 		isCCSecure: options.isCCSecure ?? (() => false),
 		getCCVersion:
 			options.getCCVersion ??
-			((cc) =>
-				host.getSafeCCVersionForNode(
-					cc,
-					options.nodeId,
-					options.index,
-				)),
+			((cc) => host.getSafeCCVersion(cc, options.nodeId, options.index)),
 		virtual: false,
 		addCC: function (
 			cc: CommandClasses,
