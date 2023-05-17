@@ -268,6 +268,22 @@ function reInterpretSignedValue(
 	return parseValue(raw, valueSize, targetFormat);
 }
 
+function getParamInformationFromConfigFile(
+	applHost: ZWaveApplicationHost,
+	nodeId: number,
+	endpointIndex: number,
+): ParamInfoMap | undefined {
+	const deviceConfig = applHost.getDeviceConfig?.(nodeId);
+	if (endpointIndex === 0) {
+		return (
+			deviceConfig?.paramInformation ??
+			deviceConfig?.endpoints?.get(0)?.paramInformation
+		);
+	} else {
+		return deviceConfig?.endpoints?.get(endpointIndex)?.paramInformation;
+	}
+}
+
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
@@ -1013,7 +1029,11 @@ export class ConfigurationCC extends CommandClass {
 		});
 
 		const deviceConfig = applHost.getDeviceConfig?.(node.id);
-		const paramInfo = deviceConfig?.paramInformation;
+		const paramInfo = getParamInformationFromConfigFile(
+			applHost,
+			node.id,
+			this.endpointIndex,
+		);
 		if (paramInfo) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -1155,9 +1175,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 		if (this.version < 3) {
 			// V1/V2: Query all values defined in the config file
-			const paramInfo = applHost.getDeviceConfig?.(
+			const paramInfo = getParamInformationFromConfigFile(
+				applHost,
 				node.id,
-			)?.paramInformation;
+				this.endpointIndex,
+			);
 			if (paramInfo?.size) {
 				// Because partial params share the same parameter number,
 				// we need to remember which ones we have already queried.

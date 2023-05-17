@@ -28,6 +28,11 @@ The `getSupportedCCVersionForNode` method has been renamed to `getSupportedCCVer
 
 These methods were inconsistently named and none of the other methods that accept a node ID and endpoint index specify that in their name.
 
+## `paramInformation` in custom device configuration files can no longer be an object
+
+In version `8.6.0`, we switched from defining config parameters as an array of objects with instead of an object. Parsing objects was still supported for user-defined config files, but this is no longer the case.
+All config files must now use the new format. See [this pull request](https://github.com/zwave-js/node-zwave-js/pull/3100) for details on the change.
+
 ## Removed several deprecated method signatures, enums and properties
 
 -   The enum member `NodeType["Routing End Node"]` has been removed. This has been called `"End Node"` since `v9.3.0`
