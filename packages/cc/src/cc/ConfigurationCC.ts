@@ -100,7 +100,6 @@ export const ConfigurationCCValues = Object.freeze({
 				(typeof propertyKey === "number" || propertyKey == undefined),
 			// Metadata is determined dynamically depending on other factors
 			undefined,
-			{ supportsEndpoints: false },
 		),
 	}),
 });
@@ -494,7 +493,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 			allowUnexpectedResponse,
 		});
@@ -520,6 +519,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			);
 		}
 		this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+			endpoint: this.endpoint.index,
 			message: `Received unexpected ConfigurationReport (param = ${
 				response.parameter
 			}, value = ${response.value.toString()})`,
@@ -563,7 +563,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		) {
 			const cc = new ConfigurationCCBulkGet(this.applHost, {
 				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				endpoint: this.endpoint.index,
 				parameters: distinctParameters,
 			});
 			const response =
@@ -582,7 +582,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			for (const parameter of distinctParameters) {
 				const cc = new ConfigurationCCGet(this.applHost, {
 					nodeId: this.endpoint.nodeId,
-					// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+					endpoint: this.endpoint.index,
 					parameter,
 				});
 				const response =
@@ -654,7 +654,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 		const cc = new ConfigurationCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			resetToDefault: false,
 			parameter: normalized.parameter,
 			value,
@@ -699,7 +699,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		if (canUseBulkSet) {
 			const cc = new ConfigurationCCBulkSet(this.applHost, {
 				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				endpoint: this.endpoint.index,
 				parameters: allParams.map((v) => v.parameter),
 				valueSize: allParams[0].valueSize,
 				valueFormat: allParams[0].valueFormat,
@@ -745,7 +745,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			} of allParams) {
 				const cc = new ConfigurationCCSet(this.applHost, {
 					nodeId: this.endpoint.nodeId,
-					// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+					endpoint: this.endpoint.index,
 					parameter,
 					value,
 					valueSize,
@@ -780,7 +780,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 			resetToDefault: true,
 		});
@@ -802,7 +802,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		) {
 			const cc = new ConfigurationCCBulkSet(this.applHost, {
 				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				endpoint: this.endpoint.index,
 				parameters,
 				resetToDefault: true,
 			});
@@ -816,7 +816,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				(parameter) =>
 					new ConfigurationCCSet(this.applHost, {
 						nodeId: this.endpoint.nodeId,
-						// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+						endpoint: this.endpoint.index,
 						parameter,
 						resetToDefault: true,
 					}),
@@ -839,7 +839,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCDefaultReset(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
@@ -852,7 +852,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCPropertiesGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 		});
 		const response =
@@ -884,7 +884,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCNameGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 		});
 		const response =
@@ -903,7 +903,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCInfoGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 		});
 		const response =
@@ -937,10 +937,10 @@ export class ConfigurationCCAPI extends CCAPI {
 		this.assertPhysicalEndpoint(this.endpoint);
 
 		// TODO: Reduce the priority of the messages
-		this.applHost.controllerLog.logNode(
-			this.endpoint.nodeId,
-			`Scanning available parameters...`,
-		);
+		this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+			endpoint: this.endpoint.index,
+			message: `Scanning available parameters...`,
+		});
 		const ccInstance = createConfigurationCCInstance(
 			this.applHost,
 			this.endpoint,
@@ -949,6 +949,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
 			this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+				endpoint: this.endpoint.index,
 				message: `  trying param ${param}...`,
 				direction: "outbound",
 			});
@@ -967,6 +968,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
     value     = ${originalValue.toString()}`;
 					this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+						endpoint: this.endpoint.index,
 						message: logMessage,
 						direction: "inbound",
 					});
@@ -1253,11 +1255,6 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Don't trust param information that a node reports if we have already loaded it from a config file
 		if (this.isParamInformationFromConfig(applHost)) return;
 
-		const valueDB = this.getValueDB(applHost);
-		const valueId = ConfigurationCCValues.paramInformation(
-			parameter,
-			valueBitMask,
-		).id;
 		// Retrieve the base metadata
 		const metadata = this.getParamInformation(
 			applHost,
@@ -1267,7 +1264,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Override it with new data
 		Object.assign(metadata, info);
 		// And store it back
-		valueDB.setMetadata(valueId, metadata);
+		this.setMetadata(
+			applHost,
+			ConfigurationCCValues.paramInformation(parameter, valueBitMask),
+			metadata,
+		);
 	}
 
 	/**
@@ -1320,6 +1321,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		return valueDB.findMetadata(
 			(id) =>
 				id.commandClass === this.ccId &&
+				(id.endpoint ?? 0) === this.endpointIndex &&
 				id.property === parameter &&
 				id.propertyKey != undefined,
 		) as (ValueID & { metadata: ConfigurationMetadata })[];
@@ -1355,6 +1357,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const otherValues = valueDB.findValues(
 			(id) =>
 				id.commandClass === this.ccId &&
+				(id.endpoint ?? 0) === this.endpointIndex &&
 				id.property === parameter &&
 				id.propertyKey != undefined &&
 				!partials.some((p) => id.propertyKey === p.bitMask),
@@ -1381,7 +1384,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 		// Clear old param information
 		for (const meta of valueDB.getAllMetadata(this.ccId)) {
-			if (typeof meta.property === "number") {
+			if (
+				typeof meta.property === "number" &&
+				(meta.endpoint ?? 0) === this.endpointIndex
+			) {
 				// this is a param information, delete it
 				valueDB.setMetadata(
 					meta,
@@ -1538,7 +1544,6 @@ export class ConfigurationCCReport extends ConfigurationCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Check if the initial assumption of SignedInteger holds true
 		const oldParamInformation = this.getParamInformation(
@@ -1590,12 +1595,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		if (partialParams.length > 0) {
 			for (const param of partialParams) {
 				if (typeof param.propertyKey === "number") {
-					valueDB.setValue(
-						{
-							commandClass: this.ccId,
-							property: this.parameter,
-							propertyKey: param.propertyKey,
-						},
+					this.setValue(
+						applHost,
+						ConfigurationCCValues.paramInformation(this.parameter),
 						parsePartial(
 							this.value as any,
 							param.propertyKey,
@@ -1609,11 +1611,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			}
 		} else {
 			// This is a single param
-			valueDB.setValue(
-				{
-					commandClass: this.ccId,
-					property: this.parameter,
-				},
+			this.setValue(
+				applHost,
+				ConfigurationCCValues.paramInformation(this.parameter),
 				this.value,
 			);
 		}
@@ -2039,7 +2039,6 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Store every received parameter
 		// eslint-disable-next-line prefer-const
@@ -2062,11 +2061,9 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				this._values.set(parameter, value);
 			}
 
-			valueDB.setValue(
-				{
-					commandClass: this.ccId,
-					property: parameter,
-				},
+			this.setValue(
+				applHost,
+				ConfigurationCCValues.paramInformation(parameter),
 				value,
 			);
 		}
