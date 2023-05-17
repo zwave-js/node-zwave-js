@@ -4281,12 +4281,12 @@ export const ConfigurationCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly minVersion: 1;
+            readonly secret: false;
+            readonly stateful: true;
+            readonly supportsEndpoints: true;
             readonly autoCreate: true;
-            readonly supportsEndpoints: false;
         };
     };
     isParamInformationFromConfig: {
