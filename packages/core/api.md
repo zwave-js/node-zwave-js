@@ -444,8 +444,6 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
     description?: string;
     // (undocumented)
     format?: ConfigValueFormat;
-    // @deprecated (undocumented)
-    info?: string;
     // (undocumented)
     isAdvanced?: boolean;
     // (undocumented)
@@ -456,8 +454,6 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
     max?: ConfigValue;
     // (undocumented)
     min?: ConfigValue;
-    // @deprecated (undocumented)
-    name?: string;
     // Warning: (tsdoc-missing-deprecation-message) The @deprecated block must include a deprecation message, e.g. describing the recommended alternative
     //
     // @deprecated (undocumented)
@@ -1581,8 +1577,6 @@ export enum NodeStatus {
 export enum NodeType {
     // (undocumented)
     "End Node" = 1,
-    // @deprecated (undocumented)
-    "Routing End Node" = 1,
     // (undocumented)
     Controller = 0
 }

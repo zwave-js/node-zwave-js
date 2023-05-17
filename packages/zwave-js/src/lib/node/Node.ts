@@ -4054,171 +4054,6 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	/**
-	 * Starts an OTA firmware update process for this node.
-	 *
-	 * This method will resolve after the process has **STARTED** successfully. It does not wait for the update to finish.
-	 *
-	 * @deprecated Use {@link updateFirmware} instead, which allows waiting for the update to finish.
-	 *
-	 * **WARNING: Use at your own risk! We don't take any responsibility if your devices don't work after an update.**
-	 *
-	 * @param data The firmware image
-	 * @param target The firmware target (i.e. chip) to upgrade. 0 updates the Z-Wave chip, >=1 updates others if they exist
-	 */
-	public async beginFirmwareUpdate(
-		data: Buffer,
-		target: number = 0,
-	): Promise<void> {
-		// Don't start the process twice
-		if (this.isFirmwareUpdateInProgress()) {
-			throw new ZWaveError(
-				`Failed to start the update: A firmware upgrade for this node is already in progress!`,
-				ZWaveErrorCodes.FirmwareUpdateCC_Busy,
-			);
-		}
-
-		// Don't let two firmware updates happen in parallel
-		if (this.driver.controller.isAnyOTAFirmwareUpdateInProgress()) {
-			throw new ZWaveError(
-				`Failed to start the update: A firmware update is already in progress on this network!`,
-				ZWaveErrorCodes.FirmwareUpdateCC_NetworkBusy,
-			);
-		}
-		this._firmwareUpdateInProgress = true;
-
-		// Support aborting the update
-		const abortContext: {
-			abort: boolean;
-			tooLateToAbort: boolean;
-			abortPromise: DeferredPromise<boolean>;
-		} = {
-			abort: false,
-			tooLateToAbort: false,
-			abortPromise: createDeferredPromise<boolean>(),
-		};
-
-		this._abortFirmwareUpdate = async () => {
-			if (abortContext.tooLateToAbort) {
-				throw new ZWaveError(
-					`The firmware update was transmitted completely, cannot abort anymore.`,
-					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
-				);
-			}
-
-			this.driver.controllerLog.logNode(this.id, {
-				message: `Aborting firmware update...`,
-				direction: "outbound",
-			});
-
-			// Trigger the abort
-			abortContext.abort = true;
-			const aborted = await abortContext.abortPromise;
-			if (!aborted) {
-				throw new ZWaveError(
-					`The node did not acknowledge the aborted update`,
-					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
-				);
-			}
-			this.driver.controllerLog.logNode(this.id, {
-				message: `Firmware update aborted`,
-				direction: "inbound",
-			});
-		};
-
-		// If the node isn't supposed to be kept awake yet, do it
-		this.keepAwake = true;
-
-		// Reset persisted state after the update
-		const restore = (keepAwake: boolean) => {
-			this.keepAwake = keepAwake;
-			this._firmwareUpdateInProgress = false;
-			this._abortFirmwareUpdate = undefined;
-			this._firmwareUpdatePrematureRequest = undefined;
-		};
-
-		// Kick off the firmware update "synchronously"
-		let fragmentSize: number;
-		try {
-			const result = await this.prepareFirmwareUpdateInternal(
-				[target],
-				abortContext,
-			);
-
-			// Handle early aborts
-			if (abortContext.abort) {
-				this.emit(
-					"firmware update finished",
-					this,
-					FirmwareUpdateStatus.Error_TransmissionFailed,
-					undefined,
-					{
-						success: false,
-						status: FirmwareUpdateStatus.Error_TransmissionFailed,
-						reInterview: false,
-					},
-				);
-				restore(false);
-				return;
-			}
-
-			let meta: FirmwareUpdateMetaData;
-			({ fragmentSize, ...meta } = result!);
-
-			await this.beginFirmwareUpdateInternal(
-				data,
-				target,
-				meta,
-				fragmentSize,
-			);
-		} catch {
-			restore(false);
-			return;
-		}
-
-		// Perform the update in the background
-		void (async () => {
-			const result = await this.doFirmwareUpdateInternal(
-				data,
-				fragmentSize,
-				abortContext,
-				(fragment, total) => {
-					const progress: FirmwareUpdateProgress = {
-						currentFile: 1,
-						totalFiles: 1,
-						sentFragments: fragment,
-						totalFragments: total,
-						progress: roundTo((fragment / total) * 100, 2),
-					};
-					this.emit(
-						"firmware update progress",
-						this,
-						fragment,
-						total,
-						progress,
-					);
-				},
-			);
-
-			let waitTime = result.waitTime;
-			if (result.success) {
-				waitTime =
-					this.driver.getConservativeWaitTimeAfterFirmwareUpdate(
-						result.waitTime,
-					);
-			}
-
-			this.emit(
-				"firmware update finished",
-				this,
-				result.status,
-				waitTime,
-				{ ...result, waitTime, reInterview: result.success },
-			);
-			restore(result.success);
-		})();
-	}
-
-	/**
 	 * Performs an OTA firmware upgrade of one or more chips on this node.
 	 *
 	 * This method will resolve after the process has **COMPLETED**. Failure to start any one of the provided updates will throw an error.
@@ -4341,13 +4176,7 @@ protocol version:      ${this.protocolVersion}`;
 					status: FirmwareUpdateStatus.Error_TransmissionFailed,
 					reInterview: false,
 				};
-				this.emit(
-					"firmware update finished",
-					this,
-					FirmwareUpdateStatus.Error_TransmissionFailed,
-					undefined,
-					result,
-				);
+				this.emit("firmware update finished", this, result);
 				restore(false);
 				return result;
 			}
@@ -4412,13 +4241,7 @@ protocol version:      ${this.protocolVersion}`;
 							2,
 						),
 					};
-					this.emit(
-						"firmware update progress",
-						this,
-						fragment,
-						total,
-						progress,
-					);
+					this.emit("firmware update progress", this, progress);
 
 					// When this file is done, add the fragments to the total, so we can compute the total progress correctly
 					if (fragment === total) {
@@ -4449,13 +4272,7 @@ protocol version:      ${this.protocolVersion}`;
 					waitTime: undefined,
 					reInterview: false,
 				};
-				this.emit(
-					"firmware update finished",
-					this,
-					updateResult.status,
-					undefined,
-					result,
-				);
+				this.emit("firmware update finished", this, result);
 				restore(false);
 				return result;
 			} else if (i < updates.length - 1) {
@@ -4484,13 +4301,7 @@ protocol version:      ${this.protocolVersion}`;
 			reInterview: true,
 		};
 
-		this.emit(
-			"firmware update finished",
-			this,
-			updateResult.status,
-			conservativeWaitTime!,
-			result,
-		);
+		this.emit("firmware update finished", this, result);
 
 		restore(true);
 		return result;
