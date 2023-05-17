@@ -1,6 +1,7 @@
 import {
 	AssociationCC,
 	ECDHProfiles,
+	FirmwareUpdateResult,
 	InclusionControllerCCComplete,
 	InclusionControllerCCInitiate,
 	InclusionControllerStatus,
@@ -5831,7 +5832,7 @@ ${associatedNodes.join(", ")}`,
 	public async firmwareUpdateOTA(
 		nodeId: number,
 		updates: FirmwareUpdateFileInfo[],
-	): Promise<boolean> {
+	): Promise<FirmwareUpdateResult> {
 		if (updates.length === 0) {
 			throw new ZWaveError(
 				`At least one update must be provided`,
@@ -5931,7 +5932,9 @@ ${associatedNodes.join(", ")}`,
 	 *
 	 * **WARNING:** A failure during this process may put your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded. Use at your own risk!
 	 */
-	public async firmwareUpdateOTW(data: Buffer): Promise<boolean> {
+	public async firmwareUpdateOTW(
+		data: Buffer,
+	): Promise<ControllerFirmwareUpdateResult> {
 		// Don't let two firmware updates happen in parallel
 		if (this.isAnyOTAFirmwareUpdateInProgress()) {
 			const message = `Failed to start the update: A firmware update is already in progress on this network!`;
@@ -5956,7 +5959,7 @@ ${associatedNodes.join(", ")}`,
 		) {
 			// This is 500 series
 			const wasUpdated = await this.firmwareUpdateOTW500(data);
-			if (wasUpdated) {
+			if (wasUpdated.success) {
 				// After updating the firmware on 500 series sticks, we MUST soft-reset them
 				await this.driver.softResetAndRestart(
 					"Activating new firmware and restarting driver...",
@@ -5972,7 +5975,9 @@ ${associatedNodes.join(", ")}`,
 		}
 	}
 
-	private async firmwareUpdateOTW500(data: Buffer): Promise<boolean> {
+	private async firmwareUpdateOTW500(
+		data: Buffer,
+	): Promise<ControllerFirmwareUpdateResult> {
 		this._firmwareUpdateInProgress = true;
 		let turnedRadioOff = false;
 		try {
@@ -5984,11 +5989,13 @@ ${associatedNodes.join(", ")}`,
 					"OTW update failed: This controller does not support firmware updates",
 					"error",
 				);
-				this.emit("firmware update finished", {
+
+				const result: ControllerFirmwareUpdateResult = {
 					success: false,
 					status: ControllerFirmwareUpdateStatus.Error_NotSupported,
-				});
-				return false;
+				};
+				this.emit("firmware update finished", result);
+				return result;
 			}
 
 			// Avoid interruption by incoming messages
@@ -6024,11 +6031,13 @@ ${associatedNodes.join(", ")}`,
 					"OTW update failed: The firmware image is invalid",
 					"error",
 				);
-				this.emit("firmware update finished", {
+
+				const result: ControllerFirmwareUpdateResult = {
 					success: false,
 					status: ControllerFirmwareUpdateStatus.Error_Aborted,
-				});
-				return false;
+				};
+				this.emit("firmware update finished", result);
+				return result;
 			}
 
 			this.emit("firmware update progress", {
@@ -6041,18 +6050,22 @@ ${associatedNodes.join(", ")}`,
 			await this.firmwareUpdateNVMSetNewImage();
 
 			this.driver.controllerLog.print("Firmware update succeeded");
-			this.emit("firmware update finished", {
+
+			const result: ControllerFirmwareUpdateResult = {
 				success: true,
 				status: ControllerFirmwareUpdateStatus.OK,
-			});
-			return true;
+			};
+			this.emit("firmware update finished", result);
+			return result;
 		} finally {
 			this._firmwareUpdateInProgress = false;
 			if (turnedRadioOff) await this.toggleRF(true);
 		}
 	}
 
-	private async firmwareUpdateOTW700(data: Buffer): Promise<boolean> {
+	private async firmwareUpdateOTW700(
+		data: Buffer,
+	): Promise<ControllerFirmwareUpdateResult> {
 		this._firmwareUpdateInProgress = true;
 		let destroy = false;
 
@@ -6084,11 +6097,12 @@ ${associatedNodes.join(", ")}`,
 					"OTW update failed: Expected response not received from the bootloader",
 					"error",
 				);
-				this.emit("firmware update finished", {
+				const result: ControllerFirmwareUpdateResult = {
 					success: false,
 					status: ControllerFirmwareUpdateStatus.Error_Timeout,
-				});
-				return false;
+				};
+				this.emit("firmware update finished", result);
+				return result;
 			}
 
 			const BLOCK_SIZE = 128;
@@ -6131,11 +6145,13 @@ ${associatedNodes.join(", ")}`,
 							"OTW update failed: The bootloader did not acknowledge the start of transfer.",
 							"error",
 						);
-						this.emit("firmware update finished", {
+
+						const result: ControllerFirmwareUpdateResult = {
 							success: false,
 							status: ControllerFirmwareUpdateStatus.Error_Timeout,
-						});
-						return false;
+						};
+						this.emit("firmware update finished", result);
+						return result;
 					}
 
 					switch (result.command) {
@@ -6170,11 +6186,12 @@ ${associatedNodes.join(", ")}`,
 					"OTW update failed: Maximum retry attempts reached",
 					"error",
 				);
-				this.emit("firmware update finished", {
+				const result: ControllerFirmwareUpdateResult = {
 					success: false,
 					status: ControllerFirmwareUpdateStatus.Error_RetryLimitReached,
-				});
-				return false;
+				};
+				this.emit("firmware update finished", result);
+				return result;
 			}
 
 			if (aborted) {
@@ -6204,11 +6221,13 @@ ${associatedNodes.join(", ")}`,
 					// TODO: parse error code
 				}
 				this.driver.controllerLog.print(message, "error");
-				this.emit("firmware update finished", {
+
+				const result: ControllerFirmwareUpdateResult = {
 					success: false,
 					status: ControllerFirmwareUpdateStatus.Error_Aborted,
-				});
-				return false;
+				};
+				this.emit("firmware update finished", result);
+				return result;
 			} else {
 				// We're done, send EOT and wait for the menu screen
 				await this.driver.bootloader.finishUpload();
@@ -6228,20 +6247,23 @@ ${associatedNodes.join(", ")}`,
 						"OTW update failed: The bootloader did not acknowledge the end of transfer.",
 						"error",
 					);
-					this.emit("firmware update finished", {
+					const result: ControllerFirmwareUpdateResult = {
 						success: false,
 						status: ControllerFirmwareUpdateStatus.Error_Timeout,
-					});
-					return false;
+					};
+					this.emit("firmware update finished", result);
+					return result;
 				}
 			}
 
 			this.driver.controllerLog.print("Firmware update succeeded");
-			this.emit("firmware update finished", {
+
+			const result: ControllerFirmwareUpdateResult = {
 				success: true,
 				status: ControllerFirmwareUpdateStatus.OK,
-			});
-			return true;
+			};
+			this.emit("firmware update finished", result);
+			return result;
 		} finally {
 			await this.driver.leaveBootloader(destroy);
 			this._firmwareUpdateInProgress = false;

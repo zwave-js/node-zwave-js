@@ -9,3 +9,14 @@ The `Window Covering CC` allows for more granular control of covers to the point
 As a result, the Z-Wave specification forbids interacting with the `Multilevel Switch CC` on devices that support the `Window Covering CC`.
 
 To avoid removing functionality for users, applications that plan on upgrading to `v11` must make sure to have support for the `Window Covering CC`.
+
+## Changed return types of `Controller.firmwareUpdateOTA` and `Controller.firmwareUpdateOTW` methods
+
+These methods previously only returned a `boolean` indicating success or failure. To get more information about the update result, applications had to listen to the `firmware update finished` event in addition to awaiting the returned promise.
+
+To make this easier:
+
+-   `firmwareUpdateOTA` now returns a `Promise<FirmwareUpdateResult>`
+-   `firmwareUpdateOTW` now returns a `Promise<ControllerFirmwareUpdateResult>`
+
+both of which contain the same information as the corresponding `firmware update finished` events.

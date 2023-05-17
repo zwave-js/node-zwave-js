@@ -940,15 +940,16 @@ interface GetFirmwareUpdatesOptions {
 #### `firmwareUpdateOTA`
 
 ```ts
-firmwareUpdateOTA(nodeId: number, update: FirmwareUpdateFileInfo): Promise<boolean>
+firmwareUpdateOTA(nodeId: number, update: FirmwareUpdateFileInfo): Promise<FirmwareUpdateResult>
 ```
 
 > [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
 
-Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and performs an over-the-air (OTA) firmware update for the given node. The return value indicates whether the update was successful.  
-This is very similar to [`ZWaveNode.updateFirmware`](api/node#updatefirmware), except that the updates are officially provided by manufacturers and downloaded in the background.
+Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and performs an over-the-air (OTA) firmware update for the given node. This is very similar to [`ZWaveNode.updateFirmware`](api/node#updatefirmware), except that the updates are officially provided by manufacturers and downloaded in the background.
 
 To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/node#quotfirmware-update-progressquot) of the corresponding node.
+
+The return value indicates whether the update was successful and includes some additional information. This is the same information that is emitted using the `"firmware update finished"` event.
 
 > [!NOTE] Calling this will result in an HTTP request to the URL contained in the `update` parameter.
 
@@ -963,18 +964,27 @@ Returns whether an OTA firmware update is in progress for any node.
 ### Updating the firmware of the controller (OTW)
 
 ```ts
-firmwareUpdateOTW(data: Buffer): Promise<boolean>
+firmwareUpdateOTW(data: Buffer): Promise<ControllerFirmwareUpdateResult>
 ```
 
 > [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
 
-Performs an over-the-wire (OTW) firmware update for the controller using the given firmware image. The return value indicates whether the update was successful.
-
-To do so, the controller gets put in bootloader mode where a new firmware image can be uploaded.
+Performs an over-the-wire (OTW) firmware update for the controller using the given firmware image. To do so, the controller gets put in bootloader mode where a new firmware image can be uploaded.
 
 > [!WARNING] A failure during this process may leave your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded.
 
 To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/controller#quotfirmware-update-progressquot) of the controller.
+
+The return value indicates whether the update was successful and includes an error code that can be used to determine the reason for a failure. This is the same information that is emitted using the `"firmware update finished"` event:
+
+<!-- #import ControllerFirmwareUpdateResult from "zwave-js" -->
+
+```ts
+interface ControllerFirmwareUpdateResult {
+	success: boolean;
+	status: ControllerFirmwareUpdateStatus;
+}
+```
 
 ### `isFirmwareUpdateInProgress`
 

@@ -4229,7 +4229,9 @@ protocol version:      ${this.protocolVersion}`;
 	 *
 	 * @returns Whether all of the given updates were successful.
 	 */
-	public async updateFirmware(updates: Firmware[]): Promise<boolean> {
+	public async updateFirmware(
+		updates: Firmware[],
+	): Promise<FirmwareUpdateResult> {
 		if (updates.length === 0) {
 			throw new ZWaveError(
 				`At least one update must be provided`,
@@ -4327,37 +4329,47 @@ protocol version:      ${this.protocolVersion}`;
 		let fragmentSize: number;
 		let meta: FirmwareUpdateMetaData;
 		try {
-			const result = await this.prepareFirmwareUpdateInternal(
+			const prepareResult = await this.prepareFirmwareUpdateInternal(
 				updates.map((u) => u.firmwareTarget ?? 0),
 				abortContext,
 			);
 
 			// Handle early aborts
 			if (abortContext.abort) {
+				const result: FirmwareUpdateResult = {
+					success: false,
+					status: FirmwareUpdateStatus.Error_TransmissionFailed,
+					reInterview: false,
+				};
 				this.emit(
 					"firmware update finished",
 					this,
 					FirmwareUpdateStatus.Error_TransmissionFailed,
 					undefined,
-					{
-						success: false,
-						status: FirmwareUpdateStatus.Error_TransmissionFailed,
-						reInterview: false,
-					},
+					result,
 				);
 				restore(false);
-				return false;
+				return result;
 			}
 
-			// If the firmware update was not aborted, result is definitely defined
-			({ fragmentSize, ...meta } = result!);
+			// If the firmware update was not aborted, prepareResult is definitely defined
+			({ fragmentSize, ...meta } = prepareResult!);
 		} catch {
 			restore(false);
-			return false;
+			// Not sure what the error is, but we'll label it "transmission failed"
+			const result: FirmwareUpdateResult = {
+				success: false,
+				status: FirmwareUpdateStatus.Error_TransmissionFailed,
+				reInterview: false,
+			};
+
+			return result;
 		}
 
 		// Perform all firmware updates in sequence
-		let result!: Awaited<ReturnType<ZWaveNode["doFirmwareUpdateInternal"]>>;
+		let updateResult!: Awaited<
+			ReturnType<ZWaveNode["doFirmwareUpdateInternal"]>
+		>;
 		let conservativeWaitTime: number;
 
 		const totalFragments: number = updates.reduce(
@@ -4383,7 +4395,7 @@ protocol version:      ${this.protocolVersion}`;
 			);
 
 			// And handle them
-			result = await this.doFirmwareUpdateInternal(
+			updateResult = await this.doFirmwareUpdateInternal(
 				data,
 				fragmentSize,
 				abortContext,
@@ -4418,29 +4430,34 @@ protocol version:      ${this.protocolVersion}`;
 			// If we wait, wait a bit longer than the device told us, so it is actually ready to use
 			conservativeWaitTime =
 				this.driver.getConservativeWaitTimeAfterFirmwareUpdate(
-					result.waitTime,
+					updateResult.waitTime,
 				);
 
-			if (!result.success) {
+			if (!updateResult.success) {
 				this.driver.controllerLog.logNode(this.id, {
 					message: `Firmware update (part ${i + 1} / ${
 						updates.length
 					}) failed with status ${getEnumMemberName(
 						FirmwareUpdateStatus,
-						result.status,
+						updateResult.status,
 					)}`,
 					direction: "inbound",
 				});
 
+				const result: FirmwareUpdateResult = {
+					...updateResult,
+					waitTime: undefined,
+					reInterview: false,
+				};
 				this.emit(
 					"firmware update finished",
 					this,
-					result.status,
+					updateResult.status,
 					undefined,
-					{ ...result, waitTime: undefined, reInterview: false },
+					result,
 				);
 				restore(false);
-				return false;
+				return result;
 			} else if (i < updates.length - 1) {
 				// Update succeeded, but we're not done yet
 
@@ -4449,7 +4466,7 @@ protocol version:      ${this.protocolVersion}`;
 						updates.length
 					}) succeeded with status ${getEnumMemberName(
 						FirmwareUpdateStatus,
-						result.status,
+						updateResult.status,
 					)}`,
 					direction: "inbound",
 				});
@@ -4461,16 +4478,22 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		}
 
+		const result: FirmwareUpdateResult = {
+			...updateResult,
+			waitTime: conservativeWaitTime!,
+			reInterview: true,
+		};
+
 		this.emit(
 			"firmware update finished",
 			this,
-			result.status,
+			updateResult.status,
 			conservativeWaitTime!,
-			{ ...result, waitTime: conservativeWaitTime!, reInterview: true },
+			result,
 		);
 
 		restore(true);
-		return true;
+		return result;
 	}
 
 	/** Prepares the firmware update of a single target by collecting the necessary information */
