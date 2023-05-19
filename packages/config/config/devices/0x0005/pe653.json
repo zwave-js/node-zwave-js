@@ -15,45 +15,466 @@
 	},
 	"paramInformation": [
 		{
-			"#": "2",
+			"#": "1[0x02]",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Installed Pump Type",
+			"valueSize": 2,
+			"options": [
+				{
+					"label": "One Speed",
+					"value": 0
+				},
+				{
+					"label": "Two Speed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "1[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Booster (Cleaner) Pump Installed",
+			"valueSize": 2
+		},
+		{
+			"#": "1[0xff00]",
+			"label": "Booster (Cleaner) Pump Operation Mode",
+			"description": "Set the filter pump mode to use when the booster (cleaner) pump is running.",
+			"valueSize": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Circuit 1",
+					"value": 2
+				},
+				{
+					"label": "VSP Speed 1",
+					"value": 3
+				},
+				{
+					"label": "VSP Speed 2",
+					"value": 4
+				},
+				{
+					"label": "VSP Speed 3",
+					"value": 5
+				},
+				{
+					"label": "VSP Speed 4",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "2[0xff00]",
 			"label": "Fireman Timeout",
-			"description": "Minutes that pump will continue to run after heater shutoff",
-			"valueSize": 1,
+			"description": "Minimum time pump will continue to run after heater shutoff for cooldown. Circuit 5 will be assigned to the heater if >=0. Set to -1 to disable.",
+			"valueSize": 2,
+			"minValue": -1,
+			"maxValue": 15,
+			"defaultValue": -1,
+			"unit": "minutes",
+			"options": [
+				{
+					"label": "No heater installed",
+					"value": -1
+				},
+				{
+					"label": "Heater installed with no cooldown",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Heater Safety Setting",
+			"description": "Prevent the heater from turning on while the pump is off.",
+			"valueSize": 2
+		},
+		{
+			"#": "3[0xff000000]",
+			"label": "Water Temperature Offset",
+			"valueSize": 4,
+			"minValue": -5,
+			"maxValue": 5,
+			"unit": "°F",
+			"defaultValue": 0
+		},
+		{
+			"#": "3[0xff0000]",
+			"$import": "#paramInformation/3[0xff000000]",
+			"label": "Air/Freeze Temperature Offset"
+		},
+		{
+			"#": "3[0xff00]",
+			"$import": "#paramInformation/3[0xff000000]",
+			"label": "Solar Temperature Offset"
+		},
+		{
+			"#": "22",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Pool/Spa Configuration",
+			"options": [
+				{
+					"label": "Pool",
+					"value": 0
+				},
+				{
+					"label": "Spa",
+					"value": 1
+				},
+				{
+					"label": "Both",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "23",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Spa Mode Pump Speed",
+			"description": "Requires pool/spa configuration and connected variable speed pump.",
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 1
+				},
+				{
+					"label": "Circuit 1",
+					"value": 2
+				},
+				{
+					"label": "VSP Speed 1",
+					"value": 3
+				},
+				{
+					"label": "VSP Speed 2",
+					"value": 4
+				},
+				{
+					"label": "VSP Speed 3",
+					"value": 5
+				},
+				{
+					"label": "VSP Speed 4",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Variable Speed Pump - Speed 1",
+			"description": "Requires connected variable speed pump.",
+			"valueSize": 2,
+			"unit": "RPM",
+			"minValue": 400,
+			"maxValue": 3450,
+			"defaultValue": 750,
+			"unsigned": true
+		},
+		{
+			"#": "33",
+			"$import": "#paramInformation/32",
+			"label": "Variable Speed Pump - Speed 2",
+			"defaultValue": 1500
+		},
+		{
+			"#": "34",
+			"$import": "#paramInformation/32",
+			"label": "Variable Speed Pump - Speed 3",
+			"defaultValue": 2350
+		},
+		{
+			"#": "35",
+			"$import": "#paramInformation/32",
+			"label": "Variable Speed Pump - Speed 4",
+			"defaultValue": 3110
+		},
+		{
+			"#": "49",
+			"$import": "#paramInformation/32",
+			"label": "Variable Speed Pump - Max Speed",
+			"defaultValue": 3450
+		},
+		{
+			"#": "50[0xff000000]",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Freeze Protection: Temperature",
+			"description": "Temperature at air/freeze sensor when freeze protection starts. Set to 0 to disable freeze protection.",
+			"valueSize": 4,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "40 °F",
+					"value": 40
+				},
+				{
+					"label": "41 °F",
+					"value": 41
+				},
+				{
+					"label": "42 °F",
+					"value": 42
+				},
+				{
+					"label": "43 °F",
+					"value": 43
+				},
+				{
+					"label": "44 °F",
+					"value": 44
+				}
+			]
+		},
+		{
+			"#": "50[0x010000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Freeze Protection: Circuit 1",
+			"description": "Turn on the circuit when system is in freeze protection mode. Requires connected air/freeze sensor.",
+			"valueSize": 4
+		},
+		{
+			"#": "50[0x020000]",
+			"$import": "#paramInformation/50[0x010000]",
+			"label": "Freeze Protection: Circuit 2"
+		},
+		{
+			"#": "50[0x040000]",
+			"$import": "#paramInformation/50[0x010000]",
+			"label": "Freeze Protection: Circuit 3"
+		},
+		{
+			"#": "50[0x080000]",
+			"$import": "#paramInformation/50[0x010000]",
+			"label": "Freeze Protection: Circuit 4"
+		},
+		{
+			"#": "50[0x100000]",
+			"$import": "#paramInformation/50[0x010000]",
+			"label": "Freeze Protection: Circuit 5"
+		},
+		{
+			"#": "50[0xff00]",
+			"label": "Freeze Protection: VSP Speed",
+			"description": "Pump speed while in freeze protection mode. Requires connected air/freeze sensor.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "VSP Speed 1",
+					"value": 2
+				},
+				{
+					"label": "VSP Speed 2",
+					"value": 3
+				},
+				{
+					"label": "VSP Speed 3",
+					"value": 4
+				},
+				{
+					"label": "VSP Speed 4",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "50[0x80]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Freeze Protection: Heater",
+			"description": "Turn on the heater when system is in freeze protection mode. Requires heater and connected air/freeze sensor.",
+			"valueSize": 4
+		},
+		{
+			"#": "50[0x7f]",
+			"label": "Freeze Protection: Pool/Spa Cycle Time",
+			"description": "Time to spend in each mode while cycling between pool and spa during freeze protection. Requires pool/spa configuration and connected air/freeze sensor.",
+			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 30,
 			"defaultValue": 0,
 			"unsigned": true
 		},
 		{
-			"#": "22",
-			"label": "Pool - Spa Mode",
-			"description": "Controller Mode",
-			"valueSize": 1,
-			"unit": "Decimal",
+			"#": "4",
+			"label": "Circuit 1 Schedule 1",
+			"description": "Start time (first two bytes, little endian) and stop time (last two bytes, little endian) of schedule in minutes past midnight, e.g. 12:05am (0x0500) to 3:00pm (0x8403) is entered as 83919875. Set to 4294967295 (0xffffffff) to disable.",
+			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 4294967295,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 4294967295
+				}
+			]
 		},
 		{
-			"#": "1[0xff]",
-			"label": "Booster/Cleaner Pump Operation Mode",
-			"description": "Which circuit the booster/cleaner pump resides on",
-			"valueSize": 2,
-			"unit": "Decimal",
-			"minValue": 1,
-			"maxValue": 6,
-			"defaultValue": 1
+			"#": "5",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 1 Schedule 2"
 		},
 		{
-			"#": "1[0xff00]",
-			"label": "Pump Type Operation Mode",
-			"description": "Which type of pump is being used",
-			"valueSize": 2,
-			"unit": "Decimal",
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 0
+			"#": "6",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 1 Schedule 3"
+		},
+		{
+			"#": "7",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 2 Schedule 1"
+		},
+		{
+			"#": "8",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 2 Schedule 2"
+		},
+		{
+			"#": "9",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 2 Schedule 3"
+		},
+		{
+			"#": "10",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 3 Schedule 1"
+		},
+		{
+			"#": "11",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 3 Schedule 2"
+		},
+		{
+			"#": "12",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 3 Schedule 3"
+		},
+		{
+			"#": "13",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 4 Schedule 1"
+		},
+		{
+			"#": "14",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 4 Schedule 2"
+		},
+		{
+			"#": "15",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 4 Schedule 3"
+		},
+		{
+			"#": "16",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 5 Schedule 1"
+		},
+		{
+			"#": "17",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 5 Schedule 2"
+		},
+		{
+			"#": "18",
+			"$import": "#paramInformation/4",
+			"label": "Circuit 5 Schedule 3"
+		},
+		{
+			"#": "19",
+			"$import": "#paramInformation/4",
+			"label": "Pool/Spa Mode Schedule 1"
+		},
+		{
+			"#": "20",
+			"$import": "#paramInformation/4",
+			"label": "Pool/Spa Mode Schedule 2"
+		},
+		{
+			"#": "21",
+			"$import": "#paramInformation/4",
+			"label": "Pool/Spa Mode Schedule 3"
+		},
+		{
+			"#": "36",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 1 Schedule 1"
+		},
+		{
+			"#": "37",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 1 Schedule 2"
+		},
+		{
+			"#": "38",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 1 Schedule 3"
+		},
+		{
+			"#": "39",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 2 Schedule 1"
+		},
+		{
+			"#": "40",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 2 Schedule 2"
+		},
+		{
+			"#": "41",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 2 Schedule 3"
+		},
+		{
+			"#": "42",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 3 Schedule 1"
+		},
+		{
+			"#": "43",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 3 Schedule 2"
+		},
+		{
+			"#": "44",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 3 Schedule 3"
+		},
+		{
+			"#": "45",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 4 Schedule 1"
+		},
+		{
+			"#": "46",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 4 Schedule 2"
+		},
+		{
+			"#": "47",
+			"$import": "#paramInformation/4",
+			"label": "Variable Speed Pump Speed 4 Schedule 3"
 		}
 	],
 	"associations": {
