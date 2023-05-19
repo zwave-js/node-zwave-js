@@ -33,6 +33,12 @@ These methods were inconsistently named and none of the other methods that accep
 In version `8.6.0`, we switched from defining config parameters as an array of objects with instead of an object. Parsing objects was still supported for user-defined config files, but this is no longer the case.
 All config files must now use the new format. See [this pull request](https://github.com/zwave-js/node-zwave-js/pull/3100) for details on the change.
 
+## Added support for configuration parameters on endpoints
+
+Configuration parameters on endpoints are now supported. For devices with config parameters on endpoints, the parameter numbers are likely **not** unique.
+
+Applications that expect configuration parameters to only exist on the root device will have to be updated to support this change.
+
 ## Removed several deprecated method signatures, enums and properties
 
 -   The enum member `NodeType["Routing End Node"]` has been removed. This has been called `"End Node"` since `v9.3.0`
