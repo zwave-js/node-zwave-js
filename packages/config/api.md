@@ -9,7 +9,7 @@ import type { CommandClassInfo } from '@zwave-js/core/safe';
 import { JSONObject } from '@zwave-js/shared/safe';
 import { JSONObject as JSONObject_2 } from '@zwave-js/shared';
 import type { LogContext } from '@zwave-js/core/safe';
-import { ReadonlyObjectKeyMap } from '@zwave-js/shared';
+import { ReadonlyObjectKeyMap } from '@zwave-js/shared/safe';
 import type { ValueID } from '@zwave-js/core/safe';
 import type { ValueType } from '@zwave-js/core/safe';
 import { ZWaveLogContainer } from '@zwave-js/core';
@@ -262,7 +262,7 @@ export class ConditionalDeviceMetadata implements ConditionalItem<DeviceMetadata
 //
 // @public (undocumented)
 export class ConditionalEndpointConfig implements ConditionalItem<EndpointConfig> {
-    constructor(filename: string, index: number, definition: JSONObject);
+    constructor(parent: ConditionalDeviceConfig, index: number, definition: JSONObject);
     // (undocumented)
     readonly associations?: ReadonlyMap<number, ConditionalAssociationConfig>;
     // (undocumented)
@@ -273,6 +273,8 @@ export class ConditionalEndpointConfig implements ConditionalItem<EndpointConfig
     readonly index: number;
     // (undocumented)
     readonly label?: string;
+    // (undocumented)
+    readonly paramInformation?: ConditionalParamInfoMap;
 }
 
 // Warning: (ae-missing-release-tag) "ConditionalParamInfoMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -573,8 +575,9 @@ export const embeddedDevicesDir: string;
 // Warning: (ae-missing-release-tag) "EndpointConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type EndpointConfig = Omit<ConditionalEndpointConfig, "condition" | "evaluateCondition" | "associations"> & {
+export type EndpointConfig = Omit<ConditionalEndpointConfig, "condition" | "evaluateCondition" | "associations" | "paramInformation"> & {
     associations?: Map<number, AssociationConfig> | undefined;
+    paramInformation?: ParamInfoMap;
 };
 
 // Warning: (ae-missing-release-tag) "externalConfigDir" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -878,6 +881,11 @@ export type ParamInformation = Omit<ConditionalParamInformation, "condition" | "
     minValue: NonNullable<ConditionalParamInformation["minValue"]>;
     maxValue: NonNullable<ConditionalParamInformation["maxValue"]>;
 };
+
+// Warning: (ae-missing-release-tag) "parseConditionalParamInformationMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function parseConditionalParamInformationMap(definition: JSONObject, parent: ConditionalDeviceConfig, errorPrefix?: string): ConditionalParamInfoMap;
 
 // Warning: (ae-missing-release-tag) "saveManufacturersInternal" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
