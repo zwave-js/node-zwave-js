@@ -4,6 +4,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add `allowManualEntry` property to numeric metadata to indicate whether `states` are only informational or restrict the possible values (#5806)
+
+### Bugfixes
+* Make `Driver` and `ZWave[Application]Host` interfaces compatible for external projects (#5796)
+* Correct return type for `Configuration CC` `setBulk` command (#5803)
+* Add catch-all overload to `ScheduleEntryLockCC.getScheduleCached` (#5805)
+* Clean up `Window Covering CC` values (#5807)
+* Optimize config parameter scan during the interview (#5811)
+* Always include the duration field in the serialized buffer for CC versions that support it (#5809)
+* Consider endpoints when force-adding CCs mandatory for Z-Wave+ v2 devices, add logs (#5820)
+
+### Config file changes
+* Disable Supervision for Simon IO Roller Blind 700 series (#5819)
+
+### Changes under the hood
+* Influence the `setValue` implementation of CC APIs using hooks (#5808)
+
 ## 10.20.0 (2023-05-12)
 ### Features
 * Add `states` property to `boolean` value metadata to declare which values are accepted (#5792)
