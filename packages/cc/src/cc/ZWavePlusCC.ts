@@ -1,6 +1,9 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	getCCName,
+	IZWaveEndpoint,
+	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
 	validatePayload,
 } from "@zwave-js/core/safe";
@@ -168,24 +171,102 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 				// - Transport Service, version 2
 				// - Version, version 2
 				// - Z-Wave Plus Info, version 2
+				//
+				// All Multi Channel End Points MUST support:
+				// - Association, version 2
+				// - Association Group Information
+				// - Multi Channel Association, version 3
+				// - Supervision
+				// - Z-Wave Plus Info, version 2
 
 				// It has been found that some devices are not advertising all of these (looking at you CTT!),
 				// so we force-add support here:
-				for (const cc of [
-					CommandClasses.Association,
-					CommandClasses["Association Group Information"],
-					CommandClasses["Device Reset Locally"],
-					CommandClasses["Firmware Update Meta Data"],
-					CommandClasses.Indicator,
-					CommandClasses["Manufacturer Specific"],
-					CommandClasses["Multi Channel Association"],
-					CommandClasses.Powerlevel,
-					CommandClasses.Security,
-					CommandClasses.Supervision,
-					CommandClasses["Transport Service"],
-					CommandClasses.Version,
-				]) {
-					node.addCC(cc, { isSupported: true });
+				const maybeAddCC = (
+					endpoint: IZWaveEndpoint,
+					cc: CommandClasses,
+					version: number,
+				) => {
+					if (
+						!endpoint.supportsCC(cc) ||
+						endpoint.getCCVersion(cc) < version
+					) {
+						applHost.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `force-adding support for mandatory CC ${getCCName(
+								cc,
+							)}${version > 1 ? ` v${version}` : ""}`,
+							level: "warn",
+						});
+
+						endpoint.addCC(cc, {
+							isSupported: true,
+							version: Math.max(
+								endpoint.getCCVersion(cc),
+								version,
+							),
+						});
+					}
+				};
+
+				const mandatoryCCs: { cc: CommandClasses; version: number }[] =
+					endpoint.index === 0
+						? [
+								{ cc: CommandClasses.Association, version: 2 },
+								{
+									cc: CommandClasses[
+										"Association Group Information"
+									],
+									version: 1,
+								},
+								{
+									cc: CommandClasses["Device Reset Locally"],
+									version: 1,
+								},
+								{
+									cc: CommandClasses[
+										"Firmware Update Meta Data"
+									],
+									version: 5,
+								},
+								{ cc: CommandClasses.Indicator, version: 3 },
+								{
+									cc: CommandClasses["Manufacturer Specific"],
+									version: 1,
+								},
+								{
+									cc: CommandClasses[
+										"Multi Channel Association"
+									],
+									version: 3,
+								},
+								{ cc: CommandClasses.Powerlevel, version: 1 },
+								{ cc: CommandClasses.Security, version: 1 },
+								{ cc: CommandClasses.Supervision, version: 1 },
+								{
+									cc: CommandClasses["Transport Service"],
+									version: 2,
+								},
+								{ cc: CommandClasses.Version, version: 2 },
+						  ]
+						: [
+								{ cc: CommandClasses.Association, version: 2 },
+								{
+									cc: CommandClasses[
+										"Association Group Information"
+									],
+									version: 1,
+								},
+								{
+									cc: CommandClasses[
+										"Multi Channel Association"
+									],
+									version: 3,
+								},
+								{ cc: CommandClasses.Supervision, version: 1 },
+						  ];
+
+				for (const { cc, version } of mandatoryCCs) {
+					maybeAddCC(endpoint, cc, version);
 				}
 			}
 		}
