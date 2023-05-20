@@ -5,8 +5,8 @@
 	"description": "Smart Door Lock",
 	"devices": [
 		{
-			"productType": "0x5010",
-			"productId": "0x1001",
+			"productType": "0x634b",
+			"productId": "0x504c",
 			"zwaveAllianceId": 3048
 		}
 	],
