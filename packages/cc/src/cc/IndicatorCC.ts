@@ -1,5 +1,6 @@
 import type { ConfigManager } from "@zwave-js/config";
 import type {
+	IZWaveEndpoint,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
@@ -17,6 +18,8 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
+import { clamp, roundTo } from "alcalzone-shared/math";
+import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -42,10 +45,71 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { IndicatorCommand } from "../lib/_Types";
+import { IndicatorCommand, IndicatorTimeout } from "../lib/_Types";
 
 function isManufacturerDefinedIndicator(indicatorId: number): boolean {
 	return indicatorId >= 0x80 && indicatorId <= 0x9f;
+}
+
+const timeoutStringRegex =
+	/^(?:(?<hoursStr>\d+)h)?(?:(?<minutesStr>\d+)m)?(?:(?<secondsStr>\d+(?:\.\d+)?)s)?$/i;
+
+function parseIndicatorTimeoutString(
+	text: string,
+): IndicatorTimeout | undefined {
+	if (!text.length) return undefined;
+	// Try to parse the numeric parts from a timeout
+	const match = timeoutStringRegex.exec(text);
+	if (!match) return undefined;
+	const { hoursStr, minutesStr, secondsStr } = match.groups!;
+	if (!hoursStr && !minutesStr && !secondsStr) return undefined;
+
+	const ret: IndicatorTimeout = {};
+	if (hoursStr) {
+		ret.hours = clamp(parseInt(hoursStr, 10), 0, 255);
+	}
+	if (minutesStr) {
+		ret.minutes = clamp(parseInt(minutesStr, 10), 0, 255);
+	}
+	if (secondsStr) {
+		ret.seconds = clamp(roundTo(parseFloat(secondsStr), 2), 0, 59.99);
+	}
+
+	return ret;
+}
+
+function indicatorObjectsToTimeout(
+	values: IndicatorObject[],
+): IndicatorTimeout | undefined {
+	const timeoutValues = values.filter((v) =>
+		[0x0a, 0x06, 0x07, 0x08].includes(v.propertyId),
+	);
+	if (!timeoutValues.length) return undefined;
+
+	const hours = (timeoutValues.find((v) => v.propertyId === 0x0a)?.value ??
+		0) as number;
+	const minutes = (timeoutValues.find((v) => v.propertyId === 0x06)?.value ??
+		0) as number;
+	const seconds =
+		clamp(
+			(timeoutValues.find((v) => v.propertyId === 0x07)
+				?.value as number) ?? 0,
+			0,
+			59,
+		) +
+		clamp(
+			(timeoutValues.find((v) => v.propertyId === 0x08)
+				?.value as number) ?? 0,
+			0,
+			99,
+		) /
+			100;
+
+	return {
+		hours,
+		minutes,
+		seconds,
+	};
 }
 
 export const IndicatorCCValues = Object.freeze({
@@ -62,6 +126,7 @@ export const IndicatorCCValues = Object.freeze({
 			},
 		} as const),
 
+		// Convenience values for indicators that are split across multiple properties
 		...V.staticProperty(
 			"identify",
 			{
@@ -70,6 +135,15 @@ export const IndicatorCCValues = Object.freeze({
 				states: {
 					true: "Identify",
 				},
+			} as const,
+			{ minVersion: 3 } as const,
+		),
+
+		...V.staticProperty(
+			"timeout",
+			{
+				...ValueMetadata.String,
+				label: "Timeout",
 			} as const,
 			{ minVersion: 3 } as const,
 		),
@@ -343,7 +417,7 @@ export class IndicatorCCAPI extends CCAPI {
 	public async identify(): Promise<SupervisionResult | undefined> {
 		if (this.version < 3) {
 			throw new ZWaveError(
-				`The identify command is only supported in Version 3 and above`,
+				`The identify command is only supported in Indicator CC version 3 and above`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
@@ -364,6 +438,136 @@ export class IndicatorCCAPI extends CCAPI {
 				value: 0x06,
 			},
 		]);
+	}
+
+	/**
+	 * Set a timeout for a given indicator ID after which the indicator will be turned off.
+	 * @param timeout The timeout in one of the supported forms:
+	 * 	- a timeout string in the form `12h18m17.59s`. All parts (hours, minutes, seconds, hundredths) are optional, but must be specified in this order. An empty string will be treated like `undefined`.
+	 * 	- an object specifying the timeout parts. An empty object will be treated like `undefined`.
+	 * 	- `undefined` to disable the timeout.
+	 */
+	public async setTimeout(
+		indicatorId: number,
+		timeout: IndicatorTimeout | string | undefined,
+	): Promise<SupervisionResult | undefined> {
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		if (this.version < 3) {
+			throw new ZWaveError(
+				`The setTimeout command is only supported in Indicator CC version 3 and above`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
+		if (typeof timeout === "string") {
+			if (timeout === "") {
+				timeout = undefined;
+			} else {
+				const parsed = parseIndicatorTimeoutString(timeout);
+				if (!parsed) {
+					throw new ZWaveError(
+						`The timeout string "${timeout}" is not valid`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				timeout = parsed;
+			}
+		}
+
+		const supportedPropertyIDs = IndicatorCC.getSupportedPropertyIDsCached(
+			this.applHost,
+			this.endpoint,
+			indicatorId,
+		);
+
+		const objects: IndicatorObject[] = [];
+		if (timeout) {
+			const hours = timeout.hours ?? 0;
+			const minutes = timeout.minutes ?? 0;
+			const seconds = Math.floor(timeout.seconds ?? 0);
+			const hundredths = Math.round(((timeout.seconds ?? 0) % 1) * 100);
+
+			if (hours) {
+				if (!supportedPropertyIDs?.includes(0x0a)) {
+					throw new ZWaveError(
+						`The indicator ${indicatorId} does not support setting the timeout in hours`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				objects.push({
+					indicatorId,
+					propertyId: 0x0a,
+					value: hours,
+				});
+			}
+
+			if (minutes) {
+				if (!supportedPropertyIDs?.includes(0x06)) {
+					throw new ZWaveError(
+						`The indicator ${indicatorId} does not support setting the timeout in minutes`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				objects.push({
+					indicatorId,
+					propertyId: 0x06,
+					value: minutes,
+				});
+			}
+
+			if (seconds) {
+				if (!supportedPropertyIDs?.includes(0x07)) {
+					throw new ZWaveError(
+						`The indicator ${indicatorId} does not support setting the timeout in seconds`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				objects.push({
+					indicatorId,
+					propertyId: 0x07,
+					value: seconds,
+				});
+			}
+
+			if (hundredths) {
+				if (!supportedPropertyIDs?.includes(0x08)) {
+					throw new ZWaveError(
+						`The indicator ${indicatorId} does not support setting the timeout in 1/100 seconds`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				objects.push({
+					indicatorId,
+					propertyId: 0x08,
+					value: hundredths,
+				});
+			}
+		}
+
+		if (!objects.length) {
+			objects.push(
+				...(supportedPropertyIDs ?? []).map((p) => ({
+					indicatorId,
+					propertyId: p,
+					value: 0,
+				})),
+			);
+		}
+
+		return this.set(objects);
+	}
+
+	/**
+	 * Returns the timeout after which the given indicator will be turned off.
+	 */
+	public async getTimeout(
+		indicatorId: number,
+	): Promise<IndicatorTimeout | undefined> {
+		const values = await this.get(indicatorId);
+		if (!isArray(values)) return;
+
+		return indicatorObjectsToTimeout(values);
 	}
 
 	@validateArgs()
@@ -566,6 +770,20 @@ export class IndicatorCC extends CommandClass {
 				)?.length,
 		);
 	}
+
+	public static getSupportedPropertyIDsCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		indicatorId: number,
+	): number[] | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				IndicatorCCValues.supportedPropertyIDs(indicatorId).endpoint(
+					endpoint.index,
+				),
+			);
+	}
 }
 
 export interface IndicatorObject {
@@ -754,8 +972,26 @@ export class IndicatorCCReport extends IndicatorCC {
 				}
 			}
 		} else if (this.values) {
+			// Store the simple values first
 			for (const value of this.values) {
 				this.setIndicatorValue(applHost, value);
+			}
+
+			// Then group values into the convenience properties
+
+			// ... timeout
+			const timeout = indicatorObjectsToTimeout(this.values);
+			if (timeout) {
+				let timeoutString = "";
+				if (timeout?.hours) timeoutString += `${timeout.hours}h`;
+				if (timeout?.minutes) timeoutString += `${timeout.minutes}m`;
+				if (timeout?.seconds) timeoutString += `${timeout.seconds}s`;
+
+				this.setValue(
+					applHost,
+					IndicatorCCValues.timeout,
+					timeoutString,
+				);
 			}
 		}
 
