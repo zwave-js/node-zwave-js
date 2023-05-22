@@ -42,6 +42,7 @@ import {
 	nwiHomeIdFromDSK,
 	ProtocolType,
 	RFRegion,
+	RouteKind,
 	RSSI,
 	SecurityClass,
 	securityClassIsS2,
@@ -4290,11 +4291,49 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * Returns the priority route which is currently set for a node. If none is set, either the LWR or the NLWR is returned.
+	 * Removes the priority route used for the first transmission attempt from the controller to the given node.
+	 * @param destinationNodeId The ID of the node that should be reached via the priority route
+	 */
+	public async removePriorityRoute(
+		destinationNodeId: number,
+	): Promise<boolean> {
+		this.driver.controllerLog.print(
+			`Removing priority route to node ${destinationNodeId}...`,
+		);
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetPriorityRouteRequest(this.driver, {
+					destinationNodeId,
+					// no repeaters = remove
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Removing priority route failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the priority route which is currently set for a node.
+	 * If none is set, either the LWR or the NLWR is returned.
+	 * If no route is known yet, this returns `undefined`.
+	 *
 	 * @param destinationNodeId The ID of the node for which the priority route should be returned
 	 */
 	public async getPriorityRoute(destinationNodeId: number): Promise<
 		| {
+				routeKind:
+					| RouteKind.LWR
+					| RouteKind.NLWR
+					| RouteKind.Application;
 				repeaters: number[];
 				routeSpeed: ZWaveDataRate;
 		  }
@@ -4312,9 +4351,11 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
+			if (result.routeKind === RouteKind.None) return undefined;
 			return {
-				repeaters: result.repeaters,
-				routeSpeed: result.routeSpeed,
+				routeKind: result.routeKind,
+				repeaters: result.repeaters!,
+				routeSpeed: result.routeSpeed!,
 			};
 		} catch (e) {
 			this.driver.controllerLog.print(

@@ -510,7 +510,13 @@ deleteSUCReturnRoute(nodeId: number): Promise<boolean>;
 -   `assignSUCReturnRoute` works like `assignReturnRoute`, but the routes have the SUC as the destination.
 -   `deleteSUCReturnRoute` works like `deleteReturnRoute`, but for routes that have the SUC as the destination.
 
-In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first instead of the automatically determined routes. This is done with the following methods:
+In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first instead of the automatically determined routes.
+
+> [!WARNING] While these methods are meant to improve the routing and latency in certain situations, they can easily make things worse by choosing the wrong or unreachable repeaters, or by selecting a route speed that is not supported by a node in the route.
+>
+> Typically you'll want to use these methods to force a direct connection as the first attempt.
+
+The following methods control which route is used for the first transmission attempt from the **controller** to the given node.
 
 ```ts
 setPriorityRoute(
@@ -521,30 +527,40 @@ setPriorityRoute(
 
 getPriorityRoute(destinationNodeId: number): Promise<
 	| {
+			routeKind:
+				| RouteKind.LWR
+				| RouteKind.NLWR
+				| RouteKind.Application;
 			repeaters: number[];
 			routeSpeed: ZWaveDataRate;
 	  }
 	| undefined
 >;
 
-assignPriorityReturnRoute(
-	nodeId: number,
-	destinationNodeId: number,
-	repeaters: number[],
-	routeSpeed: ZWaveDataRate,
-): Promise<boolean>;
-
-assignPrioritySUCReturnRoute(
-	nodeId: number,
-	repeaters: number[],
-	routeSpeed: ZWaveDataRate,
-): Promise<boolean>
+removePriorityRoute(destinationNodeId: number): Promise<boolean>;
 ```
 
 -   `setPriorityRoute` sets the priority route which will always be used for the first transmission attempt from the controller to the given node.
--   `getPriorityRoute` returns the priority route to the given node. **Note:** if none is set, this will return the LWR or NLWR instead.
--   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
--   `assignPrioritySUCReturnRoute` does the same, but with the SUC as the destination node.
+-   `getPriorityRoute` returns the priority route to the given node, which can be:
+    -   `undefined` if there is no route at all,
+    -   the priority route if it exists,
+    -   otherwise the LWR/NLWR
+
+`routeKind` identifies which kind of route is returned by `getPriorityRoute` (`None` is only used internally):
+
+<!-- #import RouteKind from "@zwave-js/core" -->
+
+```ts
+enum RouteKind {
+	None = 0x00,
+	/** Last Working Route */
+	LWR = 0x01,
+	/** Next to Last Working Route */
+	NLWR = 0x02,
+	/** Application-defined priority route */
+	Application = 0x10,
+}
+```
 
 The `repeaters` array contains the node IDs of the repeaters (max. 4) that should be used for the route. An empty array means a direct connection.
 
@@ -560,9 +576,25 @@ enum ZWaveDataRate {
 }
 ```
 
-> [!WARNING] While these methods are meant to improve the routing and latency in certain situations, they can easily make things worse by choosing the wrong or unreachable repeaters, or by selecting a route speed that is not supported by a node in the route.
->
-> Typically you'll want to use these methods to force a direct connection as the first attempt.
+To control which routes a **node** will use for the first attempt, use the following methods:
+
+```ts
+assignPriorityReturnRoute(
+	nodeId: number,
+	destinationNodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>;
+
+assignPrioritySUCReturnRoute(
+	nodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>
+```
+
+-   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
+-   `assignPrioritySUCReturnRoute` does the same, but with the SUC (controller) as the destination node.
 
 ### Managing associations
 
