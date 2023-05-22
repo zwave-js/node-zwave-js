@@ -174,6 +174,7 @@ import {
 	type AppInfo,
 } from "../telemetry/statistics";
 import { Bootloader } from "./Bootloader";
+import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -884,10 +885,32 @@ export class Driver
 		);
 	}
 
-	/** Enumerates all existing serial ports */
-	public static async enumerateSerialPorts(): Promise<string[]> {
-		const ports = await SerialPort.list();
-		return ports.map((port) => port.path);
+	/**
+	 * Enumerates all existing serial ports.
+	 * @param local Whether to include local serial ports
+	 * @param remote Whether to discover remote serial ports using an mDNS query for the `_zwave._tcp` domain
+	 */
+	public static async enumerateSerialPorts({
+		local = true,
+		remote = true,
+	}: {
+		local?: boolean;
+		remote?: boolean;
+	}): Promise<string[]> {
+		const localPorts: string[] = [];
+		const remotePorts: string[] = [];
+		if (local) {
+			const ports = await SerialPort.list();
+			localPorts.push(...ports.map((port) => port.path));
+		}
+		if (remote) {
+			const ports = await discoverRemoteSerialPorts();
+			if (ports) {
+				remotePorts.push(...ports.map((p) => p.port));
+			}
+		}
+
+		return [...remotePorts, ...localPorts];
 	}
 
 	/** Updates a subset of the driver options on the fly */
