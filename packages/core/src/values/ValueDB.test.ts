@@ -964,3 +964,24 @@ test("dbKeyToValueIdFast() -> should work correctly", (t) => {
 		t.deepEqual(dbKeyToValueIdFast(JSON.stringify(test)), test);
 	}
 });
+
+test.only("keys that are invalid JSON should not cause a crash", (t) => {
+	const valueDB = new ValueDB(
+		30,
+		new Map([
+			[
+				`{"nodeId":30,"commandClass":44,"endpoint<\u0011\u0000\u0000"property":"level","propertyKey":225}`,
+				1,
+			],
+		]) as any,
+		new Map([
+			[
+				`{"nodeId":30,"commandClass":44,"endpoint<\u0011\u0000\u0000"property":"level","propertyKey":225}`,
+				`{"type":"number","readable":true,"writeable":true,"min":0,"max":255,"label":"Level (225)","valueChangeOptions":["transitionDuration"]}`,
+			],
+		]) as any,
+	);
+
+	t.deepEqual(valueDB.getAllMetadata(44), []);
+	t.is(valueDB["_index"].size, 0);
+});

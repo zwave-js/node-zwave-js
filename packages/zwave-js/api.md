@@ -108,6 +108,7 @@ import { ResponsePredicate } from '@zwave-js/serial';
 import { ResponseRole } from '@zwave-js/serial';
 import { RFRegion } from '@zwave-js/core/safe';
 import { RFRegion as RFRegion_2 } from '@zwave-js/core';
+import { RouteKind } from '@zwave-js/core';
 import { RouteProtocolDataRate } from '@zwave-js/core';
 import { RSSI } from '@zwave-js/core/safe';
 import { RSSI as RSSI_2 } from '@zwave-js/core';
@@ -1121,6 +1122,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     getPowerlevel(): Promise<Pick<SerialAPISetup_GetPowerlevelResponse, "powerlevel" | "measured0dBm">>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     getPriorityRoute(destinationNodeId: number): Promise<{
+        routeKind: RouteKind.LWR | RouteKind.NLWR | RouteKind.Application;
         repeaters: number[];
         routeSpeed: ZWaveDataRate;
     } | undefined>;
@@ -1167,6 +1169,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     removeFailedNode(nodeId: number): Promise<void>;
     removeNodeFromAllAssociations(nodeId: number): Promise<void>;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    removePriorityRoute(destinationNodeId: number): Promise<boolean>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     replaceFailedNode(nodeId: number, options?: ReplaceNodeOptions): Promise<boolean>;

@@ -1949,6 +1949,17 @@ export enum RFRegion {
     "USA" = 1
 }
 
+// Warning: (ae-missing-release-tag) "RouteKind" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum RouteKind {
+    Application = 16,
+    LWR = 1,
+    NLWR = 2,
+    // (undocumented)
+    None = 0
+}
+
 // Warning: (ae-missing-release-tag) "RouteProtocolDataRate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
