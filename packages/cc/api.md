@@ -7509,6 +7509,8 @@ export class IndicatorCC extends CommandClass {
     // (undocumented)
     ccCommand: IndicatorCommand;
     // (undocumented)
+    static getSupportedPropertyIDsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, indicatorId: number): number[] | undefined;
+    // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
@@ -7717,6 +7719,32 @@ export const IndicatorCCValues: Readonly<{
             readonly internal: true;
         };
     };
+    timeout: {
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: "timeout";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: "timeout";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
+        readonly meta: {
+            readonly label: "Timeout";
+            readonly type: "string";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly internal: false;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly minVersion: 3;
+        };
+    };
     identify: {
         readonly id: {
             commandClass: CommandClasses.Indicator;
@@ -7833,6 +7861,15 @@ export type IndicatorMetadata = ValueMetadata_2 & {
         propertyId?: number;
     };
 };
+
+// Warning: (ae-missing-release-tag) "IndicatorTimeout" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface IndicatorTimeout {
+    hours?: number;
+    minutes?: number;
+    seconds?: number;
+}
 
 // Warning: (ae-missing-release-tag) "InvalidCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
