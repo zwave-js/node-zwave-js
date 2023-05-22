@@ -2031,6 +2031,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			const nodeId = msg.nodeId;
 			const nodeInfo = msg.nodeInformation;
 
+			// It can happen that this is received for a node that is already part of the network:
+			// https://github.com/zwave-js/node-zwave-js/issues/5781
+			// In this case, ignore this message to prevent chaos.
+
+			if (this._nodes.has(nodeId)) {
+				this.driver.controllerLog.print(
+					`Node ${nodeId} was (supposedly) included by another controller, but it is already part of the network. Ignoring the message...`,
+					"warn",
+				);
+				return;
+			}
+
 			this.setInclusionState(InclusionState.Busy);
 
 			const deviceClass = new DeviceClass(
