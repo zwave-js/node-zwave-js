@@ -90,18 +90,18 @@ async stopLevelChange(
 -   **secret:** false
 -   **value type:** `"duration"`
 
-### `open(parameter: WindowCoveringParameter)`
+### `levelChangeDown(parameter: WindowCoveringParameter)`
 
 ```ts
 {
 	commandClass: CommandClasses["Window Covering"],
 	endpoint: number,
-	property: "open",
+	property: "levelChangeDown",
 	propertyKey: WindowCoveringParameter,
 }
 ```
 
--   **label:** `Open - ${string}`
+-   **label:** `${string} - ${string}`
 -   **min. CC version:** 1
 -   **readable:** false
 -   **writeable:** true
@@ -109,18 +109,18 @@ async stopLevelChange(
 -   **secret:** false
 -   **value type:** `"boolean"`
 
-### `positionClose(parameter: WindowCoveringParameter)`
+### `levelChangeUp(parameter: WindowCoveringParameter)`
 
 ```ts
 {
 	commandClass: CommandClasses["Window Covering"],
 	endpoint: number,
-	property: "close",
+	property: "levelChangeUp",
 	propertyKey: WindowCoveringParameter,
 }
 ```
 
--   **label:** `Close - ${string}`
+-   **label:** `${string} - ${string}`
 -   **min. CC version:** 1
 -   **readable:** false
 -   **writeable:** true
@@ -148,41 +148,3 @@ async stopLevelChange(
 -   **value type:** `"number"`
 -   **min. value:** 0
 -   **max. value:** 99
-
-### `tiltClose0(parameter: WindowCoveringParameter)`
-
-```ts
-{
-	commandClass: CommandClasses["Window Covering"],
-	endpoint: number,
-	property: "close0",
-	propertyKey: WindowCoveringParameter,
-}
-```
-
--   **label:** `Close Right - ${string}` | `Close Up - ${string}`
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
-
-### `tiltClose99(parameter: WindowCoveringParameter)`
-
-```ts
-{
-	commandClass: CommandClasses["Window Covering"],
-	endpoint: number,
-	property: "close99",
-	propertyKey: WindowCoveringParameter,
-}
-```
-
--   **label:** `Close Left - ${string}` | `Close Down - ${string}`
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
