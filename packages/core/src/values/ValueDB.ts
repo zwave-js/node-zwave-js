@@ -138,13 +138,21 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		});
 	}
 
-	private dbKeyToValueId(key: string): { nodeId: number } & ValueID {
+	private dbKeyToValueId(
+		key: string,
+	): ({ nodeId: number } & ValueID) | undefined {
 		try {
 			// Try the dumb but fast way first
 			return dbKeyToValueIdFast(key);
 		} catch {
+			// ignore
+		}
+
+		try {
 			// Fall back to JSON.parse if anything went wrong
 			return JSON.parse(key);
+		} catch {
+			// This is not a valid DB key
 		}
 	}
 
@@ -250,7 +258,13 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		const ret: ReturnType<ValueDB["findValues"]> = [];
 		for (const key of this._index) {
 			if (!this._db.has(key)) continue;
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			const vid = this.dbKeyToValueId(key);
+			if (!vid) {
+				this.dropBrokenEntry(key);
+				continue;
+			}
+
+			const { nodeId, ...valueId } = vid;
 
 			if (predicate(valueId)) {
 				ret.push({ ...valueId, value: this._db.get(key) });
@@ -267,7 +281,14 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 				compareDBKeyFast(key, this.nodeId, { commandClass: forCC }) &&
 				this._db.has(key)
 			) {
-				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+				const vid = this.dbKeyToValueId(key);
+				if (!vid) {
+					this.dropBrokenEntry(key);
+					continue;
+				}
+
+				const { nodeId, ...valueId } = vid;
+
 				const value = this._db.get(key);
 				ret.push({ ...valueId, value });
 			}
@@ -286,7 +307,11 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 	/** Clears all values from the value DB */
 	public clear(options: SetValueOptions = {}): void {
 		for (const key of this._index) {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			const vid = this.dbKeyToValueId(key);
+			if (!vid) continue;
+
+			const { nodeId, ...valueId } = vid;
+
 			if (this._db.has(key)) {
 				const prevValue = this._db.get(key);
 				this._db.delete(key);
@@ -312,6 +337,14 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			}
 		}
 		this._index.clear();
+	}
+
+	private dropBrokenEntry(key: string): void {
+		// Sometimes the files get corrupted on disk, e.g. when an SD card goes bad
+		// When this happens for a key, we can no longer parse it, so we silently drop it from the DB
+		this._db.delete(key);
+		this._metadata.delete(key);
+		this._index.delete(key);
 	}
 
 	/**
@@ -382,7 +415,14 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 				compareDBKeyFast(key, this.nodeId, { commandClass: forCC }) &&
 				this._metadata.has(key)
 			) {
-				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+				const vid = this.dbKeyToValueId(key);
+				if (!vid) {
+					this.dropBrokenEntry(key);
+					continue;
+				}
+
+				const { nodeId, ...valueId } = vid;
+
 				const metadata = this._metadata.get(key)!;
 				ret.push({ ...valueId, metadata });
 			}
@@ -397,7 +437,14 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		const ret: ReturnType<ValueDB["findMetadata"]> = [];
 		for (const key of this._index) {
 			if (!this._metadata.has(key)) continue;
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+
+			const vid = this.dbKeyToValueId(key);
+			if (!vid) {
+				this.dropBrokenEntry(key);
+				continue;
+			}
+
+			const { nodeId, ...valueId } = vid;
 
 			if (predicate(valueId)) {
 				ret.push({ ...valueId, metadata: this._metadata.get(key)! });
