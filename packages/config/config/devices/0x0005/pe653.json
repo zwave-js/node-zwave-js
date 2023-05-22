@@ -72,8 +72,7 @@
 		},
 		{
 			"#": "2[0xff00]",
-			"label": "Fireman Timeout",
-			"description": "Minimum time pump will continue to run after heater shutoff for cooldown. Circuit 5 will be assigned to the heater if >=0. Set to -1 to disable.",
+			"label": "Heater Cooldown Period",
 			"valueSize": 2,
 			"minValue": -1,
 			"maxValue": 15,
@@ -139,7 +138,7 @@
 			"#": "23",
 			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "Spa Mode Pump Speed",
-			"description": "Requires pool/spa configuration and connected variable speed pump.",
+			"description": "Requires pool/spa configuration.",
 			"defaultValue": 1,
 			"options": [
 				{
@@ -207,7 +206,6 @@
 			"#": "50[0xff000000]",
 			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "Freeze Protection: Temperature",
-			"description": "Temperature at air/freeze sensor when freeze protection starts. Set to 0 to disable freeze protection.",
 			"valueSize": 4,
 			"unsigned": true,
 			"options": [
@@ -240,34 +238,33 @@
 		{
 			"#": "50[0x010000]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Freeze Protection: Circuit 1",
-			"description": "Turn on the circuit when system is in freeze protection mode. Requires connected air/freeze sensor.",
+			"label": "Freeze Protection: Turn On Circuit 1",
 			"valueSize": 4
 		},
 		{
 			"#": "50[0x020000]",
 			"$import": "#paramInformation/50[0x010000]",
-			"label": "Freeze Protection: Circuit 2"
+			"label": "Freeze Protection: Turn On Circuit 2"
 		},
 		{
 			"#": "50[0x040000]",
 			"$import": "#paramInformation/50[0x010000]",
-			"label": "Freeze Protection: Circuit 3"
+			"label": "Freeze Protection: Turn On Circuit 3"
 		},
 		{
 			"#": "50[0x080000]",
 			"$import": "#paramInformation/50[0x010000]",
-			"label": "Freeze Protection: Circuit 4"
+			"label": "Freeze Protection: Turn On Circuit 4"
 		},
 		{
 			"#": "50[0x100000]",
 			"$import": "#paramInformation/50[0x010000]",
-			"label": "Freeze Protection: Circuit 5"
+			"label": "Freeze Protection: Turn On Circuit 5"
 		},
 		{
 			"#": "50[0xff00]",
-			"label": "Freeze Protection: VSP Speed",
-			"description": "Pump speed while in freeze protection mode. Requires connected air/freeze sensor.",
+			"label": "Freeze Protection: Turn On VSP Speed",
+			"description": "Requires variable speed pump and connected air/freeze sensor.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 5,
@@ -300,14 +297,14 @@
 		{
 			"#": "50[0x80]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Freeze Protection: Heater",
-			"description": "Turn on the heater when system is in freeze protection mode. Requires heater and connected air/freeze sensor.",
+			"label": "Freeze Protection: Turn On Heater",
+			"description": "Requires heater and connected air/freeze sensor.",
 			"valueSize": 4
 		},
 		{
 			"#": "50[0x7f]",
 			"label": "Freeze Protection: Pool/Spa Cycle Time",
-			"description": "Time to spend in each mode while cycling between pool and spa during freeze protection. Requires pool/spa configuration and connected air/freeze sensor.",
+			"description": "Requires pool/spa configuration and connected air/freeze sensor.",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -334,146 +331,147 @@
 		{
 			"#": "5",
 			"$import": "#paramInformation/4",
-			"label": "Circuit 1 Schedule 2"
+			"label": "Circuit 1 Schedule 2",
+			"description": "Refer to parameter 4 for usage."
 		},
 		{
 			"#": "6",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 1 Schedule 3"
 		},
 		{
 			"#": "7",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 2 Schedule 1"
 		},
 		{
 			"#": "8",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 2 Schedule 2"
 		},
 		{
 			"#": "9",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 2 Schedule 3"
 		},
 		{
 			"#": "10",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 3 Schedule 1"
 		},
 		{
 			"#": "11",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 3 Schedule 2"
 		},
 		{
 			"#": "12",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 3 Schedule 3"
 		},
 		{
 			"#": "13",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 4 Schedule 1"
 		},
 		{
 			"#": "14",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 4 Schedule 2"
 		},
 		{
 			"#": "15",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 4 Schedule 3"
 		},
 		{
 			"#": "16",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 5 Schedule 1"
 		},
 		{
 			"#": "17",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 5 Schedule 2"
 		},
 		{
 			"#": "18",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Circuit 5 Schedule 3"
 		},
 		{
 			"#": "19",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Pool/Spa Mode Schedule 1"
 		},
 		{
 			"#": "20",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Pool/Spa Mode Schedule 2"
 		},
 		{
 			"#": "21",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Pool/Spa Mode Schedule 3"
 		},
 		{
 			"#": "36",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 1 Schedule 1"
 		},
 		{
 			"#": "37",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 1 Schedule 2"
 		},
 		{
 			"#": "38",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 1 Schedule 3"
 		},
 		{
 			"#": "39",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 2 Schedule 1"
 		},
 		{
 			"#": "40",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 2 Schedule 2"
 		},
 		{
 			"#": "41",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 2 Schedule 3"
 		},
 		{
 			"#": "42",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 3 Schedule 1"
 		},
 		{
 			"#": "43",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 3 Schedule 2"
 		},
 		{
 			"#": "44",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 3 Schedule 3"
 		},
 		{
 			"#": "45",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 4 Schedule 1"
 		},
 		{
 			"#": "46",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 4 Schedule 2"
 		},
 		{
 			"#": "47",
-			"$import": "#paramInformation/4",
+			"$import": "#paramInformation/5",
 			"label": "Variable Speed Pump Speed 4 Schedule 3"
 		}
 	],
