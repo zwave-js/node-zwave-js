@@ -1,13 +1,13 @@
 {
-	"manufacturer": "Kwikset",
+	"manufacturer": "Spectrum Brands",
 	"manufacturerId": "0x0090",
-	"label": "914C",
+	"label": "914",
 	"description": "Convert Smart Lock",
 	"devices": [
 		{
 			"productType": "0x0003",
 			"productId": "0x0446",
-			"zwaveAllianceId": [2268, 3105]
+			"zwaveAllianceId": 2268
 		}
 	],
 	"firmwareVersion": {
@@ -16,8 +16,13 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Lifeline",
+			"label": "Group 1",
 			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
@@ -170,5 +175,11 @@
 			"#": "40",
 			"$import": "templates/kwikset_template.json#reset"
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Initiate the process to add the lock to your system at your smart home controller.\nWhen prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode.\nPlease allow time for the controller to add the lock to your system",
+		"exclusion": "Follow your smart home system’s instructions to remove the lock from the network. When prompted by the system, press button A” on the lock interior once. The red LED will illuminate when the lock enters Remove mode.",
+		"reset": "A factory reset will delete all user codes associated with the lock and will remove itself from your smart home system.\nPlease only perform a factory reset when the primary controller is missing or inoperable.\n\nTo perform a factory reset, please perform the following: \n1. Remove the battery pack\n2. Press and HOLD the Program button while reinserting the battery pack.\n3. Keep holding the button for 30 seconds until the lock beeps and the status LED flashes red.\n4. Press the Program button once more. The status LED will flash green and red several times.\n5. After a few seconds, the lock will initiate the door handing process",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2268/Install_Guide_914C_03_09_2017.pdf"
+	}
 }
