@@ -1,17 +1,17 @@
 {
 	"manufacturer": "Dawon",
 	"manufacturerId": "0x018c",
-	"label": "PM-S240-ZW",
-	"description": "2-Channel Power Switch",
+	"label": "PM-S340-ZW",
+	"description": "3-Button Wall Switch",
 	"devices": [
 		{
 			// KR frequency
-			"productType": "0x0062",
+			"productType": "0x0063",
 			"productId": "0x0001"
 		},
 		{
 			// US frequency
-			"productType": "0x0065",
+			"productType": "0x0066",
 			"productId": "0x0001"
 		}
 	],
