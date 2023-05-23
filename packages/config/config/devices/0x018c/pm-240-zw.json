@@ -22,6 +22,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
+				// The device seems to report support for Supervision but ignores the commands
 				"0x6c": {
 					"endpoints": "*"
 				}
