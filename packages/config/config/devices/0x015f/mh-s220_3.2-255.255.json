@@ -19,17 +19,17 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Switch 1",
-			"maxNodes": 5
-		},
-		"2": {
-			"label": "Switch 2",
-			"maxNodes": 5
-		},
-		"3": {
 			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
+		},
+		"2": {
+			"label": "Switch 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch 2",
+			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
@@ -45,37 +45,38 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary button",
+					"label": "Momentary buttons",
 					"value": 0
 				},
 				{
-					"label": "Toggle (2-state) switch",
+					"label": "Toggle switches",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "2-State switch behavior",
+			"label": "Toggle Switch behavior",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle without specified on/off position",
+					"label": "Without specified on/off position",
 					"value": 0
 				},
 				{
-					"label": "Toggle with specified on/off position",
+					"label": "With specified on/off position",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Off-timer",
+			"label": "Override off-timer",
+			"Description": "Allow S1/S2 to switch device off when timing function is set > 0 (Param. 5)",
 			"valueSize": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -91,10 +92,12 @@
 		{
 			"#": "5",
 			"label": "Timing function",
+			"Description": "Off timer: Auto switch off after n x 100ms (n max. 65535)"
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unit": "100ms",
 			"unsigned": true,
 			"options": [
 				{
@@ -131,27 +134,26 @@
 		},
 		{
 			"#": "8",
-			"label": "Operation Report SW1 to AG2",
-			"description": "Operation report from switch 1 (SW1) to association group 2 (AG2)",
+			"label": "Switch 1: Report to Association Group 2",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Report ON/OFF state of SW1 to AG2",
+					"label": "Report both on/off",
 					"value": 0
 				},
 				{
-					"label": "Report only ON state of SW1 to AG2",
+					"label": "Report on only",
 					"value": 1
 				},
 				{
-					"label": "Report only OFF state of SW1 to AG2",
+					"label": "Report off only",
 					"value": 2
 				},
 				{
-					"label": "Do not send reports to AG2",
+					"label": "Report disabled",
 					"value": 255
 				}
 			]
@@ -184,34 +186,33 @@
 		},
 		{
 			"#": "10",
-			"label": "Operation Report SW2 > AG3",
-			"description": "Operation report from switch 2 (SW2) to association group 3 (AG3)",
+			"label": "Switch 2: Report to Association Group 3",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Report ON/OFF state of SW2 to AG3",
+					"label": "Report both on/off",
 					"value": 0
 				},
 				{
-					"label": "Report only ON state of SW2 to AG3",
+					"label": "Report on only",
 					"value": 1
 				},
 				{
-					"label": "Report only OFF state of SW2 to AG3",
+					"label": "Report off only",
 					"value": 2
 				},
 				{
-					"label": "Do not send reports to AG3",
+					"label": "Report disabled",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Send scene ID to AG1 on SINGLE click on S2",
+			"label": "Switch S2: Scene ID (Single Click)",
 			"description": "0 = scene activation disabled / 1-255  = send activation CC to association group 1 (AG1) with specified scene ID",
 			"valueSize": 1,
 			"minValue": 0,
@@ -227,7 +228,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Send scene ID to AG1 on DOUBLE click on S2",
+			"label": "Switch S2: Scene ID (Double Click)",
 			"description": "0 = scene activation disabled / 1-255  = send activation CC to association group 1 (AG1) with specified scene ID",
 			"valueSize": 1,
 			"minValue": 0,
@@ -243,7 +244,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Send scene ID to AG1 on HOLD S2",
+			"label": "Switch S2: Scene ID (Hold)",
 			"description": "0 = scene activation disabled / 1-255  = send activation CC to association group 1 (AG1) with specified scene ID",
 			"valueSize": 1,
 			"minValue": 0,
