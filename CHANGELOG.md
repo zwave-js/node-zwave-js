@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add a value and API to control the indicator timeout (#5830)
+
+### Bugfixes
+* Ignore inclusion notification for existing nodes (#5828)
+* Correct the serial API commands to set/get/delete priority routes (#5827)
+* Avoid crashing when the value DB contains a non-JSON key (#5829)
+
+### Config file changes
+* Add LG U+ smart switches (#5835)
+* Add/correct config files for iSurpass J1825 (#5823)
+* Add fingerprint `0x0003:0x0042` to Kwikset 914C (#5834)
+* Add Dawon PM-S140-ZW, PM-S340-ZW and KR frequencies (#5833)
+
 ## 10.21.0 (2023-05-19)
 ### Features
 * Add `allowManualEntry` property to numeric metadata to indicate whether `states` are only informational or restrict the possible values (#5806)
