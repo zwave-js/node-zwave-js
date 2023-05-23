@@ -92,7 +92,7 @@
 		{
 			"#": "5",
 			"label": "Timing function",
-			"Description": "Off timer: Auto switch off after n x 100ms (n max. 65535)"
+			"Description": "Off timer: Auto switch off after n x 100ms (n max. 65535)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
