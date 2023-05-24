@@ -92,32 +92,36 @@ export class LockCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "locked") {
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: LockCCAPI, { property }, value) {
+			if (property !== "locked") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"boolean",
+					typeof value,
+				);
+			}
+			const result = await this.set(value);
+
+			// Verify the current value after a delay, unless the command was supervised and successful
+			if (!supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property }, value);
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: LockCCAPI, { property }) {
+			if (property === "locked") return this.get();
 			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "boolean") {
-			throwWrongValueType(this.ccId, property, "boolean", typeof value);
-		}
-		const result = await this.set(value);
-
-		// Verify the current value after a delay, unless the command was supervised and successful
-		if (!supervisedCommandSucceeded(result)) {
-			this.schedulePoll({ property }, value);
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		if (property === "locked") return this.get();
-		throwUnsupportedProperty(this.ccId, property);
-	};
+		};
+	}
 }
 
 @commandClass(CommandClasses.Lock)

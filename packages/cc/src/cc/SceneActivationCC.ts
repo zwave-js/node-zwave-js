@@ -66,20 +66,28 @@ export class SceneActivationCCAPI extends CCAPI {
 		return true;
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-		options,
-	) => {
-		if (property !== "sceneId") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-		const duration = Duration.from(options?.transitionDuration);
-		return this.set(value, duration);
-	};
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: SceneActivationCCAPI,
+			{ property },
+			value,
+			options,
+		) {
+			if (property !== "sceneId") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			const duration = Duration.from(options?.transitionDuration);
+			return this.set(value, duration);
+		};
+	}
 
 	/**
 	 * Activates the Scene with the given ID

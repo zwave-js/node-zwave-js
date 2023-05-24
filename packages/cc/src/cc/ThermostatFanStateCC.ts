@@ -52,17 +52,17 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "state":
-				return this.get();
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: ThermostatFanStateCCAPI, { property }) {
+			switch (property) {
+				case "state":
+					return this.get();
 
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {

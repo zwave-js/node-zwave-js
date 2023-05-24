@@ -993,7 +993,12 @@ export class ZWaveNode
 			}
 
 			// And call it
-			const result = await api.setValue!(valueIdProps, value, options);
+			const result = await api.setValue!.call(
+				api,
+				valueIdProps,
+				value,
+				options,
+			);
 
 			if (loglevel === "silly") {
 				let message = `[setValue] result of SET_VALUE API call for ${api.constructor.name}:`;
@@ -1172,7 +1177,7 @@ export class ZWaveNode
 		}
 
 		// And call it
-		return (api.pollValue as PollValueImplementation<T>)({
+		return (api.pollValue as PollValueImplementation<T>).call(api, {
 			property: valueId.property,
 			propertyKey: valueId.propertyKey,
 		});
@@ -1225,7 +1230,7 @@ export class ZWaveNode
 			// clean up after the timeout
 			this.cancelScheduledPoll(valueId);
 			try {
-				await api.pollValue!(valueId);
+				await api.pollValue!.call(api, valueId);
 			} catch {
 				/* ignore */
 			}

@@ -79,39 +79,47 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "name" && property !== "location") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "string") {
-			throwWrongValueType(this.ccId, property, "string", typeof value);
-		}
-
-		switch (property) {
-			case "name":
-				return this.setName(value);
-			case "location":
-				return this.setLocation(value);
-		}
-
-		return undefined;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "name":
-				return this.getName();
-			case "location":
-				return this.getLocation();
-			default:
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: NodeNamingAndLocationCCAPI,
+			{ property },
+			value,
+		) {
+			if (property !== "name" && property !== "location") {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+			if (typeof value !== "string") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"string",
+					typeof value,
+				);
+			}
+
+			switch (property) {
+				case "name":
+					return this.setName(value);
+				case "location":
+					return this.setLocation(value);
+			}
+
+			return undefined;
+		};
+	}
+
+	protected override get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: NodeNamingAndLocationCCAPI, { property }) {
+			switch (property) {
+				case "name":
+					return this.getName();
+				case "location":
+					return this.getLocation();
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	public async getName(): Promise<string | undefined> {
 		this.assertSupportsCommand(

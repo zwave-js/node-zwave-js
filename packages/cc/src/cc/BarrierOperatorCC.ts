@@ -219,44 +219,51 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		if (property === "targetState") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: BarrierOperatorCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			if (property === "targetState") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
 
-			const targetValue =
-				value === BarrierState.Closed
-					? BarrierState.Closed
-					: BarrierState.Open;
-			return this.set(targetValue);
-		} else if (property === "signalingState") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+				const targetValue =
+					value === BarrierState.Closed
+						? BarrierState.Closed
+						: BarrierState.Open;
+				return this.set(targetValue);
+			} else if (property === "signalingState") {
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				return this.setEventSignaling(propertyKey, value);
+			} else {
+				throwUnsupportedProperty(this.ccId, property);
 			}
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			return this.setEventSignaling(propertyKey, value);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+		};
+	}
 
 	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
 		{ property, propertyKey },
@@ -352,29 +359,31 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		}
 	};
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentState":
-			case "position":
-				return (await this.get())?.[property];
-			case "signalingState":
-				if (propertyKey == undefined) {
-					throwMissingPropertyKey(this.ccId, property);
-				} else if (typeof propertyKey !== "number") {
-					throwUnsupportedPropertyKey(
-						this.ccId,
-						property,
-						propertyKey,
-					);
-				}
-				return this.getEventSignaling(propertyKey);
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: BarrierOperatorCCAPI,
+			{ property, propertyKey },
+		) {
+			switch (property) {
+				case "currentState":
+				case "position":
+					return (await this.get())?.[property];
+				case "signalingState":
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
+					return this.getEventSignaling(propertyKey);
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 }
 
 @commandClass(CommandClasses["Barrier Operator"])

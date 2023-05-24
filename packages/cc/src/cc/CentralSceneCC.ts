@@ -161,27 +161,31 @@ export class CentralSceneCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "slowRefresh") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "boolean") {
-			throwWrongValueType(this.ccId, property, "boolean", typeof value);
-		}
-		return this.setConfiguration(value);
-	};
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: CentralSceneCCAPI, { property }, value) {
+			if (property !== "slowRefresh") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"boolean",
+					typeof value,
+				);
+			}
+			return this.setConfiguration(value);
+		};
+	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		if (property === "slowRefresh") {
-			return (await this.getConfiguration())?.[property];
-		}
-		throwUnsupportedProperty(this.ccId, property);
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: CentralSceneCCAPI, { property }) {
+			if (property === "slowRefresh") {
+				return (await this.getConfiguration())?.[property];
+			}
+			throwUnsupportedProperty(this.ccId, property);
+		};
+	}
 }
 
 @commandClass(CommandClasses["Central Scene"])

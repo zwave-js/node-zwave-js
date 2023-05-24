@@ -128,64 +128,70 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		if (property !== "fibaro") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-
-		if (propertyKey === "venetianBlindsPosition") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: FibaroCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			if (property !== "fibaro") {
+				throwUnsupportedProperty(this.ccId, property);
 			}
-			await this.fibaroVenetianBlindsSetPosition(value);
-		} else if (propertyKey === "venetianBlindsTilt") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
+
+			if (propertyKey === "venetianBlindsPosition") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				await this.fibaroVenetianBlindsSetPosition(value);
+			} else if (propertyKey === "venetianBlindsTilt") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				await this.fibaroVenetianBlindsSetTilt(value);
+			} else {
+				// unsupported property key, ignore...
+				return;
 			}
-			await this.fibaroVenetianBlindsSetTilt(value);
-		} else {
-			// unsupported property key, ignore...
-			return;
-		}
 
-		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey }, value);
+			// Verify the current value after a delay
+			this.schedulePoll({ property, propertyKey }, value);
 
-		return undefined;
-	};
+			return undefined;
+		};
+	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		if (property !== "fibaro") {
-			throwUnsupportedProperty(this.ccId, property);
-		} else if (propertyKey == undefined) {
-			throwMissingPropertyKey(this.ccId, property);
-		}
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: FibaroCCAPI, { property, propertyKey }) {
+			if (property !== "fibaro") {
+				throwUnsupportedProperty(this.ccId, property);
+			} else if (propertyKey == undefined) {
+				throwMissingPropertyKey(this.ccId, property);
+			}
 
-		switch (propertyKey) {
-			case "venetianBlindsPosition":
-				return (await this.fibaroVenetianBlindsGet())?.position;
-			case "venetianBlindsTilt":
-				return (await this.fibaroVenetianBlindsGet())?.tilt;
-			default:
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-	};
+			switch (propertyKey) {
+				case "venetianBlindsPosition":
+					return (await this.fibaroVenetianBlindsGet())?.position;
+				case "venetianBlindsTilt":
+					return (await this.fibaroVenetianBlindsGet())?.tilt;
+				default:
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+			}
+		};
+	}
 }
 
 @manufacturerId(MANUFACTURERID_FIBARO)

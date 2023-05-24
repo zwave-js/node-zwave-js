@@ -104,7 +104,8 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
 			// And call it
-			await api.setValue(
+			await api.setValue.call(
+				api,
 				{
 					property: valueId.property,
 					propertyKey: valueId.propertyKey,
