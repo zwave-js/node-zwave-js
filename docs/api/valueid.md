@@ -90,6 +90,7 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 	steps?: number;
 	default?: number;
 	states?: Record<number, string>;
+	allowManualEntry?: boolean;
 	unit?: string;
 }
 ```
@@ -112,6 +113,10 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	default?: number;
+	states?: {
+		true?: string;
+		false?: string;
+	};
 }
 ```
 

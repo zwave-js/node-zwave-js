@@ -19,6 +19,7 @@ export * from "./security/Manager2";
 export * from "./security/QR";
 export * from "./security/SecurityClass";
 export * from "./security/crypto";
+export * from "./security/ctr_drbg";
 export * from "./security/shared_safe";
 export * from "./test/assertZWaveError";
 export * from "./util/_Types";

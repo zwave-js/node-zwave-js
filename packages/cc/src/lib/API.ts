@@ -19,7 +19,12 @@ import {
 	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
-import { getEnumMemberName, num2hex, type OnlyMethods } from "@zwave-js/shared";
+import {
+	getEnumMemberName,
+	num2hex,
+	type AllOrNone,
+	type OnlyMethods,
+} from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	getAPI,
@@ -36,6 +41,30 @@ export type SetValueImplementation = (
 	value: unknown,
 	options?: SetValueAPIOptions,
 ) => Promise<SupervisionResult | undefined>;
+
+export const SET_VALUE_HOOKS: unique symbol = Symbol.for(
+	"CCAPI_SET_VALUE_HOOKS",
+);
+
+export type SetValueImplementationHooks = AllOrNone<{
+	// Opt-in to and handle delayed supervision updates
+	supervisionDelayedUpdates: boolean;
+	supervisionOnSuccess: () => void | Promise<void>;
+	supervisionOnFailure: () => void | Promise<void>;
+}> & {
+	// Optimistically update related cached values (if allowed)
+	optimisticallyUpdateRelatedValues?: () => void;
+	// Check if a verification of the set value is required, even if the API response suggests otherwise
+	forceVerifyChanges?: () => boolean;
+	// Verify the changes
+	verifyChanges?: () => void | Promise<void>;
+};
+
+export type SetValueImplementationHooksFactory = (
+	property: ValueIDProperties,
+	value: unknown,
+	options?: SetValueAPIOptions,
+) => SetValueImplementationHooks | undefined;
 
 /**
  * A generic options bag for the `setValue` API.
@@ -190,6 +219,14 @@ export class CCAPI {
 		return this[SET_VALUE];
 	}
 
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory | undefined;
+	/**
+	 * Can be implemented by CC APIs to influence the behavior of the setValue API in regards to Supervision and verifying values.
+	 */
+	public get setValueHooks(): SetValueImplementationHooksFactory | undefined {
+		return this[SET_VALUE_HOOKS];
+	}
+
 	/** Whether a successful setValue call should imply that the value was successfully updated */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public isSetValueOptimistic(valueId: ValueID): boolean {
@@ -209,7 +246,7 @@ export class CCAPI {
 	 * @returns `true` if the poll was scheduled, `false` otherwise
 	 */
 	protected schedulePoll(
-		property: ValueIDProperties,
+		{ property, propertyKey }: ValueIDProperties,
 		expectedValue: unknown,
 		{ duration, transition = "slow" }: SchedulePollOptions = {},
 	): boolean {
@@ -231,7 +268,8 @@ export class CCAPI {
 				{
 					commandClass: this.ccId,
 					endpoint: this.endpoint.index,
-					...property,
+					property,
+					propertyKey,
 				},
 				{ timeoutMs, expectedValue },
 			);
@@ -250,7 +288,8 @@ export class CCAPI {
 					{
 						commandClass: this.ccId,
 						endpoint: this.endpoint.index,
-						...property,
+						property,
+						propertyKey,
 					},
 					{ timeoutMs, expectedValue },
 				);

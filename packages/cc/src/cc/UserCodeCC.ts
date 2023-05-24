@@ -1093,6 +1093,38 @@ export class UserCodeCC extends CommandClass {
 				),
 			);
 	}
+
+	/**
+	 * Returns the current status of a user ID.
+	 * This only works AFTER the user IDs have been queried.
+	 */
+	public static getUserIdStatusCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		userId: number,
+	): UserIDStatus | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue<UserIDStatus>(
+				UserCodeCCValues.userIdStatus(userId).endpoint(endpoint.index),
+			);
+	}
+
+	/**
+	 * Returns the current code belonging to a user ID.
+	 * This only works AFTER the user IDs have been queried.
+	 */
+	public static getUserCodeCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		userId: number,
+	): string | Buffer | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue<string | Buffer>(
+				UserCodeCCValues.userCode(userId).endpoint(endpoint.index),
+			);
+	}
 }
 
 type UserCodeCCSetOptions =

@@ -1,19 +1,20 @@
 import {
 	CommandClasses,
-	Maybe,
 	MessagePriority,
+	ValueMetadata,
+	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
-	ValueMetadata,
+	type Maybe,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -33,8 +34,8 @@ import { V } from "../lib/Values";
 import {
 	EnergyProductionCommand,
 	EnergyProductionParameter,
-	EnergyProductionScale,
 	getEnergyProductionScale,
+	type EnergyProductionScale,
 } from "../lib/_Types";
 
 export const EnergyProductionCCValues = Object.freeze({
@@ -169,18 +170,32 @@ export class EnergyProductionCC extends CommandClass {
 	}
 }
 
+export interface EnergyProductionCCReportOptions extends CCCommandOptions {
+	parameter: EnergyProductionParameter;
+	scale: EnergyProductionScale;
+	value: number;
+}
+
 @CCCommand(EnergyProductionCommand.Report)
 export class EnergyProductionCCReport extends EnergyProductionCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| EnergyProductionCCReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.parameter = this.payload[0];
-		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
-		this.value = value;
-		this.scale = getEnergyProductionScale(this.parameter, scale);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload[0];
+			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			this.value = value;
+			this.scale = getEnergyProductionScale(this.parameter, scale);
+		} else {
+			this.parameter = options.parameter;
+			this.value = options.value;
+			this.scale = options.scale;
+		}
 	}
 
 	public readonly parameter: EnergyProductionParameter;
@@ -202,6 +217,14 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		this.setValue(applHost, valueValue, this.value);
 
 		return true;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.parameter]),
+			encodeFloatWithScale(this.value, this.scale.key),
+		]);
+		return super.serialize();
 	}
 }
 

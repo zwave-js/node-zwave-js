@@ -916,6 +916,16 @@ export enum IndicatorCommand {
 	DescriptionReport = 0x07,
 }
 
+/** Specifies a timeout for an indicator. At least one of the properties must be present. */
+export interface IndicatorTimeout {
+	/** Whole hours (0-255) */
+	hours?: number;
+	/** Whole minutes (0-255) */
+	minutes?: number;
+	/** Whole and 1/100th seconds (0-59.99) */
+	seconds?: number;
+}
+
 export type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
@@ -1265,6 +1275,12 @@ export interface ScheduleEntryLockWeekDaySchedule {
 	startMinute: number;
 	stopHour: number;
 	stopMinute: number;
+}
+
+export enum ScheduleEntryLockScheduleKind {
+	WeekDay,
+	YearDay,
+	DailyRepeating,
 }
 
 export enum Security2Command {

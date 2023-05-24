@@ -4,6 +4,144 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.22.1 (2023-05-24)
+### Features
+* Add a value and API to control the indicator timeout (#5830)
+
+### Bugfixes
+* Ignore inclusion notification for existing nodes (#5828)
+* Correct the serial API commands to set/get/delete priority routes (#5827)
+* Avoid crashing when the value DB contains a non-JSON key (#5829)
+
+### Config file changes
+* Add LG U+ smart switches (#5835)
+* Add/correct config files for iSurpass J1825 (#5823)
+* Add fingerprint `0x0003:0x0042` to Kwikset 914C (#5834)
+* Add Dawon PM-S140-ZW, PM-S340-ZW and KR frequencies (#5833)
+
+## 10.21.0 (2023-05-19)
+### Features
+* Add `allowManualEntry` property to numeric metadata to indicate whether `states` are only informational or restrict the possible values (#5806)
+
+### Bugfixes
+* Make `Driver` and `ZWave[Application]Host` interfaces compatible for external projects (#5796)
+* Correct return type for `Configuration CC` `setBulk` command (#5803)
+* Add catch-all overload to `ScheduleEntryLockCC.getScheduleCached` (#5805)
+* Clean up `Window Covering CC` values (#5807)
+* Optimize config parameter scan during the interview (#5811)
+* Always include the duration field in the serialized buffer for CC versions that support it (#5809)
+* Consider endpoints when force-adding CCs mandatory for Z-Wave+ v2 devices, add logs (#5820)
+
+### Config file changes
+* Disable Supervision for Simon IO Roller Blind 700 series (#5819)
+
+### Changes under the hood
+* Influence the `setValue` implementation of CC APIs using hooks (#5808)
+
+## 10.20.0 (2023-05-12)
+### Features
+* Add `states` property to `boolean` value metadata to declare which values are accepted (#5792)
+
+### Bugfixes
+* Fixed inconsistencies in the metadata of auto-discovered config parameters, which lead to missing labels and value ranges in applications (#5791)
+* Fixed a crash that happens when message cannot be decoded because the node is unknown (#5794)
+
+### Config file changes
+* Add 700 series variant of SimonTech Roller Blind (#5743)
+* Updated Leviton VRS15 metadata (#5764)
+* Correct inclusion instructions for Leviton ZW15R (#5790)
+
+### Changes under the hood
+* Implement mocks for `Configuration CC` (#5788)
+* Implement mocks for `Energy Production CC` (#5789)
+
+## 10.19.0 (2023-05-11)
+### Features
+* `Schedule Entry Lock CC`: schedules, enabled users, and the active scheduling kind for each user are now cached and can be read from the cache (#5787)
+
+### Bugfixes
+* `Sound Switch CC`: configuration is now queried after the tone count to comply with overly strict certification requirements (#5775)
+* Fixed the logic for determining whether driver logs should be printed to `stdout` (#5774)
+* Assign Lifelines for association groups that send specific notifications (#5780)
+* Received commands with lower-than-expected security level are now discarded in more situations (#5783)
+
+### Config file changes
+* Add Zooz ZEN53, 54, 55 (#5779)
+* Extend version range for Vesternet VES-ZW-HLD-016 (#5782)
+
+## 10.18.0 (2023-05-05)
+### Features
+* Expose methods to read cached user code and user ID status (#5759)
+
+### Bugfixes
+* Use the correct commands to read and write config parameters above 255 (#5761)
+* Only discard unknown Multilevel Sensor readings on V4 and lower (#5760)
+* Fixed a crash that could happen when receiving certain CCs while the controller is not yet interviewed (#5758)
+* Improve the "unnecessary endpoint" heuristic that is used to ignore endpoints (#5747)
+* In accordance with the specification, the versions of all supported CCs are now queried during the interview, even if they only exist in version 1 (#5746)
+
+## 10.17.1 (2023-05-04)
+### Bugfixes
+* Fixed a startup crash that happens when the controller returns an empty list of nodes (#5745)
+
+## 10.17.0 (2023-05-03)
+### Features
+* Implemented a `mock-server` binary to expose a simulated controller via TCP for application testing (#5714)
+
+### Bugfixes
+* Several fixes and polishing for `Window Covering CC` (#5735, #5741)
+* Fixed a race condition on Windows systems between the serial port and state machine that could cause the communication with the Z-Wave stick to fail (#5737)
+* When no other actuator CCs are supported, `Basic CC` is now queried even if not advertised (#5730)
+* The daily Entry Lock schedule is now only parsed if any weekday is selected (#5732)
+* Support inicoming `Transport Service CCs` with unequal fragment sizes (#5731)
+* Do not encapsulate CRC16 or Transport Service in Security S0/S2 (#5731)
+* Disconnects of TCP sockets are detected again (#5715)
+
+### Config file changes
+* Disable periodic refresh for Shenzhen Neo NAS-PD03Z (#5739)
+* Add missing parameter 9 to Logic Group ZDB5100 (#5690)
+* Add new parameters 10-13 to Zooz ZEN04 (#5689)
+* Force-add Battery CC support for EcoNet Controls EV100 (#5712)
+
+### Changes under the hood
+* Fixed the `watch` task on Windows systems
+* Add compat flag to disable periodic value refreshes (#5738)
+
+## 10.16.0 (2023-04-25)
+### Features
+* Implement `pollValue` for `Notification CC` (for pull-mode nodes) (#5676)
+* Add support for `Energy Production CC` (#5677)
+* Add support for `Window Covering CC` (#5679, #5687)
+
+### Bugfixes
+* When a command is too large for explorer frames, and Transport Service CC is not supported, the driver will now attempt to send the command without using explorer frames, instead of failing immediately (#5662)
+* Ensure devices don't report duplicate firmware targets (#5670)
+* Always write metadata for `Meter CC` reports and add `ccSpecific` info (#5675)
+* Sending raw, non-implemented CCs no longer throws while attempting to determine the version (#5674)
+* RSSI background measurements are now also scheduled in networks without always-listening nodes (#5681)
+* Possibly matching partial responses to a command now refresh the timeout (#5683)
+* Logging to file and logging to the console at the same time is now possible (#5696)
+* Fixed some spec-compliance issues related to NIF, Security S2 and Version CC (#5697, #5704, #5706)
+* Respond to queries for the commands supported via S0 (#5701)
+* When receiving an S2 encapsulated singlecast command with the sender's entropy, decryption is now only attempted once (#5699)
+* Fixed a crash that could happen when receiving a secure command before the controller was interviewed on startup (#5698)
+
+### Config file changes
+* Correct link to manual for Aeotec ZWA011 (#5657)
+* Disable Supervision CC for Homeseer HS-FLS100 (#5663)
+* Add Swidget Z-Wave inserts (#5498)
+* Add non-pro variant of the RaZberry 7 (#5673)
+* Define config parameters for Zipato ZD2301EU-5 (#5559)
+* Add alarm mappings to Weiser GED1455 SmartCode 5 (#5667)
+* Add kVar and kVarh to Aeotec Home Energy Meter Gen 5 (#5589)
+* Add config file for Shenzhen Neo PIR Motion, Temperature & Light Sensor (#5582)
+* Re-enable Supervision on Zooz ZSE29 FW2.2+ (#5671)
+* Add Inovelli VZW31-SN (#5629)
+
+### Changes under the hood
+* Refactored some integration tests (#5655, #5659)
+* The build process uses TypeScript project references again (#5658, #5685)
+
 ## 10.15.0 (2023-04-12)
 ### Features
 * Simplify working with mixed-security multicast (#5593)

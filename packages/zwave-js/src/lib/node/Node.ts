@@ -18,6 +18,7 @@ import {
 	TimeCCTimeOffsetGet,
 	TimeCommand,
 	TimeParametersCommand,
+	ValueIDProperties,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 	defaultCCValueOptions,
@@ -75,14 +76,20 @@ import {
 import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
 import {
+	Security2CCCommandsSupportedGet,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
 } from "@zwave-js/cc/Security2CC";
 import {
+	SecurityCCCommandsSupportedGet,
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
-import { VersionCCValues } from "@zwave-js/cc/VersionCC";
+import {
+	VersionCCCommandClassGet,
+	VersionCCGet,
+	VersionCCValues,
+} from "@zwave-js/cc/VersionCC";
 import {
 	WakeUpCCValues,
 	WakeUpCCWakeUpNotification,
@@ -106,6 +113,7 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	ZWaveLibraryTypes,
 	actuatorCCs,
 	applicationCCs,
 	getCCName,
@@ -171,6 +179,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import { isDeepStrictEqual } from "util";
+import { determineNIF } from "../controller/NodeInformationFrame";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import { interpretEx, type Extended } from "../driver/StateMachineShared";
@@ -939,7 +948,7 @@ export class ZWaveNode
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 			if (!endpointInstance) return false;
-			const api = (endpointInstance.commandClasses as any)[
+			let api = (endpointInstance.commandClasses as any)[
 				valueId.commandClass
 			] as CCAPI;
 			// Check if the setValue method is implemented
@@ -957,15 +966,34 @@ export class ZWaveNode
 				});
 			}
 
+			const valueIdProps: ValueIDProperties = {
+				property: valueId.property,
+				propertyKey: valueId.propertyKey,
+			};
+
+			const hooks = api.setValueHooks?.(valueIdProps, value, options);
+
+			if (hooks?.supervisionDelayedUpdates) {
+				api = api.withOptions({
+					requestStatusUpdates: true,
+					onUpdate: async (update) => {
+						try {
+							if (update.status === SupervisionStatus.Success) {
+								await hooks.supervisionOnSuccess();
+							} else if (
+								update.status === SupervisionStatus.Fail
+							) {
+								await hooks.supervisionOnFailure();
+							}
+						} catch {
+							// TODO: Log error?
+						}
+					},
+				});
+			}
+
 			// And call it
-			const result = await api.setValue(
-				{
-					property: valueId.property,
-					propertyKey: valueId.propertyKey,
-				},
-				value,
-				options,
-			);
+			const result = await api.setValue!(valueIdProps, value, options);
 
 			if (loglevel === "silly") {
 				let message = `[setValue] result of SET_VALUE API call for ${api.constructor.name}:`;
@@ -990,7 +1018,7 @@ export class ZWaveNode
 				});
 			}
 
-			// Remember the new value if...
+			// Remember the new value for the value we just set, if...
 			// ... the call did not throw (assume that the call was successful)
 			// ... the call was supervised and successful
 			if (
@@ -1029,6 +1057,37 @@ export class ZWaveNode
 					message: `[setValue] not updating value`,
 					level: "silly",
 				});
+			}
+
+			// Depending on the settings of the SET_VALUE implementation, we may have to
+			// optimistically update a different value and/or verify the changes
+			if (hooks) {
+				// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+				// so UIs have immediate feedback
+				const shouldUpdateOptimistically =
+					api.isSetValueOptimistic(valueId) &&
+					// For unsupervised commands, make the choice to update optimistically dependent on the driver options
+					((!this.driver.options.disableOptimisticValueUpdate &&
+						result == undefined) ||
+						(isSupervisionResult(result) &&
+							result.status === SupervisionStatus.Success));
+
+				// Let the API implementation handle additional optimistic updates
+				if (shouldUpdateOptimistically) {
+					hooks.optimisticallyUpdateRelatedValues?.();
+				}
+
+				// Verify the current value after a delay, unless...
+				// ...the command was supervised and successful
+				// ...and the CC API decides not to verify anyways
+				if (
+					!supervisedCommandSucceeded(result) ||
+					hooks.forceVerifyChanges?.()
+				) {
+					// Let the CC API implementation handle the verification.
+					// It may still decide not to do it.
+					await hooks.verifyChanges?.();
+				}
 			}
 
 			return isUnsupervisedOrSucceeded(result);
@@ -2015,6 +2074,10 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
+		// Basic CC MUST only be used/interviewed when no other actuator CC is supported. If Basic CC is not in the NIF
+		// or list of supported CCs, we need to add it here manually, so its version can get queried.
+		this.maybeAddBasicCCAsFallback();
+
 		if (this.supportsCC(CommandClasses.Version)) {
 			this.driver.controllerLog.logNode(
 				this.nodeId,
@@ -2281,6 +2344,10 @@ protocol version:      ${this.protocolVersion}`;
 					});
 				}
 			}
+
+			// Basic CC MUST only be used/interviewed when no other actuator CC is supported. If Basic CC is not in the NIF
+			// or list of supported CCs, we need to add it here manually, so its version can get queried.
+			this.maybeAddBasicCCAsFallback();
 
 			// This intentionally checks for Version CC support on the root device.
 			// Endpoints SHOULD not support this CC, but we still need to query their
@@ -2630,6 +2697,11 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		}
 
+		// If we're being queried by another node, treat this as a sign that the other node is awake
+		if (command.constructor.name.endsWith("Get")) {
+			this.markAsAwake();
+		}
+
 		if (command instanceof BasicCC) {
 			return this.handleBasicCommand(command);
 		} else if (command instanceof MultilevelSwitchCC) {
@@ -2646,10 +2718,14 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleSecurityNonceGet();
 		} else if (command instanceof SecurityCCNonceReport) {
 			return this.handleSecurityNonceReport(command);
+		} else if (command instanceof SecurityCCCommandsSupportedGet) {
+			return this.handleSecurityCommandsSupportedGet(command);
 		} else if (command instanceof Security2CCNonceGet) {
 			return this.handleSecurity2NonceGet();
 		} else if (command instanceof Security2CCNonceReport) {
 			return this.handleSecurity2NonceReport(command);
+		} else if (command instanceof Security2CCCommandsSupportedGet) {
+			return this.handleSecurity2CommandsSupportedGet(command);
 		} else if (command instanceof HailCC) {
 			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
@@ -2666,6 +2742,10 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleTimeOffsetGet(command);
 		} else if (command instanceof ZWavePlusCCGet) {
 			return this.handleZWavePlusGet(command);
+		} else if (command instanceof VersionCCGet) {
+			return this.handleVersionGet(command);
+		} else if (command instanceof VersionCCCommandClassGet) {
+			return this.handleVersionCommandClassGet(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -3041,7 +3121,7 @@ protocol version:      ${this.protocolVersion}`;
 		// Some legacy devices expect us to query them on wake up in order to function correctly
 		if (this._deviceConfig?.compat?.queryOnWakeup) {
 			void this.compatDoWakeupQueries();
-		} else {
+		} else if (!this._deviceConfig?.compat?.disableAutoRefresh) {
 			// For other devices we may have to refresh their values from time to time
 			void this.autoRefreshValues().catch(() => {
 				// ignore
@@ -3314,9 +3394,6 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	private async handleZWavePlusGet(command: ZWavePlusCCGet): Promise<void> {
-		// treat this as a sign that the node is awake
-		this.markAsAwake();
-
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		await endpoint.commandClasses["Z-Wave Plus Info"]
@@ -3331,6 +3408,63 @@ protocol version:      ${this.protocolVersion}`;
 				installerIcon: 0x0500, // Generic Gateway
 				userIcon: 0x0500, // Generic Gateway
 			});
+	}
+
+	private async handleVersionGet(command: VersionCCGet): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		await endpoint.commandClasses.Version.withOptions({
+			// Answer with the same encapsulation as asked
+			encapsulationFlags: command.encapsulationFlags,
+		}).sendReport({
+			libraryType: ZWaveLibraryTypes["Static Controller"],
+			protocolVersion: this.driver.controller.protocolVersion!,
+			firmwareVersions: [this.driver.controller.firmwareVersion!],
+		});
+	}
+
+	private async handleVersionCommandClassGet(
+		command: VersionCCCommandClassGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		await endpoint.commandClasses.Version.withOptions({
+			// Answer with the same encapsulation as asked
+			encapsulationFlags: command.encapsulationFlags,
+		}).reportCCVersion(command.requestedCC);
+	}
+
+	private async handleSecurityCommandsSupportedGet(
+		command: SecurityCCCommandsSupportedGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		if (this.getHighestSecurityClass() === SecurityClass.S0_Legacy) {
+			const { supportedCCs } = determineNIF();
+			await endpoint.commandClasses.Security.reportSupportedCommands(
+				supportedCCs,
+				// The list of controlled CCs is long. We would need to split this
+				// into multiple reports.
+				// FIXME: Do that
+				[],
+			);
+		} else {
+			// S0 is not the highest class. Return an empty list
+			await endpoint.commandClasses.Security.reportSupportedCommands(
+				[],
+				[],
+			);
+		}
+	}
+
+	private async handleSecurity2CommandsSupportedGet(
+		command: Security2CCCommandsSupportedGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		await endpoint.commandClasses["Security 2"].reportSupportedCommands(
+			determineNIF().supportedCCs,
+		);
 	}
 
 	/**
@@ -3765,9 +3899,6 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	private async handleTimeGet(command: TimeCCTimeGet): Promise<void> {
-		// treat this as a sign that the node is awake
-		this.markAsAwake();
-
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		const now = new Date();
@@ -3786,9 +3917,6 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	private async handleDateGet(command: TimeCCDateGet): Promise<void> {
-		// treat this as a sign that the node is awake
-		this.markAsAwake();
-
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		const now = new Date();
@@ -3809,9 +3937,6 @@ protocol version:      ${this.protocolVersion}`;
 	private async handleTimeOffsetGet(
 		command: TimeCCTimeOffsetGet,
 	): Promise<void> {
-		// treat this as a sign that the node is awake
-		this.markAsAwake();
-
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		const timezone = getDSTInfo(new Date());

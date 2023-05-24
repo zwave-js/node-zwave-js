@@ -213,15 +213,18 @@
 			"defaultValue": 1
 		},
 		{
+			"#": "9",
+			"$if": "firmwareVersion >= 1.8",
+			"$import": "templates/logic_group_template.json#default_brightness"
+		},
+		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enhanced LED Control"
 		},
 		{
 			"#": "11",
-			"$import": "templates/logic_group_template.json#button_debounce",
-			"unit": "10 ms",
-			"defaultValue": 5
+			"$import": "templates/logic_group_template.json#button_debounce"
 		},
 		{
 			"#": "12",

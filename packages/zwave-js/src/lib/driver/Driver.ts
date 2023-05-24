@@ -11,6 +11,7 @@ import {
 	Security2Command,
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
+	SecurityCommand,
 	SupervisionCC,
 	SupervisionCCReport,
 	TransportServiceCCFirstSegment,
@@ -439,9 +440,9 @@ export class Driver
 		}
 
 		// merge given options with defaults
-		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
+		this._options = mergeDeep(options, defaultOptions) as ZWaveOptions;
 		// And make sure they contain valid values
-		checkOptions(this.options);
+		checkOptions(this._options);
 		if (options?.userAgent) {
 			if (!isObject(options.userAgent)) {
 				throw new ZWaveError(
@@ -454,18 +455,18 @@ export class Driver
 		}
 
 		// Initialize logging
-		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
+		this._logContainer = new ZWaveLogContainer(this._options.logConfig);
 		this._driverLog = new DriverLogger(this, this._logContainer);
 		this._controllerLog = new ControllerLogger(this._logContainer);
 
 		// Initialize the cache
-		this.cacheDir = this.options.storage.cacheDir;
+		this.cacheDir = this._options.storage.cacheDir;
 
 		// Initialize config manager
 		this.configManager = new ConfigManager({
 			logContainer: this._logContainer,
 			deviceConfigPriorityDir:
-				this.options.storage.deviceConfigPriorityDir,
+				this._options.storage.deviceConfigPriorityDir,
 		});
 
 		// And initialize but don't start the send thread machine
@@ -583,7 +584,7 @@ export class Driver
 				log: this.driverLog.print.bind(this.driverLog),
 				logQueue: this.driverLog.sendQueue.bind(this.driverLog),
 			},
-			pick(this.options, ["timeouts", "attempts"]),
+			pick(this._options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
 		this._sendThreadIdle = false;
@@ -697,7 +698,11 @@ export class Driver
 	}
 
 	private _controllerLog: ControllerLogger;
-	/** @internal */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
 	public get controllerLog(): ControllerLogger {
 		return this._controllerLog;
 	}
@@ -732,29 +737,52 @@ export class Driver
 	}
 
 	private _securityManager: SecurityManager | undefined;
-	/** @internal */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
 	public get securityManager(): SecurityManager | undefined {
 		return this._securityManager;
 	}
 
 	private _securityManager2: SecurityManager2 | undefined;
-	/** @internal */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
 	public get securityManager2(): SecurityManager2 | undefined {
 		return this._securityManager2;
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications. Use `controller.homeId` instead!
+	 */
 	public get homeId(): number {
+		// This is needed for the ZWaveHost interface
 		return this.controller.homeId!;
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications. Use `controller.ownNodeId` instead!
+	 */
 	public get ownNodeId(): number {
+		// This is needed for the ZWaveHost interface
 		return this.controller.ownNodeId!;
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications. Use `controller.nodes` instead!
+	 */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
+		// This is needed for the ZWaveHost interface
 		return this.controller.nodes;
 	}
 
@@ -771,50 +799,70 @@ export class Driver
 		}
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
 	public getValueDB(nodeId: number): ValueDB {
+		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.valueDB;
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
 	public tryGetValueDB(nodeId: number): ValueDB | undefined {
+		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.get(nodeId);
 		return node?.valueDB;
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
 	public getDeviceConfig(nodeId: number): DeviceConfig | undefined {
+		// This is needed for the ZWaveHost interface
 		return this.controller.nodes.get(nodeId)?.deviceConfig;
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
 	public getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.getHighestSecurityClass();
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
 	public hasSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
 	): Maybe<boolean> {
+		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.hasSecurityClass(securityClass);
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
 	public setSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
 		granted: boolean,
 	): void {
+		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		node.setSecurityClass(securityClass, granted);
 	}
 
-	/** @internal This is needed for the ZWaveHost interface */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications. Use `node.isControllerNode` instead!
+	 */
 	public isControllerNode(nodeId: number): boolean {
+		// This is needed for the ZWaveHost interface
 		return nodeId === this.ownNodeId;
 	}
 
@@ -832,7 +880,7 @@ export class Driver
 	public setPreferredScales(
 		scales: ZWaveOptions["preferences"]["scales"],
 	): void {
-		this.options.preferences.scales = mergeDeep(
+		this._options.preferences.scales = mergeDeep(
 			defaultOptions.preferences.scales,
 			scales,
 		);
@@ -860,7 +908,7 @@ export class Driver
 		// Create a new deep-merged copy of the options so we can check them for validity
 		// without affecting our own options
 		const newOptions = mergeDeep(
-			cloneDeep(this.options),
+			cloneDeep(this._options),
 			safeOptions,
 			true,
 		) as ZWaveOptions;
@@ -874,7 +922,7 @@ export class Driver
 		}
 
 		// All good, update the options
-		this.options = newOptions;
+		this._options = newOptions;
 
 		if (options.logConfig) {
 			this.updateLogConfig(options.logConfig);
@@ -885,8 +933,10 @@ export class Driver
 		}
 	}
 
-	/** @internal */
-	public options: ZWaveOptions;
+	private _options: ZWaveOptions;
+	public get options(): Readonly<ZWaveOptions> {
+		return this._options;
+	}
 
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
@@ -905,7 +955,7 @@ export class Driver
 
 		// Enforce that an error handler is attached, except for testing with a mocked serialport
 		if (
-			!this.options.testingHooks &&
+			!this._options.testingHooks &&
 			(this as unknown as EventEmitter).listenerCount("error") === 0
 		) {
 			throw new ZWaveError(
@@ -941,7 +991,7 @@ export class Driver
 				this.serial = new ZWaveSerialPort(
 					this.port,
 					this._logContainer,
-					this.options.testingHooks?.serialPortBinding,
+					this._options.testingHooks?.serialPortBinding,
 				);
 			}
 		} else {
@@ -997,10 +1047,10 @@ export class Driver
 			spOpenPromise.resolve();
 
 			if (
-				typeof this.options.testingHooks?.onSerialPortOpen ===
+				typeof this._options.testingHooks?.onSerialPortOpen ===
 				"function"
 			) {
-				await this.options.testingHooks.onSerialPortOpen(this.serial!);
+				await this._options.testingHooks.onSerialPortOpen(this.serial!);
 			}
 
 			// Perform initialization sequence
@@ -1009,7 +1059,7 @@ export class Driver
 			// to handle sticks that don't support the soft reset command. Therefore we do it
 			// after opening the value DBs
 
-			if (!this.options.testingHooks?.skipBootloaderCheck) {
+			if (!this._options.testingHooks?.skipBootloaderCheck) {
 				// After an incomplete firmware upgrade, we might be stuck in the bootloader
 				// Therefore wait a short amount of time to see if the serialport detects bootloader mode.
 				// If we are, the bootloader will reply with its menu.
@@ -1024,7 +1074,7 @@ export class Driver
 					// Wait a short time again. If we're in bootloader mode again, we're stuck
 					await wait(1000);
 					if (this._bootloader) {
-						if (this.options.allowBootloaderOnly) {
+						if (this._options.allowBootloaderOnly) {
 							this.driverLog.print(
 								"Failed to recover from bootloader. Staying in bootloader mode as requested.",
 								"warn",
@@ -1053,7 +1103,7 @@ export class Driver
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
-				await this.options.storage.driver.ensureDir(this.cacheDir);
+				await this._options.storage.driver.ensureDir(this.cacheDir);
 			} catch (e) {
 				let message: string;
 				if (
@@ -1075,7 +1125,7 @@ export class Driver
 			}
 
 			// Load the necessary configuration
-			if (this.options.testingHooks?.loadConfiguration !== false) {
+			if (this._options.testingHooks?.loadConfiguration !== false) {
 				this.driverLog.print("loading configuration...");
 				try {
 					await this.configManager.loadAll();
@@ -1131,7 +1181,7 @@ export class Driver
 		// After a reset, the serial port may need a few seconds until we can open it - try a few times
 		for (
 			let attempt = 1;
-			attempt <= this.options.attempts.openSerialPort;
+			attempt <= this._options.attempts.openSerialPort;
 			attempt++
 		) {
 			try {
@@ -1140,7 +1190,7 @@ export class Driver
 			} catch (e) {
 				lastError = e;
 			}
-			if (attempt < this.options.attempts.openSerialPort) {
+			if (attempt < this._options.attempts.openSerialPort) {
 				await wait(1000);
 			}
 		}
@@ -1161,11 +1211,11 @@ export class Driver
 	private getJsonlDBOptions(): JsonlDBOptions<any> {
 		const options: JsonlDBOptions<any> = {
 			ignoreReadErrors: true,
-			...throttlePresets[this.options.storage.throttle],
+			...throttlePresets[this._options.storage.throttle],
 		};
-		if (this.options.storage.lockDir) {
+		if (this._options.storage.lockDir) {
 			options.lockfile = {
-				directory: this.options.storage.lockDir,
+				directory: this._options.storage.lockDir,
 			};
 		}
 		return options;
@@ -1246,7 +1296,7 @@ export class Driver
 					this.controller.homeId,
 					this._networkCache,
 					this._valueDB,
-					this.options.storage.driver,
+					this._options.storage.driver,
 					this.cacheDir,
 				);
 
@@ -1280,7 +1330,7 @@ export class Driver
 				.on("node removed", this.onNodeRemoved.bind(this));
 		}
 
-		if (!this.options.testingHooks?.skipControllerIdentification) {
+		if (!this._options.testingHooks?.skipControllerIdentification) {
 			// Determine controller IDs to open the Value DBs
 			// We need to do this first because some older controllers, especially the UZB1 and
 			// some 500-series sticks in virtualized environments don't respond after a soft reset
@@ -1292,15 +1342,15 @@ export class Driver
 			await this.controller.identify();
 			await this.initNetworkCache(this.controller.homeId!);
 
-			if (this.options.enableSoftReset && !this.maySoftReset()) {
+			if (this._options.enableSoftReset && !this.maySoftReset()) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
 				);
-				this.options.enableSoftReset = false;
+				this._options.enableSoftReset = false;
 			}
 
-			if (this.options.enableSoftReset) {
+			if (this._options.enableSoftReset) {
 				try {
 					await this.softResetInternal(false);
 				} catch (e) {
@@ -1325,7 +1375,7 @@ export class Driver
 			// which isn't valid. In this case try again after having soft-reset the stick
 			if (
 				this.controller.ownNodeId === 0 &&
-				this.options.enableSoftReset
+				this._options.enableSoftReset
 			) {
 				this.driverLog.print(
 					`Controller identification returned invalid node ID 0 - trying again...`,
@@ -1364,7 +1414,7 @@ export class Driver
 
 		// Set up the S0 security manager. We can only do that after the controller
 		// interview because we need to know the controller node id.
-		const S0Key = this.options.securityKeys?.S0_Legacy;
+		const S0Key = this._options.securityKeys?.S0_Legacy;
 		if (S0Key) {
 			this.driverLog.print(
 				"Network key for S0 configured, enabling S0 security manager...",
@@ -1372,7 +1422,7 @@ export class Driver
 			this._securityManager = new SecurityManager({
 				networkKey: S0Key,
 				ownNodeId: this._controller.ownNodeId!,
-				nonceTimeout: this.options.timeouts.nonce,
+				nonceTimeout: this._options.timeouts.nonce,
 			});
 		} else {
 			this.driverLog.print(
@@ -1383,9 +1433,9 @@ export class Driver
 
 		// The S2 security manager could be initialized earlier, but we do it here for consistency
 		if (
-			this.options.securityKeys &&
+			this._options.securityKeys &&
 			// Only set it up if we have security keys for at least one S2 security class
-			Object.keys(this.options.securityKeys).some(
+			Object.keys(this._options.securityKeys).some(
 				(key) =>
 					key.startsWith("S2_") &&
 					key in SecurityClass &&
@@ -1403,7 +1453,7 @@ export class Driver
 				"S2_AccessControl",
 				"S0_Legacy",
 			] as const) {
-				const key = this.options.securityKeys[secClass];
+				const key = this._options.securityKeys[secClass];
 				if (key) {
 					this._securityManager2.setKey(SecurityClass[secClass], key);
 				}
@@ -1428,7 +1478,7 @@ export class Driver
 		this._nodesReady.clear();
 		this._nodesReadyEventEmitted = false;
 
-		if (!this.options.testingHooks?.skipNodeInterview) {
+		if (!this._options.testingHooks?.skipNodeInterview) {
 			// Now interview all nodes
 			// First complete the controller interview
 			const controllerNode = this._controller.nodes.get(
@@ -1510,7 +1560,7 @@ export class Driver
 			ZWaveErrorCodes.Controller_InterviewRestarted,
 		);
 
-		const maxInterviewAttempts = this.options.attempts.nodeInterview;
+		const maxInterviewAttempts = this._options.attempts.nodeInterview;
 
 		try {
 			if (!(await node.interviewInternal())) {
@@ -1967,8 +2017,8 @@ export class Driver
 	private onNodeAdded(node: ZWaveNode): void {
 		this.addNodeEventHandlers(node);
 
-		if (this.options.interview?.disableOnNodeAdded) return;
-		if (this.options.testingHooks?.skipNodeInterview) return;
+		if (this._options.interview?.disableOnNodeAdded) return;
+		if (this._options.testingHooks?.skipNodeInterview) return;
 
 		// Interview the node
 		// don't await the interview, because it may take a very long time
@@ -2314,12 +2364,17 @@ export class Driver
 		return false;
 	}
 
-	/** @internal Required for ZWaveApplicationHost */
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
 	public schedulePoll(
 		nodeId: number,
 		valueId: ValueID,
 		options: NodeSchedulePollOptions,
 	): boolean {
+		// Needed for ZWaveApplicationHost
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.schedulePoll(valueId, options);
 	}
@@ -2371,7 +2426,7 @@ export class Driver
 	 * Soft-resets the controller if the feature is enabled
 	 */
 	public async trySoftReset(): Promise<void> {
-		if (this.options.enableSoftReset && this.maySoftReset()) {
+		if (this._options.enableSoftReset && this.maySoftReset()) {
 			await this.softReset();
 		} else {
 			const message = `The soft reset feature is not enabled, skipping API call.`;
@@ -2387,7 +2442,7 @@ export class Driver
 	 * **Warning:** This call will throw if soft-reset is not enabled.
 	 */
 	public async softReset(): Promise<void> {
-		if (!this.options.enableSoftReset) {
+		if (!this._options.enableSoftReset) {
 			const message = `The soft reset feature has been disabled with a config option or the ZWAVEJS_DISABLE_SOFT_RESET environment variable.`;
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
@@ -2514,7 +2569,7 @@ export class Driver
 			(msg) => {
 				return msg.functionType === FunctionType.SerialAPIStarted;
 			},
-			this.options.timeouts.serialAPIStarted,
+			this._options.timeouts.serialAPIStarted,
 		).catch(() => false as const);
 
 		if (waitResult) {
@@ -2864,6 +2919,11 @@ export class Driver
 			msg = undefined;
 		}
 
+		// If we receive a CC from a node while the controller is not ready yet,
+		// we can't do anything with it, but logging it may assume that it can access the controller.
+		// To prevent this problem, we just ignore CCs until the controller is ready
+		if (!this._controller && isCommandClassContainer(msg)) return;
+
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
 			let wasMessageLogged = false;
@@ -3053,6 +3113,17 @@ export class Driver
 						"warn",
 					);
 					return MessageHeaders.ACK;
+
+				case ZWaveErrorCodes.Controller_NodeNotFound:
+					this.driverLog.print(
+						`Dropping message because ${
+							typeof e.context === "number"
+								? `node ${e.context}`
+								: "the node"
+						} does not exist.`,
+						"warn",
+					);
+					return MessageHeaders.ACK;
 			}
 		} else {
 			if (/database is not open/.test(e.message)) {
@@ -3205,7 +3276,8 @@ export class Driver
 
 			return true;
 		} else if (
-			e.code === ZWaveErrorCodes.Security2CC_CannotDecodeMulticast &&
+			(e.code === ZWaveErrorCodes.Security2CC_NoMPAN ||
+				e.code === ZWaveErrorCodes.Security2CC_CannotDecodeMulticast) &&
 			isCommandClassContainer(msg)
 		) {
 			// Decoding the command failed because the MPAN used by the other node
@@ -3443,17 +3515,16 @@ export class Driver
 
 			const RXStateMachine = createTransportServiceRXMachine(
 				{
-					requestMissingSegment: async (index: number) => {
+					requestMissingSegment: async (offset: number) => {
 						this.controllerLog.logNode(command.nodeId, {
-							message: `Transport Service RX session #${command.sessionId}: Segment ${index} missing - requesting it...`,
+							message: `Transport Service RX session #${command.sessionId}: Segment with offset ${offset} missing - requesting it...`,
 							level: "debug",
 							direction: "outbound",
 						});
 						const cc = new TransportServiceCCSegmentRequest(this, {
 							nodeId: command.nodeId,
 							sessionId: command.sessionId,
-							datagramOffset:
-								index * transportSession!.fragmentSize,
+							datagramOffset: offset,
 						});
 						await this.sendCommand(cc, {
 							maxSendAttempts: 1,
@@ -3480,9 +3551,8 @@ export class Driver
 					// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
 					missingSegmentTimeout:
 						TransportServiceTimeouts.requestMissingSegmentR2,
-					numSegments: Math.ceil(
-						command.datagramSize / command.partialDatagram.length,
-					),
+					datagramSize: command.datagramSize,
+					firstSegmentSize: command.partialDatagram.length,
 				},
 			);
 
@@ -3509,9 +3579,8 @@ export class Driver
 			if (transportSession) {
 				transportSession.interpreter.send({
 					type: "segment",
-					index: Math.floor(
-						command.datagramOffset / transportSession.fragmentSize,
-					),
+					offset: command.datagramOffset,
+					length: command.partialDatagram.length,
 				});
 			} else {
 				// This belongs to a session we don't know... tell the sending node to try again
@@ -3616,11 +3685,14 @@ ${handlers.length} left`,
 	 * This method expects `cc` to be unwrapped.
 	 */
 	private shouldDiscardCC(cc: CommandClass): boolean {
-		// For Command Classes supported securely, a controlling node MUST discard
-		// the command from a supporting node if not received at the highest common
-		// security level between the controlling node and the sending S2 node.
+		// With Security S0, some commands may be accepted without encryption, some require it
+		// With Security S2, a node MUST support its command classes only when communication is using its
+		// highest Security Class granted during security bootstrapping.
 
-		const node = this.controller.nodes.get(cc.nodeId as number);
+		// We already discard lower S2 keys when decrypting, so all that's left here to check is if the
+		// CC is encrypted at all.
+
+		const node = this._controller?.nodes.get(cc.nodeId as number);
 		if (!node) {
 			// Node does not exist, don't accept the CC
 			this.controllerLog.logNode(
@@ -3631,33 +3703,63 @@ ${handlers.length} left`,
 			return true;
 		}
 
-		switch (node.getHighestSecurityClass()) {
-			case SecurityClass.None:
-			case SecurityClass.Temporary:
-				return false;
+		const secClass = node.getHighestSecurityClass();
+		if (
+			secClass === SecurityClass.None ||
+			secClass === SecurityClass.Temporary
+		) {
+			return false;
 		}
 
-		let isSecure = false;
-		let requiresSecurity = false;
-		while (true) {
-			if (isEncapsulatingCommandClass(cc)) {
-				if (
-					cc.ccId === CommandClasses.Security ||
-					cc.ccId === CommandClasses["Security 2"]
-				) {
-					isSecure = true;
+		const expectedSecurityCC = securityClassIsS2(secClass)
+			? CommandClasses["Security 2"]
+			: secClass === SecurityClass.S0_Legacy
+			? CommandClasses.Security
+			: undefined;
+
+		const acceptAnyways = (cmd: CommandClass): boolean => {
+			// Some CCs are always accepted, regardless of security class
+			if (cmd instanceof SecurityCC) {
+				switch (cmd.ccCommand) {
+					// Cannot be sent encapsulated:
+					case SecurityCommand.NonceGet:
+					case SecurityCommand.NonceReport:
+					case SecurityCommand.SchemeGet:
+					case SecurityCommand.SchemeReport:
+						return true;
+
+					// Needs to be accepted to be able interview/respond to S0 queries
+					case SecurityCommand.CommandsSupportedGet:
+					case SecurityCommand.CommandsSupportedReport:
+						return cmd.isEncapsulatedWith(
+							CommandClasses.Security,
+							SecurityCommand.CommandEncapsulation,
+						);
 				}
+			}
+			return false;
+		};
+
+		let isSecure = false;
+		let requiresSecurity = securityClassIsS2(secClass);
+		while (true) {
+			if (cc.ccId === expectedSecurityCC || acceptAnyways(cc)) {
+				isSecure = true;
+			}
+
+			if (isEncapsulatingCommandClass(cc)) {
 				cc = cc.encapsulated;
 			} else if (isMultiEncapsulatingCommandClass(cc)) {
-				requiresSecurity = cc.encapsulated.some((cmd) =>
+				requiresSecurity ||= cc.encapsulated.some((cmd) =>
 					node.isCCSecure(cmd.ccId),
 				);
 				break;
 			} else {
-				requiresSecurity =
+				requiresSecurity ||=
 					node.isCCSecure(cc.ccId) &&
 					cc.ccId !== CommandClasses.Security &&
 					cc.ccId !== CommandClasses["Security 2"];
+
 				break;
 			}
 		}
@@ -3665,11 +3767,12 @@ ${handlers.length} left`,
 			// none found, don't accept the CC
 			this.controllerLog.logNode(
 				cc.nodeId as number,
-				`command must be encrypted but was received without Security encapsulation - discarding it...`,
+				`command was received at a lower security level than expected - discarding it...`,
 				"warn",
 			);
 			return true;
 		}
+
 		return false;
 	}
 
@@ -4323,12 +4426,12 @@ ${handlers.length} left`,
 				// Prioritize Bridge commands when they are supported
 				msg = new SendDataBridgeRequest(this, {
 					command,
-					maxSendAttempts: this.options.attempts.sendData,
+					maxSendAttempts: this._options.attempts.sendData,
 				});
 			} else {
 				msg = new SendDataRequest(this, {
 					command,
-					maxSendAttempts: this.options.attempts.sendData,
+					maxSendAttempts: this._options.attempts.sendData,
 				});
 			}
 		} else if (command.isMulticast()) {
@@ -4340,12 +4443,12 @@ ${handlers.length} left`,
 				// Prioritize Bridge commands when they are supported
 				msg = new SendDataMulticastBridgeRequest(this, {
 					command,
-					maxSendAttempts: this.options.attempts.sendData,
+					maxSendAttempts: this._options.attempts.sendData,
 				});
 			} else {
 				msg = new SendDataMulticastRequest(this, {
 					command,
-					maxSendAttempts: this.options.attempts.sendData,
+					maxSendAttempts: this._options.attempts.sendData,
 				});
 			}
 		} else {
@@ -4904,7 +5007,7 @@ ${handlers.length} left`,
 		// otherwise use the driver option
 		return (
 			node?.deviceConfig?.compat?.reportTimeout ??
-			this.options.timeouts.report
+			this._options.timeouts.report
 		);
 	}
 
@@ -4986,7 +5089,7 @@ ${handlers.length} left`,
 			if (this.configManager.useExternalConfig && extConfigDir) {
 				// 1. external config dir, leave node_modules alone
 				await installConfigUpdateInDocker(newVersion, {
-					cacheDir: this.options.storage.cacheDir,
+					cacheDir: this._options.storage.cacheDir,
 					configDir: extConfigDir,
 				});
 			} else if (isDocker()) {

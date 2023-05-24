@@ -1,6 +1,8 @@
 import {
 	MAX_REPEATERS,
 	MessagePriority,
+	MessageRecord,
+	RouteKind,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -69,30 +71,45 @@ export class GetPriorityRouteResponse extends Message {
 	) {
 		super(host, options);
 		this.destinationNodeId = this.payload[0];
-		this.repeaters = [...this.payload.slice(1, 1 + MAX_REPEATERS)].filter(
-			(id) => id > 0,
-		);
-		this.routeSpeed = this.payload[1 + MAX_REPEATERS];
+		this.routeKind = this.payload[1];
+		if (this.routeKind) {
+			this.repeaters = [
+				...this.payload.slice(2, 2 + MAX_REPEATERS),
+			].filter((id) => id > 0);
+			this.routeSpeed = this.payload[2 + MAX_REPEATERS];
+		}
 	}
 
 	public readonly destinationNodeId: number;
-	public readonly repeaters: number[];
-	public readonly routeSpeed: ZWaveDataRate;
+	public readonly routeKind: RouteKind;
+	public readonly repeaters?: number[];
+	public readonly routeSpeed?: ZWaveDataRate;
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		return {
-			...super.toLogEntry(),
-			message: {
-				"node ID": this.destinationNodeId,
-				repeaters:
-					this.repeaters.length > 0
-						? this.repeaters.join(" -> ")
-						: "none",
+		let message: MessageRecord = {
+			"node ID": this.destinationNodeId,
+		};
+		if (this.routeKind !== RouteKind.None) {
+			message = {
+				...message,
+				"route kind": getEnumMemberName(RouteKind, this.routeKind),
+				repeaters: this.repeaters?.length
+					? this.repeaters.join(" -> ")
+					: "none",
 				"route speed": getEnumMemberName(
 					ZWaveDataRate,
-					this.routeSpeed,
+					this.routeSpeed!,
 				),
-			},
+			};
+		} else {
+			message = {
+				...message,
+				route: "(not set)",
+			};
+		}
+		return {
+			...super.toLogEntry(),
+			message,
 		};
 	}
 }

@@ -1,8 +1,3 @@
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	SupervisionResult,
-} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -10,9 +5,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
+	getCCName,
 	parseBitMask,
 	validatePayload,
 	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -46,7 +45,6 @@ import {
 import { V } from "../lib/Values";
 import { CentralSceneCommand, CentralSceneKeys } from "../lib/_Types";
 import * as ccUtils from "../lib/utils";
-import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
 
 export const CentralSceneCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Central Scene"], {
@@ -224,41 +222,22 @@ export class CentralSceneCC extends CommandClass {
 		});
 
 		// If one Association group issues CentralScene notifications,
-		// we need to associate ourselves with that channel
-		if (
-			node.supportsCC(CommandClasses["Association Group Information"]) &&
-			(node.supportsCC(CommandClasses.Association) ||
-				node.supportsCC(CommandClasses["Multi Channel Association"]))
-		) {
-			const groupsIssueingNotifications =
-				AssociationGroupInfoCC.findGroupsForIssuedCommand(
-					applHost,
-					node,
+		// we must associate ourselves with that channel
+		try {
+			await ccUtils.assignLifelineIssueingCommand(
+				applHost,
+				endpoint,
+				this.ccId,
+				CentralSceneCommand.Notification,
+			);
+		} catch {
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
+				message: `Configuring associations to receive ${getCCName(
 					this.ccId,
-					CentralSceneCommand.Notification,
-				);
-			if (groupsIssueingNotifications.length > 0) {
-				// We always grab the first group - usually it should be the lifeline
-				const groupId = groupsIssueingNotifications[0];
-				const existingAssociations =
-					ccUtils.getAssociations(applHost, node).get(groupId) ?? [];
-
-				if (
-					!existingAssociations.some(
-						(a) => a.nodeId === applHost.ownNodeId,
-					)
-				) {
-					applHost.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Configuring associations to receive Central Scene notifications...",
-						direction: "outbound",
-					});
-					await ccUtils.addAssociations(applHost, node, groupId, [
-						{ nodeId: applHost.ownNodeId },
-					]);
-				}
-			}
+				)} commands failed!`,
+				level: "warn",
+			});
 		}
 
 		applHost.controllerLog.logNode(node.id, {

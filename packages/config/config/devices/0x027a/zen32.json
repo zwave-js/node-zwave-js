@@ -148,12 +148,12 @@
 		},
 		{
 			"#": "16",
-			"$import": "templates/zooz_template.json#auto_off_timer",
+			"$import": "templates/zooz_template.json#auto_off_timer_3x_7x",
 			"label": "Auto-Off Timer (Relay)"
 		},
 		{
 			"#": "17",
-			"$import": "templates/zooz_template.json#auto_on_timer",
+			"$import": "templates/zooz_template.json#auto_on_timer_3x_7x",
 			"label": "Auto-On Timer (Relay)"
 		},
 		{

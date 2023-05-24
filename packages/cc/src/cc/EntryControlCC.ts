@@ -4,6 +4,7 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
@@ -46,6 +47,7 @@ import {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
 } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
 
 export const EntryControlCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Entry Control"], {
@@ -239,6 +241,15 @@ export class EntryControlCCAPI extends CCAPI {
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
 
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		return [
+			...super.determineRequiredCCInterviews(),
+			CommandClasses.Association,
+			CommandClasses["Multi Channel Association"],
+			CommandClasses["Association Group Information"],
+		];
+	}
+
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
@@ -255,6 +266,25 @@ export class EntryControlCC extends CommandClass {
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
+
+		// If one Association group issues Entry Control notifications,
+		// we must associate ourselves with that channel
+		try {
+			await ccUtils.assignLifelineIssueingCommand(
+				applHost,
+				endpoint,
+				this.ccId,
+				EntryControlCommand.Notification,
+			);
+		} catch {
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
+				message: `Configuring associations to receive ${getCCName(
+					this.ccId,
+				)} commands failed!`,
+				level: "warn",
+			});
+		}
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,

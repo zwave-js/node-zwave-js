@@ -1,34 +1,38 @@
 import {
 	CommandClasses,
 	Duration,
-	encodeBitMask,
-	Maybe,
 	MessagePriority,
-	parseBitMask,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	parseBitMask,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 } from "../lib/API";
 import {
-	CCCommandOptions,
 	CommandClass,
 	gotDeserializationOptions,
+	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -39,72 +43,64 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
-	LevelChangeDirection,
 	WindowCoveringCommand,
 	WindowCoveringParameter,
+	type LevelChangeDirection,
 } from "../lib/_Types";
 
 function parameterToMetadataStates(
 	parameter: WindowCoveringParameter,
-	isTargetValue: boolean,
-): Record<number, string> | undefined {
+): Record<number, string> {
 	switch (parameter) {
 		case WindowCoveringParameter["Vertical Slats Angle (no position)"]:
-			if (isTargetValue) return undefined;
-			return {
-				0: "Closing (right)",
-				50: "Opening",
-				99: "Closing (left)",
-			};
 		case WindowCoveringParameter["Vertical Slats Angle"]:
 			return {
-				0: "Closed (right)",
+				0: "Closed (right inside)",
 				50: "Open",
-				99: "Closed (left)",
+				99: "Closed (left inside)",
 			};
 
 		case WindowCoveringParameter["Horizontal Slats Angle (no position)"]:
-			if (isTargetValue) return undefined;
-			return {
-				0: "Closing (up)",
-				50: "Opening",
-				99: "Closing (down)",
-			};
 		case WindowCoveringParameter["Horizontal Slats Angle"]:
 			return {
-				0: "Closed (up)",
+				0: "Closed (up inside)",
 				50: "Open",
-				99: "Closed (down)",
+				99: "Closed (down inside)",
 			};
 	}
 
-	if (parameter % 2 === 1) {
-		// Odd-numbered parameters have position support
-		return {
-			0: "Closed",
-			99: "Open",
-		};
-	} else {
-		if (isTargetValue) return undefined;
-		return {
-			0: "Closing",
-			99: "Opening",
-		};
-	}
+	return {
+		0: "Closed",
+		99: "Open",
+	};
 }
 
-function isTiltParameter(parameter: WindowCoveringParameter): boolean {
-	return (
-		parameter === WindowCoveringParameter["Vertical Slats Angle"] ||
-		parameter ===
-			WindowCoveringParameter["Vertical Slats Angle (no position)"] ||
-		parameter === WindowCoveringParameter["Horizontal Slats Angle"] ||
-		parameter ===
-			WindowCoveringParameter["Horizontal Slats Angle (no position)"]
-	);
+function parameterToLevelChangeLabel(
+	parameter: WindowCoveringParameter,
+	direction: "up" | "down",
+): string {
+	switch (parameter) {
+		// For angle control, both directions are closed, so we specify it explicitly
+		case WindowCoveringParameter["Vertical Slats Angle (no position)"]:
+		case WindowCoveringParameter["Vertical Slats Angle"]:
+			return `Change tilt (${
+				direction === "up" ? "left inside" : "right inside"
+			})`;
+
+		case WindowCoveringParameter["Horizontal Slats Angle (no position)"]:
+		case WindowCoveringParameter["Horizontal Slats Angle"]:
+			// Horizontal slats refer to the position of the inner side of the slats
+			// where a high level (99) actually means they face down
+			return `Change tilt (${
+				direction === "up" ? "down inside" : "up inside"
+			})`;
+	}
+	// For all other parameters, refer to the amount of light that is let in
+	return direction === "up" ? "Open" : "Close";
 }
 
 export const WindowCoveringCCValues = Object.freeze({
@@ -124,17 +120,14 @@ export const WindowCoveringCCValues = Object.freeze({
 			({ property, propertyKey }) =>
 				property === "currentValue" && typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
-				const states = parameterToMetadataStates(parameter, false);
 				return {
 					...ValueMetadata.ReadOnlyLevel,
 					label: `Current value - ${getEnumMemberName(
 						WindowCoveringParameter,
 						parameter,
 					)}`,
-					...(states ? { states } : {}),
-					ccSpecific: {
-						parameter,
-					},
+					states: parameterToMetadataStates(parameter),
+					ccSpecific: { parameter },
 				} as const;
 			},
 		),
@@ -146,7 +139,8 @@ export const WindowCoveringCCValues = Object.freeze({
 			({ property, propertyKey }) =>
 				property === "targetValue" && typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
-				const states = parameterToMetadataStates(parameter, false);
+				// Only odd-numbered parameters have position support and are writable
+				const writeable = parameter % 2 === 1;
 				return {
 					...ValueMetadata.Level,
 					label: `Target value - ${getEnumMemberName(
@@ -155,10 +149,9 @@ export const WindowCoveringCCValues = Object.freeze({
 					)}`,
 					// Only odd-numbered parameters have position support and are writable
 					writeable: parameter % 2 === 1,
-					...(states ? { states } : {}),
-					ccSpecific: {
-						parameter,
-					},
+					states: parameterToMetadataStates(parameter),
+					allowManualEntry: writeable,
+					ccSpecific: { parameter },
 					valueChangeOptions: ["transitionDuration"],
 				} as const;
 			},
@@ -183,112 +176,57 @@ export const WindowCoveringCCValues = Object.freeze({
 				} as const),
 		),
 
-		// Convenience values to control the different parameters
-		// Open all parameters
 		...V.dynamicPropertyAndKeyWithName(
-			"open",
-			"open",
+			"levelChangeUp",
+			// The direction refers to the change in level, not the physical location
+			"levelChangeUp",
 			(parameter: WindowCoveringParameter) => parameter,
 			({ property, propertyKey }) =>
-				property === "open" && typeof propertyKey === "number",
-			(parameter: WindowCoveringParameter) =>
-				({
-					...ValueMetadata.WriteOnlyBoolean,
-					label: `Open - ${getEnumMemberName(
-						WindowCoveringParameter,
-						parameter,
-					)}`,
-					ccSpecific: {
-						parameter,
-					},
-					valueChangeOptions: ["transitionDuration"],
-				} as const),
-		),
-
-		// Close positional parameters
-		...V.dynamicPropertyAndKeyWithName(
-			"positionClose",
-			"close",
-			(parameter: WindowCoveringParameter) => parameter,
-			({ property, propertyKey }) =>
-				property === "close" &&
-				typeof propertyKey === "number" &&
-				!isTiltParameter(propertyKey),
-			(parameter: WindowCoveringParameter) =>
-				({
-					...ValueMetadata.WriteOnlyBoolean,
-					label: `Close - ${getEnumMemberName(
-						WindowCoveringParameter,
-						parameter,
-					)}`,
-					ccSpecific: {
-						parameter,
-					},
-					valueChangeOptions: ["transitionDuration"],
-				} as const),
-		),
-
-		// Close vertical slats to the right, horizontal to the top
-		...V.dynamicPropertyAndKeyWithName(
-			"tiltClose0",
-			"close0",
-			(parameter: WindowCoveringParameter) => parameter,
-			({ property, propertyKey }) =>
-				property === "close0" &&
-				typeof propertyKey === "number" &&
-				isTiltParameter(propertyKey),
+				property === "levelChangeUp" && typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
-				const direction =
-					parameter ===
-						WindowCoveringParameter["Vertical Slats Angle"] ||
-					parameter ===
-						WindowCoveringParameter[
-							"Vertical Slats Angle (no position)"
-						]
-						? "Right"
-						: "Up";
 				return {
 					...ValueMetadata.WriteOnlyBoolean,
-					label: `Close ${direction} - ${getEnumMemberName(
+					label: `${parameterToLevelChangeLabel(
+						parameter,
+						"up",
+					)} - ${getEnumMemberName(
 						WindowCoveringParameter,
 						parameter,
 					)}`,
-					ccSpecific: {
-						parameter,
-					},
 					valueChangeOptions: ["transitionDuration"],
+					states: {
+						true: "Start",
+						false: "Stop",
+					},
+					ccSpecific: { parameter },
 				} as const;
 			},
 		),
-		// Close vertical slats to the left, horizontal to the bottom
+
 		...V.dynamicPropertyAndKeyWithName(
-			"tiltClose99",
-			"close99",
+			"levelChangeDown",
+			// The direction refers to the change in level, not the physical location
+			"levelChangeDown",
 			(parameter: WindowCoveringParameter) => parameter,
 			({ property, propertyKey }) =>
-				property === "close99" &&
-				typeof propertyKey === "number" &&
-				isTiltParameter(propertyKey),
+				property === "levelChangeDown" &&
+				typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
-				const direction =
-					parameter ===
-						WindowCoveringParameter["Vertical Slats Angle"] ||
-					parameter ===
-						WindowCoveringParameter[
-							"Vertical Slats Angle (no position)"
-						]
-						? "Left"
-						: "Down";
 				return {
 					...ValueMetadata.WriteOnlyBoolean,
-					label: `Close ${direction} - ${getEnumMemberName(
+					label: `${parameterToLevelChangeLabel(
+						parameter,
+						"down",
+					)} - ${getEnumMemberName(
 						WindowCoveringParameter,
 						parameter,
 					)}`,
-					ccSpecific: {
-						parameter,
-					},
 					valueChangeOptions: ["transitionDuration"],
+					states: {
+						true: "Start",
+						false: "Stop",
+					},
+					ccSpecific: { parameter },
 				} as const;
 			},
 		),
@@ -338,47 +276,120 @@ export class WindowCoveringCCAPI extends CCAPI {
 				);
 			}
 
+			const parameter = propertyKey;
 			const duration = Duration.from(options?.transitionDuration);
-			const result = await this.set(
-				[{ parameter: propertyKey, value }],
-				duration,
-			);
 
-			return result;
+			return this.set([{ parameter, value }], duration);
 		} else if (
-			WindowCoveringCCValues.open.is(valueId) ||
-			WindowCoveringCCValues.tiltClose99.is(valueId)
+			WindowCoveringCCValues.levelChangeUp.is(valueId) ||
+			WindowCoveringCCValues.levelChangeDown.is(valueId)
 		) {
-			if (!value) {
-				throwWrongValueType(this.ccId, property, "true", typeof value);
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"boolean",
+					typeof value,
+				);
 			}
 
-			// Opening a positional parameter is the same as closing a tilt parameter to one side
-			const duration = Duration.from(options?.transitionDuration);
-			const result = await this.set(
-				[{ parameter: propertyKey as number, value: 99 }],
-				duration,
-			);
+			const parameter = propertyKey as number;
+			const direction = WindowCoveringCCValues.levelChangeUp.is(valueId)
+				? "up"
+				: "down";
 
-			return result;
-		} else if (
-			WindowCoveringCCValues.positionClose.is(valueId) ||
-			WindowCoveringCCValues.tiltClose0.is(valueId)
-		) {
-			if (!!value) {
-				throwWrongValueType(this.ccId, property, "false", typeof value);
+			if (value) {
+				// Perform the level change
+				const duration = Duration.from(options?.transitionDuration);
+				return this.startLevelChange(parameter, direction, duration);
+			} else {
+				return this.stopLevelChange(parameter);
 			}
-
-			// Closing a positional parameter is the same as closing a tilt parameter to the other side
-			const duration = Duration.from(options?.transitionDuration);
-			const result = await this.set(
-				[{ parameter: propertyKey as number, value: 0 }],
-				duration,
-			);
-
-			return result;
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
+		{ property, propertyKey },
+		value,
+		options,
+	) => {
+		const valueId = {
+			commandClass: this.ccId,
+			property,
+			propertyKey,
+		};
+
+		if (WindowCoveringCCValues.targetValue.is(valueId)) {
+			if (typeof propertyKey !== "number") return;
+			const parameter = propertyKey;
+
+			const duration = Duration.from(options?.transitionDuration);
+
+			const currentValueValueId = WindowCoveringCCValues.currentValue(
+				parameter,
+			).endpoint(this.endpoint.index);
+
+			return {
+				// Window Covering commands may take some time to be executed.
+				// Therefore we try to supervise the command execution and delay the
+				// optimistic update until the final result is received.
+				supervisionDelayedUpdates: true,
+				supervisionOnSuccess: () => {
+					this.tryGetValueDB()?.setValue(currentValueValueId, value);
+				},
+				supervisionOnFailure: async () => {
+					// The transition failed, so now we don't know the status - refresh the current value
+					try {
+						await this.get(parameter);
+					} catch {
+						// ignore
+					}
+				},
+
+				optimisticallyUpdateRelatedValues: () => {
+					// Only update currentValue for valid target values
+					if (
+						typeof value === "number" &&
+						value >= 0 &&
+						value <= 99
+					) {
+						if (this.isSinglecast()) {
+							this.tryGetValueDB()?.setValue(
+								currentValueValueId,
+								value,
+							);
+						} else if (this.isMulticast()) {
+							// Figure out which nodes were affected by this command
+							const affectedNodes =
+								this.endpoint.node.physicalNodes.filter(
+									(node) =>
+										node
+											.getEndpoint(this.endpoint.index)
+											?.supportsCC(this.ccId),
+								);
+							// and optimistically update the currentValue
+							for (const node of affectedNodes) {
+								this.applHost
+									.tryGetValueDB(node.id)
+									?.setValue(currentValueValueId, value);
+							}
+						}
+					}
+				},
+
+				verifyChanges: () => {
+					if (this.isSinglecast()) {
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						this.schedulePoll(currentValueValueId, value, {
+							duration,
+						});
+					} else {
+						// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
+					}
+				},
+			};
 		}
 	};
 
@@ -468,7 +479,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -490,7 +501,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -508,7 +519,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			parameter,
 		});
 
-		return this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -568,23 +579,15 @@ ${supported
 					WindowCoveringCCValues.duration(param),
 				);
 
-				// Convenience values
-				this.setMetadata(applHost, WindowCoveringCCValues.open(param));
-				if (isTiltParameter(param)) {
-					this.setMetadata(
-						applHost,
-						WindowCoveringCCValues.tiltClose0(param),
-					);
-					this.setMetadata(
-						applHost,
-						WindowCoveringCCValues.tiltClose99(param),
-					);
-				} else {
-					this.setMetadata(
-						applHost,
-						WindowCoveringCCValues.positionClose(param),
-					);
-				}
+				// Level change values
+				this.setMetadata(
+					applHost,
+					WindowCoveringCCValues.levelChangeUp(param),
+				);
+				this.setMetadata(
+					applHost,
+					WindowCoveringCCValues.levelChangeDown(param),
+				);
 
 				// And for the odd parameters (with position support), query the position
 				if (param % 2 === 1) {
@@ -665,6 +668,23 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				"supported parameters": this.supportedParameters
+					.map(
+						(p) =>
+							`\n· ${getEnumMemberName(
+								WindowCoveringParameter,
+								p,
+							)}`,
+					)
+					.join(""),
+			},
+		};
+	}
 }
 
 @CCCommand(WindowCoveringCommand.SupportedGet)
@@ -703,6 +723,21 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 		(self: WindowCoveringCCReport) => [self.parameter] as const,
 	)
 	public readonly duration: Duration;
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+				"current value": this.currentValue,
+				"target value": this.targetValue,
+				duration: this.duration.toString(),
+			},
+		};
+	}
 }
 
 interface WindowCoveringCCGetOptions extends CCCommandOptions {
@@ -740,6 +775,18 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+			},
+		};
+	}
 }
 
 export interface WindowCoveringCCSetOptions extends CCCommandOptions {
@@ -751,7 +798,7 @@ export interface WindowCoveringCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(WindowCoveringCommand.Set)
-@expectedCCResponse(WindowCoveringCCReport)
+@useSupervision()
 export class WindowCoveringCCSet extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
@@ -795,6 +842,21 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		for (const { parameter, value } of this.targetValues) {
+			message[getEnumMemberName(WindowCoveringParameter, parameter)] =
+				value;
+		}
+		if (this.duration) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 export interface WindowCoveringCCStartLevelChangeOptions
@@ -805,7 +867,7 @@ export interface WindowCoveringCCStartLevelChangeOptions
 }
 
 @CCCommand(WindowCoveringCommand.StartLevelChange)
-@expectedCCResponse(WindowCoveringCCReport)
+@useSupervision()
 export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
@@ -839,6 +901,23 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			parameter: getEnumMemberName(
+				WindowCoveringParameter,
+				this.parameter,
+			),
+			direction: this.direction,
+		};
+		if (this.duration) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(applHost),
+			message,
+		};
+	}
 }
 
 interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
@@ -846,7 +925,7 @@ interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
 }
 
 @CCCommand(WindowCoveringCommand.StopLevelChange)
-@expectedCCResponse(WindowCoveringCCReport)
+@useSupervision()
 export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public constructor(
 		host: ZWaveHost,
@@ -871,5 +950,17 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					WindowCoveringParameter,
+					this.parameter,
+				),
+			},
+		};
 	}
 }

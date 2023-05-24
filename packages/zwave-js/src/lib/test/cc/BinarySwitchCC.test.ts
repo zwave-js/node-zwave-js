@@ -35,6 +35,7 @@ test("the Set command (v1) should serialize correctly", (t) => {
 		nodeId: 2,
 		targetValue: false,
 	});
+	cc.version = 1;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BinarySwitchCommand.Set, // CC Command
@@ -51,6 +52,7 @@ test("the Set command (v2) should serialize correctly", (t) => {
 		targetValue: true,
 		duration,
 	});
+	cc.version = 2;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BinarySwitchCommand.Set, // CC Command

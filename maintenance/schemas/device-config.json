@@ -561,6 +561,9 @@
 					},
 					"additionalProperties": false
 				},
+				"disableAutoRefresh": {
+					"const": true
+				},
 				"disableBasicMapping": {
 					"const": true
 				},

@@ -27,6 +27,8 @@ import {
 	NodeType,
 	ProtocolType,
 	RFRegion,
+	RSSI,
+	RouteKind,
 	SecurityClass,
 	TransmitStatus,
 	ValueDB,
@@ -49,7 +51,6 @@ import {
 	securityClassIsS2,
 	securityClassOrder,
 	type Firmware,
-	type RSSI,
 	type SinglecastCC,
 	type ZWaveDataRate,
 } from "@zwave-js/core";
@@ -383,6 +384,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			throw new ZWaveError(
 				`Node ${nodeId} was not found!`,
 				ZWaveErrorCodes.Controller_NodeNotFound,
+				nodeId,
 			);
 		});
 
@@ -633,30 +635,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	/** Returns whether the network or a node is currently being healed. */
 	public get isHealNetworkActive(): boolean {
 		return this._healNetworkActive;
-	}
-
-	private groupNodesBySecurityClass(
-		nodeIDs?: number[],
-	): Map<SecurityClass, number[]> {
-		const ret = new Map<SecurityClass, number[]>();
-
-		const nodes = nodeIDs
-			? nodeIDs.map((id) => this._nodes.getOrThrow(id))
-			: [...this._nodes.values()];
-
-		for (const node of nodes) {
-			const secClass = node.getHighestSecurityClass();
-			if (secClass === SecurityClass.Temporary || secClass == undefined) {
-				continue;
-			}
-
-			if (!ret.has(secClass)) {
-				ret.set(secClass, []);
-			}
-			ret.get(secClass)!.push(node.id);
-		}
-
-		return ret;
 	}
 
 	/**
@@ -1230,6 +1208,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this.driver.metadataDB!,
 		]);
 		// create an empty entry in the nodes map so we can initialize them afterwards
+		const nodeIds = [...initData.nodeIds];
+		if (nodeIds.length === 0) {
+			this.driver.controllerLog.print(
+				`Controller reports no nodes in its network. This could be an indication of a corrupted controller memory.`,
+				"warn",
+			);
+			nodeIds.push(this._ownNodeId!);
+		}
+
 		for (const nodeId of initData.nodeIds) {
 			this._nodes.set(
 				nodeId,
@@ -2048,6 +2035,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			// A node was included by another controller
 			const nodeId = msg.nodeId;
 			const nodeInfo = msg.nodeInformation;
+
+			// It can happen that this is received for a node that is already part of the network:
+			// https://github.com/zwave-js/node-zwave-js/issues/5781
+			// In this case, ignore this message to prevent chaos.
+
+			if (this._nodes.has(nodeId)) {
+				this.driver.controllerLog.print(
+					`Node ${nodeId} was (supposedly) included by another controller, but it is already part of the network. Ignoring the message...`,
+					"warn",
+				);
+				return;
+			}
 
 			this.setInclusionState(InclusionState.Busy);
 
@@ -4308,11 +4307,49 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * Returns the priority route which is currently set for a node. If none is set, either the LWR or the NLWR is returned.
+	 * Removes the priority route used for the first transmission attempt from the controller to the given node.
+	 * @param destinationNodeId The ID of the node that should be reached via the priority route
+	 */
+	public async removePriorityRoute(
+		destinationNodeId: number,
+	): Promise<boolean> {
+		this.driver.controllerLog.print(
+			`Removing priority route to node ${destinationNodeId}...`,
+		);
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetPriorityRouteRequest(this.driver, {
+					destinationNodeId,
+					// no repeaters = remove
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Removing priority route failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the priority route which is currently set for a node.
+	 * If none is set, either the LWR or the NLWR is returned.
+	 * If no route is known yet, this returns `undefined`.
+	 *
 	 * @param destinationNodeId The ID of the node for which the priority route should be returned
 	 */
 	public async getPriorityRoute(destinationNodeId: number): Promise<
 		| {
+				routeKind:
+					| RouteKind.LWR
+					| RouteKind.NLWR
+					| RouteKind.Application;
 				repeaters: number[];
 				routeSpeed: ZWaveDataRate;
 		  }
@@ -4330,9 +4367,11 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
+			if (result.routeKind === RouteKind.None) return undefined;
 			return {
-				repeaters: result.repeaters,
-				routeSpeed: result.routeSpeed,
+				routeKind: result.routeKind,
+				repeaters: result.repeaters!,
+				routeSpeed: result.routeSpeed!,
 			};
 		} catch (e) {
 			this.driver.controllerLog.print(

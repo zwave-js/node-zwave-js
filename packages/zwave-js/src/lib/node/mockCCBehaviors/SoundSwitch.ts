@@ -9,9 +9,9 @@ import {
 } from "@zwave-js/cc/SoundSwitchCC";
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
 	SoundSwitchCCCapabilities,
+	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 

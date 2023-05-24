@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/nvmedit",
-  "version": "10.15.0",
+  "version": "10.22.1",
   "description": "zwave-js: library to edit NVM backups",
   "keywords": [],
   "publishConfig": {
@@ -50,8 +50,8 @@
     "alcalzone-shared": "^4.0.8",
     "fs-extra": "^10.1.0",
     "reflect-metadata": "^0.1.13",
-    "semver": "^7.3.7",
-    "yargs": "^17.5.1"
+    "semver": "^7.5.0",
+    "yargs": "^17.7.2"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
@@ -65,16 +65,16 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "*",
+    "@microsoft/api-extractor": "^7.35.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.36",
-    "@types/semver": "^7.3.12",
-    "@types/yargs": "^17.0.12",
+    "@types/node": "^14.18.43",
+    "@types/semver": "^7.3.13",
+    "@types/yargs": "^17.0.24",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
-    "esbuild": "0.15.7",
+    "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.4",
+    "prettier": "^2.8.8",
     "typescript": "5.0.4"
   }
 }

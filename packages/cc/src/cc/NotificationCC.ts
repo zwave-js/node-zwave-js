@@ -10,14 +10,15 @@ import { timespan } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
-	encodeBitMask,
-	isZWaveError,
 	MessagePriority,
-	parseBitMask,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	getCCName,
+	isZWaveError,
+	parseBitMask,
+	validatePayload,
 	type IZWaveEndpoint,
 	type IZWaveNode,
 	type Maybe,
@@ -34,15 +35,15 @@ import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
-	PhysicalCCAPI,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
 	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
-	gotDeserializationOptions,
 	InvalidCC,
+	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -57,9 +58,10 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
-import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import { NotificationCommand, UserCodeCommand } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
+import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
 
 export const NotificationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Notification, {
@@ -469,25 +471,14 @@ export class NotificationCC extends CommandClass {
 		if (!node.supportsCC(CommandClasses.Association)) return "pull";
 
 		try {
-			if (
-				node.supportsCC(CommandClasses["Association Group Information"])
-			) {
-				const assocGroups = ccUtils.getAssociationGroups(
+			const groupsIssueingNotifications =
+				AssociationGroupInfoCC.findGroupsForIssuedCommand(
 					applHost,
 					node,
+					this.ccId,
+					NotificationCommand.Report,
 				);
-				for (const group of assocGroups.values()) {
-					// Check if this group sends Notification Reports
-					if (
-						group.issuedCommands
-							?.get(CommandClasses.Notification)
-							?.includes(NotificationCommand.Report)
-					) {
-						return "push";
-					}
-				}
-				return "pull";
-			}
+			return groupsIssueingNotifications.length > 0 ? "push" : "pull";
 		} catch {
 			// We might be dealing with an older cache file, fall back to testing
 		}
@@ -551,6 +542,25 @@ export class NotificationCC extends CommandClass {
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
+
+		// If one Association group issues Notification Reports,
+		// we must associate ourselves with that channel
+		try {
+			await ccUtils.assignLifelineIssueingCommand(
+				applHost,
+				endpoint,
+				this.ccId,
+				NotificationCommand.Report,
+			);
+		} catch {
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
+				message: `Configuring associations to receive ${getCCName(
+					this.ccId,
+				)} reports failed!`,
+				level: "warn",
+			});
+		}
 
 		let supportsV1Alarm = false;
 		if (this.version >= 2) {

@@ -8,6 +8,7 @@ import {
 	ZWaveErrorCodes,
 	computeMAC,
 	decryptAES128OFB,
+	encodeCCList,
 	encryptAES128OFB,
 	generateAuthKey,
 	generateEncryptionKey,
@@ -39,7 +40,9 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import { SecurityCommand } from "../lib/_Types";
+import { CRC16CC } from "./CRC16CC";
 import { Security2CC } from "./Security2CC";
+import { TransportServiceCC } from "./TransportServiceCC";
 
 // @noSetValueAPI This is an encapsulation CC
 
@@ -266,6 +269,24 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			return pick(response, ["supportedCCs", "controlledCCs"]);
 		}
 	}
+
+	public async reportSupportedCommands(
+		supportedCCs: CommandClasses[],
+		controlledCCs: CommandClasses[],
+	): Promise<void> {
+		this.assertSupportsCommand(
+			SecurityCommand,
+			SecurityCommand.CommandsSupportedReport,
+		);
+
+		const cc = new SecurityCCCommandsSupportedReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			supportedCCs,
+			controlledCCs,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
 }
 
 @commandClass(CommandClasses.Security)
@@ -375,17 +396,41 @@ export class SecurityCC extends CommandClass {
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
-		return (
-			!!(cc.encapsulationFlags & EncapsulationFlags.Security) &&
-			// Already encapsulated (SecurityCCCommandEncapsulationNonceGet is a subclass)
-			!(cc instanceof Security2CC) &&
-			!(cc instanceof SecurityCCCommandEncapsulation) &&
-			// Cannot be sent encapsulated
-			!(cc instanceof SecurityCCNonceGet) &&
-			!(cc instanceof SecurityCCNonceReport) &&
-			!(cc instanceof SecurityCCSchemeGet) &&
-			!(cc instanceof SecurityCCSchemeReport)
-		);
+		// No security flag -> no encapsulation
+		if (!(cc.encapsulationFlags & EncapsulationFlags.Security)) {
+			return false;
+		}
+
+		// S2, CRC16, Transport Service -> no S2 encapsulation
+		if (
+			cc instanceof Security2CC ||
+			cc instanceof CRC16CC ||
+			cc instanceof TransportServiceCC
+		) {
+			return false;
+		}
+
+		// S0: check command
+		if (cc instanceof SecurityCC) {
+			switch (cc.ccCommand) {
+				// Already encapsulated
+				case SecurityCommand.CommandEncapsulation:
+				case SecurityCommand.CommandEncapsulationNonceGet:
+				// Cannot be sent encapsulated:
+				case SecurityCommand.NonceGet:
+				case SecurityCommand.NonceReport:
+				case SecurityCommand.SchemeGet:
+				case SecurityCommand.SchemeReport:
+					return false;
+
+				default:
+					// All other commands must be encapsulated
+					return true;
+			}
+		}
+
+		// Everything else needs to be encapsulated if the CC is secure
+		return true;
 	}
 
 	/** Encapsulates a command that should be sent encrypted */
@@ -792,21 +837,44 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 	// @noLogEntry - The network key shouldn't be logged, so users can safely post their logs online
 }
 
+interface SecurityCCCommandsSupportedReportOptions extends CCCommandOptions {
+	supportedCCs: CommandClasses[];
+	controlledCCs: CommandClasses[];
+}
+
 @CCCommand(SecurityCommand.CommandsSupportedReport)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| SecurityCCCommandsSupportedReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.reportsToFollow = this.payload[0];
-		const list = parseCCList(this.payload.slice(1));
-		this._supportedCCs = list.supportedCCs;
-		this._controlledCCs = list.controlledCCs;
+
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.reportsToFollow = this.payload[0];
+			const list = parseCCList(this.payload.slice(1));
+			this.supportedCCs = list.supportedCCs;
+			this.controlledCCs = list.controlledCCs;
+		} else {
+			this.supportedCCs = options.supportedCCs;
+			this.controlledCCs = options.controlledCCs;
+			// TODO: properly split the CCs into multiple reports
+			this.reportsToFollow = 0;
+		}
 	}
 
 	public readonly reportsToFollow: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.reportsToFollow]),
+			encodeCCList(this.supportedCCs, this.controlledCCs),
+		]);
+		return super.serialize();
+	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		// Nothing special we can distinguish sessions with
@@ -817,26 +885,19 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		return this.reportsToFollow > 0;
 	}
 
-	private _supportedCCs: CommandClasses[];
-	public get supportedCCs(): CommandClasses[] {
-		return this._supportedCCs;
-	}
-
-	private _controlledCCs: CommandClasses[];
-	public get controlledCCs(): CommandClasses[] {
-		return this._controlledCCs;
-	}
+	public supportedCCs: CommandClasses[];
+	public controlledCCs: CommandClasses[];
 
 	public mergePartialCCs(
 		applHost: ZWaveApplicationHost,
 		partials: SecurityCCCommandsSupportedReport[],
 	): void {
 		// Concat the lists of CCs
-		this._supportedCCs = [...partials, this]
-			.map((report) => report._supportedCCs)
+		this.supportedCCs = [...partials, this]
+			.map((report) => report.supportedCCs)
 			.reduce((prev, cur) => prev.concat(...cur), []);
-		this._controlledCCs = [...partials, this]
-			.map((report) => report._controlledCCs)
+		this.controlledCCs = [...partials, this]
+			.map((report) => report.controlledCCs)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
@@ -845,11 +906,11 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 			...super.toLogEntry(applHost),
 			message: {
 				reportsToFollow: this.reportsToFollow,
-				supportedCCs: this._supportedCCs
+				supportedCCs: this.supportedCCs
 					.map((cc) => getCCName(cc))
 					.map((cc) => `\n· ${cc}`)
 					.join(""),
-				controlledCCs: this._controlledCCs
+				controlledCCs: this.controlledCCs
 					.map((cc) => getCCName(cc))
 					.map((cc) => `\n· ${cc}`)
 					.join(""),

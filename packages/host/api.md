@@ -24,12 +24,12 @@ import { ThrowingMap } from '@zwave-js/shared';
 import type { ValueDB } from '@zwave-js/core';
 import type { ValueID } from '@zwave-js/core';
 
-// Warning: (ae-missing-release-tag) "createTestingHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createTestingHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createTestingHost(options?: Partial<CreateTestingHostOptions>): TestingHost;
 
-// Warning: (ae-missing-release-tag) "CreateTestingHostOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateTestingHostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CreateTestingHostOptions {
@@ -43,7 +43,7 @@ export interface CreateTestingHostOptions {
     ownNodeId: ZWaveHost["ownNodeId"];
 }
 
-// Warning: (ae-missing-release-tag) "FileSystem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FileSystem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface FileSystem {
@@ -59,7 +59,7 @@ export interface FileSystem {
     } | string): Promise<void>;
 }
 
-// Warning: (ae-missing-release-tag) "NodeSchedulePollOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeSchedulePollOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NodeSchedulePollOptions {
@@ -67,14 +67,14 @@ export interface NodeSchedulePollOptions {
     timeoutMs?: number;
 }
 
-// Warning: (ae-missing-release-tag) "TestingHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TestingHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TestingHost = Overwrite<Omit<ZWaveApplicationHost, "__internalIsMockNode">, {
     nodes: ThrowingMap<number, IZWaveNode>;
 }>;
 
-// Warning: (ae-missing-release-tag) "ZWaveApplicationHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveApplicationHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ZWaveApplicationHost extends ZWaveHost {
@@ -95,7 +95,7 @@ export interface ZWaveApplicationHost extends ZWaveHost {
     waitForCommand<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, timeout: number): Promise<T>;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ZWaveHost {
@@ -120,7 +120,7 @@ export interface ZWaveHost {
     setSecurityClass(nodeId: number, securityClass: SecurityClass, granted: boolean): void;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveHostOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveHostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveHostOptions {

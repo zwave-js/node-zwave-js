@@ -44,17 +44,17 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit",
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit_5x_short",
 			"label": "Relay 1: Auto Off Timer"
 		},
 		{
 			"#": "4",
-			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit",
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit_5x_short",
 			"label": "Relay 1: Auto On Timer"
 		},
 		{
 			"#": "7",
-			"$import": "templates/zooz_template.json#auto_timer_unit_select",
+			"$import": "templates/zooz_template.json#auto_timer_unit_select_min_sec",
 			"label": "Relay 1: Timer Unit"
 		},
 		{
@@ -84,17 +84,17 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit",
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit_5x_short",
 			"label": "Relay 2: Auto Off Timer"
 		},
 		{
 			"#": "6",
-			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit",
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit_5x_short",
 			"label": "Relay 2: Auto On Timer"
 		},
 		{
 			"#": "8",
-			"$import": "templates/zooz_template.json#auto_timer_unit_select",
+			"$import": "templates/zooz_template.json#auto_timer_unit_select_min_sec",
 			"label": "Relay 2: Timer Unit"
 		},
 		{
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "24",
-			"$import": "templates/zooz_template.json#association_reports"
+			"$import": "templates/zooz_template.json#association_reports_binary"
 		}
 	],
 	"metadata": {

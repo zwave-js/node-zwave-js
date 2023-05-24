@@ -2,6 +2,7 @@ import {
 	MAX_NODES,
 	MAX_REPEATERS,
 	MessagePriority,
+	MessageRecord,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -20,13 +21,14 @@ import {
 	type MessageDeserializationOptions,
 	type SuccessIndicator,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { AllOrNone, getEnumMemberName } from "@zwave-js/shared";
 
-export interface SetPriorityRouteRequestOptions extends MessageBaseOptions {
+export type SetPriorityRouteRequestOptions = {
 	destinationNodeId: number;
+} & AllOrNone<{
 	repeaters: number[];
 	routeSpeed: ZWaveDataRate;
-}
+}>;
 
 @messageTypes(MessageType.Request, FunctionType.SetPriorityRoute)
 @priority(MessagePriority.Normal)
@@ -34,7 +36,9 @@ export interface SetPriorityRouteRequestOptions extends MessageBaseOptions {
 export class SetPriorityRouteRequest extends Message {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions | SetPriorityRouteRequestOptions,
+		options:
+			| MessageDeserializationOptions
+			| (MessageBaseOptions & SetPriorityRouteRequestOptions),
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
@@ -43,44 +47,60 @@ export class SetPriorityRouteRequest extends Message {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (
-				options.repeaters.length > MAX_REPEATERS ||
-				options.repeaters.some((id) => id < 1 || id > MAX_NODES)
-			) {
-				throw new ZWaveError(
-					`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
+			if (options.repeaters) {
+				if (
+					options.repeaters.length > MAX_REPEATERS ||
+					options.repeaters.some((id) => id < 1 || id > MAX_NODES)
+				) {
+					throw new ZWaveError(
+						`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				if (options.routeSpeed == undefined) {
+					throw new ZWaveError(
+						`When setting a priority route, repeaters and route speed must be set together`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				this.repeaters = options.repeaters;
+				this.routeSpeed = options.routeSpeed;
 			}
 
 			this.destinationNodeId = options.destinationNodeId;
-			this.repeaters = options.repeaters;
-			this.routeSpeed = options.routeSpeed;
 		}
 	}
 
 	public destinationNodeId: number;
-	public repeaters: number[];
-	public routeSpeed: ZWaveDataRate;
+	public repeaters: number[] | undefined;
+	public routeSpeed: ZWaveDataRate | undefined;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.destinationNodeId,
-			this.repeaters[0] ?? 0,
-			this.repeaters[1] ?? 0,
-			this.repeaters[2] ?? 0,
-			this.repeaters[3] ?? 0,
-			this.routeSpeed,
-		]);
+		if (this.repeaters == undefined || this.routeSpeed == undefined) {
+			// Remove the priority route
+			this.payload = Buffer.from([this.destinationNodeId]);
+		} else {
+			// Set the priority route
+			this.payload = Buffer.from([
+				this.destinationNodeId,
+				this.repeaters[0] ?? 0,
+				this.repeaters[1] ?? 0,
+				this.repeaters[2] ?? 0,
+				this.repeaters[3] ?? 0,
+				this.routeSpeed,
+			]);
+		}
 
 		return super.serialize();
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		return {
-			...super.toLogEntry(),
-			message: {
-				"node ID": this.destinationNodeId,
+		let message: MessageRecord = {
+			"node ID": this.destinationNodeId,
+		};
+		if (this.repeaters != undefined && this.routeSpeed != undefined) {
+			message = {
+				...message,
 				repeaters:
 					this.repeaters.length > 0
 						? this.repeaters.join(" -> ")
@@ -89,7 +109,11 @@ export class SetPriorityRouteRequest extends Message {
 					ZWaveDataRate,
 					this.routeSpeed,
 				),
-			},
+			};
+		}
+		return {
+			...super.toLogEntry(),
+			message,
 		};
 	}
 }

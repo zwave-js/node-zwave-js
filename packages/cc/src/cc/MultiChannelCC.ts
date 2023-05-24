@@ -19,6 +19,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
+import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
 import {
 	CommandClass,
@@ -121,13 +122,19 @@ export const MultiChannelCCValues = Object.freeze({
  * Many devices unnecessarily use endpoints when they could (or do) provide all functionality via the root device.
  * This function gives an estimate if this is the case (i.e. all endpoints have a different device class)
  */
-function areAllEndpointsDifferent(
+function areEndpointsUnnecessary(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 	endpointIndizes: number[],
 ): boolean {
-	// Endpoints are useless if all of them have different device classes
-	const deviceClasses = new Set<number>();
+	// Gather all device classes
+	const deviceClasses = new Map<
+		number,
+		{
+			generic: number;
+			specific: number;
+		}
+	>();
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId =
 			MultiChannelCCValues.endpointDeviceClass.endpoint(endpoint);
@@ -136,10 +143,51 @@ function areAllEndpointsDifferent(
 			specific: number;
 		}>(devClassValueId);
 		if (deviceClass) {
-			deviceClasses.add(deviceClass.generic * 256 + deviceClass.specific);
+			deviceClasses.set(endpoint, {
+				generic: deviceClass.generic,
+				specific: deviceClass.specific,
+			});
 		}
 	}
-	return deviceClasses.size === endpointIndizes.length;
+
+	// Endpoints may be useless if all of them have different device classes
+	const distinctDeviceClasses = distinct(
+		[...deviceClasses.values()].map(
+			({ generic, specific }) => generic * 256 + specific,
+		),
+	);
+	if (distinctDeviceClasses.length !== endpointIndizes.length) {
+		// There are endpoints with the same device class, so they are not unnecessary
+		return false;
+	}
+
+	// If any endpoint has a mandatory supported CC that's not exposed by the root device, the endpoints are necessary
+	for (const { generic, specific } of deviceClasses.values()) {
+		const deviceClass = applHost.configManager.lookupSpecificDeviceClass(
+			generic,
+			specific,
+		);
+		// Unsure what this device class is. Probably not a good idea to assume it's unnecessary
+		if (!deviceClass) return false;
+		if (deviceClass.supportedCCs.some((cc) => !node.supportsCC(cc))) {
+			// We found one that's not supported by the root device
+			return false;
+		}
+	}
+
+	// Last heuristic: Endpoints are necessary if more than 1 of them has a switch-type device class
+	const switchTypeDeviceClasses = [
+		0x10, // Binary Switch
+		0x11, // Multilevel Switch
+		0x12, // Remote Switch
+		0x13, // Toggle Switch
+	];
+	const numSwitchEndpoints = [...deviceClasses.values()].filter(
+		({ generic }) => switchTypeDeviceClasses.includes(generic),
+	).length;
+	if (numSwitchEndpoints > 1) return false;
+
+	return true;
 }
 
 @API(CommandClasses["Multi Channel"])
@@ -613,7 +661,7 @@ supported CCs:`;
 		// But first figure out if they seem unnecessary and if they do, which ones should be preserved
 		if (
 			!multiResponse.identicalCapabilities &&
-			areAllEndpointsDifferent(applHost, node, allEndpoints)
+			areEndpointsUnnecessary(applHost, node, allEndpoints)
 		) {
 			const preserve = applHost.getDeviceConfig?.(node.id)?.compat
 				?.preserveEndpoints;

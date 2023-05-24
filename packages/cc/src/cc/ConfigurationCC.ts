@@ -3,6 +3,7 @@ import {
 	CommandClasses,
 	ConfigValueFormat,
 	MessagePriority,
+	SupervisionStatus,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -12,6 +13,7 @@ import {
 	getIntegerLimits,
 	getMinIntegerSize,
 	isConsecutiveArray,
+	mergeSupervisionResults,
 	parseBitMask,
 	parsePartial,
 	stripUndefined,
@@ -472,6 +474,17 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
+		// Two-byte parameter numbers can only be read using the BulkGet command
+		if (parameter > 255) {
+			const result = await this.getBulk([
+				{
+					parameter,
+					bitMask: options?.valueBitMask,
+				},
+			]);
+			return result.find((r) => r.parameter === parameter)?.value;
+		}
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Get,
@@ -611,6 +624,11 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async set(
 		options: ConfigurationCCAPISetOptions,
 	): Promise<SupervisionResult | undefined> {
+		// Two-byte parameter numbers can only be set using the BulkSet command
+		if (options.parameter > 255) {
+			return this.setBulk([options]);
+		}
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -688,12 +706,37 @@ export class ConfigurationCCAPI extends CCAPI {
 				values: allParams.map((v) => v.value as number),
 				handshake: true,
 			});
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			// The handshake flag is set, so we expect a BulkReport in response
+			const result =
+				await this.applHost.sendCommand<ConfigurationCCBulkReport>(
+					cc,
+					this.commandOptions,
+				);
+
+			// If we did receive a response, we also received the updated parameters,
+			// so if any one was not accepted, we know by looking at the values.
+			// Translate the result into a SupervisionResult by comparing the values
+			if (result) {
+				const sentValues = cc.values;
+				const receivedValues = [...result.values.values()];
+				const success =
+					sentValues.length === receivedValues.length &&
+					sentValues.every((v, i) => v === receivedValues[i]);
+				return {
+					status: success
+						? SupervisionStatus.Success
+						: SupervisionStatus.Fail,
+				};
+			} else {
+				return undefined;
+			}
 		} else {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
 				ConfigurationCommand.Set,
 			);
+
+			const supervisionResults: (SupervisionResult | undefined)[] = [];
 			for (const {
 				parameter,
 				value,
@@ -708,9 +751,11 @@ export class ConfigurationCCAPI extends CCAPI {
 					valueSize,
 					valueFormat,
 				});
-				// TODO: handle intermediate errors
-				await this.applHost.sendCommand(cc, this.commandOptions);
+				supervisionResults.push(
+					await this.applHost.sendCommand(cc, this.commandOptions),
+				);
 			}
+			return mergeSupervisionResults(supervisionResults);
 		}
 	}
 
@@ -723,6 +768,11 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async reset(
 		parameter: number,
 	): Promise<SupervisionResult | undefined> {
+		// Two-byte parameter numbers can only be reset using the BulkSet command
+		if (parameter > 255) {
+			return this.resetBulk([parameter]);
+		}
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -743,7 +793,9 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
 	@validateArgs()
-	public async resetBulk(parameters: number[]): Promise<void> {
+	public async resetBulk(
+		parameters: number[],
+	): Promise<SupervisionResult | undefined> {
 		if (
 			isConsecutiveArray(parameters) &&
 			this.supportsCommand(ConfigurationCommand.BulkSet)
@@ -754,7 +806,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				parameters,
 				resetToDefault: true,
 			});
-			await this.applHost.sendCommand(cc, this.commandOptions);
+			return this.applHost.sendCommand(cc, this.commandOptions);
 		} else {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
@@ -968,6 +1020,9 @@ export class ConfigurationCC extends CommandClass {
 			});
 			this.deserializeParamInformationFromConfig(applHost, paramInfo);
 		}
+		const documentedParamNumbers = new Set(
+			Array.from(paramInfo?.keys() ?? []).map((k) => k.parameter),
+		);
 
 		if (this.version >= 3) {
 			applHost.controllerLog.logNode(node.id, {
@@ -1005,14 +1060,17 @@ export class ConfigurationCC extends CommandClass {
 				});
 
 				// Query properties and the next param
-				const props = await api.getProperties(param);
+				const props = await api.getProperties(param).catch(
+					// If querying the properties fails, don't abort the entire interview
+					() => undefined,
+				);
 				if (!props) {
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `Querying parameter #${param} information timed out, skipping interview...`,
+						message: `Querying parameter #${param} information timed out, skipping scan...`,
 						level: "warn",
 					});
-					return;
+					break;
 				}
 				const { nextParameter, ...properties } = props;
 
@@ -1020,15 +1078,24 @@ export class ConfigurationCC extends CommandClass {
 				if (properties.valueSize === 0) {
 					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
 				} else {
-					// Query name and info only if the parameter is supported, but skip the query for bugged devices
 					let name: string | undefined;
-					if (!deviceConfig?.compat?.skipConfigurationNameQuery) {
-						name = await api.getName(param);
-					}
+					// Query the name and info for parameters that are NOT defined in a config file
+					if (!documentedParamNumbers.has(param)) {
+						// Skip the name query for bugged devices
+						if (!deviceConfig?.compat?.skipConfigurationNameQuery) {
+							name = await api.getName(param).catch(
+								// If querying the name fails, don't abort the entire interview
+								() => undefined,
+							);
+						}
 
-					// Skip the info query for bugged devices
-					if (!deviceConfig?.compat?.skipConfigurationInfoQuery) {
-						await api.getInfo(param);
+						// Skip the info query for bugged devices
+						if (!deviceConfig?.compat?.skipConfigurationInfoQuery) {
+							await api.getInfo(param).catch(
+								// If querying the info fails, don't abort the entire interview
+								() => undefined,
+							);
+						}
 					}
 
 					logMessage = `received information for parameter #${param}:`;
@@ -1421,31 +1488,53 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 }
 
+export interface ConfigurationCCReportOptions extends CCCommandOptions {
+	parameter: number;
+	value: ConfigValue;
+	valueSize: number;
+	valueFormat?: ConfigValueFormat;
+}
+
 @CCCommand(ConfigurationCommand.Report)
 export class ConfigurationCCReport extends ConfigurationCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ConfigurationCCReportOptions,
 	) {
 		super(host, options);
-		// All fields must be present
-		validatePayload(this.payload.length > 2);
-		this._parameter = this.payload[0];
-		this._valueSize = this.payload[1] & 0b111;
-		// Ensure we received a valid report
-		validatePayload(
-			this._valueSize >= 1,
-			this._valueSize <= 4,
-			this.payload.length >= 2 + this._valueSize,
-		);
-		// Default to parsing the value as SignedInteger, like the specs say.
-		// We try to re-interpret the value in persistValues()
-		this._value = parseValue(
-			this.payload.slice(2),
-			this._valueSize,
-			ConfigValueFormat.SignedInteger,
-		);
+
+		if (gotDeserializationOptions(options)) {
+			// All fields must be present
+			validatePayload(this.payload.length > 2);
+			this.parameter = this.payload[0];
+			this.valueSize = this.payload[1] & 0b111;
+			// Ensure we received a valid report
+			validatePayload(
+				this.valueSize >= 1,
+				this.valueSize <= 4,
+				this.payload.length >= 2 + this.valueSize,
+			);
+			// Default to parsing the value as SignedInteger, like the specs say.
+			// We try to re-interpret the value in persistValues()
+			this.value = parseValue(
+				this.payload.slice(2),
+				this.valueSize,
+				ConfigValueFormat.SignedInteger,
+			);
+		} else {
+			this.parameter = options.parameter;
+			this.value = options.value;
+			this.valueSize = options.valueSize;
+			this.valueFormat = options.valueFormat;
+		}
 	}
+
+	public parameter: number;
+	public value: ConfigValue;
+	public valueSize: number;
+	private valueFormat?: ConfigValueFormat; // only used for serialization
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
@@ -1454,23 +1543,23 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		// Check if the initial assumption of SignedInteger holds true
 		const oldParamInformation = this.getParamInformation(
 			applHost,
-			this._parameter,
+			this.parameter,
 		);
 		if (
 			oldParamInformation.format != undefined &&
 			oldParamInformation.format !== ConfigValueFormat.SignedInteger
 		) {
 			// Re-interpret the value with the new format
-			this._value = reInterpretSignedValue(
-				this._value,
-				this._valueSize,
+			this.value = reInterpretSignedValue(
+				this.value,
+				this.valueSize,
 				oldParamInformation.format,
 			);
 		}
 
 		// Store the parameter size and value
-		this.extendParamInformation(applHost, this._parameter, undefined, {
-			valueSize: this._valueSize,
+		this.extendParamInformation(applHost, this.parameter, undefined, {
+			valueSize: this.valueSize,
 			type:
 				oldParamInformation.format === ConfigValueFormat.BitField
 					? "number[]"
@@ -1487,16 +1576,16 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				oldParamInformation.format === ConfigValueFormat.SignedInteger;
 			this.extendParamInformation(
 				applHost,
-				this._parameter,
+				this.parameter,
 				undefined,
-				getIntegerLimits(this._valueSize as any, isSigned),
+				getIntegerLimits(this.valueSize as any, isSigned),
 			);
 		}
 		// And store the value itself
 		// If we have partial config params defined, we need to split the value
 		const partialParams = this.getPartialParamInfos(
 			applHost,
-			this._parameter,
+			this.parameter,
 		);
 		if (partialParams.length > 0) {
 			for (const param of partialParams) {
@@ -1504,11 +1593,11 @@ export class ConfigurationCCReport extends ConfigurationCC {
 					valueDB.setValue(
 						{
 							commandClass: this.ccId,
-							property: this._parameter,
+							property: this.parameter,
 							propertyKey: param.propertyKey,
 						},
 						parsePartial(
-							this._value as any,
+							this.value as any,
 							param.propertyKey,
 							isSignedPartial(
 								param.propertyKey,
@@ -1523,27 +1612,32 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			valueDB.setValue(
 				{
 					commandClass: this.ccId,
-					property: this._parameter,
+					property: this.parameter,
 				},
-				this._value,
+				this.value,
 			);
 		}
 		return true;
 	}
 
-	private _parameter: number;
-	public get parameter(): number {
-		return this._parameter;
-	}
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.parameter, this.valueSize & 0b111]),
+			Buffer.allocUnsafe(this.valueSize),
+		]);
+		const valueFormat =
+			typeof this.value === "number"
+				? this.valueFormat ?? ConfigValueFormat.SignedInteger
+				: ConfigValueFormat.BitField;
+		serializeValue(
+			this.payload,
+			2,
+			this.valueSize,
+			valueFormat,
+			this.value,
+		);
 
-	private _value: ConfigValue;
-	public get value(): ConfigValue {
-		return this._value;
-	}
-
-	private _valueSize: number;
-	public get valueSize(): number {
-		return this._valueSize;
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1586,11 +1680,9 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.parameter = this.payload[0];
+			this.allowUnexpectedResponse = false;
 		} else {
 			this.parameter = options.parameter;
 			this.allowUnexpectedResponse =
@@ -1639,10 +1731,22 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload[0];
+			this.resetToDefault = !!(this.payload[1] & 0b1000_0000);
+			this.valueSize = this.payload[1] & 0b111;
+
+			// Ensure we received a valid report
+			validatePayload(
+				this.valueSize >= 1,
+				this.valueSize <= 4,
+				this.payload.length >= 2 + this.valueSize,
+			);
+			// Parse the value as signed integer. We don't know the format here.
+			this.value = parseValue(
+				this.payload.slice(2),
+				this.valueSize,
+				ConfigValueFormat.SignedInteger,
 			);
 		} else {
 			this.parameter = options.parameter;
@@ -2119,6 +2223,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 
 		this.extendParamInformation(applHost, this.parameter, undefined, {
 			name: this.name,
+			label: this.name,
 		});
 		return true;
 	}
@@ -2196,55 +2301,70 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 	}
 }
 
+export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
+	parameter: number;
+	info: string;
+	reportsToFollow: number;
+}
+
 @CCCommand(ConfigurationCommand.InfoReport)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ConfigurationCCInfoReportOptions,
 	) {
 		super(host, options);
-		// Parameter and # of reports must be present
-		validatePayload(this.payload.length >= 3);
-		this._parameter = this.payload.readUInt16BE(0);
-		this._reportsToFollow = this.payload[2];
-		if (this._reportsToFollow > 0) {
-			// If more reports follow, the info must at least be one byte
-			validatePayload(this.payload.length >= 4);
+
+		if (gotDeserializationOptions(options)) {
+			// Parameter and # of reports must be present
+			validatePayload(this.payload.length >= 3);
+			this.parameter = this.payload.readUInt16BE(0);
+			this.reportsToFollow = this.payload[2];
+			if (this.reportsToFollow > 0) {
+				// If more reports follow, the info must at least be one byte
+				validatePayload(this.payload.length >= 4);
+			}
+			this.info = this.payload.slice(3).toString("utf8");
+		} else {
+			this.parameter = options.parameter;
+			this.info = options.info;
+			this.reportsToFollow = options.reportsToFollow;
 		}
-		this._info = this.payload.slice(3).toString("utf8");
 	}
+
+	public readonly parameter: number;
+	public info: string;
+	public readonly reportsToFollow: number;
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		this.extendParamInformation(applHost, this._parameter, undefined, {
-			info: this._info,
+		this.extendParamInformation(applHost, this.parameter, undefined, {
+			info: this.info,
+			description: this.info,
 		});
 		return true;
 	}
 
-	private _parameter: number;
-	public get parameter(): number {
-		return this._parameter;
-	}
+	public serialize(): Buffer {
+		const infoBuffer = Buffer.from(this.info, "utf8");
+		this.payload = Buffer.allocUnsafe(3 + infoBuffer.length);
+		this.payload.writeUInt16BE(this.parameter, 0);
+		this.payload[2] = this.reportsToFollow;
+		infoBuffer.copy(this.payload, 3);
 
-	private _info: string;
-	public get info(): string {
-		return this._info;
-	}
-
-	private _reportsToFollow: number;
-	public get reportsToFollow(): number {
-		return this._reportsToFollow;
+		return super.serialize();
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		// Distinguish sessions by the parameter number
-		return { parameter: this._parameter };
+		return { parameter: this.parameter };
 	}
 
 	public expectMoreMessages(): boolean {
-		return this._reportsToFollow > 0;
+		return this.reportsToFollow > 0;
 	}
 
 	public mergePartialCCs(
@@ -2252,8 +2372,8 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		partials: ConfigurationCCInfoReport[],
 	): void {
 		// Concat the info
-		this._info = [...partials, this]
-			.map((report) => report._info)
+		this.info = [...partials, this]
+			.map((report) => report.info)
 			.reduce((prev, cur) => prev + cur, "");
 	}
 
@@ -2278,11 +2398,8 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload.readUInt16BE(0);
 		} else {
 			this.parameter = options.parameter;
 		}
@@ -2304,66 +2421,115 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 	}
 }
 
+export interface ConfigurationCCPropertiesReportOptions
+	extends CCCommandOptions {
+	parameter: number;
+	valueSize: number;
+	valueFormat: ConfigValueFormat;
+	minValue?: ConfigValue;
+	maxValue?: ConfigValue;
+	defaultValue?: ConfigValue;
+	nextParameter: number;
+	altersCapabilities?: boolean;
+	isReadonly?: boolean;
+	isAdvanced?: boolean;
+	noBulkSupport?: boolean;
+}
+
 @CCCommand(ConfigurationCommand.PropertiesReport)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ConfigurationCCPropertiesReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 3);
-		this._parameter = this.payload.readUInt16BE(0);
-		this._valueFormat = (this.payload[2] & 0b111000) >>> 3;
-		this._valueSize = this.payload[2] & 0b111;
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 3);
+			this.parameter = this.payload.readUInt16BE(0);
+			this.valueFormat = (this.payload[2] & 0b111000) >>> 3;
+			this.valueSize = this.payload[2] & 0b111;
 
-		// GH#1309 Some devices don't tell us the first parameter if we query #0
-		// Instead, they contain 0x000000
-		if (this._valueSize === 0 && this.payload.length < 5) {
-			this._nextParameter = 0;
-			return;
-		}
+			// GH#1309 Some devices don't tell us the first parameter if we query #0
+			// Instead, they contain 0x000000
+			if (this.valueSize === 0 && this.payload.length < 5) {
+				this.nextParameter = 0;
+				return;
+			}
 
-		// Ensure the payload contains the two bytes for next parameter
-		const nextParameterOffset = 3 + 3 * this._valueSize;
-		validatePayload(this.payload.length >= nextParameterOffset + 2);
+			// Ensure the payload contains the two bytes for next parameter
+			const nextParameterOffset = 3 + 3 * this.valueSize;
+			validatePayload(this.payload.length >= nextParameterOffset + 2);
 
-		if (this.valueSize > 0) {
-			if (this._valueFormat !== ConfigValueFormat.BitField) {
-				this._minValue = parseValue(
-					this.payload.slice(3),
-					this._valueSize,
-					this._valueFormat,
+			if (this.valueSize > 0) {
+				if (this.valueFormat !== ConfigValueFormat.BitField) {
+					this.minValue = parseValue(
+						this.payload.slice(3),
+						this.valueSize,
+						this.valueFormat,
+					);
+				}
+				this.maxValue = parseValue(
+					this.payload.slice(3 + this.valueSize),
+					this.valueSize,
+					this.valueFormat,
+				);
+				this.defaultValue = parseValue(
+					this.payload.slice(3 + 2 * this.valueSize),
+					this.valueSize,
+					this.valueFormat,
 				);
 			}
-			this._maxValue = parseValue(
-				this.payload.slice(3 + this._valueSize),
-				this._valueSize,
-				this._valueFormat,
-			);
-			this._defaultValue = parseValue(
-				this.payload.slice(3 + 2 * this._valueSize),
-				this._valueSize,
-				this._valueFormat,
-			);
-		}
-		if (this.version < 4) {
-			// Read the last 2 bytes to work around nodes not omitting min/max value when their size is 0
-			this._nextParameter = this.payload.readUInt16BE(
-				this.payload.length - 2,
-			);
-		} else {
-			this._nextParameter =
-				this.payload.readUInt16BE(nextParameterOffset);
+			if (this.version < 4) {
+				// Read the last 2 bytes to work around nodes not omitting min/max value when their size is 0
+				this.nextParameter = this.payload.readUInt16BE(
+					this.payload.length - 2,
+				);
+			} else {
+				this.nextParameter =
+					this.payload.readUInt16BE(nextParameterOffset);
 
-			// Ensure the payload contains a byte for the 2nd option flags
-			validatePayload(this.payload.length >= nextParameterOffset + 3);
-			const options1 = this.payload[2];
-			const options2 = this.payload[3 + 3 * this.valueSize + 2];
-			this._altersCapabilities = !!(options1 & 0b1000_0000);
-			this._isReadonly = !!(options1 & 0b0100_0000);
-			this._isAdvanced = !!(options2 & 0b1);
-			this._noBulkSupport = !!(options2 & 0b10);
+				// Ensure the payload contains a byte for the 2nd option flags
+				validatePayload(this.payload.length >= nextParameterOffset + 3);
+				const options1 = this.payload[2];
+				const options2 = this.payload[3 + 3 * this.valueSize + 2];
+				this.altersCapabilities = !!(options1 & 0b1000_0000);
+				this.isReadonly = !!(options1 & 0b0100_0000);
+				this.isAdvanced = !!(options2 & 0b1);
+				this.noBulkSupport = !!(options2 & 0b10);
+			}
+		} else {
+			this.parameter = options.parameter;
+			this.valueSize = options.valueSize;
+			this.valueFormat = options.valueFormat;
+			if (this.valueSize > 0) {
+				if (options.minValue == undefined) {
+					throw new ZWaveError(
+						"The minimum value must be set when the value size is non-zero",
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				} else if (options.maxValue == undefined) {
+					throw new ZWaveError(
+						"The maximum value must be set when the value size is non-zero",
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				} else if (options.defaultValue == undefined) {
+					throw new ZWaveError(
+						"The default value must be set when the value size is non-zero",
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				this.minValue = options.minValue;
+				this.maxValue = options.maxValue;
+				this.defaultValue = options.defaultValue;
+			}
+			this.nextParameter = options.nextParameter;
+			this.altersCapabilities = options.altersCapabilities;
+			this.isReadonly = options.isReadonly;
+			this.isAdvanced = options.isAdvanced;
+			this.noBulkSupport = options.noBulkSupport;
 		}
 	}
 
@@ -2371,27 +2537,31 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		if (!super.persistValues(applHost)) return false;
 
 		// If we actually received parameter info, store it
-		if (this._valueSize > 0) {
+		if (this.valueSize > 0) {
 			const valueType =
-				this._valueFormat === ConfigValueFormat.SignedInteger ||
-				this._valueFormat === ConfigValueFormat.UnsignedInteger
+				this.valueFormat === ConfigValueFormat.SignedInteger ||
+				this.valueFormat === ConfigValueFormat.UnsignedInteger
 					? "number"
 					: "number[]";
-			const paramInfo: Partial<ConfigurationMetadata> = stripUndefined({
+			const paramInfo = stripUndefined({
 				type: valueType,
-				valueFormat: this._valueFormat,
-				valueSize: this._valueSize,
-				minValue: this._minValue,
-				maxValue: this._maxValue,
-				defaultValue: this._defaultValue,
-				requiresReInclusion: this._altersCapabilities,
-				writeable: !this._isReadonly,
-				isAdvanced: this._isAdvanced,
-				noBulkSupport: this._noBulkSupport,
-			});
+				format: this.valueFormat,
+				valueSize: this.valueSize,
+				min: this.minValue,
+				max: this.maxValue,
+				default: this.defaultValue,
+				requiresReInclusion: this.altersCapabilities,
+				readable: true,
+				writeable: !this.isReadonly,
+				allowManualEntry: true,
+				isAdvanced: this.isAdvanced,
+				noBulkSupport: this.noBulkSupport,
+				isFromConfig: false,
+			} as const satisfies ConfigurationMetadata);
+
 			this.extendParamInformation(
 				applHost,
-				this._parameter,
+				this.parameter,
 				undefined,
 				paramInfo,
 			);
@@ -2400,91 +2570,103 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		return true;
 	}
 
-	private _parameter: number;
-	public get parameter(): number {
-		return this._parameter;
-	}
+	public parameter: number;
+	public valueSize: number;
+	public valueFormat: ConfigValueFormat;
+	public minValue: ConfigValue | undefined;
+	public maxValue: ConfigValue | undefined;
+	public defaultValue: ConfigValue | undefined;
+	public nextParameter: number;
+	public altersCapabilities: boolean | undefined;
+	public isReadonly: boolean | undefined;
+	public isAdvanced: boolean | undefined;
+	public noBulkSupport: boolean | undefined;
 
-	private _valueSize: number;
-	public get valueSize(): number {
-		return this._valueSize;
-	}
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(
+			3 + // preamble
+				3 * this.valueSize + // min, max, default value
+				2, // next parameter
+		);
+		this.payload.writeUInt16BE(this.parameter, 0);
+		const options1 =
+			(this.altersCapabilities ? 0b1000_0000 : 0) |
+			(this.isReadonly ? 0b0100_0000 : 0) |
+			((this.valueFormat & 0b111) << 3) |
+			(this.valueSize & 0b111);
+		this.payload[2] = options1;
 
-	private _valueFormat: ConfigValueFormat;
-	public get valueFormat(): ConfigValueFormat {
-		return this._valueFormat;
-	}
+		let offset = 3;
+		if (this.valueSize > 0) {
+			serializeValue(
+				this.payload,
+				offset,
+				this.valueSize,
+				this.valueFormat,
+				this.minValue!,
+			);
+			offset += this.valueSize;
+			serializeValue(
+				this.payload,
+				offset,
+				this.valueSize,
+				this.valueFormat,
+				this.maxValue!,
+			);
+			offset += this.valueSize;
+			serializeValue(
+				this.payload,
+				offset,
+				this.valueSize,
+				this.valueFormat,
+				this.defaultValue!,
+			);
+			offset += this.valueSize;
+		}
+		this.payload.writeUInt16BE(this.nextParameter, offset);
 
-	private _minValue: ConfigValue | undefined;
-	public get minValue(): ConfigValue | undefined {
-		return this._minValue;
-	}
+		if (this.version >= 4) {
+			const options2 =
+				(this.isAdvanced ? 0b1 : 0) | (this.noBulkSupport ? 0b10 : 0);
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([options2]),
+			]);
+		}
 
-	private _maxValue: ConfigValue | undefined;
-	public get maxValue(): ConfigValue | undefined {
-		return this._maxValue;
-	}
-
-	private _defaultValue: ConfigValue | undefined;
-	public get defaultValue(): ConfigValue | undefined {
-		return this._defaultValue;
-	}
-
-	private _nextParameter: number;
-	public get nextParameter(): number {
-		return this._nextParameter;
-	}
-
-	private _altersCapabilities: boolean | undefined;
-	public get altersCapabilities(): boolean | undefined {
-		return this._altersCapabilities;
-	}
-
-	private _isReadonly: boolean | undefined;
-	public get isReadonly(): boolean | undefined {
-		return this._isReadonly;
-	}
-
-	private _isAdvanced: boolean | undefined;
-	public get isAdvanced(): boolean | undefined {
-		return this._isAdvanced;
-	}
-
-	private _noBulkSupport: boolean | undefined;
-	public get noBulkSupport(): boolean | undefined {
-		return this._noBulkSupport;
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"parameter #": this._parameter,
-			"next param #": this._nextParameter,
-			"value size": this._valueSize,
+			"parameter #": this.parameter,
+			"next param #": this.nextParameter,
+			"value size": this.valueSize,
 			"value format": getEnumMemberName(
 				ConfigValueFormat,
-				this._valueFormat,
+				this.valueFormat,
 			),
 		};
-		if (this._minValue != undefined) {
-			message["min value"] = configValueToString(this._minValue);
+		if (this.minValue != undefined) {
+			message["min value"] = configValueToString(this.minValue);
 		}
-		if (this._maxValue != undefined) {
-			message["max value"] = configValueToString(this._maxValue);
+		if (this.maxValue != undefined) {
+			message["max value"] = configValueToString(this.maxValue);
 		}
-		if (this._defaultValue != undefined) {
-			message["default value"] = configValueToString(this._defaultValue);
+		if (this.defaultValue != undefined) {
+			message["default value"] = configValueToString(this.defaultValue);
 		}
-		if (this._altersCapabilities != undefined) {
-			message["alters capabilities"] = this._altersCapabilities;
+		if (this.altersCapabilities != undefined) {
+			message["alters capabilities"] = this.altersCapabilities;
 		}
-		if (this._isReadonly != undefined) {
-			message.readonly = this._isReadonly;
+		if (this.isReadonly != undefined) {
+			message.readonly = this.isReadonly;
 		}
-		if (this._isAdvanced != undefined) {
-			message.advanced = this._isAdvanced;
+		if (this.isAdvanced != undefined) {
+			message.advanced = this.isAdvanced;
 		}
-		if (this._noBulkSupport != undefined) {
-			message["bulk support"] = !this._noBulkSupport;
+		if (this.noBulkSupport != undefined) {
+			message["bulk support"] = !this.noBulkSupport;
 		}
 		return {
 			...super.toLogEntry(applHost),
@@ -2502,11 +2684,8 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload.readUInt16BE(0);
 		} else {
 			this.parameter = options.parameter;
 		}

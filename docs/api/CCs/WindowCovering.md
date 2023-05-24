@@ -61,7 +61,7 @@ async stopLevelChange(
 }
 ```
 
--   **label:** _(dynamic)_
+-   **label:** `Current value - ${string}`
 -   **min. CC version:** 1
 -   **readable:** true
 -   **writeable:** false
@@ -89,6 +89,44 @@ async stopLevelChange(
 -   **stateful:** true
 -   **secret:** false
 -   **value type:** `"duration"`
+
+### `levelChangeDown(parameter: WindowCoveringParameter)`
+
+```ts
+{
+	commandClass: CommandClasses["Window Covering"],
+	endpoint: number,
+	property: "levelChangeDown",
+	propertyKey: WindowCoveringParameter,
+}
+```
+
+-   **label:** `${string} - ${string}`
+-   **min. CC version:** 1
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
+
+### `levelChangeUp(parameter: WindowCoveringParameter)`
+
+```ts
+{
+	commandClass: CommandClasses["Window Covering"],
+	endpoint: number,
+	property: "levelChangeUp",
+	propertyKey: WindowCoveringParameter,
+}
+```
+
+-   **label:** `${string} - ${string}`
+-   **min. CC version:** 1
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
 
 ### `targetValue(parameter: WindowCoveringParameter)`
 

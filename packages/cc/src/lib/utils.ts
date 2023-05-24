@@ -3,6 +3,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	actuatorCCs,
+	getCCName,
 	type IZWaveEndpoint,
 	type IZWaveNode,
 } from "@zwave-js/core/safe";
@@ -1006,4 +1007,49 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 		AssociationCCValues.hasLifeline.endpoint(endpoint.index),
 		true,
 	);
+}
+
+export async function assignLifelineIssueingCommand(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+	ccId: CommandClasses,
+	ccCommand: number,
+): Promise<void> {
+	const node = endpoint.getNodeUnsafe()!;
+	if (
+		node.supportsCC(CommandClasses["Association Group Information"]) &&
+		(node.supportsCC(CommandClasses.Association) ||
+			node.supportsCC(CommandClasses["Multi Channel Association"]))
+	) {
+		const groupsIssueingNotifications =
+			AssociationGroupInfoCC.findGroupsForIssuedCommand(
+				applHost,
+				node,
+				ccId,
+				ccCommand,
+			);
+		if (groupsIssueingNotifications.length > 0) {
+			// We always grab the first group - usually it should be the lifeline
+			const groupId = groupsIssueingNotifications[0];
+			const existingAssociations =
+				getAssociations(applHost, node).get(groupId) ?? [];
+
+			if (
+				!existingAssociations.some(
+					(a) => a.nodeId === applHost.ownNodeId,
+				)
+			) {
+				applHost.controllerLog.logNode(node.id, {
+					endpoint: endpoint.index,
+					message: `Configuring associations to receive ${getCCName(
+						ccId,
+					)} commands...`,
+					direction: "outbound",
+				});
+				await addAssociations(applHost, node, groupId, [
+					{ nodeId: applHost.ownNodeId },
+				]);
+			}
+		}
+	}
 }

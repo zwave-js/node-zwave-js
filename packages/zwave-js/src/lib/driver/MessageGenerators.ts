@@ -1,6 +1,4 @@
 import {
-	getInnermostCommandClass,
-	isCommandClassContainer,
 	MGRPExtension,
 	MPANExtension,
 	Security2CCMessageEncapsulation,
@@ -9,6 +7,8 @@ import {
 	SupervisionCC,
 	SupervisionCCReport,
 	SupervisionCommand,
+	getInnermostCommandClass,
+	isCommandClassContainer,
 	type CommandClass,
 } from "@zwave-js/cc";
 import {
@@ -30,7 +30,6 @@ import {
 import {
 	CommandClasses,
 	EncapsulationFlags,
-	mergeSupervisionResults,
 	MessagePriority,
 	NODE_ID_BROADCAST,
 	SPANState,
@@ -38,6 +37,7 @@ import {
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
+	mergeSupervisionResults,
 	type SendCommandOptions,
 	type SupervisionResult,
 } from "@zwave-js/core";

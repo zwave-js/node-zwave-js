@@ -70,6 +70,9 @@ export const MeterCCValues = Object.freeze({
 		...V.staticPropertyWithName("resetAll", "reset", {
 			...ValueMetadata.WriteOnlyBoolean,
 			label: `Reset accumulated values`,
+			states: {
+				true: "Reset",
+			},
 		} as const),
 	}),
 
@@ -86,6 +89,9 @@ export const MeterCCValues = Object.freeze({
 					// This is only a placeholder label. A config manager is needed to
 					// determine the actual label.
 					label: `Reset (${num2hex(meterType)})`,
+					states: {
+						true: "Reset",
+					},
 					ccSpecific: { meterType },
 				} as const),
 		),

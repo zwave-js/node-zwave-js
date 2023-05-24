@@ -97,6 +97,13 @@ export interface ValueMetadataNumeric extends ValueMetadataAny {
 	default?: number;
 	/** Speaking names for numeric values */
 	states?: Record<number, string>;
+	/**
+	 * Whether a user should be able to manually enter all legal values in the range `min...max` (`true`),
+	 * or if only the ones defined in `states` should be selectable in a dropdown (`false`).
+	 *
+	 * If missing, applications should assume this to be `true` if no `states` are defined and `false` if `states` are defined.
+	 */
+	allowManualEntry?: boolean;
 	/** An optional unit for numeric values */
 	unit?: string;
 }
@@ -107,6 +114,11 @@ export interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	/** The default value */
 	default?: number;
+	/** Possible values and their meaning */
+	states?: {
+		true?: string;
+		false?: string;
+	};
 }
 
 const defineBoolean = define<ValueMetadataBoolean>();
@@ -164,8 +176,13 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	unit?: string;
 	valueSize?: number;
 	format?: ConfigValueFormat;
+	label?: string;
+	description?: string;
+	/** @deprecated Use the `label` property instead */
 	name?: string;
+	/** @deprecated Use the `description` property instead */
 	info?: string;
+	/** @deprecated */
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	requiresReInclusion?: boolean;
