@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.22.0 (2023-05-23)
+## 10.22.1 (2023-05-24)
 ### Features
 * Add a value and API to control the indicator timeout (#5830)
 
