@@ -88,98 +88,103 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-		options,
-	) => {
-		if (propertyKey == undefined) {
-			throwMissingPropertyKey(this.ccId, property);
-		} else if (typeof propertyKey !== "number") {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-		if (property === "level") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: SceneActuatorConfigurationCCAPI,
+			{ property, propertyKey },
+			value,
+			options,
+		) {
+			if (propertyKey == undefined) {
+				throwMissingPropertyKey(this.ccId, property);
+			} else if (typeof propertyKey !== "number") {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 			}
+			if (property === "level") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
 
-			// We need to set the dimming duration along with the level.
-			// Dimming duration is chosen with the following precedence:
-			// 1. options.transitionDuration
-			// 2. current stored value
-			// 3. default
-			const dimmingDuration =
-				Duration.from(options?.transitionDuration) ??
-				this.tryGetValueDB()?.getValue<Duration>(
-					SceneActuatorConfigurationCCValues.dimmingDuration(
+				// We need to set the dimming duration along with the level.
+				// Dimming duration is chosen with the following precedence:
+				// 1. options.transitionDuration
+				// 2. current stored value
+				// 3. default
+				const dimmingDuration =
+					Duration.from(options?.transitionDuration) ??
+					this.tryGetValueDB()?.getValue<Duration>(
+						SceneActuatorConfigurationCCValues.dimmingDuration(
+							propertyKey,
+						).endpoint(this.endpoint.index),
+					);
+				return this.set(propertyKey, dimmingDuration, value);
+			} else if (property === "dimmingDuration") {
+				if (typeof value !== "string" && !(value instanceof Duration)) {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"duration",
+						typeof value,
+					);
+				}
+
+				const dimmingDuration = Duration.from(value);
+				if (dimmingDuration == undefined) {
+					throw new ZWaveError(
+						`${getCCName(
+							this.ccId,
+						)}: "${property}" could not be set. ${JSON.stringify(
+							value,
+						)} is not a valid duration.`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+
+				// Must set the level along with the dimmingDuration,
+				// Use saved value, if it's defined. Otherwise the default
+				// will be used.
+				const level = this.tryGetValueDB()?.getValue<number>(
+					SceneActuatorConfigurationCCValues.level(
 						propertyKey,
 					).endpoint(this.endpoint.index),
 				);
-			return this.set(propertyKey, dimmingDuration, value);
-		} else if (property === "dimmingDuration") {
-			if (typeof value !== "string" && !(value instanceof Duration)) {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"duration",
-					typeof value,
-				);
-			}
 
-			const dimmingDuration = Duration.from(value);
-			if (dimmingDuration == undefined) {
-				throw new ZWaveError(
-					`${getCCName(
-						this.ccId,
-					)}: "${property}" could not be set. ${JSON.stringify(
-						value,
-					)} is not a valid duration.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			// Must set the level along with the dimmingDuration,
-			// Use saved value, if it's defined. Otherwise the default
-			// will be used.
-			const level = this.tryGetValueDB()?.getValue<number>(
-				SceneActuatorConfigurationCCValues.level(propertyKey).endpoint(
-					this.endpoint.index,
-				),
-			);
-
-			return this.set(propertyKey, dimmingDuration, level);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "level":
-			case "dimmingDuration": {
-				if (propertyKey == undefined) {
-					throwMissingPropertyKey(this.ccId, property);
-				} else if (typeof propertyKey !== "number") {
-					throwUnsupportedPropertyKey(
-						this.ccId,
-						property,
-						propertyKey,
-					);
-				}
-				return (await this.get(propertyKey))?.[property];
-			}
-			default:
+				return this.set(propertyKey, dimmingDuration, level);
+			} else {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: SceneActuatorConfigurationCCAPI,
+			{ property, propertyKey },
+		) {
+			switch (property) {
+				case "level":
+				case "dimmingDuration": {
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
+					return (await this.get(propertyKey))?.[property];
+				}
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	@validateArgs()
 	public async set(

@@ -266,103 +266,106 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property === "targetMode") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			const result = await this.set(value);
-
-			// Verify the current value after a delay, unless the command was supervised and successful
-			if (supervisedCommandSucceeded(result)) {
-				this.getValueDB().setValue(
-					DoorLockCCValues.currentMode.endpoint(this.endpoint.index),
-					value,
-				);
-			} else {
-				this.schedulePoll({ property }, value);
-			}
-
-			return result;
-		} else if (
-			typeof property === "string" &&
-			configurationSetParameters.includes(property as any)
-		) {
-			// checking every type here would create a LOT of duplicate code, so we don't
-
-			// ConfigurationSet expects all parameters --> read the others from cache
-			const config = {
-				[property]: value,
-			} as DoorLockCCConfigurationSetOptions;
-			for (const param of configurationSetParameters) {
-				if (param !== property) {
-					(config as any)[param] = this.tryGetValueDB()?.getValue({
-						commandClass: this.ccId,
-						endpoint: this.endpoint.index,
-						property: param,
-					});
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: DoorLockCCAPI, { property }, value) {
+			if (property === "targetMode") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
 				}
-			}
+				const result = await this.set(value);
 
-			// Fix insideHandlesCanOpenDoorConfiguration is not iterable
-			const allTrue: DoorHandleStatus = [true, true, true, true];
-			if (!config.insideHandlesCanOpenDoorConfiguration) {
-				config.insideHandlesCanOpenDoorConfiguration = allTrue;
-			}
-			if (!config.outsideHandlesCanOpenDoorConfiguration) {
-				config.outsideHandlesCanOpenDoorConfiguration = allTrue;
-			}
+				// Verify the current value after a delay, unless the command was supervised and successful
+				if (supervisedCommandSucceeded(result)) {
+					this.getValueDB().setValue(
+						DoorLockCCValues.currentMode.endpoint(
+							this.endpoint.index,
+						),
+						value,
+					);
+				} else {
+					this.schedulePoll({ property }, value);
+				}
 
-			const result = await this.setConfiguration(config);
+				return result;
+			} else if (
+				typeof property === "string" &&
+				configurationSetParameters.includes(property as any)
+			) {
+				// checking every type here would create a LOT of duplicate code, so we don't
 
-			// Verify the current value after a delay, unless the command was supervised and successful
-			if (!supervisedCommandSucceeded(result)) {
-				this.schedulePoll({ property }, value);
-			}
+				// ConfigurationSet expects all parameters --> read the others from cache
+				const config = {
+					[property]: value,
+				} as DoorLockCCConfigurationSetOptions;
+				for (const param of configurationSetParameters) {
+					if (param !== property) {
+						(config as any)[param] = this.tryGetValueDB()?.getValue(
+							{
+								commandClass: this.ccId,
+								endpoint: this.endpoint.index,
+								property: param,
+							},
+						);
+					}
+				}
 
-			return result;
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				// Fix insideHandlesCanOpenDoorConfiguration is not iterable
+				const allTrue: DoorHandleStatus = [true, true, true, true];
+				if (!config.insideHandlesCanOpenDoorConfiguration) {
+					config.insideHandlesCanOpenDoorConfiguration = allTrue;
+				}
+				if (!config.outsideHandlesCanOpenDoorConfiguration) {
+					config.outsideHandlesCanOpenDoorConfiguration = allTrue;
+				}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentMode":
-			case "targetMode":
-			case "duration":
-			case "outsideHandlesCanOpenDoor":
-			case "insideHandlesCanOpenDoor":
-			case "latchStatus":
-			case "boltStatus":
-			case "doorStatus":
-			case "lockTimeout":
-				return (await this.get())?.[property];
+				const result = await this.setConfiguration(config);
 
-			case "operationType":
-			case "outsideHandlesCanOpenDoorConfiguration":
-			case "insideHandlesCanOpenDoorConfiguration":
-			case "lockTimeoutConfiguration":
-			case "autoRelockTime":
-			case "holdAndReleaseTime":
-			case "twistAssist":
-			case "blockToBlock":
-				return (await this.getConfiguration())?.[property];
+				// Verify the current value after a delay, unless the command was supervised and successful
+				if (!supervisedCommandSucceeded(result)) {
+					this.schedulePoll({ property }, value);
+				}
 
-			default:
+				return result;
+			} else {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: DoorLockCCAPI, { property }) {
+			switch (property) {
+				case "currentMode":
+				case "targetMode":
+				case "duration":
+				case "outsideHandlesCanOpenDoor":
+				case "insideHandlesCanOpenDoor":
+				case "latchStatus":
+				case "boltStatus":
+				case "doorStatus":
+				case "lockTimeout":
+					return (await this.get())?.[property];
+
+				case "operationType":
+				case "outsideHandlesCanOpenDoorConfiguration":
+				case "insideHandlesCanOpenDoorConfiguration":
+				case "lockTimeoutConfiguration":
+				case "autoRelockTime":
+				case "holdAndReleaseTime":
+				case "twistAssist":
+				case "blockToBlock":
+					return (await this.getConfiguration())?.[property];
+
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCapabilities() {

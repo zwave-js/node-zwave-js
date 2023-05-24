@@ -234,27 +234,29 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpoint.index,
-			property,
-			propertyKey,
-		};
-		if (NotificationCCValues.notificationVariable.is(valueId)) {
-			const notificationType: number | undefined =
-				this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific
-					?.notificationType;
-			if (notificationType != undefined) {
-				return this.getInternal({ notificationType });
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: NotificationCCAPI,
+			{ property, propertyKey },
+		) {
+			const valueId: ValueID = {
+				commandClass: this.ccId,
+				endpoint: this.endpoint.index,
+				property,
+				propertyKey,
+			};
+			if (NotificationCCValues.notificationVariable.is(valueId)) {
+				const notificationType: number | undefined =
+					this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific
+						?.notificationType;
+				if (notificationType != undefined) {
+					return this.getInternal({ notificationType });
+				}
 			}
-		}
 
-		throwUnsupportedProperty(this.ccId, property);
-	};
+			throwUnsupportedProperty(this.ccId, property);
+		};
+	}
 
 	/**
 	 * @internal

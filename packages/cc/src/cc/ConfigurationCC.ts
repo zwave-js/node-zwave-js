@@ -292,170 +292,185 @@ export class ConfigurationCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		// Config parameters are addressed with numeric properties/keys
-		if (typeof property !== "number") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (propertyKey != undefined && typeof propertyKey !== "number") {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-
-		let ccInstance: ConfigurationCC;
-		const applHost = this.applHost;
-
-		if (this.isSinglecast()) {
-			ccInstance = createConfigurationCCInstance(
-				this.applHost,
-				this.endpoint,
-			);
-		} else if (this.isMulticast()) {
-			// Multicast is only possible if the parameter definition is the same on all target nodes
-			const nodes = this.endpoint.node.physicalNodes;
-			if (
-				!nodes.every((node) =>
-					node
-						.getEndpoint(this.endpoint.index)
-						?.supportsCC(CommandClasses.Configuration),
-				)
-			) {
-				throw new ZWaveError(
-					`The multicast setValue API for Configuration CC requires all virtual target endpoints to support Configuration CC!`,
-					ZWaveErrorCodes.CC_Invalid,
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: ConfigurationCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			// Config parameters are addressed with numeric properties/keys
+			if (typeof property !== "number") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (propertyKey != undefined && typeof propertyKey !== "number") {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
 				);
 			}
-			// Figure out if all the relevant info is the same
-			const paramInfos = this.endpoint.node.physicalNodes.map((node) =>
-				createConfigurationCCInstance(
+
+			let ccInstance: ConfigurationCC;
+			const applHost = this.applHost;
+
+			if (this.isSinglecast()) {
+				ccInstance = createConfigurationCCInstance(
 					this.applHost,
-					node.getEndpoint(this.endpoint.index)!,
-				).getParamInformation(this.applHost, property, propertyKey),
-			);
-			if (
-				!paramInfos.length ||
-				!paramInfos.every((info, index) => {
-					if (index === 0) return true;
-					return (
-						info.valueSize === paramInfos[0].valueSize &&
-						info.format === paramInfos[0].format
+					this.endpoint,
+				);
+			} else if (this.isMulticast()) {
+				// Multicast is only possible if the parameter definition is the same on all target nodes
+				const nodes = this.endpoint.node.physicalNodes;
+				if (
+					!nodes.every((node) =>
+						node
+							.getEndpoint(this.endpoint.index)
+							?.supportsCC(CommandClasses.Configuration),
+					)
+				) {
+					throw new ZWaveError(
+						`The multicast setValue API for Configuration CC requires all virtual target endpoints to support Configuration CC!`,
+						ZWaveErrorCodes.CC_Invalid,
 					);
-				})
-			) {
+				}
+				// Figure out if all the relevant info is the same
+				const paramInfos = this.endpoint.node.physicalNodes.map(
+					(node) =>
+						createConfigurationCCInstance(
+							this.applHost,
+							node.getEndpoint(this.endpoint.index)!,
+						).getParamInformation(
+							this.applHost,
+							property,
+							propertyKey,
+						),
+				);
+				if (
+					!paramInfos.length ||
+					!paramInfos.every((info, index) => {
+						if (index === 0) return true;
+						return (
+							info.valueSize === paramInfos[0].valueSize &&
+							info.format === paramInfos[0].format
+						);
+					})
+				) {
+					throw new ZWaveError(
+						`The multicast setValue API for Configuration CC requires all virtual target nodes to have the same parameter definition!`,
+						ZWaveErrorCodes.CC_Invalid,
+					);
+				}
+				// If it is, just use the first node to create the CC instance
+				ccInstance = createConfigurationCCInstance(
+					this.applHost,
+					this.endpoint,
+				);
+			} else {
 				throw new ZWaveError(
-					`The multicast setValue API for Configuration CC requires all virtual target nodes to have the same parameter definition!`,
-					ZWaveErrorCodes.CC_Invalid,
+					`The setValue API for Configuration CC is not supported via broadcast!`,
+					ZWaveErrorCodes.CC_NotSupported,
 				);
 			}
-			// If it is, just use the first node to create the CC instance
-			ccInstance = createConfigurationCCInstance(
-				this.applHost,
-				this.endpoint,
-			);
-		} else {
-			throw new ZWaveError(
-				`The setValue API for Configuration CC is not supported via broadcast!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
 
-		let {
-			valueSize,
-			format: valueFormat = ConfigValueFormat.SignedInteger,
-		} = ccInstance.getParamInformation(applHost, property);
+			let {
+				valueSize,
+				format: valueFormat = ConfigValueFormat.SignedInteger,
+			} = ccInstance.getParamInformation(applHost, property);
 
-		let targetValue: number;
-		if (propertyKey) {
-			// This is a partial value, we need to update some bits only
-			// Find out the correct value size
-			if (!valueSize) {
-				valueSize = ccInstance.getParamInformation(
+			let targetValue: number;
+			if (propertyKey) {
+				// This is a partial value, we need to update some bits only
+				// Find out the correct value size
+				if (!valueSize) {
+					valueSize = ccInstance.getParamInformation(
+						applHost,
+						property,
+						propertyKey,
+					).valueSize;
+				}
+				// Add the target value to the remaining partial values
+				targetValue = ccInstance.composePartialParamValue(
 					applHost,
 					property,
 					propertyKey,
-				).valueSize;
+					value,
+				);
+				// Partial parameters are internally converted to unsigned values - update the valueFormat accordingly
+				valueFormat = ConfigValueFormat.UnsignedInteger;
+			} else {
+				targetValue = value;
 			}
-			// Add the target value to the remaining partial values
-			targetValue = ccInstance.composePartialParamValue(
-				applHost,
-				property,
-				propertyKey,
-				value,
-			);
-			// Partial parameters are internally converted to unsigned values - update the valueFormat accordingly
-			valueFormat = ConfigValueFormat.UnsignedInteger;
-		} else {
-			targetValue = value;
-		}
 
-		if (!valueSize) {
-			// If there's no value size configured, figure out a matching value size
-			valueSize = getMinIntegerSize(
-				targetValue,
-				valueFormat === ConfigValueFormat.SignedInteger,
-			);
-			// Throw if the value is too large or too small
 			if (!valueSize) {
-				throw new ZWaveError(
-					`The value ${targetValue} is not valid for configuration parameters!`,
-					ZWaveErrorCodes.Argument_Invalid,
+				// If there's no value size configured, figure out a matching value size
+				valueSize = getMinIntegerSize(
+					targetValue,
+					valueFormat === ConfigValueFormat.SignedInteger,
+				);
+				// Throw if the value is too large or too small
+				if (!valueSize) {
+					throw new ZWaveError(
+						`The value ${targetValue} is not valid for configuration parameters!`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+			}
+
+			// Make sure that the given value fits into the value size
+			if (!isSafeValue(targetValue, valueSize, valueFormat)) {
+				// If there is a value size configured, check that the given value is compatible
+				throwInvalidValueError(
+					targetValue,
+					property,
+					valueSize,
+					valueFormat,
 				);
 			}
-		}
 
-		// Make sure that the given value fits into the value size
-		if (!isSafeValue(targetValue, valueSize, valueFormat)) {
-			// If there is a value size configured, check that the given value is compatible
-			throwInvalidValueError(
-				targetValue,
-				property,
-				valueSize,
+			const result = await this.set({
+				parameter: property,
+				value: targetValue,
+				valueSize: valueSize as any,
 				valueFormat,
-			);
-		}
+			});
 
-		const result = await this.set({
-			parameter: property,
-			value: targetValue,
-			valueSize: valueSize as any,
-			valueFormat,
-		});
+			if (
+				!supervisedCommandSucceeded(result) &&
+				(this as ConfigurationCCAPI).isSinglecast()
+			) {
+				// Verify the current value after a delay, unless the command was supervised and successful
+				(this as ConfigurationCCAPI).schedulePoll(
+					{ property, propertyKey },
+					targetValue,
+					// Configuration changes are instant
+					{ transition: "fast" },
+				);
+			}
 
-		if (
-			!supervisedCommandSucceeded(result) &&
-			(this as ConfigurationCCAPI).isSinglecast()
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: ConfigurationCCAPI,
+			{ property, propertyKey },
 		) {
-			// Verify the current value after a delay, unless the command was supervised and successful
-			(this as ConfigurationCCAPI).schedulePoll(
-				{ property, propertyKey },
-				targetValue,
-				// Configuration changes are instant
-				{ transition: "fast" },
-			);
-		}
+			// Config parameters are addressed with numeric properties/keys
+			if (typeof property !== "number") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (propertyKey != undefined && typeof propertyKey !== "number") {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+			}
 
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		// Config parameters are addressed with numeric properties/keys
-		if (typeof property !== "number") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (propertyKey != undefined && typeof propertyKey !== "number") {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-
-		return this.get(property, { valueBitMask: propertyKey });
-	};
+			return this.get(property, { valueBitMask: propertyKey });
+		};
+	}
 
 	/**
 	 * Requests the current value of a given config parameter from the device.

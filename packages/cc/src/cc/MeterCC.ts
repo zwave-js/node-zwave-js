@@ -186,36 +186,35 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "value":
-			case "previousValue":
-			case "deltaTime": {
-				if (propertyKey == undefined) {
-					throwMissingPropertyKey(this.ccId, property);
-				} else if (typeof propertyKey !== "number") {
-					throwUnsupportedPropertyKey(
-						this.ccId,
-						property,
-						propertyKey,
-					);
-				}
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: MeterCCAPI, { property, propertyKey }) {
+			switch (property) {
+				case "value":
+				case "previousValue":
+				case "deltaTime": {
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
 
-				const { rateType, scale } = splitPropertyKey(propertyKey);
-				return (
-					await this.get({
-						rateType,
-						scale,
-					})
-				)?.[property];
+					const { rateType, scale } = splitPropertyKey(propertyKey);
+					return (
+						await this.get({
+							rateType,
+							scale,
+						})
+					)?.[property];
+				}
+				default:
+					throwUnsupportedProperty(this.ccId, property);
 			}
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+		};
+	}
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -322,40 +321,43 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		if (property !== "reset") {
-			throwUnsupportedProperty(this.ccId, property);
-		} else if (
-			propertyKey != undefined &&
-			typeof propertyKey !== "number"
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: MeterCCAPI,
+			{ property, propertyKey },
+			value,
 		) {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		} else if (value !== true) {
-			throwWrongValueType(
-				this.ccId,
-				property,
-				"true",
-				value === false ? "false" : typeof value,
-			);
-		}
+			if (property !== "reset") {
+				throwUnsupportedProperty(this.ccId, property);
+			} else if (
+				propertyKey != undefined &&
+				typeof propertyKey !== "number"
+			) {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+			} else if (value !== true) {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"true",
+					value === false ? "false" : typeof value,
+				);
+			}
 
-		const resetOptions: MeterCCResetOptions =
-			propertyKey != undefined
-				? {
-						type: propertyKey,
-						targetValue: 0,
-				  }
-				: {};
-		await this.reset(resetOptions);
+			const resetOptions: MeterCCResetOptions =
+				propertyKey != undefined
+					? {
+							type: propertyKey,
+							targetValue: 0,
+					  }
+					: {};
+			await this.reset(resetOptions);
 
-		// Refresh values
-		await this.getAll();
+			// Refresh values
+			await this.getAll();
 
-		return undefined;
-	};
+			return undefined;
+		};
+	}
 }
 
 @commandClass(CommandClasses.Meter)

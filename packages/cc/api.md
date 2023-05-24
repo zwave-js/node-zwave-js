@@ -2507,9 +2507,9 @@ export enum BinarySwitchCommand {
 // @public
 export class CCAPI {
     // (undocumented)
-    protected [POLL_VALUE]: PollValueImplementation | undefined;
+    protected get [POLL_VALUE](): PollValueImplementation | undefined;
     // (undocumented)
-    protected [SET_VALUE]: SetValueImplementation | undefined;
+    protected get [SET_VALUE](): SetValueImplementation | undefined;
     // (undocumented)
     protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory | undefined;
     constructor(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint | IVirtualEndpoint);

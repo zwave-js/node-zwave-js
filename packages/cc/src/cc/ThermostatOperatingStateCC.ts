@@ -58,16 +58,19 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "state":
-				return this.get();
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: ThermostatOperatingStateCCAPI,
+			{ property },
+		) {
+			switch (property) {
+				case "state":
+					return this.get();
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	public async get(): Promise<ThermostatOperatingState | undefined> {
 		this.assertSupportsCommand(
