@@ -7,22 +7,21 @@
     "access": "public"
   },
   "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js",
-    "./test": "./build/index_test.js"
-  },
   "types": "build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "safe": [
-        "build/index_safe.d.ts"
-      ],
-      "test": [
-        "build/index_test.d.ts"
-      ]
-    }
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./safe": {
+      "types": "./build/index_safe.d.ts",
+      "default": "./build/index_safe.js"
+    },
+    "./test": {
+      "types": "./build/index_test.d.ts",
+      "default": "./build/index_test.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "build/**/*.{js,d.ts,map}"

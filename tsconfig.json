@@ -14,6 +14,8 @@
 		"inlineSourceMap": false,
 		"stripInternal": true,
 
+		"moduleResolution": "node16",
+
 		"pretty": true,
 		"types": ["node", "ts-nameof"],
 		"noErrorTruncation": true
