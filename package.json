@@ -37,7 +37,7 @@
     "@commitlint/cli": "^17.6.1",
     "@commitlint/config-conventional": "^17.6.1",
     "@esm2cjs/p-queue": "^7.3.0",
-    "@microsoft/api-extractor": "^7.34.7",
+    "@microsoft/api-extractor": "^7.35.0",
     "@monorepo-utils/workspaces-to-typescript-project-references": "^2.9.0",
     "@tsconfig/node14": "^1.0.3",
     "@types/fs-extra": "^9.0.13",

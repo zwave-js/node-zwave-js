@@ -70,7 +70,7 @@
   },
   "devDependencies": {
     "@esm2cjs/got": "^12.5.3",
-    "@microsoft/api-extractor": "*",
+    "@microsoft/api-extractor": "^7.35.0",
     "@types/fs-extra": "^9.0.13",
     "@types/js-levenshtein": "^1.1.1",
     "@types/json-logic-js": "^2.0.2",

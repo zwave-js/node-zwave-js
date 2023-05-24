@@ -65,7 +65,7 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "*",
+    "@microsoft/api-extractor": "^7.35.0",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^14.18.43",
     "@types/semver": "^7.3.13",
