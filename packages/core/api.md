@@ -18,22 +18,22 @@ import type { TypedClassDecorator } from '@zwave-js/shared';
 import { TypedEventEmitter } from '@zwave-js/shared';
 import winston from 'winston';
 
-// Warning: (ae-missing-release-tag) "actuatorCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "actuatorCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const actuatorCCs: readonly CommandClasses[];
 
-// Warning: (ae-missing-release-tag) "allCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "allCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const allCCs: readonly CommandClasses[];
 
-// Warning: (ae-missing-release-tag) "applicationCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "applicationCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const applicationCCs: readonly CommandClasses[];
 
-// Warning: (ae-missing-release-tag) "ApplicationNodeInformation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ApplicationNodeInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ApplicationNodeInformation {
@@ -45,19 +45,19 @@ export interface ApplicationNodeInformation {
     supportedCCs: CommandClasses[];
 }
 
-// Warning: (ae-missing-release-tag) "assertValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "assertValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function assertValueID(param: Record<any, any>): asserts param is ValueID;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "assertZWaveError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "assertZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function assertZWaveError<T>(t: ExecutionContext, valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
 
-// Warning: (ae-missing-release-tag) "AssertZWaveErrorOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AssertZWaveErrorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface AssertZWaveErrorOptions {
@@ -69,24 +69,24 @@ export interface AssertZWaveErrorOptions {
     messageMatches?: string | RegExp;
 }
 
-// Warning: (ae-missing-release-tag) "authHomeIdFromDSK" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "authHomeIdFromDSK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function authHomeIdFromDSK(dsk: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "averageRSSI" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "averageRSSI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function averageRSSI(acc: number | undefined, rssi: RSSI, weight: number): number;
 
-// Warning: (ae-missing-release-tag) "BroadcastCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BroadcastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type BroadcastCC<T extends ICommandClass = ICommandClass> = T & {
     nodeId: typeof NODE_ID_BROADCAST;
 };
 
-// Warning: (ae-missing-release-tag) "CacheBackedMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CacheBackedMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class CacheBackedMap<K extends string | number, V> implements Map<K, V> {
@@ -117,7 +117,7 @@ export class CacheBackedMap<K extends string | number, V> implements Map<K, V> {
     values: () => IterableIterator<V>;
 }
 
-// Warning: (ae-missing-release-tag) "CacheBackedMapKeys" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CacheBackedMapKeys" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CacheBackedMapKeys<K extends string | number> {
@@ -126,7 +126,7 @@ export interface CacheBackedMapKeys<K extends string | number> {
     suffixSerializer: (suffix: K) => string;
 }
 
-// Warning: (ae-missing-release-tag) "CacheMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CacheMetadata" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CacheMetadata extends Pick<ValueID, "endpoint" | "property" | "propertyKey"> {
@@ -134,7 +134,7 @@ export interface CacheMetadata extends Pick<ValueID, "endpoint" | "property" | "
     metadata: ValueMetadata;
 }
 
-// Warning: (ae-missing-release-tag) "CacheValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CacheValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CacheValue extends Pick<ValueID, "endpoint" | "property" | "propertyKey"> {
@@ -150,7 +150,7 @@ export interface CacheValue extends Pick<ValueID, "endpoint" | "property" | "pro
 export const channelPadding: string;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "CommandClasses" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandClasses" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export enum CommandClasses {
@@ -402,7 +402,7 @@ export enum CommandClasses {
     "Version" = 134
 }
 
-// Warning: (ae-missing-release-tag) "CommandClassInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandClassInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CommandClassInfo {
@@ -412,27 +412,27 @@ export interface CommandClassInfo {
     version: number;
 }
 
-// Warning: (ae-missing-release-tag) "computeCMAC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "computeCMAC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function computeCMAC(message: Buffer, key: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "computeMAC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "computeMAC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function computeMAC(authData: Buffer, key: Buffer, iv?: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "computeNoncePRK" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "computeNoncePRK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function computeNoncePRK(senderEI: Buffer, receiverEI: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "computePRK" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "computePRK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function computePRK(ecdhSharedSecret: Buffer, pubKeyA: Buffer, pubKeyB: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "ConfigurationMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConfigurationMetadata" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ConfigurationMetadata extends ValueMetadataAny {
@@ -473,12 +473,12 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 }
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "ConfigValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConfigValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type ConfigValue = number | Set<number>;
 
-// Warning: (ae-missing-release-tag) "ConfigValueFormat" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConfigValueFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export enum ConfigValueFormat {
@@ -492,17 +492,17 @@ export enum ConfigValueFormat {
     UnsignedInteger = 1
 }
 
-// Warning: (ae-missing-release-tag) "CONTROL_CHAR_WIDTH" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CONTROL_CHAR_WIDTH" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const CONTROL_CHAR_WIDTH = 2;
 
-// Warning: (ae-missing-release-tag) "CONTROLLER_LABEL" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CONTROLLER_LABEL" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const CONTROLLER_LABEL = "CNTRLR";
 
-// Warning: (ae-missing-release-tag) "ControllerCapabilityFlags" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerCapabilityFlags" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ControllerCapabilityFlags {
@@ -520,12 +520,12 @@ export enum ControllerCapabilityFlags {
     WasRealPrimary = 8
 }
 
-// Warning: (ae-missing-release-tag) "ControllerLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ControllerLogContext = ControllerSelfLogContext | ControllerNodeLogContext | ControllerValueLogContext;
 
-// Warning: (ae-missing-release-tag) "ControllerLogger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerLogger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
@@ -557,7 +557,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
     }>;
 }
 
-// Warning: (ae-missing-release-tag) "ControllerNodeLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerNodeLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ControllerNodeLogContext = LogContext<"controller"> & NodeLogContext & {
@@ -565,14 +565,14 @@ export type ControllerNodeLogContext = LogContext<"controller"> & NodeLogContext
     direction: string;
 };
 
-// Warning: (ae-missing-release-tag) "ControllerSelfLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerSelfLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ControllerSelfLogContext = LogContext<"controller"> & {
     type: "controller";
 };
 
-// Warning: (ae-missing-release-tag) "ControllerValueLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerValueLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ControllerValueLogContext = LogContext<"controller"> & ValueLogContext & {
@@ -581,33 +581,33 @@ export type ControllerValueLogContext = LogContext<"controller"> & ValueLogConte
     internal?: boolean;
 };
 
-// Warning: (ae-missing-release-tag) "CRC16_CCITT" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CRC16_CCITT" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function CRC16_CCITT(data: Buffer, startValue?: number): number;
 
-// Warning: (ae-missing-release-tag) "createDefaultTransportFormat" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createDefaultTransportFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createDefaultTransportFormat(colorize: boolean, shortTimestamps: boolean): Format;
 
-// Warning: (ae-missing-release-tag) "createLoggerFormat" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createLoggerFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createLoggerFormat(channel: string): Format;
 
-// Warning: (ae-missing-release-tag) "createLogMessagePrinter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createLogMessagePrinter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createLogMessagePrinter(shortTimestamps: boolean): Format;
 
 // Warning: (ae-forgotten-export) The symbol "Constructor" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "createReflectionDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createReflectionDecorator<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, valueFromArgs, constructorLookupKey, }: CreateReflectionDecoratorOptions<TBase, TArgs, TValue, TConstructor>): ReflectionDecorator<TBase, TArgs, TValue, TConstructor>;
 
-// Warning: (ae-missing-release-tag) "CreateReflectionDecoratorOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CreateReflectionDecoratorOptions<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
@@ -616,12 +616,12 @@ export interface CreateReflectionDecoratorOptions<TBase extends Object, TArgs ex
     valueFromArgs: (...args: TArgs) => TValue;
 }
 
-// Warning: (ae-missing-release-tag) "createReflectionDecoratorPair" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createReflectionDecoratorPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createReflectionDecoratorPair<TBase extends Object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ superName, subName, }: CreateReflectionDecoratorPairOptions): ReflectionDecoratorPair<TBase, TSuperArgs, TSubArgs, TConstructor>;
 
-// Warning: (ae-missing-release-tag) "CreateReflectionDecoratorPairOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateReflectionDecoratorPairOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CreateReflectionDecoratorPairOptions {
@@ -629,31 +629,31 @@ export interface CreateReflectionDecoratorPairOptions {
     superName: string;
 }
 
-// Warning: (ae-missing-release-tag) "createSimpleReflectionDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createSimpleReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createSimpleReflectionDecorator<TBase extends Object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, }: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<TBase, TArgs, TConstructor>;
 
-// Warning: (ae-missing-release-tag) "CreateSimpleReflectionDecoratorOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateSimpleReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CreateSimpleReflectionDecoratorOptions {
     name: string;
 }
 
-// Warning: (ae-missing-release-tag) "createValuelessReflectionDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createValuelessReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createValuelessReflectionDecorator<TBase extends Object>({ name, }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<TBase>;
 
-// Warning: (ae-missing-release-tag) "CreateValuelessReflectionDecoratorOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateValuelessReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CreateValuelessReflectionDecoratorOptions {
     name: string;
 }
 
-// Warning: (ae-missing-release-tag) "CtrDRBG" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CtrDRBG" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CtrDRBG {
@@ -672,31 +672,31 @@ export class CtrDRBG {
     update(seed?: Buffer): this;
 }
 
-// Warning: (ae-missing-release-tag) "DataDirection" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataDirection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type DataDirection = "inbound" | "outbound" | "none";
 
-// Warning: (ae-missing-release-tag) "DataRate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type DataRate = 9600 | 40000 | 100000;
 
 // Warning: (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
 // Warning: (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
-// Warning: (ae-missing-release-tag) "dbKeyToValueIdFast" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "dbKeyToValueIdFast" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function dbKeyToValueIdFast(key: string): {
     nodeId: number;
 } & ValueID;
 
-// Warning: (ae-missing-release-tag) "decodeX25519KeyDER" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "decodeX25519KeyDER" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function decodeX25519KeyDER(key: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "decryptAES128CCM" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "decryptAES128CCM" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function decryptAES128CCM(key: Buffer, iv: Buffer, ciphertext: Buffer, additionalData: Buffer, authTag: Buffer): {
@@ -704,17 +704,17 @@ export function decryptAES128CCM(key: Buffer, iv: Buffer, ciphertext: Buffer, ad
     authOK: boolean;
 };
 
-// Warning: (ae-missing-release-tag) "decryptAES128OFB" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "decryptAES128OFB" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const decryptAES128OFB: (input: Buffer, key: Buffer, iv: Buffer) => Buffer;
 
-// Warning: (ae-missing-release-tag) "deriveMEI" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "deriveMEI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function deriveMEI(noncePRK: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "deriveNetworkKeys" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "deriveNetworkKeys" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function deriveNetworkKeys(PNK: Buffer): {
@@ -723,7 +723,7 @@ export function deriveNetworkKeys(PNK: Buffer): {
     personalizationString: Buffer;
 };
 
-// Warning: (ae-missing-release-tag) "deriveTempKeys" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "deriveTempKeys" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function deriveTempKeys(PRK: Buffer): {
@@ -731,27 +731,27 @@ export function deriveTempKeys(PRK: Buffer): {
     tempPersonalizationString: Buffer;
 };
 
-// Warning: (ae-missing-release-tag) "deserializeCacheValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "deserializeCacheValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function deserializeCacheValue(value: SerializedValue): unknown;
 
-// Warning: (ae-missing-release-tag) "directionPrefixPadding" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "directionPrefixPadding" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const directionPrefixPadding: string;
 
-// Warning: (ae-missing-release-tag) "dskFromString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "dskFromString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function dskFromString(dsk: string): Buffer;
 
-// Warning: (ae-missing-release-tag) "dskToString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "dskToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function dskToString(dsk: Buffer): string;
 
-// Warning: (ae-missing-release-tag) "DSTInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DSTInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface DSTInfo {
@@ -765,7 +765,7 @@ export interface DSTInfo {
     startDate: Date;
 }
 
-// Warning: (ae-missing-release-tag) "Duration" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Duration" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class Duration {
@@ -795,17 +795,17 @@ export class Duration {
     set value(v: number);
 }
 
-// Warning: (ae-missing-release-tag) "DurationUnit" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DurationUnit" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
-// Warning: (ae-missing-release-tag) "encapsulationCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encapsulationCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const encapsulationCCs: readonly CommandClasses[];
 
-// Warning: (ae-missing-release-tag) "EncapsulationFlags" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EncapsulationFlags" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum EncapsulationFlags {
@@ -819,33 +819,33 @@ export enum EncapsulationFlags {
     Supervision = 1
 }
 
-// Warning: (ae-missing-release-tag) "encodeApplicationNodeInformation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeApplicationNodeInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function encodeApplicationNodeInformation(nif: ApplicationNodeInformation): Buffer;
 
-// Warning: (ae-missing-release-tag) "encodeBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encodeBitMask(values: readonly number[], maxValue?: number, startValue?: number): Buffer;
 
-// Warning: (ae-missing-release-tag) "encodeBoolean" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encodeBoolean(val: boolean): number;
 
-// Warning: (ae-missing-release-tag) "encodeCCId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeCCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encodeCCId(ccId: CommandClasses, payload: Buffer, offset?: number): number;
 
-// Warning: (ae-missing-release-tag) "encodeCCList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeCCList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function encodeCCList(supportedCCs: readonly CommandClasses[], controlledCCs: readonly CommandClasses[]): Buffer;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "encodeFloatWithScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeFloatWithScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encodeFloatWithScale(value: number, scale: number, override?: {
@@ -853,32 +853,32 @@ export function encodeFloatWithScale(value: number, scale: number, override?: {
     precision?: number;
 }): Buffer;
 
-// Warning: (ae-missing-release-tag) "encodeMaybeBoolean" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeMaybeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encodeMaybeBoolean(val: Maybe<boolean>): number;
 
-// Warning: (ae-missing-release-tag) "encodeNodeBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer;
 
-// Warning: (ae-missing-release-tag) "encodeNodeInformationFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function encodeNodeInformationFrame(info: NodeInformationFrame): Buffer;
 
-// Warning: (ae-missing-release-tag) "encodeNodeProtocolInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeNodeProtocolInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function encodeNodeProtocolInfo(info: NodeProtocolInfo): Buffer;
 
-// Warning: (ae-missing-release-tag) "encodeNodeProtocolInfoAndDeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeNodeProtocolInfoAndDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function encodeNodeProtocolInfoAndDeviceClass(info: NodeProtocolInfoAndDeviceClass): Buffer;
 
-// Warning: (ae-missing-release-tag) "encodeNodeUpdatePayload" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function encodeNodeUpdatePayload(nif: NodeUpdatePayload): Buffer;
@@ -886,22 +886,22 @@ export function encodeNodeUpdatePayload(nif: NodeUpdatePayload): Buffer;
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "encodePartial" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodePartial" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encodePartial(fullValue: number, partialValue: number, bitMask: number): number;
 
-// Warning: (ae-missing-release-tag) "encodeX25519KeyDERPKCS8" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeX25519KeyDERPKCS8" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encodeX25519KeyDERPKCS8(key: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "encodeX25519KeyDERSPKI" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encodeX25519KeyDERSPKI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encodeX25519KeyDERSPKI(key: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "encryptAES128CCM" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encryptAES128CCM" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function encryptAES128CCM(key: Buffer, iv: Buffer, plaintext: Buffer, additionalData: Buffer, authTagLength: number): {
@@ -909,27 +909,27 @@ export function encryptAES128CCM(key: Buffer, iv: Buffer, plaintext: Buffer, add
     authTag: Buffer;
 };
 
-// Warning: (ae-missing-release-tag) "encryptAES128ECB" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encryptAES128ECB" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function encryptAES128ECB(plaintext: Buffer, key: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "encryptAES128OFB" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "encryptAES128OFB" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const encryptAES128OFB: (input: Buffer, key: Buffer, iv: Buffer) => Buffer;
 
-// Warning: (ae-missing-release-tag) "enumValuesToMetadataStates" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "enumValuesToMetadataStates" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function enumValuesToMetadataStates<T extends Record<string, any>>(enumeration: T, values?: readonly number[]): Record<number, string>;
 
-// Warning: (ae-missing-release-tag) "extractFirmware" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "extractFirmware" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware;
 
-// Warning: (ae-missing-release-tag) "Firmware" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Firmware" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface Firmware {
@@ -939,72 +939,72 @@ export interface Firmware {
     firmwareTarget?: number;
 }
 
-// Warning: (ae-missing-release-tag) "FirmwareFileFormat" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FirmwareFileFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type FirmwareFileFormat = "aeotec" | "otz" | "ota" | "hex" | "hec" | "gecko" | "bin";
 
-// Warning: (ae-missing-release-tag) "FLiRS" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FLiRS" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type FLiRS = false | "250ms" | "1000ms";
 
-// Warning: (ae-missing-release-tag) "formatDate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "formatDate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function formatDate(date: Date, format: string): string;
 
-// Warning: (ae-missing-release-tag) "FrameType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FrameType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type FrameType = "singlecast" | "broadcast" | "multicast";
 
-// Warning: (ae-missing-release-tag) "generateAuthKey" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "generateAuthKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function generateAuthKey(networkKey: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "generateEncryptionKey" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "generateEncryptionKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function generateEncryptionKey(networkKey: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "getBitMaskWidth" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getBitMaskWidth" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getBitMaskWidth(mask: number): number;
 
-// Warning: (ae-missing-release-tag) "getCCName" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getCCName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getCCName(cc: number): string;
 
-// Warning: (ae-missing-release-tag) "getDefaultDSTInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDefaultDSTInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getDefaultDSTInfo(defaultOffset?: number): DSTInfo;
 
-// Warning: (ae-missing-release-tag) "getDirectionPrefix" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDirectionPrefix" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getDirectionPrefix(direction: DataDirection): "« " | "» " | "  ";
 
-// Warning: (ae-missing-release-tag) "getDSTInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDSTInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getDSTInfo(now?: Date): DSTInfo;
 
-// Warning: (ae-missing-release-tag) "getErrorSuffix" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getErrorSuffix" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getErrorSuffix(code: ZWaveErrorCodes): string;
 
-// Warning: (ae-missing-release-tag) "getHighestSecurityClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getHighestSecurityClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getHighestSecurityClass(securityClasses: SecurityClass[]): SecurityClass;
 
-// Warning: (ae-missing-release-tag) "getIntegerLimits" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getIntegerLimits" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getIntegerLimits(size: 1 | 2 | 3 | 4, signed: boolean): {
@@ -1012,32 +1012,32 @@ export function getIntegerLimits(size: 1 | 2 | 3 | 4, signed: boolean): {
     max: number;
 };
 
-// Warning: (ae-missing-release-tag) "getLegalRangeForBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getLegalRangeForBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getLegalRangeForBitMask(mask: number, unsigned: boolean): [min: number, max: number];
 
-// Warning: (ae-missing-release-tag) "getMinimumShiftForBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getMinimumShiftForBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getMinimumShiftForBitMask(mask: number): number;
 
-// Warning: (ae-missing-release-tag) "getMinIntegerSize" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getMinIntegerSize" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getMinIntegerSize(value: number, signed: boolean): 1 | 2 | 4 | undefined;
 
-// Warning: (ae-missing-release-tag) "getNodeTag" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getNodeTag" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getNodeTag(nodeId: number): string;
 
-// Warning: (ae-missing-release-tag) "getNumericEnumValues" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getNumericEnumValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getNumericEnumValues<T extends Record<string, any>>(enumeration: T): readonly number[];
 
-// Warning: (ae-missing-release-tag) "GraphNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GraphNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GraphNode<T> {
@@ -1048,22 +1048,22 @@ export class GraphNode<T> {
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "guessFirmwareFileFormat" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "guessFirmwareFileFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function guessFirmwareFileFormat(filename: string, rawData: Buffer): FirmwareFileFormat;
 
-// Warning: (ae-missing-release-tag) "highResTimestamp" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "highResTimestamp" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function highResTimestamp(): number;
 
-// Warning: (ae-missing-release-tag) "HOMEID_BYTES" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HOMEID_BYTES" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const HOMEID_BYTES = 4;
 
-// Warning: (ae-missing-release-tag) "ICommandClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ICommandClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ICommandClass {
@@ -1081,12 +1081,12 @@ export interface ICommandClass {
     serialize(): Buffer;
 }
 
-// Warning: (ae-missing-release-tag) "indexDBsByNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "indexDBsByNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>>;
 
-// Warning: (ae-missing-release-tag) "IntegerLimits" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerLimits" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const IntegerLimits: Readonly<{
@@ -1124,7 +1124,7 @@ export const IntegerLimits: Readonly<{
     }>;
 }>;
 
-// Warning: (ae-missing-release-tag) "Interviewable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Interviewable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface Interviewable {
@@ -1134,7 +1134,7 @@ export interface Interviewable {
     interviewStage: InterviewStage;
 }
 
-// Warning: (ae-missing-release-tag) "InterviewStage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InterviewStage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum InterviewStage {
@@ -1146,66 +1146,66 @@ export enum InterviewStage {
     ProtocolInfo = 1
 }
 
-// Warning: (ae-missing-release-tag) "isConsecutiveArray" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isConsecutiveArray" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function isConsecutiveArray(values: number[]): boolean;
 
-// Warning: (ae-missing-release-tag) "isExtendedCCId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isExtendedCCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isExtendedCCId(ccId: CommandClasses): boolean;
 
-// Warning: (ae-missing-release-tag) "isMessagePriority" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isMessagePriority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isMessagePriority(val: unknown): val is MessagePriority;
 
-// Warning: (ae-missing-release-tag) "isRecoverableZWaveError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isRecoverableZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function isRecoverableZWaveError(e: unknown): e is ZWaveError;
 
-// Warning: (ae-missing-release-tag) "isRssiError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isRssiError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isRssiError(rssi: RSSI): rssi is RssiError;
 
-// Warning: (ae-missing-release-tag) "isSupervisionResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isSupervisionResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isSupervisionResult(obj: unknown): obj is SupervisionResult;
 
-// Warning: (ae-missing-release-tag) "isTransmissionError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isTransmissionError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isTransmissionError(e: unknown): e is ZWaveError & {
     code: ZWaveErrorCodes.Controller_Timeout | ZWaveErrorCodes.Controller_MessageDropped | ZWaveErrorCodes.Controller_CallbackNOK | ZWaveErrorCodes.Controller_ResponseNOK | ZWaveErrorCodes.Controller_NodeTimeout | ZWaveErrorCodes.Security2CC_CannotDecode;
 };
 
-// Warning: (ae-missing-release-tag) "isUnsupervisedOrSucceeded" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isUnsupervisedOrSucceeded" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isUnsupervisedOrSucceeded(result: SupervisionResult | undefined): result is undefined | (SupervisionResult & {
     status: SupervisionStatus.Success | SupervisionStatus.Working;
 });
 
-// Warning: (ae-missing-release-tag) "isValidDSK" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isValidDSK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isValidDSK(dsk: string): boolean;
 
-// Warning: (ae-missing-release-tag) "isValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isValueID(param: Record<any, any>): param is ValueID;
 
-// Warning: (ae-missing-release-tag) "isZWaveError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isZWaveError(e: unknown): e is ZWaveError;
 
-// Warning: (ae-missing-release-tag) "IVirtualEndpoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IVirtualEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface IVirtualEndpoint {
@@ -1223,7 +1223,7 @@ export interface IVirtualEndpoint {
     readonly virtual: true;
 }
 
-// Warning: (ae-missing-release-tag) "IVirtualNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IVirtualNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface IVirtualNode extends IVirtualEndpoint {
@@ -1239,7 +1239,7 @@ export interface IVirtualNode extends IVirtualEndpoint {
     readonly physicalNodes: readonly IZWaveNode[];
 }
 
-// Warning: (ae-missing-release-tag) "IZWaveEndpoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IZWaveEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface IZWaveEndpoint {
@@ -1267,7 +1267,7 @@ export interface IZWaveEndpoint {
     readonly virtual: false;
 }
 
-// Warning: (ae-missing-release-tag) "IZWaveNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IZWaveNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
@@ -1295,17 +1295,17 @@ export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
     readonly status: NodeStatus;
 }
 
-// Warning: (ae-missing-release-tag) "LOG_PREFIX_WIDTH" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LOG_PREFIX_WIDTH" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const LOG_PREFIX_WIDTH = 20;
 
-// Warning: (ae-missing-release-tag) "LOG_WIDTH" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LOG_WIDTH" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const LOG_WIDTH = 80;
 
-// Warning: (ae-missing-release-tag) "LogConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LogConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface LogConfig {
@@ -1327,7 +1327,7 @@ export interface LogConfig {
     transports: Transport[];
 }
 
-// Warning: (ae-missing-release-tag) "LogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface LogContext<T extends string = string> {
@@ -1335,12 +1335,12 @@ export interface LogContext<T extends string = string> {
     type?: string;
 }
 
-// Warning: (ae-missing-release-tag) "logMessageFormatter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "logMessageFormatter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const logMessageFormatter: Format;
 
-// Warning: (ae-missing-release-tag) "LogNodeOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LogNodeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface LogNodeOptions {
@@ -1354,7 +1354,7 @@ export interface LogNodeOptions {
     message: string;
 }
 
-// Warning: (ae-missing-release-tag) "LogValueArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LogValueArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type LogValueArgs<T> = T & {
@@ -1362,50 +1362,50 @@ export type LogValueArgs<T> = T & {
     internal?: boolean;
 };
 
-// Warning: (ae-missing-release-tag) "managementCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "managementCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const managementCCs: readonly CommandClasses[];
 
-// Warning: (ae-missing-release-tag) "MAX_NODES" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MAX_NODES" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const MAX_NODES = 232;
 
-// Warning: (ae-missing-release-tag) "MAX_REPEATERS" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MAX_REPEATERS" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const MAX_REPEATERS = 4;
 
-// Warning: (ae-missing-release-tag) "MAX_SUPERVISION_SESSION_ID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MAX_SUPERVISION_SESSION_ID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const MAX_SUPERVISION_SESSION_ID = 63;
 
-// Warning: (ae-missing-release-tag) "MAX_TRANSPORT_SERVICE_SESSION_ID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MAX_TRANSPORT_SERVICE_SESSION_ID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const MAX_TRANSPORT_SERVICE_SESSION_ID = 15;
 
 // Warning: (ae-forgotten-export) The symbol "BrandedUnknown" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "Maybe" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Maybe" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type Maybe<T> = T | BrandedUnknown<T>;
 
-// Warning: (ae-missing-release-tag) "mergeSupervisionResults" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "mergeSupervisionResults" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function mergeSupervisionResults(results: unknown[]): SupervisionResult | undefined;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "messageFitsIntoOneLine" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "messageFitsIntoOneLine" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function messageFitsIntoOneLine(info: ZWaveLogInfo, messageLength: number): boolean;
 
-// Warning: (ae-missing-release-tag) "MessageOrCCLogEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageOrCCLogEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MessageOrCCLogEntry {
@@ -1416,7 +1416,7 @@ export interface MessageOrCCLogEntry {
 }
 
 // Warning: (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// Warning: (ae-missing-release-tag) "MessagePriority" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessagePriority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export enum MessagePriority {
@@ -1440,22 +1440,22 @@ export enum MessagePriority {
     WakeUp = 5
 }
 
-// Warning: (ae-missing-release-tag) "MessageRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MessageRecord = Record<string, string | number | boolean | null | undefined>;
 
-// Warning: (ae-missing-release-tag) "messageRecordToLines" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "messageRecordToLines" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function messageRecordToLines(message: MessageRecord): string[];
 
-// Warning: (ae-missing-release-tag) "messageToLines" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "messageToLines" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function messageToLines(message: string | string[]): string[];
 
-// Warning: (ae-missing-release-tag) "MetadataUpdatedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MetadataUpdatedArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MetadataUpdatedArgs extends ValueID {
@@ -1463,7 +1463,7 @@ export interface MetadataUpdatedArgs extends ValueID {
     metadata: ValueMetadata | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "MPANState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MPANState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum MPANState {
@@ -1472,7 +1472,7 @@ export enum MPANState {
     OutOfSync = 1
 }
 
-// Warning: (ae-missing-release-tag) "MPANTableEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MPANTableEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MPANTableEntry = {
@@ -1482,19 +1482,19 @@ export type MPANTableEntry = {
     currentMPAN: Buffer;
 };
 
-// Warning: (ae-missing-release-tag) "MulticastCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MulticastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MulticastCC<T extends ICommandClass = ICommandClass> = T & {
     nodeId: MulticastDestination;
 };
 
-// Warning: (ae-missing-release-tag) "MulticastDestination" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MulticastDestination" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MulticastDestination = [number, number, ...number[]];
 
-// Warning: (ae-missing-release-tag) "MulticastGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MulticastGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MulticastGroup {
@@ -1506,22 +1506,22 @@ export interface MulticastGroup {
     sequenceNumber: number;
 }
 
-// Warning: (ae-missing-release-tag) "NODE_ID_BROADCAST" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NODE_ID_BROADCAST" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const NODE_ID_BROADCAST = 255;
 
-// Warning: (ae-missing-release-tag) "NODE_ID_MAX" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NODE_ID_MAX" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const NODE_ID_MAX = 232;
 
-// Warning: (ae-missing-release-tag) "NodeInformationFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type NodeInformationFrame = NodeProtocolInfoAndDeviceClass & ApplicationNodeInformation;
 
-// Warning: (ae-missing-release-tag) "NodeLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type NodeLogContext = LogContext & {
@@ -1529,7 +1529,7 @@ export type NodeLogContext = LogContext & {
     type: "node";
 };
 
-// Warning: (ae-missing-release-tag) "NodeProtocolInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeProtocolInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NodeProtocolInfo {
@@ -1547,7 +1547,7 @@ export interface NodeProtocolInfo {
     supportsSecurity: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "NodeProtocolInfoAndDeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeProtocolInfoAndDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NodeProtocolInfoAndDeviceClass extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
@@ -1559,7 +1559,7 @@ export interface NodeProtocolInfoAndDeviceClass extends Omit<NodeProtocolInfo, "
     specificDeviceClass: number;
 }
 
-// Warning: (ae-missing-release-tag) "NodeStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum NodeStatus {
@@ -1575,7 +1575,7 @@ export enum NodeStatus {
     Unknown = 0
 }
 
-// Warning: (ae-missing-release-tag) "NodeType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum NodeType {
@@ -1587,7 +1587,7 @@ export enum NodeType {
     Controller = 0
 }
 
-// Warning: (ae-missing-release-tag) "NodeUpdatePayload" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NodeUpdatePayload extends ApplicationNodeInformation {
@@ -1597,7 +1597,7 @@ export interface NodeUpdatePayload extends ApplicationNodeInformation {
     nodeId: number;
 }
 
-// Warning: (ae-missing-release-tag) "nonApplicationCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "nonApplicationCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const nonApplicationCCs: readonly CommandClasses[];
@@ -1607,38 +1607,38 @@ export const nonApplicationCCs: readonly CommandClasses[];
 // @internal (undocumented)
 export const nonUndefinedLogConfigKeys: readonly ["enabled", "level", "transports", "logToFile", "maxFiles", "filename", "forceConsole"];
 
-// Warning: (ae-missing-release-tag) "normalizeValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "normalizeValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function normalizeValueID(valueID: ValueID): ValueID;
 
-// Warning: (ae-missing-release-tag) "NUM_NODEMASK_BYTES" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NUM_NODEMASK_BYTES" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const NUM_NODEMASK_BYTES: number;
 
-// Warning: (ae-missing-release-tag) "nwiHomeIdFromDSK" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "nwiHomeIdFromDSK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function nwiHomeIdFromDSK(dsk: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "parseApplicationNodeInformation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseApplicationNodeInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function parseApplicationNodeInformation(nif: Buffer): ApplicationNodeInformation;
 
-// Warning: (ae-missing-release-tag) "parseBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parseBitMask(mask: Buffer, startValue?: number): number[];
 
-// Warning: (ae-missing-release-tag) "parseBoolean" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parseBoolean(val: number): boolean | undefined;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "parseCCId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseCCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parseCCId(payload: Buffer, offset?: number): {
@@ -1646,7 +1646,7 @@ export function parseCCId(payload: Buffer, offset?: number): {
     bytesRead: number;
 };
 
-// Warning: (ae-missing-release-tag) "parseCCList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseCCList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function parseCCList(payload: Buffer): {
@@ -1654,8 +1654,8 @@ export function parseCCList(payload: Buffer): {
     controlledCCs: CommandClasses[];
 };
 
-// Warning: (ae-missing-release-tag) "parseFloatWithScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "parseFloatWithScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseFloatWithScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseFloatWithScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parseFloatWithScale(payload: Buffer, allowEmpty?: false): {
@@ -1673,32 +1673,32 @@ export function parseFloatWithScale(payload: Buffer, allowEmpty: true): {
     bytesRead: number;
 };
 
-// Warning: (ae-missing-release-tag) "parseMaybeBoolean" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseMaybeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parseMaybeBoolean(val: number, preserveUnknown?: boolean): Maybe<boolean> | undefined;
 
-// Warning: (ae-missing-release-tag) "parseMaybeNumber" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseMaybeNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parseMaybeNumber(val: number): Maybe<number> | undefined;
 
-// Warning: (ae-missing-release-tag) "parseNodeBitMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function parseNodeBitMask(mask: Buffer): number[];
 
-// Warning: (ae-missing-release-tag) "parseNodeInformationFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function parseNodeInformationFrame(buffer: Buffer): NodeInformationFrame;
 
-// Warning: (ae-missing-release-tag) "parseNodeProtocolInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseNodeProtocolInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function parseNodeProtocolInfo(buffer: Buffer, offset: number): NodeProtocolInfo;
 
-// Warning: (ae-missing-release-tag) "parseNodeProtocolInfoAndDeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseNodeProtocolInfoAndDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
@@ -1706,12 +1706,12 @@ export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
     bytesRead: number;
 };
 
-// Warning: (ae-missing-release-tag) "parseNodeUpdatePayload" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload;
 
-// Warning: (ae-missing-release-tag) "parseNumber" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parseNumber(val: number): number | undefined;
@@ -1719,17 +1719,17 @@ export function parseNumber(val: number): number | undefined;
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "parsePartial" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parsePartial" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parsePartial(value: number, bitMask: number, signed: boolean): number;
 
-// Warning: (ae-missing-release-tag) "parseQRCodeString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "parseQRCodeString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function parseQRCodeString(qr: string): QRProvisioningInformation;
 
-// Warning: (ae-missing-release-tag) "ProtocolDataRate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProtocolDataRate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ProtocolDataRate {
@@ -1743,17 +1743,17 @@ export enum ProtocolDataRate {
     ZWave_9k6 = 1
 }
 
-// Warning: (ae-missing-release-tag) "protocolDataRateMask" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "protocolDataRateMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const protocolDataRateMask = 7;
 
-// Warning: (ae-missing-release-tag) "protocolDataRateToString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "protocolDataRateToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function protocolDataRateToString(rate: ProtocolDataRate): string;
 
-// Warning: (ae-missing-release-tag) "Protocols" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Protocols" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum Protocols {
@@ -1763,7 +1763,7 @@ export enum Protocols {
     ZWaveLongRange = 1
 }
 
-// Warning: (ae-missing-release-tag) "ProtocolType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProtocolType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ProtocolType {
@@ -1775,7 +1775,7 @@ export enum ProtocolType {
     "Z-Wave" = 0
 }
 
-// Warning: (ae-missing-release-tag) "ProtocolVersion" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProtocolVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ProtocolVersion {
@@ -1789,7 +1789,7 @@ export enum ProtocolVersion {
     "unknown" = 0
 }
 
-// Warning: (ae-missing-release-tag) "ProvisioningInformation_MaxInclusionRequestInterval" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProvisioningInformation_MaxInclusionRequestInterval" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ProvisioningInformation_MaxInclusionRequestInterval {
@@ -1797,7 +1797,7 @@ export interface ProvisioningInformation_MaxInclusionRequestInterval {
     maxInclusionRequestInterval: number;
 }
 
-// Warning: (ae-missing-release-tag) "ProvisioningInformation_ProductId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProvisioningInformation_ProductId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ProvisioningInformation_ProductId {
@@ -1811,7 +1811,7 @@ export interface ProvisioningInformation_ProductId {
     productType: number;
 }
 
-// Warning: (ae-missing-release-tag) "ProvisioningInformation_ProductType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProvisioningInformation_ProductType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ProvisioningInformation_ProductType {
@@ -1823,7 +1823,7 @@ export interface ProvisioningInformation_ProductType {
     specificDeviceClass: number;
 }
 
-// Warning: (ae-missing-release-tag) "ProvisioningInformation_SupportedProtocols" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProvisioningInformation_SupportedProtocols" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ProvisioningInformation_SupportedProtocols {
@@ -1831,7 +1831,7 @@ export interface ProvisioningInformation_SupportedProtocols {
     supportedProtocols: Protocols[];
 }
 
-// Warning: (ae-missing-release-tag) "ProvisioningInformation_UUID16" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProvisioningInformation_UUID16" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ProvisioningInformation_UUID16 {
@@ -1839,7 +1839,7 @@ export interface ProvisioningInformation_UUID16 {
     uuid: string;
 }
 
-// Warning: (ae-missing-release-tag) "ProvisioningInformationType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProvisioningInformationType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ProvisioningInformationType {
@@ -1867,7 +1867,7 @@ export enum ProvisioningInformationType {
     UUID16 = 3
 }
 
-// Warning: (ae-missing-release-tag) "QRCodeVersion" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QRCodeVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum QRCodeVersion {
@@ -1877,7 +1877,7 @@ export enum QRCodeVersion {
     SmartStart = 1
 }
 
-// Warning: (ae-missing-release-tag) "QRProvisioningInformation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QRProvisioningInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type QRProvisioningInformation = {
@@ -1887,7 +1887,7 @@ export type QRProvisioningInformation = {
     dsk: string;
 } & ProvisioningInformation_ProductType & ProvisioningInformation_ProductId & Partial<ProvisioningInformation_MaxInclusionRequestInterval> & Partial<ProvisioningInformation_UUID16> & Partial<ProvisioningInformation_SupportedProtocols>;
 
-// Warning: (ae-missing-release-tag) "ReflectionDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ReflectionDecorator<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
@@ -1898,7 +1898,7 @@ export interface ReflectionDecorator<TBase extends Object, TArgs extends any[], 
     lookupValueStatic: (constr: Function) => TValue | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ReflectionDecoratorPair" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ReflectionDecoratorPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ReflectionDecoratorPair<TBase extends Object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
@@ -1912,12 +1912,12 @@ export interface ReflectionDecoratorPair<TBase extends Object, TSuperArgs extend
     superDecorator: <TTarget extends TBase>(...args: TSuperArgs) => TypedClassDecorator<TTarget>;
 }
 
-// Warning: (ae-missing-release-tag) "restoreSilence" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "restoreSilence" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function restoreSilence(logger: winston.Logger, original: boolean): void;
 
-// Warning: (ae-missing-release-tag) "RFRegion" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RFRegion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum RFRegion {
@@ -1949,7 +1949,7 @@ export enum RFRegion {
     "USA" = 1
 }
 
-// Warning: (ae-missing-release-tag) "RouteKind" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RouteKind" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum RouteKind {
@@ -1960,7 +1960,7 @@ export enum RouteKind {
     None = 0
 }
 
-// Warning: (ae-missing-release-tag) "RouteProtocolDataRate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RouteProtocolDataRate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum RouteProtocolDataRate {
@@ -1976,12 +1976,12 @@ export enum RouteProtocolDataRate {
     ZWave_9k6 = 1
 }
 
-// Warning: (ae-missing-release-tag) "RSSI" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RSSI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type RSSI = number | RssiError;
 
-// Warning: (ae-missing-release-tag) "RssiError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RssiError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum RssiError {
@@ -1993,22 +1993,22 @@ export enum RssiError {
     ReceiverSaturated = 126
 }
 
-// Warning: (ae-missing-release-tag) "rssiToString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "rssiToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function rssiToString(rssi: RSSI): string;
 
-// Warning: (ae-missing-release-tag) "S2SecurityClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "S2SecurityClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type S2SecurityClass = SecurityClass.S2_Unauthenticated | SecurityClass.S2_Authenticated | SecurityClass.S2_AccessControl;
 
-// Warning: (ae-missing-release-tag) "SECURITY_S2_AUTH_TAG_LENGTH" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SECURITY_S2_AUTH_TAG_LENGTH" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const SECURITY_S2_AUTH_TAG_LENGTH = 8;
 
-// Warning: (ae-missing-release-tag) "SecurityClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum SecurityClass {
@@ -2024,18 +2024,18 @@ export enum SecurityClass {
     Temporary = -2
 }
 
-// Warning: (ae-missing-release-tag) "securityClassIsS2" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "securityClassIsS2" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function securityClassIsS2(secClass: SecurityClass | undefined): secClass is S2SecurityClass;
 
 // Warning: (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// Warning: (ae-missing-release-tag) "securityClassOrder" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "securityClassOrder" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const securityClassOrder: readonly [SecurityClass.S2_AccessControl, SecurityClass.S2_Authenticated, SecurityClass.S2_Unauthenticated, SecurityClass.S0_Legacy];
 
-// Warning: (ae-missing-release-tag) "SecurityClassOwner" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityClassOwner" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface SecurityClassOwner {
@@ -2049,7 +2049,7 @@ export interface SecurityClassOwner {
     setSecurityClass(securityClass: SecurityClass, granted: boolean): void;
 }
 
-// Warning: (ae-missing-release-tag) "SecurityManager" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityManager {
@@ -2080,7 +2080,7 @@ export class SecurityManager {
     setNonce(id: number | NonceKey, entry: NonceEntry, { free }?: SetNonceOptions): void;
 }
 
-// Warning: (ae-missing-release-tag) "SecurityManager2" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityManager2" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityManager2 {
@@ -2137,7 +2137,7 @@ export class SecurityManager2 {
     tryIncrementPeerMPAN(peerNodeId: number, groupId: number): void;
 }
 
-// Warning: (ae-missing-release-tag) "SecurityManagerOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityManagerOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface SecurityManagerOptions {
@@ -2149,7 +2149,7 @@ export interface SecurityManagerOptions {
     ownNodeId: number;
 }
 
-// Warning: (ae-missing-release-tag) "SendCommandOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SendCommandOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SendCommandOptions = SendMessageOptions & SupervisionOptions & SendCommandSecurityS2Options & {
@@ -2159,12 +2159,12 @@ export type SendCommandOptions = SendMessageOptions & SupervisionOptions & SendC
     transmitOptions?: TransmitOptions;
 };
 
-// Warning: (ae-missing-release-tag) "SendCommandReturnType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SendCommandReturnType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> = undefined extends TResponse ? SupervisionResult | undefined : TResponse | undefined;
 
-// Warning: (ae-missing-release-tag) "SendCommandSecurityS2Options" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SendCommandSecurityS2Options" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SendCommandSecurityS2Options = {
@@ -2173,7 +2173,7 @@ export type SendCommandSecurityS2Options = {
     s2MulticastGroupId?: number;
 };
 
-// Warning: (ae-missing-release-tag) "SendMessageOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SendMessageOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface SendMessageOptions {
@@ -2189,17 +2189,17 @@ export interface SendMessageOptions {
     tag?: any;
 }
 
-// Warning: (ae-missing-release-tag) "sensorCCs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "sensorCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const sensorCCs: readonly CommandClasses[];
 
-// Warning: (ae-missing-release-tag) "serializeCacheValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "serializeCacheValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function serializeCacheValue(value: unknown): SerializedValue;
 
-// Warning: (ae-missing-release-tag) "SetNonceOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SetNonceOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface SetNonceOptions {
@@ -2207,7 +2207,7 @@ export interface SetNonceOptions {
     free?: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "SetValueOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SetValueOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface SetValueOptions {
@@ -2218,7 +2218,7 @@ export interface SetValueOptions {
     updateTimestamp?: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "SimpleReflectionDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SimpleReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface SimpleReflectionDecorator<TBase extends Object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
@@ -2228,14 +2228,14 @@ export interface SimpleReflectionDecorator<TBase extends Object, TArgs extends [
     lookupValueStatic: (constr: Function) => TArgs[0] | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "SinglecastCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SinglecastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SinglecastCC<T extends ICommandClass = ICommandClass> = T & {
     nodeId: number;
 };
 
-// Warning: (ae-missing-release-tag) "SPANState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SPANState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum SPANState {
@@ -2248,7 +2248,7 @@ export enum SPANState {
     SPAN = 3
 }
 
-// Warning: (ae-missing-release-tag) "SPANTableEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SPANTableEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SPANTableEntry = {
@@ -2272,26 +2272,26 @@ export type SPANTableEntry = {
 // @internal (undocumented)
 export function stringToNodeList(nodes?: string): number[] | undefined;
 
-// Warning: (ae-missing-release-tag) "stripUndefined" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "stripUndefined" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function stripUndefined<T>(obj: Record<string, T>): Record<string, T>;
 
-// Warning: (ae-missing-release-tag) "supervisedCommandFailed" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "supervisedCommandFailed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function supervisedCommandFailed(result: unknown): result is SupervisionResult & {
     status: SupervisionStatus.Fail | SupervisionStatus.NoSupport;
 };
 
-// Warning: (ae-missing-release-tag) "supervisedCommandSucceeded" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "supervisedCommandSucceeded" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function supervisedCommandSucceeded(result: unknown): result is SupervisionResult & {
     status: SupervisionStatus.Success | SupervisionStatus.Working;
 };
 
-// Warning: (ae-missing-release-tag) "SupervisionOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SupervisionOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SupervisionOptions = ({
@@ -2305,7 +2305,7 @@ export type SupervisionOptions = ({
     useSupervision: false;
 };
 
-// Warning: (ae-missing-release-tag) "SupervisionResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SupervisionResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SupervisionResult = {
@@ -2316,7 +2316,7 @@ export type SupervisionResult = {
     remainingDuration: Duration;
 };
 
-// Warning: (ae-missing-release-tag) "SupervisionStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SupervisionStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum SupervisionStatus {
@@ -2330,17 +2330,17 @@ export enum SupervisionStatus {
     Working = 1
 }
 
-// Warning: (ae-missing-release-tag) "SupervisionUpdateHandler" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SupervisionUpdateHandler" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SupervisionUpdateHandler = (update: SupervisionResult) => void;
 
-// Warning: (ae-missing-release-tag) "tagify" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "tagify" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function tagify(tags: string[]): string;
 
-// Warning: (ae-missing-release-tag) "Timeout" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Timeout" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class Timeout {
@@ -2362,12 +2362,12 @@ export class Timeout {
     set value(v: number);
 }
 
-// Warning: (ae-missing-release-tag) "TimeoutUnit" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TimeoutUnit" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TimeoutUnit = "seconds" | "minutes" | "none" | "infinite";
 
-// Warning: (ae-missing-release-tag) "timespan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "timespan" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const timespan: Readonly<{
@@ -2377,27 +2377,27 @@ export const timespan: Readonly<{
     days: (num: number) => number;
 }>;
 
-// Warning: (ae-missing-release-tag) "timestampFormatShort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "timestampFormatShort" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const timestampFormatShort = "HH:mm:ss.SSS";
 
-// Warning: (ae-missing-release-tag) "timestampPadding" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "timestampPadding" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const timestampPadding: string;
 
-// Warning: (ae-missing-release-tag) "timestampPaddingShort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "timestampPaddingShort" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const timestampPaddingShort: string;
 
-// Warning: (ae-missing-release-tag) "topologicalSort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "topologicalSort" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function topologicalSort<T>(graph: GraphNode<T>[]): T[];
 
-// Warning: (ae-missing-release-tag) "TranslatedValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TranslatedValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface TranslatedValueID extends ValueID {
@@ -2409,7 +2409,7 @@ export interface TranslatedValueID extends ValueID {
     propertyName?: string;
 }
 
-// Warning: (ae-missing-release-tag) "TransmitOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TransmitOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum TransmitOptions {
@@ -2431,7 +2431,7 @@ export enum TransmitOptions {
     NotSet = 0
 }
 
-// Warning: (ae-missing-release-tag) "TransmitStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TransmitStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum TransmitStatus {
@@ -2447,12 +2447,12 @@ export enum TransmitStatus {
     OK = 0
 }
 
-// Warning: (ae-missing-release-tag) "tryParseDSKFromQRCodeString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "tryParseDSKFromQRCodeString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function tryParseDSKFromQRCodeString(qr: string): string | undefined;
 
-// Warning: (ae-missing-release-tag) "TXReport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface TXReport {
@@ -2477,28 +2477,28 @@ export interface TXReport {
     txTicks: number;
 }
 
-// Warning: (ae-missing-release-tag) "unknownBoolean" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "unknownBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const unknownBoolean: Maybe<boolean>;
 
-// Warning: (ae-missing-release-tag) "unknownNumber" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "unknownNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const unknownNumber: Maybe<number>;
 
-// Warning: (ae-missing-release-tag) "unsilence" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "unsilence" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function unsilence(logger: winston.Logger): boolean;
 
 // Warning: (ae-forgotten-export) The symbol "ValidatePayload" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "validatePayload" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "validatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const validatePayload: ValidatePayload;
 
-// Warning: (ae-missing-release-tag) "ValueAddedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueAddedArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueAddedArgs extends ValueID {
@@ -2506,7 +2506,7 @@ export interface ValueAddedArgs extends ValueID {
     newValue: unknown;
 }
 
-// Warning: (ae-missing-release-tag) "ValueChangeOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ValueChangeOptions {
@@ -2515,7 +2515,7 @@ export interface ValueChangeOptions {
 }
 
 // Warning: (ae-forgotten-export) The symbol "ValueDBEventCallbacks" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "ValueDB" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueDB" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
@@ -2547,7 +2547,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
     setValue(valueId: ValueID, value: unknown, options?: SetValueOptions): void;
 }
 
-// Warning: (ae-missing-release-tag) "ValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ValueID {
@@ -2561,12 +2561,12 @@ export interface ValueID {
     propertyKey?: string | number;
 }
 
-// Warning: (ae-missing-release-tag) "valueIdToString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "valueIdToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function valueIdToString(valueID: ValueID): string;
 
-// Warning: (ae-missing-release-tag) "ValuelessReflectionDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValuelessReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValuelessReflectionDecorator<TBase extends Object> {
@@ -2575,7 +2575,7 @@ export interface ValuelessReflectionDecorator<TBase extends Object> {
     isDecoratedStatic: (constr: Function) => boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ValueLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ValueLogContext = LogContext & ValueID & {
@@ -2583,8 +2583,8 @@ export type ValueLogContext = LogContext & ValueID & {
     type: "value";
 };
 
-// Warning: (ae-missing-release-tag) "ValueMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ValueMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueMetadata" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueMetadata" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ValueMetadata = ValueMetadataAny | ValueMetadataNumeric | ValueMetadataBoolean | ValueMetadataString | ValueMetadataDuration | ValueMetadataBuffer | ConfigurationMetadata;
@@ -2887,7 +2887,7 @@ export const ValueMetadata: {
     }>;
 };
 
-// Warning: (ae-missing-release-tag) "ValueMetadataAny" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueMetadataAny" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueMetadataAny {
@@ -2903,7 +2903,7 @@ export interface ValueMetadataAny {
     writeable: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ValueMetadataBoolean" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueMetadataBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueMetadataBoolean extends ValueMetadataAny {
@@ -2916,7 +2916,7 @@ export interface ValueMetadataBoolean extends ValueMetadataAny {
     type: "boolean";
 }
 
-// Warning: (ae-missing-release-tag) "ValueMetadataBuffer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueMetadataBuffer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueMetadataBuffer extends ValueMetadataAny {
@@ -2926,7 +2926,7 @@ export interface ValueMetadataBuffer extends ValueMetadataAny {
     type: "buffer";
 }
 
-// Warning: (ae-missing-release-tag) "ValueMetadataDuration" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueMetadataDuration" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueMetadataDuration extends ValueMetadataAny {
@@ -2936,7 +2936,7 @@ export interface ValueMetadataDuration extends ValueMetadataAny {
     type: "duration";
 }
 
-// Warning: (ae-missing-release-tag) "ValueMetadataNumeric" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueMetadataNumeric" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueMetadataNumeric extends ValueMetadataAny {
@@ -2951,7 +2951,7 @@ export interface ValueMetadataNumeric extends ValueMetadataAny {
     unit?: string;
 }
 
-// Warning: (ae-missing-release-tag) "ValueMetadataString" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueMetadataString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueMetadataString extends ValueMetadataAny {
@@ -2962,7 +2962,7 @@ export interface ValueMetadataString extends ValueMetadataAny {
     type: "string" | "color";
 }
 
-// Warning: (ae-missing-release-tag) "ValueNotificationArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueNotificationArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueNotificationArgs extends ValueID {
@@ -2970,7 +2970,7 @@ export interface ValueNotificationArgs extends ValueID {
     value: unknown;
 }
 
-// Warning: (ae-missing-release-tag) "ValueRemovedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueRemovedArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueRemovedArgs extends ValueID {
@@ -2978,12 +2978,12 @@ export interface ValueRemovedArgs extends ValueID {
     prevValue: unknown;
 }
 
-// Warning: (ae-missing-release-tag) "ValueType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ValueType = "number" | "boolean" | "string" | "number[]" | "boolean[]" | "string[]" | "duration" | "color" | "buffer" | "any";
 
-// Warning: (ae-missing-release-tag) "ValueUpdatedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ValueUpdatedArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ValueUpdatedArgs extends ValueID {
@@ -2994,7 +2994,7 @@ export interface ValueUpdatedArgs extends ValueID {
     source?: "driver" | "node";
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveApiVersion" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveApiVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveApiVersion {
@@ -3004,7 +3004,7 @@ export interface ZWaveApiVersion {
     version: number;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveDataRate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveDataRate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ZWaveDataRate {
@@ -3016,7 +3016,7 @@ export enum ZWaveDataRate {
     "9k6" = 1
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class ZWaveError extends Error {
@@ -3031,7 +3031,7 @@ export class ZWaveError extends Error {
     readonly transactionSource?: string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveErrorCodes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveErrorCodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export enum ZWaveErrorCodes {
@@ -3153,7 +3153,7 @@ export enum ZWaveErrorCodes {
     Unsupported_Firmware_Format = 1507
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveLibraryTypes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveLibraryTypes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ZWaveLibraryTypes {
@@ -3183,7 +3183,7 @@ export enum ZWaveLibraryTypes {
     "Unknown" = 0
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveLogContainer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveLogContainer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveLogContainer extends winston.Container {
@@ -3200,14 +3200,14 @@ export class ZWaveLogContainer extends winston.Container {
     updateConfiguration(config: DeepPartial<LogConfig>): void;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveLogger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveLogger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveLogger<TContext extends LogContext = LogContext> = Omit<Logger, "log"> & {
     log: <T extends TContext>(info: ZWaveLogInfo<T>) => void;
 };
 
-// Warning: (ae-missing-release-tag) "ZWaveLoggerBase" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveLoggerBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveLoggerBase<TContext extends LogContext = LogContext> {
@@ -3218,7 +3218,7 @@ export class ZWaveLoggerBase<TContext extends LogContext = LogContext> {
     logger: ZWaveLogger<TContext>;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveLogInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveLogInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends Omit<TransformableInfo, "message"> {

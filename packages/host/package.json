@@ -58,7 +58,7 @@
     "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "*",
+    "@microsoft/api-extractor": "^7.35.0",
     "@types/node": "^14.18.43",
     "del-cli": "^5.0.0",
     "prettier": "^2.8.8",

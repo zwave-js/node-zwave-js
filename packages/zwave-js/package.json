@@ -110,7 +110,7 @@
     "xstate": "4.29.0"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "*",
+    "@microsoft/api-extractor": "^7.35.0",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^14.18.43",
     "@types/proper-lockfile": "^4.1.2",

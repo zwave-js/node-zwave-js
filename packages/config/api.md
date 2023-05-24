@@ -14,12 +14,12 @@ import type { ValueID } from '@zwave-js/core/safe';
 import type { ValueType } from '@zwave-js/core/safe';
 import { ZWaveLogContainer } from '@zwave-js/core';
 
-// Warning: (ae-missing-release-tag) "AssociationConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AssociationConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type AssociationConfig = Omit<ConditionalAssociationConfig, "condition" | "evaluateCondition">;
 
-// Warning: (ae-missing-release-tag) "BasicDeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BasicDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface BasicDeviceClass {
@@ -29,12 +29,12 @@ export interface BasicDeviceClass {
     label: string;
 }
 
-// Warning: (ae-missing-release-tag) "BasicDeviceClassMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BasicDeviceClassMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type BasicDeviceClassMap = ReadonlyMap<number, string>;
 
-// Warning: (ae-missing-release-tag) "CompatAddCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CompatAddCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CompatAddCC {
@@ -43,12 +43,12 @@ export class CompatAddCC {
     readonly endpoints: ReadonlyMap<number, Partial<CommandClassInfo>>;
 }
 
-// Warning: (ae-missing-release-tag) "CompatConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CompatConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type CompatConfig = Omit<ConditionalCompatConfig, "condition" | "evaluateCondition">;
 
-// Warning: (ae-missing-release-tag) "CompatMapAlarm" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CompatMapAlarm" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CompatMapAlarm {
@@ -59,7 +59,7 @@ export class CompatMapAlarm {
     readonly to: CompatMapAlarmTo;
 }
 
-// Warning: (ae-missing-release-tag) "CompatMapAlarmFrom" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CompatMapAlarmFrom" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CompatMapAlarmFrom {
@@ -69,7 +69,7 @@ export interface CompatMapAlarmFrom {
     alarmType: number;
 }
 
-// Warning: (ae-missing-release-tag) "CompatMapAlarmTo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CompatMapAlarmTo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CompatMapAlarmTo {
@@ -82,7 +82,7 @@ export interface CompatMapAlarmTo {
 }
 
 // Warning: (ae-forgotten-export) The symbol "ConditionalItem" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "ConditionalAssociationConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalAssociationConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConditionalAssociationConfig implements ConditionalItem<AssociationConfig> {
@@ -103,7 +103,7 @@ export class ConditionalAssociationConfig implements ConditionalItem<Association
     readonly multiChannel: boolean | "auto";
 }
 
-// Warning: (ae-missing-release-tag) "ConditionalCompatConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalCompatConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
@@ -167,7 +167,7 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     readonly treatMultilevelSwitchSetAsEvent?: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ConditionalConfigOption" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalConfigOption" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConditionalConfigOption implements ConditionalItem<ConfigOption> {
@@ -182,7 +182,7 @@ export class ConditionalConfigOption implements ConditionalItem<ConfigOption> {
     readonly value: number;
 }
 
-// Warning: (ae-missing-release-tag) "ConditionalDeviceComment" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalDeviceComment" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConditionalDeviceComment implements ConditionalItem<DeviceComment> {
@@ -197,7 +197,7 @@ export class ConditionalDeviceComment implements ConditionalItem<DeviceComment> 
     readonly text: string;
 }
 
-// Warning: (ae-missing-release-tag) "ConditionalDeviceConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalDeviceConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class ConditionalDeviceConfig {
@@ -241,7 +241,7 @@ export class ConditionalDeviceConfig {
     readonly proprietary?: Record<string, unknown>;
 }
 
-// Warning: (ae-missing-release-tag) "ConditionalDeviceMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalDeviceMetadata" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConditionalDeviceMetadata implements ConditionalItem<DeviceMetadata> {
@@ -258,7 +258,7 @@ export class ConditionalDeviceMetadata implements ConditionalItem<DeviceMetadata
     readonly wakeup?: ConditionalPrimitive<string>;
 }
 
-// Warning: (ae-missing-release-tag) "ConditionalEndpointConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalEndpointConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConditionalEndpointConfig implements ConditionalItem<EndpointConfig> {
@@ -275,7 +275,7 @@ export class ConditionalEndpointConfig implements ConditionalItem<EndpointConfig
     readonly label?: string;
 }
 
-// Warning: (ae-missing-release-tag) "ConditionalParamInfoMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalParamInfoMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ConditionalParamInfoMap = ReadonlyObjectKeyMap<{
@@ -283,7 +283,7 @@ export type ConditionalParamInfoMap = ReadonlyObjectKeyMap<{
     valueBitMask?: number;
 }, ConditionalParamInformation[]>;
 
-// Warning: (ae-missing-release-tag) "ConditionalParamInformation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionalParamInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConditionalParamInformation implements ConditionalItem<ParamInformation> {
@@ -322,22 +322,22 @@ export class ConditionalParamInformation implements ConditionalItem<ParamInforma
     readonly writeOnly?: true;
 }
 
-// Warning: (ae-missing-release-tag) "CONFIG_LABEL" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CONFIG_LABEL" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const CONFIG_LABEL = "CONFIG";
 
-// Warning: (ae-missing-release-tag) "CONFIG_LOGLEVEL" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CONFIG_LOGLEVEL" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const CONFIG_LOGLEVEL = "debug";
 
-// Warning: (ae-missing-release-tag) "ConfigLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConfigLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ConfigLogContext = LogContext<"config">;
 
-// Warning: (ae-missing-release-tag) "ConfigManager" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConfigManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConfigManager {
@@ -428,7 +428,7 @@ export class ConfigManager {
     get useExternalConfig(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ConfigManagerOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConfigManagerOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ConfigManagerOptions {
@@ -438,7 +438,7 @@ export interface ConfigManagerOptions {
     logContainer?: ZWaveLogContainer;
 }
 
-// Warning: (ae-missing-release-tag) "ConfigOption" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConfigOption" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ConfigOption {
@@ -448,7 +448,7 @@ export interface ConfigOption {
     value: number;
 }
 
-// Warning: (ae-missing-release-tag) "DeviceComment" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeviceComment" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface DeviceComment {
@@ -458,7 +458,7 @@ export interface DeviceComment {
     text: string;
 }
 
-// Warning: (ae-missing-release-tag) "DeviceConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeviceConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DeviceConfig {
@@ -508,12 +508,12 @@ export class DeviceConfig {
     readonly proprietary?: Record<string, unknown> | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "DeviceConfigIndex" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeviceConfigIndex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 
-// Warning: (ae-missing-release-tag) "DeviceConfigIndexEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeviceConfigIndexEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface DeviceConfigIndexEntry {
@@ -533,7 +533,7 @@ export interface DeviceConfigIndexEntry {
     rootDir?: string;
 }
 
-// Warning: (ae-missing-release-tag) "DeviceID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeviceID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface DeviceID {
@@ -547,7 +547,7 @@ export interface DeviceID {
     productType: number;
 }
 
-// Warning: (ae-missing-release-tag) "DeviceMetadata" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeviceMetadata" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface DeviceMetadata {
@@ -565,24 +565,24 @@ export interface DeviceMetadata {
     wakeup?: string;
 }
 
-// Warning: (ae-missing-release-tag) "embeddedDevicesDir" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "embeddedDevicesDir" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const embeddedDevicesDir: string;
 
-// Warning: (ae-missing-release-tag) "EndpointConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EndpointConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type EndpointConfig = Omit<ConditionalEndpointConfig, "condition" | "evaluateCondition" | "associations"> & {
     associations?: Map<number, AssociationConfig> | undefined;
 };
 
-// Warning: (ae-missing-release-tag) "externalConfigDir" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "externalConfigDir" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function externalConfigDir(): string | undefined;
 
-// Warning: (ae-missing-release-tag) "FirmwareVersionRange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FirmwareVersionRange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface FirmwareVersionRange {
@@ -592,12 +592,12 @@ export interface FirmwareVersionRange {
     min: string;
 }
 
-// Warning: (ae-missing-release-tag) "FulltextDeviceConfigIndex" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FulltextDeviceConfigIndex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type FulltextDeviceConfigIndex = FulltextDeviceConfigIndexEntry[];
 
-// Warning: (ae-missing-release-tag) "FulltextDeviceConfigIndexEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FulltextDeviceConfigIndexEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface FulltextDeviceConfigIndexEntry {
@@ -623,7 +623,7 @@ export interface FulltextDeviceConfigIndexEntry {
     rootDir?: string;
 }
 
-// Warning: (ae-missing-release-tag) "GenericDeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GenericDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GenericDeviceClass {
@@ -642,32 +642,32 @@ export class GenericDeviceClass {
     readonly supportedCCs: readonly CommandClasses[];
 }
 
-// Warning: (ae-missing-release-tag) "GenericDeviceClassMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GenericDeviceClassMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type GenericDeviceClassMap = ReadonlyMap<number, GenericDeviceClass>;
 
-// Warning: (ae-missing-release-tag) "getDefaultGenericDeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDefaultGenericDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getDefaultGenericDeviceClass(key: number): GenericDeviceClass;
 
-// Warning: (ae-missing-release-tag) "getDefaultMeterScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDefaultMeterScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getDefaultMeterScale(scale: number): MeterScale;
 
-// Warning: (ae-missing-release-tag) "getDefaultScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDefaultScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getDefaultScale(scale: number): Scale;
 
-// Warning: (ae-missing-release-tag) "getDefaultSpecificDeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDefaultSpecificDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getDefaultSpecificDeviceClass(generic: GenericDeviceClass, key: number): SpecificDeviceClass;
 
-// Warning: (ae-missing-release-tag) "getDevicesPaths" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDevicesPaths" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getDevicesPaths(configDir: string): {
@@ -675,17 +675,17 @@ export function getDevicesPaths(configDir: string): {
     indexPath: string;
 };
 
-// Warning: (ae-missing-release-tag) "IndicatorMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IndicatorMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type IndicatorMap = ReadonlyMap<number, string>;
 
-// Warning: (ae-missing-release-tag) "IndicatorPropertiesMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IndicatorPropertiesMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type IndicatorPropertiesMap = ReadonlyMap<number, IndicatorProperty>;
 
-// Warning: (ae-missing-release-tag) "IndicatorProperty" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IndicatorProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IndicatorProperty {
@@ -706,12 +706,12 @@ export class IndicatorProperty {
     readonly type: ValueType | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ManufacturersMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ManufacturersMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ManufacturersMap = Map<number, string>;
 
-// Warning: (ae-missing-release-tag) "Meter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Meter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Meter {
@@ -724,12 +724,12 @@ export class Meter {
     readonly scales: ReadonlyMap<number, MeterScale>;
 }
 
-// Warning: (ae-missing-release-tag) "MeterMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MeterMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MeterMap = ReadonlyMap<number, Meter>;
 
-// Warning: (ae-missing-release-tag) "MeterScale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MeterScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MeterScale {
@@ -740,12 +740,12 @@ export class MeterScale {
     readonly label: string;
 }
 
-// Warning: (ae-missing-release-tag) "NamedScalesGroupMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NamedScalesGroupMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type NamedScalesGroupMap = ReadonlyMap<string, ScaleGroup>;
 
-// Warning: (ae-missing-release-tag) "Notification" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Notification" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Notification {
@@ -762,7 +762,7 @@ export class Notification {
     readonly variables: readonly NotificationVariable[];
 }
 
-// Warning: (ae-missing-release-tag) "NotificationEvent" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationEvent" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationEvent {
@@ -779,33 +779,33 @@ export class NotificationEvent {
     readonly parameter?: NotificationParameter;
 }
 
-// Warning: (ae-missing-release-tag) "NotificationMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type NotificationMap = ReadonlyMap<number, Notification>;
 
-// Warning: (ae-missing-release-tag) "NotificationParameter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationParameter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationParameter {
     constructor(definition: JSONObject);
 }
 
-// Warning: (ae-missing-release-tag) "NotificationParameterWithCommandClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationParameterWithCommandClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class NotificationParameterWithCommandClass {
     constructor(_definition: JSONObject);
 }
 
-// Warning: (ae-missing-release-tag) "NotificationParameterWithDuration" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationParameterWithDuration" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class NotificationParameterWithDuration {
     constructor(_definition: JSONObject);
 }
 
-// Warning: (ae-missing-release-tag) "NotificationParameterWithEnum" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationParameterWithEnum" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class NotificationParameterWithEnum {
@@ -814,7 +814,7 @@ export class NotificationParameterWithEnum {
     readonly values: ReadonlyMap<number, string>;
 }
 
-// Warning: (ae-missing-release-tag) "NotificationParameterWithValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationParameterWithValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class NotificationParameterWithValue {
@@ -823,7 +823,7 @@ export class NotificationParameterWithValue {
     readonly propertyName: string;
 }
 
-// Warning: (ae-missing-release-tag) "NotificationState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationState {
@@ -840,7 +840,7 @@ export class NotificationState {
 
 // Warning: (ae-forgotten-export) The symbol "NotificationStateDefinition" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "NotificationEventDefinition" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "NotificationValueDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationValueDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type NotificationValueDefinition = (NotificationStateDefinition | NotificationEventDefinition) & {
@@ -850,7 +850,7 @@ export type NotificationValueDefinition = (NotificationStateDefinition | Notific
     idleVariables?: number[];
 };
 
-// Warning: (ae-missing-release-tag) "NotificationVariable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationVariable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationVariable {
@@ -862,7 +862,7 @@ export class NotificationVariable {
     readonly states: ReadonlyMap<number, NotificationState>;
 }
 
-// Warning: (ae-missing-release-tag) "ParamInfoMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ParamInfoMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ParamInfoMap = ReadonlyObjectKeyMap<{
@@ -870,7 +870,7 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<{
     valueBitMask?: number;
 }, ParamInformation>;
 
-// Warning: (ae-missing-release-tag) "ParamInformation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ParamInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ParamInformation = Omit<ConditionalParamInformation, "condition" | "evaluateCondition" | "options" | "minValue" | "maxValue"> & {
@@ -879,12 +879,12 @@ export type ParamInformation = Omit<ConditionalParamInformation, "condition" | "
     maxValue: NonNullable<ConditionalParamInformation["maxValue"]>;
 };
 
-// Warning: (ae-missing-release-tag) "saveManufacturersInternal" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "saveManufacturersInternal" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function saveManufacturersInternal(manufacturers: ManufacturersMap): Promise<void>;
 
-// Warning: (ae-missing-release-tag) "Scale" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Scale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Scale {
@@ -899,14 +899,14 @@ export class Scale {
     readonly unit: string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ScaleGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScaleGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ScaleGroup = ReadonlyMap<number, Scale> & {
     readonly name?: string;
 };
 
-// Warning: (ae-missing-release-tag) "SensorType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SensorType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SensorType {
@@ -919,12 +919,12 @@ export class SensorType {
     readonly scales: ScaleGroup;
 }
 
-// Warning: (ae-missing-release-tag) "SensorTypeMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SensorTypeMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SensorTypeMap = ReadonlyMap<number, SensorType>;
 
-// Warning: (ae-missing-release-tag) "SpecificDeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SpecificDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SpecificDeviceClass {
