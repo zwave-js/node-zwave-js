@@ -88,7 +88,7 @@
     "@esm2cjs/got": "^12.5.3",
     "@esm2cjs/p-queue": "^7.3.0",
     "@sentry/integrations": "^7.12.1",
-    "@sentry/node": "^7.12.1",
+    "@sentry/node": "^7.53.0",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
