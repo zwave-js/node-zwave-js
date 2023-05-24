@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.22.2 (2023-05-24)
 ### Bugfixes
 * Fixed an issue where values wouldn't be updated after some supervised commands when the device's initial response was `WORKING` (#5840)
 
