@@ -15,7 +15,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	`Regression test for #5825: Update values when "Success" is received after an initial "Working" result`,
 	{
-		debug: true,
+		// debug: true,
 		// provisioningDirectory: path.join(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
