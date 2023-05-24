@@ -446,13 +446,14 @@ jobs:
         yarn npm whoami
         yarn workspaces foreach -vti --no-private npm publish --tolerate-republish $TAG
 
+
     - name: Create Github Release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release v${{ steps.extract_release.outputs.VERSION }}
+        name: Release v${{ steps.extract_release.outputs.VERSION }}
         draft: false
         # Prerelease versions create prereleases on Github
         prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
