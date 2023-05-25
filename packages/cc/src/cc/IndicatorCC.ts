@@ -272,74 +272,77 @@ export class IndicatorCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		if (property === "value") {
-			// V1 value
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			return this.set(value);
-		} else if (
-			typeof property === "number" &&
-			typeof propertyKey === "number"
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: IndicatorCCAPI,
+			{ property, propertyKey },
+			value,
 		) {
-			const indicatorId = property;
-			const propertyId = propertyKey;
-			const expectedType = getIndicatorMetadata(
-				this.applHost.configManager,
-				indicatorId,
-				propertyId,
-			).type as "number" | "boolean";
+			if (property === "value") {
+				// V1 value
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				return this.set(value);
+			} else if (
+				typeof property === "number" &&
+				typeof propertyKey === "number"
+			) {
+				const indicatorId = property;
+				const propertyId = propertyKey;
+				const expectedType = getIndicatorMetadata(
+					this.applHost.configManager,
+					indicatorId,
+					propertyId,
+				).type as "number" | "boolean";
 
-			// V2+ value
-			if (typeof value !== expectedType) {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					expectedType,
-					typeof value,
-				);
+				// V2+ value
+				if (typeof value !== expectedType) {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						expectedType,
+						typeof value,
+					);
+				}
+				return this.set([
+					{
+						indicatorId: property,
+						propertyId: propertyKey,
+						value: value as any,
+					},
+				]);
+			} else if (property === "identify") {
+				if (typeof value !== "boolean") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"boolean",
+						typeof value,
+					);
+				}
+				return this.identify();
+			} else {
+				throwUnsupportedProperty(this.ccId, property);
 			}
-			return this.set([
-				{
-					indicatorId: property,
-					propertyId: propertyKey,
-					value: value as any,
-				},
-			]);
-		} else if (property === "identify") {
-			if (typeof value !== "boolean") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"boolean",
-					typeof value,
-				);
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: IndicatorCCAPI, { property }) {
+			if (property === "value") return this.get();
+			if (typeof property === "number") {
+				return this.get(property);
 			}
-			return this.identify();
-		} else {
+
 			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		if (property === "value") return this.get();
-		if (typeof property === "number") {
-			return this.get(property);
-		}
-
-		throwUnsupportedProperty(this.ccId, property);
-	};
+		};
+	}
 
 	@validateArgs()
 	public async get(

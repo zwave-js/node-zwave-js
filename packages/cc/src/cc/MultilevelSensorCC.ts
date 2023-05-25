@@ -199,24 +199,24 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		// Look up the necessary information
-		const valueId: ValueID = {
-			commandClass: CommandClasses["Multilevel Sensor"],
-			endpoint: this.endpoint.index,
-			property,
-		};
-		const ccSpecific =
-			this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific;
-		if (!ccSpecific) {
-			throwUnsupportedProperty(this.ccId, property);
-		}
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: MultilevelSensorCCAPI, { property }) {
+			// Look up the necessary information
+			const valueId: ValueID = {
+				commandClass: CommandClasses["Multilevel Sensor"],
+				endpoint: this.endpoint.index,
+				property,
+			};
+			const ccSpecific =
+				this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific;
+			if (!ccSpecific) {
+				throwUnsupportedProperty(this.ccId, property);
+			}
 
-		const { sensorType, scale } = ccSpecific;
-		return this.get(sensorType, scale);
-	};
+			const { sensorType, scale } = ccSpecific;
+			return this.get(sensorType, scale);
+		};
+	}
 
 	/** Query the default sensor value */
 	public async get(): Promise<

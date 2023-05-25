@@ -183,56 +183,62 @@ export class EntryControlCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "keyCacheSize" && property !== "keyCacheTimeout") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-
-		let keyCacheSize = value;
-		let keyCacheTimeout = 2;
-		if (property === "keyCacheTimeout") {
-			keyCacheTimeout = value;
-
-			const oldKeyCacheSize = this.tryGetValueDB()?.getValue<number>(
-				EntryControlCCValues.keyCacheSize.endpoint(this.endpoint.index),
-			);
-			if (oldKeyCacheSize == undefined) {
-				throw new ZWaveError(
-					`The "keyCacheTimeout" property cannot be changed before the key cache size is known!`,
-					ZWaveErrorCodes.Argument_Invalid,
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: EntryControlCCAPI, { property }, value) {
+			if (property !== "keyCacheSize" && property !== "keyCacheTimeout") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
 				);
 			}
-			keyCacheSize = oldKeyCacheSize;
-		}
-		const result = await this.setConfiguration(
-			keyCacheSize,
-			keyCacheTimeout,
-		);
 
-		// Verify the change after a short delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			this.schedulePoll({ property }, value, { transition: "fast" });
-		}
+			let keyCacheSize = value;
+			let keyCacheTimeout = 2;
+			if (property === "keyCacheTimeout") {
+				keyCacheTimeout = value;
 
-		return result;
-	};
+				const oldKeyCacheSize = this.tryGetValueDB()?.getValue<number>(
+					EntryControlCCValues.keyCacheSize.endpoint(
+						this.endpoint.index,
+					),
+				);
+				if (oldKeyCacheSize == undefined) {
+					throw new ZWaveError(
+						`The "keyCacheTimeout" property cannot be changed before the key cache size is known!`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				keyCacheSize = oldKeyCacheSize;
+			}
+			const result = await this.setConfiguration(
+				keyCacheSize,
+				keyCacheTimeout,
+			);
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "keyCacheSize":
-			case "keyCacheTimeout":
-				return (await this.getConfiguration())?.[property];
-		}
-		throwUnsupportedProperty(this.ccId, property);
-	};
+			// Verify the change after a short delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property }, value, { transition: "fast" });
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: EntryControlCCAPI, { property }) {
+			switch (property) {
+				case "keyCacheSize":
+				case "keyCacheTimeout":
+					return (await this.getConfiguration())?.[property];
+			}
+			throwUnsupportedProperty(this.ccId, property);
+		};
+	}
 }
 
 @commandClass(CommandClasses["Entry Control"])

@@ -36,6 +36,7 @@ export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
 export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
+
 export type SetValueImplementation = (
 	property: ValueIDProperties,
 	value: unknown,
@@ -211,9 +212,13 @@ export class CCAPI {
 	 */
 	public readonly ccId: CommandClasses;
 
-	protected [SET_VALUE]: SetValueImplementation | undefined;
+	protected get [SET_VALUE](): SetValueImplementation | undefined {
+		return undefined;
+	}
+
 	/**
-	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key)
+	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key).
+	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get setValue(): SetValueImplementation | undefined {
 		return this[SET_VALUE];
@@ -233,9 +238,12 @@ export class CCAPI {
 		return true;
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation | undefined;
+	protected get [POLL_VALUE](): PollValueImplementation | undefined {
+		return undefined;
+	}
 	/**
 	 * Can be used on supported CC APIs to poll a CC value by property name (and optionally the property key)
+	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
 		return this[POLL_VALUE]?.bind(this);

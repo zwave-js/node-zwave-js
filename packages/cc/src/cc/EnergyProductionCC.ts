@@ -74,23 +74,25 @@ export class EnergyProductionCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		if (
-			EnergyProductionCCValues.value.is({
-				commandClass: this.ccId,
-				property,
-				propertyKey,
-			})
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: EnergyProductionCCAPI,
+			{ property, propertyKey },
 		) {
-			return (await this.get(property as EnergyProductionParameter))
-				?.value;
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			if (
+				EnergyProductionCCValues.value.is({
+					commandClass: this.ccId,
+					property,
+					propertyKey,
+				})
+			) {
+				return (await this.get(property as EnergyProductionParameter))
+					?.value;
+			} else {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	@validateArgs({ strictEnums: true })
 	public async get(

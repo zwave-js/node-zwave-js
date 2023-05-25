@@ -247,68 +247,81 @@ export class WindowCoveringCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-		options,
-	) => {
-		const valueId = {
-			commandClass: this.ccId,
-			property,
-			propertyKey,
-		};
-
-		if (WindowCoveringCCValues.targetValue.is(valueId)) {
-			if (
-				typeof propertyKey !== "number" ||
-				// Only odd-numbered parameters have position support and are writable
-				propertyKey % 2 === 0
-			) {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey!);
-			}
-
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-
-			const parameter = propertyKey;
-			const duration = Duration.from(options?.transitionDuration);
-
-			return this.set([{ parameter, value }], duration);
-		} else if (
-			WindowCoveringCCValues.levelChangeUp.is(valueId) ||
-			WindowCoveringCCValues.levelChangeDown.is(valueId)
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: WindowCoveringCCAPI,
+			{ property, propertyKey },
+			value,
+			options,
 		) {
-			if (typeof value !== "boolean") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"boolean",
-					typeof value,
-				);
-			}
+			const valueId = {
+				commandClass: this.ccId,
+				property,
+				propertyKey,
+			};
 
-			const parameter = propertyKey as number;
-			const direction = WindowCoveringCCValues.levelChangeUp.is(valueId)
-				? "up"
-				: "down";
+			if (WindowCoveringCCValues.targetValue.is(valueId)) {
+				if (
+					typeof propertyKey !== "number" ||
+					// Only odd-numbered parameters have position support and are writable
+					propertyKey % 2 === 0
+				) {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey!,
+					);
+				}
 
-			if (value) {
-				// Perform the level change
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+
+				const parameter = propertyKey;
 				const duration = Duration.from(options?.transitionDuration);
-				return this.startLevelChange(parameter, direction, duration);
+
+				return this.set([{ parameter, value }], duration);
+			} else if (
+				WindowCoveringCCValues.levelChangeUp.is(valueId) ||
+				WindowCoveringCCValues.levelChangeDown.is(valueId)
+			) {
+				if (typeof value !== "boolean") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"boolean",
+						typeof value,
+					);
+				}
+
+				const parameter = propertyKey as number;
+				const direction = WindowCoveringCCValues.levelChangeUp.is(
+					valueId,
+				)
+					? "up"
+					: "down";
+
+				if (value) {
+					// Perform the level change
+					const duration = Duration.from(options?.transitionDuration);
+					return this.startLevelChange(
+						parameter,
+						direction,
+						duration,
+					);
+				} else {
+					return this.stopLevelChange(parameter);
+				}
 			} else {
-				return this.stopLevelChange(parameter);
+				throwUnsupportedProperty(this.ccId, property);
 			}
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+		};
+	}
 
 	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
 		{ property, propertyKey },
@@ -393,28 +406,30 @@ export class WindowCoveringCCAPI extends CCAPI {
 		}
 	};
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentValue":
-			case "targetValue":
-			case "duration":
-				if (propertyKey == undefined) {
-					throwMissingPropertyKey(this.ccId, property);
-				} else if (typeof propertyKey !== "number") {
-					throwUnsupportedPropertyKey(
-						this.ccId,
-						property,
-						propertyKey,
-					);
-				}
-				return (await this.get(propertyKey))?.[property];
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: WindowCoveringCCAPI,
+			{ property, propertyKey },
+		) {
+			switch (property) {
+				case "currentValue":
+				case "targetValue":
+				case "duration":
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
+					return (await this.get(propertyKey))?.[property];
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	public async getSupported(): Promise<
 		readonly WindowCoveringParameter[] | undefined

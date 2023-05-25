@@ -132,20 +132,28 @@ export class BinarySwitchCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-		options,
-	) => {
-		if (property !== "targetValue") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "boolean") {
-			throwWrongValueType(this.ccId, property, "boolean", typeof value);
-		}
-		const duration = Duration.from(options?.transitionDuration);
-		return this.set(value, duration);
-	};
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: BinarySwitchCCAPI,
+			{ property },
+			value,
+			options,
+		) {
+			if (property !== "targetValue") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"boolean",
+					typeof value,
+				);
+			}
+			const duration = Duration.from(options?.transitionDuration);
+			return this.set(value, duration);
+		};
+	}
 
 	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
 		{ property },
@@ -199,18 +207,18 @@ export class BinarySwitchCCAPI extends CCAPI {
 		}
 	};
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentValue":
-			case "targetValue":
-			case "duration":
-				return (await this.get())?.[property];
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: BinarySwitchCCAPI, { property }) {
+			switch (property) {
+				case "currentValue":
+				case "targetValue":
+				case "duration":
+					return (await this.get())?.[property];
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 }
 
 @commandClass(CommandClasses["Binary Switch"])

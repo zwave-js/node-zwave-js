@@ -124,29 +124,28 @@ export class TimeParametersCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "dateAndTime") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (!(value instanceof Date)) {
-			throwWrongValueType(this.ccId, property, "date", typeof value);
-		}
-		return this.set(value);
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "dateAndTime":
-				return this.get();
-			default:
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: TimeParametersCCAPI, { property }, value) {
+			if (property !== "dateAndTime") {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+			if (!(value instanceof Date)) {
+				throwWrongValueType(this.ccId, property, "date", typeof value);
+			}
+			return this.set(value);
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: TimeParametersCCAPI, { property }) {
+			switch (property) {
+				case "dateAndTime":
+					return this.get();
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	public async get(): Promise<Date | undefined> {
 		this.assertSupportsCommand(

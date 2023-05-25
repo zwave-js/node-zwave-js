@@ -237,82 +237,96 @@ export class SoundSwitchCCAPI extends CCAPI {
 		}
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-		options,
-	) => {
-		if (property === "defaultToneId") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: SoundSwitchCCAPI,
+			{ property },
+			value,
+			options,
+		) {
+			if (property === "defaultToneId") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				return this.setConfiguration(
+					value,
+					0xff /* keep current volume */,
 				);
-			}
-			return this.setConfiguration(value, 0xff /* keep current volume */);
-		} else if (property === "defaultVolume") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+			} else if (property === "defaultVolume") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				return this.setConfiguration(
+					0x00 /* keep current tone */,
+					value,
 				);
-			}
-			return this.setConfiguration(0x00 /* keep current tone */, value);
-		} else if (property === "toneId") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			let result: SupervisionResult | undefined;
-			if (value > 0) {
-				// Use provided volume or try to use the current volume if it exists
-				const volume =
-					options?.volume !== undefined
-						? options.volume
-						: this.tryGetValueDB()?.getValue<number>(
-								SoundSwitchCCValues.volume.endpoint(
-									this.endpoint.index,
-								),
-						  );
-				result = await this.play(value, volume);
+			} else if (property === "toneId") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				let result: SupervisionResult | undefined;
+				if (value > 0) {
+					// Use provided volume or try to use the current volume if it exists
+					const volume =
+						options?.volume !== undefined
+							? options.volume
+							: this.tryGetValueDB()?.getValue<number>(
+									SoundSwitchCCValues.volume.endpoint(
+										this.endpoint.index,
+									),
+							  );
+					result = await this.play(value, volume);
+				} else {
+					result = await this.stopPlaying();
+				}
+				if (
+					this.isSinglecast() &&
+					!supervisedCommandSucceeded(result)
+				) {
+					// Verify the current value after a (short) delay, unless the command was supervised and successful
+					this.schedulePoll({ property }, value, {
+						transition: "fast",
+					});
+				}
+
+				return result;
 			} else {
-				result = await this.stopPlaying();
-			}
-			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-				// Verify the current value after a (short) delay, unless the command was supervised and successful
-				this.schedulePoll({ property }, value, { transition: "fast" });
-			}
-
-			return result;
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "defaultToneId":
-			case "defaultVolume":
-				return (await this.getConfiguration())?.[property];
-
-			case "toneId":
-			case "volume":
-				return (await this.getPlaying())?.[property];
-
-			default:
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: SoundSwitchCCAPI, { property }) {
+			switch (property) {
+				case "defaultToneId":
+				case "defaultVolume":
+					return (await this.getConfiguration())?.[property];
+
+				case "toneId":
+				case "volume":
+					return (await this.getPlaying())?.[property];
+
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 }
 
 @commandClass(CommandClasses["Sound Switch"])

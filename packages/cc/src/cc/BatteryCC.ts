@@ -189,30 +189,30 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "level":
-			case "isLow":
-			case "chargingStatus":
-			case "rechargeable":
-			case "backup":
-			case "overheating":
-			case "lowFluid":
-			case "rechargeOrReplace":
-			case "lowTemperatureStatus":
-			case "disconnected":
-				return (await this.get())?.[property];
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: BatteryCCAPI, { property }) {
+			switch (property) {
+				case "level":
+				case "isLow":
+				case "chargingStatus":
+				case "rechargeable":
+				case "backup":
+				case "overheating":
+				case "lowFluid":
+				case "rechargeOrReplace":
+				case "lowTemperatureStatus":
+				case "disconnected":
+					return (await this.get())?.[property];
 
-			case "maximumCapacity":
-			case "temperature":
-				return (await this.getHealth())?.[property];
+				case "maximumCapacity":
+				case "temperature":
+					return (await this.getHealth())?.[property];
 
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
