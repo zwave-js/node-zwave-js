@@ -1,12 +1,12 @@
 import {
 	MAX_REPEATERS,
 	MessagePriority,
-	MessageRecord,
 	RouteKind,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
 	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {

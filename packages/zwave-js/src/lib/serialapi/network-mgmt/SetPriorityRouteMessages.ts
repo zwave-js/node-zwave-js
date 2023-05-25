@@ -2,11 +2,11 @@ import {
 	MAX_NODES,
 	MAX_REPEATERS,
 	MessagePriority,
-	MessageRecord,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
 	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
@@ -21,7 +21,7 @@ import {
 	type MessageDeserializationOptions,
 	type SuccessIndicator,
 } from "@zwave-js/serial";
-import { AllOrNone, getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, type AllOrNone } from "@zwave-js/shared";
 
 export type SetPriorityRouteRequestOptions = {
 	destinationNodeId: number;

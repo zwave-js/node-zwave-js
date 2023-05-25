@@ -9,9 +9,9 @@ import {
 import { CommandClasses } from "@zwave-js/core/safe";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
-	EnergyProductionCCCapabilities,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
+	type EnergyProductionCCCapabilities,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 

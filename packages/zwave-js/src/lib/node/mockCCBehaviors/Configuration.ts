@@ -12,9 +12,9 @@ import {
 } from "@zwave-js/cc/ConfigurationCC";
 import { CommandClasses, ConfigValueFormat } from "@zwave-js/core/safe";
 import {
-	ConfigurationCCCapabilities,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
+	type ConfigurationCCCapabilities,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 

@@ -18,7 +18,6 @@ import {
 	TimeCCTimeOffsetGet,
 	TimeCommand,
 	TimeParametersCommand,
-	ValueIDProperties,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 	defaultCCValueOptions,
@@ -33,6 +32,7 @@ import {
 	type FirmwareUpdateResult,
 	type PollValueImplementation,
 	type SetValueAPIOptions,
+	type ValueIDProperties,
 } from "@zwave-js/cc";
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import {

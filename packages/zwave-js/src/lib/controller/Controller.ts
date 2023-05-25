@@ -27,7 +27,6 @@ import {
 	NodeType,
 	ProtocolType,
 	RFRegion,
-	RSSI,
 	RouteKind,
 	SecurityClass,
 	TransmitStatus,
@@ -51,6 +50,7 @@ import {
 	securityClassIsS2,
 	securityClassOrder,
 	type Firmware,
+	type RSSI,
 	type SinglecastCC,
 	type ZWaveDataRate,
 } from "@zwave-js/core";

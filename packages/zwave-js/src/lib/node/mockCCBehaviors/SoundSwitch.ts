@@ -10,9 +10,9 @@ import {
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
 	MockZWaveFrameType,
-	SoundSwitchCCCapabilities,
 	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
+	type SoundSwitchCCCapabilities,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: SoundSwitchCCCapabilities = {
