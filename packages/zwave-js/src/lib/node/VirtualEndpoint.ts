@@ -1,21 +1,21 @@
 import {
-	APIMethodsOf,
 	CCAPI,
-	CCAPIs,
-	CCNameOrId,
+	PhysicalCCAPI,
 	getAPI,
 	normalizeCCNameOrId,
-	PhysicalCCAPI,
+	type APIMethodsOf,
+	type CCAPIs,
+	type CCNameOrId,
 } from "@zwave-js/cc";
 import {
-	CommandClasses,
-	getCCName,
-	IVirtualEndpoint,
-	MulticastDestination,
-	SecurityClass,
-	securityClassIsS2,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
+	securityClassIsS2,
+	type CommandClasses,
+	type IVirtualEndpoint,
+	type MulticastDestination,
+	type SecurityClass,
 } from "@zwave-js/core/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";

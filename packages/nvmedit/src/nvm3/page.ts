@@ -6,10 +6,10 @@ import {
 	NVM3_PAGE_COUNTER_SIZE,
 	NVM3_PAGE_HEADER_SIZE,
 	NVM3_PAGE_MAGIC,
-	PageStatus,
-	PageWriteSize,
+	type PageStatus,
+	type PageWriteSize,
 } from "./consts";
-import { NVM3Object, readObjects } from "./object";
+import { readObjects, type NVM3Object } from "./object";
 import { computeBergerCode, validateBergerCode } from "./utils";
 
 export interface NVM3PageHeader {

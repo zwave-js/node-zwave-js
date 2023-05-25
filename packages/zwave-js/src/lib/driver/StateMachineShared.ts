@@ -8,30 +8,30 @@ import type { Message } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
 	assign,
-	DefaultContext,
-	EventObject,
 	Interpreter,
-	InterpreterOptions,
 	Machine,
 	spawn,
-	StateMachine,
-	StateSchema,
-	Typestate,
+	type DefaultContext,
+	type EventObject,
+	type InterpreterOptions,
+	type StateMachine,
+	type StateSchema,
+	type Typestate,
 } from "xstate";
 import { respond, sendParent } from "xstate/lib/actions";
 import type { DriverLogger } from "../log/Driver";
 import {
 	SendDataBridgeRequest,
-	SendDataBridgeRequestTransmitReport,
 	SendDataMulticastBridgeRequest,
-	SendDataMulticastBridgeRequestTransmitReport,
+	type SendDataBridgeRequestTransmitReport,
+	type SendDataMulticastBridgeRequestTransmitReport,
 } from "../serialapi/transport/SendDataBridgeMessages";
 import {
-	SendDataAbort,
 	SendDataMulticastRequest,
-	SendDataMulticastRequestTransmitReport,
 	SendDataRequest,
-	SendDataRequestTransmitReport,
+	type SendDataAbort,
+	type SendDataMulticastRequestTransmitReport,
+	type SendDataRequestTransmitReport,
 } from "../serialapi/transport/SendDataMessages";
 import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { SendDataErrorData } from "./SendThreadMachine";

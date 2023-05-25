@@ -1,17 +1,17 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	getCCName,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	getCCName,
+	parseBitMask,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -19,12 +19,12 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -42,9 +42,9 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import { CentralSceneCommand, CentralSceneKeys } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
 
 export const CentralSceneCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Central Scene"], {

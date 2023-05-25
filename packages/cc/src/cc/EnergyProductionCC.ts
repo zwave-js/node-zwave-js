@@ -1,20 +1,20 @@
 import {
 	CommandClasses,
-	encodeFloatWithScale,
-	Maybe,
 	MessagePriority,
+	ValueMetadata,
+	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
-	ValueMetadata,
+	type Maybe,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -34,8 +34,8 @@ import { V } from "../lib/Values";
 import {
 	EnergyProductionCommand,
 	EnergyProductionParameter,
-	EnergyProductionScale,
 	getEnergyProductionScale,
+	type EnergyProductionScale,
 } from "../lib/_Types";
 
 export const EnergyProductionCCValues = Object.freeze({

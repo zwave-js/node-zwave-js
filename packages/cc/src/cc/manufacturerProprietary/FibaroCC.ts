@@ -1,15 +1,15 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessageRecord,
-	parseMaybeNumber,
-	unknownNumber,
-	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	parseMaybeNumber,
+	unknownNumber,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type ValueID,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared";

@@ -2,7 +2,7 @@ import {
 	NotificationCCReport,
 	NotificationCCValues,
 } from "@zwave-js/cc/NotificationCC";
-import { CommandClasses, ValueMetadataNumeric } from "@zwave-js/core";
+import { CommandClasses, type ValueMetadataNumeric } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";

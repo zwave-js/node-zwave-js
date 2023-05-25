@@ -1,9 +1,9 @@
 import { highResTimestamp, MessagePriority } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import {
-	Comparable,
 	compareNumberOrString,
-	CompareResult,
+	type Comparable,
+	type CompareResult,
 } from "alcalzone-shared/comparable";
 import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { NodeStatus } from "../node/_Types";

@@ -1,7 +1,7 @@
 import {
-	ConfigManager,
 	getDefaultMeterScale,
-	MeterScale,
+	type ConfigManager,
+	type MeterScale,
 } from "@zwave-js/config";
 import { timespan } from "@zwave-js/core";
 import type {
@@ -12,31 +12,31 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	getMinIntegerSize,
-	Maybe,
 	MessagePriority,
+	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
+	getMinIntegerSize,
 	parseBitMask,
 	parseFloatWithScale,
 	unknownNumber,
 	validatePayload,
-	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type Maybe,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	PhysicalCCAPI,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,

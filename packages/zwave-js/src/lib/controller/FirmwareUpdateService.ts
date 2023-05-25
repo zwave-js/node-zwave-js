@@ -1,13 +1,16 @@
-import got, { Headers, OptionsOfTextResponseBody } from "@esm2cjs/got";
+import got, {
+	type Headers,
+	type OptionsOfTextResponseBody,
+} from "@esm2cjs/got";
 import PQueue from "@esm2cjs/p-queue";
 import type { DeviceID } from "@zwave-js/config";
 import {
-	extractFirmware,
-	Firmware,
-	guessFirmwareFileFormat,
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
+	extractFirmware,
+	guessFirmwareFileFormat,
+	type Firmware,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
 import crypto from "crypto";

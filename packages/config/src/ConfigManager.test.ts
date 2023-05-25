@@ -1,5 +1,5 @@
 import { ZWaveLogContainer } from "@zwave-js/core";
-import ava, { ExecutionContext, type TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import * as fs from "fs-extra";
 import { tmpdir } from "os";
 import * as path from "path";

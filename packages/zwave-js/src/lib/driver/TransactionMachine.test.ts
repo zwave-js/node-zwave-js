@@ -1,16 +1,16 @@
 import { createModel } from "@xstate/test";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "@zwave-js/cc";
 import {
-	assertZWaveError,
 	MessagePriority,
 	TransmitStatus,
+	assertZWaveError,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
-import ava, { ExecutionContext, TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
-import { assign, StateValue } from "xstate";
-import { interpret, Interpreter } from "xstate/lib/interpreter";
+import { assign, type StateValue } from "xstate";
 import { createMachine } from "xstate/lib/Machine";
+import { interpret, type Interpreter } from "xstate/lib/interpreter";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	GetControllerIdRequest,
@@ -27,7 +27,7 @@ import { createWrapperMachine } from "./StateMachineShared";
 import { Transaction } from "./Transaction";
 import {
 	createTransactionMachine,
-	TransactionMachineInterpreter,
+	type TransactionMachineInterpreter,
 } from "./TransactionMachine";
 
 interface AvaTestContext {

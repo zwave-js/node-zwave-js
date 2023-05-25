@@ -6,26 +6,26 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
 	MessagePriority,
+	ValueMetadata,
+	enumValuesToMetadataStates,
 	parseFloatWithScale,
 	validatePayload,
-	ValueMetadata,
+	type Maybe,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
+import { getEnumMemberName, pick, type AllOrNone } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
-	CCCommandOptions,
 	CommandClass,
 	gotDeserializationOptions,
+	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {

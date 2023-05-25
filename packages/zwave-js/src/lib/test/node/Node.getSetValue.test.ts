@@ -3,7 +3,7 @@ import { BasicCC, BasicCCValues } from "@zwave-js/cc/BasicCC";
 import { CommandClasses, ValueMetadata, type ValueID } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { ExecutionContext, type TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";

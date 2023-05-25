@@ -1,17 +1,21 @@
-import { BasicCCValues, CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import {
-	actuatorCCs,
-	isZWaveError,
-	IVirtualNode,
-	normalizeValueID,
+	BasicCCValues,
+	type CCAPI,
+	type SetValueAPIOptions,
+} from "@zwave-js/cc";
+import {
 	SecurityClass,
-	TranslatedValueID,
-	ValueID,
-	valueIdToString,
-	ValueMetadata,
-	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
+	actuatorCCs,
+	isZWaveError,
+	normalizeValueID,
+	valueIdToString,
+	type IVirtualNode,
+	type TranslatedValueID,
+	type ValueID,
+	type ValueMetadata,
+	type ValueMetadataNumeric,
 } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";

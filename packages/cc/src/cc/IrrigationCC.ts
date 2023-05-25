@@ -1,19 +1,19 @@
 import {
 	CommandClasses,
-	encodeFloatWithScale,
-	enumValuesToMetadataStates,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseFloatWithScale,
-	SupervisionResult,
-	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeFloatWithScale,
+	enumValuesToMetadataStates,
+	parseFloatWithScale,
+	validatePayload,
+	type IZWaveEndpoint,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
+	type ValueID,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -21,14 +21,14 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -50,9 +50,9 @@ import { V } from "../lib/Values";
 import {
 	IrrigationCommand,
 	IrrigationSensorPolarity,
-	ValveId,
-	ValveTableEntry,
 	ValveType,
+	type ValveId,
+	type ValveTableEntry,
 } from "../lib/_Types";
 
 export const IrrigationCCValues = Object.freeze({

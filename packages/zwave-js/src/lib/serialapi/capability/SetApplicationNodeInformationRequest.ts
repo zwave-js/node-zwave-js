@@ -1,17 +1,17 @@
 import {
 	CommandClasses,
-	getCCName,
-	MessageOrCCLogEntry,
 	MessagePriority,
+	getCCName,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
-	MessageBaseOptions,
 	MessageType,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
 } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 

@@ -1,21 +1,21 @@
 import {
-	CommandClasses,
 	CRC16_CCITT,
-	Maybe,
-	MessageOrCCLogEntry,
+	CommandClasses,
 	MessagePriority,
-	MessageRecord,
-	unknownBoolean,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	unknownBoolean,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
-	AllOrNone,
 	getEnumMemberName,
 	num2hex,
 	pick,
+	type AllOrNone,
 } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -38,10 +38,10 @@ import { V } from "../lib/Values";
 import {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
-	FirmwareUpdateMetaData,
 	FirmwareUpdateMetaDataCommand,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
+	type FirmwareUpdateMetaData,
 } from "../lib/_Types";
 
 // @noSetValueAPI There are no values to set here

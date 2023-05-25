@@ -1,32 +1,32 @@
 import type { ParamInfoMap } from "@zwave-js/config";
 import {
 	CommandClasses,
-	ConfigurationMetadata,
 	ConfigValueFormat,
+	MessagePriority,
+	SupervisionStatus,
+	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
 	encodeBitMask,
 	encodePartial,
 	getBitMaskWidth,
 	getIntegerLimits,
 	getMinIntegerSize,
 	isConsecutiveArray,
-	IVirtualEndpoint,
-	IZWaveEndpoint,
-	Maybe,
 	mergeSupervisionResults,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	MessageRecord,
 	parseBitMask,
 	parsePartial,
 	stripUndefined,
 	supervisedCommandSucceeded,
-	SupervisionResult,
-	SupervisionStatus,
 	validatePayload,
-	ValueID,
-	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type ConfigurationMetadata,
+	type IVirtualEndpoint,
+	type IZWaveEndpoint,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
+	type ValueID,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -36,13 +36,13 @@ import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -60,7 +60,7 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { ConfigurationCommand, ConfigValue } from "../lib/_Types";
+import { ConfigurationCommand, type ConfigValue } from "../lib/_Types";
 
 function configValueToString(value: ConfigValue): string {
 	if (typeof value === "number") return value.toString();

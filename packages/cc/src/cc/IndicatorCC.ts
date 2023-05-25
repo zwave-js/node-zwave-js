@@ -7,13 +7,13 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	Maybe,
 	MessagePriority,
-	parseBitMask,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	parseBitMask,
+	validatePayload,
+	type Maybe,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
@@ -22,12 +22,12 @@ import { clamp, roundTo } from "alcalzone-shared/math";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -45,7 +45,7 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { IndicatorCommand, IndicatorTimeout } from "../lib/_Types";
+import { IndicatorCommand, type IndicatorTimeout } from "../lib/_Types";
 
 function isManufacturerDefinedIndicator(indicatorId: number): boolean {
 	return indicatorId >= 0x80 && indicatorId <= 0x9f;

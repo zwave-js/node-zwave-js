@@ -1,13 +1,13 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import {
-	CommandClasses,
-	dskFromString,
-	dskToString,
 	NodeType,
 	SecurityClass,
-	securityClassOrder,
 	ZWaveError,
 	ZWaveErrorCodes,
+	dskFromString,
+	dskToString,
+	securityClassOrder,
+	type CommandClasses,
 } from "@zwave-js/core";
 import type { FileSystem } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
@@ -15,7 +15,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "path";
 import {
 	ProvisioningEntryStatus,
-	SmartStartProvisioningEntry,
+	type SmartStartProvisioningEntry,
 } from "../controller/Inclusion";
 import { DeviceClass } from "../node/DeviceClass";
 import { InterviewStage } from "../node/_Types";

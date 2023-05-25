@@ -1,11 +1,11 @@
 import type { Scale } from "@zwave-js/config/safe";
 import {
-	CommandClasses,
-	DataRate,
-	FLiRS,
-	Maybe,
-	ValueMetadata,
 	ZWaveDataRate,
+	type CommandClasses,
+	type DataRate,
+	type FLiRS,
+	type Maybe,
+	type ValueMetadata,
 } from "@zwave-js/core/safe";
 
 export enum AlarmSensorCommand {

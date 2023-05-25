@@ -1,17 +1,17 @@
 import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
-	allCCs,
-	applicationCCs,
 	CommandClasses,
-	getCCName,
-	IZWaveEndpoint,
-	IZWaveNode,
-	SetValueOptions,
-	TranslatedValueID,
-	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
+	allCCs,
+	applicationCCs,
+	getCCName,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type SetValueOptions,
+	type TranslatedValueID,
+	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 

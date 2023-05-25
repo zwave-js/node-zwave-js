@@ -1,15 +1,15 @@
 import {
 	CommandClasses,
-	getCCName,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseCCId,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
+	parseCCId,
+	validatePayload,
+	type IZWaveEndpoint,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";

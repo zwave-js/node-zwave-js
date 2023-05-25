@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { MockController, MockNode, MockNodeOptions } from "@zwave-js/testing";
+import {
+	MockController,
+	MockNode,
+	type MockNodeOptions,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import test, { ExecutionContext } from "ava";
+import test, { type ExecutionContext } from "ava";
 import crypto from "crypto";
 import fs from "fs-extra";
 import os from "os";
@@ -14,7 +18,7 @@ import {
 import type { Driver } from "../driver/Driver";
 import {
 	createAndStartDriverWithMockPort,
-	CreateAndStartDriverWithMockPortResult,
+	type CreateAndStartDriverWithMockPortResult,
 } from "../driver/DriverMock";
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";

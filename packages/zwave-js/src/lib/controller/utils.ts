@@ -7,7 +7,10 @@ import {
 import { padVersion } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import semver from "semver";
-import { PlannedProvisioningEntry, ProvisioningEntryStatus } from "./Inclusion";
+import {
+	ProvisioningEntryStatus,
+	type PlannedProvisioningEntry,
+} from "./Inclusion";
 
 export function assertProvisioningEntry(
 	arg: any,

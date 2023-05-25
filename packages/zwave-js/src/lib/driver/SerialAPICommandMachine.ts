@@ -7,15 +7,15 @@ import {
 import {
 	assign,
 	createMachine,
-	Interpreter,
-	MachineConfig,
-	MachineOptions,
-	StateMachine,
+	type Interpreter,
+	type MachineConfig,
+	type MachineOptions,
+	type StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
 import {
 	respondUnsolicited,
-	ServiceImplementations,
+	type ServiceImplementations,
 } from "./StateMachineShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 

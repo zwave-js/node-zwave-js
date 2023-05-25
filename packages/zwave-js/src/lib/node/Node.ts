@@ -1,38 +1,38 @@
 import {
-	CCAPI,
-	CCValueOptions,
 	CentralSceneKeys,
 	ClockCommand,
 	CommandClass,
-	defaultCCValueOptions,
 	DoorLockMode,
 	EntryControlDataTypes,
-	entryControlEventTypeLabels,
-	FirmwareUpdateCapabilities,
-	FirmwareUpdateMetaData,
-	FirmwareUpdateProgress,
 	FirmwareUpdateRequestStatus,
-	FirmwareUpdateResult,
 	FirmwareUpdateStatus,
-	getCCValues,
 	InclusionControllerCCInitiate,
 	InclusionControllerStep,
-	isCommandClassContainer,
 	MultiCommandCCCommandEncapsulation,
 	MultilevelSwitchCommand,
-	PollValueImplementation,
 	Powerlevel,
 	PowerlevelTestStatus,
 	ScheduleEntryLockCommand,
-	SetValueAPIOptions,
 	TimeCCDateGet,
 	TimeCCTimeGet,
 	TimeCCTimeOffsetGet,
 	TimeCommand,
 	TimeParametersCommand,
-	ValueIDProperties,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
+	defaultCCValueOptions,
+	entryControlEventTypeLabels,
+	getCCValues,
+	isCommandClassContainer,
+	type CCAPI,
+	type CCValueOptions,
+	type FirmwareUpdateCapabilities,
+	type FirmwareUpdateMetaData,
+	type FirmwareUpdateProgress,
+	type FirmwareUpdateResult,
+	type PollValueImplementation,
+	type SetValueAPIOptions,
+	type ValueIDProperties,
 } from "@zwave-js/cc";
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import {
@@ -68,10 +68,10 @@ import {
 } from "@zwave-js/cc/MultilevelSwitchCC";
 import { NodeNamingAndLocationCCValues } from "@zwave-js/cc/NodeNamingCC";
 import {
-	getNotificationStateValueWithEnum,
-	getNotificationValueMetadata,
 	NotificationCCReport,
 	NotificationCCValues,
+	getNotificationStateValueWithEnum,
+	getNotificationValueMetadata,
 } from "@zwave-js/cc/NotificationCC";
 import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
@@ -101,14 +101,21 @@ import type {
 	NotificationValueDefinition,
 } from "@zwave-js/config";
 import {
-	actuatorCCs,
-	applicationCCs,
+	CRC16_CCITT,
 	CacheBackedMap,
 	CommandClasses,
-	CRC16_CCITT,
-	DataRate,
-	Firmware,
-	FLiRS,
+	MessagePriority,
+	NodeType,
+	RssiError,
+	SecurityClass,
+	SupervisionStatus,
+	ValueDB,
+	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
+	ZWaveLibraryTypes,
+	actuatorCCs,
+	applicationCCs,
 	getCCName,
 	getDSTInfo,
 	isRssiError,
@@ -116,62 +123,55 @@ import {
 	isTransmissionError,
 	isUnsupervisedOrSucceeded,
 	isZWaveError,
-	IZWaveNode,
-	Maybe,
-	MessagePriority,
-	MetadataUpdatedArgs,
-	NodeType,
-	NodeUpdatePayload,
 	nonApplicationCCs,
 	normalizeValueID,
-	ProtocolVersion,
-	RSSI,
-	RssiError,
-	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
-	SecurityClassOwner,
-	SendCommandOptions,
 	sensorCCs,
-	SetValueOptions,
-	SinglecastCC,
 	supervisedCommandFailed,
 	supervisedCommandSucceeded,
-	SupervisionStatus,
 	topologicalSort,
-	TranslatedValueID,
-	TXReport,
 	unknownBoolean,
-	ValueDB,
-	ValueID,
 	valueIdToString,
-	ValueMetadata,
-	ValueMetadataNumeric,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
-	ZWaveError,
-	ZWaveErrorCodes,
-	ZWaveLibraryTypes,
+	type DataRate,
+	type FLiRS,
+	type Firmware,
+	type IZWaveNode,
+	type Maybe,
+	type MetadataUpdatedArgs,
+	type NodeUpdatePayload,
+	type ProtocolVersion,
+	type RSSI,
+	type SecurityClassOwner,
+	type SendCommandOptions,
+	type SetValueOptions,
+	type SinglecastCC,
+	type TXReport,
+	type TranslatedValueID,
+	type ValueID,
+	type ValueMetadataNumeric,
+	type ValueRemovedArgs,
+	type ValueUpdatedArgs,
 } from "@zwave-js/core";
 import type { NodeSchedulePollOptions } from "@zwave-js/host";
 import type { Message } from "@zwave-js/serial";
 import {
+	Mixin,
+	ObjectKeyMap,
 	discreteLinearSearch,
 	formatId,
 	getEnumMemberName,
 	getErrorMessage,
-	Mixin,
 	num2hex,
-	ObjectKeyMap,
 	pick,
 	stringify,
-	TypedEventEmitter,
+	type TypedEventEmitter,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { padStart } from "alcalzone-shared/strings";
@@ -182,13 +182,13 @@ import { isDeepStrictEqual } from "util";
 import { determineNIF } from "../controller/NodeInformationFrame";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
-import { Extended, interpretEx } from "../driver/StateMachineShared";
+import { interpretEx, type Extended } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
 import {
-	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
+	type ApplicationUpdateRequest,
 } from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	GetNodeProtocolInfoRequest,
@@ -207,20 +207,19 @@ import {
 } from "./HealthCheck";
 import {
 	createNodeReadyMachine,
-	NodeReadyInterpreter,
+	type NodeReadyInterpreter,
 } from "./NodeReadyMachine";
 import {
-	NodeStatistics,
 	NodeStatisticsHost,
-	RouteStatistics,
 	routeStatisticsEquals,
+	type NodeStatistics,
+	type RouteStatistics,
 } from "./NodeStatistics";
 import {
 	createNodeStatusMachine,
-	NodeStatusInterpreter,
 	nodeStatusMachineStateToNodeStatus,
+	type NodeStatusInterpreter,
 } from "./NodeStatusMachine";
-import * as nodeUtils from "./utils";
 import type {
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
@@ -231,6 +230,7 @@ import type {
 	ZWaveNodeValueEventCallbacks,
 } from "./_Types";
 import { InterviewStage, NodeStatus } from "./_Types";
+import * as nodeUtils from "./utils";
 
 interface ScheduledPoll {
 	timeout: NodeJS.Timeout;

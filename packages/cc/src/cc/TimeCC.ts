@@ -1,15 +1,15 @@
 import {
 	CommandClasses,
-	DSTInfo,
-	formatDate,
-	getDSTInfo,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	SupervisionResult,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	formatDate,
+	getDSTInfo,
+	validatePayload,
+	type DSTInfo,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
@@ -30,8 +30,8 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import { encodeTimezone, parseTimezone } from "../lib/serializers";
 import { TimeCommand } from "../lib/_Types";
+import { encodeTimezone, parseTimezone } from "../lib/serializers";
 
 // @noSetValueAPI
 // Only the timezone information can be set and that accepts a non-primitive value

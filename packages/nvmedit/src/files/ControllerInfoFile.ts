@@ -9,9 +9,9 @@ import {
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export type ControllerInfoFileOptions = NVMFileCreationOptions & {

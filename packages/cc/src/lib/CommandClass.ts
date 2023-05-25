@@ -1,35 +1,35 @@
 import {
-	BroadcastCC,
 	CommandClasses,
 	EncapsulationFlags,
-	FrameType,
-	getCCName,
-	ICommandClass,
-	isZWaveError,
-	IZWaveEndpoint,
-	IZWaveNode,
-	MessageOrCCLogEntry,
-	MessageRecord,
-	MulticastCC,
-	MulticastDestination,
 	NODE_ID_BROADCAST,
-	parseCCId,
-	SinglecastCC,
-	ValueDB,
-	ValueID,
-	valueIdToString,
-	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
+	isZWaveError,
+	parseCCId,
+	valueIdToString,
+	type BroadcastCC,
+	type FrameType,
+	type ICommandClass,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type MulticastCC,
+	type MulticastDestination,
+	type SinglecastCC,
+	type ValueDB,
+	type ValueID,
+	type ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
 	buffer2hex,
 	getEnumMemberName,
-	JSONObject,
 	num2hex,
 	staticExtends,
+	type JSONObject,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { ValueIDProperties } from "./API";
@@ -45,19 +45,19 @@ import {
 	getImplementedVersion,
 } from "./CommandClassDecorators";
 import {
-	EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
+	type EncapsulatingCommandClass,
 } from "./EncapsulatingCommandClass";
 import {
-	ICommandClassContainer,
 	isCommandClassContainer,
+	type ICommandClassContainer,
 } from "./ICommandClassContainer";
 import {
-	CCValue,
 	defaultCCValueOptions,
-	DynamicCCValue,
-	StaticCCValue,
+	type CCValue,
+	type DynamicCCValue,
+	type StaticCCValue,
 } from "./Values";
 
 export type CommandClassDeserializationOptions = {

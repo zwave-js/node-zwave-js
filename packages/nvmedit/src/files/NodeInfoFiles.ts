@@ -1,20 +1,20 @@
 import {
+	MAX_NODES,
+	NUM_NODEMASK_BYTES,
 	encodeBitMask,
 	encodeNodeProtocolInfo,
-	MAX_NODES,
-	NodeProtocolInfo,
-	NUM_NODEMASK_BYTES,
 	parseBitMask,
 	parseNodeProtocolInfo,
+	type NodeProtocolInfo,
 } from "@zwave-js/core/safe";
 import { pick } from "@zwave-js/shared/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
-	gotDeserializationOptions,
 	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
+	gotDeserializationOptions,
 	nvmFileID,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export const NODEINFOS_PER_FILE_V1 = 4;

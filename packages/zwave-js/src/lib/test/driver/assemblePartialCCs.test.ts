@@ -1,11 +1,11 @@
 import { AssociationCCReport } from "@zwave-js/cc/AssociationCC";
 import { BasicCCSet } from "@zwave-js/cc/BasicCC";
 import { MultiCommandCCCommandEncapsulation } from "@zwave-js/cc/MultiCommandCC";
-import { AssociationCommand } from "@zwave-js/cc/safe";
 import { SecurityCCCommandEncapsulation } from "@zwave-js/cc/SecurityCC";
+import { AssociationCommand } from "@zwave-js/cc/safe";
 import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { MockController, MockNode } from "@zwave-js/testing";
-import ava, { TestFn } from "ava";
+import ava, { type TestFn } from "ava";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";

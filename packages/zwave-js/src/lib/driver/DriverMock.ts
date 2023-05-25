@@ -1,8 +1,8 @@
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import {
 	MockBinding,
-	MockPortBinding,
 	SerialPortMock,
+	type MockPortBinding,
 } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";

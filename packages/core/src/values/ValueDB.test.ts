@@ -4,9 +4,9 @@ import sinon from "sinon";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
+import type { ValueID } from "./_Types";
 import { ValueMetadata } from "./Metadata";
 import { dbKeyToValueIdFast, ValueDB } from "./ValueDB";
-import type { ValueID } from "./_Types";
 
 function setup(): {
 	valueDB: ValueDB;

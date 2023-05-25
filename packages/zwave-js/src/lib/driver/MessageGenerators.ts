@@ -1,7 +1,4 @@
 import {
-	CommandClass,
-	getInnermostCommandClass,
-	isCommandClassContainer,
 	MGRPExtension,
 	MPANExtension,
 	Security2CCMessageEncapsulation,
@@ -10,43 +7,46 @@ import {
 	SupervisionCC,
 	SupervisionCCReport,
 	SupervisionCommand,
+	getInnermostCommandClass,
+	isCommandClassContainer,
+	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityCCCommandEncapsulation,
 	SecurityCCNonceGet,
-	SecurityCCNonceReport,
+	type SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
 import {
 	MAX_SEGMENT_SIZE,
 	RELAXED_TIMING_THRESHOLD,
-	TransportServiceCC,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
 	TransportServiceCCSegmentRequest,
 	TransportServiceCCSegmentWait,
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	type TransportServiceCC,
 } from "@zwave-js/cc/TransportServiceCC";
 import {
 	CommandClasses,
 	EncapsulationFlags,
-	mergeSupervisionResults,
 	MessagePriority,
 	NODE_ID_BROADCAST,
-	SendCommandOptions,
 	SPANState,
-	SupervisionResult,
 	SupervisionStatus,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
+	mergeSupervisionResults,
+	type SendCommandOptions,
+	type SupervisionResult,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import {
 	exceedsMaxPayloadLength,

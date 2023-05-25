@@ -11,9 +11,9 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
-	MockZWaveRequestFrame,
+	createMockZWaveRequestFrame,
+	type MockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import path from "path";
 import { integrationTest } from "../integrationTestSuite";
