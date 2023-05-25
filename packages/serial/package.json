@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "@sentry/node": "^7.12.1",
-    "@serialport/stream": "^10.3.0",
+    "@serialport/stream": "^11.0.0",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
     "@zwave-js/shared": "workspace:*",

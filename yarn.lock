@@ -1139,6 +1139,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@serialport/bindings-interface@npm:1.2.2":
+  version: 1.2.2
+  resolution: "@serialport/bindings-interface@npm:1.2.2"
+  checksum: 66154b9abe8b3cfc466431f2197ca1d6ed832e121bab15aed9ffcbda5c1d3bc0d11be3cb5c343d3cfc2b0ea69a393900c5be6a77fe9ec646e3004bf6d6a3756d
+  languageName: node
+  linkType: hard
+
 "@serialport/parser-byte-length@npm:10.3.0":
   version: 10.3.0
   resolution: "@serialport/parser-byte-length@npm:10.3.0"
@@ -1211,13 +1218,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/stream@npm:10.3.0, @serialport/stream@npm:^10.3.0":
+"@serialport/stream@npm:10.3.0":
   version: 10.3.0
   resolution: "@serialport/stream@npm:10.3.0"
   dependencies:
     "@serialport/bindings-interface": 1.2.1
     debug: ^4.3.2
   checksum: b6e21cab78a76c9b589259d23adc0a82f8c8df552e53965ccc9f5292aaf7e57a4d7de4e65ae0e475da4506254fb21f51c46c8617dff8d090e5576134c8a42885
+  languageName: node
+  linkType: hard
+
+"@serialport/stream@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@serialport/stream@npm:11.0.0"
+  dependencies:
+    "@serialport/bindings-interface": 1.2.2
+    debug: 4.3.4
+  checksum: 01341c9446fe8747c1f37eb999f9b153f7fe23dee174ceafe11afc7641aaebcdaa75f67d9ea0d3860026fede6656e2eea8f5c2d975587112de6fea7077f5be83
   languageName: node
   linkType: hard
 
@@ -1971,7 +1988,7 @@ __metadata:
     "@sentry/node": ^7.12.1
     "@serialport/binding-mock": ^10.2.2
     "@serialport/bindings-interface": "*"
-    "@serialport/stream": ^10.3.0
+    "@serialport/stream": ^11.0.0
     "@types/node": ^14.18.47
     "@types/sinon": ^10.0.14
     "@zwave-js/core": "workspace:*"
@@ -3396,6 +3413,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"debug@npm:4.3.4, debug@npm:^4.3.4":
+  version: 4.3.4
+  resolution: "debug@npm:4.3.4"
+  dependencies:
+    ms: 2.1.2
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: 3dbad3f94ea64f34431a9cbf0bafb61853eda57bff2880036153438f50fb5a84f27683ba0d8e5426bf41a8c6ff03879488120cf5b3a761e77953169c0600a708
+  languageName: node
+  linkType: hard
+
 "debug@npm:^4.3.3":
   version: 4.3.3
   resolution: "debug@npm:4.3.3"
@@ -3405,18 +3434,6 @@ __metadata:
     supports-color:
       optional: true
   checksum: 14472d56fe4a94dbcfaa6dbed2dd3849f1d72ba78104a1a328047bb564643ca49df0224c3a17fa63533fd11dd3d4c8636cd861191232a2c6735af00cc2d4de16
-  languageName: node
-  linkType: hard
-
-"debug@npm:^4.3.4":
-  version: 4.3.4
-  resolution: "debug@npm:4.3.4"
-  dependencies:
-    ms: 2.1.2
-  peerDependenciesMeta:
-    supports-color:
-      optional: true
-  checksum: 3dbad3f94ea64f34431a9cbf0bafb61853eda57bff2880036153438f50fb5a84f27683ba0d8e5426bf41a8c6ff03879488120cf5b3a761e77953169c0600a708
   languageName: node
   linkType: hard
 
