@@ -60,7 +60,7 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.35.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.43",
+    "@types/node": "^14.18.47",
     "@types/sinon": "^10.0.14",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
