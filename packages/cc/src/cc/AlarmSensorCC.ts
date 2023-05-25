@@ -1,12 +1,12 @@
 import {
 	CommandClasses,
+	MaybeNotKnown,
 	MessagePriority,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -106,7 +106,7 @@ export const AlarmSensorCCValues = Object.freeze({
 
 @API(CommandClasses["Alarm Sensor"])
 export class AlarmSensorCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: AlarmSensorCommand): Maybe<boolean> {
+	public supportsCommand(cmd: AlarmSensorCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case AlarmSensorCommand.Get:
 			case AlarmSensorCommand.SupportedGet:

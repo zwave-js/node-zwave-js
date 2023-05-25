@@ -22,7 +22,7 @@ import {
 	type ConfigurationMetadata,
 	type IVirtualEndpoint,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -286,7 +286,7 @@ function getParamInformationFromConfigFile(
 
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
-	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ConfigurationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ConfigurationCommand.Get:
 			case ConfigurationCommand.Set:

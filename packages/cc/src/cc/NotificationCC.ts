@@ -21,7 +21,7 @@ import {
 	validatePayload,
 	type IZWaveEndpoint,
 	type IZWaveNode,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SinglecastCC,
@@ -218,7 +218,7 @@ function lookupNotificationNames(
 
 @API(CommandClasses.Notification)
 export class NotificationCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: NotificationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case NotificationCommand.Report:
 			case NotificationCommand.Get:

@@ -9,11 +9,11 @@ import {
 	parseBitMask,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import {
 	formatDate,
@@ -186,7 +186,9 @@ function setUserCodeScheduleEnabledCached(
 
 @API(CommandClasses["Schedule Entry Lock"])
 export class ScheduleEntryLockCCAPI extends CCAPI {
-	public supportsCommand(cmd: ScheduleEntryLockCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ScheduleEntryLockCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ScheduleEntryLockCommand.EnableSet:
 			case ScheduleEntryLockCommand.EnableAllSet:

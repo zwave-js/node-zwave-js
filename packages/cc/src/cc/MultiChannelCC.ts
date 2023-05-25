@@ -12,7 +12,7 @@ import {
 	validatePayload,
 	type ApplicationNodeInformation,
 	type IZWaveNode,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -192,7 +192,7 @@ function areEndpointsUnnecessary(
 
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
-	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
+	public supportsCommand(cmd: MultiChannelCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			// Legacy commands:
 			case MultiChannelCommand.GetV1:

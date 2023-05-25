@@ -6,23 +6,28 @@ import {
 	validatePayload,
 } from "../util/misc";
 
-export type NOT_YET_KNOWN = undefined;
-export const NOT_YET_KNOWN: NOT_YET_KNOWN = undefined;
-export type UNKNOWN_STATE = null;
-export const UNKNOWN_STATE: UNKNOWN_STATE = null;
+/** Indicates that value is not known (yet). */
+export const NOT_KNOWN = undefined;
+export type NOT_KNOWN = typeof NOT_KNOWN;
 
-export type Maybe<T> = T | UNKNOWN_STATE;
+/** Indicates that something is (known to be) in an unknown state. */
+export const UNKNOWN_STATE = null;
+export type UNKNOWN_STATE = typeof UNKNOWN_STATE;
 
-/** Parses a boolean that is encoded as a single byte and might also be "unknown" */
+/** Helper type to preserve the names of an alternative type */
+export type Either<T, Or> = T | Or;
+
+export type MaybeNotKnown<T> = Either<T, NOT_KNOWN>;
+export type MaybeUnknown<T> = Either<T, UNKNOWN_STATE>;
+
+/**
+ * Parses a boolean that is encoded as a single byte and might also be {@link UNKNOWN_STATE} (`null`).
+ * Returns `undefined` if the value canot be parsed.
+ */
 export function parseMaybeBoolean(
 	val: number,
-	preserveUnknown: boolean = true,
-): Maybe<boolean> | undefined {
-	return val === 0xfe
-		? preserveUnknown
-			? UNKNOWN_STATE
-			: undefined
-		: parseBoolean(val);
+): MaybeUnknown<boolean> | undefined {
+	return val === 0xfe ? UNKNOWN_STATE : parseBoolean(val);
 }
 
 /** Parses a boolean that is encoded as a single byte */
@@ -35,13 +40,15 @@ export function encodeBoolean(val: boolean): number {
 	return val ? 0xff : 0;
 }
 
-/** Encodes a boolean that is encoded as a single byte and might also be "unknown" */
-export function encodeMaybeBoolean(val: Maybe<boolean>): number {
+/** Encodes a boolean that is encoded as a single byte and might also be {@link UNKNOWN_STATE} (`null`) */
+export function encodeMaybeBoolean(val: MaybeUnknown<boolean>): number {
 	return val === UNKNOWN_STATE ? 0xfe : val ? 0xff : 0;
 }
 
-/** Parses a single-byte number from 0 to 99, which might also be "unknown" */
-export function parseMaybeNumber(val: number): Maybe<number> | undefined {
+/** Parses a single-byte number from 0 to 99, which might also be {@link UNKNOWN_STATE} (`null`) */
+export function parseMaybeNumber(
+	val: number,
+): MaybeUnknown<number> | undefined {
 	return val === 0xfe ? UNKNOWN_STATE : parseNumber(val);
 }
 

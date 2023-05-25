@@ -8,7 +8,7 @@ import {
 	getCCName,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -84,7 +84,7 @@ export const SceneControllerConfigurationCCValues = Object.freeze({
 export class SceneControllerConfigurationCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: SceneControllerConfigurationCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SceneControllerConfigurationCommand.Get:
 				return this.isSinglecast();

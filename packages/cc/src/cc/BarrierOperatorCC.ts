@@ -7,7 +7,7 @@ import {
 	enumValuesToMetadataStates,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -103,7 +103,9 @@ export const BarrierOperatorCCValues = Object.freeze({
 
 @API(CommandClasses["Barrier Operator"])
 export class BarrierOperatorCCAPI extends CCAPI {
-	public supportsCommand(cmd: BarrierOperatorCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: BarrierOperatorCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BarrierOperatorCommand.Get:
 			case BarrierOperatorCommand.Set:

@@ -5,10 +5,10 @@ import {
 	formatDate,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -114,7 +114,7 @@ function dateToSegments(date: Date, local: boolean): DateSegments {
 
 @API(CommandClasses["Time Parameters"])
 export class TimeParametersCCAPI extends CCAPI {
-	public supportsCommand(cmd: TimeParametersCommand): Maybe<boolean> {
+	public supportsCommand(cmd: TimeParametersCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case TimeParametersCommand.Get:
 				return this.isSinglecast();

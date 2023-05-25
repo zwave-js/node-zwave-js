@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
 	Duration,
+	MaybeUnknown,
 	MessagePriority,
-	UNKNOWN_STATE,
 	ValueMetadata,
 	parseMaybeNumber,
 	parseNumber,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -90,7 +90,7 @@ export const BasicCCValues = Object.freeze({
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	public supportsCommand(cmd: BasicCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BasicCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BasicCommand.Get:
 				return this.isSinglecast();
@@ -389,20 +389,9 @@ export class BasicCCReport extends BasicCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (
-			this.currentValue === UNKNOWN_STATE &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._currentValue = undefined;
-		}
-
-		return super.persistValues(applHost);
-	}
-
-	private _currentValue: Maybe<number> | undefined;
+	private _currentValue: MaybeUnknown<number> | undefined;
 	@ccValue(BasicCCValues.currentValue)
-	public get currentValue(): Maybe<number> | undefined {
+	public get currentValue(): MaybeUnknown<number> | undefined {
 		return this._currentValue;
 	}
 

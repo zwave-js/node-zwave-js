@@ -12,7 +12,7 @@ import {
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -176,7 +176,7 @@ function deserializeMultiChannelAssociationDestination(data: Buffer): {
 export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(
 		cmd: MultiChannelAssociationCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MultiChannelAssociationCommand.Get:
 			case MultiChannelAssociationCommand.Set:

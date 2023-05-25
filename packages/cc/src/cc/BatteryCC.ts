@@ -11,7 +11,7 @@ import {
 	enumValuesToMetadataStates,
 	parseFloatWithScale,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick, type AllOrNone } from "@zwave-js/shared/safe";
@@ -179,7 +179,7 @@ export const BatteryCCValues = Object.freeze({
 
 @API(CommandClasses.Battery)
 export class BatteryCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: BatteryCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BatteryCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BatteryCommand.Get:
 				return true; // This is mandatory

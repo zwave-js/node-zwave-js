@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	MaybeUnknown,
 	MessagePriority,
 	UNKNOWN_STATE,
 	ValueMetadata,
@@ -9,7 +10,7 @@ import {
 	parseBoolean,
 	parseMaybeBoolean,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -73,7 +74,7 @@ export const BinarySwitchCCValues = Object.freeze({
 
 @API(CommandClasses["Binary Switch"])
 export class BinarySwitchCCAPI extends CCAPI {
-	public supportsCommand(cmd: BinarySwitchCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BinarySwitchCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BinarySwitchCommand.Get:
 				return this.isSinglecast();
@@ -373,7 +374,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	}
 
 	@ccValue(BinarySwitchCCValues.currentValue)
-	public readonly currentValue: Maybe<boolean> | undefined;
+	public readonly currentValue: MaybeUnknown<boolean> | undefined;
 
 	@ccValue(BinarySwitchCCValues.targetValue)
 	public readonly targetValue: boolean | undefined;

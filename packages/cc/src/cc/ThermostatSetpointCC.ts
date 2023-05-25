@@ -10,7 +10,7 @@ import {
 	parseFloatWithScale,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 	type ValueMetadataNumeric,
@@ -106,7 +106,9 @@ export const ThermostatSetpointCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatSetpointCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ThermostatSetpointCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatSetpointCommand.Get:
 			case ThermostatSetpointCommand.SupportedGet:

@@ -3,7 +3,7 @@ import {
 	type ConfigManager,
 	type MeterScale,
 } from "@zwave-js/config";
-import { timespan } from "@zwave-js/core";
+import { MaybeUnknown, timespan } from "@zwave-js/core";
 import {
 	CommandClasses,
 	MessageOrCCLogEntry,
@@ -19,7 +19,7 @@ import {
 	parseBitMask,
 	parseFloatWithScale,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
@@ -166,7 +166,7 @@ function getValueLabel(
 
 @API(CommandClasses.Meter)
 export class MeterCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: MeterCommand): Maybe<boolean> {
+	public supportsCommand(cmd: MeterCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MeterCommand.Get:
 				return true; // This is mandatory
@@ -703,8 +703,8 @@ export class MeterCCReport extends MeterCC {
 		return this._rateType;
 	}
 
-	private _deltaTime: Maybe<number>;
-	public get deltaTime(): Maybe<number> {
+	private _deltaTime: MaybeUnknown<number>;
+	public get deltaTime(): MaybeUnknown<number> {
 		return this._deltaTime;
 	}
 

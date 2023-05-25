@@ -5,7 +5,7 @@ import {
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -80,7 +80,9 @@ export const ClimateControlScheduleCCValues = Object.freeze({
 
 @API(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCCAPI extends CCAPI {
-	public supportsCommand(cmd: ClimateControlScheduleCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ClimateControlScheduleCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ClimateControlScheduleCommand.Set:
 			case ClimateControlScheduleCommand.OverrideSet:

@@ -4,7 +4,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -103,7 +103,9 @@ export const DoorLockLoggingCCValues = Object.freeze({
 
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: DoorLockLoggingCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: DoorLockLoggingCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case DoorLockLoggingCommand.RecordsSupportedGet:
 			case DoorLockLoggingCommand.RecordsSupportedReport:

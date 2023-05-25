@@ -2,7 +2,7 @@ import type { AssociationConfig } from "@zwave-js/config";
 import type {
 	IZWaveEndpoint,
 	IZWaveNode,
-	Maybe,
+	MaybeNotKnown,
 	MessageRecord,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -118,7 +118,7 @@ export function getLifelineGroupIds(
 
 @API(CommandClasses.Association)
 export class AssociationCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: AssociationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: AssociationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case AssociationCommand.Get:
 			case AssociationCommand.Set:

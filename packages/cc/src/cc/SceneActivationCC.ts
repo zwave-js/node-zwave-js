@@ -1,5 +1,4 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
@@ -9,6 +8,7 @@ import {
 	Duration,
 	ValueMetadata,
 	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -61,7 +61,9 @@ export const SceneActivationCCValues = Object.freeze({
 
 @API(CommandClasses["Scene Activation"])
 export class SceneActivationCCAPI extends CCAPI {
-	public supportsCommand(_cmd: SceneActivationCommand): Maybe<boolean> {
+	public supportsCommand(
+		_cmd: SceneActivationCommand,
+	): MaybeNotKnown<boolean> {
 		// There is only one mandatory command
 		return true;
 	}

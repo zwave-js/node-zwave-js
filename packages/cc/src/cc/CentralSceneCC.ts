@@ -8,7 +8,7 @@ import {
 	getCCName,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -86,7 +86,7 @@ export const CentralSceneCCValues = Object.freeze({
 
 @API(CommandClasses["Central Scene"])
 export class CentralSceneCCAPI extends CCAPI {
-	public supportsCommand(cmd: CentralSceneCommand): Maybe<boolean> {
+	public supportsCommand(cmd: CentralSceneCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case CentralSceneCommand.SupportedGet:
 				return this.isSinglecast(); // this is mandatory

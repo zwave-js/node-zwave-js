@@ -7,7 +7,7 @@ import {
 	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -76,7 +76,7 @@ export const WakeUpCCValues = Object.freeze({
 
 @API(CommandClasses["Wake Up"])
 export class WakeUpCCAPI extends CCAPI {
-	public supportsCommand(cmd: WakeUpCommand): Maybe<boolean> {
+	public supportsCommand(cmd: WakeUpCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case WakeUpCommand.IntervalGet:
 				return this.isSinglecast();

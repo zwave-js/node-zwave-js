@@ -20,7 +20,6 @@ import {
 	securityClassIsS2,
 	securityClassOrder,
 	validatePayload,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type S2SecurityClass,
@@ -31,6 +30,7 @@ import {
 	EncapsulationFlags,
 	NODE_ID_BROADCAST,
 	encodeCCList,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
@@ -152,7 +152,7 @@ interface DecryptionResult {
 // want to pay the cost of validating each call
 @API(CommandClasses["Security 2"])
 export class Security2CCAPI extends CCAPI {
-	public supportsCommand(_cmd: Security2Command): Maybe<boolean> {
+	public supportsCommand(_cmd: Security2Command): MaybeNotKnown<boolean> {
 		// All commands are mandatory
 		return true;
 	}

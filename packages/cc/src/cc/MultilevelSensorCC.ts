@@ -1,4 +1,4 @@
-import { getDefaultScale, Scale } from "@zwave-js/config";
+import { Scale, getDefaultScale } from "@zwave-js/config";
 import { timespan } from "@zwave-js/core";
 import type {
 	MessageOrCCLogEntry,
@@ -9,27 +9,23 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	encodeFloatWithScale,
 	MessagePriority,
-	parseBitMask,
-	parseFloatWithScale,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type Maybe,
+	encodeFloatWithScale,
+	parseBitMask,
+	parseFloatWithScale,
+	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
-	MultilevelSensorCommand,
-	type MultilevelSensorValue,
-} from "../lib/_Types";
-import {
 	CCAPI,
-	PhysicalCCAPI,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
 	type PollValueImplementation,
 } from "../lib/API";
@@ -51,6 +47,10 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
+import {
+	MultilevelSensorCommand,
+	type MultilevelSensorValue,
+} from "../lib/_Types";
 
 export const MultilevelSensorCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Multilevel Sensor"], {
@@ -187,7 +187,9 @@ function getPreferredSensorScale(
 
 @API(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: MultilevelSensorCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: MultilevelSensorCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MultilevelSensorCommand.Get:
 			case MultilevelSensorCommand.Report:

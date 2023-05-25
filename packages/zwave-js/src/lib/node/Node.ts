@@ -104,7 +104,9 @@ import {
 	CRC16_CCITT,
 	CacheBackedMap,
 	CommandClasses,
+	MaybeNotKnown,
 	MessagePriority,
+	NOT_KNOWN,
 	NodeType,
 	RssiError,
 	SecurityClass,
@@ -137,7 +139,6 @@ import {
 	type FLiRS,
 	type Firmware,
 	type IZWaveNode,
-	type Maybe,
 	type MetadataUpdatedArgs,
 	type NodeUpdatePayload,
 	type ProtocolVersion,
@@ -661,15 +662,17 @@ export class ZWaveNode
 	}
 
 	/** Whether the node was granted at least one security class */
-	public get isSecure(): Maybe<boolean> {
+	public get isSecure(): MaybeNotKnown<boolean> {
 		const securityClass = this.getHighestSecurityClass();
-		if (securityClass == undefined) return UNKNOWN_STATE;
+		if (securityClass == undefined) return NOT_KNOWN;
 		if (securityClass === SecurityClass.None) return false;
 		return true;
 	}
 
-	public hasSecurityClass(securityClass: SecurityClass): Maybe<boolean> {
-		return this.securityClasses.get(securityClass) ?? UNKNOWN_STATE;
+	public hasSecurityClass(
+		securityClass: SecurityClass,
+	): MaybeNotKnown<boolean> {
+		return this.securityClasses.get(securityClass);
 	}
 
 	public setSecurityClass(
@@ -680,7 +683,7 @@ export class ZWaveNode
 	}
 
 	/** Returns the highest security class this node was granted or `undefined` if that information isn't known yet */
-	public getHighestSecurityClass(): SecurityClass | undefined {
+	public getHighestSecurityClass(): MaybeNotKnown<SecurityClass> {
 		if (this.securityClasses.size === 0) return undefined;
 		let missingSome = false;
 		for (const secClass of securityClassOrder) {
@@ -690,7 +693,7 @@ export class ZWaveNode
 			}
 		}
 		// If we don't have the info for every security class, we don't know the highest one yet
-		return missingSome ? undefined : SecurityClass.None;
+		return missingSome ? NOT_KNOWN : SecurityClass.None;
 	}
 
 	/** The Z-Wave protocol version this node implements */

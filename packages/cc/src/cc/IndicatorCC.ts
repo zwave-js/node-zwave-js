@@ -13,7 +13,7 @@ import {
 	ZWaveErrorCodes,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
@@ -258,7 +258,7 @@ const MAX_INDICATOR_OBJECTS = 31;
 
 @API(CommandClasses.Indicator)
 export class IndicatorCCAPI extends CCAPI {
-	public supportsCommand(cmd: IndicatorCommand): Maybe<boolean> {
+	public supportsCommand(cmd: IndicatorCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case IndicatorCommand.Get:
 				return this.isSinglecast();

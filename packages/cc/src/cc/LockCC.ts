@@ -6,7 +6,7 @@ import {
 	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -53,7 +53,7 @@ export const LockCCValues = Object.freeze({
 
 @API(CommandClasses.Lock)
 export class LockCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: LockCommand): Maybe<boolean> {
+	public supportsCommand(cmd: LockCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case LockCommand.Get:
 			case LockCommand.Set:

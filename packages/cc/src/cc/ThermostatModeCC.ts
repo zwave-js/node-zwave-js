@@ -6,7 +6,7 @@ import {
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -61,7 +61,7 @@ export const ThermostatModeCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Mode"])
 export class ThermostatModeCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatModeCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ThermostatModeCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatModeCommand.Get:
 			case ThermostatModeCommand.SupportedGet:

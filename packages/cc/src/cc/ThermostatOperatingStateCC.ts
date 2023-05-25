@@ -1,10 +1,11 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
 	ValueMetadata,
 	enumValuesToMetadataStates,
 	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
@@ -50,7 +51,7 @@ export const ThermostatOperatingStateCCValues = Object.freeze({
 export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 	public supportsCommand(
 		cmd: ThermostatOperatingStateCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatOperatingStateCommand.Get:
 				return true; // This is mandatory

@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
 	Duration,
+	MaybeUnknown,
 	MessagePriority,
-	UNKNOWN_STATE,
 	ValueMetadata,
 	parseMaybeNumber,
 	parseNumber,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -188,7 +188,9 @@ export const MultilevelSwitchCCValues = Object.freeze({
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
-	public supportsCommand(cmd: MultilevelSwitchCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: MultilevelSwitchCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MultilevelSwitchCommand.Get:
 				return this.isSinglecast();
@@ -346,7 +348,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					// even if the target node is going to ignore it. There might
 					// be some bugged devices that ignore the ignore start level flag.
 					const startLevel = this.tryGetValueDB()?.getValue<
-						Maybe<number>
+						MaybeUnknown<number>
 					>(
 						MultilevelSwitchCCValues.currentValue.endpoint(
 							this.endpoint.index,
@@ -656,17 +658,6 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (
-			this.currentValue === UNKNOWN_STATE &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this.currentValue = undefined;
-		}
-
-		return super.persistValues(applHost);
-	}
-
 	@ccValue(MultilevelSwitchCCValues.targetValue)
 	public targetValue: number | undefined;
 
@@ -674,7 +665,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public duration: Duration | undefined;
 
 	@ccValue(MultilevelSwitchCCValues.currentValue)
-	public currentValue: Maybe<number> | undefined;
+	public currentValue: MaybeUnknown<number> | undefined;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([

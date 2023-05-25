@@ -5,7 +5,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -68,7 +68,9 @@ function isASCII(str: string): boolean {
 
 @API(CommandClasses["Node Naming and Location"])
 export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: NodeNamingAndLocationCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: NodeNamingAndLocationCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case NodeNamingAndLocationCommand.NameGet:
 			case NodeNamingAndLocationCommand.NameSet:

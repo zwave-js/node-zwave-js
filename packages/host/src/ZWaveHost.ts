@@ -4,7 +4,7 @@ import type {
 	ControllerLogger,
 	ICommandClass,
 	IZWaveNode,
-	Maybe,
+	MaybeNotKnown,
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
@@ -58,12 +58,12 @@ export interface ZWaveHost {
 		endpointIndex?: number,
 	): boolean;
 
-	getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
-	): Maybe<boolean>;
+	): MaybeNotKnown<boolean>;
 
 	setSecurityClass(
 		nodeId: number,

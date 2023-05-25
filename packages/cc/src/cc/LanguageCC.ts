@@ -1,5 +1,4 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
@@ -11,6 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
@@ -53,7 +53,7 @@ export const LanguageCCValues = Object.freeze({
 
 @API(CommandClasses.Language)
 export class LanguageCCAPI extends CCAPI {
-	public supportsCommand(cmd: LanguageCommand): Maybe<boolean> {
+	public supportsCommand(cmd: LanguageCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case LanguageCommand.Get:
 				return this.isSinglecast();

@@ -1,7 +1,6 @@
 import {
 	CommandClasses,
 	MessagePriority,
-	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -10,7 +9,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -242,7 +241,7 @@ export function userCodeToLogString(userCode: string | Buffer): string {
 
 @API(CommandClasses["User Code"])
 export class UserCodeCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: UserCodeCommand): Maybe<boolean> {
+	public supportsCommand(cmd: UserCodeCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case UserCodeCommand.Get:
 			case UserCodeCommand.Set:
@@ -259,23 +258,19 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			case UserCodeCommand.MasterCodeSet:
 			case UserCodeCommand.MasterCodeGet: {
 				if (this.version < 2) return false;
-				return (
-					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						UserCodeCCValues.supportsMasterCode.endpoint(
-							this.endpoint.index,
-						),
-					) ?? UNKNOWN_STATE
+				return this.tryGetValueDB()?.getValue<boolean>(
+					UserCodeCCValues.supportsMasterCode.endpoint(
+						this.endpoint.index,
+					),
 				);
 			}
 
 			case UserCodeCommand.UserCodeChecksumGet: {
 				if (this.version < 2) return false;
-				return (
-					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						UserCodeCCValues.supportsUserCodeChecksum.endpoint(
-							this.endpoint.index,
-						),
-					) ?? UNKNOWN_STATE
+				return this.tryGetValueDB()?.getValue<boolean>(
+					UserCodeCCValues.supportsUserCodeChecksum.endpoint(
+						this.endpoint.index,
+					),
 				);
 			}
 		}

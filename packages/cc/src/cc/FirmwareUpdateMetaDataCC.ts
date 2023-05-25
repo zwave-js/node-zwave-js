@@ -2,11 +2,10 @@ import {
 	CRC16_CCITT,
 	CommandClasses,
 	MessagePriority,
-	UNKNOWN_STATE,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -65,7 +64,9 @@ export const FirmwareUpdateMetaDataCCValues = Object.freeze({
 
 @API(CommandClasses["Firmware Update Meta Data"])
 export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: FirmwareUpdateMetaDataCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: FirmwareUpdateMetaDataCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case FirmwareUpdateMetaDataCommand.MetaDataGet:
 			case FirmwareUpdateMetaDataCommand.RequestGet:
@@ -333,10 +334,10 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
 	@ccValue(FirmwareUpdateMetaDataCCValues.continuesToFunction)
-	public readonly continuesToFunction: Maybe<boolean> = UNKNOWN_STATE;
+	public readonly continuesToFunction: MaybeNotKnown<boolean>;
 
 	@ccValue(FirmwareUpdateMetaDataCCValues.supportsActivation)
-	public readonly supportsActivation: Maybe<boolean> = UNKNOWN_STATE;
+	public readonly supportsActivation: MaybeNotKnown<boolean>;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

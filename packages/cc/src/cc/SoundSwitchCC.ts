@@ -6,7 +6,7 @@ import {
 	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -82,7 +82,7 @@ export const SoundSwitchCCValues = Object.freeze({
 
 @API(CommandClasses["Sound Switch"])
 export class SoundSwitchCCAPI extends CCAPI {
-	public supportsCommand(cmd: SoundSwitchCommand): Maybe<boolean> {
+	public supportsCommand(cmd: SoundSwitchCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SoundSwitchCommand.TonesNumberGet:
 			case SoundSwitchCommand.ToneInfoGet:

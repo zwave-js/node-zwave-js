@@ -10,7 +10,7 @@ import {
 	parseFloatWithScale,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 	type ValueMetadataNumeric,
@@ -110,7 +110,7 @@ function getSetpointUnit(configManager: ConfigManager, scale: number): string {
 export class HumidityControlSetpointCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: HumidityControlSetpointCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case HumidityControlSetpointCommand.Get:
 			case HumidityControlSetpointCommand.SupportedGet:

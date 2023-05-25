@@ -1,7 +1,8 @@
 import {
 	CommandClasses,
+	MaybeNotKnown,
 	NODE_ID_BROADCAST,
-	UNKNOWN_STATE,
+	NOT_KNOWN,
 	ZWaveError,
 	ZWaveErrorCodes,
 	isZWaveError,
@@ -10,7 +11,6 @@ import {
 	type IVirtualEndpoint,
 	type IZWaveEndpoint,
 	type IZWaveNode,
-	type Maybe,
 	type SendCommandOptions,
 	type SupervisionResult,
 	type TXReport,
@@ -340,12 +340,12 @@ export class CCAPI {
 
 	/**
 	 * Determine whether the linked node supports a specific command of this command class.
-	 * "unknown" means that the information has not been received yet
+	 * {@link NOT_KNOWN} (`undefined`) means that the information has not been received yet
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public supportsCommand(command: number): Maybe<boolean> {
+	public supportsCommand(command: number): MaybeNotKnown<boolean> {
 		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
-		return UNKNOWN_STATE;
+		return NOT_KNOWN;
 	}
 
 	protected assertSupportsCommand(

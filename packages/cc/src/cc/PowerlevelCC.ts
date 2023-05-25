@@ -4,7 +4,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -35,7 +35,7 @@ import {
 
 @API(CommandClasses.Powerlevel)
 export class PowerlevelCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: PowerlevelCommand): Maybe<boolean> {
+	public supportsCommand(cmd: PowerlevelCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case PowerlevelCommand.Get:
 			case PowerlevelCommand.TestNodeGet:

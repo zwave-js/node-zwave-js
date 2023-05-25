@@ -7,7 +7,7 @@ import {
 	parseCCId,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -84,7 +84,9 @@ export const AssociationGroupInfoCCValues = Object.freeze({
 
 @API(CommandClasses["Association Group Information"])
 export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: AssociationGroupInfoCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: AssociationGroupInfoCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case AssociationGroupInfoCommand.NameGet:
 			case AssociationGroupInfoCommand.InfoGet:

@@ -307,7 +307,6 @@ Updates a subset of the driver options without having to restart the driver. The
 -   `interview`
 -   `logConfig`
 -   `preferences`
--   `preserveUnknownValues`
 -   `userAgent` (behaves like `updateUserAgent`)
 
 ### `checkForConfigUpdates`
@@ -771,14 +770,6 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
 	 */
 	inclusionUserCallbacks?: InclusionUserCallbacks;
-
-	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
 
 	/**
 	 * Some SET-type commands optimistically update the current value to match the target value

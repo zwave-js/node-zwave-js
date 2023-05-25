@@ -1,7 +1,7 @@
 import type { FLiRS } from "../capabilities/NodeInfo";
 import type { InterviewStage, NodeStatus } from "../consts";
-import type { Maybe } from "../index_safe";
 import type { SecurityClassOwner } from "../security/SecurityClass";
+import { MaybeNotKnown } from "../values/Primitive";
 import type { IVirtualEndpoint, IZWaveEndpoint } from "./IZWaveEndpoint";
 
 /** A basic abstraction of a Z-Wave node providing access to the relevant functionality */
@@ -17,7 +17,7 @@ export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
 	getEndpoint(index: number): IZWaveEndpoint | undefined;
 	getEndpointOrThrow(index: number): IZWaveEndpoint;
 	getAllEndpoints(): IZWaveEndpoint[];
-	readonly isSecure: Maybe<boolean>;
+	readonly isSecure: MaybeNotKnown<boolean>;
 }
 
 /** A basic abstraction of a virtual node (multicast or broadcast) providing access to the relevant functionality */

@@ -49,6 +49,7 @@ import {
 	MAX_SUPERVISION_SESSION_ID,
 	MAX_TRANSPORT_SERVICE_SESSION_ID,
 	MPANState,
+	MaybeNotKnown,
 	MessagePriority,
 	SPANState,
 	SecurityClass,
@@ -68,7 +69,6 @@ import {
 	timespan,
 	type ICommandClass,
 	type LogConfig,
-	type Maybe,
 	type MessageRecord,
 	type SendCommandOptions,
 	type SendCommandReturnType,
@@ -235,7 +235,6 @@ const defaultOptions: ZWaveOptions = {
 		sendData: 3,
 		nodeInterview: 5,
 	},
-	preserveUnknownValues: false,
 	disableOptimisticValueUpdate: false,
 	// By default enable soft reset unless the env variable is set
 	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
@@ -823,7 +822,9 @@ export class Driver
 		return this.controller.nodes.get(nodeId)?.deviceConfig;
 	}
 
-	public getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+	public getHighestSecurityClass(
+		nodeId: number,
+	): MaybeNotKnown<SecurityClass> {
 		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.getHighestSecurityClass();
@@ -832,7 +833,7 @@ export class Driver
 	public hasSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.hasSecurityClass(securityClass);
@@ -899,7 +900,6 @@ export class Driver
 			"inclusionUserCallbacks",
 			"interview",
 			"preferences",
-			"preserveUnknownValues",
 		]);
 
 		// Create a new deep-merged copy of the options so we can check them for validity

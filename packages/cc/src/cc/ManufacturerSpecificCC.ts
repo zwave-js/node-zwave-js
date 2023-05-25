@@ -1,4 +1,4 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -6,6 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
@@ -81,7 +82,9 @@ export const ManufacturerSpecificCCValues = Object.freeze({
 
 @API(CommandClasses["Manufacturer Specific"])
 export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ManufacturerSpecificCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ManufacturerSpecificCommand.Get:
 				return true; // This is mandatory

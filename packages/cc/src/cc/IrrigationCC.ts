@@ -9,7 +9,7 @@ import {
 	parseFloatWithScale,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -498,7 +498,7 @@ const valveConfigPropertyKeys = [
 
 @API(CommandClasses.Irrigation)
 export class IrrigationCCAPI extends CCAPI {
-	public supportsCommand(cmd: IrrigationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: IrrigationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case IrrigationCommand.SystemInfoGet:
 			case IrrigationCommand.SystemStatusGet:

@@ -1,4 +1,4 @@
-import type { Maybe } from "../values/Primitive";
+import type { MaybeNotKnown } from "../values/Primitive";
 
 export enum SecurityClass {
 	/**
@@ -42,8 +42,8 @@ export const securityClassOrder = [
 
 export interface SecurityClassOwner {
 	readonly id: number;
-	getHighestSecurityClass(): SecurityClass | undefined;
-	hasSecurityClass(securityClass: SecurityClass): Maybe<boolean>;
+	getHighestSecurityClass(): MaybeNotKnown<SecurityClass>;
+	hasSecurityClass(securityClass: SecurityClass): MaybeNotKnown<boolean>;
 	setSecurityClass(securityClass: SecurityClass, granted: boolean): void;
 }
 
