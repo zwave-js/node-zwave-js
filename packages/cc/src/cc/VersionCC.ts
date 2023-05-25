@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLibraryTypes,
 	enumValuesToMetadataStates,
 	getCCName,
-	unknownBoolean,
 	validatePayload,
 	type Maybe,
 	type MessageOrCCLogEntry,
@@ -228,7 +228,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 						this.endpoint.index,
 					),
 				);
-				if (ret == undefined) ret = unknownBoolean;
+				if (ret == undefined) ret = UNKNOWN_STATE;
 				return ret;
 			}
 		}

@@ -2,10 +2,10 @@ import {
 	CommandClasses,
 	Duration,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	parseMaybeNumber,
 	parseNumber,
-	unknownNumber,
 	validatePayload,
 	type Maybe,
 	type MessageOrCCLogEntry,
@@ -391,7 +391,7 @@ export class BasicCCReport extends BasicCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (
-			this.currentValue === unknownNumber &&
+			this.currentValue === UNKNOWN_STATE &&
 			!applHost.options.preserveUnknownValues
 		) {
 			this._currentValue = undefined;

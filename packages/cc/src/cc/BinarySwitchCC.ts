@@ -2,12 +2,12 @@ import {
 	CommandClasses,
 	Duration,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	encodeBoolean,
 	encodeMaybeBoolean,
 	parseBoolean,
 	parseMaybeBoolean,
-	unknownBoolean,
 	validatePayload,
 	type Maybe,
 	type MessageOrCCLogEntry,
@@ -383,7 +383,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			encodeMaybeBoolean(this.currentValue ?? unknownBoolean),
+			encodeMaybeBoolean(this.currentValue ?? UNKNOWN_STATE),
 		]);
 		if (this.targetValue != undefined) {
 			this.payload = Buffer.concat([

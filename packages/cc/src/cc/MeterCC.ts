@@ -4,22 +4,20 @@ import {
 	type MeterScale,
 } from "@zwave-js/config";
 import { timespan } from "@zwave-js/core";
-import type {
+import {
+	CommandClasses,
 	MessageOrCCLogEntry,
+	MessagePriority,
 	MessageRecord,
 	SinglecastCC,
 	SupervisionResult,
-} from "@zwave-js/core/safe";
-import {
-	CommandClasses,
-	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getMinIntegerSize,
 	parseBitMask,
 	parseFloatWithScale,
-	unknownNumber,
 	validatePayload,
 	type Maybe,
 } from "@zwave-js/core/safe";
@@ -567,7 +565,7 @@ export class MeterCCReport extends MeterCC {
 			this._deltaTime = this.payload.readUInt16BE(offset);
 			offset += 2;
 			if (this._deltaTime === 0xffff) {
-				this._deltaTime = unknownNumber;
+				this._deltaTime = UNKNOWN_STATE;
 			}
 
 			if (
@@ -723,7 +721,7 @@ export class MeterCCReport extends MeterCC {
 			"rate type": getEnumMemberName(RateType, this._rateType),
 			value: this.value,
 		};
-		if (this._deltaTime !== "unknown") {
+		if (this._deltaTime !== UNKNOWN_STATE) {
 			message["time delta"] = `${this.deltaTime} seconds`;
 		}
 		if (this._previousValue != undefined) {

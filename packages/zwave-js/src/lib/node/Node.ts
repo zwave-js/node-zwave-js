@@ -109,6 +109,7 @@ import {
 	RssiError,
 	SecurityClass,
 	SupervisionStatus,
+	UNKNOWN_STATE,
 	ValueDB,
 	ValueMetadata,
 	ZWaveError,
@@ -131,7 +132,6 @@ import {
 	supervisedCommandFailed,
 	supervisedCommandSucceeded,
 	topologicalSort,
-	unknownBoolean,
 	valueIdToString,
 	type DataRate,
 	type FLiRS,
@@ -663,13 +663,13 @@ export class ZWaveNode
 	/** Whether the node was granted at least one security class */
 	public get isSecure(): Maybe<boolean> {
 		const securityClass = this.getHighestSecurityClass();
-		if (securityClass == undefined) return unknownBoolean;
+		if (securityClass == undefined) return UNKNOWN_STATE;
 		if (securityClass === SecurityClass.None) return false;
 		return true;
 	}
 
 	public hasSecurityClass(securityClass: SecurityClass): Maybe<boolean> {
-		return this.securityClasses.get(securityClass) ?? unknownBoolean;
+		return this.securityClasses.get(securityClass) ?? UNKNOWN_STATE;
 	}
 
 	public setSecurityClass(
@@ -2015,7 +2015,7 @@ protocol version:      ${this.protocolVersion}`;
 				SecurityClass.S2_Authenticated,
 				SecurityClass.S2_Unauthenticated,
 			] as const) {
-				if (this.hasSecurityClass(secClass) === unknownBoolean) {
+				if (this.hasSecurityClass(secClass) === UNKNOWN_STATE) {
 					this.securityClasses.set(secClass, false);
 				}
 			}
@@ -2061,8 +2061,7 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		} else {
 			if (
-				this.hasSecurityClass(SecurityClass.S0_Legacy) ===
-				unknownBoolean
+				this.hasSecurityClass(SecurityClass.S0_Legacy) === UNKNOWN_STATE
 			) {
 				// Remember that this node hasn't been granted the S0 security class
 				this.securityClasses.set(SecurityClass.S0_Legacy, false);

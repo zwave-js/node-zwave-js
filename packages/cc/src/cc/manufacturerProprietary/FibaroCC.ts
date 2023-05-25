@@ -1,10 +1,10 @@
 import {
 	CommandClasses,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseMaybeNumber,
-	unknownNumber,
 	validatePayload,
 	type Maybe,
 	type MessageOrCCLogEntry,
@@ -450,13 +450,13 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (
-			this._position === unknownNumber &&
+			this._position === UNKNOWN_STATE &&
 			!applHost.options.preserveUnknownValues
 		) {
 			this._position = undefined;
 		}
 		if (
-			this._tilt === unknownNumber &&
+			this._tilt === UNKNOWN_STATE &&
 			!applHost.options.preserveUnknownValues
 		) {
 			this._tilt = undefined;

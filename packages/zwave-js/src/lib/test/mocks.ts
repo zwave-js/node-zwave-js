@@ -6,10 +6,10 @@ import {
 	MessagePriority,
 	NodeStatus,
 	SecurityClass,
+	UNKNOWN_STATE,
 	ZWaveError,
 	ZWaveErrorCodes,
 	securityClassOrder,
-	unknownBoolean,
 	type CommandClassInfo,
 	type CommandClasses,
 	type FLiRS,
@@ -327,14 +327,14 @@ export function createTestNode(
 			return missingSome ? undefined : SecurityClass.None;
 		},
 		hasSecurityClass(securityClass: SecurityClass): Maybe<boolean> {
-			return securityClasses.get(securityClass) ?? unknownBoolean;
+			return securityClasses.get(securityClass) ?? UNKNOWN_STATE;
 		},
 		setSecurityClass(securityClass: SecurityClass, granted: boolean): void {
 			securityClasses.set(securityClass, granted);
 		},
 		get isSecure(): Maybe<boolean> {
 			const securityClass = ret.getHighestSecurityClass();
-			if (securityClass == undefined) return unknownBoolean;
+			if (securityClass == undefined) return UNKNOWN_STATE;
 			if (securityClass === SecurityClass.None) return false;
 			return true;
 		},

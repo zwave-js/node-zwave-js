@@ -6,13 +6,12 @@ import {
 	validatePayload,
 } from "../util/misc";
 
-type Brand<K, T> = K & { __brand: T };
+export type NOT_YET_KNOWN = undefined;
+export const NOT_YET_KNOWN: NOT_YET_KNOWN = undefined;
+export type UNKNOWN_STATE = null;
+export const UNKNOWN_STATE: UNKNOWN_STATE = null;
 
-type BrandedUnknown<T> = Brand<"unknown", T>;
-export type Maybe<T> = T | BrandedUnknown<T>;
-
-export const unknownNumber = "unknown" as Maybe<number>;
-export const unknownBoolean = "unknown" as Maybe<boolean>;
+export type Maybe<T> = T | UNKNOWN_STATE;
 
 /** Parses a boolean that is encoded as a single byte and might also be "unknown" */
 export function parseMaybeBoolean(
@@ -21,7 +20,7 @@ export function parseMaybeBoolean(
 ): Maybe<boolean> | undefined {
 	return val === 0xfe
 		? preserveUnknown
-			? unknownBoolean
+			? UNKNOWN_STATE
 			: undefined
 		: parseBoolean(val);
 }
@@ -38,12 +37,12 @@ export function encodeBoolean(val: boolean): number {
 
 /** Encodes a boolean that is encoded as a single byte and might also be "unknown" */
 export function encodeMaybeBoolean(val: Maybe<boolean>): number {
-	return val === "unknown" ? 0xfe : val ? 0xff : 0;
+	return val === UNKNOWN_STATE ? 0xfe : val ? 0xff : 0;
 }
 
 /** Parses a single-byte number from 0 to 99, which might also be "unknown" */
 export function parseMaybeNumber(val: number): Maybe<number> | undefined {
-	return val === 0xfe ? unknownNumber : parseNumber(val);
+	return val === 0xfe ? UNKNOWN_STATE : parseNumber(val);
 }
 
 /** Parses a single-byte number from 0 to 99 */

@@ -3,12 +3,12 @@ import {
 	MAX_NODES,
 	MessagePriority,
 	Timeout,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	parseBitMask,
-	unknownBoolean,
 	validatePayload,
 	type Maybe,
 	type MessageOrCCLogEntry,
@@ -124,7 +124,7 @@ export class ProtectionCCAPI extends CCAPI {
 							this.endpoint.index,
 						),
 					) ??
-						unknownBoolean)
+						UNKNOWN_STATE)
 				);
 			}
 			case ProtectionCommand.ExclusiveControlGet:
@@ -136,7 +136,7 @@ export class ProtectionCCAPI extends CCAPI {
 							this.endpoint.index,
 						),
 					) ??
-						unknownBoolean)
+						UNKNOWN_STATE)
 				);
 			}
 		}

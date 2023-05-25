@@ -1,11 +1,11 @@
 import {
 	CommandClasses,
 	NODE_ID_BROADCAST,
+	UNKNOWN_STATE,
 	ZWaveError,
 	ZWaveErrorCodes,
 	isZWaveError,
 	stripUndefined,
-	unknownBoolean,
 	type Duration,
 	type IVirtualEndpoint,
 	type IZWaveEndpoint,
@@ -345,7 +345,7 @@ export class CCAPI {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public supportsCommand(command: number): Maybe<boolean> {
 		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
-		return unknownBoolean;
+		return UNKNOWN_STATE;
 	}
 
 	protected assertSupportsCommand(

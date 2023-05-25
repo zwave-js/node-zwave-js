@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	parseBitMask,
 	supervisedCommandSucceeded,
-	unknownBoolean,
 	validatePayload,
 	type IZWaveEndpoint,
 	type Maybe,
@@ -264,7 +264,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						UserCodeCCValues.supportsMasterCode.endpoint(
 							this.endpoint.index,
 						),
-					) ?? unknownBoolean
+					) ?? UNKNOWN_STATE
 				);
 			}
 
@@ -275,7 +275,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						UserCodeCCValues.supportsUserCodeChecksum.endpoint(
 							this.endpoint.index,
 						),
-					) ?? unknownBoolean
+					) ?? UNKNOWN_STATE
 				);
 			}
 		}

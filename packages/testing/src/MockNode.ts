@@ -1,7 +1,7 @@
 import {
 	SecurityClass,
+	UNKNOWN_STATE,
 	securityClassOrder,
-	unknownBoolean,
 	type CommandClassInfo,
 	type CommandClasses,
 	type Maybe,
@@ -122,7 +122,7 @@ export class MockNode {
 			): Maybe<boolean> {
 				return (
 					securityClasses.get(nodeId)?.get(securityClass) ??
-					unknownBoolean
+					UNKNOWN_STATE
 				);
 			},
 			setSecurityClass(

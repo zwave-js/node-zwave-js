@@ -2,9 +2,9 @@ import {
 	CRC16_CCITT,
 	CommandClasses,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ZWaveError,
 	ZWaveErrorCodes,
-	unknownBoolean,
 	validatePayload,
 	type Maybe,
 	type MessageOrCCLogEntry,
@@ -333,10 +333,10 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
 	@ccValue(FirmwareUpdateMetaDataCCValues.continuesToFunction)
-	public readonly continuesToFunction: Maybe<boolean> = unknownBoolean;
+	public readonly continuesToFunction: Maybe<boolean> = UNKNOWN_STATE;
 
 	@ccValue(FirmwareUpdateMetaDataCCValues.supportsActivation)
-	public readonly supportsActivation: Maybe<boolean> = unknownBoolean;
+	public readonly supportsActivation: Maybe<boolean> = UNKNOWN_STATE;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

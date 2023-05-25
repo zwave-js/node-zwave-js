@@ -2,10 +2,10 @@ import {
 	CommandClasses,
 	Duration,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	parseMaybeNumber,
 	parseNumber,
-	unknownNumber,
 	validatePayload,
 	type Maybe,
 	type MessageOrCCLogEntry,
@@ -626,43 +626,70 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	}
 }
 
+interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
+	currentValue: number;
+	targetValue: number;
+	duration?: Duration | string;
+}
+
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| MultilevelSwitchCCReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this._currentValue = parseMaybeNumber(this.payload[0]);
-		if (this.version >= 4 && this.payload.length >= 3) {
-			this.targetValue = parseNumber(this.payload[1]);
-			this.duration = Duration.parseReport(this.payload[2]);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.currentValue = parseMaybeNumber(this.payload[0]);
+			if (this.version >= 4 && this.payload.length >= 3) {
+				this.targetValue = parseNumber(this.payload[1]);
+				this.duration = Duration.parseReport(this.payload[2]);
+			}
+		} else {
+			this.currentValue = options.currentValue;
+			this.targetValue = options.targetValue;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (
-			this.currentValue === unknownNumber &&
+			this.currentValue === UNKNOWN_STATE &&
 			!applHost.options.preserveUnknownValues
 		) {
-			this._currentValue = undefined;
+			this.currentValue = undefined;
 		}
 
 		return super.persistValues(applHost);
 	}
 
 	@ccValue(MultilevelSwitchCCValues.targetValue)
-	public readonly targetValue: number | undefined;
+	public targetValue: number | undefined;
 
 	@ccValue(MultilevelSwitchCCValues.duration)
-	public readonly duration: Duration | undefined;
+	public duration: Duration | undefined;
 
-	private _currentValue: Maybe<number> | undefined;
 	@ccValue(MultilevelSwitchCCValues.currentValue)
-	public get currentValue(): Maybe<number> | undefined {
-		return this._currentValue;
+	public currentValue: Maybe<number> | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			typeof this.currentValue === "number" ? this.currentValue : 254,
+		]);
+		if (this.version >= 4) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([
+					this.targetValue ?? 254,
+					(this.duration ?? Duration.default()).serializeReport(),
+				]),
+			]);
+		}
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
