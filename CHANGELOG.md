@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.22.3 (2023-05-26)
+### Bugfixes
+* Fixed an issue introduced in `10.21.0` where some optimistic value updates would no longer happen after successful multicast commands (#5848)
+
+### Changes under the hood
+* Upgraded to TypeScript 5.0 (#5656)
+
 ## 10.22.2 (2023-05-24)
 ### Bugfixes
 * Fixed an issue where values wouldn't be updated after some supervised commands when the device's initial response was `WORKING` (#5840)
