@@ -2,14 +2,18 @@ import {
 	BasicCCValues,
 	type CCAPI,
 	type SetValueAPIOptions,
+	type ValueIDProperties,
 } from "@zwave-js/cc";
 import {
 	SecurityClass,
+	SupervisionStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 	actuatorCCs,
+	isSupervisionResult,
 	isZWaveError,
 	normalizeValueID,
+	supervisedCommandSucceeded,
 	valueIdToString,
 	type IVirtualNode,
 	type TranslatedValueID,
@@ -102,18 +106,42 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 			if (!endpointInstance) return false;
-			const api = (endpointInstance.commandClasses as any)[
+			let api = (endpointInstance.commandClasses as any)[
 				valueId.commandClass
 			] as CCAPI;
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
+
+			const valueIdProps: ValueIDProperties = {
+				property: valueId.property,
+				propertyKey: valueId.propertyKey,
+			};
+
+			const hooks = api.setValueHooks?.(valueIdProps, value, options);
+
+			if (hooks?.supervisionDelayedUpdates) {
+				api = api.withOptions({
+					requestStatusUpdates: true,
+					onUpdate: async (update) => {
+						try {
+							if (update.status === SupervisionStatus.Success) {
+								await hooks.supervisionOnSuccess();
+							} else if (
+								update.status === SupervisionStatus.Fail
+							) {
+								await hooks.supervisionOnFailure();
+							}
+						} catch {
+							// TODO: Log error?
+						}
+					},
+				});
+			}
+
 			// And call it
-			await api.setValue.call(
+			const result = await api.setValue!.call(
 				api,
-				{
-					property: valueId.property,
-					propertyKey: valueId.propertyKey,
-				},
+				valueIdProps,
 				value,
 				options,
 			);
@@ -134,6 +162,37 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 					);
 				for (const node of affectedNodes) {
 					node.valueDB.setValue(valueId, value);
+				}
+			}
+
+			// Depending on the settings of the SET_VALUE implementation, we may have to
+			// optimistically update a different value and/or verify the changes
+			if (hooks) {
+				// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+				// so UIs have immediate feedback
+				const shouldUpdateOptimistically =
+					api.isSetValueOptimistic(valueId) &&
+					// For unsupervised commands, make the choice to update optimistically dependent on the driver options
+					((!this.driver.options.disableOptimisticValueUpdate &&
+						result == undefined) ||
+						(isSupervisionResult(result) &&
+							result.status === SupervisionStatus.Success));
+
+				// Let the API implementation handle additional optimistic updates
+				if (shouldUpdateOptimistically) {
+					hooks.optimisticallyUpdateRelatedValues?.();
+				}
+
+				// Verify the current value after a delay, unless...
+				// ...the command was supervised and successful
+				// ...and the CC API decides not to verify anyways
+				if (
+					!supervisedCommandSucceeded(result) ||
+					hooks.forceVerifyChanges?.()
+				) {
+					// Let the CC API implementation handle the verification.
+					// It may still decide not to do it.
+					await hooks.verifyChanges?.();
 				}
 			}
 

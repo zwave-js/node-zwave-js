@@ -134,8 +134,6 @@ function suite(
 				}
 
 				await Promise.all(promises);
-				console.error(`all nodes ready`);
-
 				process.nextTick(resolve);
 			});
 
