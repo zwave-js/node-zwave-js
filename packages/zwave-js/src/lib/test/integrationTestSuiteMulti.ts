@@ -26,18 +26,18 @@ interface IntegrationTestOptions {
 	provisioningDirectory?: string;
 	/** Whether the recorded messages and frames should be cleared before executing the test body. Default: true. */
 	clearMessageStatsBeforeTest?: boolean;
-	nodeCapabilities?: MockNodeOptions["capabilities"];
+	nodeCapabilities: Pick<MockNodeOptions, "id" | "capabilities">[];
 	customSetup?: (
 		driver: Driver,
 		mockController: MockController,
-		mockNode: MockNode,
+		mockNodes: MockNode[],
 	) => Promise<void>;
 	testBody: (
 		t: ExecutionContext,
 		driver: Driver,
-		node: ZWaveNode,
+		nodes: ZWaveNode[],
 		mockController: MockController,
-		mockNode: MockNode,
+		mockNodes: MockNode[],
 	) => Promise<void>;
 	additionalDriverOptions?: Partial<ZWaveOptions>;
 }
@@ -68,11 +68,11 @@ function suite(
 	} = options;
 
 	let driver: Driver;
-	let node: ZWaveNode;
 	let mockPort: MockPortBinding;
 	let continueStartup: () => void;
 	let mockController: MockController;
-	let mockNode: MockNode;
+	let mockNodes: MockNode[];
+	let nodes: ZWaveNode[];
 
 	const cacheDir = path.join(
 		os.tmpdir(),
@@ -97,35 +97,46 @@ function suite(
 			debug,
 			additionalDriverOptions,
 		));
-
-		({
-			mockController,
-			mockNodes: [mockNode],
-		} = prepareMocks(mockPort, undefined, [
-			{
-				id: 2,
-				capabilities: nodeCapabilities,
-			},
-		]));
+		({ mockController, mockNodes } = prepareMocks(
+			mockPort,
+			undefined,
+			nodeCapabilities,
+		));
 
 		if (customSetup) {
-			await customSetup(driver, mockController, mockNode);
+			await customSetup(driver, mockController, mockNodes);
 		}
 
+		// Wait for all nodes to be ready
 		return new Promise<void>((resolve) => {
-			driver.once("driver ready", () => {
-				// Test code goes here
+			driver.once("driver ready", async () => {
+				const promises: Promise<void>[] = [];
+				nodes = [];
+				for (const mockNode of mockNodes) {
+					const node = driver.controller.nodes.getOrThrow(
+						mockNode.id,
+					);
+					nodes.push(node);
 
-				node = driver.controller.nodes.getOrThrow(mockNode.id);
-				node.once("ready", () => {
-					if (clearMessageStatsBeforeTest) {
-						mockNode.clearReceivedControllerFrames();
-						mockNode.clearSentControllerFrames();
-						mockController.clearReceivedHostMessages();
-					}
+					promises.push(
+						new Promise<void>((resolve) => {
+							node.once("ready", () => {
+								if (clearMessageStatsBeforeTest) {
+									mockNode.clearReceivedControllerFrames();
+									mockNode.clearSentControllerFrames();
+									mockController.clearReceivedHostMessages();
+								}
 
-					process.nextTick(resolve);
-				});
+								process.nextTick(resolve);
+							});
+						}),
+					);
+				}
+
+				await Promise.all(promises);
+				console.error(`all nodes ready`);
+
+				process.nextTick(resolve);
 			});
 
 			continueStartup();
@@ -148,7 +159,7 @@ function suite(
 		});
 
 		await prepareTest();
-		await testBody(t, driver, node, mockController, mockNode);
+		await testBody(t, driver, nodes, mockController, mockNodes);
 	});
 }
 
