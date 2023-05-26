@@ -8,6 +8,7 @@ import {
 	ZWaveErrorCodes,
 	type MessageOrCCLogEntry,
 	type MulticastCC,
+	type MulticastDestination,
 	type SinglecastCC,
 	type TXReport,
 } from "@zwave-js/core";
@@ -303,12 +304,23 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 @priority(MessagePriority.Normal)
 export class SendDataMulticastRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== SendDataMulticastRequestTransmitReport
-		) {
-			return new SendDataMulticastRequestTransmitReport(host, options);
+		if (gotDeserializationOptions(options)) {
+			if (
+				options.origin === MessageOrigin.Host &&
+				(new.target as any) !== SendDataMulticastRequest
+			) {
+				return new SendDataMulticastRequest(host, options);
+			} else if (
+				options.origin !== MessageOrigin.Host &&
+				(new.target as any) !== SendDataMulticastRequestTransmitReport
+			) {
+				return new SendDataMulticastRequestTransmitReport(
+					host,
+					options,
+				);
+			}
 		}
+
 		super(host, options);
 	}
 }
@@ -330,32 +342,69 @@ export class SendDataMulticastRequest<
 {
 	public constructor(
 		host: ZWaveHost,
-		options: SendDataMulticastRequestOptions<CCType>,
+		options:
+			| MessageDeserializationOptions
+			| SendDataMulticastRequestOptions<CCType>,
 	) {
 		super(host, options);
 
-		if (!options.command.isMulticast()) {
-			throw new ZWaveError(
-				`SendDataMulticastRequest can only be used for multicast CCs`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		} else if (options.command.nodeId.length === 0) {
-			throw new ZWaveError(
-				`At least one node must be targeted`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		} else if (options.command.nodeId.some((n) => n < 1 || n > MAX_NODES)) {
-			throw new ZWaveError(
-				`All node IDs must be between 1 and ${MAX_NODES}!`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
+		if (gotDeserializationOptions(options)) {
+			const numNodeIDs = this.payload[0];
+			this._nodeIds = [
+				...this.payload.slice(1, numNodeIDs + 1),
+			] as MulticastDestination;
 
-		this.command = options.command;
-		this.transmitOptions =
-			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		if (options.maxSendAttempts != undefined) {
-			this.maxSendAttempts = options.maxSendAttempts;
+			let offset = numNodeIDs + 1;
+			const serializedCCLength = this.payload[offset];
+			offset++;
+			const serializedCC = this.payload.slice(
+				offset,
+				offset + serializedCCLength,
+			);
+			offset += serializedCCLength;
+			this.transmitOptions = this.payload[offset];
+			offset++;
+			this.callbackId = this.payload[offset];
+
+			this.payload = serializedCC;
+
+			if (options.parseCCs !== false) {
+				this.command = CommandClass.from(host, {
+					nodeId: this._nodeIds[0],
+					data: this.payload,
+					origin: options.origin,
+				}) as MulticastCC<CCType>;
+				this.command.nodeId = this._nodeIds;
+			} else {
+				// Little hack for testing with a network mock. This will be parsed in the next step.
+				this.command = undefined as any;
+			}
+		} else {
+			if (!options.command.isMulticast()) {
+				throw new ZWaveError(
+					`SendDataMulticastRequest can only be used for multicast CCs`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			} else if (options.command.nodeId.length === 0) {
+				throw new ZWaveError(
+					`At least one node must be targeted`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			} else if (
+				options.command.nodeId.some((n) => n < 1 || n > MAX_NODES)
+			) {
+				throw new ZWaveError(
+					`All node IDs must be between 1 and ${MAX_NODES}!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
+			this.command = options.command;
+			this.transmitOptions =
+				options.transmitOptions ?? TransmitOptions.DEFAULT;
+			if (options.maxSendAttempts != undefined) {
+				this.maxSendAttempts = options.maxSendAttempts;
+			}
 		}
 	}
 
@@ -373,6 +422,7 @@ export class SendDataMulticastRequest<
 		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
 	}
 
+	private _nodeIds: MulticastDestination | undefined;
 	public override getNodeId(): number | undefined {
 		// This is multicast, getNodeId must return undefined here
 		return undefined;
@@ -455,7 +505,6 @@ export class SendDataMulticastRequestTransmitReport
 			this.callbackId = this.payload[0];
 			this._transmitStatus = this.payload[1];
 			// not sure what bytes 2 and 3 mean
-			// the CC seems not to be included in this, but rather come in an application command later
 		} else {
 			this.callbackId = options.callbackId;
 			this._transmitStatus = options.transmitStatus;
@@ -465,6 +514,11 @@ export class SendDataMulticastRequestTransmitReport
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
 		return this._transmitStatus;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.callbackId, this._transmitStatus]);
+		return super.serialize();
 	}
 
 	public isOK(): boolean {
@@ -485,6 +539,10 @@ export class SendDataMulticastRequestTransmitReport
 	}
 }
 
+export interface SendDataMulticastResponseOptions extends MessageBaseOptions {
+	wasSent: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
 export class SendDataMulticastResponse
 	extends Message
@@ -492,20 +550,27 @@ export class SendDataMulticastResponse
 {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| SendDataMulticastResponseOptions,
 	) {
 		super(host, options);
-		this._wasSent = this.payload[0] !== 0;
-		// if (!this._wasSent) this._errorCode = this.payload[0];
+		if (gotDeserializationOptions(options)) {
+			this.wasSent = this.payload[0] !== 0;
+		} else {
+			this.wasSent = options.wasSent;
+		}
+	}
+
+	public wasSent: boolean;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.wasSent ? 1 : 0]);
+		return super.serialize();
 	}
 
 	public isOK(): boolean {
-		return this._wasSent;
-	}
-
-	private _wasSent: boolean;
-	public get wasSent(): boolean {
-		return this._wasSent;
+		return this.wasSent;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
