@@ -250,9 +250,7 @@ const defaultOptions: ZWaveOptions = {
 		throttle: "normal",
 	},
 	preferences: {
-		scales: {
-			temperature: "Celsius",
-		},
+		scales: {},
 	},
 };
 
