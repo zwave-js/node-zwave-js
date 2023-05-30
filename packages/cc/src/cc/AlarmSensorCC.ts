@@ -1,12 +1,12 @@
 import {
 	CommandClasses,
-	MaybeNotKnown,
 	MessagePriority,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseBitMask,
 	validatePayload,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";

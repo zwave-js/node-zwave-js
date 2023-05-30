@@ -1,10 +1,10 @@
 import {
-	MaybeNotKnown,
 	NOT_KNOWN,
 	SecurityClass,
 	securityClassOrder,
 	type CommandClassInfo,
 	type CommandClasses,
+	type MaybeNotKnown,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";

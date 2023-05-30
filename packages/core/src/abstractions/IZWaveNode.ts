@@ -1,7 +1,7 @@
 import type { FLiRS } from "../capabilities/NodeInfo";
 import type { InterviewStage, NodeStatus } from "../consts";
 import type { SecurityClassOwner } from "../security/SecurityClass";
-import { MaybeNotKnown } from "../values/Primitive";
+import { type MaybeNotKnown } from "../values/Primitive";
 import type { IVirtualEndpoint, IZWaveEndpoint } from "./IZWaveEndpoint";
 
 /** A basic abstraction of a Z-Wave node providing access to the relevant functionality */

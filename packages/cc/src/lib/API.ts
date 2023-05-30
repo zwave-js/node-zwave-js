@@ -1,6 +1,5 @@
 import {
 	CommandClasses,
-	MaybeNotKnown,
 	NODE_ID_BROADCAST,
 	NOT_KNOWN,
 	ZWaveError,
@@ -11,6 +10,7 @@ import {
 	type IVirtualEndpoint,
 	type IZWaveEndpoint,
 	type IZWaveNode,
+	type MaybeNotKnown,
 	type SendCommandOptions,
 	type SupervisionResult,
 	type TXReport,

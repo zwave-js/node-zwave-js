@@ -1,11 +1,11 @@
 import {
 	CommandClasses,
-	MaybeUnknown,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseMaybeNumber,
 	validatePayload,
+	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type ValueID,
