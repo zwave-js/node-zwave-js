@@ -34,8 +34,10 @@ import { IZWaveEndpoint as IZWaveEndpoint_2 } from '@zwave-js/core/safe';
 import { IZWaveNode } from '@zwave-js/core/safe';
 import { IZWaveNode as IZWaveNode_2 } from '@zwave-js/core';
 import { JSONObject } from '@zwave-js/shared';
-import { Maybe } from '@zwave-js/core/safe';
-import { Maybe as Maybe_2 } from '@zwave-js/core';
+import { MaybeNotKnown } from '@zwave-js/core/safe';
+import { MaybeNotKnown as MaybeNotKnown_2 } from '@zwave-js/core';
+import { MaybeUnknown } from '@zwave-js/core/safe';
+import { MaybeUnknown as MaybeUnknown_2 } from '@zwave-js/core';
 import type { Message } from '@zwave-js/serial';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessageOrCCLogEntry as MessageOrCCLogEntry_2 } from '@zwave-js/core/safe';
@@ -1537,15 +1539,13 @@ export class BasicCCReport extends BasicCC {
     // Warning: (ae-forgotten-export) The symbol "BasicCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BasicCCReportOptions);
     // (undocumented)
-    get currentValue(): Maybe<number> | undefined;
+    get currentValue(): MaybeUnknown<number> | undefined;
     // (undocumented)
     readonly duration: Duration | undefined;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost_2): boolean;
-    // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    readonly targetValue: number | undefined;
+    readonly targetValue: MaybeUnknown<number> | undefined;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -2377,13 +2377,13 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
     // Warning: (ae-forgotten-export) The symbol "BinarySwitchCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BinarySwitchCCReportOptions);
     // (undocumented)
-    readonly currentValue: Maybe<boolean> | undefined;
+    readonly currentValue: MaybeUnknown<boolean> | undefined;
     // (undocumented)
     readonly duration: Duration | undefined;
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
-    readonly targetValue: boolean | undefined;
+    readonly targetValue: MaybeUnknown<boolean> | undefined;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -2549,7 +2549,8 @@ export class CCAPI {
     protected schedulePoll({ property, propertyKey }: ValueIDProperties, expectedValue: unknown, { duration, transition }?: SchedulePollOptions): boolean;
     get setValue(): SetValueImplementation | undefined;
     get setValueHooks(): SetValueImplementationHooksFactory | undefined;
-    supportsCommand(command: number): Maybe_2<boolean>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "NOT_KNOWN"
+    supportsCommand(command: number): MaybeNotKnown_2<boolean>;
     protected tryGetValueDB(): ValueDB | undefined;
     get version(): number;
     withOptions(options: SendCommandOptions): this;
@@ -6139,9 +6140,9 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    get position(): Maybe<number> | undefined;
+    get position(): MaybeUnknown<number> | undefined;
     // (undocumented)
-    get tilt(): Maybe<number> | undefined;
+    get tilt(): MaybeUnknown<number> | undefined;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -6200,11 +6201,10 @@ export type FirmwareUpdateCapabilities = {
 } | {
     readonly firmwareUpgradable: true;
     readonly firmwareTargets: readonly number[];
-    readonly continuesToFunction: Maybe<boolean>;
-    readonly supportsActivation: Maybe<boolean>;
+    readonly continuesToFunction: MaybeNotKnown<boolean>;
+    readonly supportsActivation: MaybeNotKnown<boolean>;
 };
 
-// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaData" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaData" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6214,7 +6214,7 @@ export interface FirmwareUpdateMetaData {
     // (undocumented)
     checksum: number;
     // (undocumented)
-    continuesToFunction: Maybe<boolean>;
+    continuesToFunction: MaybeNotKnown<boolean>;
     // (undocumented)
     firmwareId: number;
     // (undocumented)
@@ -6226,29 +6226,7 @@ export interface FirmwareUpdateMetaData {
     // (undocumented)
     maxFragmentSize?: number;
     // (undocumented)
-    supportsActivation: Maybe<boolean>;
-}
-
-// @public (undocumented)
-export interface FirmwareUpdateMetaData {
-    // (undocumented)
-    additionalFirmwareIDs: readonly number[];
-    // (undocumented)
-    checksum: number;
-    // (undocumented)
-    continuesToFunction: Maybe<boolean>;
-    // (undocumented)
-    firmwareId: number;
-    // (undocumented)
-    firmwareUpgradable: boolean;
-    // (undocumented)
-    hardwareVersion?: number;
-    // (undocumented)
-    manufacturerId: number;
-    // (undocumented)
-    maxFragmentSize?: number;
-    // (undocumented)
-    supportsActivation: Maybe<boolean>;
+    supportsActivation: MaybeNotKnown<boolean>;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6335,7 +6313,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
     // (undocumented)
     readonly checksum: number;
     // (undocumented)
-    readonly continuesToFunction: Maybe<boolean>;
+    readonly continuesToFunction: MaybeNotKnown<boolean>;
     // (undocumented)
     readonly firmwareId: number;
     // (undocumented)
@@ -6347,7 +6325,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
     // (undocumented)
     readonly maxFragmentSize?: number;
     // (undocumented)
-    readonly supportsActivation: Maybe<boolean>;
+    readonly supportsActivation: MaybeNotKnown<boolean>;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -10068,7 +10046,7 @@ export class MeterCCGet extends MeterCC {
 export class MeterCCReport extends MeterCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    get deltaTime(): Maybe<number>;
+    get deltaTime(): MaybeUnknown_2<number>;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
@@ -11399,15 +11377,16 @@ export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
 //
 // @public (undocumented)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "MultilevelSwitchCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultilevelSwitchCCReportOptions);
     // (undocumented)
-    get currentValue(): Maybe<number> | undefined;
+    currentValue: MaybeUnknown<number> | undefined;
     // (undocumented)
-    readonly duration: Duration | undefined;
+    duration: Duration | undefined;
     // (undocumented)
-    persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    serialize(): Buffer;
     // (undocumented)
-    readonly targetValue: number | undefined;
+    targetValue: MaybeUnknown<number> | undefined;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }

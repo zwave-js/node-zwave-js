@@ -67,7 +67,7 @@ import type { JSONObject } from '@zwave-js/shared';
 import { KEXFailType } from '@zwave-js/cc';
 import { LogConfig } from '@zwave-js/core';
 import { LogContext } from '@zwave-js/core';
-import { Maybe } from '@zwave-js/core';
+import { MaybeNotKnown } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import { MessageBaseOptions } from '@zwave-js/serial';
 import { MessageDeserializationOptions } from '@zwave-js/serial';
@@ -306,7 +306,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // (undocumented)
     getDeviceConfig(nodeId: number): DeviceConfig | undefined;
     // (undocumented)
-    getHighestSecurityClass(nodeId: number): SecurityClass_2 | undefined;
+    getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass_2>;
     getLogConfig(): LogConfig;
     readonly getNextCallbackId: () => number;
     readonly getNextSupervisionSessionId: () => number;
@@ -332,7 +332,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (ae-forgotten-export) The symbol "Transaction" needs to be exported by the entry point index.d.ts
     hasPendingTransactions(predicate: (t: Transaction) => boolean): boolean;
     // (undocumented)
-    hasSecurityClass(nodeId: number, securityClass: SecurityClass_2): Maybe<boolean>;
+    hasSecurityClass(nodeId: number, securityClass: SecurityClass_2): MaybeNotKnown<boolean>;
     get homeId(): number;
     installConfigUpdate(): Promise<boolean>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -416,7 +416,7 @@ export { DurationUnit }
 // Warning: (ae-missing-release-tag) "EditableZWaveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type EditableZWaveOptions = Pick<ZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences" | "preserveUnknownValues"> & {
+export type EditableZWaveOptions = Pick<ZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences"> & {
     userAgent?: Record<string, string | null | undefined>;
 };
 
@@ -1257,12 +1257,12 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     getEndpointOrThrow(index: number): Endpoint;
     getFirmwareUpdateCapabilities(): Promise<FirmwareUpdateCapabilities>;
     getFirmwareUpdateCapabilitiesCached(): FirmwareUpdateCapabilities;
-    getHighestSecurityClass(): SecurityClass_2 | undefined;
+    getHighestSecurityClass(): MaybeNotKnown<SecurityClass_2>;
     getValue<T = unknown>(valueId: ValueID_2): T | undefined;
     getValueMetadata(valueId: ValueID_2): ValueMetadata_2;
     getValueTimestamp(valueId: ValueID_2): number | undefined;
     // (undocumented)
-    hasSecurityClass(securityClass: SecurityClass_2): Maybe<boolean>;
+    hasSecurityClass(securityClass: SecurityClass_2): MaybeNotKnown<boolean>;
     get hasSUCReturnRoute(): boolean;
     set hasSUCReturnRoute(value: boolean);
     // (undocumented)
@@ -1281,7 +1281,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get isFrequentListening(): FLiRS_2 | undefined;
     get isListening(): boolean | undefined;
     get isRouting(): boolean | undefined;
-    get isSecure(): Maybe<boolean>;
+    get isSecure(): MaybeNotKnown<boolean>;
     keepAwake: boolean;
     // (undocumented)
     get label(): string | undefined;
@@ -1570,7 +1570,6 @@ export interface ZWaveOptions extends ZWaveHostOptions {
     preferences: {
         scales: Partial<Record<string | number, string | number>>;
     };
-    preserveUnknownValues?: boolean;
     securityKeys?: {
         S2_Unauthenticated?: Buffer;
         S2_Authenticated?: Buffer;

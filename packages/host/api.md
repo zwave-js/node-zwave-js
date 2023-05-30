@@ -12,7 +12,7 @@ import type { ControllerLogger } from '@zwave-js/core';
 import type { DeviceConfig } from '@zwave-js/config';
 import type { ICommandClass } from '@zwave-js/core';
 import { IZWaveNode } from '@zwave-js/core';
-import type { Maybe } from '@zwave-js/core';
+import type { MaybeNotKnown } from '@zwave-js/core';
 import type { Overwrite } from 'alcalzone-shared/types';
 import type { ReadonlyThrowingMap } from '@zwave-js/shared';
 import type { SecurityClass } from '@zwave-js/core';
@@ -104,13 +104,13 @@ export interface ZWaveHost {
     // (undocumented)
     getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
     // (undocumented)
-    getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
+    getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
     getNextCallbackId(): number;
     getNextSupervisionSessionId(): number;
     getSafeCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
     getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
     // (undocumented)
-    hasSecurityClass(nodeId: number, securityClass: SecurityClass): Maybe<boolean>;
+    hasSecurityClass(nodeId: number, securityClass: SecurityClass): MaybeNotKnown<boolean>;
     homeId: number;
     isCCSecure(cc: CommandClasses, nodeId: number, endpointIndex?: number): boolean;
     ownNodeId: number;
@@ -139,7 +139,6 @@ export interface ZWaveHostOptions {
     preferences?: {
         scales: Partial<Record<string | number, string | number>>;
     };
-    preserveUnknownValues?: boolean;
     timeouts: {
         refreshValue: number;
         refreshValueAfterTransition: number;
