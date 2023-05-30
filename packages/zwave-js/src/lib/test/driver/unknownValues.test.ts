@@ -2,7 +2,7 @@ import {
 	MultilevelSwitchCCReport,
 	MultilevelSwitchCCValues,
 } from "@zwave-js/cc";
-import { CommandClasses, NOT_YET_KNOWN, UNKNOWN_STATE } from "@zwave-js/core";
+import { CommandClasses, NOT_KNOWN, UNKNOWN_STATE } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
@@ -65,8 +65,8 @@ integrationTest(`Reports with the UNKNOWN state are correctly handled`, {
 		const currentValueId = MultilevelSwitchCCValues.currentValue.id;
 
 		// At the start, values are not known yet
-		t.is(node.getValue(targetValueId), NOT_YET_KNOWN);
-		t.is(node.getValue(currentValueId), NOT_YET_KNOWN);
+		t.is(node.getValue(targetValueId), NOT_KNOWN);
+		t.is(node.getValue(currentValueId), NOT_KNOWN);
 
 		// Send an initial state
 		let cc = new MultilevelSwitchCCReport(mockNode.host, {
