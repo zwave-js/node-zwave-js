@@ -25,6 +25,7 @@ import {
 	CommandClasses,
 	NODE_ID_BROADCAST,
 	NodeType,
+	ProtocolDataRate,
 	ProtocolType,
 	RFRegion,
 	RouteKind,
@@ -4368,6 +4369,32 @@ ${associatedNodes.join(", ")}`,
 				);
 
 			if (result.routeKind === RouteKind.None) return undefined;
+
+			// If we do not have any route statistics for the node yet, use this information to
+			// to at least partially populate it
+			const node = this.nodes.get(destinationNodeId);
+			if (
+				node &&
+				(result.routeKind === RouteKind.LWR ||
+					result.routeKind === RouteKind.NLWR)
+			) {
+				const routeName =
+					result.routeKind === RouteKind.LWR ? "lwr" : "nlwr";
+
+				if (!node.statistics[routeName]) {
+					node.updateStatistics((current) => {
+						const ret = { ...current };
+						ret[routeName] = {
+							repeaters: result.repeaters!,
+							protocolDataRate:
+								// ZWaveDataRate is a subset of ProtocolDataRate
+								result.routeSpeed as unknown as ProtocolDataRate,
+						};
+						return ret;
+					});
+				}
+			}
+
 			return {
 				routeKind: result.routeKind,
 				repeaters: result.repeaters!,
