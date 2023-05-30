@@ -647,7 +647,11 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this.currentValue = parseMaybeNumber(this.payload[0]);
+			this.currentValue =
+				// 0xff is a legacy value for 100% (99)
+				this.payload[0] === 0xff
+					? 99
+					: parseMaybeNumber(this.payload[0]);
 			if (this.version >= 4 && this.payload.length >= 3) {
 				this.targetValue = parseMaybeNumber(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
