@@ -104,7 +104,6 @@ import {
 	CRC16_CCITT,
 	CacheBackedMap,
 	CommandClasses,
-	MaybeNotKnown,
 	MessagePriority,
 	NOT_KNOWN,
 	NodeType,
@@ -139,6 +138,7 @@ import {
 	type FLiRS,
 	type Firmware,
 	type IZWaveNode,
+	type MaybeNotKnown,
 	type MetadataUpdatedArgs,
 	type NodeUpdatePayload,
 	type ProtocolVersion,
@@ -1266,8 +1266,8 @@ export class ZWaveNode
 		if (!poll) return false;
 
 		if (
-			actualValue != undefined &&
-			poll.expectedValue != undefined &&
+			actualValue !== undefined &&
+			poll.expectedValue !== undefined &&
 			!isDeepStrictEqual(poll.expectedValue, actualValue)
 		) {
 			return false;

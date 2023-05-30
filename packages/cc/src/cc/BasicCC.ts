@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
 	Duration,
-	MaybeUnknown,
 	MessagePriority,
 	ValueMetadata,
+	maybeUnknownToString,
 	parseMaybeNumber,
-	parseNumber,
 	validatePayload,
 	type MaybeNotKnown,
+	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -374,12 +374,10 @@ export class BasicCCReport extends BasicCC {
 			validatePayload(this.payload.length >= 1);
 			this._currentValue = parseMaybeNumber(this.payload[0]);
 
-			if (this.version >= 2 && this.payload.length >= 3) {
-				this.targetValue = parseNumber(this.payload[1]);
+			if (this.payload.length >= 3) {
+				this.targetValue = parseMaybeNumber(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
 			}
-			// Do not persist values here. We want to control when this is happening,
-			// in case the report is mapped to another CC
 		} else {
 			this._currentValue = options.currentValue;
 			if ("targetValue" in options) {
@@ -396,7 +394,7 @@ export class BasicCCReport extends BasicCC {
 	}
 
 	@ccValue(BasicCCValues.targetValue)
-	public readonly targetValue: number | undefined;
+	public readonly targetValue: MaybeUnknown<number> | undefined;
 
 	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
@@ -405,8 +403,15 @@ export class BasicCCReport extends BasicCC {
 		const payload: number[] = [
 			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
 		];
-		if (this.version >= 2 && this.targetValue && this.duration) {
-			payload.push(this.targetValue, this.duration.serializeReport());
+		if (
+			this.version >= 2 &&
+			this.targetValue !== undefined &&
+			this.duration
+		) {
+			payload.push(
+				this.targetValue ?? 0xfe,
+				this.duration.serializeReport(),
+			);
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
@@ -414,10 +419,10 @@ export class BasicCCReport extends BasicCC {
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this.currentValue,
+			"current value": maybeUnknownToString(this.currentValue),
 		};
-		if (this.targetValue != undefined) {
-			message["target value"] = this.targetValue;
+		if (this.targetValue !== undefined) {
+			message["target value"] = maybeUnknownToString(this.targetValue);
 		}
 		if (this.duration != undefined) {
 			message.duration = this.duration.toString();

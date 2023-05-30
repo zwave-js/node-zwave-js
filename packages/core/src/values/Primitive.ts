@@ -57,6 +57,18 @@ export function parseNumber(val: number): number | undefined {
 	return val <= 99 ? val : val === 0xff ? 99 : undefined;
 }
 
+/** Stringifies a value that is potentially unknown */
+export function maybeUnknownToString<T>(
+	val: MaybeUnknown<T>,
+	ifNotUnknown: (val: NonNullable<T>) => string = (val) => val.toString(),
+): string {
+	return val === undefined
+		? "undefined"
+		: val === UNKNOWN_STATE
+		? "unknown"
+		: ifNotUnknown(val);
+}
+
 /**
  * Parses a floating point value with a scale from a buffer.
  */

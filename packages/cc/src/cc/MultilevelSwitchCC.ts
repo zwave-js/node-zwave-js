@@ -1,13 +1,14 @@
 import {
 	CommandClasses,
 	Duration,
-	MaybeUnknown,
 	MessagePriority,
+	NOT_KNOWN,
 	ValueMetadata,
+	maybeUnknownToString,
 	parseMaybeNumber,
-	parseNumber,
 	validatePayload,
 	type MaybeNotKnown,
+	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -648,7 +649,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 			validatePayload(this.payload.length >= 1);
 			this.currentValue = parseMaybeNumber(this.payload[0]);
 			if (this.version >= 4 && this.payload.length >= 3) {
-				this.targetValue = parseNumber(this.payload[1]);
+				this.targetValue = parseMaybeNumber(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
 			}
 		} else {
@@ -659,7 +660,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	}
 
 	@ccValue(MultilevelSwitchCCValues.targetValue)
-	public targetValue: number | undefined;
+	public targetValue: MaybeUnknown<number> | undefined;
 
 	@ccValue(MultilevelSwitchCCValues.duration)
 	public duration: Duration | undefined;
@@ -685,10 +686,10 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this.currentValue,
+			"current value": maybeUnknownToString(this.currentValue),
 		};
-		if (this.targetValue != undefined && this.duration) {
-			message["target value"] = this.targetValue;
+		if (this.targetValue !== NOT_KNOWN && this.duration) {
+			message["target value"] = maybeUnknownToString(this.targetValue);
 			message.duration = this.duration.toString();
 		}
 		return {

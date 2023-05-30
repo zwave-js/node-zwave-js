@@ -907,8 +907,8 @@ export class CommandClass implements ICommandClass {
 				valueDB.setMetadata(valueId, value.meta);
 			}
 
-			// The value only gets written if it is not undefined
-			if (sourceValue == undefined) continue;
+			// The value only gets written if it is not undefined. null is a valid value!
+			if (sourceValue === undefined) continue;
 
 			valueDB.setValue(valueId, sourceValue, {
 				stateful: value.options.stateful,
