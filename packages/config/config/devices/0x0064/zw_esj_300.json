@@ -2,7 +2,7 @@
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "ZW ESJ 300",
-	"description": "Duwi ZW ESJ 300 Blind Control",
+	"description": "Duwi Blind Control",
 	"devices": [
 		{
 			"productType": "0x4001",
@@ -15,29 +15,94 @@
 	},
 	"paramInformation": [
 		{
-			"#": "0",
-			"label": "Running time",
-			"description": "Adjustment of the operating times of the sun blind control",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "1",
-			"label": "Stop-functionality",
-			"valueSize": 1,
+			"#": "0[0x8000]",
+			"label": "Runtime Up: Mode",
+			"valueSize": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Short (0-127s)",
 					"value": 0
 				},
 				{
-					"label": "Enabled (default)",
+					"label": "Long (130s-23m)",
 					"value": 1
+				}
+			]
+		},
+		{
+			"#": "0[0x7f00]",
+			"label": "Runtime Up: Duration",
+			"description": "In Long mode, the runtime will be 130s + 10 * value.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 127,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Endless (Short mode only, also applies to down direction)",
+					"value": 0
+				},
+				{
+					"label": "Set to factory default (120s, Long mode only)",
+					"value": 127
+				}
+			]
+		},
+		{
+			"#": "0[0x80]",
+			"label": "Runtime Down: Mode",
+			"valueSize": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Short (0-127s)",
+					"value": 0
+				},
+				{
+					"label": "Long (130s-23m)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "0[0x7f]",
+			"label": "Runtime Down: Duration",
+			"description": "In Long mode, the runtime will be 130s + 10 * value. Will be ignored if Up direction is set to endless.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 127,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "0.5s (Short mode only)",
+					"value": 0
+				},
+				{
+					"label": "Set to factory default (120s, Long mode only)",
+					"value": 127
+				}
+			]
+		},
+		{
+			"#": "1",
+			"label": "Opposite Button Behavior",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reverse direction",
+					"value": 0
+				},
+				{
+					"label": "Stop",
+					"value": 255
 				}
 			]
 		}
