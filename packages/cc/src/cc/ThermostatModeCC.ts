@@ -1,27 +1,27 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
+	ValueMetadata,
+	enumValuesToMetadataStates,
 	parseBitMask,
 	supervisedCommandSucceeded,
-	SupervisionResult,
 	validatePayload,
-	ValueMetadata,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -72,39 +72,43 @@ export class ThermostatModeCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "mode") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-		const result = await this.set(value);
-
-		// Verify the current value after a delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
-			// aren't able to handle the GET this quickly.
-			this.schedulePoll({ property }, value);
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "mode":
-				return (await this.get())?.[property];
-
-			default:
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: ThermostatModeCCAPI, { property }, value) {
+			if (property !== "mode") {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			const result = await this.set(value);
+
+			// Verify the current value after a delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
+				// aren't able to handle the GET this quickly.
+				this.schedulePoll({ property }, value);
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: ThermostatModeCCAPI, { property }) {
+			switch (property) {
+				case "mode":
+					return (await this.get())?.[property];
+
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {

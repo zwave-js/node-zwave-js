@@ -1,30 +1,30 @@
 import {
 	CommandClasses,
 	Duration,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
+	ValueMetadata,
 	parseMaybeNumber,
 	parseNumber,
-	SupervisionResult,
 	unknownNumber,
 	validatePayload,
-	ValueMetadata,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
-	SetValueImplementationHooksFactory,
 	SET_VALUE,
 	SET_VALUE_HOOKS,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -298,73 +298,79 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		return response?.switchType;
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-		options,
-	) => {
-		// Enable restoring the previous non-zero value
-		if (property === "restorePrevious") {
-			property = "targetValue";
-			value = 255;
-		}
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: MultilevelSwitchCCAPI,
+			{ property },
+			value,
+			options,
+		) {
+			// Enable restoring the previous non-zero value
+			if (property === "restorePrevious") {
+				property = "targetValue";
+				value = 255;
+			}
 
-		if (property === "targetValue") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			const duration = Duration.from(options?.transitionDuration);
-			return this.set(value, duration);
-		} else if (switchTypeProperties.includes(property as string)) {
-			// Since the switch only supports one of the switch types, we would
-			// need to check if the correct one is used. But since the names are
-			// purely cosmetic, we just accept all of them
-			if (typeof value !== "boolean") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			if (value) {
-				// The property names are organized so that positive motions are
-				// at odd indices and negative motions at even indices
-				const direction =
-					switchTypeProperties.indexOf(property as string) % 2 === 0
-						? "down"
-						: "up";
-				// Singlecast only: Try to retrieve the current value to use as the start level,
-				// even if the target node is going to ignore it. There might
-				// be some bugged devices that ignore the ignore start level flag.
-				const startLevel = this.tryGetValueDB()?.getValue<
-					Maybe<number>
-				>(
-					MultilevelSwitchCCValues.currentValue.endpoint(
-						this.endpoint.index,
-					),
-				);
-				// And perform the level change
+			if (property === "targetValue") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
 				const duration = Duration.from(options?.transitionDuration);
-				return this.startLevelChange({
-					direction,
-					ignoreStartLevel: true,
-					startLevel:
-						typeof startLevel === "number" ? startLevel : undefined,
-					duration,
-				});
+				return this.set(value, duration);
+			} else if (switchTypeProperties.includes(property as string)) {
+				// Since the switch only supports one of the switch types, we would
+				// need to check if the correct one is used. But since the names are
+				// purely cosmetic, we just accept all of them
+				if (typeof value !== "boolean") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				if (value) {
+					// The property names are organized so that positive motions are
+					// at odd indices and negative motions at even indices
+					const direction =
+						switchTypeProperties.indexOf(property as string) % 2 ===
+						0
+							? "down"
+							: "up";
+					// Singlecast only: Try to retrieve the current value to use as the start level,
+					// even if the target node is going to ignore it. There might
+					// be some bugged devices that ignore the ignore start level flag.
+					const startLevel = this.tryGetValueDB()?.getValue<
+						Maybe<number>
+					>(
+						MultilevelSwitchCCValues.currentValue.endpoint(
+							this.endpoint.index,
+						),
+					);
+					// And perform the level change
+					const duration = Duration.from(options?.transitionDuration);
+					return this.startLevelChange({
+						direction,
+						ignoreStartLevel: true,
+						startLevel:
+							typeof startLevel === "number"
+								? startLevel
+								: undefined,
+						duration,
+					});
+				} else {
+					return this.stopLevelChange();
+				}
 			} else {
-				return this.stopLevelChange();
+				throwUnsupportedProperty(this.ccId, property);
 			}
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+		};
+	}
 
 	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
 		{ property },
@@ -400,7 +406,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						// ignore
 					}
 				},
-				optimisticallyUpdateRelatedValues: () => {
+				optimisticallyUpdateRelatedValues: (
+					_supervisedAndSuccessful,
+				) => {
 					// Only update currentValue for valid target values
 					if (
 						typeof value === "number" &&
@@ -453,18 +461,18 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		}
 	};
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentValue":
-			case "targetValue":
-			case "duration":
-				return (await this.get())?.[property];
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: MultilevelSwitchCCAPI, { property }) {
+			switch (property) {
+				case "currentValue":
+				case "targetValue":
+				case "duration":
+					return (await this.get())?.[property];
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 }
 
 @commandClass(CommandClasses["Multilevel Switch"])

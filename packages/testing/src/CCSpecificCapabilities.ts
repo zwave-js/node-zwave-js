@@ -1,4 +1,8 @@
-import { CommandClasses, ConfigValue, ConfigValueFormat } from "@zwave-js/core";
+import {
+	type CommandClasses,
+	type ConfigValue,
+	type ConfigValueFormat,
+} from "@zwave-js/core";
 
 export interface ConfigurationCCCapabilities {
 	// We don't have bulk support implemented in the mocks

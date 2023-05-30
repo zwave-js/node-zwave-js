@@ -109,6 +109,7 @@ import { ResponsePredicate } from '@zwave-js/serial';
 import { ResponseRole } from '@zwave-js/serial';
 import { RFRegion } from '@zwave-js/core/safe';
 import { RFRegion as RFRegion_2 } from '@zwave-js/core';
+import { RouteKind } from '@zwave-js/core';
 import { RouteProtocolDataRate } from '@zwave-js/core';
 import { RSSI } from '@zwave-js/core/safe';
 import { RSSI as RSSI_2 } from '@zwave-js/core';
@@ -166,12 +167,12 @@ import { ZWaveSerialPortImplementation } from '@zwave-js/serial';
 export { buffer2hex }
 
 // Warning: (ae-forgotten-export) The symbol "ControllerEventCallbacks" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "ControllerEvents" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
-// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateProgress" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateProgress" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ControllerFirmwareUpdateProgress {
@@ -180,7 +181,7 @@ export interface ControllerFirmwareUpdateProgress {
     totalFragments: number;
 }
 
-// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ControllerFirmwareUpdateResult {
@@ -190,7 +191,7 @@ export interface ControllerFirmwareUpdateResult {
     success: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerFirmwareUpdateStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ControllerFirmwareUpdateStatus {
@@ -209,7 +210,7 @@ export { ControllerNodeLogContext }
 
 export { ControllerSelfLogContext }
 
-// Warning: (ae-missing-release-tag) "ControllerStatistics" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ControllerStatistics" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ControllerStatistics {
@@ -241,19 +242,19 @@ export interface ControllerStatistics {
 
 export { ControllerValueLogContext }
 
-// Warning: (ae-missing-release-tag) "createDefaultBehaviors" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createDefaultBehaviors" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createDefaultMockControllerBehaviors(): MockControllerBehavior[];
 
-// Warning: (ae-missing-release-tag) "createDefaultBehaviors" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createDefaultBehaviors" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createDefaultMockNodeBehaviors(): MockNodeBehavior[];
 
 export { DataRate }
 
-// Warning: (ae-missing-release-tag) "DeviceClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DeviceClass {
@@ -273,7 +274,7 @@ export class DeviceClass {
 }
 
 // Warning: (ae-forgotten-export) The symbol "DriverEventCallbacks" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "Driver" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Driver" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements ZWaveApplicationHost {
@@ -400,7 +401,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     waitForMessage<T extends Message>(predicate: (msg: Message) => boolean, timeout: number, refreshPredicate?: (msg: Message) => boolean): Promise<T>;
 }
 
-// Warning: (ae-missing-release-tag) "DriverLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DriverLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface DriverLogContext extends LogContext<"driver"> {
@@ -412,14 +413,14 @@ export { Duration }
 
 export { DurationUnit }
 
-// Warning: (ae-missing-release-tag) "EditableZWaveOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EditableZWaveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type EditableZWaveOptions = Pick<ZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences" | "preserveUnknownValues"> & {
     userAgent?: Record<string, string | null | undefined>;
 };
 
-// Warning: (ae-missing-release-tag) "Endpoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Endpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class Endpoint implements IZWaveEndpoint {
@@ -466,14 +467,14 @@ export { EntryControlDataTypes }
 
 export { EntryControlEventTypes }
 
-// Warning: (ae-missing-release-tag) "ExclusionOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExclusionOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ExclusionOptions = {
     strategy: ExclusionStrategy.ExcludeOnly | ExclusionStrategy.DisableProvisioningEntry | ExclusionStrategy.Unprovision;
 };
 
-// Warning: (ae-missing-release-tag) "ExclusionStrategy" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExclusionStrategy" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ExclusionStrategy {
@@ -490,7 +491,7 @@ export { Firmware }
 
 export { FirmwareFileFormat }
 
-// Warning: (ae-missing-release-tag) "FirmwareUpdateFileInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FirmwareUpdateFileInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface FirmwareUpdateFileInfo {
@@ -502,7 +503,7 @@ export interface FirmwareUpdateFileInfo {
     url: string;
 }
 
-// Warning: (ae-missing-release-tag) "FirmwareUpdateInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FirmwareUpdateInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface FirmwareUpdateInfo {
@@ -526,27 +527,27 @@ export { FLiRS }
 
 export { formatId }
 
-// Warning: (ae-missing-release-tag) "formatLifelineHealthCheckRound" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "formatLifelineHealthCheckRound" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function formatLifelineHealthCheckRound(round: number, numRounds: number, result: LifelineHealthCheckResult): string;
 
-// Warning: (ae-missing-release-tag) "formatLifelineHealthCheckSummary" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "formatLifelineHealthCheckSummary" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function formatLifelineHealthCheckSummary(summary: LifelineHealthCheckSummary): string;
 
-// Warning: (ae-missing-release-tag) "formatRouteHealthCheckRound" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "formatRouteHealthCheckRound" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function formatRouteHealthCheckRound(sourceNodeId: number, targetNodeId: number, round: number, numRounds: number, result: RouteHealthCheckResult): string;
 
-// Warning: (ae-missing-release-tag) "formatRouteHealthCheckSummary" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "formatRouteHealthCheckSummary" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function formatRouteHealthCheckSummary(sourceNodeId: number, targetNodeId: number, summary: RouteHealthCheckSummary): string;
 
-// Warning: (ae-missing-release-tag) "FoundNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FoundNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface FoundNode {
@@ -564,7 +565,7 @@ export { FunctionType }
 
 export { getEnumMemberName }
 
-// Warning: (ae-missing-release-tag) "GetFirmwareUpdatesOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GetFirmwareUpdatesOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface GetFirmwareUpdatesOptions {
@@ -575,24 +576,24 @@ export interface GetFirmwareUpdatesOptions {
 
 export { guessFirmwareFileFormat }
 
-// Warning: (ae-missing-release-tag) "HealNetworkOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HealNetworkOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface HealNetworkOptions {
     includeSleeping?: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "HealNodeStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HealNodeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
 
-// Warning: (ae-missing-release-tag) "healthCheckRatingToWord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "healthCheckRatingToWord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function healthCheckRatingToWord(rating: number): string;
 
-// Warning: (ae-missing-release-tag) "IncludedProvisioningEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IncludedProvisioningEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface IncludedProvisioningEntry extends PlannedProvisioningEntry {
@@ -600,7 +601,7 @@ export interface IncludedProvisioningEntry extends PlannedProvisioningEntry {
     nodeId: number;
 }
 
-// Warning: (ae-missing-release-tag) "InclusionGrant" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InclusionGrant" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface InclusionGrant {
@@ -608,7 +609,7 @@ export interface InclusionGrant {
     securityClasses: SecurityClass[];
 }
 
-// Warning: (ae-missing-release-tag) "InclusionOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InclusionOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type InclusionOptions = {
@@ -626,7 +627,7 @@ export type InclusionOptions = {
     strategy: InclusionStrategy.Insecure | InclusionStrategy.Security_S0;
 };
 
-// Warning: (ae-missing-release-tag) "InclusionResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InclusionResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type InclusionResult = {
@@ -636,7 +637,7 @@ export type InclusionResult = {
     lowSecurityReason: SecurityBootstrapFailure;
 };
 
-// Warning: (ae-missing-release-tag) "InclusionState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InclusionState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum InclusionState {
@@ -647,7 +648,7 @@ export enum InclusionState {
     SmartStart = 4
 }
 
-// Warning: (ae-missing-release-tag) "InclusionStrategy" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InclusionStrategy" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum InclusionStrategy {
@@ -658,7 +659,7 @@ export enum InclusionStrategy {
     SmartStart = 1
 }
 
-// Warning: (ae-missing-release-tag) "InclusionUserCallbacks" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InclusionUserCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface InclusionUserCallbacks {
@@ -672,17 +673,17 @@ export { InterviewStage }
 
 export { isRssiError }
 
-// Warning: (ae-missing-release-tag) "libName" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "libName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const libName: string;
 
-// Warning: (ae-missing-release-tag) "libVersion" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "libVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const libVersion: string;
 
-// Warning: (ae-missing-release-tag) "LifelineHealthCheckResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LifelineHealthCheckResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface LifelineHealthCheckResult {
@@ -697,7 +698,7 @@ export interface LifelineHealthCheckResult {
     snrMargin?: number;
 }
 
-// Warning: (ae-missing-release-tag) "LifelineHealthCheckSummary" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LifelineHealthCheckSummary" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface LifelineHealthCheckSummary {
@@ -709,7 +710,7 @@ export interface LifelineHealthCheckSummary {
     results: LifelineHealthCheckResult[];
 }
 
-// Warning: (ae-missing-release-tag) "LifelineRoutes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LifelineRoutes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface LifelineRoutes {
@@ -731,7 +732,7 @@ export { NODE_ID_BROADCAST }
 
 export { NODE_ID_MAX }
 
-// Warning: (ae-missing-release-tag) "NodeInterviewFailedEventArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeInterviewFailedEventArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type NodeInterviewFailedEventArgs = {
@@ -742,7 +743,7 @@ export type NodeInterviewFailedEventArgs = {
     maxAttempts: number;
 } | {});
 
-// Warning: (ae-missing-release-tag) "NodeStatistics" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeStatistics" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface NodeStatistics {
@@ -765,7 +766,7 @@ export { num2hex }
 
 export { parseQRCodeString }
 
-// Warning: (ae-missing-release-tag) "PlannedProvisioningEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PlannedProvisioningEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface PlannedProvisioningEntry {
@@ -791,7 +792,7 @@ export { ProtocolType }
 
 export { ProtocolVersion }
 
-// Warning: (ae-missing-release-tag) "ProvisioningEntryStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ProvisioningEntryStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ProvisioningEntryStatus {
@@ -805,7 +806,7 @@ export { QRCodeVersion }
 
 export { QRProvisioningInformation }
 
-// Warning: (ae-missing-release-tag) "RefreshInfoOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RefreshInfoOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface RefreshInfoOptions {
@@ -813,7 +814,7 @@ export interface RefreshInfoOptions {
     waitForWakeup?: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ReplaceNodeOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ReplaceNodeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type ReplaceNodeOptions = {
@@ -832,7 +833,7 @@ export { ResponseRole }
 
 export { RFRegion }
 
-// Warning: (ae-missing-release-tag) "RouteHealthCheckResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RouteHealthCheckResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface RouteHealthCheckResult {
@@ -845,7 +846,7 @@ export interface RouteHealthCheckResult {
     rating: number;
 }
 
-// Warning: (ae-missing-release-tag) "RouteHealthCheckSummary" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RouteHealthCheckSummary" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface RouteHealthCheckSummary {
@@ -857,7 +858,7 @@ export interface RouteHealthCheckSummary {
 
 export { RouteProtocolDataRate }
 
-// Warning: (ae-missing-release-tag) "RouteStatistics" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RouteStatistics" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface RouteStatistics {
@@ -876,12 +877,12 @@ export { rssiToString }
 
 export { Scale }
 
-// Warning: (ae-missing-release-tag) "SDKVersion" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SDKVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SDKVersion = `${number}.${number}` | `${number}.${number}.${number}`;
 
-// Warning: (ae-missing-release-tag) "SecurityBootstrapFailure" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityBootstrapFailure" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum SecurityBootstrapFailure {
@@ -900,7 +901,7 @@ export { SendMessageOptions }
 
 export { SensorType }
 
-// Warning: (ae-missing-release-tag) "SerialAPISetupCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SerialAPISetupCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum SerialAPISetupCommand {
@@ -936,7 +937,7 @@ export enum SerialAPISetupCommand {
 
 export { SetbackState }
 
-// Warning: (ae-missing-release-tag) "SmartStartProvisioningEntry" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SmartStartProvisioningEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type SmartStartProvisioningEntry = PlannedProvisioningEntry | IncludedProvisioningEntry;
@@ -961,7 +962,7 @@ export { ValueMetadataString }
 
 export { ValueType }
 
-// Warning: (ae-missing-release-tag) "VirtualEndpoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "VirtualEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class VirtualEndpoint implements IVirtualEndpoint {
@@ -984,7 +985,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
     readonly virtual = true;
 }
 
-// Warning: (ae-missing-release-tag) "VirtualNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "VirtualNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
@@ -1008,7 +1009,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
     setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;
 }
 
-// Warning: (ae-missing-release-tag) "VirtualValueID" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "VirtualValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface VirtualValueID extends TranslatedValueID_2 {
@@ -1019,8 +1020,8 @@ export interface VirtualValueID extends TranslatedValueID_2 {
 export { ZWaveApiVersion }
 
 // Warning: (ae-forgotten-export) The symbol "ControllerStatisticsHost" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "ZWaveController" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZWaveController" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveController" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveController" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveController extends ControllerStatisticsHost {
@@ -1094,6 +1095,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     getPowerlevel(): Promise<Pick<SerialAPISetup_GetPowerlevelResponse, "powerlevel" | "measured0dBm">>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     getPriorityRoute(destinationNodeId: number): Promise<{
+        routeKind: RouteKind.LWR | RouteKind.NLWR | RouteKind.Application;
         repeaters: number[];
         routeSpeed: ZWaveDataRate;
     } | undefined>;
@@ -1140,6 +1142,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     removeFailedNode(nodeId: number): Promise<void>;
     removeNodeFromAllAssociations(nodeId: number): Promise<void>;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    removePriorityRoute(destinationNodeId: number): Promise<boolean>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     replaceFailedNode(nodeId: number, options?: ReplaceNodeOptions): Promise<boolean>;
@@ -1197,7 +1201,7 @@ export { ZWaveError }
 
 export { ZWaveErrorCodes }
 
-// Warning: (ae-missing-release-tag) "ZWaveFeature" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveFeature" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export enum ZWaveFeature {
@@ -1205,7 +1209,7 @@ export enum ZWaveFeature {
     SmartStart = 0
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveInterviewFailedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveInterviewFailedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveInterviewFailedCallback = (node: ZWaveNode, args: NodeInterviewFailedEventArgs) => void;
@@ -1214,8 +1218,8 @@ export { ZWaveLibraryTypes }
 
 // Warning: (ae-forgotten-export) The symbol "StatisticsEventCallbacksWithSelf" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "NodeStatisticsHost" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "ZWaveNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZWaveNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveNode extends TypedEventEmitter<ZWaveNodeEventCallbacks & StatisticsEventCallbacksWithSelf<ZWaveNode, NodeStatistics>>, NodeStatisticsHost {
@@ -1334,7 +1338,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get zwavePlusVersion(): number | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeEventCallbacks" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
@@ -1364,47 +1368,47 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
     sleep: ZWaveNodeStatusChangeCallback;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeEvents" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateFinishedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateFinishedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeFirmwareUpdateFinishedCallback = (node: ZWaveNode, result: FirmwareUpdateResult) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateProgressCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateProgressCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeFirmwareUpdateProgressCallback = (node: ZWaveNode, progress: FirmwareUpdateProgress) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeMetadataUpdatedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeMetadataUpdatedArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeMetadataUpdatedArgs = MetadataUpdatedArgs & TranslatedValueID;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeMetadataUpdatedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeMetadataUpdatedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeMetadataUpdatedCallback = (node: ZWaveNode, args: ZWaveNodeMetadataUpdatedArgs) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeStatusChangeCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeStatusChangeCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeStatusChangeCallback = (node: ZWaveNode, oldStatus: NodeStatus) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueAddedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueAddedArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueAddedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueAddedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeValueAddedCallback = (node: ZWaveNode, args: ZWaveNodeValueAddedArgs) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueEventCallbacks" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveNodeValueEventCallbacks {
@@ -1420,42 +1424,42 @@ export interface ZWaveNodeValueEventCallbacks {
     "value updated": ZWaveNodeValueUpdatedCallback;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueNotificationArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueNotificationArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeValueNotificationArgs = ValueNotificationArgs & TranslatedValueID;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueNotificationCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueNotificationCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeValueNotificationCallback = (node: ZWaveNode, args: ZWaveNodeValueNotificationArgs) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueRemovedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueRemovedArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeValueRemovedArgs = ValueRemovedArgs & TranslatedValueID;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueRemovedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueRemovedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeValueRemovedCallback = (node: ZWaveNode, args: ZWaveNodeValueRemovedArgs) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueUpdatedArgs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueUpdatedArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeValueUpdatedArgs = Omit<ValueUpdatedArgs, "source"> & TranslatedValueID;
 
-// Warning: (ae-missing-release-tag) "ZWaveNodeValueUpdatedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNodeValueUpdatedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNodeValueUpdatedCallback = (node: ZWaveNode, args: ZWaveNodeValueUpdatedArgs) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveNotificationCallback = (...args: ZWaveNotificationCallbackParams_NotificationCC | ZWaveNotificationCallbackParams_EntryControlCC | ZWaveNotificationCallbackParams_PowerlevelCC | ZWaveNotificationCallbackParams_MultilevelSwitchCC) => void;
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_EntryControlCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveNotificationCallbackArgs_EntryControlCC {
@@ -1469,7 +1473,7 @@ export interface ZWaveNotificationCallbackArgs_EntryControlCC {
     eventTypeLabel: string;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_MultilevelSwitchCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_MultilevelSwitchCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
@@ -1478,7 +1482,7 @@ export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
     eventTypeLabel: string;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_NotificationCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveNotificationCallbackArgs_NotificationCC {
@@ -1489,7 +1493,7 @@ export interface ZWaveNotificationCallbackArgs_NotificationCC {
     type: number;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_PowerlevelCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_PowerlevelCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
@@ -1501,7 +1505,7 @@ export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
     testNodeId: number;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_EntryControlCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type ZWaveNotificationCallbackParams_EntryControlCC = [
@@ -1510,7 +1514,7 @@ ccId: (typeof CommandClasses)["Entry Control"],
 args: ZWaveNotificationCallbackArgs_EntryControlCC
 ];
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_MultilevelSwitchCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_MultilevelSwitchCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
@@ -1519,7 +1523,7 @@ ccId: (typeof CommandClasses)["Multilevel Switch"],
 args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 ];
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_NotificationCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type ZWaveNotificationCallbackParams_NotificationCC = [
@@ -1528,7 +1532,7 @@ ccId: CommandClasses.Notification,
 args: ZWaveNotificationCallbackArgs_NotificationCC
 ];
 
-// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_PowerlevelCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_PowerlevelCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type ZWaveNotificationCallbackParams_PowerlevelCC = [
@@ -1537,7 +1541,7 @@ ccId: CommandClasses.Powerlevel,
 args: ZWaveNotificationCallbackArgs_PowerlevelCC
 ];
 
-// Warning: (ae-missing-release-tag) "ZWaveOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveOptions extends ZWaveHostOptions {

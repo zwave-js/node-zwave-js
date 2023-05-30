@@ -666,6 +666,25 @@ interface ZWaveOptions extends ZWaveHostOptions {
 
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
+
+		/**
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
+		 * How long to wait for a poll after setting a value without transition duration
+		 */
+		refreshValue: number;
+
+		/**
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
+		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
+		 */
+		refreshValueAfterTransition: number;
+
 		/**
 		 * How long to wait for the Serial API Started command after a soft-reset before resorting
 		 * to polling the API for the responsiveness check.

@@ -13,7 +13,7 @@ async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: num
 ### `getAll`
 
 ```ts
-async getAll(): Promise<{ value: number; rateType: RateType; previousValue: number | undefined; deltaTime: Maybe<number>; type: number; scale: MeterScale; }[]>;
+async getAll(): Promise<{ rateType: RateType; value: number; previousValue: number | undefined; deltaTime: Maybe<number>; type: number; scale: MeterScale; }[]>;
 ```
 
 ### `getSupported`

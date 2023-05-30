@@ -1,10 +1,10 @@
 import {
-	CommandClasses,
 	CRC16_CCITT,
+	CommandClasses,
 	EncapsulationFlags,
-	Maybe,
-	MessageOrCCLogEntry,
 	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";

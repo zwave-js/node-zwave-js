@@ -1,19 +1,19 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	unknownBoolean,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	unknownBoolean,
+	validatePayload,
+	type IZWaveEndpoint,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
@@ -26,15 +26,15 @@ import {
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	PhysicalCCAPI,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -282,111 +282,34 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		let result: SupervisionResult | undefined;
-		if (property === "keypadMode") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			result = await this.setKeypadMode(value);
-		} else if (property === "masterCode") {
-			if (typeof value !== "string") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"string",
-					typeof value,
-				);
-			}
-			result = await this.setMasterCode(value);
-		} else if (property === "userIdStatus") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-			}
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-
-			if (value === UserIDStatus.Available) {
-				// Clear Code
-				result = await this.clear(propertyKey);
-			} else {
-				// We need to set the user code along with the status
-				const userCode = this.getValueDB().getValue<string>(
-					UserCodeCCValues.userCode(propertyKey).endpoint(
-						this.endpoint.index,
-					),
-				);
-				result = await this.set(propertyKey, value, userCode!);
-			}
-		} else if (property === "userCode") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-			}
-			if (typeof value !== "string" && !Buffer.isBuffer(value)) {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"string or Buffer",
-					typeof value,
-				);
-			}
-
-			// We need to set the user id status along with the code
-			let userIdStatus = this.getValueDB().getValue<UserIDStatus>(
-				UserCodeCCValues.userIdStatus(propertyKey).endpoint(
-					this.endpoint.index,
-				),
-			);
-			if (
-				userIdStatus === UserIDStatus.Available ||
-				userIdStatus == undefined
-			) {
-				userIdStatus = UserIDStatus.Enabled;
-			}
-			result = await this.set(propertyKey, userIdStatus as any, value);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-
-		// Verify the change after a short delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			this.schedulePoll({ property, propertyKey }, value, {
-				transition: "fast",
-			});
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "keypadMode":
-				return this.getKeypadMode();
-			case "masterCode":
-				return this.getMasterCode();
-			case "userIdStatus":
-			case "userCode": {
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: UserCodeCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			let result: SupervisionResult | undefined;
+			if (property === "keypadMode") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				result = await this.setKeypadMode(value);
+			} else if (property === "masterCode") {
+				if (typeof value !== "string") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"string",
+						typeof value,
+					);
+				}
+				result = await this.setMasterCode(value);
+			} else if (property === "userIdStatus") {
 				if (propertyKey == undefined) {
 					throwMissingPropertyKey(this.ccId, property);
 				} else if (typeof propertyKey !== "number") {
@@ -396,12 +319,103 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						propertyKey,
 					);
 				}
-				return (await this.get(propertyKey))?.[property];
-			}
-			default:
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+
+				if (value === UserIDStatus.Available) {
+					// Clear Code
+					result = await this.clear(propertyKey);
+				} else {
+					// We need to set the user code along with the status
+					const userCode = this.getValueDB().getValue<string>(
+						UserCodeCCValues.userCode(propertyKey).endpoint(
+							this.endpoint.index,
+						),
+					);
+					result = await this.set(propertyKey, value, userCode!);
+				}
+			} else if (property === "userCode") {
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				if (typeof value !== "string" && !Buffer.isBuffer(value)) {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"string or Buffer",
+						typeof value,
+					);
+				}
+
+				// We need to set the user id status along with the code
+				let userIdStatus = this.getValueDB().getValue<UserIDStatus>(
+					UserCodeCCValues.userIdStatus(propertyKey).endpoint(
+						this.endpoint.index,
+					),
+				);
+				if (
+					userIdStatus === UserIDStatus.Available ||
+					userIdStatus == undefined
+				) {
+					userIdStatus = UserIDStatus.Enabled;
+				}
+				result = await this.set(
+					propertyKey,
+					userIdStatus as any,
+					value,
+				);
+			} else {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+
+			// Verify the change after a short delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property, propertyKey }, value, {
+					transition: "fast",
+				});
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: UserCodeCCAPI, { property, propertyKey }) {
+			switch (property) {
+				case "keypadMode":
+					return this.getKeypadMode();
+				case "masterCode":
+					return this.getMasterCode();
+				case "userIdStatus":
+				case "userCode": {
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
+					return (await this.get(propertyKey))?.[property];
+				}
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	public async getUsersCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(

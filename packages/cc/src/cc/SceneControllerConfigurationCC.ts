@@ -1,30 +1,30 @@
 import {
 	CommandClasses,
 	Duration,
-	getCCName,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
+	validatePayload,
+	type IZWaveEndpoint,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -94,114 +94,122 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-		options,
-	) => {
-		if (propertyKey == undefined) {
-			throwMissingPropertyKey(this.ccId, property);
-		} else if (typeof propertyKey !== "number") {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-		if (property === "sceneId") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: SceneControllerConfigurationCCAPI,
+			{ property, propertyKey },
+			value,
+			options,
+		) {
+			if (propertyKey == undefined) {
+				throwMissingPropertyKey(this.ccId, property);
+			} else if (typeof propertyKey !== "number") {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 			}
-
-			if (value === 0) {
-				// Disable Group ID / Scene ID
-				return this.disable(propertyKey);
-			} else {
-				// We need to set the dimming duration along with the scene ID
-				// Dimming duration is chosen with the following precedence:
-				// 1. options.transitionDuration
-				// 2. current stored value
-				// 3. default value
-				const dimmingDuration =
-					Duration.from(options?.transitionDuration) ??
-					this.tryGetValueDB()?.getValue<Duration>(
-						SceneControllerConfigurationCCValues.dimmingDuration(
-							propertyKey,
-						).endpoint(this.endpoint.index),
-					) ??
-					Duration.default();
-				return this.set(propertyKey, value, dimmingDuration);
-			}
-		} else if (property === "dimmingDuration") {
-			if (typeof value !== "string" && !(value instanceof Duration)) {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"duration",
-					typeof value,
-				);
-			}
-
-			const dimmingDuration = Duration.from(value);
-			if (dimmingDuration == undefined) {
-				throw new ZWaveError(
-					`${getCCName(
-						this.ccId,
-					)}: "${property}" could not be set. ${JSON.stringify(
-						value,
-					)} is not a valid duration.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			const valueDB = this.tryGetValueDB();
-			const sceneId = valueDB?.getValue<number>(
-				SceneControllerConfigurationCCValues.sceneId(
-					propertyKey,
-				).endpoint(this.endpoint.index),
-			);
-			if (sceneId == undefined || sceneId === 0) {
-				if (valueDB) {
-					// Can't actually send dimmingDuration without valid sceneId
-					// So we save it in the valueDB without sending it to the node
-					const dimmingDurationValueId =
-						SceneControllerConfigurationCCValues.dimmingDuration(
-							propertyKey,
-						).endpoint(this.endpoint.index);
-					valueDB.setValue(dimmingDurationValueId, dimmingDuration);
-				}
-				return;
-			}
-
-			return this.set(propertyKey, sceneId, dimmingDuration);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "sceneId":
-			case "dimmingDuration": {
-				if (propertyKey == undefined) {
-					throwMissingPropertyKey(this.ccId, property);
-				} else if (typeof propertyKey !== "number") {
-					throwUnsupportedPropertyKey(
+			if (property === "sceneId") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
 						this.ccId,
 						property,
-						propertyKey,
+						"number",
+						typeof value,
 					);
 				}
-				return (await this.get(propertyKey))?.[property];
-			}
-			default:
+
+				if (value === 0) {
+					// Disable Group ID / Scene ID
+					return this.disable(propertyKey);
+				} else {
+					// We need to set the dimming duration along with the scene ID
+					// Dimming duration is chosen with the following precedence:
+					// 1. options.transitionDuration
+					// 2. current stored value
+					// 3. default value
+					const dimmingDuration =
+						Duration.from(options?.transitionDuration) ??
+						this.tryGetValueDB()?.getValue<Duration>(
+							SceneControllerConfigurationCCValues.dimmingDuration(
+								propertyKey,
+							).endpoint(this.endpoint.index),
+						) ??
+						Duration.default();
+					return this.set(propertyKey, value, dimmingDuration);
+				}
+			} else if (property === "dimmingDuration") {
+				if (typeof value !== "string" && !(value instanceof Duration)) {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"duration",
+						typeof value,
+					);
+				}
+
+				const dimmingDuration = Duration.from(value);
+				if (dimmingDuration == undefined) {
+					throw new ZWaveError(
+						`${getCCName(
+							this.ccId,
+						)}: "${property}" could not be set. ${JSON.stringify(
+							value,
+						)} is not a valid duration.`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+
+				const valueDB = this.tryGetValueDB();
+				const sceneId = valueDB?.getValue<number>(
+					SceneControllerConfigurationCCValues.sceneId(
+						propertyKey,
+					).endpoint(this.endpoint.index),
+				);
+				if (sceneId == undefined || sceneId === 0) {
+					if (valueDB) {
+						// Can't actually send dimmingDuration without valid sceneId
+						// So we save it in the valueDB without sending it to the node
+						const dimmingDurationValueId =
+							SceneControllerConfigurationCCValues.dimmingDuration(
+								propertyKey,
+							).endpoint(this.endpoint.index);
+						valueDB.setValue(
+							dimmingDurationValueId,
+							dimmingDuration,
+						);
+					}
+					return;
+				}
+
+				return this.set(propertyKey, sceneId, dimmingDuration);
+			} else {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: SceneControllerConfigurationCCAPI,
+			{ property, propertyKey },
+		) {
+			switch (property) {
+				case "sceneId":
+				case "dimmingDuration": {
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
+					return (await this.get(propertyKey))?.[property];
+				}
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	@validateArgs()
 	public async disable(

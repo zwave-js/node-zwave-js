@@ -5,23 +5,23 @@ import type { Message } from "@zwave-js/serial";
 import {
 	assign,
 	createMachine,
-	Interpreter,
-	MachineOptions,
 	sendParent,
-	StateMachine,
+	type Interpreter,
+	type MachineOptions,
+	type StateMachine,
 } from "xstate";
 import { SendDataMulticastBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataMulticastRequest } from "../serialapi/transport/SendDataMessages";
 import {
 	isSendData,
 	isTransmitReport,
-	SendDataMessage,
+	type SendDataMessage,
 } from "../serialapi/transport/SendDataShared";
 import type { CommandQueueEvent } from "./CommandQueueMachine";
 import {
 	createMessageDroppedUnexpectedError,
 	sendDataErrorToZWaveError,
-	ServiceImplementations,
+	type ServiceImplementations,
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
 

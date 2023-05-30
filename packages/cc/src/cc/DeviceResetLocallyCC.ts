@@ -2,8 +2,8 @@ import { CommandClasses, validatePayload } from "@zwave-js/core/safe";
 import type { ZWaveHost } from "@zwave-js/host/safe";
 import {
 	CommandClass,
-	CommandClassOptions,
 	gotDeserializationOptions,
+	type CommandClassOptions,
 } from "../lib/CommandClass";
 import {
 	CCCommand,

@@ -39,6 +39,7 @@ async function main() {
 
 		root.transform((traversal) => {
 			const node = traversal.currentNode;
+			const f = traversal.factory;
 
 			// Only look for the paramInformation property
 			if (node === root.compilerNode) return traversal.visitChildren();
@@ -54,10 +55,10 @@ async function main() {
 				if (ts.isObjectLiteralExpression(prop.initializer)) {
 					// Objects are simple, we just add the param no. there
 					return [
-						ts.createObjectLiteral([
-							ts.createPropertyAssignment(
+						f.createObjectLiteralExpression([
+							f.createPropertyAssignment(
 								`"#"`,
-								ts.createStringLiteral(
+								f.createStringLiteral(
 									prop.name.getText().slice(1, -1),
 								),
 							),
@@ -70,10 +71,10 @@ async function main() {
 						if (!ts.isObjectLiteralExpression(item))
 							throw new Error("Can't touch this!");
 
-						return ts.createObjectLiteral([
-							ts.createPropertyAssignment(
+						return f.createObjectLiteralExpression([
+							f.createPropertyAssignment(
 								`"#"`,
-								ts.createStringLiteral(
+								f.createStringLiteral(
 									prop.name.getText().slice(1, -1),
 								),
 							),
@@ -85,10 +86,10 @@ async function main() {
 			});
 
 			didChange = true;
-			return ts.updatePropertyAssignment(
+			return f.updatePropertyAssignment(
 				node,
 				node.name,
-				ts.createArrayLiteral(children),
+				f.createArrayLiteralExpression(children),
 			);
 		});
 

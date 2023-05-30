@@ -1,10 +1,10 @@
 import {
-	CommandClasses,
-	CommandClassInfo,
-	Maybe,
 	SecurityClass,
 	securityClassOrder,
 	unknownBoolean,
+	type CommandClassInfo,
+	type CommandClasses,
+	type Maybe,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
@@ -14,17 +14,17 @@ import type { MockController } from "./MockController";
 import {
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
-	MockEndpointCapabilities,
-	PartialCCCapabilities,
+	type MockEndpointCapabilities,
 	type MockNodeCapabilities,
+	type PartialCCCapabilities,
 } from "./MockNodeCapabilities";
 import {
-	createMockZWaveAckFrame,
-	MockZWaveAckFrame,
-	MockZWaveFrame,
-	MockZWaveFrameType,
-	MockZWaveRequestFrame,
 	MOCK_FRAME_ACK_TIMEOUT,
+	MockZWaveFrameType,
+	createMockZWaveAckFrame,
+	type MockZWaveAckFrame,
+	type MockZWaveFrame,
+	type MockZWaveRequestFrame,
 } from "./MockZWaveFrame";
 
 const defaultCCInfo: CommandClassInfo = {

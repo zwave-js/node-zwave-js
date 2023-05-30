@@ -1,17 +1,17 @@
 import { NoOperationCC } from "@zwave-js/cc/NoOperationCC";
 import { MessagePriority } from "@zwave-js/core";
-import { getDefaultPriority, Message } from "@zwave-js/serial";
+import { getDefaultPriority, type Message } from "@zwave-js/serial";
 import test from "ava";
-import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/_Types";
+import type { ZWaveNode } from "../node/Node";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
 import { RemoveFailedNodeRequest } from "../serialapi/network-mgmt/RemoveFailedNodeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import type { Driver } from "./Driver";
 import {
-	MessageGenerator,
 	Transaction,
-	TransactionOptions,
+	type MessageGenerator,
+	type TransactionOptions,
 } from "./Transaction";
 
 function createDummyMessageGenerator(msg: Message): MessageGenerator {

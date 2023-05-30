@@ -1,24 +1,24 @@
 import {
-	DataRate,
-	encodeNodeProtocolInfo,
-	FLiRS,
 	MessagePriority,
-	NodeProtocolInfoAndDeviceClass,
-	NodeType,
+	encodeNodeProtocolInfo,
 	parseNodeProtocolInfo,
-	ProtocolVersion,
+	type DataRate,
+	type FLiRS,
+	type NodeProtocolInfoAndDeviceClass,
+	type NodeType,
+	type ProtocolVersion,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {

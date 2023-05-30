@@ -1,9 +1,11 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
+	ObjectKeyMap,
 	enumFilesRecursive,
 	formatId,
-	JSONObject,
 	stringify,
+	type JSONObject,
+	type ReadonlyObjectKeyMap,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
@@ -18,21 +20,26 @@ import {
 	ConditionalAssociationConfig,
 	type AssociationConfig,
 } from "./AssociationConfig";
-import { CompatConfig, ConditionalCompatConfig } from "./CompatConfig";
+import { ConditionalCompatConfig, type CompatConfig } from "./CompatConfig";
 import { evaluateDeep, validateCondition } from "./ConditionalItem";
 import {
-	ConditionalPrimitive,
 	parseConditionalPrimitive,
+	type ConditionalPrimitive,
 } from "./ConditionalPrimitive";
 import {
 	ConditionalDeviceMetadata,
 	type DeviceMetadata,
 } from "./DeviceMetadata";
-import { ConditionalEndpointConfig, EndpointConfig } from "./EndpointConfig";
+import {
+	ConditionalEndpointConfig,
+	type EndpointConfig,
+} from "./EndpointConfig";
 import {
 	ConditionalParamInfoMap,
+	ConditionalParamInformation,
 	ParamInfoMap,
 	parseConditionalParamInformationMap,
+	type ParamInformation,
 } from "./ParamInformation";
 import type { DeviceID, FirmwareVersionRange } from "./shared";
 

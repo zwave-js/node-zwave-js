@@ -1,5 +1,13 @@
 import {
 	CommandClasses,
+	MPANState,
+	MessagePriority,
+	SECURITY_S2_AUTH_TAG_LENGTH,
+	SPANState,
+	SecurityClass,
+	TransmitOptions,
+	ZWaveError,
+	ZWaveErrorCodes,
 	decryptAES128CCM,
 	encodeBitMask,
 	encryptAES128CCM,
@@ -7,30 +15,22 @@ import {
 	highResTimestamp,
 	isTransmissionError,
 	isZWaveError,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	MessageRecord,
-	MPANState,
 	parseBitMask,
 	parseCCList,
-	S2SecurityClass,
-	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
-	SecurityManager2,
-	SECURITY_S2_AUTH_TAG_LENGTH,
-	SPANState,
-	SPANTableEntry,
-	TransmitOptions,
 	validatePayload,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type S2SecurityClass,
+	type SPANTableEntry,
+	type SecurityManager2,
 } from "@zwave-js/core";
 import {
 	EncapsulationFlags,
-	encodeCCList,
 	NODE_ID_BROADCAST,
+	encodeCCList,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
@@ -56,12 +56,12 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
-	isValidExtension,
 	MGRPExtension,
 	MOSExtension,
 	MPANExtension,
-	Security2Extension,
 	SPANExtension,
+	Security2Extension,
+	isValidExtension,
 } from "../lib/Security2/Extension";
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "../lib/Security2/shared";
 import { Security2Command } from "../lib/_Types";

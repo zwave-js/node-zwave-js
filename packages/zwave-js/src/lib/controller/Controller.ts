@@ -6,7 +6,6 @@ import {
 	InclusionControllerCCInitiate,
 	InclusionControllerStatus,
 	InclusionControllerStep,
-	inclusionTimeouts,
 	KEXFailType,
 	KEXSchemes,
 	ManufacturerSpecificCCValues,
@@ -17,82 +16,93 @@ import {
 	Security2CCNetworkKeyVerify,
 	Security2CCPublicKeyReport,
 	Security2CCTransferEnd,
-	utils as ccUtils,
 	VersionCCValues,
+	utils as ccUtils,
+	inclusionTimeouts,
 	type AssociationAddress,
 	type AssociationGroup,
 } from "@zwave-js/cc";
 import {
+	CommandClasses,
+	NODE_ID_BROADCAST,
+	NodeType,
+	ProtocolType,
+	RFRegion,
+	RouteKind,
+	SecurityClass,
+	TransmitStatus,
+	ValueDB,
+	ZWaveError,
+	ZWaveErrorCodes,
 	authHomeIdFromDSK,
 	averageRSSI,
-	CommandClasses,
 	computePRK,
 	decodeX25519KeyDER,
 	deriveTempKeys,
 	dskFromString,
 	dskToString,
 	encodeX25519KeyDERSPKI,
-	Firmware,
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
 	isValidDSK,
 	isZWaveError,
-	NodeType,
-	NODE_ID_BROADCAST,
 	nwiHomeIdFromDSK,
-	ProtocolType,
-	RFRegion,
-	RSSI,
-	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
-	SinglecastCC,
-	TransmitStatus,
-	ValueDB,
-	ZWaveDataRate,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type Firmware,
+	type RSSI,
+	type SinglecastCC,
+	type ZWaveDataRate,
 } from "@zwave-js/core";
 import { migrateNVM } from "@zwave-js/nvmedit";
 import {
-	BootloaderChunk,
 	BootloaderChunkType,
 	FunctionType,
-	Message,
-	SuccessIndicator,
 	XModemMessageHeaders,
+	type BootloaderChunk,
+	type Message,
+	type SuccessIndicator,
 } from "@zwave-js/serial";
 import {
+	Mixin,
+	TypedEventEmitter,
 	createThrowingMap,
 	flatMap,
 	getEnumMemberName,
 	getErrorMessage,
-	Mixin,
 	num2hex,
 	pick,
-	ReadonlyObjectKeyMap,
-	ReadonlyThrowingMap,
-	ThrowingMap,
-	TypedEventEmitter,
+	type ReadonlyObjectKeyMap,
+	type ReadonlyThrowingMap,
+	type ThrowingMap,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
 import util from "util";
 import type { Driver } from "../driver/Driver";
-import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
+import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { VirtualNode } from "../node/VirtualNode";
-import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/_Types";
+import {
+	InterviewStage,
+	NodeStatus,
+	type LifelineRoutes,
+} from "../node/_Types";
+import {
+	ZWaveLibraryTypes,
+	type NodeIDType,
+	type ZWaveApiVersion,
+} from "../serialapi/_Types";
 import {
 	ApplicationUpdateRequestNodeAdded,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -102,117 +112,117 @@ import {
 } from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	ShutdownRequest,
-	ShutdownResponse,
+	type ShutdownResponse,
 } from "../serialapi/application/ShutdownMessages";
 import {
 	GetControllerCapabilitiesRequest,
-	GetControllerCapabilitiesResponse,
+	type GetControllerCapabilitiesResponse,
 } from "../serialapi/capability/GetControllerCapabilitiesMessages";
 import {
 	GetControllerVersionRequest,
-	GetControllerVersionResponse,
+	type GetControllerVersionResponse,
 } from "../serialapi/capability/GetControllerVersionMessages";
 import {
 	GetProtocolVersionRequest,
-	GetProtocolVersionResponse,
+	type GetProtocolVersionResponse,
 } from "../serialapi/capability/GetProtocolVersionMessages";
 import {
 	GetSerialApiCapabilitiesRequest,
-	GetSerialApiCapabilitiesResponse,
+	type GetSerialApiCapabilitiesResponse,
 } from "../serialapi/capability/GetSerialApiCapabilitiesMessages";
 import {
 	GetSerialApiInitDataRequest,
-	GetSerialApiInitDataResponse,
+	type GetSerialApiInitDataResponse,
 } from "../serialapi/capability/GetSerialApiInitDataMessages";
 import { HardResetRequest } from "../serialapi/capability/HardResetRequest";
 import {
 	SerialAPISetupCommand,
 	SerialAPISetup_CommandUnsupportedResponse,
 	SerialAPISetup_GetLRMaximumPayloadSizeRequest,
-	SerialAPISetup_GetLRMaximumPayloadSizeResponse,
 	SerialAPISetup_GetMaximumPayloadSizeRequest,
-	SerialAPISetup_GetMaximumPayloadSizeResponse,
 	SerialAPISetup_GetPowerlevel16BitRequest,
-	SerialAPISetup_GetPowerlevel16BitResponse,
 	SerialAPISetup_GetPowerlevelRequest,
-	SerialAPISetup_GetPowerlevelResponse,
 	SerialAPISetup_GetRFRegionRequest,
-	SerialAPISetup_GetRFRegionResponse,
 	SerialAPISetup_GetSupportedCommandsRequest,
-	SerialAPISetup_GetSupportedCommandsResponse,
 	SerialAPISetup_SetNodeIDTypeRequest,
-	SerialAPISetup_SetNodeIDTypeResponse,
 	SerialAPISetup_SetPowerlevel16BitRequest,
-	SerialAPISetup_SetPowerlevel16BitResponse,
 	SerialAPISetup_SetPowerlevelRequest,
-	SerialAPISetup_SetPowerlevelResponse,
 	SerialAPISetup_SetRFRegionRequest,
-	SerialAPISetup_SetRFRegionResponse,
 	SerialAPISetup_SetTXStatusReportRequest,
-	SerialAPISetup_SetTXStatusReportResponse,
+	type SerialAPISetup_GetLRMaximumPayloadSizeResponse,
+	type SerialAPISetup_GetMaximumPayloadSizeResponse,
+	type SerialAPISetup_GetPowerlevel16BitResponse,
+	type SerialAPISetup_GetPowerlevelResponse,
+	type SerialAPISetup_GetRFRegionResponse,
+	type SerialAPISetup_GetSupportedCommandsResponse,
+	type SerialAPISetup_SetNodeIDTypeResponse,
+	type SerialAPISetup_SetPowerlevel16BitResponse,
+	type SerialAPISetup_SetPowerlevelResponse,
+	type SerialAPISetup_SetRFRegionResponse,
+	type SerialAPISetup_SetTXStatusReportResponse,
 } from "../serialapi/capability/SerialAPISetupMessages";
 import { SetApplicationNodeInformationRequest } from "../serialapi/capability/SetApplicationNodeInformationRequest";
 import {
 	GetControllerIdRequest,
-	GetControllerIdResponse,
+	type GetControllerIdResponse,
 } from "../serialapi/memory/GetControllerIdMessages";
 import {
 	GetBackgroundRSSIRequest,
-	GetBackgroundRSSIResponse,
+	type GetBackgroundRSSIResponse,
 } from "../serialapi/misc/GetBackgroundRSSIMessages";
 import {
 	SetRFReceiveModeRequest,
-	SetRFReceiveModeResponse,
+	type SetRFReceiveModeResponse,
 } from "../serialapi/misc/SetRFReceiveModeMessages";
 import {
 	SetSerialApiTimeoutsRequest,
-	SetSerialApiTimeoutsResponse,
+	type SetSerialApiTimeoutsResponse,
 } from "../serialapi/misc/SetSerialApiTimeoutsMessages";
 import {
 	AddNodeDSKToNetworkRequest,
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
-	AddNodeToNetworkRequestStatusReport,
 	AddNodeType,
-	computeNeighborDiscoveryTimeout,
 	EnableSmartStartListenRequest,
+	computeNeighborDiscoveryTimeout,
+	type AddNodeToNetworkRequestStatusReport,
 } from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
 import { AssignPriorityReturnRouteRequest } from "../serialapi/network-mgmt/AssignPriorityReturnRouteMessages";
 import {
 	AssignPrioritySUCReturnRouteRequest,
-	AssignPrioritySUCReturnRouteRequestTransmitReport,
+	type AssignPrioritySUCReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/AssignPrioritySUCReturnRouteMessages";
 import {
 	AssignReturnRouteRequest,
-	AssignReturnRouteRequestTransmitReport,
+	type AssignReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
 import {
 	AssignSUCReturnRouteRequest,
-	AssignSUCReturnRouteRequestTransmitReport,
+	type AssignSUCReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
 import {
 	DeleteReturnRouteRequest,
-	DeleteReturnRouteRequestTransmitReport,
+	type DeleteReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
 import {
 	DeleteSUCReturnRouteRequest,
-	DeleteSUCReturnRouteRequestTransmitReport,
+	type DeleteSUCReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
 import {
 	GetPriorityRouteRequest,
-	GetPriorityRouteResponse,
+	type GetPriorityRouteResponse,
 } from "../serialapi/network-mgmt/GetPriorityRouteMessages";
 import {
 	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
+	type GetRoutingInfoResponse,
 } from "../serialapi/network-mgmt/GetRoutingInfoMessages";
 import {
 	GetSUCNodeIdRequest,
-	GetSUCNodeIdResponse,
+	type GetSUCNodeIdResponse,
 } from "../serialapi/network-mgmt/GetSUCNodeIdMessages";
 import {
 	IsFailedNodeRequest,
-	IsFailedNodeResponse,
+	type IsFailedNodeResponse,
 } from "../serialapi/network-mgmt/IsFailedNodeMessages";
 import {
 	RemoveFailedNodeRequest,
@@ -223,100 +233,108 @@ import {
 } from "../serialapi/network-mgmt/RemoveFailedNodeMessages";
 import {
 	RemoveNodeFromNetworkRequest,
-	RemoveNodeFromNetworkRequestStatusReport,
 	RemoveNodeStatus,
 	RemoveNodeType,
+	type RemoveNodeFromNetworkRequestStatusReport,
 } from "../serialapi/network-mgmt/RemoveNodeFromNetworkRequest";
 import {
 	ReplaceFailedNodeRequest,
-	ReplaceFailedNodeRequestStatusReport,
-	ReplaceFailedNodeResponse,
 	ReplaceFailedNodeStartFlags,
 	ReplaceFailedNodeStatus,
+	type ReplaceFailedNodeRequestStatusReport,
+	type ReplaceFailedNodeResponse,
 } from "../serialapi/network-mgmt/ReplaceFailedNodeRequest";
 import {
 	NodeNeighborUpdateStatus,
-	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
+	type RequestNodeNeighborUpdateReport,
 } from "../serialapi/network-mgmt/RequestNodeNeighborUpdateMessages";
 import { SetPriorityRouteRequest } from "../serialapi/network-mgmt/SetPriorityRouteMessages";
 import { SetSUCNodeIdRequest } from "../serialapi/network-mgmt/SetSUCNodeIDMessages";
 import {
 	ExtNVMReadLongBufferRequest,
-	ExtNVMReadLongBufferResponse,
+	type ExtNVMReadLongBufferResponse,
 } from "../serialapi/nvm/ExtNVMReadLongBufferMessages";
 import {
 	ExtNVMReadLongByteRequest,
-	ExtNVMReadLongByteResponse,
+	type ExtNVMReadLongByteResponse,
 } from "../serialapi/nvm/ExtNVMReadLongByteMessages";
 import {
 	ExtNVMWriteLongBufferRequest,
-	ExtNVMWriteLongBufferResponse,
+	type ExtNVMWriteLongBufferResponse,
 } from "../serialapi/nvm/ExtNVMWriteLongBufferMessages";
 import {
 	ExtNVMWriteLongByteRequest,
-	ExtNVMWriteLongByteResponse,
+	type ExtNVMWriteLongByteResponse,
 } from "../serialapi/nvm/ExtNVMWriteLongByteMessages";
 import {
 	FirmwareUpdateNVM_GetNewImageRequest,
-	FirmwareUpdateNVM_GetNewImageResponse,
 	FirmwareUpdateNVM_InitRequest,
-	FirmwareUpdateNVM_InitResponse,
 	FirmwareUpdateNVM_IsValidCRC16Request,
-	FirmwareUpdateNVM_IsValidCRC16Response,
 	FirmwareUpdateNVM_SetNewImageRequest,
-	FirmwareUpdateNVM_SetNewImageResponse,
 	FirmwareUpdateNVM_UpdateCRC16Request,
-	FirmwareUpdateNVM_UpdateCRC16Response,
 	FirmwareUpdateNVM_WriteRequest,
-	FirmwareUpdateNVM_WriteResponse,
+	type FirmwareUpdateNVM_GetNewImageResponse,
+	type FirmwareUpdateNVM_InitResponse,
+	type FirmwareUpdateNVM_IsValidCRC16Response,
+	type FirmwareUpdateNVM_SetNewImageResponse,
+	type FirmwareUpdateNVM_UpdateCRC16Response,
+	type FirmwareUpdateNVM_WriteResponse,
 } from "../serialapi/nvm/FirmwareUpdateNVMMessages";
 import {
 	GetNVMIdRequest,
-	GetNVMIdResponse,
-	NVMId,
 	nvmSizeToBufferSize,
+	type GetNVMIdResponse,
+	type NVMId,
 } from "../serialapi/nvm/GetNVMIdMessages";
 import {
+	NVMOperationStatus,
 	NVMOperationsCloseRequest,
 	NVMOperationsOpenRequest,
 	NVMOperationsReadRequest,
-	NVMOperationsResponse,
-	NVMOperationStatus,
 	NVMOperationsWriteRequest,
+	type NVMOperationsResponse,
 } from "../serialapi/nvm/NVMOperationsMessages";
 import type { TransmitReport } from "../serialapi/transport/SendDataShared";
 import {
-	NodeIDType,
-	ZWaveApiVersion,
-	ZWaveLibraryTypes,
-} from "../serialapi/_Types";
-import {
-	ControllerStatistics,
 	ControllerStatisticsHost,
+	type ControllerStatistics,
 } from "./ControllerStatistics";
-import { minFeatureVersions, ZWaveFeature } from "./Features";
+import { ZWaveFeature, minFeatureVersions } from "./Features";
 import {
 	downloadFirmwareUpdate,
 	getAvailableFirmwareUpdates,
 } from "./FirmwareUpdateService";
 import {
-	ExclusionOptions,
 	ExclusionStrategy,
-	FoundNode,
-	InclusionOptions,
-	InclusionOptionsInternal,
-	InclusionResult,
 	InclusionState,
 	InclusionStrategy,
-	InclusionUserCallbacks,
-	PlannedProvisioningEntry,
 	ProvisioningEntryStatus,
-	ReplaceNodeOptions,
 	SecurityBootstrapFailure,
-	SmartStartProvisioningEntry,
+	type ExclusionOptions,
+	type FoundNode,
+	type InclusionOptions,
+	type InclusionOptionsInternal,
+	type InclusionResult,
+	type InclusionUserCallbacks,
+	type PlannedProvisioningEntry,
+	type ReplaceNodeOptions,
+	type SmartStartProvisioningEntry,
 } from "./Inclusion";
 import { determineNIF } from "./NodeInformationFrame";
+import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
+import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
+import {
+	ControllerFirmwareUpdateStatus,
+	type ControllerFirmwareUpdateProgress,
+	type ControllerFirmwareUpdateResult,
+	type FirmwareUpdateFileInfo,
+	type FirmwareUpdateInfo,
+	type GetFirmwareUpdatesOptions,
+	type HealNetworkOptions,
+	type HealNodeStatus,
+	type SDKVersion,
+} from "./_Types";
 import {
 	assertProvisioningEntry,
 	sdkVersionGt,
@@ -324,19 +342,6 @@ import {
 	sdkVersionLt,
 	sdkVersionLte,
 } from "./utils";
-import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
-import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
-import {
-	ControllerFirmwareUpdateProgress,
-	ControllerFirmwareUpdateResult,
-	ControllerFirmwareUpdateStatus,
-	FirmwareUpdateFileInfo,
-	FirmwareUpdateInfo,
-	GetFirmwareUpdatesOptions,
-	HealNetworkOptions,
-	HealNodeStatus,
-	SDKVersion,
-} from "./_Types";
 
 // Strongly type the event emitter events
 interface ControllerEventCallbacks
@@ -1915,6 +1920,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			// A node was included by another controller
 			const nodeId = msg.nodeId;
 			const nodeInfo = msg.nodeInformation;
+
+			// It can happen that this is received for a node that is already part of the network:
+			// https://github.com/zwave-js/node-zwave-js/issues/5781
+			// In this case, ignore this message to prevent chaos.
+
+			if (this._nodes.has(nodeId)) {
+				this.driver.controllerLog.print(
+					`Node ${nodeId} was (supposedly) included by another controller, but it is already part of the network. Ignoring the message...`,
+					"warn",
+				);
+				return;
+			}
 
 			this.setInclusionState(InclusionState.Busy);
 
@@ -4175,11 +4192,49 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * Returns the priority route which is currently set for a node. If none is set, either the LWR or the NLWR is returned.
+	 * Removes the priority route used for the first transmission attempt from the controller to the given node.
+	 * @param destinationNodeId The ID of the node that should be reached via the priority route
+	 */
+	public async removePriorityRoute(
+		destinationNodeId: number,
+	): Promise<boolean> {
+		this.driver.controllerLog.print(
+			`Removing priority route to node ${destinationNodeId}...`,
+		);
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetPriorityRouteRequest(this.driver, {
+					destinationNodeId,
+					// no repeaters = remove
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Removing priority route failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the priority route which is currently set for a node.
+	 * If none is set, either the LWR or the NLWR is returned.
+	 * If no route is known yet, this returns `undefined`.
+	 *
 	 * @param destinationNodeId The ID of the node for which the priority route should be returned
 	 */
 	public async getPriorityRoute(destinationNodeId: number): Promise<
 		| {
+				routeKind:
+					| RouteKind.LWR
+					| RouteKind.NLWR
+					| RouteKind.Application;
 				repeaters: number[];
 				routeSpeed: ZWaveDataRate;
 		  }
@@ -4197,9 +4252,11 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
+			if (result.routeKind === RouteKind.None) return undefined;
 			return {
-				repeaters: result.repeaters,
-				routeSpeed: result.routeSpeed,
+				routeKind: result.routeKind,
+				repeaters: result.repeaters!,
+				routeSpeed: result.routeSpeed!,
 			};
 		} catch (e) {
 			this.driver.controllerLog.print(

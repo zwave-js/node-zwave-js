@@ -1,98 +1,92 @@
-import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
+import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
 import {
-	assertValidCCs,
-	CommandClass,
 	CRC16CC,
 	DeviceResetLocallyCCNotification,
-	FirmwareUpdateResult,
-	getImplementedVersion,
-	ICommandClassContainer,
 	InvalidCC,
-	isCommandClassContainer,
-	isEncapsulatingCommandClass,
-	isMultiEncapsulatingCommandClass,
-	isTransportServiceEncapsulation,
 	KEXFailType,
-	messageIsPing,
 	MultiChannelCC,
 	Security2CC,
-	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
 	Security2Command,
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
 	SecurityCommand,
 	SupervisionCC,
-	SupervisionCCGet,
 	SupervisionCCReport,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
 	TransportServiceCCSegmentRequest,
 	TransportServiceCCSegmentWait,
-	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
 	VersionCommand,
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
+	assertValidCCs,
+	getImplementedVersion,
+	isCommandClassContainer,
+	isEncapsulatingCommandClass,
+	isMultiEncapsulatingCommandClass,
+	isTransportServiceEncapsulation,
+	messageIsPing,
+	type CommandClass,
+	type FirmwareUpdateResult,
+	type ICommandClassContainer,
+	type Security2CCMessageEncapsulation,
+	type SupervisionCCGet,
+	type TransportServiceCCSubsequentSegment,
 } from "@zwave-js/cc";
 import {
 	ConfigManager,
-	DeviceConfig,
 	externalConfigDir,
+	type DeviceConfig,
 } from "@zwave-js/config";
 import {
 	CommandClasses,
 	ControllerLogger,
-	deserializeCacheValue,
 	Duration,
 	EncapsulationFlags,
-	highResTimestamp,
-	ICommandClass,
-	isZWaveError,
-	LogConfig,
 	MAX_SUPERVISION_SESSION_ID,
 	MAX_TRANSPORT_SERVICE_SESSION_ID,
-	Maybe,
-	MessagePriority,
-	MessageRecord,
-	messageRecordToLines,
 	MPANState,
+	MessagePriority,
+	SPANState,
 	SecurityClass,
-	securityClassIsS2,
 	SecurityManager,
 	SecurityManager2,
-	SendCommandOptions,
-	SendCommandReturnType,
-	SendMessageOptions,
-	serializeCacheValue,
-	SinglecastCC,
-	SPANState,
-	SupervisionResult,
 	SupervisionStatus,
-	SupervisionUpdateHandler,
-	timespan,
 	TransmitOptions,
-	ValueDB,
-	ValueID,
-	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
+	deserializeCacheValue,
+	highResTimestamp,
+	isZWaveError,
+	messageRecordToLines,
+	securityClassIsS2,
+	serializeCacheValue,
+	timespan,
+	type ICommandClass,
+	type LogConfig,
+	type Maybe,
+	type MessageRecord,
+	type SendCommandOptions,
+	type SendCommandReturnType,
+	type SendMessageOptions,
+	type SinglecastCC,
+	type SupervisionResult,
+	type SupervisionUpdateHandler,
+	type ValueDB,
+	type ValueID,
+	type ValueMetadata,
 } from "@zwave-js/core";
 import type {
 	NodeSchedulePollOptions,
 	ZWaveApplicationHost,
 } from "@zwave-js/host";
 import {
-	BootloaderChunk,
 	BootloaderChunkType,
 	FunctionType,
-	getDefaultPriority,
-	INodeQuery,
-	isNodeQuery,
-	isSuccessIndicator,
-	isZWaveSerialPortImplementation,
 	Message,
 	MessageHeaders,
 	MessageType,
@@ -100,27 +94,33 @@ import {
 	ZWaveSerialMode,
 	ZWaveSerialPort,
 	ZWaveSerialPortBase,
-	ZWaveSerialPortImplementation,
 	ZWaveSocket,
+	getDefaultPriority,
+	isNodeQuery,
+	isSuccessIndicator,
+	isZWaveSerialPortImplementation,
+	type BootloaderChunk,
+	type INodeQuery,
+	type ZWaveSerialPortImplementation,
 } from "@zwave-js/serial";
 import {
+	TypedEventEmitter,
 	buffer2hex,
 	cloneDeep,
 	createWrappingCounter,
-	DeepPartial,
 	getErrorMessage,
 	isDocker,
 	mergeDeep,
 	num2hex,
 	pick,
-	ReadonlyThrowingMap,
-	ThrowingMap,
-	TypedEventEmitter,
+	type DeepPartial,
+	type ReadonlyThrowingMap,
+	type ThrowingMap,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
@@ -139,7 +139,7 @@ import type { ZWaveNode } from "../node/Node";
 import {
 	InterviewStage,
 	NodeStatus,
-	ZWaveNotificationCallback,
+	type ZWaveNotificationCallback,
 } from "../node/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
@@ -163,14 +163,14 @@ import {
 	isSendDataSinglecast,
 	isSendDataTransmitReport,
 	isTransmitReport,
-	SendDataMessage,
+	type SendDataMessage,
 } from "../serialapi/transport/SendDataShared";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import { initSentry } from "../telemetry/sentry";
 import {
-	AppInfo,
 	compileStatistics,
 	sendStatistics,
+	type AppInfo,
 } from "../telemetry/statistics";
 import { Bootloader } from "./Bootloader";
 import { createMessageGenerator } from "./MessageGenerators";
@@ -182,15 +182,15 @@ import {
 } from "./NetworkCache";
 import {
 	createSendThreadMachine,
-	SendThreadInterpreter,
-	TransactionReducer,
-	TransactionReducerResult,
+	type SendThreadInterpreter,
+	type TransactionReducer,
+	type TransactionReducerResult,
 } from "./SendThreadMachine";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
 import {
 	createTransportServiceRXMachine,
-	TransportServiceRXInterpreter,
+	type TransportServiceRXInterpreter,
 } from "./TransportServiceMachine";
 import {
 	checkForConfigUpdates,
@@ -249,9 +249,7 @@ const defaultOptions: ZWaveOptions = {
 		throttle: "normal",
 	},
 	preferences: {
-		scales: {
-			temperature: "Celsius",
-		},
+		scales: {},
 	},
 };
 

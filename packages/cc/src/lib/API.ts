@@ -1,29 +1,29 @@
 import {
 	CommandClasses,
-	Duration,
-	isZWaveError,
-	IVirtualEndpoint,
-	IZWaveEndpoint,
-	IZWaveNode,
-	Maybe,
 	NODE_ID_BROADCAST,
-	SendCommandOptions,
-	stripUndefined,
-	SupervisionResult,
-	TXReport,
-	unknownBoolean,
-	ValueChangeOptions,
-	ValueDB,
-	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isZWaveError,
+	stripUndefined,
+	unknownBoolean,
+	type Duration,
+	type IVirtualEndpoint,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type Maybe,
+	type SendCommandOptions,
+	type SupervisionResult,
+	type TXReport,
+	type ValueChangeOptions,
+	type ValueDB,
+	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import {
-	AllOrNone,
 	getEnumMemberName,
 	num2hex,
-	OnlyMethods,
+	type AllOrNone,
+	type OnlyMethods,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
@@ -36,6 +36,7 @@ export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
 export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
+
 export type SetValueImplementation = (
 	property: ValueIDProperties,
 	value: unknown,
@@ -53,7 +54,9 @@ export type SetValueImplementationHooks = AllOrNone<{
 	supervisionOnFailure: () => void | Promise<void>;
 }> & {
 	// Optimistically update related cached values (if allowed)
-	optimisticallyUpdateRelatedValues?: () => void;
+	optimisticallyUpdateRelatedValues?: (
+		supervisedAndSuccessful: boolean,
+	) => void;
 	// Check if a verification of the set value is required, even if the API response suggests otherwise
 	forceVerifyChanges?: () => boolean;
 	// Verify the changes
@@ -211,9 +214,13 @@ export class CCAPI {
 	 */
 	public readonly ccId: CommandClasses;
 
-	protected [SET_VALUE]: SetValueImplementation | undefined;
+	protected get [SET_VALUE](): SetValueImplementation | undefined {
+		return undefined;
+	}
+
 	/**
-	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key)
+	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key).
+	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get setValue(): SetValueImplementation | undefined {
 		return this[SET_VALUE];
@@ -233,9 +240,12 @@ export class CCAPI {
 		return true;
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation | undefined;
+	protected get [POLL_VALUE](): PollValueImplementation | undefined {
+		return undefined;
+	}
 	/**
 	 * Can be used on supported CC APIs to poll a CC value by property name (and optionally the property key)
+	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
 		return this[POLL_VALUE]?.bind(this);

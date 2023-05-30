@@ -1,20 +1,20 @@
 import {
 	CommandClasses,
-	encodeFloatWithScale,
-	Maybe,
 	MessagePriority,
+	ValueMetadata,
+	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
-	ValueMetadata,
+	type Maybe,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -34,8 +34,8 @@ import { V } from "../lib/Values";
 import {
 	EnergyProductionCommand,
 	EnergyProductionParameter,
-	EnergyProductionScale,
 	getEnergyProductionScale,
+	type EnergyProductionScale,
 } from "../lib/_Types";
 
 export const EnergyProductionCCValues = Object.freeze({
@@ -74,23 +74,25 @@ export class EnergyProductionCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		if (
-			EnergyProductionCCValues.value.is({
-				commandClass: this.ccId,
-				property,
-				propertyKey,
-			})
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: EnergyProductionCCAPI,
+			{ property, propertyKey },
 		) {
-			return (await this.get(property as EnergyProductionParameter))
-				?.value;
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			if (
+				EnergyProductionCCValues.value.is({
+					commandClass: this.ccId,
+					property,
+					propertyKey,
+				})
+			) {
+				return (await this.get(property as EnergyProductionParameter))
+					?.value;
+			} else {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	@validateArgs({ strictEnums: true })
 	public async get(

@@ -1,12 +1,12 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
@@ -31,8 +31,8 @@ import { V } from "../lib/Values";
 import {
 	DoorLockLoggingCommand,
 	DoorLockLoggingEventType,
-	DoorLockLoggingRecord,
 	DoorLockLoggingRecordStatus,
+	type DoorLockLoggingRecord,
 } from "../lib/_Types";
 import { userCodeToLogString } from "./UserCodeCC";
 

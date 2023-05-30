@@ -41,6 +41,34 @@ async identify(): Promise<SupervisionResult | undefined>;
 
 Instructs the node to identify itself. Available starting with V3 of this CC.
 
+### `setTimeout`
+
+```ts
+async setTimeout(
+	indicatorId: number,
+	timeout: IndicatorTimeout | string | undefined,
+): Promise<SupervisionResult | undefined>;
+```
+
+Set a timeout for a given indicator ID after which the indicator will be turned off.
+
+**Parameters:**
+
+-   `timeout`: The timeout in one of the supported forms:
+    -   a timeout string in the form `12h18m17.59s`. All parts (hours, minutes, seconds, hundredths) are optional, but must be specified in this order. An empty string will be treated like `undefined`.
+    -   an object specifying the timeout parts. An empty object will be treated like `undefined`.
+    -   `undefined` to disable the timeout.
+
+### `getTimeout`
+
+```ts
+async getTimeout(
+	indicatorId: number,
+): Promise<IndicatorTimeout | undefined>;
+```
+
+Returns the timeout after which the given indicator will be turned off.
+
 ### `getDescription`
 
 ```ts
@@ -68,6 +96,24 @@ async getDescription(
 -   **stateful:** true
 -   **secret:** false
 -   **value type:** `"boolean"`
+
+### `timeout`
+
+```ts
+{
+	commandClass: CommandClasses.Indicator,
+	endpoint: number,
+	property: "timeout",
+}
+```
+
+-   **label:** Timeout
+-   **min. CC version:** 3
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"string"`
 
 ### `valueV1`
 

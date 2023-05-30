@@ -1,23 +1,23 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	parseBitMask,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	parseBitMask,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -78,17 +78,17 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		if (typeof property === "string") {
-			const sensorType = (BinarySensorType as any)[property] as
-				| BinarySensorType
-				| undefined;
-			if (sensorType) return this.get(sensorType);
-		}
-		throwUnsupportedProperty(this.ccId, property);
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: BinarySensorCCAPI, { property }) {
+			if (typeof property === "string") {
+				const sensorType = (BinarySensorType as any)[property] as
+					| BinarySensorType
+					| undefined;
+				if (sensorType) return this.get(sensorType);
+			}
+			throwUnsupportedProperty(this.ccId, property);
+		};
+	}
 
 	/**
 	 * Retrieves the current value from this sensor

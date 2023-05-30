@@ -7,8 +7,8 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import type { NotificationCCCapabilities } from "@zwave-js/testing";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 

@@ -1,11 +1,11 @@
 import type { Scale } from "@zwave-js/config/safe";
 import {
-	CommandClasses,
-	DataRate,
-	FLiRS,
-	Maybe,
-	ValueMetadata,
 	ZWaveDataRate,
+	type CommandClasses,
+	type DataRate,
+	type FLiRS,
+	type Maybe,
+	type ValueMetadata,
 } from "@zwave-js/core/safe";
 
 export enum AlarmSensorCommand {
@@ -914,6 +914,16 @@ export enum IndicatorCommand {
 	SupportedReport = 0x05,
 	DescriptionGet = 0x06,
 	DescriptionReport = 0x07,
+}
+
+/** Specifies a timeout for an indicator. At least one of the properties must be present. */
+export interface IndicatorTimeout {
+	/** Whole hours (0-255) */
+	hours?: number;
+	/** Whole minutes (0-255) */
+	minutes?: number;
+	/** Whole and 1/100th seconds (0-59.99) */
+	seconds?: number;
 }
 
 export type IndicatorMetadata = ValueMetadata & {

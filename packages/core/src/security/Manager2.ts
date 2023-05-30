@@ -5,6 +5,7 @@ import * as crypto from "crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { encodeNodeBitMask } from "../index_safe";
 import { highResTimestamp } from "../util/date";
+import { SecurityClass, type S2SecurityClass } from "./SecurityClass";
 import { increment } from "./bufferUtils";
 import {
 	computeNoncePRK,
@@ -13,7 +14,6 @@ import {
 	encryptAES128ECB,
 } from "./crypto";
 import { CtrDRBG } from "./ctr_drbg";
-import { S2SecurityClass, SecurityClass } from "./SecurityClass";
 
 interface NetworkKeys {
 	pnk: Buffer;

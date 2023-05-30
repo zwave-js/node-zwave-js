@@ -10,12 +10,10 @@
 		"removeComments": false,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": false,
-		"importsNotUsedAsValues": "error",
 		"sourceMap": true,
 		"inlineSourceMap": false,
 		"stripInternal": true,
 
-		"watch": false, // true breaks CI scripts
 		"pretty": true,
 		"types": ["node", "ts-nameof"],
 		"noErrorTruncation": true

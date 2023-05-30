@@ -1,15 +1,15 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	supervisedCommandSucceeded,
-	SupervisionResult,
 	TransmitOptions,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
@@ -89,39 +89,43 @@ export class WakeUpCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "wakeUpInterval") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-		const result = await this.setInterval(
-			value,
-			this.applHost.ownNodeId ?? 1,
-		);
-
-		// Verify the change after a short delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			this.schedulePoll({ property }, value, { transition: "fast" });
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "wakeUpInterval":
-				return (await this.getInterval())?.[property];
-			default:
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: WakeUpCCAPI, { property }, value) {
+			if (property !== "wakeUpInterval") {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			const result = await this.setInterval(
+				value,
+				this.applHost.ownNodeId ?? 1,
+			);
+
+			// Verify the change after a short delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property }, value, { transition: "fast" });
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: WakeUpCCAPI, { property }) {
+			switch (property) {
+				case "wakeUpInterval":
+					return (await this.getInterval())?.[property];
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getInterval() {

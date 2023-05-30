@@ -9,9 +9,9 @@ import {
 	RateType,
 } from "@zwave-js/cc";
 import {
-	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";

@@ -1,12 +1,12 @@
 import {
+	ZWaveError,
+	ZWaveErrorCodes,
 	createReflectionDecorator,
 	getNodeTag,
 	highResTimestamp,
-	IZWaveNode,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type IZWaveNode,
+	type MessageOrCCLogEntry,
+	type MessagePriority,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";

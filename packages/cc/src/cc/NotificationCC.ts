@@ -1,33 +1,33 @@
 import {
-	Notification,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
 	NotificationParameterWithEnum,
 	NotificationParameterWithValue,
-	NotificationValueDefinition,
+	type Notification,
+	type NotificationValueDefinition,
 } from "@zwave-js/config";
 import { timespan } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
+	MessagePriority,
+	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
 	encodeBitMask,
 	getCCName,
 	isZWaveError,
-	IZWaveEndpoint,
-	IZWaveNode,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	MessageRecord,
 	parseBitMask,
-	SinglecastCC,
-	SupervisionResult,
 	validatePayload,
-	ValueID,
-	ValueMetadata,
-	ValueMetadataNumeric,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
+	type ValueID,
+	type ValueMetadataNumeric,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
@@ -35,15 +35,15 @@ import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
-	gotDeserializationOptions,
 	InvalidCC,
+	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -58,9 +58,9 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
-import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import { NotificationCommand, UserCodeCommand } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
 import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
 
 export const NotificationCCValues = Object.freeze({
@@ -234,27 +234,29 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpoint.index,
-			property,
-			propertyKey,
-		};
-		if (NotificationCCValues.notificationVariable.is(valueId)) {
-			const notificationType: number | undefined =
-				this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific
-					?.notificationType;
-			if (notificationType != undefined) {
-				return this.getInternal({ notificationType });
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: NotificationCCAPI,
+			{ property, propertyKey },
+		) {
+			const valueId: ValueID = {
+				commandClass: this.ccId,
+				endpoint: this.endpoint.index,
+				property,
+				propertyKey,
+			};
+			if (NotificationCCValues.notificationVariable.is(valueId)) {
+				const notificationType: number | undefined =
+					this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific
+						?.notificationType;
+				if (notificationType != undefined) {
+					return this.getInternal({ notificationType });
+				}
 			}
-		}
 
-		throwUnsupportedProperty(this.ccId, property);
-	};
+			throwUnsupportedProperty(this.ccId, property);
+		};
+	}
 
 	/**
 	 * @internal

@@ -2,11 +2,11 @@ import { createModel } from "@xstate/test";
 import type { Message } from "@zwave-js/serial";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import ava, { ExecutionContext, TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
-import { assign, interpret, Machine, State } from "xstate";
+import { assign, interpret, Machine, type State } from "xstate";
 import {
 	dummyCallbackNOK,
 	dummyCallbackOK,
@@ -21,9 +21,9 @@ import {
 } from "../test/messages";
 import {
 	createSerialAPICommandMachine,
-	SerialAPICommandDoneData,
-	SerialAPICommandInterpreter,
-	SerialAPICommandMachineParams,
+	type SerialAPICommandDoneData,
+	type SerialAPICommandInterpreter,
+	type SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 
 interface AvaTestContext {

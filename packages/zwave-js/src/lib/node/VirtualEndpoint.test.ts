@@ -9,7 +9,7 @@ import { FunctionType } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
-import ava, { ExecutionContext, type TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import { ZWaveController } from "../controller/Controller";
 import type { Driver } from "../driver/Driver";
 import { createAndStartDriver } from "../test/utils";

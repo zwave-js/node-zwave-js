@@ -1,11 +1,11 @@
-import { interpret, Interpreter } from "xstate";
+import { interpret, type Interpreter } from "xstate";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
-import test, { ExecutionContext } from "ava";
+import test, { type ExecutionContext } from "ava";
 import {
 	createNodeStatusMachine,
-	NodeStatusEvent,
-	NodeStatusMachine,
-	NodeStatusStateSchema,
+	type NodeStatusEvent,
+	type NodeStatusMachine,
+	type NodeStatusStateSchema,
 } from "./NodeStatusMachine";
 
 const testNodeNonSleeping = { canSleep: false } as any;

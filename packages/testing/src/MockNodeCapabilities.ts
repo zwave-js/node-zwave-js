@@ -1,8 +1,8 @@
 import {
-	CommandClasses,
-	CommandClassInfo,
-	NodeProtocolInfoAndDeviceClass,
 	NodeType,
+	type CommandClassInfo,
+	type CommandClasses,
+	type NodeProtocolInfoAndDeviceClass,
 } from "@zwave-js/core";
 import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 

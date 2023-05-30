@@ -1,4 +1,4 @@
-import { assign, Interpreter, Machine, StateMachine } from "xstate";
+import { Machine, assign, type Interpreter, type StateMachine } from "xstate";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface NodeReadyStateSchema {

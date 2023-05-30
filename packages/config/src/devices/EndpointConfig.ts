@@ -6,10 +6,10 @@ import {
 	type AssociationConfig,
 } from "./AssociationConfig";
 import {
-	ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
 	validateCondition,
+	type ConditionalItem,
 } from "./ConditionalItem";
 import type { ConditionalDeviceConfig } from "./DeviceConfig";
 import {

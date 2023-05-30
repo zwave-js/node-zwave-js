@@ -10,7 +10,6 @@ import type {
 import {
 	CommandClasses,
 	encodeFloatWithScale,
-	Maybe,
 	MessagePriority,
 	parseBitMask,
 	parseFloatWithScale,
@@ -18,16 +17,21 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type Maybe,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
+	MultilevelSensorCommand,
+	type MultilevelSensorValue,
+} from "../lib/_Types";
+import {
 	CCAPI,
 	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -47,7 +51,6 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { MultilevelSensorCommand, MultilevelSensorValue } from "../lib/_Types";
 
 export const MultilevelSensorCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Multilevel Sensor"], {
@@ -196,24 +199,24 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		// Look up the necessary information
-		const valueId: ValueID = {
-			commandClass: CommandClasses["Multilevel Sensor"],
-			endpoint: this.endpoint.index,
-			property,
-		};
-		const ccSpecific =
-			this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific;
-		if (!ccSpecific) {
-			throwUnsupportedProperty(this.ccId, property);
-		}
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: MultilevelSensorCCAPI, { property }) {
+			// Look up the necessary information
+			const valueId: ValueID = {
+				commandClass: CommandClasses["Multilevel Sensor"],
+				endpoint: this.endpoint.index,
+				property,
+			};
+			const ccSpecific =
+				this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific;
+			if (!ccSpecific) {
+				throwUnsupportedProperty(this.ccId, property);
+			}
 
-		const { sensorType, scale } = ccSpecific;
-		return this.get(sensorType, scale);
-	};
+			const { sensorType, scale } = ccSpecific;
+			return this.get(sensorType, scale);
+		};
+	}
 
 	/** Query the default sensor value */
 	public async get(): Promise<

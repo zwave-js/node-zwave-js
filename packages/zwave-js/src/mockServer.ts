@@ -1,16 +1,16 @@
 import type { ZWaveSerialPort } from "@zwave-js/serial";
 import {
 	createAndOpenMockedZWaveSerialPort,
-	MockPortBinding,
+	type MockPortBinding,
 } from "@zwave-js/serial/mock";
 import {
 	MockController,
-	MockControllerOptions,
 	MockNode,
+	type MockControllerOptions,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import { AddressInfo, createServer, Server } from "net";
+import { createServer, type AddressInfo, type Server } from "net";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,

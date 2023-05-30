@@ -84,6 +84,17 @@ module.exports = {
 				checksVoidReturn: false,
 			},
 		],
+
+		// Make sure type imports are used where necessary
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				fixStyle: "inline-type-imports",
+				disallowTypeAnnotations: false,
+			},
+		],
+		"@typescript-eslint/consistent-type-exports": "error",
+
 		// We can turn this on from time to time but in general these rules
 		// make our lives harder instead of easier
 		"@typescript-eslint/no-unsafe-argument": "off",

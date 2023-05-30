@@ -2,13 +2,13 @@ import { pick, type JSONObject } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe";
 import {
-	ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
+	type ConditionalItem,
 } from "./ConditionalItem";
 import {
-	ConditionalPrimitive,
 	parseConditionalPrimitive,
+	type ConditionalPrimitive,
 } from "./ConditionalPrimitive";
 import type { DeviceID } from "./shared";
 

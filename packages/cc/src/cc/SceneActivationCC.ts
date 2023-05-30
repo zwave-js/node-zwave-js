@@ -7,17 +7,17 @@ import type {
 import {
 	CommandClasses,
 	Duration,
-	validatePayload,
 	ValueMetadata,
+	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -66,20 +66,28 @@ export class SceneActivationCCAPI extends CCAPI {
 		return true;
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-		options,
-	) => {
-		if (property !== "sceneId") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-		const duration = Duration.from(options?.transitionDuration);
-		return this.set(value, duration);
-	};
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: SceneActivationCCAPI,
+			{ property },
+			value,
+			options,
+		) {
+			if (property !== "sceneId") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			const duration = Duration.from(options?.transitionDuration);
+			return this.set(value, duration);
+		};
+	}
 
 	/**
 	 * Activates the Scene with the given ID

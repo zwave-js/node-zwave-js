@@ -1,19 +1,19 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
 	MAX_NODES,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	SupervisionResult,
 	Timeout,
-	unknownBoolean,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	unknownBoolean,
+	validatePayload,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -21,12 +21,12 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -143,71 +143,73 @@ export class ProtectionCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		const valueDB = this.tryGetValueDB();
-		if (property === "local") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: ProtectionCCAPI, { property }, value) {
+			const valueDB = this.tryGetValueDB();
+			if (property === "local") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				// We need to set both values together, so retrieve the other one from the value DB
+				const rf = valueDB?.getValue<RFProtectionState>(
+					ProtectionCCValues.rfProtectionState.endpoint(
+						this.endpoint.index,
+					),
 				);
-			}
-			// We need to set both values together, so retrieve the other one from the value DB
-			const rf = valueDB?.getValue<RFProtectionState>(
-				ProtectionCCValues.rfProtectionState.endpoint(
-					this.endpoint.index,
-				),
-			);
-			return this.set(value, rf);
-		} else if (property === "rf") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+				return this.set(value, rf);
+			} else if (property === "rf") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				// We need to set both values together, so retrieve the other one from the value DB
+				const local = valueDB?.getValue<LocalProtectionState>(
+					ProtectionCCValues.localProtectionState.endpoint(
+						this.endpoint.index,
+					),
 				);
-			}
-			// We need to set both values together, so retrieve the other one from the value DB
-			const local = valueDB?.getValue<LocalProtectionState>(
-				ProtectionCCValues.localProtectionState.endpoint(
-					this.endpoint.index,
-				),
-			);
-			return this.set(local ?? LocalProtectionState.Unprotected, value);
-		} else if (property === "exclusiveControlNodeId") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+				return this.set(
+					local ?? LocalProtectionState.Unprotected,
+					value,
 				);
-			}
-			return this.setExclusiveControl(value);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "local":
-			case "rf":
-				return (await this.get())?.[property];
-			case "exclusiveControlNodeId":
-				return this.getExclusiveControl();
-			default:
+			} else if (property === "exclusiveControlNodeId") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				return this.setExclusiveControl(value);
+			} else {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: ProtectionCCAPI, { property }) {
+			switch (property) {
+				case "local":
+				case "rf":
+					return (await this.get())?.[property];
+				case "exclusiveControlNodeId":
+					return this.getExclusiveControl();
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {

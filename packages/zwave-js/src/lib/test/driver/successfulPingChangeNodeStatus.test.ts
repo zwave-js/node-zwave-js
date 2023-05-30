@@ -3,13 +3,13 @@ import type { MockSerialPort } from "@zwave-js/serial/mock";
 import {
 	createThrowingMap,
 	getEnumMemberName,
-	ThrowingMap,
+	type ThrowingMap,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";
-import { ZWaveNode } from "../../node/Node";
 import { NodeStatus } from "../../node/_Types";
+import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
 import { isFunctionSupported_NoBridge } from "./fixtures";
 

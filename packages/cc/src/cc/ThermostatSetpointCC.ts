@@ -1,31 +1,31 @@
 import type { ConfigManager, Scale } from "@zwave-js/config";
 import {
 	CommandClasses,
-	encodeFloatWithScale,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
+	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
+	encodeFloatWithScale,
 	parseBitMask,
 	parseFloatWithScale,
 	supervisedCommandSucceeded,
-	SupervisionResult,
 	validatePayload,
-	ValueMetadata,
-	ValueMetadataNumeric,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type Maybe,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
+	type ValueMetadataNumeric,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -119,64 +119,78 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		if (property !== "setpoint") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof propertyKey !== "number") {
-			throw new ZWaveError(
-				`${
-					CommandClasses[this.ccId]
-				}: "${property}" must be further specified by a numeric property key`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-
-		// SDS14223: The Scale field value MUST be identical to the value received in the Thermostat Setpoint Report for the
-		// actual Setpoint Type during the node interview. Fall back to the first scale if none is known
-		const preferredScale = this.tryGetValueDB()?.getValue<number>(
-			ThermostatSetpointCCValues.setpointScale(propertyKey).endpoint(
-				this.endpoint.index,
-			),
-		);
-		const result = await this.set(propertyKey, value, preferredScale ?? 0);
-
-		// Verify the current value after a delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
-			// aren't able to handle the GET this quickly.
-			this.schedulePoll({ property, propertyKey }, value);
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "setpoint":
-				if (typeof propertyKey !== "number") {
-					throw new ZWaveError(
-						`${
-							CommandClasses[this.ccId]
-						}: "${property}" must be further specified by a numeric property key`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-
-				return (await this.get(propertyKey))?.value;
-			default:
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: ThermostatSetpointCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			if (property !== "setpoint") {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+			if (typeof propertyKey !== "number") {
+				throw new ZWaveError(
+					`${
+						CommandClasses[this.ccId]
+					}: "${property}" must be further specified by a numeric property key`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+
+			// SDS14223: The Scale field value MUST be identical to the value received in the Thermostat Setpoint Report for the
+			// actual Setpoint Type during the node interview. Fall back to the first scale if none is known
+			const preferredScale = this.tryGetValueDB()?.getValue<number>(
+				ThermostatSetpointCCValues.setpointScale(propertyKey).endpoint(
+					this.endpoint.index,
+				),
+			);
+			const result = await this.set(
+				propertyKey,
+				value,
+				preferredScale ?? 0,
+			);
+
+			// Verify the current value after a delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
+				// aren't able to handle the GET this quickly.
+				this.schedulePoll({ property, propertyKey }, value);
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: ThermostatSetpointCCAPI,
+			{ property, propertyKey },
+		) {
+			switch (property) {
+				case "setpoint":
+					if (typeof propertyKey !== "number") {
+						throw new ZWaveError(
+							`${
+								CommandClasses[this.ccId]
+							}: "${property}" must be further specified by a numeric property key`,
+							ZWaveErrorCodes.Argument_Invalid,
+						);
+					}
+
+					return (await this.get(propertyKey))?.value;
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	@validateArgs()
 	public async get(

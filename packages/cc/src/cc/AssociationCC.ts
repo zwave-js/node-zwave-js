@@ -9,11 +9,11 @@ import type {
 import {
 	CommandClasses,
 	MAX_NODES,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -35,9 +35,9 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import { AssociationCommand, type AssociationAddress } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
 
 export const AssociationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Association, {

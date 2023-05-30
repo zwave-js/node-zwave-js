@@ -3,29 +3,29 @@ import {
 	CommandClasses,
 	MessagePriority,
 	ZWaveError,
-	ZWaveErrorCodes,
+	type ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
-	Action,
-	ActorRef,
-	ActorRefFrom,
 	assign,
-	AssignAction,
 	createMachine,
 	forwardTo,
-	Interpreter,
-	MachineOptions,
-	PureAction,
 	spawn,
-	StateMachine,
+	type Action,
+	type ActorRef,
+	type ActorRefFrom,
+	type AssignAction,
+	type Interpreter,
+	type MachineOptions,
+	type PureAction,
+	type StateMachine,
 } from "xstate";
 import { pure, raise, send, stop } from "xstate/lib/actions";
 import { InterviewStage, NodeStatus } from "../node/_Types";
 import {
-	CommandQueueEvent,
 	createCommandQueueMachine,
+	type CommandQueueEvent,
 } from "./CommandQueueMachine";
 import type {
 	SerialAPICommandDoneData,
@@ -35,7 +35,7 @@ import type { ServiceImplementations } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
 import {
 	createTransactionMachine,
-	TransactionMachine,
+	type TransactionMachine,
 } from "./TransactionMachine";
 import type { ZWaveOptions } from "./ZWaveOptions";
 

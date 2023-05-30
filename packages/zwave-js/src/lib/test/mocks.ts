@@ -2,29 +2,29 @@
 import { getImplementedVersion } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
-	CommandClasses,
-	CommandClassInfo,
-	FLiRS,
 	InterviewStage,
-	IZWaveEndpoint,
-	IZWaveNode,
-	Maybe,
 	MessagePriority,
 	NodeStatus,
 	SecurityClass,
-	securityClassOrder,
-	unknownBoolean,
 	ZWaveError,
 	ZWaveErrorCodes,
+	securityClassOrder,
+	unknownBoolean,
+	type CommandClassInfo,
+	type CommandClasses,
+	type FLiRS,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type Maybe,
 } from "@zwave-js/core";
 import type { TestingHost } from "@zwave-js/host";
 import {
-	expectedResponse,
-	FunctionType,
 	Message,
 	MessageType,
+	expectedResponse,
 	messageTypes,
 	priority,
+	type FunctionType,
 } from "@zwave-js/serial";
 import sinon from "sinon";
 import type { Driver } from "../driver/Driver";
