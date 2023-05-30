@@ -307,7 +307,12 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					}
 				},
 
-				optimisticallyUpdateRelatedValues: () => {
+				optimisticallyUpdateRelatedValues: (
+					supervisedAndSuccessful,
+				) => {
+					// For barriers, do not update the current value unless we actually know the command was successful
+					if (!supervisedAndSuccessful) return;
+
 					if (this.isSinglecast()) {
 						this.tryGetValueDB()?.setValue(
 							currentStateValueId,

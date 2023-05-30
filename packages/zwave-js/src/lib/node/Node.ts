@@ -1067,19 +1067,24 @@ export class ZWaveNode
 			// Depending on the settings of the SET_VALUE implementation, we may have to
 			// optimistically update a different value and/or verify the changes
 			if (hooks) {
-				// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-				// so UIs have immediate feedback
+				const supervisedAndSuccessful =
+					isSupervisionResult(result) &&
+					result.status === SupervisionStatus.Success;
+
 				const shouldUpdateOptimistically =
 					api.isSetValueOptimistic(valueId) &&
-					// For unsupervised commands, make the choice to update optimistically dependent on the driver options
-					((!this.driver.options.disableOptimisticValueUpdate &&
-						result == undefined) ||
-						(isSupervisionResult(result) &&
-							result.status === SupervisionStatus.Success));
+					// For successful supervised commands, we know that an optimistic update is ok
+					(supervisedAndSuccessful ||
+						// For unsupervised commands that did not fail, we let the applciation decide whether
+						// to update related value optimistically
+						(!this.driver.options.disableOptimisticValueUpdate &&
+							result == undefined));
 
-				// Let the API implementation handle additional optimistic updates
+				// The actual API implementation handles additional optimistic updates
 				if (shouldUpdateOptimistically) {
-					hooks.optimisticallyUpdateRelatedValues?.();
+					hooks.optimisticallyUpdateRelatedValues?.(
+						supervisedAndSuccessful,
+					);
 				}
 
 				// Verify the current value after a delay, unless...
