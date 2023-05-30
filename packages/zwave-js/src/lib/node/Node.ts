@@ -2703,7 +2703,12 @@ protocol version:      ${this.protocolVersion}`;
 		}
 
 		// If we're being queried by another node, treat this as a sign that the other node is awake
-		if (command.constructor.name.endsWith("Get")) {
+		if (
+			command.constructor.name.endsWith("Get") &&
+			// Nonces can be sent while asleep though
+			!(command instanceof SecurityCCNonceGet) &&
+			!(command instanceof Security2CCNonceGet)
+		) {
 			this.markAsAwake();
 		}
 
