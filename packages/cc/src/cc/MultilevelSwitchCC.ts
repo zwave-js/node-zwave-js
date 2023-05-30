@@ -406,7 +406,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						// ignore
 					}
 				},
-				optimisticallyUpdateRelatedValues: () => {
+				optimisticallyUpdateRelatedValues: (
+					_supervisedAndSuccessful,
+				) => {
 					// Only update currentValue for valid target values
 					if (
 						typeof value === "number" &&

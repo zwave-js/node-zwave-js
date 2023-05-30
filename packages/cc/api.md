@@ -14626,7 +14626,7 @@ export type SetValueImplementationHooks = AllOrNone_2<{
     supervisionOnSuccess: () => void | Promise<void>;
     supervisionOnFailure: () => void | Promise<void>;
 }> & {
-    optimisticallyUpdateRelatedValues?: () => void;
+    optimisticallyUpdateRelatedValues?: (supervisedAndSuccessful: boolean) => void;
     forceVerifyChanges?: () => boolean;
     verifyChanges?: () => void | Promise<void>;
 };

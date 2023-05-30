@@ -140,7 +140,9 @@ export class BasicCCAPI extends CCAPI {
 				this.endpoint.index,
 			);
 			return {
-				optimisticallyUpdateRelatedValues: () => {
+				optimisticallyUpdateRelatedValues: (
+					_supervisedAndSuccessful,
+				) => {
 					// Only update currentValue for valid target values
 					if (
 						typeof value === "number" &&

@@ -54,7 +54,9 @@ export type SetValueImplementationHooks = AllOrNone<{
 	supervisionOnFailure: () => void | Promise<void>;
 }> & {
 	// Optimistically update related cached values (if allowed)
-	optimisticallyUpdateRelatedValues?: () => void;
+	optimisticallyUpdateRelatedValues?: (
+		supervisedAndSuccessful: boolean,
+	) => void;
 	// Check if a verification of the set value is required, even if the API response suggests otherwise
 	forceVerifyChanges?: () => boolean;
 	// Verify the changes

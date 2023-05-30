@@ -165,7 +165,9 @@ export class BinarySwitchCCAPI extends CCAPI {
 				BinarySwitchCCValues.currentValue.endpoint(this.endpoint.index);
 
 			return {
-				optimisticallyUpdateRelatedValues: () => {
+				optimisticallyUpdateRelatedValues: (
+					_supervisedAndSuccessful,
+				) => {
 					// After setting targetValue, optimistically update currentValue
 					if (this.isSinglecast()) {
 						this.tryGetValueDB()?.setValue(
