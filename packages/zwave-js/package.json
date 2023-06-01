@@ -85,7 +85,7 @@
   "dependencies": {
     "@alcalzone/jsonl-db": "^3.1.0",
     "@alcalzone/pak": "^0.9.0",
-    "@esm2cjs/got": "^12.5.3",
+    "@esm2cjs/got": "^13.0.0",
     "@esm2cjs/p-queue": "^7.3.0",
     "@sentry/integrations": "^7.12.1",
     "@sentry/node": "^7.12.1",

@@ -565,18 +565,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esm2cjs/cacheable-request@npm:^10.2.1":
-  version: 10.2.5
-  resolution: "@esm2cjs/cacheable-request@npm:10.2.5"
+"@esm2cjs/cacheable-request@npm:^10.2.8":
+  version: 10.2.10
+  resolution: "@esm2cjs/cacheable-request@npm:10.2.10"
   dependencies:
     "@esm2cjs/mimic-response": ^4.0.0
     "@esm2cjs/normalize-url": ^8.0.0
     "@esm2cjs/responselike": ^3.0.0
     "@types/http-cache-semantics": ^4.0.1
     get-stream: ^6.0.1
-    http-cache-semantics: ^4.1.0
+    http-cache-semantics: ^4.1.1
     keyv: ^4.5.2
-  checksum: 590454cbcf146d9b1639560f341d7be43a4186a262d202cc60749a87acdd4a23e63d9c5d057ed42fa115b7b0b38b9d512ac9ecf9cd66c6722f11451d0b2457a9
+  checksum: aeaff4a08e9b16b44233a1373a5a0a548197211dcbaa09def8d342371eef394ed188926df8ae3a0ea9c7cf765787023a99963162195de4842c1ce51c79093da0
   languageName: node
   linkType: hard
 
@@ -587,12 +587,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esm2cjs/got@npm:^12.5.3":
-  version: 12.5.3
-  resolution: "@esm2cjs/got@npm:12.5.3"
+"@esm2cjs/got@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "@esm2cjs/got@npm:13.0.0"
   dependencies:
     "@esm2cjs/cacheable-lookup": ^7.0.0
-    "@esm2cjs/cacheable-request": ^10.2.1
+    "@esm2cjs/cacheable-request": ^10.2.8
     "@esm2cjs/form-data-encoder": ^2.1.2
     "@esm2cjs/http-timer": ^5.0.1
     "@esm2cjs/is": ^5.2.0
@@ -602,7 +602,7 @@ __metadata:
     get-stream: ^6.0.1
     http2-wrapper: ^2.1.10
     responselike: ^3.0.0
-  checksum: 069c96a5f1065f48a3c13fc318fdca331bb6ce0b98dd7e8697e1ffbb091f90712113671e230df6f8683db59f1b636368a71366f4256b73c4f96eb75252f94738
+  checksum: b55bd3074c2a1a4def3e5352a59a5e8f4eb608a2732fadb31de310a77c28e82f83c6dd3158546df2967f5731b01a424fd7bcab894f310537b69b13bb16c4cdf8
   languageName: node
   linkType: hard
 
@@ -1743,7 +1743,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
-    "@esm2cjs/got": ^12.5.3
+    "@esm2cjs/got": ^13.0.0
     "@microsoft/api-extractor": ^7.35.0
     "@types/fs-extra": ^9.0.13
     "@types/js-levenshtein": ^1.1.1
@@ -4917,7 +4917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-cache-semantics@npm:^4.1.0":
+"http-cache-semantics@npm:^4.1.0, http-cache-semantics@npm:^4.1.1":
   version: 4.1.1
   resolution: "http-cache-semantics@npm:4.1.1"
   checksum: 83ac0bc60b17a3a36f9953e7be55e5c8f41acc61b22583060e8dedc9dd5e3607c823a88d0926f9150e571f90946835c7fe150732801010845c72cd8bbff1a236
@@ -8975,7 +8975,7 @@ __metadata:
   dependencies:
     "@alcalzone/jsonl-db": ^3.1.0
     "@alcalzone/pak": ^0.9.0
-    "@esm2cjs/got": ^12.5.3
+    "@esm2cjs/got": ^13.0.0
     "@esm2cjs/p-queue": ^7.3.0
     "@microsoft/api-extractor": ^7.35.0
     "@sentry/integrations": ^7.12.1

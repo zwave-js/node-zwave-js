@@ -69,7 +69,7 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
-    "@esm2cjs/got": "^12.5.3",
+    "@esm2cjs/got": "^13.0.0",
     "@microsoft/api-extractor": "^7.35.0",
     "@types/fs-extra": "^9.0.13",
     "@types/js-levenshtein": "^1.1.1",
