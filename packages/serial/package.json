@@ -58,7 +58,7 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "dependencies": {
-    "@sentry/node": "^7.12.1",
+    "@sentry/node": "^7.53.1",
     "@serialport/stream": "^10.3.0",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
