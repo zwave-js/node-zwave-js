@@ -1,6 +1,6 @@
 declare module "mdns-server" {
-	import * as dgram from "dgram";
-	import { EventEmitter } from "events";
+	import type * as dgram from "dgram";
+	import { type EventEmitter } from "events";
 
 	function MDnsServer(
 		opts?: Partial<MDnsServer.Options>,

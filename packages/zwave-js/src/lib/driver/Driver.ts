@@ -174,7 +174,6 @@ import {
 	type AppInfo,
 } from "../telemetry/statistics";
 import { Bootloader } from "./Bootloader";
-import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -201,6 +200,7 @@ import {
 } from "./UpdateConfig";
 import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
 import type { EditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
+import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
