@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.23.0 (2023-06-01)
 ### Features
 * Z-Wave controllers hosted remotely over TCP can now be discovered using mDNS (#5863)
 
