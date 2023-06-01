@@ -8,7 +8,7 @@ import {
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -73,7 +73,9 @@ export const ThermostatFanModeCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Fan Mode"])
 export class ThermostatFanModeCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatFanModeCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ThermostatFanModeCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatFanModeCommand.Get:
 			case ThermostatFanModeCommand.SupportedGet:
@@ -199,7 +201,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 	}
 
 	public async getSupportedModes(): Promise<
-		readonly ThermostatFanMode[] | undefined
+		MaybeNotKnown<readonly ThermostatFanMode[]>
 	> {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,

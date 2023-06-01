@@ -1,7 +1,6 @@
 import {
 	AssociationCC,
 	ECDHProfiles,
-	FirmwareUpdateResult,
 	InclusionControllerCCComplete,
 	InclusionControllerCCInitiate,
 	InclusionControllerStatus,
@@ -21,6 +20,7 @@ import {
 	inclusionTimeouts,
 	type AssociationAddress,
 	type AssociationGroup,
+	type FirmwareUpdateResult,
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
@@ -51,6 +51,7 @@ import {
 	securityClassIsS2,
 	securityClassOrder,
 	type Firmware,
+	type MaybeNotKnown,
 	type RSSI,
 	type SinglecastCC,
 	type ZWaveDataRate,
@@ -407,120 +408,122 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		);
 	}
 
-	private _type: ZWaveLibraryTypes | undefined;
-	public get type(): ZWaveLibraryTypes | undefined {
+	private _type: MaybeNotKnown<ZWaveLibraryTypes>;
+	public get type(): MaybeNotKnown<ZWaveLibraryTypes> {
 		return this._type;
 	}
 
-	private _protocolVersion: string | undefined;
-	public get protocolVersion(): string | undefined {
+	private _protocolVersion: MaybeNotKnown<string>;
+	public get protocolVersion(): MaybeNotKnown<string> {
 		return this._protocolVersion;
 	}
 
-	private _sdkVersion: string | undefined;
-	public get sdkVersion(): string | undefined {
+	private _sdkVersion: MaybeNotKnown<string>;
+	public get sdkVersion(): MaybeNotKnown<string> {
 		return this._sdkVersion;
 	}
 
-	private _zwaveApiVersion: ZWaveApiVersion | undefined;
-	public get zwaveApiVersion(): ZWaveApiVersion | undefined {
+	private _zwaveApiVersion: MaybeNotKnown<ZWaveApiVersion>;
+	public get zwaveApiVersion(): MaybeNotKnown<ZWaveApiVersion> {
 		return this._zwaveApiVersion;
 	}
 
-	private _zwaveChipType: string | UnknownZWaveChipType | undefined;
-	public get zwaveChipType(): string | UnknownZWaveChipType | undefined {
+	private _zwaveChipType: MaybeNotKnown<string | UnknownZWaveChipType>;
+	public get zwaveChipType(): MaybeNotKnown<string | UnknownZWaveChipType> {
 		return this._zwaveChipType;
 	}
 
-	private _homeId: number | undefined;
+	private _homeId: MaybeNotKnown<number>;
 	/** A 32bit number identifying the current network */
-	public get homeId(): number | undefined {
+	public get homeId(): MaybeNotKnown<number> {
 		return this._homeId;
 	}
 
-	private _ownNodeId: number | undefined;
+	private _ownNodeId: MaybeNotKnown<number>;
 	/** The ID of the controller in the current network */
-	public get ownNodeId(): number | undefined {
+	public get ownNodeId(): MaybeNotKnown<number> {
 		return this._ownNodeId;
 	}
 
-	private _isPrimary: boolean | undefined;
-	public get isPrimary(): boolean | undefined {
+	private _isPrimary: MaybeNotKnown<boolean>;
+	public get isPrimary(): MaybeNotKnown<boolean> {
 		return this._isPrimary;
 	}
 
-	private _isUsingHomeIdFromOtherNetwork: boolean | undefined;
-	public get isUsingHomeIdFromOtherNetwork(): boolean | undefined {
+	private _isUsingHomeIdFromOtherNetwork: MaybeNotKnown<boolean>;
+	public get isUsingHomeIdFromOtherNetwork(): MaybeNotKnown<boolean> {
 		return this._isUsingHomeIdFromOtherNetwork;
 	}
 
-	private _isSISPresent: boolean | undefined;
-	public get isSISPresent(): boolean | undefined {
+	private _isSISPresent: MaybeNotKnown<boolean>;
+	public get isSISPresent(): MaybeNotKnown<boolean> {
 		return this._isSISPresent;
 	}
 
-	private _wasRealPrimary: boolean | undefined;
-	public get wasRealPrimary(): boolean | undefined {
+	private _wasRealPrimary: MaybeNotKnown<boolean>;
+	public get wasRealPrimary(): MaybeNotKnown<boolean> {
 		return this._wasRealPrimary;
 	}
 
-	private _isSIS: boolean | undefined;
-	public get isSIS(): boolean | undefined {
+	private _isSIS: MaybeNotKnown<boolean>;
+	public get isSIS(): MaybeNotKnown<boolean> {
 		return this._isSIS;
 	}
 
-	private _isSUC: boolean | undefined;
-	public get isSUC(): boolean | undefined {
+	private _isSUC: MaybeNotKnown<boolean>;
+	public get isSUC(): MaybeNotKnown<boolean> {
 		return this._isSUC;
 	}
 
-	private _nodeType: NodeType | undefined;
-	public get nodeType(): NodeType | undefined {
+	private _nodeType: MaybeNotKnown<NodeType>;
+	public get nodeType(): MaybeNotKnown<NodeType> {
 		return this._nodeType;
 	}
 
 	/** Checks if the SDK version is greater than the given one */
-	public sdkVersionGt(version: SDKVersion): boolean | undefined {
+	public sdkVersionGt(version: SDKVersion): MaybeNotKnown<boolean> {
 		return sdkVersionGt(this._sdkVersion, version);
 	}
 
 	/** Checks if the SDK version is greater than or equal to the given one */
-	public sdkVersionGte(version: SDKVersion): boolean | undefined {
+	public sdkVersionGte(version: SDKVersion): MaybeNotKnown<boolean> {
 		return sdkVersionGte(this._sdkVersion, version);
 	}
 
 	/** Checks if the SDK version is lower than the given one */
-	public sdkVersionLt(version: SDKVersion): boolean | undefined {
+	public sdkVersionLt(version: SDKVersion): MaybeNotKnown<boolean> {
 		return sdkVersionLt(this._sdkVersion, version);
 	}
 
 	/** Checks if the SDK version is lower than or equal to the given one */
-	public sdkVersionLte(version: SDKVersion): boolean | undefined {
+	public sdkVersionLte(version: SDKVersion): MaybeNotKnown<boolean> {
 		return sdkVersionLte(this._sdkVersion, version);
 	}
 
-	private _manufacturerId: number | undefined;
-	public get manufacturerId(): number | undefined {
+	private _manufacturerId: MaybeNotKnown<number>;
+	public get manufacturerId(): MaybeNotKnown<number> {
 		return this._manufacturerId;
 	}
 
-	private _productType: number | undefined;
-	public get productType(): number | undefined {
+	private _productType: MaybeNotKnown<number>;
+	public get productType(): MaybeNotKnown<number> {
 		return this._productType;
 	}
 
-	private _productId: number | undefined;
-	public get productId(): number | undefined {
+	private _productId: MaybeNotKnown<number>;
+	public get productId(): MaybeNotKnown<number> {
 		return this._productId;
 	}
 
-	private _firmwareVersion: string | undefined;
-	public get firmwareVersion(): string | undefined {
+	private _firmwareVersion: MaybeNotKnown<string>;
+	public get firmwareVersion(): MaybeNotKnown<string> {
 		return this._firmwareVersion;
 	}
 
-	private _supportedFunctionTypes: FunctionType[] | undefined;
-	public get supportedFunctionTypes(): readonly FunctionType[] | undefined {
+	private _supportedFunctionTypes: MaybeNotKnown<FunctionType[]>;
+	public get supportedFunctionTypes(): MaybeNotKnown<
+		readonly FunctionType[]
+	> {
 		return this._supportedFunctionTypes;
 	}
 
@@ -561,7 +564,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Tests if the controller supports a certain feature.
 	 * Returns `undefined` if this information isn't known yet.
 	 */
-	public supportsFeature(feature: ZWaveFeature): boolean | undefined {
+	public supportsFeature(feature: ZWaveFeature): MaybeNotKnown<boolean> {
 		switch (feature) {
 			case ZWaveFeature.SmartStart:
 				return this.sdkVersionGte(minFeatureVersions[feature]);
@@ -581,28 +584,28 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 	}
 
-	private _sucNodeId: number | undefined;
-	public get sucNodeId(): number | undefined {
+	private _sucNodeId: MaybeNotKnown<number>;
+	public get sucNodeId(): MaybeNotKnown<number> {
 		return this._sucNodeId;
 	}
 
-	private _supportsTimers: boolean | undefined;
-	public get supportsTimers(): boolean | undefined {
+	private _supportsTimers: MaybeNotKnown<boolean>;
+	public get supportsTimers(): MaybeNotKnown<boolean> {
 		return this._supportsTimers;
 	}
 
 	/** Whether the controller is known to support soft reset */
-	public get supportsSoftReset(): boolean | undefined {
+	public get supportsSoftReset(): MaybeNotKnown<boolean> {
 		return this.driver.cacheGet(cacheKeys.controller.supportsSoftReset);
 	}
 	/** @internal */
-	public set supportsSoftReset(value: boolean | undefined) {
+	public set supportsSoftReset(value: MaybeNotKnown<boolean>) {
 		this.driver.cacheSet(cacheKeys.controller.supportsSoftReset, value);
 	}
 
-	private _rfRegion: RFRegion | undefined;
+	private _rfRegion: MaybeNotKnown<RFRegion>;
 	/** Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet). This value is cached and can be changed through {@link setRFRegion}. */
-	public get rfRegion(): RFRegion | undefined {
+	public get rfRegion(): MaybeNotKnown<RFRegion> {
 		return this._rfRegion;
 	}
 

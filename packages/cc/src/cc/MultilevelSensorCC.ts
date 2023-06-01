@@ -1,4 +1,4 @@
-import { getDefaultScale, Scale } from "@zwave-js/config";
+import { Scale, getDefaultScale } from "@zwave-js/config";
 import { timespan } from "@zwave-js/core";
 import type {
 	MessageOrCCLogEntry,
@@ -9,27 +9,23 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	encodeFloatWithScale,
 	MessagePriority,
-	parseBitMask,
-	parseFloatWithScale,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type Maybe,
+	encodeFloatWithScale,
+	parseBitMask,
+	parseFloatWithScale,
+	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
-	MultilevelSensorCommand,
-	type MultilevelSensorValue,
-} from "../lib/_Types";
-import {
 	CCAPI,
-	PhysicalCCAPI,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
 	type PollValueImplementation,
 } from "../lib/API";
@@ -51,6 +47,10 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
+import {
+	MultilevelSensorCommand,
+	type MultilevelSensorValue,
+} from "../lib/_Types";
 
 export const MultilevelSensorCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Multilevel Sensor"], {
@@ -187,7 +187,9 @@ function getPreferredSensorScale(
 
 @API(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: MultilevelSensorCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: MultilevelSensorCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MultilevelSensorCommand.Get:
 			case MultilevelSensorCommand.Report:
@@ -220,17 +222,17 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 
 	/** Query the default sensor value */
 	public async get(): Promise<
-		(MultilevelSensorValue & { type: number }) | undefined
+		MaybeNotKnown<MultilevelSensorValue & { type: number }>
 	>;
 	/** Query the sensor value for the given sensor type using the preferred sensor scale */
 	public async get(
 		sensorType: number,
-	): Promise<MultilevelSensorValue | undefined>;
+	): Promise<MaybeNotKnown<MultilevelSensorValue>>;
 	/** Query the sensor value for the given sensor type using the given sensor scale */
 	public async get(
 		sensorType: number,
 		scale: number,
-	): Promise<number | undefined>;
+	): Promise<MaybeNotKnown<number>>;
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -298,7 +300,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getSupportedSensorTypes(): Promise<
-		readonly number[] | undefined
+		MaybeNotKnown<readonly number[]>
 	> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
@@ -320,7 +322,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getSupportedScales(
 		sensorType: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedScale,

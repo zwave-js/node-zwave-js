@@ -39,6 +39,34 @@ Configuration parameters on endpoints are now supported. For devices with config
 
 Applications that expect configuration parameters to only exist on the root device will have to be updated to support this change.
 
+## Removed `preserveUnknownValues` driver option, distinguish between (known to be) unknown and not (yet) known states/values
+
+Several CCs use the value 254 to indicate that a state is unknown. However this value often lies outside of the normal range of values, e.g. 0-99 for multilevel switches. Other CCs translate the raw numeric values to another type, e.g. `boolean` for the `Binary Switch CC`. So simply preserving the 254 isn't an option, because it would throw off applications which expect a value in the defined range or of the correct type.
+
+Previously, Z-Wave JS used `"unknown"` or `undefined` (based on the driver option `preserveUnknownValues`), which both have downsides aswell:
+
+-   The string `"unknown"` is obviously not a number or boolean, which could cause errors
+-   `undefined` gets "filtered" out by the value DB, because it also means **no value**. As a result changes **to** `unknown` would cause no events
+-   `undefined` could also mean the data hasn't been queried yet, but it is impossible to distinguish from the `unknown` case
+
+To solve this dilemma, Z-Wave JS now uses two distinct values (and types using the same name):
+
+-   `NOT_KNOWN` is an alias for `undefined` and indicates that a value is **not known (yet)**, either for a value that has not been queried yet, or where no response was received
+-   `UNKNOWN_STATE` is an alias for `null` and indicates that some information has been queried, but the corresponding state is **(known to be) unknown**. For example a multilevel device without intermediate position support - it knows that it is neither fully open, nor fully closed, but not the exact position.
+
+Two related utility types have been introduced to preserve this distinction through the type system and replace the former `Maybe<T>` type:
+
+-   `MaybeNotKnown<T>` is `T | NOT_KNOWN` and indicates that something is either of the type `T`, or `NOT_KNOWN = undefined`
+-   `MaybeUnknown<T>` is `T | UNKNOWN_STATE` and indicates that something is either of the type `T`, or `UNKNOWN_STATE = null`
+
+Many method signatures and properties which previously used `undefined` to indicate an uncertainty have been updated to use either of the previous types to make it clear what an absence of a value means. Likewise, several CC values can now be `null / UNKNOWN_STATE`. The `preserveUnknownValues` driver option has been removed.
+
+Application developers should double-check their code for a common class of errors/bugs that could be introduced by this change, e.g.:
+
+-   The comparisons `== null`, `== undefined`, `!= null` and `!= undefined` fail to distinguish between `NOT_KNOWN` and `UNKNOWN_STATE`. While it is generally recommended to use triple-equals comparison in JavaScript, in these cases, double-equals is a convenient way to compare against both `null` and `undefined` at the same time.
+-   Likewise for nullish coalescing and optional chaining operators (`?.`, `??`, `??=`)
+-   Expecting a `number` or `boolean` when a CC value is not `undefined` is no longer safe, because it could be `null`.
+
 ## Removed several deprecated method signatures, enums and properties
 
 -   The enum member `NodeType["Routing End Node"]` has been removed. This has been called `"End Node"` since `v9.3.0`

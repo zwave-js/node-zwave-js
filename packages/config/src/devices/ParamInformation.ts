@@ -1,8 +1,8 @@
 import {
 	ObjectKeyMap,
 	pick,
-	ReadonlyObjectKeyMap,
 	type JSONObject,
+	type ReadonlyObjectKeyMap,
 } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe";

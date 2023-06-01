@@ -3,7 +3,7 @@ import {
 	CommandClasses,
 	EncapsulationFlags,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -30,7 +30,7 @@ import { CRC16Command } from "../lib/_Types";
 // want to pay the cost of validating each call
 @API(CommandClasses["CRC-16 Encapsulation"])
 export class CRC16CCAPI extends CCAPI {
-	public supportsCommand(_cmd: CRC16Command): Maybe<boolean> {
+	public supportsCommand(_cmd: CRC16Command): MaybeNotKnown<boolean> {
 		// switch (cmd) {
 		// 	case CRC16Command.CommandEncapsulation:
 		return true; // This is mandatory

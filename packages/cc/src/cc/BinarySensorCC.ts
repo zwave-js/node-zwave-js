@@ -6,7 +6,7 @@ import {
 	ZWaveErrorCodes,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -68,7 +68,7 @@ export const BinarySensorCCValues = Object.freeze({
 
 @API(CommandClasses["Binary Sensor"])
 export class BinarySensorCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: BinarySensorCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BinarySensorCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BinarySensorCommand.Get:
 				return true; // This is mandatory
@@ -97,7 +97,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 	@validateArgs({ strictEnums: true })
 	public async get(
 		sensorType?: BinarySensorType,
-	): Promise<boolean | undefined> {
+	): Promise<MaybeNotKnown<boolean>> {
 		this.assertSupportsCommand(
 			BinarySensorCommand,
 			BinarySensorCommand.Get,

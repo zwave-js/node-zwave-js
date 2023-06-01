@@ -65,10 +65,11 @@ import {
 	messageRecordToLines,
 	securityClassIsS2,
 	serializeCacheValue,
+	stripUndefined,
 	timespan,
 	type ICommandClass,
 	type LogConfig,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageRecord,
 	type SendCommandOptions,
 	type SendCommandReturnType,
@@ -235,7 +236,6 @@ const defaultOptions: ZWaveOptions = {
 		sendData: 3,
 		nodeInterview: 5,
 	},
-	preserveUnknownValues: false,
 	disableOptimisticValueUpdate: false,
 	// By default enable soft reset unless the env variable is set
 	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
@@ -823,7 +823,9 @@ export class Driver
 		return this.controller.nodes.get(nodeId)?.deviceConfig;
 	}
 
-	public getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+	public getHighestSecurityClass(
+		nodeId: number,
+	): MaybeNotKnown<SecurityClass> {
 		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.getHighestSecurityClass();
@@ -832,7 +834,7 @@ export class Driver
 	public hasSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.hasSecurityClass(securityClass);
@@ -899,7 +901,6 @@ export class Driver
 			"inclusionUserCallbacks",
 			"interview",
 			"preferences",
-			"preserveUnknownValues",
 		]);
 
 		// Create a new deep-merged copy of the options so we can check them for validity
@@ -2189,10 +2190,12 @@ export class Driver
 			});
 		} else if (ccId === CommandClasses["Multilevel Switch"]) {
 			prefix = "[Notification] Multilevel Switch";
-			details = messageRecordToLines({
-				"event type": ccArgs.eventTypeLabel,
-				direction: ccArgs.direction,
-			});
+			details = messageRecordToLines(
+				stripUndefined({
+					"event type": ccArgs.eventTypeLabel,
+					direction: ccArgs.direction,
+				}),
+			);
 		} /*if (ccId === CommandClasses.Powerlevel)*/ else {
 			// Don't bother logging this
 			return;

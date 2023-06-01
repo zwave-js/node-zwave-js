@@ -4,7 +4,7 @@ import {
 	getCCName,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -68,7 +68,7 @@ export const ZWavePlusCCValues = Object.freeze({
 
 @API(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: ZWavePlusCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ZWavePlusCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ZWavePlusCommand.Get:
 			case ZWavePlusCommand.Report:

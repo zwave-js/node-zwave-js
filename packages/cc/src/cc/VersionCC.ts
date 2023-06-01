@@ -7,9 +7,8 @@ import {
 	ZWaveLibraryTypes,
 	enumValuesToMetadataStates,
 	getCCName,
-	unknownBoolean,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -205,7 +204,7 @@ function parseVersion(buffer: Buffer): string {
 
 @API(CommandClasses.Version)
 export class VersionCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: VersionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case VersionCommand.Get:
 			case VersionCommand.Report:
@@ -223,13 +222,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 					) >= 3
 				);
 			case VersionCommand.ZWaveSoftwareGet: {
-				let ret = this.getValueDB().getValue<Maybe<boolean>>(
+				return this.getValueDB().getValue<boolean>(
 					VersionCCValues.supportsZWaveSoftwareGet.endpoint(
 						this.endpoint.index,
 					),
 				);
-				if (ret == undefined) ret = unknownBoolean;
-				return ret;
 			}
 		}
 		return super.supportsCommand(cmd);
@@ -272,7 +269,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getCCVersion(
 		requestedCC: CommandClasses,
-	): Promise<number | undefined> {
+	): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			VersionCommand,
 			VersionCommand.CommandClassGet,

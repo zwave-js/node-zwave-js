@@ -5,7 +5,7 @@ import {
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -80,7 +80,9 @@ export const ClimateControlScheduleCCValues = Object.freeze({
 
 @API(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCCAPI extends CCAPI {
-	public supportsCommand(cmd: ClimateControlScheduleCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ClimateControlScheduleCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ClimateControlScheduleCommand.Set:
 			case ClimateControlScheduleCommand.OverrideSet:
@@ -115,7 +117,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async get(
 		weekday: Weekday,
-	): Promise<readonly Switchpoint[] | undefined> {
+	): Promise<MaybeNotKnown<readonly Switchpoint[]>> {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.Get,
@@ -134,7 +136,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		return response?.schedule;
 	}
 
-	public async getChangeCounter(): Promise<number | undefined> {
+	public async getChangeCounter(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.ChangedGet,

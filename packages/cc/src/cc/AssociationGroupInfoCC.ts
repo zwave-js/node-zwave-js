@@ -7,7 +7,7 @@ import {
 	parseCCId,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -84,7 +84,9 @@ export const AssociationGroupInfoCCValues = Object.freeze({
 
 @API(CommandClasses["Association Group Information"])
 export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: AssociationGroupInfoCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: AssociationGroupInfoCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case AssociationGroupInfoCommand.NameGet:
 			case AssociationGroupInfoCommand.InfoGet:
@@ -95,7 +97,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
-	public async getGroupName(groupId: number): Promise<string | undefined> {
+	public async getGroupName(groupId: number): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
 			AssociationGroupInfoCommand.NameGet,
@@ -150,7 +152,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		groupId: number,
 		allowCache: boolean = true,
 	): Promise<
-		AssociationGroupInfoCCCommandListReport["commands"] | undefined
+		MaybeNotKnown<AssociationGroupInfoCCCommandListReport["commands"]>
 	> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
@@ -192,7 +194,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		groupId: number,
-	): string | undefined {
+	): MaybeNotKnown<string> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -207,7 +209,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		groupId: number,
-	): AssociationGroupInfoProfile | undefined {
+	): MaybeNotKnown<AssociationGroupInfoProfile> {
 		return applHost.getValueDB(endpoint.nodeId).getValue<{
 			profile: AssociationGroupInfoProfile;
 		}>(AssociationGroupInfoCCValues.groupInfo(groupId).endpoint(endpoint.index))
@@ -219,7 +221,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		groupId: number,
-	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
+	): MaybeNotKnown<ReadonlyMap<CommandClasses, readonly number[]>> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(

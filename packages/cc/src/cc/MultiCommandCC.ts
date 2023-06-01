@@ -1,8 +1,9 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	EncapsulationFlags,
 	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -28,7 +29,7 @@ import { MultiCommandCommand } from "../lib/_Types";
 
 @API(CommandClasses["Multi Command"])
 export class MultiCommandCCAPI extends CCAPI {
-	public supportsCommand(_cmd: MultiCommandCommand): Maybe<boolean> {
+	public supportsCommand(_cmd: MultiCommandCommand): MaybeNotKnown<boolean> {
 		// switch (cmd) {
 		// 	case MultiCommandCommand.CommandEncapsulation:
 		return true; // This is mandatory

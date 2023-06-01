@@ -4,7 +4,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -103,7 +103,9 @@ export const DoorLockLoggingCCValues = Object.freeze({
 
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: DoorLockLoggingCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: DoorLockLoggingCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case DoorLockLoggingCommand.RecordsSupportedGet:
 			case DoorLockLoggingCommand.RecordsSupportedReport:
@@ -114,7 +116,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getRecordsCount(): Promise<number | undefined> {
+	public async getRecordsCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordsSupportedGet,
@@ -136,7 +138,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getRecord(
 		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
-	): Promise<DoorLockLoggingRecord | undefined> {
+	): Promise<MaybeNotKnown<DoorLockLoggingRecord>> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordGet,

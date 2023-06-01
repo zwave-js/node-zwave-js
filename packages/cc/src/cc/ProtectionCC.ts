@@ -8,9 +8,8 @@ import {
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	parseBitMask,
-	unknownBoolean,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -107,7 +106,7 @@ export const ProtectionCCValues = Object.freeze({
 
 @API(CommandClasses.Protection)
 export class ProtectionCCAPI extends CCAPI {
-	public supportsCommand(cmd: ProtectionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ProtectionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ProtectionCommand.Get:
 				return this.isSinglecast();
@@ -119,24 +118,22 @@ export class ProtectionCCAPI extends CCAPI {
 			case ProtectionCommand.TimeoutSet: {
 				return (
 					this.isSinglecast() &&
-					(this.tryGetValueDB()?.getValue<Maybe<boolean>>(
+					this.tryGetValueDB()?.getValue<boolean>(
 						ProtectionCCValues.supportsTimeout.endpoint(
 							this.endpoint.index,
 						),
-					) ??
-						unknownBoolean)
+					)
 				);
 			}
 			case ProtectionCommand.ExclusiveControlGet:
 			case ProtectionCommand.ExclusiveControlSet: {
 				return (
 					this.isSinglecast() &&
-					(this.tryGetValueDB()?.getValue<Maybe<boolean>>(
+					this.tryGetValueDB()?.getValue<boolean>(
 						ProtectionCCValues.supportsExclusiveControl.endpoint(
 							this.endpoint.index,
 						),
-					) ??
-						unknownBoolean)
+					)
 				);
 			}
 		}
@@ -270,7 +267,7 @@ export class ProtectionCCAPI extends CCAPI {
 		}
 	}
 
-	public async getExclusiveControl(): Promise<number | undefined> {
+	public async getExclusiveControl(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.ExclusiveControlGet,
@@ -305,7 +302,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getTimeout(): Promise<Timeout | undefined> {
+	public async getTimeout(): Promise<MaybeNotKnown<Timeout>> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.TimeoutGet,

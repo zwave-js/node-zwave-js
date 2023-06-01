@@ -16,11 +16,11 @@ import {
 	isTransmissionError,
 	parseCCList,
 	validatePayload,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SecurityManager,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -81,7 +81,7 @@ const HALF_NONCE_SIZE = 8;
 // want to pay the cost of validating each call
 @API(CommandClasses.Security)
 export class SecurityCCAPI extends PhysicalCCAPI {
-	public supportsCommand(_cmd: SecurityCommand): Maybe<boolean> {
+	public supportsCommand(_cmd: SecurityCommand): MaybeNotKnown<boolean> {
 		// All commands are mandatory
 		return true;
 	}

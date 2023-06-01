@@ -10,7 +10,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -253,7 +253,7 @@ const configurationSetParameters = [
 
 @API(CommandClasses["Door Lock"])
 export class DoorLockCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: DoorLockCommand): Maybe<boolean> {
+	public supportsCommand(cmd: DoorLockCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case DoorLockCommand.OperationSet:
 			case DoorLockCommand.OperationGet:

@@ -8,7 +8,7 @@ import {
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -57,7 +57,9 @@ export const HumidityControlModeCCValues = Object.freeze({
 
 @API(CommandClasses["Humidity Control Mode"])
 export class HumidityControlModeCCAPI extends CCAPI {
-	public supportsCommand(cmd: HumidityControlModeCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: HumidityControlModeCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case HumidityControlModeCommand.Get:
 			case HumidityControlModeCommand.SupportedGet:
@@ -110,7 +112,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		};
 	}
 
-	public async get(): Promise<HumidityControlMode | undefined> {
+	public async get(): Promise<MaybeNotKnown<HumidityControlMode>> {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,
 			HumidityControlModeCommand.Get,
@@ -148,7 +150,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 	}
 
 	public async getSupportedModes(): Promise<
-		readonly HumidityControlMode[] | undefined
+		MaybeNotKnown<readonly HumidityControlMode[]>
 	> {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,

@@ -22,7 +22,7 @@ import {
 	type ConfigurationMetadata,
 	type IVirtualEndpoint,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -286,7 +286,7 @@ function getParamInformationFromConfigFile(
 
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
-	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ConfigurationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ConfigurationCommand.Get:
 			case ConfigurationCommand.Set:
@@ -500,7 +500,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			valueBitMask?: number;
 			allowUnexpectedResponse?: boolean;
 		},
-	): Promise<ConfigValue | undefined> {
+	): Promise<MaybeNotKnown<ConfigValue>> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
@@ -578,7 +578,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		{
 			parameter: number;
 			bitMask?: number;
-			value: ConfigValue | undefined;
+			value: MaybeNotKnown<ConfigValue>;
 		}[]
 	> {
 		// Get-type commands are only possible in singlecast
@@ -909,7 +909,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/** Requests the name of a configuration parameter from the node */
 	@validateArgs()
-	public async getName(parameter: number): Promise<string | undefined> {
+	public async getName(parameter: number): Promise<MaybeNotKnown<string>> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
@@ -928,7 +928,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/** Requests usage info for a configuration parameter from the node */
 	@validateArgs()
-	public async getInfo(parameter: number): Promise<string | undefined> {
+	public async getInfo(parameter: number): Promise<MaybeNotKnown<string>> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
@@ -2605,14 +2605,14 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public parameter: number;
 	public valueSize: number;
 	public valueFormat: ConfigValueFormat;
-	public minValue: ConfigValue | undefined;
-	public maxValue: ConfigValue | undefined;
-	public defaultValue: ConfigValue | undefined;
+	public minValue: MaybeNotKnown<ConfigValue>;
+	public maxValue: MaybeNotKnown<ConfigValue>;
+	public defaultValue: MaybeNotKnown<ConfigValue>;
 	public nextParameter: number;
-	public altersCapabilities: boolean | undefined;
-	public isReadonly: boolean | undefined;
-	public isAdvanced: boolean | undefined;
-	public noBulkSupport: boolean | undefined;
+	public altersCapabilities: MaybeNotKnown<boolean>;
+	public isReadonly: MaybeNotKnown<boolean>;
+	public isAdvanced: MaybeNotKnown<boolean>;
+	public noBulkSupport: MaybeNotKnown<boolean>;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.allocUnsafe(
