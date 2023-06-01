@@ -302,7 +302,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     enableStatistics(appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    static enumerateSerialPorts({ local, remote, }: {
+    static enumerateSerialPorts({ local, remote, }?: {
         local?: boolean;
         remote?: boolean;
     }): Promise<string[]>;
