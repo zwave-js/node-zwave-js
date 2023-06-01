@@ -2,7 +2,6 @@ import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
 	CommandClasses,
-	MaybeNotKnown,
 	ZWaveError,
 	ZWaveErrorCodes,
 	allCCs,
@@ -10,6 +9,7 @@ import {
 	getCCName,
 	type IZWaveEndpoint,
 	type IZWaveNode,
+	type MaybeNotKnown,
 	type SetValueOptions,
 	type TranslatedValueID,
 	type ValueID,

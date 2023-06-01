@@ -1,9 +1,9 @@
 import {
-	isValidDSK,
-	MaybeNotKnown,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isValidDSK,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import { padVersion } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";

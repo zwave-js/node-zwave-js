@@ -1,7 +1,6 @@
 import {
 	AssociationCC,
 	ECDHProfiles,
-	FirmwareUpdateResult,
 	InclusionControllerCCComplete,
 	InclusionControllerCCInitiate,
 	InclusionControllerStatus,
@@ -21,10 +20,10 @@ import {
 	inclusionTimeouts,
 	type AssociationAddress,
 	type AssociationGroup,
+	type FirmwareUpdateResult,
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
-	MaybeNotKnown,
 	NODE_ID_BROADCAST,
 	NodeType,
 	ProtocolType,
@@ -52,6 +51,7 @@ import {
 	securityClassIsS2,
 	securityClassOrder,
 	type Firmware,
+	type MaybeNotKnown,
 	type RSSI,
 	type SinglecastCC,
 	type ZWaveDataRate,
