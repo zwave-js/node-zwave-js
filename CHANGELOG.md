@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.23.1 (2023-06-01)
+### Bugfixes
+* Make the argument to `enumerateSerialPorts` optional again (#5868)
+
 ## 10.23.0 (2023-06-01)
 ### Features
 * Z-Wave controllers hosted remotely over TCP can now be discovered using mDNS (#5863)
