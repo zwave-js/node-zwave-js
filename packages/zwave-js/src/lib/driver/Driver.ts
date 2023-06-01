@@ -65,6 +65,7 @@ import {
 	messageRecordToLines,
 	securityClassIsS2,
 	serializeCacheValue,
+	stripUndefined,
 	timespan,
 	type ICommandClass,
 	type LogConfig,
@@ -2189,10 +2190,12 @@ export class Driver
 			});
 		} else if (ccId === CommandClasses["Multilevel Switch"]) {
 			prefix = "[Notification] Multilevel Switch";
-			details = messageRecordToLines({
-				"event type": ccArgs.eventTypeLabel,
-				direction: ccArgs.direction,
-			});
+			details = messageRecordToLines(
+				stripUndefined({
+					"event type": ccArgs.eventTypeLabel,
+					direction: ccArgs.direction,
+				}),
+			);
 		} /*if (ccId === CommandClasses.Powerlevel)*/ else {
 			// Don't bother logging this
 			return;

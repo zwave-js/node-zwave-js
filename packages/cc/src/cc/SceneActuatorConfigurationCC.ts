@@ -8,6 +8,7 @@ import {
 	validatePayload,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
+	type MessageRecord,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -381,13 +382,17 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			sceneId: this.sceneId,
+			dimmingDuration: this.dimmingDuration.toString(),
+		};
+		if (this.level != undefined) {
+			message.level = this.level;
+		}
+
 		return {
 			...super.toLogEntry(applHost),
-			message: {
-				sceneId: this.sceneId,
-				level: this.level,
-				dimmingDuration: this.dimmingDuration?.toString(),
-			},
+			message,
 		};
 	}
 }
@@ -441,13 +446,19 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			sceneId: this.sceneId,
+		};
+		if (this.dimmingDuration != undefined) {
+			message.dimmingDuration = this.dimmingDuration.toString();
+		}
+		if (this.level != undefined) {
+			message.level = this.level;
+		}
+
 		return {
 			...super.toLogEntry(applHost),
-			message: {
-				sceneId: this.sceneId,
-				level: this.level,
-				dimmingDuration: this.dimmingDuration?.toString(),
-			},
+			message,
 		};
 	}
 }

@@ -1454,7 +1454,7 @@ export enum MessagePriority {
 // Warning: (ae-missing-release-tag) "MessageRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type MessageRecord = Record<string, string | number | boolean | null | undefined>;
+export type MessageRecord = Record<string, string | number | boolean>;
 
 // Warning: (ae-missing-release-tag) "messageRecordToLines" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2295,7 +2295,7 @@ export function stringToNodeList(nodes?: string): number[] | undefined;
 // Warning: (ae-missing-release-tag) "stripUndefined" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function stripUndefined<T>(obj: Record<string, T>): Record<string, T>;
+export function stripUndefined<T>(obj: Record<string, T | undefined>): Record<string, T>;
 
 // Warning: (ae-missing-release-tag) "supervisedCommandFailed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

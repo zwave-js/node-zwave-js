@@ -1082,7 +1082,7 @@ export class NotificationCCReport extends NotificationCC {
 		if (this.alarmType) {
 			message = {
 				"V1 alarm type": this.alarmType,
-				"V1 alarm level": this.alarmLevel,
+				"V1 alarm level": this.alarmLevel!,
 			};
 		}
 
@@ -1102,7 +1102,7 @@ export class NotificationCCReport extends NotificationCC {
 						applHost.configManager.getNotificationName(
 							this.notificationType,
 						),
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					[`notification ${valueConfig.type}`]:
 						valueConfig.label ??
 						`Unknown (${num2hex(this.notificationEvent)})`,
@@ -1111,14 +1111,14 @@ export class NotificationCCReport extends NotificationCC {
 				message = {
 					...message,
 					"notification type": this.notificationType,
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					"notification state": "idle",
 				};
 			} else {
 				message = {
 					...message,
 					"notification type": this.notificationType,
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					"notification event": num2hex(this.notificationEvent),
 				};
 			}

@@ -697,7 +697,9 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const message: MessageRecord = { "group id": this.groupId };
+		const message: MessageRecord = {
+			"group id": this.groupId || "(all groups)",
+		};
 		if (this.nodeIds) {
 			message["node ids"] = this.nodeIds.join(", ");
 		}

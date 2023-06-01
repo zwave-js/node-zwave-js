@@ -6,6 +6,7 @@ import {
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	getCCName,
+	maybeUnknownToString,
 	parseBitMask,
 	validatePayload,
 	type MaybeNotKnown,
@@ -424,7 +425,9 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"scene count": this.sceneCount,
-			"supports slow refresh": this.supportsSlowRefresh,
+			"supports slow refresh": maybeUnknownToString(
+				this.supportsSlowRefresh,
+			),
 		};
 		for (const [scene, keys] of this.supportedKeyAttributes) {
 			message[`supported attributes (scene #${scene})`] = keys

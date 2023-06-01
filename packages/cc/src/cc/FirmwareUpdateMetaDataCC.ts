@@ -340,21 +340,33 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	public readonly supportsActivation: MaybeNotKnown<boolean>;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"manufacturer id": this.manufacturerId,
+			"firmware id": this.firmwareId,
+			checksum: this.checksum,
+			"firmware upgradable": this.firmwareUpgradable,
+		};
+		if (this.maxFragmentSize != undefined) {
+			message["max fragment size"] = this.maxFragmentSize;
+		}
+		if (this.additionalFirmwareIDs.length) {
+			message["additional firmware IDs"] = JSON.stringify(
+				this.additionalFirmwareIDs,
+			);
+		}
+		if (this.hardwareVersion != undefined) {
+			message["hardware version"] = this.hardwareVersion;
+		}
+		if (this.continuesToFunction != undefined) {
+			message["continues to function"] = this.continuesToFunction;
+		}
+		if (this.supportsActivation != undefined) {
+			message["supports activation"] = this.supportsActivation;
+		}
+
 		return {
 			...super.toLogEntry(applHost),
-			message: {
-				"manufacturer id": this.manufacturerId,
-				"firmware id": this.firmwareId,
-				checksum: this.checksum,
-				"firmware upgradable": this.firmwareUpgradable,
-				"max fragment size": this.maxFragmentSize,
-				"additional firmware IDs": JSON.stringify(
-					this.additionalFirmwareIDs,
-				),
-				"hardware version": this.hardwareVersion,
-				"continues to function": this.continuesToFunction,
-				"supports activation": this.supportsActivation,
-			},
+			message,
 		};
 	}
 }
