@@ -725,6 +725,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@leichtgewicht/ip-codec@npm:^2.0.1":
+  version: 2.0.4
+  resolution: "@leichtgewicht/ip-codec@npm:2.0.4"
+  checksum: 468de1f04d33de6d300892683d7c8aecbf96d1e2c5fe084f95f816e50a054d45b7c1ebfb141a1447d844b86a948733f6eebd92234da8581c84a1ad4de2946a2d
+  languageName: node
+  linkType: hard
+
 "@microsoft/api-extractor-model@npm:7.27.0":
   version: 7.27.0
   resolution: "@microsoft/api-extractor-model@npm:7.27.0"
@@ -3600,6 +3607,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dns-packet@npm:^5.2.2":
+  version: 5.6.0
+  resolution: "dns-packet@npm:5.6.0"
+  dependencies:
+    "@leichtgewicht/ip-codec": ^2.0.1
+  checksum: 1b643814e5947a87620f8a906287079347492282964ce1c236d52c414e3e3941126b96581376b180ba6e66899e70b86b587bc1aa23e3acd9957765be952d83fc
+  languageName: node
+  linkType: hard
+
 "doctrine@npm:^3.0.0":
   version: 3.0.0
   resolution: "doctrine@npm:3.0.0"
@@ -5962,6 +5978,15 @@ __metadata:
   dependencies:
     blueimp-md5: ^2.10.0
   checksum: 6799a19e8bdd3e0c2861b94c1d4d858a89220488d7885c1fa236797e367d0c2e5f2b789e05309307083503f85be3603a9686a5915568a473137d6b4117419cc2
+  languageName: node
+  linkType: hard
+
+"mdns-server@npm:^1.0.11":
+  version: 1.0.11
+  resolution: "mdns-server@npm:1.0.11"
+  dependencies:
+    dns-packet: ^5.2.2
+  checksum: d4c298d47226ae7153b12c4cbbb67de850686f65b2a9aa4ab23b94f70c322c743df8a91d75a14737776001a4cdac57afa82ed824442ab606e8ae79882fb298f5
   languageName: node
   linkType: hard
 
@@ -9006,6 +9031,7 @@ __metadata:
     esbuild-register: ^3.4.2
     execa: ^5.1.1
     fs-extra: ^10.1.0
+    mdns-server: ^1.0.11
     mockdate: ^3.0.5
     prettier: ^2.8.8
     proper-lockfile: ^4.1.2

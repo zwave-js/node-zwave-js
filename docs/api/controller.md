@@ -1289,10 +1289,10 @@ The healing process for the network was completed. The event handler is called w
 This event is emitted regularly during and after communication with the controller and gives some insight that would otherwise only be visible by looking at logs. The callback has the signature
 
 ```ts
-(statistics: ControllerStatistics) => void
+(statistics: Readonly<ControllerStatistics>) => void
 ```
 
-where the statistics have the following shape:
+where the statistics are readonly and have the following shape:
 
 <!-- #import ControllerStatistics from "zwave-js" -->
 

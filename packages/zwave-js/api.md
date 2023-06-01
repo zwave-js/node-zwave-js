@@ -301,7 +301,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     enableErrorReporting(): void;
     // Warning: (ae-forgotten-export) The symbol "AppInfo" needs to be exported by the entry point index.d.ts
     enableStatistics(appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">): void;
-    static enumerateSerialPorts(): Promise<string[]>;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    static enumerateSerialPorts({ local, remote, }: {
+        local?: boolean;
+        remote?: boolean;
+    }): Promise<string[]>;
     getConservativeWaitTimeAfterFirmwareUpdate(advertisedWaitTime: number | undefined): number;
     // (undocumented)
     getDeviceConfig(nodeId: number): DeviceConfig | undefined;

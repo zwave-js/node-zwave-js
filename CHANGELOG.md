@@ -11,6 +11,7 @@
 * Rename some `ZWaveHost` interface methods (#5814)
 * Remove deprecated method signatures, enums and properties (#5816)
 * Support configuration parameters on endpoints (#5818)
+* Removed `preserveUnknownValues` driver option, distinguish between (known to be) unknown and not (yet) known states/values (#5843)
 
 ### Features
 

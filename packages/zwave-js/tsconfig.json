@@ -10,6 +10,11 @@
 				"transform": "ts-nameof",
 				"type": "raw"
 			}
+		],
+		"typeRoots": [
+			"src/lib/@types",
+			"node_modules/@types",
+			"../../node_modules/@types"
 		]
 	},
 	"references": [
