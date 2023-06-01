@@ -75,7 +75,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getPowerlevel(): Promise<
-		Pick<PowerlevelCCReport, "powerlevel" | "timeout"> | undefined
+		MaybeNotKnown<Pick<PowerlevelCCReport, "powerlevel" | "timeout">>
 	> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Get);
 
@@ -134,11 +134,12 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getNodeTestStatus(): Promise<
-		| Pick<
+		MaybeNotKnown<
+			Pick<
 				PowerlevelCCTestNodeReport,
 				"testNodeId" | "status" | "acknowledgedFrames"
-		  >
-		| undefined
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			PowerlevelCommand,

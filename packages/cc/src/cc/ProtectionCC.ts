@@ -267,7 +267,7 @@ export class ProtectionCCAPI extends CCAPI {
 		}
 	}
 
-	public async getExclusiveControl(): Promise<number | undefined> {
+	public async getExclusiveControl(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.ExclusiveControlGet,
@@ -302,7 +302,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getTimeout(): Promise<Timeout | undefined> {
+	public async getTimeout(): Promise<MaybeNotKnown<Timeout>> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.TimeoutGet,

@@ -693,8 +693,8 @@ export class MeterCCReport extends MeterCC {
 		return this._value;
 	}
 
-	private _previousValue: number | undefined;
-	public get previousValue(): number | undefined {
+	private _previousValue: MaybeNotKnown<number>;
+	public get previousValue(): MaybeNotKnown<number> {
 		return this._previousValue;
 	}
 

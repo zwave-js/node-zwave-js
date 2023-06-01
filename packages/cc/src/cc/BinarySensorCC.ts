@@ -97,7 +97,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 	@validateArgs({ strictEnums: true })
 	public async get(
 		sensorType?: BinarySensorType,
-	): Promise<boolean | undefined> {
+	): Promise<MaybeNotKnown<boolean>> {
 		this.assertSupportsCommand(
 			BinarySensorCommand,
 			BinarySensorCommand.Get,

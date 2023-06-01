@@ -13,9 +13,9 @@ import {
 } from "./ConditionalItem";
 import type { ConditionalDeviceConfig } from "./DeviceConfig";
 import {
-	ConditionalParamInfoMap,
-	ParamInfoMap,
 	parseConditionalParamInformationMap,
+	type ConditionalParamInfoMap,
+	type ParamInfoMap,
 } from "./ParamInformation";
 import type { DeviceID } from "./shared";
 

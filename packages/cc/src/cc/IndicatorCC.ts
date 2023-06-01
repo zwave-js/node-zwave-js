@@ -347,7 +347,7 @@ export class IndicatorCCAPI extends CCAPI {
 	@validateArgs()
 	public async get(
 		indicatorId?: number,
-	): Promise<number | IndicatorObject[] | undefined> {
+	): Promise<MaybeNotKnown<number | IndicatorObject[]>> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Get);
 
 		const cc = new IndicatorCCGet(this.applHost, {
@@ -566,7 +566,7 @@ export class IndicatorCCAPI extends CCAPI {
 	 */
 	public async getTimeout(
 		indicatorId: number,
-	): Promise<IndicatorTimeout | undefined> {
+	): Promise<MaybeNotKnown<IndicatorTimeout>> {
 		const values = await this.get(indicatorId);
 		if (!isArray(values)) return;
 
@@ -576,7 +576,7 @@ export class IndicatorCCAPI extends CCAPI {
 	@validateArgs()
 	public async getDescription(
 		indicatorId: number,
-	): Promise<string | undefined> {
+	): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			IndicatorCommand,
 			IndicatorCommand.DescriptionGet,
@@ -778,7 +778,7 @@ export class IndicatorCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		indicatorId: number,
-	): number[] | undefined {
+	): MaybeNotKnown<number[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(

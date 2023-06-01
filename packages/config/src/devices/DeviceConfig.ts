@@ -1,11 +1,9 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
-	ObjectKeyMap,
 	enumFilesRecursive,
 	formatId,
 	stringify,
 	type JSONObject,
-	type ReadonlyObjectKeyMap,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
@@ -35,11 +33,9 @@ import {
 	type EndpointConfig,
 } from "./EndpointConfig";
 import {
-	ConditionalParamInfoMap,
-	ConditionalParamInformation,
-	ParamInfoMap,
 	parseConditionalParamInformationMap,
-	type ParamInformation,
+	type ConditionalParamInfoMap,
+	type ParamInfoMap,
 } from "./ParamInformation";
 import type { DeviceID, FirmwareVersionRange } from "./shared";
 

@@ -283,7 +283,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getSupported(): Promise<SwitchType | undefined> {
+	public async getSupported(): Promise<MaybeNotKnown<SwitchType>> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.SupportedGet,

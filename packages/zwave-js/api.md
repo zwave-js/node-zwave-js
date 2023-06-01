@@ -438,8 +438,8 @@ export class Endpoint implements IZWaveEndpoint {
     createCCInstance<T extends CommandClass>(cc: CommandClasses_2 | CCConstructor<T>): T | undefined;
     createCCInstanceUnsafe<T extends CommandClass>(cc: CommandClasses_2 | CCConstructor<T>): T | undefined;
     // (undocumented)
-    get deviceClass(): DeviceClass | undefined;
-    protected set deviceClass(deviceClass: DeviceClass | undefined);
+    get deviceClass(): MaybeNotKnown<DeviceClass>;
+    protected set deviceClass(deviceClass: MaybeNotKnown<DeviceClass>);
     protected readonly driver: Driver;
     get endpointLabel(): string | undefined;
     // (undocumented)
@@ -449,7 +449,7 @@ export class Endpoint implements IZWaveEndpoint {
     getSupportedCCInstances(): readonly CommandClass[];
     hideBasicCCInFavorOfActuatorCCs(): void;
     readonly index: number;
-    get installerIcon(): number | undefined;
+    get installerIcon(): MaybeNotKnown<number>;
     invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : Omit<CCNameOrId, CommandClasses_2> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     isCCSecure(cc: CommandClasses_2): boolean;
     maybeAddBasicCCAsFallback(): void;
@@ -458,7 +458,7 @@ export class Endpoint implements IZWaveEndpoint {
     protected reset(): void;
     supportsCC(cc: CommandClasses_2): boolean;
     supportsCCAPI(cc: CCNameOrId): boolean;
-    get userIcon(): number | undefined;
+    get userIcon(): MaybeNotKnown<number>;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "IZWaveEndpoint"
     readonly virtual = false;
 }
@@ -1073,7 +1073,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     firmwareUpdateOTA(nodeId: number, updates: FirmwareUpdateFileInfo[]): Promise<FirmwareUpdateResult_2>;
     firmwareUpdateOTW(data: Buffer): Promise<ControllerFirmwareUpdateResult>;
     // (undocumented)
-    get firmwareVersion(): string | undefined;
+    get firmwareVersion(): MaybeNotKnown<string>;
     getAllAssociationGroups(nodeId: number): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>>;
     getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<AssociationAddress, ReadonlyMap<number, readonly AssociationAddress[]>>;
     getAssociationGroups(source: AssociationAddress): ReadonlyMap<number, AssociationGroup>;
@@ -1104,7 +1104,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     getRFRegion(): Promise<RFRegion_2>;
     hasPlannedProvisioningEntries(): boolean;
     healNode(nodeId: number): Promise<boolean>;
-    get homeId(): number | undefined;
+    get homeId(): MaybeNotKnown<number>;
     // (undocumented)
     get inclusionState(): InclusionState;
     isAnyOTAFirmwareUpdateInProgress(): boolean;
@@ -1115,28 +1115,28 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     isFunctionSupported(functionType: FunctionType): boolean;
     get isHealNetworkActive(): boolean;
     // (undocumented)
-    get isPrimary(): boolean | undefined;
+    get isPrimary(): MaybeNotKnown<boolean>;
     isSerialAPISetupCommandSupported(command: SerialAPISetupCommand): boolean;
     // (undocumented)
-    get isSIS(): boolean | undefined;
+    get isSIS(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get isSISPresent(): boolean | undefined;
+    get isSISPresent(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get isSUC(): boolean | undefined;
+    get isSUC(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get isUsingHomeIdFromOtherNetwork(): boolean | undefined;
+    get isUsingHomeIdFromOtherNetwork(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get manufacturerId(): number | undefined;
+    get manufacturerId(): MaybeNotKnown<number>;
     get nodes(): ReadonlyThrowingMap<number, ZWaveNode>;
     // (undocumented)
-    get nodeType(): NodeType_2 | undefined;
-    get ownNodeId(): number | undefined;
+    get nodeType(): MaybeNotKnown<NodeType_2>;
+    get ownNodeId(): MaybeNotKnown<number>;
     // (undocumented)
-    get productId(): number | undefined;
+    get productId(): MaybeNotKnown<number>;
     // (undocumented)
-    get productType(): number | undefined;
+    get productType(): MaybeNotKnown<number>;
     // (undocumented)
-    get protocolVersion(): string | undefined;
+    get protocolVersion(): MaybeNotKnown<string>;
     provisionSmartStartNode(entry: PlannedProvisioningEntry): void;
     removeAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -1156,13 +1156,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "restoreNVM"
     restoreNVMRaw(nvmData: Buffer, onProgress?: (bytesWritten: number, total: number) => void): Promise<void>;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "setRFRegion"
-    get rfRegion(): RFRegion_2 | undefined;
+    get rfRegion(): MaybeNotKnown<RFRegion_2>;
     // (undocumented)
-    get sdkVersion(): string | undefined;
-    sdkVersionGt(version: SDKVersion): boolean | undefined;
-    sdkVersionGte(version: SDKVersion): boolean | undefined;
-    sdkVersionLt(version: SDKVersion): boolean | undefined;
-    sdkVersionLte(version: SDKVersion): boolean | undefined;
+    get sdkVersion(): MaybeNotKnown<string>;
+    sdkVersionGt(version: SDKVersion): MaybeNotKnown<boolean>;
+    sdkVersionGte(version: SDKVersion): MaybeNotKnown<boolean>;
+    sdkVersionLt(version: SDKVersion): MaybeNotKnown<boolean>;
+    sdkVersionLte(version: SDKVersion): MaybeNotKnown<boolean>;
     setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -1173,28 +1173,28 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     stopHealingNetwork(): boolean;
     stopInclusion(): Promise<boolean>;
     // (undocumented)
-    get sucNodeId(): number | undefined;
+    get sucNodeId(): MaybeNotKnown<number>;
     // (undocumented)
-    get supportedFunctionTypes(): readonly FunctionType[] | undefined;
+    get supportedFunctionTypes(): MaybeNotKnown<readonly FunctionType[]>;
     // (undocumented)
     get supportedSerialAPISetupCommands(): readonly SerialAPISetupCommand[] | undefined;
-    supportsFeature(feature: ZWaveFeature): boolean | undefined;
-    get supportsSoftReset(): boolean | undefined;
+    supportsFeature(feature: ZWaveFeature): MaybeNotKnown<boolean>;
+    get supportsSoftReset(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get supportsTimers(): boolean | undefined;
+    get supportsTimers(): MaybeNotKnown<boolean>;
     toggleRF(enabled: boolean): Promise<boolean>;
     // (undocumented)
-    get type(): ZWaveLibraryTypes | undefined;
+    get type(): MaybeNotKnown<ZWaveLibraryTypes>;
     unprovisionSmartStartNode(dskOrNodeId: string | number): void;
     get valueDB(): ValueDB;
     // (undocumented)
-    get wasRealPrimary(): boolean | undefined;
+    get wasRealPrimary(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get zwaveApiVersion(): ZWaveApiVersion | undefined;
+    get zwaveApiVersion(): MaybeNotKnown<ZWaveApiVersion>;
     // Warning: (ae-forgotten-export) The symbol "UnknownZWaveChipType" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
-    get zwaveChipType(): string | UnknownZWaveChipType | undefined;
+    get zwaveChipType(): MaybeNotKnown<string | UnknownZWaveChipType>;
 }
 
 export { ZWaveError }
@@ -1230,22 +1230,22 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     constructor(id: number, driver: Driver, deviceClass?: DeviceClass, supportedCCs?: CommandClasses_2[], controlledCCs?: CommandClasses_2[], valueDB?: ValueDB);
     abortFirmwareUpdate(): Promise<void>;
     // (undocumented)
-    get aggregatedEndpointCount(): number | undefined;
+    get aggregatedEndpointCount(): MaybeNotKnown<number>;
     // (undocumented)
-    get canSleep(): boolean | undefined;
+    get canSleep(): MaybeNotKnown<boolean>;
     checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number) => void): Promise<LifelineHealthCheckSummary>;
     checkRouteHealth(targetNodeId: number, rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number) => void): Promise<RouteHealthCheckSummary>;
     destroy(): void;
     get deviceConfig(): DeviceConfig | undefined;
     // (undocumented)
-    get deviceDatabaseUrl(): string | undefined;
+    get deviceDatabaseUrl(): MaybeNotKnown<string>;
     get dsk(): Buffer | undefined;
     // (undocumented)
-    get endpointCountIsDynamic(): boolean | undefined;
+    get endpointCountIsDynamic(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get endpointsHaveIdenticalCapabilities(): boolean | undefined;
+    get endpointsHaveIdenticalCapabilities(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get firmwareVersion(): string | undefined;
+    get firmwareVersion(): MaybeNotKnown<string>;
     getAllEndpoints(): Endpoint[];
     getDefinedValueIDs(): TranslatedValueID_2[];
     getEndpoint(index: 0): Endpoint;
@@ -1258,9 +1258,9 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     getFirmwareUpdateCapabilities(): Promise<FirmwareUpdateCapabilities>;
     getFirmwareUpdateCapabilitiesCached(): FirmwareUpdateCapabilities;
     getHighestSecurityClass(): MaybeNotKnown<SecurityClass_2>;
-    getValue<T = unknown>(valueId: ValueID_2): T | undefined;
+    getValue<T = unknown>(valueId: ValueID_2): MaybeNotKnown<T>;
     getValueMetadata(valueId: ValueID_2): ValueMetadata_2;
-    getValueTimestamp(valueId: ValueID_2): number | undefined;
+    getValueTimestamp(valueId: ValueID_2): MaybeNotKnown<number>;
     // (undocumented)
     hasSecurityClass(securityClass: SecurityClass_2): MaybeNotKnown<boolean>;
     get hasSUCReturnRoute(): boolean;
@@ -1268,7 +1268,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // (undocumented)
     readonly id: number;
     // (undocumented)
-    get individualEndpointCount(): number | undefined;
+    get individualEndpointCount(): MaybeNotKnown<number>;
     interview(): Promise<void>;
     get interviewAttempts(): number;
     interviewCC(cc: CommandClasses_2): Promise<void>;
@@ -1278,34 +1278,34 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     set interviewStage(value: InterviewStage);
     get isControllerNode(): boolean;
     isFirmwareUpdateInProgress(): boolean;
-    get isFrequentListening(): FLiRS_2 | undefined;
-    get isListening(): boolean | undefined;
-    get isRouting(): boolean | undefined;
+    get isFrequentListening(): MaybeNotKnown<FLiRS_2>;
+    get isListening(): MaybeNotKnown<boolean>;
+    get isRouting(): MaybeNotKnown<boolean>;
     get isSecure(): MaybeNotKnown<boolean>;
     keepAwake: boolean;
     // (undocumented)
     get label(): string | undefined;
     protected loadDeviceConfig(): Promise<void>;
-    get location(): string | undefined;
+    get location(): MaybeNotKnown<string>;
     set location(value: string | undefined);
     manuallyIdleNotificationValue(valueId: ValueID_2): void;
     // (undocumented)
     manuallyIdleNotificationValue(notificationType: number, prevValue: number, endpointIndex?: number): void;
     // (undocumented)
-    get manufacturerId(): number | undefined;
+    get manufacturerId(): MaybeNotKnown<number>;
     // (undocumented)
-    get maxDataRate(): DataRate_2 | undefined;
-    get name(): string | undefined;
+    get maxDataRate(): MaybeNotKnown<DataRate_2>;
+    get name(): MaybeNotKnown<string>;
     set name(value: string | undefined);
-    get nodeType(): NodeType_2 | undefined;
+    get nodeType(): MaybeNotKnown<NodeType_2>;
     protected overwriteConfig(): Promise<void>;
     ping(): Promise<boolean>;
-    pollValue<T = unknown>(valueId: ValueID_2, sendCommandOptions?: SendCommandOptions): Promise<T | undefined>;
+    pollValue<T = unknown>(valueId: ValueID_2, sendCommandOptions?: SendCommandOptions): Promise<MaybeNotKnown<T>>;
     // (undocumented)
-    get productId(): number | undefined;
+    get productId(): MaybeNotKnown<number>;
     // (undocumented)
-    get productType(): number | undefined;
-    get protocolVersion(): ProtocolVersion_2 | undefined;
+    get productType(): MaybeNotKnown<number>;
+    get protocolVersion(): MaybeNotKnown<ProtocolVersion_2>;
     protected queryProtocolInfo(): Promise<void>;
     get ready(): boolean;
     refreshCCValues(cc: CommandClasses_2): Promise<void>;
@@ -1314,28 +1314,28 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // (undocumented)
     requestNodeInfo(): Promise<NodeUpdatePayload>;
     // (undocumented)
-    get sdkVersion(): string | undefined;
+    get sdkVersion(): MaybeNotKnown<string>;
     setDateAndTime(now?: Date): Promise<boolean>;
     // (undocumented)
     setSecurityClass(securityClass: SecurityClass_2, granted: boolean): void;
     setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;
     get status(): NodeStatus;
     // (undocumented)
-    get supportedDataRates(): readonly DataRate_2[] | undefined;
-    get supportsBeaming(): boolean | undefined;
-    get supportsSecurity(): boolean | undefined;
+    get supportedDataRates(): MaybeNotKnown<readonly DataRate_2[]>;
+    get supportsBeaming(): MaybeNotKnown<boolean>;
+    get supportsSecurity(): MaybeNotKnown<boolean>;
     // (undocumented)
-    get supportsWakeUpOnDemand(): boolean | undefined;
+    get supportsWakeUpOnDemand(): MaybeNotKnown<boolean>;
     testPowerlevel(testNodeId: number, powerlevel: Powerlevel_2, healthCheckTestFrameCount: number, onProgress?: (acknowledged: number, total: number) => void): Promise<number>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     updateFirmware(updates: Firmware[]): Promise<FirmwareUpdateResult_2>;
     waitForWakeup(): Promise<void>;
     // (undocumented)
-    get zwavePlusNodeType(): ZWavePlusNodeType | undefined;
+    get zwavePlusNodeType(): MaybeNotKnown<ZWavePlusNodeType>;
     // (undocumented)
-    get zwavePlusRoleType(): ZWavePlusRoleType | undefined;
+    get zwavePlusRoleType(): MaybeNotKnown<ZWavePlusRoleType>;
     // (undocumented)
-    get zwavePlusVersion(): number | undefined;
+    get zwavePlusVersion(): MaybeNotKnown<number>;
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveNodeEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

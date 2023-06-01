@@ -143,8 +143,6 @@ export class SceneActivationCCSet extends SceneActivationCC {
 			// Per the specs, dimmingDuration is required, but as always the real world is different...
 			if (this.payload.length >= 2) {
 				this.dimmingDuration = Duration.parseSet(this.payload[1]);
-			} else {
-				this.dimmingDuration = undefined;
 			}
 
 			validatePayload(this.sceneId >= 1, this.sceneId <= 255);

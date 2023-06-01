@@ -123,7 +123,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		};
 	}
 
-	public async getName(): Promise<string | undefined> {
+	public async getName(): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.NameGet,
@@ -156,7 +156,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getLocation(): Promise<string | undefined> {
+	public async getLocation(): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.LocationGet,

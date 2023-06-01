@@ -136,7 +136,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	 * Returns the number of association groups a node supports.
 	 * Association groups are consecutive, starting at 1.
 	 */
-	public async getGroupCount(): Promise<number | undefined> {
+	public async getGroupCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.SupportedGroupingsGet,

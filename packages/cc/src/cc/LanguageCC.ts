@@ -187,11 +187,11 @@ export class LanguageCCSet extends LanguageCC {
 		this._language = value;
 	}
 
-	private _country: string | undefined;
-	public get country(): string | undefined {
+	private _country: MaybeNotKnown<string>;
+	public get country(): MaybeNotKnown<string> {
 		return this._country;
 	}
-	public set country(value: string | undefined) {
+	public set country(value: MaybeNotKnown<string>) {
 		if (
 			typeof value === "string" &&
 			(value.length !== 2 || value.toUpperCase() !== value)
@@ -243,7 +243,7 @@ export class LanguageCCReport extends LanguageCC {
 	public readonly language: string;
 
 	@ccValue(LanguageCCValues.country)
-	public readonly country: string | undefined;
+	public readonly country: MaybeNotKnown<string>;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };

@@ -624,9 +624,9 @@ export class AssociationGroupInfoCC extends CommandClass {
     determineRequiredCCInterviews(): readonly CommandClasses[];
     // (undocumented)
     static findGroupsForIssuedCommand(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, ccId: CommandClasses, command: number): number[];
-    static getGroupNameCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): string | undefined;
-    static getGroupProfileCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): AssociationGroupInfoProfile | undefined;
-    static getIssuedCommandsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): ReadonlyMap<CommandClasses, readonly number[]> | undefined;
+    static getGroupNameCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): MaybeNotKnown<string>;
+    static getGroupProfileCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): MaybeNotKnown<AssociationGroupInfoProfile>;
+    static getIssuedCommandsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, groupId: number): MaybeNotKnown<ReadonlyMap<CommandClasses, readonly number[]>>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
@@ -1282,9 +1282,9 @@ export class BarrierOperatorCCGet extends BarrierOperatorCC {
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    readonly currentState: BarrierState | undefined;
+    readonly currentState: MaybeUnknown<BarrierState>;
     // (undocumented)
-    readonly position: number | undefined;
+    readonly position: MaybeUnknown<number>;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -2975,7 +2975,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
     // (undocumented)
     get supportedKeyAttributes(): ReadonlyMap<number, readonly CentralSceneKeys[]>;
     // (undocumented)
-    readonly supportsSlowRefresh: boolean | undefined;
+    readonly supportsSlowRefresh: MaybeNotKnown<boolean>;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -4187,21 +4187,21 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
     // Warning: (ae-forgotten-export) The symbol "ConfigurationCCPropertiesReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCPropertiesReportOptions);
     // (undocumented)
-    altersCapabilities: boolean | undefined;
+    altersCapabilities: MaybeNotKnown<boolean>;
     // (undocumented)
-    defaultValue: ConfigValue | undefined;
+    defaultValue: MaybeNotKnown<ConfigValue>;
     // (undocumented)
-    isAdvanced: boolean | undefined;
+    isAdvanced: MaybeNotKnown<boolean>;
     // (undocumented)
-    isReadonly: boolean | undefined;
+    isReadonly: MaybeNotKnown<boolean>;
     // (undocumented)
-    maxValue: ConfigValue | undefined;
+    maxValue: MaybeNotKnown<ConfigValue>;
     // (undocumented)
-    minValue: ConfigValue | undefined;
+    minValue: MaybeNotKnown<ConfigValue>;
     // (undocumented)
     nextParameter: number;
     // (undocumented)
-    noBulkSupport: boolean | undefined;
+    noBulkSupport: MaybeNotKnown<boolean>;
     // (undocumented)
     parameter: number;
     // (undocumented)
@@ -7487,7 +7487,7 @@ export class IndicatorCC extends CommandClass {
     // (undocumented)
     ccCommand: IndicatorCommand;
     // (undocumented)
-    static getSupportedPropertyIDsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, indicatorId: number): number[] | undefined;
+    static getSupportedPropertyIDsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, indicatorId: number): MaybeNotKnown<number[]>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
@@ -7878,8 +7878,8 @@ export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 export class IrrigationCC extends CommandClass {
     // (undocumented)
     ccCommand: IrrigationCommand;
-    static getMaxValveTableSizeCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number | undefined;
-    static getNumValvesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number | undefined;
+    static getMaxValveTableSizeCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<number>;
+    static getNumValvesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<number>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
@@ -9570,7 +9570,7 @@ export class LanguageCCGet extends LanguageCC {
 export class LanguageCCReport extends LanguageCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
     // (undocumented)
-    readonly country: string | undefined;
+    readonly country: MaybeNotKnown<string>;
     // (undocumented)
     readonly language: string;
     // (undocumented)
@@ -9584,8 +9584,8 @@ export class LanguageCCSet extends LanguageCC {
     // Warning: (ae-forgotten-export) The symbol "LanguageCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | LanguageCCSetOptions);
     // (undocumented)
-    get country(): string | undefined;
-    set country(value: string | undefined);
+    get country(): MaybeNotKnown<string>;
+    set country(value: MaybeNotKnown<string>);
     // (undocumented)
     get language(): string;
     set language(value: string);
@@ -10050,7 +10050,7 @@ export class MeterCCReport extends MeterCC {
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    get previousValue(): number | undefined;
+    get previousValue(): MaybeNotKnown<number>;
     // (undocumented)
     get rateType(): RateType;
     // (undocumented)
@@ -10770,7 +10770,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
     // Warning: (ae-forgotten-export) The symbol "MultiChannelCCEndPointReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCEndPointReportOptions);
     // (undocumented)
-    aggregatedCount: number | undefined;
+    aggregatedCount: MaybeNotKnown<number>;
     // (undocumented)
     countIsDynamic: boolean;
     // (undocumented)
@@ -11940,7 +11940,7 @@ export class NotificationCC extends CommandClass {
     ccCommand: NotificationCommand;
     // (undocumented)
     determineRequiredCCInterviews(): readonly CommandClasses[];
-    static getNotificationMode(applHost: ZWaveApplicationHost_2, node: IZWaveNode): "push" | "pull" | undefined;
+    static getNotificationMode(applHost: ZWaveApplicationHost_2, node: IZWaveNode): MaybeNotKnown<"push" | "pull">;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
@@ -13377,15 +13377,15 @@ export class ScheduleEntryLockCC extends CommandClass {
     static getNumWeekDaySlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
     static getNumYearDaySlotsCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint): number;
     // (undocumented)
-    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.WeekDay, userId: number, slotId: number): ScheduleEntryLockWeekDaySchedule | false | undefined;
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.WeekDay, userId: number, slotId: number): MaybeNotKnown<ScheduleEntryLockWeekDaySchedule | false>;
     // (undocumented)
-    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.YearDay, userId: number, slotId: number): ScheduleEntryLockYearDaySchedule | false | undefined;
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.YearDay, userId: number, slotId: number): MaybeNotKnown<ScheduleEntryLockYearDaySchedule | false>;
     // (undocumented)
-    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating, userId: number, slotId: number): ScheduleEntryLockDailyRepeatingSchedule | false | undefined;
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating, userId: number, slotId: number): MaybeNotKnown<ScheduleEntryLockDailyRepeatingSchedule | false>;
     // (undocumented)
-    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind, userId: number, slotId: number): ScheduleEntryLockWeekDaySchedule | ScheduleEntryLockYearDaySchedule | ScheduleEntryLockDailyRepeatingSchedule | false | undefined;
+    static getScheduleCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, scheduleKind: ScheduleEntryLockScheduleKind, userId: number, slotId: number): MaybeNotKnown<ScheduleEntryLockWeekDaySchedule | ScheduleEntryLockYearDaySchedule | ScheduleEntryLockDailyRepeatingSchedule | false>;
     static getUserCodeScheduleEnabledCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, userId: number): boolean;
-    static getUserCodeScheduleKindCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, userId: number): ScheduleEntryLockScheduleKind | undefined;
+    static getUserCodeScheduleKindCached(applHost: ZWaveApplicationHost, endpoint: IZWaveEndpoint, userId: number): MaybeNotKnown<ScheduleEntryLockScheduleKind>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost): Promise<void>;
 }
@@ -16543,12 +16543,12 @@ export const TransportServiceTimeouts: {
 export class UserCodeCC extends CommandClass {
     // (undocumented)
     ccCommand: UserCodeCommand;
-    static getSupportedASCIICharsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): string | undefined;
-    static getSupportedKeypadModesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): KeypadMode[] | undefined;
-    static getSupportedUserIDStatusesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): UserIDStatus[] | undefined;
-    static getSupportedUsersCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number | undefined;
-    static getUserCodeCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, userId: number): string | Buffer | undefined;
-    static getUserIdStatusCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, userId: number): UserIDStatus | undefined;
+    static getSupportedASCIICharsCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<string>;
+    static getSupportedKeypadModesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<KeypadMode[]>;
+    static getSupportedUserIDStatusesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<UserIDStatus[]>;
+    static getSupportedUsersCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<number>;
+    static getUserCodeCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, userId: number): MaybeNotKnown<string | Buffer>;
+    static getUserIdStatusCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, userId: number): MaybeNotKnown<UserIDStatus>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)

@@ -213,11 +213,12 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	}
 
 	public async getActive(): Promise<
-		| Pick<
+		MaybeNotKnown<
+			Pick<
 				SceneActuatorConfigurationCCReport,
 				"sceneId" | "level" | "dimmingDuration"
-		  >
-		| undefined
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			SceneActuatorConfigurationCommand,
@@ -244,8 +245,12 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	public async get(
 		sceneId: number,
 	): Promise<
-		| Pick<SceneActuatorConfigurationCCReport, "level" | "dimmingDuration">
-		| undefined
+		MaybeNotKnown<
+			Pick<
+				SceneActuatorConfigurationCCReport,
+				"level" | "dimmingDuration"
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			SceneActuatorConfigurationCommand,

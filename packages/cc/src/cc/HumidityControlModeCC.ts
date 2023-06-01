@@ -112,7 +112,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		};
 	}
 
-	public async get(): Promise<HumidityControlMode | undefined> {
+	public async get(): Promise<MaybeNotKnown<HumidityControlMode>> {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,
 			HumidityControlModeCommand.Get,
@@ -150,7 +150,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 	}
 
 	public async getSupportedModes(): Promise<
-		readonly HumidityControlMode[] | undefined
+		MaybeNotKnown<readonly HumidityControlMode[]>
 	> {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,

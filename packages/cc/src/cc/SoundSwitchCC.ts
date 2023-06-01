@@ -96,7 +96,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getToneCount(): Promise<number | undefined> {
+	public async getToneCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.TonesNumberGet,

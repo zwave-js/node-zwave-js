@@ -99,7 +99,7 @@ export class EnergyProductionCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async get(
 		parameter: EnergyProductionParameter,
-	): Promise<{ value: number; scale: EnergyProductionScale } | undefined> {
+	): Promise<MaybeNotKnown<{ value: number; scale: EnergyProductionScale }>> {
 		this.assertSupportsCommand(
 			EnergyProductionCommand,
 			EnergyProductionCommand.Get,

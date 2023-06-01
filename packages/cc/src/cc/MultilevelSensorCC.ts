@@ -222,17 +222,17 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 
 	/** Query the default sensor value */
 	public async get(): Promise<
-		(MultilevelSensorValue & { type: number }) | undefined
+		MaybeNotKnown<MultilevelSensorValue & { type: number }>
 	>;
 	/** Query the sensor value for the given sensor type using the preferred sensor scale */
 	public async get(
 		sensorType: number,
-	): Promise<MultilevelSensorValue | undefined>;
+	): Promise<MaybeNotKnown<MultilevelSensorValue>>;
 	/** Query the sensor value for the given sensor type using the given sensor scale */
 	public async get(
 		sensorType: number,
 		scale: number,
-	): Promise<number | undefined>;
+	): Promise<MaybeNotKnown<number>>;
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -300,7 +300,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getSupportedSensorTypes(): Promise<
-		readonly number[] | undefined
+		MaybeNotKnown<readonly number[]>
 	> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
@@ -322,7 +322,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getSupportedScales(
 		sensorType: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedScale,

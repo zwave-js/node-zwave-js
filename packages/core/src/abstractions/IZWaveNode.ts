@@ -7,9 +7,9 @@ import type { IVirtualEndpoint, IZWaveEndpoint } from "./IZWaveEndpoint";
 /** A basic abstraction of a Z-Wave node providing access to the relevant functionality */
 export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
 	readonly id: number;
-	isListening: boolean | undefined;
-	isFrequentListening: FLiRS | undefined;
-	readonly canSleep: boolean | undefined;
+	isListening: MaybeNotKnown<boolean>;
+	isFrequentListening: MaybeNotKnown<FLiRS>;
+	readonly canSleep: MaybeNotKnown<boolean>;
 	readonly status: NodeStatus;
 	interviewStage: InterviewStage;
 

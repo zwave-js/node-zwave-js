@@ -1274,7 +1274,7 @@ export interface IZWaveEndpoint {
 // @public
 export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
     // (undocumented)
-    readonly canSleep: boolean | undefined;
+    readonly canSleep: MaybeNotKnown<boolean>;
     // (undocumented)
     getAllEndpoints(): IZWaveEndpoint[];
     // (undocumented)
@@ -1288,9 +1288,9 @@ export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
     // (undocumented)
     interviewStage: InterviewStage;
     // (undocumented)
-    isFrequentListening: FLiRS | undefined;
+    isFrequentListening: MaybeNotKnown<FLiRS>;
     // (undocumented)
-    isListening: boolean | undefined;
+    isListening: MaybeNotKnown<boolean>;
     // (undocumented)
     readonly isSecure: MaybeNotKnown<boolean>;
     // (undocumented)

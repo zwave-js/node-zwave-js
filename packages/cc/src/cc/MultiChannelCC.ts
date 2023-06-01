@@ -244,7 +244,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	@validateArgs()
 	public async getEndpointCapabilities(
 		endpoint: number,
-	): Promise<EndpointCapability | undefined> {
+	): Promise<MaybeNotKnown<EndpointCapability>> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.CapabilityGet,
@@ -284,7 +284,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	public async findEndpoints(
 		genericClass: number,
 		specificClass: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.EndPointFind,
@@ -307,7 +307,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	@validateArgs()
 	public async getAggregatedMembers(
 		endpoint: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.AggregatedMembersGet,
@@ -349,7 +349,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	@validateArgs()
 	public async getEndpointCountV1(
 		ccId: CommandClasses,
-	): Promise<number | undefined> {
+	): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.GetV1,
@@ -828,7 +828,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public individualCount: number;
 
 	@ccValue(MultiChannelCCValues.aggregatedEndpointCount)
-	public aggregatedCount: number | undefined;
+	public aggregatedCount: MaybeNotKnown<number>;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([

@@ -147,7 +147,7 @@ export class TimeParametersCCAPI extends CCAPI {
 		};
 	}
 
-	public async get(): Promise<Date | undefined> {
+	public async get(): Promise<MaybeNotKnown<Date>> {
 		this.assertSupportsCommand(
 			TimeParametersCommand,
 			TimeParametersCommand.Get,

@@ -2,6 +2,7 @@ import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
 	CommandClasses,
+	MaybeNotKnown,
 	ZWaveError,
 	ZWaveErrorCodes,
 	allCCs,
@@ -36,7 +37,7 @@ function setValue(
 export function endpointCountIsDynamic(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	return getValue(
 		applHost,
 		node,
@@ -47,7 +48,7 @@ export function endpointCountIsDynamic(
 export function endpointsHaveIdenticalCapabilities(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	return getValue(
 		applHost,
 		node,
@@ -58,7 +59,7 @@ export function endpointsHaveIdenticalCapabilities(
 export function getIndividualEndpointCount(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): number | undefined {
+): MaybeNotKnown<number> {
 	return getValue(
 		applHost,
 		node,
@@ -69,7 +70,7 @@ export function getIndividualEndpointCount(
 export function getAggregatedEndpointCount(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): number | undefined {
+): MaybeNotKnown<number> {
 	return getValue(
 		applHost,
 		node,

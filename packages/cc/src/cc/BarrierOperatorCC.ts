@@ -1,13 +1,16 @@
 import {
 	CommandClasses,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
+	maybeUnknownToString,
 	parseBitMask,
 	validatePayload,
 	type MaybeNotKnown,
+	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -157,7 +160,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 	@validateArgs()
 	public async getSignalingCapabilities(): Promise<
-		readonly SubsystemType[] | undefined
+		MaybeNotKnown<readonly SubsystemType[]>
 	> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
@@ -182,7 +185,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async getEventSignaling(
 		subsystemType: SubsystemType,
-	): Promise<SubsystemState | undefined> {
+	): Promise<MaybeNotKnown<SubsystemState>> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.EventSignalingGet,
@@ -537,36 +540,45 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 
 		validatePayload(this.payload.length >= 1);
 
-		// return values state and position value
-		// if state is 0 - 99 or FF (100%) return the appropriate values.
-		// if state is different just use the table and
-		// return undefined position
-
+		// The payload byte encodes information about the state and position in a single value
 		const payloadValue = this.payload[0];
-		this.currentState = payloadValue;
-		this.position = undefined;
 		if (payloadValue <= 99) {
+			// known position
 			this.position = payloadValue;
-			if (payloadValue > 0) {
-				this.currentState = undefined;
-			}
 		} else if (payloadValue === 255) {
+			// known position, fully opened
 			this.position = 100;
+		} else {
+			// unknown position
+			this.position = UNKNOWN_STATE;
+		}
+
+		if (
+			payloadValue === BarrierState.Closed ||
+			payloadValue >= BarrierState.Closing
+		) {
+			// predefined states
 			this.currentState = payloadValue;
+		} else if (payloadValue > 0 && payloadValue <= 99) {
+			// stopped at exact position
+			this.currentState = BarrierState.Stopped;
+		} else {
+			// invalid value, assume unknown
+			this.currentState = UNKNOWN_STATE;
 		}
 	}
 
 	@ccValue(BarrierOperatorCCValues.currentState)
-	public readonly currentState: BarrierState | undefined;
+	public readonly currentState: MaybeUnknown<BarrierState>;
 
 	@ccValue(BarrierOperatorCCValues.position)
-	public readonly position: number | undefined;
+	public readonly position: MaybeUnknown<number>;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"barrier position": this.position,
+				"barrier position": maybeUnknownToString(this.position),
 				"barrier state":
 					this.currentState != undefined
 						? getEnumMemberName(BarrierState, this.currentState)

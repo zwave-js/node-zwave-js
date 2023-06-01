@@ -62,7 +62,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async get(): Promise<boolean | undefined> {
+	public async get(): Promise<MaybeNotKnown<boolean>> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Get);
 
 		const cc = new LockCCGet(this.applHost, {

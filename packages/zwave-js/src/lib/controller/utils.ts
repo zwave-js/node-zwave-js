@@ -1,5 +1,6 @@
 import {
 	isValidDSK,
+	MaybeNotKnown,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -63,9 +64,9 @@ export function assertProvisioningEntry(
 
 /** Checks if the SDK version is greater than the given one */
 export function sdkVersionGt(
-	sdkVersion: string | undefined,
+	sdkVersion: MaybeNotKnown<string>,
 	compareVersion: string,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	if (sdkVersion === undefined) {
 		return undefined;
 	}
@@ -74,9 +75,9 @@ export function sdkVersionGt(
 
 /** Checks if the SDK version is greater than or equal to the given one */
 export function sdkVersionGte(
-	sdkVersion: string | undefined,
+	sdkVersion: MaybeNotKnown<string>,
 	compareVersion: string,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	if (sdkVersion === undefined) {
 		return undefined;
 	}
@@ -85,9 +86,9 @@ export function sdkVersionGte(
 
 /** Checks if the SDK version is lower than the given one */
 export function sdkVersionLt(
-	sdkVersion: string | undefined,
+	sdkVersion: MaybeNotKnown<string>,
 	compareVersion: string,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	if (sdkVersion === undefined) {
 		return undefined;
 	}
@@ -96,9 +97,9 @@ export function sdkVersionLt(
 
 /** Checks if the SDK version is lower than or equal to the given one */
 export function sdkVersionLte(
-	sdkVersion: string | undefined,
+	sdkVersion: MaybeNotKnown<string>,
 	compareVersion: string,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	if (sdkVersion === undefined) {
 		return undefined;
 	}

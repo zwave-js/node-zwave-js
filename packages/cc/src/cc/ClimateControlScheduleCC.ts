@@ -117,7 +117,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async get(
 		weekday: Weekday,
-	): Promise<readonly Switchpoint[] | undefined> {
+	): Promise<MaybeNotKnown<readonly Switchpoint[]>> {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.Get,
@@ -136,7 +136,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		return response?.schedule;
 	}
 
-	public async getChangeCounter(): Promise<number | undefined> {
+	public async getChangeCounter(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.ChangedGet,

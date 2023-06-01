@@ -269,11 +269,12 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	}
 
 	public async getLastActivated(): Promise<
-		| Pick<
+		MaybeNotKnown<
+			Pick<
 				SceneControllerConfigurationCCReport,
 				"groupId" | "sceneId" | "dimmingDuration"
-		  >
-		| undefined
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -303,11 +304,12 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	public async get(
 		groupId: number,
 	): Promise<
-		| Pick<
+		MaybeNotKnown<
+			Pick<
 				SceneControllerConfigurationCCReport,
 				"sceneId" | "dimmingDuration"
-		  >
-		| undefined
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,

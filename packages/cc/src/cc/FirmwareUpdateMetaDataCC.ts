@@ -94,7 +94,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	/**
 	 * Requests information about the current firmware on the device
 	 */
-	public async getMetaData(): Promise<FirmwareUpdateMetaData | undefined> {
+	public async getMetaData(): Promise<MaybeNotKnown<FirmwareUpdateMetaData>> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.MetaDataGet,
@@ -193,7 +193,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async activateFirmware(
 		options: FirmwareUpdateMetaDataCCActivationSetOptions,
-	): Promise<FirmwareUpdateActivationStatus | undefined> {
+	): Promise<MaybeNotKnown<FirmwareUpdateActivationStatus>> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.ActivationSet,

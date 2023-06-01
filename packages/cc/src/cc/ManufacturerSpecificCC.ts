@@ -122,7 +122,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async deviceSpecificGet(
 		deviceIdType: DeviceIdType,
-	): Promise<string | undefined> {
+	): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			ManufacturerSpecificCommand,
 			ManufacturerSpecificCommand.DeviceSpecificGet,

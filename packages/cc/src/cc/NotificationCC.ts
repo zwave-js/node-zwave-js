@@ -359,7 +359,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getSupportedEvents(
 		notificationType: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.EventSupportedGet,
@@ -522,7 +522,7 @@ export class NotificationCC extends CommandClass {
 	public static getNotificationMode(
 		applHost: ZWaveApplicationHost,
 		node: IZWaveNode,
-	): "push" | "pull" | undefined {
+	): MaybeNotKnown<"push" | "pull"> {
 		return applHost
 			.getValueDB(node.id)
 			.getValue(NotificationCCValues.notificationMode.id);

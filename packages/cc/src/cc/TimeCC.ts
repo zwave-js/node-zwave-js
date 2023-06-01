@@ -139,7 +139,7 @@ export class TimeCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getTimezone(): Promise<DSTInfo | undefined> {
+	public async getTimezone(): Promise<MaybeNotKnown<DSTInfo>> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetGet);
 
 		const cc = new TimeCCTimeOffsetGet(this.applHost, {

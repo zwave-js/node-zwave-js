@@ -179,7 +179,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 	}
 
 	public async getSupported(): Promise<
-		readonly ColorComponent[] | undefined
+		MaybeNotKnown<readonly ColorComponent[]>
 	> {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,

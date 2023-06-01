@@ -434,7 +434,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 	}
 
 	public async getSupported(): Promise<
-		readonly WindowCoveringParameter[] | undefined
+		MaybeNotKnown<readonly WindowCoveringParameter[]>
 	> {
 		this.assertSupportsCommand(
 			WindowCoveringCommand,

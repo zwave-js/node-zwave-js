@@ -354,8 +354,9 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 2);
 		this.sceneCount = this.payload[0];
-		this.supportsSlowRefresh =
-			this.version >= 3 ? !!(this.payload[1] & 0b1000_0000) : undefined;
+		if (this.version >= 3) {
+			this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
+		}
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
 		const numEntries = identicalKeyAttributes ? 1 : this.sceneCount;
@@ -405,7 +406,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 	// TODO: Only offer `slowRefresh` if this is true
 	@ccValue(CentralSceneCCValues.supportsSlowRefresh)
-	public readonly supportsSlowRefresh: boolean | undefined;
+	public readonly supportsSlowRefresh: MaybeNotKnown<boolean>;
 
 	private _supportedKeyAttributes = new Map<
 		number,

@@ -412,7 +412,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		};
 	}
 
-	public async getUsersCount(): Promise<number | undefined> {
+	public async getUsersCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UsersNumberGet,
@@ -433,12 +433,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	public async get(
 		userId: number,
 		multiple?: false,
-	): Promise<Pick<UserCode, "userIdStatus" | "userCode"> | undefined>;
+	): Promise<MaybeNotKnown<Pick<UserCode, "userIdStatus" | "userCode">>>;
 	public async get(
 		userId: number,
 		multiple: true,
 	): Promise<
-		{ userCodes: readonly UserCode[]; nextUserId: number } | undefined
+		MaybeNotKnown<{ userCodes: readonly UserCode[]; nextUserId: number }>
 	>;
 
 	@validateArgs()
@@ -697,7 +697,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	public async getKeypadMode(): Promise<KeypadMode | undefined> {
+	public async getKeypadMode(): Promise<MaybeNotKnown<KeypadMode>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.KeypadModeGet,
@@ -753,7 +753,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getMasterCode(): Promise<string | undefined> {
+	public async getMasterCode(): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeGet,
@@ -820,7 +820,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getUserCodeChecksum(): Promise<number | undefined> {
+	public async getUserCodeChecksum(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UserCodeChecksumGet,
@@ -1016,7 +1016,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedUsersCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): number | undefined {
+	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(UserCodeCCValues.supportedUsers.endpoint(endpoint.index));
@@ -1029,7 +1029,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedKeypadModesCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): KeypadMode[] | undefined {
+	): MaybeNotKnown<KeypadMode[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1044,7 +1044,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedUserIDStatusesCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): UserIDStatus[] | undefined {
+	): MaybeNotKnown<UserIDStatus[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1061,7 +1061,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedASCIICharsCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): string | undefined {
+	): MaybeNotKnown<string> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1111,7 +1111,7 @@ export class UserCodeCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		userId: number,
-	): UserIDStatus | undefined {
+	): MaybeNotKnown<UserIDStatus> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<UserIDStatus>(
@@ -1127,7 +1127,7 @@ export class UserCodeCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		userId: number,
-	): string | Buffer | undefined {
+	): MaybeNotKnown<string | Buffer> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<string | Buffer>(

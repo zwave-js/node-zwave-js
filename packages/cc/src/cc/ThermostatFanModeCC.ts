@@ -201,7 +201,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 	}
 
 	public async getSupportedModes(): Promise<
-		readonly ThermostatFanMode[] | undefined
+		MaybeNotKnown<readonly ThermostatFanMode[]>
 	> {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,

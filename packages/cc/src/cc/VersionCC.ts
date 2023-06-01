@@ -269,7 +269,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getCCVersion(
 		requestedCC: CommandClasses,
-	): Promise<number | undefined> {
+	): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			VersionCommand,
 			VersionCommand.CommandClassGet,

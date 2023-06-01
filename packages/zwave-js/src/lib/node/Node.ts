@@ -595,50 +595,50 @@ export class ZWaveNode
 	}
 
 	/** Whether this node is always listening or not */
-	public get isListening(): boolean | undefined {
+	public get isListening(): MaybeNotKnown<boolean> {
 		return this.driver.cacheGet(cacheKeys.node(this.id).isListening);
 	}
-	private set isListening(value: boolean | undefined) {
+	private set isListening(value: MaybeNotKnown<boolean>) {
 		this.driver.cacheSet(cacheKeys.node(this.id).isListening, value);
 	}
 
 	/** Indicates the wakeup interval if this node is a FLiRS node. `false` if it isn't. */
-	public get isFrequentListening(): FLiRS | undefined {
+	public get isFrequentListening(): MaybeNotKnown<FLiRS> {
 		return this.driver.cacheGet(
 			cacheKeys.node(this.id).isFrequentListening,
 		);
 	}
-	private set isFrequentListening(value: FLiRS | undefined) {
+	private set isFrequentListening(value: MaybeNotKnown<FLiRS>) {
 		this.driver.cacheSet(
 			cacheKeys.node(this.id).isFrequentListening,
 			value,
 		);
 	}
 
-	public get canSleep(): boolean | undefined {
+	public get canSleep(): MaybeNotKnown<boolean> {
 		// The controller node can never sleep (apparently it can report otherwise though)
 		if (this.isControllerNode) return false;
-		if (this.isListening == undefined) return undefined;
-		if (this.isFrequentListening == undefined) return undefined;
+		if (this.isListening == NOT_KNOWN) return NOT_KNOWN;
+		if (this.isFrequentListening == NOT_KNOWN) return NOT_KNOWN;
 		return !this.isListening && !this.isFrequentListening;
 	}
 
 	/** Whether the node supports routing/forwarding messages. */
-	public get isRouting(): boolean | undefined {
+	public get isRouting(): MaybeNotKnown<boolean> {
 		return this.driver.cacheGet(cacheKeys.node(this.id).isRouting);
 	}
-	private set isRouting(value: boolean | undefined) {
+	private set isRouting(value: MaybeNotKnown<boolean>) {
 		this.driver.cacheSet(cacheKeys.node(this.id).isRouting, value);
 	}
 
-	public get supportedDataRates(): readonly DataRate[] | undefined {
+	public get supportedDataRates(): MaybeNotKnown<readonly DataRate[]> {
 		return this.driver.cacheGet(cacheKeys.node(this.id).supportedDataRates);
 	}
-	private set supportedDataRates(value: readonly DataRate[] | undefined) {
+	private set supportedDataRates(value: MaybeNotKnown<readonly DataRate[]>) {
 		this.driver.cacheSet(cacheKeys.node(this.id).supportedDataRates, value);
 	}
 
-	public get maxDataRate(): DataRate | undefined {
+	public get maxDataRate(): MaybeNotKnown<DataRate> {
 		if (this.supportedDataRates) {
 			return Math.max(...this.supportedDataRates) as DataRate;
 		}
@@ -697,18 +697,18 @@ export class ZWaveNode
 	}
 
 	/** The Z-Wave protocol version this node implements */
-	public get protocolVersion(): ProtocolVersion | undefined {
+	public get protocolVersion(): MaybeNotKnown<ProtocolVersion> {
 		return this.driver.cacheGet(cacheKeys.node(this.id).protocolVersion);
 	}
-	private set protocolVersion(value: ProtocolVersion | undefined) {
+	private set protocolVersion(value: MaybeNotKnown<ProtocolVersion>) {
 		this.driver.cacheSet(cacheKeys.node(this.id).protocolVersion, value);
 	}
 
 	/** Whether this node is a controller (can calculate routes) or an end node (relies on route info) */
-	public get nodeType(): NodeType | undefined {
+	public get nodeType(): MaybeNotKnown<NodeType> {
 		return this.driver.cacheGet(cacheKeys.node(this.id).nodeType);
 	}
-	private set nodeType(value: NodeType | undefined) {
+	private set nodeType(value: MaybeNotKnown<NodeType>) {
 		this.driver.cacheSet(cacheKeys.node(this.id).nodeType, value);
 	}
 
@@ -716,34 +716,34 @@ export class ZWaveNode
 	 * Whether this node supports security (S0 or S2).
 	 * **WARNING:** Nodes often report this incorrectly - do not blindly trust it.
 	 */
-	public get supportsSecurity(): boolean | undefined {
+	public get supportsSecurity(): MaybeNotKnown<boolean> {
 		return this.driver.cacheGet(cacheKeys.node(this.id).supportsSecurity);
 	}
-	private set supportsSecurity(value: boolean | undefined) {
+	private set supportsSecurity(value: MaybeNotKnown<boolean>) {
 		this.driver.cacheSet(cacheKeys.node(this.id).supportsSecurity, value);
 	}
 
 	/** Whether this node can issue wakeup beams to FLiRS nodes */
-	public get supportsBeaming(): boolean | undefined {
+	public get supportsBeaming(): MaybeNotKnown<boolean> {
 		return this.driver.cacheGet(cacheKeys.node(this.id).supportsBeaming);
 	}
-	private set supportsBeaming(value: boolean | undefined) {
+	private set supportsBeaming(value: MaybeNotKnown<boolean>) {
 		this.driver.cacheSet(cacheKeys.node(this.id).supportsBeaming, value);
 	}
 
-	public get manufacturerId(): number | undefined {
+	public get manufacturerId(): MaybeNotKnown<number> {
 		return this.getValue(ManufacturerSpecificCCValues.manufacturerId.id);
 	}
 
-	public get productId(): number | undefined {
+	public get productId(): MaybeNotKnown<number> {
 		return this.getValue(ManufacturerSpecificCCValues.productId.id);
 	}
 
-	public get productType(): number | undefined {
+	public get productType(): MaybeNotKnown<number> {
 		return this.getValue(ManufacturerSpecificCCValues.productType.id);
 	}
 
-	public get firmwareVersion(): string | undefined {
+	public get firmwareVersion(): MaybeNotKnown<string> {
 		// On supporting nodes, use the applicationVersion, which MUST be
 		// same as the first (main) firmware, plus the patch version.
 		const firmware0Version = this.getValue<string[]>(
@@ -753,7 +753,7 @@ export class ZWaveNode
 			VersionCCValues.applicationVersion.id,
 		);
 
-		let ret: string | undefined = firmware0Version;
+		let ret = firmware0Version;
 		if (applicationVersion) {
 			// If the application version is set, we cannot blindly trust that it is the firmware version.
 			// Some nodes incorrectly set this field to the Z-Wave Application Framework API Version
@@ -774,23 +774,23 @@ export class ZWaveNode
 		return ret;
 	}
 
-	public get sdkVersion(): string | undefined {
+	public get sdkVersion(): MaybeNotKnown<string> {
 		return this.getValue(VersionCCValues.sdkVersion.id);
 	}
 
-	public get zwavePlusVersion(): number | undefined {
+	public get zwavePlusVersion(): MaybeNotKnown<number> {
 		return this.getValue(ZWavePlusCCValues.zwavePlusVersion.id);
 	}
 
-	public get zwavePlusNodeType(): ZWavePlusNodeType | undefined {
+	public get zwavePlusNodeType(): MaybeNotKnown<ZWavePlusNodeType> {
 		return this.getValue(ZWavePlusCCValues.nodeType.id);
 	}
 
-	public get zwavePlusRoleType(): ZWavePlusRoleType | undefined {
+	public get zwavePlusRoleType(): MaybeNotKnown<ZWavePlusRoleType> {
 		return this.getValue(ZWavePlusCCValues.roleType.id);
 	}
 
-	public get supportsWakeUpOnDemand(): boolean | undefined {
+	public get supportsWakeUpOnDemand(): MaybeNotKnown<boolean> {
 		return this.getValue(WakeUpCCValues.wakeUpOnDemandSupported.id);
 	}
 
@@ -800,7 +800,7 @@ export class ZWaveNode
 	 * **Note:** Setting this value only updates the name locally. To permanently change the name of the node, use
 	 * the `commandClasses` API.
 	 */
-	public get name(): string | undefined {
+	public get name(): MaybeNotKnown<string> {
 		return this.getValue(NodeNamingAndLocationCCValues.name.id);
 	}
 	public set name(value: string | undefined) {
@@ -820,7 +820,7 @@ export class ZWaveNode
 	 * **Note:** Setting this value only updates the location locally. To permanently change the location of the node, use
 	 * the `commandClasses` API.
 	 */
-	public get location(): string | undefined {
+	public get location(): MaybeNotKnown<string> {
 		return this.getValue(NodeNamingAndLocationCCValues.location.id);
 	}
 	public set location(value: string | undefined) {
@@ -858,7 +858,7 @@ export class ZWaveNode
 		return this._deviceConfig?.label;
 	}
 
-	public get deviceDatabaseUrl(): string | undefined {
+	public get deviceDatabaseUrl(): MaybeNotKnown<string> {
 		if (
 			this.manufacturerId != undefined &&
 			this.productType != undefined &&
@@ -885,14 +885,14 @@ export class ZWaveNode
 	 * Retrieves a stored value for a given value id.
 	 * This does not request an updated value from the node!
 	 */
-	public getValue<T = unknown>(valueId: ValueID): T | undefined {
+	public getValue<T = unknown>(valueId: ValueID): MaybeNotKnown<T> {
 		return this._valueDB.getValue(valueId);
 	}
 
 	/**
 	 * Returns when the given value id was last updated by an update from the node.
 	 */
-	public getValueTimestamp(valueId: ValueID): number | undefined {
+	public getValueTimestamp(valueId: ValueID): MaybeNotKnown<number> {
 		return this._valueDB.getTimestamp(valueId);
 	}
 
@@ -1149,7 +1149,7 @@ export class ZWaveNode
 	public pollValue<T = unknown>(
 		valueId: ValueID,
 		sendCommandOptions: SendCommandOptions = {},
-	): Promise<T | undefined> {
+	): Promise<MaybeNotKnown<T>> {
 		// Ensure we're dealing with a valid value ID, with no extra properties
 		valueId = normalizeValueID(valueId);
 
@@ -1279,24 +1279,24 @@ export class ZWaveNode
 		return true;
 	}
 
-	public get endpointCountIsDynamic(): boolean | undefined {
+	public get endpointCountIsDynamic(): MaybeNotKnown<boolean> {
 		return nodeUtils.endpointCountIsDynamic(this.driver, this);
 	}
 
-	public get endpointsHaveIdenticalCapabilities(): boolean | undefined {
+	public get endpointsHaveIdenticalCapabilities(): MaybeNotKnown<boolean> {
 		return nodeUtils.endpointsHaveIdenticalCapabilities(this.driver, this);
 	}
 
-	public get individualEndpointCount(): number | undefined {
+	public get individualEndpointCount(): MaybeNotKnown<number> {
 		return nodeUtils.getIndividualEndpointCount(this.driver, this);
 	}
 
-	public get aggregatedEndpointCount(): number | undefined {
+	public get aggregatedEndpointCount(): MaybeNotKnown<number> {
 		return nodeUtils.getAggregatedEndpointCount(this.driver, this);
 	}
 
 	/** Returns the device class of an endpoint. Falls back to the node's device class if the information is not known. */
-	private getEndpointDeviceClass(index: number): DeviceClass | undefined {
+	private getEndpointDeviceClass(index: number): MaybeNotKnown<DeviceClass> {
 		const deviceClass = this.getValue<{
 			generic: number;
 			specific: number;
@@ -1317,7 +1317,7 @@ export class ZWaveNode
 		return this.deviceClass;
 	}
 
-	private getEndpointCCs(index: number): CommandClasses[] | undefined {
+	private getEndpointCCs(index: number): MaybeNotKnown<CommandClasses[]> {
 		const ret = this.getValue(
 			MultiChannelCCValues.endpointCCs.endpoint(
 				this.endpointsHaveIdenticalCapabilities ? 1 : index,

@@ -73,7 +73,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 		};
 	}
 
-	public async get(): Promise<ThermostatOperatingState | undefined> {
+	public async get(): Promise<MaybeNotKnown<ThermostatOperatingState>> {
 		this.assertSupportsCommand(
 			ThermostatOperatingStateCommand,
 			ThermostatOperatingStateCommand.Get,

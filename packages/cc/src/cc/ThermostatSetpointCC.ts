@@ -279,7 +279,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	 * during node interview.
 	 */
 	public async getSupportedSetpointTypes(): Promise<
-		readonly ThermostatSetpointType[] | undefined
+		MaybeNotKnown<readonly ThermostatSetpointType[]>
 	> {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,

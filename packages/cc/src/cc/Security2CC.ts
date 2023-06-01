@@ -313,7 +313,7 @@ export class Security2CCAPI extends CCAPI {
 			| SecurityClass.S2_AccessControl
 			| SecurityClass.S2_Authenticated
 			| SecurityClass.S2_Unauthenticated,
-	): Promise<CommandClasses[] | undefined> {
+	): Promise<MaybeNotKnown<CommandClasses[]>> {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.CommandsSupportedGet,
