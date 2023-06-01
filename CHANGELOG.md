@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Z-Wave controllers hosted remotely over TCP can now be discovered using mDNS (#5863)
+
+### Bugfixes
+* The Celsius temperature scale is no longer set as a preferred scale by default (#5856)
+* Nodes are no longer assumed to be awake when they send a `NonceGet` (#5857)
+* Disable optimistic value update for unsupervised `Barrier Operator CC` commands (#5858)
+* Change the type definition to indicate that emitted statistics are readonly (#5861)
+* The results of `getPriorityRoute` calls are used to initialize nodes' routing statistics (#5859)
+
+### Config file changes
+* Correct config parameters for Duwi ZW ESJ 300 (#5767)
+
 ## 10.22.3 (2023-05-26)
 ### Bugfixes
 * Fixed an issue introduced in `10.21.0` where some optimistic value updates would no longer happen after successful multicast commands (#5848)
