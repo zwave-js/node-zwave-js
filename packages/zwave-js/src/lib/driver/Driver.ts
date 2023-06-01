@@ -200,6 +200,7 @@ import {
 } from "./UpdateConfig";
 import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
 import type { EditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
+import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -884,10 +885,32 @@ export class Driver
 		);
 	}
 
-	/** Enumerates all existing serial ports */
-	public static async enumerateSerialPorts(): Promise<string[]> {
-		const ports = await SerialPort.list();
-		return ports.map((port) => port.path);
+	/**
+	 * Enumerates all existing serial ports.
+	 * @param local Whether to include local serial ports
+	 * @param remote Whether to discover remote serial ports using an mDNS query for the `_zwave._tcp` domain
+	 */
+	public static async enumerateSerialPorts({
+		local = true,
+		remote = true,
+	}: {
+		local?: boolean;
+		remote?: boolean;
+	}): Promise<string[]> {
+		const localPorts: string[] = [];
+		const remotePorts: string[] = [];
+		if (local) {
+			const ports = await SerialPort.list();
+			localPorts.push(...ports.map((port) => port.path));
+		}
+		if (remote) {
+			const ports = await discoverRemoteSerialPorts();
+			if (ports) {
+				remotePorts.push(...ports.map((p) => p.port));
+			}
+		}
+
+		return [...remotePorts, ...localPorts];
 	}
 
 	/** Updates a subset of the driver options on the fly */
