@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/minoston_template.json#led_indicator_brightness_mr40z",			
+			"$import": "templates/minoston_template.json#led_indicator_brightness_mr40z",
 			"label": "Led Indicator Brightness"
 		},
 		{
@@ -89,7 +89,7 @@
 		{
 			"#": "5",
 			"label": "Up Press Value",
-			"description": "NOTE: This parameter will be invalid when #10 is value 0 or 1", 
+			"description": "NOTE: This parameter will be invalid when #10 is value 0 or 1",
 			// This has more complicated values, but I don't know how to make a valid configuration for them
 			//   0 - Turn off
 			//   1~99 -Custom Brightness
@@ -105,7 +105,7 @@
 		{
 			"#": "6",
 			"label": "Down Press Value",
-			"description": "NOTE: This parameter will be invalid when #11 is value 0 or 1", 
+			"description": "NOTE: This parameter will be invalid when #11 is value 0 or 1",
 			// This has more complicated values, but I don't know how to make a valid configuration for them
 			//   0 - Turn off
 			//   1~99 -Custom Brightness
@@ -121,7 +121,7 @@
 		{
 			"#": "7",
 			"label": "Left Press Value",
-			"description": "NOTE: This parameter will be invalid when #12 is value 0 or 1", 
+			"description": "NOTE: This parameter will be invalid when #12 is value 0 or 1",
 			// This has more complicated values, but I don't know how to make a valid configuration for them
 			//   0 - Turn off
 			//   1~99 -Custom Brightness
@@ -137,7 +137,7 @@
 		{
 			"#": "8",
 			"label": "Right Press Value",
-			"description": "NOTE: This parameter will be invalid when #13 is value 0 or 1", 
+			"description": "NOTE: This parameter will be invalid when #13 is value 0 or 1",
 			// This has more complicated values, but I don't know how to make a valid configuration for them
 			//   0 - Turn off
 			//   1~99 -Custom Brightness
@@ -160,9 +160,9 @@
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
-			"options":[
-				{"label": "Disable Scene", "value": 0},
-				{"label": "Enable Scene", "value": 1}
+			"options": [
+				{ "label": "Disable Scene", "value": 0 },
+				{ "label": "Enable Scene", "value": 1 }
 			]
 		},
 		{
@@ -175,11 +175,11 @@
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
-			"options":[
-				{"label": "Disable", "value": 0},
-				{"label": "Only enable scene", "value": 1},
-				{"label": "Only enable #PARAM", "value": 2},
-				{"label": "Enable Both", "value": 3}
+			"options": [
+				{ "label": "Disable", "value": 0 },
+				{ "label": "Only enable scene", "value": 1 },
+				{ "label": "Only enable #PARAM", "value": 2 },
+				{ "label": "Enable Both", "value": 3 }
 			]
 		},
 		{
@@ -210,7 +210,7 @@
 		},
 		{
 			"#": "16",
-			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "17",
@@ -231,8 +231,8 @@
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
-				{"value": 0, "label": "Toggle switch"},
-				{"value": 1, "label": "Momentary button"}
+				{ "value": 0, "label": "Toggle switch" },
+				{ "value": 1, "label": "Momentary button" }
 			]
 		},
 		{
@@ -241,9 +241,7 @@
 			"label": "Rate For Physical On",
 			"description": "When activated by knob or external switch",
 			"unit": "seconds",
-			"options": [
-				{"label": "Instant", "value": 0}
-			]
+			"options": [{ "label": "Instant", "value": 0 }]
 		},
 		{
 			"#": "21",
@@ -251,9 +249,7 @@
 			"label": "Rate For Physical Off",
 			"description": "When activated by knob or external switch",
 			"unit": "seconds",
-			"options": [
-				{"label": "Instant", "value": 0}
-			]
+			"options": [{ "label": "Instant", "value": 0 }]
 		},
 		{
 			"#": "22",
@@ -262,10 +258,10 @@
 			"defaultValue": 255,
 			"unit": "seconds",
 			"options": [
-				{"label": "Instant", "value": 0},
-				{"label": "Same as #PARAM 20", "value": 255}
+				{ "label": "Instant", "value": 0 },
+				{ "label": "Same as #PARAM 20", "value": 255 }
 			]
- 		},
+		},
 		{
 			"#": "23",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
@@ -273,8 +269,8 @@
 			"defaultValue": 255,
 			"unit": "seconds",
 			"options": [
-				{"label": "Instant", "value": 0},
-				{"label": "Same as #PARAM 21", "value": 255}
+				{ "label": "Instant", "value": 0 },
+				{ "label": "Same as #PARAM 21", "value": 255 }
 			]
 		},
 		{
@@ -288,10 +284,10 @@
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
-				{ "label": "Turn to brightness from #PARAM 25", "value": 0},
-				{ "label": "Always turn on to 100%", "value": 1},
-				{ "label": "Always turn on to maximum brightness from #PARAM 18", "value": 2},
-				{ "label": "Turn on to last brightness before power off", "value": 3}
+				{ "label": "Turn to brightness from #PARAM 25", "value": 0 },
+				{ "label": "Always turn on to 100%", "value": 1 },
+				{ "label": "Always turn on to maximum brightness from #PARAM 18", "value": 2 },
+				{ "label": "Turn on to last brightness before power off", "value": 3 }
 			]
 		},
 		{
