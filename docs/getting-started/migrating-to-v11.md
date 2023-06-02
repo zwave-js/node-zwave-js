@@ -67,6 +67,14 @@ Application developers should double-check their code for a common class of erro
 -   Likewise for nullish coalescing and optional chaining operators (`?.`, `??`, `??=`)
 -   Expecting a `number` or `boolean` when a CC value is not `undefined` is no longer safe, because it could be `null`.
 
+## Reworked `BitField` config parameters to behave like partial parameters
+
+Previously, `BitField` config parameters were using JavaScript `Set`s as values. This seemed like a good idea 4 years ago when the code was written, but until recently almost no devices used this type of config parameter. As it turns out, `Set`s don't serialize well - meaning some of the queried information got lost on the way to the cache - and they are awkward to use for applications.
+
+For config parameters that are defined in configuration files, we have had a better solution for quite some time now: **partial parameters**. Starting with `v11`, `BitField` config parameters will automatically be split into multiple single-bit partial parameters. This means applications which use value metadata to expose config parameters should be able to support them without any changes.
+
+However, the type `ConfigValue` has been changed to just `number`, so we treat this as a breaking change.
+
 ## Removed several deprecated method signatures, enums and properties
 
 -   The enum member `NodeType["Routing End Node"]` has been removed. This has been called `"End Node"` since `v9.3.0`

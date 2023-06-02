@@ -7,14 +7,12 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-	encodeBitMask,
 	encodePartial,
 	getBitMaskWidth,
 	getIntegerLimits,
 	getMinIntegerSize,
 	isConsecutiveArray,
 	mergeSupervisionResults,
-	parseBitMask,
 	parsePartial,
 	stripUndefined,
 	supervisedCommandSucceeded,
@@ -232,7 +230,7 @@ function bulkMergePartialParamValues(
 					parameter,
 					partials.map((p) => ({
 						bitMask: p.bitMask!,
-						partialValue: p.value as number,
+						partialValue: p.value,
 					})),
 				),
 				valueSize: partials[0].valueSize,
@@ -734,7 +732,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				parameters: allParams.map((v) => v.parameter),
 				valueSize: allParams[0].valueSize,
 				valueFormat: allParams[0].valueFormat,
-				values: allParams.map((v) => v.value as number),
+				values: allParams.map((v) => v.value),
 				handshake: true,
 			});
 			// The handshake flag is set, so we expect a BulkReport in response
@@ -1582,53 +1580,66 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		// Check if the initial assumption of SignedInteger holds true
-		const oldParamInformation = this.getParamInformation(
+		// This parameter may be a partial param in the following cases:
+		// * a config file defines it as such
+		// * it was reported by the device as a bit field
+		const partialParams = this.getPartialParamInfos(
 			applHost,
 			this.parameter,
 		);
+
+		let cachedValueFormat: ConfigValueFormat | undefined;
+
+		if (partialParams.length > 0) {
+			// This is a partial param. All definitions should have the same format, so we just take the first one
+			cachedValueFormat = partialParams[0].metadata.format;
+		} else {
+			// Check if the initial assumption of SignedInteger holds true
+			const oldParamInformation = this.getParamInformation(
+				applHost,
+				this.parameter,
+			);
+			cachedValueFormat = oldParamInformation.format;
+
+			// On older CC versions, these reports may be the only way we can retrieve the value size
+			// Therefore we store it here
+			this.extendParamInformation(applHost, this.parameter, undefined, {
+				valueSize: this.valueSize,
+			});
+			if (
+				this.version < 3 &&
+				!this.isParamInformationFromConfig &&
+				oldParamInformation.min == undefined &&
+				oldParamInformation.max == undefined
+			) {
+				const isSigned =
+					oldParamInformation.format == undefined ||
+					oldParamInformation.format ===
+						ConfigValueFormat.SignedInteger;
+				this.extendParamInformation(
+					applHost,
+					this.parameter,
+					undefined,
+					getIntegerLimits(this.valueSize as any, isSigned),
+				);
+			}
+		}
+
+		// We may have to re-interpret the value as unsigned, depending on the cached value format
 		if (
-			oldParamInformation.format != undefined &&
-			oldParamInformation.format !== ConfigValueFormat.SignedInteger
+			cachedValueFormat != undefined &&
+			cachedValueFormat !== ConfigValueFormat.SignedInteger
 		) {
 			// Re-interpret the value with the new format
 			this.value = reInterpretSignedValue(
 				this.value,
 				this.valueSize,
-				oldParamInformation.format,
+				cachedValueFormat,
 			);
 		}
 
-		// Store the parameter size and value
-		this.extendParamInformation(applHost, this.parameter, undefined, {
-			valueSize: this.valueSize,
-			type:
-				oldParamInformation.format === ConfigValueFormat.BitField
-					? "number[]"
-					: "number",
-		});
-		if (
-			this.version < 3 &&
-			!this.isParamInformationFromConfig &&
-			oldParamInformation.min == undefined &&
-			oldParamInformation.max == undefined
-		) {
-			const isSigned =
-				oldParamInformation.format == undefined ||
-				oldParamInformation.format === ConfigValueFormat.SignedInteger;
-			this.extendParamInformation(
-				applHost,
-				this.parameter,
-				undefined,
-				getIntegerLimits(this.valueSize as any, isSigned),
-			);
-		}
 		// And store the value itself
 		// If we have partial config params defined, we need to split the value
-		const partialParams = this.getPartialParamInfos(
-			applHost,
-			this.parameter,
-		);
 		if (partialParams.length > 0) {
 			for (const param of partialParams) {
 				if (typeof param.propertyKey === "number") {
@@ -1662,15 +1673,11 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			Buffer.from([this.parameter, this.valueSize & 0b111]),
 			Buffer.allocUnsafe(this.valueSize),
 		]);
-		const valueFormat =
-			typeof this.value === "number"
-				? this.valueFormat ?? ConfigValueFormat.SignedInteger
-				: ConfigValueFormat.BitField;
 		serializeValue(
 			this.payload,
 			2,
 			this.valueSize,
-			valueFormat,
+			this.valueFormat ?? ConfigValueFormat.SignedInteger,
 			this.value,
 		);
 
@@ -2255,9 +2262,37 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		this.extendParamInformation(applHost, this.parameter, undefined, {
-			label: this.name,
-		});
+		// Bitfield parameters that are not documented in a config file
+		// are split into multiple partial parameters. We need to set the name for
+		// all of them.
+		const partialParams = this.getPartialParamInfos(
+			applHost,
+			this.parameter,
+		);
+
+		if (partialParams.length === 0) {
+			this.extendParamInformation(applHost, this.parameter, undefined, {
+				label: this.name,
+			});
+		} else {
+			for (const param of partialParams) {
+				const paramNumber = param.property as number;
+				const bitMask = param.propertyKey as number;
+				const bitNumber =
+					Math.log2(bitMask) % 1 === 0
+						? Math.log2(bitMask)
+						: undefined;
+
+				let label = `${this.name} - ${bitMask}`;
+				if (bitNumber != undefined) {
+					label += ` (bit ${bitNumber})`;
+				}
+				this.extendParamInformation(applHost, paramNumber, bitMask, {
+					label,
+				});
+			}
+		}
+
 		return true;
 	}
 
@@ -2374,9 +2409,49 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		this.extendParamInformation(applHost, this.parameter, undefined, {
-			description: this.info,
-		});
+		// Bitfield parameters that are not documented in a config file
+		// are split into multiple partial parameters. We need to set the description for
+		// all of them. However, these can get very long, so we put the reported
+		// description on the first partial param, and refer to it from the others
+		const partialParams = this.getPartialParamInfos(
+			applHost,
+			this.parameter,
+		).sort(
+			(a, b) =>
+				((a.propertyKey as number) ?? 0) -
+				((b.propertyKey as number) ?? 0),
+		);
+
+		if (partialParams.length === 0) {
+			this.extendParamInformation(applHost, this.parameter, undefined, {
+				description: this.info,
+			});
+		} else {
+			let firstParamLabel: string | undefined;
+
+			for (const param of partialParams) {
+				const paramNumber = param.property as number;
+				const bitMask = param.propertyKey as number;
+
+				// We put the description on the first partial param
+				const description = firstParamLabel
+					? `Refer to ${firstParamLabel}`
+					: this.info;
+
+				this.extendParamInformation(applHost, paramNumber, bitMask, {
+					description,
+				});
+
+				// Then we store the name of the first param to refer to it on the
+				// following partial params
+				if (firstParamLabel == undefined) {
+					firstParamLabel =
+						this.getParamInformation(applHost, paramNumber, bitMask)
+							.label ?? `parameter ${paramNumber} - ${bitMask}`;
+				}
+			}
+		}
+
 		return true;
 	}
 
@@ -2496,7 +2571,9 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			validatePayload(this.payload.length >= nextParameterOffset + 2);
 
 			if (this.valueSize > 0) {
-				if (this.valueFormat !== ConfigValueFormat.BitField) {
+				if (this.valueFormat === ConfigValueFormat.BitField) {
+					this.minValue = 0;
+				} else {
 					this.minValue = parseValue(
 						this.payload.slice(3),
 						this.valueSize,
@@ -2570,18 +2647,10 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 
 		// If we actually received parameter info, store it
 		if (this.valueSize > 0) {
-			const valueType =
-				this.valueFormat === ConfigValueFormat.SignedInteger ||
-				this.valueFormat === ConfigValueFormat.UnsignedInteger
-					? "number"
-					: "number[]";
-			const paramInfo = stripUndefined({
-				type: valueType,
+			const baseInfo = {
+				type: "number",
 				format: this.valueFormat,
 				valueSize: this.valueSize,
-				min: this.minValue,
-				max: this.maxValue,
-				default: this.defaultValue,
 				requiresReInclusion: this.altersCapabilities,
 				readable: true,
 				writeable: !this.isReadonly,
@@ -2589,14 +2658,44 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				isAdvanced: this.isAdvanced,
 				noBulkSupport: this.noBulkSupport,
 				isFromConfig: false,
-			} as const satisfies ConfigurationMetadata);
+			} as const;
 
-			this.extendParamInformation(
-				applHost,
-				this.parameter,
-				undefined,
-				paramInfo,
-			);
+			if (this.valueFormat !== ConfigValueFormat.BitField) {
+				const paramInfo = stripUndefined({
+					...baseInfo,
+					min: this.minValue,
+					max: this.maxValue,
+					default: this.defaultValue,
+				} as const satisfies ConfigurationMetadata);
+
+				this.extendParamInformation(
+					applHost,
+					this.parameter,
+					undefined,
+					paramInfo,
+				);
+			} else {
+				// Bit fields are split into multiple single-bit partial parameters
+				const bits = this.maxValue!;
+				let mask = 1;
+				while (mask <= bits) {
+					const paramInfo = stripUndefined({
+						...baseInfo,
+						min: 0,
+						max: 1,
+						default: this.defaultValue! & mask ? 1 : 0,
+					} as const satisfies ConfigurationMetadata);
+
+					this.extendParamInformation(
+						applHost,
+						this.parameter,
+						mask,
+						paramInfo,
+					);
+
+					mask <<= 1;
+				}
+			}
 		}
 
 		return true;
@@ -2756,10 +2855,10 @@ function isSafeValue(
 			break;
 		case ConfigValueFormat.UnsignedInteger:
 		case ConfigValueFormat.Enumerated:
+		case ConfigValueFormat.BitField:
 			minValue = 0;
 			maxValue = Math.pow(2, 8 * size);
 			break;
-		case ConfigValueFormat.BitField:
 		default:
 			throw new Error("not implemented");
 	}
@@ -2777,9 +2876,8 @@ function parseValue(
 			return raw.readIntBE(0, size);
 		case ConfigValueFormat.UnsignedInteger:
 		case ConfigValueFormat.Enumerated:
-			return raw.readUIntBE(0, size);
 		case ConfigValueFormat.BitField:
-			return new Set(parseBitMask(raw.slice(0, size)));
+			return raw.readUIntBE(0, size);
 	}
 }
 
@@ -2822,19 +2920,12 @@ function serializeValue(
 ): void {
 	switch (format) {
 		case ConfigValueFormat.SignedInteger:
-			payload.writeIntBE(value as number, offset, size);
+			payload.writeIntBE(value, offset, size);
 			return;
 		case ConfigValueFormat.UnsignedInteger:
 		case ConfigValueFormat.Enumerated:
-			payload.writeUIntBE(value as number, offset, size);
+		case ConfigValueFormat.BitField:
+			payload.writeUIntBE(value, offset, size);
 			return;
-		case ConfigValueFormat.BitField: {
-			const mask = encodeBitMask(
-				[...(value as Set<number>).values()],
-				size * 8,
-			);
-			mask.copy(payload, offset);
-			return;
-		}
 	}
 }
