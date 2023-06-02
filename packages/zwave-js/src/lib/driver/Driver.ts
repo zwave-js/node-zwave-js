@@ -897,7 +897,7 @@ export class Driver
 	}: {
 		local?: boolean;
 		remote?: boolean;
-	}): Promise<string[]> {
+	} = {}): Promise<string[]> {
 		const localPorts: string[] = [];
 		const remotePorts: string[] = [];
 		if (local) {
