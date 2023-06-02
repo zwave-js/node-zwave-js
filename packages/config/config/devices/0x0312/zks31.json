@@ -1,0 +1,313 @@
+{
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "ZKS31",
+	"description": "Z-Wave Knob Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0x7002",
+			"zwaveAllianceId": 4779
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "BASIC SET Group 1",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"label": "Led Indicator Behavior"
+		},
+		{
+			"#": "2",
+			"label": "Led Indicator Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Blue",
+					"value": 0
+				},
+				{
+					"label": "Green",
+					"value": 1
+				},
+				{
+					"label": "Red",
+					"value": 2
+				},
+				{
+					"label": "White",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Cyan",
+					"value": 5
+				},
+				{
+					"label": "Magenta",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$import": "templates/minoston_template.json#led_indicator_brightness_mr40z",			
+			"label": "Led Indicator Brightness"
+		},
+		{
+			"#": "4",
+			"label": "Knob Step",
+			"description": "Rotate once to adjust 1%-10%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Up Press Value",
+			"description": "NOTE: This parameter will be invalid when #10 is value 0 or 1", 
+			// This has more complicated values, but I don't know how to make a valid configuration for them
+			//   0 - Turn off
+			//   1~99 -Custom Brightness
+			//   100 -Maximum Brightness
+			//   101 -Minimum Brightness
+			//   Others -Turn on
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Down Press Value",
+			"description": "NOTE: This parameter will be invalid when #11 is value 0 or 1", 
+			// This has more complicated values, but I don't know how to make a valid configuration for them
+			//   0 - Turn off
+			//   1~99 -Custom Brightness
+			//   100 -Maximum Brightness
+			//   101 -Minimum Brightness
+			//   Others -Turn on
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Left Press Value",
+			"description": "NOTE: This parameter will be invalid when #12 is value 0 or 1", 
+			// This has more complicated values, but I don't know how to make a valid configuration for them
+			//   0 - Turn off
+			//   1~99 -Custom Brightness
+			//   100 -Maximum Brightness
+			//   101 -Minimum Brightness
+			//   Others -Turn on
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Right Press Value",
+			"description": "NOTE: This parameter will be invalid when #13 is value 0 or 1", 
+			// This has more complicated values, but I don't know how to make a valid configuration for them
+			//   0 - Turn off
+			//   1~99 -Custom Brightness
+			//   100 -Maximum Brightness
+			//   101 -Minimum Brightness
+			//   Others -Turn on
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Center Press Behavior",
+			"description": "Enable or disable scene message",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options":[
+				{"label": "Disable Scene", "value": 0},
+				{"label": "Enable Scene", "value": 1}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Up Behavior",
+			"description": "If value 2, adjust brightness value with parameter 5",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options":[
+				{"label": "Disable", "value": 0},
+				{"label": "Only enable scene", "value": 1},
+				{"label": "Only enable #PARAM", "value": 2},
+				{"label": "Enable Both", "value": 3}
+			]
+		},
+		{
+			"#": "11",
+			"$import": "#paramInformation/10",
+			"label": "Down Behavior",
+			"description": "If value 2, adjust brightness value with parameter 6"
+		},
+		{
+			"#": "12",
+			"$import": "#paramInformation/10",
+			"label": "Left Behavior",
+			"description": "If value 2, adjust brightness value with parameter 7"
+		},
+		{
+			"#": "13",
+			"$import": "#paramInformation/10",
+			"label": "Right Behavior",
+			"description": "If value 2, adjust brightness value with parameter 8"
+		},
+		{
+			"#": "14",
+			"$import": "templates/minoston_template.json#auto_off_timer"
+		},
+		{
+			"#": "15",
+			"$import": "templates/minoston_template.json#auto_on_timer"
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
+		},
+		{
+			"#": "17",
+			"$import": "~/templates/master_template.json#minimum_dim_level_0-99"
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-99"
+		},
+		{
+			"#": "19",
+			"label": "External Switch Type",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{"value": 0, "label": "Toggle switch"},
+				{"value": 1, "label": "Momentary button"}
+			]
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Rate For Physical On",
+			"description": "When activated by knob or external switch",
+			"unit": "seconds",
+			"options": [
+				{"label": "Instant", "value": 0}
+			]
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Rate For Physical Off",
+			"description": "When activated by knob or external switch",
+			"unit": "seconds",
+			"options": [
+				{"label": "Instant", "value": 0}
+			]
+		},
+		{
+			"#": "22",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Rate For Hub On",
+			"defaultValue": 255,
+			"unit": "seconds",
+			"options": [
+				{"label": "Instant", "value": 0},
+				{"label": "Same as #PARAM 20", "value": 255}
+			]
+ 		},
+		{
+			"#": "23",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Rate For Hub Off",
+			"defaultValue": 255,
+			"unit": "seconds",
+			"options": [
+				{"label": "Instant", "value": 0},
+				{"label": "Same as #PARAM 21", "value": 255}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Single Tap Behavior",
+			"description": "When CENTER pressed on device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{ "label": "Turn to brightness from #PARAM 25", "value": 0},
+				{ "label": "Always turn on to 100%", "value": 1},
+				{ "label": "Always turn on to maximum brightness from #PARAM 18", "value": 2},
+				{ "label": "Turn on to last brightness before power off", "value": 3}
+			]
+		},
+		{
+			"#": "25",
+			"label": "Custom Brightness",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 80,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Network Wide Inclusion To A Z-Wave™ Network\nRefer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the z-wave button Three times",
+		"exclusion": "Network Wide Inclusion To A Z-Wave™ Network\nRefer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the z-wave button Three times .\nREMOVE/Exclusion to a Z-Wave Network Same operation",
+		"reset": "Factory Reset : Press the knob(center) twice and hold for 10 seconds (Tap -> Tap -> Press and hold for 10 seconds) to reset the device. Indicate: RED led will flashes, and then the GREEN led be solid for 2 seconds.\nZKS31 User Manual"
+	}
+}
