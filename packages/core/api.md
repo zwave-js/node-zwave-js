@@ -471,8 +471,8 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ConfigValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public
-export type ConfigValue = number | Set<number>;
+// @public (undocumented)
+export type ConfigValue = number;
 
 // Warning: (ae-missing-release-tag) "ConfigValueFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
