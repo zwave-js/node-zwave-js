@@ -89,13 +89,19 @@ interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 
-// This indirection is necessary to be able to define the same CC as the response
-function getResponseForCommandEncapsulation() {
-	return CRC16CCCommandEncapsulation;
+function getCCResponseForCommandEncapsulation(
+	sent: CRC16CCCommandEncapsulation,
+) {
+	if (sent.encapsulated?.expectsCCResponse()) {
+		return CRC16CCCommandEncapsulation;
+	}
 }
 
 @CCCommand(CRC16Command.CommandEncapsulation)
-@expectedCCResponse(getResponseForCommandEncapsulation)
+@expectedCCResponse(
+	getCCResponseForCommandEncapsulation,
+	() => "checkEncapsulated",
+)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
 		host: ZWaveHost,
