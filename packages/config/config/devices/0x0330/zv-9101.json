@@ -1,72 +1,152 @@
 {
-	"manufacturer": "Sunricher",
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
 	"manufacturerId": "0x0330",
-	"label": "ZV-9101",
+	"label": "SR-ZV9101SAC-HP",
 	"description": "In-Wall Dimmer Module",
 	"devices": [
 		{
 			"productType": "0x0200",
-			"productId": "0xd005"
+			"productId": "0xd005",
+			"zwaveAllianceId": 2918
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Saving load state",
+			"label": "Saving Load State Before Power Failure",
 			"description": "Saving load state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutoff load",
+					"value": 0
+				},
+				{
+					"label": "Turn on load",
+					"value": 1
+				},
+				{
+					"label": "Save load state before power failure",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "3",
-			"label": "Enable/disable to send report",
-			"description": "basic report to the Lifeline when the load state changed",
+			"label": "Enable/Disable to Send The Basic Report",
+			"description": "Enable/disable to send the basic report to the lifeline when the load state changed (when value set as 1, re-power on the dimmer, it will send basic report automatically）",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable to send basic report",
+					"value": 0
+				},
+				{
+					"label": "Enable to send basic report",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "4",
-			"label": "Default fade time",
+			"label": "Default Fade Time",
+			"description": "Default fade time (unit is second, this value has the same function as duration of multilevel)",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"unit": "seconds"
+			"options": [
+				{
+					"label": "Instantly",
+					"value": 0
+				},
+				{
+					"label": "Factory default duration. （1 second）",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "5",
-			"label": "Minimum Brightness",
+			"label": "Setting Minimum Brightness Value",
+			"description": "The bigger the value is, the higher the load’s minimum brightness is",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "6",
-			"label": "MOSFET",
-			"description": "Choose MOSFET",
+			"label": "Choose Mosfet Driving Type",
+			"description": "Choose mosfet driving type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trailing edge",
+					"value": 0
+				},
+				{
+					"label": "Leading edge",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "7",
-			"label": "removal from network",
-			"description": "Enable/disable external switch to be added to and removed from a network",
+			"label": "Enable/Disable External Switch to Be Added to And Removed From a Network",
+			"description": "Enable/disable external switch to be added to and removed from a network (when enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a network)",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer to your primary controllers manual on how to turn your controller into inclusion).\n2. Power on the in-wall dimmer and set it into inclusion mode. There are two methods to set the in-wall dimmer into inclusion mode:\n1)Repower on the dimmer, it will be set into inclusion mode automatically, and waiting to be included.\n2)Triple press the action button on the dimmer, it will set the plug into inclusion mode.\nThe connected light will stay solid on for 3 seconds to indicate successful inclusion",
+		"exclusion": "There are two exclusion methods:\nMethod 1: Exclusion from the primary controller/gateway as follows:\n1. Set the primary controller/gateway into exclusion mode (Please refer to your primary controllers manual on how to set your controller into exclusion).\n2. Triple press the action button, the dimmer will be set to exclusion mode, and waiting to be excluded, then the dimmer will be included to the network.\nMethod 2: Factory reset the dimmer will force the it to be excluded from a network.\n(please refer to the part “Factory Reset” of this manual)\nNote: Factory reset is not recommended for exclusion, please use this procedure only if the primary controller/gateway is missing or otherwise inoperable",
+		"reset": "Press and hold down the action button for over 10 seconds, the dimmer will be reset to factory defaults",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2918/Z-Wave%20In-wall%20Dimmer%20SR-ZV9101SAC-HP-EU.pdf"
+	}
 }
