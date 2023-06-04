@@ -233,6 +233,35 @@
 			]
 		},
 		{
+			"#": "51",
+			"$if": "firmwareVersion >= 3.6",
+			"label": "Curtain Trip Time for UP (Open) moving",
+			"valueSize": 2,
+			"unit": "0.01 seconds",
+			"minValue": 500,
+			"maxValue": 32767,
+			"defaultValue": 15000,
+			"unsigned": true
+		},
+		{
+			"#": "52",
+			"$if": "firmwareVersion >= 3.6",
+			"label": "Set whether the Curtain Trip Times for Up and Down are equal",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "the Curtain Trip Times for Up and Down are not equal.",
+					"value": 0
+				},
+				{
+					"label": "the Curtain Trip Times for Up and Down are equal (Parameter #35).",
+					"value": 1
+				}
+			]
+		},
+		{
 			"#": "80",
 			"$import": "~/0x0086/templates/aeotec_template.json#multilevel_report_type",
 			"label": "Command Report Type"
