@@ -30,7 +30,7 @@
 
     -   [Send custom messages](usage/custom.md)
     -   [External config DB location](usage/external-config.md)
-    -   [Connect to a hosted serial port over TCP](usage/tcp-connection.md)
+    -   [Remote serial port over TCP](usage/tcp-connection.md)
 
 -   Troubleshooting
 
