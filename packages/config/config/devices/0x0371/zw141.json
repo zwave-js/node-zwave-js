@@ -250,6 +250,7 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "the Curtain Trip Times for Up and Down are not equal.",
