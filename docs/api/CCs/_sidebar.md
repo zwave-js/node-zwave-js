@@ -91,12 +91,14 @@
 
     -   [Send custom messages](usage/custom.md)
     -   [External config DB location](usage/external-config.md)
-    -   [Connect to a hosted serial port over TCP](usage/tcp-connection.md)
+    -   [Remote serial port over TCP](usage/tcp-connection.md)
 
 -   Troubleshooting
 
     -   [Overview](troubleshooting/index.md)
     -   [Connectivity issues](troubleshooting/connectivity-issues.md)
+    -   [Problems with 700 series sticks](troubleshooting/otw-upgrade.md)
+    -   [Nonsensical values appear randomly](troubleshooting/nonsensical-values.md)
     -   [Improving the network health](troubleshooting/network-health.md)
     -   [Missing updates from a device](troubleshooting/no-updates.md)
     -   [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
