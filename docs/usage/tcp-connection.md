@@ -31,7 +31,9 @@ The serial port must be configured with the following settings:
 
 ## Configuring `ser2net`
 
-The following configuration will expose a local serial port via TCP using `ser2net`:
+> [!NOTE] This uses the new YAML configuration format for `ser2net` and as such requires a `ser2net` version 4.0 or newer. If you have been using the old line-based configuration format make sure that you save the sample below using a `.yaml` suffix and point `ser2net` to that file.
+
+The following `ser2net.yaml` configuration will expose a local serial port via TCP using `ser2net`:
 
 ```yaml
 connection: &my-zwave
@@ -69,6 +71,6 @@ In this case, the alias `my-zwave` will be used as the service instance name. Th
 
 For Service Discovery to fully function a few things are required:
 
-1. The [`gensio`](https://github.com/cminyard/gensio) library underlying `ser2net` was built with mDNS support enabled. `ser2net` will fail to start with the above configuration if this is not the case.
+1. The [`gensio`](https://github.com/cminyard/gensio) library underlying `ser2net` was built with mDNS support enabled. `ser2net` will fail to start with the above configuration if this is not the case. `ser2net` first started supporting mDNS in version 4.3.0.
 2. The host running `ser2net` has a functioning implementation of mDNS / DNS-SD. For most Linux distributions it is sufficient if the [`avahi`](https://www.avahi.org/) daemon is enabled and running.
 3. On the Z-Wave JS side it is necessary that the embedded mDNS implementation can participate in multicast communication on the local network. When running Z-Wave JS in a container this requires the container network to share the host network namespace, which in Docker can be achieved by passing `--network host` to the `docker run` command.
