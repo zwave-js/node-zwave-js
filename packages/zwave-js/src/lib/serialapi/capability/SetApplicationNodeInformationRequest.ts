@@ -1,7 +1,8 @@
 import {
-	CommandClasses,
 	MessagePriority,
+	encodeCCList,
 	getCCName,
+	type CommandClasses,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
@@ -46,11 +47,7 @@ export class SetApplicationNodeInformationRequest extends Message {
 	public controlledCCs: CommandClasses[];
 
 	public serialize(): Buffer {
-		const ccList = [
-			...this.supportedCCs,
-			CommandClasses["Support/Control Mark"],
-			...this.controlledCCs,
-		];
+		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const ccListLength = Math.min(ccList.length, 35);
 		this.payload = Buffer.from([
 			this.isListening ? 0x01 : 0, // APPLICATION_NODEINFO_LISTENING

@@ -25,21 +25,10 @@ export function determineNIF(): {
 			cc !== CommandClasses["Multi Channel"],
 	);
 
-	// The supported CCs are mostly determined by the Z-Wave+ v2 device type specification
+	// The controller is considered a secure device, so it MUST only list CCs in the NIF that MUST always be supported insecurely
 	const supportedCCs = new Set([
 		// Z-Wave Plus Info must be listed first
 		CommandClasses["Z-Wave Plus Info"],
-		// Mandatory CCs for Z-Wave Plus v2 devices:
-		// Association SHOULD be within the first 6 entries
-		CommandClasses.Association,
-		CommandClasses["Association Group Information"],
-		CommandClasses["Device Reset Locally"],
-		CommandClasses["Firmware Update Meta Data"],
-		CommandClasses.Indicator,
-		CommandClasses["Manufacturer Specific"],
-		CommandClasses["Multi Channel Association"],
-		CommandClasses.Powerlevel,
-		CommandClasses.Version,
 		// Gateway device type MUST support Inclusion Controller and Time CC
 		CommandClasses["Inclusion Controller"],
 		CommandClasses.Time,
