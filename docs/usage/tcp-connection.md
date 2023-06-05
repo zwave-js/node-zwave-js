@@ -14,6 +14,8 @@ Examples include:
 > [!NOTE] Proxying serial connections over TCP/IP networks introduces an additional point of failure. Latency, jitter and packet loss can all negatively affect the performance and functioning of a Z-Wave network. As such it is recommended to limit the use of this feature to local and preferably wired networks.\
 > Considering these effects when [troubleshooting connectivity issues](troubleshooting/connectivity-issues.md) and mentioning the use of a remote serial port when reporting bugs is another good measure to take.
 
+> [!ATTENTION] Currently Z-Wave JS does not support authenticated or encrypted remote ports. If you are using Z-Wave JS to control security relevant devices ensure that the network the port is shared over is trusted, secure and protected.
+
 ## Configuration in Z-Wave JS
 
 To use a remote serial port, enter `tcp://<hostname-or-ip>:<port>` as the connection string in the "Serial Port" field of the Z-Wave JS configuration, where
