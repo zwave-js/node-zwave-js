@@ -83,6 +83,8 @@ Now that we got this out of the way, here's a collection of **common** issues an
 
 🐛 [Problems with 700 series sticks](troubleshooting/otw-upgrade.md)
 
+🐛 [Nonsensical values appear randomly](troubleshooting/nonsensical-values.md), like water flow sensors on an electrical outlet, or CO<sub>2</sub> readings on a motion sensor.
+
 🐛 [Missing updates from a device](troubleshooting/no-updates.md), e.g. when toggling it physically
 
 🐛 [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
