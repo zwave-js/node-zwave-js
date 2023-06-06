@@ -169,7 +169,7 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a queued message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
 	/**
 	 * @internal
@@ -235,6 +235,8 @@ export type SendCommandOptions = SendMessageOptions &
 		encapsulationFlags?: EncapsulationFlags;
 		/** Overwrite the default transmit options */
 		transmitOptions?: TransmitOptions;
+		/** Overwrite the default report timeout */
+		reportTimeoutMs?: number;
 	};
 
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =

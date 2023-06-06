@@ -15,6 +15,7 @@ import {
 	Security2CCNetworkKeyVerify,
 	Security2CCPublicKeyReport,
 	Security2CCTransferEnd,
+	Security2Command,
 	VersionCCValues,
 	utils as ccUtils,
 	inclusionTimeouts,
@@ -2639,7 +2640,7 @@ supported CCs: ${nodeInfo.supportedCCs
 
 			// Ask the node for its desired security classes and key exchange params
 			const kexParams = await api
-				.withOptions({ expire: inclusionTimeouts.TA1 })
+				.withOptions({ reportTimeoutMs: inclusionTimeouts.TA1 })
 				.getKeyExchangeParameters();
 			if (!kexParams) {
 				this.driver.controllerLog.logNode(node.id, {
@@ -2651,23 +2652,27 @@ supported CCs: ${nodeInfo.supportedCCs
 			}
 
 			// Validate the response
-			// At the time of implementation, only these are defined
+			// At the time of implementation, only KEXScheme1 and Curve25519 are defined.
+			// The certification testing ensures that no other bits are set, so we need to check that too.
+			// Not sure why this choice is made, since it essentially breaks any forwards compatibility
 			if (
+				kexParams.supportedKEXSchemes.length !== 1 ||
 				!kexParams.supportedKEXSchemes.includes(KEXSchemes.KEXScheme1)
 			) {
 				this.driver.controllerLog.logNode(node.id, {
-					message: `Security S2 bootstrapping failed: No supported key exchange scheme.`,
+					message: `Security S2 bootstrapping failed: No supported key exchange scheme or invalid list.`,
 					level: "warn",
 				});
 				await abort(KEXFailType.NoSupportedScheme);
 				return SecurityBootstrapFailure.ParameterMismatch;
 			} else if (
+				kexParams.supportedECDHProfiles.length !== 1 ||
 				!kexParams.supportedECDHProfiles.includes(
 					ECDHProfiles.Curve25519,
 				)
 			) {
 				this.driver.controllerLog.logNode(node.id, {
-					message: `Security S2 bootstrapping failed: No supported ECDH profile.`,
+					message: `Security S2 bootstrapping failed: No supported ECDH profile or invalid list.`,
 					level: "warn",
 				});
 				await abort(KEXFailType.NoSupportedCurve);
@@ -2860,7 +2865,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				return SecurityBootstrapFailure.S2IncorrectPIN;
 			}
 			// Validate that the received command contains the correct list of keys
-			if (keySetEcho instanceof Security2CCKEXFail || !keySetEcho.echo) {
+			if (keySetEcho instanceof Security2CCKEXFail) {
 				this.driver.controllerLog.logNode(node.id, {
 					message: `The joining node canceled the Security S2 bootstrapping.`,
 					direction: "inbound",
@@ -2868,6 +2873,27 @@ supported CCs: ${nodeInfo.supportedCCs
 				});
 				await abort();
 				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (!keySetEcho.echo) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: KEXSet received without echo flag`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (
+				!keySetEcho.isEncapsulatedWith(
+					CommandClasses["Security 2"],
+					Security2Command.MessageEncapsulation,
+				)
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: Command received without encryption`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.S2WrongSecurityLevel;
 			} else if (
 				keySetEcho.grantedKeys.length !== grantedKeys.length ||
 				!keySetEcho.grantedKeys.every((k) => grantedKeys.includes(k))
@@ -2997,7 +3023,7 @@ supported CCs: ${nodeInfo.supportedCCs
 					message: `Security S2 bootstrapping failed: Node did not confirm completion of the key exchange`,
 					level: "warn",
 				});
-				await abort();
+				await abort(KEXFailType.NoVerify);
 				return SecurityBootstrapFailure.Timeout;
 			}
 
