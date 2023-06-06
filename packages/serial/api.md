@@ -475,6 +475,7 @@ export class Message {
     markAsCompleted(): void;
     markAsSent(): void;
     needsCallbackId(): boolean;
+    nodeUpdateTimeout: number | undefined;
     // (undocumented)
     payload: Buffer;
     prematureNodeUpdate: Message | undefined;

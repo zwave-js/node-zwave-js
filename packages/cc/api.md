@@ -14171,6 +14171,8 @@ export class Security2CCKEXReport extends Security2CC {
     // (undocumented)
     readonly requestedKeys: readonly SecurityClass[];
     // (undocumented)
+    readonly _reserved: number;
+    // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     readonly supportedECDHProfiles: readonly ECDHProfiles[];

@@ -4492,6 +4492,10 @@ ${handlers.length} left`,
 			}
 		}
 
+		if (!!options.reportTimeoutMs) {
+			msg.nodeUpdateTimeout = options.reportTimeoutMs;
+		}
+
 		return msg;
 	}
 
@@ -5024,10 +5028,12 @@ ${handlers.length} left`,
 	public getReportTimeout(msg: Message): number {
 		const node = this.getNodeUnsafe(msg);
 
-		// If the node has a compat flag to override the timeout, use that,
-		// otherwise use the driver option
 		return (
+			// If there's a message-specific timeout, use that
+			msg.nodeUpdateTimeout ??
+			// If the node has a compat flag to override the timeout, use that
 			node?.deviceConfig?.compat?.reportTimeout ??
+			// otherwise use the driver option
 			this._options.timeouts.report
 		);
 	}
