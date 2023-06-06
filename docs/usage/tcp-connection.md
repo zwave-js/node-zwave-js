@@ -66,7 +66,7 @@ connection: &my-zwave
         mdns: true
         mdns-sysattrs: true
         mdns-type: "_zwave._tcp"
-    connector: serialdev,<path-to-serial>,nobreak,local
+    connector: serialdev,<path-to-serial>,115200N81,nobreak,local
 ```
 
 In this case, the alias `my-zwave` will be used as the service instance name. This name can be customized to distinguish different instances. In this example the resulting `PTR` record value will be `my-zwave._zwave._tcp.local`.
