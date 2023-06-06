@@ -2885,6 +2885,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				requestedKeys: [...kexParams.requestedKeys],
 				supportedECDHProfiles: [...kexParams.supportedECDHProfiles],
 				supportedKEXSchemes: [...kexParams.supportedKEXSchemes],
+				_reserved: kexParams._reserved,
 			});
 
 			for (let i = 0; i < grantedKeys.length; i++) {
