@@ -75,6 +75,32 @@ For config parameters that are defined in configuration files, we have had a bet
 
 However, the type `ConfigValue` has been changed to just `number`, so we treat this as a breaking change.
 
+## Changed `Node.setValue` and `VirtualNode.setValue` to return a `SetValueResult`
+
+Historically, these methods returned a `boolean` indicating whether the value was successfully set or not. While convenient, simply returning `true` or `false` isn't very helpful, especially since Z-Wave JS started using Supervision whereever possible in v10.
+
+For example, it is not possible to know from a simple `true` whether the command was actually executed by the device or whether it just acknowledged an unsupervised command but didn't actually do anything.
+Likewise, returning `false` seems too generic when there are a multitude of possible reasons for this:
+- A value was set on a non-existing endpoint
+- The endpoint does not support the CC
+- The CC is not implemented in Z-Wave JS
+- There is no `setValue` implementation for the CC in Z-Wave JS
+- The command could not be sent
+- The command was sent and received, but the device could not execute it
+- An invalid value was provided
+- ...
+
+To solve this and help applications give better feedback to the user, `Node.setValue` and `VirtualNode.setValue` now return a `SetValueResult` object with the following properties:
+```ts
+type SetValueResult = {
+	status: SetValueStatus;
+	remainingDuration?: Duration;
+	message?: string;
+};
+```
+
+See the [updated documentation](../api/node.md#setValue) for a more detailed explanation on working with `SetValueResult`s.
+
 ## Removed several deprecated method signatures, enums and properties
 
 -   The enum member `NodeType["Routing End Node"]` has been removed. This has been called `"End Node"` since `v9.3.0`
