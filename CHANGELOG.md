@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Check encapsulated command to determine if `CRC16 CC` expects a response (#5873)
+* Reworked what belongs in the node information frame the controller sends when queried (#5887)
+* Improve handling of unexpected/incorrect commands during S2 bootstrapping (#5893)
+
+### Changes under the hood
+* Updated documentation to explain how to auto-discover remote serialports hosted using `ser2net` (#5882, #5891)
+* Updated documentation to explain where nonsensical sensor readings may come from and how to avoid them (#5885)
+* Make it possible to define custom behaviors in `mock-server` config (#5895)
+
 ## 10.23.1 (2023-06-01)
 ### Bugfixes
 * Make the argument to `enumerateSerialPorts` optional again (#5868)
