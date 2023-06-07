@@ -140,6 +140,13 @@
 		// The device has two endpoints with different device classes, but both need to exist
 		"preserveEndpoints": [1, 2],
 		// Not sure if necessary, but this can prevent missing updates on endpoint 1
-		"mapRootReportsToEndpoint": 1
+		"mapRootReportsToEndpoint": 1,
+		"commandClasses": {
+			"remove": {
+				"0x80": {
+					"endpoints": [0]
+				}
+			}
+		}
 	}
 }
