@@ -502,7 +502,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		>,
 		userCode: string | Buffer,
 	): Promise<SupervisionResult | undefined> {
-		if (this.version > 1 || userId > 255) {
+		if (userId > 255) {
 			return this.setMany([{ userId, userIdStatus, userCode }]);
 		}
 
