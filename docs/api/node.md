@@ -68,32 +68,16 @@ When building a user interface for a Z-Wave application, you might need to know 
 ### `setValue`
 
 ```ts
-async setValue(valueId: ValueID, value: unknown, options?: SetValueAPIOptions): Promise<boolean>
+async setValue(valueId: ValueID, value: unknown, options?: SetValueAPIOptions): Promise<SetValueResult>
 ```
 
-Updates a value on the node. This method takes the following arguments:
+Updates a value on the node. This method automatically figures out which commands to send to the node, so you don't have to use the specific commands yourself.
+
+It method takes the following arguments:
 
 -   `valueId: ValueID` - specifies which value to update
 -   `value: unknown` - The new value to set
 -   `options?: SetValueAPIOptions` - Optional options for the resulting commands
-
-This method automatically figures out which commands to send to the node, so you don't have to use the specific commands yourself. The returned promise resolves to `true` in these cases:
-
--   The command was unsupervised and acknowledged by the node
--   The command was supervised and the node reported that the value was updated
--   The command was supervised and the node reported that it started changing the value
-
-It resolves to `false` if any of the following conditions are met:
-
--   The `setValue` API is not implemented in the required Command Class
--   The required Command Class is not supported by the node/endpoint
--   The required Command Class is not implemented in this library yet
--   The API for the required Command Class is not implemented in this library yet
--   The command was supervised and the node reported that it failed to change the value
-
-> [!ATTENTION] By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call is enough for the application to know that the value was changed and update its own cache or UI. Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
->
-> To get `"value updated"` events nonetheless, set the driver option `emitValueUpdateAfterSetValue` to `true`.
 
 The `options` bag contains options that influence the resulting commands, for example a transition duration. Each implementation will choose the options that are relevant for it, so you can use the same options everywhere.
 
@@ -102,6 +86,63 @@ The `options` bag contains options that influence the resulting commands, for ex
 ```ts
 type SetValueAPIOptions = Partial<ValueChangeOptions>;
 ```
+
+> [!ATTENTION] By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call is enough for the application to know that the value was changed and update its own cache or UI. Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
+>
+> To get `"value updated"` events nonetheless, set the driver option `emitValueUpdateAfterSetValue` to `true`.
+
+The returned promise resolves to a `SetValueResult` object
+
+```ts
+type SetValueResult = {
+	status: SetValueStatus;
+	remainingDuration?: Duration;
+	message?: string;
+};
+```
+
+with a `status` property to indicate
+
+-   whether the command was sent, and if not why it wasn't
+-   whether it was acknowledged and/or executed by the device.
+
+<!-- #import SetValueStatus from "@zwave-js/cc" -->
+
+```ts
+enum SetValueStatus {
+	/** The device reports no support for this command */
+	NoDeviceSupport = 0x00,
+	/** The device has accepted the command and is working on it */
+	Working = 0x01,
+	/** The device has rejected the command */
+	Fail = 0x02,
+	/** The endpoint specified in the value ID does not exist */
+	EndpointNotFound = 0x03,
+	/** The given CC or its API is not implemented (yet) or it has no `setValue` implementation */
+	NotImplemented = 0x04,
+	/** The value to set (or a related value) is invalid */
+	InvalidValue = 0x05,
+	/** The command was sent successfully, but it is unknown whether it was executed */
+	SuccessUnsupervised = 0xfe,
+	/** The device has executed the command successfully */
+	Success = 0xff,
+}
+```
+
+Depending on the status, the additional properties give some more context:
+
+-   If the status is `Working`, the `remainingDuration` property indicates how long the device will take to finish the transition.
+-   If the status is `EndpointNotFound`, `NotImplemented` or `InvalidValue`,the `message` property contains a human-readable error message.
+
+To make it easier for applications to test the status, a few helper methods are available:
+
+-   `setValueSucceeded(result: SetValueResult)` returns whether the command was sent using supervision and the device either executed it or started working on it
+-   `setValueWasUnsupervisedOrSucceeded(result: SetValueResult)` returns whether:
+    -   the above applies
+    -   or the command was sent without supervision and was acknowledged (but not necessarily executed) by the device
+-   `setValueFailed(result: SetValueResult)` returns whether:
+    -   the command was either not sent due to an error
+    -   or the command was sent using supervision and the device indicated an error
 
 ### `pollValue`
 
@@ -268,9 +309,9 @@ type FirmwareUpdateCapabilities =
 			/** An array of firmware targets that can be upgraded */
 			readonly firmwareTargets: readonly number[];
 			/** Indicates whether the node continues to function normally during an upgrade */
-			readonly continuesToFunction: Maybe<boolean>;
+			readonly continuesToFunction: MaybeNotKnown<boolean>;
 			/** Indicates whether the node supports delayed activation of the new firmware */
-			readonly supportsActivation: Maybe<boolean>;
+			readonly supportsActivation: MaybeNotKnown<boolean>;
 	  };
 ```
 

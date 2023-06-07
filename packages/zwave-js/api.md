@@ -128,6 +128,7 @@ import { SensorType } from '@zwave-js/config';
 import type { SerialPort } from 'serialport';
 import { SetbackState } from '@zwave-js/cc';
 import { SetValueAPIOptions } from '@zwave-js/cc';
+import { SetValueResult } from '@zwave-js/cc';
 import { SinglecastCC } from '@zwave-js/core';
 import type { SpecificDeviceClass } from '@zwave-js/config';
 import { Switchpoint } from '@zwave-js/cc';
@@ -1011,7 +1012,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
     readonly nodesBySecurityClass: ReadonlyMap<SecurityClass_2, readonly ZWaveNode[]>;
     // (undocumented)
     readonly physicalNodes: readonly ZWaveNode[];
-    setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;
+    setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<SetValueResult>;
 }
 
 // Warning: (ae-missing-release-tag) "VirtualValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1323,7 +1324,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     setDateAndTime(now?: Date): Promise<boolean>;
     // (undocumented)
     setSecurityClass(securityClass: SecurityClass_2, granted: boolean): void;
-    setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<boolean>;
+    setValue(valueId: ValueID_2, value: unknown, options?: SetValueAPIOptions): Promise<SetValueResult>;
     get status(): NodeStatus;
     // (undocumented)
     get supportedDataRates(): MaybeNotKnown<readonly DataRate_2[]>;

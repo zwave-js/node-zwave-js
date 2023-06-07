@@ -13,6 +13,7 @@ import {
 	Powerlevel,
 	PowerlevelTestStatus,
 	ScheduleEntryLockCommand,
+	SetValueStatus,
 	TimeCCDateGet,
 	TimeCCTimeGet,
 	TimeCCTimeOffsetGet,
@@ -24,6 +25,7 @@ import {
 	entryControlEventTypeLabels,
 	getCCValues,
 	isCommandClassContainer,
+	supervisionResultToSetValueResult,
 	type CCAPI,
 	type CCValueOptions,
 	type FirmwareUpdateCapabilities,
@@ -32,6 +34,7 @@ import {
 	type FirmwareUpdateResult,
 	type PollValueImplementation,
 	type SetValueAPIOptions,
+	type SetValueResult,
 	type ValueIDProperties,
 } from "@zwave-js/cc";
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
@@ -940,22 +943,34 @@ export class ZWaveNode
 		valueId: ValueID,
 		value: unknown,
 		options?: SetValueAPIOptions,
-	): Promise<boolean> {
+	): Promise<SetValueResult> {
 		// Ensure we're dealing with a valid value ID, with no extra properties
 		valueId = normalizeValueID(valueId);
 
-		// Try to retrieve the corresponding CC API
 		const loglevel = this.driver.getLogConfig().level;
 
+		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
-			if (!endpointInstance) return false;
+			if (!endpointInstance) {
+				return {
+					status: SetValueStatus.EndpointNotFound,
+					message: `Endpoint ${valueId.endpoint} does not exist on Node ${this.id}`,
+				};
+			}
 			let api = (endpointInstance.commandClasses as any)[
 				valueId.commandClass
 			] as CCAPI;
 			// Check if the setValue method is implemented
-			if (!api.setValue) return false;
+			if (!api.setValue) {
+				return {
+					status: SetValueStatus.NotImplemented,
+					message: `The ${getCCName(
+						valueId.commandClass,
+					)} CC does not support setting values`,
+				};
+			}
 
 			if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
@@ -1103,30 +1118,33 @@ export class ZWaveNode
 				}
 			}
 
-			return isUnsupervisedOrSucceeded(result);
+			return supervisionResultToSetValueResult(result);
 		} catch (e) {
-			// Define which errors during setValue are expected and won't crash
-			// the driver:
+			// Define which errors during setValue are expected and won't throw an error
 			if (isZWaveError(e)) {
-				let handled = false;
-				let emitErrorEvent = false;
+				let result: SetValueResult | undefined;
 				switch (e.code) {
 					// This CC or API is not implemented
 					case ZWaveErrorCodes.CC_NotImplemented:
 					case ZWaveErrorCodes.CC_NoAPI:
-						handled = true;
+						result = {
+							status: SetValueStatus.NotImplemented,
+							message: e.message,
+						};
 						break;
 					// A user tried to set an invalid value
 					case ZWaveErrorCodes.Argument_Invalid:
-						handled = true;
-						emitErrorEvent = true;
+						result = {
+							status: SetValueStatus.InvalidValue,
+							message: e.message,
+						};
 						break;
 				}
 
 				if (loglevel === "silly") {
 					this.driver.controllerLog.logNode(this.id, {
 						message: `[setValue] raised ZWaveError (${
-							handled ? "handled" : "not handled"
+							!!result ? "handled" : "not handled"
 						}, code ${getEnumMemberName(
 							ZWaveErrorCodes,
 							e.code,
@@ -1135,8 +1153,7 @@ export class ZWaveNode
 					});
 				}
 
-				if (emitErrorEvent) this.driver.emit("error", e);
-				if (handled) return false;
+				if (result) return result;
 			}
 			throw e;
 		}
