@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.23.2 (2023-06-07)
 ### Bugfixes
 * Check encapsulated command to determine if `CRC16 CC` expects a response (#5873)
 * Reworked what belongs in the node information frame the controller sends when queried (#5887)
