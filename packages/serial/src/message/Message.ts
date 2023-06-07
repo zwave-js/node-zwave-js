@@ -340,6 +340,9 @@ export class Message {
 		return false;
 	}
 
+	/** Returns a message specific timeout used to wait for an update from the target node */
+	public nodeUpdateTimeout: number | undefined; // Default: use driver timeout
+
 	/** Checks if a message is an expected response for this message */
 	public isExpectedResponse(msg: Message): boolean {
 		return (

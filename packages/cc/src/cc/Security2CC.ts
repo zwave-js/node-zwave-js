@@ -380,6 +380,7 @@ export class Security2CCAPI extends CCAPI {
 				"supportedKEXSchemes",
 				"supportedECDHProfiles",
 				"requestedKeys",
+				"_reserved",
 			]);
 		}
 	}
@@ -1729,6 +1730,7 @@ export class Security2CCNonceGet extends Security2CC {
 interface Security2CCKEXReportOptions {
 	requestCSA: boolean;
 	echo: boolean;
+	_reserved?: number;
 	supportedKEXSchemes: KEXSchemes[];
 	supportedECDHProfiles: ECDHProfiles[];
 	requestedKeys: SecurityClass[];
@@ -1747,6 +1749,8 @@ export class Security2CCKEXReport extends Security2CC {
 			validatePayload(this.payload.length >= 4);
 			this.requestCSA = !!(this.payload[0] & 0b10);
 			this.echo = !!(this.payload[0] & 0b1);
+			// Remember the reserved bits for the echo
+			this._reserved = this.payload[0] & 0b1111_1100;
 			// The bit mask starts at 0, but bit 0 is not used
 			this.supportedKEXSchemes = parseBitMask(
 				this.payload.slice(1, 2),
@@ -1763,12 +1767,14 @@ export class Security2CCKEXReport extends Security2CC {
 		} else {
 			this.requestCSA = options.requestCSA;
 			this.echo = options.echo;
+			this._reserved = options._reserved ?? 0;
 			this.supportedKEXSchemes = options.supportedKEXSchemes;
 			this.supportedECDHProfiles = options.supportedECDHProfiles;
 			this.requestedKeys = options.requestedKeys;
 		}
 	}
 
+	public readonly _reserved: number;
 	public readonly requestCSA: boolean;
 	public readonly echo: boolean;
 	public readonly supportedKEXSchemes: readonly KEXSchemes[];
@@ -1777,7 +1783,11 @@ export class Security2CCKEXReport extends Security2CC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
-			Buffer.from([(this.requestCSA ? 0b10 : 0) + (this.echo ? 0b1 : 0)]),
+			Buffer.from([
+				this._reserved +
+					(this.requestCSA ? 0b10 : 0) +
+					(this.echo ? 0b1 : 0),
+			]),
 			// The bit mask starts at 0, but bit 0 is not used
 			encodeBitMask(this.supportedKEXSchemes, 7, 0),
 			encodeBitMask(

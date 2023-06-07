@@ -2177,6 +2177,7 @@ export type SendCommandOptions = SendMessageOptions & SupervisionOptions & SendC
     autoEncapsulate?: boolean;
     encapsulationFlags?: EncapsulationFlags;
     transmitOptions?: TransmitOptions;
+    reportTimeoutMs?: number;
 };
 
 // Warning: (ae-missing-release-tag) "SendCommandReturnType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
