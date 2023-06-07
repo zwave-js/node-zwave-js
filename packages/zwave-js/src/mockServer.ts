@@ -6,7 +6,9 @@ import {
 import {
 	MockController,
 	MockNode,
+	type MockControllerBehavior,
 	type MockControllerOptions,
+	type MockNodeBehavior,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
@@ -16,11 +18,26 @@ import {
 	createDefaultMockNodeBehaviors,
 } from "./Utils";
 
+export type MockServerControllerOptions = Pick<
+	MockControllerOptions,
+	"ownNodeId" | "homeId" | "capabilities"
+> & {
+	behaviors?: MockControllerBehavior[];
+};
+
+export type MockServerNodeOptions = Pick<
+	MockNodeOptions,
+	"id" | "capabilities"
+> & {
+	behaviors?: MockNodeBehavior[];
+};
 export interface MockServerOptions {
 	interface?: string;
 	port?: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	config?: {};
+	config?: {
+		controller?: MockServerControllerOptions;
+		nodes?: MockServerNodeOptions[];
+	};
 }
 
 export class MockServer {
@@ -42,8 +59,8 @@ export class MockServer {
 		// Hook up a fake controller and nodes
 		prepareMocks(
 			binding,
-			(this.options.config as any)?.controller,
-			(this.options.config as any)?.nodes,
+			this.options.config?.controller,
+			this.options.config?.nodes,
 		);
 
 		// Start a TCP server, listen for connections, and forward them to the serial port
@@ -109,11 +126,8 @@ export class MockServer {
 
 function prepareMocks(
 	mockPort: MockPortBinding,
-	controller: Pick<
-		MockControllerOptions,
-		"ownNodeId" | "homeId" | "capabilities"
-	> = {},
-	nodes: Pick<MockNodeOptions, "id" | "capabilities">[] = [],
+	controller: MockServerControllerOptions = {},
+	nodes: MockServerNodeOptions[] = [],
 ): void {
 	const mockController = new MockController({
 		homeId: 0x7e570001,
@@ -123,6 +137,10 @@ function prepareMocks(
 	});
 	// Apply default behaviors that are required for interacting with the driver correctly
 	mockController.defineBehavior(...createDefaultMockControllerBehaviors());
+	// Apply custom behaviors
+	if (controller.behaviors) {
+		mockController.defineBehavior(...controller.behaviors);
+	}
 
 	for (const node of nodes) {
 		const mockNode = new MockNode({
@@ -133,5 +151,9 @@ function prepareMocks(
 
 		// Apply default behaviors that are required for interacting with the driver correctly
 		mockNode.defineBehavior(...createDefaultMockNodeBehaviors());
+		// Apply custom behaviors
+		if (node.behaviors) {
+			mockNode.defineBehavior(...node.behaviors);
+		}
 	}
 }
