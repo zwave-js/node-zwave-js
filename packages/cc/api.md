@@ -14592,6 +14592,13 @@ export enum SetbackType {
 // @public
 export type SetValueAPIOptions = Partial<ValueChangeOptions>;
 
+// Warning: (ae-missing-release-tag) "setValueFailed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function setValueFailed(result: SetValueResult): result is SetValueResult & {
+    status: SetValueStatus.NoDeviceSupport | SetValueStatus.Fail | SetValueStatus.EndpointNotFound | SetValueStatus.NotImplemented | SetValueStatus.InvalidValue;
+};
+
 // Warning: (ae-missing-release-tag) "SetValueImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14614,6 +14621,55 @@ export type SetValueImplementationHooks = AllOrNone_2<{
 //
 // @public (undocumented)
 export type SetValueImplementationHooksFactory = (property: ValueIDProperties, value: unknown, options?: SetValueAPIOptions) => SetValueImplementationHooks | undefined;
+
+// Warning: (ae-missing-release-tag) "SetValueResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type SetValueResult = {
+    status: SetValueStatus.NoDeviceSupport | SetValueStatus.Fail | SetValueStatus.Success;
+    remainingDuration?: undefined;
+    message?: undefined;
+} | {
+    status: SetValueStatus.Working;
+    remainingDuration: Duration_2;
+    message?: undefined;
+} | {
+    status: SetValueStatus.SuccessUnsupervised;
+    remainingDuration?: undefined;
+    message?: undefined;
+} | {
+    status: SetValueStatus.EndpointNotFound | SetValueStatus.NotImplemented | SetValueStatus.InvalidValue;
+    remainingDuration?: undefined;
+    message: string;
+};
+
+// Warning: (ae-missing-release-tag) "SetValueStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export enum SetValueStatus {
+    EndpointNotFound = 3,
+    Fail = 2,
+    InvalidValue = 5,
+    NoDeviceSupport = 0,
+    NotImplemented = 4,
+    Success = 255,
+    SuccessUnsupervised = 254,
+    Working = 1
+}
+
+// Warning: (ae-missing-release-tag) "setValueSucceeded" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function setValueSucceeded(result: SetValueResult): result is SetValueResult & {
+    status: SetValueStatus.Success | SetValueStatus.Working;
+};
+
+// Warning: (ae-missing-release-tag) "setValueWasUnsupervisedOrSucceeded" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function setValueWasUnsupervisedOrSucceeded(result: SetValueResult): result is SetValueResult & {
+    status: SetValueStatus.SuccessUnsupervised | SetValueStatus.Success | SetValueStatus.Working;
+};
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "shouldUseSupervision" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15043,6 +15099,11 @@ export enum SupervisionCommand {
     // (undocumented)
     Report = 2
 }
+
+// Warning: (ae-missing-release-tag) "supervisionResultToSetValueResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function supervisionResultToSetValueResult(result: SupervisionResult_2 | undefined): SetValueResult;
 
 // Warning: (ae-missing-release-tag) "Switchpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
