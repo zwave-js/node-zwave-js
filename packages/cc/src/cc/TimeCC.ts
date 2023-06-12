@@ -225,7 +225,6 @@ interface TimeCCTimeReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.TimeReport)
-@useSupervision()
 export class TimeCCTimeReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -285,7 +284,6 @@ interface TimeCCDateReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.DateReport)
-@useSupervision()
 export class TimeCCDateReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -413,7 +411,6 @@ interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.TimeOffsetReport)
-@useSupervision()
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
