@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Increase fragment timeout during OTA update to 2 minutes (#5908)
+* Do not use Supervision for sending `TimeCC` Reports (#5907)
+* Do not force-add support for mandatory CCs of Z-Wave+ v2 devices (#5906)
+* Fix incorrect timeouts and scheme validation during S0 bootstrap, detect downgrade attacks (#5904)
+* Do not check CC support when responding to Get requests (#5905)
+* Only use `ExtendedUserCodeSet` command for user IDs above 255 (#5896)
+
+### Config file changes
+* Remove duplicated battery info on endpoint 0 for Fibaro FGT001 (#5899)
+
 ## 10.23.2 (2023-06-07)
 ### Bugfixes
 * Check encapsulated command to determine if `CRC16 CC` expects a response (#5873)
