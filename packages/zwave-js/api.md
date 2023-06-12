@@ -893,11 +893,12 @@ export enum SecurityBootstrapFailure {
     NodeCanceled = 5,
     NoKeysConfigured = 1,
     ParameterMismatch = 4,
+    S0Downgrade = 8,
     S2IncorrectPIN = 6,
     S2NoUserCallbacks = 2,
     S2WrongSecurityLevel = 7,
     Timeout = 3,
-    Unknown = 8,
+    Unknown = 9,
     UserCanceled = 0
 }
 
