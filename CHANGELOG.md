@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.23.3 (2023-06-12)
 ### Bugfixes
 * Increase fragment timeout during OTA update to 2 minutes (#5908)
 * Do not use Supervision for sending `TimeCC` Reports (#5907)
