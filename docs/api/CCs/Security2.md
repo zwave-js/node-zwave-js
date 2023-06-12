@@ -60,7 +60,7 @@ async reportSupportedCommands(
 ### `getKeyExchangeParameters`
 
 ```ts
-async getKeyExchangeParameters(): Promise<Pick<Security2CCKEXReport, "requestCSA" | "echo" | "supportedKEXSchemes" | "supportedECDHProfiles" | "requestedKeys"> | undefined>;
+async getKeyExchangeParameters(): Promise<Pick<Security2CCKEXReport, "requestCSA" | "echo" | "supportedKEXSchemes" | "supportedECDHProfiles" | "requestedKeys" | "_reserved"> | undefined>;
 ```
 
 ### `grantKeys`

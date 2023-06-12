@@ -1242,6 +1242,8 @@ enum SecurityBootstrapFailure {
 	S2IncorrectPIN,
 	/** There was a mismatch in security keys between the controller and the node */
 	S2WrongSecurityLevel,
+	/** The node has been bootstrapped using S0 in an S2-capable network */
+	S0Downgrade,
 	/** Some other unspecified error happened */
 	Unknown,
 }
