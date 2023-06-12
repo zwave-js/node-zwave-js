@@ -3428,10 +3428,16 @@ protocol version:      ${this.protocolVersion}`;
 	private async handleVersionGet(command: VersionCCGet): Promise<void> {
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
-		await endpoint.commandClasses.Version.withOptions({
-			// Answer with the same encapsulation as asked
-			encapsulationFlags: command.encapsulationFlags,
-		}).sendReport({
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Version, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			});
+
+		await api.sendReport({
 			libraryType: ZWaveLibraryTypes["Static Controller"],
 			protocolVersion: this.driver.controller.protocolVersion!,
 			firmwareVersions: [this.driver.controller.firmwareVersion!],
@@ -3443,10 +3449,16 @@ protocol version:      ${this.protocolVersion}`;
 	): Promise<void> {
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
-		await endpoint.commandClasses.Version.withOptions({
-			// Answer with the same encapsulation as asked
-			encapsulationFlags: command.encapsulationFlags,
-		}).reportCCVersion(command.requestedCC);
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Version, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			});
+
+		await api.reportCCVersion(command.requestedCC);
 	}
 
 	private async handleSecurityCommandsSupportedGet(
@@ -3922,11 +3934,20 @@ protocol version:      ${this.protocolVersion}`;
 		const seconds = now.getSeconds();
 
 		try {
-			await endpoint.commandClasses.Time.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
-			}).reportTime(hours, minutes, seconds);
-		} catch (e) {
+			// We are being queried, so the device may actually not support the CC, just control it.
+			// Using the commandClasses property would throw in that case
+			const api = endpoint
+				.createAPI(CommandClasses.Time, false)
+				.withOptions({
+					// Answer with the same encapsulation as asked
+					encapsulationFlags: command.encapsulationFlags,
+				});
+			await api.reportTime(hours, minutes, seconds);
+		} catch (e: any) {
+			this.driver.controllerLog.logNode(this.nodeId, {
+				message: e.message,
+				level: "error",
+			});
 			// ignore
 		}
 	}
@@ -3940,11 +3961,20 @@ protocol version:      ${this.protocolVersion}`;
 		const day = now.getDate();
 
 		try {
-			await endpoint.commandClasses.Time.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
-			}).reportDate(year, month, day);
-		} catch (e) {
+			// We are being queried, so the device may actually not support the CC, just control it.
+			// Using the commandClasses property would throw in that case
+			const api = endpoint
+				.createAPI(CommandClasses.Time, false)
+				.withOptions({
+					// Answer with the same encapsulation as asked
+					encapsulationFlags: command.encapsulationFlags,
+				});
+			await api.reportDate(year, month, day);
+		} catch (e: any) {
+			this.driver.controllerLog.logNode(this.nodeId, {
+				message: e.message,
+				level: "error",
+			});
 			// ignore
 		}
 	}
@@ -3957,10 +3987,15 @@ protocol version:      ${this.protocolVersion}`;
 		const timezone = getDSTInfo(new Date());
 
 		try {
-			await endpoint.commandClasses.Time.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
-			}).reportTimezone(timezone);
+			// We are being queried, so the device may actually not support the CC, just control it.
+			// Using the commandClasses property would throw in that case
+			const api = endpoint
+				.createAPI(CommandClasses.Time, false)
+				.withOptions({
+					// Answer with the same encapsulation as asked
+					encapsulationFlags: command.encapsulationFlags,
+				});
+			await api.reportTimezone(timezone);
 		} catch (e) {
 			// ignore
 		}
