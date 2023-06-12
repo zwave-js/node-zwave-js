@@ -2344,22 +2344,44 @@ supported CCs: ${nodeInfo.supportedCCs
 				});
 			}
 
-			// SDS13783 - impose a 10s timeout on each message
+			// At most 10s may pass between receiving each command. We enforce this twofold:
+			// 1. by imposing a report timeout on the requests, so they don't linger too long. This does not consider
+			//    the time it takes to transmit and receiv the ACK.
+			// 2. by imposing a timeout around the whole API call.
+			const S0_TIMEOUT = 10000;
 			const api = node.commandClasses.Security.withOptions({
-				expire: 10000,
+				reportTimeoutMs: S0_TIMEOUT,
 			});
-			// Request security scheme, because it is required by the specs
-			await api.getSecurityScheme(); // ignore the result
 
-			// Request nonce separately, so we can impose a timeout
-			await api.getNonce();
-
-			// send the network key
-			await api.setNetworkKey(this.driver.securityManager.networkKey);
-
+			const tasks: (() => Promise<any>)[] = [
+				// Request security scheme (and ignore the result), because it is required by the specs
+				() => api.getSecurityScheme(),
+				// Request nonce (for network key) separately, so we can impose a timeout
+				() => api.getNonce(),
+				// send the network key
+				() =>
+					api.setNetworkKey(this.driver.securityManager!.networkKey),
+			];
 			if (this._includeController) {
 				// Tell the controller which security scheme to use
-				await api.inheritSecurityScheme();
+				tasks.push(async () => {
+					// Request nonce (for security scheme) manually, so it has the longer timeout
+					await api.getNonce();
+					await api.inheritSecurityScheme();
+				});
+			}
+
+			for (const task of tasks) {
+				const result = await Promise.race([
+					wait(S0_TIMEOUT, true).then(() => false as const),
+					task().catch(() => false as const),
+				]);
+				if (result === false) {
+					throw new ZWaveError(
+						`A secure inclusion timer has elapsed`,
+						ZWaveErrorCodes.Controller_NodeTimeout,
+					);
+				}
 			}
 
 			// Remember that the node was granted the S0 security class
@@ -2370,9 +2392,6 @@ supported CCs: ${nodeInfo.supportedCCs
 				SecurityBootstrapFailure.Unknown;
 			if (!isZWaveError(e)) {
 				errorMessage += `: ${e as any}`;
-			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
-				errorMessage += ": a secure inclusion timer has elapsed.";
-				failure = SecurityBootstrapFailure.Timeout;
 			} else if (
 				e.code !== ZWaveErrorCodes.Controller_MessageDropped &&
 				e.code !== ZWaveErrorCodes.Controller_NodeTimeout
@@ -3222,11 +3241,18 @@ supported CCs: ${nodeInfo.supportedCCs
 					if (bootstrapFailure == undefined) {
 						const actualSecurityClass =
 							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass <
-								SecurityClass.S2_Unauthenticated
-						) {
+						if (actualSecurityClass == SecurityClass.S0_Legacy) {
+							// Notify user about potential S0 downgrade attack.
+							// S0 is considered insecure if both controller and node are S2-capable
+							bootstrapFailure =
+								SecurityBootstrapFailure.S0Downgrade;
+
+							this.driver.controllerLog.logNode(newNode.id, {
+								message:
+									"Possible S0 downgrade attack detected!",
+								level: "warn",
+							});
+						} else if (!securityClassIsS2(actualSecurityClass)) {
 							bootstrapFailure = SecurityBootstrapFailure.Unknown;
 						}
 					}
@@ -3244,10 +3270,36 @@ supported CCs: ${nodeInfo.supportedCCs
 					if (bootstrapFailure == undefined) {
 						const actualSecurityClass =
 							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass < SecurityClass.S0_Legacy
-						) {
+						if (actualSecurityClass == SecurityClass.S0_Legacy) {
+							// If the user chose this, i.e. InclusionStrategy.Security_S0 was used,
+							// then this is the expected outcome and not a failure
+							if (
+								opts.strategy !== InclusionStrategy.Security_S0
+							) {
+								// S0 is considered insecure if both controller and node are S2-capable
+								const nif = await newNode
+									.requestNodeInfo()
+									.catch(() => undefined);
+								if (
+									nif?.supportedCCs.includes(
+										CommandClasses["Security 2"],
+									)
+								) {
+									// Notify user about potential S0 downgrade attack.
+									bootstrapFailure =
+										SecurityBootstrapFailure.S0Downgrade;
+
+									this.driver.controllerLog.logNode(
+										newNode.id,
+										{
+											message:
+												"Possible S0 downgrade attack detected!",
+											level: "warn",
+										},
+									);
+								}
+							}
+						} else {
 							bootstrapFailure = SecurityBootstrapFailure.Unknown;
 						}
 					}
