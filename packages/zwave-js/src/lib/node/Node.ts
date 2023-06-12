@@ -130,6 +130,7 @@ import {
 	sensorCCs,
 	supervisedCommandFailed,
 	supervisedCommandSucceeded,
+	timespan,
 	topologicalSort,
 	unknownBoolean,
 	valueIdToString,
@@ -4640,7 +4641,9 @@ protocol version:      ${this.protocolVersion}`;
 						(cc) =>
 							cc.nodeId === this.nodeId &&
 							cc instanceof FirmwareUpdateMetaDataCCGet,
-						30000,
+						// Wait up to 2 minutes for each fragment request.
+						// Some users try to update devices with unstable connections, where 30s can be too short.
+						timespan.minutes(2),
 					)
 					.catch(() => undefined));
 			this._firmwareUpdatePrematureRequest = undefined;
