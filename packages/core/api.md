@@ -2169,6 +2169,7 @@ export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
 //
 // @public (undocumented)
 export type SendCommandSecurityS2Options = {
+    s2OverrideSecurityClass?: S2SecurityClass;
     s2VerifyDelivery?: boolean;
     s2MulticastOutOfSync?: boolean;
     s2MulticastGroupId?: number;
