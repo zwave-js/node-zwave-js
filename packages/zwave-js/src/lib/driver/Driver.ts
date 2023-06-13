@@ -7,6 +7,9 @@ import {
 	KEXFailType,
 	MultiChannelCC,
 	Security2CC,
+	Security2CCCommandsSupportedGet,
+	Security2CCCommandsSupportedReport,
+	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
 	Security2Command,
 	SecurityCC,
@@ -33,7 +36,6 @@ import {
 	type FirmwareUpdateResult,
 	type FirmwareUpdateStatus,
 	type ICommandClassContainer,
-	type Security2CCMessageEncapsulation,
 	type SupervisionCCGet,
 	type TransportServiceCCSubsequentSegment,
 } from "@zwave-js/cc";
@@ -3738,6 +3740,26 @@ ${handlers.length} left`,
 			? CommandClasses.Security
 			: undefined;
 
+		const discardAnyways = (cmd: CommandClass): boolean => {
+			// S2-encapsulated CCs must always be discarded if they are received using a lower security class, except:
+			// - CommandsSupportedGet and CommandsSupportedReport
+			// - multicast commands
+			if (!(cmd instanceof Security2CCMessageEncapsulation)) return false;
+			if (cmd.getMulticastGroupId() != undefined) return false;
+			// This shouldn't happen, but better be sure
+			if (cmd.securityClass == undefined) return true;
+			// Received at the highest security class -> ok
+			if (cmd.securityClass === secClass) return false;
+
+			if (
+				cmd.encapsulated instanceof Security2CCCommandsSupportedGet ||
+				cmd.encapsulated instanceof Security2CCCommandsSupportedReport
+			) {
+				return false;
+			}
+			return true;
+		};
+
 		const acceptAnyways = (cmd: CommandClass): boolean => {
 			// Some CCs are always accepted, regardless of security class
 			if (cmd instanceof SecurityCC) {
@@ -3764,7 +3786,10 @@ ${handlers.length} left`,
 		let isSecure = false;
 		let requiresSecurity = securityClassIsS2(secClass);
 		while (true) {
-			if (cc.ccId === expectedSecurityCC || acceptAnyways(cc)) {
+			if (
+				(cc.ccId === expectedSecurityCC && !discardAnyways(cc)) ||
+				acceptAnyways(cc)
+			) {
 				isSecure = true;
 			}
 
@@ -4105,6 +4130,7 @@ ${handlers.length} left`,
 			}
 			if (maybeS2 && Security2CC.requiresEncapsulation(cmd)) {
 				cmd = Security2CC.encapsulate(this, cmd, {
+					securityClass: options.s2OverrideSecurityClass,
 					multicastOutOfSync: !!options.s2MulticastOutOfSync,
 					multicastGroupId: options.s2MulticastGroupId,
 					verifyDelivery: options.s2VerifyDelivery,

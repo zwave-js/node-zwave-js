@@ -371,7 +371,9 @@ export class MockController {
 			ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
 		}
 		process.nextTick(() => {
-			void node.onControllerFrame(frame);
+			void node.onControllerFrame(frame).catch((e) => {
+				console.error(e);
+			});
 		});
 		if (ret) return await ret;
 	}

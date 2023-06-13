@@ -51,6 +51,7 @@ import { OnlyMethods } from '@zwave-js/shared';
 import type { ParamInfoMap } from '@zwave-js/config';
 import { ProtocolVersion } from '@zwave-js/core';
 import { ReadonlyObjectKeyMap } from '@zwave-js/shared/safe';
+import { S2SecurityClass } from '@zwave-js/core';
 import { Scale } from '@zwave-js/config';
 import type { Scale as Scale_2 } from '@zwave-js/config/safe';
 import { SecurityClass } from '@zwave-js/core';
@@ -14108,7 +14109,7 @@ export class Security2CC extends CommandClass {
     // (undocumented)
     ccCommand: Security2Command;
     static encapsulate(host: ZWaveHost_2, cc: CommandClass, options?: {
-        securityClass?: SecurityClass;
+        securityClass?: S2SecurityClass;
         multicastOutOfSync?: boolean;
         multicastGroupId?: number;
         verifyDelivery?: boolean;
@@ -14226,6 +14227,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     };
     // (undocumented)
     prepareRetransmission(): void;
+    // (undocumented)
+    readonly securityClass?: SecurityClass;
     get sequenceNumber(): number;
     // (undocumented)
     serialize(): Buffer;

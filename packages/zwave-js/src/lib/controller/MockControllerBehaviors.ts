@@ -278,7 +278,10 @@ const handleSendData: MockControllerBehavior = {
 						}
 					}
 
-					if (!handled) throw e;
+					if (!handled) {
+						console.error(e);
+						throw e;
+					}
 				}
 
 				// Send the data to the node
