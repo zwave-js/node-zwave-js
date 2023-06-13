@@ -78,8 +78,27 @@
 			"unsigned": true
 		},
 		{
+			"#": "52",
+			"$if": "firmwareVersion >= 3.6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Equal Curtain Trip Times (Opening and Closing)",
+			"description": "Enabling this disables parameter #51",
+			"defaultValue": 1
+		},
+		{
 			"#": "35",
-			"label": "Curtain Trip Time",
+			"label": "Curtain Trip Time (Closing)",
+			"valueSize": 2,
+			"unit": "0.01 seconds",
+			"minValue": 500,
+			"maxValue": 32767,
+			"defaultValue": 15000,
+			"unsigned": true
+		},
+		{
+			"#": "51",
+			"$if": "firmwareVersion >= 3.6",
+			"label": "Curtain Trip Time (Opening)",
 			"valueSize": 2,
 			"unit": "0.01 seconds",
 			"minValue": 500,
@@ -229,36 +248,6 @@
 				{
 					"label": "Enable action button/command/S1/S2 calibration",
 					"value": 2
-				}
-			]
-		},
-		{
-			"#": "51",
-			"$if": "firmwareVersion >= 3.6",
-			"label": "Curtain Trip Time for UP (Open) moving",
-			"valueSize": 2,
-			"unit": "0.01 seconds",
-			"minValue": 500,
-			"maxValue": 32767,
-			"defaultValue": 15000,
-			"unsigned": true
-		},
-		{
-			"#": "52",
-			"$if": "firmwareVersion >= 3.6",
-			"label": "Set whether the Curtain Trip Times for Up and Down are equal",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "the Curtain Trip Times for Up and Down are not equal.",
-					"value": 0
-				},
-				{
-					"label": "the Curtain Trip Times for Up and Down are equal (Parameter #35).",
-					"value": 1
 				}
 			]
 		},
