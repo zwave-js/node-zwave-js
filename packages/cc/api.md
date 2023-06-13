@@ -3882,6 +3882,7 @@ export class CommandClass implements ICommandClass {
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectMoreMessages(_session: CommandClass[]): boolean;
     expectsCCResponse(): boolean;
+    readonly frameType?: FrameType;
     static from(host: ZWaveHost, options: CommandClassDeserializationOptions): CommandClass;
     static getCCCommand(data: Buffer): number | undefined;
     protected getCCValue(valueId: ValueID): StaticCCValue | DynamicCCValue | undefined;
