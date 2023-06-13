@@ -3504,7 +3504,15 @@ protocol version:      ${this.protocolVersion}`;
 		) {
 			// The command was received using the highest security class. Return the list of supported CCs
 			await endpoint.commandClasses["Security 2"].reportSupportedCommands(
-				determineNIF().supportedCCs,
+				determineNIF().supportedCCs.filter(
+					(cc) =>
+						// CC:009F.01.0E.11.00F
+						// The Security 0 and Security 2 Command Class MUST NOT be advertised in this command
+						// The Transport Service Command Class MUST NOT be advertised in this command.
+						cc !== CommandClasses.Security &&
+						cc !== CommandClasses["Security 2"] &&
+						cc !== CommandClasses["Transport Service"],
+				),
 			);
 		} else if (securityClassIsS2(actualSecurityClass)) {
 			// The command was received using a lower security class. Return an empty list
