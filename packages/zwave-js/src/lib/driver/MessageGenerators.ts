@@ -569,9 +569,16 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		const spanState = secMan.getSPANState(nodeId);
 		let additionalTimeoutMs: number | undefined;
 
+		// We need a new nonce when there is no shared SPAN state, or the SPAN state is for a lower security class
+		// than the command we want to send
+		const expectedSecurityClass =
+			msg.command.securityClass ?? driver.getHighestSecurityClass(nodeId);
+
 		if (
 			spanState.type === SPANState.None ||
-			spanState.type === SPANState.LocalEI
+			spanState.type === SPANState.LocalEI ||
+			(spanState.type === SPANState.SPAN &&
+				spanState.securityClass !== expectedSecurityClass)
 		) {
 			// Request a new nonce
 

@@ -146,6 +146,7 @@ interface DecryptionResult {
 	authOK: boolean;
 	key?: Buffer;
 	iv?: Buffer;
+	securityClass: SecurityClass | undefined;
 }
 
 // @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
@@ -752,7 +753,7 @@ export class Security2CC extends CommandClass {
 		host: ZWaveHost,
 		cc: CommandClass,
 		options?: {
-			securityClass?: SecurityClass;
+			securityClass?: S2SecurityClass;
 			multicastOutOfSync?: boolean;
 			multicastGroupId?: number;
 			verifyDelivery?: boolean;
@@ -792,7 +793,7 @@ export class Security2CC extends CommandClass {
 
 interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
 	/** Can be used to override the default security class for the command */
-	securityClass?: SecurityClass;
+	securityClass?: S2SecurityClass;
 	extensions?: Security2Extension[];
 	encapsulated?: CommandClass;
 	verifyDelivery?: boolean;
@@ -1013,7 +1014,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						ciphertext,
 						authData,
 						authTag,
-						securityClass,
 						spanState,
 					);
 			}
@@ -1022,12 +1022,19 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			let authOK = false;
 			let key: Buffer | undefined;
 			let iv: Buffer | undefined;
+			let decryptionSecurityClass: SecurityClass | undefined;
 
 			// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
 			// the Receiver SHOULD try decrypting the message with one or more of the following SPAN values,
 			// stopping when decryption is successful or the maximum number of iterations is reached.
 			for (let i = 0; i < DECRYPT_ATTEMPTS; i++) {
-				({ plaintext, authOK, key, iv } = decrypt());
+				({
+					plaintext,
+					authOK,
+					key,
+					iv,
+					securityClass: decryptionSecurityClass,
+				} = decrypt());
 				if (!!authOK && !!plaintext) break;
 				// No need to try further SPANs if we just got the sender's EI
 				if (!!this.getSenderEI()) break;
@@ -1059,6 +1066,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			}
 
+			// Remember which security class was used to decrypt this message, so we can discard it later
+			this.securityClass = decryptionSecurityClass;
+
 			offset = 0;
 			if (hasEncryptedExtensions) parseExtensions(plaintext);
 
@@ -1085,7 +1095,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			}
 
-			this._securityClass = options.securityClass;
+			this.securityClass = options.securityClass;
 			if (options.encapsulated) {
 				this.encapsulated = options.encapsulated;
 				options.encapsulated.encapsulatingCC = this as any;
@@ -1106,7 +1116,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 	}
 
-	private _securityClass?: SecurityClass;
+	public readonly securityClass?: SecurityClass;
 
 	// Only used for testing/debugging purposes
 	private key?: Buffer;
@@ -1228,7 +1238,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			} else {
 				const securityClass =
-					this._securityClass ??
+					this.securityClass ??
 					this.host.getHighestSecurityClass(receiverNodeId);
 
 				if (securityClass == undefined) {
@@ -1309,9 +1319,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			iv = this.host.securityManager2.nextNonce(this.nodeId, true);
 			const { keyCCM } =
 				// Prefer the overridden security class if it was given
-				this._securityClass != undefined
+				this.securityClass != undefined
 					? this.host.securityManager2.getKeysForSecurityClass(
-							this._securityClass,
+							this.securityClass,
 					  )
 					: this.host.securityManager2.getKeysForNode(this.nodeId);
 			key = keyCCM;
@@ -1394,6 +1404,27 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				message["auth tag"] = buffer2hex(this.authTag);
 			}
 		}
+
+		if (this.isSinglecast()) {
+			// TODO: This is ugly, we should probably do this in the constructor or so
+			let securityClass = this.securityClass;
+			if (securityClass == undefined) {
+				const spanState = this.host.securityManager2.getSPANState(
+					this.nodeId,
+				);
+				if (spanState.type === SPANState.SPAN) {
+					securityClass = spanState.securityClass;
+				}
+			}
+
+			if (securityClass != undefined) {
+				message["security class"] = getEnumMemberName(
+					SecurityClass,
+					securityClass,
+				);
+			}
+		}
+
 		return {
 			...super.toLogEntry(applHost),
 			message,
@@ -1406,16 +1437,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		ciphertext: Buffer,
 		authData: Buffer,
 		authTag: Buffer,
-		securityClass: SecurityClass | undefined,
 		spanState: SPANTableEntry & {
 			type: SPANState.SPAN | SPANState.LocalEI;
 		},
-	): {
-		plaintext: Buffer;
-		authOK: boolean;
-		key?: Buffer;
-		iv?: Buffer;
-	} {
+	): DecryptionResult {
 		const decryptWithNonce = (nonce: Buffer) => {
 			const { keyCCM: key } =
 				this.host.securityManager2.getKeysForNode(sendingNodeId);
@@ -1450,14 +1475,20 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			) {
 				const nonce = spanState.currentSPAN.nonce;
 				spanState.currentSPAN = undefined;
-				return decryptWithNonce(nonce);
+				return {
+					...decryptWithNonce(nonce),
+					securityClass: spanState.securityClass,
+				};
 			} else {
 				// forgetting the current SPAN shouldn't be necessary but better be safe than sorry
 				spanState.currentSPAN = undefined;
 			}
 
 			// This can only happen if the security class is known
-			return getNonceAndDecrypt();
+			return {
+				...getNonceAndDecrypt(),
+				securityClass: spanState.securityClass,
+			};
 		} else if (spanState.type === SPANState.LocalEI) {
 			// We've sent the other our receiver's EI and received its sender's EI,
 			// meaning we can now establish an SPAN
@@ -1475,7 +1506,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 				const ret = getNonceAndDecrypt();
 				// Decryption with the temporary key worked
-				if (ret.authOK) return ret;
+				if (ret.authOK)
+					return {
+						...ret,
+						securityClass: SecurityClass.Temporary,
+					};
 
 				// Reset the SPAN state and try with the recently granted security class
 				this.host.securityManager2.setSPANState(
@@ -1484,44 +1519,50 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			}
 
-			if (securityClass != undefined) {
+			// When ending up here, one of two situations has occured:
+			// a) We've taken over an existing network and do not know the node's security class
+			// b) We know the security class, but we're about to establish a new SPAN. This may happen at a lower
+			//    security class than the one the node normally uses, e.g. when we're being queried for securely
+			//    supported CCs.
+			// In both cases, we should simply try decoding with multiple security classes, starting from the highest one.
+			// If this fails, we restore the previous (partial) SPAN state.
+
+			// Try all security classes where we do not definitely know that it was not granted
+			const possibleSecurityClasses = securityClassOrder
+				.filter(securityClassIsS2)
+				.filter(
+					(s) =>
+						this.host.hasSecurityClass(sendingNodeId, s) !== false,
+				);
+
+			for (const secClass of possibleSecurityClasses) {
+				// Initialize an SPAN with that security class
 				this.host.securityManager2.initializeSPAN(
 					sendingNodeId,
-					securityClass,
+					secClass,
 					senderEI,
 					receiverEI,
 				);
+				const ret = getNonceAndDecrypt();
 
-				return getNonceAndDecrypt();
-			} else {
-				// Not knowing it can happen if we just took over an existing network
-				// Try multiple security classes
-				const possibleSecurityClasses = securityClassOrder
-					.filter((s) => securityClassIsS2(s))
-					.filter(
-						(s) =>
-							this.host.hasSecurityClass(sendingNodeId, s) !==
-							false,
-					);
-				for (const secClass of possibleSecurityClasses) {
-					// Initialize an SPAN with that security class
-					this.host.securityManager2.initializeSPAN(
-						sendingNodeId,
-						secClass,
-						senderEI,
-						receiverEI,
-					);
-					const ret = getNonceAndDecrypt();
-
-					// It worked, return the result and remember the security class
-					if (ret.authOK) {
+				// It worked, return the result
+				if (ret.authOK) {
+					// Also if we weren't sure before, we now know that the security class is granted
+					if (
+						this.host.hasSecurityClass(sendingNodeId, secClass) ===
+						undefined
+					) {
 						this.host.setSecurityClass(
 							sendingNodeId,
 							secClass,
 							true,
 						);
-						return ret;
 					}
+					return {
+						...ret,
+						securityClass: secClass,
+					};
+				} else {
 					// Reset the SPAN state and try with the next security class
 					this.host.securityManager2.setSPANState(
 						sendingNodeId,
@@ -1532,7 +1573,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 
 		// Nothing worked, fail the decryption
-		return { plaintext: Buffer.from([]), authOK: false };
+		return {
+			plaintext: Buffer.from([]),
+			authOK: false,
+			securityClass: undefined,
+		};
 	}
 
 	private decryptMulticast(
@@ -1541,12 +1586,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		ciphertext: Buffer,
 		authData: Buffer,
 		authTag: Buffer,
-	): {
-		plaintext: Buffer;
-		authOK: boolean;
-		key?: Buffer;
-		iv?: Buffer;
-	} {
+	): DecryptionResult {
 		const iv = this.host.securityManager2.nextPeerMPAN(
 			sendingNodeId,
 			groupId,
@@ -1557,6 +1597,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			key,
 			iv,
 			...decryptAES128CCM(key, iv, ciphertext, authData, authTag),
+			// The security class is irrelevant when decrypting multicast commands
+			securityClass: undefined,
 		};
 	}
 }
@@ -2182,7 +2224,7 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				supportedCCs: this.supportedCCs
+				"supported CCs": this.supportedCCs
 					.map((cc) => getCCName(cc))
 					.map((cc) => `\n· ${cc}`)
 					.join(""),
