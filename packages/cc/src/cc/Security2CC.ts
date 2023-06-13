@@ -1541,6 +1541,15 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				  );
 
 			for (const secClass of possibleSecurityClasses) {
+				// Skip security classes we don't have keys for
+				if (
+					!this.host.securityManager2.hasKeysForSecurityClass(
+						secClass,
+					)
+				) {
+					continue;
+				}
+
 				// Initialize an SPAN with that security class
 				this.host.securityManager2.initializeSPAN(
 					sendingNodeId,
