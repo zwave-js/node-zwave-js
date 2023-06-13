@@ -26,10 +26,10 @@
 {"k":"node.2.endpoint.0.commandClass.0x20","v":{"isSupported":true,"isControlled":false,"secure":true,"version":1}}
 {"k":"node.2.endpoint.0.commandClass.0x9f","v":{"isSupported":true,"isControlled":false,"secure":true,"version":1}}
 
-# S2 is supported and Access Control granted (at least we think that)
+# S2 is supported and all S2 keys granted (at least we think so)
 {"k":"node.2.securityClasses.S2_AccessControl","v":true}
-{"k":"node.2.securityClasses.S2_Authenticated","v":false}
-{"k":"node.2.securityClasses.S2_Unauthenticated","v":false}
+{"k":"node.2.securityClasses.S2_Authenticated","v":true}
+{"k":"node.2.securityClasses.S2_Unauthenticated","v":true}
 
 {"k":"node.2.interviewStage","v":"Complete"}
 {"k":"node.2.hasSUCReturnRoute","v":true}
