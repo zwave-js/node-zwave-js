@@ -1497,13 +1497,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const receiverEI = spanState.receiverEI;
 
 			// How we do this depends on whether we know the security class of the other node
-			if (this.host.securityManager2.tempKeys.has(sendingNodeId)) {
+			const isBootstrappingNode =
+				this.host.securityManager2.tempKeys.has(sendingNodeId);
+			if (isBootstrappingNode) {
 				// We're currently bootstrapping the node, it might be using a temporary key
 				this.host.securityManager2.initializeTempSPAN(
 					sendingNodeId,
 					senderEI,
 					receiverEI,
 				);
+
 				const ret = getNonceAndDecrypt();
 				// Decryption with the temporary key worked
 				if (ret.authOK)
@@ -1528,12 +1531,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// If this fails, we restore the previous (partial) SPAN state.
 
 			// Try all security classes where we do not definitely know that it was not granted
-			const possibleSecurityClasses = securityClassOrder
-				.filter(securityClassIsS2)
-				.filter(
-					(s) =>
-						this.host.hasSecurityClass(sendingNodeId, s) !== false,
-				);
+			// While bootstrapping a node, we consider the key that is being exchanged (including S0) to be the highest. No need to look at others
+			const possibleSecurityClasses = isBootstrappingNode
+				? [this.host.getHighestSecurityClass(sendingNodeId)!]
+				: securityClassOrder.filter(
+						(s) =>
+							this.host.hasSecurityClass(sendingNodeId, s) !==
+							false,
+				  );
 
 			for (const secClass of possibleSecurityClasses) {
 				// Initialize an SPAN with that security class

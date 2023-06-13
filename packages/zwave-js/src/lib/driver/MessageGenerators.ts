@@ -33,6 +33,7 @@ import {
 	MessagePriority,
 	NODE_ID_BROADCAST,
 	SPANState,
+	SecurityClass,
 	SupervisionStatus,
 	TransmitOptions,
 	ZWaveError,
@@ -578,6 +579,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			spanState.type === SPANState.None ||
 			spanState.type === SPANState.LocalEI ||
 			(spanState.type === SPANState.SPAN &&
+				spanState.securityClass !== SecurityClass.Temporary &&
 				spanState.securityClass !== expectedSecurityClass)
 		) {
 			// Request a new nonce
