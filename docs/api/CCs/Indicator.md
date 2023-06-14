@@ -9,7 +9,7 @@
 ```ts
 async get(
 	indicatorId?: number,
-): Promise<number | IndicatorObject[] | undefined>;
+): Promise<MaybeNotKnown<number | IndicatorObject[]>>;
 ```
 
 ### `set`
@@ -64,7 +64,7 @@ Set a timeout for a given indicator ID after which the indicator will be turned 
 ```ts
 async getTimeout(
 	indicatorId: number,
-): Promise<IndicatorTimeout | undefined>;
+): Promise<MaybeNotKnown<IndicatorTimeout>>;
 ```
 
 Returns the timeout after which the given indicator will be turned off.
@@ -74,7 +74,7 @@ Returns the timeout after which the given indicator will be turned off.
 ```ts
 async getDescription(
 	indicatorId: number,
-): Promise<string | undefined>;
+): Promise<MaybeNotKnown<string>>;
 ```
 
 ## Indicator CC values

@@ -7,7 +7,7 @@
 ### `get`
 
 ```ts
-async get(): Promise<HumidityControlMode | undefined>;
+async get(): Promise<MaybeNotKnown<HumidityControlMode>>;
 ```
 
 ### `set`
@@ -22,7 +22,7 @@ async set(
 
 ```ts
 async getSupportedModes(): Promise<
-	readonly HumidityControlMode[] | undefined
+	MaybeNotKnown<readonly HumidityControlMode[]>
 >;
 ```
 

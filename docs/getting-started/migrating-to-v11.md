@@ -81,16 +81,18 @@ Historically, these methods returned a `boolean` indicating whether the value wa
 
 For example, it is not possible to know from a simple `true` whether the command was actually executed by the device or whether it just acknowledged an unsupervised command but didn't actually do anything.
 Likewise, returning `false` seems too generic when there are a multitude of possible reasons for this:
-- A value was set on a non-existing endpoint
-- The endpoint does not support the CC
-- The CC is not implemented in Z-Wave JS
-- There is no `setValue` implementation for the CC in Z-Wave JS
-- The command could not be sent
-- The command was sent and received, but the device could not execute it
-- An invalid value was provided
-- ...
+
+-   A value was set on a non-existing endpoint
+-   The endpoint does not support the CC
+-   The CC is not implemented in Z-Wave JS
+-   There is no `setValue` implementation for the CC in Z-Wave JS
+-   The command could not be sent
+-   The command was sent and received, but the device could not execute it
+-   An invalid value was provided
+-   ...
 
 To solve this and help applications give better feedback to the user, `Node.setValue` and `VirtualNode.setValue` now return a `SetValueResult` object with the following properties:
+
 ```ts
 type SetValueResult = {
 	status: SetValueStatus;

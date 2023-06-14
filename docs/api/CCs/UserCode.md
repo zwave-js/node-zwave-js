@@ -7,7 +7,7 @@
 ### `getUsersCount`
 
 ```ts
-async getUsersCount(): Promise<number | undefined>;
+async getUsersCount(): Promise<MaybeNotKnown<number>>;
 ```
 
 ### `get`
@@ -16,13 +16,13 @@ async getUsersCount(): Promise<number | undefined>;
 async get(
 	userId: number,
 	multiple?: false,
-): Promise<Pick<UserCode, "userIdStatus" | "userCode"> | undefined>;
+): Promise<MaybeNotKnown<Pick<UserCode, "userIdStatus" | "userCode">>>;
 
 async get(
 	userId: number,
 	multiple: true,
 ): Promise<
-	{ userCodes: readonly UserCode[]; nextUserId: number } | undefined
+	MaybeNotKnown<{ userCodes: readonly UserCode[]; nextUserId: number }>
 >;
 ```
 
@@ -74,7 +74,7 @@ async getCapabilities(): Promise<Pick<UserCodeCCCapabilitiesReport, "supportsMas
 ### `getKeypadMode`
 
 ```ts
-async getKeypadMode(): Promise<KeypadMode | undefined>;
+async getKeypadMode(): Promise<MaybeNotKnown<KeypadMode>>;
 ```
 
 ### `setKeypadMode`
@@ -88,7 +88,7 @@ async setKeypadMode(
 ### `getMasterCode`
 
 ```ts
-async getMasterCode(): Promise<string | undefined>;
+async getMasterCode(): Promise<MaybeNotKnown<string>>;
 ```
 
 ### `setMasterCode`
@@ -102,7 +102,7 @@ async setMasterCode(
 ### `getUserCodeChecksum`
 
 ```ts
-async getUserCodeChecksum(): Promise<number | undefined>;
+async getUserCodeChecksum(): Promise<MaybeNotKnown<number>>;
 ```
 
 ## User Code CC values

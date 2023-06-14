@@ -23,7 +23,7 @@ async set(
 
 ```ts
 async getSupportedModes(): Promise<
-	readonly ThermostatFanMode[] | undefined
+	MaybeNotKnown<readonly ThermostatFanMode[]>
 >;
 ```
 

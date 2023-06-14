@@ -309,9 +309,9 @@ type FirmwareUpdateCapabilities =
 			/** An array of firmware targets that can be upgraded */
 			readonly firmwareTargets: readonly number[];
 			/** Indicates whether the node continues to function normally during an upgrade */
-			readonly continuesToFunction: MaybeNotKnown<boolean>;
+			readonly continuesToFunction: Maybe<boolean>;
 			/** Indicates whether the node supports delayed activation of the new firmware */
-			readonly supportsActivation: MaybeNotKnown<boolean>;
+			readonly supportsActivation: Maybe<boolean>;
 	  };
 ```
 
@@ -404,13 +404,10 @@ if (actualFirmware.firmwareTarget == undefined) {
 
 // try the update
 try {
-	await this.driver.controller.nodes
+	const result = await this.driver.controller.nodes
 		.get(nodeId)!
-		.beginFirmwareUpdate(
-			actualFirmware.data,
-			actualFirmware.firmwareTarget,
-		);
-	console.log(`Node ${nodeId}: Firmware update started`);
+		.updateFirmware([actualFirmware]);
+	// check result
 } catch (e) {
 	// handle error
 }
@@ -1111,18 +1108,50 @@ There are two situations when this event is emitted:
 ### `"firmware update progress"`
 
 ```ts
-(node: ZWaveNode, sentFragments: number, totalFragments: number) => void;
+(node: ZWaveNode, progress: FirmwareUpdateProgress) => void;
 ```
 
-Firmware update progress has been made. The callback takes the node itself, the already sent fragments, and the total fragments to be sent:
+Firmware update progress has been made. The callback will be called with the node itself and an object describing the progress:
+
+<!-- #import FirmwareUpdateProgress from "zwave-js" -->
+
+```ts
+interface FirmwareUpdateProgress {
+	/** Which part/file of the firmware update process is currently in progress. This is a number from 1 to `totalFiles` and can be used to display progress. */
+	currentFile: number;
+	/** How many files the firmware update process consists of. */
+	totalFiles: number;
+	/** How many fragments of the current file have been transmitted. Together with `totalFragments` this can be used to display progress. */
+	sentFragments: number;
+	/** How many fragments the current file of the firmware update consists of. */
+	totalFragments: number;
+	/** The total progress of the firmware update in %, rounded to two digits. This considers the total size of all files. */
+	progress: number;
+}
+```
 
 ### `"firmware update finished"`
 
 ```ts
-(node: ZWaveNode, status: FirmwareUpdateStatus, waitTime?: number) => void;
+(node: ZWaveNode, result: FirmwareUpdateResult) => void;
 ```
 
-The firmware update process is finished. The returned status indicates whether the update was successful and if it was, a wait time may be needed before the device is functional again.
+The firmware update process is finished. The callback will be called with the node itself and the result of the firmware update, including information about what happens next:
+
+<!-- #import FirmwareUpdateResult from "zwave-js" -->
+
+```ts
+interface FirmwareUpdateResult {
+	/** The status returned by the device for this firmware update attempt. For multi-target updates, this will be the status for the last update. */
+	status: FirmwareUpdateStatus;
+	/** Whether the update was successful. This is a simpler interpretation of the `status` field. */
+	success: boolean;
+	/** How long (in seconds) to wait before interacting with the device again */
+	waitTime?: number;
+	/** Whether the device will be re-interviewed. If this is `true`, applications should wait for the `"ready"` event to interact with the device again. */
+	reInterview: boolean;
+}
+```
 
 ### `"value added"` / `"value updated"` / `"value removed"`
 
