@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* When no lifeline can be determined using the existing heuristics, fall back to checking if group 1 has the `General: Lifeline` profile (#5916)
+* Discard GET-type commands received via multicast or broadcast (#5914)
+* Answer query for secure commands, even if received with a lower security class (#5913)
+
+### Config file changes
+* Add new FW3.6 parameters to Aeotec ZW141 Nano Shutter (#5883)
+* Add metadata to HANK Electronics Ltd. HKZW-SO01 (#5881)
+
 ## 10.23.3 (2023-06-12)
 ### Bugfixes
 * Increase fragment timeout during OTA update to 2 minutes (#5908)
