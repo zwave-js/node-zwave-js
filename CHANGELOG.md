@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.23.4 (2023-06-14)
 ### Bugfixes
 * When no lifeline can be determined using the existing heuristics, fall back to checking if group 1 has the `General: Lifeline` profile (#5916)
 * Discard GET-type commands received via multicast or broadcast (#5914)
