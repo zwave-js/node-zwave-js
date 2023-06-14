@@ -2554,13 +2554,17 @@ supported CCs: ${nodeInfo.supportedCCs
 		}
 
 		let userCallbacks: InclusionUserCallbacks;
-		const inclusionOptions = this
-			._inclusionOptions as InclusionOptionsInternal & {
-			strategy:
-				| InclusionStrategy.Security_S2
-				| InclusionStrategy.SmartStart;
-		};
+		const inclusionOptions = this._inclusionOptions as
+			| (InclusionOptionsInternal & {
+					// This is the type when we end up here during normal inclusion
+					strategy:
+						| InclusionStrategy.Security_S2
+						| InclusionStrategy.SmartStart;
+			  })
+			// And this when we do proxy bootstrapping for an inclusion controller
+			| undefined;
 		if (
+			inclusionOptions &&
 			"provisioning" in inclusionOptions &&
 			!!inclusionOptions.provisioning
 		) {
@@ -2587,6 +2591,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				},
 			};
 		} else if (
+			inclusionOptions &&
 			"userCallbacks" in inclusionOptions &&
 			!!inclusionOptions.userCallbacks
 		) {
@@ -2803,6 +2808,7 @@ supported CCs: ${nodeInfo.supportedCCs
 
 				let pinResult: string | false;
 				if (
+					inclusionOptions &&
 					"dsk" in inclusionOptions &&
 					typeof inclusionOptions.dsk === "string" &&
 					isValidDSK(inclusionOptions.dsk)
