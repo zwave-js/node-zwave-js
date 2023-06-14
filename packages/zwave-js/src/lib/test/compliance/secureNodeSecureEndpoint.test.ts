@@ -195,11 +195,9 @@ integrationTest(
 						frame.payload.encapsulated instanceof
 							Security2CCCommandsSupportedGet
 					) {
-						const isHighestGranted = frame.payload["key"]?.equals(
-							smNode.getKeysForSecurityClass(
-								self.host.getHighestSecurityClass(self.id)!,
-							).keyCCM,
-						);
+						const isHighestGranted =
+							frame.payload.securityClass ===
+							self.host.getHighestSecurityClass(self.id);
 
 						const cc = Security2CC.encapsulate(
 							self.host,

@@ -53,6 +53,7 @@ import { OnlyMethods } from '@zwave-js/shared';
 import type { ParamInfoMap } from '@zwave-js/config';
 import { ProtocolVersion } from '@zwave-js/core';
 import { ReadonlyObjectKeyMap } from '@zwave-js/shared/safe';
+import { S2SecurityClass } from '@zwave-js/core';
 import { Scale } from '@zwave-js/config';
 import type { Scale as Scale_2 } from '@zwave-js/config/safe';
 import { SecurityClass } from '@zwave-js/core';
@@ -3882,6 +3883,7 @@ export class CommandClass implements ICommandClass {
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectMoreMessages(_session: CommandClass[]): boolean;
     expectsCCResponse(): boolean;
+    readonly frameType?: FrameType;
     static from(host: ZWaveHost, options: CommandClassDeserializationOptions): CommandClass;
     static getCCCommand(data: Buffer): number | undefined;
     protected getCCValue(valueId: ValueID): StaticCCValue | DynamicCCValue | undefined;
@@ -14087,7 +14089,7 @@ export class Security2CC extends CommandClass {
     // (undocumented)
     ccCommand: Security2Command;
     static encapsulate(host: ZWaveHost_2, cc: CommandClass, options?: {
-        securityClass?: SecurityClass;
+        securityClass?: S2SecurityClass;
         multicastOutOfSync?: boolean;
         multicastGroupId?: number;
         verifyDelivery?: boolean;
@@ -14205,6 +14207,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     };
     // (undocumented)
     prepareRetransmission(): void;
+    // (undocumented)
+    readonly securityClass?: SecurityClass;
     get sequenceNumber(): number;
     // (undocumented)
     serialize(): Buffer;

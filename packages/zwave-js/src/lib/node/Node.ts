@@ -13,6 +13,7 @@ import {
 	Powerlevel,
 	PowerlevelTestStatus,
 	ScheduleEntryLockCommand,
+	Security2Command,
 	SetValueStatus,
 	TimeCCDateGet,
 	TimeCCTimeGet,
@@ -82,6 +83,7 @@ import {
 	Security2CCCommandsSupportedGet,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
+	type Security2CCMessageEncapsulation,
 } from "@zwave-js/cc/Security2CC";
 import {
 	SecurityCCCommandsSupportedGet,
@@ -3511,9 +3513,7 @@ protocol version:      ${this.protocolVersion}`;
 			const { supportedCCs } = determineNIF();
 			await endpoint.commandClasses.Security.reportSupportedCommands(
 				supportedCCs,
-				// The list of controlled CCs is long. We would need to split this
-				// into multiple reports.
-				// FIXME: Do that
+				// We don't report controlled CCs
 				[],
 			);
 		} else {
@@ -3530,9 +3530,40 @@ protocol version:      ${this.protocolVersion}`;
 	): Promise<void> {
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
-		await endpoint.commandClasses["Security 2"].reportSupportedCommands(
-			determineNIF().supportedCCs,
-		);
+		const highestSecurityClass = this.getHighestSecurityClass();
+		const actualSecurityClass = (
+			command.getEncapsulatingCC(
+				CommandClasses["Security 2"],
+				Security2Command.MessageEncapsulation,
+			) as Security2CCMessageEncapsulation | undefined
+		)?.securityClass;
+
+		if (
+			highestSecurityClass !== undefined &&
+			highestSecurityClass === actualSecurityClass
+		) {
+			// The command was received using the highest security class. Return the list of supported CCs
+			await endpoint.commandClasses["Security 2"].reportSupportedCommands(
+				determineNIF().supportedCCs.filter(
+					(cc) =>
+						// CC:009F.01.0E.11.00F
+						// The Security 0 and Security 2 Command Class MUST NOT be advertised in this command
+						// The Transport Service Command Class MUST NOT be advertised in this command.
+						cc !== CommandClasses.Security &&
+						cc !== CommandClasses["Security 2"] &&
+						cc !== CommandClasses["Transport Service"],
+				),
+			);
+		} else if (securityClassIsS2(actualSecurityClass)) {
+			// The command was received using a lower security class. Return an empty list
+			await endpoint.commandClasses["Security 2"]
+				.withOptions({
+					s2OverrideSecurityClass: actualSecurityClass,
+				})
+				.reportSupportedCommands([]);
+		} else {
+			// Do not respond
+		}
 	}
 
 	/**

@@ -150,6 +150,9 @@ export class CommandClass implements ICommandClass {
 			} else {
 				this.nodeId = options.nodeId;
 			}
+
+			this.frameType = options.frameType;
+
 			({
 				ccId: this.ccId,
 				ccCommand: this.ccCommand,
@@ -258,6 +261,9 @@ export class CommandClass implements ICommandClass {
 
 	/** Contains a reference to the encapsulating CC if this CC is encapsulated */
 	public encapsulatingCC?: EncapsulatingCommandClass;
+
+	/** The type of Z-Wave frame this CC was sent with */
+	public readonly frameType?: FrameType;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
