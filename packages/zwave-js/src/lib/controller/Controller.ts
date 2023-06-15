@@ -719,8 +719,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		const index = provisioningList.indexOf(entry);
 		if (index >= 0) {
 			provisioningList.splice(index, 1);
-			this.autoProvisionSmartStart();
 			this.provisioningList = provisioningList;
+
+			this.autoProvisionSmartStart();
 		}
 	}
 
@@ -2443,13 +2444,17 @@ supported CCs: ${nodeInfo.supportedCCs
 		}
 
 		let userCallbacks: InclusionUserCallbacks;
-		const inclusionOptions = this
-			._inclusionOptions as InclusionOptionsInternal & {
-			strategy:
-				| InclusionStrategy.Security_S2
-				| InclusionStrategy.SmartStart;
-		};
+		const inclusionOptions = this._inclusionOptions as
+			| (InclusionOptionsInternal & {
+					// This is the type when we end up here during normal inclusion
+					strategy:
+						| InclusionStrategy.Security_S2
+						| InclusionStrategy.SmartStart;
+			  })
+			// And this when we do proxy bootstrapping for an inclusion controller
+			| undefined;
 		if (
+			inclusionOptions &&
 			"provisioning" in inclusionOptions &&
 			!!inclusionOptions.provisioning
 		) {
@@ -2476,6 +2481,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				},
 			};
 		} else if (
+			inclusionOptions &&
 			"userCallbacks" in inclusionOptions &&
 			!!inclusionOptions.userCallbacks
 		) {
@@ -2692,6 +2698,7 @@ supported CCs: ${nodeInfo.supportedCCs
 
 				let pinResult: string | false;
 				if (
+					inclusionOptions &&
 					"dsk" in inclusionOptions &&
 					typeof inclusionOptions.dsk === "string" &&
 					isValidDSK(inclusionOptions.dsk)
@@ -3232,6 +3239,27 @@ supported CCs: ${nodeInfo.supportedCCs
 				const opts = this._inclusionOptions;
 				// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
 				let bootstrapFailure: SecurityBootstrapFailure | undefined;
+
+				// A controller performing a SmartStart network inclusion shall perform S2 bootstrapping,
+				// even if the joining node does not show the S2 Command Class in its supported Command Class list.
+				let forceAddedS2Support = false;
+				if (
+					opts.strategy === InclusionStrategy.SmartStart &&
+					!newNode.supportsCC(CommandClasses["Security 2"])
+				) {
+					this.driver.controllerLog.logNode(newNode.id, {
+						message:
+							"does not list S2 as supported, but was included using SmartStart which implies S2 support.",
+						level: "warn",
+					});
+
+					forceAddedS2Support = true;
+					newNode.addCC(CommandClasses["Security 2"], {
+						isSupported: true,
+						version: 1,
+					});
+				}
+
 				if (
 					newNode.supportsCC(CommandClasses["Security 2"]) &&
 					(opts.strategy === InclusionStrategy.Default ||
@@ -3239,9 +3267,10 @@ supported CCs: ${nodeInfo.supportedCCs
 						opts.strategy === InclusionStrategy.SmartStart)
 				) {
 					bootstrapFailure = await this.secureBootstrapS2(newNode);
+					const actualSecurityClass =
+						newNode.getHighestSecurityClass();
+
 					if (bootstrapFailure == undefined) {
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
 						if (actualSecurityClass == SecurityClass.S0_Legacy) {
 							// Notify user about potential S0 downgrade attack.
 							// S0 is considered insecure if both controller and node are S2-capable
@@ -3256,6 +3285,14 @@ supported CCs: ${nodeInfo.supportedCCs
 						} else if (!securityClassIsS2(actualSecurityClass)) {
 							bootstrapFailure = SecurityBootstrapFailure.Unknown;
 						}
+					}
+
+					if (
+						forceAddedS2Support &&
+						!securityClassIsS2(actualSecurityClass)
+					) {
+						// Remove the fake S2 support again
+						newNode.removeCC(CommandClasses["Security 2"]);
 					}
 				} else if (
 					newNode.supportsCC(CommandClasses.Security) &&
@@ -4589,7 +4626,20 @@ ${associatedNodes.join(", ")}`,
 		reason: RemoveNodeReason,
 	): Promise<void> {
 		const node = this.nodes.getOrThrow(nodeId);
-		if (await node.ping()) {
+
+		// It is possible that this method is called while the node is still in the process of resetting or leaving the network
+		// Therefore, we ping multiple times in case of success and wait a bit in between
+		let didFail = false;
+		for (let attempt = 0; attempt < 3; attempt++) {
+			if (await node.ping()) {
+				await wait(2000);
+				continue;
+			}
+
+			didFail = true;
+			break;
+		}
+		if (!didFail) {
 			throw new ZWaveError(
 				`The node removal process could not be started because the node responded to a ping.`,
 				ZWaveErrorCodes.RemoveFailedNode_Failed,
