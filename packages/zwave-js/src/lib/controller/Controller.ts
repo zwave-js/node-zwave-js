@@ -803,8 +803,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		const index = provisioningList.indexOf(entry);
 		if (index >= 0) {
 			provisioningList.splice(index, 1);
-			this.autoProvisionSmartStart();
 			this.provisioningList = provisioningList;
+
+			this.autoProvisionSmartStart();
 		}
 	}
 
@@ -3349,6 +3350,27 @@ supported CCs: ${nodeInfo.supportedCCs
 				const opts = this._inclusionOptions;
 				// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
 				let bootstrapFailure: SecurityBootstrapFailure | undefined;
+
+				// A controller performing a SmartStart network inclusion shall perform S2 bootstrapping,
+				// even if the joining node does not show the S2 Command Class in its supported Command Class list.
+				let forceAddedS2Support = false;
+				if (
+					opts.strategy === InclusionStrategy.SmartStart &&
+					!newNode.supportsCC(CommandClasses["Security 2"])
+				) {
+					this.driver.controllerLog.logNode(newNode.id, {
+						message:
+							"does not list S2 as supported, but was included using SmartStart which implies S2 support.",
+						level: "warn",
+					});
+
+					forceAddedS2Support = true;
+					newNode.addCC(CommandClasses["Security 2"], {
+						isSupported: true,
+						version: 1,
+					});
+				}
+
 				if (
 					newNode.supportsCC(CommandClasses["Security 2"]) &&
 					(opts.strategy === InclusionStrategy.Default ||
@@ -3356,9 +3378,10 @@ supported CCs: ${nodeInfo.supportedCCs
 						opts.strategy === InclusionStrategy.SmartStart)
 				) {
 					bootstrapFailure = await this.secureBootstrapS2(newNode);
+					const actualSecurityClass =
+						newNode.getHighestSecurityClass();
+
 					if (bootstrapFailure == undefined) {
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
 						if (actualSecurityClass == SecurityClass.S0_Legacy) {
 							// Notify user about potential S0 downgrade attack.
 							// S0 is considered insecure if both controller and node are S2-capable
@@ -3373,6 +3396,14 @@ supported CCs: ${nodeInfo.supportedCCs
 						} else if (!securityClassIsS2(actualSecurityClass)) {
 							bootstrapFailure = SecurityBootstrapFailure.Unknown;
 						}
+					}
+
+					if (
+						forceAddedS2Support &&
+						!securityClassIsS2(actualSecurityClass)
+					) {
+						// Remove the fake S2 support again
+						newNode.removeCC(CommandClasses["Security 2"]);
 					}
 				} else if (
 					newNode.supportsCC(CommandClasses.Security) &&
