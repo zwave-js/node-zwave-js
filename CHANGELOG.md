@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.23.5 (2023-06-15)
 ### Bugfixes
 * When removing a failed node, the node is now pinged up to 3 times with a pause inbetween attempts. This allows removing nodes that still respond for a short time after the reset (#5921)
 * When including a SmartStart node, always perform S2 bootstrapping (#5918)
