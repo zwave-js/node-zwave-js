@@ -135,7 +135,7 @@ import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
 import { ZWaveController } from "../controller/Controller";
-import { InclusionState } from "../controller/Inclusion";
+import { InclusionState, RemoveNodeReason } from "../controller/Inclusion";
 import { DriverLogger } from "../log/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
@@ -2050,7 +2050,7 @@ export class Driver
 	}
 
 	/** This is called when a node was removed from the network */
-	private onNodeRemoved(node: ZWaveNode, replaced: boolean): void {
+	private onNodeRemoved(node: ZWaveNode, reason: RemoveNodeReason): void {
 		// Remove all listeners and timers
 		this.removeNodeEventHandlers(node);
 		if (this.sendNodeToSleepTimers.has(node.id)) {
@@ -2080,6 +2080,9 @@ export class Driver
 			ZWaveErrorCodes.Controller_NodeRemoved,
 		);
 
+		const replaced =
+			reason === RemoveNodeReason.Replaced ||
+			reason === RemoveNodeReason.ProxyReplaced;
 		if (!replaced) {
 			// Asynchronously remove the node from all possible associations, ignore potential errors
 			// but only if the node is not getting replaced, because the removal will interfere with
@@ -3925,7 +3928,10 @@ ${handlers.length} left`,
 				});
 
 				try {
-					await this.controller.removeFailedNode(msg.command.nodeId);
+					await this.controller.removeFailedNodeInternal(
+						msg.command.nodeId,
+						RemoveNodeReason.Reset,
+					);
 				} catch (e) {
 					this.controllerLog.logNode(msg.command.nodeId, {
 						message: `removing the node failed: ${getErrorMessage(

@@ -106,6 +106,38 @@ See the [updated documentation](../api/node.md#setValue) for a more detailed exp
 Since the result now contains error information, calling `setValue` will no longer emit an `"error"` event in case of a usage error (unimplemented CC, invalid value).
 It will however still throw an error if the communication fails.
 
+## The `"node removed"` event callback now indicates why a node was removed
+
+The signature of the callback has been changed from
+```ts
+(node: ZWaveNode, replaced: boolean) => void
+```
+to
+```ts
+(node: ZWaveNode, reason: RemoveNodeReason) => void
+```
+
+where the second argument has one of the following values:
+```ts
+enum RemoveNodeReason {
+	/** The node was excluded by the user or an inclusion controller */
+	Excluded,
+	/** The node was excluded by an inclusion controller */
+	ProxyExcluded,
+	/** The node was removed using the "remove failed node" feature */
+	RemoveFailed,
+	/** The node was replaced using the "replace failed node" feature */
+	Replaced,
+	/** The node was replaced by an inclusion controller */
+	ProxyReplaced,
+	/** The node was reset locally and was auto-removed */
+	Reset,
+}
+```
+
+> [!NOTE] To comply with the Z-Wave specifications, applications **MUST** indicate that the node was _reset locally and has left the network_ when the `reason` is `RemoveNodeReason.Reset`.
+
+
 ## Removed several deprecated method signatures, enums and properties
 
 -   The enum member `NodeType["Routing End Node"]` has been removed. This has been called `"End Node"` since `v9.3.0`

@@ -261,3 +261,19 @@ export interface FoundNode {
 	supportedCCs?: CommandClasses[];
 	controlledCCs?: CommandClasses[];
 }
+
+/** Additional information why a node was removed from the network */
+export enum RemoveNodeReason {
+	/** The node was excluded by the user or an inclusion controller */
+	Excluded,
+	/** The node was excluded by an inclusion controller */
+	ProxyExcluded,
+	/** The node was removed using the "remove failed node" feature */
+	RemoveFailed,
+	/** The node was replaced using the "replace failed node" feature */
+	Replaced,
+	/** The node was replaced by an inclusion controller */
+	ProxyReplaced,
+	/** The node was reset locally and was auto-removed */
+	Reset,
+}

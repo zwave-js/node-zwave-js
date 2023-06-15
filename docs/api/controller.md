@@ -1261,11 +1261,34 @@ enum SecurityBootstrapFailure {
 
 ### `"node removed"`
 
-A node has successfully been replaced or removed from the network. The `replaced` parameter indicates whether the node was replaced with another node.
+A node has successfully been replaced or removed from the network.
 
 ```ts
-(node: ZWaveNode, replaced: boolean) => void
+(node: ZWaveNode, reason: RemoveNodeReason) => void
 ```
+
+The `reason` argument indicates why the node was removed:
+
+<!-- #import RemoveNodeReason from "zwave-js" -->
+
+```ts
+enum RemoveNodeReason {
+	/** The node was excluded by the user or an inclusion controller */
+	Excluded,
+	/** The node was excluded by an inclusion controller */
+	ProxyExcluded,
+	/** The node was removed using the "remove failed node" feature */
+	RemoveFailed,
+	/** The node was replaced using the "replace failed node" feature */
+	Replaced,
+	/** The node was replaced by an inclusion controller */
+	ProxyReplaced,
+	/** The node was reset locally and was auto-removed */
+	Reset,
+}
+```
+
+> [!NOTE] To comply with the Z-Wave specifications, applications **MUST** indicate that the node was _reset locally and has left the network_ when the `reason` is `RemoveNodeReason.Reset`.
 
 ### `"heal network progress"`
 

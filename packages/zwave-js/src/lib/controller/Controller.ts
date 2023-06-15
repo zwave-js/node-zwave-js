@@ -313,6 +313,7 @@ import {
 	InclusionState,
 	InclusionStrategy,
 	ProvisioningEntryStatus,
+	RemoveNodeReason,
 	SecurityBootstrapFailure,
 	type ExclusionOptions,
 	type FoundNode,
@@ -357,7 +358,7 @@ interface ControllerEventCallbacks
 	"exclusion stopped": () => void;
 	"node found": (node: FoundNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
-	"node removed": (node: ZWaveNode, replaced: boolean) => void;
+	"node removed": (node: ZWaveNode, reason: RemoveNodeReason) => void;
 	"heal network progress": (
 		progress: ReadonlyMap<number, HealNodeStatus>,
 	) => void;
@@ -1919,7 +1920,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					"was removed from the network by another controller",
 				);
 
-				this.emit("node removed", node, false);
+				this.emit("node removed", node, RemoveNodeReason.ProxyExcluded);
 			}
 		} else if (msg instanceof ApplicationUpdateRequestNodeAdded) {
 			// A node was included by another controller
@@ -2142,7 +2143,7 @@ supported CCs: ${nodeInfo.supportedCCs
 		const replacedNodeId = initiate.includedNodeId;
 		const oldNode = this.nodes.get(replacedNodeId);
 		if (oldNode) {
-			this.emit("node removed", oldNode, true);
+			this.emit("node removed", oldNode, RemoveNodeReason.ProxyReplaced);
 			this._nodes.delete(oldNode.id);
 		}
 
@@ -3395,7 +3396,11 @@ supported CCs: ${nodeInfo.supportedCCs
 				this.emit("inclusion stopped");
 
 				if (this._nodePendingReplace) {
-					this.emit("node removed", this._nodePendingReplace, true);
+					this.emit(
+						"node removed",
+						this._nodePendingReplace,
+						RemoveNodeReason.Replaced,
+					);
 					this._nodes.delete(this._nodePendingReplace.id);
 
 					// We're technically done with the replacing but should not include
@@ -3584,7 +3589,11 @@ supported CCs: ${nodeInfo.supportedCCs
 				this._exclusionOptions = undefined;
 
 				// notify listeners
-				this.emit("node removed", this._nodePendingExclusion, false);
+				this.emit(
+					"node removed",
+					this._nodePendingExclusion,
+					RemoveNodeReason.Excluded,
+				);
 				// and forget the node
 				this._nodes.delete(nodeId);
 				this._nodePendingExclusion = undefined;
@@ -4568,6 +4577,17 @@ ${associatedNodes.join(", ")}`,
 	 * @param nodeId The id of the node to remove
 	 */
 	public async removeFailedNode(nodeId: number): Promise<void> {
+		await this.removeFailedNodeInternal(
+			nodeId,
+			RemoveNodeReason.RemoveFailed,
+		);
+	}
+
+	/** @internal */
+	public async removeFailedNodeInternal(
+		nodeId: number,
+		reason: RemoveNodeReason,
+	): Promise<void> {
 		const node = this.nodes.getOrThrow(nodeId);
 		if (await node.ping()) {
 			throw new ZWaveError(
@@ -4635,7 +4655,7 @@ ${associatedNodes.join(", ")}`,
 					// If everything went well, the status is RemoveFailedNodeStatus.NodeRemoved
 
 					// Emit the removed event so the driver and applications can react
-					this.emit("node removed", this.nodes.get(nodeId)!, false);
+					this.emit("node removed", this.nodes.get(nodeId)!, reason);
 					// and forget the node
 					this._nodes.delete(nodeId);
 
