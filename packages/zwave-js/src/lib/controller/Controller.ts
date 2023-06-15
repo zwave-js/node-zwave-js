@@ -3357,16 +3357,31 @@ supported CCs: ${nodeInfo.supportedCCs
 				// The controller should consider the node to be failed.
 				if (smartStartFailed) {
 					try {
+						this.driver.controllerLog.logNode(newNode.id, {
+							message:
+								"SmartStart inclusion failed. Checking if the node needs to be removed.",
+							level: "warn",
+						});
+
 						await this.removeFailedNodeInternal(
 							newNode.id,
 							RemoveNodeReason.SmartStartFailed,
 						);
+
+						this.driver.controllerLog.logNode(newNode.id, {
+							message: "was removed",
+						});
 
 						// The node was removed. Do not emit the "node added" event
 						this.setInclusionState(InclusionState.Idle);
 						return true;
 					} catch {
 						// The node could not be removed, continue
+						this.driver.controllerLog.logNode(newNode.id, {
+							message:
+								"The node is still part of the network, continuing with insecure communication.",
+							level: "warn",
+						});
 					}
 				} else {
 					// Bootstrap the node's lifelines, so it knows where the controller is
@@ -4652,9 +4667,10 @@ ${associatedNodes.join(", ")}`,
 		// It is possible that this method is called while the node is still in the process of resetting or leaving the network
 		// Therefore, we ping multiple times in case of success and wait a bit in between
 		let didFail = false;
-		for (let attempt = 0; attempt < 3; attempt++) {
+		const MAX_ATTEMPTS = 3;
+		for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
 			if (await node.ping()) {
-				await wait(2000);
+				if (attempt < MAX_ATTEMPTS) await wait(2000);
 				continue;
 			}
 
