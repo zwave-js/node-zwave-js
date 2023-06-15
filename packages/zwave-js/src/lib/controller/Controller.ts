@@ -3237,8 +3237,9 @@ supported CCs: ${nodeInfo.supportedCCs
 				);
 
 				const opts = this._inclusionOptions;
-				// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
+
 				let bootstrapFailure: SecurityBootstrapFailure | undefined;
+				let smartStartFailed = false;
 
 				// A controller performing a SmartStart network inclusion shall perform S2 bootstrapping,
 				// even if the joining node does not show the S2 Command Class in its supported Command Class list.
@@ -3260,6 +3261,7 @@ supported CCs: ${nodeInfo.supportedCCs
 					});
 				}
 
+				// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
 				if (
 					newNode.supportsCC(CommandClasses["Security 2"]) &&
 					(opts.strategy === InclusionStrategy.Default ||
@@ -3285,6 +3287,8 @@ supported CCs: ${nodeInfo.supportedCCs
 						} else if (!securityClassIsS2(actualSecurityClass)) {
 							bootstrapFailure = SecurityBootstrapFailure.Unknown;
 						}
+					} else if (opts.strategy === InclusionStrategy.SmartStart) {
+						smartStartFailed = true;
 					}
 
 					if (
@@ -3349,8 +3353,42 @@ supported CCs: ${nodeInfo.supportedCCs
 				}
 				this._includeController = false;
 
-				// Bootstrap the node's lifelines, so it knows where the controller is
-				await this.bootstrapLifelineAndWakeup(newNode);
+				// After an unsuccessful SmartStart inclusion, the node MUST leave the network and return to SmartStart learn mode
+				// The controller should consider the node to be failed.
+				if (smartStartFailed) {
+					try {
+						this.driver.controllerLog.logNode(newNode.id, {
+							message:
+								"SmartStart inclusion failed. Checking if the node needs to be removed.",
+							level: "warn",
+						});
+
+						await this.removeFailedNodeInternal(
+							newNode.id,
+							RemoveNodeReason.SmartStartFailed,
+						);
+
+						this.driver.controllerLog.logNode(newNode.id, {
+							message: "was removed",
+						});
+
+						// The node was removed. Do not emit the "node added" event
+						this.setInclusionState(InclusionState.Idle);
+						return true;
+					} catch {
+						// The node could not be removed, continue
+						this.driver.controllerLog.logNode(newNode.id, {
+							message:
+								"The node is still part of the network, continuing with insecure communication.",
+							level: "warn",
+						});
+					}
+				} else {
+					// Bootstrap the node's lifelines, so it knows where the controller is
+					await this.bootstrapLifelineAndWakeup(newNode);
+				}
+
+				this.setInclusionState(InclusionState.Idle);
 
 				// We're done adding this node, notify listeners
 				const result: InclusionResult =
@@ -3361,7 +3399,6 @@ supported CCs: ${nodeInfo.supportedCCs
 						  }
 						: { lowSecurity: false };
 
-				this.setInclusionState(InclusionState.Idle);
 				this.emit("node added", newNode, result);
 
 				return true; // Don't invoke any more handlers
@@ -4630,9 +4667,10 @@ ${associatedNodes.join(", ")}`,
 		// It is possible that this method is called while the node is still in the process of resetting or leaving the network
 		// Therefore, we ping multiple times in case of success and wait a bit in between
 		let didFail = false;
-		for (let attempt = 0; attempt < 3; attempt++) {
+		const MAX_ATTEMPTS = 3;
+		for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
 			if (await node.ping()) {
-				await wait(2000);
+				if (attempt < MAX_ATTEMPTS) await wait(2000);
 				continue;
 			}
 

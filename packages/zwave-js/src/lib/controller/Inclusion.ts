@@ -276,4 +276,6 @@ export enum RemoveNodeReason {
 	ProxyReplaced,
 	/** The node was reset locally and was auto-removed */
 	Reset,
+	/** SmartStart inclusion failed, and the node was auto-removed as a result. */
+	SmartStartFailed,
 }

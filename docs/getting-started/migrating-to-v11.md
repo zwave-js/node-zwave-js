@@ -109,15 +109,21 @@ It will however still throw an error if the communication fails.
 ## The `"node removed"` event callback now indicates why a node was removed
 
 The signature of the callback has been changed from
+
 ```ts
 (node: ZWaveNode, replaced: boolean) => void
 ```
+
 to
+
 ```ts
 (node: ZWaveNode, reason: RemoveNodeReason) => void
 ```
 
 where the second argument has one of the following values:
+
+<!-- #import RemoveNodeReason from "zwave-js" -->
+
 ```ts
 enum RemoveNodeReason {
 	/** The node was excluded by the user or an inclusion controller */
@@ -132,11 +138,12 @@ enum RemoveNodeReason {
 	ProxyReplaced,
 	/** The node was reset locally and was auto-removed */
 	Reset,
+	/** SmartStart inclusion failed, and the node was auto-removed as a result. */
+	SmartStartFailed,
 }
 ```
 
 > [!NOTE] To comply with the Z-Wave specifications, applications **MUST** indicate that the node was _reset locally and has left the network_ when the `reason` is `RemoveNodeReason.Reset`.
-
 
 ## Removed several deprecated method signatures, enums and properties
 

@@ -829,7 +829,8 @@ export enum RemoveNodeReason {
     ProxyReplaced = 4,
     RemoveFailed = 2,
     Replaced = 3,
-    Reset = 5
+    Reset = 5,
+    SmartStartFailed = 6
 }
 
 // Warning: (ae-missing-release-tag) "ReplaceNodeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
