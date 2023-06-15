@@ -4,17 +4,9 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
-### Breaking changes · [Migration guide](https://github.com/zwave-js/node-zwave-js/blob/v11-dev/docs/getting-started/migrating-to-v11.md)
-
-### Features
-
+## 11.0.0-beta.6 (2023-06-15)
 ### Bugfixes
 * Auto-remove nodes when they leave the network after failed SmartStart bootstrapping (#5922)
-
-### Config file changes
-
-### Changes under the hood
 
 ## 11.0.0-beta.5 (2023-06-15)
 ### Breaking changes · [Migration guide](https://github.com/zwave-js/node-zwave-js/blob/v11-dev/docs/getting-started/migrating-to-v11.md)
