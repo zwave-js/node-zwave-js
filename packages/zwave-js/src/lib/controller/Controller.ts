@@ -4718,7 +4718,20 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async removeFailedNode(nodeId: number): Promise<void> {
 		const node = this.nodes.getOrThrow(nodeId);
-		if (await node.ping()) {
+
+		// It is possible that this method is called while the node is still in the process of resetting or leaving the network
+		// Therefore, we ping multiple times in case of success and wait a bit in between
+		let didFail = false;
+		for (let attempt = 0; attempt < 3; attempt++) {
+			if (await node.ping()) {
+				await wait(2000);
+				continue;
+			}
+
+			didFail = true;
+			break;
+		}
+		if (!didFail) {
 			throw new ZWaveError(
 				`The node removal process could not be started because the node responded to a ping.`,
 				ZWaveErrorCodes.RemoveFailedNode_Failed,
