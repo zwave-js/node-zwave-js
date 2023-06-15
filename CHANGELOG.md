@@ -4,6 +4,12 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* When removing a failed node, the node is now pinged up to 3 times with a pause inbetween attempts. This allows removing nodes that still respond for a short time after the reset (#5921)
+* When including a SmartStart node, always perform S2 bootstrapping (#5918)
+* Fixed a `TypeError` that could happen when bootstrapping an S2-capable node on behalf of an inclusion controller (#5917)
+
 ## 10.23.4 (2023-06-14)
 ### Bugfixes
 * When no lifeline can be determined using the existing heuristics, fall back to checking if group 1 has the `General: Lifeline` profile (#5916)
