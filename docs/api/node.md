@@ -309,9 +309,9 @@ type FirmwareUpdateCapabilities =
 			/** An array of firmware targets that can be upgraded */
 			readonly firmwareTargets: readonly number[];
 			/** Indicates whether the node continues to function normally during an upgrade */
-			readonly continuesToFunction: Maybe<boolean>;
+			readonly continuesToFunction: MaybeNotKnown<boolean>;
 			/** Indicates whether the node supports delayed activation of the new firmware */
-			readonly supportsActivation: Maybe<boolean>;
+			readonly supportsActivation: MaybeNotKnown<boolean>;
 	  };
 ```
 

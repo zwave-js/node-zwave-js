@@ -820,6 +820,18 @@ export interface RefreshInfoOptions {
     waitForWakeup?: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "RemoveNodeReason" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export enum RemoveNodeReason {
+    Excluded = 0,
+    ProxyExcluded = 1,
+    ProxyReplaced = 4,
+    RemoveFailed = 2,
+    Replaced = 3,
+    Reset = 5
+}
+
 // Warning: (ae-missing-release-tag) "ReplaceNodeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
