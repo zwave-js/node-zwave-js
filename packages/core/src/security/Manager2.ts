@@ -502,7 +502,8 @@ export class SecurityManager2 {
 
 		// Compute the next MPAN
 		const stateN = mpanState.currentMPAN;
-		const ret = encryptAES128ECB(stateN, keys.keyMPAN);
+		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
+		const ret = encryptAES128ECB(stateN, keys.keyMPAN).slice(0, 13);
 		// Increment the inner state
 		increment(stateN);
 		return ret;
