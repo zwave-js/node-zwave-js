@@ -421,21 +421,24 @@ export class AssociationCCRemove extends AssociationCC {
 //
 // @public (undocumented)
 export class AssociationCCReport extends AssociationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "AssociationCCReportSpecificOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (AssociationCCReportSpecificOptions & CCCommandOptions));
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
-    get groupId(): number;
+    groupId: number;
     // (undocumented)
-    get maxNodes(): number;
+    maxNodes: number;
     // (undocumented)
     mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: AssociationCCReport[]): void;
     // (undocumented)
-    get nodeIds(): readonly number[];
+    nodeIds: number[];
     // (undocumented)
-    get reportsToFollow(): number;
+    reportsToFollow: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -466,9 +469,12 @@ export class AssociationCCSupportedGroupingsGet extends AssociationCC {
 //
 // @public (undocumented)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "AssociationCCSupportedGroupingsReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationCCSupportedGroupingsReportOptions);
     // (undocumented)
-    get groupCount(): number;
+    groupCount: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -654,11 +660,14 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCCommandListReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationGroupInfoCCCommandListReportOptions);
     // (undocumented)
     readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
     // (undocumented)
     readonly groupId: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -685,7 +694,8 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCInfoReportSpecificOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (AssociationGroupInfoCCInfoReportSpecificOptions & CCCommandOptions));
     // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfo" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -696,6 +706,8 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
     readonly isListMode: boolean;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -718,13 +730,16 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCNameReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationGroupInfoCCNameReportOptions);
     // (undocumented)
     readonly groupId: number;
     // (undocumented)
     readonly name: string;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -2598,6 +2613,10 @@ export interface CCAPIs {
     //
     // (undocumented)
     "CRC-16 Encapsulation": CRC16CCAPI;
+    // Warning: (ae-forgotten-export) The symbol "DeviceResetLocallyCCAPI" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    "Device Reset Locally": DeviceResetLocallyCCAPI;
     // Warning: (ae-forgotten-export) The symbol "DoorLockLoggingCCAPI" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
