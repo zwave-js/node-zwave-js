@@ -1,12 +1,14 @@
 import {
 	BasicCCValues,
-	SetValueStatus,
-	supervisionResultToSetValueResult,
 	type CCAPI,
 	type SetValueAPIOptions,
-	type SetValueResult,
 	type ValueIDProperties,
 } from "@zwave-js/cc";
+import {
+	SetValueStatus,
+	supervisionResultToSetValueResult,
+	type SetValueResult,
+} from "@zwave-js/cc/safe";
 import {
 	SecurityClass,
 	SupervisionStatus,

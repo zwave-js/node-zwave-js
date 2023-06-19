@@ -14,7 +14,6 @@ import {
 	PowerlevelTestStatus,
 	ScheduleEntryLockCommand,
 	Security2Command,
-	SetValueStatus,
 	TimeCCDateGet,
 	TimeCCTimeGet,
 	TimeCCTimeOffsetGet,
@@ -26,7 +25,6 @@ import {
 	entryControlEventTypeLabels,
 	getCCValues,
 	isCommandClassContainer,
-	supervisionResultToSetValueResult,
 	type CCAPI,
 	type CCValueOptions,
 	type FirmwareUpdateCapabilities,
@@ -35,7 +33,6 @@ import {
 	type FirmwareUpdateResult,
 	type PollValueImplementation,
 	type SetValueAPIOptions,
-	type SetValueResult,
 	type ValueIDProperties,
 } from "@zwave-js/cc";
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
@@ -100,6 +97,11 @@ import {
 	WakeUpCCWakeUpNotification,
 } from "@zwave-js/cc/WakeUpCC";
 import { ZWavePlusCCGet, ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
+import {
+	SetValueStatus,
+	supervisionResultToSetValueResult,
+	type SetValueResult,
+} from "@zwave-js/cc/safe";
 import type {
 	DeviceConfig,
 	Notification,
