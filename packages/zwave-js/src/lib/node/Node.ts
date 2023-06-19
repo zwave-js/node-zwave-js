@@ -14,7 +14,6 @@ import {
 	PowerlevelTestStatus,
 	ScheduleEntryLockCommand,
 	Security2Command,
-	SetValueStatus,
 	TimeCCDateGet,
 	TimeCCTimeGet,
 	TimeCCTimeOffsetGet,
@@ -26,7 +25,6 @@ import {
 	entryControlEventTypeLabels,
 	getCCValues,
 	isCommandClassContainer,
-	supervisionResultToSetValueResult,
 	type CCAPI,
 	type CCValueOptions,
 	type FirmwareUpdateCapabilities,
@@ -35,7 +33,6 @@ import {
 	type FirmwareUpdateResult,
 	type PollValueImplementation,
 	type SetValueAPIOptions,
-	type SetValueResult,
 	type ValueIDProperties,
 } from "@zwave-js/cc";
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
@@ -238,6 +235,7 @@ import type {
 } from "./_Types";
 import { InterviewStage, NodeStatus } from "./_Types";
 import * as nodeUtils from "./utils";
+import { SetValueResult, SetValueStatus, supervisionResultToSetValueResult } from "@zwave-js/cc/safe";
 
 interface ScheduledPoll {
 	timeout: NodeJS.Timeout;

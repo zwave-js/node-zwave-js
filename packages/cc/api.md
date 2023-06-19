@@ -14637,7 +14637,7 @@ export type SetValueResult = {
     message?: undefined;
 } | {
     status: SetValueStatus.Working;
-    remainingDuration: Duration_2;
+    remainingDuration: Duration;
     message?: undefined;
 } | {
     status: SetValueStatus.SuccessUnsupervised;
@@ -15109,7 +15109,7 @@ export enum SupervisionCommand {
 // Warning: (ae-missing-release-tag) "supervisionResultToSetValueResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function supervisionResultToSetValueResult(result: SupervisionResult_2 | undefined): SetValueResult;
+export function supervisionResultToSetValueResult(result: SupervisionResult | undefined): SetValueResult;
 
 // Warning: (ae-missing-release-tag) "Switchpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
