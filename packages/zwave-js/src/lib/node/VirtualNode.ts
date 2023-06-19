@@ -5,9 +5,9 @@ import {
 	type ValueIDProperties,
 } from "@zwave-js/cc";
 import {
-	SetValueResult,
 	SetValueStatus,
 	supervisionResultToSetValueResult,
+	type SetValueResult,
 } from "@zwave-js/cc/safe";
 import {
 	SecurityClass,

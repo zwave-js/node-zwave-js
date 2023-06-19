@@ -98,9 +98,9 @@ import {
 } from "@zwave-js/cc/WakeUpCC";
 import { ZWavePlusCCGet, ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import {
-	SetValueResult,
 	SetValueStatus,
 	supervisionResultToSetValueResult,
+	type SetValueResult,
 } from "@zwave-js/cc/safe";
 import type {
 	DeviceConfig,
