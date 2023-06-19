@@ -32,6 +32,10 @@ export function determineNIF(): {
 		// Gateway device type MUST support Inclusion Controller and Time CC
 		CommandClasses["Inclusion Controller"],
 		CommandClasses.Time,
+		// Supporting lifeline associations is also mandatory
+		CommandClasses.Association,
+		// And apparently we must advertise that we're able to send Device Reset Locally notifications
+		CommandClasses["Device Reset Locally"],
 		...implementedEncapsulationCCs,
 	]);
 

@@ -1264,6 +1264,19 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public async hardReset(): Promise<void> {
 		// begin the reset process
 		try {
+			const associations = this.nodes.get(this._ownNodeId!)?.associations;
+			if (associations?.length) {
+				this.driver.controllerLog.print(
+					"Notifying associated nodes about reset...",
+				);
+				for (const nodeId of associations) {
+					const node = this.nodes.get(nodeId);
+					if (!node) continue;
+
+					void node.sendResetLocallyNotification().catch(() => {});
+				}
+			}
+
 			this.driver.controllerLog.print("performing hard reset...");
 			await this.driver.sendMessage(new HardResetRequest(this.driver), {
 				supportCheck: false,
