@@ -7,7 +7,7 @@
 ### `getEndpoints`
 
 ```ts
-async getEndpoints(): Promise<{ isDynamicEndpointCount: boolean; identicalCapabilities: boolean; individualEndpointCount: number; aggregatedEndpointCount: number | undefined; } | undefined>;
+async getEndpoints(): Promise<{ isDynamicEndpointCount: boolean; identicalCapabilities: boolean; individualEndpointCount: number; aggregatedEndpointCount: MaybeNotKnown<number>; } | undefined>;
 ```
 
 ### `getEndpointCapabilities`
@@ -15,7 +15,7 @@ async getEndpoints(): Promise<{ isDynamicEndpointCount: boolean; identicalCapabi
 ```ts
 async getEndpointCapabilities(
 	endpoint: number,
-): Promise<EndpointCapability | undefined>;
+): Promise<MaybeNotKnown<EndpointCapability>>;
 ```
 
 ### `findEndpoints`
@@ -24,7 +24,7 @@ async getEndpointCapabilities(
 async findEndpoints(
 	genericClass: number,
 	specificClass: number,
-): Promise<readonly number[] | undefined>;
+): Promise<MaybeNotKnown<readonly number[]>>;
 ```
 
 ### `getAggregatedMembers`
@@ -32,7 +32,7 @@ async findEndpoints(
 ```ts
 async getAggregatedMembers(
 	endpoint: number,
-): Promise<readonly number[] | undefined>;
+): Promise<MaybeNotKnown<readonly number[]>>;
 ```
 
 ### `sendEncapsulated`
@@ -51,7 +51,7 @@ async sendEncapsulated(
 ```ts
 async getEndpointCountV1(
 	ccId: CommandClasses,
-): Promise<number | undefined>;
+): Promise<MaybeNotKnown<number>>;
 ```
 
 ### `sendEncapsulatedV1`

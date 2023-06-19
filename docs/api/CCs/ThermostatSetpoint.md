@@ -32,7 +32,7 @@ async getCapabilities(setpointType: ThermostatSetpointType): Promise<Pick<Thermo
 
 ```ts
 async getSupportedSetpointTypes(): Promise<
-	readonly ThermostatSetpointType[] | undefined
+	MaybeNotKnown<readonly ThermostatSetpointType[]>
 >;
 ```
 

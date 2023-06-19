@@ -7,7 +7,7 @@
 ### `getGroupName`
 
 ```ts
-async getGroupName(groupId: number): Promise<string | undefined>;
+async getGroupName(groupId: number): Promise<MaybeNotKnown<string>>;
 ```
 
 ### `getGroupInfo`
@@ -23,6 +23,6 @@ async getCommands(
 	groupId: number,
 	allowCache: boolean = true,
 ): Promise<
-	AssociationGroupInfoCCCommandListReport["commands"] | undefined
+	MaybeNotKnown<AssociationGroupInfoCCCommandListReport["commands"]>
 >;
 ```

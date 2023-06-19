@@ -9,11 +9,11 @@ import {
 	parseBitMask,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import {
 	formatDate,
@@ -186,7 +186,9 @@ function setUserCodeScheduleEnabledCached(
 
 @API(CommandClasses["Schedule Entry Lock"])
 export class ScheduleEntryLockCCAPI extends CCAPI {
-	public supportsCommand(cmd: ScheduleEntryLockCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ScheduleEntryLockCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ScheduleEntryLockCommand.EnableSet:
 			case ScheduleEntryLockCommand.EnableAllSet:
@@ -363,7 +365,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 	@validateArgs()
 	public async getWeekDaySchedule(
 		slot: ScheduleEntryLockSlotId,
-	): Promise<ScheduleEntryLockWeekDaySchedule | undefined> {
+	): Promise<MaybeNotKnown<ScheduleEntryLockWeekDaySchedule>> {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.WeekDayScheduleSet,
@@ -466,7 +468,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 	@validateArgs()
 	public async getYearDaySchedule(
 		slot: ScheduleEntryLockSlotId,
-	): Promise<ScheduleEntryLockYearDaySchedule | undefined> {
+	): Promise<MaybeNotKnown<ScheduleEntryLockYearDaySchedule>> {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.YearDayScheduleSet,
@@ -578,7 +580,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 	@validateArgs()
 	public async getDailyRepeatingSchedule(
 		slot: ScheduleEntryLockSlotId,
-	): Promise<ScheduleEntryLockDailyRepeatingSchedule | undefined> {
+	): Promise<MaybeNotKnown<ScheduleEntryLockDailyRepeatingSchedule>> {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.DailyRepeatingScheduleSet,
@@ -609,7 +611,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		}
 	}
 
-	public async getTimezone(): Promise<Timezone | undefined> {
+	public async getTimezone(): Promise<MaybeNotKnown<Timezone>> {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.TimeOffsetGet,
@@ -804,7 +806,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		userId: number,
-	): ScheduleEntryLockScheduleKind | undefined {
+	): MaybeNotKnown<ScheduleEntryLockScheduleKind> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<ScheduleEntryLockScheduleKind>(
@@ -820,7 +822,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		scheduleKind: ScheduleEntryLockScheduleKind.WeekDay,
 		userId: number,
 		slotId: number,
-	): ScheduleEntryLockWeekDaySchedule | false | undefined;
+	): MaybeNotKnown<ScheduleEntryLockWeekDaySchedule | false>;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
@@ -828,7 +830,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		scheduleKind: ScheduleEntryLockScheduleKind.YearDay,
 		userId: number,
 		slotId: number,
-	): ScheduleEntryLockYearDaySchedule | false | undefined;
+	): MaybeNotKnown<ScheduleEntryLockYearDaySchedule | false>;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
@@ -836,7 +838,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating,
 		userId: number,
 		slotId: number,
-	): ScheduleEntryLockDailyRepeatingSchedule | false | undefined;
+	): MaybeNotKnown<ScheduleEntryLockDailyRepeatingSchedule | false>;
 
 	// Catch-all overload for applications which haven't narrowed `scheduleKind`
 	public static getScheduleCached(
@@ -845,12 +847,12 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		scheduleKind: ScheduleEntryLockScheduleKind,
 		userId: number,
 		slotId: number,
-	):
+	): MaybeNotKnown<
 		| ScheduleEntryLockWeekDaySchedule
 		| ScheduleEntryLockYearDaySchedule
 		| ScheduleEntryLockDailyRepeatingSchedule
 		| false
-		| undefined;
+	>;
 
 	/**
 	 * Returns the assumed state of a schedule. Since the Schedule Entry Lock CC
@@ -866,12 +868,12 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		scheduleKind: ScheduleEntryLockScheduleKind,
 		userId: number,
 		slotId: number,
-	):
+	): MaybeNotKnown<
 		| ScheduleEntryLockWeekDaySchedule
 		| ScheduleEntryLockYearDaySchedule
 		| ScheduleEntryLockDailyRepeatingSchedule
 		| false
-		| undefined {
+	> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(

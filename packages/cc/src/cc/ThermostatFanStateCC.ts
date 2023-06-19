@@ -4,7 +4,7 @@ import {
 	ValueMetadata,
 	enumValuesToMetadataStates,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -44,7 +44,9 @@ export const ThermostatFanStateCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Fan State"])
 export class ThermostatFanStateCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatFanStateCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ThermostatFanStateCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatFanStateCommand.Get:
 				return this.isSinglecast();

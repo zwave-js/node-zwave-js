@@ -37,7 +37,7 @@ async setWeekDaySchedule(
 ```ts
 async getWeekDaySchedule(
 	slot: ScheduleEntryLockSlotId,
-): Promise<ScheduleEntryLockWeekDaySchedule | undefined>;
+): Promise<MaybeNotKnown<ScheduleEntryLockWeekDaySchedule>>;
 ```
 
 ### `setYearDaySchedule`
@@ -54,7 +54,7 @@ async setYearDaySchedule(
 ```ts
 async getYearDaySchedule(
 	slot: ScheduleEntryLockSlotId,
-): Promise<ScheduleEntryLockYearDaySchedule | undefined>;
+): Promise<MaybeNotKnown<ScheduleEntryLockYearDaySchedule>>;
 ```
 
 ### `setDailyRepeatingSchedule`
@@ -71,13 +71,13 @@ async setDailyRepeatingSchedule(
 ```ts
 async getDailyRepeatingSchedule(
 	slot: ScheduleEntryLockSlotId,
-): Promise<ScheduleEntryLockDailyRepeatingSchedule | undefined>;
+): Promise<MaybeNotKnown<ScheduleEntryLockDailyRepeatingSchedule>>;
 ```
 
 ### `getTimezone`
 
 ```ts
-async getTimezone(): Promise<Timezone | undefined>;
+async getTimezone(): Promise<MaybeNotKnown<Timezone>>;
 ```
 
 ### `setTimezone`

@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/nvmedit",
-  "version": "10.23.6",
+  "version": "11.0.0-beta.4",
   "description": "zwave-js: library to edit NVM backups",
   "keywords": [],
   "publishConfig": {

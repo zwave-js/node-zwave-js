@@ -10,7 +10,7 @@ import {
 	parseFloatWithScale,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 	type ValueMetadataNumeric,
@@ -110,7 +110,7 @@ function getSetpointUnit(configManager: ConfigManager, scale: number): string {
 export class HumidityControlSetpointCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: HumidityControlSetpointCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case HumidityControlSetpointCommand.Get:
 			case HumidityControlSetpointCommand.SupportedGet:
@@ -195,7 +195,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 	@validateArgs()
 	public async get(
 		setpointType: HumidityControlSetpointType,
-	): Promise<HumidityControlSetpointValue | undefined> {
+	): Promise<MaybeNotKnown<HumidityControlSetpointValue>> {
 		this.assertSupportsCommand(
 			HumidityControlSetpointCommand,
 			HumidityControlSetpointCommand.Get,
@@ -246,7 +246,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 	@validateArgs()
 	public async getCapabilities(
 		setpointType: HumidityControlSetpointType,
-	): Promise<HumidityControlSetpointCapabilities | undefined> {
+	): Promise<MaybeNotKnown<HumidityControlSetpointCapabilities>> {
 		this.assertSupportsCommand(
 			HumidityControlSetpointCommand,
 			HumidityControlSetpointCommand.CapabilitiesGet,
@@ -273,7 +273,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 	}
 
 	public async getSupportedSetpointTypes(): Promise<
-		readonly HumidityControlSetpointType[] | undefined
+		MaybeNotKnown<readonly HumidityControlSetpointType[]>
 	> {
 		this.assertSupportsCommand(
 			HumidityControlSetpointCommand,
@@ -295,7 +295,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 	@validateArgs()
 	public async getSupportedScales(
 		setpointType: HumidityControlSetpointType,
-	): Promise<readonly Scale[] | undefined> {
+	): Promise<MaybeNotKnown<readonly Scale[]>> {
 		this.assertSupportsCommand(
 			HumidityControlSetpointCommand,
 			HumidityControlSetpointCommand.SupportedGet,

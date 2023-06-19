@@ -444,8 +444,6 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
     description?: string;
     // (undocumented)
     format?: ConfigValueFormat;
-    // @deprecated (undocumented)
-    info?: string;
     // (undocumented)
     isAdvanced?: boolean;
     // (undocumented)
@@ -456,8 +454,6 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
     max?: ConfigValue;
     // (undocumented)
     min?: ConfigValue;
-    // @deprecated (undocumented)
-    name?: string;
     // Warning: (tsdoc-missing-deprecation-message) The @deprecated block must include a deprecation message, e.g. describing the recommended alternative
     //
     // @deprecated (undocumented)
@@ -475,8 +471,8 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ConfigValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public
-export type ConfigValue = number | Set<number>;
+// @public (undocumented)
+export type ConfigValue = number;
 
 // Warning: (ae-missing-release-tag) "ConfigValueFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -800,6 +796,11 @@ export class Duration {
 // @public (undocumented)
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
+// Warning: (ae-missing-release-tag) "Either" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type Either<T, Or> = T | Or;
+
 // Warning: (ae-missing-release-tag) "encapsulationCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -854,9 +855,10 @@ export function encodeFloatWithScale(value: number, scale: number, override?: {
 }): Buffer;
 
 // Warning: (ae-missing-release-tag) "encodeMaybeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "UNKNOWN_STATE" has more than one declaration; you need to add a TSDoc member reference selector
 //
 // @public
-export function encodeMaybeBoolean(val: Maybe<boolean>): number;
+export function encodeMaybeBoolean(val: MaybeUnknown<boolean>): number;
 
 // Warning: (ae-missing-release-tag) "encodeNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1272,7 +1274,7 @@ export interface IZWaveEndpoint {
 // @public
 export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
     // (undocumented)
-    readonly canSleep: boolean | undefined;
+    readonly canSleep: MaybeNotKnown<boolean>;
     // (undocumented)
     getAllEndpoints(): IZWaveEndpoint[];
     // (undocumented)
@@ -1286,11 +1288,11 @@ export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
     // (undocumented)
     interviewStage: InterviewStage;
     // (undocumented)
-    isFrequentListening: FLiRS | undefined;
+    isFrequentListening: MaybeNotKnown<FLiRS>;
     // (undocumented)
-    isListening: boolean | undefined;
+    isListening: MaybeNotKnown<boolean>;
     // (undocumented)
-    readonly isSecure: Maybe<boolean>;
+    readonly isSecure: MaybeNotKnown<boolean>;
     // (undocumented)
     readonly status: NodeStatus;
 }
@@ -1387,11 +1389,20 @@ export const MAX_SUPERVISION_SESSION_ID = 63;
 // @public (undocumented)
 export const MAX_TRANSPORT_SERVICE_SESSION_ID = 15;
 
-// Warning: (ae-forgotten-export) The symbol "BrandedUnknown" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "Maybe" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MaybeNotKnown" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type Maybe<T> = T | BrandedUnknown<T>;
+export type MaybeNotKnown<T> = Either<T, NOT_KNOWN>;
+
+// Warning: (ae-missing-release-tag) "MaybeUnknown" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type MaybeUnknown<T> = Either<T, UNKNOWN_STATE>;
+
+// Warning: (ae-missing-release-tag) "maybeUnknownToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function maybeUnknownToString<T>(val: MaybeUnknown<T>, ifNotUnknown?: (val: NonNullable<T>) => string): string;
 
 // Warning: (ae-missing-release-tag) "mergeSupervisionResults" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1443,7 +1454,7 @@ export enum MessagePriority {
 // Warning: (ae-missing-release-tag) "MessageRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type MessageRecord = Record<string, string | number | boolean | null | undefined>;
+export type MessageRecord = Record<string, string | number | boolean>;
 
 // Warning: (ae-missing-release-tag) "messageRecordToLines" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1581,8 +1592,6 @@ export enum NodeStatus {
 export enum NodeType {
     // (undocumented)
     "End Node" = 1,
-    // @deprecated (undocumented)
-    "Routing End Node" = 1,
     // (undocumented)
     Controller = 0
 }
@@ -1611,6 +1620,15 @@ export const nonUndefinedLogConfigKeys: readonly ["enabled", "level", "transport
 //
 // @public
 export function normalizeValueID(valueID: ValueID): ValueID;
+
+// Warning: (ae-missing-release-tag) "NOT_KNOWN" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NOT_KNOWN" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const NOT_KNOWN: undefined;
+
+// @public (undocumented)
+export type NOT_KNOWN = typeof NOT_KNOWN;
 
 // Warning: (ae-missing-release-tag) "NUM_NODEMASK_BYTES" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1674,14 +1692,16 @@ export function parseFloatWithScale(payload: Buffer, allowEmpty: true): {
 };
 
 // Warning: (ae-missing-release-tag) "parseMaybeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "UNKNOWN_STATE" has more than one declaration; you need to add a TSDoc member reference selector
 //
 // @public
-export function parseMaybeBoolean(val: number, preserveUnknown?: boolean): Maybe<boolean> | undefined;
+export function parseMaybeBoolean(val: number): MaybeUnknown<boolean> | undefined;
 
 // Warning: (ae-missing-release-tag) "parseMaybeNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "UNKNOWN_STATE" has more than one declaration; you need to add a TSDoc member reference selector
 //
 // @public
-export function parseMaybeNumber(val: number): Maybe<number> | undefined;
+export function parseMaybeNumber(val: number): MaybeUnknown<number> | undefined;
 
 // Warning: (ae-missing-release-tag) "parseNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2040,9 +2060,9 @@ export const securityClassOrder: readonly [SecurityClass.S2_AccessControl, Secur
 // @public (undocumented)
 export interface SecurityClassOwner {
     // (undocumented)
-    getHighestSecurityClass(): SecurityClass | undefined;
+    getHighestSecurityClass(): MaybeNotKnown<SecurityClass>;
     // (undocumented)
-    hasSecurityClass(securityClass: SecurityClass): Maybe<boolean>;
+    hasSecurityClass(securityClass: SecurityClass): MaybeNotKnown<boolean>;
     // (undocumented)
     readonly id: number;
     // (undocumented)
@@ -2277,7 +2297,7 @@ export function stringToNodeList(nodes?: string): number[] | undefined;
 // Warning: (ae-missing-release-tag) "stripUndefined" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function stripUndefined<T>(obj: Record<string, T>): Record<string, T>;
+export function stripUndefined<T>(obj: Record<string, T | undefined>): Record<string, T>;
 
 // Warning: (ae-missing-release-tag) "supervisedCommandFailed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2479,15 +2499,14 @@ export interface TXReport {
     txTicks: number;
 }
 
-// Warning: (ae-missing-release-tag) "unknownBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UNKNOWN_STATE" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UNKNOWN_STATE" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
-export const unknownBoolean: Maybe<boolean>;
+// @public
+export const UNKNOWN_STATE: null;
 
-// Warning: (ae-missing-release-tag) "unknownNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
-export const unknownNumber: Maybe<number>;
+export type UNKNOWN_STATE = typeof UNKNOWN_STATE;
 
 // Warning: (ae-missing-release-tag) "unsilence" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

@@ -9,7 +9,7 @@ import {
 	parseFloatWithScale,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -498,7 +498,7 @@ const valveConfigPropertyKeys = [
 
 @API(CommandClasses.Irrigation)
 export class IrrigationCCAPI extends CCAPI {
-	public supportsCommand(cmd: IrrigationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: IrrigationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case IrrigationCommand.SystemInfoGet:
 			case IrrigationCommand.SystemStatusGet:
@@ -773,7 +773,7 @@ export class IrrigationCCAPI extends CCAPI {
 	@validateArgs()
 	public async getValveTable(
 		tableId: number,
-	): Promise<ValveTableEntry[] | undefined> {
+	): Promise<MaybeNotKnown<ValveTableEntry[]>> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveTableGet,
@@ -1037,7 +1037,7 @@ export class IrrigationCC extends CommandClass {
 	public static getMaxValveTableSizeCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): number | undefined {
+	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1052,7 +1052,7 @@ export class IrrigationCC extends CommandClass {
 	public static getNumValvesCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): number | undefined {
+	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(IrrigationCCValues.numValves.endpoint(endpoint.index));

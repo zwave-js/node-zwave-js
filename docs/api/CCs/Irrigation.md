@@ -81,7 +81,7 @@ async setValveTable(
 ```ts
 async getValveTable(
 	tableId: number,
-): Promise<ValveTableEntry[] | undefined>;
+): Promise<MaybeNotKnown<ValveTableEntry[]>>;
 ```
 
 ### `runTables`

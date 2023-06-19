@@ -34,7 +34,6 @@ import {
 	messageIsPing,
 	type CommandClass,
 	type FirmwareUpdateResult,
-	type FirmwareUpdateStatus,
 	type ICommandClassContainer,
 	type SupervisionCCGet,
 	type TransportServiceCCSubsequentSegment,
@@ -68,10 +67,11 @@ import {
 	messageRecordToLines,
 	securityClassIsS2,
 	serializeCacheValue,
+	stripUndefined,
 	timespan,
 	type ICommandClass,
 	type LogConfig,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageRecord,
 	type SendCommandOptions,
 	type SendCommandReturnType,
@@ -135,7 +135,7 @@ import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
 import { ZWaveController } from "../controller/Controller";
-import { InclusionState } from "../controller/Inclusion";
+import { InclusionState, RemoveNodeReason } from "../controller/Inclusion";
 import { DriverLogger } from "../log/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
@@ -239,7 +239,6 @@ const defaultOptions: ZWaveOptions = {
 		sendData: 3,
 		nodeInterview: 5,
 	},
-	preserveUnknownValues: false,
 	disableOptimisticValueUpdate: false,
 	// By default enable soft reset unless the env variable is set
 	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
@@ -827,7 +826,9 @@ export class Driver
 		return this.controller.nodes.get(nodeId)?.deviceConfig;
 	}
 
-	public getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+	public getHighestSecurityClass(
+		nodeId: number,
+	): MaybeNotKnown<SecurityClass> {
 		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.getHighestSecurityClass();
@@ -836,7 +837,7 @@ export class Driver
 	public hasSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.hasSecurityClass(securityClass);
@@ -925,7 +926,6 @@ export class Driver
 			"inclusionUserCallbacks",
 			"interview",
 			"preferences",
-			"preserveUnknownValues",
 		]);
 
 		// Create a new deep-merged copy of the options so we can check them for validity
@@ -2050,7 +2050,7 @@ export class Driver
 	}
 
 	/** This is called when a node was removed from the network */
-	private onNodeRemoved(node: ZWaveNode, replaced: boolean): void {
+	private onNodeRemoved(node: ZWaveNode, reason: RemoveNodeReason): void {
 		// Remove all listeners and timers
 		this.removeNodeEventHandlers(node);
 		if (this.sendNodeToSleepTimers.has(node.id)) {
@@ -2080,6 +2080,9 @@ export class Driver
 			ZWaveErrorCodes.Controller_NodeRemoved,
 		);
 
+		const replaced =
+			reason === RemoveNodeReason.Replaced ||
+			reason === RemoveNodeReason.ProxyReplaced;
 		if (!replaced) {
 			// Asynchronously remove the node from all possible associations, ignore potential errors
 			// but only if the node is not getting replaced, because the removal will interfere with
@@ -2124,8 +2127,6 @@ export class Driver
 	/** This is called when the firmware on one of a node's firmware targets was updated */
 	private async onNodeFirmwareUpdated(
 		node: ZWaveNode,
-		_status: FirmwareUpdateStatus,
-		_waitTime: number | undefined,
 		result: FirmwareUpdateResult,
 	): Promise<void> {
 		const { success, reInterview } = result;
@@ -2217,10 +2218,12 @@ export class Driver
 			});
 		} else if (ccId === CommandClasses["Multilevel Switch"]) {
 			prefix = "[Notification] Multilevel Switch";
-			details = messageRecordToLines({
-				"event type": ccArgs.eventTypeLabel,
-				direction: ccArgs.direction,
-			});
+			details = messageRecordToLines(
+				stripUndefined({
+					"event type": ccArgs.eventTypeLabel,
+					direction: ccArgs.direction,
+				}),
+			);
 		} /*if (ccId === CommandClasses.Powerlevel)*/ else {
 			// Don't bother logging this
 			return;
@@ -2267,7 +2270,7 @@ export class Driver
 	 * @param nodeId The node for which the CC version should be retrieved
 	 * @param endpointIndex The endpoint in question
 	 */
-	public getSupportedCCVersionForEndpoint(
+	public getSupportedCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex: number = 0,
@@ -2292,12 +2295,12 @@ export class Driver
 	 * @param nodeId The node for which the CC version should be retrieved
 	 * @param endpointIndex The endpoint for which the CC version should be retrieved
 	 */
-	public getSafeCCVersionForNode(
+	public getSafeCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex: number = 0,
 	): number {
-		const supportedVersion = this.getSupportedCCVersionForEndpoint(
+		const supportedVersion = this.getSupportedCCVersion(
 			cc,
 			nodeId,
 			endpointIndex,
@@ -3925,7 +3928,10 @@ ${handlers.length} left`,
 				});
 
 				try {
-					await this.controller.removeFailedNode(msg.command.nodeId);
+					await this.controller.removeFailedNodeInternal(
+						msg.command.nodeId,
+						RemoveNodeReason.Reset,
+					);
 				} catch (e) {
 					this.controllerLog.logNode(msg.command.nodeId, {
 						message: `removing the node failed: ${getErrorMessage(

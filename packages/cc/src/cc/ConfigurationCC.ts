@@ -7,14 +7,12 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-	encodeBitMask,
 	encodePartial,
 	getBitMaskWidth,
 	getIntegerLimits,
 	getMinIntegerSize,
 	isConsecutiveArray,
 	mergeSupervisionResults,
-	parseBitMask,
 	parsePartial,
 	stripUndefined,
 	supervisedCommandSucceeded,
@@ -22,7 +20,7 @@ import {
 	type ConfigurationMetadata,
 	type IVirtualEndpoint,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -100,7 +98,6 @@ export const ConfigurationCCValues = Object.freeze({
 				(typeof propertyKey === "number" || propertyKey == undefined),
 			// Metadata is determined dynamically depending on other factors
 			undefined,
-			{ supportsEndpoints: false },
 		),
 	}),
 });
@@ -233,7 +230,7 @@ function bulkMergePartialParamValues(
 					parameter,
 					partials.map((p) => ({
 						bitMask: p.bitMask!,
-						partialValue: p.value as number,
+						partialValue: p.value,
 					})),
 				),
 				valueSize: partials[0].valueSize,
@@ -269,9 +266,25 @@ function reInterpretSignedValue(
 	return parseValue(raw, valueSize, targetFormat);
 }
 
+function getParamInformationFromConfigFile(
+	applHost: ZWaveApplicationHost,
+	nodeId: number,
+	endpointIndex: number,
+): ParamInfoMap | undefined {
+	const deviceConfig = applHost.getDeviceConfig?.(nodeId);
+	if (endpointIndex === 0) {
+		return (
+			deviceConfig?.paramInformation ??
+			deviceConfig?.endpoints?.get(0)?.paramInformation
+		);
+	} else {
+		return deviceConfig?.endpoints?.get(endpointIndex)?.paramInformation;
+	}
+}
+
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
-	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ConfigurationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ConfigurationCommand.Get:
 			case ConfigurationCommand.Set:
@@ -485,7 +498,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			valueBitMask?: number;
 			allowUnexpectedResponse?: boolean;
 		},
-	): Promise<ConfigValue | undefined> {
+	): Promise<MaybeNotKnown<ConfigValue>> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
@@ -509,7 +522,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 			allowUnexpectedResponse,
 		});
@@ -535,6 +548,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			);
 		}
 		this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+			endpoint: this.endpoint.index,
 			message: `Received unexpected ConfigurationReport (param = ${
 				response.parameter
 			}, value = ${response.value.toString()})`,
@@ -562,7 +576,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		{
 			parameter: number;
 			bitMask?: number;
-			value: ConfigValue | undefined;
+			value: MaybeNotKnown<ConfigValue>;
 		}[]
 	> {
 		// Get-type commands are only possible in singlecast
@@ -578,7 +592,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		) {
 			const cc = new ConfigurationCCBulkGet(this.applHost, {
 				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				endpoint: this.endpoint.index,
 				parameters: distinctParameters,
 			});
 			const response =
@@ -597,7 +611,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			for (const parameter of distinctParameters) {
 				const cc = new ConfigurationCCGet(this.applHost, {
 					nodeId: this.endpoint.nodeId,
-					// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+					endpoint: this.endpoint.index,
 					parameter,
 				});
 				const response =
@@ -669,7 +683,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 		const cc = new ConfigurationCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			resetToDefault: false,
 			parameter: normalized.parameter,
 			value,
@@ -714,11 +728,11 @@ export class ConfigurationCCAPI extends CCAPI {
 		if (canUseBulkSet) {
 			const cc = new ConfigurationCCBulkSet(this.applHost, {
 				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				endpoint: this.endpoint.index,
 				parameters: allParams.map((v) => v.parameter),
 				valueSize: allParams[0].valueSize,
 				valueFormat: allParams[0].valueFormat,
-				values: allParams.map((v) => v.value as number),
+				values: allParams.map((v) => v.value),
 				handshake: true,
 			});
 			// The handshake flag is set, so we expect a BulkReport in response
@@ -760,7 +774,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			} of allParams) {
 				const cc = new ConfigurationCCSet(this.applHost, {
 					nodeId: this.endpoint.nodeId,
-					// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+					endpoint: this.endpoint.index,
 					parameter,
 					value,
 					valueSize,
@@ -795,7 +809,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 			resetToDefault: true,
 		});
@@ -817,7 +831,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		) {
 			const cc = new ConfigurationCCBulkSet(this.applHost, {
 				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				endpoint: this.endpoint.index,
 				parameters,
 				resetToDefault: true,
 			});
@@ -831,7 +845,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				(parameter) =>
 					new ConfigurationCCSet(this.applHost, {
 						nodeId: this.endpoint.nodeId,
-						// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+						endpoint: this.endpoint.index,
 						parameter,
 						resetToDefault: true,
 					}),
@@ -854,7 +868,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCDefaultReset(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
@@ -867,7 +881,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCPropertiesGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 		});
 		const response =
@@ -893,13 +907,13 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/** Requests the name of a configuration parameter from the node */
 	@validateArgs()
-	public async getName(parameter: number): Promise<string | undefined> {
+	public async getName(parameter: number): Promise<MaybeNotKnown<string>> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
 		const cc = new ConfigurationCCNameGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 		});
 		const response =
@@ -912,13 +926,13 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/** Requests usage info for a configuration parameter from the node */
 	@validateArgs()
-	public async getInfo(parameter: number): Promise<string | undefined> {
+	public async getInfo(parameter: number): Promise<MaybeNotKnown<string>> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
 		const cc = new ConfigurationCCInfoGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			endpoint: this.endpoint.index,
 			parameter,
 		});
 		const response =
@@ -952,10 +966,10 @@ export class ConfigurationCCAPI extends CCAPI {
 		this.assertPhysicalEndpoint(this.endpoint);
 
 		// TODO: Reduce the priority of the messages
-		this.applHost.controllerLog.logNode(
-			this.endpoint.nodeId,
-			`Scanning available parameters...`,
-		);
+		this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+			endpoint: this.endpoint.index,
+			message: `Scanning available parameters...`,
+		});
 		const ccInstance = createConfigurationCCInstance(
 			this.applHost,
 			this.endpoint,
@@ -964,6 +978,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
 			this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+				endpoint: this.endpoint.index,
 				message: `  trying param ${param}...`,
 				direction: "outbound",
 			});
@@ -982,6 +997,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
     value     = ${originalValue.toString()}`;
 					this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+						endpoint: this.endpoint.index,
 						message: logMessage,
 						direction: "inbound",
 					});
@@ -1026,7 +1042,11 @@ export class ConfigurationCC extends CommandClass {
 		});
 
 		const deviceConfig = applHost.getDeviceConfig?.(node.id);
-		const paramInfo = deviceConfig?.paramInformation;
+		const paramInfo = getParamInformationFromConfigFile(
+			applHost,
+			node.id,
+			this.endpointIndex,
+		);
 		if (paramInfo) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -1168,9 +1188,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 		if (this.version < 3) {
 			// V1/V2: Query all values defined in the config file
-			const paramInfo = applHost.getDeviceConfig?.(
+			const paramInfo = getParamInformationFromConfigFile(
+				applHost,
 				node.id,
-			)?.paramInformation;
+				this.endpointIndex,
+			);
 			if (paramInfo?.size) {
 				// Because partial params share the same parameter number,
 				// we need to remember which ones we have already queried.
@@ -1268,11 +1290,6 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Don't trust param information that a node reports if we have already loaded it from a config file
 		if (this.isParamInformationFromConfig(applHost)) return;
 
-		const valueDB = this.getValueDB(applHost);
-		const valueId = ConfigurationCCValues.paramInformation(
-			parameter,
-			valueBitMask,
-		).id;
 		// Retrieve the base metadata
 		const metadata = this.getParamInformation(
 			applHost,
@@ -1282,7 +1299,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Override it with new data
 		Object.assign(metadata, info);
 		// And store it back
-		valueDB.setMetadata(valueId, metadata);
+		this.setMetadata(
+			applHost,
+			ConfigurationCCValues.paramInformation(parameter, valueBitMask),
+			metadata,
+		);
 	}
 
 	/**
@@ -1335,6 +1356,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		return valueDB.findMetadata(
 			(id) =>
 				id.commandClass === this.ccId &&
+				(id.endpoint ?? 0) === this.endpointIndex &&
 				id.property === parameter &&
 				id.propertyKey != undefined,
 		) as (ValueID & { metadata: ConfigurationMetadata })[];
@@ -1370,6 +1392,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const otherValues = valueDB.findValues(
 			(id) =>
 				id.commandClass === this.ccId &&
+				(id.endpoint ?? 0) === this.endpointIndex &&
 				id.property === parameter &&
 				id.propertyKey != undefined &&
 				!partials.some((p) => id.propertyKey === p.bitMask),
@@ -1396,7 +1419,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 		// Clear old param information
 		for (const meta of valueDB.getAllMetadata(this.ccId)) {
-			if (typeof meta.property === "number") {
+			if (
+				typeof meta.property === "number" &&
+				(meta.endpoint ?? 0) === this.endpointIndex
+			) {
 				// this is a param information, delete it
 				valueDB.setMetadata(
 					meta,
@@ -1553,64 +1579,73 @@ export class ConfigurationCCReport extends ConfigurationCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
-		// Check if the initial assumption of SignedInteger holds true
-		const oldParamInformation = this.getParamInformation(
+		// This parameter may be a partial param in the following cases:
+		// * a config file defines it as such
+		// * it was reported by the device as a bit field
+		const partialParams = this.getPartialParamInfos(
 			applHost,
 			this.parameter,
 		);
+
+		let cachedValueFormat: ConfigValueFormat | undefined;
+
+		if (partialParams.length > 0) {
+			// This is a partial param. All definitions should have the same format, so we just take the first one
+			cachedValueFormat = partialParams[0].metadata.format;
+		} else {
+			// Check if the initial assumption of SignedInteger holds true
+			const oldParamInformation = this.getParamInformation(
+				applHost,
+				this.parameter,
+			);
+			cachedValueFormat = oldParamInformation.format;
+
+			// On older CC versions, these reports may be the only way we can retrieve the value size
+			// Therefore we store it here
+			this.extendParamInformation(applHost, this.parameter, undefined, {
+				valueSize: this.valueSize,
+			});
+			if (
+				this.version < 3 &&
+				!this.isParamInformationFromConfig &&
+				oldParamInformation.min == undefined &&
+				oldParamInformation.max == undefined
+			) {
+				const isSigned =
+					oldParamInformation.format == undefined ||
+					oldParamInformation.format ===
+						ConfigValueFormat.SignedInteger;
+				this.extendParamInformation(
+					applHost,
+					this.parameter,
+					undefined,
+					getIntegerLimits(this.valueSize as any, isSigned),
+				);
+			}
+		}
+
+		// We may have to re-interpret the value as unsigned, depending on the cached value format
 		if (
-			oldParamInformation.format != undefined &&
-			oldParamInformation.format !== ConfigValueFormat.SignedInteger
+			cachedValueFormat != undefined &&
+			cachedValueFormat !== ConfigValueFormat.SignedInteger
 		) {
 			// Re-interpret the value with the new format
 			this.value = reInterpretSignedValue(
 				this.value,
 				this.valueSize,
-				oldParamInformation.format,
+				cachedValueFormat,
 			);
 		}
 
-		// Store the parameter size and value
-		this.extendParamInformation(applHost, this.parameter, undefined, {
-			valueSize: this.valueSize,
-			type:
-				oldParamInformation.format === ConfigValueFormat.BitField
-					? "number[]"
-					: "number",
-		});
-		if (
-			this.version < 3 &&
-			!this.isParamInformationFromConfig &&
-			oldParamInformation.min == undefined &&
-			oldParamInformation.max == undefined
-		) {
-			const isSigned =
-				oldParamInformation.format == undefined ||
-				oldParamInformation.format === ConfigValueFormat.SignedInteger;
-			this.extendParamInformation(
-				applHost,
-				this.parameter,
-				undefined,
-				getIntegerLimits(this.valueSize as any, isSigned),
-			);
-		}
 		// And store the value itself
 		// If we have partial config params defined, we need to split the value
-		const partialParams = this.getPartialParamInfos(
-			applHost,
-			this.parameter,
-		);
 		if (partialParams.length > 0) {
 			for (const param of partialParams) {
 				if (typeof param.propertyKey === "number") {
-					valueDB.setValue(
-						{
-							commandClass: this.ccId,
-							property: this.parameter,
-							propertyKey: param.propertyKey,
-						},
+					this.setValue(
+						applHost,
+						ConfigurationCCValues.paramInformation(this.parameter),
 						parsePartial(
 							this.value as any,
 							param.propertyKey,
@@ -1624,11 +1659,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			}
 		} else {
 			// This is a single param
-			valueDB.setValue(
-				{
-					commandClass: this.ccId,
-					property: this.parameter,
-				},
+			this.setValue(
+				applHost,
+				ConfigurationCCValues.paramInformation(this.parameter),
 				this.value,
 			);
 		}
@@ -1640,15 +1673,11 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			Buffer.from([this.parameter, this.valueSize & 0b111]),
 			Buffer.allocUnsafe(this.valueSize),
 		]);
-		const valueFormat =
-			typeof this.value === "number"
-				? this.valueFormat ?? ConfigValueFormat.SignedInteger
-				: ConfigValueFormat.BitField;
 		serializeValue(
 			this.payload,
 			2,
 			this.valueSize,
-			valueFormat,
+			this.valueFormat ?? ConfigValueFormat.SignedInteger,
 			this.value,
 		);
 
@@ -2054,7 +2083,6 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Store every received parameter
 		// eslint-disable-next-line prefer-const
@@ -2077,11 +2105,9 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				this._values.set(parameter, value);
 			}
 
-			valueDB.setValue(
-				{
-					commandClass: this.ccId,
-					property: parameter,
-				},
+			this.setValue(
+				applHost,
+				ConfigurationCCValues.paramInformation(parameter),
 				value,
 			);
 		}
@@ -2236,10 +2262,37 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		this.extendParamInformation(applHost, this.parameter, undefined, {
-			name: this.name,
-			label: this.name,
-		});
+		// Bitfield parameters that are not documented in a config file
+		// are split into multiple partial parameters. We need to set the name for
+		// all of them.
+		const partialParams = this.getPartialParamInfos(
+			applHost,
+			this.parameter,
+		);
+
+		if (partialParams.length === 0) {
+			this.extendParamInformation(applHost, this.parameter, undefined, {
+				label: this.name,
+			});
+		} else {
+			for (const param of partialParams) {
+				const paramNumber = param.property as number;
+				const bitMask = param.propertyKey as number;
+				const bitNumber =
+					Math.log2(bitMask) % 1 === 0
+						? Math.log2(bitMask)
+						: undefined;
+
+				let label = `${this.name} - ${bitMask}`;
+				if (bitNumber != undefined) {
+					label += ` (bit ${bitNumber})`;
+				}
+				this.extendParamInformation(applHost, paramNumber, bitMask, {
+					label,
+				});
+			}
+		}
+
 		return true;
 	}
 
@@ -2356,10 +2409,49 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		this.extendParamInformation(applHost, this.parameter, undefined, {
-			info: this.info,
-			description: this.info,
-		});
+		// Bitfield parameters that are not documented in a config file
+		// are split into multiple partial parameters. We need to set the description for
+		// all of them. However, these can get very long, so we put the reported
+		// description on the first partial param, and refer to it from the others
+		const partialParams = this.getPartialParamInfos(
+			applHost,
+			this.parameter,
+		).sort(
+			(a, b) =>
+				((a.propertyKey as number) ?? 0) -
+				((b.propertyKey as number) ?? 0),
+		);
+
+		if (partialParams.length === 0) {
+			this.extendParamInformation(applHost, this.parameter, undefined, {
+				description: this.info,
+			});
+		} else {
+			let firstParamLabel: string | undefined;
+
+			for (const param of partialParams) {
+				const paramNumber = param.property as number;
+				const bitMask = param.propertyKey as number;
+
+				// We put the description on the first partial param
+				const description = firstParamLabel
+					? `Refer to ${firstParamLabel}`
+					: this.info;
+
+				this.extendParamInformation(applHost, paramNumber, bitMask, {
+					description,
+				});
+
+				// Then we store the name of the first param to refer to it on the
+				// following partial params
+				if (firstParamLabel == undefined) {
+					firstParamLabel =
+						this.getParamInformation(applHost, paramNumber, bitMask)
+							.label ?? `parameter ${paramNumber} - ${bitMask}`;
+				}
+			}
+		}
+
 		return true;
 	}
 
@@ -2479,7 +2571,9 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			validatePayload(this.payload.length >= nextParameterOffset + 2);
 
 			if (this.valueSize > 0) {
-				if (this.valueFormat !== ConfigValueFormat.BitField) {
+				if (this.valueFormat === ConfigValueFormat.BitField) {
+					this.minValue = 0;
+				} else {
 					this.minValue = parseValue(
 						this.payload.slice(3),
 						this.valueSize,
@@ -2553,18 +2647,10 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 
 		// If we actually received parameter info, store it
 		if (this.valueSize > 0) {
-			const valueType =
-				this.valueFormat === ConfigValueFormat.SignedInteger ||
-				this.valueFormat === ConfigValueFormat.UnsignedInteger
-					? "number"
-					: "number[]";
-			const paramInfo = stripUndefined({
-				type: valueType,
+			const baseInfo = {
+				type: "number",
 				format: this.valueFormat,
 				valueSize: this.valueSize,
-				min: this.minValue,
-				max: this.maxValue,
-				default: this.defaultValue,
 				requiresReInclusion: this.altersCapabilities,
 				readable: true,
 				writeable: !this.isReadonly,
@@ -2572,14 +2658,44 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				isAdvanced: this.isAdvanced,
 				noBulkSupport: this.noBulkSupport,
 				isFromConfig: false,
-			} as const satisfies ConfigurationMetadata);
+			} as const;
 
-			this.extendParamInformation(
-				applHost,
-				this.parameter,
-				undefined,
-				paramInfo,
-			);
+			if (this.valueFormat !== ConfigValueFormat.BitField) {
+				const paramInfo = stripUndefined({
+					...baseInfo,
+					min: this.minValue,
+					max: this.maxValue,
+					default: this.defaultValue,
+				} as const satisfies ConfigurationMetadata);
+
+				this.extendParamInformation(
+					applHost,
+					this.parameter,
+					undefined,
+					paramInfo,
+				);
+			} else {
+				// Bit fields are split into multiple single-bit partial parameters
+				const bits = this.maxValue!;
+				let mask = 1;
+				while (mask <= bits) {
+					const paramInfo = stripUndefined({
+						...baseInfo,
+						min: 0,
+						max: 1,
+						default: this.defaultValue! & mask ? 1 : 0,
+					} as const satisfies ConfigurationMetadata);
+
+					this.extendParamInformation(
+						applHost,
+						this.parameter,
+						mask,
+						paramInfo,
+					);
+
+					mask <<= 1;
+				}
+			}
 		}
 
 		return true;
@@ -2588,14 +2704,14 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public parameter: number;
 	public valueSize: number;
 	public valueFormat: ConfigValueFormat;
-	public minValue: ConfigValue | undefined;
-	public maxValue: ConfigValue | undefined;
-	public defaultValue: ConfigValue | undefined;
+	public minValue: MaybeNotKnown<ConfigValue>;
+	public maxValue: MaybeNotKnown<ConfigValue>;
+	public defaultValue: MaybeNotKnown<ConfigValue>;
 	public nextParameter: number;
-	public altersCapabilities: boolean | undefined;
-	public isReadonly: boolean | undefined;
-	public isAdvanced: boolean | undefined;
-	public noBulkSupport: boolean | undefined;
+	public altersCapabilities: MaybeNotKnown<boolean>;
+	public isReadonly: MaybeNotKnown<boolean>;
+	public isAdvanced: MaybeNotKnown<boolean>;
+	public noBulkSupport: MaybeNotKnown<boolean>;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.allocUnsafe(
@@ -2739,10 +2855,10 @@ function isSafeValue(
 			break;
 		case ConfigValueFormat.UnsignedInteger:
 		case ConfigValueFormat.Enumerated:
+		case ConfigValueFormat.BitField:
 			minValue = 0;
 			maxValue = Math.pow(2, 8 * size);
 			break;
-		case ConfigValueFormat.BitField:
 		default:
 			throw new Error("not implemented");
 	}
@@ -2760,9 +2876,8 @@ function parseValue(
 			return raw.readIntBE(0, size);
 		case ConfigValueFormat.UnsignedInteger:
 		case ConfigValueFormat.Enumerated:
-			return raw.readUIntBE(0, size);
 		case ConfigValueFormat.BitField:
-			return new Set(parseBitMask(raw.slice(0, size)));
+			return raw.readUIntBE(0, size);
 	}
 }
 
@@ -2805,19 +2920,12 @@ function serializeValue(
 ): void {
 	switch (format) {
 		case ConfigValueFormat.SignedInteger:
-			payload.writeIntBE(value as number, offset, size);
+			payload.writeIntBE(value, offset, size);
 			return;
 		case ConfigValueFormat.UnsignedInteger:
 		case ConfigValueFormat.Enumerated:
-			payload.writeUIntBE(value as number, offset, size);
+		case ConfigValueFormat.BitField:
+			payload.writeUIntBE(value, offset, size);
 			return;
-		case ConfigValueFormat.BitField: {
-			const mask = encodeBitMask(
-				[...(value as Set<number>).values()],
-				size * 8,
-			);
-			mask.copy(payload, offset);
-			return;
-		}
 	}
 }

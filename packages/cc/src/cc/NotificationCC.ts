@@ -21,7 +21,7 @@ import {
 	validatePayload,
 	type IZWaveEndpoint,
 	type IZWaveNode,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SinglecastCC,
@@ -218,7 +218,7 @@ function lookupNotificationNames(
 
 @API(CommandClasses.Notification)
 export class NotificationCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: NotificationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case NotificationCommand.Report:
 			case NotificationCommand.Get:
@@ -359,7 +359,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getSupportedEvents(
 		notificationType: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.EventSupportedGet,
@@ -522,7 +522,7 @@ export class NotificationCC extends CommandClass {
 	public static getNotificationMode(
 		applHost: ZWaveApplicationHost,
 		node: IZWaveNode,
-	): "push" | "pull" | undefined {
+	): MaybeNotKnown<"push" | "pull"> {
 		return applHost
 			.getValueDB(node.id)
 			.getValue(NotificationCCValues.notificationMode.id);
@@ -1082,7 +1082,7 @@ export class NotificationCCReport extends NotificationCC {
 		if (this.alarmType) {
 			message = {
 				"V1 alarm type": this.alarmType,
-				"V1 alarm level": this.alarmLevel,
+				"V1 alarm level": this.alarmLevel!,
 			};
 		}
 
@@ -1102,7 +1102,7 @@ export class NotificationCCReport extends NotificationCC {
 						applHost.configManager.getNotificationName(
 							this.notificationType,
 						),
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					[`notification ${valueConfig.type}`]:
 						valueConfig.label ??
 						`Unknown (${num2hex(this.notificationEvent)})`,
@@ -1111,14 +1111,14 @@ export class NotificationCCReport extends NotificationCC {
 				message = {
 					...message,
 					"notification type": this.notificationType,
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					"notification state": "idle",
 				};
 			} else {
 				message = {
 					...message,
 					"notification type": this.notificationType,
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					"notification event": num2hex(this.notificationEvent),
 				};
 			}

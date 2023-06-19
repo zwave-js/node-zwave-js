@@ -9,7 +9,7 @@
 ```ts
 async get(
 	sensorType?: BinarySensorType,
-): Promise<boolean | undefined>;
+): Promise<MaybeNotKnown<boolean>>;
 ```
 
 Retrieves the current value from this sensor.

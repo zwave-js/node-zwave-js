@@ -7,7 +7,7 @@
 ### `get`
 
 ```ts
-async get(): Promise<ThermostatOperatingState | undefined>;
+async get(): Promise<MaybeNotKnown<ThermostatOperatingState>>;
 ```
 
 ## Thermostat Operating State CC values

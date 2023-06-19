@@ -8,7 +8,7 @@
 
 ```ts
 async getSupported(): Promise<
-	readonly ColorComponent[] | undefined
+	MaybeNotKnown<readonly ColorComponent[]>
 >;
 ```
 

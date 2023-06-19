@@ -43,7 +43,7 @@ async stopLevelChange(): Promise<SupervisionResult | undefined>;
 ### `getSupported`
 
 ```ts
-async getSupported(): Promise<SwitchType | undefined>;
+async getSupported(): Promise<MaybeNotKnown<SwitchType>>;
 ```
 
 ## Multilevel Switch CC values

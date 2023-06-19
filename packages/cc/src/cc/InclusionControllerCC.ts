@@ -1,9 +1,9 @@
 import {
 	CommandClasses,
 	validatePayload,
-	type Maybe,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
@@ -33,7 +33,9 @@ export class InclusionControllerCC extends CommandClass {
 
 @API(CommandClasses["Inclusion Controller"])
 export class InclusionControllerCCAPI extends CCAPI {
-	public supportsCommand(cmd: InclusionControllerCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: InclusionControllerCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case InclusionControllerCommand.Initiate:
 			case InclusionControllerCommand.Complete:

@@ -26,11 +26,12 @@ async set(
 
 ```ts
 async getLastActivated(): Promise<
-	| Pick<
+	MaybeNotKnown<
+		Pick<
 			SceneControllerConfigurationCCReport,
 			"groupId" | "sceneId" | "dimmingDuration"
-	  >
-	| undefined
+		>
+	>
 >;
 ```
 
@@ -40,11 +41,12 @@ async getLastActivated(): Promise<
 async get(
 	groupId: number,
 ): Promise<
-	| Pick<
+	MaybeNotKnown<
+		Pick<
 			SceneControllerConfigurationCCReport,
 			"sceneId" | "dimmingDuration"
-	  >
-	| undefined
+		>
+	>
 >;
 ```
 

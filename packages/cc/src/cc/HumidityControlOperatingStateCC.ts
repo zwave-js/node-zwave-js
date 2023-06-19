@@ -4,7 +4,7 @@ import {
 	ValueMetadata,
 	enumValuesToMetadataStates,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -53,7 +53,7 @@ export const HumidityControlOperatingStateCCValues = Object.freeze({
 export class HumidityControlOperatingStateCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: HumidityControlOperatingStateCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case HumidityControlOperatingStateCommand.Get:
 				return this.isSinglecast();

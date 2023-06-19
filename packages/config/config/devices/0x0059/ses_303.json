@@ -16,9 +16,8 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delta Temp",
-			"description": "Precision of measured temperature (delta)",
-			"unit": "Celcius degrees",
+			"label": "Temperature Reporting Threshold",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -27,9 +26,9 @@
 		},
 		{
 			"#": "2",
-			"label": "Temp Reporting Interval",
+			"label": "Temperature Reporting Interval",
 			"description": "Reporting interval in minutes",
-			"unit": "Mins",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -38,9 +37,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Delta Humidity",
-			"description": "Precision of measured humidity (delta)",
-			"unit": "RH %",
+			"label": "Humidity Reporting Threshold",
+			"unit": "0.1 %rH",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -50,13 +48,36 @@
 		{
 			"#": "4",
 			"label": "Humidity Reporting Interval",
-			"description": "Reporting interval in minutes",
-			"unit": "Mins",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	]
+	],
+	"endpoints": {
+		// The device has up to 4 endpoints, each supporting parameter 1 and 2
+		"1": {
+			"paramInformation": [
+				{
+					"#": "1",
+					"$import": "#paramInformation/1"
+				},
+				{
+					"#": "2",
+					"$import": "#paramInformation/2"
+				}
+			]
+		},
+		"2": {
+			"$import": "#endpoints/1"
+		},
+		"3": {
+			"$import": "#endpoints/1"
+		},
+		"4": {
+			"$import": "#endpoints/1"
+		}
+	}
 }

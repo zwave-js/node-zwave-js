@@ -5,8 +5,8 @@ import {
 	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
-	type Maybe,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -66,7 +66,9 @@ export const EnergyProductionCCValues = Object.freeze({
 
 @API(CommandClasses["Energy Production"])
 export class EnergyProductionCCAPI extends CCAPI {
-	public supportsCommand(cmd: EnergyProductionCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: EnergyProductionCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case EnergyProductionCommand.Get:
 				return true; // This is mandatory
@@ -97,7 +99,7 @@ export class EnergyProductionCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async get(
 		parameter: EnergyProductionParameter,
-	): Promise<{ value: number; scale: EnergyProductionScale } | undefined> {
+	): Promise<MaybeNotKnown<{ value: number; scale: EnergyProductionScale }>> {
 		this.assertSupportsCommand(
 			EnergyProductionCommand,
 			EnergyProductionCommand.Get,

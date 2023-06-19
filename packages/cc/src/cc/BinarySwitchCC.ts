@@ -2,14 +2,14 @@ import {
 	CommandClasses,
 	Duration,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
-	encodeBoolean,
 	encodeMaybeBoolean,
-	parseBoolean,
+	maybeUnknownToString,
 	parseMaybeBoolean,
-	unknownBoolean,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
+	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -73,7 +73,7 @@ export const BinarySwitchCCValues = Object.freeze({
 
 @API(CommandClasses["Binary Switch"])
 export class BinarySwitchCCAPI extends CCAPI {
-	public supportsCommand(cmd: BinarySwitchCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BinarySwitchCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BinarySwitchCommand.Get:
 				return this.isSinglecast();
@@ -340,9 +340,9 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 }
 
 export type BinarySwitchCCReportOptions = CCCommandOptions & {
-	currentValue: boolean;
+	currentValue: MaybeUnknown<boolean>;
 } & AllOrNone<{
-		targetValue: boolean;
+		targetValue: MaybeUnknown<boolean>;
 		duration: Duration | string;
 	}>;
 
@@ -360,9 +360,8 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 			validatePayload(this.payload.length >= 1);
 			this.currentValue = parseMaybeBoolean(this.payload[0]);
 
-			if (this.version >= 2 && this.payload.length >= 3) {
-				// V2
-				this.targetValue = parseBoolean(this.payload[1]);
+			if (this.payload.length >= 3) {
+				this.targetValue = parseMaybeBoolean(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
 			}
 		} else {
@@ -373,23 +372,23 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	}
 
 	@ccValue(BinarySwitchCCValues.currentValue)
-	public readonly currentValue: Maybe<boolean> | undefined;
+	public readonly currentValue: MaybeUnknown<boolean> | undefined;
 
 	@ccValue(BinarySwitchCCValues.targetValue)
-	public readonly targetValue: boolean | undefined;
+	public readonly targetValue: MaybeUnknown<boolean> | undefined;
 
 	@ccValue(BinarySwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			encodeMaybeBoolean(this.currentValue ?? unknownBoolean),
+			encodeMaybeBoolean(this.currentValue ?? UNKNOWN_STATE),
 		]);
-		if (this.targetValue != undefined) {
+		if (this.targetValue !== undefined) {
 			this.payload = Buffer.concat([
 				this.payload,
 				Buffer.from([
-					encodeBoolean(this.targetValue),
+					encodeMaybeBoolean(this.targetValue),
 					(this.duration ?? Duration.default()).serializeReport(),
 				]),
 			]);
@@ -399,10 +398,10 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this.currentValue,
+			"current value": maybeUnknownToString(this.currentValue),
 		};
-		if (this.targetValue != undefined) {
-			message["target value"] = this.targetValue;
+		if (this.targetValue !== undefined) {
+			message["target value"] = maybeUnknownToString(this.targetValue);
 		}
 		if (this.duration != undefined) {
 			message.duration = this.duration.toString();

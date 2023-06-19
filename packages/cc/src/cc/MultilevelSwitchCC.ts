@@ -2,12 +2,13 @@ import {
 	CommandClasses,
 	Duration,
 	MessagePriority,
+	NOT_KNOWN,
 	ValueMetadata,
+	maybeUnknownToString,
 	parseMaybeNumber,
-	parseNumber,
-	unknownNumber,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
+	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -188,7 +189,9 @@ export const MultilevelSwitchCCValues = Object.freeze({
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
-	public supportsCommand(cmd: MultilevelSwitchCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: MultilevelSwitchCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MultilevelSwitchCommand.Get:
 				return this.isSinglecast();
@@ -280,7 +283,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getSupported(): Promise<SwitchType | undefined> {
+	public async getSupported(): Promise<MaybeNotKnown<SwitchType>> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.SupportedGet,
@@ -346,7 +349,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					// even if the target node is going to ignore it. There might
 					// be some bugged devices that ignore the ignore start level flag.
 					const startLevel = this.tryGetValueDB()?.getValue<
-						Maybe<number>
+						MaybeUnknown<number>
 					>(
 						MultilevelSwitchCCValues.currentValue.endpoint(
 							this.endpoint.index,
@@ -626,51 +629,71 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	}
 }
 
+interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
+	currentValue: number;
+	targetValue: number;
+	duration?: Duration | string;
+}
+
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| MultilevelSwitchCCReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this._currentValue = parseMaybeNumber(this.payload[0]);
-		if (this.version >= 4 && this.payload.length >= 3) {
-			this.targetValue = parseNumber(this.payload[1]);
-			this.duration = Duration.parseReport(this.payload[2]);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.currentValue =
+				// 0xff is a legacy value for 100% (99)
+				this.payload[0] === 0xff
+					? 99
+					: parseMaybeNumber(this.payload[0]);
+			if (this.version >= 4 && this.payload.length >= 3) {
+				this.targetValue = parseMaybeNumber(this.payload[1]);
+				this.duration = Duration.parseReport(this.payload[2]);
+			}
+		} else {
+			this.currentValue = options.currentValue;
+			this.targetValue = options.targetValue;
+			this.duration = Duration.from(options.duration);
 		}
-	}
-
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (
-			this.currentValue === unknownNumber &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._currentValue = undefined;
-		}
-
-		return super.persistValues(applHost);
 	}
 
 	@ccValue(MultilevelSwitchCCValues.targetValue)
-	public readonly targetValue: number | undefined;
+	public targetValue: MaybeUnknown<number> | undefined;
 
 	@ccValue(MultilevelSwitchCCValues.duration)
-	public readonly duration: Duration | undefined;
+	public duration: Duration | undefined;
 
-	private _currentValue: Maybe<number> | undefined;
 	@ccValue(MultilevelSwitchCCValues.currentValue)
-	public get currentValue(): Maybe<number> | undefined {
-		return this._currentValue;
+	public currentValue: MaybeUnknown<number> | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			typeof this.currentValue === "number" ? this.currentValue : 254,
+		]);
+		if (this.version >= 4) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([
+					this.targetValue ?? 254,
+					(this.duration ?? Duration.default()).serializeReport(),
+				]),
+			]);
+		}
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this.currentValue,
+			"current value": maybeUnknownToString(this.currentValue),
 		};
-		if (this.targetValue != undefined && this.duration) {
-			message["target value"] = this.targetValue;
+		if (this.targetValue !== NOT_KNOWN && this.duration) {
+			message["target value"] = maybeUnknownToString(this.targetValue);
 			message.duration = this.duration.toString();
 		}
 		return {

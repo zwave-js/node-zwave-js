@@ -7,10 +7,10 @@ import {
 	getDSTInfo,
 	validatePayload,
 	type DSTInfo,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -38,7 +38,7 @@ import { encodeTimezone, parseTimezone } from "../lib/serializers";
 
 @API(CommandClasses.Time)
 export class TimeCCAPI extends CCAPI {
-	public supportsCommand(cmd: TimeCommand): Maybe<boolean> {
+	public supportsCommand(cmd: TimeCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case TimeCommand.TimeGet:
 			case TimeCommand.TimeReport:
@@ -139,7 +139,7 @@ export class TimeCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getTimezone(): Promise<DSTInfo | undefined> {
+	public async getTimezone(): Promise<MaybeNotKnown<DSTInfo>> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetGet);
 
 		const cc = new TimeCCTimeOffsetGet(this.applHost, {

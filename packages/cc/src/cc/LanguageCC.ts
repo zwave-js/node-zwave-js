@@ -1,5 +1,4 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
@@ -11,6 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
@@ -53,7 +53,7 @@ export const LanguageCCValues = Object.freeze({
 
 @API(CommandClasses.Language)
 export class LanguageCCAPI extends CCAPI {
-	public supportsCommand(cmd: LanguageCommand): Maybe<boolean> {
+	public supportsCommand(cmd: LanguageCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case LanguageCommand.Get:
 				return this.isSinglecast();
@@ -187,11 +187,11 @@ export class LanguageCCSet extends LanguageCC {
 		this._language = value;
 	}
 
-	private _country: string | undefined;
-	public get country(): string | undefined {
+	private _country: MaybeNotKnown<string>;
+	public get country(): MaybeNotKnown<string> {
 		return this._country;
 	}
-	public set country(value: string | undefined) {
+	public set country(value: MaybeNotKnown<string>) {
 		if (
 			typeof value === "string" &&
 			(value.length !== 2 || value.toUpperCase() !== value)
@@ -243,7 +243,7 @@ export class LanguageCCReport extends LanguageCC {
 	public readonly language: string;
 
 	@ccValue(LanguageCCValues.country)
-	public readonly country: string | undefined;
+	public readonly country: MaybeNotKnown<string>;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };

@@ -10,7 +10,7 @@ import {
 	isTransmissionError,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SinglecastCC,
@@ -59,7 +59,7 @@ export const SupervisionCCValues = Object.freeze({
 // want to pay the cost of validating each call
 @API(CommandClasses.Supervision)
 export class SupervisionCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: SupervisionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SupervisionCommand.Get:
 			case SupervisionCommand.Report:

@@ -88,10 +88,10 @@ disableStatistics(): void
 
 Disable sending usage statistics.
 
-### `getSupportedCCVersionForEndpoint`
+### `getSupportedCCVersion`
 
 ```ts
-getSupportedCCVersionForEndpoint(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
+getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
 ```
 
 Nodes in a Z-Wave network are very likely support different versions of a Command Class (CC) and frequently support older versions than the driver software.  
@@ -110,13 +110,13 @@ This method
 > [!WARNING]
 > This only provides reliable information **after** the node/endpoint interview was completed.
 
-### `getSafeCCVersionForNode`
+### `getSafeCCVersion`
 
 ```ts
-getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number
+getSafeCCVersion(nodeId: number, cc: CommandClasses): number
 ```
 
-Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersionForEndpoint`, but behaves differently. It
+Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersion`, but behaves differently. It
 
 -   returns `1` if the node claims not to support the CC or no information is known
 -   **throws (!)** if the requested CC is not implemented in this library
@@ -307,7 +307,6 @@ Updates a subset of the driver options without having to restart the driver. The
 -   `interview`
 -   `logConfig`
 -   `preferences`
--   `preserveUnknownValues`
 -   `userAgent` (behaves like `updateUserAgent`)
 
 ### `checkForConfigUpdates`
@@ -771,14 +770,6 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
 	 */
 	inclusionUserCallbacks?: InclusionUserCallbacks;
-
-	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
 
 	/**
 	 * Some SET-type commands optimistically update the current value to match the target value
