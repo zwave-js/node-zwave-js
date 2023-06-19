@@ -1,6 +1,6 @@
 # Migrating to v11
 
-I've put this off for a while now - we just got to a `.20` minor version for the first time.
+I've put this off for a while now. `v10` has been pretty stable - we've never had anything close to `.23` minor version before.
 But Z-Wave JS is on the road to certification, and some of those requirements are forcing my hand.
 
 ## Window Covering CC vs. Multilevel Switch CC

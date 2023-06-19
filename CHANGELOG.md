@@ -4,16 +4,15 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 11.0.0-beta.6 (2023-06-15)
-### Bugfixes
-* Auto-remove nodes when they leave the network after failed SmartStart bootstrapping (#5922)
+## __WORK IN PROGRESS__ · _„I'm on the highway to ~~hell~~ certification...”_
+### Application compatibility
+Home Assistant users who manage their `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
+- Home Assistant **2023.6.0** or higher
+- `zwave-js-server` **1.29.0** (not yet released)
 
-## 11.0.0-beta.5 (2023-06-15)
-### Breaking changes · [Migration guide](https://github.com/zwave-js/node-zwave-js/blob/v11-dev/docs/getting-started/migrating-to-v11.md)
-* Changed `"node removed"` event callback to specify why a node was removed (#5920)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v11)
 
-## 11.0.0-beta.4 (2023-06-14)
-### Breaking changes · [Migration guide](https://github.com/zwave-js/node-zwave-js/blob/v11-dev/docs/getting-started/migrating-to-v11.md)
+
 * Hide `Multilevel Switch CC` in favor of `Window Covering CC` (#5812)
 * Improve return type of `firmwareUpdateOTA` and `firmwareUpdateOTW` methods (#5815)
 * Rename some `ZWaveHost` interface methods (#5814)
@@ -22,3 +21,7 @@
 * Removed `preserveUnknownValues` driver option, distinguish between (known to be) unknown and not (yet) known states/values (#5843)
 * Auto-discovered `BitField` config params are now represented as partial params (#5870)
 * Change return type of `setValue` to include context on the execution result (#5897)
+* Changed `"node removed"` event callback to specify why a node was removed (#5920)
+
+### Bugfixes
+* Auto-remove nodes when they leave the network after failed SmartStart bootstrapping (#5922)
