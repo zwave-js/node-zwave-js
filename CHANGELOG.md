@@ -23,3 +23,6 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 
 ### Bugfixes
 * Auto-remove nodes when they leave the network after failed SmartStart bootstrapping (#5922)
+
+### Config file changes
+* Hide `Binary Switch CC` in favor of `Window Covering CC` on iBlinds v3 (#5912)
