@@ -2,6 +2,8 @@ import {
 	CommandClasses,
 	MessagePriority,
 	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	parseBitMask,
 	supervisedCommandSucceeded,
@@ -139,18 +141,32 @@ export class ThermostatModeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined>;
 	public async set(
 		mode: (typeof ThermostatMode)["Manufacturer specific"],
-		manufacturerData: Buffer,
+		manufacturerData: Buffer | string,
 	): Promise<SupervisionResult | undefined>;
 
 	@validateArgs({ strictEnums: true })
 	public async set(
 		mode: ThermostatMode,
-		manufacturerData?: Buffer,
+		manufacturerData?: Buffer | string,
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ThermostatModeCommand,
 			ThermostatModeCommand.Set,
 		);
+
+		if (typeof manufacturerData === "string") {
+			// We accept the manufacturer data as a hex string. Make sure it's valid
+			if (
+				manufacturerData.length % 2 !== 0 ||
+				!manufacturerData.match(/^[0-9a-f]+$/i)
+			) {
+				throw new ZWaveError(
+					`Manufacturer data must be represented as hexadecimal when passed as a string!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			manufacturerData = Buffer.from(manufacturerData, "hex");
+		}
 
 		const cc = new ThermostatModeCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
