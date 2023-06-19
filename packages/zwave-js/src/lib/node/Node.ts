@@ -265,6 +265,8 @@ interface AbortFirmwareUpdateContext {
 	abortPromise: DeferredPromise<boolean>;
 }
 
+const MAX_ASSOCIATIONS = 1;
+
 export interface ZWaveNode
 	extends TypedEventEmitter<
 			ZWaveNodeEventCallbacks &
@@ -3677,7 +3679,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		await api.sendReport({
 			groupId: command.groupId,
-			maxNodes: 1,
+			maxNodes: MAX_ASSOCIATIONS,
 			nodeIds: [...(controllerNode?.associations ?? [])],
 			reportsToFollow: 0,
 		});
@@ -3696,7 +3698,10 @@ protocol version:      ${this.protocolVersion}`;
 		);
 		if (!controllerNode) return;
 
-		controllerNode.associations = [...controllerNode.associations, ...command.nodeIds];
+		controllerNode.associations = [
+			...controllerNode.associations,
+			...command.nodeIds,
+		].slice(0, MAX_ASSOCIATIONS);
 	}
 
 	private async handleAssociationRemove(

@@ -195,7 +195,9 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	public async sendReport(options: AssociationCCReportSpecificOptions): Promise<void> {
+	public async sendReport(
+		options: AssociationCCReportSpecificOptions,
+	): Promise<void> {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.Report,
@@ -204,7 +206,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 		const cc = new AssociationCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			...options
+			...options,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}

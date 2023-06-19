@@ -1,5 +1,11 @@
-import { CommandClasses, MaybeNotKnown, TransmitOptions, validatePayload } from "@zwave-js/core/safe";
+import {
+	CommandClasses,
+	MaybeNotKnown,
+	TransmitOptions,
+	validatePayload,
+} from "@zwave-js/core/safe";
 import type { ZWaveHost } from "@zwave-js/host/safe";
+import { CCAPI } from "../lib/API";
 import {
 	CommandClass,
 	gotDeserializationOptions,
@@ -12,20 +18,21 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import { DeviceResetLocallyCommand } from "../lib/_Types";
-import { CCAPI } from "../lib/API";
 
 // @noInterview: There is no interview procedure
 
 @API(CommandClasses["Device Reset Locally"])
 export class DeviceResetLocallyCCAPI extends CCAPI {
-	public supportsCommand(cmd: DeviceResetLocallyCommand): MaybeNotKnown<boolean> {
+	public supportsCommand(
+		cmd: DeviceResetLocallyCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case DeviceResetLocallyCommand.Notification:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
 	}
-	
+
 	public async sendNotification(): Promise<void> {
 		this.assertSupportsCommand(
 			DeviceResetLocallyCommand,
@@ -51,7 +58,6 @@ export class DeviceResetLocallyCCAPI extends CCAPI {
 			// Don't care
 		}
 	}
-
 }
 
 @commandClass(CommandClasses["Device Reset Locally"])
