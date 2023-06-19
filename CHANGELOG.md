@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__ · _„I'm on the highway to ~~hell~~ certification...”_
+## 11.0.0 (2023-06-19) · _„I'm on the highway to ~~hell~~ certification...”_
 ### Application compatibility
 Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
 * Home Assistant **2023.6.0** or higher
