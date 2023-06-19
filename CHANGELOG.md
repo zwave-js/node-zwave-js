@@ -8,7 +8,7 @@
 ### Application compatibility
 Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
 * Home Assistant **2023.6.0** or higher
-* `zwave-js-server` **1.29.0** (not yet released)
+* `zwave-js-server` **1.29.0**
 
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v11)
 * Hide `Multilevel Switch CC` in favor of `Window Covering CC` (#5812)
