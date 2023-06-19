@@ -6,13 +6,11 @@
 -->
 ## __WORK IN PROGRESS__ · _„I'm on the highway to ~~hell~~ certification...”_
 ### Application compatibility
-Home Assistant users who manage their `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
-- Home Assistant **2023.6.0** or higher
-- `zwave-js-server` **1.29.0** (not yet released)
+Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
+* Home Assistant **2023.6.0** or higher
+* `zwave-js-server` **1.29.0** (not yet released)
 
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v11)
-
-
 * Hide `Multilevel Switch CC` in favor of `Window Covering CC` (#5812)
 * Improve return type of `firmwareUpdateOTA` and `firmwareUpdateOTW` methods (#5815)
 * Rename some `ZWaveHost` interface methods (#5814)

@@ -1,4 +1,9 @@
 # Changelog (v1 to v10)
+## 10.23.6 (2023-06-19)
+### Bugfixes
+* Determining the firmware file format no longer requires lowercase file extensions (#5925)
+* Fix handling of incoming S2 multicast commands (#5924)
+
 ## 10.23.5 (2023-06-15)
 ### Bugfixes
 * When removing a failed node, the node is now pinged up to 3 times with a pause inbetween attempts. This allows removing nodes that still respond for a short time after the reset (#5921)

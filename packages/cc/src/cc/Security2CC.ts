@@ -1072,6 +1072,21 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			offset = 0;
 			if (hasEncryptedExtensions) parseExtensions(plaintext);
 
+			// If the MPAN extension was received, store the MPAN
+			if (!ctx.isMulticast) {
+				const mpanExtension = this.getMPANExtension();
+				if (mpanExtension) {
+					this.host.securityManager2.storePeerMPAN(
+						sendingNodeId,
+						mpanExtension.groupId,
+						{
+							type: MPANState.MPAN,
+							currentMPAN: mpanExtension.innerMPANState,
+						},
+					);
+				}
+			}
+
 			// Not every S2 message includes an encapsulated CC
 			const decryptedCCBytes = plaintext.slice(offset);
 			if (decryptedCCBytes.length > 0) {
@@ -1192,6 +1207,12 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public getMulticastGroupId(): number | undefined {
 		const mgrpExtension = this.getMGRPExtension();
 		return mgrpExtension?.groupId;
+	}
+
+	private getMPANExtension(): MPANExtension | undefined {
+		return this.extensions.find(
+			(e): e is MPANExtension => e instanceof MPANExtension,
+		);
 	}
 
 	public hasMOSExtension(): boolean {

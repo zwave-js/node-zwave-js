@@ -78,9 +78,9 @@ import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
 import {
 	Security2CCCommandsSupportedGet,
+	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
-	type Security2CCMessageEncapsulation,
 } from "@zwave-js/cc/Security2CC";
 import {
 	SecurityCCCommandsSupportedGet,
@@ -2820,6 +2820,12 @@ protocol version:      ${this.protocolVersion}`;
 			for (const cmd of command.encapsulated) {
 				await this.handleCommand(cmd);
 			}
+			return;
+		} else if (
+			command instanceof Security2CCMessageEncapsulation &&
+			command.encapsulated == undefined
+		) {
+			// Some S2 commands contain only extensions. Those are handled by the CC implementation.
 			return;
 		}
 
