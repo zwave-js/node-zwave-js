@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.23.6 (2023-06-19)
 ### Bugfixes
 * Determining the firmware file format no longer requires lowercase file extensions (#5925)
 * Fix handling of incoming S2 multicast commands (#5924)
