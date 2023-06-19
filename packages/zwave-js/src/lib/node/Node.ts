@@ -97,6 +97,11 @@ import {
 	WakeUpCCWakeUpNotification,
 } from "@zwave-js/cc/WakeUpCC";
 import { ZWavePlusCCGet, ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
+import {
+	SetValueResult,
+	SetValueStatus,
+	supervisionResultToSetValueResult,
+} from "@zwave-js/cc/safe";
 import type {
 	DeviceConfig,
 	Notification,
@@ -235,7 +240,6 @@ import type {
 } from "./_Types";
 import { InterviewStage, NodeStatus } from "./_Types";
 import * as nodeUtils from "./utils";
-import { SetValueResult, SetValueStatus, supervisionResultToSetValueResult } from "@zwave-js/cc/safe";
 
 interface ScheduledPoll {
 	timeout: NodeJS.Timeout;
