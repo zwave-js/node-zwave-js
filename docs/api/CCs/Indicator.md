@@ -33,6 +33,16 @@ async getSupported(indicatorId: number): Promise<
 >;
 ```
 
+### `reportSupported`
+
+```ts
+async reportSupported(
+	indicatorId: number,
+	supportedProperties: readonly number[],
+	nextIndicatorId: number,
+): Promise<void>;
+```
+
 ### `identify`
 
 ```ts
