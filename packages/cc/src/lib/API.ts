@@ -584,6 +584,7 @@ type CCNameMap = {
 	Clock: (typeof CommandClasses)["Clock"];
 	"Color Switch": (typeof CommandClasses)["Color Switch"];
 	Configuration: (typeof CommandClasses)["Configuration"];
+	"Device Reset Locally": (typeof CommandClasses)["Device Reset Locally"];
 	"Door Lock": (typeof CommandClasses)["Door Lock"];
 	"Door Lock Logging": (typeof CommandClasses)["Door Lock Logging"];
 	"Energy Production": (typeof CommandClasses)["Energy Production"];
@@ -723,6 +724,7 @@ export interface CCAPIs {
 	Clock: import("../cc/ClockCC").ClockCCAPI;
 	"Color Switch": import("../cc/ColorSwitchCC").ColorSwitchCCAPI;
 	Configuration: import("../cc/ConfigurationCC").ConfigurationCCAPI;
+	"Device Reset Locally": import("../cc/DeviceResetLocallyCC").DeviceResetLocallyCCAPI;
 	"Door Lock": import("../cc/DoorLockCC").DoorLockCCAPI;
 	"Door Lock Logging": import("../cc/DoorLockLoggingCC").DoorLockLoggingCCAPI;
 	"Energy Production": import("../cc/EnergyProductionCC").EnergyProductionCCAPI;

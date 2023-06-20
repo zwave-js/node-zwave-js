@@ -1335,6 +1335,8 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     requestNodeInfo(): Promise<NodeUpdatePayload>;
     // (undocumented)
     get sdkVersion(): MaybeNotKnown<string>;
+    // (undocumented)
+    sendResetLocallyNotification(): Promise<void>;
     setDateAndTime(now?: Date): Promise<boolean>;
     // (undocumented)
     setSecurityClass(securityClass: SecurityClass_2, granted: boolean): void;

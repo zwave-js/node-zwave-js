@@ -1,7 +1,9 @@
 import {
+	AssociationGroupInfoProfile,
 	CentralSceneKeys,
 	ClockCommand,
 	CommandClass,
+	DeviceResetLocallyCommand,
 	DoorLockMode,
 	EntryControlDataTypes,
 	FirmwareUpdateRequestStatus,
@@ -35,7 +37,18 @@ import {
 	type SetValueAPIOptions,
 	type ValueIDProperties,
 } from "@zwave-js/cc";
-import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
+import {
+	AssociationCCGet,
+	AssociationCCRemove,
+	AssociationCCSet,
+	AssociationCCSupportedGroupingsGet,
+	AssociationCCValues,
+} from "@zwave-js/cc/AssociationCC";
+import {
+	AssociationGroupInfoCCCommandListGet,
+	AssociationGroupInfoCCInfoGet,
+	AssociationGroupInfoCCNameGet,
+} from "@zwave-js/cc/AssociationGroupInfoCC";
 import {
 	BasicCC,
 	BasicCCReport,
@@ -251,6 +264,8 @@ interface AbortFirmwareUpdateContext {
 	tooLateToAbort: boolean;
 	abortPromise: DeferredPromise<boolean>;
 }
+
+const MAX_ASSOCIATIONS = 1;
 
 export interface ZWaveNode
 	extends TypedEventEmitter<
@@ -852,6 +867,17 @@ export class ZWaveNode
 	}
 	public set hasSUCReturnRoute(value: boolean) {
 		this.driver.cacheSet(cacheKeys.node(this.id).hasSUCReturnRoute, value);
+	}
+
+	/** @internal Which associations are currently configured */
+	public get associations(): readonly number[] {
+		return (
+			this.driver.cacheGet(cacheKeys.node(this.id).associations(1)) ?? []
+		);
+	}
+
+	private set associations(value: readonly number[]) {
+		this.driver.cacheSet(cacheKeys.node(this.id).associations(1), value);
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
@@ -2806,6 +2832,20 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleVersionGet(command);
 		} else if (command instanceof VersionCCCommandClassGet) {
 			return this.handleVersionCommandClassGet(command);
+		} else if (command instanceof AssociationGroupInfoCCNameGet) {
+			return this.handleAGINameGet(command);
+		} else if (command instanceof AssociationGroupInfoCCInfoGet) {
+			return this.handleAGIInfoGet(command);
+		} else if (command instanceof AssociationGroupInfoCCCommandListGet) {
+			return this.handleAGICommandListGet(command);
+		} else if (command instanceof AssociationCCSupportedGroupingsGet) {
+			return this.handleAssociationSupportedGroupingsGet(command);
+		} else if (command instanceof AssociationCCGet) {
+			return this.handleAssociationGet(command);
+		} else if (command instanceof AssociationCCSet) {
+			return this.handleAssociationSet(command);
+		} else if (command instanceof AssociationCCRemove) {
+			return this.handleAssociationRemove(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -3510,6 +3550,178 @@ protocol version:      ${this.protocolVersion}`;
 			});
 
 		await api.reportCCVersion(command.requestedCC);
+	}
+
+	private async handleAGINameGet(
+		command: AssociationGroupInfoCCNameGet,
+	): Promise<void> {
+		if (command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Association Group Information"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			});
+
+		await api.reportGroupName(1, "Lifeline");
+	}
+
+	private async handleAGIInfoGet(
+		command: AssociationGroupInfoCCInfoGet,
+	): Promise<void> {
+		if (!command.listMode && command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Association Group Information"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			});
+
+		await api.reportGroupInfo({
+			isListMode: command.listMode ?? false,
+			hasDynamicInfo: false,
+			groups: [
+				{
+					groupId: 1,
+					eventCode: 0, // ignored anyways
+					profile: AssociationGroupInfoProfile["General: Lifeline"],
+					mode: 0, // ignored anyways
+				},
+			],
+		});
+	}
+
+	private async handleAGICommandListGet(
+		command: AssociationGroupInfoCCCommandListGet,
+	): Promise<void> {
+		if (command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Association Group Information"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			});
+
+		await api.reportCommands(
+			command.groupId,
+			new Map([
+				[
+					CommandClasses["Device Reset Locally"],
+					[DeviceResetLocallyCommand.Notification],
+				],
+			]),
+		);
+	}
+
+	private async handleAssociationSupportedGroupingsGet(
+		command: AssociationCCSupportedGroupingsGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Association, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			});
+
+		// We only "support" the lifeline group
+		await api.reportGroupCount(1);
+	}
+
+	private async handleAssociationGet(
+		command: AssociationCCGet,
+	): Promise<void> {
+		if (command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		const controllerNode = this.driver.controller.nodes.get(
+			this.driver.controller.ownNodeId!,
+		)!;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Association, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			});
+
+		await api.sendReport({
+			groupId: command.groupId,
+			maxNodes: MAX_ASSOCIATIONS,
+			nodeIds: [...(controllerNode?.associations ?? [])],
+			reportsToFollow: 0,
+		});
+	}
+
+	private handleAssociationSet(command: AssociationCCSet): void {
+		if (command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+
+		const controllerNode = this.driver.controller.nodes.get(
+			this.driver.controller.ownNodeId!,
+		);
+		if (!controllerNode) return;
+
+		controllerNode.associations = [
+			...controllerNode.associations,
+			...command.nodeIds,
+		].slice(0, MAX_ASSOCIATIONS);
+	}
+
+	private handleAssociationRemove(command: AssociationCCRemove): void {
+		// Allow accessing the lifeline group or all groups (which is the same)
+		if (!!command.groupId && command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+
+		const controllerNode = this.driver.controller.nodes.get(
+			this.driver.controller.ownNodeId!,
+		);
+		if (!controllerNode) return;
+
+		if (!command.nodeIds) {
+			// clear
+			controllerNode.associations = [];
+		} else {
+			controllerNode.associations = controllerNode.associations.filter(
+				(nodeId) => !command.nodeIds!.includes(nodeId),
+			);
+		}
 	}
 
 	private async handleSecurityCommandsSupportedGet(
@@ -5604,5 +5816,15 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		}
 
 		return true;
+	}
+
+	public async sendResetLocallyNotification(): Promise<void> {
+		// We don't care if the CC is supported by the receiving node
+		const api = this.createAPI(
+			CommandClasses["Device Reset Locally"],
+			false,
+		);
+
+		await api.sendNotification();
 	}
 }

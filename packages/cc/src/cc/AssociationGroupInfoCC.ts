@@ -1,8 +1,7 @@
 import {
 	CommandClasses,
 	MessagePriority,
-	ZWaveError,
-	ZWaveErrorCodes,
+	encodeCCId,
 	getCCName,
 	parseCCId,
 	validatePayload,
@@ -89,8 +88,11 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case AssociationGroupInfoCommand.NameGet:
+			case AssociationGroupInfoCommand.NameReport:
 			case AssociationGroupInfoCommand.InfoGet:
+			case AssociationGroupInfoCommand.InfoReport:
 			case AssociationGroupInfoCommand.CommandListGet:
+			case AssociationGroupInfoCommand.CommandListReport:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
@@ -114,6 +116,23 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 				this.commandOptions,
 			);
 		if (response) return response.name;
+	}
+
+	@validateArgs()
+	public async reportGroupName(groupId: number, name: string): Promise<void> {
+		this.assertSupportsCommand(
+			AssociationGroupInfoCommand,
+			AssociationGroupInfoCommand.NameReport,
+		);
+
+		const cc = new AssociationGroupInfoCCNameReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			groupId,
+			name,
+		});
+
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -147,6 +166,23 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	public async reportGroupInfo(
+		options: AssociationGroupInfoCCInfoReportSpecificOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			AssociationGroupInfoCommand,
+			AssociationGroupInfoCommand.InfoReport,
+		);
+
+		const cc = new AssociationGroupInfoCCInfoReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
 	@validateArgs()
 	public async getCommands(
 		groupId: number,
@@ -171,6 +207,26 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 				this.commandOptions,
 			);
 		if (response) return response.commands;
+	}
+
+	@validateArgs()
+	public async reportCommands(
+		groupId: number,
+		commands: ReadonlyMap<CommandClasses, readonly number[]>,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			AssociationGroupInfoCommand,
+			AssociationGroupInfoCommand.CommandListReport,
+		);
+
+		const cc = new AssociationGroupInfoCCCommandListReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			groupId,
+			commands,
+		});
+
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -382,23 +438,41 @@ profile:         ${getEnumMemberName(
 		}
 	}
 }
+
+export interface AssociationGroupInfoCCNameReportOptions
+	extends CCCommandOptions {
+	groupId: number;
+	name: string;
+}
+
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| AssociationGroupInfoCCNameReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.groupId = this.payload[0];
-		const nameLength = this.payload[1];
-		validatePayload(this.payload.length >= 2 + nameLength);
-		// The specs don't allow 0-terminated string, but some devices use them
-		// So we need to cut them off
-		this.name = cpp2js(
-			this.payload.slice(2, 2 + nameLength).toString("utf8"),
-		);
+
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.groupId = this.payload[0];
+			const nameLength = this.payload[1];
+			validatePayload(this.payload.length >= 2 + nameLength);
+			// The specs don't allow 0-terminated string, but some devices use them
+			// So we need to cut them off
+			this.name = cpp2js(
+				this.payload.slice(2, 2 + nameLength).toString("utf8"),
+			);
+		} else {
+			this.groupId = options.groupId;
+			this.name = options.name;
+		}
 	}
+
+	public readonly groupId: number;
+	public readonly name: string;
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
@@ -414,8 +488,13 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public readonly groupId: number;
-	public readonly name: string;
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.groupId, this.name.length]),
+			Buffer.from(this.name, "utf8"),
+		]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -443,11 +522,8 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.groupId = this.payload[0];
 		} else {
 			this.groupId = options.groupId;
 		}
@@ -475,33 +551,56 @@ export interface AssociationGroupInfo {
 	eventCode: number;
 }
 
+export interface AssociationGroupInfoCCInfoReportSpecificOptions {
+	isListMode: boolean;
+	hasDynamicInfo: boolean;
+	groups: AssociationGroupInfo[];
+}
+
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (AssociationGroupInfoCCInfoReportSpecificOptions &
+					CCCommandOptions),
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.isListMode = !!(this.payload[0] & 0b1000_0000);
-		this.hasDynamicInfo = !!(this.payload[0] & 0b0100_0000);
 
-		const groupCount = this.payload[0] & 0b0011_1111;
-		// each group requires 7 bytes of payload
-		validatePayload(this.payload.length >= 1 + groupCount * 7);
-		const _groups: AssociationGroupInfo[] = [];
-		for (let i = 0; i < groupCount; i++) {
-			const offset = 1 + i * 7;
-			// Parse the payload
-			const groupBytes = this.payload.slice(offset, offset + 7);
-			const groupId = groupBytes[0];
-			const mode = 0; //groupBytes[1];
-			const profile = groupBytes.readUInt16BE(2);
-			const eventCode = 0; // groupBytes.readUInt16BE(5);
-			_groups.push({ groupId, mode, profile, eventCode });
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.isListMode = !!(this.payload[0] & 0b1000_0000);
+			this.hasDynamicInfo = !!(this.payload[0] & 0b0100_0000);
+
+			const groupCount = this.payload[0] & 0b0011_1111;
+			// each group requires 7 bytes of payload
+			validatePayload(this.payload.length >= 1 + groupCount * 7);
+			const _groups: AssociationGroupInfo[] = [];
+			for (let i = 0; i < groupCount; i++) {
+				const offset = 1 + i * 7;
+				// Parse the payload
+				const groupBytes = this.payload.slice(offset, offset + 7);
+				const groupId = groupBytes[0];
+				const mode = 0; //groupBytes[1];
+				const profile = groupBytes.readUInt16BE(2);
+				const eventCode = 0; // groupBytes.readUInt16BE(5);
+				_groups.push({ groupId, mode, profile, eventCode });
+			}
+			this.groups = _groups;
+		} else {
+			this.isListMode = options.isListMode;
+			this.hasDynamicInfo = options.hasDynamicInfo;
+			this.groups = options.groups;
 		}
-		this.groups = _groups;
 	}
+
+	public readonly isListMode: boolean;
+
+	@ccValue(AssociationGroupInfoCCValues.hasDynamicInfo)
+	public readonly hasDynamicInfo: boolean;
+
+	public readonly groups: readonly AssociationGroupInfo[];
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
@@ -521,12 +620,23 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public readonly isListMode: boolean;
+	public serialize(): Buffer {
+		this.payload = Buffer.alloc(1 + this.groups.length * 7, 0);
 
-	@ccValue(AssociationGroupInfoCCValues.hasDynamicInfo)
-	public readonly hasDynamicInfo: boolean;
+		this.payload[0] =
+			(this.isListMode ? 0b1000_0000 : 0) |
+			(this.hasDynamicInfo ? 0b0100_0000 : 0) |
+			(this.groups.length & 0b0011_1111);
 
-	public readonly groups: readonly AssociationGroupInfo[];
+		for (let i = 0; i < this.groups.length; i++) {
+			const offset = 1 + i * 7;
+			this.payload[offset] = this.groups[i].groupId;
+			this.payload.writeUint16BE(this.groups[i].profile, offset + 2);
+			// The remaining bytes are zero
+		}
+
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -570,11 +680,13 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			const optionByte = this.payload[0];
+			this.refreshCache = !!(optionByte & 0b1000_0000);
+			this.listMode = !!(optionByte & 0b0100_0000);
+			if (!this.listMode) {
+				this.groupId = this.payload[1];
+			}
 		} else {
 			this.refreshCache = options.refreshCache;
 			if ("listMode" in options) this.listMode = options.listMode;
@@ -614,30 +726,44 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	}
 }
 
+export interface AssociationGroupInfoCCCommandListReportOptions
+	extends CCCommandOptions {
+	groupId: number;
+	commands: ReadonlyMap<CommandClasses, readonly number[]>;
+}
+
 @CCCommand(AssociationGroupInfoCommand.CommandListReport)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| AssociationGroupInfoCCCommandListReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.groupId = this.payload[0];
-		const listLength = this.payload[1];
-		validatePayload(this.payload.length >= 2 + listLength);
-		const listBytes = this.payload.slice(2, 2 + listLength);
-		// Parse all CC ids and commands
-		let offset = 0;
-		const commands = new Map<CommandClasses, number[]>();
-		while (offset < listLength) {
-			const { ccId, bytesRead } = parseCCId(listBytes, offset);
-			const command = listBytes[offset + bytesRead];
-			if (!commands.has(ccId)) commands.set(ccId, []);
-			commands.get(ccId)!.push(command);
-			offset += bytesRead + 1;
-		}
 
-		this.commands = commands;
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.groupId = this.payload[0];
+			const listLength = this.payload[1];
+			validatePayload(this.payload.length >= 2 + listLength);
+			const listBytes = this.payload.slice(2, 2 + listLength);
+			// Parse all CC ids and commands
+			let offset = 0;
+			const commands = new Map<CommandClasses, number[]>();
+			while (offset < listLength) {
+				const { ccId, bytesRead } = parseCCId(listBytes, offset);
+				const command = listBytes[offset + bytesRead];
+				if (!commands.has(ccId)) commands.set(ccId, []);
+				commands.get(ccId)!.push(command);
+				offset += bytesRead + 1;
+			}
+
+			this.commands = commands;
+		} else {
+			this.groupId = options.groupId;
+			this.commands = options.commands;
+		}
 	}
 
 	public readonly groupId: number;
@@ -648,6 +774,24 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 			[self.groupId] as const,
 	)
 	public readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
+
+	public serialize(): Buffer {
+		// To make it easier to encode possible extended CCs, we first
+		// allocate as much space as we may need, then trim it again
+		this.payload = Buffer.allocUnsafe(2 + this.commands.size * 3);
+		this.payload[0] = this.groupId;
+		let offset = 2;
+		for (const [ccId, commands] of this.commands) {
+			for (const command of commands) {
+				offset += encodeCCId(ccId, this.payload, offset);
+				this.payload[offset] = command;
+				offset++;
+			}
+		}
+		this.payload[1] = offset - 2; // list length
+
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -682,11 +826,9 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.allowCache = !!(this.payload[0] & 0b1000_0000);
+			this.groupId = this.payload[1];
 		} else {
 			this.allowCache = options.allowCache;
 			this.groupId = options.groupId;
