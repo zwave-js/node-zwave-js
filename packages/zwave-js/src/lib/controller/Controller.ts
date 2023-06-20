@@ -1273,7 +1273,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					const node = this.nodes.get(nodeId);
 					if (!node) continue;
 
-					void node.sendResetLocallyNotification().catch(() => {});
+					void node.sendResetLocallyNotification().catch(() => {
+						// ignore
+					});
 				}
 			}
 

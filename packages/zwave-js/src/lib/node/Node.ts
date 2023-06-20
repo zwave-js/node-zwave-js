@@ -3685,9 +3685,7 @@ protocol version:      ${this.protocolVersion}`;
 		});
 	}
 
-	private async handleAssociationSet(
-		command: AssociationCCSet,
-	): Promise<void> {
+	private handleAssociationSet(command: AssociationCCSet): void {
 		if (command.groupId !== 1) {
 			// We only "support" the lifeline group
 			return;
@@ -3704,9 +3702,7 @@ protocol version:      ${this.protocolVersion}`;
 		].slice(0, MAX_ASSOCIATIONS);
 	}
 
-	private async handleAssociationRemove(
-		command: AssociationCCRemove,
-	): Promise<void> {
+	private handleAssociationRemove(command: AssociationCCRemove): void {
 		// Allow accessing the lifeline group or all groups (which is the same)
 		if (!!command.groupId && command.groupId !== 1) {
 			// We only "support" the lifeline group
