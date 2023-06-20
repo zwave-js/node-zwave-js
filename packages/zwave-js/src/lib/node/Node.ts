@@ -10,6 +10,8 @@ import {
 	FirmwareUpdateStatus,
 	InclusionControllerCCInitiate,
 	InclusionControllerStep,
+	IndicatorCCSet,
+	IndicatorCCSupportedGet,
 	MultiCommandCCCommandEncapsulation,
 	MultilevelSwitchCommand,
 	Powerlevel,
@@ -2846,6 +2848,10 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleAssociationSet(command);
 		} else if (command instanceof AssociationCCRemove) {
 			return this.handleAssociationRemove(command);
+		} else if (command instanceof IndicatorCCSupportedGet) {
+			return this.handleIndicatorSupportedGet(command);
+		} else if (command instanceof IndicatorCCSet) {
+			return this.handleIndicatorSet(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -3722,6 +3728,50 @@ protocol version:      ${this.protocolVersion}`;
 				(nodeId) => !command.nodeIds!.includes(nodeId),
 			);
 		}
+	}
+
+	private handleIndicatorSupportedGet(
+		command: IndicatorCCSupportedGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Indicator, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			});
+
+		switch (command.indicatorId) {
+			case 0:
+			// 0 must be answered with the first supported indicator ID.
+			// We only support identify (0x50)
+			case 0x50:
+				// Identify
+				return api.reportSupported(0x50, [0x03, 0x04, 0x05], 0);
+			default:
+				// A supporting node receiving a non-zero Indicator ID that is
+				// not supported MUST set all fields to 0x00 in the returned response.
+				return api.reportSupported(0, [], 0);
+		}
+	}
+
+	private handleIndicatorSet(command: IndicatorCCSet): void {
+		// We only support "identify"
+		if (command.values?.length !== 3) return;
+		const [v1, v2, v3] = command.values;
+		if (v1.indicatorId !== 0x50 || v1.propertyId !== 0x03) return;
+		if (v2.indicatorId !== 0x50 || v2.propertyId !== 0x04) return;
+		if (v3.indicatorId !== 0x50 || v3.propertyId !== 0x05) return;
+
+		this.driver.controllerLog.logNode(this.id, {
+			message: "Received identify command",
+			direction: "inbound",
+		});
+
+		this.driver.controller.emit("identify");
 	}
 
 	private async handleSecurityCommandsSupportedGet(

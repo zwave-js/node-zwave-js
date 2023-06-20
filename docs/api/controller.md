@@ -1413,3 +1413,16 @@ enum ControllerFirmwareUpdateStatus {
 	OK = 0xff,
 }
 ```
+
+### `"identify"`
+
+This is emitted when another node instructs Z-Wave JS to identify itself using the `Indicator CC`, indicator ID `0x50`. The callback has no arguments:
+
+```ts
+() => void
+```
+
+> [!NOTE] Although support for this seems to be a certification requirement, it is currently unclear how this requirement must be fulfilled for controllers. The specification only refers to nodes:
+> The node is RECOMMENDED to use a visible LED for an identify function if it has an LED. If the node is itself a light source, e.g. a light bulb, this MAY be used in place of a dedicated LED.
+>
+> The event signature may be extended to accomodate this after clarification.

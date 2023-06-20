@@ -25,13 +25,14 @@ export function determineNIF(): {
 			cc !== CommandClasses["Multi Channel"],
 	);
 
-	// The controller is considered a secure device, so it MUST only list CCs in the NIF that MUST always be supported insecurely
 	const supportedCCs = new Set([
 		// Z-Wave Plus Info must be listed first
 		CommandClasses["Z-Wave Plus Info"],
 		// Gateway device type MUST support Inclusion Controller and Time CC
 		CommandClasses["Inclusion Controller"],
 		CommandClasses.Time,
+		// All devices must support Indicator CC
+		CommandClasses.Indicator,
 		// Supporting lifeline associations is also mandatory
 		CommandClasses.Association,
 		// And apparently we must advertise that we're able to send Device Reset Locally notifications

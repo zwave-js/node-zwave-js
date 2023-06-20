@@ -1,19 +1,18 @@
 import type { ConfigManager } from "@zwave-js/config";
-import type {
-	IZWaveEndpoint,
-	MessageOrCCLogEntry,
-	MessageRecord,
-	SupervisionResult,
-} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
 	parseBitMask,
 	validatePayload,
+	type IZWaveEndpoint,
 	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
@@ -261,10 +260,12 @@ export class IndicatorCCAPI extends CCAPI {
 	public supportsCommand(cmd: IndicatorCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case IndicatorCommand.Get:
+			case IndicatorCommand.Report:
 				return this.isSinglecast();
 			case IndicatorCommand.Set:
 				return true; // This is mandatory
 			case IndicatorCommand.SupportedGet:
+			case IndicatorCommand.SupportedReport:
 				return this.version >= 2 && this.isSinglecast();
 			case IndicatorCommand.DescriptionGet:
 				return this.version >= 4 && this.isSinglecast();
@@ -361,7 +362,7 @@ export class IndicatorCCAPI extends CCAPI {
 		);
 		if (!response) return;
 		if (response.values) return response.values;
-		return response.value!;
+		return response.indicator0Value!;
 	}
 
 	@validateArgs()
@@ -412,6 +413,28 @@ export class IndicatorCCAPI extends CCAPI {
 				nextIndicatorId: response.nextIndicatorId,
 			};
 		}
+	}
+
+	@validateArgs()
+	public async reportSupported(
+		indicatorId: number,
+		supportedProperties: readonly number[],
+		nextIndicatorId: number,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			IndicatorCommand,
+			IndicatorCommand.SupportedReport,
+		);
+
+		const cc = new IndicatorCCSupportedReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			indicatorId,
+			supportedProperties,
+			nextIndicatorId,
+		});
+
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -795,7 +818,7 @@ export interface IndicatorObject {
 	value: number | boolean;
 }
 
-type IndicatorCCSetOptions =
+export type IndicatorCCSetOptions =
 	| {
 			value: number;
 	  }
@@ -814,11 +837,25 @@ export class IndicatorCCSet extends IndicatorCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+
+			const objCount =
+				this.payload.length >= 2 ? this.payload[1] & 0b11111 : 0;
+			if (objCount === 0) {
+				this.indicator0Value = this.payload[0];
+			} else {
+				validatePayload(this.payload.length >= 2 + 3 * objCount);
+				this.values = [];
+				for (let i = 0; i < objCount; i++) {
+					const offset = 2 + 3 * i;
+					const value: IndicatorObject = {
+						indicatorId: this.payload[offset],
+						propertyId: this.payload[offset + 1],
+						value: this.payload[offset + 2],
+					};
+					this.values.push(value);
+				}
+			}
 		} else {
 			if (this.version === 1) {
 				if (!("value" in options)) {
@@ -850,30 +887,23 @@ export class IndicatorCCSet extends IndicatorCC {
 	public values: IndicatorObject[] | undefined;
 
 	public serialize(): Buffer {
-		if (this.indicator0Value != undefined) {
-			this.payload = Buffer.from([this.indicator0Value]);
+		if (this.values != undefined) {
+			// V2+
+			this.payload = Buffer.alloc(2 + 3 * this.values.length, 0);
+			// Byte 0 is the legacy value
+			const objCount = this.values.length & MAX_INDICATOR_OBJECTS;
+			this.payload[1] = objCount;
+			for (let i = 0; i < objCount; i++) {
+				const offset = 2 + 3 * i;
+				this.payload[offset] = this.values[i].indicatorId;
+				this.payload[offset + 1] = this.values[i].propertyId;
+				const value = this.values[i].value;
+				this.payload[offset + 2] =
+					value === true ? 0xff : value === false ? 0x00 : value;
+			}
 		} else {
-			const values = this.values!;
-			const objCount = values.length & MAX_INDICATOR_OBJECTS;
-			const valuesFlat = values
-				.slice(0, objCount + 1)
-				.map(
-					(o) =>
-						[
-							o.indicatorId,
-							o.propertyId,
-							typeof o.value === "number"
-								? o.value
-								: o.value
-								? 0xff
-								: 0x00,
-						] as const,
-				)
-				.reduce((acc, cur) => acc.concat(...cur), [] as number[]);
-			this.payload = Buffer.concat([
-				Buffer.from([0, objCount]),
-				Buffer.from(valuesFlat),
-			]);
+			// V1
+			this.payload = Buffer.from([this.indicator0Value ?? 0]);
 		}
 		return super.serialize();
 	}
@@ -900,70 +930,94 @@ export class IndicatorCCSet extends IndicatorCC {
 	}
 }
 
+export type IndicatorCCReportSpecificOptions =
+	| {
+			value: number;
+	  }
+	| {
+			values: IndicatorObject[];
+	  };
+
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (IndicatorCCReportSpecificOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
 
-		const objCount =
-			this.payload.length >= 2 ? this.payload[1] & 0b11111 : 0;
-		if (objCount === 0) {
-			this.value = this.payload[0];
-		} else {
-			validatePayload(this.payload.length >= 2 + 3 * objCount);
-			this.values = [];
-			for (let i = 0; i < objCount; i++) {
-				const offset = 2 + 3 * i;
-				const value: IndicatorObject = {
-					indicatorId: this.payload[offset],
-					propertyId: this.payload[offset + 1],
-					value: this.payload[offset + 2],
-				};
-				this.values.push(value);
+			const objCount =
+				this.payload.length >= 2 ? this.payload[1] & 0b11111 : 0;
+			if (objCount === 0) {
+				this.indicator0Value = this.payload[0];
+			} else {
+				validatePayload(this.payload.length >= 2 + 3 * objCount);
+				this.values = [];
+				for (let i = 0; i < objCount; i++) {
+					const offset = 2 + 3 * i;
+					const value: IndicatorObject = {
+						indicatorId: this.payload[offset],
+						propertyId: this.payload[offset + 1],
+						value: this.payload[offset + 2],
+					};
+					this.values.push(value);
+				}
+
+				// TODO: Think if we want this:
+
+				// // If not all Property IDs are included in the command for the actual Indicator ID,
+				// // a controlling node MUST assume non-specified Property IDs values to be 0x00.
+				// const indicatorId = this.values[0].indicatorId;
+				// const supportedIndicatorProperties =
+				// 	valueDB.getValue<number[]>(
+				// 		getSupportedPropertyIDsValueID(
+				// 			this.endpointIndex,
+				// 			indicatorId,
+				// 		),
+				// 	) ?? [];
+				// // Find out which ones are missing
+				// const missingIndicatorProperties = supportedIndicatorProperties.filter(
+				// 	prop =>
+				// 		!this.values!.find(({ propertyId }) => prop === propertyId),
+				// );
+				// // And assume they are 0 (false)
+				// for (const missing of missingIndicatorProperties) {
+				// 	this.setIndicatorValue({
+				// 		indicatorId,
+				// 		propertyId: missing,
+				// 		value: 0,
+				// 	});
+				// }
 			}
-
-			// TODO: Think if we want this:
-
-			// // If not all Property IDs are included in the command for the actual Indicator ID,
-			// // a controlling node MUST assume non-specified Property IDs values to be 0x00.
-			// const indicatorId = this.values[0].indicatorId;
-			// const supportedIndicatorProperties =
-			// 	valueDB.getValue<number[]>(
-			// 		getSupportedPropertyIDsValueID(
-			// 			this.endpointIndex,
-			// 			indicatorId,
-			// 		),
-			// 	) ?? [];
-			// // Find out which ones are missing
-			// const missingIndicatorProperties = supportedIndicatorProperties.filter(
-			// 	prop =>
-			// 		!this.values!.find(({ propertyId }) => prop === propertyId),
-			// );
-			// // And assume they are 0 (false)
-			// for (const missing of missingIndicatorProperties) {
-			// 	this.setIndicatorValue({
-			// 		indicatorId,
-			// 		propertyId: missing,
-			// 		value: 0,
-			// 	});
-			// }
+		} else {
+			if ("value" in options) {
+				this.indicator0Value = options.value;
+			} else if ("values" in options) {
+				if (options.values.length > MAX_INDICATOR_OBJECTS) {
+					throw new ZWaveError(
+						`Only ${MAX_INDICATOR_OBJECTS} indicator values can be set at a time!`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				this.values = options.values;
+			}
 		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		if (this.value != undefined) {
+		if (this.indicator0Value != undefined) {
 			if (!this.supportsV2Indicators(applHost)) {
 				// Publish the value
 				const valueV1 = IndicatorCCValues.valueV1;
 				this.setMetadata(applHost, valueV1);
-				this.setValue(applHost, valueV1, this.value);
+				this.setValue(applHost, valueV1, this.indicator0Value);
 			} else {
 				if (this.isSinglecast()) {
 					// Don't!
@@ -1001,7 +1055,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		return true;
 	}
 
-	public readonly value: number | undefined;
+	public readonly indicator0Value: number | undefined;
 	public readonly values: IndicatorObject[] | undefined;
 
 	private setIndicatorValue(
@@ -1038,10 +1092,32 @@ export class IndicatorCCReport extends IndicatorCC {
 		this.setValue(applHost, valueV2, value.value);
 	}
 
+	public serialize(): Buffer {
+		if (this.values != undefined) {
+			// V2+
+			this.payload = Buffer.alloc(2 + 3 * this.values.length, 0);
+			// Byte 0 is the legacy value
+			const objCount = this.values.length & MAX_INDICATOR_OBJECTS;
+			this.payload[1] = objCount;
+			for (let i = 0; i < objCount; i++) {
+				const offset = 2 + 3 * i;
+				this.payload[offset] = this.values[i].indicatorId;
+				this.payload[offset + 1] = this.values[i].propertyId;
+				const value = this.values[i].value;
+				this.payload[offset + 2] =
+					value === true ? 0xff : value === false ? 0x00 : value;
+			}
+		} else {
+			// V1
+			this.payload = Buffer.from([this.indicator0Value ?? 0]);
+		}
+		return super.serialize();
+	}
+
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
-		if (this.value != undefined) {
-			message["indicator 0 value"] = this.value;
+		if (this.indicator0Value != undefined) {
+			message["indicator 0 value"] = this.indicator0Value;
 		}
 		if (this.values != undefined) {
 			message.values = `${this.values
@@ -1073,11 +1149,9 @@ export class IndicatorCCGet extends IndicatorCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			if (this.payload.length > 0) {
+				this.indicatorId = this.payload[0];
+			}
 		} else {
 			this.indicatorId = options.indicatorId;
 		}
@@ -1105,27 +1179,41 @@ export class IndicatorCCGet extends IndicatorCC {
 	}
 }
 
+export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
+	indicatorId: number;
+	nextIndicatorId: number;
+	supportedProperties: readonly number[];
+}
+
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| IndicatorCCSupportedReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 3);
-		this.indicatorId = this.payload[0];
-		this.nextIndicatorId = this.payload[1];
-		const bitMaskLength = this.payload[2] & 0b11111;
-		if (bitMaskLength === 0) {
-			this.supportedProperties = [];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 3);
+			this.indicatorId = this.payload[0];
+			this.nextIndicatorId = this.payload[1];
+			const bitMaskLength = this.payload[2] & 0b11111;
+			if (bitMaskLength === 0) {
+				this.supportedProperties = [];
+			} else {
+				validatePayload(this.payload.length >= 3 + bitMaskLength);
+				// The bit mask starts at 0, but bit 0 is not used
+				this.supportedProperties = parseBitMask(
+					this.payload.slice(3, 3 + bitMaskLength),
+					0,
+				).filter((v) => v !== 0);
+			}
 		} else {
-			validatePayload(this.payload.length >= 3 + bitMaskLength);
-			// The bit mask starts at 0, but bit 0 is not used
-			this.supportedProperties = parseBitMask(
-				this.payload.slice(3, 3 + bitMaskLength),
-				0,
-			).filter((v) => v !== 0);
+			this.indicatorId = options.indicatorId;
+			this.nextIndicatorId = options.nextIndicatorId;
+			this.supportedProperties = options.supportedProperties;
 		}
 	}
 
@@ -1146,6 +1234,23 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly indicatorId: number;
 	public readonly nextIndicatorId: number;
 	public readonly supportedProperties: readonly number[];
+
+	public serialize(): Buffer {
+		const bitmask =
+			this.supportedProperties.length > 0
+				? encodeBitMask(this.supportedProperties, undefined, 0)
+				: Buffer.from([]);
+		this.payload = Buffer.concat([
+			Buffer.from([
+				this.indicatorId,
+				this.nextIndicatorId,
+				bitmask.length,
+			]),
+			bitmask,
+		]);
+
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -1196,11 +1301,8 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.indicatorId = this.payload[0];
 		} else {
 			this.indicatorId = options.indicatorId;
 		}
