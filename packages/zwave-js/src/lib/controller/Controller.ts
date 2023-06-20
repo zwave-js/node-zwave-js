@@ -2108,7 +2108,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				}
 
 				// Bootstrap the node's lifelines, so it knows where the controller is
-				await this.bootstrapLifelineAndWakeup(newNode);
+				await this.bootstrapLifeline(newNode);
 
 				// We're done adding this node, notify listeners
 				const result: InclusionResult =
@@ -2213,7 +2213,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				inclCtrlr,
 			);
 			// Bootstrap the node's lifelines, so it knows where the controller is
-			await this.bootstrapLifelineAndWakeup(newNode);
+			await this.bootstrapLifeline(newNode);
 
 			// We're done adding this node, notify listeners
 			const result: InclusionResult =
@@ -3004,7 +3004,7 @@ supported CCs: ${nodeInfo.supportedCCs
 	}
 
 	/** Ensures that the node knows where to reach the controller */
-	private async bootstrapLifelineAndWakeup(node: ZWaveNode): Promise<void> {
+	private async bootstrapLifeline(node: ZWaveNode): Promise<void> {
 		// If the node was bootstrapped with S2, all these requests must happen securely
 		if (securityClassIsS2(node.getHighestSecurityClass())) {
 			for (const cc of [
@@ -3065,41 +3065,6 @@ supported CCs: ${nodeInfo.supportedCCs
 					direction: "none",
 					level: "warn",
 				});
-			}
-		}
-
-		if (node.supportsCC(CommandClasses["Wake Up"])) {
-			try {
-				// Query the version, so we can setup the wakeup destination correctly.
-				let supportedVersion: number | undefined;
-				if (node.supportsCC(CommandClasses.Version)) {
-					supportedVersion =
-						await node.commandClasses.Version.getCCVersion(
-							CommandClasses["Wake Up"],
-						);
-				}
-				// If querying the version can't be done, we should at least assume that it supports V1
-				supportedVersion ??= 1;
-				if (supportedVersion > 0) {
-					node.addCC(CommandClasses["Wake Up"], {
-						version: supportedVersion,
-					});
-					const instance = node.createCCInstance(
-						CommandClasses["Wake Up"],
-					)!;
-					await instance.interview(this.driver);
-				}
-			} catch (e) {
-				if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
-					this.driver.controllerLog.logNode(node.id, {
-						message: `Cannot configure wakeup destination: ${e.message}`,
-						direction: "none",
-						level: "warn",
-					});
-				} else {
-					// we want to pass all other errors through
-					throw e;
-				}
 			}
 		}
 	}
@@ -3401,7 +3366,7 @@ supported CCs: ${nodeInfo.supportedCCs
 					}
 				} else {
 					// Bootstrap the node's lifelines, so it knows where the controller is
-					await this.bootstrapLifelineAndWakeup(newNode);
+					await this.bootstrapLifeline(newNode);
 				}
 
 				this.setInclusionState(InclusionState.Idle);
@@ -3572,7 +3537,7 @@ supported CCs: ${nodeInfo.supportedCCs
 					}
 
 					// Bootstrap the node's lifelines, so it knows where the controller is
-					await this.bootstrapLifelineAndWakeup(newNode);
+					await this.bootstrapLifeline(newNode);
 
 					// We're done adding this node, notify listeners. This also kicks off the node interview
 					const result: InclusionResult =

@@ -2156,6 +2156,17 @@ protocol version:      ${this.protocolVersion}`;
 			this.applyCommandClassesCompatFlag();
 		}
 
+		// The Wakeup interview should be done as early as possible
+		if (this.supportsCC(CommandClasses["Wake Up"])) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Root device interview: Wake Up",
+				"silly",
+			);
+
+			await interviewEndpoint(this, CommandClasses["Wake Up"]);
+		}
+
 		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
 		// to map the Basic CC to other CCs or expose Basic Set as an event
 		this.modifySupportedCCBeforeInterview(this);
@@ -2163,20 +2174,21 @@ protocol version:      ${this.protocolVersion}`;
 		// We determine the correct interview order of the remaining CCs by topologically sorting two dependency graph
 		// In order to avoid emitting unnecessary value events for the root endpoint,
 		// we defer the application CC interview until after the other endpoints have been interviewed
-		const rootInterviewGraphBeforeEndpoints = this.buildCCInterviewGraph([
+		const priorityCCs = [
 			CommandClasses.Security,
 			CommandClasses["Security 2"],
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Version,
+			CommandClasses["Wake Up"],
+		];
+		const rootInterviewGraphBeforeEndpoints = this.buildCCInterviewGraph([
+			...priorityCCs,
 			...applicationCCs,
 		]);
 		let rootInterviewOrderBeforeEndpoints: CommandClasses[];
 
 		const rootInterviewGraphAfterEndpoints = this.buildCCInterviewGraph([
-			CommandClasses.Security,
-			CommandClasses["Security 2"],
-			CommandClasses["Manufacturer Specific"],
-			CommandClasses.Version,
+			...priorityCCs,
 			...nonApplicationCCs,
 		]);
 		let rootInterviewOrderAfterEndpoints: CommandClasses[];
