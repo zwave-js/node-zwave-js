@@ -10,10 +10,24 @@
 async getGroupName(groupId: number): Promise<MaybeNotKnown<string>>;
 ```
 
+### `reportGroupName`
+
+```ts
+async reportGroupName(groupId: number, name: string): Promise<void>;
+```
+
 ### `getGroupInfo`
 
 ```ts
 async getGroupInfo(groupId: number, refreshCache: boolean = false): Promise<{ mode: number; profile: number; eventCode: number; hasDynamicInfo: boolean; } | undefined>;
+```
+
+### `reportGroupInfo`
+
+```ts
+async reportGroupInfo(
+	options: AssociationGroupInfoCCInfoReportSpecificOptions,
+): Promise<void>;
 ```
 
 ### `getCommands`
@@ -25,4 +39,13 @@ async getCommands(
 ): Promise<
 	MaybeNotKnown<AssociationGroupInfoCCCommandListReport["commands"]>
 >;
+```
+
+### `reportCommands`
+
+```ts
+async reportCommands(
+	groupId: number,
+	commands: ReadonlyMap<CommandClasses, readonly number[]>,
+): Promise<void>;
 ```

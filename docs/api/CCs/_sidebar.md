@@ -41,6 +41,7 @@
         -   [Color Switch CC](api/CCs/ColorSwitch.md)
         -   [Configuration CC](api/CCs/Configuration.md)
         -   [CRC-16 Encapsulation CC](api/CCs/CRC16.md)
+        -   [Device Reset Locally CC](api/CCs/DeviceResetLocally.md)
         -   [Door Lock CC](api/CCs/DoorLock.md)
         -   [Door Lock Logging CC](api/CCs/DoorLockLogging.md)
         -   [Energy Production CC](api/CCs/EnergyProduction.md)
