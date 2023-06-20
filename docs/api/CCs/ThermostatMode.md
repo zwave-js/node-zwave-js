@@ -22,7 +22,7 @@ async set(
 
 async set(
 	mode: (typeof ThermostatMode)["Manufacturer specific"],
-	manufacturerData: Buffer,
+	manufacturerData: Buffer | string,
 ): Promise<SupervisionResult | undefined>;
 ```
 

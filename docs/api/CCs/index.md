@@ -24,6 +24,7 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [Color Switch CC](api/CCs/ColorSwitch.md) · `0x33`
 -   [Configuration CC](api/CCs/Configuration.md) · `0x70`
 -   [CRC-16 Encapsulation CC](api/CCs/CRC16.md) · `0x56`
+-   [Device Reset Locally CC](api/CCs/DeviceResetLocally.md) · `0x5a`
 -   [Door Lock CC](api/CCs/DoorLock.md) · `0x62`
 -   [Door Lock Logging CC](api/CCs/DoorLockLogging.md) · `0x4c`
 -   [Energy Production CC](api/CCs/EnergyProduction.md) · `0x90`
