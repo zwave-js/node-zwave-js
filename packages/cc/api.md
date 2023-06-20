@@ -7568,13 +7568,16 @@ export class IndicatorCCGet extends IndicatorCC {
 //
 // @public (undocumented)
 export class IndicatorCCReport extends IndicatorCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "IndicatorCCReportSpecificOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (IndicatorCCReportSpecificOptions & CCCommandOptions));
+    // (undocumented)
+    readonly indicator0Value: number | undefined;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    serialize(): Buffer;
     // (undocumented)
-    readonly value: number | undefined;
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // Warning: (ae-forgotten-export) The symbol "IndicatorObject" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -7615,13 +7618,16 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 //
 // @public (undocumented)
 export class IndicatorCCSupportedReport extends IndicatorCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "IndicatorCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IndicatorCCSupportedReportOptions);
     // (undocumented)
     readonly indicatorId: number;
     // (undocumented)
     readonly nextIndicatorId: number;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly supportedProperties: readonly number[];
     // (undocumented)

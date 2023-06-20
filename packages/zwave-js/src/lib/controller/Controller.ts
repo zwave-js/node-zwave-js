@@ -369,6 +369,7 @@ interface ControllerEventCallbacks
 	"firmware update finished": (
 		result: ControllerFirmwareUpdateResult,
 	) => void;
+	identify: () => void;
 }
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
