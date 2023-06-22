@@ -44,8 +44,6 @@ import {
 	dskToString,
 	encodeX25519KeyDERSPKI,
 	indexDBsByNode,
-	isRecoverableZWaveError,
-	isTransmissionError,
 	isValidDSK,
 	isZWaveError,
 	nwiHomeIdFromDSK,
@@ -2107,9 +2105,6 @@ supported CCs: ${nodeInfo.supportedCCs
 					}
 				}
 
-				// Bootstrap the node's lifelines, so it knows where the controller is
-				await this.bootstrapLifelineAndWakeup(newNode);
-
 				// We're done adding this node, notify listeners
 				const result: InclusionResult =
 					bootstrapFailure != undefined
@@ -2212,8 +2207,6 @@ supported CCs: ${nodeInfo.supportedCCs
 				newNode,
 				inclCtrlr,
 			);
-			// Bootstrap the node's lifelines, so it knows where the controller is
-			await this.bootstrapLifelineAndWakeup(newNode);
 
 			// We're done adding this node, notify listeners
 			const result: InclusionResult =
@@ -3003,107 +2996,6 @@ supported CCs: ${nodeInfo.supportedCCs
 		}
 	}
 
-	/** Ensures that the node knows where to reach the controller */
-	private async bootstrapLifelineAndWakeup(node: ZWaveNode): Promise<void> {
-		// If the node was bootstrapped with S2, all these requests must happen securely
-		if (securityClassIsS2(node.getHighestSecurityClass())) {
-			for (const cc of [
-				CommandClasses["Wake Up"],
-				CommandClasses.Association,
-				CommandClasses["Multi Channel Association"],
-				CommandClasses.Version,
-			]) {
-				if (node.supportsCC(cc)) {
-					node.addCC(cc, { secure: true });
-				}
-			}
-		}
-
-		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			// SDS11846: The Z-Wave+ lifeline must be assigned to a node as the very first thing
-			if (
-				node.supportsCC(CommandClasses.Association) ||
-				node.supportsCC(CommandClasses["Multi Channel Association"])
-			) {
-				this.driver.controllerLog.logNode(node.id, {
-					message: `Configuring Z-Wave+ Lifeline association...`,
-					direction: "none",
-				});
-				const ownNodeId = this.driver.controller.ownNodeId!;
-
-				try {
-					if (node.supportsCC(CommandClasses.Association)) {
-						await node.commandClasses.Association.addNodeIds(
-							1,
-							ownNodeId,
-						);
-					} else {
-						await node.commandClasses[
-							"Multi Channel Association"
-						].addDestinations({
-							groupId: 1,
-							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
-						});
-					}
-
-					// After setting the association, make sure the node knows how to reach us
-					await this.assignReturnRoute(node.id, ownNodeId);
-				} catch (e) {
-					if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
-						this.driver.controllerLog.logNode(node.id, {
-							message: `Failed to configure Z-Wave+ Lifeline association: ${e.message}`,
-							direction: "none",
-							level: "warn",
-						});
-					} else {
-						throw e;
-					}
-				}
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					message: `Cannot configure Z-Wave+ Lifeline association: Node does not support associations...`,
-					direction: "none",
-					level: "warn",
-				});
-			}
-		}
-
-		if (node.supportsCC(CommandClasses["Wake Up"])) {
-			try {
-				// Query the version, so we can setup the wakeup destination correctly.
-				let supportedVersion: number | undefined;
-				if (node.supportsCC(CommandClasses.Version)) {
-					supportedVersion =
-						await node.commandClasses.Version.getCCVersion(
-							CommandClasses["Wake Up"],
-						);
-				}
-				// If querying the version can't be done, we should at least assume that it supports V1
-				supportedVersion ??= 1;
-				if (supportedVersion > 0) {
-					node.addCC(CommandClasses["Wake Up"], {
-						version: supportedVersion,
-					});
-					const instance = node.createCCInstance(
-						CommandClasses["Wake Up"],
-					)!;
-					await instance.interview(this.driver);
-				}
-			} catch (e) {
-				if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
-					this.driver.controllerLog.logNode(node.id, {
-						message: `Cannot configure wakeup destination: ${e.message}`,
-						direction: "none",
-						level: "warn",
-					});
-				} else {
-					// we want to pass all other errors through
-					throw e;
-				}
-			}
-		}
-	}
-
 	/**
 	 * Is called when an AddNode request is received from the controller.
 	 * Handles and controls the inclusion process.
@@ -3399,9 +3291,6 @@ supported CCs: ${nodeInfo.supportedCCs
 							level: "warn",
 						});
 					}
-				} else {
-					// Bootstrap the node's lifelines, so it knows where the controller is
-					await this.bootstrapLifelineAndWakeup(newNode);
 				}
 
 				this.setInclusionState(InclusionState.Idle);
@@ -3570,9 +3459,6 @@ supported CCs: ${nodeInfo.supportedCCs
 							newNode.securityClasses.set(secClass, false);
 						}
 					}
-
-					// Bootstrap the node's lifelines, so it knows where the controller is
-					await this.bootstrapLifelineAndWakeup(newNode);
 
 					// We're done adding this node, notify listeners. This also kicks off the node interview
 					const result: InclusionResult =
