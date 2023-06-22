@@ -3,8 +3,6 @@ import {
 	MessagePriority,
 	TransmitOptions,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
 	validatePayload,
 	type MaybeNotKnown,
@@ -356,13 +354,9 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			// This error is used to test the applHost!
-			// When implementing this branch, update the corresponding applHost test
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 4);
+			this.wakeUpInterval = this.payload.readUIntBE(0, 3);
+			this.controllerNodeId = this.payload[3];
 		} else {
 			this.wakeUpInterval = options.wakeUpInterval;
 			this.controllerNodeId = options.controllerNodeId;
