@@ -104,7 +104,7 @@
     "mdns-server": "^1.0.11",
     "proper-lockfile": "^4.1.2",
     "reflect-metadata": "^0.1.13",
-    "semver": "^7.5.0",
+    "semver": "^7.5.2",
     "serialport": "^10.4.0",
     "source-map-support": "^0.5.21",
     "winston": "^3.8.2",
