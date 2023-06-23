@@ -392,8 +392,8 @@ export const logMessageFormatter: Format = {
 							: LOG_WIDTH - CONTROL_CHAR_WIDTH,
 					);
 					isFirstLine = false;
-					lines.push(message.substr(0, cut));
-					message = message.substr(cut);
+					lines.push(message.slice(0, cut));
+					message = message.slice(cut);
 				}
 			}
 			info.message = lines.join("\n");

@@ -1059,10 +1059,16 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     assignPrioritySUCReturnRoute(nodeId: number, repeaters: number[], routeSpeed: ZWaveDataRate): Promise<boolean>;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignReturnRoutes"
+    //
+    // @deprecated (undocumented)
     assignReturnRoute(nodeId: number, destinationNodeId: number): Promise<boolean>;
-    // (undocumented)
+    assignReturnRoutes(nodeId: number, destinationNodeId: number): Promise<boolean>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignSUCReturnRoutes"
+    //
+    // @deprecated (undocumented)
     assignSUCReturnRoute(nodeId: number): Promise<boolean>;
+    assignSUCReturnRoutes(nodeId: number): Promise<boolean>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     backupNVMRaw(onProgress?: (bytesRead: number, total: number) => void): Promise<Buffer>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -1073,10 +1079,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // (undocumented)
     cancelSecureBootstrapS2(reason: KEXFailType): void;
     configureSUC(nodeId: number, enableSUC: boolean, enableSIS: boolean): Promise<boolean>;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "deleteReturnRoutes"
+    //
+    // @deprecated (undocumented)
     deleteReturnRoute(nodeId: number): Promise<boolean>;
-    // (undocumented)
+    deleteReturnRoutes(nodeId: number): Promise<boolean>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "deleteSUCReturnRoutes"
+    //
+    // @deprecated (undocumented)
     deleteSUCReturnRoute(nodeId: number): Promise<boolean>;
+    deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getKnownNodeNeighbors"
+    discoverNodeNeighbors(nodeId: number): Promise<boolean>;
     externalNVMClose(): Promise<void>;
     externalNVMOpen(): Promise<number>;
     externalNVMReadBuffer(offset: number, length: number): Promise<Buffer>;
