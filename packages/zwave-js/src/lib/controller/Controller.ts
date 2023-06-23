@@ -2054,9 +2054,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					);
 
 					// Assign SUC return route to make sure the node knows where to get its routes from
-					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
-						newNode.id,
-					);
+					newNode.hasSUCReturnRoute =
+						await this.assignSUCReturnRoutes(newNode.id);
 
 					// Include using the default inclusion strategy:
 					// * Use S2 if possible,
@@ -3140,7 +3139,7 @@ supported CCs: ${nodeInfo.supportedCCs
 				newNode.markAsAlive();
 
 				// Assign SUC return route to make sure the node knows where to get its routes from
-				newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
+				newNode.hasSUCReturnRoute = await this.assignSUCReturnRoutes(
 					newNode.id,
 				);
 
@@ -3412,9 +3411,8 @@ supported CCs: ${nodeInfo.supportedCCs
 					newNode.markAsAlive();
 
 					// Assign SUC return route to make sure the node knows where to get its routes from
-					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
-						newNode.id,
-					);
+					newNode.hasSUCReturnRoute =
+						await this.assignSUCReturnRoutes(newNode.id);
 
 					// Try perform the security bootstrap process. When replacing a node, we don't know any supported CCs
 					// yet, so we need to trust the chosen inclusion strategy.
@@ -3833,26 +3831,10 @@ supported CCs: ${nodeInfo.supportedCCs
 					message: `refreshing neighbor list (attempt ${attempt})...`,
 					direction: "outbound",
 				});
-				// During inclusion, the timeout is mainly required for the node to detect all neighbors
-				// We do the same here, so we just reuse the timeout
-				const discoveryTimeout = computeNeighborDiscoveryTimeout(
-					this.driver,
-					// Controllers take longer, just assume the worst case here
-					NodeType.Controller,
-				);
 
 				try {
-					const resp =
-						await this.driver.sendMessage<RequestNodeNeighborUpdateReport>(
-							new RequestNodeNeighborUpdateRequest(this.driver, {
-								nodeId,
-								discoveryTimeout,
-							}),
-						);
-					if (
-						resp.updateStatus ===
-						NodeNeighborUpdateStatus.UpdateDone
-					) {
+					const result = await this.discoverNodeNeighbors(nodeId);
+					if (result) {
 						this.driver.controllerLog.logNode(nodeId, {
 							message: "neighbor list refreshed...",
 							direction: "inbound",
@@ -3860,7 +3842,6 @@ supported CCs: ${nodeInfo.supportedCCs
 						// this step was successful, continue with the next
 						break;
 					} else {
-						// UpdateFailed
 						this.driver.controllerLog.logNode(nodeId, {
 							message: "refreshing neighbor list failed...",
 							direction: "inbound",
@@ -3887,31 +3868,19 @@ supported CCs: ${nodeInfo.supportedCCs
 			}
 
 			// 2. re-create the SUC return route, just in case
-			if (await this.deleteSUCReturnRoute(nodeId)) {
-				node.hasSUCReturnRoute = false;
-			}
-			node.hasSUCReturnRoute = await this.assignSUCReturnRoute(nodeId);
+			node.hasSUCReturnRoute ||= await this.assignSUCReturnRoutes(nodeId);
 
-			// 3. delete all return routes so we can assign new ones
+			// 3. delete all return routes to get rid of potential priority return routes
 			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `deleting return routes (attempt ${attempt})...`,
 					direction: "outbound",
 				});
 
-				try {
-					await this.driver.sendMessage(
-						new DeleteReturnRouteRequest(this.driver, { nodeId }),
-					);
-					// this step was successful, continue with the next
+				if (await this.deleteReturnRoutes(nodeId)) {
 					break;
-				} catch (e) {
-					this.driver.controllerLog.logNode(
-						nodeId,
-						`deleting return routes failed: ${getErrorMessage(e)}`,
-						"warn",
-					);
 				}
+
 				if (attempt === maxAttempts) {
 					this.driver.controllerLog.logNode(nodeId, {
 						message: `failed to delete return routes after ${maxAttempts} attempts, healing failed`,
@@ -3922,9 +3891,8 @@ supported CCs: ${nodeInfo.supportedCCs
 				}
 			}
 
-			// 4. Assign up to 4 return routes for associations, one of which should be the controller
+			// 4. Assign return routes to all association destinations.
 			let associatedNodes: number[] = [];
-			const maxReturnRoutes = 4;
 			try {
 				associatedNodes = distinct(
 					flatMap<number, AssociationAddress[]>(
@@ -3936,12 +3904,9 @@ supported CCs: ${nodeInfo.supportedCCs
 			} catch {
 				/* ignore */
 			}
-			// Always include ourselves first
+			// One of those should probably be the controller. Not sure if the SUC return route is enough.
 			if (!associatedNodes.includes(this._ownNodeId!)) {
 				associatedNodes.unshift(this._ownNodeId!);
-			}
-			if (associatedNodes.length > maxReturnRoutes) {
-				associatedNodes = associatedNodes.slice(0, maxReturnRoutes);
 			}
 			this.driver.controllerLog.logNode(nodeId, {
 				message: `assigning return routes to the following nodes:
@@ -3955,24 +3920,13 @@ ${associatedNodes.join(", ")}`,
 						direction: "outbound",
 					});
 
-					try {
-						await this.driver.sendMessage(
-							new AssignReturnRouteRequest(this.driver, {
-								nodeId,
-								destinationNodeId,
-							}),
-						);
+					if (
+						await this.assignReturnRoutes(nodeId, destinationNodeId)
+					) {
 						// this step was successful, continue with the next
 						break;
-					} catch (e) {
-						this.driver.controllerLog.logNode(
-							nodeId,
-							`assigning return route failed: ${getErrorMessage(
-								e,
-							)}`,
-							"warn",
-						);
 					}
+
 					if (attempt === maxAttempts) {
 						this.driver.controllerLog.logNode(nodeId, {
 							message: `failed to assign return route after ${maxAttempts} attempts, healing failed`,
@@ -4019,7 +3973,16 @@ ${associatedNodes.join(", ")}`,
 		return result.isOK();
 	}
 
-	public async assignSUCReturnRoute(nodeId: number): Promise<boolean> {
+	/** @deprecated Use {@link assignSUCReturnRoutes} instead */
+	public assignSUCReturnRoute(nodeId: number): Promise<boolean> {
+		return this.assignSUCReturnRoutes(nodeId);
+	}
+
+	/**
+	 * Instructs the controller to assign static routes from the given end node to the SUC.
+	 * This will assign up to 4 routes, depending on the network topology (that the controller knows about).
+	 */
+	public async assignSUCReturnRoutes(nodeId: number): Promise<boolean> {
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning SUC return route...`,
 			direction: "outbound",
@@ -4044,7 +4007,16 @@ ${associatedNodes.join(", ")}`,
 		}
 	}
 
-	public async deleteSUCReturnRoute(nodeId: number): Promise<boolean> {
+	/** @deprecated use {@link deleteSUCReturnRoutes} instead */
+	public deleteSUCReturnRoute(nodeId: number): Promise<boolean> {
+		return this.deleteReturnRoutes(nodeId);
+	}
+
+	/**
+	 * Instructs the controller to assign static routes from the given end node to the SUC.
+	 * This will assign up to 4 routes, depending on the network topology (that the controller knows about).
+	 */
+	public async deleteSUCReturnRoutes(nodeId: number): Promise<boolean> {
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Deleting SUC return route...`,
 			direction: "outbound",
@@ -4069,12 +4041,24 @@ ${associatedNodes.join(", ")}`,
 		}
 	}
 
-	public async assignReturnRoute(
+	/** @deprecated use {@link assignReturnRoutes} instead */
+	public assignReturnRoute(
+		nodeId: number,
+		destinationNodeId: number,
+	): Promise<boolean> {
+		return this.assignReturnRoutes(nodeId, destinationNodeId);
+	}
+
+	/**
+	 * Instructs the controller to assign static routes between the two given end nodes.
+	 * This will assign up to 4 routes, depending on the network topology (that the controller knows about).
+	 */
+	public async assignReturnRoutes(
 		nodeId: number,
 		destinationNodeId: number,
 	): Promise<boolean> {
 		this.driver.controllerLog.logNode(nodeId, {
-			message: `Assigning return route to node ${destinationNodeId}...`,
+			message: `Assigning return routes to node ${destinationNodeId}...`,
 			direction: "outbound",
 		});
 
@@ -4091,14 +4075,23 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Assigning return route failed: ${getErrorMessage(e)}`,
+				`Assigning return routes failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
 		}
 	}
 
-	public async deleteReturnRoute(nodeId: number): Promise<boolean> {
+	/** @deprecated use {@link deleteReturnRoutes} instead */
+	public deleteReturnRoute(nodeId: number): Promise<boolean> {
+		return this.deleteReturnRoutes(nodeId);
+	}
+
+	/**
+	 * Instructs the controller to delete all static routes between the given node and
+	 * other end nodes, including the priority return routes.
+	 */
+	public async deleteReturnRoutes(nodeId: number): Promise<boolean> {
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Deleting all return routes...`,
 			direction: "outbound",
@@ -4455,7 +4448,7 @@ ${associatedNodes.join(", ")}`,
 			// Except to the controller itself - this route is already known
 		).filter((id) => id !== this.ownNodeId);
 		for (const id of destinationNodeIDs) {
-			await this.assignReturnRoute(source.nodeId, id);
+			await this.assignReturnRoutes(source.nodeId, id);
 		}
 	}
 
@@ -4911,6 +4904,35 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 		return result.maxPayloadSize;
+	}
+
+	/**
+	 * Instructs a node to (re-)discover its neighbors.
+	 *
+	 * @returns `true` if the update was successful and the new neighbors can be retrieved using
+	 * {@link getKnownNodeNeighbors}. `false` if the update failed.
+	 */
+	public async discoverNodeNeighbors(nodeId: number): Promise<boolean> {
+		// TODO: Consider making this not block the send queue.
+		// However, I haven't actually seen a UpdateStarted callback in the wild,
+		// so we don't know if that would even work.
+
+		// During inclusion, the timeout is mainly required for the node to detect all neighbors
+		// We do the same here, so we just reuse the timeout
+		const discoveryTimeout = computeNeighborDiscoveryTimeout(
+			this.driver,
+			// Controllers take longer, just assume the worst case here
+			NodeType.Controller,
+		);
+
+		const resp =
+			await this.driver.sendMessage<RequestNodeNeighborUpdateReport>(
+				new RequestNodeNeighborUpdateRequest(this.driver, {
+					nodeId,
+					discoveryTimeout,
+				}),
+			);
+		return resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone;
 	}
 
 	/**

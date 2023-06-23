@@ -50,7 +50,7 @@ error in compat option queryOnWakeup`,
 							this.valueIdRegex.test(arg)
 						) {
 							const tuple = JSON.parse(
-								arg.substr("$value$".length),
+								arg.slice("$value$".length),
 							);
 							return {
 								property: tuple[0],

@@ -1539,7 +1539,9 @@ export class Driver
 						node.status !== NodeStatus.Dead
 					) {
 						node.hasSUCReturnRoute =
-							await this.controller.assignSUCReturnRoute(node.id);
+							await this.controller.assignSUCReturnRoutes(
+								node.id,
+							);
 					}
 				})();
 			}

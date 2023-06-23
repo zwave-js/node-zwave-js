@@ -319,7 +319,7 @@ function printMethodDeclaration(method: MethodDeclaration): string {
 	const end = method.getBody()!.getStart();
 	let ret = method
 		.getText()
-		.substr(0, end - start)
+		.slice(0, end - start)
 		.trim();
 	if (!method.getReturnTypeNode()) {
 		ret += ": " + method.getSignature().getReturnType().getText(method);
