@@ -1,6 +1,7 @@
 import {
 	AssociationCC,
 	ECDHProfiles,
+	FLiRS2WakeUpTime,
 	InclusionControllerCCComplete,
 	InclusionControllerCCInitiate,
 	InclusionControllerStatus,
@@ -17,6 +18,7 @@ import {
 	Security2CCTransferEnd,
 	Security2Command,
 	VersionCCValues,
+	ZWaveProtocolCCAssignReturnRoute,
 	utils as ccUtils,
 	inclusionTimeouts,
 	type AssociationAddress,
@@ -25,14 +27,17 @@ import {
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
+	MessagePriority,
 	NODE_ID_BROADCAST,
 	NodeType,
 	ProtocolType,
 	RFRegion,
 	RouteKind,
 	SecurityClass,
+	TransmitOptions,
 	TransmitStatus,
 	ValueDB,
+	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
 	authHomeIdFromDSK,
@@ -53,8 +58,8 @@ import {
 	type MaybeNotKnown,
 	type ProtocolDataRate,
 	type RSSI,
+	type Route,
 	type SinglecastCC,
-	type ZWaveDataRate,
 } from "@zwave-js/core";
 import { migrateNVM } from "@zwave-js/nvmedit";
 import {
@@ -4080,6 +4085,67 @@ ${associatedNodes.join(", ")}`,
 			);
 			return false;
 		}
+	}
+
+	/**
+	 * Assigns static routes between the two given end nodes. Unlike {@link assignReturnRoutes}, this method assigns
+	 * the given routes instead of having the controller calculate them. At most 4 routes can be assigned. If less are
+	 * specified, the remaining routes are cleared.
+	 */
+	public async assignCustomReturnRoutes(
+		nodeId: number,
+		destinationNodeId: number,
+		routes: Route[],
+	): Promise<boolean> {
+		const MAX_ROUTES = 4;
+
+		let result = true;
+
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Assigning custom return routes to node ${destinationNodeId}...`,
+			direction: "outbound",
+		});
+		for (let i = 0; i < MAX_ROUTES; i++) {
+			const route = routes[i] ?? {
+				repeaters: [],
+				routeSpeed: ZWaveDataRate["9k6"],
+			};
+
+			const targetWakeup =
+				this.nodes.get(destinationNodeId)?.isFrequentListening;
+
+			const cc = new ZWaveProtocolCCAssignReturnRoute(this.driver, {
+				nodeId,
+				destinationNodeId,
+				routeIndex: i,
+				repeaters: route.repeaters,
+				destinationSpeed: route.routeSpeed,
+				destinationWakeUp: FLiRS2WakeUpTime(targetWakeup ?? false),
+			});
+
+			try {
+				// TODO: add a better method to send ZWaveProtocolCC
+				await this.driver.sendCommand(cc, {
+					priority: MessagePriority.MultistepController,
+					autoEncapsulate: false,
+					changeNodeStatusOnMissingACK: false,
+					maxSendAttempts: 1,
+					useSupervision: false,
+					transmitOptions:
+						TransmitOptions.AutoRoute | TransmitOptions.ACK,
+				});
+			} catch (e) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `Assigning custom return route #${i} failed`,
+					direction: "outbound",
+					level: "warn",
+				});
+
+				result = false;
+			}
+		}
+
+		return result;
 	}
 
 	/** @deprecated use {@link deleteReturnRoutes} instead */

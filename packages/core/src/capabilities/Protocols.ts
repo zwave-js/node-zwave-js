@@ -58,3 +58,8 @@ export enum RouteKind {
 	/** Application-defined priority route */
 	Application = 0x10,
 }
+
+export interface Route {
+	repeaters: number[];
+	routeSpeed: ZWaveDataRate;
+}
