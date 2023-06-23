@@ -13,7 +13,8 @@ jobs:
   # This job checks if the docs can be generated and produce changes
   # If they do, a PR will be created with the changes
   check-and-update:
-    if: github.repository == 'zwave-js/node-zwave-js' # Don't run in forks
+    # Don't run in forks
+    if: github.repository == 'zwave-js/node-zwave-js'
 
     runs-on: ubuntu-latest
     strategy:
@@ -43,6 +44,9 @@ jobs:
 
     - name: Generate documentation
       run: yarn run docs:generate
+
+    - name: Generate API report
+      run: yarn run accept-api
 
     # Trigger this step only when pushing to master
     - name: Create or update PR
