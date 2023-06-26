@@ -585,8 +585,9 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 
 			// Send the command to the node
 			const node = controller.nodes.get(msg.getNodeId()!)!;
-			const command = new ZWaveProtocolCCAssignSUCReturnRoute(node.host, {
-				nodeId: controller.host.ownNodeId,
+			const command = new ZWaveProtocolCCAssignSUCReturnRoute(host, {
+				nodeId: node.id,
+				destinationNodeId: controller.host.ownNodeId,
 				repeaters: [], // don't care
 				routeIndex: 0, // don't care
 				destinationSpeed: ZWaveDataRate["100k"],

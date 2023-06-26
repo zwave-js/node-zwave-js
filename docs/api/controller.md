@@ -495,20 +495,26 @@ type ReplaceNodeOptions =
 
 ### Managing routes
 
-The methods shown here can be used to manage routes between nodes. For the most part, these are not particularly relevant for applications or even end users, since they are used automatically by Z-Wave JS when necessary.
+#### Automatic assignment
+
+The methods shown here can be used to manage routes between nodes. For the most part, these are not particularly relevant for applications or even end users, since they are used automatically by Z-Wave JS when necessary. Routes assigned by these methods are determined by the controller, which should be preferred usually.
 
 ```ts
-assignReturnRoute(nodeId: number, destinationNodeId: number): Promise<boolean>;
-deleteReturnRoute(nodeId: number): Promise<boolean>;
+assignReturnRoutes(nodeId: number, destinationNodeId: number): Promise<boolean>;
+deleteReturnRoutes(nodeId: number): Promise<boolean>;
 
-assignSUCReturnRoute(nodeId: number): Promise<boolean>;
-deleteSUCReturnRoute(nodeId: number): Promise<boolean>;
+assignSUCReturnRoutes(nodeId: number): Promise<boolean>;
+deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
 ```
 
--   `assignReturnRoute` instructs the controller to assign node `nodeId` a set of routes to node `destinationNodeId`. These routes are determined by the controller.
--   `deleteReturnRoute` instructs node `nodeId` to delete all previously assigned routes.
--   `assignSUCReturnRoute` works like `assignReturnRoute`, but the routes have the SUC as the destination.
--   `deleteSUCReturnRoute` works like `deleteReturnRoute`, but for routes that have the SUC as the destination.
+-   `assignReturnRoutes` instructs the controller to assign node `nodeId` a set of routes to node `destinationNodeId`.
+-   `deleteReturnRoutes` instructs node `nodeId` to delete all previously assigned routes.
+-   `assignSUCReturnRoutes` works like `assignReturnRoutes`, but the routes have the SUC as the destination.
+-   `deleteSUCReturnRoutes` works like `deleteReturnRoutes`, but for routes that have the SUC as the destination.
+
+> [!NOTE] These routes cannot be read back, since they are managed internally by the controller and no API exists to query them.
+
+#### Priority routes
 
 In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first instead of the automatically determined routes.
 
@@ -595,6 +601,58 @@ assignPrioritySUCReturnRoute(
 
 -   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
 -   `assignPrioritySUCReturnRoute` does the same, but with the SUC (controller) as the destination node.
+
+> [!WARNING] It has been found that assigning return routes to nodes that already have a priority route can cause the priority route to be changed unexpectedly. To avoid this, assigning priority routes should be done last. Otherwise, call `deleteReturnRoutes` or `deleteSUCReturnRoutes` (for routes to the controller) before assigning new routes. Unfortunately, `deleteReturnRoutes` deletes **all** return routes to all destination nodes, so they all have to be set up again afterwards.
+
+As mentioned before, there is unfortunately no way to query return routes from a node. To remedy this, Z-Wave JS caches the routes it has assigned. To read them, use the following methods:
+
+```ts
+getPriorityReturnRouteCached(nodeId: number, destinationNodeId: number): MaybeUnknown<Route> | undefined;
+getPrioritySUCReturnRouteCached(nodeId: number): MaybeUnknown<Route> | undefined;
+```
+
+-   `getPriorityReturnRouteCached` returns a priority return route that was set using `assignPriorityReturnRoute`. If a non-priority return route has been set since assigning the priority route, this will return `UNKNOWN_STATE` (`null`).
+-   `getPrioritySUCReturnRouteCached` does the same for a route set through `assignPrioritySUCReturnRoute`.
+
+The return type `Route` has the following shape:
+
+<!-- #import Route from "@zwave-js/core" -->
+
+```ts
+interface Route {
+	repeaters: number[];
+	routeSpeed: ZWaveDataRate;
+}
+```
+
+> [!NOTE] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
+
+#### Custom non-priority return routes
+
+A middle ground between the two approaches above is to set custom return routes manually. Unlike priority routes, these are not set in stone like priority return routes, so they can change if they fail. This uses the `Z-Wave Protocol` command class, which is used internally by the controller and Z-Wave protocol, so this should at least be considered an inofficial way to set return routes.
+
+Routes set by these methods have to be provided manually, up to 4 for each combination of source and destination node. If less routes are given, the remaining ones will be cleared:
+```ts
+assignCustomReturnRoutes(nodeId: number, destinationNodeId: number, routes: Route[]): Promise<boolean>;
+assignCustomSUCReturnRoutes(nodeId: number, routes: Route[]): Promise<boolean>;
+```
+
+-   `assignCustomReturnRoutes` assigns node `nodeId` a set of routes to node `destinationNodeId`.
+-   `assignCustomSUCReturnRoutes` does the same, but with the SUC as the destination.
+
+To remove these routes, use `deleteReturnRoutes` and `deleteSUCReturnRoutes` as described above.
+
+Like with priority return routes, Z-Wave JS caches the assigned routes, so they can be read back:
+
+```ts
+getCustomReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] | undefined;
+getCustomSUCReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] | undefined;
+```
+
+-   `getCustomReturnRoutesCached` returns routes that were was set using `assignCustomReturnRoutes`.
+-   `getCustomSUCReturnRoutesCached` returns routes that were was set using `assignCustomSUCReturnRoutes`.
+
+> [!NOTE] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
 
 ### Managing associations
 

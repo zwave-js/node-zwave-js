@@ -66,6 +66,12 @@ export const cacheKeys = {
 			hasSUCReturnRoute: `${nodeBaseKey}hasSUCReturnRoute`,
 			associations: (groupId: number) =>
 				`${nodeBaseKey}associations.${groupId}`,
+			priorityReturnRoute: (destinationNodeId: number) =>
+				`${nodeBaseKey}priorityReturnRoute.${destinationNodeId}`,
+			prioritySUCReturnRoute: `${nodeBaseKey}priorityReturnRoute.SUC`,
+			customReturnRoutes: (destinationNodeId: number) =>
+				`${nodeBaseKey}customReturnRoutes.${destinationNodeId}`,
+			customSUCReturnRoutes: `${nodeBaseKey}customReturnRoutes.SUC`,
 		};
 	},
 } as const;
