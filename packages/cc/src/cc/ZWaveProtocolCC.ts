@@ -39,8 +39,27 @@ import {
 	type NetworkTransferStatus,
 } from "../lib/_Types";
 
-// TODO: Move this enumeration into the _Types.ts file
-// All additional type definitions (except CC constructor options) must be defined there too
+enum DataRateBitmask {
+	"9k6" = 0b001,
+	"40k" = 0b010,
+	"100k" = 0b100,
+}
+
+function dataRate2Bitmask(dataRate: ZWaveDataRate): DataRateBitmask {
+	return dataRate === ZWaveDataRate["100k"]
+		? DataRateBitmask["100k"]
+		: dataRate === ZWaveDataRate["40k"]
+		? DataRateBitmask["40k"]
+		: DataRateBitmask["9k6"];
+}
+
+function bitmask2DataRate(mask: DataRateBitmask): ZWaveDataRate {
+	return mask === DataRateBitmask["100k"]
+		? ZWaveDataRate["100k"]
+		: mask === DataRateBitmask["40k"]
+		? ZWaveDataRate["40k"]
+		: ZWaveDataRate["9k6"];
+}
 
 @commandClass(CommandClasses["Z-Wave Protocol"])
 @implementedVersion(1)
@@ -518,7 +537,9 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 			const numRepeaters = this.payload[1] & 0b1111;
 			this.repeaters = [...this.payload.slice(2, 2 + numRepeaters)];
 			const speedAndWakeup = this.payload[2 + numRepeaters];
-			this.destinationSpeed = (speedAndWakeup >>> 3) & 0b111;
+			this.destinationSpeed = bitmask2DataRate(
+				(speedAndWakeup >>> 3) & 0b111,
+			);
 			this.destinationWakeUp = (speedAndWakeup >>> 1) & 0b11;
 		} else {
 			if (options.repeaters.length > MAX_REPEATERS) {
@@ -543,14 +564,14 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 	public destinationSpeed: ZWaveDataRate;
 
 	public serialize(): Buffer {
+		const routeByte = (this.routeIndex << 4) | this.repeaters.length;
+		const speedMask = dataRate2Bitmask(this.destinationSpeed);
+		const speedByte = (speedMask << 3) | (this.destinationWakeUp << 1);
 		this.payload = Buffer.from([
 			this.destinationNodeId,
-			(this.routeIndex << 4) | this.repeaters.length,
-			this.repeaters[0] ?? 0,
-			this.repeaters[1] ?? 0,
-			this.repeaters[2] ?? 0,
-			this.repeaters[3] ?? 0,
-			(this.destinationSpeed << 3) | (this.destinationWakeUp << 1),
+			routeByte,
+			...this.repeaters,
+			speedByte,
 		]);
 		return super.serialize();
 	}

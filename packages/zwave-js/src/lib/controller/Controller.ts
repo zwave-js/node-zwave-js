@@ -19,6 +19,7 @@ import {
 	Security2Command,
 	VersionCCValues,
 	ZWaveProtocolCCAssignReturnRoute,
+	ZWaveProtocolCCAssignSUCReturnRoute,
 	utils as ccUtils,
 	inclusionTimeouts,
 	type AssociationAddress,
@@ -27,6 +28,8 @@ import {
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
+	EMPTY_ROUTE,
+	MAX_NODES,
 	MessagePriority,
 	NODE_ID_BROADCAST,
 	NodeType,
@@ -37,7 +40,6 @@ import {
 	TransmitOptions,
 	TransmitStatus,
 	ValueDB,
-	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
 	authHomeIdFromDSK,
@@ -60,6 +62,7 @@ import {
 	type RSSI,
 	type Route,
 	type SinglecastCC,
+	type ZWaveDataRate,
 } from "@zwave-js/core";
 import { migrateNVM } from "@zwave-js/nvmedit";
 import {
@@ -4001,7 +4004,15 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
-			return this.handleRouteAssignmentTransmitReport(result, nodeId);
+			const success = this.handleRouteAssignmentTransmitReport(
+				result,
+				nodeId,
+			);
+			if (success) {
+				// Custom assigned routes are no longer valid
+				this.setCustomSUCReturnRoutesCached(nodeId, undefined);
+			}
+			return success;
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -4010,6 +4021,100 @@ ${associatedNodes.join(", ")}`,
 			);
 			return false;
 		}
+	}
+
+	/**
+	 * Returns which custom static routes are currently assigned from the given end node to the SUC.
+	 *
+	 * **Note:** This only considers routes that were assigned using {@link assignCustomSUCReturnRoutes}.
+	 * If another controller has assigned routes in the meantime, this information may be out of date.
+	 */
+	public getCustomSUCReturnRoutesCached(nodeId: number): Route[] {
+		return (
+			this.driver.cacheGet<Route[]>(
+				cacheKeys.node(nodeId).customSUCReturnRoutes,
+			) ?? []
+		);
+	}
+
+	private setCustomSUCReturnRoutesCached(
+		nodeId: number,
+		routes: Route[] | undefined,
+	): void {
+		this.driver.cacheSet(
+			cacheKeys.node(nodeId).customSUCReturnRoutes,
+			routes,
+		);
+	}
+
+	/**
+	 * Assigns static routes from the given end node to the SUC. Unlike {@link assignSUCReturnRoutes}, this method assigns
+	 * the given routes instead of having the controller calculate them. At most 4 routes can be assigned. If less are
+	 * specified, the remaining routes are cleared.
+	 *
+	 * **Note:** Calling {@link assignSUCReturnRoutes} or {@link deleteSUCReturnRoutes} will override the custom routes.
+	 */
+	public async assignCustomSUCReturnRoutes(
+		nodeId: number,
+		routes: Route[],
+	): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Assigning custom SUC return routes...`,
+			direction: "outbound",
+		});
+
+		let result = true;
+		const MAX_ROUTES = 4;
+
+		// Keep track of which routes have been assigned
+		const assignedRoutes = this.getCustomSUCReturnRoutesCached(nodeId);
+		while (assignedRoutes.length < MAX_ROUTES) {
+			assignedRoutes.push(EMPTY_ROUTE);
+		}
+
+		for (let i = 0; i < MAX_ROUTES; i++) {
+			const route = routes[i] ?? EMPTY_ROUTE;
+
+			// We are always listening
+			const targetWakeup = false;
+
+			const cc = new ZWaveProtocolCCAssignSUCReturnRoute(this.driver, {
+				nodeId,
+				destinationNodeId: this.ownNodeId ?? 1,
+				routeIndex: i,
+				repeaters: route.repeaters,
+				destinationSpeed: route.routeSpeed,
+				destinationWakeUp: FLiRS2WakeUpTime(targetWakeup ?? false),
+			});
+
+			try {
+				// TODO: add a better method to send ZWaveProtocolCC
+				await this.driver.sendCommand(cc, {
+					priority: MessagePriority.MultistepController,
+					autoEncapsulate: false,
+					changeNodeStatusOnMissingACK: false,
+					maxSendAttempts: 1,
+					useSupervision: false,
+					transmitOptions:
+						TransmitOptions.AutoRoute | TransmitOptions.ACK,
+				});
+
+				// Remember that this route has been assigned
+				assignedRoutes[i] = route;
+			} catch (e) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `Assigning custom SUC return route #${i} failed`,
+					direction: "outbound",
+					level: "warn",
+				});
+
+				result = false;
+			}
+		}
+
+		this.setCustomSUCReturnRoutesCached(nodeId, assignedRoutes);
+
+		return result;
 	}
 
 	/** @deprecated use {@link deleteSUCReturnRoutes} instead */
@@ -4035,7 +4140,15 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
-			return this.handleRouteAssignmentTransmitReport(result, nodeId);
+			const success = this.handleRouteAssignmentTransmitReport(
+				result,
+				nodeId,
+			);
+			if (success) {
+				// Custom assigned routes are no longer valid
+				this.setCustomSUCReturnRoutesCached(nodeId, undefined);
+			}
+			return success;
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -4043,6 +4156,41 @@ ${associatedNodes.join(", ")}`,
 				"error",
 			);
 			return false;
+		}
+	}
+
+	/**
+	 * Returns which custom static routes are currently assigned between the given end nodes.
+	 *
+	 * **Note:** This only considers routes that were assigned using {@link assignCustomReturnRoutes}.
+	 * If another controller has assigned routes in the meantime, this information may be out of date.
+	 */
+	public getCustomReturnRoutesCached(
+		nodeId: number,
+		destinationNodeId: number,
+	): Route[] {
+		return (
+			this.driver.cacheGet<Route[]>(
+				cacheKeys.node(nodeId).customReturnRoutes(destinationNodeId),
+			) ?? []
+		);
+	}
+
+	private setCustomReturnRoutesCached(
+		nodeId: number,
+		destinationNodeId: number,
+		routes: Route[] | undefined,
+	): void {
+		this.driver.cacheSet(
+			cacheKeys.node(nodeId).customReturnRoutes(destinationNodeId),
+			routes,
+		);
+	}
+
+	private clearCustomReturnRoutesCached(nodeId: number): void {
+		// This is a bit ugly, but the best we can do right now.
+		for (let dest = 1; dest <= MAX_NODES; dest++) {
+			this.setCustomReturnRoutesCached(nodeId, dest, undefined);
 		}
 	}
 
@@ -4076,7 +4224,19 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
-			return this.handleRouteAssignmentTransmitReport(result, nodeId);
+			const success = this.handleRouteAssignmentTransmitReport(
+				result,
+				nodeId,
+			);
+			if (success) {
+				// Custom assigned routes are no longer valid
+				this.setCustomReturnRoutesCached(
+					nodeId,
+					destinationNodeId,
+					undefined,
+				);
+			}
+			return success;
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -4091,25 +4251,33 @@ ${associatedNodes.join(", ")}`,
 	 * Assigns static routes between the two given end nodes. Unlike {@link assignReturnRoutes}, this method assigns
 	 * the given routes instead of having the controller calculate them. At most 4 routes can be assigned. If less are
 	 * specified, the remaining routes are cleared.
+	 *
+	 * **Note:** Calling {@link assignReturnRoutes} or {@link deleteReturnRoutes} will override the custom routes.
 	 */
 	public async assignCustomReturnRoutes(
 		nodeId: number,
 		destinationNodeId: number,
 		routes: Route[],
 	): Promise<boolean> {
-		const MAX_ROUTES = 4;
-
-		let result = true;
-
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning custom return routes to node ${destinationNodeId}...`,
 			direction: "outbound",
 		});
+
+		let result = true;
+		const MAX_ROUTES = 4;
+
+		// Keep track of which routes have been assigned
+		const assignedRoutes = this.getCustomReturnRoutesCached(
+			nodeId,
+			destinationNodeId,
+		);
+		while (assignedRoutes.length < MAX_ROUTES) {
+			assignedRoutes.push(EMPTY_ROUTE);
+		}
+
 		for (let i = 0; i < MAX_ROUTES; i++) {
-			const route = routes[i] ?? {
-				repeaters: [],
-				routeSpeed: ZWaveDataRate["9k6"],
-			};
+			const route = routes[i] ?? EMPTY_ROUTE;
 
 			const targetWakeup =
 				this.nodes.get(destinationNodeId)?.isFrequentListening;
@@ -4134,6 +4302,9 @@ ${associatedNodes.join(", ")}`,
 					transmitOptions:
 						TransmitOptions.AutoRoute | TransmitOptions.ACK,
 				});
+
+				// Remember that this route has been assigned
+				assignedRoutes[i] = route;
 			} catch (e) {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Assigning custom return route #${i} failed`,
@@ -4144,6 +4315,12 @@ ${associatedNodes.join(", ")}`,
 				result = false;
 			}
 		}
+
+		this.setCustomReturnRoutesCached(
+			nodeId,
+			destinationNodeId,
+			assignedRoutes,
+		);
 
 		return result;
 	}
@@ -4171,7 +4348,15 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
-			return this.handleRouteAssignmentTransmitReport(result, nodeId);
+			const success = this.handleRouteAssignmentTransmitReport(
+				result,
+				nodeId,
+			);
+			if (success) {
+				// All custom assigned routes are no longer valid
+				this.clearCustomReturnRoutesCached(nodeId);
+			}
+			return success;
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,

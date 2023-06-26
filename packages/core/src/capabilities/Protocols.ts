@@ -63,3 +63,15 @@ export interface Route {
 	repeaters: number[];
 	routeSpeed: ZWaveDataRate;
 }
+
+export const EMPTY_ROUTE: Route = {
+	repeaters: [],
+	routeSpeed: ZWaveDataRate["9k6"],
+};
+
+export function isEmptyRoute(route: Route): boolean {
+	return (
+		route.repeaters.length === 0 &&
+		route.routeSpeed === ZWaveDataRate["9k6"]
+	);
+}
