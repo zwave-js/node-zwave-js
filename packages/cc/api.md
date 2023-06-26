@@ -18761,9 +18761,9 @@ export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
     // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCAssignIDsOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCAssignIDsOptions);
     // (undocumented)
-    homeId: number;
+    assignedNodeId: number;
     // (undocumented)
-    nodeId: number;
+    homeId: number;
     // (undocumented)
     serialize(): Buffer;
 }
@@ -18775,11 +18775,11 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
     // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCAssignReturnRouteOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCAssignReturnRouteOptions);
     // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
     destinationSpeed: ZWaveDataRate;
     // (undocumented)
     destinationWakeUp: WakeUpTime;
-    // (undocumented)
-    nodeId: number;
     // (undocumented)
     repeaters: number[];
     // (undocumented)
@@ -18867,7 +18867,7 @@ export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
     // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCLostOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCLostOptions);
     // (undocumented)
-    nodeId: number;
+    lostNodeId: number;
     // (undocumented)
     serialize(): Buffer;
 }
@@ -18889,7 +18889,7 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC implements
     // (undocumented)
     isRouting: boolean;
     // (undocumented)
-    nodeId: number;
+    newNodeId: number;
     // (undocumented)
     nodeType: NodeType;
     // (undocumented)
@@ -18919,9 +18919,9 @@ export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
-    nodeId: number;
-    // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    testedNodeId: number;
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19175,8 +19175,6 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC impl
     // (undocumented)
     isRouting: boolean;
     // (undocumented)
-    nodeId: number;
-    // (undocumented)
     nodeType: NodeType;
     // (undocumented)
     optionalFunctionality: boolean;
@@ -19186,6 +19184,8 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC impl
     sequenceNumber: number;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    sourceNodeId: number;
     // (undocumented)
     specificDeviceClass: number;
     // (undocumented)
@@ -19221,11 +19221,11 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
-    nodeId: number;
-    // (undocumented)
     sequenceNumber: number;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    testedNodeId: number;
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

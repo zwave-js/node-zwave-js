@@ -68,6 +68,7 @@ import { KEXFailType } from '@zwave-js/cc';
 import { LogConfig } from '@zwave-js/core';
 import { LogContext } from '@zwave-js/core';
 import { MaybeNotKnown } from '@zwave-js/core';
+import { MaybeUnknown } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import { MessageBaseOptions } from '@zwave-js/serial';
 import { MessageDeserializationOptions } from '@zwave-js/serial';
@@ -109,6 +110,7 @@ import { ResponsePredicate } from '@zwave-js/serial';
 import { ResponseRole } from '@zwave-js/serial';
 import { RFRegion } from '@zwave-js/core/safe';
 import { RFRegion as RFRegion_2 } from '@zwave-js/core';
+import { Route } from '@zwave-js/core';
 import { RouteKind } from '@zwave-js/core';
 import { RouteProtocolDataRate } from '@zwave-js/core';
 import { RSSI } from '@zwave-js/core/safe';
@@ -1050,6 +1052,14 @@ export interface ZWaveController extends ControllerStatisticsHost {
 // @public (undocumented)
 export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks> {
     addAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignReturnRoutes"
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignReturnRoutes"
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "deleteReturnRoutes"
+    assignCustomReturnRoutes(nodeId: number, destinationNodeId: number, routes: Route[]): Promise<boolean>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignSUCReturnRoutes"
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignSUCReturnRoutes"
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "deleteSUCReturnRoutes"
+    assignCustomSUCReturnRoutes(nodeId: number, routes: Route[]): Promise<boolean>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -1119,6 +1129,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         rssiChannel2?: RSSI_2;
     }>;
     getBroadcastNode(): VirtualNode;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignCustomReturnRoutes"
+    getCustomReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[];
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignCustomSUCReturnRoutes"
+    getCustomSUCReturnRoutesCached(nodeId: number): Route[];
     getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>;
     getMulticastGroup(nodeIDs: number[]): VirtualNode;
     getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined;
@@ -1127,12 +1141,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     getNVMId(): Promise<NVMId>;
     // Warning: (ae-forgotten-export) The symbol "SerialAPISetup_GetPowerlevelResponse" needs to be exported by the entry point index.d.ts
     getPowerlevel(): Promise<Pick<SerialAPISetup_GetPowerlevelResponse, "powerlevel" | "measured0dBm">>;
+    getPriorityReturnRouteCached(nodeId: number, destinationNodeId: number): MaybeUnknown<Route> | undefined;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     getPriorityRoute(destinationNodeId: number): Promise<{
         routeKind: RouteKind.LWR | RouteKind.NLWR | RouteKind.Application;
         repeaters: number[];
         routeSpeed: ZWaveDataRate;
     } | undefined>;
+    getPrioritySUCReturnRouteCached(nodeId: number): Route | undefined;
     getProvisioningEntries(): SmartStartProvisioningEntry[];
     getProvisioningEntry(dskOrNodeId: string | number): Readonly<SmartStartProvisioningEntry> | undefined;
     getRFRegion(): Promise<RFRegion_2>;
