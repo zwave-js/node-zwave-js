@@ -4009,7 +4009,8 @@ ${associatedNodes.join(", ")}`,
 				nodeId,
 			);
 			if (success) {
-				// Custom assigned routes are no longer valid
+				// Custom assigned and priority return routes are no longer valid
+				this.setPrioritySUCReturnRouteCached(nodeId, undefined);
 				this.setCustomSUCReturnRoutesCached(nodeId, undefined);
 			}
 			return success;
@@ -4145,7 +4146,8 @@ ${associatedNodes.join(", ")}`,
 				nodeId,
 			);
 			if (success) {
-				// Custom assigned routes are no longer valid
+				// Custom assigned and priority return routes are no longer valid
+				this.setPrioritySUCReturnRouteCached(nodeId, undefined);
 				this.setCustomSUCReturnRoutesCached(nodeId, undefined);
 			}
 			return success;
@@ -4229,7 +4231,12 @@ ${associatedNodes.join(", ")}`,
 				nodeId,
 			);
 			if (success) {
-				// Custom assigned routes are no longer valid
+				// Custom assigned and priority return routes are no longer valid
+				this.setPriorityReturnRouteCached(
+					nodeId,
+					destinationNodeId,
+					undefined,
+				);
 				this.setCustomReturnRoutesCached(
 					nodeId,
 					destinationNodeId,
@@ -4354,6 +4361,7 @@ ${associatedNodes.join(", ")}`,
 			);
 			if (success) {
 				// All custom assigned routes are no longer valid
+				this.clearPriorityReturnRoutesCached(nodeId);
 				this.clearCustomReturnRoutesCached(nodeId);
 			}
 			return success;
@@ -4396,7 +4404,18 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
-			return this.handleRouteAssignmentTransmitReport(result, nodeId);
+			const success = this.handleRouteAssignmentTransmitReport(
+				result,
+				nodeId,
+			);
+			if (success) {
+				// Update the cached priority route
+				this.setPriorityReturnRouteCached(nodeId, destinationNodeId, {
+					repeaters,
+					routeSpeed,
+				});
+			}
+			return success;
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -4405,6 +4424,39 @@ ${associatedNodes.join(", ")}`,
 			);
 			return false;
 		}
+	}
+
+	private setPriorityReturnRouteCached(
+		nodeId: number,
+		destinationNodeId: number,
+		route: Route | undefined,
+	): void {
+		this.driver.cacheSet(
+			cacheKeys.node(nodeId).priorityReturnRoute(destinationNodeId),
+			route,
+		);
+	}
+
+	private clearPriorityReturnRoutesCached(nodeId: number): void {
+		// This is a bit ugly, but the best we can do right now.
+		for (let dest = 1; dest <= MAX_NODES; dest++) {
+			this.setPriorityReturnRouteCached(nodeId, dest, undefined);
+		}
+	}
+
+	/**
+	 * Returns which priority route is currently assigned between the given end nodes.
+	 *
+	 * **Note:** This is using cached information, since there's no way to query priority routes from a node.
+	 * If another controller has assigned routes in the meantime, this information may be out of date.
+	 */
+	public getPriorityReturnRouteCached(
+		nodeId: number,
+		destinationNodeId: number,
+	): Route | undefined {
+		return this.driver.cacheGet<Route>(
+			cacheKeys.node(nodeId).priorityReturnRoute(destinationNodeId),
+		);
 	}
 
 	/**
@@ -4433,7 +4485,18 @@ ${associatedNodes.join(", ")}`,
 					}),
 				);
 
-			return this.handleRouteAssignmentTransmitReport(result, nodeId);
+			const success = this.handleRouteAssignmentTransmitReport(
+				result,
+				nodeId,
+			);
+			if (success) {
+				// Update the cached priority route
+				this.setPrioritySUCReturnRouteCached(nodeId, {
+					repeaters,
+					routeSpeed,
+				});
+			}
+			return success;
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
@@ -4444,6 +4507,28 @@ ${associatedNodes.join(", ")}`,
 			);
 			return false;
 		}
+	}
+
+	private setPrioritySUCReturnRouteCached(
+		nodeId: number,
+		route: Route | undefined,
+	): void {
+		this.driver.cacheSet(
+			cacheKeys.node(nodeId).prioritySUCReturnRoute,
+			route,
+		);
+	}
+
+	/**
+	 * Returns which priority route is currently assigned from the given end node to the SUC.
+	 *
+	 * **Note:** This is using cached information, since there's no way to query priority routes from a node.
+	 * If another controller has assigned routes in the meantime, this information may be out of date.
+	 */
+	public getPrioritySUCReturnRouteCached(nodeId: number): Route | undefined {
+		return this.driver.cacheGet<Route>(
+			cacheKeys.node(nodeId).prioritySUCReturnRoute,
+		);
 	}
 
 	private handleRouteAssignmentTransmitReport(
