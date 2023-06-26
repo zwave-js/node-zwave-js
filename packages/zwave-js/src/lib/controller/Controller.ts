@@ -5333,6 +5333,8 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Instructs a node to (re-)discover its neighbors.
 	 *
+	 * **WARNING:** On some controllers, this can cause new SUC return routes to be assigned.
+	 *
 	 * @returns `true` if the update was successful and the new neighbors can be retrieved using
 	 * {@link getKnownNodeNeighbors}. `false` if the update failed.
 	 */
@@ -5356,7 +5358,16 @@ ${associatedNodes.join(", ")}`,
 					discoveryTimeout,
 				}),
 			);
-		return resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone;
+		const success =
+			resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone;
+
+		if (success) {
+			// Not sure why, but Zniffer traces show that a node neighbor update can cause the controller to
+			// also do AssignSUCReturnRoute. As a result, we need to invalidate our route cache.
+			this.setCustomSUCReturnRoutesCached(nodeId, undefined);
+		}
+
+		return success;
 	}
 
 	/**
