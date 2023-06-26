@@ -632,6 +632,7 @@ interface Route {
 A middle ground between the two approaches above is to set custom return routes manually. Unlike priority routes, these are not set in stone like priority return routes, so they can change if they fail. This uses the `Z-Wave Protocol` command class, which is used internally by the controller and Z-Wave protocol, so this should at least be considered an inofficial way to set return routes.
 
 Routes set by these methods have to be provided manually, up to 4 for each combination of source and destination node. If less routes are given, the remaining ones will be cleared:
+
 ```ts
 assignCustomReturnRoutes(nodeId: number, destinationNodeId: number, routes: Route[]): Promise<boolean>;
 assignCustomSUCReturnRoutes(nodeId: number, routes: Route[]): Promise<boolean>;

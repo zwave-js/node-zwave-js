@@ -801,6 +801,11 @@ export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 // @public
 export type Either<T, Or> = T | Or;
 
+// Warning: (ae-missing-release-tag) "EMPTY_ROUTE" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const EMPTY_ROUTE: Route;
+
 // Warning: (ae-missing-release-tag) "encapsulationCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1152,6 +1157,11 @@ export enum InterviewStage {
 //
 // @public
 export function isConsecutiveArray(values: number[]): boolean;
+
+// Warning: (ae-missing-release-tag) "isEmptyRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isEmptyRoute(route: Route): boolean;
 
 // Warning: (ae-missing-release-tag) "isExtendedCCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1967,6 +1977,16 @@ export enum RFRegion {
     "Unknown" = 254,
     // (undocumented)
     "USA" = 1
+}
+
+// Warning: (ae-missing-release-tag) "Route" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Route {
+    // (undocumented)
+    repeaters: number[];
+    // (undocumented)
+    routeSpeed: ZWaveDataRate;
 }
 
 // Warning: (ae-missing-release-tag) "RouteKind" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
