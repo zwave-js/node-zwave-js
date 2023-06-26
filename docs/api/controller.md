@@ -602,14 +602,16 @@ assignPrioritySUCReturnRoute(
 -   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
 -   `assignPrioritySUCReturnRoute` does the same, but with the SUC (controller) as the destination node.
 
+> [!WARNING] It has been found that assigning return routes to nodes that already have a priority route can cause the priority route to be changed unexpectedly. To avoid this, assigning priority routes should be done last. Otherwise, call `deleteReturnRoutes` or `deleteSUCReturnRoutes` (for routes to the controller) before assigning new routes. Unfortunately, `deleteReturnRoutes` deletes **all** return routes to all destination nodes, so they all have to be set up again afterwards.
+
 As mentioned before, there is unfortunately no way to query return routes from a node. To remedy this, Z-Wave JS caches the routes it has assigned. To read them, use the following methods:
 
 ```ts
-getPriorityReturnRouteCached(nodeId: number, destinationNodeId: number): Route | undefined;
-getPrioritySUCReturnRouteCached(nodeId: number): Route | undefined;
+getPriorityReturnRouteCached(nodeId: number, destinationNodeId: number): MaybeUnknown<Route> | undefined;
+getPrioritySUCReturnRouteCached(nodeId: number): MaybeUnknown<Route> | undefined;
 ```
 
--   `getPriorityReturnRouteCached` returns a priority return route that was set using `assignPriorityReturnRoute`.
+-   `getPriorityReturnRouteCached` returns a priority return route that was set using `assignPriorityReturnRoute`. If a non-priority return route has been set since assigning the priority route, this will return `UNKNOWN_STATE` (`null`).
 -   `getPrioritySUCReturnRouteCached` does the same for a route set through `assignPrioritySUCReturnRoute`.
 
 The return type `Route` has the following shape:

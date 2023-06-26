@@ -39,6 +39,7 @@ import {
 	SecurityClass,
 	TransmitOptions,
 	TransmitStatus,
+	UNKNOWN_STATE,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -51,6 +52,7 @@ import {
 	dskToString,
 	encodeX25519KeyDERSPKI,
 	indexDBsByNode,
+	isEmptyRoute,
 	isValidDSK,
 	isZWaveError,
 	nwiHomeIdFromDSK,
@@ -58,6 +60,7 @@ import {
 	securityClassOrder,
 	type Firmware,
 	type MaybeNotKnown,
+	type MaybeUnknown,
 	type ProtocolDataRate,
 	type RSSI,
 	type Route,
@@ -3981,6 +3984,27 @@ ${associatedNodes.join(", ")}`,
 		return result.isOK();
 	}
 
+	// After a lot of experimenting, it seems to make sense to document how assigning return routes works in the controller.
+	// Each node has a list of 4 return routes per destination (and probably a separate list for the SUC):
+	// - #0, repeaters..., speed, wakeup
+	// - #1, repeaters..., speed, wakeup
+	// - #2, repeaters..., speed, wakeup
+	// - #3, repeaters..., speed, wakeup
+	//
+	// Empty slots are filled with 0 repeaters, 9.6kbit/s, no wakeup
+	//
+	// Calling assignReturnRoute will assign all 4 slots, some of which may be empty.
+	// Calling deleteReturnRoute will assign an empty route to all 4 slots.
+	//
+	// Priority return routes are indicated by a separate "pointer" byte which tells the node which route is the priority.
+	// Calling assignPriorityReturnRoute will first assign 4 routes, one of which is then marked as priority.
+	// This is not fully understood yet, but it seems that the priority route is actually the last non-empty route.
+	// If the priority byte points to an empty route, it is ignored.
+	//
+	// Calling assignReturnRoute after having assigned a priority return route will not clear that pointer byte. This
+	// means that a previously-assigned priority route can randomly change if assignReturnRoute assigns enough routes.
+	// deleteReturnRoute does also clear the priority byte.
+
 	/** @deprecated Use {@link assignSUCReturnRoutes} instead */
 	public assignSUCReturnRoute(nodeId: number): Promise<boolean> {
 		return this.assignSUCReturnRoutes(nodeId);
@@ -3996,6 +4020,10 @@ ${associatedNodes.join(", ")}`,
 			direction: "outbound",
 		});
 
+		// Since there is only one SUC, we can do the right thing here and delete all routes first, which clears any dangling priority return routes.
+		// Afterwards, we'll set up all routes again anyways.
+		await this.deleteSUCReturnRoutes(nodeId);
+
 		try {
 			const result =
 				await this.driver.sendMessage<AssignSUCReturnRouteRequestTransmitReport>(
@@ -4009,8 +4037,7 @@ ${associatedNodes.join(", ")}`,
 				nodeId,
 			);
 			if (success) {
-				// Custom assigned and priority return routes are no longer valid
-				this.setPrioritySUCReturnRouteCached(nodeId, undefined);
+				// Custom assigned are no longer valid
 				this.setCustomSUCReturnRoutesCached(nodeId, undefined);
 			}
 			return success;
@@ -4064,6 +4091,9 @@ ${associatedNodes.join(", ")}`,
 			direction: "outbound",
 		});
 
+		// Since there is only one SUC, we can do the right thing here and delete all routes first, which clears the priority return routes.
+		await this.deleteSUCReturnRoutes(nodeId);
+
 		let result = true;
 		const MAX_ROUTES = 4;
 
@@ -4075,13 +4105,15 @@ ${associatedNodes.join(", ")}`,
 
 		for (let i = 0; i < MAX_ROUTES; i++) {
 			const route = routes[i] ?? EMPTY_ROUTE;
+			const isEmpty = isEmptyRoute(route);
 
 			// We are always listening
 			const targetWakeup = false;
 
 			const cc = new ZWaveProtocolCCAssignSUCReturnRoute(this.driver, {
 				nodeId,
-				destinationNodeId: this.ownNodeId ?? 1,
+				// Empty routes are marked with a nodeId of 0
+				destinationNodeId: isEmpty ? 0 : this.ownNodeId ?? 1,
 				routeIndex: i,
 				repeaters: route.repeaters,
 				destinationSpeed: route.routeSpeed,
@@ -4111,6 +4143,15 @@ ${associatedNodes.join(", ")}`,
 
 				result = false;
 			}
+		}
+
+		// Trim empty routes off the end. We may end up with empty routes in the middle
+		// if an assignment fails.
+		while (
+			assignedRoutes.length > 0 &&
+			isEmptyRoute(assignedRoutes[assignedRoutes.length - 1])
+		) {
+			assignedRoutes.pop();
 		}
 
 		this.setCustomSUCReturnRoutesCached(nodeId, assignedRoutes);
@@ -4212,6 +4253,11 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 		destinationNodeId: number,
 	): Promise<boolean> {
+		// Make sure this is not misused by passing the controller's node ID
+		if (destinationNodeId === this.ownNodeId) {
+			return this.assignSUCReturnRoutes(nodeId);
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning return routes to node ${destinationNodeId}...`,
 			direction: "outbound",
@@ -4231,17 +4277,25 @@ ${associatedNodes.join(", ")}`,
 				nodeId,
 			);
 			if (success) {
-				// Custom assigned and priority return routes are no longer valid
-				this.setPriorityReturnRouteCached(
-					nodeId,
-					destinationNodeId,
-					undefined,
-				);
+				// Custom assigned are no longer valid
 				this.setCustomReturnRoutesCached(
 					nodeId,
 					destinationNodeId,
 					undefined,
 				);
+				// The priority route probably is invalid too now, but it may also point to a random route
+				if (
+					this.hasPriorityReturnRouteCached(
+						nodeId,
+						destinationNodeId,
+					) !== false
+				) {
+					this.setPriorityReturnRouteCached(
+						nodeId,
+						destinationNodeId,
+						UNKNOWN_STATE,
+					);
+				}
 			}
 			return success;
 		} catch (e) {
@@ -4285,13 +4339,16 @@ ${associatedNodes.join(", ")}`,
 
 		for (let i = 0; i < MAX_ROUTES; i++) {
 			const route = routes[i] ?? EMPTY_ROUTE;
+			const isEmpty = isEmptyRoute(route);
 
-			const targetWakeup =
-				this.nodes.get(destinationNodeId)?.isFrequentListening;
+			const targetWakeup = !isEmpty
+				? this.nodes.get(destinationNodeId)?.isFrequentListening
+				: undefined;
 
 			const cc = new ZWaveProtocolCCAssignReturnRoute(this.driver, {
 				nodeId,
-				destinationNodeId,
+				// Empty routes are marked with a nodeId of 0
+				destinationNodeId: isEmpty ? 0 : destinationNodeId,
 				routeIndex: i,
 				repeaters: route.repeaters,
 				destinationSpeed: route.routeSpeed,
@@ -4323,11 +4380,31 @@ ${associatedNodes.join(", ")}`,
 			}
 		}
 
+		// Trim empty routes off the end. We may end up with empty routes in the middle
+		// if an assignment fails.
+		while (
+			assignedRoutes.length > 0 &&
+			isEmptyRoute(assignedRoutes[assignedRoutes.length - 1])
+		) {
+			assignedRoutes.pop();
+		}
+
 		this.setCustomReturnRoutesCached(
 			nodeId,
 			destinationNodeId,
 			assignedRoutes,
 		);
+		// The priority route is probably invalid now, but it may also point to a random route
+		if (
+			this.hasPriorityReturnRouteCached(nodeId, destinationNodeId) !==
+			false
+		) {
+			this.setPriorityReturnRouteCached(
+				nodeId,
+				destinationNodeId,
+				UNKNOWN_STATE,
+			);
+		}
 
 		return result;
 	}
@@ -4338,7 +4415,7 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * Instructs the controller to delete all static routes between the given node and
+	 * Instructs the controller to delete all static routes between the given node and all
 	 * other end nodes, including the priority return routes.
 	 */
 	public async deleteReturnRoutes(nodeId: number): Promise<boolean> {
@@ -4426,10 +4503,21 @@ ${associatedNodes.join(", ")}`,
 		}
 	}
 
+	private hasPriorityReturnRouteCached(
+		nodeId: number,
+		destinationNodeId: number,
+	): MaybeUnknown<boolean> {
+		const ret = this.driver.cacheGet<MaybeUnknown<Route>>(
+			cacheKeys.node(nodeId).priorityReturnRoute(destinationNodeId),
+		);
+		if (ret === UNKNOWN_STATE) return UNKNOWN_STATE;
+		return ret !== undefined;
+	}
+
 	private setPriorityReturnRouteCached(
 		nodeId: number,
 		destinationNodeId: number,
-		route: Route | undefined,
+		route: MaybeUnknown<Route> | undefined,
 	): void {
 		this.driver.cacheSet(
 			cacheKeys.node(nodeId).priorityReturnRoute(destinationNodeId),
@@ -4453,8 +4541,8 @@ ${associatedNodes.join(", ")}`,
 	public getPriorityReturnRouteCached(
 		nodeId: number,
 		destinationNodeId: number,
-	): Route | undefined {
-		return this.driver.cacheGet<Route>(
+	): MaybeUnknown<Route> | undefined {
+		return this.driver.cacheGet(
 			cacheKeys.node(nodeId).priorityReturnRoute(destinationNodeId),
 		);
 	}
@@ -4526,7 +4614,7 @@ ${associatedNodes.join(", ")}`,
 	 * If another controller has assigned routes in the meantime, this information may be out of date.
 	 */
 	public getPrioritySUCReturnRouteCached(nodeId: number): Route | undefined {
-		return this.driver.cacheGet<Route>(
+		return this.driver.cacheGet(
 			cacheKeys.node(nodeId).prioritySUCReturnRoute,
 		);
 	}
