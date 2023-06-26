@@ -16,8 +16,9 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			// TODO: It is unknown what this parameter does. If anyone knows,
-			// let us know so we can find a better label for it
+			// A botton on the blinds offers the ability to control it without z-wave or remote, i.e, by hand
+			// Pressing the "hand" button will cause the blind to open or close. If it's in between, this is the 
+			// direction it will travel.  
 			"label": "Set To Start Holding Hands",
 			"description": "This parameter can be used to set the motor open hand start function",
 			"valueSize": 1,
