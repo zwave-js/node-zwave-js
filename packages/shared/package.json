@@ -58,9 +58,9 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.35.0",
+    "@microsoft/api-extractor": "^7.36.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.47",
+    "@types/node": "^14.18.52",
     "@types/sinon": "^10.0.14",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
@@ -68,6 +68,6 @@
     "esbuild-register": "^3.4.2",
     "prettier": "^2.8.8",
     "sinon": "^14.0.2",
-    "typescript": "5.0.4"
+    "typescript": "5.1.3"
   }
 }
