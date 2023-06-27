@@ -5646,6 +5646,8 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
     parameter: EnergyProductionParameter;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "EnergyProductionCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5662,6 +5664,8 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
     readonly scale: EnergyProductionScale;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     readonly value: number;
 }
