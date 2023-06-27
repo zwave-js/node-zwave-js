@@ -1,11 +1,11 @@
 import {
 	CommandClasses,
-	MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
 	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
