@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
 	encodeFloatWithScale,
@@ -230,6 +231,18 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				[getEnumMemberName(
+					EnergyProductionParameter,
+					this.parameter,
+				).toLowerCase()]: `${this.value} ${this.scale.unit}`,
+			},
+		};
+	}
 }
 
 interface EnergyProductionCCGetOptions extends CCCommandOptions {
@@ -269,5 +282,17 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					EnergyProductionParameter,
+					this.parameter,
+				),
+			},
+		};
 	}
 }
