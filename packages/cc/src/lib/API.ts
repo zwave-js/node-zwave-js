@@ -248,7 +248,7 @@ export class CCAPI {
 	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
-		return this[POLL_VALUE]?.bind(this);
+		return this[POLL_VALUE];
 	}
 
 	/**
@@ -415,10 +415,14 @@ export class CCAPI {
 		}
 
 		// Remember which properties need to be proxied
-		const ownProps = new Set(
-			Object.getOwnPropertyNames(this.constructor.prototype),
-		);
-		ownProps.delete("constructor");
+		const proxiedProps = new Set([
+			// These are the CC-specific methods
+			...Object.getOwnPropertyNames(this.constructor.prototype),
+			// as well as setValue and pollValue
+			"setValue",
+			"pollValue",
+		]);
+		proxiedProps.delete("constructor");
 
 		function wrapResult<T>(result: T, txReport: TXReport): any {
 			// Both the result and the TX report may be undefined (no response, no support)
@@ -434,7 +438,7 @@ export class CCAPI {
 
 				let original: any = (target as any)[prop];
 				if (
-					ownProps.has(prop as string) &&
+					proxiedProps.has(prop as string) &&
 					typeof original === "function"
 				) {
 					// This is a method that only exists in the specific implementation
@@ -674,14 +678,19 @@ export type WrapWithTXReport<T> = [T] extends [Promise<infer U>]
 	? { txReport: TXReport | undefined }
 	: { result: T; txReport: TXReport | undefined };
 
+export type ReturnWithTXReport<T> = T extends (...args: any[]) => any
+	? (...args: Parameters<T>) => WrapWithTXReport<ReturnType<T>>
+	: undefined;
+
 // Converts the type of the given API implementation so the API methods return an object including the TX report
 export type WithTXReport<API extends CCAPI> = Omit<
 	API,
-	keyof OwnMethodsOf<API> | "withOptions" | "withTXReport"
+	keyof OwnMethodsOf<API> | "withOptions" | "withTXReport" | "setValue"
 > & {
-	[K in keyof OwnMethodsOf<API>]: API[K] extends (...args: any[]) => any
-		? (...args: Parameters<API[K]>) => WrapWithTXReport<ReturnType<API[K]>>
-		: never;
+	[K in
+		| keyof OwnMethodsOf<API>
+		| "setValue"
+		| "pollValue"]: ReturnWithTXReport<API[K]>;
 };
 
 export function normalizeCCNameOrId(
