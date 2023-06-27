@@ -248,7 +248,7 @@ export class CCAPI {
 	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
-		return this[POLL_VALUE]?.bind(this);
+		return this[POLL_VALUE];
 	}
 
 	/**
