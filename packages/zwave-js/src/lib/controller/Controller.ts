@@ -2135,7 +2135,12 @@ supported CCs: ${nodeInfo.supportedCCs
 							nodeId,
 							`Notifying node ${inclCtrlrId} of finished inclusion`,
 						);
-						void inclCtrlr!.commandClasses["Inclusion Controller"]
+						// Create API without checking for support
+						const api = inclCtrlr!.createAPI(
+							CommandClasses["Inclusion Controller"],
+							false,
+						);
+						void api
 							.completeStep(step, InclusionControllerStatus.OK)
 							// eslint-disable-next-line @typescript-eslint/no-empty-function
 							.catch(() => {});
@@ -2236,7 +2241,12 @@ supported CCs: ${nodeInfo.supportedCCs
 					inclCtrlr.nodeId,
 					`Notifying inclusion controller of finished inclusion`,
 				);
-				void inclCtrlr.commandClasses["Inclusion Controller"]
+				// Create API without checking for support
+				const api = inclCtrlr.createAPI(
+					CommandClasses["Inclusion Controller"],
+					false,
+				);
+				void api
 					.completeStep(initiate.step, InclusionControllerStatus.OK)
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
 					.catch(() => {});
