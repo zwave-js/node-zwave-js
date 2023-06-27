@@ -13012,6 +13012,11 @@ export enum RateType {
 // @public (undocumented)
 function removeAssociations(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, group: number, destinations: AssociationAddress[]): Promise<void>;
 
+// Warning: (ae-missing-release-tag) "ReturnWithTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ReturnWithTXReport<T> = T extends (...args: any[]) => any ? (...args: Parameters<T>) => WrapWithTXReport<ReturnType<T>> : undefined;
+
 // Warning: (ae-missing-release-tag) "RFProtectionState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -18506,8 +18511,8 @@ export enum WindowCoveringParameter {
 // Warning: (ae-missing-release-tag) "WithTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type WithTXReport<API extends CCAPI> = Omit<API, keyof OwnMethodsOf<API> | "withOptions" | "withTXReport"> & {
-    [K in keyof OwnMethodsOf<API>]: API[K] extends (...args: any[]) => any ? (...args: Parameters<API[K]>) => WrapWithTXReport<ReturnType<API[K]>> : never;
+export type WithTXReport<API extends CCAPI> = Omit<API, keyof OwnMethodsOf<API> | "withOptions" | "withTXReport" | "setValue"> & {
+    [K in keyof OwnMethodsOf<API> | "setValue" | "pollValue"]: ReturnWithTXReport<API[K]>;
 };
 
 // Warning: (ae-missing-release-tag) "WrapWithTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
