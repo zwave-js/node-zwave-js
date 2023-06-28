@@ -13,46 +13,48 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 2,
-			"isLifeline": true
-		}
-	},
-	"paramInformation": [
-		{
-			"#": "1",
-			"label": "Temperature Reporting Threshold",
-			"unit": "0.1 °C",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "2",
-			"label": "Temperature Reporting Interval",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"unsigned": true
-		}
-	],
 	"endpoints": {
+		"0": {
+			"associations": {
+				"1": {
+					"label": "Lifeline",
+					"maxNodes": 2,
+					"isLifeline": true
+				}
+			},
+			"paramInformation": [
+				{
+					"#": "1",
+					"label": "Temperature Reporting Threshold",
+					"unit": "0.1 °C",
+					"valueSize": 1,
+					"minValue": 0,
+					"maxValue": 255,
+					"defaultValue": 0,
+					"unsigned": true
+				},
+				{
+					"#": "2",
+					"label": "Temperature Reporting Interval",
+					"unit": "minutes",
+					"valueSize": 1,
+					"minValue": 0,
+					"maxValue": 255,
+					"defaultValue": 5,
+					"unsigned": true
+				}
+			]
+		},
 		// The device has up to 4 endpoints, each supporting parameter 1 and 2
 		"1": {
 			"paramInformation": [
 				{
 					"#": "1",
-					"$import": "#paramInformation/1"
+					"$import": "#endpoints/0/paramInformation/1"
 				},
 				{
 					"#": "2",
-					"$import": "#paramInformation/2"
+					"$import": "#endpoints/0/paramInformation/2"
 				}
 			]
 		},
