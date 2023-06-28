@@ -1,4 +1,5 @@
-import { Machine, type Interpreter, type StateMachine } from "xstate";
+import { Machine, type StateMachine } from "xstate";
+import { type InterpreterFromMachine } from "../driver/StateMachineShared";
 import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./_Types";
 
@@ -44,11 +45,7 @@ export type NodeStatusMachine = StateMachine<
 	any,
 	any
 >;
-export type NodeStatusInterpreter = Interpreter<
-	any,
-	NodeStatusStateSchema,
-	NodeStatusEvent
->;
+export type NodeStatusInterpreter = InterpreterFromMachine<NodeStatusMachine>;
 
 export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(

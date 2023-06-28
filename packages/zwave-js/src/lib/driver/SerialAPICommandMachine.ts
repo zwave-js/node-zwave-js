@@ -13,10 +13,7 @@ import {
 	type StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
-import {
-	respondUnsolicited,
-	type ServiceImplementations,
-} from "./StateMachineShared";
+import { type ServiceImplementations } from "./StateMachineShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
 /* eslint-disable @typescript-eslint/ban-types */
@@ -136,7 +133,11 @@ export function getSerialAPICommandMachineConfig(
 	{
 		timestamp,
 		logOutgoingMessage,
-	}: Pick<ServiceImplementations, "timestamp" | "logOutgoingMessage">,
+		notifyUnsolicited,
+	}: Pick<
+		ServiceImplementations,
+		"timestamp" | "logOutgoingMessage" | "notifyUnsolicited"
+	>,
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
 ): SerialAPICommandMachineConfig {
 	return {
@@ -158,7 +159,9 @@ export function getSerialAPICommandMachineConfig(
 					actions: forwardMessage as any,
 				},
 				{
-					actions: respondUnsolicited,
+					actions: (_: any, evt: any) => {
+						notifyUnsolicited(evt.message);
+					},
 				},
 			],
 		},
@@ -389,7 +392,14 @@ export function getSerialAPICommandMachineOptions(
 
 export function createSerialAPICommandMachine(
 	message: Message,
-	implementations: ServiceImplementations,
+	implementations: Pick<
+		ServiceImplementations,
+		| "timestamp"
+		| "logOutgoingMessage"
+		| "sendData"
+		| "notifyRetry"
+		| "notifyUnsolicited"
+	>,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
 	return createMachine<SerialAPICommandContext, SerialAPICommandEvent>(

@@ -125,6 +125,7 @@ import {
 	createDeferredPromise,
 	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
+import { SortedList } from "alcalzone-shared/sorted-list";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
@@ -156,7 +157,6 @@ import {
 } from "../serialapi/transport/SendDataBridgeMessages";
 import {
 	MAX_SEND_ATTEMPTS,
-	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../serialapi/transport/SendDataMessages";
@@ -184,11 +184,14 @@ import {
 	serializeNetworkCacheValue,
 } from "./NetworkCache";
 import {
-	createSendThreadMachine,
-	type SendThreadInterpreter,
 	type TransactionReducer,
 	type TransactionReducerResult,
 } from "./SendThreadMachine";
+import {
+	createSendThreadMachineSlim,
+	type SendThreadSlimInterpreter,
+} from "./SendThreadMachineSlim";
+import { type SerialAPICommandDoneData } from "./SerialAPICommandMachine";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
 import {
@@ -470,10 +473,158 @@ export class Driver
 		});
 
 		// And initialize but don't start the send thread machine
-		const sendThreadMachine = createSendThreadMachine(
+		// const sendThreadMachine = createSendThreadMachine(
+		// 	{
+		// 		sendData: this.writeSerial.bind(this),
+		// 		createSendDataAbort: () => new SendDataAbort(this),
+		// 		notifyUnsolicited: (msg) => {
+		// 			void this.handleUnsolicitedMessage(msg);
+		// 		},
+		// 		notifyRetry: (
+		// 			command,
+		// 			lastError,
+		// 			message,
+		// 			attempts,
+		// 			maxAttempts,
+		// 			delay,
+		// 		) => {
+		// 			if (command === "SendData") {
+		// 				this.controllerLog.logNode(
+		// 					message.getNodeId() ?? 255,
+		// 					`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+		// 					"warn",
+		// 				);
+		// 			} else {
+		// 				// Translate the error into a better one
+		// 				let errorReason: string;
+		// 				switch (lastError) {
+		// 					case "response timeout":
+		// 						errorReason = "No response from controller";
+		// 						this._controller?.incrementStatistics(
+		// 							"timeoutResponse",
+		// 						);
+		// 						break;
+		// 					case "callback timeout":
+		// 						errorReason = "No callback from controller";
+		// 						this._controller?.incrementStatistics(
+		// 							"timeoutCallback",
+		// 						);
+		// 						break;
+		// 					case "response NOK":
+		// 						errorReason =
+		// 							"The controller response indicated failure";
+		// 						break;
+		// 					case "callback NOK":
+		// 						errorReason =
+		// 							"The controller callback indicated failure";
+		// 						break;
+		// 					case "ACK timeout":
+		// 						this._controller?.incrementStatistics(
+		// 							"timeoutACK",
+		// 						);
+		// 					// fall through
+		// 					case "CAN":
+		// 					case "NAK":
+		// 					default:
+		// 						errorReason =
+		// 							"Failed to execute controller command";
+		// 						break;
+		// 				}
+		// 				this.controllerLog.print(
+		// 					`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+		// 					"warn",
+		// 				);
+		// 			}
+		// 		},
+		// 		timestamp: highResTimestamp,
+		// 		rejectTransaction: (transaction, error) => {
+		// 			// If a node failed to respond in time, it might be sleeping
+		// 			if (this.isMissingNodeACK(transaction, error)) {
+		// 				if (this.handleMissingNodeACK(transaction as any))
+		// 					return;
+		// 			}
+
+		// 			// If the transaction was already started, we need to throw the error into the message generator
+		// 			// so it correctly gets ended. Otherwise just reject the result promise
+		// 			if (transaction.parts.self) {
+		// 				// eslint-disable-next-line @typescript-eslint/no-empty-function
+		// 				transaction.parts.self.throw(error).catch(() => {});
+		// 			} else {
+		// 				transaction.promise.reject(error);
+		// 			}
+		// 		},
+		// 		resolveTransaction: (transaction, result) => {
+		// 			// If the transaction was already started, we need to end the message generator early by throwing
+		// 			// the result. Otherwise just resolve the result promise
+		// 			if (transaction.parts.self) {
+		// 				// eslint-disable-next-line @typescript-eslint/no-empty-function
+		// 				transaction.parts.self.throw(result).catch(() => {});
+		// 			} else {
+		// 				transaction.promise.resolve(result);
+		// 			}
+		// 		},
+		// 		logOutgoingMessage: (msg: Message) => {
+		// 			this.driverLog.logMessage(msg, {
+		// 				direction: "outbound",
+		// 			});
+		// 			if (process.env.NODE_ENV !== "test") {
+		// 				// Enrich error data in case something goes wrong
+		// 				Sentry.addBreadcrumb({
+		// 					category: "message",
+		// 					timestamp: Date.now() / 1000,
+		// 					type: "debug",
+		// 					data: {
+		// 						direction: "outbound",
+		// 						msgType: msg.type,
+		// 						functionType: msg.functionType,
+		// 						name: msg.constructor.name,
+		// 						nodeId: msg.getNodeId(),
+		// 						...msg.toLogEntry(),
+		// 					},
+		// 				});
+		// 			}
+		// 		},
+		// 		log: this.driverLog.print.bind(this.driverLog),
+		// 		logQueue: this.driverLog.sendQueue.bind(this.driverLog),
+		// 	},
+		// 	pick(this._options, ["timeouts", "attempts"]),
+		// );
+		// this.sendThread = interpret(sendThreadMachine);
+		// this._sendThreadIdle = false;
+
+		// this.sendThread.onTransition((state) => {
+		// 	if (state.changed) {
+		// 		this.sendThreadIdle = state.matches("idle");
+		// 	}
+		// });
+
+		// For debugging
+		// this.sendThread.onTransition((state) => {
+		// 	if (state.changed)
+		// 		this.driverLog.print(
+		// 			`send thread state: ${state.toStrings().join("->")}`,
+		// 			"verbose",
+		// 		);
+		// });
+		// this.sendThread.onEvent((evt) => {
+		// 	if (evt.type === "forward") {
+		// 		this.driverLog.print(
+		// 			// @ts-ignore
+		// 			`forwarding event: ${evt.payload.type} from ${evt.from} to ${evt.to}`,
+		// 			"verbose",
+		// 		);
+		// 	} else {
+		// 		this.driverLog.print(
+		// 			`send thread event: ${evt.type}`,
+		// 			"verbose",
+		// 		);
+		// 	}
+		// });
+		this.queue = new SortedList();
+
+		const sendThreadMachine = createSendThreadMachineSlim(
 			{
 				sendData: this.writeSerial.bind(this),
-				createSendDataAbort: () => new SendDataAbort(this),
 				notifyUnsolicited: (msg) => {
 					void this.handleUnsolicitedMessage(msg);
 				},
@@ -534,32 +685,6 @@ export class Driver
 					}
 				},
 				timestamp: highResTimestamp,
-				rejectTransaction: (transaction, error) => {
-					// If a node failed to respond in time, it might be sleeping
-					if (this.isMissingNodeACK(transaction, error)) {
-						if (this.handleMissingNodeACK(transaction as any))
-							return;
-					}
-
-					// If the transaction was already started, we need to throw the error into the message generator
-					// so it correctly gets ended. Otherwise just reject the result promise
-					if (transaction.parts.self) {
-						// eslint-disable-next-line @typescript-eslint/no-empty-function
-						transaction.parts.self.throw(error).catch(() => {});
-					} else {
-						transaction.promise.reject(error);
-					}
-				},
-				resolveTransaction: (transaction, result) => {
-					// If the transaction was already started, we need to end the message generator early by throwing
-					// the result. Otherwise just resolve the result promise
-					if (transaction.parts.self) {
-						// eslint-disable-next-line @typescript-eslint/no-empty-function
-						transaction.parts.self.throw(result).catch(() => {});
-					} else {
-						transaction.promise.resolve(result);
-					}
-				},
 				logOutgoingMessage: (msg: Message) => {
 					this.driverLog.logMessage(msg, {
 						direction: "outbound",
@@ -582,47 +707,32 @@ export class Driver
 					}
 				},
 				log: this.driverLog.print.bind(this.driverLog),
-				logQueue: this.driverLog.sendQueue.bind(this.driverLog),
+				pollQueue: (prevResult) => this.pollQueue(prevResult),
 			},
 			pick(this._options, ["timeouts", "attempts"]),
 		);
-		this.sendThread = interpret(sendThreadMachine);
-		this._sendThreadIdle = false;
+		this.sendThreadSlim = interpret(sendThreadMachine);
 
-		this.sendThread.onTransition((state) => {
+		this._sendThreadIdle = false;
+		this.sendThreadSlim.onTransition((state) => {
 			if (state.changed) {
 				this.sendThreadIdle = state.matches("idle");
 			}
 		});
-
-		// For debugging
-		// this.sendThread.onTransition((state) => {
-		// 	if (state.changed)
-		// 		this.driverLog.print(
-		// 			`send thread state: ${state.toStrings().join("->")}`,
-		// 			"verbose",
-		// 		);
-		// });
-		// this.sendThread.onEvent((evt) => {
-		// 	if (evt.type === "forward") {
-		// 		this.driverLog.print(
-		// 			// @ts-ignore
-		// 			`forwarding event: ${evt.payload.type} from ${evt.from} to ${evt.to}`,
-		// 			"verbose",
-		// 		);
-		// 	} else {
-		// 		this.driverLog.print(
-		// 			`send thread event: ${evt.type}`,
-		// 			"verbose",
-		// 		);
-		// 	}
-		// });
 	}
 
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
+	// /** An instance of the Send Thread state machine */
+	// private sendThread: SendThreadInterpreter;
+
+	/** The queue of pending transactions */
+	private queue: SortedList<Transaction>;
+	private queuePaused = false;
+	/** The transaction that is currently being handled */
+	private currentTransaction: Transaction | undefined;
 	/** An instance of the Send Thread state machine */
-	private sendThread: SendThreadInterpreter;
+	private sendThreadSlim: SendThreadSlimInterpreter;
 
 	private _sendThreadIdle: boolean;
 	/** Whether the Send Thread is currently idle */
@@ -995,7 +1105,7 @@ export class Driver
 		this.driverLog.print("", "info");
 
 		this.driverLog.print("starting driver...");
-		this.sendThread.start();
+		this.sendThreadSlim.start();
 
 		// Open the serial port
 		if (typeof this.port === "string") {
@@ -1717,18 +1827,14 @@ export class Driver
 
 		// Make sure to handle the pending messages as quickly as possible
 		if (oldStatus === NodeStatus.Asleep) {
-			this.sendThread.send({
-				type: "reduce",
-				reducer: ({ message }) => {
-					// Ignore messages that are not for this node
-					if (message.getNodeId() !== node.id)
-						return { type: "keep" };
-					// Resolve pings, so we don't need to send them (we know the node is awake)
-					if (messageIsPing(message))
-						return { type: "resolve", message: undefined };
-					// Re-queue all other transactions for this node, so they get added in front of the others
-					return { type: "requeue" };
-				},
+			this.reduceQueue(({ message }) => {
+				// Ignore messages that are not for this node
+				if (message.getNodeId() !== node.id) return { type: "keep" };
+				// Resolve pings, so we don't need to send them (we know the node is awake)
+				if (messageIsPing(message))
+					return { type: "resolve", message: undefined };
+				// Re-queue all other transactions for this node, so they get added in front of the others
+				return { type: "requeue" };
 			});
 		}
 	}
@@ -2255,10 +2361,9 @@ export class Driver
 	public hasPendingTransactions(
 		predicate: (t: Transaction) => boolean,
 	): boolean {
-		const { queue, activeTransactions } = this.sendThread.state.context;
-		if (!!queue.find((t) => predicate(t))) return true;
-		for (const { transaction } of activeTransactions.values()) {
-			if (predicate(transaction)) return true;
+		if (!!this.queue.find((t) => predicate(t))) return true;
+		if (this.currentTransaction && predicate(this.currentTransaction)) {
+			return true;
 		}
 		return false;
 	}
@@ -2524,7 +2629,7 @@ export class Driver
 		// This is a bit hacky, but what the heck...
 		if (!this._enteringBootloader) {
 			// Resume sending
-			this.unpauseSendThread();
+			this.unpauseSendQueue();
 			// Soft-resetting disables any ongoing inclusion, so we need to reset
 			// the state that is tracked in the controller
 			this._controller?.setInclusionState(InclusionState.Idle);
@@ -2615,11 +2720,11 @@ export class Driver
 		const pollController = async () => {
 			try {
 				// And resume sending - this requires us to unpause the send thread
-				this.unpauseSendThread();
+				this.unpauseSendQueue();
 				await this.sendMessage(new GetControllerVersionRequest(this), {
 					supportCheck: false,
 				});
-				this.pauseSendThread();
+				this.pauseSendQueue();
 				this.controllerLog.print("Serial API responded");
 				return true;
 			} catch {
@@ -2763,7 +2868,7 @@ export class Driver
 		this.driverLog.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
-		if (this.sendThread.initialized) this.sendThread.stop();
+		if (this.sendThreadSlim.initialized) this.sendThreadSlim.stop();
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
 			this.serial.removeAllListeners();
@@ -2799,7 +2904,6 @@ export class Driver
 
 		// Remove all timeouts
 		for (const timeout of [
-			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
 			...this.retryNodeInterviewTimeouts.values(),
 			...this.autoRefreshNodeValueTimers.values(),
@@ -2843,16 +2947,16 @@ export class Driver
 			switch (data) {
 				// single-byte messages - just forward them to the send thread
 				case MessageHeaders.ACK: {
-					this.sendThread.send("ACK");
+					this.sendThreadSlim.send("ACK");
 					return;
 				}
 				case MessageHeaders.NAK: {
-					this.sendThread.send("NAK");
+					this.sendThreadSlim.send("NAK");
 					this._controller?.incrementStatistics("NAK");
 					return;
 				}
 				case MessageHeaders.CAN: {
-					this.sendThread.send("CAN");
+					this.sendThreadSlim.send("CAN");
 					this._controller?.incrementStatistics("CAN");
 					return;
 				}
@@ -3067,7 +3171,10 @@ export class Driver
 					`Logging a message failed: ${getErrorMessage(e)}`,
 				);
 			}
-			this.sendThread.send({ type: "message", message: msg });
+
+			// Pass the message to the send thread, so it can be handled or returned
+			// as unsolicited
+			this.sendThreadSlim.send({ type: "message", message: msg });
 		}
 	}
 
@@ -3866,26 +3973,20 @@ ${handlers.length} left`,
 
 		// It could also be that this is the node's response for a CC that we sent, but where the ACK is delayed
 		if (isCommandClassContainer(msg)) {
-			const { activeTransactions } = this.sendThread.state.context;
-			const pendingMessages = [...activeTransactions.values()]
-				.map((t) => t.transaction.getCurrentMessage())
-				.filter((m): m is Message => !!m);
-			const msgExpectingUpdate = pendingMessages.find((sentMsg) => {
-				return (
-					sentMsg.expectsNodeUpdate() &&
-					sentMsg.isExpectedNodeUpdate(msg)
-				);
-			});
-
-			if (msgExpectingUpdate) {
-				// Found a message that is still in progress but expects this message in response.
+			const currentMessage = this.currentTransaction?.getCurrentMessage();
+			if (
+				currentMessage &&
+				currentMessage.expectsNodeUpdate() &&
+				currentMessage.isExpectedNodeUpdate(msg)
+			) {
+				// The message we're currently sending is still in progress but expects this message in response.
 				// Remember the message there.
 				this.controllerLog.logNode(msg.getNodeId()!, {
 					message: `received expected response prematurely, remembering it...`,
 					level: "verbose",
 					direction: "inbound",
 				});
-				msgExpectingUpdate.prematureNodeUpdate = msg;
+				currentMessage.prematureNodeUpdate = msg;
 				return;
 			}
 		}
@@ -4276,6 +4377,46 @@ ${handlers.length} left`,
 		}
 	}
 
+	public async pollQueue(
+		prevResult: SerialAPICommandDoneData | ZWaveError | undefined,
+	): Promise<Message | undefined> {
+		if (this.queuePaused) return;
+
+		while (true) {
+			// If we don't have a current transaction yet, try to get the next one from the queue
+			if (!this.currentTransaction) {
+				this.currentTransaction = this.queue.shift();
+				if (!this.currentTransaction) return;
+			}
+
+			// If the transaction hasn't been started yet, do it now
+			if (!this.currentTransaction.parts.self) {
+				this.currentTransaction.parts.start();
+				// self is now guaranteed to be defined
+
+				// We do not pass previous results to new transactions
+				prevResult = undefined;
+			}
+
+			// TODO: Test if the transaction may be started at all
+
+			// Execute the transaction until it gives us the next message
+			const { value, done } =
+				await this.currentTransaction.parts.self!.next(prevResult);
+			if (done) {
+				// This transaction is finished, try the next one
+				this.currentTransaction = undefined;
+				continue;
+			} else {
+				// We got a message, return it
+				return value;
+			}
+
+			// The loop will never execute more than once, except if we reached
+			// the end of a transaction.
+		}
+	}
+
 	/**
 	 * Sends a message to the Z-Wave stick.
 	 * @param msg The message to send
@@ -4384,23 +4525,21 @@ ${handlers.length} left`,
 		transaction.tag = options.tag;
 
 		// And queue it
-		this.sendThread.send({ type: "add", transaction });
+		this.queue.add(transaction);
+		this.sendThreadSlim.send({ type: "trigger" });
 
 		// If the transaction should expire, start the timeout
 		let expirationTimeout: NodeJS.Timeout | undefined;
 		if (options.expire) {
 			expirationTimeout = setTimeout(() => {
-				this.sendThread.send({
-					type: "reduce",
-					reducer: (t: Transaction) => {
-						if (t === transaction)
-							return {
-								type: "reject",
-								message: `The message has expired`,
-								code: ZWaveErrorCodes.Controller_MessageExpired,
-							};
-						return { type: "keep" };
-					},
+				this.reduceQueue((t, _source) => {
+					if (t === transaction)
+						return {
+							type: "reject",
+							message: `The message has expired`,
+							code: ZWaveErrorCodes.Controller_MessageExpired,
+						};
+					return { type: "keep" };
 				});
 			}, options.expire).unref();
 		}
@@ -4802,6 +4941,39 @@ ${handlers.length} left`,
 		};
 	}
 
+	private rejectTransaction(
+		transaction: Transaction,
+		error: ZWaveError,
+	): void {
+		// If a node failed to respond in time, it might be sleeping
+		if (this.isMissingNodeACK(transaction, error)) {
+			if (this.handleMissingNodeACK(transaction as any)) return;
+		}
+
+		// If the transaction was already started, we need to throw the error into the message generator
+		// so it correctly gets ended. Otherwise just reject the result promise
+		if (transaction.parts.self) {
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			transaction.parts.self.throw(error).catch(() => {});
+		} else {
+			transaction.promise.reject(error);
+		}
+	}
+
+	private resolveTransaction(
+		transaction: Transaction,
+		result?: Message,
+	): void {
+		// If the transaction was already started, we need to end the message generator early by throwing
+		// the result. Otherwise just resolve the result promise
+		if (transaction.parts.self) {
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			transaction.parts.self.throw(result).catch(() => {});
+		} else {
+			transaction.promise.resolve(result);
+		}
+	}
+
 	/** Checks if a message is allowed to go into the wakeup queue */
 	private mayMoveToWakeupQueue(transaction: Transaction): boolean {
 		const msg = transaction.message;
@@ -4837,7 +5009,7 @@ ${handlers.length} left`,
 			tag: "interview",
 		};
 
-		const reducer: TransactionReducer = (transaction, _source) => {
+		this.reduceQueue((transaction, _source) => {
 			const msg = transaction.message;
 			if (msg.getNodeId() !== nodeId) return { type: "keep" };
 			// Drop all messages that are not allowed in the wakeup queue
@@ -4847,10 +5019,7 @@ ${handlers.length} left`,
 					? requeueAndTagAsInterview
 					: requeue
 				: reject;
-		};
-
-		// Apply the reducer to the send thread
-		this.sendThread.send({ type: "reduce", reducer });
+		});
 	}
 
 	/**
@@ -4862,7 +5031,7 @@ ${handlers.length} left`,
 		errorMsg: string = `The message has been removed from the queue`,
 		errorCode: ZWaveErrorCodes = ZWaveErrorCodes.Controller_MessageDropped,
 	): void {
-		const reducer: TransactionReducer = (transaction) => {
+		this.reduceQueue((transaction, _source) => {
 			if (predicate(transaction)) {
 				return {
 					type: "reject",
@@ -4872,9 +5041,7 @@ ${handlers.length} left`,
 			} else {
 				return { type: "keep" };
 			}
-		};
-		// Apply the reducer to the send thread
-		this.sendThread.send({ type: "reduce", reducer });
+		});
 	}
 
 	/**
@@ -4894,30 +5061,85 @@ ${handlers.length} left`,
 	}
 
 	/**
-	 * @internal
-	 * Pauses the send thread, avoiding commands to be sent to the controller
+	 * Pauses the send queue, avoiding commands to be sent to the controller
 	 */
-	public pauseSendThread(): void {
-		this.sendThread.send({ type: "pause" });
+	private pauseSendQueue(): void {
+		this.queuePaused = true;
 	}
 
 	/**
-	 * @internal
-	 * Unpauses the send thread, allowing commands to be sent to the controller again
+	 * Unpauses the send queue, allowing commands to be sent to the controller again
 	 */
-	public unpauseSendThread(): void {
-		this.sendThread.send({ type: "unpause" });
+	private unpauseSendQueue(): void {
+		this.queuePaused = false;
+		this.sendThreadSlim.send({ type: "trigger" });
 	}
 
-	/** Re-sorts the send queue */
-	private sortSendQueue(): void {
-		this.sendThread.send("sortQueue");
-	}
+	private reduceQueue(reducer: TransactionReducer): void {
+		const dropQueued: Transaction[] = [];
+		const stopActive: Transaction[] = [];
+		const requeue: Transaction[] = [];
 
-	private lastSaveToCache: number = 0;
-	private readonly saveToCacheInterval: number = 150;
-	private saveToCacheTimer: NodeJS.Timer | undefined;
-	private isSavingToCache: boolean = false;
+		const reduceTransaction: (
+			...args: Parameters<TransactionReducer>
+		) => void = (transaction, source) => {
+			const reducerResult = reducer(transaction, source);
+			switch (reducerResult.type) {
+				case "drop":
+					(source === "queue" ? dropQueued : stopActive).push(
+						transaction,
+					);
+					break;
+				case "requeue":
+					if (reducerResult.priority != undefined) {
+						transaction.priority = reducerResult.priority;
+					}
+					if (reducerResult.tag != undefined) {
+						transaction.tag = reducerResult.tag;
+					}
+					if (source === "active") stopActive.push(transaction);
+					requeue.push(transaction);
+					break;
+				case "resolve":
+					this.resolveTransaction(transaction, reducerResult.message);
+					(source === "queue" ? dropQueued : stopActive).push(
+						transaction,
+					);
+					break;
+				case "reject":
+					this.rejectTransaction(
+						transaction,
+						new ZWaveError(
+							reducerResult.message,
+							reducerResult.code,
+							undefined,
+							transaction.stack,
+						),
+					);
+					(source === "queue" ? dropQueued : stopActive).push(
+						transaction,
+					);
+					break;
+			}
+		};
+
+		for (const transaction of this.queue) {
+			reduceTransaction(transaction, "queue");
+		}
+
+		if (this.currentTransaction) {
+			reduceTransaction(this.currentTransaction, "active");
+		}
+
+		// Now we know what to do with the transactions
+		this.queue.remove(...dropQueued, ...requeue);
+		this.queue.add(...requeue.map((t) => t.clone()));
+
+		// FIXME: Abort ongoing transaction if it should be dropped
+
+		// Continue sending
+		this.sendThreadSlim.send({ type: "trigger" });
+	}
 
 	/**
 	 * @internal
@@ -5209,7 +5431,7 @@ ${handlers.length} left`,
 			);
 
 			await this.trySoftReset();
-			this.pauseSendThread();
+			this.pauseSendQueue();
 
 			// Again, just to be very sure
 			this.rejectTransactions(
@@ -5277,7 +5499,7 @@ ${handlers.length} left`,
 				);
 			});
 		} else {
-			this.unpauseSendThread();
+			this.unpauseSendQueue();
 			await this.ensureSerialAPI();
 		}
 	}

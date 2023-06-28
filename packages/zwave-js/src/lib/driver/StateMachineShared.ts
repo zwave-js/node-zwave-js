@@ -11,12 +11,12 @@ import {
 	Interpreter,
 	Machine,
 	spawn,
-	type DefaultContext,
-	type EventObject,
+	type BaseActionObject,
 	type InterpreterOptions,
+	type ResolveTypegenMeta,
+	type ServiceMap,
 	type StateMachine,
-	type StateSchema,
-	type Typestate,
+	type TypegenDisabled,
 } from "xstate";
 import { respond, sendParent } from "xstate/lib/actions";
 import type { DriverLogger } from "../log/Driver";
@@ -244,40 +244,50 @@ export function createWrapperMachine(
 	});
 }
 
-export type ExtendedInterpreter<
-	TContext = DefaultContext,
-	TStateSchema extends StateSchema = any,
-	TEvent extends EventObject = EventObject,
-	TTypestate extends Typestate<TContext> = { value: any; context: TContext },
-> = Interpreter<TContext, TStateSchema, TEvent, TTypestate> & {
-	restart(): Interpreter<TContext, TStateSchema, TEvent, TTypestate>;
+export type InterpreterFromMachine<
+	TMachine extends StateMachine<any, any, any, any>,
+> = TMachine extends StateMachine<
+	infer TContext,
+	infer TStateSchema,
+	infer TEvent,
+	any
+>
+	? Interpreter<
+			TContext,
+			TStateSchema,
+			TEvent,
+			{
+				value: any;
+				context: TContext;
+			},
+			ResolveTypegenMeta<
+				TypegenDisabled,
+				TEvent,
+				BaseActionObject,
+				ServiceMap
+			>
+	  >
+	: never;
+
+export type ExtendedInterpreterFromMachine<
+	TMachine extends StateMachine<any, any, any, any>,
+> = Extended<InterpreterFromMachine<TMachine>>;
+
+export type Extended<
+	TInterpreter extends Interpreter<any, any, any, any, any>,
+> = TInterpreter & {
+	restart(): TInterpreter;
 };
-export type Extended<TInterpreter extends Interpreter<any, any, any, any>> =
-	TInterpreter extends Interpreter<infer A, infer B, infer C, infer D>
-		? ExtendedInterpreter<A, B, C, D>
-		: never;
 
 /** Extends the default xstate interpreter with a restart function that re-attaches all event handlers */
-export function interpretEx<
-	TContext = DefaultContext,
-	TStateSchema extends StateSchema = any,
-	TEvent extends EventObject = EventObject,
-	TTypestate extends Typestate<TContext> = { value: any; context: TContext },
->(
-	machine: StateMachine<TContext, TStateSchema, TEvent, TTypestate>,
+export function interpretEx<TMachine extends StateMachine<any, any, any, any>>(
+	machine: TMachine,
 	options?: Partial<InterpreterOptions>,
-): ExtendedInterpreter<TContext, TStateSchema, TEvent, TTypestate> {
-	const interpreter = new Interpreter<
-		TContext,
-		TStateSchema,
-		TEvent,
-		TTypestate
-	>(machine, options) as ExtendedInterpreter<
-		TContext,
-		TStateSchema,
-		TEvent,
-		TTypestate
-	>;
+): ExtendedInterpreterFromMachine<TMachine> {
+	const interpreter = new Interpreter(
+		machine,
+		options,
+	) as ExtendedInterpreterFromMachine<TMachine>;
 
 	return new Proxy(interpreter, {
 		get(target, key) {
