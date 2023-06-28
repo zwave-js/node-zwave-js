@@ -502,10 +502,6 @@
 			"$import": "templates/swidget_template.json#humidity_high_actions_apply_exit_delay"
 		},
 		{
-			"#": "142[0x80]",
-			"$import": "templates/swidget_template.json#humidity_high_actions_baseline_mode"
-		},
-		{
 			"#": "143[0x01]",
 			"$import": "templates/swidget_template.json#humidity_low_actions_control_associations_on_entry"
 		},
