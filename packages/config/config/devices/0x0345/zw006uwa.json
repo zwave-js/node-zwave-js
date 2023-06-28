@@ -530,10 +530,6 @@
 			"$import": "templates/swidget_template.json#humidity_low_actions_apply_exit_delay"
 		},
 		{
-			"#": "143[0x80]",
-			"$import": "templates/swidget_template.json#humidity_low_actions_baseline_mode"
-		},
-		{
 			"#": "152",
 			"$import": "templates/swidget_template.json#system_status"
 		},
