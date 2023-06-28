@@ -330,10 +330,6 @@
 			"$import": "templates/swidget_template.json#air_quality_voc_periodic_report"
 		},
 		{
-			"#": "71",
-			"$import": "templates/swidget_template.json#air_quality_co2_periodic_report"
-		},
-		{
 			"#": "72",
 			"$import": "templates/swidget_template.json#air_quality_alert_entry_set_value"
 		},
@@ -482,118 +478,6 @@
 			"$import": "templates/swidget_template.json#temperature_units"
 		},
 		{
-			"#": "104",
-			"$import": "templates/swidget_template.json#pressure_high_entry_level"
-		},
-		{
-			"#": "105",
-			"$import": "templates/swidget_template.json#pressure_low_entry_level"
-		},
-		{
-			"#": "106",
-			"$import": "templates/swidget_template.json#pressure_high_exit_level"
-		},
-		{
-			"#": "107",
-			"$import": "templates/swidget_template.json#pressure_low_exit_level"
-		},
-		{
-			"#": "108",
-			"$import": "templates/swidget_template.json#pressure_high_delay"
-		},
-		{
-			"#": "109",
-			"$import": "templates/swidget_template.json#pressure_low_delay"
-		},
-		{
-			"#": "110",
-			"$import": "templates/swidget_template.json#pressure_periodic_report"
-		},
-		{
-			"#": "111",
-			"$import": "templates/swidget_template.json#pressure_change_report"
-		},
-		{
-			"#": "112",
-			"$import": "templates/swidget_template.json#pressure_renotification_delay"
-		},
-		{
-			"#": "113",
-			"$import": "templates/swidget_template.json#pressure_high_entry_set_value"
-		},
-		{
-			"#": "114",
-			"$import": "templates/swidget_template.json#pressure_high_exit_set_value"
-		},
-		{
-			"#": "115",
-			"$import": "templates/swidget_template.json#pressure_low_entry_set_value"
-		},
-		{
-			"#": "116",
-			"$import": "templates/swidget_template.json#pressure_low_exit_set_value"
-		},
-		{
-			"#": "117[0x01]",
-			"$import": "templates/swidget_template.json#pressure_high_actions_control_associations_on_entry"
-		},
-		{
-			"#": "117[0x02]",
-			"$import": "templates/swidget_template.json#pressure_high_actions_control_associations_on_exit"
-		},
-		{
-			"#": "117[0x04]",
-			"$import": "templates/swidget_template.json#pressure_high-actions_control_host_on_entry"
-		},
-		{
-			"#": "117[0x08]",
-			"$import": "templates/swidget_template.json#pressure_high_actions_control_host_on_exit"
-		},
-		{
-			"#": "117[0x10]",
-			"$import": "templates/swidget_template.json#pressure_high_actions_report_transitions"
-		},
-		{
-			"#": "117[0x20]",
-			"$import": "templates/swidget_template.json#pressure_high-actions_apply_entry_delay"
-		},
-		{
-			"#": "117[0x40]",
-			"$import": "templates/swidget_template.json#pressure_high_actions_apply_exit_delay"
-		},
-		{
-			"#": "118[0x01]",
-			"$import": "templates/swidget_template.json#pressure_low_actions_control_associations_on_entry"
-		},
-		{
-			"#": "118[0x02]",
-			"$import": "templates/swidget_template.json#pressure_low_actions_control_associations_on_exit"
-		},
-		{
-			"#": "118[0x04]",
-			"$import": "templates/swidget_template.json#pressure_low_actions_control_host_on_entry"
-		},
-		{
-			"#": "118[0x08]",
-			"$import": "templates/swidget_template.json#pressure_low_actions_control_host_on_exit"
-		},
-		{
-			"#": "118[0x10]",
-			"$import": "templates/swidget_template.json#pressure_low_actions_report_transitions"
-		},
-		{
-			"#": "118[0x20]",
-			"$import": "templates/swidget_template.json#pressure_low_actions_apply_entry_delay"
-		},
-		{
-			"#": "118[0x40]",
-			"$import": "templates/swidget_template.json#pressure_low_actions_apply_exit_delay"
-		},
-		{
-			"#": "119",
-			"$import": "templates/swidget_template.json#pressure_units"
-		},
-		{
 			"#": "128",
 			"$import": "templates/swidget_template.json#humidity_high_entry_level"
 		},
@@ -644,10 +528,6 @@
 		{
 			"#": "140",
 			"$import": "templates/swidget_template.json#humidity_low_exit_set_value"
-		},
-		{
-			"#": "141",
-			"$import": "templates/swidget_template.json#humidity_baseline"
 		},
 		{
 			"#": "142[0x01]",

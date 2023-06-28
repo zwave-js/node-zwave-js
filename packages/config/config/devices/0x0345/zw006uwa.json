@@ -474,10 +474,6 @@
 			"$import": "templates/swidget_template.json#humidity_low_exit_set_value"
 		},
 		{
-			"#": "141",
-			"$import": "templates/swidget_template.json#humidity_baseline"
-		},
-		{
 			"#": "142[0x01]",
 			"$import": "templates/swidget_template.json#humidity_high_actions_control_associations_on_entry"
 		},
