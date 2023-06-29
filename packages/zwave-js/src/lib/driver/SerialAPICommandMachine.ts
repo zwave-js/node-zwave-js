@@ -7,12 +7,12 @@ import {
 import {
 	assign,
 	createMachine,
-	type Interpreter,
+	raise,
+	type InterpreterFrom,
 	type MachineConfig,
 	type MachineOptions,
 	type StateMachine,
 } from "xstate";
-import { send } from "xstate/lib/actions";
 import { type ServiceImplementations } from "./StateMachineShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
@@ -57,12 +57,12 @@ export type SerialAPICommandEvent =
 	| { type: "NAK" }
 	| { type: "message"; message: Message } // A message that might or might not be expected
 	| { type: "response"; message: Message } // Gets forwarded when a response-type message is expected
-	| { type: "callback"; message: Message } // Gets forwarded when a callback-type message is expected
-	| { type: "unsolicited"; message: Message }; // A message that IS unexpected on the Serial API level
+	| { type: "callback"; message: Message }; // Gets forwarded when a callback-type message is expected
 
 export type SerialAPICommandDoneData =
 	| {
 			type: "success";
+			// TODO: Can we get rid of this?
 			txTimestamp: number;
 			result?: Message;
 	  }
@@ -85,11 +85,25 @@ export type SerialAPICommandDoneData =
 			  }
 	  ));
 
+export interface SerialAPICommandServiceImplementations {
+	timestamp: () => number;
+	sendData: (data: Buffer) => Promise<void>;
+	notifyRetry: (
+		lastError: SerialAPICommandError | undefined,
+		message: Message,
+		attempts: number,
+		maxAttempts: number,
+		delay: number,
+	) => void;
+	notifyUnsolicited: (message: Message) => void;
+	logOutgoingMessage: (message: Message) => void;
+}
+
 function computeRetryDelay(ctx: SerialAPICommandContext): number {
 	return 100 + 1000 * (ctx.attempts - 1);
 }
 
-const forwardMessage = send((_, evt: SerialAPICommandEvent) => {
+const forwardMessage = raise((_, evt: SerialAPICommandEvent) => {
 	const msg = (evt as any).message as Message;
 	return {
 		type: msg.type === MessageType.Response ? "response" : "callback",
@@ -105,17 +119,11 @@ export type SerialAPICommandMachineConfig = MachineConfig<
 export type SerialAPICommandMachine = StateMachine<
 	SerialAPICommandContext,
 	SerialAPICommandStateSchema,
-	SerialAPICommandEvent,
-	any,
-	any,
-	any,
-	any
->;
-export type SerialAPICommandInterpreter = Interpreter<
-	SerialAPICommandContext,
-	SerialAPICommandStateSchema,
 	SerialAPICommandEvent
 >;
+
+export type SerialAPICommandInterpreter =
+	InterpreterFrom<SerialAPICommandMachine>;
 export type SerialAPICommandMachineOptions = Partial<
 	MachineOptions<SerialAPICommandContext, SerialAPICommandEvent>
 >;
@@ -141,6 +149,7 @@ export function getSerialAPICommandMachineConfig(
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
 ): SerialAPICommandMachineConfig {
 	return {
+		predictableActionArguments: true,
 		id: "serialAPICommand",
 		initial: "sending",
 		context: {
@@ -318,7 +327,7 @@ export function getSerialAPICommandMachineOptions(
 	{
 		sendData,
 		notifyRetry,
-	}: Pick<ServiceImplementations, "sendData" | "notifyRetry">,
+	}: Pick<SerialAPICommandServiceImplementations, "sendData" | "notifyRetry">,
 	timeoutConfig: SerialAPICommandMachineParams["timeouts"],
 ): SerialAPICommandMachineOptions {
 	return {
@@ -329,8 +338,7 @@ export function getSerialAPICommandMachineOptions(
 				return sendData(ctx.data);
 			},
 			notifyRetry: (ctx) => {
-				notifyRetry?.(
-					"SerialAPI",
+				notifyRetry(
 					ctx.lastError,
 					ctx.msg,
 					ctx.attempts,
@@ -392,14 +400,7 @@ export function getSerialAPICommandMachineOptions(
 
 export function createSerialAPICommandMachine(
 	message: Message,
-	implementations: Pick<
-		ServiceImplementations,
-		| "timestamp"
-		| "logOutgoingMessage"
-		| "sendData"
-		| "notifyRetry"
-		| "notifyUnsolicited"
-	>,
+	implementations: SerialAPICommandServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
 	return createMachine<SerialAPICommandContext, SerialAPICommandEvent>(

@@ -1,5 +1,9 @@
-import { Machine, assign, type StateMachine } from "xstate";
-import { type InterpreterFromMachine } from "../driver/StateMachineShared";
+import {
+	Machine,
+	assign,
+	type InterpreterFrom,
+	type StateMachine,
+} from "xstate";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface NodeReadyStateSchema {
@@ -30,7 +34,7 @@ export type NodeReadyMachine = StateMachine<
 	any,
 	any
 >;
-export type NodeReadyInterpreter = InterpreterFromMachine<NodeReadyMachine>;
+export type NodeReadyInterpreter = InterpreterFrom<NodeReadyMachine>;
 
 export function createNodeReadyMachine(
 	initialContext: Partial<NodeReadyContext> = {},

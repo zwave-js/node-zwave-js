@@ -55,7 +55,7 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 import type { Driver } from "./Driver";
-import { sendDataErrorToZWaveError } from "./StateMachineShared";
+import { serialAPICommandErrorToZWaveError } from "./StateMachineShared";
 import type { MessageGenerator } from "./Transaction";
 
 export type MessageGeneratorImplementation = (
@@ -950,7 +950,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 								return;
 							} else {
 								resultPromise.reject(
-									sendDataErrorToZWaveError(
+									serialAPICommandErrorToZWaveError(
 										"callback NOK",
 										generator.parent,
 										e,

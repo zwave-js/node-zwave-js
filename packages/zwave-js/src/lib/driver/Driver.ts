@@ -114,6 +114,7 @@ import {
 	getErrorMessage,
 	isDocker,
 	mergeDeep,
+	noop,
 	num2hex,
 	pick,
 	type DeepPartial,
@@ -134,7 +135,7 @@ import path from "path";
 import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
-import { interpret } from "xstate";
+import { InterpreterStatus, interpret } from "xstate";
 import { ZWaveController } from "../controller/Controller";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion";
 import { DriverLogger } from "../log/Driver";
@@ -157,6 +158,7 @@ import {
 } from "../serialapi/transport/SendDataBridgeMessages";
 import {
 	MAX_SEND_ATTEMPTS,
+	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../serialapi/transport/SendDataMessages";
@@ -184,14 +186,16 @@ import {
 	serializeNetworkCacheValue,
 } from "./NetworkCache";
 import {
+	createSerialAPICommandMachine,
+	type SerialAPICommandDoneData,
+	type SerialAPICommandInterpreter,
+} from "./SerialAPICommandMachine";
+import {
+	createMessageDroppedUnexpectedError,
+	serialAPICommandErrorToZWaveError,
 	type TransactionReducer,
 	type TransactionReducerResult,
-} from "./SendThreadMachine";
-import {
-	createSendThreadMachineSlim,
-	type SendThreadSlimInterpreter,
-} from "./SendThreadMachineSlim";
-import { type SerialAPICommandDoneData } from "./SerialAPICommandMachine";
+} from "./StateMachineShared";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
 import {
@@ -622,103 +626,103 @@ export class Driver
 		// });
 		this.queue = new SortedList();
 
-		const sendThreadMachine = createSendThreadMachineSlim(
-			{
-				sendData: this.writeSerial.bind(this),
-				notifyUnsolicited: (msg) => {
-					void this.handleUnsolicitedMessage(msg);
-				},
-				notifyRetry: (
-					command,
-					lastError,
-					message,
-					attempts,
-					maxAttempts,
-					delay,
-				) => {
-					if (command === "SendData") {
-						this.controllerLog.logNode(
-							message.getNodeId() ?? 255,
-							`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-							"warn",
-						);
-					} else {
-						// Translate the error into a better one
-						let errorReason: string;
-						switch (lastError) {
-							case "response timeout":
-								errorReason = "No response from controller";
-								this._controller?.incrementStatistics(
-									"timeoutResponse",
-								);
-								break;
-							case "callback timeout":
-								errorReason = "No callback from controller";
-								this._controller?.incrementStatistics(
-									"timeoutCallback",
-								);
-								break;
-							case "response NOK":
-								errorReason =
-									"The controller response indicated failure";
-								break;
-							case "callback NOK":
-								errorReason =
-									"The controller callback indicated failure";
-								break;
-							case "ACK timeout":
-								this._controller?.incrementStatistics(
-									"timeoutACK",
-								);
-							// fall through
-							case "CAN":
-							case "NAK":
-							default:
-								errorReason =
-									"Failed to execute controller command";
-								break;
-						}
-						this.controllerLog.print(
-							`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-							"warn",
-						);
-					}
-				},
-				timestamp: highResTimestamp,
-				logOutgoingMessage: (msg: Message) => {
-					this.driverLog.logMessage(msg, {
-						direction: "outbound",
-					});
-					if (process.env.NODE_ENV !== "test") {
-						// Enrich error data in case something goes wrong
-						Sentry.addBreadcrumb({
-							category: "message",
-							timestamp: Date.now() / 1000,
-							type: "debug",
-							data: {
-								direction: "outbound",
-								msgType: msg.type,
-								functionType: msg.functionType,
-								name: msg.constructor.name,
-								nodeId: msg.getNodeId(),
-								...msg.toLogEntry(),
-							},
-						});
-					}
-				},
-				log: this.driverLog.print.bind(this.driverLog),
-				pollQueue: (prevResult) => this.pollQueue(prevResult),
-			},
-			pick(this._options, ["timeouts", "attempts"]),
-		);
-		this.sendThreadSlim = interpret(sendThreadMachine);
+		// const sendThreadMachine = createSendThreadMachineSlim(
+		// 	{
+		// 		sendData: this.writeSerial.bind(this),
+		// 		notifyUnsolicited: (msg) => {
+		// 			void this.handleUnsolicitedMessage(msg);
+		// 		},
+		// 		notifyRetry: (
+		// 			command,
+		// 			lastError,
+		// 			message,
+		// 			attempts,
+		// 			maxAttempts,
+		// 			delay,
+		// 		) => {
+		// 			if (command === "SendData") {
+		// 				this.controllerLog.logNode(
+		// 					message.getNodeId() ?? 255,
+		// 					`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+		// 					"warn",
+		// 				);
+		// 			} else {
+		// 				// Translate the error into a better one
+		// 				let errorReason: string;
+		// 				switch (lastError) {
+		// 					case "response timeout":
+		// 						errorReason = "No response from controller";
+		// 						this._controller?.incrementStatistics(
+		// 							"timeoutResponse",
+		// 						);
+		// 						break;
+		// 					case "callback timeout":
+		// 						errorReason = "No callback from controller";
+		// 						this._controller?.incrementStatistics(
+		// 							"timeoutCallback",
+		// 						);
+		// 						break;
+		// 					case "response NOK":
+		// 						errorReason =
+		// 							"The controller response indicated failure";
+		// 						break;
+		// 					case "callback NOK":
+		// 						errorReason =
+		// 							"The controller callback indicated failure";
+		// 						break;
+		// 					case "ACK timeout":
+		// 						this._controller?.incrementStatistics(
+		// 							"timeoutACK",
+		// 						);
+		// 					// fall through
+		// 					case "CAN":
+		// 					case "NAK":
+		// 					default:
+		// 						errorReason =
+		// 							"Failed to execute controller command";
+		// 						break;
+		// 				}
+		// 				this.controllerLog.print(
+		// 					`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+		// 					"warn",
+		// 				);
+		// 			}
+		// 		},
+		// 		timestamp: highResTimestamp,
+		// 		logOutgoingMessage: (msg: Message) => {
+		// 			this.driverLog.logMessage(msg, {
+		// 				direction: "outbound",
+		// 			});
+		// 			if (process.env.NODE_ENV !== "test") {
+		// 				// Enrich error data in case something goes wrong
+		// 				Sentry.addBreadcrumb({
+		// 					category: "message",
+		// 					timestamp: Date.now() / 1000,
+		// 					type: "debug",
+		// 					data: {
+		// 						direction: "outbound",
+		// 						msgType: msg.type,
+		// 						functionType: msg.functionType,
+		// 						name: msg.constructor.name,
+		// 						nodeId: msg.getNodeId(),
+		// 						...msg.toLogEntry(),
+		// 					},
+		// 				});
+		// 			}
+		// 		},
+		// 		log: this.driverLog.print.bind(this.driverLog),
+		// 		pollQueue: (prevResult) => this.pollQueue(prevResult),
+		// 	},
+		// 	pick(this._options, ["timeouts", "attempts"]),
+		// );
+		// this.sendThreadSlim = interpret(sendThreadMachine);
 
 		this._sendThreadIdle = false;
-		this.sendThreadSlim.onTransition((state) => {
-			if (state.changed) {
-				this.sendThreadIdle = state.matches("idle");
-			}
-		});
+		// this.sendThreadSlim.onTransition((state) => {
+		// 	if (state.changed) {
+		// 		this.sendThreadIdle = state.matches("idle");
+		// 	}
+		// });
 	}
 
 	/** The serial port instance */
@@ -731,8 +735,8 @@ export class Driver
 	private queuePaused = false;
 	/** The transaction that is currently being handled */
 	private currentTransaction: Transaction | undefined;
-	/** An instance of the Send Thread state machine */
-	private sendThreadSlim: SendThreadSlimInterpreter;
+	/** The interpreter for the currently active Serial API command */
+	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
 
 	private _sendThreadIdle: boolean;
 	/** Whether the Send Thread is currently idle */
@@ -1105,7 +1109,7 @@ export class Driver
 		this.driverLog.print("", "info");
 
 		this.driverLog.print("starting driver...");
-		this.sendThreadSlim.start();
+		// this.sendThreadSlim.start();
 
 		// Open the serial port
 		if (typeof this.port === "string") {
@@ -2868,7 +2872,9 @@ export class Driver
 		this.driverLog.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
-		if (this.sendThreadSlim.initialized) this.sendThreadSlim.stop();
+		if (this.serialAPIInterpreter?.status === InterpreterStatus.Running) {
+			this.serialAPIInterpreter.stop();
+		}
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
 			this.serial.removeAllListeners();
@@ -2947,16 +2953,31 @@ export class Driver
 			switch (data) {
 				// single-byte messages - just forward them to the send thread
 				case MessageHeaders.ACK: {
-					this.sendThreadSlim.send("ACK");
+					if (
+						this.serialAPIInterpreter?.status ===
+						InterpreterStatus.Running
+					) {
+						this.serialAPIInterpreter.send("ACK");
+					}
 					return;
 				}
 				case MessageHeaders.NAK: {
-					this.sendThreadSlim.send("NAK");
+					if (
+						this.serialAPIInterpreter?.status ===
+						InterpreterStatus.Running
+					) {
+						this.serialAPIInterpreter.send("NAK");
+					}
 					this._controller?.incrementStatistics("NAK");
 					return;
 				}
 				case MessageHeaders.CAN: {
-					this.sendThreadSlim.send("CAN");
+					if (
+						this.serialAPIInterpreter?.status ===
+						InterpreterStatus.Running
+					) {
+						this.serialAPIInterpreter.send("CAN");
+					}
 					this._controller?.incrementStatistics("CAN");
 					return;
 				}
@@ -3172,9 +3193,17 @@ export class Driver
 				);
 			}
 
-			// Pass the message to the send thread, so it can be handled or returned
-			// as unsolicited
-			this.sendThreadSlim.send({ type: "message", message: msg });
+			// Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
+			if (
+				this.serialAPIInterpreter?.status === InterpreterStatus.Running
+			) {
+				this.serialAPIInterpreter.send({
+					type: "message",
+					message: msg,
+				});
+			} else {
+				void this.handleUnsolicitedMessage(msg);
+			}
 		}
 	}
 
@@ -4377,9 +4406,7 @@ ${handlers.length} left`,
 		}
 	}
 
-	public async pollQueue(
-		prevResult: SerialAPICommandDoneData | ZWaveError | undefined,
-	): Promise<Message | undefined> {
+	private async advanceQueue(prevResult: Message | undefined): Promise<void> {
 		if (this.queuePaused) return;
 
 		while (true) {
@@ -4401,20 +4428,195 @@ ${handlers.length} left`,
 			// TODO: Test if the transaction may be started at all
 
 			// Execute the transaction until it gives us the next message
-			const { value, done } =
-				await this.currentTransaction.parts.self!.next(prevResult);
+			const { done } = await this.currentTransaction.parts.self!.next(
+				prevResult!,
+			);
 			if (done) {
 				// This transaction is finished, try the next one
 				this.currentTransaction = undefined;
 				continue;
 			} else {
-				// We got a message, return it
-				return value;
+				// The .current property of the current transactions's message generator
+				// now contains the next message to send
+				return;
 			}
 
 			// The loop will never execute more than once, except if we reached
 			// the end of a transaction.
 		}
+	}
+
+	private drainQueueBusy = false;
+
+	private async drainQueue(prevResult?: Message): Promise<void> {
+		// Don't execute more than once at a time
+		if (this.drainQueueBusy) {
+			return;
+		}
+		this.drainQueueBusy = true;
+
+		while (true) {
+			// Try to get the next message to send
+			await this.advanceQueue(prevResult);
+			const transaction = this.currentTransaction;
+			if (transaction) {
+				// We have something to send, so not idle
+				this.sendThreadIdle = false;
+
+				try {
+					prevResult = await this.executeSerialAPICommand(
+						transaction,
+					);
+					// We got a result, pass it to the transaction on the next iteration
+				} catch (e: any) {
+					// Sending the command failed, reject the transaction
+					if (!isZWaveError(e)) {
+						e = createMessageDroppedUnexpectedError(e);
+					} else {
+						// TODO: Add specialized handling for some ZWaveErrors:
+						// - [ ] Send Data callback timeout
+						// - [ ] Retry SendData messages if their retry count allows it and its not a multicast with NOK callback
+					}
+					this.rejectTransaction(transaction, e);
+				}
+			} else {
+				// Nothing to send, definitely idle
+				this.sendThreadIdle = true;
+				break;
+			}
+		}
+
+		this.drainQueueBusy = false;
+
+		// Avoid a deadlock when a transaction was added after the advanceQueue call,
+		// but before setting the busy flag back to false
+		if (this.queue.length > 0) {
+			process.nextTick(() => this.drainQueue());
+		}
+	}
+
+	private triggerQueue(): void {
+		process.nextTick(() => this.drainQueue());
+	}
+
+	/**
+	 * Executes a Serial API command and returns or throws the result.
+	 * @param transaction The transaction which contains the message to be executed
+	 */
+	private async executeSerialAPICommand(
+		transaction: Transaction,
+	): Promise<Message | undefined> {
+		const msg = transaction.getCurrentMessage();
+		if (!msg) return;
+		const machine = createSerialAPICommandMachine(
+			msg,
+			{
+				sendData: this.writeSerial.bind(this),
+				notifyUnsolicited: (msg) => {
+					void this.handleUnsolicitedMessage(msg);
+				},
+				notifyRetry: (
+					lastError,
+					message,
+					attempts,
+					maxAttempts,
+					delay,
+				) => {
+					// Translate the error into a better one
+					let errorReason: string;
+					switch (lastError) {
+						case "response timeout":
+							errorReason = "No response from controller";
+							this._controller?.incrementStatistics(
+								"timeoutResponse",
+							);
+							break;
+						case "callback timeout":
+							errorReason = "No callback from controller";
+							this._controller?.incrementStatistics(
+								"timeoutCallback",
+							);
+							break;
+						case "response NOK":
+							errorReason =
+								"The controller response indicated failure";
+							break;
+						case "callback NOK":
+							errorReason =
+								"The controller callback indicated failure";
+							break;
+						case "ACK timeout":
+							this._controller?.incrementStatistics("timeoutACK");
+						// fall through
+						case "CAN":
+						case "NAK":
+						default:
+							errorReason =
+								"Failed to execute controller command";
+							break;
+					}
+					this.controllerLog.print(
+						`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+						"warn",
+					);
+				},
+				timestamp: highResTimestamp,
+				logOutgoingMessage: (msg: Message) => {
+					this.driverLog.logMessage(msg, {
+						direction: "outbound",
+					});
+					if (process.env.NODE_ENV !== "test") {
+						// Enrich error data in case something goes wrong
+						Sentry.addBreadcrumb({
+							category: "message",
+							timestamp: Date.now() / 1000,
+							type: "debug",
+							data: {
+								direction: "outbound",
+								msgType: msg.type,
+								functionType: msg.functionType,
+								name: msg.constructor.name,
+								nodeId: msg.getNodeId(),
+								...msg.toLogEntry(),
+							},
+						});
+					}
+				},
+			},
+			pick(this._options, ["timeouts", "attempts"]),
+		);
+
+		const result = createDeferredPromise<Message | undefined>();
+
+		this.serialAPIInterpreter = interpret(machine).onDone((evt) => {
+			this.serialAPIInterpreter?.stop();
+			this.serialAPIInterpreter = undefined;
+
+			const cmdResult = evt.data as SerialAPICommandDoneData;
+			if (cmdResult.type === "success") {
+				result.resolve(cmdResult.result);
+			} else if (
+				cmdResult.reason === "callback NOK" &&
+				(isSendData(msg) || isTransmitReport(cmdResult.result))
+			) {
+				// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
+				// ... so we treat it as a result
+				result.resolve(cmdResult.result);
+			} else {
+				// Convert to a Z-Wave error
+				result.reject(
+					serialAPICommandErrorToZWaveError(
+						cmdResult.reason,
+						transaction,
+						cmdResult.result,
+					),
+				);
+			}
+		});
+
+		this.serialAPIInterpreter.start();
+
+		return result;
 	}
 
 	/**
@@ -4526,7 +4728,7 @@ ${handlers.length} left`,
 
 		// And queue it
 		this.queue.add(transaction);
-		this.sendThreadSlim.send({ type: "trigger" });
+		this.triggerQueue();
 
 		// If the transaction should expire, start the timeout
 		let expirationTimeout: NodeJS.Timeout | undefined;
@@ -5072,12 +5274,12 @@ ${handlers.length} left`,
 	 */
 	private unpauseSendQueue(): void {
 		this.queuePaused = false;
-		this.sendThreadSlim.send({ type: "trigger" });
+		this.triggerQueue();
 	}
 
 	private reduceQueue(reducer: TransactionReducer): void {
 		const dropQueued: Transaction[] = [];
-		const stopActive: Transaction[] = [];
+		let stopActive: Transaction | undefined;
 		const requeue: Transaction[] = [];
 
 		const reduceTransaction: (
@@ -5086,9 +5288,11 @@ ${handlers.length} left`,
 			const reducerResult = reducer(transaction, source);
 			switch (reducerResult.type) {
 				case "drop":
-					(source === "queue" ? dropQueued : stopActive).push(
-						transaction,
-					);
+					if (source === "queue") {
+						dropQueued.push(transaction);
+					} else {
+						stopActive = transaction;
+					}
 					break;
 				case "requeue":
 					if (reducerResult.priority != undefined) {
@@ -5097,14 +5301,16 @@ ${handlers.length} left`,
 					if (reducerResult.tag != undefined) {
 						transaction.tag = reducerResult.tag;
 					}
-					if (source === "active") stopActive.push(transaction);
+					if (source === "active") stopActive = transaction;
 					requeue.push(transaction);
 					break;
 				case "resolve":
 					this.resolveTransaction(transaction, reducerResult.message);
-					(source === "queue" ? dropQueued : stopActive).push(
-						transaction,
-					);
+					if (source === "queue") {
+						dropQueued.push(transaction);
+					} else {
+						stopActive = transaction;
+					}
 					break;
 				case "reject":
 					this.rejectTransaction(
@@ -5116,9 +5322,11 @@ ${handlers.length} left`,
 							transaction.stack,
 						),
 					);
-					(source === "queue" ? dropQueued : stopActive).push(
-						transaction,
-					);
+					if (source === "queue") {
+						dropQueued.push(transaction);
+					} else {
+						stopActive = transaction;
+					}
 					break;
 			}
 		};
@@ -5135,10 +5343,26 @@ ${handlers.length} left`,
 		this.queue.remove(...dropQueued, ...requeue);
 		this.queue.add(...requeue.map((t) => t.clone()));
 
-		// FIXME: Abort ongoing transaction if it should be dropped
+		// Abort ongoing SendData messages that should be dropped
+		if (isSendData(stopActive?.message)) {
+			void this.writeSerial(new SendDataAbort(this).serialize()).catch(
+				noop,
+			);
+		}
 
 		// Continue sending
-		this.sendThreadSlim.send({ type: "trigger" });
+		this.triggerQueue();
+	}
+
+	/** @internal */
+	public resolvePendingPings(nodeId: number): void {
+		// When a previously sleeping node sends a NIF after a ping was sent to it, but not acknowledged yet,
+		// the node is awake, but the ping would fail. Resolve pending pings, so communication can continue.
+		const msg = this.currentTransaction?.parts.current;
+		if (!!msg && messageIsPing(msg) && msg.getNodeId() === nodeId) {
+			// The pending transaction is a ping. Short-circuit its message generator by throwing something that's not an error
+			this.currentTransaction?.parts.self!.throw(undefined).catch(noop);
+		}
 	}
 
 	/**

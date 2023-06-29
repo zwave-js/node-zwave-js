@@ -1,22 +1,21 @@
 import {
-	isZWaveError,
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isZWaveError,
+	type MessagePriority,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
-	assign,
 	Interpreter,
 	Machine,
+	assign,
 	spawn,
-	type BaseActionObject,
+	type AnyStateMachine,
+	type InterpreterFrom,
 	type InterpreterOptions,
-	type ResolveTypegenMeta,
-	type ServiceMap,
 	type StateMachine,
-	type TypegenDisabled,
 } from "xstate";
 import { respond, sendParent } from "xstate/lib/actions";
 import type { DriverLogger } from "../log/Driver";
@@ -34,8 +33,8 @@ import {
 	type SendDataRequestTransmitReport,
 } from "../serialapi/transport/SendDataMessages";
 import { isSendData } from "../serialapi/transport/SendDataShared";
-import type { SendDataErrorData } from "./SendThreadMachine";
 import type {
+	SerialAPICommandDoneData,
 	SerialAPICommandError,
 	SerialAPICommandEvent,
 } from "./SerialAPICommandMachine";
@@ -61,12 +60,129 @@ export interface ServiceImplementations {
 	logQueue: DriverLogger["sendQueue"];
 }
 
-export function sendDataErrorToZWaveError(
-	error: SendDataErrorData["reason"],
+// export function sendDataErrorToZWaveError(
+// 	error: SendDataErrorData["reason"],
+// 	transaction: Transaction,
+// 	receivedMessage: Message | undefined,
+// ): ZWaveError {
+// 	switch (error) {
+// 		case "send failure":
+// 		case "CAN":
+// 		case "NAK":
+// 			return new ZWaveError(
+// 				`Failed to send the message after 3 attempts`,
+// 				ZWaveErrorCodes.Controller_MessageDropped,
+// 				undefined,
+// 				transaction.stack,
+// 			);
+// 		case "ACK timeout":
+// 			return new ZWaveError(
+// 				`Timeout while waiting for an ACK from the controller`,
+// 				ZWaveErrorCodes.Controller_Timeout,
+// 				undefined,
+// 				transaction.stack,
+// 			);
+// 		case "response timeout":
+// 			return new ZWaveError(
+// 				`Timeout while waiting for a response from the controller`,
+// 				ZWaveErrorCodes.Controller_Timeout,
+// 				undefined,
+// 				transaction.stack,
+// 			);
+// 		case "callback timeout":
+// 			return new ZWaveError(
+// 				`Timeout while waiting for a callback from the controller`,
+// 				ZWaveErrorCodes.Controller_Timeout,
+// 				undefined,
+// 				transaction.stack,
+// 			);
+// 		case "response NOK": {
+// 			const sentMessage = transaction.getCurrentMessage();
+// 			if (isSendData(sentMessage)) {
+// 				return new ZWaveError(
+// 					`Failed to send the command after ${sentMessage.maxSendAttempts} attempts. Transmission queue full`,
+// 					ZWaveErrorCodes.Controller_MessageDropped,
+// 					receivedMessage,
+// 					transaction.stack,
+// 				);
+// 			} else {
+// 				return new ZWaveError(
+// 					`The controller response indicated failure`,
+// 					ZWaveErrorCodes.Controller_ResponseNOK,
+// 					receivedMessage,
+// 					transaction.stack,
+// 				);
+// 			}
+// 		}
+// 		case "callback NOK": {
+// 			const sentMessage = transaction.getCurrentMessage();
+// 			if (
+// 				sentMessage instanceof SendDataRequest ||
+// 				sentMessage instanceof SendDataBridgeRequest
+// 			) {
+// 				const status = (
+// 					receivedMessage as
+// 						| SendDataRequestTransmitReport
+// 						| SendDataBridgeRequestTransmitReport
+// 				).transmitStatus;
+// 				return new ZWaveError(
+// 					`Failed to send the command after ${
+// 						sentMessage.maxSendAttempts
+// 					} attempts (Status ${getEnumMemberName(
+// 						TransmitStatus,
+// 						status,
+// 					)})`,
+// 					status === TransmitStatus.NoAck
+// 						? ZWaveErrorCodes.Controller_CallbackNOK
+// 						: ZWaveErrorCodes.Controller_MessageDropped,
+// 					receivedMessage,
+// 					transaction.stack,
+// 				);
+// 			} else if (
+// 				sentMessage instanceof SendDataMulticastRequest ||
+// 				sentMessage instanceof SendDataMulticastBridgeRequest
+// 			) {
+// 				const status = (
+// 					receivedMessage as
+// 						| SendDataMulticastRequestTransmitReport
+// 						| SendDataMulticastBridgeRequestTransmitReport
+// 				).transmitStatus;
+// 				return new ZWaveError(
+// 					`One or more nodes did not respond to the multicast request (Status ${getEnumMemberName(
+// 						TransmitStatus,
+// 						status,
+// 					)})`,
+// 					status === TransmitStatus.NoAck
+// 						? ZWaveErrorCodes.Controller_CallbackNOK
+// 						: ZWaveErrorCodes.Controller_MessageDropped,
+// 					receivedMessage,
+// 					transaction.stack,
+// 				);
+// 			} else {
+// 				return new ZWaveError(
+// 					`The controller callback indicated failure`,
+// 					ZWaveErrorCodes.Controller_CallbackNOK,
+// 					receivedMessage,
+// 					transaction.stack,
+// 				);
+// 			}
+// 		}
+// 		case "node timeout":
+// 			return new ZWaveError(
+// 				`Timed out while waiting for a response from the node`,
+// 				ZWaveErrorCodes.Controller_NodeTimeout,
+// 				undefined,
+// 				transaction.stack,
+// 			);
+// 	}
+// }
+
+export function serialAPICommandErrorToZWaveError(
+	reason: (SerialAPICommandDoneData & { type: "failure" })["reason"],
 	transaction: Transaction,
 	receivedMessage: Message | undefined,
 ): ZWaveError {
-	switch (error) {
+	switch (reason) {
 		case "send failure":
 		case "CAN":
 		case "NAK":
@@ -168,13 +284,6 @@ export function sendDataErrorToZWaveError(
 				);
 			}
 		}
-		case "node timeout":
-			return new ZWaveError(
-				`Timed out while waiting for a response from the node`,
-				ZWaveErrorCodes.Controller_NodeTimeout,
-				undefined,
-				transaction.stack,
-			);
 	}
 }
 
@@ -244,34 +353,9 @@ export function createWrapperMachine(
 	});
 }
 
-export type InterpreterFromMachine<
-	TMachine extends StateMachine<any, any, any, any>,
-> = TMachine extends StateMachine<
-	infer TContext,
-	infer TStateSchema,
-	infer TEvent,
-	any
->
-	? Interpreter<
-			TContext,
-			TStateSchema,
-			TEvent,
-			{
-				value: any;
-				context: TContext;
-			},
-			ResolveTypegenMeta<
-				TypegenDisabled,
-				TEvent,
-				BaseActionObject,
-				ServiceMap
-			>
-	  >
-	: never;
-
-export type ExtendedInterpreterFromMachine<
-	TMachine extends StateMachine<any, any, any, any>,
-> = Extended<InterpreterFromMachine<TMachine>>;
+export type ExtendedInterpreterFrom<
+	TMachine extends AnyStateMachine | ((...args: any[]) => AnyStateMachine),
+> = Extended<InterpreterFrom<TMachine>>;
 
 export type Extended<
 	TInterpreter extends Interpreter<any, any, any, any, any>,
@@ -280,14 +364,14 @@ export type Extended<
 };
 
 /** Extends the default xstate interpreter with a restart function that re-attaches all event handlers */
-export function interpretEx<TMachine extends StateMachine<any, any, any, any>>(
+export function interpretEx<TMachine extends AnyStateMachine>(
 	machine: TMachine,
 	options?: Partial<InterpreterOptions>,
-): ExtendedInterpreterFromMachine<TMachine> {
+): ExtendedInterpreterFrom<TMachine> {
 	const interpreter = new Interpreter(
 		machine,
 		options,
-	) as ExtendedInterpreterFromMachine<TMachine>;
+	) as ExtendedInterpreterFrom<TMachine>;
 
 	return new Proxy(interpreter, {
 		get(target, key) {
@@ -330,3 +414,36 @@ export function interpretEx<TMachine extends StateMachine<any, any, any, any>>(
 		},
 	});
 }
+
+export type TransactionReducerResult =
+	| {
+			// Silently drop the transaction
+			type: "drop";
+	  }
+	| {
+			// Do nothing (useful especially for the current transaction)
+			type: "keep";
+	  }
+	| {
+			// Reject the transaction with the given error
+			type: "reject";
+			message: string;
+			code: ZWaveErrorCodes;
+	  }
+	| {
+			// Resolve the transaction with the given message
+			type: "resolve";
+			message?: Message;
+	  }
+	| {
+			// Changes the priority (and tag) of the transaction if a new one is given,
+			// and moves the current transaction back to the queue
+			type: "requeue";
+			priority?: MessagePriority;
+			tag?: any;
+	  };
+
+export type TransactionReducer = (
+	transaction: Transaction,
+	source: "queue" | "active",
+) => TransactionReducerResult;

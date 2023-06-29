@@ -1,25 +1,27 @@
 import { type ZWaveError } from "@zwave-js/core";
 import { type Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
-import { assign, createMachine, forwardTo } from "xstate";
+import { assign, createMachine, forwardTo, type InterpreterFrom } from "xstate";
 import { type DriverLogger } from "../log/Driver";
 import {
 	createSerialAPICommandMachine,
-	type SerialAPICommandDoneData,
 	type SerialAPICommandError,
 	type SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 import {
 	createMessageDroppedUnexpectedError,
-	type InterpreterFromMachine,
+	sendDataErrorToZWaveError,
 } from "./StateMachineShared";
+import { type Transaction } from "./Transaction";
 
 export interface ServiceImplementations {
-	pollQueue: (
-		// FIXME: I don't want to expose SerialAPICommandDoneData here.
-		// This should be Message | ZWaveError | undefined
-		prevResult: SerialAPICommandDoneData | ZWaveError | undefined,
-	) => Promise<Message | undefined>;
+	pollQueue: (prevResult: Message | ZWaveError | undefined) => Promise<
+		| {
+				transaction: Transaction;
+				message: Message;
+		  }
+		| undefined
+	>;
 	notifyUnsolicited: (message: Message) => void;
 	sendData: (data: Buffer) => Promise<void>;
 	// createSendDataAbort: () => SendDataAbort;
@@ -39,10 +41,10 @@ export interface ServiceImplementations {
 export type SendThreadSlimMachineParams = SerialAPICommandMachineParams;
 
 interface SendThreadSlimContext {
-	current?: Message;
-	// FIXME: I don't want to expose SerialAPICommandDoneData here.
-	// This should be Message | ZWaveError | undefined
-	prevResult?: SerialAPICommandDoneData | ZWaveError;
+	transaction?: Transaction;
+	message?: Message;
+	result?: Message;
+	error?: ZWaveError;
 }
 
 export type SendThreadSlimEvents =
@@ -65,8 +67,10 @@ export function createSendThreadMachineSlim(
 		{
 			predictableActionArguments: true,
 			context: {
-				current: undefined,
-				prevResult: undefined,
+				transaction: undefined,
+				message: undefined,
+				result: undefined,
+				error: undefined,
 			},
 			initial: "idle",
 			states: {
@@ -85,9 +89,10 @@ export function createSendThreadMachineSlim(
 							{
 								// If we got a message, store it and transition to sending
 								cond: "hasMessage",
-								actions: assign({
-									current: (_, evt) => evt.data,
-								}),
+								actions: assign((_, evt) => ({
+									message: evt.data.message,
+									transaction: evt.data.transaction,
+								})),
 								target: "sending",
 							},
 							// If the queue is empty, go back to the idle state
@@ -101,10 +106,17 @@ export function createSendThreadMachineSlim(
 					invoke: {
 						id: "execute",
 						src: "executeSerialAPICommand",
-						onDone: {
-							target: "executeDone",
-							actions: "rememberCommandResult",
-						},
+						onDone: [
+							{
+								cond: "executeSuccessful",
+								target: "executeDone",
+								actions: "rememberCommandSuccess",
+							},
+							{
+								target: "executeDone",
+								actions: "rememberCommandFailure",
+							},
+						],
 						onError: {
 							target: "executeDone",
 							actions: "rememberCommandError",
@@ -121,7 +133,7 @@ export function createSendThreadMachineSlim(
 				executeDone: {
 					always: {
 						target: "idle",
-						actions: "deleteCurrentMessage",
+						actions: "unsetMessage",
 					},
 				},
 			},
@@ -176,16 +188,53 @@ export function createSendThreadMachineSlim(
 		},
 		{
 			actions: {
-				deleteCurrentMessage: assign({
-					current: undefined,
+				unsetMessage: assign({
+					message: undefined,
+					transaction: undefined,
 				}),
-				rememberCommandResult: assign({
-					prevResult: (ctx, evt: any) => evt.data,
-				}),
-				rememberCommandError: assign({
-					prevResult: (_, evt: any) =>
-						createMessageDroppedUnexpectedError(evt.data),
-				}),
+				rememberCommandSuccess: assign((_, evt: any) => ({
+					result: evt.result,
+					error: undefined,
+				})),
+				rememberCommandFailure: assign((ctx, evt: any) => ({
+					result: undefined,
+					error: sendDataErrorToZWaveError(
+						evt.reason,
+						ctx.transaction!,
+						evt.result,
+					),
+					// TODO: Do this in the driver
+					// // For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
+					// if (
+					// 	(isSendData(ctx.transaction?.parts.current) ||
+					// 		isTransmitReport(evt.result)) &&
+					// 	evt.reason === "callback NOK"
+					// ) {
+					// 	return {
+					// 		...ctx,
+					// 		result: evt.result,
+					// 		error: undefined,
+					// 	};
+					// } else {
+					// 	return {
+					// 		...ctx,
+					// 		result: undefined,
+					// 		error: sendDataErrorToZWaveError(
+					// 			evt.reason,
+					// 			ctx.transaction,
+					// 			evt.result,
+					// 		),
+					// 	};
+					// }
+				})),
+				rememberCommandError: assign((_, evt: any) => ({
+					result: undefined,
+					error: createMessageDroppedUnexpectedError(evt.error),
+				})),
+				unsetCommandResult: assign((_) => ({
+					result: undefined,
+					error: undefined,
+				})),
 				notifyUnsolicited: (_, evt: any) => {
 					implementations.notifyUnsolicited(evt.message);
 				},
@@ -199,11 +248,12 @@ export function createSendThreadMachineSlim(
 			services: {
 				// This service polls the queue for the next message to send. It also passes the result of the last command
 				// so the generator can decide whether to continue or not.
-				nextMessage: (ctx) => implementations.pollQueue(ctx.prevResult),
+				nextMessage: (ctx) =>
+					implementations.pollQueue(ctx.error ?? ctx.result),
 				executeSerialAPICommand: (ctx) => {
 					try {
 						return createSerialAPICommandMachine(
-							ctx.current!,
+							ctx.message!,
 							implementations,
 							params,
 						);
@@ -237,5 +287,4 @@ export type SendThreadMachineSlim = ReturnType<
 	typeof createSendThreadMachineSlim
 >;
 
-export type SendThreadSlimInterpreter =
-	InterpreterFromMachine<SendThreadMachineSlim>;
+export type SendThreadSlimInterpreter = InterpreterFrom<SendThreadMachineSlim>;
