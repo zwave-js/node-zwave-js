@@ -4158,58 +4158,57 @@ ${handlers.length} left`,
 		}
 	}
 
-	// TODO: Work this in
-	// mayStartTransaction: (ctx, evt: any, meta) => {
-	// 	// We may not send anything if the send thread is paused
-	// 	if (ctx.paused) return false;
-	// 	const nextTransaction = ctx.queue.peekStart();
-	// 	// We can't send anything if the queue is empty
-	// 	if (!nextTransaction) return false;
+	private mayStartNextTransaction(): boolean {
+		// We may not send anything if the send thread is paused
+		if (this.queuePaused) return false;
+		const nextTransaction = this.queue.peekStart();
+		// We can't send anything if the queue is empty
+		if (!nextTransaction) return false;
 
-	// 	const message = nextTransaction.message;
-	// 	const targetNode = message.getNodeUnsafe(nextTransaction.driver);
+		const message = nextTransaction.message;
+		const targetNode = message.getNodeUnsafe(this);
 
-	// 	// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
-	// 	// There are a few exceptions:
-	// 	// 1. Pings may be used to determine whether a node is really asleep.
-	// 	// 2. Responses to nonce requests must be sent independent of the node status, because some sleeping nodes may try to send us encrypted messages.
-	// 	//    If we don't send them, they block the send queue
-	// 	// 3. Nodes that can sleep but do not support wakeup: https://github.com/zwave-js/node-zwave-js/discussions/1537
-	// 	//    We need to try and send messages to them even if they are asleep, because we might never hear from them
+		// The transaction queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
+		// There are a few exceptions:
+		// 1. Pings may be used to determine whether a node is really asleep.
+		// 2. Responses to nonce requests must be sent independent of the node status, because some sleeping nodes may try to send us encrypted messages.
+		//    If we don't send them, they block the send queue
+		// 3. Nodes that can sleep but do not support wakeup: https://github.com/zwave-js/node-zwave-js/discussions/1537
+		//    We need to try and send messages to them even if they are asleep, because we might never hear from them
 
-	// 	// While the queue is busy, we may not start any transaction, except nonce responses to the node we're currently communicating with
-	// 	if (meta.state.matches("busy")) {
-	// 		if (nextTransaction.priority === MessagePriority.Nonce) {
-	// 			for (const active of ctx.activeTransactions.values()) {
-	// 				if (
-	// 					active.transaction.message.getNodeId() ===
-	// 					nextTransaction.message.getNodeId()
-	// 				) {
-	// 					return true;
-	// 				}
-	// 			}
-	// 		}
-	// 		return false;
-	// 	}
+		// 	// While the queue is busy, we may not start any transaction, except nonce responses to the node we're currently communicating with
+		// 	if (meta.state.matches("busy")) {
+		// 		if (nextTransaction.priority === MessagePriority.Nonce) {
+		// 			for (const active of ctx.activeTransactions.values()) {
+		// 				if (
+		// 					active.transaction.message.getNodeId() ===
+		// 					nextTransaction.message.getNodeId()
+		// 				) {
+		// 					return true;
+		// 				}
+		// 			}
+		// 		}
+		// 		return false;
+		// 	}
 
-	// 	// While not busy, always reply to nonce requests and Supervision Get requests
-	// 	if (
-	// 		nextTransaction.priority === MessagePriority.Nonce ||
-	// 		nextTransaction.priority === MessagePriority.Supervision
-	// 	) {
-	// 		return true;
-	// 	}
-	// 	// And send pings
-	// 	if (messageIsPing(message)) return true;
-	// 	// Or controller messages
-	// 	if (!targetNode) return true;
+		// 	Replies to nonce requests and Supervision Get requests must always be allowed
+		if (
+			nextTransaction.priority === MessagePriority.Nonce ||
+			nextTransaction.priority === MessagePriority.Supervision
+		) {
+			return true;
+		}
+		// Same for pings
+		if (messageIsPing(message)) return true;
+		// Or messages to the controller
+		if (!targetNode) return true;
 
-	// 	return (
-	// 		targetNode.status !== NodeStatus.Asleep ||
-	// 		(!targetNode.supportsCC(CommandClasses["Wake Up"]) &&
-	// 			targetNode.interviewStage >= InterviewStage.NodeInfo)
-	// 	);
-	// },
+		return (
+			targetNode.status !== NodeStatus.Asleep ||
+			(!targetNode.supportsCC(CommandClasses["Wake Up"]) &&
+				targetNode.interviewStage >= InterviewStage.NodeInfo)
+		);
+	}
 
 	private async advanceQueue(prevResult: Message | undefined): Promise<void> {
 		if (this.queuePaused) return;
@@ -4217,6 +4216,8 @@ ${handlers.length} left`,
 		while (true) {
 			// If we don't have a current transaction yet, try to get the next one from the queue
 			if (!this.currentTransaction) {
+				if (!this.mayStartNextTransaction()) return;
+
 				this.currentTransaction = this.queue.shift();
 				if (!this.currentTransaction) return;
 			}
@@ -4229,8 +4230,6 @@ ${handlers.length} left`,
 				// We do not pass previous results to new transactions
 				prevResult = undefined;
 			}
-
-			// TODO: Test if the transaction may be started at all
 
 			// Execute the transaction until it gives us the next message
 			const { done } = await this.currentTransaction.parts.self!.next(
