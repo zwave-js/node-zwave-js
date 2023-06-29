@@ -76,8 +76,15 @@ export function isZWaveSerialPortImplementation(
 	);
 }
 
+type write_cb=(err:Error|null|undefined)=>void
+export interface DuplexAlike {
+	// (chunk: any, encoding?: BufferEncoding | undefined, cb?: ((error: Error | null | undefined) => void) | undefined): boolean; (chunk: any, cb?: ((error: Error | null | undefined) => void) | undefined): boolean;
+	write(chunk:Buffer,cb?:write_cb|undefined):boolean;
+} ;
+
+
 export interface ZWaveSerialPortImplementation {
-	create(): Duplex & EventEmitter;
+	create(): DuplexAlike & EventEmitter;
 	open(
 		port: ReturnType<ZWaveSerialPortImplementation["create"]>,
 	): Promise<void>;
