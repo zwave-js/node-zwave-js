@@ -4257,49 +4257,60 @@ ${handlers.length} left`,
 		if (this.drainQueueBusy) return;
 		this.drainQueueBusy = true;
 
-		while (true) {
+		transactionLoop: while (true) {
 			// Try to get the next message to send
 			await this.advanceQueue(prevResult);
 			const transaction = this.currentTransaction;
 			if (transaction) {
+				const msg = transaction.getCurrentMessage()!;
 				// We have something to send, so not idle
 				this.sendThreadIdle = false;
 
-				try {
-					prevResult = await this.executeSerialAPICommand(
-						transaction,
-					);
-					// We got a result, pass it to the transaction on the next iteration
-				} catch (e: any) {
-					// Sending the command failed, reject the transaction
-					if (!isZWaveError(e)) {
-						e = createMessageDroppedUnexpectedError(e);
-					} else {
-						// TODO: Add specialized handling for some ZWaveErrors:
-						// - [ ] Send Data callback timeout
-						// - [ ] Retry SendData messages if their retry count allows it and its not a multicast with NOK callback
-						// mayRetry: (ctx, evt: any) => {
-						// 	const msg = ctx.transaction.parts.current;
-						// 	if (!isSendData(msg)) return false;
-						// 	if (
-						// 		msg instanceof SendDataMulticastRequest ||
-						// 		msg instanceof SendDataMulticastBridgeRequest
-						// 	) {
-						// 		// Don't try to resend multicast messages if they were already transmitted.
-						// 		// One or more nodes might have already reacted
-						// 		if (evt.reason === "callback NOK") {
-						// 			return false;
-						// 		}
-						// 	}
-						// 	return msg.maxSendAttempts > ctx.sendDataAttempts;
-						// },
+				// TODO: refactor this nested loop or make it part of executeSerialAPICommand
+				attemptMessage: for (let attemptNumber = 1; ; attemptNumber++) {
+					try {
+						prevResult = await this.executeSerialAPICommand(
+							transaction,
+						);
+						// We got a result, pass it to the transaction on the next iteration
+					} catch (e: any) {
+						if (!isZWaveError(e)) {
+							e = createMessageDroppedUnexpectedError(e);
+						} else {
+							if (
+								isSendData(msg) &&
+								e.code === ZWaveErrorCodes.Controller_Timeout &&
+								e.context === "callback"
+							) {
+								// If the callback to SendData times out, we need to issue a SendDataAbort
+								void this.writeSerial(
+									new SendDataAbort(this).serialize(),
+								).catch(noop);
+								// TODO: Figure out if we need to wait for the ACK to that
+							}
+
+							if (
+								this.mayRetrySerialAPICommand(
+									msg,
+									attemptNumber,
+									e.code,
+								)
+							) {
+								// Retry the command
+								continue attemptMessage;
+							}
+						}
+
+						// Sending the command failed, reject the transaction
+						this.rejectTransaction(transaction, e);
+						// and continue with the next one
+						break attemptMessage;
 					}
-					this.rejectTransaction(transaction, e);
 				}
 			} else {
 				// Nothing to send, definitely idle
 				this.sendThreadIdle = true;
-				break;
+				break transactionLoop;
 			}
 		}
 
@@ -4308,12 +4319,31 @@ ${handlers.length} left`,
 		// Avoid a deadlock when a transaction was added after the advanceQueue call,
 		// but before setting the busy flag back to false
 		if (this.queue.length > 0) {
-			process.nextTick(() => this.drainQueue());
+			this.triggerQueue();
 		}
 	}
 
 	private triggerQueue(): void {
 		process.nextTick(() => this.drainQueue());
+	}
+
+	private mayRetrySerialAPICommand(
+		msg: Message,
+		attemptNumber: number,
+		errorCode: ZWaveErrorCodes,
+	): boolean {
+		if (!isSendData(msg)) return false;
+		if (
+			msg instanceof SendDataMulticastRequest ||
+			msg instanceof SendDataMulticastBridgeRequest
+		) {
+			// Don't try to resend multicast messages if they were already transmitted.
+			// One or more nodes might have already reacted
+			if (errorCode === ZWaveErrorCodes.Controller_CallbackNOK) {
+				return false;
+			}
+		}
+		return attemptNumber < msg.maxSendAttempts;
 	}
 
 	/**

@@ -13,7 +13,6 @@ import {
 	type MachineOptions,
 	type StateMachine,
 } from "xstate";
-import { type ServiceImplementations } from "./StateMachineShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
 /* eslint-disable @typescript-eslint/ban-types */
@@ -143,7 +142,7 @@ export function getSerialAPICommandMachineConfig(
 		logOutgoingMessage,
 		notifyUnsolicited,
 	}: Pick<
-		ServiceImplementations,
+		SerialAPICommandServiceImplementations,
 		"timestamp" | "logOutgoingMessage" | "notifyUnsolicited"
 	>,
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
