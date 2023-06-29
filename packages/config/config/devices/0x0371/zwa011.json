@@ -130,6 +130,6 @@
 		"inclusion": "Triple clicking the tamper button includes (adds) the device",
 		"exclusion": "Triple clicking the tamper button excludes (removes) the device",
 		"reset": "This device also allows to be reset without any involvement of a Z-Wave controller. This procedure should only be used when the primary controller is inoperable.\nOnce Cover is removed and tamper switch is tripped, push the tamper for 5 seconds until red LED blinks. Then release tamper and push it again for 5 seconds until LED blinks",
-		"manual": "https://help.aeotec.com/support/solutions/articles/6000230382-door-window-sensor-7-basic-user-guide-zwa011-zwa041-"
+		"manual": "https://aeotec.freshdesk.com/support/solutions/articles/6000230382-door-window-sensor-7-basic-user-guide-zwa011-"
 	}
 }

@@ -4,7 +4,7 @@ import { padStart } from "alcalzone-shared/strings";
 export function cpp2js(str: string): string {
 	const nullIndex = str.indexOf("\0");
 	if (nullIndex === -1) return str;
-	return str.substr(0, nullIndex);
+	return str.slice(0, nullIndex);
 }
 
 /**
@@ -65,4 +65,20 @@ export function compareStrings(a: string, b: string): number {
 	if (a > b) return 1;
 	if (b > a) return -1;
 	return 0;
+}
+
+export function formatTime(hour: number, minute: number): string {
+	return `${padStart(hour.toString(), 2, "0")}:${padStart(
+		minute.toString(),
+		2,
+		"0",
+	)}`;
+}
+
+export function formatDate(year: number, month: number, day: number): string {
+	return `${padStart(year.toString(), 4, "0")}-${padStart(
+		month.toString(),
+		2,
+		"0",
+	)}-${padStart(day.toString(), 2, "0")}`;
 }

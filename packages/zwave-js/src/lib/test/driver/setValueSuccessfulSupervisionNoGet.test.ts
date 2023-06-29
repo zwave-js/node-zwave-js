@@ -7,11 +7,12 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
 import {
-	createMockZWaveRequestFrame,
-	MockNodeBehavior,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
+	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
+import sinon from "sinon";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
@@ -56,8 +57,8 @@ integrationTest(
 			};
 			mockNode.defineBehavior(respondToSupervisionGet);
 		},
-		testBody: async (driver, node, mockController, mockNode) => {
-			const onValueChange = jest.fn();
+		testBody: async (t, driver, node, mockController, mockNode) => {
+			const onValueChange = sinon.spy();
 			node.on("value added", onValueChange);
 			node.on("value updated", onValueChange);
 
@@ -89,19 +90,21 @@ integrationTest(
 			const currentValue = node.getValue(
 				BinarySwitchCCValues.currentValue.id,
 			);
-			expect(currentValue).toBeTrue();
+			t.true(currentValue);
 
 			// And make sure the value event handlers are called
-			expect(onValueChange).toHaveBeenCalledWith(
-				expect.anything(),
-				expect.objectContaining({
+			sinon.assert.calledWith(
+				onValueChange,
+				sinon.match.any,
+				sinon.match({
 					property: "currentValue",
 					newValue: true,
 				}),
 			);
-			expect(onValueChange).toHaveBeenCalledWith(
-				expect.anything(),
-				expect.objectContaining({
+			sinon.assert.calledWith(
+				onValueChange,
+				sinon.match.any,
+				sinon.match({
 					property: "targetValue",
 					newValue: true,
 				}),

@@ -3,10 +3,52 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"plugins": [
-			{ "transform": "@zwave-js/transformers" },
-			{ "transform": "ts-nameof", "type": "raw" }
+			{
+				"transform": "@zwave-js/transformers"
+			},
+			{
+				"transform": "ts-nameof",
+				"type": "raw"
+			}
+		],
+		"typeRoots": [
+			"src/lib/@types",
+			"node_modules/@types",
+			"../../node_modules/@types"
 		]
 	},
+	"references": [
+		{
+			"path": "../cc"
+		},
+		{
+			"path": "../config"
+		},
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../host"
+		},
+		{
+			"path": "../nvmedit"
+		},
+		{
+			"path": "../serial"
+		},
+		{
+			"path": "../shared"
+		},
+		{
+			"path": "../testing"
+		},
+		{
+			"path": "../maintenance"
+		},
+		{
+			"path": "../transformers"
+		}
+	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

@@ -1,5 +1,4 @@
 import {
-	CommandClass,
 	InvalidCC,
 	Security2CC,
 	Security2CCMessageEncapsulation,
@@ -11,6 +10,7 @@ import {
 	SecurityCCNonceReport,
 	SupervisionCCGet,
 	SupervisionCCReport,
+	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityClass,
@@ -20,8 +20,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
@@ -223,7 +223,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		mockNode.defineBehavior(respondToSupervisionGet);
 	},
 
-	testBody: async (driver, node, mockController, mockNode) => {
+	testBody: async (t, driver, node, mockController, mockNode) => {
 		await node.commandClasses.Security.getSupportedCommands();
 
 		await wait(100);
@@ -234,5 +234,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 				f.payload.encapsulated instanceof
 					SecurityCCCommandsSupportedGet,
 		);
+
+		t.pass();
 	},
 });

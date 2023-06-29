@@ -5,14 +5,46 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { MockSerialPort } from "@zwave-js/serial";
 import { FunctionType } from "@zwave-js/serial";
+import type { MockSerialPort } from "@zwave-js/serial/mock";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import { ZWaveController } from "../controller/Controller";
 import type { Driver } from "../driver/Driver";
 import { createAndStartDriver } from "../test/utils";
 import { ZWaveNode } from "./Node";
+
+interface TestContext {
+	driver: Driver;
+	serialport: MockSerialPort;
+	makePhysicalNode(nodeId: number): ZWaveNode;
+}
+
+const test = ava as TestFn<TestContext>;
+
+test.beforeEach(async (t) => {
+	const { driver, serialport } = await createAndStartDriver();
+	driver["_controller"] = new ZWaveController(driver);
+	driver["_controller"].isFunctionSupported = isFunctionSupported;
+
+	t.context.driver = driver;
+	t.context.serialport = serialport;
+	t.context.makePhysicalNode = (nodeId: number) => {
+		const node = new ZWaveNode(nodeId, driver);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			nodeId,
+			node,
+		);
+		return node;
+	};
+});
+
+test.afterEach.always(async (t) => {
+	const { driver } = t.context;
+	await driver.destroy();
+	driver.removeAllListeners();
+});
 
 // Test mock for isFunctionSupported to control which commands are getting used
 function isFunctionSupported(fn: FunctionType): boolean {
@@ -24,141 +56,162 @@ function isFunctionSupported(fn: FunctionType): boolean {
 	return true;
 }
 
-describe("lib/node/VirtualEndpoint", () => {
-	let driver: Driver;
-	let serialport: MockSerialPort;
+test.serial(
+	"createAPI() throws if a non-implemented API should be created",
+	(t) => {
+		const { driver } = t.context;
+		const broadcast = driver.controller.getBroadcastNode();
+		assertZWaveError(t, () => broadcast.createAPI(0xbada55), {
+			errorCode: ZWaveErrorCodes.CC_NoAPI,
+			messageMatches: "no associated API",
+		});
+	},
+);
 
-	beforeEach(async () => {
-		({ driver, serialport } = await createAndStartDriver());
-		driver["_controller"] = new ZWaveController(driver);
-		driver["_controller"].isFunctionSupported = isFunctionSupported;
-	});
+test.serial(
+	"the broadcast API throws when trying to access a non-supported CC",
+	async (t) => {
+		const { driver, makePhysicalNode } = t.context;
+		makePhysicalNode(2);
+		makePhysicalNode(3);
+		const broadcast = driver.controller.getBroadcastNode();
 
-	function makePhysicalNode(nodeId: number): ZWaveNode {
-		const node = new ZWaveNode(nodeId, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			nodeId,
-			node,
-		);
-		return node;
+		// We must not use Basic CC here, because that is assumed to be always supported
+		const api = broadcast.createAPI(
+			CommandClasses["Binary Switch"],
+		) as BinarySensorCCAPI;
+
+		// this does not throw
+		api.isSupported();
+		// this does
+		await assertZWaveError(t, () => api.get(), {
+			errorCode: ZWaveErrorCodes.CC_NotSupported,
+		});
+	},
+);
+
+test.serial(
+	"the broadcast API should know it is a broadcast API",
+	async (t) => {
+		const { driver, makePhysicalNode } = t.context;
+		makePhysicalNode(2);
+		makePhysicalNode(3);
+		const broadcast = driver.controller.getBroadcastNode();
+
+		t.true(broadcast.createAPI(CommandClasses.Basic)["isBroadcast"]());
+	},
+);
+
+test.serial(
+	"the multicast API should know it is a multicast API",
+	async (t) => {
+		const { driver, makePhysicalNode } = t.context;
+		makePhysicalNode(2);
+		makePhysicalNode(3);
+		const multicast = driver.controller.getMulticastGroup([2, 3]);
+
+		t.true(multicast.createAPI(CommandClasses.Basic)["isMulticast"]());
+	},
+);
+
+{
+	function prepareTest(t: ExecutionContext<TestContext>): {
+		node2: ZWaveNode;
+		node3: ZWaveNode;
+	} {
+		return {
+			node2: t.context.makePhysicalNode(2),
+			node3: t.context.makePhysicalNode(3),
+		};
 	}
 
-	// function setNumEndpoints(node: ZWaveNode, numEndpoints: number) {
-	// 	node.valueDB.setValue(
-	// 		{
-	// 			commandClass: CommandClasses["Multi Channel"],
-	// 			property: "individualCount",
-	// 		},
-	// 		numEndpoints,
-	// 	);
-	// }
+	test.serial(
+		"the commandClasses dictionary throws when trying to access a non-implemented CC",
+		(t) => {
+			const { driver } = t.context;
+			prepareTest(t);
 
-	afterEach(async () => {
-		await driver.destroy();
-		driver.removeAllListeners();
-	});
-
-	describe("createAPI", () => {
-		it("throws if a non-implemented API should be created", () => {
-			const broadcast = driver.controller.getBroadcastNode();
-			assertZWaveError(() => broadcast.createAPI(0xbada55), {
-				errorCode: ZWaveErrorCodes.CC_NoAPI,
-				messageMatches: "no associated API",
-			});
-		});
-
-		it("the broadcast API throws when trying to access a non-supported CC", async () => {
-			makePhysicalNode(2);
-			makePhysicalNode(3);
 			const broadcast = driver.controller.getBroadcastNode();
 
-			// We must not use Basic CC here, because that is assumed to be always supported
-			const api = broadcast.createAPI(
-				CommandClasses["Binary Switch"],
-			) as BinarySensorCCAPI;
-
-			// this does not throw
-			api.isSupported();
-			// this does
-			await assertZWaveError(() => api.get(), {
-				errorCode: ZWaveErrorCodes.CC_NotSupported,
-			});
-		});
-
-		it("the broadcast API should know it is a broadcast API", async () => {
-			makePhysicalNode(2);
-			makePhysicalNode(3);
-			const broadcast = driver.controller.getBroadcastNode();
-
-			expect(
-				broadcast.createAPI(CommandClasses.Basic)["isBroadcast"](),
-			).toBeTrue();
-		});
-
-		it("the multicast API should know it is a multicast API", async () => {
-			makePhysicalNode(2);
-			makePhysicalNode(3);
-			const multicast = driver.controller.getMulticastGroup([2, 3]);
-
-			expect(
-				multicast.createAPI(CommandClasses.Basic)["isMulticast"](),
-			).toBeTrue();
-		});
-	});
-
-	describe("commandClasses dictionary", () => {
-		let node2: ZWaveNode;
-		let node3: ZWaveNode;
-		beforeEach(() => {
-			node2 = makePhysicalNode(2);
-			node3 = makePhysicalNode(3);
-		});
-
-		it("throws when trying to access a non-implemented CC", () => {
-			const broadcast = driver.controller.getBroadcastNode();
-
-			assertZWaveError(() => (broadcast.commandClasses as any).FOOBAR, {
-				errorCode: ZWaveErrorCodes.CC_NotImplemented,
-				messageMatches: "FOOBAR is not implemented",
-			});
-		});
-
-		it("throws when trying to use a command of an unsupported CC", () => {
-			const broadcast = driver.controller.getBroadcastNode();
 			assertZWaveError(
-				() => broadcast.commandClasses["Binary Switch"].set(true),
+				t,
+				() => (broadcast.commandClasses as any).FOOBAR,
 				{
-					errorCode: ZWaveErrorCodes.CC_NotSupported,
-					messageMatches:
-						"does not support the Command Class Binary Switch",
+					errorCode: ZWaveErrorCodes.CC_NotImplemented,
+					messageMatches: "FOOBAR is not implemented",
 				},
 			);
-		});
+		},
+	);
 
-		it("does not throw when checking support of a CC", () => {
-			const broadcast = driver.controller.getBroadcastNode();
-			expect(
-				broadcast.commandClasses["Binary Switch"].isSupported(),
-			).toBeFalse();
-		});
+	// This test never worked:
+	// test.serial.only(
+	// 	"the commandClasses dictionary throws when trying to use a command of an unsupported CC",
+	// 	(t) => {
+	// 		const { driver } = t.context;
+	// 		prepareTest(t);
 
-		it("does not throw when accessing the ID of a CC", () => {
+	// 		const broadcast = driver.controller.getBroadcastNode();
+	// 		assertZWaveError(
+	// 			t,
+	// 			() => broadcast.commandClasses["Binary Switch"].set(true),
+	// 			{
+	// 				errorCode: ZWaveErrorCodes.CC_NotSupported,
+	// 				messageMatches:
+	// 					"does not support the Command Class Binary Switch",
+	// 			},
+	// 		);
+	// 	},
+	// );
+
+	test.serial(
+		"the commandClasses dictionary does not throw when checking support of a CC",
+		(t) => {
+			const { driver } = t.context;
+			prepareTest(t);
+
 			const broadcast = driver.controller.getBroadcastNode();
-			expect(broadcast.commandClasses["Binary Switch"].ccId).toBe(
+			t.false(broadcast.commandClasses["Binary Switch"].isSupported());
+		},
+	);
+
+	test.serial(
+		"the commandClasses dictionary  does not throw when accessing the ID of a CC",
+		(t) => {
+			const { driver } = t.context;
+			prepareTest(t);
+
+			const broadcast = driver.controller.getBroadcastNode();
+			t.is(
+				broadcast.commandClasses["Binary Switch"].ccId,
 				CommandClasses["Binary Switch"],
 			);
-		});
+		},
+	);
 
-		it("does not throw when scoping the API options", () => {
+	test.serial(
+		"the commandClasses dictionary  does not throw when scoping the API options",
+		(t) => {
+			const { driver } = t.context;
+			prepareTest(t);
+
 			const broadcast = driver.controller.getBroadcastNode();
-			broadcast.commandClasses["Binary Switch"].withOptions({});
-		});
+			t.notThrows(() =>
+				broadcast.commandClasses["Binary Switch"].withOptions({}),
+			);
+		},
+	);
 
-		it("returns all supported CCs when being enumerated", () => {
+	test.serial(
+		"the commandClasses dictionary  returns all supported CCs when being enumerated",
+		(t) => {
+			const { driver } = t.context;
+			const { node2, node3 } = prepareTest(t);
+
 			// No supported CCs, empty array
 			let broadcast = driver.controller.getBroadcastNode();
 			let actual = [...broadcast.commandClasses];
-			expect(actual).toEqual([]);
+			t.deepEqual(actual, []);
 
 			// Supported and controlled CCs
 			node2.addCC(CommandClasses["Binary Switch"], { isSupported: true });
@@ -168,58 +221,83 @@ describe("lib/node/VirtualEndpoint", () => {
 			broadcast = driver.controller.getBroadcastNode();
 
 			actual = [...broadcast.commandClasses];
-			expect(actual).toHaveLength(1);
-			expect(actual.map((api) => api.constructor)).toIncludeAllMembers([
-				BinarySwitchCCAPI,
-				// VersionCCAPI cannot be used in broadcast
-				// WakeUpCCAPI is not supported (only controlled), so no API!
-			]);
-		});
+			t.is(actual.length, 1);
+			t.deepEqual(
+				actual.map((api) => api.constructor),
+				[
+					BinarySwitchCCAPI,
+					// VersionCCAPI cannot be used in broadcast
+					// WakeUpCCAPI is not supported (only controlled), so no API!
+				],
+			);
+		},
+	);
 
-		it("returns [object Object] when turned into a string", () => {
+	test.serial(
+		"the commandClasses dictionary  returns [object Object] when turned into a string",
+		(t) => {
+			const { driver } = t.context;
+			prepareTest(t);
+
 			const broadcast = driver.controller.getBroadcastNode();
-			expect((broadcast.commandClasses as any)[Symbol.toStringTag]).toBe(
+			t.is(
+				(broadcast.commandClasses as any)[Symbol.toStringTag],
 				"[object Object]",
 			);
-		});
+		},
+	);
 
-		it("returns undefined for other symbol properties", () => {
+	test.serial(
+		"the commandClasses dictionary  returns undefined for other symbol properties",
+		(t) => {
+			const { driver } = t.context;
+			prepareTest(t);
+
 			const broadcast = driver.controller.getBroadcastNode();
-			expect(
+			t.is(
 				(broadcast.commandClasses as any)[Symbol.unscopables],
-			).toBeUndefined();
-		});
-	});
-
-	describe("uses the correct commands behind the scenes", () => {
-		it("broadcast", async () => {
-			makePhysicalNode(2);
-			makePhysicalNode(3);
-			const broadcast = driver.controller.getBroadcastNode();
-			broadcast.commandClasses.Basic.set(99);
-			await wait(1);
-			// » [Node 255] [REQ] [SendData]
-			//   │ transmit options: 0x25
-			//   │ callback id:        1
-			//   └─[BasicCCSet]
-			expect(serialport.lastWrite).toEqual(
-				Buffer.from("010a0013ff0320016325017c", "hex"),
+				undefined,
 			);
-		});
+		},
+	);
+}
 
-		it("multicast", async () => {
-			makePhysicalNode(2);
-			makePhysicalNode(3);
-			const multicast = driver.controller.getMulticastGroup([2, 3]);
-			multicast.commandClasses.Basic.set(99);
-			await wait(1);
-			// » [Node 2, 3] [REQ] [SendData]
-			//   │ transmit options: 0x25
-			//   │ callback id:        1
-			//   └─[BasicCCSet]
-			expect(serialport.lastWrite).toEqual(
-				Buffer.from("010c001402020303200163250181", "hex"),
-			);
-		});
-	});
-});
+test.serial(
+	"broadcast uses the correct commands behind the scenes",
+	async (t) => {
+		const { driver, serialport, makePhysicalNode } = t.context;
+		makePhysicalNode(2);
+		makePhysicalNode(3);
+		const broadcast = driver.controller.getBroadcastNode();
+		broadcast.commandClasses.Basic.set(99);
+		await wait(1);
+		// » [Node 255] [REQ] [SendData]
+		//   │ transmit options: 0x25
+		//   │ callback id:        1
+		//   └─[BasicCCSet]
+		t.deepEqual(
+			serialport.lastWrite,
+			Buffer.from("010a0013ff0320016325017c", "hex"),
+		);
+	},
+);
+
+test.serial(
+	"multicast uses the correct commands behind the scenes",
+	async (t) => {
+		const { driver, serialport, makePhysicalNode } = t.context;
+		makePhysicalNode(2);
+		makePhysicalNode(3);
+		const multicast = driver.controller.getMulticastGroup([2, 3]);
+		multicast.commandClasses.Basic.set(99);
+		await wait(1);
+		// » [Node 2, 3] [REQ] [SendData]
+		//   │ transmit options: 0x25
+		//   │ callback id:        1
+		//   └─[BasicCCSet]
+		t.deepEqual(
+			serialport.lastWrite,
+			Buffer.from("010c001402020303200163250181", "hex"),
+		);
+	},
+);

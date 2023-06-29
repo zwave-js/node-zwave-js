@@ -13,10 +13,10 @@ const classNameRegex = /class ([^\s]+) extends (\w+)?CCAPI/;
 const ccDir = path.join(__dirname, "..", "src/cc");
 const libDir = path.join(__dirname, "..", "src/lib");
 const apiFile = path.join(libDir, "API.ts");
-const startTokenType1 = "export type CCToName<CC extends CommandClasses> =";
+const startTokenType1 = "type CCNameMap = {";
 // const startTokenType2 =
 // 	"export type CCInstanceToAPI<CC extends CommandClass> =";
-const endTokenType = "never;";
+const endTokenType = "};";
 
 const startTokenInterface = "\t// AUTO GENERATION BELOW";
 const endTokenInterface = "}";
@@ -81,7 +81,7 @@ export async function generateCCAPIInterface(): Promise<void> {
 		"\n" +
 		CCsWithAPI.map(({ name }) => {
 			if (!name.startsWith(`"`)) name = `"${name}"`;
-			return `\t[CC] extends [(typeof CommandClasses[${name}])] ? ${name} : `;
+			return `\t${name}: typeof CommandClasses[${name}]`;
 		}).join("\n") +
 		"\n" +
 		apiFileContent.slice(endTokenStart);

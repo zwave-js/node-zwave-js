@@ -2,18 +2,19 @@ import {
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
-	isTransmissionError,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	SinglecastCC,
 	SupervisionStatus,
 	TransmitOptions,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isTransmissionError,
+	validatePayload,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
@@ -58,7 +59,7 @@ export const SupervisionCCValues = Object.freeze({
 // want to pay the cost of validating each call
 @API(CommandClasses.Supervision)
 export class SupervisionCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: SupervisionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SupervisionCommand.Get:
 			case SupervisionCommand.Report:
@@ -218,6 +219,7 @@ export class SupervisionCC extends CommandClass {
 		command: T,
 	): command is SinglecastCC<T> {
 		// Supervision may only be used for singlecast CCs that expect no response
+		// The specs mention that Supervision CAN be used for S2 multicast, but conveniently fail to explain how to respond to that.
 		if (!command.isSinglecast()) return false;
 		if (command.expectsCCResponse()) return false;
 
@@ -328,6 +330,19 @@ export class SupervisionCCReport extends SupervisionCC {
 			...super.toLogEntry(applHost),
 			message,
 		};
+	}
+
+	public toSupervisionResult(): SupervisionResult {
+		if (this.status === SupervisionStatus.Working) {
+			return {
+				status: this.status,
+				remainingDuration: this.duration!,
+			};
+		} else {
+			return {
+				status: this.status,
+			};
+		}
 	}
 }
 

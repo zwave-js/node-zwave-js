@@ -1,10 +1,11 @@
+import test, { type ExecutionContext } from "ava";
 import fsExtra from "fs-extra";
+import sinon from "sinon";
 import { ConfigManager } from "./ConfigManager";
 import type { Notification } from "./Notifications";
 
-jest.mock("fs-extra");
-const readFileMock = fsExtra.readFile as jest.Mock;
-const pathExistsMock = fsExtra.pathExists as jest.Mock;
+const readFileStub = sinon.stub(fsExtra, "readFile");
+const pathExistsStub = sinon.stub(fsExtra, "pathExists");
 
 const dummyNotifications = {
 	"0x0a": {
@@ -34,132 +35,138 @@ const dummyNotifications = {
 	},
 };
 
-describe("lib/config/Notifications", () => {
-	describe("lookupNotification (with missing file)", () => {
-		let configManager: ConfigManager;
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockClear();
-				readFileMock.mockClear();
-				pathExistsMock.mockResolvedValue(false);
-				readFileMock.mockRejectedValue(
-					new Error("File does not exist"),
-				);
+		pathExistsStub.reset();
+		readFileStub.reset();
+		pathExistsStub.resolves(false);
+		readFileStub.rejects(new Error("File does not exist"));
 
-				configManager = new ConfigManager();
-				await configManager.loadNotifications();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		const configManager = new ConfigManager();
+		await configManager.loadNotifications();
+		return configManager;
+	}
 
-		it("does not throw", () => {
-			expect(() => configManager.lookupNotification(0)).not.toThrow();
-		});
+	test.serial(
+		"lookupNotification (with missing file) does not throw",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.notThrows(() => configManager.lookupNotification(0));
+		},
+	);
 
-		it("returns undefined", () => {
-			expect(configManager.lookupNotification(0x0e)).toBeUndefined();
-			expect(configManager.lookupNotification(0xff)).toBeUndefined();
-		});
-	});
+	test.serial(
+		"lookupNotification (with missing file) returns undefined",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.is(configManager.lookupNotification(0x0e), undefined);
+			t.is(configManager.lookupNotification(0xff), undefined);
+		},
+	);
+}
 
-	describe("lookupNotification (with invalid file)", () => {
-		let configManager: ConfigManager;
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockClear();
-				readFileMock.mockClear();
-				pathExistsMock.mockResolvedValue(true);
-				readFileMock.mockResolvedValue(`{"0x01": `);
+		pathExistsStub.reset();
+		readFileStub.reset();
+		pathExistsStub.resolves(true);
+		readFileStub.resolves(`{"0x01": ` as any);
 
-				configManager = new ConfigManager();
-				await configManager.loadNotifications();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		const configManager = new ConfigManager();
+		await configManager.loadNotifications();
+		return configManager;
+	}
 
-		it("does not throw", () => {
-			expect(() => configManager.lookupNotification(0x0e)).not.toThrow();
-		});
+	test.serial(
+		"lookupNotification (with invalid file) does not throw",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.notThrows(() => configManager.lookupNotification(0x0e));
+		},
+	);
 
-		it("returns undefined", () => {
-			expect(configManager.lookupNotification(0x0e)).toBeUndefined();
-		});
-	});
+	test.serial(
+		"lookupNotification (with invalid file) returns undefined",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.is(configManager.lookupNotification(0x0e), undefined);
+		},
+	);
+}
 
-	describe("lookupNotification()", () => {
-		let configManager: ConfigManager;
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockResolvedValue(true);
-				readFileMock.mockResolvedValue(
-					JSON.stringify(dummyNotifications),
-				);
+		readFileStub.reset();
+		pathExistsStub.reset();
+		pathExistsStub.resolves(true);
+		readFileStub.resolves(JSON.stringify(dummyNotifications) as any);
 
-				configManager = new ConfigManager();
-				await configManager.loadNotifications();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		const configManager = new ConfigManager();
+		await configManager.loadNotifications();
+		return configManager;
+	}
 
-		beforeEach(() => {
-			readFileMock.mockClear();
-			pathExistsMock.mockClear();
-		});
-
-		it("returns the notification definition if it is defined", () => {
+	test.serial(
+		"lookupNotification() returns the notification definition if it is defined",
+		async (t) => {
+			const configManager = await prepareTest(t);
 			const test1 = configManager.lookupNotification(0x0a);
-			expect(test1).not.toBeUndefined();
-			expect(test1!.name).toBe("Dummy Notification");
+			t.not(test1, undefined);
+			t.is(test1!.name, "Dummy Notification");
 
-			expect(configManager.lookupNotification(0xff)).toBeUndefined();
-		});
-	});
+			t.is(configManager.lookupNotification(0xff), undefined);
+		},
+	);
+}
 
-	describe("lookupValue()", () => {
-		let notification: Notification;
+{
+	async function prepareTest(t: ExecutionContext): Promise<Notification> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		let configManager: ConfigManager;
+		pathExistsStub.reset();
+		readFileStub.reset();
+		pathExistsStub.resolves(true);
+		readFileStub.resolves(JSON.stringify(dummyNotifications) as any);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockClear();
-				readFileMock.mockClear();
-				pathExistsMock.mockResolvedValue(true);
-				readFileMock.mockResolvedValue(
-					JSON.stringify(dummyNotifications),
-				);
+		const configManager = new ConfigManager();
+		await configManager.loadNotifications();
 
-				configManager = new ConfigManager();
-				await configManager.loadNotifications();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		const notification = configManager.lookupNotification(0x0a)!;
+		t.not(notification, undefined);
 
-		beforeEach(async () => {
-			notification = configManager.lookupNotification(0x0a)!;
-			expect(notification).not.toBeUndefined();
-		});
+		return notification;
+	}
 
-		it("returns undefined if nothing was defined with the given value", () => {
+	test.serial(
+		"lookupValue() returns undefined if nothing was defined with the given value",
+		async (t) => {
+			const notification = await prepareTest(t);
 			const undefinedValue = notification.lookupValue(0xffff);
-			expect(undefinedValue).toBeUndefined();
-		});
+			t.is(undefinedValue, undefined);
+		},
+	);
 
-		it("returns the type of the value and its definition otherwise", () => {
+	test.serial(
+		"lookupValue() returns the type of the value and its definition otherwise",
+		async (t) => {
+			const notification = await prepareTest(t);
 			const actual = notification.lookupValue(0x01);
-			expect(actual).toMatchObject({
+			t.like(actual, {
 				variableName: "Some status",
 				value: 1,
 				label: "Status 1",
 				description: "Some generic description",
 			});
-		});
-	});
-});
+		},
+	);
+}

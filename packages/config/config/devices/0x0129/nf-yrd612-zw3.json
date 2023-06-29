@@ -1,0 +1,75 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "NF-YRD612-ZW3",
+	"description": "Real Living® Assure Lock™ Z-Wave Enabled Push Button Deadbolt",
+	"devices": [
+		{
+			"productType": "0x8101",
+			"productId": "0x810a",
+			"zwaveAllianceId": 4681
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "8",
+			"$import": "templates/yale_template.json#operating_mode"
+		},
+		{
+			"#": "1",
+			"$import": "templates/yale_template.json#volume"
+		},
+		{
+			"#": "11",
+			"$import": "templates/yale_template.json#one_touch"
+		},
+		{
+			"#": "12",
+			"$import": "templates/yale_template.json#privacy_button"
+		},
+		{
+			"#": "13",
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "2",
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#auto_relock_time_180"
+		},
+		{
+			"#": "28",
+			"label": "Expiring Pin Code Enabled Time",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
+		},
+		{
+			"#": "7",
+			"$import": "templates/yale_template.json#wrong_code_lockout"
+		}
+	],
+	"metadata": {
+		"reset": "When lock is reset to factory defaults all Entry Codes\n(including the Master Entry Code*) are deleted and all\nprogramming features are reset to original default\nsettings (see below).\n1. Remove battery cover and batteries.\n2. Remove inside lock to access reset button.\n3. Reset button (see image at right) is located beside\ncable adapter.\n4. While pressing reset button reinstall batteries. Hold\nreset button a minimum of 3 seconds then release.\n5. Replace battery cover.\nAfter reset, Master Entry Code creation is the only\noption available and must be performed prior to\nany other programming of the lock"
+	}
+}

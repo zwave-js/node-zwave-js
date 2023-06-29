@@ -2,7 +2,7 @@
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN20",
-	"description": "Z-Wave Plus Power Strip, VER. 2.0",
+	"description": "Z-Wave Plus Power Strip",
 	"devices": [
 		{
 			"productType": "0xa000",

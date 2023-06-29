@@ -148,12 +148,12 @@
 		},
 		{
 			"#": "16",
-			"$import": "templates/zooz_template.json#auto_off_timer",
+			"$import": "templates/zooz_template.json#auto_off_timer_3x_7x",
 			"label": "Auto-Off Timer (Relay)"
 		},
 		{
 			"#": "17",
-			"$import": "templates/zooz_template.json#auto_on_timer",
+			"$import": "templates/zooz_template.json#auto_on_timer_3x_7x",
 			"label": "Auto-On Timer (Relay)"
 		},
 		{
@@ -185,6 +185,13 @@
 			"$if": "firmwareVersion >= 10.20",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "LED Settings Indicator",
+			"defaultValue": 0
+		},
+		{
+			"#": "24",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"$if": "firmwareVersion >= 10.30",
+			"label": "Scene Control (Relay)",
 			"defaultValue": 0
 		}
 	],

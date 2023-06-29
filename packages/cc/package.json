@@ -1,22 +1,10 @@
 {
   "name": "@zwave-js/cc",
-  "version": "10.3.0",
+  "version": "11.1.0",
   "description": "zwave-js: Command Classes",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "safe": [
-          "build/index_safe.d.ts"
-        ],
-        "*": [
-          "build/cc/*.d.ts",
-          "build/index.d.ts"
-        ]
-      }
-    }
+    "access": "public"
   },
   "main": "build/index.js",
   "exports": {
@@ -25,15 +13,15 @@
     "./safe": "./build/index_safe.js",
     "./*": "./build/cc/*.js"
   },
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "src/index_safe.ts"
+        "build/index_safe.d.ts"
       ],
       "*": [
-        "src/cc/*.ts",
-        "src/index.ts"
+        "build/cc/*.d.ts",
+        "build/index.d.ts"
       ]
     }
   },
@@ -62,16 +50,17 @@
   "scripts": {
     "task": "yarn ts maintenance/_tasks.ts",
     "codegen": "yarn task codegen",
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "//watch": "yarn run codegen && tsc -b tsconfig.build.json --watch --pretty",
     "lint:zwave": "yarn task lint",
     "ts": "node -r esbuild-register",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:prettier:fix": "yarn run lint:prettier -w",
+    "test:ts": "ava",
+    "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
@@ -83,17 +72,16 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "*",
+    "@microsoft/api-extractor": "^7.35.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^29.0.2",
-    "@types/node": "^14.18.29",
+    "@types/node": "^14.18.47",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/testing": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
+    "ava": "^4.3.3",
     "del-cli": "^5.0.0",
     "fs-extra": "^10.1.0",
-    "jest-extended": "^2.0.0",
-    "prettier": "^2.7.1",
-    "typescript": "4.8.3"
+    "prettier": "^2.8.8",
+    "typescript": "5.0.4"
   }
 }

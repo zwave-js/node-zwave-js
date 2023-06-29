@@ -24,6 +24,32 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"endpoints": {
+		"1": {
+			"label": "Browse"
+		},
+		"2": {
+			"label": "Tampering"
+		},
+		"3": {
+			"label": "Doorbell 1"
+		},
+		"4": {
+			"label": "Doorbell 2"
+		},
+		"5": {
+			"label": "Doorbell 3"
+		},
+		"6": {
+			"label": "Environment"
+		},
+		"7": {
+			"label": "Security"
+		},
+		"8": {
+			"label": "Emergency"
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1[0xff000000]",

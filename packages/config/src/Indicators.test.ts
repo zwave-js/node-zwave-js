@@ -1,9 +1,10 @@
+import test, { type ExecutionContext } from "ava";
 import fsExtra from "fs-extra";
+import sinon from "sinon";
 import { ConfigManager } from "./ConfigManager";
 
-jest.mock("fs-extra");
-const readFileMock = fsExtra.readFile as jest.Mock;
-const pathExistsMock = fsExtra.pathExists as jest.Mock;
+const readFileStub = sinon.stub(fsExtra, "readFile");
+const pathExistsStub = sinon.stub(fsExtra, "pathExists");
 
 const dummyIndicators = {
 	indicators: {
@@ -17,116 +18,124 @@ const dummyIndicators = {
 	},
 };
 
-describe("lib/config/Indicators", () => {
-	describe("lookupIndicator (with missing file)", () => {
-		let configManager: ConfigManager;
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockClear();
-				readFileMock.mockClear();
-				pathExistsMock.mockResolvedValue(false);
-				readFileMock.mockRejectedValue(
-					new Error("File does not exist"),
-				);
+		pathExistsStub.reset();
+		readFileStub.reset();
+		pathExistsStub.resolves(false);
+		readFileStub.rejects(new Error("File does not exist"));
 
-				configManager = new ConfigManager();
-				await configManager.loadIndicators();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		const configManager = new ConfigManager();
+		await configManager.loadIndicators();
+		return configManager;
+	}
 
-		it("does not throw", () => {
-			expect(() => configManager.lookupIndicator(1)).not.toThrow();
-		});
+	test.serial(
+		"lookupIndicator (with missing file) does not throw",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.notThrows(() => configManager.lookupIndicator(1));
+		},
+	);
 
-		it("returns undefined", () => {
-			expect(configManager.lookupIndicator(0x0e)).toBeUndefined();
-			expect(configManager.lookupIndicator(0xff)).toBeUndefined();
-		});
-	});
+	test.serial(
+		"lookupIndicator (with missing file) returns undefined",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.is(configManager.lookupIndicator(0x0e), undefined);
+			t.is(configManager.lookupIndicator(0xff), undefined);
+		},
+	);
+}
 
-	describe("lookupIndicator (with invalid file)", () => {
-		let configManager: ConfigManager;
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockClear();
-				readFileMock.mockClear();
-				pathExistsMock.mockResolvedValue(true);
-				readFileMock.mockResolvedValue(`{"0x01": `);
+		pathExistsStub.reset();
+		readFileStub.reset();
+		pathExistsStub.resolves(true);
+		readFileStub.resolves(`{"0x01": ` as any);
 
-				configManager = new ConfigManager();
-				await configManager.loadIndicators();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		const configManager = new ConfigManager();
+		await configManager.loadIndicators();
+		return configManager;
+	}
 
-		it("does not throw", () => {
-			expect(() => configManager.lookupIndicator(0x1)).not.toThrow();
-		});
+	test.serial(
+		"lookupIndicator (with invalid file) does not throw",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.notThrows(() => configManager.lookupIndicator(0x1));
+		},
+	);
 
-		it("returns undefined", () => {
-			expect(configManager.lookupIndicator(0x01)).toBeUndefined();
-		});
-	});
+	test.serial(
+		"lookupIndicator (with invalid file) returns undefined",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.is(configManager.lookupIndicator(0x01), undefined);
+		},
+	);
+}
 
-	describe("lookupIndicator()", () => {
-		let configManager: ConfigManager;
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockResolvedValue(true);
-				readFileMock.mockResolvedValue(JSON.stringify(dummyIndicators));
+		pathExistsStub.reset();
+		readFileStub.reset();
 
-				configManager = new ConfigManager();
-				await configManager.loadIndicators();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		pathExistsStub.resolves(true);
+		readFileStub.resolves(JSON.stringify(dummyIndicators) as any);
 
-		beforeEach(() => {
-			readFileMock.mockClear();
-			pathExistsMock.mockClear();
-		});
+		const configManager = new ConfigManager();
+		await configManager.loadIndicators();
+		return configManager;
+	}
 
-		it("returns the indicator definition if it is defined", () => {
+	test.serial(
+		"lookupIndicator() returns the indicator definition if it is defined",
+		async (t) => {
+			const configManager = await prepareTest(t);
 			const test1 = configManager.lookupIndicator(0x01);
-			expect(test1).toBe("Indicator 1");
+			t.is(test1, "Indicator 1");
 
-			expect(configManager.lookupIndicator(0xff)).toBeUndefined();
-		});
-	});
+			t.is(configManager.lookupIndicator(0xff), undefined);
+		},
+	);
+}
 
-	describe("lookupIndicatorProperty()", () => {
-		let configManager: ConfigManager;
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockResolvedValue(true);
-				readFileMock.mockResolvedValue(JSON.stringify(dummyIndicators));
+		pathExistsStub.reset();
+		readFileStub.reset();
+		pathExistsStub.resolves(true);
+		readFileStub.resolves(JSON.stringify(dummyIndicators) as any);
 
-				configManager = new ConfigManager();
-				await configManager.loadIndicators();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		const configManager = new ConfigManager();
+		await configManager.loadIndicators();
+		return configManager;
+	}
 
-		beforeEach(() => {
-			readFileMock.mockClear();
-			pathExistsMock.mockClear();
-		});
+	test.serial(
+		"lookupIndicatorProperty() returns the property definition if it is defined",
+		async (t) => {
+			const configManager = await prepareTest(t);
 
-		it("returns the property definition if it is defined", () => {
 			const test1 = configManager.lookupProperty(0x01);
-			expect(test1).not.toBeUndefined();
-			expect(test1!.label).toBe("Property 1");
+			t.not(test1, undefined);
+			t.is(test1!.label, "Property 1");
 
-			expect(configManager.lookupProperty(0xff)).toBeUndefined();
-		});
-	});
-});
+			t.is(configManager.lookupProperty(0xff), undefined);
+		},
+	);
+}

@@ -6,11 +6,12 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
 import {
-	createMockZWaveRequestFrame,
-	MockNodeBehavior,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
+	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
+import sinon from "sinon";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
@@ -56,8 +57,8 @@ integrationTest(
 			};
 			mockNode.defineBehavior(respondToSupervisionGet);
 		},
-		testBody: async (_driver, node, _mockController, _mockNode) => {
-			const onValueChange = jest.fn();
+		testBody: async (t, driver, node, _mockController, _mockNode) => {
+			const onValueChange = sinon.spy();
 			// node.on("value added", onValueChange);
 			node.on("value updated", onValueChange);
 
@@ -72,12 +73,13 @@ integrationTest(
 			await wait(500);
 
 			const setpoint = node.getValue(setpointValueId);
-			expect(setpoint).toBe(20);
+			t.is(setpoint, 20);
 
 			// And make sure the value event handlers are called
-			expect(onValueChange).toHaveBeenCalledWith(
-				expect.anything(),
-				expect.objectContaining({
+			sinon.assert.calledWith(
+				onValueChange,
+				sinon.match.any,
+				sinon.match({
 					property: setpointValueId.property,
 					propertyKey: setpointValueId.propertyKey,
 					newValue: 20,

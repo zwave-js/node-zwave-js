@@ -8,7 +8,7 @@ The driver is the core of this library. It controls the serial interface, handle
 new (port: string, options?: ZWaveOptions) => Driver
 ```
 
-The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Connect to a hosted serial port over TCP](usage/tcp-connection.md).
+The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Remote serial port over TCP](usage/tcp-connection.md).
 
 For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed description.
 
@@ -31,6 +31,16 @@ The following table gives you an overview of what happens during the startup pro
 |  3   | Every node is interviewed in the background (This may take a long time) | `"ready"` event is emitted for every node as soon as it can be used                                                                                                           |
 |  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                                                                                |
 |  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed for the first time. This only gets emitted once, unless the node gets re-interviewed. |
+
+### `shutdown`
+
+```ts
+async shutdown(): Promise<boolean>
+```
+
+If supported by the controller, this instructs it to shut down the Z-Wave API, so it can safely be removed from power. If this is successful (returns `true`), the driver instance will be destroyed and can no longer be used.
+
+> [!WARNING] The controller will have to be restarted manually (e.g. by unplugging and plugging it back in) before it can be used again!
 
 ### `interviewNode`
 
@@ -78,10 +88,10 @@ disableStatistics(): void
 
 Disable sending usage statistics.
 
-### `getSupportedCCVersionForEndpoint`
+### `getSupportedCCVersion`
 
 ```ts
-getSupportedCCVersionForEndpoint(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
+getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
 ```
 
 Nodes in a Z-Wave network are very likely support different versions of a Command Class (CC) and frequently support older versions than the driver software.  
@@ -100,13 +110,13 @@ This method
 > [!WARNING]
 > This only provides reliable information **after** the node/endpoint interview was completed.
 
-### `getSafeCCVersionForNode`
+### `getSafeCCVersion`
 
 ```ts
-getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number
+getSafeCCVersion(nodeId: number, cc: CommandClasses): number
 ```
 
-Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersionForEndpoint`, but behaves differently. It
+Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersion`, but behaves differently. It
 
 -   returns `1` if the node claims not to support the CC or no information is known
 -   **throws (!)** if the requested CC is not implemented in this library
@@ -297,7 +307,6 @@ Updates a subset of the driver options without having to restart the driver. The
 -   `interview`
 -   `logConfig`
 -   `preferences`
--   `preserveUnknownValues`
 -   `userAgent` (behaves like `updateUserAgent`)
 
 ### `checkForConfigUpdates`
@@ -383,11 +392,12 @@ Returns the user agent string used for service requests.
 
 The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are implemented:
 
-| Event               | Description                                                                                                                                                                                          |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"error"`           | Is emitted when the underlying serial port emits an error or invalid data is received. You **must** add a listener for this event, otherwise unhandled `"error"` events will crash your application! |
-| `"driver ready"`    | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                     |
-| `"all nodes ready"` | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                             |
+| Event                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"error"`            | Is emitted when the underlying serial port emits an error or invalid data is received. You **must** add a listener for this event, otherwise unhandled `"error"` events will crash your application!                                                                                                                                                                                                                                                                             |
+| `"driver ready"`     | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                                                                                                                                                                                                                                                                                                 |
+| `"all nodes ready"`  | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                                                                                                                                                                                                                                                                                                         |
+| `"bootloader ready"` | Is emitted when the controller is in recovery mode (e.g. after a failed firmware upgrade) and the bootloader has been entered. This behavior is opt-in using the `allowBootloaderOnly` flag of the [`ZWaveOptions`](#ZWaveOptions). If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image. The `"driver ready"` event will not be emitted and commands attempting to talk to the serial API will fail in this mode. |
 
 ## Interfaces
 
@@ -426,6 +436,7 @@ interface LogConfig {
 	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
+	maxFiles: number;
 	nodeFilter?: number[];
 	filename: string;
 	forceConsole: boolean;
@@ -462,7 +473,7 @@ interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a queued message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
 	/** If a Wake Up On Demand should be requested for the target node. */
 	requestWakeUpOnDemand?: boolean;
@@ -581,10 +592,10 @@ enum RssiError {
 
 ```ts
 enum ProtocolDataRate {
-	ZWave_9k6 = 0x01,
-	ZWave_40k = 0x02,
-	ZWave_100k = 0x03,
-	LongRange_100k = 0x04,
+	ZWave_9k6 = 1,
+	ZWave_40k = 2,
+	ZWave_100k = 3,
+	LongRange_100k = 4,
 }
 ```
 
@@ -654,6 +665,25 @@ interface ZWaveOptions extends ZWaveHostOptions {
 
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
+
+		/**
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
+		 * How long to wait for a poll after setting a value without transition duration
+		 */
+		refreshValue: number;
+
+		/**
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
+		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
+		 */
+		refreshValueAfterTransition: number;
+
 		/**
 		 * How long to wait for the Serial API Started command after a soft-reset before resorting
 		 * to polling the API for the responsiveness check.
@@ -742,14 +772,6 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	inclusionUserCallbacks?: InclusionUserCallbacks;
 
 	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
-
-	/**
 	 * Some SET-type commands optimistically update the current value to match the target value
 	 * when the device acknowledges the command.
 	 *
@@ -815,10 +837,52 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	};
 
 	/**
+	 * Normally, the driver expects to start in Serial API mode and enter the bootloader on demand. If in bootloader,
+	 * it will try to exit it and enter Serial API mode again.
+	 *
+	 * However there are situations where a controller may be stuck in bootloader mode and no Serial API is available.
+	 * In this case, the driver startup will fail, unless this option is set to `true`.
+	 *
+	 * If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image.
+	 * Commands attempting to talk to the serial API will fail.
+	 */
+	allowBootloaderOnly?: boolean;
+
+	/**
 	 * An object with application/module/component names and their versions.
 	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
 	 */
 	userAgent?: Record<string, string>;
+
+	/** DO NOT USE! Used for testing internally */
+	testingHooks?: {
+		serialPortBinding?: typeof SerialPort;
+		/**
+		 * A hook that allows accessing the serial port instance after opening
+		 * and before interacting with it.
+		 */
+		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+
+		/**
+		 * Set this to true to skip the controller identification sequence.
+		 */
+		skipControllerIdentification?: boolean;
+
+		/**
+		 * Set this to true to skip the interview of all nodes.
+		 */
+		skipNodeInterview?: boolean;
+
+		/**
+		 * Set this to true to skip checking if the controller is in bootloader mode
+		 */
+		skipBootloaderCheck?: boolean;
+
+		/**
+		 * Set this to false to skip loading the configuration files. Default: `true`..
+		 */
+		loadConfiguration?: boolean;
+	};
 }
 ````
 

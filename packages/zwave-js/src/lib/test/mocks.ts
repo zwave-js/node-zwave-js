@@ -1,27 +1,31 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getImplementedVersion } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
-	CommandClasses,
-	FLiRS,
 	InterviewStage,
-	IZWaveEndpoint,
-	IZWaveNode,
-	Maybe,
 	MessagePriority,
+	NOT_KNOWN,
 	NodeStatus,
 	SecurityClass,
+	ZWaveError,
+	ZWaveErrorCodes,
 	securityClassOrder,
-	unknownBoolean,
+	type CommandClassInfo,
+	type CommandClasses,
+	type FLiRS,
+	type IZWaveEndpoint,
+	type IZWaveNode,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { TestingHost } from "@zwave-js/host";
 import {
-	expectedResponse,
-	FunctionType,
 	Message,
 	MessageType,
+	expectedResponse,
 	messageTypes,
 	priority,
+	type FunctionType,
 } from "@zwave-js/serial";
+import sinon from "sinon";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "../node/Node";
 import * as nodeUtils from "../node/utils";
@@ -56,35 +60,14 @@ export const mockDriverDummyCallbackId = 0xfe;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createEmptyMockDriver() {
 	const ret = {
-		sendMessage: jest.fn().mockImplementation(() => Promise.resolve()),
-		sendCommand: jest.fn(),
-		getSafeCCVersionForNode: jest
-			.fn()
-			.mockImplementation(
-				(
-					ccId: CommandClasses,
-					nodeId: number,
-					endpointIndex: number = 0,
-				) => {
-					if (
-						ret.controller?.nodes instanceof Map &&
-						ret.controller.nodes.has(nodeId)
-					) {
-						const node: ZWaveNode =
-							ret.controller.nodes.get(nodeId);
-						const ccVersion = node
-							.getEndpoint(endpointIndex)!
-							.getCCVersion(ccId);
-						if (ccVersion > 0) return ccVersion;
-					}
-					// default to the implemented version
-					return getImplementedVersion(ccId);
-				},
-			),
-		isCCSecure: jest.fn().mockImplementation(() => false),
-		getNextCallbackId: jest
-			.fn()
-			.mockImplementation(() => mockDriverDummyCallbackId),
+		sendMessage: sinon.stub().callsFake(() => Promise.resolve()),
+		sendCommand: sinon.stub(),
+		getSupportedCCVersion: sinon.stub(),
+		getSafeCCVersion: sinon.stub(),
+		isCCSecure: sinon.stub().callsFake(() => false),
+		getNextCallbackId: sinon
+			.stub()
+			.callsFake(() => mockDriverDummyCallbackId),
 		controller: {
 			nodes: new Map(),
 			ownNodeId: 1,
@@ -101,7 +84,7 @@ export function createEmptyMockDriver() {
 		},
 		metadataDB: new Map(),
 		networkCache: new Map(),
-		cacheGet: jest.fn().mockImplementation(
+		cacheGet: sinon.stub().callsFake(
 			<T>(
 				cacheKey: string,
 				options?: {
@@ -122,7 +105,7 @@ export function createEmptyMockDriver() {
 				return _ret;
 			},
 		),
-		cacheSet: jest.fn().mockImplementation(
+		cacheSet: sinon.stub().callsFake(
 			<T>(
 				cacheKey: string,
 				value: T | undefined,
@@ -186,13 +169,36 @@ export function createEmptyMockDriver() {
 			};
 		},
 	};
-	ret.sendCommand.mockImplementation(async (command, options) => {
+	ret.sendCommand.callsFake(async (command, options) => {
 		const msg = new SendDataRequest(ret as unknown as Driver, {
 			command,
 		});
 		const resp = await ret.sendMessage(msg, options);
 		return resp?.command;
 	});
+	ret.getSupportedCCVersion.callsFake(
+		(ccId: CommandClasses, nodeId: number, endpointIndex: number = 0) => {
+			if (
+				ret.controller?.nodes instanceof Map &&
+				ret.controller.nodes.has(nodeId)
+			) {
+				const node: ZWaveNode = ret.controller.nodes.get(nodeId);
+				const ccVersion = node
+					.getEndpoint(endpointIndex)!
+					.getCCVersion(ccId);
+				return ccVersion;
+			}
+			return 0;
+		},
+	);
+	ret.getSafeCCVersion.callsFake(
+		(ccId: CommandClasses, nodeId: number, endpointIndex: number = 0) => {
+			return (
+				ret.getSupportedCCVersion(ccId, nodeId, endpointIndex) ||
+				getImplementedVersion(ccId)
+			);
+		},
+	);
 	return ret;
 }
 
@@ -202,7 +208,7 @@ export interface CreateTestNodeOptions {
 	isFrequentListening?: FLiRS | undefined;
 	status?: NodeStatus;
 	interviewStage?: InterviewStage;
-	isSecure?: Maybe<boolean>;
+	isSecure?: MaybeNotKnown<boolean>;
 
 	numEndpoints?: number;
 
@@ -217,7 +223,7 @@ export interface TestNode extends IZWaveNode {
 }
 
 export function createTestNode(
-	host: ZWaveHost,
+	host: TestingHost,
 	options: CreateTestNodeOptions,
 ): TestNode {
 	const endpointCache = new Map<number, IZWaveEndpoint>();
@@ -285,6 +291,27 @@ export function createTestNode(
 			return endpointCache.get(index);
 		}) as IZWaveNode["getEndpoint"],
 
+		getEndpointOrThrow(index) {
+			const ep = ret.getEndpoint(index);
+			if (!ep) {
+				throw new ZWaveError(
+					`Endpoint ${index} does not exist on Node ${ret.id}`,
+					ZWaveErrorCodes.Controller_EndpointNotFound,
+				);
+			}
+			return ep;
+		},
+
+		getAllEndpoints() {
+			if (!options.numEndpoints) return [...endpointCache.values()];
+			const eps: IZWaveEndpoint[] = [];
+			for (let i = 0; i <= options.numEndpoints; i++) {
+				const ep = ret.getEndpoint(i);
+				if (ep) eps.push(ep);
+			}
+			return eps;
+		},
+
 		// These are copied from Node.ts
 		getHighestSecurityClass(): SecurityClass | undefined {
 			if (securityClasses.size === 0) return undefined;
@@ -298,15 +325,15 @@ export function createTestNode(
 			// If we don't have the info for every security class, we don't know the highest one yet
 			return missingSome ? undefined : SecurityClass.None;
 		},
-		hasSecurityClass(securityClass: SecurityClass): Maybe<boolean> {
-			return securityClasses.get(securityClass) ?? unknownBoolean;
+		hasSecurityClass(securityClass: SecurityClass): MaybeNotKnown<boolean> {
+			return securityClasses.get(securityClass);
 		},
 		setSecurityClass(securityClass: SecurityClass, granted: boolean): void {
 			securityClasses.set(securityClass, granted);
 		},
-		get isSecure(): Maybe<boolean> {
+		get isSecure(): MaybeNotKnown<boolean> {
 			const securityClass = ret.getHighestSecurityClass();
-			if (securityClass == undefined) return unknownBoolean;
+			if (securityClass == undefined) return NOT_KNOWN;
 			if (securityClass === SecurityClass.None) return false;
 			return true;
 		},
@@ -334,7 +361,7 @@ export interface CreateTestEndpointOptions {
 }
 
 export function createTestEndpoint(
-	host: ZWaveHost,
+	host: TestingHost,
 	options: CreateTestEndpointOptions,
 ): IZWaveEndpoint {
 	const ret: IZWaveEndpoint = {
@@ -345,12 +372,25 @@ export function createTestEndpoint(
 		isCCSecure: options.isCCSecure ?? (() => false),
 		getCCVersion:
 			options.getCCVersion ??
-			((cc) =>
-				host.getSafeCCVersionForNode(
-					cc,
-					options.nodeId,
-					options.index,
-				)),
+			((cc) => host.getSafeCCVersion(cc, options.nodeId, options.index)),
+		virtual: false,
+		addCC: function (
+			cc: CommandClasses,
+			info: Partial<CommandClassInfo>,
+		): void {
+			throw new Error("Function not implemented.");
+		},
+		removeCC: function (cc: CommandClasses): void {
+			throw new Error("Function not implemented.");
+		},
+		getCCs: function (): Iterable<
+			[ccId: CommandClasses, info: CommandClassInfo]
+		> {
+			throw new Error("Function not implemented.");
+		},
+		getNodeUnsafe: function (): IZWaveNode | undefined {
+			throw new Error("Function not implemented.");
+		},
 	};
 
 	return ret;

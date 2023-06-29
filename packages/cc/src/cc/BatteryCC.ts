@@ -1,24 +1,31 @@
-import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
+import { timespan } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	SinglecastCC,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
 	MessagePriority,
+	ValueMetadata,
+	enumValuesToMetadataStates,
 	parseFloatWithScale,
 	validatePayload,
-	ValueMetadata,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
+import { getEnumMemberName, pick, type AllOrNone } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
+	gotDeserializationOptions,
+	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -36,6 +43,7 @@ import {
 	BatteryCommand,
 	BatteryReplacementStatus,
 } from "../lib/_Types";
+import { NotificationCCValues } from "./NotificationCC";
 
 export const BatteryCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Battery, {
@@ -171,7 +179,7 @@ export const BatteryCCValues = Object.freeze({
 
 @API(CommandClasses.Battery)
 export class BatteryCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: BatteryCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BatteryCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BatteryCommand.Get:
 				return true; // This is mandatory
@@ -181,30 +189,30 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "level":
-			case "isLow":
-			case "chargingStatus":
-			case "rechargeable":
-			case "backup":
-			case "overheating":
-			case "lowFluid":
-			case "rechargeOrReplace":
-			case "lowTemperatureStatus":
-			case "disconnected":
-				return (await this.get())?.[property];
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: BatteryCCAPI, { property }) {
+			switch (property) {
+				case "level":
+				case "isLow":
+				case "chargingStatus":
+				case "rechargeable":
+				case "backup":
+				case "overheating":
+				case "lowFluid":
+				case "rechargeOrReplace":
+				case "lowTemperatureStatus":
+				case "disconnected":
+					return (await this.get())?.[property];
 
-			case "maximumCapacity":
-			case "temperature":
-				return (await this.getHealth())?.[property];
+				case "maximumCapacity":
+				case "temperature":
+					return (await this.getHealth())?.[property];
 
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
@@ -340,40 +348,136 @@ temperature:   ${batteryHealth.temperature} °C`;
 			}
 		}
 	}
+
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		applHost: ZWaveApplicationHost,
+	): boolean {
+		// Check when the battery state was last updated
+		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		if (!valueDB) return true;
+
+		const lastUpdated = valueDB.getTimestamp(
+			BatteryCCValues.level.endpoint(this.endpointIndex),
+		);
+		return (
+			lastUpdated == undefined ||
+			// The specs say once per month, but that's a bit too unfrequent IMO
+			// Also the maximum that setInterval supports is ~24.85 days
+			Date.now() - lastUpdated > timespan.days(7)
+		);
+	}
 }
+
+export type BatteryCCReportOptions = CCCommandOptions &
+	(
+		| {
+				isLow?: false;
+				level: number;
+		  }
+		| {
+				isLow: true;
+				level?: undefined;
+		  }
+	) &
+	AllOrNone<{
+		// V2+
+		chargingStatus: BatteryChargingStatus;
+		rechargeable: boolean;
+		backup: boolean;
+		overheating: boolean;
+		lowFluid: boolean;
+		rechargeOrReplace: BatteryReplacementStatus;
+		disconnected: boolean;
+	}> &
+	AllOrNone<{
+		// V3+
+		lowTemperatureStatus: boolean;
+	}>;
 
 @CCCommand(BatteryCommand.Report)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: CommandClassDeserializationOptions | BatteryCCReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this.level = this.payload[0];
-		if (this.level === 0xff) {
-			this.level = 0;
-			this.isLow = true;
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.level = this.payload[0];
+			if (this.level === 0xff) {
+				this.level = 0;
+				this.isLow = true;
+			} else {
+				this.isLow = false;
+			}
+
+			if (this.payload.length >= 3) {
+				// Starting with V2
+				this.chargingStatus = this.payload[1] >>> 6;
+				this.rechargeable = !!(this.payload[1] & 0b0010_0000);
+				this.backup = !!(this.payload[1] & 0b0001_0000);
+				this.overheating = !!(this.payload[1] & 0b1000);
+				this.lowFluid = !!(this.payload[1] & 0b0100);
+				this.rechargeOrReplace = !!(this.payload[1] & 0b10)
+					? BatteryReplacementStatus.Now
+					: !!(this.payload[1] & 0b1)
+					? BatteryReplacementStatus.Soon
+					: BatteryReplacementStatus.No;
+				this.lowTemperatureStatus = !!(this.payload[2] & 0b10);
+				this.disconnected = !!(this.payload[2] & 0b1);
+			}
 		} else {
-			this.isLow = false;
+			this.level = options.isLow ? 0 : options.level;
+			this.isLow = !!options.isLow;
+			this.chargingStatus = options.chargingStatus;
+			this.rechargeable = options.rechargeable;
+			this.backup = options.backup;
+			this.overheating = options.overheating;
+			this.lowFluid = options.lowFluid;
+			this.rechargeOrReplace = options.rechargeOrReplace;
+			this.disconnected = options.disconnected;
+			this.lowTemperatureStatus = options.lowTemperatureStatus;
+		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		// Naïve heuristic for a full battery
+		if (this.level >= 90) {
+			// Some devices send Notification CC Reports with battery information,
+			// or this information is mapped from legacy V1 alarm values.
+			// We may need to idle the corresponding values when the battery is full
+			const notificationCCVersion = applHost.getSupportedCCVersion(
+				CommandClasses.Notification,
+				this.nodeId as number,
+				this.endpointIndex,
+			);
+			if (
+				// supported
+				notificationCCVersion > 0 &&
+				// but idling is not required
+				notificationCCVersion < 8
+			) {
+				const batteryLevelStatusValue =
+					NotificationCCValues.notificationVariable(
+						"Power Management",
+						"Battery level status",
+					);
+				// If not undefined and not idle
+				if (this.getValue(applHost, batteryLevelStatusValue)) {
+					this.setValue(
+						applHost,
+						batteryLevelStatusValue,
+						0 /* idle */,
+					);
+				}
+			}
 		}
 
-		if (this.payload.length >= 3) {
-			// Starting with V2
-			this.chargingStatus = this.payload[1] >>> 6;
-			this.rechargeable = !!(this.payload[1] & 0b0010_0000);
-			this.backup = !!(this.payload[1] & 0b0001_0000);
-			this.overheating = !!(this.payload[1] & 0b1000);
-			this.lowFluid = !!(this.payload[1] & 0b0100);
-			this.rechargeOrReplace = !!(this.payload[1] & 0b10)
-				? BatteryReplacementStatus.Now
-				: !!(this.payload[1] & 0b1)
-				? BatteryReplacementStatus.Soon
-				: BatteryReplacementStatus.No;
-			this.lowTemperatureStatus = !!(this.payload[2] & 0b10);
-			this.disconnected = !!(this.payload[2] & 0b1);
-		}
+		return true;
 	}
 
 	@ccValue(BatteryCCValues.level)
@@ -405,6 +509,31 @@ export class BatteryCCReport extends BatteryCC {
 
 	@ccValue(BatteryCCValues.lowTemperatureStatus)
 	public readonly lowTemperatureStatus: boolean | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.isLow ? 0xff : this.level]);
+		if (this.chargingStatus != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([
+					(this.chargingStatus << 6) +
+						(this.rechargeable ? 0b0010_0000 : 0) +
+						(this.backup ? 0b0001_0000 : 0) +
+						(this.overheating ? 0b1000 : 0) +
+						(this.lowFluid ? 0b0100 : 0) +
+						(this.rechargeOrReplace === BatteryReplacementStatus.Now
+							? 0b10
+							: this.rechargeOrReplace ===
+							  BatteryReplacementStatus.Soon
+							? 0b1
+							: 0),
+					(this.lowTemperatureStatus ? 0b10 : 0) +
+						(this.disconnected ? 0b1 : 0),
+				]),
+			]);
+		}
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {

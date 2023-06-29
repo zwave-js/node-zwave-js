@@ -1,11 +1,11 @@
-import ava, { TestFn } from "ava";
+import ava, { type TestFn } from "ava";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { InterviewStage } from "../consts/InterviewStage";
 import {
 	assertLogInfo,
 	assertMessage,
 	SpyTransport,
-} from "../test/SpyTransportAva";
+} from "../test/SpyTransport";
 import { ControllerLogger } from "./Controller";
 import { createDefaultTransportFormat, ZWaveLogContainer } from "./shared";
 

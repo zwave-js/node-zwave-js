@@ -2,26 +2,26 @@ import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
-	ActionObject,
-	ActorRefFrom,
-	assign,
-	AssignAction,
-	Interpreter,
 	Machine,
+	assign,
 	spawn,
-	StateMachine,
+	type ActionObject,
+	type ActorRefFrom,
+	type AssignAction,
+	type Interpreter,
+	type StateMachine,
 } from "xstate";
 import { forwardTo, pure, raise, sendParent, stop } from "xstate/lib/actions";
 import { isSendData } from "../serialapi/transport/SendDataShared";
 import {
 	createSerialAPICommandMachine,
-	SerialAPICommandDoneData,
-	SerialAPICommandMachine,
-	SerialAPICommandMachineParams,
+	type SerialAPICommandDoneData,
+	type SerialAPICommandMachine,
+	type SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 import {
 	notifyUnsolicited,
-	ServiceImplementations,
+	type ServiceImplementations,
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
 

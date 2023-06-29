@@ -5,6 +5,12 @@
 	"description": "2-Channel Power Switch",
 	"devices": [
 		{
+			// KR frequency
+			"productType": "0x0062",
+			"productId": "0x0001"
+		},
+		{
+			// US frequency
 			"productType": "0x0065",
 			"productId": "0x0001"
 		}

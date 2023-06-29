@@ -1,11 +1,5 @@
 import { getImplementedVersion } from "@zwave-js/cc";
-import {
-	actuatorCCs,
-	allCCs,
-	CommandClasses,
-	encapsulationCCs,
-	sensorCCs,
-} from "@zwave-js/core/safe";
+import { allCCs, CommandClasses, encapsulationCCs } from "@zwave-js/core/safe";
 
 export function determineNIF(): {
 	basicDeviceClass: number;
@@ -21,59 +15,38 @@ export function determineNIF(): {
 	const implementedCCs = allCCs.filter((cc) => getImplementedVersion(cc) > 0);
 
 	// Encapsulation CCs are always supported
-	const implementedEncapsulationCCs = encapsulationCCs.filter((cc) =>
-		implementedCCs.includes(cc),
+	const implementedEncapsulationCCs = encapsulationCCs.filter(
+		(cc) =>
+			implementedCCs.includes(cc) &&
+			// A node MUST advertise support for Multi Channel Command Class only if it implements End Points.
+			// A node able to communicate using the Multi Channel encapsulation but implementing no End Point
+			// MUST NOT advertise support for the Multi Channel Command Class.
+			// --> We do not implement end points
+			cc !== CommandClasses["Multi Channel"],
 	);
 
-	const implementedActuatorCCs = actuatorCCs.filter((cc) =>
-		implementedCCs.includes(cc),
-	);
-	const implementedSensorCCs = sensorCCs.filter((cc) =>
-		implementedCCs.includes(cc),
-	);
-
-	const supportedCCs = [
+	const supportedCCs = new Set([
 		// Z-Wave Plus Info must be listed first
 		CommandClasses["Z-Wave Plus Info"],
-		// TODO: Z-Wave Plus v2 Device Type Specification
-		// Gateway device type MUST **support** Inclusion Controller and Time CC
+		// Gateway device type MUST support Inclusion Controller and Time CC
+		CommandClasses["Inclusion Controller"],
 		CommandClasses.Time,
-		...implementedEncapsulationCCs,
-	];
-
-	const controlledCCs = [
-		// Non-actuator CCs that MUST be supported by the gateway DT:
-		CommandClasses.Association,
-		CommandClasses["Association Group Information"],
-		CommandClasses.Basic,
-		CommandClasses["Central Scene"],
-		CommandClasses["CRC-16 Encapsulation"],
-		CommandClasses["Firmware Update Meta Data"],
+		// All devices must support Indicator CC
 		CommandClasses.Indicator,
-		CommandClasses.Meter,
-		CommandClasses["Multi Channel"],
-		CommandClasses["Multi Channel Association"],
-		CommandClasses["Multilevel Sensor"],
-		CommandClasses.Notification,
-		CommandClasses.Security,
-		CommandClasses["Security 2"],
-		CommandClasses.Version,
-		CommandClasses["Wake Up"],
-	];
-	// Add implemented actuator and sensor CCs to fill up the space. These might get cut off
-	controlledCCs.push(
-		...[...implementedActuatorCCs, ...implementedSensorCCs].filter(
-			(cc) => !controlledCCs.includes(cc),
-		),
-	);
+		// Supporting lifeline associations is also mandatory
+		CommandClasses.Association,
+		// And apparently we must advertise that we're able to send Device Reset Locally notifications
+		CommandClasses["Device Reset Locally"],
+		...implementedEncapsulationCCs,
+	]);
 
-	// TODO: Consider if the CCs should follow a certain order
+	// CC:0000.00.00.12.004: It is NOT RECOMMENDED to advertise controlled Command Classes.
 
 	return {
 		basicDeviceClass,
 		genericDeviceClass,
 		specificDeviceClass,
-		supportedCCs,
-		controlledCCs,
+		supportedCCs: [...supportedCCs],
+		controlledCCs: [],
 	};
 }

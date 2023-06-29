@@ -3,3 +3,5 @@ node_modules/
 **/node_modules/
 
 **/ava.config.cjs
+maintenance/esbuild-register.js
+.eslintrc.js

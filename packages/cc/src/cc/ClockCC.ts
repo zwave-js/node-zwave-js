@@ -1,14 +1,14 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -35,7 +35,7 @@ import { ClockCommand, Weekday } from "../lib/_Types";
 
 @API(CommandClasses.Clock)
 export class ClockCCAPI extends CCAPI {
-	public supportsCommand(cmd: ClockCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ClockCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ClockCommand.Get:
 				return this.isSinglecast();

@@ -1,7 +1,9 @@
-import type { ZWaveLogInfo } from "@zwave-js/core";
 import { ansiRegex, stripColor } from "ansi-colors";
+import type { Assertions } from "ava";
+import sinon from "sinon";
 import { MESSAGE } from "triple-beam";
 import Transport from "winston-transport";
+import type { ZWaveLogInfo } from "../log/shared_safe";
 
 const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
 const timestampPrefixRegex = new RegExp(
@@ -14,16 +16,16 @@ const channelPrefixRegex = new RegExp(
 	"gm",
 );
 
-/** Log to a jest.fn() in order to perform assertions during unit tests */
+/** Log to a sinon.spy() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
 	public constructor() {
 		super({
 			level: "silly",
 		});
-		this._spy = jest.fn();
+		this._spy = sinon.spy();
 	}
-	private _spy: jest.Mock;
-	public get spy(): jest.Mock {
+	private _spy: sinon.SinonSpy;
+	public get spy(): sinon.SinonSpy {
 		return this._spy;
 	}
 	public log(info: any, next: () => void): any {
@@ -34,6 +36,7 @@ export class SpyTransport extends Transport {
 
 /** Tests a printed log message */
 export function assertMessage(
+	t: Assertions,
 	transport: SpyTransport,
 	options: Partial<{
 		message: string;
@@ -48,8 +51,8 @@ export function assertMessage(
 	}>,
 ): void {
 	const callNumber = options.callNumber || 0;
-	expect(transport.spy.mock.calls.length).toBeGreaterThan(callNumber);
-	const callArg = transport.spy.mock.calls[callNumber][0];
+	t.true(transport.spy.callCount > callNumber);
+	const callArg = transport.spy.getCall(callNumber).args[0];
 	let actualMessage: string = callArg[MESSAGE];
 	// By default ignore the color codes
 	const ignoreColor = options.ignoreColor !== false;
@@ -72,14 +75,15 @@ export function assertMessage(
 		if (ignoreColor) {
 			options.message = stripColor(options.message);
 		}
-		expect(actualMessage).toEqual(options.message);
+		t.is(actualMessage, options.message);
 	}
 	if (typeof options.predicate === "function") {
-		expect(actualMessage).toSatisfy(options.predicate);
+		t.true(options.predicate(actualMessage));
 	}
 }
 
 export function assertLogInfo(
+	t: Assertions,
 	transport: SpyTransport,
 	options: Partial<{
 		level: string;
@@ -88,13 +92,13 @@ export function assertLogInfo(
 	}>,
 ): void {
 	const callNumber = options.callNumber || 0;
-	expect(transport.spy.mock.calls.length).toBeGreaterThan(callNumber);
-	const callArg = transport.spy.mock.calls[callNumber][0];
+	t.true(transport.spy.callCount > callNumber);
+	const callArg = transport.spy.getCall(callNumber).args[0];
 
 	if (typeof options.level === "string") {
-		expect(callArg.level).toEqual(options.level);
+		t.is(callArg.level, options.level);
 	}
 	if (typeof options.predicate === "function") {
-		expect(callArg).toSatisfy(options.predicate);
+		t.true(options.predicate(callArg));
 	}
 }

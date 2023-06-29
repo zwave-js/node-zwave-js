@@ -5,15 +5,10 @@
 		"module": "commonjs",
 		"moduleResolution": "node",
 		// "noImplicitAny": true,
-		"lib": [
-			"ES2020"
-		],
-		"target": "es2015",
+		// "lib": ["ES2020"],
+		// "target": "es2015",
 		"rootDir": "../",
 		"newLine": "lf"
 	},
-	"include": [
-		"*.ts",
-		"../packages/*/src/**/*.ts"
-	]
+	"include": ["*.ts", "../packages/*/src/**/*.ts"]
 }

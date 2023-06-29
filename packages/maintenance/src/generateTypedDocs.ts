@@ -9,22 +9,22 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import Piscina from "piscina";
 import {
-	CommentRange,
-	ExportedDeclarations,
-	InterfaceDeclaration,
-	InterfaceDeclarationStructure,
-	JSDocTagStructure,
-	MethodDeclaration,
 	Node,
-	OptionalKind,
 	Project,
-	PropertySignatureStructure,
-	SourceFile,
 	SyntaxKind,
-	ts,
-	Type,
 	TypeFormatFlags,
-	TypeLiteralNode,
+	type CommentRange,
+	type ExportedDeclarations,
+	type InterfaceDeclaration,
+	type InterfaceDeclarationStructure,
+	type JSDocTagStructure,
+	type MethodDeclaration,
+	type OptionalKind,
+	type PropertySignatureStructure,
+	type SourceFile,
+	type Type,
+	type TypeLiteralNode,
+	type ts,
 } from "ts-morph";
 import { isMainThread } from "worker_threads";
 import { formatWithPrettier } from "./prettier";
@@ -166,8 +166,10 @@ export function getTransformedSource(
 		}
 	}
 
-	// Remove exports keyword
+	// Remove exports and declare keywords
 	if (Node.isModifierable(node)) {
+		node = node.toggleModifier("declare", false);
+		// @ts-expect-error
 		node = node.toggleModifier("export", false);
 	}
 
@@ -317,7 +319,7 @@ function printMethodDeclaration(method: MethodDeclaration): string {
 	const end = method.getBody()!.getStart();
 	let ret = method
 		.getText()
-		.substr(0, end - start)
+		.slice(0, end - start)
 		.trim();
 	if (!method.getReturnTypeNode()) {
 		ret += ": " + method.getSignature().getReturnType().getText(method);
@@ -343,7 +345,7 @@ async function processCCDocFile(
 	const ccId = getCommandClassFromClassDeclaration(
 		// FIXME: there seems to be some discrepancy between ts-morph's bundled typescript and our typescript
 		file.compilerNode as any,
-		APIClass.compilerNode,
+		APIClass.compilerNode as any,
 	);
 	if (ccId == undefined) return;
 	const ccName = getCCName(ccId);
@@ -457,7 +459,7 @@ ${
 
 			// There is probably an official way to do this, but I can't find it
 			ret = ret
-				.replace(/typeof CommandClasses/g, "CommandClasses")
+				.replace(/\(?typeof CommandClasses\)?/g, "CommandClasses")
 				.replace(/^(\s+)readonly /gm, "$1")
 				.replace(/;$/gm, ",");
 

@@ -18,6 +18,7 @@
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
+				"NODE_ENV": "development"
 				// "NO_CACHE": "true"
 				// "LOGLEVEL": "info"
 			},
@@ -99,17 +100,6 @@
 			],
 			"console": "integratedTerminal",
 			"disableOptimisticBPs": true
-		},
-		{
-			"type": "node",
-			"name": "vscode-jest-tests",
-			"request": "launch",
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"disableOptimisticBPs": true,
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "yarn",
-			"args": ["run", "test:ts", "--runInBand", "--watchAll=false"]
 		}
 	]
 }

@@ -6,7 +6,7 @@ import { dskToString } from "./DSK";
 import { SecurityClass } from "./SecurityClass";
 
 function readNumber(qr: string, offset: number, length: number): number {
-	return parseInt(qr.substr(offset, length), 10);
+	return parseInt(qr.slice(offset, offset + length), 10);
 }
 
 function fail(reason: string): never {
@@ -191,7 +191,7 @@ function parseTLV(qr: string): {
 	offset += 4;
 	if (qr.length - offset < length) fail("incomplete TLV block");
 
-	const data = qr.substr(offset, length);
+	const data = qr.slice(offset, offset + length);
 	offset += length;
 
 	// Try to parse the raw data and fail if a critical block is not understood
@@ -219,6 +219,9 @@ function parseTLV(qr: string): {
 
 /** Parses a string that has been decoded from a Z-Wave (S2 or SmartStart) QR code */
 export function parseQRCodeString(qr: string): QRProvisioningInformation {
+	// Trim off whitespace that might have been copied by accident
+	qr = qr.trim();
+	// Validate the QR code
 	if (!qr.startsWith("90")) fail("must start with 90");
 	if (qr.length < minQRCodeLength) fail("too short");
 	if (!onlyDigitsRegex.test(qr)) fail("contains invalid characters");
@@ -229,7 +232,7 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 	const checksum = readUInt16(qr, 4);
 	// The checksum covers the remaining data
 	const hash = createHash("sha1");
-	hash.update(Buffer.from(qr.substr(9), "ascii"));
+	hash.update(Buffer.from(qr.slice(9), "ascii"));
 	const expectedChecksum = hash.digest().readUInt16BE(0);
 	if (checksum !== expectedChecksum) fail("invalid checksum");
 
@@ -265,7 +268,7 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 		const {
 			entry: { type, ...data },
 			charsRead,
-		} = parseTLV(qr.substr(offset));
+		} = parseTLV(qr.slice(offset));
 		offset += charsRead;
 
 		if (type === ProvisioningInformationType.ProductId) {

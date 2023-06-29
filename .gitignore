@@ -18,6 +18,8 @@ coverage/
 
 # npm package files
 zwave-js-*.tgz
+zwave-js.tgz
+.monopack/
 
 # ZWave cache
 */cache
@@ -43,3 +45,4 @@ packages/*/cache
 test/.*-audit.json
 test/*_logrotate.json
 test/zwavejs_*.log
+.DS_Store

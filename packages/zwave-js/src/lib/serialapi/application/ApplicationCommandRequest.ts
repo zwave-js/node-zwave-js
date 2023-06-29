@@ -1,22 +1,23 @@
-import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
+import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
 import {
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	SinglecastCC,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type FrameType,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
 	MessageType,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 export enum ApplicationCommandStatusFlags {
@@ -88,6 +89,7 @@ export class ApplicationCommandRequest
 				data: this.payload.slice(3, 3 + commandLength),
 				nodeId,
 				origin: options.origin,
+				frameType: this.frameType,
 			}) as SinglecastCC<CommandClass>;
 		} else {
 			// TODO: This logic is unsound
@@ -108,7 +110,7 @@ export class ApplicationCommandRequest
 	}
 
 	public readonly routedBusy: boolean;
-	public readonly frameType: "singlecast" | "broadcast" | "multicast";
+	public readonly frameType: FrameType;
 	public readonly isExploreFrame: boolean;
 	public readonly isForeignFrame: boolean;
 	public readonly fromForeignHomeId: boolean;

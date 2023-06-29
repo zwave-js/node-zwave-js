@@ -36,11 +36,11 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/zooz_template.json#auto_off_timer"
+			"$import": "templates/zooz_template.json#auto_off_timer_3x_7x"
 		},
 		{
 			"#": "5",
-			"$import": "templates/zooz_template.json#auto_on_timer"
+			"$import": "templates/zooz_template.json#auto_on_timer_3x_7x"
 		},
 		{
 			"#": "8",
@@ -72,11 +72,12 @@
 		},
 		{
 			"#": "16",
-			"$import": "templates/zooz_template.json#association_reports"
+			"$import": "templates/zooz_template.json#association_reports_binary"
 		},
 		{
 			"#": "17",
-			"$if": "firmwareVersion >= 10.0",
+			// This parameter was added in firmware 10.0, which the 2.0 firmware is based on
+			"$if": "firmwareVersion >= 2.0",
 			"$import": "templates/zooz_template.json#local_programming"
 		}
 	],

@@ -67,6 +67,16 @@ export function getEnumMemberName(enumeration: unknown, value: number): string {
 	return (enumeration as any)[value] || `unknown (${num2hex(value)})`;
 }
 
+/**
+ * Checks if the given value is a member of the given enum object.
+ *
+ * @param enumeration The enumeration object the value comes from
+ * @param value The enum value to be pretty-printed
+ */
+export function isEnumMember(enumeration: unknown, value: number): boolean {
+	return typeof (enumeration as any)[value] === "string";
+}
+
 /** Skips the first n bytes of a buffer and returns the rest */
 export function skipBytes(buf: Buffer, n: number): Buffer {
 	return Buffer.from(buf.slice(n));

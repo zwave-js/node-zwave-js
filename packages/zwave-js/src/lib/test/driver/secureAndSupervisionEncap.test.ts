@@ -35,7 +35,7 @@ integrationTest(
 			],
 		},
 
-		testBody: async (driver, node, mockController, _mockNode) => {
+		testBody: async (t, driver, node, mockController, _mockNode) => {
 			await node.commandClasses["Multilevel Switch"].startLevelChange({
 				direction: "up",
 				ignoreStartLevel: true,
@@ -51,6 +51,8 @@ integrationTest(
 						"The driver should have sent an S0-encapsulated command",
 				},
 			);
+
+			t.pass();
 		},
 	},
 );

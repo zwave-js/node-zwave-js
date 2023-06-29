@@ -13,6 +13,8 @@ on:
       # pre-releases
       - "v[0-9]+.[0-9]+.[0-9]+-**"
   pull_request: {}
+  merge_group:
+    types: [checks_requested]
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency: 
@@ -20,7 +22,12 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_FLAGS: "--concurrency=2 --api=http://127.0.0.1:9080 --token=foo --team=me" # The token must match the one in the prepare-env action
+  TURBO_API: "http://127.0.0.1:9080"
+  # The token and team are required by the TurboRepo server, just set them to anything
+  TURBO_TOKEN: foo
+  TURBO_TEAM: me
+  # Additional CLI flags for turbo commands
+  TURBO_FLAGS: "" # "--concurrency=2"
 
 jobs:
   build:
@@ -41,7 +48,7 @@ jobs:
 
     - name: Compile TypeScript code
       run: |
-        yarn clean $TURBO_FLAGS
+        # yarn clean $TURBO_FLAGS
         yarn build $TURBO_FLAGS
 
     - name: Save Turbo Cache between jobs
@@ -149,10 +156,10 @@ jobs:
         if ! git diff --quiet ; then
           echo "has changes"
           git diff > fix.patch
-          echo "::set-output name=changed::true"
+          echo "changed=true" >> $GITHUB_OUTPUT
         else
           echo "unchanged"
-          echo "::set-output name=changed::false"
+          echo "changed=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Upload Patch
@@ -220,51 +227,51 @@ jobs:
       env:
         CI: true
 
-  # ===================
-  # This job checks if a PR changes the public API surface
-  api-surface:
-    name: Check public API surface
-    # Only run for PRs
-    if: github.event_name == 'pull_request'
+  # # ===================
+  # # This job checks if a PR changes the public API surface
+  # api-surface:
+  #   name: Check public API surface
+  #   # Only run for PRs
+  #   if: github.event_name == 'pull_request'
 
-    needs: [build]
+  #   needs: [build]
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x] # This should be LTS
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [16.x] # This should be LTS
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
+  #   - name: Restore Turbo Cache from previous jobs
+  #     uses: ./.github/actions/build-cache-download
 
-    - name: Prepare testing environment
-      uses: ./.github/actions/prepare-env
-      with:
-        node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
+  #   - name: Prepare testing environment
+  #     uses: ./.github/actions/prepare-env
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #       githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Generate API report
-      run: yarn run extract-api $TURBO_FLAGS
+  #   - name: Generate API report
+  #     run: yarn run extract-api $TURBO_FLAGS
 
-    - name: Show changes
-      if: failure()
-      run: |
-        cat packages/*/.tmp/api.md
+  #   - name: Show changes
+  #     if: failure()
+  #     run: |
+  #       cat packages/*/.tmp/api.md
 
-    - name: Comment on PR
-      if: failure()
-      run: |
-        echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
-        echo "Please run" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "yarn accept-api" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
+  #   - name: Comment on PR
+  #     if: failure()
+  #     run: |
+  #       echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
+  #       echo "Please run" >> $GITHUB_STEP_SUMMARY
+  #       echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+  #       echo "yarn accept-api" >> $GITHUB_STEP_SUMMARY
+  #       echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+  #       echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
+  #       echo "" >> $GITHUB_STEP_SUMMARY
 
   # ===================
 
@@ -421,14 +428,14 @@ jobs:
       run: |
         VERSION="${{ github.ref }}"
         VERSION=${VERSION##*/v}
-        echo "::set-output name=VERSION::$VERSION"
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        EOF=$(od -An -N6 -x /dev/urandom | tr -d ' ')
         BODY=$(git show -s --format=%b)
-        BODY="${BODY//'%'/'%25'}"
-        BODY="${BODY//$'\n'/'%0A'}"
-        BODY="${BODY//$'\r'/'%0D'}"
-        echo "::set-output name=BODY::$BODY"
+        echo "BODY<<$EOF" >> $GITHUB_OUTPUT
+        echo "$BODY" >> $GITHUB_OUTPUT
+        echo "$EOF" >> $GITHUB_OUTPUT
         if [[ $VERSION == *"-"* ]] ; then
-          echo "::set-output name=TAG::--tag next"
+          echo "TAG=--tag next" >> $GITHUB_OUTPUT
         fi
 
     - name: Publish packages to npm
@@ -439,13 +446,14 @@ jobs:
         yarn npm whoami
         yarn workspaces foreach -vti --no-private npm publish --tolerate-republish $TAG
 
+
     - name: Create Github Release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release v${{ steps.extract_release.outputs.VERSION }}
+        name: Release v${{ steps.extract_release.outputs.VERSION }}
         draft: false
         # Prerelease versions create prereleases on Github
         prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}

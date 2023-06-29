@@ -1,23 +1,21 @@
-import "@zwave-js/cc";
-import { createTestingHost, TestingHost } from "@zwave-js/host";
+// import "@zwave-js/cc";
+import { createTestingHost } from "@zwave-js/host";
 import { Message } from "@zwave-js/serial";
+import test from "ava";
 
-describe("BridgeApplicationCommandRequest", () => {
-	let host: TestingHost;
-	beforeAll(async () => {
-		host = createTestingHost();
-		await host.configManager.loadMeters();
-	}, 30000);
+test("BridgeApplicationCommandRequest can be parsed without RSSI", async (t) => {
+	t.timeout(30000);
 
-	describe("regression tests", () => {
-		it("parsing without RSSI", async () => {
-			// Repro for https://github.com/zwave-js/node-zwave-js/issues/4335
-			Message.from(host, {
-				data: Buffer.from(
-					"011200a80001020a320221340000000000000069",
-					"hex",
-				),
-			});
-		});
-	});
+	const host = createTestingHost();
+	await host.configManager.loadMeters();
+
+	// Repro for https://github.com/zwave-js/node-zwave-js/issues/4335
+	t.notThrows(() =>
+		Message.from(host, {
+			data: Buffer.from(
+				"011200a80001020a320221340000000000000069",
+				"hex",
+			),
+		}),
+	);
 });

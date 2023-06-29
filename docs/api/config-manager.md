@@ -209,6 +209,7 @@ interface DeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	preferred?: true;
 	rootDir?: string;
 	filename: string;
 }
@@ -243,6 +244,7 @@ interface FulltextDeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	preferred?: true;
 	rootDir?: string;
 	filename: string;
 }
@@ -586,6 +588,7 @@ interface NotificationEvent {
 	readonly label: string;
 	readonly description?: string | undefined;
 	readonly parameter?: NotificationParameter | undefined;
+	readonly idleVariables?: number[] | undefined;
 }
 ```
 

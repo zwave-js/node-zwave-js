@@ -19,7 +19,7 @@ const { ConfigManager } = require("@zwave-js/config");
 	await configManager.loadIndicators();
 
 	// The data to decode
-	const data = Buffer.from("010b0004000503260703c70013", "hex");
+	const data = Buffer.from("010e00a80001c005710207018000a7cf", "hex");
 	// The nonce needed to decode it
 	const nonce = Buffer.from("478d7aa05d83f3ea", "hex");
 	// The network key needed to decode it
@@ -28,7 +28,8 @@ const { ConfigManager } = require("@zwave-js/config");
 	console.log(Message.getMessageLength(data));
 	/** @type {any} */
 	const host = {
-		getSafeCCVersionForNode: () => 1,
+		getSafeCCVersion: () => 1,
+		getSupportedCCVersion: () => 1,
 		configManager,
 		controller: {
 			ownNodeId: 1,

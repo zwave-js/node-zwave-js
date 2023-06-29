@@ -1,13 +1,13 @@
 import {
-	createSimpleReflectionDecorator,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
 	RFRegion,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	createSimpleReflectionDecorator,
+	parseBitMask,
+	validatePayload,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type {
@@ -15,18 +15,19 @@ import type {
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { sdkVersionLt } from "../../controller/utils";
 import { NodeIDType } from "../_Types";
 
 export enum SerialAPISetupCommand {
@@ -36,10 +37,16 @@ export enum SerialAPISetupCommand {
 	SetPowerlevel = 0x04,
 	GetPowerlevel = 0x08,
 	GetMaximumPayloadSize = 0x10,
-	GetLRMaximumPayloadSize = 0x11,
 	GetRFRegion = 0x20,
 	SetRFRegion = 0x40,
 	SetNodeIDType = 0x80,
+
+	// These are added "inbetween" the existing commands
+	SetLRMaximumTxPower = 0x03,
+	GetLRMaximumTxPower = 0x05,
+	GetLRMaximumPayloadSize = 0x11,
+	SetPowerlevel16Bit = 0x12,
+	GetPowerlevel16Bit = 0x13,
 }
 
 // We need to define the decorators for Requests and Responses separately
@@ -199,11 +206,11 @@ export class SerialAPISetup_GetSupportedCommandsResponse extends SerialAPISetupR
 			this.supportedCommands = parseBitMask(
 				this.payload.slice(1),
 				// According to the Host API specification, the first bit (bit 0) should be GetSupportedCommands
-				// However, at least in Z-Wave SDK 7.15, the entire bitmask is shifted by 1 bit and
+				// However, in Z-Wave SDK < 7.19.1, the entire bitmask is shifted by 1 bit and
 				// GetSupportedCommands is encoded in the second bit (bit 1)
-
-				// TODO: When this is fixed, make the start value dependent on the SDK version
-				SerialAPISetupCommand.Unsupported,
+				sdkVersionLt(options.sdkVersion, "7.19.1")
+					? SerialAPISetupCommand.Unsupported
+					: SerialAPISetupCommand.GetSupportedCommands,
 			);
 		} else {
 			// This module only uses the single byte power-of-2 bitmask. Decode it manually
@@ -595,6 +602,264 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 
 @subCommandResponse(SerialAPISetupCommand.SetPowerlevel)
 export class SerialAPISetup_SetPowerlevelResponse
+	extends SerialAPISetupResponse
+	implements SuccessIndicator
+{
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+		this.success = this.payload[0] !== 0;
+	}
+
+	isOK(): boolean {
+		return this.success;
+	}
+
+	public readonly success: boolean;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message = ret.message!;
+		message.success = this.success;
+		delete message.payload;
+		return ret;
+	}
+}
+
+// =============================================================================
+
+@subCommandRequest(SerialAPISetupCommand.GetPowerlevel16Bit)
+export class SerialAPISetup_GetPowerlevel16BitRequest extends SerialAPISetupRequest {
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, options);
+		this.command = SerialAPISetupCommand.GetPowerlevel16Bit;
+	}
+}
+
+@subCommandResponse(SerialAPISetupCommand.GetPowerlevel16Bit)
+export class SerialAPISetup_GetPowerlevel16BitResponse extends SerialAPISetupResponse {
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+		validatePayload(this.payload.length >= 4);
+		// The values are in 0.1 dBm, signed
+		this.powerlevel = this.payload.readInt16BE(0) / 10;
+		this.measured0dBm = this.payload.readInt16BE(2) / 10;
+	}
+
+	/** The configured normal powerlevel in dBm */
+	public readonly powerlevel: number;
+	/** The measured output power in dBm for a normal output powerlevel of 0 */
+	public readonly measured0dBm: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message: MessageRecord = {
+			...ret.message!,
+			"normal powerlevel": `${this.powerlevel.toFixed(1)} dBm`,
+			"output power at 0 dBm": `${this.measured0dBm.toFixed(1)} dBm`,
+		};
+		delete message.payload;
+		ret.message = message;
+		return ret;
+	}
+}
+
+// =============================================================================
+
+export interface SerialAPISetup_SetPowerlevel16BitOptions
+	extends MessageBaseOptions {
+	powerlevel: number;
+	measured0dBm: number;
+}
+
+@subCommandRequest(SerialAPISetupCommand.SetPowerlevel16Bit)
+export class SerialAPISetup_SetPowerlevel16BitRequest extends SerialAPISetupRequest {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| MessageDeserializationOptions
+			| SerialAPISetup_SetPowerlevel16BitOptions,
+	) {
+		super(host, options);
+		this.command = SerialAPISetupCommand.SetPowerlevel16Bit;
+
+		if (gotDeserializationOptions(options)) {
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			if (options.powerlevel < -10 || options.powerlevel > 20) {
+				throw new ZWaveError(
+					`The normal powerlevel must be between -10.0 and +20.0 dBm`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			if (options.measured0dBm < -10 || options.measured0dBm > 10) {
+				throw new ZWaveError(
+					`The measured output power at 0 dBm must be between -10.0 and +10.0 dBm`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.powerlevel = options.powerlevel;
+			this.measured0dBm = options.measured0dBm;
+		}
+	}
+
+	public powerlevel: number;
+	public measured0dBm: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(4);
+		// The values are in 0.1 dBm
+		this.payload.writeInt16BE(Math.round(this.powerlevel * 10), 0);
+		this.payload.writeInt16BE(Math.round(this.measured0dBm * 10), 2);
+
+		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message: MessageRecord = {
+			...ret.message!,
+			"normal powerlevel": `${this.powerlevel.toFixed(1)} dBm`,
+			"output power at 0 dBm": `${this.measured0dBm.toFixed(1)} dBm`,
+		};
+		delete message.payload;
+		ret.message = message;
+		return ret;
+	}
+}
+
+@subCommandResponse(SerialAPISetupCommand.SetPowerlevel16Bit)
+export class SerialAPISetup_SetPowerlevel16BitResponse
+	extends SerialAPISetupResponse
+	implements SuccessIndicator
+{
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+		this.success = this.payload[0] !== 0;
+	}
+
+	isOK(): boolean {
+		return this.success;
+	}
+
+	public readonly success: boolean;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message = ret.message!;
+		message.success = this.success;
+		delete message.payload;
+		return ret;
+	}
+}
+
+// =============================================================================
+
+@subCommandRequest(SerialAPISetupCommand.GetLRMaximumTxPower)
+export class SerialAPISetup_GetLRMaximumTxPowerRequest extends SerialAPISetupRequest {
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, options);
+		this.command = SerialAPISetupCommand.GetLRMaximumTxPower;
+	}
+}
+
+@subCommandResponse(SerialAPISetupCommand.GetLRMaximumTxPower)
+export class SerialAPISetup_GetLRMaximumTxPowerResponse extends SerialAPISetupResponse {
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+		validatePayload(this.payload.length >= 2);
+		// The values are in 0.1 dBm, signed
+		this.limit = this.payload.readInt16BE(0) / 10;
+	}
+
+	/** The maximum LR TX power dBm */
+	public readonly limit: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message: MessageRecord = {
+			...ret.message!,
+			"max. TX power (LR)": `${this.limit.toFixed(1)} dBm`,
+		};
+		delete message.payload;
+		ret.message = message;
+		return ret;
+	}
+}
+
+// =============================================================================
+
+export interface SerialAPISetup_SetLRMaximumTxPowerOptions
+	extends MessageBaseOptions {
+	limit: number;
+}
+
+@subCommandRequest(SerialAPISetupCommand.SetLRMaximumTxPower)
+export class SerialAPISetup_SetLRMaximumTxPowerRequest extends SerialAPISetupRequest {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| MessageDeserializationOptions
+			| SerialAPISetup_SetLRMaximumTxPowerOptions,
+	) {
+		super(host, options);
+		this.command = SerialAPISetupCommand.SetLRMaximumTxPower;
+
+		if (gotDeserializationOptions(options)) {
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			if (options.limit < -10 || options.limit > 20) {
+				throw new ZWaveError(
+					`The maximum LR TX power must be between -10.0 and +20.0 dBm`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
+			this.limit = options.limit;
+		}
+	}
+
+	public limit: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(2);
+		// The values are in 0.1 dBm
+		this.payload.writeInt16BE(Math.round(this.limit * 10), 0);
+
+		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message: MessageRecord = {
+			...ret.message!,
+			"max. TX power (LR)": `${this.limit.toFixed(1)} dBm`,
+		};
+		delete message.payload;
+		ret.message = message;
+		return ret;
+	}
+}
+
+@subCommandResponse(SerialAPISetupCommand.SetLRMaximumTxPower)
+export class SerialAPISetup_SetLRMaximumTxPowerResponse
 	extends SerialAPISetupResponse
 	implements SuccessIndicator
 {

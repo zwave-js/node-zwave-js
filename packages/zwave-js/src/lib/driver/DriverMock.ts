@@ -1,8 +1,8 @@
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import {
 	MockBinding,
-	MockPortBinding,
 	SerialPortMock,
+	type MockPortBinding,
 } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
@@ -102,6 +102,11 @@ export interface CreateAndStartTestingDriverOptions {
 	skipNodeInterview?: boolean;
 
 	/**
+	 * Set this to true to skip checking if the controller is in bootloader mode (default: true)
+	 */
+	skipBootloaderCheck?: boolean;
+
+	/**
 	 * Whether configuration files should be loaded (default: true)
 	 */
 	loadConfiguration?: boolean;
@@ -116,6 +121,7 @@ export async function createAndStartTestingDriver(
 	const {
 		beforeStartup,
 		skipControllerIdentification = false,
+		skipBootloaderCheck = true,
 		skipNodeInterview = false,
 		loadConfiguration = true,
 		...internalOptions
@@ -139,8 +145,12 @@ export async function createAndStartTestingDriver(
 		internalOptions.testingHooks ??= {};
 		internalOptions.testingHooks.loadConfiguration = false;
 	}
+	if (skipBootloaderCheck) {
+		internalOptions.testingHooks ??= {};
+		internalOptions.testingHooks.skipBootloaderCheck = true;
+	}
 
-	// TODO: Ideally, this would be using mock-fs, but jest does not play nice with it
+	// TODO: Make sure we delete this from time to time
 	const cacheDir = path.join(tmpdir(), "zwave-js-test-cache", testId);
 
 	internalOptions.storage ??= {};

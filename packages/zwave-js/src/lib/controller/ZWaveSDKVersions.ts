@@ -347,7 +347,7 @@ function semverToLegacy(version: string): string {
  */
 export function protocolVersionToSDKVersion(protocolVersion: string): string {
 	if (protocolVersion.startsWith("Z-Wave ")) {
-		protocolVersion = protocolVersion.substr(7);
+		protocolVersion = protocolVersion.slice(7);
 	}
 
 	const normalizedVersion = semverToLegacy(protocolVersion);

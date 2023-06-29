@@ -58,6 +58,9 @@ export enum ZWaveErrorCodes {
 	/** A Serial API command resulted in an error response */
 	Controller_CommandError,
 
+	/** Tried to send a message that is too large */
+	Controller_MessageTooLarge,
+
 	/** Could not fetch some information to determine firmware upgrades from a node */
 	FWUpdateService_MissingInformation = 260,
 	/** Any error related to HTTP requests during firmware update communication */
@@ -109,6 +112,9 @@ export enum ZWaveErrorCodes {
 	/** The replace process was aborted because the node has responded */
 	ReplaceFailedNode_NodeOK,
 
+	/** The controller is currently busy with something that prevents an OTW update */
+	OTW_Update_Busy = 380,
+
 	// Here follow CC specific errors
 
 	/**
@@ -145,7 +151,7 @@ export enum ZWaveErrorCodes {
 
 	/** Used to report that no nonce exists */
 	SecurityCC_NoNonce = 1400,
-	/** Used to report that no SPAN is established between the nodes yet. The context should be an object that contains the peer node ID */
+	/** Used to report that no SPAN is established between the nodes yet. */
 	Security2CC_NoSPAN,
 	/** Used to report that the inner state required for this action was not initialized */
 	Security2CC_NotInitialized,
@@ -157,8 +163,12 @@ export enum ZWaveErrorCodes {
 	Security2CC_CannotDecode,
 	/** Gets thrown when parsing an invalid QR code */
 	Security2CC_InvalidQRCode,
+	/** Used to report that no MPAN has been received from the peer yet, or it is out of sync. */
+	Security2CC_NoMPAN,
+	/** Gets thrown when a Security S2 Multicast encapsulated command cannot be decoded by the target node */
+	Security2CC_CannotDecodeMulticast,
 
-	/** The firmware update process is already active */
+	/** The firmware update process is already active on this node */
 	FirmwareUpdateCC_Busy = 1500,
 	/** The selected firmware target is not upgradable */
 	FirmwareUpdateCC_NotUpgradable,
@@ -175,6 +185,9 @@ export enum ZWaveErrorCodes {
 	Invalid_Firmware_File,
 	/** An firmware file with an unsupported format was provided */
 	Unsupported_Firmware_Format,
+
+	/** A firmware update is already in progress on the network preventing this action from proceeding */
+	FirmwareUpdateCC_NetworkBusy,
 
 	/** Unsupported target node for a powerlevel test */
 	PowerlevelCC_UnsupportedTestNode = 1600,

@@ -15,10 +15,10 @@ import {
 import {
 	compressObjects,
 	fragmentLargeObject,
-	NVM3Object,
 	writeObject,
+	type NVM3Object,
 } from "./object";
-import { NVM3Page, readPage, writePageHeader } from "./page";
+import { readPage, writePageHeader, type NVM3Page } from "./page";
 import { dumpObject, dumpPage } from "./utils";
 
 function comparePages(p1: NVM3Page, p2: NVM3Page) {
@@ -76,16 +76,16 @@ export function parseNVM(
 
 	// Build a compressed view of the NVM objects
 	const applicationObjects = compressObjects(
-		applicationPages.reduce(
+		applicationPages.reduce<NVM3Object[]>(
 			(acc, page) => acc.concat(page.objects),
-			[] as NVM3Object[],
+			[],
 		),
 	);
 
 	const protocolObjects = compressObjects(
-		protocolPages.reduce(
+		protocolPages.reduce<NVM3Object[]>(
 			(acc, page) => acc.concat(page.objects),
-			[] as NVM3Object[],
+			[],
 		),
 	);
 

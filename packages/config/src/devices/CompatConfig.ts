@@ -3,10 +3,10 @@ import type {
 	CommandClassInfo,
 	ValueID,
 } from "@zwave-js/core/safe";
-import { JSONObject, pick } from "@zwave-js/shared/safe";
+import { pick, type JSONObject } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegex2Digits, throwInvalidConfig } from "../utils_safe";
-import { ConditionalItem, conditionApplies } from "./ConditionalItem";
+import { conditionApplies, type ConditionalItem } from "./ConditionalItem";
 import type { DeviceID } from "./shared";
 
 export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
@@ -50,7 +50,7 @@ error in compat option queryOnWakeup`,
 							this.valueIdRegex.test(arg)
 						) {
 							const tuple = JSON.parse(
-								arg.substr("$value$".length),
+								arg.slice("$value$".length),
 							);
 							return {
 								property: tuple[0],
@@ -62,12 +62,24 @@ error in compat option queryOnWakeup`,
 			) as any;
 		}
 
+		if (definition.disableAutoRefresh != undefined) {
+			if (definition.disableAutoRefresh !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option disableAutoRefresh must be true or omitted`,
+				);
+			}
+
+			this.disableAutoRefresh = definition.disableAutoRefresh;
+		}
+
 		if (definition.disableBasicMapping != undefined) {
 			if (definition.disableBasicMapping !== true) {
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option disableBasicMapping`,
+compat option disableBasicMapping must be true or omitted`,
 				);
 			}
 
@@ -79,7 +91,7 @@ error in compat option disableBasicMapping`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option disableStrictEntryControlDataValidation`,
+compat option disableStrictEntryControlDataValidation must be true or omitted`,
 				);
 			}
 
@@ -92,7 +104,7 @@ error in compat option disableStrictEntryControlDataValidation`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option disableStrictMeasurementValidation`,
+compat option disableStrictMeasurementValidation must be true or omitted`,
 				);
 			}
 
@@ -105,7 +117,7 @@ error in compat option disableStrictMeasurementValidation`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option enableBasicSetMapping`,
+compat option enableBasicSetMapping must be true or omitted`,
 				);
 			}
 
@@ -117,7 +129,7 @@ error in compat option enableBasicSetMapping`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option forceNotificationIdleReset`,
+compat option forceNotificationIdleReset must be true or omitted`,
 				);
 			}
 
@@ -181,6 +193,27 @@ compat option preserveEndpoints must be "*" or an array of positive integers`,
 			}
 
 			this.preserveEndpoints = definition.preserveEndpoints;
+		}
+
+		if (definition.removeEndpoints != undefined) {
+			if (
+				definition.removeEndpoints !== "*" &&
+				!(
+					isArray(definition.removeEndpoints) &&
+					definition.removeEndpoints.every(
+						(d: any) =>
+							typeof d === "number" && d % 1 === 0 && d > 0,
+					)
+				)
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option removeEndpoints must be "*" or an array of positive integers`,
+				);
+			}
+
+			this.removeEndpoints = definition.removeEndpoints;
 		}
 
 		if (definition.skipConfigurationNameQuery != undefined) {
@@ -269,6 +302,30 @@ compat option manualValueRefreshDelayMs must be a non-negative integer!`,
 
 			this.manualValueRefreshDelayMs =
 				definition.manualValueRefreshDelayMs;
+		}
+
+		if (definition.reportTimeout != undefined) {
+			if (typeof definition.reportTimeout !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option reportTimeout must be a number!`,
+				);
+			}
+
+			if (
+				definition.reportTimeout % 1 !== 0 ||
+				definition.reportTimeout < 1000 ||
+				definition.reportTimeout > 10000
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option reportTimeout must be an integer between 1000 and 10000!`,
+				);
+			}
+
+			this.reportTimeout = definition.reportTimeout;
 		}
 
 		if (definition.mapRootReportsToEndpoint != undefined) {
@@ -491,6 +548,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 		CommandClasses,
 		"*" | readonly number[]
 	>;
+	public readonly disableAutoRefresh?: boolean;
 	public readonly disableBasicMapping?: boolean;
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly disableStrictMeasurementValidation?: boolean;
@@ -505,6 +563,8 @@ compat option alarmMapping must be an array where all items are objects!`,
 	};
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly preserveEndpoints?: "*" | readonly number[];
+	public readonly removeEndpoints?: "*" | readonly number[];
+	public readonly reportTimeout?: number;
 	public readonly skipConfigurationNameQuery?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
@@ -529,6 +589,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 			"alarmMapping",
 			"addCCs",
 			"removeCCs",
+			"disableAutoRefresh",
 			"disableBasicMapping",
 			"disableStrictEntryControlDataValidation",
 			"disableStrictMeasurementValidation",
@@ -538,8 +599,10 @@ compat option alarmMapping must be an array where all items are objects!`,
 			"manualValueRefreshDelayMs",
 			"mapRootReportsToEndpoint",
 			"overrideFloatEncoding",
+			"reportTimeout",
 			"preserveRootApplicationCCValueIDs",
 			"preserveEndpoints",
+			"removeEndpoints",
 			"skipConfigurationNameQuery",
 			"skipConfigurationInfoQuery",
 			"treatBasicSetAsEvent",

@@ -1,9 +1,0 @@
-path_classifiers:
-  generated:
-    - "**/build/**/*.*"
-    - "**/*.d.ts"
-    - "**/*.js"
-  test:
-    - exclude: /
-    - test
-    - "packages/**/src/**/*.test.ts"

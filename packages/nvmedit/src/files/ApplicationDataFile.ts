@@ -1,10 +1,10 @@
 import {
+	NVMFile,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export interface ApplicationDataFileOptions extends NVMFileCreationOptions {

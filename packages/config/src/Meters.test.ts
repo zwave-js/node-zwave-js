@@ -1,9 +1,10 @@
+import test, { type ExecutionContext } from "ava";
 import fsExtra from "fs-extra";
+import sinon from "sinon";
 import { ConfigManager } from "./ConfigManager";
 
-jest.mock("fs-extra");
-const readFileMock = fsExtra.readFile as jest.Mock;
-const pathExistsMock = fsExtra.pathExists as jest.Mock;
+const readFileStub = sinon.stub(fsExtra, "readFile");
+const pathExistsStub = sinon.stub(fsExtra, "pathExists");
 
 const dummyMeters = {
 	"0x01": {
@@ -15,92 +16,93 @@ const dummyMeters = {
 	},
 };
 
-describe("lib/config/Meters", () => {
-	describe("lookupMeter (with missing file)", () => {
-		let configManager: ConfigManager;
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockClear();
-				readFileMock.mockClear();
-				pathExistsMock.mockResolvedValue(false);
-				readFileMock.mockRejectedValue(
-					new Error("File does not exist"),
-				);
+		pathExistsStub.reset();
+		readFileStub.reset();
+		pathExistsStub.resolves(false);
+		readFileStub.rejects(new Error("File does not exist"));
 
-				configManager = new ConfigManager();
-				await configManager.loadMeters();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		const configManager = new ConfigManager();
+		await configManager.loadMeters();
+		return configManager;
+	}
 
-		it("does not throw", () => {
-			expect(() => configManager.lookupMeter(0)).not.toThrow();
-		});
-
-		it("returns undefined", () => {
-			expect(configManager.lookupMeter(0x0e)).toBeUndefined();
-			expect(configManager.lookupMeter(0xff)).toBeUndefined();
-		});
+	test.serial("lookupMeter (with missing file) does not throw", async (t) => {
+		const configManager = await prepareTest(t);
+		t.notThrows(() => configManager.lookupMeter(0));
 	});
 
-	describe("lookupMeter (with invalid file)", () => {
-		let configManager: ConfigManager;
+	test.serial(
+		"lookupMeter (with missing file) returns undefined",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.is(configManager.lookupMeter(0x0e), undefined);
+			t.is(configManager.lookupMeter(0xff), undefined);
+		},
+	);
+}
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockClear();
-				readFileMock.mockClear();
-				pathExistsMock.mockResolvedValue(true);
-				readFileMock.mockResolvedValue(`{"0x01": `);
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-				configManager = new ConfigManager();
-				await configManager.loadMeters();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		pathExistsStub.reset();
+		readFileStub.reset();
+		pathExistsStub.resolves(true);
+		readFileStub.resolves(`{"0x01": ` as any);
 
-		it("does not throw", () => {
-			expect(() => configManager.lookupMeter(0x0e)).not.toThrow();
-		});
+		const configManager = new ConfigManager();
+		await configManager.loadMeters();
+		return configManager;
+	}
 
-		it("returns undefined", () => {
-			expect(configManager.lookupMeter(0x0e)).toBeUndefined();
-		});
+	test.serial("lookupMeter (with invalid file) does not throw", async (t) => {
+		const configManager = await prepareTest(t);
+		t.notThrows(() => configManager.lookupMeter(0x0e));
 	});
 
-	describe("lookupMeter()", () => {
-		let configManager: ConfigManager;
+	test.serial(
+		"lookupMeter (with invalid file) returns undefined",
+		async (t) => {
+			const configManager = await prepareTest(t);
+			t.is(configManager.lookupMeter(0x0e), undefined);
+		},
+	);
+}
 
-		beforeAll(
-			async () => {
-				pathExistsMock.mockResolvedValue(true);
-				readFileMock.mockResolvedValue(JSON.stringify(dummyMeters));
+{
+	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {
+		// Loading configuration may take a while on CI
+		t.timeout(30000);
 
-				configManager = new ConfigManager();
-				await configManager.loadMeters();
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		readFileStub.reset();
+		pathExistsStub.reset();
+		pathExistsStub.resolves(true);
+		readFileStub.resolves(JSON.stringify(dummyMeters) as any);
 
-		beforeEach(() => {
-			readFileMock.mockClear();
-			pathExistsMock.mockClear();
-		});
+		const configManager = new ConfigManager();
+		await configManager.loadMeters();
+		return configManager;
+	}
 
-		it("returns the meter definition if it is defined", () => {
+	test.serial(
+		"lookupMeter() returns the meter definition if it is defined",
+		async (t) => {
+			const configManager = await prepareTest(t);
 			const test1 = configManager.lookupMeter(0x01);
-			expect(test1).not.toBeUndefined();
-			expect(test1!.name).toBe("Dummy meter");
-			expect(test1!.scales.get(0x01)).toEqual({
+			t.not(test1, undefined);
+			t.is(test1!.name, "Dummy meter");
+			t.like(test1!.scales.get(0x01), {
 				key: 0x01,
 				label: "Scale 2",
 			});
 
-			expect(configManager.lookupMeter(0xff)).toBeUndefined();
-		});
-	});
-});
+			t.is(configManager.lookupMeter(0xff), undefined);
+		},
+	);
+}

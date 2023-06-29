@@ -1,4 +1,4 @@
-import { Interpreter, Machine, StateMachine } from "xstate";
+import { Machine, type Interpreter, type StateMachine } from "xstate";
 import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./_Types";
 

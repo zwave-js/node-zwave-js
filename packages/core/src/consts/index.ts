@@ -21,3 +21,5 @@ export { NodeStatus } from "./NodeStatus";
 export * from "./Transmission";
 
 export const MAX_SUPERVISION_SESSION_ID = 0b111111;
+
+export const MAX_TRANSPORT_SERVICE_SESSION_ID = 0b1111;

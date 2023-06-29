@@ -1,11 +1,11 @@
 import {
-	CommandClasses,
 	CRC16_CCITT,
-	MessageOrCCLogEntry,
-	SinglecastCC,
-	validatePayload,
+	CommandClasses,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type MessageOrCCLogEntry,
+	type SinglecastCC,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
@@ -24,7 +24,9 @@ import {
 } from "../lib/CommandClassDecorators";
 import { TransportServiceCommand } from "../lib/_Types";
 
-const MAX_SEGMENT_SIZE = 39;
+export const MAX_SEGMENT_SIZE = 39;
+
+export const RELAXED_TIMING_THRESHOLD = 2;
 
 // TODO: Figure out how we know if communicating with R2 or R3
 /** @publicAPI */
@@ -33,6 +35,14 @@ export const TransportServiceTimeouts = {
 	requestMissingSegmentR2: 800,
 	/** Waiting time before requesting a missing segment at data rate R3 */
 	requestMissingSegmentR3: 400,
+	/** Waiting time before sending another datagram at data rate R2 */
+	segmentCompleteR2: 1000,
+	/** Waiting time before sending another datagram at data rate R3 */
+	segmentCompleteR3: 500,
+	/** Waiting time between segments when sending more than {@link RELAXED_TIMING_THRESHOLD} segments at data rate R2 */
+	relaxedTimingDelayR2: 35,
+	/** Waiting time between segments when sending more than {@link RELAXED_TIMING_THRESHOLD} segments at data rate R3 */
+	relaxedTimingDelayR3: 15,
 };
 
 @commandClass(CommandClasses["Transport Service"])
@@ -304,19 +314,22 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			return true;
 		}
 		const datagramSize = session[0].datagramSize;
-		const chunkSize = session[0].partialDatagram.length;
-		const received = new Array<boolean>(
-			Math.ceil(datagramSize / chunkSize),
-		).fill(false);
+		const receivedBytes = new Array<boolean>(datagramSize).fill(false);
 		for (const segment of [...session, this]) {
 			const offset =
 				segment instanceof TransportServiceCCFirstSegment
 					? 0
 					: segment.datagramOffset;
-			received[offset / chunkSize] = true;
+			for (
+				let i = offset;
+				i <= offset + segment.partialDatagram.length;
+				i++
+			) {
+				receivedBytes[i] = true;
+			}
 		}
 		// Expect more messages as long as we haven't received everything
-		return !received.every(Boolean);
+		return receivedBytes.some((b) => b === false);
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {

@@ -1,67 +1,52 @@
 import { DoorLockMode } from "@zwave-js/cc";
 import { DoorLockCCValues } from "@zwave-js/cc/DoorLockCC";
 import { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
-import { CommandClasses } from "@zwave-js/core";
-import type { ThrowingMap } from "@zwave-js/shared";
-import { MockController } from "@zwave-js/testing";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { ZWaveNode } from "../../node/Node";
+import { createMockZWaveRequestFrame } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
+import path from "path";
+import { integrationTest } from "../integrationTestSuite";
 
-describe("map Notification CC to Door Lock CC", () => {
-	let driver: Driver;
-	let node2: ZWaveNode;
-	let controller: MockController;
+integrationTest(
+	"When receiving a NotificationCC::Report with a lock operation, the current value for Door Lock CC should be updated accordingly",
+	{
+		// debug: true,
+		provisioningDirectory: path.join(
+			__dirname,
+			"fixtures/notificationAndDoorLockCC",
+		),
 
-	beforeAll(async () => {
-		({ driver } = await createAndStartTestingDriver({
-			skipNodeInterview: true,
-			beforeStartup(mockPort) {
-				controller = new MockController({ serial: mockPort });
-				controller.defineBehavior(
-					...createDefaultMockControllerBehaviors(),
-				);
-			},
-		}));
-		node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			node2.id,
-			node2,
-		);
+		testBody: async (t, driver, node, mockController, mockNode) => {
+			const valueId = DoorLockCCValues.currentMode.id;
 
-		node2.addCC(CommandClasses["Door Lock"], {
-			isSupported: true,
-		});
-		node2.addCC(CommandClasses.Notification, {
-			isSupported: true,
-			version: 8,
-		});
-	}, 30000);
+			let cc = new NotificationCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				notificationType: 0x06, // Access Control,
+				notificationEvent: 0x01, // Manual Lock Operation
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			// wait a bit for the value to be updated
+			await wait(100);
 
-	afterAll(async () => {
-		await driver.destroy();
-	});
+			t.is(node.getValue(valueId), DoorLockMode.Secured);
 
-	it("When receiving a NotificationCC::Report with a lock operation, the current value for Door Lock CC should be updated accordingly", () => {
-		const valueId = DoorLockCCValues.currentMode.id;
+			cc = new NotificationCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				notificationType: 0x06, // Access Control,
+				notificationEvent: 0x06, // Keypad Unlock Operation
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			// wait a bit for the value to be updated
+			await wait(100);
 
-		let cmd = new NotificationCCReport(driver, {
-			nodeId: node2.id,
-			notificationType: 0x06, // Access Control,
-			notificationEvent: 0x01, // Manual Lock Operation
-		});
-		node2.handleCommand(cmd);
-
-		expect(node2.getValue(valueId)).toEqual(DoorLockMode.Secured);
-
-		cmd = new NotificationCCReport(driver, {
-			nodeId: node2.id,
-			notificationType: 0x06, // Access Control,
-			notificationEvent: 0x06, // Keypad Unlock Operation
-		});
-		node2.handleCommand(cmd);
-
-		expect(node2.getValue(valueId)).toEqual(DoorLockMode.Unsecured);
-	});
-});
+			t.is(node.getValue(valueId), DoorLockMode.Unsecured);
+		},
+	},
+);

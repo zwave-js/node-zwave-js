@@ -7,15 +7,15 @@ import {
 import {
 	assign,
 	createMachine,
-	Interpreter,
-	MachineConfig,
-	MachineOptions,
-	StateMachine,
+	type Interpreter,
+	type MachineConfig,
+	type MachineOptions,
+	type StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
 import {
 	respondUnsolicited,
-	ServiceImplementations,
+	type ServiceImplementations,
 } from "./StateMachineShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
@@ -366,7 +366,14 @@ export function getSerialAPICommandMachineOptions(
 		},
 		delays: {
 			RETRY_DELAY: (ctx) => computeRetryDelay(ctx),
-			RESPONSE_TIMEOUT: timeoutConfig.response,
+			RESPONSE_TIMEOUT: (ctx) => {
+				return (
+					// Ask the message for its callback timeout
+					ctx.msg.getResponseTimeout() ||
+					// and fall back to default values
+					timeoutConfig.response
+				);
+			},
 			CALLBACK_TIMEOUT: (ctx) => {
 				return (
 					// Ask the message for its callback timeout

@@ -66,6 +66,10 @@ export interface ValueMetadataAny {
 	ccSpecific?: Record<string, any>;
 	/** Options that can be provided when changing this value on a device via its value ID. */
 	valueChangeOptions?: readonly (keyof ValueChangeOptions)[];
+	/** Whether this value represents a state (`true`) or a notification/event (`false`) */
+	stateful?: boolean;
+	/** Omit this value from value logs */
+	secret?: boolean;
 }
 
 /**
@@ -93,6 +97,13 @@ export interface ValueMetadataNumeric extends ValueMetadataAny {
 	default?: number;
 	/** Speaking names for numeric values */
 	states?: Record<number, string>;
+	/**
+	 * Whether a user should be able to manually enter all legal values in the range `min...max` (`true`),
+	 * or if only the ones defined in `states` should be selectable in a dropdown (`false`).
+	 *
+	 * If missing, applications should assume this to be `true` if no `states` are defined and `false` if `states` are defined.
+	 */
+	allowManualEntry?: boolean;
 	/** An optional unit for numeric values */
 	unit?: string;
 }
@@ -103,6 +114,11 @@ export interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	/** The default value */
 	default?: number;
+	/** Possible values and their meaning */
+	states?: {
+		true?: string;
+		false?: string;
+	};
 }
 
 const defineBoolean = define<ValueMetadataBoolean>();
@@ -146,11 +162,8 @@ export enum ConfigValueFormat {
 	BitField = 0x03, // Check Boxes
 }
 
-/**
- * @publicAPI
- * A configuration value is either a single number or a bit map
- */
-export type ConfigValue = number | Set<number>;
+/** @publicAPI */
+export type ConfigValue = number;
 
 export interface ConfigurationMetadata extends ValueMetadataAny {
 	// readable and writeable are inherited from ValueMetadataAny
@@ -160,14 +173,12 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	unit?: string;
 	valueSize?: number;
 	format?: ConfigValueFormat;
-	name?: string;
-	info?: string;
+	label?: string;
+	description?: string;
+	/** @deprecated */
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	requiresReInclusion?: boolean;
-	// The following information cannot be detected by scanning.
-	// We have to rely on configuration to support them
-	// options?: readonly ConfigOption[];
 	states?: Record<number, string>;
 	allowManualEntry?: boolean;
 	isFromConfig?: boolean;

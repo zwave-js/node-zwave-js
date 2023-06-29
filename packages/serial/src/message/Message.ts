@@ -1,12 +1,12 @@
 import {
+	ZWaveError,
+	ZWaveErrorCodes,
 	createReflectionDecorator,
 	getNodeTag,
 	highResTimestamp,
-	IZWaveNode,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type IZWaveNode,
+	type MessageOrCCLogEntry,
+	type MessagePriority,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
@@ -36,6 +36,8 @@ export interface MessageDeserializationOptions {
 	origin?: MessageOrigin;
 	/** Whether CCs should be parsed immediately (only affects messages that contain CCs). Default: `true` */
 	parseCCs?: boolean;
+	/** If known already, this contains the SDK version of the stick which can be used to interpret payloads differently */
+	sdkVersion?: string;
 }
 
 /**
@@ -191,9 +193,15 @@ export class Message {
 		return true;
 	}
 
+	/** Returns the response timeout for this message in case the default settings do not apply. */
+	public getResponseTimeout(): number | undefined {
+		// Use default timeout
+		return;
+	}
+
 	/** Returns the callback timeout for this message in case the default settings do not apply. */
 	public getCallbackTimeout(): number | undefined {
-		// Use default timeout by default
+		// Use default timeout
 		return;
 	}
 
@@ -331,6 +339,9 @@ export class Message {
 		// Most messages don't expect an update by default
 		return false;
 	}
+
+	/** Returns a message specific timeout used to wait for an update from the target node */
+	public nodeUpdateTimeout: number | undefined; // Default: use driver timeout
 
 	/** Checks if a message is an expected response for this message */
 	public isExpectedResponse(msg: Message): boolean {

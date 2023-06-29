@@ -3,10 +3,11 @@
 import { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
+import sinon from "sinon";
 import { PassThrough } from "stream";
 import {
 	MockBinding as SerialPortMockBinding,
-	MockPortBinding as SerialPortMockPortBinding,
+	type MockPortBinding as SerialPortMockPortBinding,
 } from "./SerialPortBindingMock";
 import { SerialPortMock } from "./SerialPortMock";
 import { ZWaveSerialPort } from "./ZWaveSerialPort";
@@ -72,17 +73,17 @@ export class MockSerialPort extends ZWaveSerialPort {
 			this.__isOpen = true;
 		});
 	}
-	public readonly openStub: jest.Mock = jest.fn(() => Promise.resolve());
+	public readonly openStub = sinon.stub().resolves();
 
 	public close(): Promise<void> {
 		return this.closeStub().then(() => {
 			this.__isOpen = false;
 		});
 	}
-	public readonly closeStub: jest.Mock = jest.fn(() => Promise.resolve());
+	public readonly closeStub = sinon.stub().resolves();
 
 	public receiveData(data: Buffer): void {
-		this.serial.push(data);
+		this.serial.emit("data", data);
 	}
 
 	public raiseError(err: Error): void {
@@ -94,7 +95,7 @@ export class MockSerialPort extends ZWaveSerialPort {
 		this.emit("write", data);
 		return this.writeStub(data);
 	}
-	public readonly writeStub: jest.Mock = jest.fn();
+	public readonly writeStub = sinon.stub();
 
 	private _lastWrite: string | number[] | Buffer | undefined;
 	public get lastWrite(): string | number[] | Buffer | undefined {

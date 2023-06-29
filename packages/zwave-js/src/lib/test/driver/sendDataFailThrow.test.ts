@@ -1,7 +1,9 @@
 import { BasicCCSet } from "@zwave-js/cc";
-import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import { MessageHeaders } from "@zwave-js/serial";
+import type { MockSerialPort } from "@zwave-js/serial/mock";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
+import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
@@ -10,28 +12,41 @@ import {
 	isFunctionSupported_NoBridge,
 } from "./fixtures";
 
-describe("regression tests", () => {
-	let driver: Driver;
-	let serialport: MockSerialPort;
-	process.env.LOGLEVEL = "debug";
+interface TestContext {
+	driver: Driver;
+	serialport: MockSerialPort;
+}
 
-	beforeEach(async () => {
-		({ driver, serialport } = await createAndStartDriver());
+const test = ava as TestFn<TestContext>;
 
-		driver["_controller"] = {
-			ownNodeId: 1,
-			nodes: new Map(),
-			incrementStatistics: () => {},
-			removeAllListeners: () => {},
-		} as any;
-	});
+test.beforeEach(async (t) => {
+	t.timeout(5000);
 
-	afterEach(async () => {
-		await driver.destroy();
-		driver.removeAllListeners();
-	});
+	const { driver, serialport } = await createAndStartDriver();
 
-	it("when a SendData request fails, the `sendMessage/sendCommand` call should be rejected", async () => {
+	driver["_controller"] = {
+		ownNodeId: 1,
+		nodes: new Map(),
+		incrementStatistics: () => {},
+		removeAllListeners: () => {},
+	} as any;
+
+	t.context = { driver, serialport };
+});
+
+test.afterEach.always(async (t) => {
+	const { driver } = t.context;
+	await driver.destroy();
+	driver.removeAllListeners();
+});
+
+process.env.LOGLEVEL = "debug";
+
+test.serial(
+	"when a SendData request fails, the `sendMessage/sendCommand` call should be rejected",
+	async (t) => {
+		const { driver, serialport } = t.context;
+
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported =
 			isFunctionSupported_NoBridge;
@@ -66,7 +81,8 @@ describe("regression tests", () => {
 		//   │ callback id:      1
 		//   └─[BasicCCSet]
 		//     └─ targetValue: 99
-		expect(serialport.lastWrite).toEqual(
+		t.deepEqual(
+			serialport.lastWrite,
 			Buffer.from("010a00130203200163250181", "hex"),
 		);
 		await wait(10);
@@ -78,7 +94,7 @@ describe("regression tests", () => {
 		//     was sent: true
 		serialport.receiveData(Buffer.from("0104011301e8", "hex"));
 		// » [ACK]
-		expect(serialport.lastWrite).toEqual(ACK);
+		t.deepEqual(serialport.lastWrite, ACK);
 
 		await wait(50);
 
@@ -86,12 +102,17 @@ describe("regression tests", () => {
 		//   callback id:     1
 		//   transmit status: NoACK
 		serialport.receiveData(Buffer.from("0107001301010002e9", "hex"));
-		expect(serialport.lastWrite).toEqual(ACK);
+		t.deepEqual(serialport.lastWrite, ACK);
 
-		await expect(promise).toReject();
-	}, 5000);
+		await t.throwsAsync(promise);
+	},
+);
 
-	it("when a SendDataBridge request fails, the `sendMessage/sendCommand` call should be rejected", async () => {
+test.serial(
+	"when a SendDataBridge request fails, the `sendMessage/sendCommand` call should be rejected",
+	async (t) => {
+		const { driver, serialport } = t.context;
+
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported = isFunctionSupported_All;
 
@@ -127,7 +148,8 @@ describe("regression tests", () => {
 		//   │ callback id:      1
 		//   └─[BasicCCSet]
 		//     └─ targetValue: 99
-		expect(serialport.lastWrite).toEqual(
+		t.deepEqual(
+			serialport.lastWrite,
 			Buffer.from("010f00a90102032001632500000000013f", "hex"),
 		);
 		await wait(10);
@@ -139,7 +161,7 @@ describe("regression tests", () => {
 		//     was sent: true
 		serialport.receiveData(Buffer.from("010401a90152", "hex"));
 		// » [ACK]
-		expect(serialport.lastWrite).toEqual(ACK);
+		t.deepEqual(serialport.lastWrite, ACK);
 
 		await wait(50);
 
@@ -152,8 +174,8 @@ describe("regression tests", () => {
 				"hex",
 			),
 		);
-		expect(serialport.lastWrite).toEqual(ACK);
+		t.deepEqual(serialport.lastWrite, ACK);
 
-		await expect(promise).toReject();
-	}, 5000);
-});
+		await t.throwsAsync(promise);
+	},
+);

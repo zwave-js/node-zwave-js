@@ -1,40 +1,40 @@
 import {
-	ConfigManager,
 	getDefaultMeterScale,
-	MeterScale,
+	type ConfigManager,
+	type MeterScale,
 } from "@zwave-js/config";
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	SupervisionResult,
-} from "@zwave-js/core/safe";
+import { timespan, type MaybeUnknown } from "@zwave-js/core";
 import {
 	CommandClasses,
-	getMinIntegerSize,
-	Maybe,
 	MessagePriority,
-	parseBitMask,
-	parseFloatWithScale,
-	unknownNumber,
-	validatePayload,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getMinIntegerSize,
+	parseBitMask,
+	parseFloatWithScale,
+	validatePayload,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	PhysicalCCAPI,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -68,6 +68,9 @@ export const MeterCCValues = Object.freeze({
 		...V.staticPropertyWithName("resetAll", "reset", {
 			...ValueMetadata.WriteOnlyBoolean,
 			label: `Reset accumulated values`,
+			states: {
+				true: "Reset",
+			},
 		} as const),
 	}),
 
@@ -84,6 +87,9 @@ export const MeterCCValues = Object.freeze({
 					// This is only a placeholder label. A config manager is needed to
 					// determine the actual label.
 					label: `Reset (${num2hex(meterType)})`,
+					states: {
+						true: "Reset",
+					},
 					ccSpecific: { meterType },
 				} as const),
 		),
@@ -160,7 +166,7 @@ function getValueLabel(
 
 @API(CommandClasses.Meter)
 export class MeterCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: MeterCommand): Maybe<boolean> {
+	public supportsCommand(cmd: MeterCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MeterCommand.Get:
 				return true; // This is mandatory
@@ -178,36 +184,35 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "value":
-			case "previousValue":
-			case "deltaTime": {
-				if (propertyKey == undefined) {
-					throwMissingPropertyKey(this.ccId, property);
-				} else if (typeof propertyKey !== "number") {
-					throwUnsupportedPropertyKey(
-						this.ccId,
-						property,
-						propertyKey,
-					);
-				}
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: MeterCCAPI, { property, propertyKey }) {
+			switch (property) {
+				case "value":
+				case "previousValue":
+				case "deltaTime": {
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
 
-				const { rateType, scale } = splitPropertyKey(propertyKey);
-				return (
-					await this.get({
-						rateType,
-						scale,
-					})
-				)?.[property];
+					const { rateType, scale } = splitPropertyKey(propertyKey);
+					return (
+						await this.get({
+							rateType,
+							scale,
+						})
+					)?.[property];
+				}
+				default:
+					throwUnsupportedProperty(this.ccId, property);
 			}
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+		};
+	}
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -314,40 +319,43 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		if (property !== "reset") {
-			throwUnsupportedProperty(this.ccId, property);
-		} else if (
-			propertyKey != undefined &&
-			typeof propertyKey !== "number"
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: MeterCCAPI,
+			{ property, propertyKey },
+			value,
 		) {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		} else if (value !== true) {
-			throwWrongValueType(
-				this.ccId,
-				property,
-				"true",
-				value === false ? "false" : typeof value,
-			);
-		}
+			if (property !== "reset") {
+				throwUnsupportedProperty(this.ccId, property);
+			} else if (
+				propertyKey != undefined &&
+				typeof propertyKey !== "number"
+			) {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+			} else if (value !== true) {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"true",
+					value === false ? "false" : typeof value,
+				);
+			}
 
-		const resetOptions: MeterCCResetOptions =
-			propertyKey != undefined
-				? {
-						type: propertyKey,
-						targetValue: 0,
-				  }
-				: {};
-		await this.reset(resetOptions);
+			const resetOptions: MeterCCResetOptions =
+				propertyKey != undefined
+					? {
+							type: propertyKey,
+							targetValue: 0,
+					  }
+					: {};
+			await this.reset(resetOptions);
 
-		// Refresh values
-		await this.getAll();
+			// Refresh values
+			await this.getAll();
 
-		return undefined;
-	};
+			return undefined;
+		};
+	}
 }
 
 @commandClass(CommandClasses.Meter)
@@ -479,6 +487,27 @@ supports reset:       ${suppResp.supportsReset}`;
 		}
 	}
 
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		applHost: ZWaveApplicationHost,
+	): boolean {
+		// Check when any of the supported values was last updated longer than 6 hours ago.
+		// This may lead to some unnecessary queries, but at least the values are up to date then
+		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		if (!valueDB) return true;
+
+		const values = this.getDefinedValueIDs(applHost).filter((v) =>
+			MeterCCValues.value.is(v),
+		);
+		return values.some((v) => {
+			const lastUpdated = valueDB.getTimestamp(v);
+			return (
+				lastUpdated == undefined ||
+				Date.now() - lastUpdated > timespan.hours(6)
+			);
+		});
+	}
+
 	public translatePropertyKey(
 		applHost: ZWaveApplicationHost,
 		property: string | number,
@@ -536,7 +565,7 @@ export class MeterCCReport extends MeterCC {
 			this._deltaTime = this.payload.readUInt16BE(offset);
 			offset += 2;
 			if (this._deltaTime === 0xffff) {
-				this._deltaTime = unknownNumber;
+				this._deltaTime = UNKNOWN_STATE;
 			}
 
 			if (
@@ -632,7 +661,7 @@ export class MeterCCReport extends MeterCC {
 			this._rateType,
 			this.scale,
 		);
-		this.ensureMetadata(applHost, valueValue, {
+		this.setMetadata(applHost, valueValue, {
 			...valueValue.meta,
 			label: getValueLabel(
 				applHost.configManager,
@@ -641,6 +670,11 @@ export class MeterCCReport extends MeterCC {
 				this._rateType,
 			),
 			unit: scale.label,
+			ccSpecific: {
+				meterType: this._type,
+				scale: this.scale,
+				rateType: this._rateType,
+			},
 		});
 		this.setValue(applHost, valueValue, this._value);
 
@@ -659,8 +693,8 @@ export class MeterCCReport extends MeterCC {
 		return this._value;
 	}
 
-	private _previousValue: number | undefined;
-	public get previousValue(): number | undefined {
+	private _previousValue: MaybeNotKnown<number>;
+	public get previousValue(): MaybeNotKnown<number> {
 		return this._previousValue;
 	}
 
@@ -669,8 +703,8 @@ export class MeterCCReport extends MeterCC {
 		return this._rateType;
 	}
 
-	private _deltaTime: Maybe<number>;
-	public get deltaTime(): Maybe<number> {
+	private _deltaTime: MaybeUnknown<number>;
+	public get deltaTime(): MaybeUnknown<number> {
 		return this._deltaTime;
 	}
 
@@ -687,7 +721,7 @@ export class MeterCCReport extends MeterCC {
 			"rate type": getEnumMemberName(RateType, this._rateType),
 			value: this.value,
 		};
-		if (this._deltaTime !== "unknown") {
+		if (this._deltaTime !== UNKNOWN_STATE) {
 			message["time delta"] = `${this.deltaTime} seconds`;
 		}
 		if (this._previousValue != undefined) {

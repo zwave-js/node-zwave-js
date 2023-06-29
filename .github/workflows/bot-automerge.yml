@@ -1,0 +1,106 @@
+name: 'Z-Wave Bot: Auto-Merge PR'
+
+on:
+  issue_comment:
+    types: [created] # edited, deleted
+  pull_request:
+    types: [synchronize, reopened]
+
+jobs:
+  # #########################################################################
+  # Approves and enables automerge on a PR when authorized person comments
+  # @zwave-js-bot automerge
+  bot-automerge:
+    if: |
+      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.comment.body, '@zwave-js-bot automerge') &&
+      github.event.comment.user.login == 'AlCalzone'
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.BOT_TOKEN}}
+          script: |
+            const options = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            };
+
+            await github.rest.pulls.createReview({
+              ...options,
+              pull_number: context.payload.issue.number,
+              event: "APPROVE"
+            });
+
+      - name: Auto-merge PR
+        env:
+          PR_URL: ${{github.event.issue.html_url}}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          gh pr merge --auto --squash "$PR_URL"
+
+  bot-reenable-automerge:
+    # Don't run in forks, don't run for drafts
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.event.pull_request.draft == false
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+      - name: Check if auto-merging should be enabled
+        id: should-automerge
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.BOT_TOKEN}}
+          result-encoding: string
+          script: |
+            const options = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            };
+
+            const { data: comments } = await github.rest.issues.listComments({
+              ...options,
+              issue_number: context.issue.number,
+            });
+            return comments.some(
+              (c) =>
+                c.user.login === "AlCalzone" &&
+                c.body === "@zwave-js-bot automerge",
+            );
+
+      - name: Approve PR
+        if: ${{ steps.should-automerge.outputs.result == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.BOT_TOKEN }}
+          script: |
+            const options = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            };
+
+            await github.rest.pulls.createReview({
+              ...options,
+              pull_number: context.issue.number,
+              event: "APPROVE"
+            });
+
+      - name: Auto-merge PR
+        if: ${{ steps.should-automerge.outputs.result == 'true' }}
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          gh pr merge --auto --squash "$PR_URL"

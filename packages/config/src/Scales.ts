@@ -1,4 +1,4 @@
-import { JSONObject, num2hex } from "@zwave-js/shared/safe";
+import { num2hex, type JSONObject } from "@zwave-js/shared/safe";
 import { throwInvalidConfig } from "./utils_safe";
 
 export type ScaleGroup = ReadonlyMap<number, Scale> & {

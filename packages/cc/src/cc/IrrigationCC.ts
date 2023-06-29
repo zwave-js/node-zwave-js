@@ -1,19 +1,19 @@
 import {
 	CommandClasses,
-	encodeFloatWithScale,
-	enumValuesToMetadataStates,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseFloatWithScale,
-	SupervisionResult,
-	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeFloatWithScale,
+	enumValuesToMetadataStates,
+	parseFloatWithScale,
+	validatePayload,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
+	type ValueID,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -21,14 +21,14 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -50,9 +50,9 @@ import { V } from "../lib/Values";
 import {
 	IrrigationCommand,
 	IrrigationSensorPolarity,
-	ValveId,
-	ValveTableEntry,
 	ValveType,
+	type ValveId,
+	type ValveTableEntry,
 } from "../lib/_Types";
 
 export const IrrigationCCValues = Object.freeze({
@@ -182,6 +182,9 @@ export const IrrigationCCValues = Object.freeze({
 		...V.staticPropertyWithName("shutoffSystem", "shutoff", {
 			...ValueMetadata.WriteOnlyBoolean,
 			label: `Shutoff system`,
+			states: {
+				true: "Shutoff",
+			},
 		} as const),
 	}),
 
@@ -461,6 +464,10 @@ export const IrrigationCCValues = Object.freeze({
 				({
 					...ValueMetadata.Boolean,
 					label: `${valveIdToMetadataPrefix(valveId)}: Start/Stop`,
+					states: {
+						true: "Start",
+						false: "Stop",
+					},
 				} as const),
 		),
 	}),
@@ -491,7 +498,7 @@ const valveConfigPropertyKeys = [
 
 @API(CommandClasses.Irrigation)
 export class IrrigationCCAPI extends CCAPI {
-	public supportsCommand(cmd: IrrigationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: IrrigationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case IrrigationCommand.SystemInfoGet:
 			case IrrigationCommand.SystemStatusGet:
@@ -766,7 +773,7 @@ export class IrrigationCCAPI extends CCAPI {
 	@validateArgs()
 	public async getValveTable(
 		tableId: number,
-	): Promise<ValveTableEntry[] | undefined> {
+	): Promise<MaybeNotKnown<ValveTableEntry[]>> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveTableGet,
@@ -832,176 +839,189 @@ export class IrrigationCCAPI extends CCAPI {
 		return this.shutoffSystem(255);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		const valueDB = this.getValueDB();
-
-		if (systemConfigProperties.includes(property as any)) {
-			const options = {} as IrrigationCCSystemConfigSetOptions;
-			for (const prop of systemConfigProperties) {
-				if (prop === property) continue;
-				const valueId: ValueID = {
-					commandClass: this.ccId,
-					endpoint: this.endpoint.index,
-					property: prop as any,
-				};
-				const cachedVal = valueDB.getValue<any>(valueId);
-				if (cachedVal == undefined) {
-					throw new ZWaveError(
-						`The "${property}" property cannot be changed before ${prop} is known!`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-				options[prop] = cachedVal;
-			}
-			options[property as keyof IrrigationCCSystemConfigSetOptions] =
-				value as any;
-
-			return this.setSystemConfig(options);
-		} else if (property === "shutoff") {
-			return this.shutoffSystem(0);
-		} else if (
-			property === "master" ||
-			(typeof property === "number" && property >= 1)
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: IrrigationCCAPI,
+			{ property, propertyKey },
+			value,
 		) {
-			// This is a value of a valve
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			}
+			const valueDB = this.getValueDB();
 
-			if (valveConfigPropertyKeys.includes(propertyKey as any)) {
-				const options = {
-					valveId: property,
-				} as IrrigationCCValveConfigSetOptions;
-
-				for (const prop of valveConfigPropertyKeys) {
-					if (prop === propertyKey) continue;
+			if (systemConfigProperties.includes(property as any)) {
+				const options = {} as IrrigationCCSystemConfigSetOptions;
+				for (const prop of systemConfigProperties) {
+					if (prop === property) continue;
 					const valueId: ValueID = {
 						commandClass: this.ccId,
 						endpoint: this.endpoint.index,
-						property,
-						propertyKey: prop as any,
+						property: prop as any,
 					};
 					const cachedVal = valueDB.getValue<any>(valueId);
 					if (cachedVal == undefined) {
 						throw new ZWaveError(
-							`The "${property}_${propertyKey}" property cannot be changed before ${property}_${prop} is known!`,
+							`The "${property}" property cannot be changed before ${prop} is known!`,
 							ZWaveErrorCodes.Argument_Invalid,
 						);
 					}
-					(options as any)[prop] = cachedVal;
+					options[prop] = cachedVal;
 				}
-				(options as any)[propertyKey] = value;
+				options[property as keyof IrrigationCCSystemConfigSetOptions] =
+					value as any;
 
-				return this.setValveConfig(options);
-			} else if (propertyKey === "duration") {
-				// The run duration needs to be set separately from triggering the run
-				// So this is okay
-				return;
-			} else if (propertyKey === "startStop") {
-				// Trigger or stop a valve run, depending on the value
-				if (typeof value !== "boolean") {
-					throwWrongValueType(
-						this.ccId,
-						property,
-						"boolean",
-						typeof value,
-					);
-				}
-
-				if (value) {
-					// Start a valve run
-					const duration = valueDB.getValue<number>(
-						IrrigationCCValues.valveRunDuration(property).endpoint(
-							this.endpoint.index,
-						),
-					);
-					if (duration == undefined) {
-						throw new ZWaveError(
-							`Cannot start a valve run without specifying a duration first!`,
-							ZWaveErrorCodes.Argument_Invalid,
-						);
-					}
-					return this.runValve(property, duration);
-				} else {
-					// Stop a valve run
-					return this.shutoffValve(property);
-				}
-			} else {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-			}
-		}
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "systemVoltage":
-			case "flowSensorActive":
-			case "pressureSensorActive":
-			case "rainSensorActive":
-			case "moistureSensorActive":
-			case "flow":
-			case "pressure":
-			case "shutoffDuration":
-			case "errorNotProgrammed":
-			case "errorEmergencyShutdown":
-			case "errorHighPressure":
-			case "errorLowPressure":
-			case "errorValve":
-			case "masterValveOpen":
-			case "firstOpenZoneId":
-				return (await this.getSystemStatus())?.[property];
-
-			case "masterValveDelay":
-			case "highPressureThreshold":
-			case "lowPressureThreshold":
-			case "rainSensorPolarity":
-			case "moistureSensorPolarity":
-				return (await this.getSystemConfig())?.[property];
-		}
-
-		if (
-			property === "master" ||
-			(typeof property === "number" && property >= 1)
-		) {
-			// This is a value of a valve
-			switch (propertyKey) {
-				case "connected":
-				case "nominalCurrent":
-				case "errorShortCircuit":
-				case "errorHighCurrent":
-				case "errorLowCurrent":
-				case "errorMaximumFlow":
-				case "errorHighFlow":
-				case "errorLowFlow":
-					return (await this.getValveInfo(property))?.[propertyKey];
-
-				case "nominalCurrentHighThreshold":
-				case "nominalCurrentLowThreshold":
-				case "maximumFlow":
-				case "highFlowThreshold":
-				case "lowFlowThreshold":
-				case "useRainSensor":
-				case "useMoistureSensor":
-					return (await this.getValveConfig(property))?.[propertyKey];
-
-				case undefined:
+				return this.setSystemConfig(options);
+			} else if (property === "shutoff") {
+				return this.shutoffSystem(0);
+			} else if (
+				property === "master" ||
+				(typeof property === "number" && property >= 1)
+			) {
+				// This is a value of a valve
+				if (propertyKey == undefined) {
 					throwMissingPropertyKey(this.ccId, property);
-				default:
+				}
+
+				if (valveConfigPropertyKeys.includes(propertyKey as any)) {
+					const options = {
+						valveId: property,
+					} as IrrigationCCValveConfigSetOptions;
+
+					for (const prop of valveConfigPropertyKeys) {
+						if (prop === propertyKey) continue;
+						const valueId: ValueID = {
+							commandClass: this.ccId,
+							endpoint: this.endpoint.index,
+							property,
+							propertyKey: prop as any,
+						};
+						const cachedVal = valueDB.getValue<any>(valueId);
+						if (cachedVal == undefined) {
+							throw new ZWaveError(
+								`The "${property}_${propertyKey}" property cannot be changed before ${property}_${prop} is known!`,
+								ZWaveErrorCodes.Argument_Invalid,
+							);
+						}
+						(options as any)[prop] = cachedVal;
+					}
+					(options as any)[propertyKey] = value;
+
+					return this.setValveConfig(options);
+				} else if (propertyKey === "duration") {
+					// The run duration needs to be set separately from triggering the run
+					// So this is okay
+					return;
+				} else if (propertyKey === "startStop") {
+					// Trigger or stop a valve run, depending on the value
+					if (typeof value !== "boolean") {
+						throwWrongValueType(
+							this.ccId,
+							property,
+							"boolean",
+							typeof value,
+						);
+					}
+
+					if (value) {
+						// Start a valve run
+						const duration = valueDB.getValue<number>(
+							IrrigationCCValues.valveRunDuration(
+								property,
+							).endpoint(this.endpoint.index),
+						);
+						if (duration == undefined) {
+							throw new ZWaveError(
+								`Cannot start a valve run without specifying a duration first!`,
+								ZWaveErrorCodes.Argument_Invalid,
+							);
+						}
+						return this.runValve(property, duration);
+					} else {
+						// Stop a valve run
+						return this.shutoffValve(property);
+					}
+				} else {
 					throwUnsupportedPropertyKey(
 						this.ccId,
 						property,
 						propertyKey,
 					);
+				}
 			}
-		}
-		throwUnsupportedProperty(this.ccId, property);
-	};
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: IrrigationCCAPI,
+			{ property, propertyKey },
+		) {
+			switch (property) {
+				case "systemVoltage":
+				case "flowSensorActive":
+				case "pressureSensorActive":
+				case "rainSensorActive":
+				case "moistureSensorActive":
+				case "flow":
+				case "pressure":
+				case "shutoffDuration":
+				case "errorNotProgrammed":
+				case "errorEmergencyShutdown":
+				case "errorHighPressure":
+				case "errorLowPressure":
+				case "errorValve":
+				case "masterValveOpen":
+				case "firstOpenZoneId":
+					return (await this.getSystemStatus())?.[property];
+
+				case "masterValveDelay":
+				case "highPressureThreshold":
+				case "lowPressureThreshold":
+				case "rainSensorPolarity":
+				case "moistureSensorPolarity":
+					return (await this.getSystemConfig())?.[property];
+			}
+
+			if (
+				property === "master" ||
+				(typeof property === "number" && property >= 1)
+			) {
+				// This is a value of a valve
+				switch (propertyKey) {
+					case "connected":
+					case "nominalCurrent":
+					case "errorShortCircuit":
+					case "errorHighCurrent":
+					case "errorLowCurrent":
+					case "errorMaximumFlow":
+					case "errorHighFlow":
+					case "errorLowFlow":
+						return (await this.getValveInfo(property))?.[
+							propertyKey
+						];
+
+					case "nominalCurrentHighThreshold":
+					case "nominalCurrentLowThreshold":
+					case "maximumFlow":
+					case "highFlowThreshold":
+					case "lowFlowThreshold":
+					case "useRainSensor":
+					case "useMoistureSensor":
+						return (await this.getValveConfig(property))?.[
+							propertyKey
+						];
+
+					case undefined:
+						throwMissingPropertyKey(this.ccId, property);
+					default:
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+				}
+			}
+			throwUnsupportedProperty(this.ccId, property);
+		};
+	}
 }
 
 @commandClass(CommandClasses.Irrigation)
@@ -1017,7 +1037,7 @@ export class IrrigationCC extends CommandClass {
 	public static getMaxValveTableSizeCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): number | undefined {
+	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1032,7 +1052,7 @@ export class IrrigationCC extends CommandClass {
 	public static getNumValvesCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): number | undefined {
+	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(IrrigationCCValues.numValves.endpoint(endpoint.index));

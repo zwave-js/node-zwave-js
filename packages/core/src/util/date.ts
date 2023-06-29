@@ -108,7 +108,7 @@ export function highResTimestamp(): number {
 }
 
 export const timespan = Object.freeze({
-	seconds: (num: number) => num * 1000,
+	seconds: (num: number) => Math.round(num * 1000),
 	minutes: (num: number) => timespan.seconds(num * 60),
 	hours: (num: number) => timespan.minutes(num * 60),
 	days: (num: number) => timespan.hours(num * 24),

@@ -1,24 +1,24 @@
 import {
-	MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedCallback,
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
-	INodeQuery,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageOrigin,
 	MessageType,
+	expectedCallback,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	SuccessIndicator,
+	type INodeQuery,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
+	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
@@ -152,7 +152,10 @@ export class AssignSUCReturnRouteRequestTransmitReport
 	}
 
 	public isOK(): boolean {
-		return this.transmitStatus === TransmitStatus.OK;
+		// The other statuses are technically "not OK", but they are caused by
+		// not being able to contact the node. We don't want the node to be marked
+		// as dead because of that
+		return this.transmitStatus !== TransmitStatus.NoAck;
 	}
 
 	public transmitStatus: TransmitStatus;

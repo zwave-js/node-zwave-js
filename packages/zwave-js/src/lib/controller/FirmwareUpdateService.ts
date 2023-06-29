@@ -1,18 +1,24 @@
-import got, { Headers, OptionsOfTextResponseBody } from "@esm2cjs/got";
+import got, {
+	type Headers,
+	type OptionsOfTextResponseBody,
+} from "@esm2cjs/got";
 import PQueue from "@esm2cjs/p-queue";
 import type { DeviceID } from "@zwave-js/config";
 import {
-	extractFirmware,
-	Firmware,
-	guessFirmwareFileFormat,
+	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
+	extractFirmware,
+	guessFirmwareFileFormat,
+	type Firmware,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
 import crypto from "crypto";
 import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
-const serviceURL = "https://firmware.zwave-js.io";
+function serviceURL(): string {
+	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
+}
 const DOWNLOAD_TIMEOUT = 60000;
 // const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
 
@@ -51,8 +57,8 @@ function cleanCache() {
 }
 
 async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
-	// Replaces got's built-in cache functionality because it depends on an outdated version of
-	// cacheable-request (<8.3.1), which does not distinguish between POSTs with different bodies
+	// Replaces got's built-in cache functionality because it uses Keyv internally
+	// which apparently has some issues: https://github.com/zwave-js/node-zwave-js/issues/5404
 
 	const hash = crypto
 		.createHash("sha256")
@@ -121,33 +127,72 @@ export interface GetAvailableFirmwareUpdateOptions {
 	includePrereleases?: boolean;
 }
 
+/** Converts the RF region to a format the update service understands */
+function rfRegionToUpdateServiceRegion(
+	rfRegion?: RFRegion,
+): string | undefined {
+	switch (rfRegion) {
+		case RFRegion["Default (EU)"]:
+		case RFRegion.Europe:
+			return "europe";
+		case RFRegion.USA:
+		case RFRegion["USA (Long Range)"]:
+			return "usa";
+		case RFRegion["Australia/New Zealand"]:
+			return "australia/new zealand";
+		case RFRegion["Hong Kong"]:
+			return "hong kong";
+		case RFRegion.India:
+			return "india";
+		case RFRegion.Israel:
+			return "israel";
+		case RFRegion.Russia:
+			return "russia";
+		case RFRegion.China:
+			return "china";
+		case RFRegion.Japan:
+			return "japan";
+		case RFRegion.Korea:
+			return "korea";
+	}
+}
+
 /**
  * Retrieves the available firmware updates for the node with the given fingerprint.
  * Returns the service response or `undefined` in case of an error.
  */
 export function getAvailableFirmwareUpdates(
-	deviceId: DeviceID & { firmwareVersion: string },
+	deviceId: DeviceID & { firmwareVersion: string; rfRegion?: RFRegion },
 	options: GetAvailableFirmwareUpdateOptions,
 ): Promise<FirmwareUpdateInfo[]> {
 	const headers: Headers = {
 		"User-Agent": options.userAgent,
+		"Content-Type": "application/json",
 	};
 	if (options.apiKey) {
 		headers["X-API-Key"] = options.apiKey;
 	}
 
+	const body: Record<string, string> = {
+		manufacturerId: formatId(deviceId.manufacturerId),
+		productType: formatId(deviceId.productType),
+		productId: formatId(deviceId.productId),
+		firmwareVersion: deviceId.firmwareVersion,
+	};
+	const rfRegion = rfRegionToUpdateServiceRegion(deviceId.rfRegion);
+	if (rfRegion) {
+		body.region = rfRegion;
+	}
+
 	const config: OptionsOfTextResponseBody = {
 		method: "POST",
-		url: `${serviceURL}/api/${
-			options.includePrereleases ? "v2" : "v1"
+		url: `${serviceURL()}/api/${
+			options.includePrereleases ? "v3" : "v1"
 		}/updates`,
-		json: {
-			manufacturerId: formatId(deviceId.manufacturerId),
-			productType: formatId(deviceId.productType),
-			productId: formatId(deviceId.productId),
-			firmwareVersion: deviceId.firmwareVersion,
-		},
-		// TODO: Re-enable this in favor of cachedGot when fixed
+		json: body,
+		// Consider re-enabling this instead of using cachedGot()
+		// At the moment, the built-in caching has some issues though, so we stick
+		// with our own implementation
 		// cache: requestCache,
 		// cacheOptions: {
 		// 	shared: false,

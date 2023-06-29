@@ -1,10 +1,10 @@
 import {
-	CommandClasses,
-	encodeBitMask,
 	MAX_NODES,
-	parseBitMask,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	parseBitMask,
+	type CommandClasses,
 } from "@zwave-js/core/safe";
 import { num2hex, pick, sum } from "@zwave-js/shared/safe";
 import { SUC_MAX_UPDATES } from "../consts";
@@ -14,19 +14,19 @@ import {
 	encodeSUCUpdateEntry,
 	parseRoute,
 	parseSUCUpdateEntry,
-	Route,
-	SUCUpdateEntry,
+	type Route,
+	type SUCUpdateEntry,
 } from "../files";
 import {
 	encodeNVM500NodeInfo,
 	encodeNVMDescriptor,
 	encodeNVMModuleDescriptor,
-	NVM500NodeInfo,
-	NVMDescriptor,
-	NVMModuleDescriptor,
 	parseNVM500NodeInfo,
 	parseNVMDescriptor,
 	parseNVMModuleDescriptor,
+	type NVM500NodeInfo,
+	type NVMDescriptor,
+	type NVMModuleDescriptor,
 } from "./EntryParsers";
 import { Bridge_6_6x } from "./parsers/Bridge_6_6x";
 import { Bridge_6_7x } from "./parsers/Bridge_6_7x";
@@ -39,15 +39,15 @@ import {
 	CONFIGURATION_VALID_0,
 	CONFIGURATION_VALID_1,
 	MAGIC_VALUE,
-	NVMData,
-	NVMEntryName,
 	NVMEntrySizes,
 	NVMEntryType,
-	NVMLayout,
 	NVMModuleType,
 	NVM_SERIALAPI_HOST_SIZE,
-	ParsedNVMEntry,
 	ROUTECACHE_VALID,
+	type NVMData,
+	type NVMEntryName,
+	type NVMLayout,
+	type ParsedNVMEntry,
 } from "./shared";
 
 export interface NVM500Details {

@@ -1,17 +1,18 @@
 import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
-	allCCs,
-	applicationCCs,
 	CommandClasses,
-	getCCName,
-	IZWaveEndpoint,
-	IZWaveNode,
-	SetValueOptions,
-	TranslatedValueID,
-	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
+	allCCs,
+	applicationCCs,
+	getCCName,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type MaybeNotKnown,
+	type SetValueOptions,
+	type TranslatedValueID,
+	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 
@@ -36,7 +37,7 @@ function setValue(
 export function endpointCountIsDynamic(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	return getValue(
 		applHost,
 		node,
@@ -47,7 +48,7 @@ export function endpointCountIsDynamic(
 export function endpointsHaveIdenticalCapabilities(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	return getValue(
 		applHost,
 		node,
@@ -58,7 +59,7 @@ export function endpointsHaveIdenticalCapabilities(
 export function getIndividualEndpointCount(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): number | undefined {
+): MaybeNotKnown<number> {
 	return getValue(
 		applHost,
 		node,
@@ -69,7 +70,7 @@ export function getIndividualEndpointCount(
 export function getAggregatedEndpointCount(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): number | undefined {
+): MaybeNotKnown<number> {
 	return getValue(
 		applHost,
 		node,
@@ -261,9 +262,9 @@ export function translateValueID<T extends ValueID>(
  * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
  * Value ID on a non-root endpoint
  */
-export function filterRootApplicationCCValueIDs(
-	allValueIds: ValueID[],
-): ValueID[] {
+export function filterRootApplicationCCValueIDs<T extends ValueID>(
+	allValueIds: T[],
+): T[] {
 	const shouldHideRootValueID = (
 		valueId: ValueID,
 		allValueIds: ValueID[],

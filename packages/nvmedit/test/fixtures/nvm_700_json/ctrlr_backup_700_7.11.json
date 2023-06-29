@@ -2,7 +2,7 @@
 	"format": 1,
 	"controller": {
 		"protocolVersion": "7.11.0",
-		"applicationVersion": "7.0.0",
+		"applicationVersion": "7.11.0",
 		"homeId": "0xfbfedd24",
 		"nodeId": 1,
 		"lastNodeId": 6,

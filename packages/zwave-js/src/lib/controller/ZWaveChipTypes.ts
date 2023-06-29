@@ -1,3 +1,5 @@
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
+
 const chipTypes = Object.freeze({
 	[0x0102]: "ZW0102",
 	[0x0201]: "ZW0201",
@@ -5,6 +7,7 @@ const chipTypes = Object.freeze({
 	[0x0401]: "ZM0401 / ZM4102 / SD3402",
 	[0x0500]: "ZW050x",
 	[0x0700]: "EFR32ZG14 / ZGM130S",
+	[0x0800]: "EFR32ZG23 / ZGM230S",
 });
 
 export interface UnknownZWaveChipType {
@@ -26,7 +29,7 @@ export function getZWaveChipType(
 
 export function getChipTypeAndVersion(
 	zWaveChipType: string,
-): { type: number; version: number } | undefined {
+): MaybeNotKnown<{ type: number; version: number }> {
 	for (const [id, name] of Object.entries(chipTypes)) {
 		if (name === zWaveChipType) {
 			const idNum = parseInt(id);

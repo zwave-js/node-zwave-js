@@ -1,3 +1,4 @@
+// This is the 300 series version of the device
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
@@ -5,9 +6,12 @@
 	"description": "AC/DC Siren",
 	"devices": [
 		{
+			// Definitely 300 series:
 			"productType": "0x2005",
 			"productId": "0x0503"
 		},
+		// Not sure which of these belong to the 500 series and which to the 300 series
+		// We separate the files by firmware version instead.
 		{
 			"productType": "0x2009",
 			"productId": "0x0901",
@@ -15,22 +19,12 @@
 		},
 		{
 			"productType": "0x2009",
-			"productId": "0x0907",
-			"zwaveAllianceId": 1276
-		},
-		{
-			"productType": "0x2009",
 			"productId": "0x0903"
-		},
-		{
-			"productType": "0x2009",
-			"productId": "0x0908",
-			"zwaveAllianceId": 2901
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
-		"max": "255.255"
+		"max": "14.255"
 	},
 	"paramInformation": [
 		{
@@ -58,7 +52,6 @@
 		},
 		{
 			"#": "1",
-			"$if": "firmwareVersion >= 15.0",
 			"label": "Alarm auto stop",
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
@@ -88,7 +81,7 @@
 	"metadata": {
 		"inclusion": "Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZM 1602 to your controller. To get in the “inclusion” mode, the distance between siren and controller is suggested to be in one meter. Open the bracket and press the program switch of ZM 1602 for 1 second at least & release to be included. After setting, the LED Setting Lighting should go off",
 		"exclusion": "Set up the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZM 1602 from your controller. Press the Tamper Switch of ZM 1602 for 1 second at least & release to be excluded",
-		"reset": "This device can’t be reset manually. It is reset to factory defaults when it is excluded. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"reset": "This device can't be reset manually. It is reset to factory defaults when it is excluded. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1276/ZM%201602-5%20Siren_R3_20170301.pdf"
 	}
 }

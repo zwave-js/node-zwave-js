@@ -646,8 +646,21 @@
 			"defaultValue": 1
 		}
 	],
-	"compat": {
-		// The device is a Binary Sensor, but uses Basic Sets to report its status
-		"enableBasicSetMapping": true
-	}
+	"compat": [
+		{
+			"$if": "firmwareVersion < 3.2",
+			// On older firmware versions, the device has a Multilevel sensor on endpoint 2
+			// which is not mirrored on the root endpoint. However, the endpoints are considered
+			// unnecessary, so endpoint 2 gets hidden along with the sensor.
+			"preserveEndpoints": [2],
+			"preserveRootApplicationCCValueIDs": true,
+
+			// The device is a Binary Sensor, but uses Basic Sets to report its status
+			"enableBasicSetMapping": true
+		},
+		{
+			// The device is a Binary Sensor, but uses Basic Sets to report its status
+			"enableBasicSetMapping": true
+		}
+	]
 }

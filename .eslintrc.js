@@ -27,7 +27,7 @@ module.exports = {
 		// Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
 		"plugin:prettier/recommended",
 	],
-	plugins: [],
+	plugins: ["deprecation"],
 	reportUnusedDisableDirectives: true,
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -84,6 +84,17 @@ module.exports = {
 				checksVoidReturn: false,
 			},
 		],
+
+		// Make sure type imports are used where necessary
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				fixStyle: "inline-type-imports",
+				disallowTypeAnnotations: false,
+			},
+		],
+		"@typescript-eslint/consistent-type-exports": "error",
+
 		// We can turn this on from time to time but in general these rules
 		// make our lives harder instead of easier
 		"@typescript-eslint/no-unsafe-argument": "off",
@@ -111,10 +122,11 @@ module.exports = {
 			},
 		],
 		"quote-props": ["error", "as-needed"],
+		"deprecation/deprecation": "error",
 	},
 	overrides: [
 		{
-			files: ["*.test.ts"],
+			files: ["*.test.ts", "*.test.ava.ts"],
 			rules: {
 				"@typescript-eslint/explicit-function-return-type": "off",
 				"@typescript-eslint/no-empty-function": "off",

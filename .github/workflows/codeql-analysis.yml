@@ -8,6 +8,8 @@ on:
     branches: [ master ]
   schedule:
     - cron: '45 8 * * 3'
+  merge_group:
+    types: [checks_requested]
 
 jobs:
   analyze:

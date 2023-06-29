@@ -1,18 +1,19 @@
 import {
 	CommandClasses,
 	Duration,
-	enumValuesToMetadataStates,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -20,13 +21,13 @@ import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	PhysicalCCAPI,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -46,10 +47,10 @@ import {
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
-	DoorHandleStatus,
 	DoorLockCommand,
 	DoorLockMode,
 	DoorLockOperationType,
+	type DoorHandleStatus,
 } from "../lib/_Types";
 
 export const DoorLockCCValues = Object.freeze({
@@ -61,7 +62,7 @@ export const DoorLockCCValues = Object.freeze({
 		} as const),
 
 		...V.staticProperty("currentMode", {
-			...ValueMetadata.UInt8,
+			...ValueMetadata.ReadOnlyUInt8,
 			label: "Current lock mode",
 			states: enumValuesToMetadataStates(DoorLockMode),
 		} as const),
@@ -169,24 +170,75 @@ export const DoorLockCCValues = Object.freeze({
 		),
 
 		...V.staticProperty("latchSupported", undefined, { internal: true }),
-		...V.staticProperty("latchStatus", {
-			...ValueMetadata.ReadOnly,
-			label: "Current status of the latch",
-		} as const),
+		...V.staticProperty(
+			"latchStatus",
+			{
+				...ValueMetadata.ReadOnly,
+				label: "Current status of the latch",
+			} as const,
+			{
+				autoCreate: shouldAutoCreateLatchStatusValue,
+			} as const,
+		),
 
 		...V.staticProperty("boltSupported", undefined, { internal: true }),
-		...V.staticProperty("boltStatus", {
-			...ValueMetadata.ReadOnly,
-			label: "Current status of the bolt",
-		} as const),
+		...V.staticProperty(
+			"boltStatus",
+			{
+				...ValueMetadata.ReadOnly,
+				label: "Current status of the bolt",
+			} as const,
+			{
+				autoCreate: shouldAutoCreateBoltStatusValue,
+			} as const,
+		),
 
 		...V.staticProperty("doorSupported", undefined, { internal: true }),
-		...V.staticProperty("doorStatus", {
-			...ValueMetadata.ReadOnly,
-			label: "Current status of the door",
-		} as const),
+		...V.staticProperty(
+			"doorStatus",
+			{
+				...ValueMetadata.ReadOnly,
+				label: "Current status of the door",
+			} as const,
+			{
+				autoCreate: shouldAutoCreateDoorStatusValue,
+			} as const,
+		),
 	}),
 });
+
+function shouldAutoCreateLatchStatusValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.latchSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateBoltStatusValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.boltSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateDoorStatusValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.doorSupported.endpoint(endpoint.index),
+	);
+}
 
 const configurationSetParameters = [
 	"operationType",
@@ -201,7 +253,7 @@ const configurationSetParameters = [
 
 @API(CommandClasses["Door Lock"])
 export class DoorLockCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: DoorLockCommand): Maybe<boolean> {
+	public supportsCommand(cmd: DoorLockCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case DoorLockCommand.OperationSet:
 			case DoorLockCommand.OperationGet:
@@ -214,103 +266,106 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property === "targetMode") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			const result = await this.set(value);
-
-			// Verify the current value after a delay, unless the command was supervised and successful
-			if (supervisedCommandSucceeded(result)) {
-				this.getValueDB().setValue(
-					DoorLockCCValues.currentMode.endpoint(this.endpoint.index),
-					value,
-				);
-			} else {
-				this.schedulePoll({ property }, value);
-			}
-
-			return result;
-		} else if (
-			typeof property === "string" &&
-			configurationSetParameters.includes(property as any)
-		) {
-			// checking every type here would create a LOT of duplicate code, so we don't
-
-			// ConfigurationSet expects all parameters --> read the others from cache
-			const config = {
-				[property]: value,
-			} as DoorLockCCConfigurationSetOptions;
-			for (const param of configurationSetParameters) {
-				if (param !== property) {
-					(config as any)[param] = this.tryGetValueDB()?.getValue({
-						commandClass: this.ccId,
-						endpoint: this.endpoint.index,
-						property: param,
-					});
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: DoorLockCCAPI, { property }, value) {
+			if (property === "targetMode") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
 				}
-			}
+				const result = await this.set(value);
 
-			// Fix insideHandlesCanOpenDoorConfiguration is not iterable
-			const allTrue: DoorHandleStatus = [true, true, true, true];
-			if (!config.insideHandlesCanOpenDoorConfiguration) {
-				config.insideHandlesCanOpenDoorConfiguration = allTrue;
-			}
-			if (!config.outsideHandlesCanOpenDoorConfiguration) {
-				config.outsideHandlesCanOpenDoorConfiguration = allTrue;
-			}
+				// Verify the current value after a delay, unless the command was supervised and successful
+				if (supervisedCommandSucceeded(result)) {
+					this.getValueDB().setValue(
+						DoorLockCCValues.currentMode.endpoint(
+							this.endpoint.index,
+						),
+						value,
+					);
+				} else {
+					this.schedulePoll({ property }, value);
+				}
 
-			const result = await this.setConfiguration(config);
+				return result;
+			} else if (
+				typeof property === "string" &&
+				configurationSetParameters.includes(property as any)
+			) {
+				// checking every type here would create a LOT of duplicate code, so we don't
 
-			// Verify the current value after a delay, unless the command was supervised and successful
-			if (!supervisedCommandSucceeded(result)) {
-				this.schedulePoll({ property }, value);
-			}
+				// ConfigurationSet expects all parameters --> read the others from cache
+				const config = {
+					[property]: value,
+				} as DoorLockCCConfigurationSetOptions;
+				for (const param of configurationSetParameters) {
+					if (param !== property) {
+						(config as any)[param] = this.tryGetValueDB()?.getValue(
+							{
+								commandClass: this.ccId,
+								endpoint: this.endpoint.index,
+								property: param,
+							},
+						);
+					}
+				}
 
-			return result;
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				// Fix insideHandlesCanOpenDoorConfiguration is not iterable
+				const allTrue: DoorHandleStatus = [true, true, true, true];
+				if (!config.insideHandlesCanOpenDoorConfiguration) {
+					config.insideHandlesCanOpenDoorConfiguration = allTrue;
+				}
+				if (!config.outsideHandlesCanOpenDoorConfiguration) {
+					config.outsideHandlesCanOpenDoorConfiguration = allTrue;
+				}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentMode":
-			case "targetMode":
-			case "duration":
-			case "outsideHandlesCanOpenDoor":
-			case "insideHandlesCanOpenDoor":
-			case "latchStatus":
-			case "boltStatus":
-			case "doorStatus":
-			case "lockTimeout":
-				return (await this.get())?.[property];
+				const result = await this.setConfiguration(config);
 
-			case "operationType":
-			case "outsideHandlesCanOpenDoorConfiguration":
-			case "insideHandlesCanOpenDoorConfiguration":
-			case "lockTimeoutConfiguration":
-			case "autoRelockTime":
-			case "holdAndReleaseTime":
-			case "twistAssist":
-			case "blockToBlock":
-				return (await this.getConfiguration())?.[property];
+				// Verify the current value after a delay, unless the command was supervised and successful
+				if (!supervisedCommandSucceeded(result)) {
+					this.schedulePoll({ property }, value);
+				}
 
-			default:
+				return result;
+			} else {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: DoorLockCCAPI, { property }) {
+			switch (property) {
+				case "currentMode":
+				case "targetMode":
+				case "duration":
+				case "outsideHandlesCanOpenDoor":
+				case "insideHandlesCanOpenDoor":
+				case "latchStatus":
+				case "boltStatus":
+				case "doorStatus":
+				case "lockTimeout":
+					return (await this.get())?.[property];
+
+				case "operationType":
+				case "outsideHandlesCanOpenDoorConfiguration":
+				case "insideHandlesCanOpenDoorConfiguration":
+				case "lockTimeoutConfiguration":
+				case "autoRelockTime":
+				case "holdAndReleaseTime":
+				case "twistAssist":
+				case "blockToBlock":
+					return (await this.getConfiguration())?.[property];
+
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCapabilities() {
@@ -536,11 +591,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 		if (!hadCriticalTimeout) {
 			// Save support information for the status values
 			const doorStatusValue = DoorLockCCValues.doorStatus;
-			this.setMetadata(
-				applHost,
-				doorStatusValue,
-				doorSupported ? doorStatusValue.meta : undefined,
-			);
+			if (doorSupported) this.setMetadata(applHost, doorStatusValue);
 			this.setValue(
 				applHost,
 				DoorLockCCValues.doorSupported,
@@ -548,11 +599,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			);
 
 			const latchStatusValue = DoorLockCCValues.latchStatus;
-			this.setMetadata(
-				applHost,
-				latchStatusValue,
-				latchSupported ? latchStatusValue.meta : undefined,
-			);
+			if (latchSupported) this.setMetadata(applHost, latchStatusValue);
 			this.setValue(
 				applHost,
 				DoorLockCCValues.latchSupported,
@@ -560,11 +607,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			);
 
 			const boltStatusValue = DoorLockCCValues.boltStatus;
-			this.setMetadata(
-				applHost,
-				boltStatusValue,
-				boltSupported ? boltStatusValue.meta : undefined,
-			);
+			if (boltSupported) this.setMetadata(applHost, boltStatusValue);
 			this.setValue(
 				applHost,
 				DoorLockCCValues.boltSupported,

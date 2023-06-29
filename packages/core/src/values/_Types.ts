@@ -2,7 +2,6 @@ import type { CommandClasses } from "../capabilities/CommandClasses";
 import type { ValueMetadata } from "./Metadata";
 
 /** Uniquely identifies to which CC, endpoint and property a value belongs to */
-
 export interface ValueID {
 	commandClass: CommandClasses;
 	endpoint?: number;
@@ -10,6 +9,7 @@ export interface ValueID {
 	propertyKey?: string | number;
 }
 
+/** Extends the {@link ValueID} interface with human-readable labels */
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
 	propertyName?: string;
@@ -45,7 +45,7 @@ export interface MetadataUpdatedArgs extends ValueID {
 export interface SetValueOptions {
 	/** When this is true, no event will be emitted for the value change */
 	noEvent?: boolean;
-	/** When this is true,  */
+	/** When this is true, trying to set invalid value IDs will not throw an error */
 	noThrow?: boolean;
 	/**
 	 * When this is `false`, the value will not be stored and a `value notification` event will be emitted instead (implies `noEvent: false`).
@@ -53,4 +53,6 @@ export interface SetValueOptions {
 	stateful?: boolean;
 	/** Allows defining the source of a value update */
 	source?: ValueUpdatedArgs["source"];
+	/** Whether the timestamp of the value should be updated. Default: `true` */
+	updateTimestamp?: boolean;
 }

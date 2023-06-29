@@ -1,8 +1,9 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
 	validatePayload,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
@@ -65,7 +66,7 @@ export const ZWavePlusCCValues = Object.freeze({
 
 @API(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: ZWavePlusCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ZWavePlusCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ZWavePlusCommand.Get:
 			case ZWavePlusCommand.Report:

@@ -1,18 +1,19 @@
 import * as Sentry from "@sentry/node";
 import {
-	CommandClass,
 	isCommandClassContainer,
 	isEncapsulatingCommandClass,
+	isMultiEncapsulatingCommandClass,
+	type CommandClass,
 } from "@zwave-js/cc";
 import {
-	DataDirection,
-	getDirectionPrefix,
-	LogContext,
 	MessagePriority,
+	ZWaveLoggerBase,
+	getDirectionPrefix,
 	messageRecordToLines,
 	tagify,
-	ZWaveLogContainer,
-	ZWaveLoggerBase,
+	type DataDirection,
+	type LogContext,
+	type ZWaveLogContainer,
 } from "@zwave-js/core";
 import type { Message, ResponseRole } from "@zwave-js/serial";
 import { FunctionType, MessageType } from "@zwave-js/serial";
@@ -140,10 +141,10 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 				// Remove the default payload message and draw a bracket
 				msg = msg.filter((line) => !line.startsWith("│ payload:"));
 
-				let indent = 0;
-				let cc: CommandClass = message.command;
-				while (true) {
-					const isEncapCC = isEncapsulatingCommandClass(cc);
+				const logCC = (cc: CommandClass, indent: number = 0) => {
+					const isEncapCC =
+						isEncapsulatingCommandClass(cc) ||
+						isMultiEncapsulatingCommandClass(cc);
 					const loggedCC = cc.toLogEntry(this.driver);
 					msg.push(
 						" ".repeat(indent * 2) + "└─" + tagify(loggedCC.tags),
@@ -162,11 +163,15 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 					}
 					// If this is an encap CC, continue
 					if (isEncapsulatingCommandClass(cc)) {
-						cc = cc.encapsulated;
-					} else {
-						break;
+						logCC(cc.encapsulated, indent);
+					} else if (isMultiEncapsulatingCommandClass(cc)) {
+						for (const encap of cc.encapsulated) {
+							logCC(encap, indent);
+						}
 					}
-				}
+				};
+
+				logCC(message.command);
 			}
 
 			this.logger.log({

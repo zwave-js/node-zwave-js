@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Make sure tsconfig references are up to date
+if ! yarn run check-references >/dev/null 2>&1 ; then
+	echo "TSConfig references are out of date. Execute \033[0;34myarn run sync-references\033[0m to fix and try again" >&2
+	exit 1
+fi
