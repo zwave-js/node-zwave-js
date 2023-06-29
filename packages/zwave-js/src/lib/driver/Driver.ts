@@ -476,259 +476,12 @@ export class Driver
 				this._options.storage.deviceConfigPriorityDir,
 		});
 
-		// And initialize but don't start the send thread machine
-		// const sendThreadMachine = createSendThreadMachine(
-		// 	{
-		// 		sendData: this.writeSerial.bind(this),
-		// 		createSendDataAbort: () => new SendDataAbort(this),
-		// 		notifyUnsolicited: (msg) => {
-		// 			void this.handleUnsolicitedMessage(msg);
-		// 		},
-		// 		notifyRetry: (
-		// 			command,
-		// 			lastError,
-		// 			message,
-		// 			attempts,
-		// 			maxAttempts,
-		// 			delay,
-		// 		) => {
-		// 			if (command === "SendData") {
-		// 				this.controllerLog.logNode(
-		// 					message.getNodeId() ?? 255,
-		// 					`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-		// 					"warn",
-		// 				);
-		// 			} else {
-		// 				// Translate the error into a better one
-		// 				let errorReason: string;
-		// 				switch (lastError) {
-		// 					case "response timeout":
-		// 						errorReason = "No response from controller";
-		// 						this._controller?.incrementStatistics(
-		// 							"timeoutResponse",
-		// 						);
-		// 						break;
-		// 					case "callback timeout":
-		// 						errorReason = "No callback from controller";
-		// 						this._controller?.incrementStatistics(
-		// 							"timeoutCallback",
-		// 						);
-		// 						break;
-		// 					case "response NOK":
-		// 						errorReason =
-		// 							"The controller response indicated failure";
-		// 						break;
-		// 					case "callback NOK":
-		// 						errorReason =
-		// 							"The controller callback indicated failure";
-		// 						break;
-		// 					case "ACK timeout":
-		// 						this._controller?.incrementStatistics(
-		// 							"timeoutACK",
-		// 						);
-		// 					// fall through
-		// 					case "CAN":
-		// 					case "NAK":
-		// 					default:
-		// 						errorReason =
-		// 							"Failed to execute controller command";
-		// 						break;
-		// 				}
-		// 				this.controllerLog.print(
-		// 					`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-		// 					"warn",
-		// 				);
-		// 			}
-		// 		},
-		// 		timestamp: highResTimestamp,
-		// 		rejectTransaction: (transaction, error) => {
-		// 			// If a node failed to respond in time, it might be sleeping
-		// 			if (this.isMissingNodeACK(transaction, error)) {
-		// 				if (this.handleMissingNodeACK(transaction as any))
-		// 					return;
-		// 			}
-
-		// 			// If the transaction was already started, we need to throw the error into the message generator
-		// 			// so it correctly gets ended. Otherwise just reject the result promise
-		// 			if (transaction.parts.self) {
-		// 				// eslint-disable-next-line @typescript-eslint/no-empty-function
-		// 				transaction.parts.self.throw(error).catch(() => {});
-		// 			} else {
-		// 				transaction.promise.reject(error);
-		// 			}
-		// 		},
-		// 		resolveTransaction: (transaction, result) => {
-		// 			// If the transaction was already started, we need to end the message generator early by throwing
-		// 			// the result. Otherwise just resolve the result promise
-		// 			if (transaction.parts.self) {
-		// 				// eslint-disable-next-line @typescript-eslint/no-empty-function
-		// 				transaction.parts.self.throw(result).catch(() => {});
-		// 			} else {
-		// 				transaction.promise.resolve(result);
-		// 			}
-		// 		},
-		// 		logOutgoingMessage: (msg: Message) => {
-		// 			this.driverLog.logMessage(msg, {
-		// 				direction: "outbound",
-		// 			});
-		// 			if (process.env.NODE_ENV !== "test") {
-		// 				// Enrich error data in case something goes wrong
-		// 				Sentry.addBreadcrumb({
-		// 					category: "message",
-		// 					timestamp: Date.now() / 1000,
-		// 					type: "debug",
-		// 					data: {
-		// 						direction: "outbound",
-		// 						msgType: msg.type,
-		// 						functionType: msg.functionType,
-		// 						name: msg.constructor.name,
-		// 						nodeId: msg.getNodeId(),
-		// 						...msg.toLogEntry(),
-		// 					},
-		// 				});
-		// 			}
-		// 		},
-		// 		log: this.driverLog.print.bind(this.driverLog),
-		// 		logQueue: this.driverLog.sendQueue.bind(this.driverLog),
-		// 	},
-		// 	pick(this._options, ["timeouts", "attempts"]),
-		// );
-		// this.sendThread = interpret(sendThreadMachine);
-		// this._sendThreadIdle = false;
-
-		// this.sendThread.onTransition((state) => {
-		// 	if (state.changed) {
-		// 		this.sendThreadIdle = state.matches("idle");
-		// 	}
-		// });
-
-		// For debugging
-		// this.sendThread.onTransition((state) => {
-		// 	if (state.changed)
-		// 		this.driverLog.print(
-		// 			`send thread state: ${state.toStrings().join("->")}`,
-		// 			"verbose",
-		// 		);
-		// });
-		// this.sendThread.onEvent((evt) => {
-		// 	if (evt.type === "forward") {
-		// 		this.driverLog.print(
-		// 			// @ts-ignore
-		// 			`forwarding event: ${evt.payload.type} from ${evt.from} to ${evt.to}`,
-		// 			"verbose",
-		// 		);
-		// 	} else {
-		// 		this.driverLog.print(
-		// 			`send thread event: ${evt.type}`,
-		// 			"verbose",
-		// 		);
-		// 	}
-		// });
 		this.queue = new SortedList();
-
-		// const sendThreadMachine = createSendThreadMachineSlim(
-		// 	{
-		// 		sendData: this.writeSerial.bind(this),
-		// 		notifyUnsolicited: (msg) => {
-		// 			void this.handleUnsolicitedMessage(msg);
-		// 		},
-		// 		notifyRetry: (
-		// 			command,
-		// 			lastError,
-		// 			message,
-		// 			attempts,
-		// 			maxAttempts,
-		// 			delay,
-		// 		) => {
-		// 			if (command === "SendData") {
-		// 				this.controllerLog.logNode(
-		// 					message.getNodeId() ?? 255,
-		// 					`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-		// 					"warn",
-		// 				);
-		// 			} else {
-		// 				// Translate the error into a better one
-		// 				let errorReason: string;
-		// 				switch (lastError) {
-		// 					case "response timeout":
-		// 						errorReason = "No response from controller";
-		// 						this._controller?.incrementStatistics(
-		// 							"timeoutResponse",
-		// 						);
-		// 						break;
-		// 					case "callback timeout":
-		// 						errorReason = "No callback from controller";
-		// 						this._controller?.incrementStatistics(
-		// 							"timeoutCallback",
-		// 						);
-		// 						break;
-		// 					case "response NOK":
-		// 						errorReason =
-		// 							"The controller response indicated failure";
-		// 						break;
-		// 					case "callback NOK":
-		// 						errorReason =
-		// 							"The controller callback indicated failure";
-		// 						break;
-		// 					case "ACK timeout":
-		// 						this._controller?.incrementStatistics(
-		// 							"timeoutACK",
-		// 						);
-		// 					// fall through
-		// 					case "CAN":
-		// 					case "NAK":
-		// 					default:
-		// 						errorReason =
-		// 							"Failed to execute controller command";
-		// 						break;
-		// 				}
-		// 				this.controllerLog.print(
-		// 					`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-		// 					"warn",
-		// 				);
-		// 			}
-		// 		},
-		// 		timestamp: highResTimestamp,
-		// 		logOutgoingMessage: (msg: Message) => {
-		// 			this.driverLog.logMessage(msg, {
-		// 				direction: "outbound",
-		// 			});
-		// 			if (process.env.NODE_ENV !== "test") {
-		// 				// Enrich error data in case something goes wrong
-		// 				Sentry.addBreadcrumb({
-		// 					category: "message",
-		// 					timestamp: Date.now() / 1000,
-		// 					type: "debug",
-		// 					data: {
-		// 						direction: "outbound",
-		// 						msgType: msg.type,
-		// 						functionType: msg.functionType,
-		// 						name: msg.constructor.name,
-		// 						nodeId: msg.getNodeId(),
-		// 						...msg.toLogEntry(),
-		// 					},
-		// 				});
-		// 			}
-		// 		},
-		// 		log: this.driverLog.print.bind(this.driverLog),
-		// 		pollQueue: (prevResult) => this.pollQueue(prevResult),
-		// 	},
-		// 	pick(this._options, ["timeouts", "attempts"]),
-		// );
-		// this.sendThreadSlim = interpret(sendThreadMachine);
-
 		this._sendThreadIdle = false;
-		// this.sendThreadSlim.onTransition((state) => {
-		// 	if (state.changed) {
-		// 		this.sendThreadIdle = state.matches("idle");
-		// 	}
-		// });
 	}
 
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
-	// /** An instance of the Send Thread state machine */
-	// private sendThread: SendThreadInterpreter;
 
 	/** The queue of pending transactions */
 	private queue: SortedList<Transaction>;
@@ -1109,7 +862,6 @@ export class Driver
 		this.driverLog.print("", "info");
 
 		this.driverLog.print("starting driver...");
-		// this.sendThreadSlim.start();
 
 		// Open the serial port
 		if (typeof this.port === "string") {
@@ -4406,6 +4158,59 @@ ${handlers.length} left`,
 		}
 	}
 
+	// TODO: Work this in
+	// mayStartTransaction: (ctx, evt: any, meta) => {
+	// 	// We may not send anything if the send thread is paused
+	// 	if (ctx.paused) return false;
+	// 	const nextTransaction = ctx.queue.peekStart();
+	// 	// We can't send anything if the queue is empty
+	// 	if (!nextTransaction) return false;
+
+	// 	const message = nextTransaction.message;
+	// 	const targetNode = message.getNodeUnsafe(nextTransaction.driver);
+
+	// 	// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
+	// 	// There are a few exceptions:
+	// 	// 1. Pings may be used to determine whether a node is really asleep.
+	// 	// 2. Responses to nonce requests must be sent independent of the node status, because some sleeping nodes may try to send us encrypted messages.
+	// 	//    If we don't send them, they block the send queue
+	// 	// 3. Nodes that can sleep but do not support wakeup: https://github.com/zwave-js/node-zwave-js/discussions/1537
+	// 	//    We need to try and send messages to them even if they are asleep, because we might never hear from them
+
+	// 	// While the queue is busy, we may not start any transaction, except nonce responses to the node we're currently communicating with
+	// 	if (meta.state.matches("busy")) {
+	// 		if (nextTransaction.priority === MessagePriority.Nonce) {
+	// 			for (const active of ctx.activeTransactions.values()) {
+	// 				if (
+	// 					active.transaction.message.getNodeId() ===
+	// 					nextTransaction.message.getNodeId()
+	// 				) {
+	// 					return true;
+	// 				}
+	// 			}
+	// 		}
+	// 		return false;
+	// 	}
+
+	// 	// While not busy, always reply to nonce requests and Supervision Get requests
+	// 	if (
+	// 		nextTransaction.priority === MessagePriority.Nonce ||
+	// 		nextTransaction.priority === MessagePriority.Supervision
+	// 	) {
+	// 		return true;
+	// 	}
+	// 	// And send pings
+	// 	if (messageIsPing(message)) return true;
+	// 	// Or controller messages
+	// 	if (!targetNode) return true;
+
+	// 	return (
+	// 		targetNode.status !== NodeStatus.Asleep ||
+	// 		(!targetNode.supportsCC(CommandClasses["Wake Up"]) &&
+	// 			targetNode.interviewStage >= InterviewStage.NodeInfo)
+	// 	);
+	// },
+
 	private async advanceQueue(prevResult: Message | undefined): Promise<void> {
 		if (this.queuePaused) return;
 
@@ -4447,12 +4252,9 @@ ${handlers.length} left`,
 	}
 
 	private drainQueueBusy = false;
-
 	private async drainQueue(prevResult?: Message): Promise<void> {
 		// Don't execute more than once at a time
-		if (this.drainQueueBusy) {
-			return;
-		}
+		if (this.drainQueueBusy) return;
 		this.drainQueueBusy = true;
 
 		while (true) {
@@ -4476,6 +4278,21 @@ ${handlers.length} left`,
 						// TODO: Add specialized handling for some ZWaveErrors:
 						// - [ ] Send Data callback timeout
 						// - [ ] Retry SendData messages if their retry count allows it and its not a multicast with NOK callback
+						// mayRetry: (ctx, evt: any) => {
+						// 	const msg = ctx.transaction.parts.current;
+						// 	if (!isSendData(msg)) return false;
+						// 	if (
+						// 		msg instanceof SendDataMulticastRequest ||
+						// 		msg instanceof SendDataMulticastBridgeRequest
+						// 	) {
+						// 		// Don't try to resend multicast messages if they were already transmitted.
+						// 		// One or more nodes might have already reacted
+						// 		if (evt.reason === "callback NOK") {
+						// 			return false;
+						// 		}
+						// 	}
+						// 	return msg.maxSendAttempts > ctx.sendDataAttempts;
+						// },
 					}
 					this.rejectTransaction(transaction, e);
 				}
