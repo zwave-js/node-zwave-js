@@ -17,6 +17,7 @@ import {
 	SecurityCommand,
 	SupervisionCC,
 	SupervisionCCReport,
+	TransportServiceCC,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
 	TransportServiceCCSegmentRequest,
@@ -3729,6 +3730,11 @@ ${handlers.length} left`,
 				"warn",
 			);
 			return true;
+		}
+
+		// CRC16, Transport Service belong outside of Security encapsulation
+		if (cc instanceof CRC16CC || cc instanceof TransportServiceCC) {
+			return false;
 		}
 
 		if (
