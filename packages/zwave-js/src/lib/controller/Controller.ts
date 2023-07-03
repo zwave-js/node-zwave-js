@@ -1863,7 +1863,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				node.updateNodeInfo(msg.nodeInformation);
 
 				// Resolve active pings that would fail otherwise
-				this.driver["resolvePendingPings"](node.id);
+				this.driver.resolvePendingPings(node.id);
 
 				if (
 					node.canSleep &&
