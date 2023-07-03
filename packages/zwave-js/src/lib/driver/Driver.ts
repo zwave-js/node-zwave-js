@@ -4302,9 +4302,9 @@ ${handlers.length} left`,
 
 						// Sending the command failed, reject the transaction
 						this.rejectTransaction(transaction, e);
-						// and continue with the next one
-						break attemptMessage;
 					}
+					// Continue with the next message
+					break attemptMessage;
 				}
 			} else {
 				// Nothing to send, definitely idle
@@ -4317,7 +4317,7 @@ ${handlers.length} left`,
 
 		// Avoid a deadlock when a transaction was added after the advanceQueue call,
 		// but before setting the busy flag back to false
-		if (this.queue.length > 0) {
+		if (this.queue.length > 0 && this.mayStartNextTransaction()) {
 			this.triggerQueue();
 		}
 	}
