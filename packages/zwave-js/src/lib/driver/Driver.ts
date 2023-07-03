@@ -4211,8 +4211,6 @@ ${handlers.length} left`,
 	}
 
 	private async advanceQueue(prevResult: Message | undefined): Promise<void> {
-		if (this.queuePaused) return;
-
 		while (true) {
 			// If we don't have a current transaction yet, try to get the next one from the queue
 			if (!this.currentTransaction) {
@@ -4257,6 +4255,8 @@ ${handlers.length} left`,
 		this.drainQueueBusy = true;
 
 		transactionLoop: while (true) {
+			if (this.queuePaused) return;
+
 			// Try to get the next message to send
 			await this.advanceQueue(prevResult);
 			const transaction = this.currentTransaction;
@@ -4269,7 +4269,8 @@ ${handlers.length} left`,
 				attemptMessage: for (let attemptNumber = 1; ; attemptNumber++) {
 					try {
 						prevResult = await this.executeSerialAPICommand(
-							transaction,
+							msg,
+							transaction.stack,
 						);
 						// We got a result, pass it to the transaction on the next iteration
 					} catch (e: any) {
@@ -4282,10 +4283,11 @@ ${handlers.length} left`,
 								e.context === "callback"
 							) {
 								// If the callback to SendData times out, we need to issue a SendDataAbort
-								void this.writeSerial(
-									new SendDataAbort(this).serialize(),
+								await this.executeSerialAPICommand(
+									new SendDataAbort(this),
 								).catch(noop);
-								// TODO: Figure out if we need to wait for the ACK to that
+								// And give the controller a bit of time before retrying
+								await wait(500);
 							}
 
 							if (
@@ -4302,6 +4304,7 @@ ${handlers.length} left`,
 
 						// Sending the command failed, reject the transaction
 						this.rejectTransaction(transaction, e);
+						this.currentTransaction = undefined;
 					}
 					// Continue with the next message
 					break attemptMessage;
@@ -4350,10 +4353,9 @@ ${handlers.length} left`,
 	 * @param transaction The transaction which contains the message to be executed
 	 */
 	private async executeSerialAPICommand(
-		transaction: Transaction,
+		msg: Message,
+		transactionSource?: string,
 	): Promise<Message | undefined> {
-		const msg = transaction.getCurrentMessage();
-		if (!msg) return;
 		const machine = createSerialAPICommandMachine(
 			msg,
 			{
@@ -4453,8 +4455,9 @@ ${handlers.length} left`,
 				result.reject(
 					serialAPICommandErrorToZWaveError(
 						cmdResult.reason,
-						transaction,
+						msg,
 						cmdResult.result,
+						transactionSource,
 					),
 				);
 			}

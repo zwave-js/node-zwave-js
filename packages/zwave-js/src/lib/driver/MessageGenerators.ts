@@ -952,8 +952,9 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 								resultPromise.reject(
 									serialAPICommandErrorToZWaveError(
 										"callback NOK",
-										generator.parent,
+										generator.current!,
 										e,
+										generator.parent.stack,
 									),
 								);
 							}

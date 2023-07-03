@@ -31,8 +31,9 @@ import type { Transaction } from "./Transaction";
 
 export function serialAPICommandErrorToZWaveError(
 	reason: (SerialAPICommandDoneData & { type: "failure" })["reason"],
-	transaction: Transaction,
+	sentMessage: Message,
 	receivedMessage: Message | undefined,
+	transactionSource: string | undefined,
 ): ZWaveError {
 	switch (reason) {
 		case "send failure":
@@ -42,49 +43,47 @@ export function serialAPICommandErrorToZWaveError(
 				`Failed to send the message after 3 attempts`,
 				ZWaveErrorCodes.Controller_MessageDropped,
 				undefined,
-				transaction.stack,
+				transactionSource,
 			);
 		case "ACK timeout":
 			return new ZWaveError(
 				`Timeout while waiting for an ACK from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
 				"ACK",
-				transaction.stack,
+				transactionSource,
 			);
 		case "response timeout":
 			return new ZWaveError(
 				`Timeout while waiting for a response from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
 				"response",
-				transaction.stack,
+				transactionSource,
 			);
 		case "callback timeout":
 			return new ZWaveError(
 				`Timeout while waiting for a callback from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
 				"callback",
-				transaction.stack,
+				transactionSource,
 			);
 		case "response NOK": {
-			const sentMessage = transaction.getCurrentMessage();
 			if (isSendData(sentMessage)) {
 				return new ZWaveError(
 					`Failed to send the command after ${sentMessage.maxSendAttempts} attempts. Transmission queue full`,
 					ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			} else {
 				return new ZWaveError(
 					`The controller response indicated failure`,
 					ZWaveErrorCodes.Controller_ResponseNOK,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			}
 		}
 		case "callback NOK": {
-			const sentMessage = transaction.getCurrentMessage();
 			if (
 				sentMessage instanceof SendDataRequest ||
 				sentMessage instanceof SendDataBridgeRequest
@@ -105,7 +104,7 @@ export function serialAPICommandErrorToZWaveError(
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			} else if (
 				sentMessage instanceof SendDataMulticastRequest ||
@@ -125,14 +124,14 @@ export function serialAPICommandErrorToZWaveError(
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			} else {
 				return new ZWaveError(
 					`The controller callback indicated failure`,
 					ZWaveErrorCodes.Controller_CallbackNOK,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			}
 		}
