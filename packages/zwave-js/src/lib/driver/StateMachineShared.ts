@@ -135,6 +135,14 @@ export function serialAPICommandErrorToZWaveError(
 				);
 			}
 		}
+		case "aborted": {
+			return new ZWaveError(
+				`The transaction was aborted`,
+				ZWaveErrorCodes.Controller_CommandAborted,
+				undefined,
+				transactionSource,
+			);
+		}
 	}
 }
 

@@ -118,22 +118,33 @@ function suite(
 					);
 					nodes.push(node);
 
+					const onReady = (resolve: () => void) => {
+						if (clearMessageStatsBeforeTest) {
+							mockNode.clearReceivedControllerFrames();
+							mockNode.clearSentControllerFrames();
+						}
+
+						process.nextTick(resolve);
+					};
+
 					promises.push(
 						new Promise<void>((resolve) => {
-							node.once("ready", () => {
-								if (clearMessageStatsBeforeTest) {
-									mockNode.clearReceivedControllerFrames();
-									mockNode.clearSentControllerFrames();
-									mockController.clearReceivedHostMessages();
-								}
-
-								process.nextTick(resolve);
-							});
+							if (
+								options.additionalDriverOptions?.testingHooks
+									?.skipNodeInterview
+							) {
+								onReady(resolve);
+							} else {
+								node.once("ready", () => onReady(resolve));
+							}
 						}),
 					);
 				}
 
 				await Promise.all(promises);
+				if (clearMessageStatsBeforeTest) {
+					mockController.clearReceivedHostMessages();
+				}
 				process.nextTick(resolve);
 			});
 

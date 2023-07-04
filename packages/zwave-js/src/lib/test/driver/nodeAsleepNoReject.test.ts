@@ -109,7 +109,7 @@ test("when a node does not respond because it is asleep, the transaction does no
 	);
 
 	// Both transactions should still be in the queue
-	const sendQueue = driver["sendThread"].state.context.queue;
+	const sendQueue = driver["queue"];
 	t.is(sendQueue.length, 2);
 	t.is(sendQueue.get(0)?.priority, MessagePriority.WakeUp);
 	t.is(sendQueue.get(1)?.priority, MessagePriority.WakeUp);

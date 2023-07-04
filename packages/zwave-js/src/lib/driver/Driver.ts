@@ -393,6 +393,7 @@ interface AwaitedThing<T> {
 	refreshPredicate?: (msg: T) => boolean;
 }
 
+type AwaitedMessageHeader = AwaitedThing<MessageHeaders>;
 type AwaitedMessageEntry = AwaitedThing<Message>;
 type AwaitedCommandEntry = AwaitedThing<ICommandClass>;
 export type AwaitedBootloaderChunkEntry = AwaitedThing<BootloaderChunk>;
@@ -505,11 +506,13 @@ export class Driver
 
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
-	/** A map of awaited messages */
+	/** A list of awaited message headers */
+	private awaitedMessageHeaders: AwaitedMessageHeader[] = [];
+	/** A list of awaited messages */
 	private awaitedMessages: AwaitedMessageEntry[] = [];
-	/** A map of awaited commands */
+	/** A list of awaited commands */
 	private awaitedCommands: AwaitedCommandEntry[] = [];
-	/** A map of awaited chunks from the bootloader */
+	/** A list of awaited chunks from the bootloader */
 	private awaitedBootloaderChunks: AwaitedBootloaderChunkEntry[] = [];
 
 	/** A map of Node ID -> ongoing sessions */
@@ -2669,6 +2672,7 @@ export class Driver
 			this.pollBackgroundRSSITimer,
 			...this.awaitedCommands.map((c) => c.timeout),
 			...this.awaitedMessages.map((m) => m.timeout),
+			...this.awaitedMessageHeaders.map((h) => h.timeout),
 			...this.awaitedBootloaderChunks.map((b) => b.timeout),
 		]) {
 			if (timeout) clearTimeout(timeout);
@@ -3255,14 +3259,18 @@ export class Driver
 			// The sender of this transaction doesn't want it to change the status of the node
 			return false;
 		} else if (node.canSleep) {
+			if (node.status === NodeStatus.Asleep) {
+				// We already moved the messages to the wakeup queue
+				return true;
+			}
 			this.controllerLog.logNode(
 				node.id,
 				`${messagePart1}. It is probably asleep, moving its messages to the wakeup queue.`,
 				"warn",
 			);
+
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
-
 			node.markAsAsleep();
 			return this.mayMoveToWakeupQueue(transaction);
 		} else {
@@ -4210,119 +4218,127 @@ ${handlers.length} left`,
 		);
 	}
 
-	private async advanceQueue(prevResult: Message | undefined): Promise<void> {
-		while (true) {
-			// If we don't have a current transaction yet, try to get the next one from the queue
-			if (!this.currentTransaction) {
-				if (!this.mayStartNextTransaction()) return;
-
-				this.currentTransaction = this.queue.shift();
-				if (!this.currentTransaction) return;
-			}
-
-			// If the transaction hasn't been started yet, do it now
-			if (!this.currentTransaction.parts.self) {
-				this.currentTransaction.parts.start();
-				// self is now guaranteed to be defined
-
-				// We do not pass previous results to new transactions
-				prevResult = undefined;
-			}
-
-			// Execute the transaction until it gives us the next message
-			const { done } = await this.currentTransaction.parts.self!.next(
-				prevResult!,
-			);
-			if (done) {
-				// This transaction is finished, try the next one
-				this.currentTransaction = undefined;
-				continue;
-			} else {
-				// The .current property of the current transactions's message generator
-				// now contains the next message to send
-				return;
-			}
-
-			// The loop will never execute more than once, except if we reached
-			// the end of a transaction.
-		}
-	}
-
 	private drainQueueBusy = false;
-	private async drainQueue(prevResult?: Message): Promise<void> {
+	private async drainQueue(): Promise<void> {
 		// Don't execute more than once at a time
 		if (this.drainQueueBusy) return;
 		this.drainQueueBusy = true;
 
-		transactionLoop: while (true) {
-			if (this.queuePaused) return;
-
-			// Try to get the next message to send
-			await this.advanceQueue(prevResult);
-			const transaction = this.currentTransaction;
-			if (transaction) {
-				const msg = transaction.getCurrentMessage()!;
+		try {
+			while (this.mayStartNextTransaction()) {
+				const transaction = (this.currentTransaction =
+					this.queue.shift()!);
 				// We have something to send, so not idle
 				this.sendThreadIdle = false;
 
-				// TODO: refactor this nested loop or make it part of executeSerialAPICommand
-				attemptMessage: for (let attemptNumber = 1; ; attemptNumber++) {
-					try {
-						prevResult = await this.executeSerialAPICommand(
-							msg,
-							transaction.stack,
-						);
-						// We got a result, pass it to the transaction on the next iteration
-					} catch (e: any) {
-						if (!isZWaveError(e)) {
-							e = createMessageDroppedUnexpectedError(e);
-						} else {
-							if (
-								isSendData(msg) &&
-								e.code === ZWaveErrorCodes.Controller_Timeout &&
-								e.context === "callback"
-							) {
-								// If the callback to SendData times out, we need to issue a SendDataAbort
-								await this.executeSerialAPICommand(
-									new SendDataAbort(this),
-								).catch(noop);
-								// And give the controller a bit of time before retrying
-								await wait(500);
-							}
-
-							if (
-								this.mayRetrySerialAPICommand(
-									msg,
-									attemptNumber,
-									e.code,
-								)
-							) {
-								// Retry the command
-								continue attemptMessage;
-							}
-						}
-
-						// Sending the command failed, reject the transaction
-						this.rejectTransaction(transaction, e);
-						this.currentTransaction = undefined;
-					}
-					// Continue with the next message
-					break attemptMessage;
+				let error: ZWaveError | undefined;
+				try {
+					await this.drainTransactionGenerator(transaction);
+				} catch (e) {
+					error = e as ZWaveError;
+				} finally {
+					this.currentTransaction = undefined;
 				}
-			} else {
-				// Nothing to send, definitely idle
-				this.sendThreadIdle = true;
-				break transactionLoop;
-			}
-		}
 
-		this.drainQueueBusy = false;
+				// Handle errors last, so the handling methods operate on the correct state
+				if (error) {
+					this.rejectTransaction(transaction, error);
+				}
+			}
+		} finally {
+			this.drainQueueBusy = false;
+			this.sendThreadIdle = true;
+		}
 
 		// Avoid a deadlock when a transaction was added after the advanceQueue call,
 		// but before setting the busy flag back to false
-		if (this.queue.length > 0 && this.mayStartNextTransaction()) {
-			this.triggerQueue();
+		if (this.mayStartNextTransaction()) this.triggerQueue();
+	}
+
+	/** Steps through the message generator of a transaction. Throws an error if the transaction should fail. */
+	private async drainTransactionGenerator(
+		transaction: Transaction,
+	): Promise<void> {
+		transaction.parts.start();
+		// .self is now guaranteed to be defined
+
+		let prevResult: Message | undefined;
+
+		// Step through the transaction as long as it gives us a next message
+		while (!(await transaction.parts.self!.next(prevResult!)).done) {
+			// The .current property of the current transactions's message generator
+			// now contains the next message to send
+			const msg = transaction.getCurrentMessage()!;
+
+			// TODO: refactor this nested loop or make it part of executeSerialAPICommand
+			attemptMessage: for (let attemptNumber = 1; ; attemptNumber++) {
+				try {
+					prevResult = await this.executeSerialAPICommand(
+						msg,
+						transaction.stack,
+					);
+					if (isTransmitReport(prevResult) && !prevResult.isOK()) {
+						// The node did not acknowledge the command. Convert this into an
+						// error so it can be handled.
+						// First throw into the generator, so it can be reset
+						transaction.parts.self!.throw(prevResult).catch(noop);
+
+						throw new ZWaveError(
+							"The node did not acknowledge the command",
+							ZWaveErrorCodes.Controller_CallbackNOK,
+							prevResult,
+							transaction.stack,
+						);
+					}
+					// We got a result - it will be passed to the next iteration
+					break attemptMessage;
+				} catch (e: any) {
+					let delay = 0;
+					let zwError: ZWaveError;
+
+					if (!isZWaveError(e)) {
+						zwError = createMessageDroppedUnexpectedError(e);
+					} else {
+						if (
+							e.code === ZWaveErrorCodes.Controller_CommandAborted
+						) {
+							// This transaction was aborted by the driver due to a controller timeout.
+							// Rejections, re-queuing etc. have been handled, so just drop it silently and
+							// continue with the next message
+							return;
+						} else if (
+							isSendData(msg) &&
+							e.code === ZWaveErrorCodes.Controller_Timeout &&
+							e.context === "callback"
+						) {
+							// If the callback to SendData times out, we need to issue a SendDataAbort
+							await this.abortSendData();
+							// Wait a short amount of time so everything can settle
+							delay = 50;
+						}
+
+						if (
+							this.mayRetrySerialAPICommand(
+								msg,
+								attemptNumber,
+								e.code,
+							)
+						) {
+							// Retry the command
+							if (delay) await wait(delay, true);
+							continue attemptMessage;
+						}
+
+						zwError = e;
+					}
+
+					// Sending the command failed, reject the transaction
+					throw zwError;
+				}
+			}
 		}
+
+		// This transaction is finished, try the next one
 	}
 
 	private triggerQueue(): void {
@@ -4866,6 +4882,33 @@ ${handlers.length} left`,
 		return this.sendCommandInternal(command, options);
 	}
 
+	private async abortSendData(
+		abortInterpreter: boolean = false,
+	): Promise<void> {
+		try {
+			const abort = new SendDataAbort(this);
+			await this.writeSerial(abort.serialize());
+			this.driverLog.logMessage(abort, {
+				direction: "outbound",
+			});
+
+			// We're bypassing the serial API machine, so we need to wait for the ACK ourselves
+			// This could also cause a NAK or CAN, but we don't really care
+			await this.waitForMessageHeader(() => true, 500).catch(noop);
+
+			// Abort the currently active command machine only if the controller has timed out.
+			// SendData commands we abort early MUST result in the normal callback.
+			if (
+				abortInterpreter &&
+				this.serialAPIInterpreter?.status === InterpreterStatus.Running
+			) {
+				this.serialAPIInterpreter.send("abort");
+			}
+		} catch {
+			// ignore
+		}
+	}
+
 	/**
 	 * Sends a low-level message like ACK, NAK or CAN immediately
 	 * @param header The low-level message to send
@@ -4878,6 +4921,47 @@ ${handlers.length} left`,
 	/** Sends a raw datagram to the serialport (if that is open) */
 	private async writeSerial(data: Buffer): Promise<void> {
 		return this.serial?.writeAsync(data);
+	}
+
+	/**
+	 * Waits until a matching message header is received or a timeout has elapsed. Returns the received message.
+	 *
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 * @param predicate A predicate function to test all incoming message headers.
+	 */
+	public waitForMessageHeader(
+		predicate: (header: MessageHeaders) => boolean,
+		timeout: number,
+	): Promise<MessageHeaders> {
+		return new Promise<MessageHeaders>((resolve, reject) => {
+			const promise = createDeferredPromise<MessageHeaders>();
+			const entry: AwaitedMessageHeader = {
+				predicate,
+				handler: (msg) => promise.resolve(msg),
+				timeout: undefined,
+			};
+			this.awaitedMessageHeaders.push(entry);
+			const removeEntry = () => {
+				if (entry.timeout) clearTimeout(entry.timeout);
+				const index = this.awaitedMessageHeaders.indexOf(entry);
+				if (index !== -1) this.awaitedMessageHeaders.splice(index, 1);
+			};
+			// When the timeout elapses, remove the wait entry and reject the returned Promise
+			entry.timeout = setTimeout(() => {
+				removeEntry();
+				reject(
+					new ZWaveError(
+						`Received no matching serial frame within the provided timeout!`,
+						ZWaveErrorCodes.Controller_Timeout,
+					),
+				);
+			}, timeout);
+			// When the promise is resolved, remove the wait entry and resolve the returned Promise
+			void promise.then((cc) => {
+				removeEntry();
+				resolve(cc);
+			});
+		});
 	}
 
 	/**
@@ -5004,8 +5088,7 @@ ${handlers.length} left`,
 		// If the transaction was already started, we need to throw the error into the message generator
 		// so it correctly gets ended. Otherwise just reject the result promise
 		if (transaction.parts.self) {
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			transaction.parts.self.throw(error).catch(() => {});
+			transaction.parts.self.throw(error).catch(noop);
 		} else {
 			transaction.promise.reject(error);
 		}
@@ -5018,8 +5101,7 @@ ${handlers.length} left`,
 		// If the transaction was already started, we need to end the message generator early by throwing
 		// the result. Otherwise just resolve the result promise
 		if (transaction.parts.self) {
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			transaction.parts.self.throw(result).catch(() => {});
+			transaction.parts.self.throw(result).catch(noop);
 		} else {
 			transaction.promise.resolve(result);
 		}
@@ -5194,9 +5276,7 @@ ${handlers.length} left`,
 
 		// Abort ongoing SendData messages that should be dropped
 		if (isSendData(stopActive?.message)) {
-			void this.writeSerial(new SendDataAbort(this).serialize()).catch(
-				noop,
-			);
+			void this.abortSendData();
 		}
 
 		// Continue sending
