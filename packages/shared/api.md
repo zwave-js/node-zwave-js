@@ -175,6 +175,11 @@ export type MethodsNamesOf<T> = OnlyMethods<T>[keyof T];
 // @public
 export function Mixin(baseCtors: Constructor[]): (derivedCtor: Constructor) => void;
 
+// Warning: (ae-missing-release-tag) "noop" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function noop(): void;
+
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (ae-missing-release-tag) "num2hex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
