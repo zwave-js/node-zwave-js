@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.2.0 (2023-07-05)
 ### Features
 * The `withTXReport` proxy now has the `setValue` and `pollValue` methods available (#3735)
 
