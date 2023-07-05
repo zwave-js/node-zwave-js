@@ -4,6 +4,27 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* The `withTXReport` proxy now has the `setValue` and `pollValue` methods available (#3735)
+
+### Bugfixes
+* When checking incoming S2-encapsulated commands for duplicates, only the last command is now considered (#5967)
+* Incoming multicast `SupervisionCC::Get` commands are no longer answered (#5973)
+* Automatically use `...SUC...` variant when assigning custom/priority return routes with the controller as the destination (#5972)
+* Clear cached custom SUC return routes after assigning a priority SUC return route (#5970)
+* Ignore `Transport Service` and `CRC16` encapsulation when checking if a command is received at a lower-than-expected security level (#5966)
+* Respond to `Inclusion Controller CC` commands without requiring support (#5949)
+
+### Config file changes
+* Update Swidget devices to match their June 8th 2023 spec (#5956)
+* Add endpoint configuration parameters to SES 302 (#5954)
+
+### Changes under the hood
+* Upgrade to TypeScript 5.1 (#5950)
+* Most state machines involved with sending commands have been removed. Queue handling is now done entirely in the driver, making it easier to follow and debug. (#5958)
+* Add logging for `Energy Production CC` (#5951)
+
 ## 11.1.0 (2023-06-26)
 ### Features
 * The `ThermostatModeCC.set` API now accepts `manufacturerData` as a hex string instead of just a Buffer (#5929)
