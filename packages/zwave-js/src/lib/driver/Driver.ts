@@ -3269,10 +3269,17 @@ export class Driver
 				"warn",
 			);
 
-			// Mark the node as asleep
-			// The handler for the asleep status will move the messages to the wakeup queue
+			// There is no longer a reference to the current transaction. If it should be moved to the wakeup queue,
+			// it temporarily needs to be added to the queue again.
+			const handled = this.mayMoveToWakeupQueue(transaction);
+			if (handled) {
+				this.queue.add(transaction);
+			}
+
+			// Mark the node as asleep. This will move the messages to the wakeup queue
 			node.markAsAsleep();
-			return this.mayMoveToWakeupQueue(transaction);
+
+			return handled;
 		} else {
 			const errorMsg = `${messagePart1}, it is presumed dead`;
 			this.controllerLog.logNode(node.id, errorMsg, "warn");
@@ -4240,7 +4247,8 @@ ${handlers.length} left`,
 					this.currentTransaction = undefined;
 				}
 
-				// Handle errors last, so the handling methods operate on the correct state
+				// Handle errors after clearing the current transaction.
+				// Otherwise, it will get considered the active transaction and cause an unnecessary SendDataAbort
 				if (error) {
 					this.rejectTransaction(transaction, error);
 				}

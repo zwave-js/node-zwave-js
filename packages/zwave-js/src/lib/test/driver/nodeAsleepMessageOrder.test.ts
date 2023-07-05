@@ -13,7 +13,7 @@ import { integrationTest } from "../integrationTestSuiteMulti";
 integrationTest(
 	"marking a node with a pending message as asleep does not mess up the remaining transactions",
 	{
-		debug: true,
+		// debug: true,
 		provisioningDirectory: path.join(
 			__dirname,
 			"fixtures/nodeAsleepMessageOrder",
