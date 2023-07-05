@@ -8900,10 +8900,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xstate@npm:4.29.0":
-  version: 4.29.0
-  resolution: "xstate@npm:4.29.0"
-  checksum: af4d273632dbab9df91aba1204bf9c28ff2dbed73a23ed16c77e2151702a18030b9187565bdb92f9e95c309b0cffa6d86655d1b36f2e22e8f0a0d193472dea6b
+"xstate@npm:4.38.0":
+  version: 4.38.0
+  resolution: "xstate@npm:4.38.0"
+  checksum: d9266d6d1c363cc93c7dba97d69b9de4bae32c0f7dc31cf4b9eddc91cb914e7910c5210882b6a656d70b3a31c6c8a1f09e54740516d18ccc715ecab447de0c37
   languageName: node
   linkType: hard
 
@@ -9128,7 +9128,7 @@ __metadata:
     source-map-support: ^0.5.21
     typescript: 5.0.4
     winston: ^3.8.2
-    xstate: 4.29.0
+    xstate: 4.38.0
   bin:
     mock-server: bin/mock-server.js
   languageName: unknown

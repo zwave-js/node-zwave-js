@@ -1862,11 +1862,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				});
 				node.updateNodeInfo(msg.nodeInformation);
 
-				// Tell the send thread that we received a NIF from the node
-				this.driver["sendThread"].send({
-					type: "NIF",
-					nodeId: node.id,
-				});
+				// Resolve active pings that would fail otherwise
+				this.driver.resolvePendingPings(node.id);
 
 				if (
 					node.canSleep &&
