@@ -15,31 +15,31 @@
       "default": "./build/index_safe.js"
     },
     "./Controller": {
-      "types": "./build/Controller.js",
+      "types": "./build/Controller.d.ts",
       "default": "./build/Controller.js"
     },
     "./Driver": {
-      "types": "./build/Driver.js",
+      "types": "./build/Driver.d.ts",
       "default": "./build/Driver.js"
     },
     "./Error": {
-      "types": "./build/Error.js",
+      "types": "./build/Error.d.ts",
       "default": "./build/Error.js"
     },
     "./Node": {
-      "types": "./build/Node.js",
+      "types": "./build/Node.d.ts",
       "default": "./build/Node.js"
     },
     "./Testing": {
-      "types": "./build/Testing.js",
+      "types": "./build/Testing.d.ts",
       "default": "./build/Testing.js"
     },
     "./Utils": {
-      "types": "./build/Utils.js",
+      "types": "./build/Utils.d.ts",
       "default": "./build/Utils.js"
     },
     "./Values": {
-      "types": "./build/Values.js",
+      "types": "./build/Values.d.ts",
       "default": "./build/Values.js"
     },
     "./package.json": "./package.json"
