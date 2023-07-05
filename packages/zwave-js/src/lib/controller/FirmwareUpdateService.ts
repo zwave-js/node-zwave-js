@@ -208,10 +208,11 @@ export async function getAvailableFirmwareUpdates(
 		requestQueue = new PQueue({ concurrency: 2 });
 	}
 	// Weird types...
-	const result: FirmwareUpdateInfo[] | void = await requestQueue.add(() =>
+	const result = await requestQueue.add<FirmwareUpdateInfo[]>(() =>
 		cachedGot(config),
-	);
+	)!;
 
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 	return result!;
 }
 
