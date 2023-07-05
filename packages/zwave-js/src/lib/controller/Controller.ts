@@ -4593,6 +4593,9 @@ ${associatedNodes.join(", ")}`,
 					repeaters,
 					routeSpeed,
 				});
+				// The command above assigns a full set of new routes, so
+				// custom SUC return routes are no longer valid
+				this.setCustomSUCReturnRoutesCached(nodeId, undefined);
 			}
 			return success;
 		} catch (e) {
