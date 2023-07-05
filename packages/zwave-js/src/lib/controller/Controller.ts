@@ -4330,6 +4330,11 @@ ${associatedNodes.join(", ")}`,
 		destinationNodeId: number,
 		routes: Route[],
 	): Promise<boolean> {
+		// Make sure this is not misused by passing the controller's node ID
+		if (destinationNodeId === this.ownNodeId) {
+			return this.assignCustomSUCReturnRoutes(nodeId, routes);
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning custom return routes to node ${destinationNodeId}...`,
 			direction: "outbound",
@@ -4475,6 +4480,15 @@ ${associatedNodes.join(", ")}`,
 		repeaters: number[],
 		routeSpeed: ZWaveDataRate,
 	): Promise<boolean> {
+		// Make sure this is not misused by passing the controller's node ID
+		if (destinationNodeId === this.ownNodeId) {
+			return this.assignPrioritySUCReturnRoute(
+				nodeId,
+				repeaters,
+				routeSpeed,
+			);
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning priority return route to node ${destinationNodeId}...`,
 			direction: "outbound",
