@@ -170,7 +170,10 @@ export class SupervisionCC extends CommandClass {
 				CommandClasses.Supervision,
 				SupervisionCommand.Get,
 			) as SupervisionCCGet;
-			if (!supervisionEncapsulation.isMulticast()) {
+			if (
+				supervisionEncapsulation.frameType !== "broadcast" &&
+				supervisionEncapsulation.frameType !== "multicast"
+			) {
 				return supervisionEncapsulation.sessionId;
 			}
 		}
