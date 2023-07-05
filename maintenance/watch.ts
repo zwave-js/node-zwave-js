@@ -1,4 +1,3 @@
-import PQueue from "@esm2cjs/p-queue";
 import { bold, gray, green, red } from "ansi-colors";
 import cp from "child_process";
 import chokidar from "chokidar";
@@ -8,6 +7,8 @@ import fs from "fs";
 // @ts-expect-error This is available in Node 16, but we're targeting Node 14
 import stream from "stream/promises";
 
+import type PQueue from "p-queue";
+
 const ABORT_RUNNING = false;
 
 const task = process.argv[2];
@@ -16,7 +17,7 @@ const taskArgs = process.argv.slice(3);
 const changes = new Set<string>();
 const hashes = new Map<string, Promise<Buffer>>();
 let prevHash: Buffer | undefined;
-const hashQueue = new PQueue({ concurrency: 10 });
+let hashQueue: PQueue | undefined;
 
 let ready = false;
 let child: cp.ChildProcess | undefined;
@@ -138,13 +139,21 @@ process.on("SIGINT", () => {
 	void watcher.close();
 });
 
-function hashFile(filename: string): Promise<Buffer> {
-	return hashQueue.add(async () => {
+async function hashFile(filename: string): Promise<Buffer> {
+	// You just gotta love ESM
+	if (!hashQueue) {
+		const PQueue = (await import("p-queue")).default;
+		hashQueue = new PQueue({ concurrency: 10 });
+	}
+	// Weird types...
+	const result: Buffer | void = await hashQueue.add(async () => {
 		const reader = fs.createReadStream(filename);
 		const hasher = crypto.createHash("sha256");
 		await stream.pipeline(reader, hasher);
 		return hasher.digest();
 	});
+	
+	return result!;
 }
 
 function debounce(fn: () => void, timeout: number) {

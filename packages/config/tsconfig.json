@@ -13,6 +13,6 @@
 			"path": "../maintenance"
 		}
 	],
-	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
+	"include": ["maintenance/**/*.ts", "src/**/*.ts", "maintenance/importConfig.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

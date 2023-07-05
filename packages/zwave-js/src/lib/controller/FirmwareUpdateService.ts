@@ -1,8 +1,3 @@
-import got, {
-	type Headers,
-	type OptionsOfTextResponseBody,
-} from "@esm2cjs/got";
-import PQueue from "@esm2cjs/p-queue";
 import type { DeviceID } from "@zwave-js/config";
 import {
 	RFRegion,
@@ -15,6 +10,12 @@ import {
 import { formatId } from "@zwave-js/shared";
 import crypto from "crypto";
 import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
+
+// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
+import type { Headers, OptionsOfTextResponseBody } from "got";
+
+// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
+import type PQueue from "p-queue";
 
 function serviceURL(): string {
 	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
@@ -32,7 +33,7 @@ interface CachedRequest<T> {
 }
 
 // Queue requests to the firmware update service. Only allow few parallel requests so we can make some use of the cache.
-const requestQueue = new PQueue({ concurrency: 2 });
+let requestQueue: PQueue | undefined;
 
 let cleanCacheTimeout: NodeJS.Timeout | undefined;
 function cleanCache() {
@@ -74,6 +75,7 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 		}
 	}
 
+	const { got } = await import("got");
 	const response = await got(config);
 	const responseJson = JSON.parse(response.body) as T;
 
@@ -161,7 +163,7 @@ function rfRegionToUpdateServiceRegion(
  * Retrieves the available firmware updates for the node with the given fingerprint.
  * Returns the service response or `undefined` in case of an error.
  */
-export function getAvailableFirmwareUpdates(
+export async function getAvailableFirmwareUpdates(
 	deviceId: DeviceID & { firmwareVersion: string; rfRegion?: RFRegion },
 	options: GetAvailableFirmwareUpdateOptions,
 ): Promise<FirmwareUpdateInfo[]> {
@@ -200,7 +202,17 @@ export function getAvailableFirmwareUpdates(
 		headers,
 	};
 
-	return requestQueue.add(() => cachedGot(config));
+	if (!requestQueue) {
+		// I just love ESM
+		const PQueue = (await import("p-queue")).default;
+		requestQueue = new PQueue({ concurrency: 2 });
+	}
+	// Weird types...
+	const result: FirmwareUpdateInfo[] | void = await requestQueue.add(() =>
+		cachedGot(config),
+	);
+
+	return result!;
 }
 
 export async function downloadFirmwareUpdate(
@@ -217,6 +229,7 @@ export async function downloadFirmwareUpdate(
 	// TODO: Make request abort-able (requires AbortController, Node 14.17+ / Node 16)
 
 	// Download the firmware file
+	const { got } = await import("got");
 	const downloadResponse = await got.get(file.url, {
 		timeout: { request: DOWNLOAD_TIMEOUT },
 		responseType: "buffer",

@@ -1,5 +1,4 @@
 import { detectPackageManager, type PackageManager } from "@alcalzone/pak";
-import got from "@esm2cjs/got";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getErrorMessage } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -18,6 +17,7 @@ import * as semver from "semver";
 export async function checkForConfigUpdates(
 	currentVersion: string,
 ): Promise<string | undefined> {
+	const { got } = await import("got");
 	let registry: Record<string, unknown>;
 
 	try {
@@ -118,6 +118,8 @@ export async function installConfigUpdateInDocker(
 		cacheDir: string;
 	},
 ): Promise<void> {
+	const { got } = await import("got");
+
 	let registryInfo: any;
 	try {
 		registryInfo = await got

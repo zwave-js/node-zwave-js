@@ -1,4 +1,3 @@
-import got from "@esm2cjs/got";
 import * as Sentry from "@sentry/node";
 import { AssociationGroupInfoCC, ConfigurationCC } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
@@ -28,6 +27,7 @@ export async function reportMissingDeviceConfig(
 	// If we tried to report this file earlier, we can skip the report
 	if (missingDeviceConfigCache.has(configFingerprint)) return;
 	// Otherwise ask our device DB if it exists
+	const { got } = await import("got");
 	try {
 		const data = await got
 			.get(

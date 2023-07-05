@@ -8,7 +8,6 @@ process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
-import got from "@esm2cjs/got";
 import { CommandClasses, getIntegerLimits } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
@@ -177,18 +176,21 @@ function updateNumberOrDefault(
 
 /** Retrieves the list of database IDs from the OpenSmartHouse DB */
 async function fetchIDsOH(): Promise<number[]> {
+	const { got } = await import("got");
 	const data = (await got.get(ohUrlIDs).json()) as any;
 	return data.devices.map((d: any) => d.id);
 }
 
 /** Retrieves the definition for a specific device from the OpenSmartHouse DB */
 async function fetchDeviceOH(id: number): Promise<string> {
+	const { got } = await import("got");
 	const source = (await got.get(ohUrlDevice(id)).json()) as any;
 	return stringify(source, "\t");
 }
 
 /** Retrieves the definition for a specific device from the Z-Wave Alliance DB */
 async function fetchDeviceZWA(id: number): Promise<string> {
+	const { got } = await import("got");
 	const source = (await got.get(zwaUrlDevice(id)).json()) as any;
 	return stringify(source, "\t");
 }
@@ -196,6 +198,7 @@ async function fetchDeviceZWA(id: number): Promise<string> {
 /** Downloads ozw master archive and store it on `tmpDir` */
 async function downloadOZWConfig(): Promise<string> {
 	console.log("downloading ozw archive...");
+	const { got } = await import("got");
 
 	// create tmp directory if missing
 	await fs.ensureDir(ozwTempDir);
@@ -1690,6 +1693,7 @@ async function retrieveZWADeviceIds(
 	highestDeviceOnly: boolean = true,
 	manufacturer: number[] = [-1],
 ): Promise<number[]> {
+	const { got } = await import("got");
 	const deviceIdsSet = new Set<number>();
 
 	for (const manu of manufacturer) {
@@ -1697,11 +1701,11 @@ async function retrieveZWADeviceIds(
 		// Page 1
 		let currentUrl = `https://products.z-wavealliance.org/search/DoAdvancedSearch?productName=&productIdentifier=&productDescription=&category=-1&brand=${manu}&regionId=-1&order=&page=${page}`;
 		const firstPage = await got.get(currentUrl).text();
-		for (const i of firstPage.match(/(?<=productId=).*?(?=[\&\"])/g)) {
+		for (const i of firstPage.match(/(?<=productId=).*?(?=[\&\"])/g)!) {
 			deviceIdsSet.add(i);
 		}
 		const pageNumbers = firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)
-			? firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)
+			? firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)!
 			: [1];
 		const lastPage = Math.max(...pageNumbers);
 
@@ -1719,7 +1723,7 @@ async function retrieveZWADeviceIds(
 				const nextPage = await got.get(currentUrl).text();
 				const nextPageIds = nextPage.match(
 					/(?<=productId=).*?(?=[\&\"])/g,
-				);
+				)!;
 
 				for (const i of nextPageIds) {
 					deviceIdsSet.add(i);
@@ -1800,6 +1804,7 @@ async function downloadDevicesOH(IDs?: number[]): Promise<void> {
 async function downloadManufacturersOH(): Promise<void> {
 	process.stdout.write("Fetching manufacturers...");
 
+	const { got } = await import("got");
 	const data = await got.get(ohUrlManufacturers).json();
 
 	// Delete the last line

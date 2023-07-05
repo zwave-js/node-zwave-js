@@ -68,7 +68,6 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
-    "@esm2cjs/got": "^12.5.3",
     "@microsoft/api-extractor": "^7.36.0",
     "@types/fs-extra": "^9.0.13",
     "@types/js-levenshtein": "^1.1.1",
@@ -85,6 +84,7 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
+    "got": "^12.6.1",
     "js-levenshtein": "^1.1.6",
     "pegjs": "^0.10.0",
     "prettier": "^2.8.8",
