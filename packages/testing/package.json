@@ -55,7 +55,7 @@
     "esbuild-register": "^3.4.2",
     "prettier": "^2.8.8",
     "triple-beam": "*",
-    "typescript": "5.1.3",
+    "typescript": "5.1.6",
     "winston-transport": "^4.5.0"
   }
 }
