@@ -642,7 +642,7 @@ Note that the same caveats as above in regards to deleting priority non-SUC retu
 ```ts
 assignCustomReturnRoutes(
 	nodeId: number,
-	destinationNodeId: number, 
+	destinationNodeId: number,
 	routes: Route[],
 	priorityRoute?: Route
 ): Promise<boolean>;
