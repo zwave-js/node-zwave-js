@@ -19,7 +19,9 @@ import {
 	Security2Command,
 	VersionCCValues,
 	ZWaveProtocolCCAssignReturnRoute,
+	ZWaveProtocolCCAssignReturnRoutePriority,
 	ZWaveProtocolCCAssignSUCReturnRoute,
+	ZWaveProtocolCCAssignSUCReturnRoutePriority,
 	utils as ccUtils,
 	inclusionTimeouts,
 	type AssociationAddress,
@@ -4087,11 +4089,17 @@ ${associatedNodes.join(", ")}`,
 	 * the given routes instead of having the controller calculate them. At most 4 routes can be assigned. If less are
 	 * specified, the remaining routes are cleared.
 	 *
+	 * To mark a route as a priority route, pass it as the optional `priorityRoute` parameter. At most 3 routes of the
+	 * `routes` array will then be used as fallback routes.
+	 *
 	 * **Note:** Calling {@link assignSUCReturnRoutes} or {@link deleteSUCReturnRoutes} will override the custom routes.
+	 *
+	 * Returns `true` when the process was successful, or `false` if at least one step failed.
 	 */
 	public async assignCustomSUCReturnRoutes(
 		nodeId: number,
 		routes: Route[],
+		priorityRoute?: Route,
 	): Promise<boolean> {
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning custom SUC return routes...`,
@@ -4105,9 +4113,13 @@ ${associatedNodes.join(", ")}`,
 		const MAX_ROUTES = 4;
 
 		// Keep track of which routes have been assigned
-		const assignedRoutes = this.getCustomSUCReturnRoutesCached(nodeId);
-		while (assignedRoutes.length < MAX_ROUTES) {
-			assignedRoutes.push(EMPTY_ROUTE);
+		const assignedRoutes = new Array(MAX_ROUTES).fill(EMPTY_ROUTE);
+
+		let priorityRouteIndex = -1;
+		// If a priority route is given, add it to the end of the routes array to mimick what the Z-Wave controller does
+		if (priorityRoute) {
+			priorityRouteIndex = Math.min(MAX_ROUTES - 1, routes.length);
+			routes[priorityRouteIndex] = priorityRoute;
 		}
 
 		for (let i = 0; i < MAX_ROUTES; i++) {
@@ -4140,10 +4152,42 @@ ${associatedNodes.join(", ")}`,
 				});
 
 				// Remember that this route has been assigned
-				assignedRoutes[i] = route;
+				if (i !== priorityRouteIndex) assignedRoutes[i] = route;
 			} catch (e) {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Assigning custom SUC return route #${i} failed`,
+					direction: "outbound",
+					level: "warn",
+				});
+
+				result = false;
+			}
+		}
+
+		// If a priority route was passed, tell the node to use it
+		if (priorityRouteIndex >= 0) {
+			const cc = new ZWaveProtocolCCAssignSUCReturnRoutePriority(
+				this.driver,
+				{
+					nodeId,
+					targetNodeId: this.ownNodeId ?? 1,
+					routeNumber: priorityRouteIndex,
+				},
+			);
+			try {
+				// TODO: add a better method to send ZWaveProtocolCC
+				await this.driver.sendCommand(cc, {
+					priority: MessagePriority.MultistepController,
+					autoEncapsulate: false,
+					changeNodeStatusOnMissingACK: false,
+					maxSendAttempts: 1,
+					useSupervision: false,
+					transmitOptions:
+						TransmitOptions.AutoRoute | TransmitOptions.ACK,
+				});
+			} catch (e) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `Marking custom SUC return route as priority failed`,
 					direction: "outbound",
 					level: "warn",
 				});
@@ -4161,6 +4205,8 @@ ${associatedNodes.join(", ")}`,
 			assignedRoutes.pop();
 		}
 
+		// Remember the routes we assigned
+		this.setPrioritySUCReturnRouteCached(nodeId, priorityRoute);
 		this.setCustomSUCReturnRoutesCached(nodeId, assignedRoutes);
 
 		return result;
@@ -4326,10 +4372,15 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 		destinationNodeId: number,
 		routes: Route[],
+		priorityRoute?: Route,
 	): Promise<boolean> {
 		// Make sure this is not misused by passing the controller's node ID
 		if (destinationNodeId === this.ownNodeId) {
-			return this.assignCustomSUCReturnRoutes(nodeId, routes);
+			return this.assignCustomSUCReturnRoutes(
+				nodeId,
+				routes,
+				priorityRoute,
+			);
 		}
 
 		this.driver.controllerLog.logNode(nodeId, {
@@ -4341,12 +4392,13 @@ ${associatedNodes.join(", ")}`,
 		const MAX_ROUTES = 4;
 
 		// Keep track of which routes have been assigned
-		const assignedRoutes = this.getCustomReturnRoutesCached(
-			nodeId,
-			destinationNodeId,
-		);
-		while (assignedRoutes.length < MAX_ROUTES) {
-			assignedRoutes.push(EMPTY_ROUTE);
+		const assignedRoutes = new Array(MAX_ROUTES).fill(EMPTY_ROUTE);
+
+		let priorityRouteIndex = -1;
+		// If a priority route is given, add it to the end of the routes array to mimick what the Z-Wave controller does
+		if (priorityRoute) {
+			priorityRouteIndex = Math.min(MAX_ROUTES - 1, routes.length);
+			routes[priorityRouteIndex] = priorityRoute;
 		}
 
 		for (let i = 0; i < MAX_ROUTES; i++) {
@@ -4380,10 +4432,42 @@ ${associatedNodes.join(", ")}`,
 				});
 
 				// Remember that this route has been assigned
-				assignedRoutes[i] = route;
+				if (i !== priorityRouteIndex) assignedRoutes[i] = route;
 			} catch (e) {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Assigning custom return route #${i} failed`,
+					direction: "outbound",
+					level: "warn",
+				});
+
+				result = false;
+			}
+		}
+
+		// If a priority route was passed, tell the node to use it
+		if (priorityRouteIndex >= 0) {
+			const cc = new ZWaveProtocolCCAssignReturnRoutePriority(
+				this.driver,
+				{
+					nodeId,
+					targetNodeId: destinationNodeId,
+					routeNumber: priorityRouteIndex,
+				},
+			);
+			try {
+				// TODO: add a better method to send ZWaveProtocolCC
+				await this.driver.sendCommand(cc, {
+					priority: MessagePriority.MultistepController,
+					autoEncapsulate: false,
+					changeNodeStatusOnMissingACK: false,
+					maxSendAttempts: 1,
+					useSupervision: false,
+					transmitOptions:
+						TransmitOptions.AutoRoute | TransmitOptions.ACK,
+				});
+			} catch (e) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `Marking custom return route as priority failed`,
 					direction: "outbound",
 					level: "warn",
 				});
@@ -4406,11 +4490,17 @@ ${associatedNodes.join(", ")}`,
 			destinationNodeId,
 			assignedRoutes,
 		);
-		// The priority route is probably invalid now, but it may also point to a random route
-		if (
+		if (priorityRoute) {
+			this.setPriorityReturnRouteCached(
+				nodeId,
+				destinationNodeId,
+				priorityRoute,
+			);
+		} else if (
 			this.hasPriorityReturnRouteCached(nodeId, destinationNodeId) !==
 			false
 		) {
+			// The priority route is probably invalid now, but it may also point to a random route
 			this.setPriorityReturnRouteCached(
 				nodeId,
 				destinationNodeId,
