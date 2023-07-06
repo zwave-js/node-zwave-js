@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.3.0 (2023-07-06)
 ### Features
 * Add `zwaveDataRateToString` method (#5978)
 
