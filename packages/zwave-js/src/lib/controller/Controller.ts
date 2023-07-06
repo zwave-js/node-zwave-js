@@ -32,14 +32,12 @@ import {
 	CommandClasses,
 	EMPTY_ROUTE,
 	MAX_NODES,
-	MessagePriority,
 	NODE_ID_BROADCAST,
 	NodeType,
 	ProtocolType,
 	RFRegion,
 	RouteKind,
 	SecurityClass,
-	TransmitOptions,
 	TransmitStatus,
 	UNKNOWN_STATE,
 	ValueDB,
@@ -4140,16 +4138,7 @@ ${associatedNodes.join(", ")}`,
 			});
 
 			try {
-				// TODO: add a better method to send ZWaveProtocolCC
-				await this.driver.sendCommand(cc, {
-					priority: MessagePriority.MultistepController,
-					autoEncapsulate: false,
-					changeNodeStatusOnMissingACK: false,
-					maxSendAttempts: 1,
-					useSupervision: false,
-					transmitOptions:
-						TransmitOptions.AutoRoute | TransmitOptions.ACK,
-				});
+				await this.driver.sendZWaveProtocolCC(cc);
 
 				// Remember that this route has been assigned
 				if (i !== priorityRouteIndex) assignedRoutes[i] = route;
@@ -4175,16 +4164,7 @@ ${associatedNodes.join(", ")}`,
 				},
 			);
 			try {
-				// TODO: add a better method to send ZWaveProtocolCC
-				await this.driver.sendCommand(cc, {
-					priority: MessagePriority.MultistepController,
-					autoEncapsulate: false,
-					changeNodeStatusOnMissingACK: false,
-					maxSendAttempts: 1,
-					useSupervision: false,
-					transmitOptions:
-						TransmitOptions.AutoRoute | TransmitOptions.ACK,
-				});
+				await this.driver.sendZWaveProtocolCC(cc);
 			} catch (e) {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Marking custom SUC return route as priority failed`,
@@ -4420,16 +4400,7 @@ ${associatedNodes.join(", ")}`,
 			});
 
 			try {
-				// TODO: add a better method to send ZWaveProtocolCC
-				await this.driver.sendCommand(cc, {
-					priority: MessagePriority.MultistepController,
-					autoEncapsulate: false,
-					changeNodeStatusOnMissingACK: false,
-					maxSendAttempts: 1,
-					useSupervision: false,
-					transmitOptions:
-						TransmitOptions.AutoRoute | TransmitOptions.ACK,
-				});
+				await this.driver.sendZWaveProtocolCC(cc);
 
 				// Remember that this route has been assigned
 				if (i !== priorityRouteIndex) assignedRoutes[i] = route;
@@ -4455,16 +4426,7 @@ ${associatedNodes.join(", ")}`,
 				},
 			);
 			try {
-				// TODO: add a better method to send ZWaveProtocolCC
-				await this.driver.sendCommand(cc, {
-					priority: MessagePriority.MultistepController,
-					autoEncapsulate: false,
-					changeNodeStatusOnMissingACK: false,
-					maxSendAttempts: 1,
-					useSupervision: false,
-					transmitOptions:
-						TransmitOptions.AutoRoute | TransmitOptions.ACK,
-				});
+				await this.driver.sendZWaveProtocolCC(cc);
 			} catch (e) {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Marking custom return route as priority failed`,

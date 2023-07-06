@@ -38,6 +38,7 @@ import {
 	type ICommandClassContainer,
 	type SupervisionCCGet,
 	type TransportServiceCCSubsequentSegment,
+	type ZWaveProtocolCC,
 } from "@zwave-js/cc";
 import {
 	ConfigManager,
@@ -4894,6 +4895,26 @@ ${handlers.length} left`,
 		// Fall back to non-supervised commands
 		// @ts-expect-error TS doesn't know we've narrowed the return type to match
 		return this.sendCommandInternal(command, options);
+	}
+
+	/** @internal */
+	public async sendZWaveProtocolCC(
+		command: ZWaveProtocolCC,
+		options: Pick<
+			SendCommandOptions,
+			"changeNodeStatusOnMissingACK" | "maxSendAttempts"
+		> = {},
+	): Promise<void> {
+		await this.sendCommandInternal(command, {
+			priority: MessagePriority.Controller,
+			// No shenanigans, just send the raw command
+			autoEncapsulate: false,
+			useSupervision: false,
+			changeNodeStatusOnMissingACK:
+				options.changeNodeStatusOnMissingACK ?? false,
+			maxSendAttempts: options.maxSendAttempts || 1,
+			transmitOptions: TransmitOptions.AutoRoute | TransmitOptions.ACK,
+		});
 	}
 
 	private async abortSendData(
