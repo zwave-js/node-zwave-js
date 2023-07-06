@@ -3057,6 +3057,11 @@ export enum ZWaveDataRate {
     "9k6" = 1
 }
 
+// Warning: (ae-missing-release-tag) "zwaveDataRateToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function zwaveDataRateToString(rate: ZWaveDataRate): string;
+
 // Warning: (ae-missing-release-tag) "ZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
