@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add `zwaveDataRateToString` method (#5978)
+
+### Config file changes
+* Disable `Window Covering CC` for ZVIDAR Roller Blind (#5976)
+
+### Changes under the hood
+* Upgrade to TypeScript 5.1.6 (#5977)
+
 ## 11.2.0 (2023-07-05)
 ### Features
 * The `withTXReport` proxy now has the `setValue` and `pollValue` methods available (#3735)
