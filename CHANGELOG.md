@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.4.0 (2023-07-06)
 ### Features
 * Added the ability to assign priority return routes along with custom fallbacks (#5980)
 
