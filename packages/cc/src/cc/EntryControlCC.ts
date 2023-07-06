@@ -1,28 +1,29 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -46,6 +47,7 @@ import {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
 } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
 
 export const EntryControlCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Entry Control"], {
@@ -82,7 +84,7 @@ export const EntryControlCCValues = Object.freeze({
 
 @API(CommandClasses["Entry Control"])
 export class EntryControlCCAPI extends CCAPI {
-	public supportsCommand(cmd: EntryControlCommand): Maybe<boolean> {
+	public supportsCommand(cmd: EntryControlCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case EntryControlCommand.KeySupportedGet:
 			case EntryControlCommand.EventSupportedGet:
@@ -181,56 +183,62 @@ export class EntryControlCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "keyCacheSize" && property !== "keyCacheTimeout") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-
-		let keyCacheSize = value;
-		let keyCacheTimeout = 2;
-		if (property === "keyCacheTimeout") {
-			keyCacheTimeout = value;
-
-			const oldKeyCacheSize = this.tryGetValueDB()?.getValue<number>(
-				EntryControlCCValues.keyCacheSize.endpoint(this.endpoint.index),
-			);
-			if (oldKeyCacheSize == undefined) {
-				throw new ZWaveError(
-					`The "keyCacheTimeout" property cannot be changed before the key cache size is known!`,
-					ZWaveErrorCodes.Argument_Invalid,
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: EntryControlCCAPI, { property }, value) {
+			if (property !== "keyCacheSize" && property !== "keyCacheTimeout") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
 				);
 			}
-			keyCacheSize = oldKeyCacheSize;
-		}
-		const result = await this.setConfiguration(
-			keyCacheSize,
-			keyCacheTimeout,
-		);
 
-		// Verify the change after a short delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			this.schedulePoll({ property }, value, { transition: "fast" });
-		}
+			let keyCacheSize = value;
+			let keyCacheTimeout = 2;
+			if (property === "keyCacheTimeout") {
+				keyCacheTimeout = value;
 
-		return result;
-	};
+				const oldKeyCacheSize = this.tryGetValueDB()?.getValue<number>(
+					EntryControlCCValues.keyCacheSize.endpoint(
+						this.endpoint.index,
+					),
+				);
+				if (oldKeyCacheSize == undefined) {
+					throw new ZWaveError(
+						`The "keyCacheTimeout" property cannot be changed before the key cache size is known!`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				keyCacheSize = oldKeyCacheSize;
+			}
+			const result = await this.setConfiguration(
+				keyCacheSize,
+				keyCacheTimeout,
+			);
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "keyCacheSize":
-			case "keyCacheTimeout":
-				return (await this.getConfiguration())?.[property];
-		}
-		throwUnsupportedProperty(this.ccId, property);
-	};
+			// Verify the change after a short delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property }, value, { transition: "fast" });
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: EntryControlCCAPI, { property }) {
+			switch (property) {
+				case "keyCacheSize":
+				case "keyCacheTimeout":
+					return (await this.getConfiguration())?.[property];
+			}
+			throwUnsupportedProperty(this.ccId, property);
+		};
+	}
 }
 
 @commandClass(CommandClasses["Entry Control"])
@@ -238,6 +246,15 @@ export class EntryControlCCAPI extends CCAPI {
 @ccValues(EntryControlCCValues)
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
+
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		return [
+			...super.determineRequiredCCInterviews(),
+			CommandClasses.Association,
+			CommandClasses["Multi Channel Association"],
+			CommandClasses["Association Group Information"],
+		];
+	}
 
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
@@ -255,6 +272,25 @@ export class EntryControlCC extends CommandClass {
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
+
+		// If one Association group issues Entry Control notifications,
+		// we must associate ourselves with that channel
+		try {
+			await ccUtils.assignLifelineIssueingCommand(
+				applHost,
+				endpoint,
+				this.ccId,
+				EntryControlCommand.Notification,
+			);
+		} catch {
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
+				message: `Configuring associations to receive ${getCCName(
+					this.ccId,
+				)} commands failed!`,
+				level: "warn",
+			});
+		}
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,

@@ -13,4 +13,4 @@ export type {
 	EditableZWaveOptions,
 	ZWaveOptions,
 } from "./lib/driver/ZWaveOptions";
-export { DriverLogContext } from "./lib/log/Driver";
+export type { DriverLogContext } from "./lib/log/Driver";

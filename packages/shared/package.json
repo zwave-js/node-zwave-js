@@ -1,18 +1,10 @@
 {
   "name": "@zwave-js/shared",
-  "version": "10.13.0",
+  "version": "11.3.0",
   "description": "zwave-js: shared utilities",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "safe": [
-          "build/index_safe.d.ts"
-        ]
-      }
-    }
+    "access": "public"
   },
   "main": "build/index.js",
   "exports": {
@@ -20,11 +12,11 @@
     "./package.json": "./package.json",
     "./safe": "./build/index_safe.js"
   },
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "src/index_safe.ts"
+        "build/index_safe.d.ts"
       ]
     }
   },
@@ -55,7 +47,7 @@
     "fs-extra": "^10.1.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
@@ -66,16 +58,16 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "*",
+    "@microsoft/api-extractor": "^7.36.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.36",
-    "@types/sinon": "^10.0.13",
+    "@types/node": "^14.18.52",
+    "@types/sinon": "^10.0.14",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
-    "esbuild": "0.15.7",
+    "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.4",
-    "sinon": "^14.0.0",
-    "typescript": "4.9.5"
+    "prettier": "^2.8.8",
+    "sinon": "^14.0.2",
+    "typescript": "5.1.6"
   }
 }

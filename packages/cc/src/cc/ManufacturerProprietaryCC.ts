@@ -1,10 +1,10 @@
 import {
 	CommandClasses,
-	IVirtualEndpoint,
-	IZWaveEndpoint,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type IVirtualEndpoint,
+	type IZWaveEndpoint,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
@@ -22,12 +22,12 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { ManufacturerSpecificCCValues } from "./ManufacturerSpecificCC";
 import {
 	getManufacturerId,
 	getManufacturerProprietaryAPI,
 	getManufacturerProprietaryCCConstructor,
 } from "./manufacturerProprietary/Decorators";
-import { ManufacturerSpecificCCValues } from "./ManufacturerSpecificCC";
 
 export type ManufacturerProprietaryCCConstructor<
 	T extends typeof ManufacturerProprietaryCC = typeof ManufacturerProprietaryCC,

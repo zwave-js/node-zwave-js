@@ -11,10 +11,10 @@ import {
 	ColorSwitchCommand,
 } from "@zwave-js/cc";
 import {
-	assertZWaveError,
 	CommandClasses,
 	Duration,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";

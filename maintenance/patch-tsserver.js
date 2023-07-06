@@ -9,13 +9,8 @@ let fileContent = fs.readFileSync(tsServerPath, "utf8");
 const replacements = [
 	[
 		// Needed for useful type display when it comes to CC values
-		"ts.defaultMaximumTruncationLength = 160;",
-		"ts.defaultMaximumTruncationLength = 10000;",
-	],
-	[
-		// Can be removed when https://github.com/microsoft/TypeScript/issues/49557 is fixed
-		"var maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));",
-		"var maximumLengthDifference = Math.max(2, Math.floor(name.length * 0.34));",
+		"var defaultMaximumTruncationLength = 160;",
+		"var defaultMaximumTruncationLength = 10000;",
 	],
 ];
 

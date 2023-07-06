@@ -8,14 +8,14 @@ import type {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "../values/_Types";
-import { tagify, ZWaveLogContainer, ZWaveLoggerBase } from "./shared";
+import { ZWaveLoggerBase, tagify, type ZWaveLogContainer } from "./shared";
 import {
-	DataDirection,
 	getDirectionPrefix,
 	getNodeTag,
-	LogContext,
-	NodeLogContext,
-	ValueLogContext,
+	type DataDirection,
+	type LogContext,
+	type NodeLogContext,
+	type ValueLogContext,
 } from "./shared_safe";
 
 export const CONTROLLER_LABEL = "CNTRLR";

@@ -1,47 +1,53 @@
 import {
-	CommandClass,
-	isCommandClassContainer,
 	MGRPExtension,
 	MPANExtension,
-	Security2CC,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
 	SupervisionCC,
+	SupervisionCCReport,
 	SupervisionCommand,
+	getInnermostCommandClass,
+	isCommandClassContainer,
+	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityCCCommandEncapsulation,
 	SecurityCCNonceGet,
-	SecurityCCNonceReport,
+	type SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
 import {
 	MAX_SEGMENT_SIZE,
 	RELAXED_TIMING_THRESHOLD,
-	TransportServiceCC,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
 	TransportServiceCCSegmentRequest,
 	TransportServiceCCSegmentWait,
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	type TransportServiceCC,
 } from "@zwave-js/cc/TransportServiceCC";
 import {
 	CommandClasses,
 	EncapsulationFlags,
 	MessagePriority,
-	SendCommandOptions,
+	NODE_ID_BROADCAST,
 	SPANState,
+	SecurityClass,
+	SupervisionStatus,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
+	mergeSupervisionResults,
+	type SendCommandOptions,
+	type SupervisionResult,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import {
 	exceedsMaxPayloadLength,
@@ -49,7 +55,6 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 import type { Driver } from "./Driver";
-import { sendDataErrorToZWaveError } from "./StateMachineShared";
 import type { MessageGenerator } from "./Transaction";
 
 export type MessageGeneratorImplementation = (
@@ -67,15 +72,39 @@ export type MessageGeneratorImplementation = (
 	additionalCommandTimeoutMs?: number,
 ) => AsyncGenerator<Message, Message, Message>;
 
+function maybePartialNodeUpdate(sent: Message, received: Message): boolean {
+	// Some commands are returned in multiple segments, which may take longer than
+	// the configured timeout.
+	if (!isCommandClassContainer(sent) || !isCommandClassContainer(received)) {
+		return false;
+	}
+
+	if (sent.getNodeId() !== received.getNodeId()) return false;
+
+	if (received.command.ccId === CommandClasses["Transport Service"]) {
+		// We don't know what's in there. It may be the expected update
+		return true;
+	}
+
+	// Let the sent CC test if the received one is a match.
+	// These predicates don't check if the received CC is complete, we can use them here.
+	// This also doesn't check for correct encapsulation, but that is good enough to refresh the timer.
+	const sentCommand = getInnermostCommandClass(sent.command);
+	const receivedCommand = getInnermostCommandClass(received.command);
+	return sentCommand.isExpectedCCResponse(receivedCommand);
+}
+
 export async function waitForNodeUpdate<T extends Message>(
 	driver: Driver,
 	msg: Message,
 	timeoutMs: number,
 ): Promise<T> {
 	try {
-		return await driver.waitForMessage<T>((received) => {
-			return msg.isExpectedNodeUpdate(received);
-		}, timeoutMs);
+		return await driver.waitForMessage<T>(
+			(received) => msg.isExpectedNodeUpdate(received),
+			timeoutMs,
+			(received) => maybePartialNodeUpdate(msg, received),
+		);
 	} catch (e) {
 		throw new ZWaveError(
 			`Timed out while waiting for a response from the node`,
@@ -107,10 +136,28 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 	) {
 		// Make sure we can send this message
 		if (isSendData(msg) && exceedsMaxPayloadLength(msg)) {
-			throw new ZWaveError(
-				"Cannot send this message because it would exceed the maximum payload length!",
-				ZWaveErrorCodes.Controller_MessageTooLarge,
-			);
+			// We use explorer frames by default, but this reduces the maximum payload length by 2 bytes compared to AUTO_ROUTE
+			// Try disabling explorer frames for this message and see if it fits now.
+			const fail = () => {
+				throw new ZWaveError(
+					"Cannot send this message because it would exceed the maximum payload length!",
+					ZWaveErrorCodes.Controller_MessageTooLarge,
+				);
+			};
+			if (msg.transmitOptions & TransmitOptions.Explore) {
+				msg.transmitOptions &= ~TransmitOptions.Explore;
+				if (exceedsMaxPayloadLength(msg)) {
+					// Still too large
+					throw fail();
+				}
+				driver.controllerLog.logNode(msg.getNodeId()!, {
+					message:
+						"Disabling explorer frames for this message due to its size",
+					level: "warn",
+				});
+			} else {
+				throw fail();
+			}
 		}
 
 		// Pass this message to the send thread and wait for it to be sent
@@ -522,9 +569,17 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		const spanState = secMan.getSPANState(nodeId);
 		let additionalTimeoutMs: number | undefined;
 
+		// We need a new nonce when there is no shared SPAN state, or the SPAN state is for a lower security class
+		// than the command we want to send
+		const expectedSecurityClass =
+			msg.command.securityClass ?? driver.getHighestSecurityClass(nodeId);
+
 		if (
 			spanState.type === SPANState.None ||
-			spanState.type === SPANState.LocalEI
+			spanState.type === SPANState.LocalEI ||
+			(spanState.type === SPANState.SPAN &&
+				spanState.securityClass !== SecurityClass.Temporary &&
+				spanState.securityClass !== expectedSecurityClass)
 		) {
 			// Request a new nonce
 
@@ -567,13 +622,11 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		// If we want to make sure that a node understood a SET-type S2-encapsulated message, we either need to use
 		// Supervision and wait for the Supervision Report (handled by the simpleMessageGenerator), or we need to add a
 		// short delay between commands and wait if a NonceReport is received.
-
-		// However, we MUST NOT do this if the encapsulated command is also a Security S2 command, because this means
-		// we're in the middle of S2 bootstrapping, where timing is critical.
+		// However, in situations where timing is critical (e.g. S2 bootstrapping), verifyDelivery is set to false, and we don't do this.
 		let nonceReport: Security2CCNonceReport | undefined;
 		if (
 			isTransmitReport(response) &&
-			!(msg.command.encapsulated instanceof Security2CC) &&
+			msg.command.verifyDelivery &&
 			!msg.command.expectsCCResponse() &&
 			!msg.command.getEncapsulatedCC(
 				CommandClasses.Supervision,
@@ -712,6 +765,8 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 		// Otherwise, the node will increase its MPAN multiple times, going out of sync.
 		const distinctNodeIDs = [...new Set(group.nodeIDs)];
 
+		const supervisionResults: (SupervisionResult | undefined)[] = [];
+
 		// Now do singlecast followups with every node in the group
 		for (const nodeId of distinctNodeIDs) {
 			// Point the CC at the target node
@@ -774,15 +829,49 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 						});
 					}
 				}
+
+				// Collect supervision results if possible
+				if (isCommandClassContainer(scResponse)) {
+					const supervisionReport =
+						scResponse.command.getEncapsulatedCC(
+							CommandClasses.Supervision,
+							SupervisionCommand.Report,
+						) as SupervisionCCReport | undefined;
+
+					supervisionResults.push(
+						supervisionReport?.toSupervisionResult(),
+					);
+				}
 			} catch (e) {
 				driver.driverLog.print(getErrorMessage(e), "error");
 				// TODO: Figure out how we got here, and what to do now.
 				// In any case, keep going with the next nodes
-				// TODO: We should probably respond that there was a failure
+				// Report that there was a failure, so the application can show it
+				supervisionResults.push({
+					status: SupervisionStatus.Fail,
+				});
 			}
 		}
 
-		return response;
+		const finalSupervisionResult =
+			mergeSupervisionResults(supervisionResults);
+		if (finalSupervisionResult) {
+			// We can return return information about the success of this multicast - so we should
+			// TODO: Not sure if we need to "wrap" the response for something. For now, try faking it
+			const cc = new SupervisionCCReport(driver, {
+				nodeId: NODE_ID_BROADCAST,
+				sessionId: 0, // fake
+				moreUpdatesFollow: false, // fake
+				...(finalSupervisionResult as any),
+			});
+			const ret = new (driver.getSendDataSinglecastConstructor())(
+				driver,
+				{ command: cc },
+			);
+			return ret;
+		} else {
+			return response;
+		}
 	};
 
 export function createMessageGenerator<TResponse extends Message = Message>(
@@ -840,7 +929,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 							break;
 						}
 
-						// Pass the generated message to the transaction machine and remember the result for the next iteration
+						// Pass the generated message to the driver and remember the result for the next iteration
 						generator.current = value;
 						sendResult = yield generator.current;
 					} catch (e) {
@@ -849,24 +938,9 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 							resultPromise.reject(e);
 						} else if (isTransmitReport(e) && !e.isOK()) {
 							// The generator was prematurely ended by throwing a NOK transmit report.
-							// If this cannot be handled (e.g. by moving the messages to the wakeup queue), we need
-							// to treat this as an error
-							if (
-								driver.handleMissingNodeACK(
-									generator.parent as any,
-								)
-							) {
-								resetGenerator();
-								return;
-							} else {
-								resultPromise.reject(
-									sendDataErrorToZWaveError(
-										"callback NOK",
-										generator.parent,
-										e,
-									),
-								);
-							}
+							// The driver may want to retry it, so reset the generator
+							resetGenerator();
+							return;
 						} else {
 							// The generator was prematurely ended by throwing a Message
 							resultPromise.resolve(e as TResponse);

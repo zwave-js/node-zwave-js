@@ -1,24 +1,24 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -36,13 +36,13 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
 import { V } from "../lib/Values";
 import {
-	SetbackState,
 	SetbackType,
 	ThermostatSetbackCommand,
+	type SetbackState,
 } from "../lib/_Types";
+import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
 
 export const ThermostatSetbackCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Thermostat Setback"], {
@@ -66,7 +66,9 @@ export const ThermostatSetbackCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatSetbackCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ThermostatSetbackCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatSetbackCommand.Get:
 				return this.isSinglecast();
@@ -76,18 +78,18 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "setbackType":
-			case "setbackState":
-				return (await this.get())?.[property];
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: ThermostatSetbackCCAPI, { property }) {
+			switch (property) {
+				case "setbackType":
+				case "setbackState":
+					return (await this.get())?.[property];
 
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {

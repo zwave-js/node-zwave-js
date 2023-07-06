@@ -4,7 +4,6 @@ import type {
 	EntryControlEventTypes,
 	FirmwareUpdateProgress,
 	FirmwareUpdateResult,
-	FirmwareUpdateStatus,
 	MultilevelSwitchCommand,
 	Powerlevel,
 	PowerlevelTestStatus,
@@ -80,14 +79,10 @@ export type ZWaveInterviewFailedCallback = (
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,
-	__DEPRECATED__sentFragments: number,
-	__DEPRECATED__totalFragments: number,
 	progress: FirmwareUpdateProgress,
 ) => void;
 export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 	node: ZWaveNode,
-	__DEPRECATED__status: FirmwareUpdateStatus,
-	__DEPRECATED__waitTime: number | undefined,
 	result: FirmwareUpdateResult,
 ) => void;
 export type ZWaveNodeStatusChangeCallback = (

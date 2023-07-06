@@ -1,25 +1,30 @@
 import {
 	CommandClasses,
-	Duration,
-	isZWaveError,
-	IVirtualEndpoint,
-	IZWaveEndpoint,
-	IZWaveNode,
-	Maybe,
 	NODE_ID_BROADCAST,
-	SendCommandOptions,
-	stripUndefined,
-	SupervisionResult,
-	TXReport,
-	unknownBoolean,
-	ValueChangeOptions,
-	ValueDB,
-	ValueID,
+	NOT_KNOWN,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isZWaveError,
+	stripUndefined,
+	type Duration,
+	type IVirtualEndpoint,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type MaybeNotKnown,
+	type SendCommandOptions,
+	type SupervisionResult,
+	type TXReport,
+	type ValueChangeOptions,
+	type ValueDB,
+	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
-import { getEnumMemberName, num2hex, OnlyMethods } from "@zwave-js/shared";
+import {
+	getEnumMemberName,
+	num2hex,
+	type AllOrNone,
+	type OnlyMethods,
+} from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	getAPI,
@@ -31,11 +36,38 @@ export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
 export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
+
 export type SetValueImplementation = (
 	property: ValueIDProperties,
 	value: unknown,
 	options?: SetValueAPIOptions,
 ) => Promise<SupervisionResult | undefined>;
+
+export const SET_VALUE_HOOKS: unique symbol = Symbol.for(
+	"CCAPI_SET_VALUE_HOOKS",
+);
+
+export type SetValueImplementationHooks = AllOrNone<{
+	// Opt-in to and handle delayed supervision updates
+	supervisionDelayedUpdates: boolean;
+	supervisionOnSuccess: () => void | Promise<void>;
+	supervisionOnFailure: () => void | Promise<void>;
+}> & {
+	// Optimistically update related cached values (if allowed)
+	optimisticallyUpdateRelatedValues?: (
+		supervisedAndSuccessful: boolean,
+	) => void;
+	// Check if a verification of the set value is required, even if the API response suggests otherwise
+	forceVerifyChanges?: () => boolean;
+	// Verify the changes
+	verifyChanges?: () => void | Promise<void>;
+};
+
+export type SetValueImplementationHooksFactory = (
+	property: ValueIDProperties,
+	value: unknown,
+	options?: SetValueAPIOptions,
+) => SetValueImplementationHooks | undefined;
 
 /**
  * A generic options bag for the `setValue` API.
@@ -182,12 +214,24 @@ export class CCAPI {
 	 */
 	public readonly ccId: CommandClasses;
 
-	protected [SET_VALUE]: SetValueImplementation | undefined;
+	protected get [SET_VALUE](): SetValueImplementation | undefined {
+		return undefined;
+	}
+
 	/**
-	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key)
+	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key).
+	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get setValue(): SetValueImplementation | undefined {
 		return this[SET_VALUE];
+	}
+
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory | undefined;
+	/**
+	 * Can be implemented by CC APIs to influence the behavior of the setValue API in regards to Supervision and verifying values.
+	 */
+	public get setValueHooks(): SetValueImplementationHooksFactory | undefined {
+		return this[SET_VALUE_HOOKS];
 	}
 
 	/** Whether a successful setValue call should imply that the value was successfully updated */
@@ -196,12 +240,15 @@ export class CCAPI {
 		return true;
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation | undefined;
+	protected get [POLL_VALUE](): PollValueImplementation | undefined {
+		return undefined;
+	}
 	/**
 	 * Can be used on supported CC APIs to poll a CC value by property name (and optionally the property key)
+	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
-		return this[POLL_VALUE]?.bind(this);
+		return this[POLL_VALUE];
 	}
 
 	/**
@@ -209,7 +256,7 @@ export class CCAPI {
 	 * @returns `true` if the poll was scheduled, `false` otherwise
 	 */
 	protected schedulePoll(
-		property: ValueIDProperties,
+		{ property, propertyKey }: ValueIDProperties,
 		expectedValue: unknown,
 		{ duration, transition = "slow" }: SchedulePollOptions = {},
 	): boolean {
@@ -231,7 +278,8 @@ export class CCAPI {
 				{
 					commandClass: this.ccId,
 					endpoint: this.endpoint.index,
-					...property,
+					property,
+					propertyKey,
 				},
 				{ timeoutMs, expectedValue },
 			);
@@ -250,7 +298,8 @@ export class CCAPI {
 					{
 						commandClass: this.ccId,
 						endpoint: this.endpoint.index,
-						...property,
+						property,
+						propertyKey,
 					},
 					{ timeoutMs, expectedValue },
 				);
@@ -267,7 +316,7 @@ export class CCAPI {
 	 */
 	public get version(): number {
 		if (this.isSinglecast() && this.endpoint.nodeId !== NODE_ID_BROADCAST) {
-			return this.applHost.getSafeCCVersionForNode(
+			return this.applHost.getSafeCCVersion(
 				this.ccId,
 				this.endpoint.nodeId,
 				this.endpoint.index,
@@ -291,12 +340,12 @@ export class CCAPI {
 
 	/**
 	 * Determine whether the linked node supports a specific command of this command class.
-	 * "unknown" means that the information has not been received yet
+	 * {@link NOT_KNOWN} (`undefined`) means that the information has not been received yet
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public supportsCommand(command: number): Maybe<boolean> {
+	public supportsCommand(command: number): MaybeNotKnown<boolean> {
 		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
-		return unknownBoolean;
+		return NOT_KNOWN;
 	}
 
 	protected assertSupportsCommand(
@@ -366,10 +415,14 @@ export class CCAPI {
 		}
 
 		// Remember which properties need to be proxied
-		const ownProps = new Set(
-			Object.getOwnPropertyNames(this.constructor.prototype),
-		);
-		ownProps.delete("constructor");
+		const proxiedProps = new Set([
+			// These are the CC-specific methods
+			...Object.getOwnPropertyNames(this.constructor.prototype),
+			// as well as setValue and pollValue
+			"setValue",
+			"pollValue",
+		]);
+		proxiedProps.delete("constructor");
 
 		function wrapResult<T>(result: T, txReport: TXReport): any {
 			// Both the result and the TX report may be undefined (no response, no support)
@@ -385,7 +438,7 @@ export class CCAPI {
 
 				let original: any = (target as any)[prop];
 				if (
-					ownProps.has(prop as string) &&
+					proxiedProps.has(prop as string) &&
 					typeof original === "function"
 				) {
 					// This is a method that only exists in the specific implementation
@@ -535,8 +588,10 @@ type CCNameMap = {
 	Clock: (typeof CommandClasses)["Clock"];
 	"Color Switch": (typeof CommandClasses)["Color Switch"];
 	Configuration: (typeof CommandClasses)["Configuration"];
+	"Device Reset Locally": (typeof CommandClasses)["Device Reset Locally"];
 	"Door Lock": (typeof CommandClasses)["Door Lock"];
 	"Door Lock Logging": (typeof CommandClasses)["Door Lock Logging"];
+	"Energy Production": (typeof CommandClasses)["Energy Production"];
 	"Entry Control": (typeof CommandClasses)["Entry Control"];
 	"Firmware Update Meta Data": (typeof CommandClasses)["Firmware Update Meta Data"];
 	"Humidity Control Mode": (typeof CommandClasses)["Humidity Control Mode"];
@@ -579,6 +634,7 @@ type CCNameMap = {
 	"User Code": (typeof CommandClasses)["User Code"];
 	Version: (typeof CommandClasses)["Version"];
 	"Wake Up": (typeof CommandClasses)["Wake Up"];
+	"Window Covering": (typeof CommandClasses)["Window Covering"];
 	"Z-Wave Plus Info": (typeof CommandClasses)["Z-Wave Plus Info"];
 };
 export type CCToName<CC extends CommandClasses> = {
@@ -622,14 +678,19 @@ export type WrapWithTXReport<T> = [T] extends [Promise<infer U>]
 	? { txReport: TXReport | undefined }
 	: { result: T; txReport: TXReport | undefined };
 
+export type ReturnWithTXReport<T> = T extends (...args: any[]) => any
+	? (...args: Parameters<T>) => WrapWithTXReport<ReturnType<T>>
+	: undefined;
+
 // Converts the type of the given API implementation so the API methods return an object including the TX report
 export type WithTXReport<API extends CCAPI> = Omit<
 	API,
-	keyof OwnMethodsOf<API> | "withOptions" | "withTXReport"
+	keyof OwnMethodsOf<API> | "withOptions" | "withTXReport" | "setValue"
 > & {
-	[K in keyof OwnMethodsOf<API>]: API[K] extends (...args: any[]) => any
-		? (...args: Parameters<API[K]>) => WrapWithTXReport<ReturnType<API[K]>>
-		: never;
+	[K in
+		| keyof OwnMethodsOf<API>
+		| "setValue"
+		| "pollValue"]: ReturnWithTXReport<API[K]>;
 };
 
 export function normalizeCCNameOrId(
@@ -672,8 +733,10 @@ export interface CCAPIs {
 	Clock: import("../cc/ClockCC").ClockCCAPI;
 	"Color Switch": import("../cc/ColorSwitchCC").ColorSwitchCCAPI;
 	Configuration: import("../cc/ConfigurationCC").ConfigurationCCAPI;
+	"Device Reset Locally": import("../cc/DeviceResetLocallyCC").DeviceResetLocallyCCAPI;
 	"Door Lock": import("../cc/DoorLockCC").DoorLockCCAPI;
 	"Door Lock Logging": import("../cc/DoorLockLoggingCC").DoorLockLoggingCCAPI;
+	"Energy Production": import("../cc/EnergyProductionCC").EnergyProductionCCAPI;
 	"Entry Control": import("../cc/EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
 	"Humidity Control Mode": import("../cc/HumidityControlModeCC").HumidityControlModeCCAPI;
@@ -716,5 +779,6 @@ export interface CCAPIs {
 	"User Code": import("../cc/UserCodeCC").UserCodeCCAPI;
 	Version: import("../cc/VersionCC").VersionCCAPI;
 	"Wake Up": import("../cc/WakeUpCC").WakeUpCCAPI;
+	"Window Covering": import("../cc/WindowCoveringCC").WindowCoveringCCAPI;
 	"Z-Wave Plus Info": import("../cc/ZWavePlusCC").ZWavePlusCCAPI;
 }

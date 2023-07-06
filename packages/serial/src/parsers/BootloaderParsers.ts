@@ -1,4 +1,4 @@
-import { Transform, TransformCallback } from "stream";
+import { Transform, type TransformCallback } from "stream";
 import type { SerialLogger } from "../Logger";
 import { XModemMessageHeaders } from "../MessageHeaders";
 

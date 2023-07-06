@@ -1,9 +1,9 @@
-import { JSONObject, pick } from "@zwave-js/shared/safe";
+import { pick, type JSONObject } from "@zwave-js/shared/safe";
 import { throwInvalidConfig } from "../utils_safe";
 import {
-	ConditionalItem,
 	conditionApplies,
 	validateCondition,
+	type ConditionalItem,
 } from "./ConditionalItem";
 import type { DeviceID } from "./shared";
 

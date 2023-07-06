@@ -2,16 +2,16 @@ import type { MessageOrCCLogEntry } from "@zwave-js/core";
 import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedCallback,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageOrigin,
 	MessageType,
+	expectedCallback,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 } from "@zwave-js/serial";
 
 @messageTypes(MessageType.Request, FunctionType.HardReset)

@@ -4,7 +4,7 @@ import { padStart } from "alcalzone-shared/strings";
 export function cpp2js(str: string): string {
 	const nullIndex = str.indexOf("\0");
 	if (nullIndex === -1) return str;
-	return str.substr(0, nullIndex);
+	return str.slice(0, nullIndex);
 }
 
 /**

@@ -1,26 +1,26 @@
 import {
-	CommandClasses,
 	createSimpleReflectionDecorator,
 	encodeNodeUpdatePayload,
 	getCCName,
-	MessageOrCCLogEntry,
-	MessageRecord,
-	NodeUpdatePayload,
 	parseCCList,
 	parseNodeUpdatePayload,
+	type CommandClasses,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type NodeUpdatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	DeserializingMessageConstructor,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageType,
+	gotDeserializationOptions,
 	messageTypes,
-	SuccessIndicator,
+	type DeserializingMessageConstructor,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
+	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 

@@ -1,14 +1,14 @@
 import { RFRegion, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
-import { AllOrNone, getEnumMemberName } from "@zwave-js/shared/safe";
+import { getEnumMemberName, type AllOrNone } from "@zwave-js/shared/safe";
 import semver from "semver";
 import type { NVM3Object } from "../nvm3/object";
 import {
+	NVMFile,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export type ApplicationRFConfigFileOptions = NVMFileCreationOptions & {

@@ -1,4 +1,4 @@
-import test, { ExecutionContext } from "ava";
+import test, { type ExecutionContext } from "ava";
 import fsExtra from "fs-extra";
 import sinon from "sinon";
 import { ConfigManager } from "./ConfigManager";

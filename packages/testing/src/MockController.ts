@@ -1,4 +1,4 @@
-import { ICommandClass, MAX_SUPERVISION_SESSION_ID } from "@zwave-js/core";
+import { MAX_SUPERVISION_SESSION_ID, type ICommandClass } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
@@ -7,19 +7,19 @@ import {
 	SerialAPIParser,
 } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { createWrappingCounter, TimedExpectation } from "@zwave-js/shared/safe";
+import { TimedExpectation, createWrappingCounter } from "@zwave-js/shared/safe";
 import {
 	getDefaultMockControllerCapabilities,
-	MockControllerCapabilities,
+	type MockControllerCapabilities,
 } from "./MockControllerCapabilities";
 import type { MockNode } from "./MockNode";
 import {
-	createMockZWaveAckFrame,
-	MockZWaveAckFrame,
-	MockZWaveFrame,
-	MockZWaveFrameType,
-	MockZWaveRequestFrame,
 	MOCK_FRAME_ACK_TIMEOUT,
+	MockZWaveFrameType,
+	createMockZWaveAckFrame,
+	type MockZWaveAckFrame,
+	type MockZWaveFrame,
+	type MockZWaveRequestFrame,
 } from "./MockZWaveFrame";
 
 export interface MockControllerOptions {
@@ -55,12 +55,8 @@ export class MockController {
 			getNextSupervisionSessionId: createWrappingCounter(
 				MAX_SUPERVISION_SESSION_ID,
 			),
-			getSafeCCVersionForNode: () => 100,
-			getSupportedCCVersionForEndpoint: (
-				cc,
-				nodeId,
-				endpointIndex = 0,
-			) => {
+			getSafeCCVersion: () => 100,
+			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
 					return 0;
 				}
@@ -371,7 +367,9 @@ export class MockController {
 			ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
 		}
 		process.nextTick(() => {
-			void node.onControllerFrame(frame);
+			void node.onControllerFrame(frame).catch((e) => {
+				console.error(e);
+			});
 		});
 		if (ret) return await ret;
 	}

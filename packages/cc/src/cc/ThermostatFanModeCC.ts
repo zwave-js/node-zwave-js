@@ -1,29 +1,29 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -73,7 +73,9 @@ export const ThermostatFanModeCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Fan Mode"])
 export class ThermostatFanModeCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatFanModeCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ThermostatFanModeCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatFanModeCommand.Get:
 			case ThermostatFanModeCommand.SupportedGet:
@@ -84,74 +86,79 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		const valueDB = this.getValueDB();
-		let result: SupervisionResult | undefined;
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: ThermostatFanModeCCAPI,
+			{ property },
+			value,
+		) {
+			const valueDB = this.getValueDB();
+			let result: SupervisionResult | undefined;
 
-		if (property === "mode") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+			if (property === "mode") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				// Preserve the value of the "off" flag
+				const off = valueDB.getValue<boolean>(
+					ThermostatFanModeCCValues.turnedOff.endpoint(
+						this.endpoint.index,
+					),
 				);
-			}
-			// Preserve the value of the "off" flag
-			const off = valueDB.getValue<boolean>(
-				ThermostatFanModeCCValues.turnedOff.endpoint(
-					this.endpoint.index,
-				),
-			);
-			result = await this.set(value, off);
-		} else if (property === "off") {
-			if (typeof value !== "boolean") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"boolean",
-					typeof value,
+				result = await this.set(value, off);
+			} else if (property === "off") {
+				if (typeof value !== "boolean") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"boolean",
+						typeof value,
+					);
+				}
+				const mode = valueDB.getValue<ThermostatFanMode>(
+					ThermostatFanModeCCValues.fanMode.endpoint(
+						this.endpoint.index,
+					),
 				);
-			}
-			const mode = valueDB.getValue<ThermostatFanMode>(
-				ThermostatFanModeCCValues.fanMode.endpoint(this.endpoint.index),
-			);
-			if (mode == undefined) {
-				throw new ZWaveError(
-					`The "off" property cannot be changed before the fan mode is known!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			result = await this.set(mode, value);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-
-		// Verify the current value after a delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
-			// aren't able to handle the GET this quickly.
-			this.schedulePoll({ property }, value);
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "mode":
-			case "off":
-				return (await this.get())?.[property];
-
-			default:
+				if (mode == undefined) {
+					throw new ZWaveError(
+						`The "off" property cannot be changed before the fan mode is known!`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				result = await this.set(mode, value);
+			} else {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+
+			// Verify the current value after a delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
+				// aren't able to handle the GET this quickly.
+				this.schedulePoll({ property }, value);
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: ThermostatFanModeCCAPI, { property }) {
+			switch (property) {
+				case "mode":
+				case "off":
+					return (await this.get())?.[property];
+
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
@@ -194,7 +201,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 	}
 
 	public async getSupportedModes(): Promise<
-		readonly ThermostatFanMode[] | undefined
+		MaybeNotKnown<readonly ThermostatFanMode[]>
 	> {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,

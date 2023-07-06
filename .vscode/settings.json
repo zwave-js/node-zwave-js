@@ -1,7 +1,11 @@
 {
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"editor.formatOnSave": true,
+	"editor.formatOnSave": false, // the default of true interferes with codeActionsOnSave
+	"editor.codeActionsOnSave": [
+		"source.fixAll.eslint",
+		"source.formatDocument"
+	],
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"eslint.validate": [
 		"javascript",

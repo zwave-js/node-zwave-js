@@ -1,41 +1,49 @@
 import {
-	Notification,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
 	NotificationParameterWithEnum,
 	NotificationParameterWithValue,
-	NotificationValueDefinition,
+	type Notification,
+	type NotificationValueDefinition,
 } from "@zwave-js/config";
 import { timespan } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
-	encodeBitMask,
-	isZWaveError,
-	IZWaveEndpoint,
-	IZWaveNode,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	SinglecastCC,
-	SupervisionResult,
-	validatePayload,
 	ValueMetadata,
-	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	getCCName,
+	isZWaveError,
+	parseBitMask,
+	validatePayload,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
+	type ValueID,
+	type ValueMetadataNumeric,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import {
+	CCAPI,
+	POLL_VALUE,
+	PhysicalCCAPI,
+	throwUnsupportedProperty,
+	type PollValueImplementation,
+} from "../lib/API";
 import {
 	CommandClass,
-	gotDeserializationOptions,
 	InvalidCC,
+	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -50,9 +58,10 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
-import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import { NotificationCommand, UserCodeCommand } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
+import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
 
 export const NotificationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Notification, {
@@ -209,7 +218,7 @@ function lookupNotificationNames(
 
 @API(CommandClasses.Notification)
 export class NotificationCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: NotificationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case NotificationCommand.Report:
 			case NotificationCommand.Get:
@@ -223,6 +232,30 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 				return this.version >= 3;
 		}
 		return super.supportsCommand(cmd);
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: NotificationCCAPI,
+			{ property, propertyKey },
+		) {
+			const valueId: ValueID = {
+				commandClass: this.ccId,
+				endpoint: this.endpoint.index,
+				property,
+				propertyKey,
+			};
+			if (NotificationCCValues.notificationVariable.is(valueId)) {
+				const notificationType: number | undefined =
+					this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific
+						?.notificationType;
+				if (notificationType != undefined) {
+					return this.getInternal({ notificationType });
+				}
+			}
+
+			throwUnsupportedProperty(this.ccId, property);
+		};
 	}
 
 	/**
@@ -326,7 +359,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getSupportedEvents(
 		notificationType: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.EventSupportedGet,
@@ -440,25 +473,14 @@ export class NotificationCC extends CommandClass {
 		if (!node.supportsCC(CommandClasses.Association)) return "pull";
 
 		try {
-			if (
-				node.supportsCC(CommandClasses["Association Group Information"])
-			) {
-				const assocGroups = ccUtils.getAssociationGroups(
+			const groupsIssueingNotifications =
+				AssociationGroupInfoCC.findGroupsForIssuedCommand(
 					applHost,
 					node,
+					this.ccId,
+					NotificationCommand.Report,
 				);
-				for (const group of assocGroups.values()) {
-					// Check if this group sends Notification Reports
-					if (
-						group.issuedCommands
-							?.get(CommandClasses.Notification)
-							?.includes(NotificationCommand.Report)
-					) {
-						return "push";
-					}
-				}
-				return "pull";
-			}
+			return groupsIssueingNotifications.length > 0 ? "push" : "pull";
 		} catch {
 			// We might be dealing with an older cache file, fall back to testing
 		}
@@ -500,7 +522,7 @@ export class NotificationCC extends CommandClass {
 	public static getNotificationMode(
 		applHost: ZWaveApplicationHost,
 		node: IZWaveNode,
-	): "push" | "pull" | undefined {
+	): MaybeNotKnown<"push" | "pull"> {
 		return applHost
 			.getValueDB(node.id)
 			.getValue(NotificationCCValues.notificationMode.id);
@@ -522,6 +544,25 @@ export class NotificationCC extends CommandClass {
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
+
+		// If one Association group issues Notification Reports,
+		// we must associate ourselves with that channel
+		try {
+			await ccUtils.assignLifelineIssueingCommand(
+				applHost,
+				endpoint,
+				this.ccId,
+				NotificationCommand.Report,
+			);
+		} catch {
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
+				message: `Configuring associations to receive ${getCCName(
+					this.ccId,
+				)} reports failed!`,
+				level: "warn",
+			});
+		}
 
 		let supportsV1Alarm = false;
 		if (this.version >= 2) {
@@ -1041,7 +1082,7 @@ export class NotificationCCReport extends NotificationCC {
 		if (this.alarmType) {
 			message = {
 				"V1 alarm type": this.alarmType,
-				"V1 alarm level": this.alarmLevel,
+				"V1 alarm level": this.alarmLevel!,
 			};
 		}
 
@@ -1061,7 +1102,7 @@ export class NotificationCCReport extends NotificationCC {
 						applHost.configManager.getNotificationName(
 							this.notificationType,
 						),
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					[`notification ${valueConfig.type}`]:
 						valueConfig.label ??
 						`Unknown (${num2hex(this.notificationEvent)})`,
@@ -1070,14 +1111,14 @@ export class NotificationCCReport extends NotificationCC {
 				message = {
 					...message,
 					"notification type": this.notificationType,
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					"notification state": "idle",
 				};
 			} else {
 				message = {
 					...message,
 					"notification type": this.notificationType,
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					"notification event": num2hex(this.notificationEvent),
 				};
 			}

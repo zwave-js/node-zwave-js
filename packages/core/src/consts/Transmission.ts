@@ -1,7 +1,8 @@
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
-import type { Duration } from "../values/Duration";
+import { type S2SecurityClass } from "../security/SecurityClass";
+import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
@@ -169,7 +170,7 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a queued message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
 	/**
 	 * @internal
@@ -216,9 +217,13 @@ export type SupervisionOptions =
 	  };
 
 export type SendCommandSecurityS2Options = {
-	/** Whether the MOS extension should be included in S2 message encapsulation */
+	/** Send the command using a different (lower) security class */
+	s2OverrideSecurityClass?: S2SecurityClass;
+	/** Whether delivery of non-supervised SET-type commands is verified by waiting for potential Nonce Reports. Default: true */
+	s2VerifyDelivery?: boolean;
+	/** Whether the MOS extension should be included in S2 message encapsulation. */
 	s2MulticastOutOfSync?: boolean;
-	/** The optional multicast group ID to use for S2 message encapsulation */
+	/** The optional multicast group ID to use for S2 message encapsulation. */
 	s2MulticastGroupId?: number;
 };
 
@@ -233,6 +238,8 @@ export type SendCommandOptions = SendMessageOptions &
 		encapsulationFlags?: EncapsulationFlags;
 		/** Overwrite the default transmit options */
 		transmitOptions?: TransmitOptions;
+		/** Overwrite the default report timeout */
+		reportTimeoutMs?: number;
 	};
 
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
@@ -302,4 +309,44 @@ export function isUnsupervisedOrSucceeded(
 			status: SupervisionStatus.Success | SupervisionStatus.Working;
 	  }) {
 	return !result || supervisedCommandSucceeded(result);
+}
+
+/** Figures out the final supervision result from an array of things that may be supervision results */
+export function mergeSupervisionResults(
+	results: unknown[],
+): SupervisionResult | undefined {
+	const supervisionResults = results.filter(isSupervisionResult);
+	if (!supervisionResults.length) return undefined;
+
+	if (supervisionResults.some((r) => r.status === SupervisionStatus.Fail)) {
+		return {
+			status: SupervisionStatus.Fail,
+		};
+	} else if (
+		supervisionResults.some((r) => r.status === SupervisionStatus.NoSupport)
+	) {
+		return {
+			status: SupervisionStatus.NoSupport,
+		};
+	}
+	const working = supervisionResults.filter(
+		(r): r is SupervisionResult & { status: SupervisionStatus.Working } =>
+			r.status === SupervisionStatus.Working,
+	);
+	if (working.length > 0) {
+		const durations = working.map((r) =>
+			r.remainingDuration.serializeSet(),
+		);
+		const maxDuration =
+			(durations.length > 0 &&
+				Duration.parseReport(Math.max(...durations))) ||
+			Duration.unknown();
+		return {
+			status: SupervisionStatus.Working,
+			remainingDuration: maxDuration,
+		};
+	}
+	return {
+		status: SupervisionStatus.Success,
+	};
 }

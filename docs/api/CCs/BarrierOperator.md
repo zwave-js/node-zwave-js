@@ -22,7 +22,7 @@ async set(
 
 ```ts
 async getSignalingCapabilities(): Promise<
-	readonly SubsystemType[] | undefined
+	MaybeNotKnown<readonly SubsystemType[]>
 >;
 ```
 
@@ -31,7 +31,7 @@ async getSignalingCapabilities(): Promise<
 ```ts
 async getEventSignaling(
 	subsystemType: SubsystemType,
-): Promise<SubsystemState | undefined>;
+): Promise<MaybeNotKnown<SubsystemState>>;
 ```
 
 ### `setEventSignaling`

@@ -90,6 +90,7 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 	steps?: number;
 	default?: number;
 	states?: Record<number, string>;
+	allowManualEntry?: boolean;
 	unit?: string;
 }
 ```
@@ -102,7 +103,7 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 -   `unit`: An optional unit for numeric values
 
 > [!WARNING]
-> A value with `type: "number"` can contain the literal string `"unknown"` if the driver option `preserveUnknownValues` is `true`.
+> A value with `type: "number"` can be `null` to indicate a (known to be) unknown state!
 
 #### `boolean`
 
@@ -112,13 +113,17 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	default?: number;
+	states?: {
+		true?: string;
+		false?: string;
+	};
 }
 ```
 
 -   `default`: The default value
 
 > [!WARNING]
-> A value with `type: "boolean"` can contain the literal string `"unknown"` if the driver option `preserveUnknownValues` is `true`.
+> A value with `type: "boolean"` can be `null` to indicate a (known to be) unknown state!
 
 #### `string`
 
@@ -136,6 +141,9 @@ interface ValueMetadataString extends ValueMetadataAny {
 -   `minLength`: The minimum length this string must have
 -   `maxLength`: The maximum length this string may have
 -   `default`: The default value
+
+> [!WARNING]
+> A value with `type: "string"` can be `null` to indicate a (known to be) unknown state!
 
 ### CC-specific fields
 
@@ -173,7 +181,6 @@ type BinarySensorValueMetadata = ValueMetadata & {
 type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
-		// only present on V2+ indicators:
 		propertyId?: number;
 	};
 };

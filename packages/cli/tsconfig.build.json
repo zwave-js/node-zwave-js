@@ -8,6 +8,17 @@
 		"module": "Node16",
 		"moduleResolution": "node16"
 	},
+	"references": [
+		{
+			"path": "../core/tsconfig.build.json"
+		},
+		{
+			"path": "../shared/tsconfig.build.json"
+		},
+		{
+			"path": "../zwave-js/tsconfig.build.json"
+		}
+	],
 	"include": ["src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["src/**/*.test.ts"]
 }

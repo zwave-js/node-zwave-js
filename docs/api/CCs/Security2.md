@@ -40,7 +40,7 @@ async getSupportedCommands(
 		| SecurityClass.S2_AccessControl
 		| SecurityClass.S2_Authenticated
 		| SecurityClass.S2_Unauthenticated,
-): Promise<CommandClasses[] | undefined>;
+): Promise<MaybeNotKnown<CommandClasses[]>>;
 ```
 
 Queries the securely supported commands for the current security class.
@@ -49,10 +49,18 @@ Queries the securely supported commands for the current security class.
 
 -   `securityClass`: Can be used to overwrite the security class to use. If this doesn't match the current one, new nonces will need to be exchanged.
 
+### `reportSupportedCommands`
+
+```ts
+async reportSupportedCommands(
+	supportedCCs: CommandClasses[],
+): Promise<void>;
+```
+
 ### `getKeyExchangeParameters`
 
 ```ts
-async getKeyExchangeParameters(): Promise<Pick<Security2CCKEXReport, "requestCSA" | "echo" | "supportedKEXSchemes" | "supportedECDHProfiles" | "requestedKeys"> | undefined>;
+async getKeyExchangeParameters(): Promise<Pick<Security2CCKEXReport, "requestCSA" | "echo" | "supportedKEXSchemes" | "supportedECDHProfiles" | "requestedKeys" | "_reserved"> | undefined>;
 ```
 
 ### `grantKeys`

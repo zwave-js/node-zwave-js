@@ -1,0 +1,626 @@
+{
+	"manufacturer": "Swidget Corp",
+	"manufacturerId": "0x0345",
+	"label": "ZW008UWA",
+	"description": "Universal Control Insert + Air Quality",
+	"devices": [
+		{
+			"productType": "0x0105",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3087
+		},
+		{
+			"productType": "0x0205",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3087
+		},
+		{
+			"productType": "0x0305",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3087
+		},
+		{
+			"productType": "0x0405",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3087
+		},
+		{
+			"productType": "0x0505",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3087
+		},
+		{
+			"productType": "0x0605",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3087
+		},
+		{
+			"productType": "0x0705",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3087
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/swidget_template.json#primary_power_high_entry_value"
+		},
+		{
+			"#": "2",
+			"$import": "templates/swidget_template.json#primary_power_low_entry_value"
+		},
+		{
+			"#": "3",
+			"$import": "templates/swidget_template.json#primary_power_high_exit_value"
+		},
+		{
+			"#": "4",
+			"$import": "templates/swidget_template.json#primary_power_low_exit_value"
+		},
+		{
+			"#": "5",
+			"$import": "templates/swidget_template.json#primary_power_high_delay"
+		},
+		{
+			"#": "6",
+			"$import": "templates/swidget_template.json#primary_power_low_delay"
+		},
+		{
+			"#": "7",
+			"$import": "templates/swidget_template.json#primary_power_periodic_report"
+		},
+		{
+			"#": "8",
+			"$import": "templates/swidget_template.json#primary_power_change_report"
+		},
+		{
+			"#": "9",
+			"$import": "templates/swidget_template.json#primary_power_renotification_delay"
+		},
+		{
+			"#": "10",
+			"$import": "templates/swidget_template.json#primary_power_high_entry_set_value"
+		},
+		{
+			"#": "11",
+			"$import": "templates/swidget_template.json#primary_power_high_exit_set_value"
+		},
+		{
+			"#": "12",
+			"$import": "templates/swidget_template.json#primary_power_low_entry_set_value"
+		},
+		{
+			"#": "13",
+			"$import": "templates/swidget_template.json#primary_power_low_exit_set_value"
+		},
+		{
+			"#": "14[0x01]",
+			"$import": "templates/swidget_template.json#primary_power_high_actions_control_associations_on_entry"
+		},
+		{
+			"#": "14[0x02]",
+			"$import": "templates/swidget_template.json#primary_power_high_actions_control_associations_on_exit"
+		},
+		{
+			"#": "14[0x04]",
+			"$import": "templates/swidget_template.json#primary_power_high_actions_control_host_on_entry"
+		},
+		{
+			"#": "14[0x08]",
+			"$import": "templates/swidget_template.json#primary_power_high_actions_control_host_on_exit"
+		},
+		{
+			"#": "14[0x10]",
+			"$import": "templates/swidget_template.json#primary_power_high_actions_report_transitions"
+		},
+		{
+			"#": "14[0x20]",
+			"$import": "templates/swidget_template.json#primary_power_high_actions_apply_entry_delay"
+		},
+		{
+			"#": "14[0x40]",
+			"$import": "templates/swidget_template.json#primary_power_high_actions_apply_exit_delay"
+		},
+		{
+			"#": "15[0x01]",
+			"$import": "templates/swidget_template.json#primary_power_low_actions_control_associations_on_entry"
+		},
+		{
+			"#": "15[0x02]",
+			"$import": "templates/swidget_template.json#primary_power_low_actions_control_associations_on_exit"
+		},
+		{
+			"#": "15[0x04]",
+			"$import": "templates/swidget_template.json#primary_power_low_actions_control_host_on_entry"
+		},
+		{
+			"#": "15[0x08]",
+			"$import": "templates/swidget_template.json#primary_power_low_actions_control_host_on_exit"
+		},
+		{
+			"#": "15[0x10]",
+			"$import": "templates/swidget_template.json#primary_power_low_actions_report_transitions"
+		},
+		{
+			"#": "15[0x20]",
+			"$import": "templates/swidget_template.json#primary_power_low_actions_apply_entry_delay"
+		},
+		{
+			"#": "15[0x40]",
+			"$import": "templates/swidget_template.json#primary_power_low_actions_apply_exit_delay"
+		},
+		{
+			"#": "24",
+			"$import": "templates/swidget_template.json#secondary_power_high_entry_value"
+		},
+		{
+			"#": "25",
+			"$import": "templates/swidget_template.json#secondary_power_low_entry_value"
+		},
+		{
+			"#": "26",
+			"$import": "templates/swidget_template.json#secondary_power_high_exit_value"
+		},
+		{
+			"#": "27",
+			"$import": "templates/swidget_template.json#secondary_power_low_exit_value"
+		},
+		{
+			"#": "28",
+			"$import": "templates/swidget_template.json#secondary_power_high_delay"
+		},
+		{
+			"#": "29",
+			"$import": "templates/swidget_template.json#secondary_power_low_delay"
+		},
+		{
+			"#": "30",
+			"$import": "templates/swidget_template.json#secondary_power_periodic_report"
+		},
+		{
+			"#": "31",
+			"$import": "templates/swidget_template.json#secondary_power_change_report"
+		},
+		{
+			"#": "32",
+			"$import": "templates/swidget_template.json#secondary_power_renotification_delay"
+		},
+		{
+			"#": "33",
+			"$import": "templates/swidget_template.json#secondary_power_high_entry_set_value"
+		},
+		{
+			"#": "34",
+			"$import": "templates/swidget_template.json#secondary_power_high_exit_set_value"
+		},
+		{
+			"#": "35",
+			"$import": "templates/swidget_template.json#secondary_power_low_entry_set_value"
+		},
+		{
+			"#": "36",
+			"$import": "templates/swidget_template.json#secondary_power_low_exit_set_value"
+		},
+		{
+			"#": "37[0x01]",
+			"$import": "templates/swidget_template.json#secondary_power_high_actions_control_associations_on_entry"
+		},
+		{
+			"#": "37[0x02]",
+			"$import": "templates/swidget_template.json#secondary_power_high_actions_control_associations_on_exit"
+		},
+		{
+			"#": "37[0x04]",
+			"$import": "templates/swidget_template.json#secondary_power_high_actions_control_host_on_entry"
+		},
+		{
+			"#": "37[0x08]",
+			"$import": "templates/swidget_template.json#secondary_power_high_actions_control_host_on_exit"
+		},
+		{
+			"#": "37[0x10]",
+			"$import": "templates/swidget_template.json#secondary_power_high_actions_report_transitions"
+		},
+		{
+			"#": "37[0x20]",
+			"$import": "templates/swidget_template.json#secondary_power_high_actions_apply_entry_delay"
+		},
+		{
+			"#": "37[0x40]",
+			"$import": "templates/swidget_template.json#secondary_power_high_actions_apply_exit_delay"
+		},
+		{
+			"#": "38[0x01]",
+			"$import": "templates/swidget_template.json#secondary_power_low_actions_control_associations_on_entry"
+		},
+		{
+			"#": "38[0x02]",
+			"$import": "templates/swidget_template.json#secondary_power_low_actions_control_associations_on_exit"
+		},
+		{
+			"#": "38[0x04]",
+			"$import": "templates/swidget_template.json#secondary_power_low_actions_control_host_on_entry"
+		},
+		{
+			"#": "38[0x08]",
+			"$import": "templates/swidget_template.json#secondary_power_low_actions_control_host_on_exit"
+		},
+		{
+			"#": "38[0x10]",
+			"$import": "templates/swidget_template.json#secondary_power_low_actions_report_transitions"
+		},
+		{
+			"#": "38[0x20]",
+			"$import": "templates/swidget_template.json#secondary_power_low_actions_apply_entry_delay"
+		},
+		{
+			"#": "38[0x40]",
+			"$import": "templates/swidget_template.json#secondary_power_low_actions_apply_exit_delay"
+		},
+		{
+			"#": "48",
+			"$import": "templates/swidget_template.json#motion_sensitivity_level"
+		},
+		{
+			"#": "49",
+			"$import": "templates/swidget_template.json#motion_renotification_delay"
+		},
+		{
+			"#": "50",
+			"$import": "templates/swidget_template.json#motion_reset_delay"
+		},
+		{
+			"#": "51",
+			"$import": "templates/swidget_template.json#motion_detected_entry_set_value"
+		},
+		{
+			"#": "52",
+			"$import": "templates/swidget_template.json#motion_detected_exit_set_value"
+		},
+		{
+			"#": "53[0x01]",
+			"$import": "templates/swidget_template.json#motion_actions_control_associations_on_entry"
+		},
+		{
+			"#": "53[0x02]",
+			"$import": "templates/swidget_template.json#motion_actions_control_associations_on_exit"
+		},
+		{
+			"#": "53[0x04]",
+			"$import": "templates/swidget_template.json#motion_actions_control_host_on_entry"
+		},
+		{
+			"#": "53[0x08]",
+			"$import": "templates/swidget_template.json#motion_actions_control_host_on_exit"
+		},
+		{
+			"#": "53[0x10]",
+			"$import": "templates/swidget_template.json#motion_actions_report_transitions"
+		},
+		{
+			"#": "64",
+			"$import": "templates/swidget_template.json#air_quality_level_1_index"
+		},
+		{
+			"#": "65",
+			"$import": "templates/swidget_template.json#air_quality_level_2_index"
+		},
+		{
+			"#": "66",
+			"$import": "templates/swidget_template.json#air_quality_level_3_index"
+		},
+		{
+			"#": "67",
+			"$import": "templates/swidget_template.json#air_quality_alert_level"
+		},
+		{
+			"#": "68",
+			"$import": "templates/swidget_template.json#air_quality_alert_delay"
+		},
+		{
+			"#": "69",
+			"$import": "templates/swidget_template.json#air_quality_renotification_delay"
+		},
+		{
+			"#": "70",
+			"$import": "templates/swidget_template.json#air_quality_voc_periodic_report"
+		},
+		{
+			"#": "72",
+			"$import": "templates/swidget_template.json#air_quality_alert_entry_set_value"
+		},
+		{
+			"#": "73",
+			"$import": "templates/swidget_template.json#air_quality_alert_exit_set_value"
+		},
+		{
+			"#": "74[0x01]",
+			"$import": "templates/swidget_template.json#air_quality_actions_control_associations_on_entry"
+		},
+		{
+			"#": "74[0x02]",
+			"$import": "templates/swidget_template.json#air_quality_actions_control_associations_on_exit"
+		},
+		{
+			"#": "74[0x04]",
+			"$import": "templates/swidget_template.json#air_quality_actions_control_host_on_entry"
+		},
+		{
+			"#": "74[0x08]",
+			"$import": "templates/swidget_template.json#air_quality_actions_host_on_exit"
+		},
+		{
+			"#": "74[0x10]",
+			"$import": "templates/swidget_template.json#air_quality_actions_notify_transitions"
+		},
+		{
+			"#": "80",
+			"$import": "templates/swidget_template.json#temperature_high_entry_level"
+		},
+		{
+			"#": "81",
+			"$import": "templates/swidget_template.json#temperature_low_entry_level"
+		},
+		{
+			"#": "82",
+			"$import": "templates/swidget_template.json#temperature_high_exit_level"
+		},
+		{
+			"#": "83",
+			"$import": "templates/swidget_template.json#temperature_low_exit_level"
+		},
+		{
+			"#": "84",
+			"$import": "templates/swidget_template.json#temperature_high_delay"
+		},
+		{
+			"#": "85",
+			"$import": "templates/swidget_template.json#temperature_low_delay"
+		},
+		{
+			"#": "86",
+			"$import": "templates/swidget_template.json#temperature_periodic_report"
+		},
+		{
+			"#": "87",
+			"$import": "templates/swidget_template.json#temperature_change_report"
+		},
+		{
+			"#": "88",
+			"$import": "templates/swidget_template.json#temperature_renotification_delay"
+		},
+		{
+			"#": "89",
+			"$import": "templates/swidget_template.json#temperature_high_entry_set_value"
+		},
+		{
+			"#": "90",
+			"$import": "templates/swidget_template.json#temperature_high_exit_set_value"
+		},
+		{
+			"#": "91",
+			"$import": "templates/swidget_template.json#temperature_low_entry_set_value"
+		},
+		{
+			"#": "92",
+			"$import": "templates/swidget_template.json#temperature_low_exit_set_value"
+		},
+		{
+			"#": "93[0x01]",
+			"$import": "templates/swidget_template.json#temperature_high_actions_control_associations_on_entry"
+		},
+		{
+			"#": "93[0x02]",
+			"$import": "templates/swidget_template.json#temperature_high_actions_control_associations_on_exit"
+		},
+		{
+			"#": "93[0x04]",
+			"$import": "templates/swidget_template.json#temperature_high_actions_control_host_on_entry"
+		},
+		{
+			"#": "93[0x08]",
+			"$import": "templates/swidget_template.json#temperature_high_actions_control_host_on_exit"
+		},
+		{
+			"#": "93[0x10]",
+			"$import": "templates/swidget_template.json#temperature_high_actions_report_transitions"
+		},
+		{
+			"#": "93[0x20]",
+			"$import": "templates/swidget_template.json#temperature_high_actions_notify_transitions"
+		},
+		{
+			"#": "93[0x40]",
+			"$import": "templates/swidget_template.json#temperature_high_actions_apply_entry_delay"
+		},
+		{
+			"#": "93[0x80]",
+			"$import": "templates/swidget_template.json#temperature_high_actions_apply_exit_delay"
+		},
+		{
+			"#": "94[0x01]",
+			"$import": "templates/swidget_template.json#temperature_low_actions_control_associations_on_entry"
+		},
+		{
+			"#": "94[0x02]",
+			"$import": "templates/swidget_template.json#temperature_low_actions_control_associations_on_exit"
+		},
+		{
+			"#": "94[0x04]",
+			"$import": "templates/swidget_template.json#temperature_low_actions_control_host_on_entry"
+		},
+		{
+			"#": "94[0x08]",
+			"$import": "templates/swidget_template.json#temperature_low_actions_control_host_on_exit"
+		},
+		{
+			"#": "94[0x10]",
+			"$import": "templates/swidget_template.json#temperature_low_actions_report_transitions"
+		},
+		{
+			"#": "94[0x20]",
+			"$import": "templates/swidget_template.json#temperature_low_actions_notify_transitions"
+		},
+		{
+			"#": "94[0x40]",
+			"$import": "templates/swidget_template.json#temperature_low_actions_apply_entry_delay"
+		},
+		{
+			"#": "94[0x80]",
+			"$import": "templates/swidget_template.json#temperature_low_actions_apply_exit_delay"
+		},
+		{
+			"#": "95",
+			"$import": "templates/swidget_template.json#temperature_units"
+		},
+		{
+			"#": "128",
+			"$import": "templates/swidget_template.json#humidity_high_entry_level"
+		},
+		{
+			"#": "129",
+			"$import": "templates/swidget_template.json#humidity_low_entry_level"
+		},
+		{
+			"#": "130",
+			"$import": "templates/swidget_template.json#humidity_high_exit_level"
+		},
+		{
+			"#": "131",
+			"$import": "templates/swidget_template.json#humidity_low_exit_level"
+		},
+		{
+			"#": "132",
+			"$import": "templates/swidget_template.json#humidity_high_delay"
+		},
+		{
+			"#": "133",
+			"$import": "templates/swidget_template.json#humidity_low_delay"
+		},
+		{
+			"#": "134",
+			"$import": "templates/swidget_template.json#humidity_periodic_report"
+		},
+		{
+			"#": "135",
+			"$import": "templates/swidget_template.json#humidity_change_report"
+		},
+		{
+			"#": "136",
+			"$import": "templates/swidget_template.json#humidity_renotification_delay"
+		},
+		{
+			"#": "137",
+			"$import": "templates/swidget_template.json#humidity_high_entry_set_value"
+		},
+		{
+			"#": "138",
+			"$import": "templates/swidget_template.json#humidity_high_exit_set_value"
+		},
+		{
+			"#": "139",
+			"$import": "templates/swidget_template.json#humidity_low_entry_set_value"
+		},
+		{
+			"#": "140",
+			"$import": "templates/swidget_template.json#humidity_low_exit_set_value"
+		},
+		{
+			"#": "142[0x01]",
+			"$import": "templates/swidget_template.json#humidity_high_actions_control_associations_on_entry"
+		},
+		{
+			"#": "142[0x02]",
+			"$import": "templates/swidget_template.json#humidity_high_actions_control_associations_on_exit"
+		},
+		{
+			"#": "142[0x04]",
+			"$import": "templates/swidget_template.json#humidity_high-actions_control_host_on_entry"
+		},
+		{
+			"#": "142[0x08]",
+			"$import": "templates/swidget_template.json#humidity_high_actions_control_host_on_exit"
+		},
+		{
+			"#": "142[0x10]",
+			"$import": "templates/swidget_template.json#humidity_high_actions_report_transitions"
+		},
+		{
+			"#": "142[0x20]",
+			"$import": "templates/swidget_template.json#humidity_high-actions_apply_entry_delay"
+		},
+		{
+			"#": "142[0x40]",
+			"$import": "templates/swidget_template.json#humidity_high_actions_apply_exit_delay"
+		},
+		{
+			"#": "143[0x01]",
+			"$import": "templates/swidget_template.json#humidity_low_actions_control_associations_on_entry"
+		},
+		{
+			"#": "143[0x02]",
+			"$import": "templates/swidget_template.json#humidity_low_actions_control_associations_on_exit"
+		},
+		{
+			"#": "143[0x04]",
+			"$import": "templates/swidget_template.json#humidity_low_actions_control_host_on_entry"
+		},
+		{
+			"#": "143[0x08]",
+			"$import": "templates/swidget_template.json#humidity_low_actions_control_host_on_exit"
+		},
+		{
+			"#": "143[0x10]",
+			"$import": "templates/swidget_template.json#humidity_low_actions_report_transitions"
+		},
+		{
+			"#": "143[0x20]",
+			"$import": "templates/swidget_template.json#humidity_low_actions_apply_entry_delay"
+		},
+		{
+			"#": "143[0x40]",
+			"$import": "templates/swidget_template.json#humidity_low_actions_apply_exit_delay"
+		},
+		{
+			"#": "152",
+			"$import": "templates/swidget_template.json#system_status"
+		},
+		{
+			"#": "153",
+			"$import": "templates/swidget_template.json#system_led_brightness"
+		},
+		{
+			"#": "154[0x01]",
+			"$import": "templates/swidget_template.json#led_invert"
+		},
+		{
+			"#": "168[0x01]",
+			"$import": "templates/swidget_template.json#switch_host_control_flags_3_way_mode"
+		},
+		{
+			"#": "168[0x02]",
+			"$import": "templates/swidget_template.json#switch_host_control_flags_on_off_invert"
+		},
+		{
+			"#": "192",
+			"$import": "templates/swidget_template.json#dimmer_minimum_brightness"
+		},
+		{
+			"#": "193",
+			"$import": "templates/swidget_template.json#dimmer_maximum_brightness"
+		},
+		{
+			"#": "194",
+			"$import": "templates/swidget_template.json#dimmer_default_brightness"
+		}
+	],
+	"metadata": {
+		"inclusion": "NOTE: Before beginning the network add procedure, ensure there are no devices plugged into either receptacle outlet. After the device has ben successfully added to the network, DO NOT plug anything into either receptacle outlet for at least 2 minutes to allow the module time to synchronize with the outlet metering hardware, or the accuracy of your meter readings may be adversely affected.\n\n1. Follow network ADD steps for your Z-Wave controller/hub to prepare the network to accept a device addition.\n2. Lightly press the push button on the Swidget Z-Wave Insert and hold for 10-15 seconds until the LED illuminates solid blue, then release the button. The LED will flash blue to indicate ADD mode is enabled. No manual or external Z-Wave operations are possible during this activity.\n3. The Swidget Z-Wave Insert will remain in ADD mode for up to 60 seconds. If the device is successfully added to the Z-Wave network, the LED will be solid blue for 5 seconds then return to the normal operational state; LED will be solid green if switch is ON (default), LED will not be illuminated if switch is OFF. If the device fails to be successfully added to the network after 60 seconds, the red LED will begin to flash. If necessary, consult your Z-Wave controller/hub manual and re-try. \n4. Please see section 4.4 on how to perform a local device reset if multiple remove attempts fail.",
+		"exclusion": "1. Follow network REMOVE steps for your Z-Wave controller/hub.\n2. Lightly press the push button on the Swidget Z-Wave Insert and hold for approximately 10 seconds until the LED illuminates solid blue, then release the button. The LED will flash blue to indicate REMOVE mode is enabled.\n3. The Swidget Z-Wave Insert will remain in REMOVE mode for up to 60 seconds. If the device is successfully removed from the Z-Wave network, the LED will be solid blue for 5 seconds then return to the normal operational state. If the device fails to be successfully removed from the network after 60 seconds, the red LED will begin to flash. If necessary, consult your Z-Wave controller/hub manual and re-try.\n4. Please see section 4.4 on how to perform a local device reset if multiple remove attempts fail.",
+		"reset": "To perform a local device reset, lightly press and hold the push button on the Swidget Z-Wave Insert for approximately 20 seconds until the LED turns SOLID RED, and then release. \n\n• After 10 seconds the LED will illuminate SOLID BLUE; indicating user is passing through network add/remove period.\n• After 15 seconds elapsed hold time, the LED will turn off\n• After 20 seconds elapsed hold time, the LED will turn SOLID RED; indicating that the user has entered the device reset period. Releasing the button during this period triggers the Factory Default Local Reset operations.\n\nWhen the Reset operation is in progress, the LED will progress from green to blue to red repeatedly until the reset process is complete, after which the LED will be turned OFF.\n\nIf the user continues to hold the button, after 25 seconds elapse, the user will leave the device reset period, the LED will turn OFF, and no actions will be taken when the button is released.\n\n\nNOTE: The local reset procedure should only be used when the original controller is inoperable or has been replaced, or if Network Add or Network Remove operations have failed after a few attempts.\n\nResetting to factory default settings will, reset the Swidget Z-Wave 500 Series Insert network parameters to the default removed state, and delete the Lifeline Association if it exists."
+	}
+}

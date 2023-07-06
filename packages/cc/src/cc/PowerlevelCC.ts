@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessageRecord,
 	NodeStatus,
-	SupervisionResult,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -35,7 +35,7 @@ import {
 
 @API(CommandClasses.Powerlevel)
 export class PowerlevelCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: PowerlevelCommand): Maybe<boolean> {
+	public supportsCommand(cmd: PowerlevelCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case PowerlevelCommand.Get:
 			case PowerlevelCommand.TestNodeGet:
@@ -75,7 +75,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getPowerlevel(): Promise<
-		Pick<PowerlevelCCReport, "powerlevel" | "timeout"> | undefined
+		MaybeNotKnown<Pick<PowerlevelCCReport, "powerlevel" | "timeout">>
 	> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Get);
 
@@ -134,11 +134,12 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getNodeTestStatus(): Promise<
-		| Pick<
+		MaybeNotKnown<
+			Pick<
 				PowerlevelCCTestNodeReport,
 				"testNodeId" | "status" | "acknowledgedFrames"
-		  >
-		| undefined
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			PowerlevelCommand,

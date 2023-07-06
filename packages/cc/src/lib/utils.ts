@@ -1,10 +1,11 @@
 import {
-	actuatorCCs,
 	CommandClasses,
-	IZWaveNode,
 	ZWaveError,
 	ZWaveErrorCodes,
+	actuatorCCs,
+	getCCName,
 	type IZWaveEndpoint,
+	type IZWaveNode,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
 import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
@@ -20,10 +21,11 @@ import {
 	MultiChannelAssociationCCValues,
 } from "../cc/MultiChannelAssociationCC";
 import { CCAPI } from "./API";
-import type {
-	AssociationAddress,
-	AssociationGroup,
-	EndpointAddress,
+import {
+	AssociationGroupInfoProfile,
+	type AssociationAddress,
+	type AssociationGroup,
+	type EndpointAddress,
 } from "./_Types";
 
 export function getAssociations(
@@ -586,6 +588,30 @@ export async function configureLifelineAssociations(
 
 	const lifelineGroups = getLifelineGroupIds(applHost, node);
 	if (lifelineGroups.length === 0) {
+		// We can look for the General Lifeline AGI profile as a last resort
+		if (
+			endpoint.supportsCC(CommandClasses["Association Group Information"])
+		) {
+			const agiAPI = CCAPI.create(
+				CommandClasses["Association Group Information"],
+				applHost,
+				endpoint,
+			);
+
+			// The lifeline MUST be group 1
+			const lifeline = await agiAPI
+				.getGroupInfo(1, true)
+				.catch(() => undefined);
+			if (
+				lifeline?.profile ===
+				AssociationGroupInfoProfile["General: Lifeline"]
+			) {
+				lifelineGroups.push(1);
+			}
+		}
+	}
+
+	if (lifelineGroups.length === 0) {
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: endpoint.index,
 			message:
@@ -1006,4 +1032,49 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 		AssociationCCValues.hasLifeline.endpoint(endpoint.index),
 		true,
 	);
+}
+
+export async function assignLifelineIssueingCommand(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+	ccId: CommandClasses,
+	ccCommand: number,
+): Promise<void> {
+	const node = endpoint.getNodeUnsafe()!;
+	if (
+		node.supportsCC(CommandClasses["Association Group Information"]) &&
+		(node.supportsCC(CommandClasses.Association) ||
+			node.supportsCC(CommandClasses["Multi Channel Association"]))
+	) {
+		const groupsIssueingNotifications =
+			AssociationGroupInfoCC.findGroupsForIssuedCommand(
+				applHost,
+				node,
+				ccId,
+				ccCommand,
+			);
+		if (groupsIssueingNotifications.length > 0) {
+			// We always grab the first group - usually it should be the lifeline
+			const groupId = groupsIssueingNotifications[0];
+			const existingAssociations =
+				getAssociations(applHost, node).get(groupId) ?? [];
+
+			if (
+				!existingAssociations.some(
+					(a) => a.nodeId === applHost.ownNodeId,
+				)
+			) {
+				applHost.controllerLog.logNode(node.id, {
+					endpoint: endpoint.index,
+					message: `Configuring associations to receive ${getCCName(
+						ccId,
+					)} commands...`,
+					direction: "outbound",
+				});
+				await addAssociations(applHost, node, groupId, [
+					{ nodeId: applHost.ownNodeId },
+				]);
+			}
+		}
+	}
 }

@@ -1,17 +1,9 @@
 import {
-	NotificationCCEventSupportedGet,
-	NotificationCCEventSupportedReport,
 	NotificationCCReport,
-	NotificationCCSupportedGet,
-	NotificationCCSupportedReport,
 	NotificationCCValues,
 } from "@zwave-js/cc/NotificationCC";
-import { CommandClasses, ValueMetadataNumeric } from "@zwave-js/core";
-import {
-	createMockZWaveRequestFrame,
-	MockZWaveFrameType,
-	type MockNodeBehavior,
-} from "@zwave-js/testing";
+import { CommandClasses, type ValueMetadataNumeric } from "@zwave-js/core";
+import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -21,64 +13,17 @@ integrationTest(
 		// debug: true,
 
 		nodeCapabilities: {
-			commandClasses: [CommandClasses.Notification],
-		},
-
-		customSetup: async (driver, controller, mockNode) => {
-			// Node supports the Water Valve notifications Valve Operation Status
-			const respondToNotificationSupportedGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof NotificationCCSupportedGet
-					) {
-						const cc = new NotificationCCSupportedReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								supportsV1Alarm: false,
-								supportedNotificationTypes: [0x0f],
-							},
-						);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
-					}
-					return false;
+			commandClasses: [
+				{
+					ccId: CommandClasses.Notification,
+					version: 8,
+					supportsV1Alarm: false,
+					notificationTypesAndEvents: {
+						// Water Valve - Valve operation status
+						[0x0f]: [0x01],
+					},
 				},
-			};
-			mockNode.defineBehavior(respondToNotificationSupportedGet);
-
-			const respondToNotificationEventSupportedGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof
-							NotificationCCEventSupportedGet &&
-						frame.payload.notificationType === 0x0f
-					) {
-						const cc = new NotificationCCEventSupportedReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								notificationType: 0x0f,
-								supportedEvents: [0x01],
-							},
-						);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
-					}
-					return false;
-				},
-			};
-			mockNode.defineBehavior(respondToNotificationEventSupportedGet);
+			],
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
@@ -146,64 +91,17 @@ integrationTest(
 		// debug: true,
 
 		nodeCapabilities: {
-			commandClasses: [CommandClasses.Notification],
-		},
-
-		customSetup: async (driver, controller, mockNode) => {
-			// Node supports the Access Control notifications Window open and Window closed
-			const respondToNotificationSupportedGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof NotificationCCSupportedGet
-					) {
-						const cc = new NotificationCCSupportedReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								supportsV1Alarm: false,
-								supportedNotificationTypes: [0x06],
-							},
-						);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
-					}
-					return false;
+			commandClasses: [
+				{
+					ccId: CommandClasses.Notification,
+					version: 8,
+					supportsV1Alarm: false,
+					notificationTypesAndEvents: {
+						// Access Control - Window open and Window closed
+						[0x06]: [0x16, 0x17],
+					},
 				},
-			};
-			mockNode.defineBehavior(respondToNotificationSupportedGet);
-
-			const respondToNotificationEventSupportedGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof
-							NotificationCCEventSupportedGet &&
-						frame.payload.notificationType === 0x06
-					) {
-						const cc = new NotificationCCEventSupportedReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								notificationType: 0x06,
-								supportedEvents: [0x16, 0x17],
-							},
-						);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
-					}
-					return false;
-				},
-			};
-			mockNode.defineBehavior(respondToNotificationEventSupportedGet);
+			],
 		},
 
 		testBody: async (t, driver, node, _mockController, _mockNode) => {
@@ -239,61 +137,13 @@ integrationTest("The 'simple' Door state value works correctly", {
 				ccId: CommandClasses.Notification,
 				isSupported: true,
 				version: 8,
+				supportsV1Alarm: false,
+				notificationTypesAndEvents: {
+					// Access Control - Window open and Window closed
+					[0x06]: [0x16, 0x17],
+				},
 			},
 		],
-	},
-
-	customSetup: async (driver, controller, mockNode) => {
-		// Node supports the Access Control notifications Window open and Window closed
-		const respondToNotificationSupportedGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
-				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof NotificationCCSupportedGet
-				) {
-					const cc = new NotificationCCSupportedReport(self.host, {
-						nodeId: controller.host.ownNodeId,
-						supportsV1Alarm: false,
-						supportedNotificationTypes: [0x06],
-					});
-					await self.sendToController(
-						createMockZWaveRequestFrame(cc, {
-							ackRequested: false,
-						}),
-					);
-					return true;
-				}
-				return false;
-			},
-		};
-		mockNode.defineBehavior(respondToNotificationSupportedGet);
-
-		const respondToNotificationEventSupportedGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
-				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof NotificationCCEventSupportedGet &&
-					frame.payload.notificationType === 0x06
-				) {
-					const cc = new NotificationCCEventSupportedReport(
-						self.host,
-						{
-							nodeId: controller.host.ownNodeId,
-							notificationType: 0x06,
-							supportedEvents: [0x16, 0x17],
-						},
-					);
-					await self.sendToController(
-						createMockZWaveRequestFrame(cc, {
-							ackRequested: false,
-						}),
-					);
-					return true;
-				}
-				return false;
-			},
-		};
-		mockNode.defineBehavior(respondToNotificationEventSupportedGet);
 	},
 
 	testBody: async (t, driver, node, mockController, mockNode) => {

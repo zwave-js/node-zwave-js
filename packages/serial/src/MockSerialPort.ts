@@ -7,7 +7,7 @@ import sinon from "sinon";
 import { PassThrough } from "stream";
 import {
 	MockBinding as SerialPortMockBinding,
-	MockPortBinding as SerialPortMockPortBinding,
+	type MockPortBinding as SerialPortMockPortBinding,
 } from "./SerialPortBindingMock";
 import { SerialPortMock } from "./SerialPortMock";
 import { ZWaveSerialPort } from "./ZWaveSerialPort";

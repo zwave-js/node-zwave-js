@@ -264,6 +264,7 @@ export const encapsulationCCs: readonly CommandClasses[] = [
 	CommandClasses["Multi Command"],
 	CommandClasses.Security,
 	CommandClasses["Security 2"],
+	CommandClasses.Supervision,
 	CommandClasses["Transport Service"],
 ];
 

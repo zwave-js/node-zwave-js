@@ -7,7 +7,7 @@
 ### `getToneCount`
 
 ```ts
-async getToneCount(): Promise<number | undefined>;
+async getToneCount(): Promise<MaybeNotKnown<number>>;
 ```
 
 ### `getToneInfo`

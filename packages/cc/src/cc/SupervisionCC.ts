@@ -2,18 +2,19 @@ import {
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
-	isTransmissionError,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	SinglecastCC,
 	SupervisionStatus,
 	TransmitOptions,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isTransmissionError,
+	validatePayload,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
@@ -58,7 +59,7 @@ export const SupervisionCCValues = Object.freeze({
 // want to pay the cost of validating each call
 @API(CommandClasses.Supervision)
 export class SupervisionCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: SupervisionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SupervisionCommand.Get:
 			case SupervisionCommand.Report:
@@ -169,7 +170,10 @@ export class SupervisionCC extends CommandClass {
 				CommandClasses.Supervision,
 				SupervisionCommand.Get,
 			) as SupervisionCCGet;
-			if (!supervisionEncapsulation.isMulticast()) {
+			if (
+				supervisionEncapsulation.frameType !== "broadcast" &&
+				supervisionEncapsulation.frameType !== "multicast"
+			) {
 				return supervisionEncapsulation.sessionId;
 			}
 		}
@@ -329,6 +333,19 @@ export class SupervisionCCReport extends SupervisionCC {
 			...super.toLogEntry(applHost),
 			message,
 		};
+	}
+
+	public toSupervisionResult(): SupervisionResult {
+		if (this.status === SupervisionStatus.Working) {
+			return {
+				status: this.status,
+				remainingDuration: this.duration!,
+			};
+		} else {
+			return {
+				status: this.status,
+			};
+		}
 	}
 }
 

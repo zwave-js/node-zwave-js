@@ -1,19 +1,19 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
+	enumValuesToMetadataStates,
+	validatePayload,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -53,7 +53,7 @@ export const HumidityControlOperatingStateCCValues = Object.freeze({
 export class HumidityControlOperatingStateCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: HumidityControlOperatingStateCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case HumidityControlOperatingStateCommand.Get:
 				return this.isSinglecast();
@@ -61,17 +61,20 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "state":
-				return this.get();
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: HumidityControlOperatingStateCCAPI,
+			{ property },
+		) {
+			switch (property) {
+				case "state":
+					return this.get();
 
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	public async get(): Promise<HumidityControlOperatingState | undefined> {
 		this.assertSupportsCommand(

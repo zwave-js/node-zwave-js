@@ -6,7 +6,7 @@ import { dskToString } from "./DSK";
 import { SecurityClass } from "./SecurityClass";
 
 function readNumber(qr: string, offset: number, length: number): number {
-	return parseInt(qr.substr(offset, length), 10);
+	return parseInt(qr.slice(offset, offset + length), 10);
 }
 
 function fail(reason: string): never {
@@ -191,7 +191,7 @@ function parseTLV(qr: string): {
 	offset += 4;
 	if (qr.length - offset < length) fail("incomplete TLV block");
 
-	const data = qr.substr(offset, length);
+	const data = qr.slice(offset, offset + length);
 	offset += length;
 
 	// Try to parse the raw data and fail if a critical block is not understood

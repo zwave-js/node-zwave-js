@@ -1,9 +1,9 @@
 import {
-	CommandClasses,
-	encodeCCList,
-	parseCCList,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeCCList,
+	parseCCList,
+	type CommandClasses,
 } from "@zwave-js/core/safe";
 import {
 	SUC_MAX_UPDATES,
@@ -12,12 +12,12 @@ import {
 } from "../consts";
 import type { NVM3Object } from "../nvm3/object";
 import {
+	NVMFile,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export const SUC_UPDATES_PER_FILE_V5 = 8;

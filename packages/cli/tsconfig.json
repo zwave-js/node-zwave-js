@@ -6,6 +6,17 @@
 		"module": "Node16",
 		"moduleResolution": "node16"
 	},
+	"references": [
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../shared"
+		},
+		{
+			"path": "../zwave-js"
+		}
+	],
 	"include": ["src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["build/**", "node_modules/**"]
 }

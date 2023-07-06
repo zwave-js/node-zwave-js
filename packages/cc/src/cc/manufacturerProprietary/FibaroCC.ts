@@ -1,15 +1,14 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessageRecord,
-	parseMaybeNumber,
-	unknownNumber,
-	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	parseMaybeNumber,
+	validatePayload,
+	type MaybeUnknown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type ValueID,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared";
@@ -128,64 +127,70 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		if (property !== "fibaro") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-
-		if (propertyKey === "venetianBlindsPosition") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: FibaroCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			if (property !== "fibaro") {
+				throwUnsupportedProperty(this.ccId, property);
 			}
-			await this.fibaroVenetianBlindsSetPosition(value);
-		} else if (propertyKey === "venetianBlindsTilt") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
+
+			if (propertyKey === "venetianBlindsPosition") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				await this.fibaroVenetianBlindsSetPosition(value);
+			} else if (propertyKey === "venetianBlindsTilt") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				await this.fibaroVenetianBlindsSetTilt(value);
+			} else {
+				// unsupported property key, ignore...
+				return;
 			}
-			await this.fibaroVenetianBlindsSetTilt(value);
-		} else {
-			// unsupported property key, ignore...
-			return;
-		}
 
-		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey }, value);
+			// Verify the current value after a delay
+			this.schedulePoll({ property, propertyKey }, value);
 
-		return undefined;
-	};
+			return undefined;
+		};
+	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		if (property !== "fibaro") {
-			throwUnsupportedProperty(this.ccId, property);
-		} else if (propertyKey == undefined) {
-			throwMissingPropertyKey(this.ccId, property);
-		}
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: FibaroCCAPI, { property, propertyKey }) {
+			if (property !== "fibaro") {
+				throwUnsupportedProperty(this.ccId, property);
+			} else if (propertyKey == undefined) {
+				throwMissingPropertyKey(this.ccId, property);
+			}
 
-		switch (propertyKey) {
-			case "venetianBlindsPosition":
-				return (await this.fibaroVenetianBlindsGet())?.position;
-			case "venetianBlindsTilt":
-				return (await this.fibaroVenetianBlindsGet())?.tilt;
-			default:
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-	};
+			switch (propertyKey) {
+				case "venetianBlindsPosition":
+					return (await this.fibaroVenetianBlindsGet())?.position;
+				case "venetianBlindsTilt":
+					return (await this.fibaroVenetianBlindsGet())?.tilt;
+				default:
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+			}
+		};
+	}
 }
 
 @manufacturerId(MANUFACTURERID_FIBARO)
@@ -443,19 +448,6 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (
-			this._position === unknownNumber &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._position = undefined;
-		}
-		if (
-			this._tilt === unknownNumber &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._tilt = undefined;
-		}
-
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 
@@ -483,13 +475,13 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		return true;
 	}
 
-	private _position: Maybe<number> | undefined;
-	public get position(): Maybe<number> | undefined {
+	private _position: MaybeUnknown<number> | undefined;
+	public get position(): MaybeUnknown<number> | undefined {
 		return this._position;
 	}
 
-	private _tilt: Maybe<number> | undefined;
-	public get tilt(): Maybe<number> | undefined {
+	private _tilt: MaybeUnknown<number> | undefined;
+	public get tilt(): MaybeUnknown<number> | undefined {
 		return this._tilt;
 	}
 

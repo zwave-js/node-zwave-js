@@ -1,11 +1,11 @@
 import type { NVM3Object } from "../nvm3/object";
 import {
+	NVMFile,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export interface VersionFileOptions extends NVMFileCreationOptions {

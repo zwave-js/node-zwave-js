@@ -1,6 +1,6 @@
 import { WakeUpCCIntervalSet } from "@zwave-js/cc/WakeUpCC";
 import { MockController } from "@zwave-js/testing";
-import ava, { TestFn } from "ava";
+import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
 import { ApplicationCommandRequest } from "../../serialapi/application/ApplicationCommandRequest";

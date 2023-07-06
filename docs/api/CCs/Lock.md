@@ -7,7 +7,7 @@
 ### `get`
 
 ```ts
-async get(): Promise<boolean | undefined>;
+async get(): Promise<MaybeNotKnown<boolean>>;
 ```
 
 ### `set`

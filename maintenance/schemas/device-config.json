@@ -80,13 +80,7 @@
 		},
 		"endpoints": { "$ref": "#/definitions/endpoints" },
 		"associations": { "$ref": "#/definitions/associations" },
-		"paramInformation": {
-			"type": "array",
-			"description": "Defines all the existing configuration parameters",
-			"items": { "$ref": "#/definitions/param" },
-			"minItems": 1,
-			"additionalItems": false
-		},
+		"paramInformation": { "$ref": "#/definitions/paramInformation" },
 		"proprietary": {
 			"type": "object",
 			"description": "A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation."
@@ -236,7 +230,12 @@
 						"label": {
 							"type": "string"
 						},
-						"associations": { "$ref": "#/definitions/associations" }
+						"associations": {
+							"$ref": "#/definitions/associations"
+						},
+						"paramInformation": {
+							"$ref": "#/definitions/paramInformation"
+						}
 					},
 					"additionalProperties": false
 				},
@@ -289,6 +288,13 @@
 				}
 			},
 			"additionalProperties": false
+		},
+		"paramInformation": {
+			"type": "array",
+			"description": "Defines all the existing configuration parameters",
+			"items": { "$ref": "#/definitions/param" },
+			"minItems": 1,
+			"additionalItems": false
 		},
 		"ccInfo": {
 			"type": "object",
@@ -560,6 +566,9 @@
 						}
 					},
 					"additionalProperties": false
+				},
+				"disableAutoRefresh": {
+					"const": true
 				},
 				"disableBasicMapping": {
 					"const": true

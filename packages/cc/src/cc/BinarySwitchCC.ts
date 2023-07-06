@@ -1,31 +1,32 @@
 import {
 	CommandClasses,
 	Duration,
-	encodeBoolean,
-	encodeMaybeBoolean,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBoolean,
-	parseMaybeBoolean,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	unknownBoolean,
-	validatePayload,
+	UNKNOWN_STATE,
 	ValueMetadata,
+	encodeMaybeBoolean,
+	maybeUnknownToString,
+	parseMaybeBoolean,
+	validatePayload,
+	type MaybeNotKnown,
+	type MaybeUnknown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import type { AllOrNone } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -72,7 +73,7 @@ export const BinarySwitchCCValues = Object.freeze({
 
 @API(CommandClasses["Binary Switch"])
 export class BinarySwitchCCAPI extends CCAPI {
-	public supportsCommand(cmd: BinarySwitchCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BinarySwitchCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BinarySwitchCommand.Get:
 				return this.isSinglecast();
@@ -131,82 +132,95 @@ export class BinarySwitchCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: BinarySwitchCCAPI,
+			{ property },
+			value,
+			options,
+		) {
+			if (property !== "targetValue") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"boolean",
+					typeof value,
+				);
+			}
+			const duration = Duration.from(options?.transitionDuration);
+			return this.set(value, duration);
+		};
+	}
+
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
 		{ property },
 		value,
 		options,
 	) => {
-		if (property !== "targetValue") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "boolean") {
-			throwWrongValueType(this.ccId, property, "boolean", typeof value);
-		}
-		const duration = Duration.from(options?.transitionDuration);
-		const result = await this.set(value, duration);
+		if (property === "targetValue") {
+			const currentValueValueId =
+				BinarySwitchCCValues.currentValue.endpoint(this.endpoint.index);
 
-		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-		// so UIs have immediate feedback
-		const shouldUpdateOptimistically =
-			// For unsupervised commands, make the choice to update optimistically dependent on the driver options
-			(!this.applHost.options.disableOptimisticValueUpdate &&
-				result == undefined) ||
-			// TODO: Consider delaying the optimistic update if the result is WORKING
-			supervisedCommandSucceeded(result);
+			return {
+				optimisticallyUpdateRelatedValues: (
+					_supervisedAndSuccessful,
+				) => {
+					// After setting targetValue, optimistically update currentValue
+					if (this.isSinglecast()) {
+						this.tryGetValueDB()?.setValue(
+							currentValueValueId,
+							value,
+						);
+					} else if (this.isMulticast()) {
+						// Figure out which nodes were affected by this command
+						const affectedNodes =
+							this.endpoint.node.physicalNodes.filter((node) =>
+								node
+									.getEndpoint(this.endpoint.index)
+									?.supportsCC(this.ccId),
+							);
+						// and optimistically update the currentValue
+						for (const node of affectedNodes) {
+							this.applHost
+								.tryGetValueDB(node.id)
+								?.setValue(currentValueValueId, value);
+						}
+					}
+				},
 
-		const currentValueValueId = BinarySwitchCCValues.currentValue.endpoint(
-			this.endpoint.index,
-		);
-
-		if (this.isSinglecast()) {
-			if (shouldUpdateOptimistically) {
-				this.tryGetValueDB()?.setValue(currentValueValueId, value);
-			}
-
-			// Verify the current value after a delay, unless the command was supervised and successful
-			if (!supervisedCommandSucceeded(result)) {
-				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-				if (property === "targetValue") property = "currentValue";
-				this.schedulePoll({ property }, value, {
-					duration,
-					// on/off "transitions" are usually fast
-					transition: "fast",
-				});
-			}
-		} else if (this.isMulticast()) {
-			if (shouldUpdateOptimistically) {
-				// Figure out which nodes were affected by this command
-				const affectedNodes = this.endpoint.node.physicalNodes.filter(
-					(node) =>
-						node
-							.getEndpoint(this.endpoint.index)
-							?.supportsCC(this.ccId),
-				);
-				// and optimistically update the currentValue
-				for (const node of affectedNodes) {
-					this.applHost
-						.tryGetValueDB(node.id)
-						?.setValue(currentValueValueId, value);
-				}
-			}
-			// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentValue":
-			case "targetValue":
-			case "duration":
-				return (await this.get())?.[property];
-			default:
-				throwUnsupportedProperty(this.ccId, property);
+				verifyChanges: () => {
+					if (this.isSinglecast()) {
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						this.schedulePoll(currentValueValueId, value, {
+							duration: Duration.from(
+								options?.transitionDuration,
+							),
+							// on/off "transitions" are usually fast
+							transition: "fast",
+						});
+					} else {
+						// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
+					}
+				},
+			};
 		}
 	};
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: BinarySwitchCCAPI, { property }) {
+			switch (property) {
+				case "currentValue":
+				case "targetValue":
+				case "duration":
+					return (await this.get())?.[property];
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 }
 
 @commandClass(CommandClasses["Binary Switch"])
@@ -304,8 +318,8 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 
 	public serialize(): Buffer {
 		const payload: number[] = [this.targetValue ? 0xff : 0x00];
-		if (this.version >= 2 && this.duration) {
-			payload.push(this.duration.serializeSet());
+		if (this.version >= 2) {
+			payload.push((this.duration ?? Duration.default()).serializeSet());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
@@ -326,9 +340,9 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 }
 
 export type BinarySwitchCCReportOptions = CCCommandOptions & {
-	currentValue: boolean;
+	currentValue: MaybeUnknown<boolean>;
 } & AllOrNone<{
-		targetValue: boolean;
+		targetValue: MaybeUnknown<boolean>;
 		duration: Duration | string;
 	}>;
 
@@ -346,9 +360,8 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 			validatePayload(this.payload.length >= 1);
 			this.currentValue = parseMaybeBoolean(this.payload[0]);
 
-			if (this.version >= 2 && this.payload.length >= 3) {
-				// V2
-				this.targetValue = parseBoolean(this.payload[1]);
+			if (this.payload.length >= 3) {
+				this.targetValue = parseMaybeBoolean(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
 			}
 		} else {
@@ -359,26 +372,24 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	}
 
 	@ccValue(BinarySwitchCCValues.currentValue)
-	public readonly currentValue: Maybe<boolean> | undefined;
+	public readonly currentValue: MaybeUnknown<boolean> | undefined;
 
 	@ccValue(BinarySwitchCCValues.targetValue)
-	public readonly targetValue: boolean | undefined;
+	public readonly targetValue: MaybeUnknown<boolean> | undefined;
 
 	@ccValue(BinarySwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			encodeMaybeBoolean(this.currentValue ?? unknownBoolean),
+			encodeMaybeBoolean(this.currentValue ?? UNKNOWN_STATE),
 		]);
-		if (this.targetValue != undefined) {
+		if (this.targetValue !== undefined) {
 			this.payload = Buffer.concat([
 				this.payload,
 				Buffer.from([
-					encodeBoolean(this.targetValue),
-					(
-						this.duration ?? new Duration(0, "default")
-					).serializeReport(),
+					encodeMaybeBoolean(this.targetValue),
+					(this.duration ?? Duration.default()).serializeReport(),
 				]),
 			]);
 		}
@@ -387,10 +398,10 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this.currentValue,
+			"current value": maybeUnknownToString(this.currentValue),
 		};
-		if (this.targetValue != undefined) {
-			message["target value"] = this.targetValue;
+		if (this.targetValue !== undefined) {
+			message["target value"] = maybeUnknownToString(this.targetValue);
 		}
 		if (this.duration != undefined) {
 			message.duration = this.duration.toString();

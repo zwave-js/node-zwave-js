@@ -6,22 +6,29 @@ import {
 	type AssociationConfig,
 } from "./AssociationConfig";
 import {
-	ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
 	validateCondition,
+	type ConditionalItem,
 } from "./ConditionalItem";
+import type { ConditionalDeviceConfig } from "./DeviceConfig";
+import {
+	parseConditionalParamInformationMap,
+	type ConditionalParamInfoMap,
+	type ParamInfoMap,
+} from "./ParamInformation";
 import type { DeviceID } from "./shared";
 
 export class ConditionalEndpointConfig
 	implements ConditionalItem<EndpointConfig>
 {
 	public constructor(
-		filename: string,
+		parent: ConditionalDeviceConfig,
 		index: number,
 		definition: JSONObject,
 	) {
 		this.index = index;
+		const filename = parent.filename;
 
 		validateCondition(
 			filename,
@@ -76,6 +83,14 @@ Endpoint ${index}: found non-numeric group id "${key}" in associations`,
 			}
 			this.associations = associations;
 		}
+
+		if (definition.paramInformation != undefined) {
+			this.paramInformation = parseConditionalParamInformationMap(
+				definition,
+				parent,
+				`Endpoint ${index}: `,
+			);
+		}
 	}
 
 	public readonly index: number;
@@ -83,6 +98,8 @@ Endpoint ${index}: found non-numeric group id "${key}" in associations`,
 		number,
 		ConditionalAssociationConfig
 	>;
+
+	public readonly paramInformation?: ConditionalParamInfoMap;
 
 	public readonly condition?: string;
 	public readonly label?: string;
@@ -96,13 +113,17 @@ Endpoint ${index}: found non-numeric group id "${key}" in associations`,
 		const associations = evaluateDeep(this.associations, deviceId);
 		if (associations) ret.associations = associations;
 
+		const paramInformation = evaluateDeep(this.paramInformation, deviceId);
+		if (paramInformation) ret.paramInformation = paramInformation;
+
 		return ret;
 	}
 }
 
 export type EndpointConfig = Omit<
 	ConditionalEndpointConfig,
-	"condition" | "evaluateCondition" | "associations"
+	"condition" | "evaluateCondition" | "associations" | "paramInformation"
 > & {
 	associations?: Map<number, AssociationConfig> | undefined;
+	paramInformation?: ParamInfoMap;
 };

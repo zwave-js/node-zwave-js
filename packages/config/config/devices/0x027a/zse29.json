@@ -143,9 +143,10 @@
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3081/zooz-z-wave-plus-s2-outdoor-motion-sensor-zse29-manual.pdf"
 	},
 	"compat": {
+		// On older firmware, supervised commands always result in a status of "Fail"
+		"$if": "firmwareVersion < 2.2",
 		"commandClasses": {
 			"remove": {
-				// Supervised commands always result in a status of "Fail"
 				"0x6c": {
 					"endpoints": "*"
 				}

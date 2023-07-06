@@ -1,18 +1,10 @@
 {
   "name": "@zwave-js/nvmedit",
-  "version": "10.13.0",
+  "version": "11.4.0",
   "description": "zwave-js: library to edit NVM backups",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "safe": [
-          "build/index_safe.d.ts"
-        ]
-      }
-    }
+    "access": "public"
   },
   "main": "build/index.js",
   "exports": {
@@ -20,11 +12,11 @@
     "./package.json": "./package.json",
     "./safe": "./build/index_safe.js"
   },
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "src/index_safe.ts"
+        "build/index_safe.d.ts"
       ]
     }
   },
@@ -58,11 +50,11 @@
     "alcalzone-shared": "^4.0.8",
     "fs-extra": "^10.1.0",
     "reflect-metadata": "^0.1.13",
-    "semver": "^7.3.7",
-    "yargs": "^17.5.1"
+    "semver": "^7.5.2",
+    "yargs": "^17.7.2"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
@@ -73,16 +65,16 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "*",
+    "@microsoft/api-extractor": "^7.36.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.36",
-    "@types/semver": "^7.3.12",
-    "@types/yargs": "^17.0.12",
+    "@types/node": "^14.18.52",
+    "@types/semver": "^7.3.13",
+    "@types/yargs": "^17.0.24",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
-    "esbuild": "0.15.7",
+    "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.4",
-    "typescript": "4.9.5"
+    "prettier": "^2.8.8",
+    "typescript": "5.1.6"
   }
 }

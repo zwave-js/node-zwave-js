@@ -1,29 +1,30 @@
 import {
-	CommandClasses,
-	CommandClassInfo,
-	Maybe,
+	NOT_KNOWN,
 	SecurityClass,
 	securityClassOrder,
-	unknownBoolean,
+	type CommandClassInfo,
+	type CommandClasses,
+	type MaybeNotKnown,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";
+import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 import type { MockController } from "./MockController";
 import {
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
-	MockEndpointCapabilities,
-	PartialCCCapabilities,
+	type MockEndpointCapabilities,
 	type MockNodeCapabilities,
+	type PartialCCCapabilities,
 } from "./MockNodeCapabilities";
 import {
-	createMockZWaveAckFrame,
-	MockZWaveAckFrame,
-	MockZWaveFrame,
-	MockZWaveFrameType,
-	MockZWaveRequestFrame,
 	MOCK_FRAME_ACK_TIMEOUT,
+	MockZWaveFrameType,
+	createMockZWaveAckFrame,
+	type MockZWaveAckFrame,
+	type MockZWaveFrame,
+	type MockZWaveRequestFrame,
 } from "./MockZWaveFrame";
 
 const defaultCCInfo: CommandClassInfo = {
@@ -118,10 +119,9 @@ export class MockNode {
 			hasSecurityClass(
 				nodeId: number,
 				securityClass: SecurityClass,
-			): Maybe<boolean> {
+			): MaybeNotKnown<boolean> {
 				return (
-					securityClasses.get(nodeId)?.get(securityClass) ??
-					unknownBoolean
+					securityClasses.get(nodeId)?.get(securityClass) ?? NOT_KNOWN
 				);
 			},
 			setSecurityClass(
@@ -134,7 +134,9 @@ export class MockNode {
 				}
 				securityClasses.get(nodeId)!.set(securityClass, granted);
 			},
-			getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+			getHighestSecurityClass(
+				nodeId: number,
+			): MaybeNotKnown<SecurityClass> {
 				const map = securityClasses.get(nodeId);
 				if (!map?.size) return undefined;
 				let missingSome = false;
@@ -401,6 +403,24 @@ export class MockNode {
 	/** Forgets all recorded frames sent to the controller */
 	public clearSentControllerFrames(): void {
 		this.sentControllerFrames = [];
+	}
+
+	public getCCCapabilities<T extends CommandClasses>(
+		ccId: T,
+		endpointIndex?: number,
+	): Partial<CCIdToCapabilities<T>> | undefined {
+		let ccInfo: CommandClassInfo | undefined;
+		if (endpointIndex) {
+			const endpoint = this.endpoints.get(endpointIndex);
+			ccInfo = endpoint?.implementedCCs.get(ccId);
+		} else {
+			ccInfo = this.implementedCCs.get(ccId);
+		}
+		if (ccInfo) {
+			const { isSupported, isControlled, version, secure, ...ret } =
+				ccInfo;
+			return ret;
+		}
 	}
 }
 

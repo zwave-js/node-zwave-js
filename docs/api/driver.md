@@ -8,7 +8,7 @@ The driver is the core of this library. It controls the serial interface, handle
 new (port: string, options?: ZWaveOptions) => Driver
 ```
 
-The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Connect to a hosted serial port over TCP](usage/tcp-connection.md).
+The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Remote serial port over TCP](usage/tcp-connection.md).
 
 For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed description.
 
@@ -88,10 +88,10 @@ disableStatistics(): void
 
 Disable sending usage statistics.
 
-### `getSupportedCCVersionForEndpoint`
+### `getSupportedCCVersion`
 
 ```ts
-getSupportedCCVersionForEndpoint(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
+getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
 ```
 
 Nodes in a Z-Wave network are very likely support different versions of a Command Class (CC) and frequently support older versions than the driver software.  
@@ -110,13 +110,13 @@ This method
 > [!WARNING]
 > This only provides reliable information **after** the node/endpoint interview was completed.
 
-### `getSafeCCVersionForNode`
+### `getSafeCCVersion`
 
 ```ts
-getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number
+getSafeCCVersion(nodeId: number, cc: CommandClasses): number
 ```
 
-Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersionForEndpoint`, but behaves differently. It
+Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersion`, but behaves differently. It
 
 -   returns `1` if the node claims not to support the CC or no information is known
 -   **throws (!)** if the requested CC is not implemented in this library
@@ -307,7 +307,6 @@ Updates a subset of the driver options without having to restart the driver. The
 -   `interview`
 -   `logConfig`
 -   `preferences`
--   `preserveUnknownValues`
 -   `userAgent` (behaves like `updateUserAgent`)
 
 ### `checkForConfigUpdates`
@@ -474,7 +473,7 @@ interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a queued message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
 	/** If a Wake Up On Demand should be requested for the target node. */
 	requestWakeUpOnDemand?: boolean;
@@ -593,10 +592,10 @@ enum RssiError {
 
 ```ts
 enum ProtocolDataRate {
-	ZWave_9k6 = 0x01,
-	ZWave_40k = 0x02,
-	ZWave_100k = 0x03,
-	LongRange_100k = 0x04,
+	ZWave_9k6 = 1,
+	ZWave_40k = 2,
+	ZWave_100k = 3,
+	LongRange_100k = 4,
 }
 ```
 
@@ -666,6 +665,25 @@ interface ZWaveOptions extends ZWaveHostOptions {
 
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
+
+		/**
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
+		 * How long to wait for a poll after setting a value without transition duration
+		 */
+		refreshValue: number;
+
+		/**
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
+		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
+		 */
+		refreshValueAfterTransition: number;
+
 		/**
 		 * How long to wait for the Serial API Started command after a soft-reset before resorting
 		 * to polling the API for the responsiveness check.
@@ -754,14 +772,6 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	inclusionUserCallbacks?: InclusionUserCallbacks;
 
 	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
-
-	/**
 	 * Some SET-type commands optimistically update the current value to match the target value
 	 * when the device acknowledges the command.
 	 *
@@ -843,6 +853,36 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
 	 */
 	userAgent?: Record<string, string>;
+
+	/** DO NOT USE! Used for testing internally */
+	testingHooks?: {
+		serialPortBinding?: typeof SerialPort;
+		/**
+		 * A hook that allows accessing the serial port instance after opening
+		 * and before interacting with it.
+		 */
+		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+
+		/**
+		 * Set this to true to skip the controller identification sequence.
+		 */
+		skipControllerIdentification?: boolean;
+
+		/**
+		 * Set this to true to skip the interview of all nodes.
+		 */
+		skipNodeInterview?: boolean;
+
+		/**
+		 * Set this to true to skip checking if the controller is in bootloader mode
+		 */
+		skipBootloaderCheck?: boolean;
+
+		/**
+		 * Set this to false to skip loading the configuration files. Default: `true`..
+		 */
+		loadConfiguration?: boolean;
+	};
 }
 ````
 

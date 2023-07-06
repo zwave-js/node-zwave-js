@@ -1,11 +1,11 @@
-import { interpret, Interpreter } from "xstate";
+import { interpret, type Interpreter } from "xstate";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
-import test, { ExecutionContext } from "ava";
+import test, { type ExecutionContext } from "ava";
 import {
 	createNodeStatusMachine,
-	NodeStatusEvent,
-	NodeStatusMachine,
-	NodeStatusStateSchema,
+	type NodeStatusEvent,
+	type NodeStatusMachine,
+	type NodeStatusStateSchema,
 } from "./NodeStatusMachine";
 
 const testNodeNonSleeping = { canSleep: false } as any;
@@ -26,7 +26,7 @@ test(`The node should start in the unknown state if it maybe cannot sleep`, (t) 
 	} as any);
 
 	const service = startMachine(t, testMachine);
-	t.is(service.state.value, "unknown");
+	t.is(service.getSnapshot().value, "unknown");
 });
 
 test(`The node should start in the unknown state if it can definitely sleep`, (t) => {
@@ -35,7 +35,7 @@ test(`The node should start in the unknown state if it can definitely sleep`, (t
 	} as any);
 
 	const service = startMachine(t, testMachine);
-	t.is(service.state.value, "unknown");
+	t.is(service.getSnapshot().value, "unknown");
 });
 
 const transitions: {
@@ -187,7 +187,7 @@ for (const testCase of transitions) {
 
 		const service = startMachine(t, testMachine);
 		service.send(testCase.event);
-		t.is(service.state.value, testCase.target);
+		t.is(service.getSnapshot().value, testCase.target);
 	});
 }
 
@@ -196,7 +196,7 @@ test("A transition from unknown to awake should not happen if the node cannot sl
 
 	const service = startMachine(t, testMachine);
 	service.send("AWAKE");
-	t.is(service.state.value, "unknown");
+	t.is(service.getSnapshot().value, "unknown");
 });
 
 test("A transition from unknown to asleep should not happen if the node cannot sleep", (t) => {
@@ -204,5 +204,5 @@ test("A transition from unknown to asleep should not happen if the node cannot s
 
 	const service = startMachine(t, testMachine);
 	service.send("ASLEEP");
-	t.is(service.state.value, "unknown");
+	t.is(service.getSnapshot().value, "unknown");
 });
