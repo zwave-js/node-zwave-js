@@ -1103,7 +1103,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // @deprecated (undocumented)
     deleteSUCReturnRoute(nodeId: number): Promise<boolean>;
     deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getKnownNodeNeighbors"
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getNodeNeighbors"
     discoverNodeNeighbors(nodeId: number): Promise<boolean>;
     externalNVMClose(): Promise<void>;
     externalNVMOpen(): Promise<number>;
