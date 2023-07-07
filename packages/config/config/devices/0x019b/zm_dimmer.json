@@ -1,12 +1,11 @@
-// TODO: This file contains a placeholder for a productType, productID, or manufacturerId (0x9999) that must be corrected.
 {
-	"manufacturer": "Heatit Controls AB",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "ZM DIMMER",
 	"description": "Heatit ZM Dimmer",
 	"devices": [
 		{
-			"productType": "0x9999",
+			"productType": "0x0004",
 			"productId": "0x0021",
 			"zwaveAllianceId": 4802
 		}
@@ -33,108 +32,180 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Power Restore Level",
-			"description": "0",
+			"label": "Brightness After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Previous state",
+					"value": 100
+				}
+			]
 		},
 		{
 			"#": "2",
 			"label": "Switch On Level",
-			"description": "0",
+			"description": "Dimming level when restored from the OFF state",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Restore previous brightness",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "3",
-			"label": "Automatic Turn Off",
-			"description": "0",
+			"label": "Auto-Off Timer",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "4",
-			"label": "Automatic Turn On",
-			"description": "0",
+			"label": "Auto-On Timer",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "5",
-			"label": "Turn Off Delay Time",
-			"description": "0",
+			"label": "Turn Off Delay",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "6",
 			"label": "S1 Functionality",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+            "options": [
+				{
+					"label": "Dimmer function",
+					"value": 0
+				},
+				{
+					"label": "Scene Controller",
+					"value": 1
+				},
+                {
+					"label": "Scene Controller and dimming",
+					"value": 2
+				},
+                {
+					"label": "Disabled",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "7",
 			"label": "S2 Functionality",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"unsigned": true
+			"unsigned": true,
+            "options": [
+				{
+					"label": "Dimmer function",
+					"value": 0
+				},
+				{
+					"label": "Scene Controller",
+					"value": 1
+				},
+                {
+					"label": "Scene Controller and dimming",
+					"value": 2
+				},
+                {
+					"label": "Disabled",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "8",
 			"label": "Dimming Duration",
-			"description": "0",
 			"valueSize": 1,
+			"unit": "ms",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
-			"unsigned": true
+			"unsigned": true, 
+            "options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
 		},
 		{
 			"#": "9",
-			"label": "Choose The Dimmer Curve",
-			"description": "0",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"label": "Dimmer Curve",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Linear",
+					"value": 0
+				},
+				{
+					"label": "Logarithmic",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "10",
-			"label": "Load Dimming Mode",
-			"description": "0",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#dimmer_type_trail_lead",
+			"defaultValue": 0
 		},
 		{
 			"#": "11",
 			"label": "Maximum Dim Level",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -144,7 +215,6 @@
 		{
 			"#": "12",
 			"label": "Minimum Dim Level",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -154,32 +224,47 @@
 		{
 			"#": "13",
 			"label": "Meter Report Threshold",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 10,
-			"unsigned": true
+			"unit": "W",
+			"unsigned": true,
+            "options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "14",
 			"label": "Meter Report Interval",
-			"description": "0",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 65535,
 			"defaultValue": 810,
+			"unit": "seconds",
 			"unsigned": true
 		},
 		{
 			"#": "15",
-			"label": "On/Off Functionality",
-			"description": "0",
+			"label": "Dimmer mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+            "options": [
+				{
+					"label": "Dimmer",
+					"value": 0
+				},
+				{
+					"label": "Switch (On / Off)",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {
