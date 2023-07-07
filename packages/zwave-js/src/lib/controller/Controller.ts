@@ -5412,7 +5412,7 @@ ${associatedNodes.join(", ")}`,
 	 * **WARNING:** On some controllers, this can cause new SUC return routes to be assigned.
 	 *
 	 * @returns `true` if the update was successful and the new neighbors can be retrieved using
-	 * {@link getKnownNodeNeighbors}. `false` if the update failed.
+	 * {@link getNodeNeighbors}. `false` if the update failed.
 	 */
 	public async discoverNodeNeighbors(nodeId: number): Promise<boolean> {
 		// TODO: Consider making this not block the send queue.
