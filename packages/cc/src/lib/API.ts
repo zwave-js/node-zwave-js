@@ -1,3 +1,4 @@
+import { type CompatOverrideQueries } from "@zwave-js/config";
 import {
 	CommandClasses,
 	NODE_ID_BROADCAST,
@@ -28,9 +29,11 @@ import {
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	getAPI,
+	getCCValues,
 	getCommandClass,
 	getImplementedVersion,
 } from "./CommandClassDecorators";
+import { type StaticCCValue } from "./Values";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
@@ -200,7 +203,31 @@ export class CCAPI {
 							ZWaveErrorCodes.CC_NotSupported,
 						);
 					}
-					return target[property as keyof CCAPI];
+
+					// If a device config defines overrides for an API call, return a wrapper method that applies them first before calling the actual method
+					const fallback = target[property as keyof CCAPI];
+					if (
+						typeof property === "string" &&
+						!endpoint.virtual &&
+						typeof fallback === "function"
+					) {
+						const overrides = applHost.getDeviceConfig?.(
+							endpoint.nodeId,
+						)?.compat?.overrideQueries;
+						if (overrides) {
+							return overrideQueriesWrapper(
+								applHost,
+								endpoint,
+								ccId,
+								property,
+								overrides,
+								fallback,
+							);
+						}
+					}
+
+					// Else just access the property
+					return fallback;
 				},
 			});
 		} else {
@@ -551,6 +578,46 @@ export class CCAPI {
 			ZWaveErrorCodes.CC_NoNodeID,
 		);
 	}
+}
+
+function overrideQueriesWrapper(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+	ccId: CommandClasses,
+	method: string,
+	overrides: CompatOverrideQueries,
+	fallback: (...args: any[]) => any,
+): (...args: any[]) => any {
+	return (...args: any[]) => {
+		const match = overrides.matchQuery(ccId, endpoint.index, method, args);
+		if (!match) return fallback(...args);
+
+		// Persist values if necessary
+		if (match.persistValues) {
+			const ccValues = getCCValues(ccId);
+			const valueDB = applHost.getValueDB(endpoint.nodeId);
+			if (ccValues) {
+				for (const [prop, value] of Object.entries(
+					match.persistValues,
+				)) {
+					// We only support static CC values for now
+					try {
+						valueDB.setValue(
+							(ccValues[prop] as StaticCCValue).endpoint(
+								endpoint.index,
+							),
+							value,
+						);
+					} catch (e) {
+						// ignore
+					}
+				}
+			}
+		}
+
+		// API methods are always async
+		return Promise.resolve(match.result);
+	};
 }
 
 /** A CC API that is only available for physical endpoints */
