@@ -5,6 +5,7 @@ import {
 	NOT_KNOWN,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
 	isZWaveError,
 	stripUndefined,
 	type Duration,
@@ -591,6 +592,14 @@ function overrideQueriesWrapper(
 	return (...args: any[]) => {
 		const match = overrides.matchQuery(ccId, endpoint.index, method, args);
 		if (!match) return fallback(...args);
+
+		applHost.controllerLog.logNode(endpoint.nodeId, {
+			message: `API call ${method} for ${getCCName(
+				ccId,
+			)} CC overridden by a compat flag.`,
+			level: "debug",
+			direction: "none",
+		});
 
 		// Persist values if necessary
 		if (match.persistValues) {
