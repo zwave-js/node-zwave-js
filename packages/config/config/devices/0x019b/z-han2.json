@@ -1,0 +1,135 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "Z-HAN2",
+	"description": "Heatit",
+	"devices": [
+		{
+			"productType": "0x0062",
+			"productId": "0x6201",
+			"zwaveAllianceId": 4745
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Meter Report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Meter Report Hysteresis For W",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 100000,
+			"defaultValue": 200,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Meter Report Hysteresis For V",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 420,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Meter Report Hysteresis For A",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Report Interval For W",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 65535,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Meter Report Interval For V And A",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Temperature Report Interval",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Temperature Report Hysteresis",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Sensor Calibration",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Serial",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Number",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "The primary controller/gateway has a mode for adding devices. Please refer to your primary controller manual on how to set the primary controller in add mode. The device may only be added in the network if the primary controller is in add mode. \nWe recommend adding the device within a 2m range from the gateway.\n\nMethod 1: Standard (Manual)\nAdd mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the module has been added to/removed from the network.\nTo start the configuration process, press the reset button 3 times in rapid succession. The LED will light up in green for 3 seconds if adding is successful. The device is now ready for use with default settings",
+		"exclusion": "The primary controller/gateway has a mode for removing devices. Please refer to your primary controller manual on how to set the primary controller in remove mode. The device may only be removed from the network if the primary controller is in remove mode. When the device is removed from the network, it will NOT revert to factory settings.\nWe recommend removing the device within a 2m range from the gateway.\n\nStandard (Manual)\nRemove mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the module has been removed from the network.\nTo start the configuration process, press the reset button 3 times in rapid succession. The LED will light up in green for 3 seconds if removing is successful. The device is now ready for use with default settings",
+		"reset": "Press and hold the reset button. After 3 seconds the LED will start to blink in green. After 20 seconds the LED will shine solid green for 3 seconds. You may now release the button.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}
