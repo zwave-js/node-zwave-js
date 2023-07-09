@@ -29,7 +29,6 @@
 		{
 			"#": "1",
 			"label": "Meter Report Hysteresis For W",
-			"description": "0",
 			"valueSize": 4,
 			"minValue": 0,
             "unit": "W",
@@ -46,7 +45,6 @@
 		{
 			"#": "2",
 			"label": "Meter Report Hysteresis For V",
-			"description": "0",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 420,
@@ -63,7 +61,6 @@
 		{
 			"#": "3",
 			"label": "Meter Report Hysteresis For A",
-			"description": "0",
 			"valueSize": 2,
 			"minValue": 0,
             "unit": "A",
@@ -80,7 +77,6 @@
 		{
 			"#": "4",
 			"label": "Report Interval For W",
-			"description": "0",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 65535,
@@ -91,7 +87,6 @@
 		{
 			"#": "5",
 			"label": "Meter Report Interval For V And A",
-			"description": "0",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 65535,
