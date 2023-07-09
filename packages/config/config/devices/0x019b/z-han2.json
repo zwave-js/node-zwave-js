@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Heatit",
+	"manufacturer": "Heatit Controls AB",
 	"manufacturerId": "0x019b",
 	"label": "Z-HAN2",
 	"description": "Heatit",
@@ -32,9 +32,16 @@
 			"description": "0",
 			"valueSize": 4,
 			"minValue": 0,
+            "unit": "W",
 			"maxValue": 100000,
 			"defaultValue": 200,
-			"unsigned": true
+			"unsigned": true,
+            "options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "2",
@@ -43,8 +50,15 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 420,
+            "unit": "V",
 			"defaultValue": 5,
-			"unsigned": true
+			"unsigned": true,
+            "options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "3",
@@ -52,9 +66,16 @@
 			"description": "0",
 			"valueSize": 2,
 			"minValue": 0,
+            "unit": "A",
 			"maxValue": 65535,
 			"defaultValue": 20,
-			"unsigned": true
+			"unsigned": true,
+            "options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "4",
@@ -63,6 +84,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 65535,
+            "unit": "seconds",
 			"defaultValue": 10,
 			"unsigned": true
 		},
@@ -74,57 +96,84 @@
 			"minValue": 10,
 			"maxValue": 65535,
 			"defaultValue": 300,
+            "unit": "seconds",
 			"unsigned": true
 		},
 		{
 			"#": "6",
 			"label": "Temperature Report Interval",
-			"description": "0",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 65535,
 			"defaultValue": 300,
+            "unit": "seconds",
 			"unsigned": true
 		},
 		{
 			"#": "7",
 			"label": "Temperature Report Hysteresis",
-			"description": "0",
+			"description": "This parameter has 0.5°C increments.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
+            "unit": "0.5 °C",
 			"defaultValue": 10,
-			"unsigned": true
+			"unsigned": true,
+            "options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "8",
 			"label": "Sensor Calibration",
-			"description": "0",
+			"description": "To set a negative value, use 256 and subtract the desired value.",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": -60,
 			"maxValue": 60,
 			"defaultValue": 0,
+            "unit": "0.1 °C",
 			"unsigned": true
 		},
 		{
 			"#": "9",
 			"label": "Serial",
-			"description": "0",
+			"description": "First half of the meter point serial number.",
+            "readOnly": true,
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
-			"defaultValue": 0,
+			"defaultValue": 1718972025,
 			"unsigned": true
 		},
 		{
 			"#": "10",
 			"label": "Number",
-			"description": "0",
+			"description": "Last half of the meter point serial number.",
+            "readOnly": true,
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
-			"defaultValue": 0,
+			"defaultValue": 1835363685,
 			"unsigned": true
+		},
+        {
+			"#": "11",
+			"label": "Scaling factor",
+			"description": "Allows for multipli-cation of the meter value in case of use with large electricalsystems",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"unsigned": true,
+            "options": [
+				{
+					"label": "No scaling",
+					"value": 0
+				}
+			]
 		}
 	],
 	"metadata": {
