@@ -86,7 +86,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Meter Report Interval For V And A",
+			"label": "Meter Report Interval For V and A",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 65535,
