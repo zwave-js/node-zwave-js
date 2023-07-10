@@ -415,7 +415,7 @@ A frequent reason for device not "working" correctly is that they respond to que
 			// is used for all calls to the method.
 			// The arguments must be exactly the same as in the API call and are
 			// compared using equality (===)
-			"matchArgs": [1, 2, 3] 
+			"matchArgs": [1, 2, 3]
 			// The result that should be returned by the API method when called.
 			"result": {
 				"numWeekDaySlots": 0,
