@@ -875,6 +875,14 @@ Property "persistValues" in compat option overrideQueries, CC ${getCCName(
 						cc,
 					)} must be an object!`,
 				);
+			} else if (info.extendMetadata && !isObject(info.extendMetadata)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Property "extendMetadata" in compat option overrideQueries, CC ${getCCName(
+						cc,
+					)} must be an object!`,
+				);
 			}
 
 			return {
@@ -883,6 +891,7 @@ Property "persistValues" in compat option overrideQueries, CC ${getCCName(
 				matchArgs: info.matchArgs,
 				result: info.result,
 				persistValues: info.persistValues,
+				extendMetadata: info.extendMetadata,
 			};
 		};
 
@@ -934,7 +943,12 @@ Property "${key}" in compat option overrideQueries must be a single override obj
 		endpointIndex: number,
 		method: string,
 		args: any[],
-	): Pick<CompatOverrideQuery, "result" | "persistValues"> | undefined {
+	):
+		| Pick<
+				CompatOverrideQuery,
+				"result" | "persistValues" | "extendMetadata"
+		  >
+		| undefined {
 		const queries = this.overrides.get(cc);
 		if (!queries) return undefined;
 		for (const query of queries) {
@@ -945,7 +959,7 @@ Property "${key}" in compat option overrideQueries must be a single override obj
 				if (!query.matchArgs.every((arg, i) => arg === args[i]))
 					continue;
 			}
-			return pick(query, ["result", "persistValues"]);
+			return pick(query, ["result", "persistValues", "extendMetadata"]);
 		}
 	}
 }
@@ -963,8 +977,14 @@ export interface CompatOverrideQuery {
 	/** The result to return from the API call */
 	result: any;
 	/**
-	 * Optionally a dictionary of values that will be persisted in the cache.
+	 * An optional dictionary of values that will be persisted in the cache.
 	 * The keys are properties of the `...CCValues` objects that belong to this CC.
 	 */
 	persistValues?: Record<string, any>;
+	/**
+	 * An optional dictionary of value metadata that will be persisted in the cache.
+	 * The keys are properties of the `...CCValues` objects that belong to this CC.
+	 * The given metadata will be merged with statically defined value metadata.
+	 */
+	extendMetadata?: Record<string, any>;
 }

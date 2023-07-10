@@ -35,7 +35,7 @@ import {
 	getCommandClass,
 	getImplementedVersion,
 } from "./CommandClassDecorators";
-import { type StaticCCValue } from "./Values";
+import { type CCValue, type StaticCCValue } from "./Values";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
@@ -608,40 +608,45 @@ function overrideQueriesWrapper(
 			direction: "none",
 		});
 
-		// Persist values if necessary
-		if (match.persistValues) {
-			const ccValues = getCCValues(ccId);
+		const ccValues = getCCValues(ccId);
+		if (ccValues) {
 			const valueDB = applHost.getValueDB(endpoint.nodeId);
-			if (ccValues) {
+
+			const prop2value = (prop: string): CCValue | undefined => {
+				// We use a simplistic parser to support dynamic value IDs:
+				// If end with round brackets with something inside, they are considered dynamic
+				// Otherwise static
+				const argsMatch = prop.match(/^(.*)\((.*)\)$/);
+				if (argsMatch) {
+					const methodName = argsMatch[1];
+					const methodArgs = JSON.parse(`[${argsMatch[2]}]`);
+
+					const dynValue = ccValues[methodName];
+					if (typeof dynValue === "function") {
+						return dynValue(...methodArgs);
+					}
+				} else {
+					const staticValue = ccValues[prop] as
+						| StaticCCValue
+						| undefined;
+					if (typeof staticValue?.endpoint === "function") {
+						return staticValue;
+					}
+				}
+			};
+
+			// Persist values if necessary
+			if (match.persistValues) {
 				for (const [prop, value] of Object.entries(
 					match.persistValues,
 				)) {
 					try {
-						let valueId: ValueID | undefined;
-						// We use a simplistic parser to support dynamic value IDs:
-						// If end with round brackets with something inside, they are considered dynamic
-						// Otherwise static
-						const argsMatch = prop.match(/^(.*)\((.*)\)$/);
-						if (argsMatch) {
-							const methodName = argsMatch[1];
-							const methodArgs = JSON.parse(`[${argsMatch[2]}]`);
-
-							const dynValue = ccValues[methodName];
-							if (typeof dynValue === "function") {
-								valueId = dynValue(...methodArgs).endpoint(
-									endpoint.index,
-								);
-							}
-						} else {
-							const staticValue = ccValues[prop] as
-								| StaticCCValue
-								| undefined;
-							if (typeof staticValue?.endpoint === "function") {
-								valueId = staticValue.endpoint(endpoint.index);
-							}
-						}
-						if (valueId) {
-							valueDB.setValue(valueId, value);
+						const ccValue = prop2value(prop);
+						if (ccValue) {
+							valueDB.setValue(
+								ccValue.endpoint(endpoint.index),
+								value,
+							);
 						} else {
 							applHost.controllerLog.logNode(endpoint.nodeId, {
 								message: `Failed to persist value ${prop} during overridden API call: value does not exist`,
@@ -652,6 +657,40 @@ function overrideQueriesWrapper(
 					} catch (e) {
 						applHost.controllerLog.logNode(endpoint.nodeId, {
 							message: `Failed to persist value ${prop} during overridden API call: ${getErrorMessage(
+								e,
+							)}`,
+							level: "error",
+							direction: "none",
+						});
+					}
+				}
+			}
+
+			// As well as metadata
+			if (match.extendMetadata) {
+				for (const [prop, meta] of Object.entries(
+					match.extendMetadata,
+				)) {
+					try {
+						const ccValue = prop2value(prop);
+						if (ccValue) {
+							valueDB.setMetadata(
+								ccValue.endpoint(endpoint.index),
+								{
+									...ccValue.meta,
+									...meta,
+								},
+							);
+						} else {
+							applHost.controllerLog.logNode(endpoint.nodeId, {
+								message: `Failed to extend value metadata ${prop} during overridden API call: value does not exist`,
+								level: "error",
+								direction: "none",
+							});
+						}
+					} catch (e) {
+						applHost.controllerLog.logNode(endpoint.nodeId, {
+							message: `Failed to extend value metadata ${prop} during overridden API call: ${getErrorMessage(
 								e,
 							)}`,
 							level: "error",
