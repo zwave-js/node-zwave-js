@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.4.1 (2023-07-10)
 ### Config file changes
 * Add missing product type to `Aeotec Water Sensor 7 Basic ZWA018` (#5989)
 * Override endpoint indizes for `heatapp! floor` (#5994)
