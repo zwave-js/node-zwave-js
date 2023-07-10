@@ -89,7 +89,7 @@ export class CompatOverrideQueries {
     // (undocumented)
     hasOverride(ccId: CommandClasses): boolean;
     // (undocumented)
-    matchOverride(cc: CommandClasses, endpointIndex: number, method: string, args: any[]): Pick<CompatOverrideQuery, "result" | "persistValues"> | undefined;
+    matchOverride(cc: CommandClasses, endpointIndex: number, method: string, args: any[]): Pick<CompatOverrideQuery, "result" | "persistValues" | "extendMetadata"> | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "CompatOverrideQuery" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -97,6 +97,7 @@ export class CompatOverrideQueries {
 // @public (undocumented)
 export interface CompatOverrideQuery {
     endpoint?: number;
+    extendMetadata?: Record<string, any>;
     matchArgs?: any[];
     method: string;
     persistValues?: Record<string, any>;
