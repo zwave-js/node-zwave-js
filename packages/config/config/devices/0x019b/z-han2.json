@@ -106,11 +106,11 @@
 		{
 			"#": "7",
 			"label": "Temperature Report Hysteresis",
-			"description": "This parameter has 0.5°C increments.",
+			"description": "Parameter supports 0,1 but reported values are 0,5",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-            "unit": "0.5 °C",
+            "unit": "0.1 °C",
 			"defaultValue": 10,
 			"unsigned": true,
             "options": [
