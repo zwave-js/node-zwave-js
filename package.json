@@ -131,6 +131,7 @@
     "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
     "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
     "codefind": "yarn ts packages/maintenance/src/codefind.ts",
+    "configfind": "yarn ts packages/config/maintenance/find.ts",
     "extract-api": "FORCE_COLOR=1 yarn turbo run extract-api",
     "accept-api": "yarn extract-api -- --local",
     "monopack": "yarn exec monopack",
