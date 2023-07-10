@@ -432,6 +432,19 @@ A frequent reason for device not "working" correctly is that they respond to que
 				// To pass arguments for dynamic CC values, put them in round brackets (must be parseable by `JSON.parse()`)
 				"userEnabled(1)": true
 			},
+			// Which metadata should be stored in the value DB when the API method is called (optional).
+			// The keys are the names of the predefined values of the given CC,
+			// see the CC documentation for available values.
+			"extendMetadata": {
+				"numWeekDaySlots": {
+					// This metadata will be merged with the statically defined metadata
+					"states": {
+						"0": "none",
+						"1": "one",
+						// ...
+					}
+				},
+			},
 		}
 	]
 }
