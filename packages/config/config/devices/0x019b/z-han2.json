@@ -124,13 +124,13 @@
 		{
 			"#": "8",
 			"label": "Sensor Calibration",
-			"description": "To set a negative value, use 256 and subtract the desired value.",
+			"description": "Range ±6°C",
 			"valueSize": 1,
 			"minValue": -60,
 			"maxValue": 60,
 			"defaultValue": 0,
             "unit": "0.1 °C",
-			"unsigned": true
+			"unsigned": false
 		},
 		{
 			"#": "9",
