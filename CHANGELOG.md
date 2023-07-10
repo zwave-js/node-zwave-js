@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Add missing product type to `Aeotec Water Sensor 7 Basic ZWA018` (#5989)
+* Override endpoint indizes for `heatapp! floor` (#5994)
+* Override schedule slot count for `P-KFCON-MOD-YALE` (#5991)
+* Override supported color channels for `Zipato RGBW Bulb2` (#5993)
+* Override supported thermostat modes for Z-Wave.me ZME_FT (#5997)
+
+### Changes under the hood
+* Fixed a typo in the `discoverNodeNeighbors` JSDoc (#5984)
+* Added Node.js 20 to the test matrix (#5983)
+* Added a compat flag to override (almost) arbitrary CC API queries (#5987, #5995)
+* Added the `yarn configfind ...` CLI command to quickly find a config file by ID
+
 ## 11.4.0 (2023-07-06)
 ### Features
 * Added the ability to assign priority return routes along with custom fallbacks (#5980)
