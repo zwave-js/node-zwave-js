@@ -30,11 +30,11 @@
 			"label": "Meter Report Hysteresis For W",
 			"valueSize": 4,
 			"minValue": 0,
-            "unit": "W",
+			"unit": "W",
 			"maxValue": 100000,
 			"defaultValue": 200,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Disabled",
 					"value": 0
@@ -47,10 +47,10 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 420,
-            "unit": "V",
+			"unit": "V",
 			"defaultValue": 5,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Disabled",
 					"value": 0
@@ -62,11 +62,11 @@
 			"label": "Meter Report Hysteresis For A",
 			"valueSize": 2,
 			"minValue": 0,
-            "unit": "A",
+			"unit": "A",
 			"maxValue": 65535,
 			"defaultValue": 20,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Disabled",
 					"value": 0
@@ -79,7 +79,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 65535,
-            "unit": "seconds",
+			"unit": "seconds",
 			"defaultValue": 10,
 			"unsigned": true
 		},
@@ -90,7 +90,7 @@
 			"minValue": 10,
 			"maxValue": 65535,
 			"defaultValue": 300,
-            "unit": "seconds",
+			"unit": "seconds",
 			"unsigned": true
 		},
 		{
@@ -100,7 +100,7 @@
 			"minValue": 30,
 			"maxValue": 65535,
 			"defaultValue": 300,
-            "unit": "seconds",
+			"unit": "seconds",
 			"unsigned": true
 		},
 		{
@@ -110,10 +110,10 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-            "unit": "0.1 °C",
+			"unit": "0.1 °C",
 			"defaultValue": 10,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Disabled",
 					"value": 0
@@ -128,14 +128,14 @@
 			"minValue": -60,
 			"maxValue": 60,
 			"defaultValue": 0,
-            "unit": "0.1 °C",
+			"unit": "0.1 °C",
 			"unsigned": false
 		},
 		{
 			"#": "9",
 			"label": "Serial",
 			"description": "First half of the meter point serial number.",
-            "readOnly": true,
+			"readOnly": true,
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -146,14 +146,14 @@
 			"#": "10",
 			"label": "Number",
 			"description": "Last half of the meter point serial number.",
-            "readOnly": true,
+			"readOnly": true,
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
 			"defaultValue": 1835363685,
 			"unsigned": true
 		},
-        {
+		{
 			"#": "11",
 			"label": "Scaling factor",
 			"description": "Allows for multipli-cation of the meter value in case of use with large electricalsystems",
@@ -162,7 +162,7 @@
 			"maxValue": 1000,
 			"defaultValue": 0,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "No scaling",
 					"value": 0
