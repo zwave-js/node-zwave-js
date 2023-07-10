@@ -423,13 +423,14 @@ A frequent reason for device not "working" correctly is that they respond to que
 				"numDailyRepeatingSlots": 1
 			},
 			// Which values should be stored in the value DB when the API method is called (optional).
-			// The keys are the names of statically defined values for the given CC,
-			// see the CC documentation for available values. Dynamic values
-			// which expect an argument are not supported.
+			// The keys are the names of the predefined values of the given CC,
+			// see the CC documentation for available values.
 			"persistValues": {
 				"numWeekDaySlots": 0,
 				"numYearDaySlots": 0,
-				"numDailyRepeatingSlots": 1
+				"numDailyRepeatingSlots": 1,
+				// To pass arguments for dynamic CC values, put them in round brackets (must be parseable by `JSON.parse()`)
+				"userEnabled(1)": true
 			},
 		}
 	]

@@ -23,6 +23,7 @@ import {
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import {
 	getEnumMemberName,
+	getErrorMessage,
 	num2hex,
 	type AllOrNone,
 	type OnlyMethods,
@@ -615,16 +616,47 @@ function overrideQueriesWrapper(
 				for (const [prop, value] of Object.entries(
 					match.persistValues,
 				)) {
-					// We only support static CC values for now
 					try {
-						valueDB.setValue(
-							(ccValues[prop] as StaticCCValue).endpoint(
-								endpoint.index,
-							),
-							value,
-						);
+						let valueId: ValueID | undefined;
+						// We use a simplistic parser to support dynamic value IDs:
+						// If end with round brackets with something inside, they are considered dynamic
+						// Otherwise static
+						const argsMatch = prop.match(/^(.*)\((.*)\)$/);
+						if (argsMatch) {
+							const methodName = argsMatch[1];
+							const methodArgs = JSON.parse(`[${argsMatch[2]}]`);
+
+							const dynValue = ccValues[methodName];
+							if (typeof dynValue === "function") {
+								valueId = dynValue(...methodArgs).endpoint(
+									endpoint.index,
+								);
+							}
+						} else {
+							const staticValue = ccValues[prop] as
+								| StaticCCValue
+								| undefined;
+							if (typeof staticValue?.endpoint === "function") {
+								valueId = staticValue.endpoint(endpoint.index);
+							}
+						}
+						if (valueId) {
+							valueDB.setValue(valueId, value);
+						} else {
+							applHost.controllerLog.logNode(endpoint.nodeId, {
+								message: `Failed to persist value ${prop} during overridden API call: value does not exist`,
+								level: "error",
+								direction: "none",
+							});
+						}
 					} catch (e) {
-						// ignore
+						applHost.controllerLog.logNode(endpoint.nodeId, {
+							message: `Failed to persist value ${prop} during overridden API call: ${getErrorMessage(
+								e,
+							)}`,
+							level: "error",
+							direction: "none",
+						});
 					}
 				}
 			}
