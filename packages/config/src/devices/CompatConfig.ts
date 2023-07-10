@@ -837,7 +837,10 @@ Property "method" in compat option overrideQueries, CC ${getCCName(
 						cc,
 					)} must be a string!`,
 				);
-			} else if (!isArray(info.matchArgs)) {
+			} else if (
+				info.matchArgs != undefined &&
+				!isArray(info.matchArgs)
+			) {
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
@@ -922,7 +925,11 @@ Property "${key}" in compat option overrideQueries must be a single override obj
 		CompatOverrideQuery[]
 	>;
 
-	public matchQuery(
+	public hasOverride(ccId: CommandClasses): boolean {
+		return this.overrides.has(ccId);
+	}
+
+	public matchOverride(
 		cc: CommandClasses,
 		endpointIndex: number,
 		method: string,
@@ -952,7 +959,7 @@ export interface CompatOverrideQuery {
 	 * An array of method arguments that needs to match for this override to apply.
 	 * If `undefined`, no matching is performed.
 	 */
-	matchArgs: any[];
+	matchArgs?: any[];
 	/** The result to return from the API call */
 	result: any;
 	/**

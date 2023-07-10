@@ -215,7 +215,7 @@ export class CCAPI {
 						const overrides = applHost.getDeviceConfig?.(
 							endpoint.nodeId,
 						)?.compat?.overrideQueries;
-						if (overrides) {
+						if (overrides?.hasOverride(ccId)) {
 							return overrideQueriesWrapper(
 								applHost,
 								endpoint,
@@ -589,9 +589,15 @@ function overrideQueriesWrapper(
 	overrides: CompatOverrideQueries,
 	fallback: (...args: any[]) => any,
 ): (...args: any[]) => any {
-	return (...args: any[]) => {
-		const match = overrides.matchQuery(ccId, endpoint.index, method, args);
-		if (!match) return fallback(...args);
+	// We must not capture the `this` context here, because the API methods are bound on use
+	return function (this: any, ...args: any[]) {
+		const match = overrides.matchOverride(
+			ccId,
+			endpoint.index,
+			method,
+			args,
+		);
+		if (!match) return fallback.call(this, ...args);
 
 		applHost.controllerLog.logNode(endpoint.nodeId, {
 			message: `API call ${method} for ${getCCName(
