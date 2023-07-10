@@ -614,6 +614,25 @@
 					"minProperties": 1,
 					"additionalProperties": false
 				},
+				"overrideQueries": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "array",
+						"minItems": 1,
+						"items": {
+							"type": "object",
+							"properties": {
+								"endpoint": { "type": "integer", "minimum": 0 },
+								"method": { "type": "string" },
+								"matchArgs": { "type": "array" },
+								"result": true,
+								"persistValues": { "type": "object" }
+							},
+							"required": ["method", "result"],
+							"additionalProperties": false
+						}
+					}
+				},
 				"preserveEndpoints": {
 					"oneOf": [
 						{

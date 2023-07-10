@@ -396,6 +396,46 @@ Some legacy devices emit an NIF when a local event occurs (e.g. a button press) 
 
 Some multi-channel devices incorrectly report state changes for one of their endpoints via the root device, however there is no way to automatically detect for which endpoint these reports are meant. The flag `mapRootReportsToEndpoint` can be used to specify which endpoint these reports are mapped to. Without this flag, reports to the root device are silently ignored, unless `preserveRootApplicationCCValueIDs` is `true`.
 
+### `overrideQueries`
+
+A frequent reason for device not "working" correctly is that they respond to queries incorrectly, e.g. RGB bulbs not reporting support for the blue color channel, or thermostats reporting the wrong supported modes. Using `overrideQueries`, the responses to these queries can be overridden, so they are not queried from the device anymore. Example:
+
+```js
+"overrideQueries": {
+	// For which CC the queries should be overridden. Also accepts the decimal or hexadecimal CC ID.
+	"Schedule Entry Lock": [
+		{
+			// Which endpoint the query should be overridden for (optional).
+			// Defaults to the root endpoint 0
+			"endpoint": 1,
+			// Which API method should be overridden. Available methods depend on the CC.
+			"method": "getNumSlots",
+			// Multiple overrides can optionally be specified for the same method, distinguished
+			// by the method arguments. If `matchArgs` is not specified, the override
+			// is used for all calls to the method.
+			// The arguments must be exactly the same as in the API call and are
+			// compared using equality (===)
+			"matchArgs": [1, 2, 3] 
+			// The result that should be returned by the API method when called.
+			"result": {
+				"numWeekDaySlots": 0,
+				"numYearDaySlots": 0,
+				"numDailyRepeatingSlots": 1
+			},
+			// Which values should be stored in the value DB when the API method is called (optional).
+			// The keys are the names of statically defined values for the given CC,
+			// see the CC documentation for available values. Dynamic values
+			// which expect an argument are not supported.
+			"persistValues": {
+				"numWeekDaySlots": 0,
+				"numYearDaySlots": 0,
+				"numDailyRepeatingSlots": 1
+			},
+		}
+	]
+}
+```
+
 ### `preserveEndpoints`
 
 Many devices unnecessarily use endpoints when they could (or do) provide all functionality via the root device. `zwave-js` tries to detect these cases and ignore all endpoints. To opt out of this behavior or to preserve single endpoints, `preserveEndpoints` can be used. Example:
