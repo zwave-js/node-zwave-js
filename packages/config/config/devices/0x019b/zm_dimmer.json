@@ -5,8 +5,8 @@
 	"description": "Heatit ZM Dimmer",
 	"devices": [
 		{
-			"productType": "0x0004",
-			"productId": "0x0021",
+			"productType": "0x0021",
+			"productId": "0x2101",
 			"zwaveAllianceId": 4802
 		}
 	],
@@ -181,6 +181,7 @@
 					"label": "Instant",
 					"value": 0
 				}
+			]
 		},
 		{
 			"#": "9",
