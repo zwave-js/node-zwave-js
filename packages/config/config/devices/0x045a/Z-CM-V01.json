@@ -16,22 +16,18 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			// A botton on the blinds offers the ability to control it without z-wave or remote, i.e, by hand
-			// Pressing the "hand" button will cause the blind to open or close. If it's in between, this is the 
-			// direction it will travel.  
-			"label": "Set To Start Holding Hands",
-			"description": "This parameter can be used to set the motor open hand start function",
+			"label": "Hand Button Action",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Close hand start function",
+					"label": "Close",
 					"value": 0
 				},
 				{
-					"label": "Open hand start function",
+					"label": "Open",
 					"value": 1
 				}
 			]
