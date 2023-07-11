@@ -243,7 +243,7 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
-				"0x31": {
+				"Multilevel Sensor": {
 					"endpoints": {
 						"2": {
 							"isSupported": true

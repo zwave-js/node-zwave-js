@@ -1023,7 +1023,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
-				"0x6c": {
+				"Supervision": {
 					// Supervision commands cause this device to crash after ~2 hours of operation due to a firmware bug
 					"endpoints": "*"
 				}

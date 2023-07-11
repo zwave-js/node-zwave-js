@@ -6,11 +6,7 @@ import {
 } from "@zwave-js/core/safe";
 import { pick, type JSONObject } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import {
-	hexKeyRegex2Digits,
-	throwInvalidConfig,
-	tryParseCCId,
-} from "../utils_safe";
+import { throwInvalidConfig, tryParseCCId } from "../utils_safe";
 import { conditionApplies, type ConditionalItem } from "./ConditionalItem";
 import type { DeviceID } from "./shared";
 
@@ -443,16 +439,6 @@ error in compat option commandClasses`,
 error in compat option commandClasses.add`,
 					);
 				} else if (
-					!Object.keys(definition.commandClasses.add).every((k) =>
-						hexKeyRegex2Digits.test(k),
-					)
-				) {
-					throwInvalidConfig(
-						"devices",
-						`config/devices/${filename}:
-All keys in compat option commandClasses.add must be 2-digit lowercase hex numbers!`,
-					);
-				} else if (
 					!Object.values(definition.commandClasses.add).every((v) =>
 						isObject(v),
 					)
@@ -465,13 +451,20 @@ All values in compat option commandClasses.add must be objects`,
 				}
 
 				const addCCs = new Map<CommandClasses, CompatAddCC>();
-				for (const [cc, info] of Object.entries(
+				for (const [key, info] of Object.entries(
 					definition.commandClasses.add,
 				)) {
-					addCCs.set(
-						parseInt(cc),
-						new CompatAddCC(filename, info as any),
-					);
+					// Parse the key into a CC ID
+					const cc = tryParseCCId(key);
+					if (cc == undefined) {
+						throwInvalidConfig(
+							"devices",
+							`config/devices/${filename}:
+Invalid Command Class "${key}" specified in compat option commandClasses.add!`,
+						);
+					}
+
+					addCCs.set(cc, new CompatAddCC(filename, info as any));
 				}
 				this.addCCs = addCCs;
 			}
@@ -483,25 +476,24 @@ All values in compat option commandClasses.add must be objects`,
 						`config/devices/${filename}:
 error in compat option commandClasses.remove`,
 					);
-				} else if (
-					!Object.keys(definition.commandClasses.remove).every((k) =>
-						hexKeyRegex2Digits.test(k),
-					)
-				) {
-					throwInvalidConfig(
-						"devices",
-						`config/devices/${filename}:
-All keys in compat option commandClasses.remove must be 2-digit lowercase hex numbers!`,
-					);
 				}
 
 				const removeCCs = new Map<
 					CommandClasses,
 					"*" | readonly number[]
 				>();
-				for (const [cc, info] of Object.entries(
+				for (const [key, info] of Object.entries(
 					definition.commandClasses.remove,
 				)) {
+					// Parse the key into a CC ID
+					const cc = tryParseCCId(key);
+					if (cc == undefined) {
+						throwInvalidConfig(
+							"devices",
+							`config/devices/${filename}:
+Invalid Command Class "${key}" specified in compat option commandClasses.remove!`,
+						);
+					}
 					if (isObject(info) && "endpoints" in info) {
 						if (
 							info.endpoints === "*" ||
@@ -510,7 +502,7 @@ All keys in compat option commandClasses.remove must be 2-digit lowercase hex nu
 									(i) => typeof i === "number",
 								))
 						) {
-							removeCCs.set(parseInt(cc), info.endpoints as any);
+							removeCCs.set(cc, info.endpoints as any);
 						} else {
 							throwInvalidConfig(
 								"devices",
