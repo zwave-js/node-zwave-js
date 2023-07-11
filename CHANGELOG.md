@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.4.2 (2023-07-11)
 ### Config file changes
 * Add Heatit ZM Dimmer (#5999)
 * Add Heatit Z-HAN2 (#5998)
