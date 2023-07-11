@@ -16,21 +16,18 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			// TODO: It is unknown what this parameter does. If anyone knows,
-			// let us know so we can find a better label for it
-			"label": "Set To Start Holding Hands",
-			"description": "This parameter can be used to set the motor open hand start function",
+			"label": "Hand Button Action",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Close hand start function",
+					"label": "Close",
 					"value": 0
 				},
 				{
-					"label": "Open hand start function",
+					"label": "Open",
 					"value": 1
 				}
 			]
