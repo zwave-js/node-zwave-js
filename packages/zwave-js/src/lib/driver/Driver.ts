@@ -146,7 +146,13 @@ import type { ZWaveNode } from "../node/Node";
 import {
 	InterviewStage,
 	NodeStatus,
-	type ZWaveNotificationCallback,
+	ZWaveNotificationCallback,
+	ZWaveNodeMetadataUpdatedCallback,
+	ZWaveNodeStatusChangeCallback,
+	ZWaveNodeValueAddedCallback,
+	ZWaveNodeValueNotificationCallback,
+	ZWaveNodeValueRemovedCallback,
+	ZWaveNodeValueUpdatedCallback,
 } from "../node/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
@@ -417,6 +423,16 @@ export interface DriverEventCallbacks {
 	"driver ready": () => void;
 	"bootloader ready": () => void;
 	"all nodes ready": () => void;
+	"node sleep": ZWaveNodeStatusChangeCallback;
+	"node wake up": ZWaveNodeStatusChangeCallback;
+	"node dead": ZWaveNodeStatusChangeCallback;
+	"node alive": ZWaveNodeStatusChangeCallback;
+	"node ready": (node: ZWaveNode) => void;
+	"node value added": ZWaveNodeValueAddedCallback;
+	"node value updated": ZWaveNodeValueUpdatedCallback;
+	"node value removed": ZWaveNodeValueRemovedCallback;
+	"node metadata updated": ZWaveNodeMetadataUpdatedCallback;
+	"node value notification": ZWaveNodeValueNotificationCallback;
 	error: (err: Error) => void;
 }
 
