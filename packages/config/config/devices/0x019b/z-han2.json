@@ -27,7 +27,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Meter Report Hysteresis For W",
+			"label": "Meter Report Hysteresis (W)",
 			"valueSize": 4,
 			"minValue": 0,
 			"unit": "W",
@@ -36,14 +36,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Meter Report Hysteresis For V",
+			"label": "Meter Report Hysteresis (V)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 420,
@@ -52,14 +52,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Meter Report Hysteresis For A",
+			"label": "Meter Report Hysteresis (A)",
 			"valueSize": 2,
 			"minValue": 0,
 			"unit": "A",
@@ -68,14 +68,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Report Interval For W",
+			"label": "Report Interval For (W)",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 65535,
@@ -85,7 +85,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Meter Report Interval For V and A",
+			"label": "Meter Report Interval (V and A)",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 65535,
@@ -106,7 +106,7 @@
 		{
 			"#": "7",
 			"label": "Temperature Report Hysteresis",
-			"description": "Parameter supports 0,1 but reported values are 0,5",
+			"description": "Accepts values in steps of 0.5 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -123,17 +123,15 @@
 		{
 			"#": "8",
 			"label": "Sensor Calibration",
-			"description": "Range ±6°C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": -60,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"unit": "0.1 °C",
-			"unsigned": false
+			"defaultValue": 0
 		},
 		{
 			"#": "9",
-			"label": "Serial",
+			"label": "Serial Number (Part 1)",
 			"description": "First half of the meter point serial number.",
 			"readOnly": true,
 			"valueSize": 4,
@@ -144,7 +142,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Number",
+			"label": "Serial Number (Part 2)",
 			"description": "Last half of the meter point serial number.",
 			"readOnly": true,
 			"valueSize": 4,
@@ -156,7 +154,7 @@
 		{
 			"#": "11",
 			"label": "Scaling factor",
-			"description": "Allows for multipli-cation of the meter value in case of use with large electricalsystems",
+			"description": "Allows for multiplication of the meter value in case of use with large electrical systems",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
