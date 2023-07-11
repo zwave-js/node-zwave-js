@@ -46,7 +46,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
-				"0x6c": {
+				"Supervision": {
 					// The device support supervision, but does not accept supervision-encapsulated Multilevel Switch commands
 					"endpoints": "*"
 				}

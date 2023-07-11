@@ -27,7 +27,7 @@
 		"commandClasses": {
 			"remove": {
 				// Removes the Z-Wave Plus CC as this device fails to send state updates. It sends NIFs, which are only refreshed for non-plus devices
-				"0x5e": {
+				"Z-Wave Plus Info": {
 					"endpoints": "*"
 				}
 			}

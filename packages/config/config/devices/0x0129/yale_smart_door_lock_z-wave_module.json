@@ -69,7 +69,7 @@
 			"remove": {
 				// At least in FW 33.16 the lock always responds with Supervision session ID 0,
 				// which means Z-Wave JS cannot map the response to the request
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

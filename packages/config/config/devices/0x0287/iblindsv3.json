@@ -172,7 +172,7 @@
 		// to the Window Covering CC values. Remove the Binary Switch CC to avoid confusion.
 		"commandClasses": {
 			"remove": {
-				"0x25": {
+				"Binary Switch": {
 					"endpoints": "*"
 				}
 			}
