@@ -56,7 +56,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Toggle Switch behavior",
+			"label": "Toggle Switch Behavior",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -72,32 +72,13 @@
 			]
 		},
 		{
-			"#": "4",
-			"label": "Override off-timer",
-			"Description": "Allow S1/S2 to switch device off when timing function is set > 0 (Param. 5)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do not allow manual operation",
-					"value": 0
-				},
-				{
-					"label": "Allow manual operation",
-					"value": 1
-				}
-			]
-		},
-		{
 			"#": "5",
-			"label": "Timing function",
-			"Description": "Off timer: Auto switch off after n x 100ms (n max. 65535)",
+			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unit": "100ms",
+			"unit": "seconds",
 			"unsigned": true,
 			"options": [
 				{
@@ -107,8 +88,15 @@
 			]
 		},
 		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto-Off Timer: Manual Operation",
+			"description": "Allow manually turning off the device when the auto-off timer is active",
+			"defaultValue": 1
+		},
+		{
 			"#": "6",
-			"label": "All on / All off",
+			"label": "All On / All Off",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -160,26 +148,27 @@
 		},
 		{
 			"#": "9",
-			"label": "Switch 2 function",
+			"label": "Switch 2: Report Type",
+			"description": "Scene Activation will be sent to the controller, Basic Set to group 3.",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Enable scene activation and send basic ON/OFF to associated devices",
+					"label": "Scene Activation and Basic Set",
 					"value": 0
 				},
 				{
-					"label": "Scene activation only",
+					"label": "Scene Activation",
 					"value": 1
 				},
 				{
-					"label": "Send basic ON/OFF only",
+					"label": "Basic Set",
 					"value": 2
 				},
 				{
-					"label": "Disable switch 2 function",
+					"label": "Disable",
 					"value": 255
 				}
 			]
@@ -205,7 +194,7 @@
 					"value": 2
 				},
 				{
-					"label": "Report disabled",
+					"label": "Disable",
 					"value": 255
 				}
 			]
@@ -213,7 +202,7 @@
 		{
 			"#": "11",
 			"label": "Switch S2: Scene ID (Single Click)",
-			"description": "0 = scene activation disabled / 1-255  = send activation CC to association group 1 (AG1) with specified scene ID",
+			"description": "Will be sent to the controller.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -221,7 +210,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -229,7 +218,7 @@
 		{
 			"#": "12",
 			"label": "Switch S2: Scene ID (Double Click)",
-			"description": "0 = scene activation disabled / 1-255  = send activation CC to association group 1 (AG1) with specified scene ID",
+			"description": "Will be sent to the controller.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -237,7 +226,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -245,7 +234,7 @@
 		{
 			"#": "13",
 			"label": "Switch S2: Scene ID (Hold)",
-			"description": "0 = scene activation disabled / 1-255  = send activation CC to association group 1 (AG1) with specified scene ID",
+			"description": "Momentary buttons only. Will be sent to the controller.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
