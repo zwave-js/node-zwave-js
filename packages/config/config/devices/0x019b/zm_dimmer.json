@@ -200,7 +200,7 @@
 		},
 		{
 			"#": "10",
-			"$import": "~/templates/master_template.json#dimmer_type_trail_lead",
+			"$import": "~/templates/master_template.json#dimmer_type_trail_lead"
 		},
 		{
 			"#": "11",
@@ -248,10 +248,9 @@
 		},
 		{
 			"#": "15",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Dimmer Functionality",
-			"description": "When disabled, the device will act as a switch (on/off) instead of a dimmer.",
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "On/Off Functionality",
+			"description": "Use for non-dimmable loads."
 		}
 	],
 	"metadata": {
