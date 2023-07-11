@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Add Heatit ZM Dimmer (#5999)
+* Add Heatit Z-HAN2 (#5998)
+* Add Remotec ZXT-800 (#5955)
+* Clarify Hand Button action for `ZVIDAR Z-CM-V01 Smart Curtain Motor` (#5946)
+* Add MCOHome MH-S220 FW 3.2 (#5832)
+* Add another device ID for Switch IO On/Off Power Switch (#5801)
+* Add/fix params for Intermatic PE653 (#5822)
+* Add ShenZhen Sunricher Technology Multisensor SR-ZV9032A-EU (#5718)
+
+### Changes under the hood
+* The `commandClasses.add/remove` compat flags now support specifying the CC name instead of its hexadecimal ID (#6000)
+
 ## 11.4.1 (2023-07-10)
 ### Config file changes
 * Add missing product type to `Aeotec Water Sensor 7 Basic ZWA018` (#5989)
