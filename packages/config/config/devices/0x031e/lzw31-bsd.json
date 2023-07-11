@@ -343,7 +343,7 @@
 		},
 		{
 			"#": "52",
-			"$if": "firmwareVersion >= 1.47 && firmwareVersion < 1.54",			
+			"$if": "firmwareVersion >= 1.47 && firmwareVersion < 1.54",
 			"label": "Smart Bulb Mode",
 			"description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim & makes it act like an ON / OFF switch.",
 			"valueSize": 1,
