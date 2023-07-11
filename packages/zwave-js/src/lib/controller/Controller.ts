@@ -19,7 +19,9 @@ import {
 	Security2Command,
 	VersionCCValues,
 	ZWaveProtocolCCAssignReturnRoute,
+	ZWaveProtocolCCAssignReturnRoutePriority,
 	ZWaveProtocolCCAssignSUCReturnRoute,
+	ZWaveProtocolCCAssignSUCReturnRoutePriority,
 	utils as ccUtils,
 	inclusionTimeouts,
 	type AssociationAddress,
@@ -30,14 +32,12 @@ import {
 	CommandClasses,
 	EMPTY_ROUTE,
 	MAX_NODES,
-	MessagePriority,
 	NODE_ID_BROADCAST,
 	NodeType,
 	ProtocolType,
 	RFRegion,
 	RouteKind,
 	SecurityClass,
-	TransmitOptions,
 	TransmitStatus,
 	UNKNOWN_STATE,
 	ValueDB,
@@ -1862,11 +1862,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				});
 				node.updateNodeInfo(msg.nodeInformation);
 
-				// Tell the send thread that we received a NIF from the node
-				this.driver["sendThread"].send({
-					type: "NIF",
-					nodeId: node.id,
-				});
+				// Resolve active pings that would fail otherwise
+				this.driver.resolvePendingPings(node.id);
 
 				if (
 					node.canSleep &&
@@ -2135,7 +2132,12 @@ supported CCs: ${nodeInfo.supportedCCs
 							nodeId,
 							`Notifying node ${inclCtrlrId} of finished inclusion`,
 						);
-						void inclCtrlr!.commandClasses["Inclusion Controller"]
+						// Create API without checking for support
+						const api = inclCtrlr!.createAPI(
+							CommandClasses["Inclusion Controller"],
+							false,
+						);
+						void api
 							.completeStep(step, InclusionControllerStatus.OK)
 							// eslint-disable-next-line @typescript-eslint/no-empty-function
 							.catch(() => {});
@@ -2236,7 +2238,12 @@ supported CCs: ${nodeInfo.supportedCCs
 					inclCtrlr.nodeId,
 					`Notifying inclusion controller of finished inclusion`,
 				);
-				void inclCtrlr.commandClasses["Inclusion Controller"]
+				// Create API without checking for support
+				const api = inclCtrlr.createAPI(
+					CommandClasses["Inclusion Controller"],
+					false,
+				);
+				void api
 					.completeStep(initiate.step, InclusionControllerStatus.OK)
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
 					.catch(() => {});
@@ -4080,11 +4087,17 @@ ${associatedNodes.join(", ")}`,
 	 * the given routes instead of having the controller calculate them. At most 4 routes can be assigned. If less are
 	 * specified, the remaining routes are cleared.
 	 *
+	 * To mark a route as a priority route, pass it as the optional `priorityRoute` parameter. At most 3 routes of the
+	 * `routes` array will then be used as fallback routes.
+	 *
 	 * **Note:** Calling {@link assignSUCReturnRoutes} or {@link deleteSUCReturnRoutes} will override the custom routes.
+	 *
+	 * Returns `true` when the process was successful, or `false` if at least one step failed.
 	 */
 	public async assignCustomSUCReturnRoutes(
 		nodeId: number,
 		routes: Route[],
+		priorityRoute?: Route,
 	): Promise<boolean> {
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning custom SUC return routes...`,
@@ -4098,9 +4111,13 @@ ${associatedNodes.join(", ")}`,
 		const MAX_ROUTES = 4;
 
 		// Keep track of which routes have been assigned
-		const assignedRoutes = this.getCustomSUCReturnRoutesCached(nodeId);
-		while (assignedRoutes.length < MAX_ROUTES) {
-			assignedRoutes.push(EMPTY_ROUTE);
+		const assignedRoutes = new Array(MAX_ROUTES).fill(EMPTY_ROUTE);
+
+		let priorityRouteIndex = -1;
+		// If a priority route is given, add it to the end of the routes array to mimick what the Z-Wave controller does
+		if (priorityRoute) {
+			priorityRouteIndex = Math.min(MAX_ROUTES - 1, routes.length);
+			routes[priorityRouteIndex] = priorityRoute;
 		}
 
 		for (let i = 0; i < MAX_ROUTES; i++) {
@@ -4121,22 +4138,36 @@ ${associatedNodes.join(", ")}`,
 			});
 
 			try {
-				// TODO: add a better method to send ZWaveProtocolCC
-				await this.driver.sendCommand(cc, {
-					priority: MessagePriority.MultistepController,
-					autoEncapsulate: false,
-					changeNodeStatusOnMissingACK: false,
-					maxSendAttempts: 1,
-					useSupervision: false,
-					transmitOptions:
-						TransmitOptions.AutoRoute | TransmitOptions.ACK,
-				});
+				await this.driver.sendZWaveProtocolCC(cc);
 
 				// Remember that this route has been assigned
-				assignedRoutes[i] = route;
+				if (i !== priorityRouteIndex) assignedRoutes[i] = route;
 			} catch (e) {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Assigning custom SUC return route #${i} failed`,
+					direction: "outbound",
+					level: "warn",
+				});
+
+				result = false;
+			}
+		}
+
+		// If a priority route was passed, tell the node to use it
+		if (priorityRouteIndex >= 0) {
+			const cc = new ZWaveProtocolCCAssignSUCReturnRoutePriority(
+				this.driver,
+				{
+					nodeId,
+					targetNodeId: this.ownNodeId ?? 1,
+					routeNumber: priorityRouteIndex,
+				},
+			);
+			try {
+				await this.driver.sendZWaveProtocolCC(cc);
+			} catch (e) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `Marking custom SUC return route as priority failed`,
 					direction: "outbound",
 					level: "warn",
 				});
@@ -4154,6 +4185,8 @@ ${associatedNodes.join(", ")}`,
 			assignedRoutes.pop();
 		}
 
+		// Remember the routes we assigned
+		this.setPrioritySUCReturnRouteCached(nodeId, priorityRoute);
 		this.setCustomSUCReturnRoutesCached(nodeId, assignedRoutes);
 
 		return result;
@@ -4319,7 +4352,17 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 		destinationNodeId: number,
 		routes: Route[],
+		priorityRoute?: Route,
 	): Promise<boolean> {
+		// Make sure this is not misused by passing the controller's node ID
+		if (destinationNodeId === this.ownNodeId) {
+			return this.assignCustomSUCReturnRoutes(
+				nodeId,
+				routes,
+				priorityRoute,
+			);
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning custom return routes to node ${destinationNodeId}...`,
 			direction: "outbound",
@@ -4329,12 +4372,13 @@ ${associatedNodes.join(", ")}`,
 		const MAX_ROUTES = 4;
 
 		// Keep track of which routes have been assigned
-		const assignedRoutes = this.getCustomReturnRoutesCached(
-			nodeId,
-			destinationNodeId,
-		);
-		while (assignedRoutes.length < MAX_ROUTES) {
-			assignedRoutes.push(EMPTY_ROUTE);
+		const assignedRoutes = new Array(MAX_ROUTES).fill(EMPTY_ROUTE);
+
+		let priorityRouteIndex = -1;
+		// If a priority route is given, add it to the end of the routes array to mimick what the Z-Wave controller does
+		if (priorityRoute) {
+			priorityRouteIndex = Math.min(MAX_ROUTES - 1, routes.length);
+			routes[priorityRouteIndex] = priorityRoute;
 		}
 
 		for (let i = 0; i < MAX_ROUTES; i++) {
@@ -4356,22 +4400,36 @@ ${associatedNodes.join(", ")}`,
 			});
 
 			try {
-				// TODO: add a better method to send ZWaveProtocolCC
-				await this.driver.sendCommand(cc, {
-					priority: MessagePriority.MultistepController,
-					autoEncapsulate: false,
-					changeNodeStatusOnMissingACK: false,
-					maxSendAttempts: 1,
-					useSupervision: false,
-					transmitOptions:
-						TransmitOptions.AutoRoute | TransmitOptions.ACK,
-				});
+				await this.driver.sendZWaveProtocolCC(cc);
 
 				// Remember that this route has been assigned
-				assignedRoutes[i] = route;
+				if (i !== priorityRouteIndex) assignedRoutes[i] = route;
 			} catch (e) {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Assigning custom return route #${i} failed`,
+					direction: "outbound",
+					level: "warn",
+				});
+
+				result = false;
+			}
+		}
+
+		// If a priority route was passed, tell the node to use it
+		if (priorityRouteIndex >= 0) {
+			const cc = new ZWaveProtocolCCAssignReturnRoutePriority(
+				this.driver,
+				{
+					nodeId,
+					targetNodeId: destinationNodeId,
+					routeNumber: priorityRouteIndex,
+				},
+			);
+			try {
+				await this.driver.sendZWaveProtocolCC(cc);
+			} catch (e) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `Marking custom return route as priority failed`,
 					direction: "outbound",
 					level: "warn",
 				});
@@ -4394,11 +4452,17 @@ ${associatedNodes.join(", ")}`,
 			destinationNodeId,
 			assignedRoutes,
 		);
-		// The priority route is probably invalid now, but it may also point to a random route
-		if (
+		if (priorityRoute) {
+			this.setPriorityReturnRouteCached(
+				nodeId,
+				destinationNodeId,
+				priorityRoute,
+			);
+		} else if (
 			this.hasPriorityReturnRouteCached(nodeId, destinationNodeId) !==
 			false
 		) {
+			// The priority route is probably invalid now, but it may also point to a random route
 			this.setPriorityReturnRouteCached(
 				nodeId,
 				destinationNodeId,
@@ -4465,6 +4529,15 @@ ${associatedNodes.join(", ")}`,
 		repeaters: number[],
 		routeSpeed: ZWaveDataRate,
 	): Promise<boolean> {
+		// Make sure this is not misused by passing the controller's node ID
+		if (destinationNodeId === this.ownNodeId) {
+			return this.assignPrioritySUCReturnRoute(
+				nodeId,
+				repeaters,
+				routeSpeed,
+			);
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning priority return route to node ${destinationNodeId}...`,
 			direction: "outbound",
@@ -4583,6 +4656,9 @@ ${associatedNodes.join(", ")}`,
 					repeaters,
 					routeSpeed,
 				});
+				// The command above assigns a full set of new routes, so
+				// custom SUC return routes are no longer valid
+				this.setCustomSUCReturnRoutesCached(nodeId, undefined);
 			}
 			return success;
 		} catch (e) {
@@ -5336,7 +5412,7 @@ ${associatedNodes.join(", ")}`,
 	 * **WARNING:** On some controllers, this can cause new SUC return routes to be assigned.
 	 *
 	 * @returns `true` if the update was successful and the new neighbors can be retrieved using
-	 * {@link getKnownNodeNeighbors}. `false` if the update failed.
+	 * {@link getNodeNeighbors}. `false` if the update failed.
 	 */
 	public async discoverNodeNeighbors(nodeId: number): Promise<boolean> {
 		// TODO: Consider making this not block the send queue.

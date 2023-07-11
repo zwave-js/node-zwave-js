@@ -1,9 +1,11 @@
+import { type CompatOverrideQueries } from "@zwave-js/config";
 import {
 	CommandClasses,
 	NODE_ID_BROADCAST,
 	NOT_KNOWN,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
 	isZWaveError,
 	stripUndefined,
 	type Duration,
@@ -21,6 +23,7 @@ import {
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import {
 	getEnumMemberName,
+	getErrorMessage,
 	num2hex,
 	type AllOrNone,
 	type OnlyMethods,
@@ -28,9 +31,11 @@ import {
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	getAPI,
+	getCCValues,
 	getCommandClass,
 	getImplementedVersion,
 } from "./CommandClassDecorators";
+import { type CCValue, type StaticCCValue } from "./Values";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
@@ -200,7 +205,31 @@ export class CCAPI {
 							ZWaveErrorCodes.CC_NotSupported,
 						);
 					}
-					return target[property as keyof CCAPI];
+
+					// If a device config defines overrides for an API call, return a wrapper method that applies them first before calling the actual method
+					const fallback = target[property as keyof CCAPI];
+					if (
+						typeof property === "string" &&
+						!endpoint.virtual &&
+						typeof fallback === "function"
+					) {
+						const overrides = applHost.getDeviceConfig?.(
+							endpoint.nodeId,
+						)?.compat?.overrideQueries;
+						if (overrides?.hasOverride(ccId)) {
+							return overrideQueriesWrapper(
+								applHost,
+								endpoint,
+								ccId,
+								property,
+								overrides,
+								fallback,
+							);
+						}
+					}
+
+					// Else just access the property
+					return fallback;
 				},
 			});
 		} else {
@@ -248,7 +277,7 @@ export class CCAPI {
 	 * **WARNING:** This function is NOT bound to an API instance. It must be called with the correct `this` context!
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
-		return this[POLL_VALUE]?.bind(this);
+		return this[POLL_VALUE];
 	}
 
 	/**
@@ -415,10 +444,14 @@ export class CCAPI {
 		}
 
 		// Remember which properties need to be proxied
-		const ownProps = new Set(
-			Object.getOwnPropertyNames(this.constructor.prototype),
-		);
-		ownProps.delete("constructor");
+		const proxiedProps = new Set([
+			// These are the CC-specific methods
+			...Object.getOwnPropertyNames(this.constructor.prototype),
+			// as well as setValue and pollValue
+			"setValue",
+			"pollValue",
+		]);
+		proxiedProps.delete("constructor");
 
 		function wrapResult<T>(result: T, txReport: TXReport): any {
 			// Both the result and the TX report may be undefined (no response, no support)
@@ -434,7 +467,7 @@ export class CCAPI {
 
 				let original: any = (target as any)[prop];
 				if (
-					ownProps.has(prop as string) &&
+					proxiedProps.has(prop as string) &&
 					typeof original === "function"
 				) {
 					// This is a method that only exists in the specific implementation
@@ -547,6 +580,130 @@ export class CCAPI {
 			ZWaveErrorCodes.CC_NoNodeID,
 		);
 	}
+}
+
+function overrideQueriesWrapper(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+	ccId: CommandClasses,
+	method: string,
+	overrides: CompatOverrideQueries,
+	fallback: (...args: any[]) => any,
+): (...args: any[]) => any {
+	// We must not capture the `this` context here, because the API methods are bound on use
+	return function (this: any, ...args: any[]) {
+		const match = overrides.matchOverride(
+			ccId,
+			endpoint.index,
+			method,
+			args,
+		);
+		if (!match) return fallback.call(this, ...args);
+
+		applHost.controllerLog.logNode(endpoint.nodeId, {
+			message: `API call ${method} for ${getCCName(
+				ccId,
+			)} CC overridden by a compat flag.`,
+			level: "debug",
+			direction: "none",
+		});
+
+		const ccValues = getCCValues(ccId);
+		if (ccValues) {
+			const valueDB = applHost.getValueDB(endpoint.nodeId);
+
+			const prop2value = (prop: string): CCValue | undefined => {
+				// We use a simplistic parser to support dynamic value IDs:
+				// If end with round brackets with something inside, they are considered dynamic
+				// Otherwise static
+				const argsMatch = prop.match(/^(.*)\((.*)\)$/);
+				if (argsMatch) {
+					const methodName = argsMatch[1];
+					const methodArgs = JSON.parse(`[${argsMatch[2]}]`);
+
+					const dynValue = ccValues[methodName];
+					if (typeof dynValue === "function") {
+						return dynValue(...methodArgs);
+					}
+				} else {
+					const staticValue = ccValues[prop] as
+						| StaticCCValue
+						| undefined;
+					if (typeof staticValue?.endpoint === "function") {
+						return staticValue;
+					}
+				}
+			};
+
+			// Persist values if necessary
+			if (match.persistValues) {
+				for (const [prop, value] of Object.entries(
+					match.persistValues,
+				)) {
+					try {
+						const ccValue = prop2value(prop);
+						if (ccValue) {
+							valueDB.setValue(
+								ccValue.endpoint(endpoint.index),
+								value,
+							);
+						} else {
+							applHost.controllerLog.logNode(endpoint.nodeId, {
+								message: `Failed to persist value ${prop} during overridden API call: value does not exist`,
+								level: "error",
+								direction: "none",
+							});
+						}
+					} catch (e) {
+						applHost.controllerLog.logNode(endpoint.nodeId, {
+							message: `Failed to persist value ${prop} during overridden API call: ${getErrorMessage(
+								e,
+							)}`,
+							level: "error",
+							direction: "none",
+						});
+					}
+				}
+			}
+
+			// As well as metadata
+			if (match.extendMetadata) {
+				for (const [prop, meta] of Object.entries(
+					match.extendMetadata,
+				)) {
+					try {
+						const ccValue = prop2value(prop);
+						if (ccValue) {
+							valueDB.setMetadata(
+								ccValue.endpoint(endpoint.index),
+								{
+									...ccValue.meta,
+									...meta,
+								},
+							);
+						} else {
+							applHost.controllerLog.logNode(endpoint.nodeId, {
+								message: `Failed to extend value metadata ${prop} during overridden API call: value does not exist`,
+								level: "error",
+								direction: "none",
+							});
+						}
+					} catch (e) {
+						applHost.controllerLog.logNode(endpoint.nodeId, {
+							message: `Failed to extend value metadata ${prop} during overridden API call: ${getErrorMessage(
+								e,
+							)}`,
+							level: "error",
+							direction: "none",
+						});
+					}
+				}
+			}
+		}
+
+		// API methods are always async
+		return Promise.resolve(match.result);
+	};
 }
 
 /** A CC API that is only available for physical endpoints */
@@ -674,14 +831,19 @@ export type WrapWithTXReport<T> = [T] extends [Promise<infer U>]
 	? { txReport: TXReport | undefined }
 	: { result: T; txReport: TXReport | undefined };
 
+export type ReturnWithTXReport<T> = T extends (...args: any[]) => any
+	? (...args: Parameters<T>) => WrapWithTXReport<ReturnType<T>>
+	: undefined;
+
 // Converts the type of the given API implementation so the API methods return an object including the TX report
 export type WithTXReport<API extends CCAPI> = Omit<
 	API,
-	keyof OwnMethodsOf<API> | "withOptions" | "withTXReport"
+	keyof OwnMethodsOf<API> | "withOptions" | "withTXReport" | "setValue"
 > & {
-	[K in keyof OwnMethodsOf<API>]: API[K] extends (...args: any[]) => any
-		? (...args: Parameters<API[K]>) => WrapWithTXReport<ReturnType<API[K]>>
-		: never;
+	[K in
+		| keyof OwnMethodsOf<API>
+		| "setValue"
+		| "pollValue"]: ReturnWithTXReport<API[K]>;
 };
 
 export function normalizeCCNameOrId(

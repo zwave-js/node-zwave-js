@@ -34,6 +34,7 @@ export enum ZWaveErrorCodes {
 	Controller_MessageDropped,
 	Controller_ResponseNOK,
 	Controller_CallbackNOK,
+	Controller_CommandAborted,
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 

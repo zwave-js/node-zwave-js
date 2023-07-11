@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/config",
-  "version": "11.1.0",
+  "version": "11.4.1",
   "description": "zwave-js: configuration files",
   "publishConfig": {
     "access": "public"
@@ -70,11 +70,11 @@
   },
   "devDependencies": {
     "@esm2cjs/got": "^12.5.3",
-    "@microsoft/api-extractor": "^7.35.0",
+    "@microsoft/api-extractor": "^7.36.0",
     "@types/fs-extra": "^9.0.13",
     "@types/js-levenshtein": "^1.1.1",
     "@types/json-logic-js": "^2.0.2",
-    "@types/node": "^14.18.47",
+    "@types/node": "^14.18.52",
     "@types/pegjs": "^0.10.3",
     "@types/semver": "^7.3.13",
     "@types/sinon": "^10.0.14",
@@ -91,7 +91,7 @@
     "prettier": "^2.8.8",
     "sinon": "^14.0.2",
     "ts-pegjs": "^0.3.1",
-    "typescript": "5.0.4",
+    "typescript": "5.1.6",
     "xml2js": "^0.5.0",
     "yargs": "^17.7.2"
   }

@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/transformers",
-  "version": "11.0.0",
+  "version": "11.3.0",
   "description": "zwave-js: compile-time transformers",
   "private": true,
   "keywords": [],
@@ -48,6 +48,6 @@
     "fs-extra": "^10.1.0",
     "prettier": "^2.8.8",
     "tsutils": "^3.21.0",
-    "typescript": "5.0.4"
+    "typescript": "5.1.6"
   }
 }

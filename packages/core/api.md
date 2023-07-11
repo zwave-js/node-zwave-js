@@ -3057,6 +3057,11 @@ export enum ZWaveDataRate {
     "9k6" = 1
 }
 
+// Warning: (ae-missing-release-tag) "zwaveDataRateToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function zwaveDataRateToString(rate: ZWaveDataRate): string;
+
 // Warning: (ae-missing-release-tag) "ZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -3105,22 +3110,24 @@ export enum ZWaveErrorCodes {
     ConfigurationCC_NoResetToDefaultOnLegacyDevices = 1002,
     // (undocumented)
     Controller_CallbackNOK = 204,
-    Controller_CommandError = 214,
-    Controller_EndpointNotFound = 210,
     // (undocumented)
-    Controller_ExclusionFailed = 206,
+    Controller_CommandAborted = 205,
+    Controller_CommandError = 215,
+    Controller_EndpointNotFound = 211,
     // (undocumented)
-    Controller_InclusionFailed = 205,
-    Controller_InterviewRestarted = 208,
+    Controller_ExclusionFailed = 207,
+    // (undocumented)
+    Controller_InclusionFailed = 206,
+    Controller_InterviewRestarted = 209,
     // (undocumented)
     Controller_MessageDropped = 202,
-    Controller_MessageExpired = 213,
-    Controller_MessageTooLarge = 215,
-    Controller_NodeInsecureCommunication = 212,
-    Controller_NodeNotFound = 209,
-    Controller_NodeRemoved = 211,
+    Controller_MessageExpired = 214,
+    Controller_MessageTooLarge = 216,
+    Controller_NodeInsecureCommunication = 213,
+    Controller_NodeNotFound = 210,
+    Controller_NodeRemoved = 212,
     Controller_NodeTimeout = 201,
-    Controller_NotSupported = 207,
+    Controller_NotSupported = 208,
     // (undocumented)
     Controller_ResponseNOK = 203,
     Controller_Timeout = 200,
