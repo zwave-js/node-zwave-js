@@ -146,13 +146,9 @@ import type { ZWaveNode } from "../node/Node";
 import {
 	InterviewStage,
 	NodeStatus,
-	ZWaveNotificationCallback,
-	ZWaveNodeMetadataUpdatedCallback,
-	ZWaveNodeStatusChangeCallback,
-	ZWaveNodeValueAddedCallback,
-	ZWaveNodeValueNotificationCallback,
-	ZWaveNodeValueRemovedCallback,
-	ZWaveNodeValueUpdatedCallback,
+	zWaveNodeEvents,
+	type ZWaveNodeEventCallbacks,
+	type ZWaveNotificationCallback,
 } from "../node/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
@@ -418,21 +414,18 @@ interface Sessions {
 	supervision: Map<number, SupervisionUpdateHandler>;
 }
 
+// Used to add all node events to the driver event callbacks, but prefixed with "node "
+type PrefixedNodeEvents = {
+	[K in keyof ZWaveNodeEventCallbacks as K extends string
+		? `node ${K}`
+		: never]: ZWaveNodeEventCallbacks[K];
+};
+
 // Strongly type the event emitter events
-export interface DriverEventCallbacks {
+export interface DriverEventCallbacks extends PrefixedNodeEvents {
 	"driver ready": () => void;
 	"bootloader ready": () => void;
 	"all nodes ready": () => void;
-	"node sleep": ZWaveNodeStatusChangeCallback;
-	"node wake up": ZWaveNodeStatusChangeCallback;
-	"node dead": ZWaveNodeStatusChangeCallback;
-	"node alive": ZWaveNodeStatusChangeCallback;
-	"node ready": (node: ZWaveNode) => void;
-	"node value added": ZWaveNodeValueAddedCallback;
-	"node value updated": ZWaveNodeValueUpdatedCallback;
-	"node value removed": ZWaveNodeValueRemovedCallback;
-	"node metadata updated": ZWaveNodeMetadataUpdatedCallback;
-	"node value notification": ZWaveNodeValueNotificationCallback;
 	error: (err: Error) => void;
 }
 
@@ -1579,18 +1572,19 @@ export class Driver
 				this.onNodeFirmwareUpdated.bind(this),
 			)
 			.on("notification", this.onNodeNotification.bind(this));
+
+		// Add forwarders for all node events
+		for (const event of zWaveNodeEvents) {
+			node.on(event, (...args: any[]) => {
+				// @ts-expect-error We made sure that args matches
+				this.emit(`node ${event}`, ...args);
+			});
+		}
 	}
 
 	/** Removes a node's event handlers that were added with addNodeEventHandlers */
 	private removeNodeEventHandlers(node: ZWaveNode): void {
-		node.removeAllListeners("wake up")
-			.removeAllListeners("sleep")
-			.removeAllListeners("alive")
-			.removeAllListeners("dead")
-			.removeAllListeners("interview completed")
-			.removeAllListeners("ready")
-			.removeAllListeners("firmware update finished")
-			.removeAllListeners("notification");
+		node.removeAllListeners();
 	}
 
 	/** Is called when a node wakes up */
