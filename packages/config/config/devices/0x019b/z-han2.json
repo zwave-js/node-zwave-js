@@ -2,7 +2,7 @@
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-HAN2",
-	"description": "Heatit",
+	"description": "Heatit Z-HAN2",
 	"devices": [
 		{
 			"productType": "0x0062",
