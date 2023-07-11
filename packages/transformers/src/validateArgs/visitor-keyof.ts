@@ -75,13 +75,13 @@ function visitRegularObjectType(
 			const names = properties.map((property) => property.name);
 			const condition = VisitorUtils.createBinaries(
 				names.map((name) =>
-					ts.createStrictInequality(
+					ts.factory.createStrictInequality(
 						VisitorUtils.objectIdentifier,
-						ts.createStringLiteral(name),
+						ts.factory.createStringLiteral(name),
 					),
 				),
 				ts.SyntaxKind.AmpersandAmpersandToken,
-				ts.createTrue(),
+				ts.factory.createTrue(),
 			);
 			return VisitorUtils.createAssertionFunction(
 				condition,

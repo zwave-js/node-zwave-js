@@ -1,7 +1,4 @@
 import {
-	CommandClass,
-	getInnermostCommandClass,
-	isCommandClassContainer,
 	MGRPExtension,
 	MPANExtension,
 	Security2CCMessageEncapsulation,
@@ -10,43 +7,47 @@ import {
 	SupervisionCC,
 	SupervisionCCReport,
 	SupervisionCommand,
+	getInnermostCommandClass,
+	isCommandClassContainer,
+	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityCCCommandEncapsulation,
 	SecurityCCNonceGet,
-	SecurityCCNonceReport,
+	type SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
 import {
 	MAX_SEGMENT_SIZE,
 	RELAXED_TIMING_THRESHOLD,
-	TransportServiceCC,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
 	TransportServiceCCSegmentRequest,
 	TransportServiceCCSegmentWait,
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	type TransportServiceCC,
 } from "@zwave-js/cc/TransportServiceCC";
 import {
 	CommandClasses,
 	EncapsulationFlags,
-	mergeSupervisionResults,
 	MessagePriority,
 	NODE_ID_BROADCAST,
-	SendCommandOptions,
 	SPANState,
-	SupervisionResult,
+	SecurityClass,
 	SupervisionStatus,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
+	mergeSupervisionResults,
+	type SendCommandOptions,
+	type SupervisionResult,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import {
 	exceedsMaxPayloadLength,
@@ -54,7 +55,6 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 import type { Driver } from "./Driver";
-import { sendDataErrorToZWaveError } from "./StateMachineShared";
 import type { MessageGenerator } from "./Transaction";
 
 export type MessageGeneratorImplementation = (
@@ -569,9 +569,17 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		const spanState = secMan.getSPANState(nodeId);
 		let additionalTimeoutMs: number | undefined;
 
+		// We need a new nonce when there is no shared SPAN state, or the SPAN state is for a lower security class
+		// than the command we want to send
+		const expectedSecurityClass =
+			msg.command.securityClass ?? driver.getHighestSecurityClass(nodeId);
+
 		if (
 			spanState.type === SPANState.None ||
-			spanState.type === SPANState.LocalEI
+			spanState.type === SPANState.LocalEI ||
+			(spanState.type === SPANState.SPAN &&
+				spanState.securityClass !== SecurityClass.Temporary &&
+				spanState.securityClass !== expectedSecurityClass)
 		) {
 			// Request a new nonce
 
@@ -921,7 +929,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 							break;
 						}
 
-						// Pass the generated message to the transaction machine and remember the result for the next iteration
+						// Pass the generated message to the driver and remember the result for the next iteration
 						generator.current = value;
 						sendResult = yield generator.current;
 					} catch (e) {
@@ -930,24 +938,9 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 							resultPromise.reject(e);
 						} else if (isTransmitReport(e) && !e.isOK()) {
 							// The generator was prematurely ended by throwing a NOK transmit report.
-							// If this cannot be handled (e.g. by moving the messages to the wakeup queue), we need
-							// to treat this as an error
-							if (
-								driver.handleMissingNodeACK(
-									generator.parent as any,
-								)
-							) {
-								resetGenerator();
-								return;
-							} else {
-								resultPromise.reject(
-									sendDataErrorToZWaveError(
-										"callback NOK",
-										generator.parent,
-										e,
-									),
-								);
-							}
+							// The driver may want to retry it, so reset the generator
+							resetGenerator();
+							return;
 						} else {
 							// The generator was prematurely ended by throwing a Message
 							resultPromise.resolve(e as TResponse);

@@ -4,12 +4,14 @@
     -   [Quick Start](getting-started/quickstart.md)
     -   [For Integrators / Why Z-Wave JS?](getting-started/integrators.md)
     -   [Our Philosophy](getting-started/philosophy.md)
+    -   [Frequently Asked Questions](getting-started/faq.md)
     -   [Security S2](getting-started/security-s2.md)
-    -   [Migrating to v6](getting-started/migrating-to-v6.md)
-    -   [Migrating to v7](getting-started/migrating-to-v7.md)
-    -   [Migrating to v8](getting-started/migrating-to-v8.md)
-    -   [Migrating to v9](getting-started/migrating-to-v9.md)
+    -   [Migrating to v11](getting-started/migrating-to-v11.md)
     -   [Migrating to v10](getting-started/migrating-to-v10.md)
+    -   [Migrating to v9](getting-started/migrating-to-v9.md)
+    -   [Migrating to v8](getting-started/migrating-to-v8.md)
+    -   [Migrating to v7](getting-started/migrating-to-v7.md)
+    -   [Migrating to v6](getting-started/migrating-to-v6.md)
     -   [🦎's device review](getting-started/device-review.md)
 
 -   API
@@ -30,12 +32,14 @@
 
     -   [Send custom messages](usage/custom.md)
     -   [External config DB location](usage/external-config.md)
-    -   [Connect to a hosted serial port over TCP](usage/tcp-connection.md)
+    -   [Remote serial port over TCP](usage/tcp-connection.md)
 
 -   Troubleshooting
 
     -   [Overview](troubleshooting/index.md)
     -   [Connectivity issues](troubleshooting/connectivity-issues.md)
+    -   [Problems with 700 series sticks](troubleshooting/otw-upgrade.md)
+    -   [Nonsensical values appear randomly](troubleshooting/nonsensical-values.md)
     -   [Improving the network health](troubleshooting/network-health.md)
     -   [Missing updates from a device](troubleshooting/no-updates.md)
     -   [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)

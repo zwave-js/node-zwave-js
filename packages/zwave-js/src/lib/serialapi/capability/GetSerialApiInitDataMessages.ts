@@ -12,16 +12,16 @@ import {
 	FunctionType,
 	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
 	MessageType,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import {
 	getChipTypeAndVersion,
 	getZWaveChipType,
-	UnknownZWaveChipType,
+	type UnknownZWaveChipType,
 } from "../../controller/ZWaveChipTypes";
 import type { ZWaveApiVersion } from "../_Types";
 

@@ -1,6 +1,6 @@
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CommandClass, CommandClassOptions } from "./CommandClass";
+import { CommandClass, type CommandClassOptions } from "./CommandClass";
 
 /** Defines the static side of an encapsulating command class */
 export interface EncapsulatingCommandClassStatic {

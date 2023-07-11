@@ -1,24 +1,24 @@
 import {
-	MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedCallback,
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
-	INodeQuery,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageOrigin,
 	MessageType,
+	expectedCallback,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	SuccessIndicator,
+	type INodeQuery,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
+	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 

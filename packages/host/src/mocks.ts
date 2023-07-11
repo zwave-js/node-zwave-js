@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
 import {
-	IZWaveNode,
 	MAX_SUPERVISION_SESSION_ID,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type IZWaveNode,
 } from "@zwave-js/core";
 import {
 	createThrowingMap,
@@ -18,8 +18,8 @@ import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
 export interface CreateTestingHostOptions {
 	homeId: ZWaveHost["homeId"];
 	ownNodeId: ZWaveHost["ownNodeId"];
-	getSafeCCVersionForNode: ZWaveHost["getSafeCCVersionForNode"];
-	getSupportedCCVersionForEndpoint?: ZWaveHost["getSupportedCCVersionForEndpoint"];
+	getSafeCCVersion: ZWaveHost["getSafeCCVersion"];
+	getSupportedCCVersion?: ZWaveHost["getSupportedCCVersion"];
 }
 
 export type TestingHost = Overwrite<
@@ -68,10 +68,10 @@ export function createTestingHost(
 				ZWaveErrorCodes.Controller_NodeNotFound,
 			);
 		}),
-		getSafeCCVersionForNode: options.getSafeCCVersionForNode ?? (() => 100),
-		getSupportedCCVersionForEndpoint:
-			options.getSupportedCCVersionForEndpoint ??
-			options.getSafeCCVersionForNode ??
+		getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
+		getSupportedCCVersion:
+			options.getSupportedCCVersion ??
+			options.getSafeCCVersion ??
 			(() => 100),
 		getNextCallbackId: createWrappingCounter(0xff),
 		getNextSupervisionSessionId: createWrappingCounter(

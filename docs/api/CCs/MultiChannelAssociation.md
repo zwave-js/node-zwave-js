@@ -7,7 +7,7 @@
 ### `getGroupCount`
 
 ```ts
-async getGroupCount(): Promise<number | undefined>;
+async getGroupCount(): Promise<MaybeNotKnown<number>>;
 ```
 
 Returns the number of association groups a node supports.

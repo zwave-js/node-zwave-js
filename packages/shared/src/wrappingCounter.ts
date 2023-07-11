@@ -14,8 +14,7 @@ export function createWrappingCounter(
 	}) as {
 		(): number;
 		// Little hack for testing purposes.
-		// TODO: Remove when packages/zwave-js/src/lib/test/driver/nodeAsleepBlockNonceReport.test.ts and packages/zwave-js/src/lib/test/driver/nodeAsleepMessageOrder.test.ts
-		// no longer need this
+		// TODO: Remove when packages/zwave-js/src/lib/test/driver/nodeAsleepBlockNonceReport.test.ts no longer needs this
 		value: number;
 	};
 	ret.value = randomSeed ? Math.round(Math.random() * maxValue) : 0;

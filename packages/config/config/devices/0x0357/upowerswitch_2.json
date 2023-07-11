@@ -1,47 +1,48 @@
 {
-	"manufacturer": "Shenzhen 3nod Acousticlink Co., Ltd.",
+	"manufacturer": "LG U+",
 	"manufacturerId": "0x0357",
 	"label": "UPowerSwitch",
-	"description": "",
+	"description": "2-Button Smart Switch",
 	"devices": [
-		{
-			"productType": "0x0057",
-			"productId": "0x0002",
-			"zwaveAllianceId": 3682
-		},
 		{
 			"productType": "0x0058",
 			"productId": "0x0002",
 			"zwaveAllianceId": 3683
-		},
-		{
-			"productType": "0x0059",
-			"productId": "0x0002",
-			"zwaveAllianceId": 3660
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "PeriodOfReport",
-			"description": "Time period of Multi Level Sensor Report.",
+			"label": "Temperature & Humidity Reporting Interval",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 60,
+			"minValue": 0,
 			"maxValue": 3600,
 			"defaultValue": 600,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "2",
-			"label": "TempSensor",
-			"description": "During the cycle, if the temperature change is greater than the set value, a report of the current temperature value will be immediately issued.",
+			"label": "Temperature Change Report Threshold",
 			"valueSize": 1,
-			"unit": ".1°C",
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 30,
 			"defaultValue": 20,
@@ -49,8 +50,7 @@
 		},
 		{
 			"#": "3",
-			"label": "HumSensor",
-			"description": "During the cycle, if the humidity change is greater than the set value, a report of the current humidity value will be immediately issued.",
+			"label": "Humidity Change Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 5,

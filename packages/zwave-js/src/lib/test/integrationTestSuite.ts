@@ -1,97 +1,24 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { MockController, MockNode, MockNodeOptions } from "@zwave-js/testing";
+import { type DeepPartial } from "@zwave-js/shared";
+import {
+	type MockController,
+	type MockNode,
+	type MockNodeOptions,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import test, { ExecutionContext } from "ava";
+import test, { type ExecutionContext } from "ava";
 import crypto from "crypto";
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
-import {
-	createDefaultMockControllerBehaviors,
-	createDefaultMockNodeBehaviors,
-} from "../../Utils";
 import type { Driver } from "../driver/Driver";
-import {
-	createAndStartDriverWithMockPort,
-	CreateAndStartDriverWithMockPortResult,
-} from "../driver/DriverMock";
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";
+import { prepareDriver, prepareMocks } from "./integrationTestSuiteShared";
 
 // Integration tests need to run in serial, or they might block the serial port on CI
 const testSerial = test.serial.bind(test);
-
-function prepareDriver(
-	cacheDir: string = path.join(__dirname, "cache"),
-	logToFile: boolean = false,
-	additionalOptions: Partial<ZWaveOptions> = {},
-): Promise<CreateAndStartDriverWithMockPortResult> {
-	return createAndStartDriverWithMockPort({
-		...additionalOptions,
-		portAddress: "/tty/FAKE",
-		...(logToFile
-			? {
-					logConfig: {
-						filename: path.join(
-							cacheDir,
-							"logs",
-							"zwavejs_%DATE%.log",
-						),
-						logToFile: true,
-						enabled: true,
-						level: "debug",
-					},
-			  }
-			: {}),
-		securityKeys: {
-			S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
-			S2_Unauthenticated: Buffer.from(
-				"11111111111111111111111111111111",
-				"hex",
-			),
-			S2_Authenticated: Buffer.from(
-				"22222222222222222222222222222222",
-				"hex",
-			),
-			S2_AccessControl: Buffer.from(
-				"33333333333333333333333333333333",
-				"hex",
-			),
-		},
-		storage: {
-			cacheDir: cacheDir,
-			lockDir: path.join(cacheDir, "locks"),
-		},
-	});
-}
-
-function prepareMocks(
-	mockPort: MockPortBinding,
-	nodeCapabilities?: MockNodeOptions["capabilities"],
-): {
-	mockController: MockController;
-	mockNode: MockNode;
-} {
-	const mockController = new MockController({
-		homeId: 0x7e570001,
-		ownNodeId: 1,
-		serial: mockPort,
-	});
-
-	const mockNode = new MockNode({
-		id: 2,
-		controller: mockController,
-		capabilities: nodeCapabilities,
-	});
-	mockController.addNode(mockNode);
-
-	// Apply default behaviors that are required for interacting with the driver correctly
-	mockController.defineBehavior(...createDefaultMockControllerBehaviors());
-	mockNode.defineBehavior(...createDefaultMockNodeBehaviors());
-
-	return { mockController, mockNode };
-}
 
 interface IntegrationTestOptions {
 	/** Enable debugging for this integration tests. When enabled, a driver logfile will be written and the test directory will not be deleted after each test. Default: false */
@@ -113,7 +40,7 @@ interface IntegrationTestOptions {
 		mockController: MockController,
 		mockNode: MockNode,
 	) => Promise<void>;
-	additionalDriverOptions?: Partial<ZWaveOptions>;
+	additionalDriverOptions?: DeepPartial<ZWaveOptions>;
 }
 
 export interface IntegrationTestFn {
@@ -171,10 +98,16 @@ function suite(
 			debug,
 			additionalDriverOptions,
 		));
-		({ mockController, mockNode } = prepareMocks(
-			mockPort,
-			nodeCapabilities,
-		));
+
+		({
+			mockController,
+			mockNodes: [mockNode],
+		} = prepareMocks(mockPort, undefined, [
+			{
+				id: 2,
+				capabilities: nodeCapabilities,
+			},
+		]));
 
 		if (customSetup) {
 			await customSetup(driver, mockController, mockNode);
@@ -184,8 +117,7 @@ function suite(
 			driver.once("driver ready", () => {
 				// Test code goes here
 
-				node = driver.controller.nodes.getOrThrow(mockNode.id);
-				node.once("ready", () => {
+				const onReady = () => {
 					if (clearMessageStatsBeforeTest) {
 						mockNode.clearReceivedControllerFrames();
 						mockNode.clearSentControllerFrames();
@@ -193,7 +125,18 @@ function suite(
 					}
 
 					process.nextTick(resolve);
-				});
+				};
+
+				node = driver.controller.nodes.getOrThrow(mockNode.id);
+
+				if (
+					options.additionalDriverOptions?.testingHooks
+						?.skipNodeInterview
+				) {
+					onReady();
+				} else {
+					node.once("ready", onReady);
+				}
 			});
 
 			continueStartup();

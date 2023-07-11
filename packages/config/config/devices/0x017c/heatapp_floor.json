@@ -2,7 +2,7 @@
 	"manufacturer": "EbV",
 	"manufacturerId": "0x017c",
 	"label": "heatapp! floor",
-	"description": "heatapp! floor is a controller for thermal actuators in underfloor heating installations and is part of the heatapp! system, providing individual circ",
+	"description": "8-channel underfloor heating controller",
 	"devices": [
 		{
 			"productType": "0x0006",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Missing Radio Link time",
+			"label": "Missing Radio Link Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 10,
@@ -26,8 +26,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Relay type",
-			"description": "0 normal open, 1 normal close, 2 switching",
+			"label": "Relay Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -46,5 +45,18 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		"overrideQueries": {
+			// The device has 8 sequential endpoints, but responds with random
+			// garbage when queried for its endpoint indizes
+			"Multi Channel": [
+				{
+					"method": "findEndpoints",
+					"result": [1, 2, 3, 4, 5, 6, 7, 8]
+					// No need to persist values, this is done as part of the interview
+				}
+			]
+		}
+	}
 }

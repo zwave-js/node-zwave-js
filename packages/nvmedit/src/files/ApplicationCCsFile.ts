@@ -1,12 +1,12 @@
 import { CommandClasses } from "@zwave-js/core/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
+	NVMFile,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export interface ApplicationCCsFileOptions extends NVMFileCreationOptions {

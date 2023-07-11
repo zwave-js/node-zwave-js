@@ -1,9 +1,9 @@
-import { BasicCommand } from "@zwave-js/cc";
+import { BasicCommand, SetValueStatus } from "@zwave-js/cc";
 import { BasicCC, BasicCCValues } from "@zwave-js/cc/BasicCC";
 import { CommandClasses, ValueMetadata, type ValueID } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { ExecutionContext, type TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
@@ -81,7 +81,7 @@ test.serial("setValue() issues the correct xyzCCSet command", async (t) => {
 		5,
 	);
 
-	t.true(result);
+	t.is(result.status, SetValueStatus.SuccessUnsupervised);
 	sinon.assert.called(sendMessage);
 
 	assertCC(t, sendMessage.getCall(0).args[0], {
@@ -102,12 +102,14 @@ test.serial(
 		const node = new ZWaveNode(1, driver);
 		const result = await node.setValue(
 			{
+				// @ts-expect-error
 				commandClass: 0xbada55, // this is guaranteed to not be implemented
 				property: "test",
 			},
 			1,
 		);
-		t.false(result);
+		t.is(result.status, SetValueStatus.NotImplemented);
+		t.regex(result.message!, /Command Class 12245589 is not implemented/);
 		node.destroy();
 	},
 );

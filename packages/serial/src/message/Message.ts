@@ -1,12 +1,12 @@
 import {
+	ZWaveError,
+	ZWaveErrorCodes,
 	createReflectionDecorator,
 	getNodeTag,
 	highResTimestamp,
-	IZWaveNode,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type IZWaveNode,
+	type MessageOrCCLogEntry,
+	type MessagePriority,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
@@ -339,6 +339,9 @@ export class Message {
 		// Most messages don't expect an update by default
 		return false;
 	}
+
+	/** Returns a message specific timeout used to wait for an update from the target node */
+	public nodeUpdateTimeout: number | undefined; // Default: use driver timeout
 
 	/** Checks if a message is an expected response for this message */
 	public isExpectedResponse(msg: Message): boolean {

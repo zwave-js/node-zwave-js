@@ -1,4 +1,4 @@
-import ava, { TestFn } from "ava";
+import ava, { type TestFn } from "ava";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { InterviewStage } from "../consts/InterviewStage";
 import {

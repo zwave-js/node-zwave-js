@@ -1,23 +1,23 @@
-import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
+import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
 import {
-	FrameType,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	SinglecastCC,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type FrameType,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
 	MessageType,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 export enum ApplicationCommandStatusFlags {

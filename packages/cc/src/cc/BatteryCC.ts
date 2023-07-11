@@ -6,26 +6,26 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
 	MessagePriority,
+	ValueMetadata,
+	enumValuesToMetadataStates,
 	parseFloatWithScale,
 	validatePayload,
-	ValueMetadata,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
+import { getEnumMemberName, pick, type AllOrNone } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
-	CCCommandOptions,
 	CommandClass,
 	gotDeserializationOptions,
+	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -179,7 +179,7 @@ export const BatteryCCValues = Object.freeze({
 
 @API(CommandClasses.Battery)
 export class BatteryCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: BatteryCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BatteryCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BatteryCommand.Get:
 				return true; // This is mandatory
@@ -189,30 +189,30 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "level":
-			case "isLow":
-			case "chargingStatus":
-			case "rechargeable":
-			case "backup":
-			case "overheating":
-			case "lowFluid":
-			case "rechargeOrReplace":
-			case "lowTemperatureStatus":
-			case "disconnected":
-				return (await this.get())?.[property];
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: BatteryCCAPI, { property }) {
+			switch (property) {
+				case "level":
+				case "isLow":
+				case "chargingStatus":
+				case "rechargeable":
+				case "backup":
+				case "overheating":
+				case "lowFluid":
+				case "rechargeOrReplace":
+				case "lowTemperatureStatus":
+				case "disconnected":
+					return (await this.get())?.[property];
 
-			case "maximumCapacity":
-			case "temperature":
-				return (await this.getHealth())?.[property];
+				case "maximumCapacity":
+				case "temperature":
+					return (await this.getHealth())?.[property];
 
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
@@ -450,12 +450,11 @@ export class BatteryCCReport extends BatteryCC {
 			// Some devices send Notification CC Reports with battery information,
 			// or this information is mapped from legacy V1 alarm values.
 			// We may need to idle the corresponding values when the battery is full
-			const notificationCCVersion =
-				applHost.getSupportedCCVersionForEndpoint(
-					CommandClasses.Notification,
-					this.nodeId as number,
-					this.endpointIndex,
-				);
+			const notificationCCVersion = applHost.getSupportedCCVersion(
+				CommandClasses.Notification,
+				this.nodeId as number,
+				this.endpointIndex,
+			);
 			if (
 				// supported
 				notificationCCVersion > 0 &&

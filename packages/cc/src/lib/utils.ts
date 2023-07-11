@@ -1,11 +1,11 @@
 import {
-	actuatorCCs,
 	CommandClasses,
-	getCCName,
-	IZWaveNode,
 	ZWaveError,
 	ZWaveErrorCodes,
+	actuatorCCs,
+	getCCName,
 	type IZWaveEndpoint,
+	type IZWaveNode,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
 import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
@@ -21,10 +21,11 @@ import {
 	MultiChannelAssociationCCValues,
 } from "../cc/MultiChannelAssociationCC";
 import { CCAPI } from "./API";
-import type {
-	AssociationAddress,
-	AssociationGroup,
-	EndpointAddress,
+import {
+	AssociationGroupInfoProfile,
+	type AssociationAddress,
+	type AssociationGroup,
+	type EndpointAddress,
 } from "./_Types";
 
 export function getAssociations(
@@ -586,6 +587,30 @@ export async function configureLifelineAssociations(
 	}
 
 	const lifelineGroups = getLifelineGroupIds(applHost, node);
+	if (lifelineGroups.length === 0) {
+		// We can look for the General Lifeline AGI profile as a last resort
+		if (
+			endpoint.supportsCC(CommandClasses["Association Group Information"])
+		) {
+			const agiAPI = CCAPI.create(
+				CommandClasses["Association Group Information"],
+				applHost,
+				endpoint,
+			);
+
+			// The lifeline MUST be group 1
+			const lifeline = await agiAPI
+				.getGroupInfo(1, true)
+				.catch(() => undefined);
+			if (
+				lifeline?.profile ===
+				AssociationGroupInfoProfile["General: Lifeline"]
+			) {
+				lifelineGroups.push(1);
+			}
+		}
+	}
+
 	if (lifelineGroups.length === 0) {
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: endpoint.index,

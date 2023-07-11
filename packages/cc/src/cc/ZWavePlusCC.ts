@@ -1,11 +1,9 @@
 import {
 	CommandClasses,
-	getCCName,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
 	validatePayload,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
@@ -68,7 +66,7 @@ export const ZWavePlusCCValues = Object.freeze({
 
 @API(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: ZWavePlusCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ZWavePlusCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ZWavePlusCommand.Get:
 			case ZWavePlusCommand.Report:
@@ -155,120 +153,6 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 				message: logMessage,
 				direction: "inbound",
 			});
-
-			if (zwavePlusResponse.zwavePlusVersion >= 2) {
-				// A Z-Wave Plus v2 node MUST support:
-				// - Association, version 2
-				// - Association Group Information
-				// - Device Reset Locally
-				// - Firmware Update Meta Data, version 5
-				// - Indicator, version 3
-				// - Manufacturer Specific
-				// - Multi Channel Association, version 3
-				// - Powerlevel
-				// - Security 2
-				// - Supervision
-				// - Transport Service, version 2
-				// - Version, version 2
-				// - Z-Wave Plus Info, version 2
-				//
-				// All Multi Channel End Points MUST support:
-				// - Association, version 2
-				// - Association Group Information
-				// - Multi Channel Association, version 3
-				// - Supervision
-				// - Z-Wave Plus Info, version 2
-
-				// It has been found that some devices are not advertising all of these (looking at you CTT!),
-				// so we force-add support here:
-				const maybeAddCC = (
-					endpoint: IZWaveEndpoint,
-					cc: CommandClasses,
-					version: number,
-				) => {
-					if (
-						!endpoint.supportsCC(cc) ||
-						endpoint.getCCVersion(cc) < version
-					) {
-						applHost.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `force-adding support for mandatory CC ${getCCName(
-								cc,
-							)}${version > 1 ? ` v${version}` : ""}`,
-							level: "warn",
-						});
-
-						endpoint.addCC(cc, {
-							isSupported: true,
-							version: Math.max(
-								endpoint.getCCVersion(cc),
-								version,
-							),
-						});
-					}
-				};
-
-				const mandatoryCCs: { cc: CommandClasses; version: number }[] =
-					endpoint.index === 0
-						? [
-								{ cc: CommandClasses.Association, version: 2 },
-								{
-									cc: CommandClasses[
-										"Association Group Information"
-									],
-									version: 1,
-								},
-								{
-									cc: CommandClasses["Device Reset Locally"],
-									version: 1,
-								},
-								{
-									cc: CommandClasses[
-										"Firmware Update Meta Data"
-									],
-									version: 5,
-								},
-								{ cc: CommandClasses.Indicator, version: 3 },
-								{
-									cc: CommandClasses["Manufacturer Specific"],
-									version: 1,
-								},
-								{
-									cc: CommandClasses[
-										"Multi Channel Association"
-									],
-									version: 3,
-								},
-								{ cc: CommandClasses.Powerlevel, version: 1 },
-								{ cc: CommandClasses.Security, version: 1 },
-								{ cc: CommandClasses.Supervision, version: 1 },
-								{
-									cc: CommandClasses["Transport Service"],
-									version: 2,
-								},
-								{ cc: CommandClasses.Version, version: 2 },
-						  ]
-						: [
-								{ cc: CommandClasses.Association, version: 2 },
-								{
-									cc: CommandClasses[
-										"Association Group Information"
-									],
-									version: 1,
-								},
-								{
-									cc: CommandClasses[
-										"Multi Channel Association"
-									],
-									version: 3,
-								},
-								{ cc: CommandClasses.Supervision, version: 1 },
-						  ];
-
-				for (const { cc, version } of mandatoryCCs) {
-					maybeAddCC(endpoint, cc, version);
-				}
-			}
 		}
 
 		// Remember that the interview is complete

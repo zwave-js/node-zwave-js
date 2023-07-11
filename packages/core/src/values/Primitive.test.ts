@@ -2,6 +2,7 @@ import test from "ava";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
 import {
+	UNKNOWN_STATE,
 	encodeBitMask,
 	encodeFloatWithScale,
 	encodePartial,
@@ -13,8 +14,6 @@ import {
 	parseMaybeNumber,
 	parseNumber,
 	parsePartial,
-	unknownBoolean,
-	unknownNumber,
 } from "./Primitive";
 
 test("parseBoolean() -> should return false when the value is 0", (t) => {
@@ -38,7 +37,7 @@ test("parseMaybeBoolean() -> should return true when the value is 0xff", (t) => 
 });
 
 test("parseMaybeBoolean() -> should return unknown when the value is 0xfe", (t) => {
-	t.is(parseMaybeBoolean(0xfe), unknownBoolean);
+	t.is(parseMaybeBoolean(0xfe), UNKNOWN_STATE);
 });
 
 test("parseMaybeBoolean() -> should return undefined otherwise", (t) => {
@@ -70,7 +69,7 @@ test("parseMaybeNumber() -> should return 99 when the value is 0xff", (t) => {
 });
 
 test("parseMaybeNumber() -> should return unknown when the value is 0xfe", (t) => {
-	t.is(parseMaybeNumber(0xfe), unknownNumber);
+	t.is(parseMaybeNumber(0xfe), UNKNOWN_STATE);
 });
 
 test("parseMaybeNumber() -> should return undefined otherwise", (t) => {

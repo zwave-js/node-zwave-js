@@ -1,4 +1,4 @@
-import { JSONObject, num2hex } from "@zwave-js/shared/safe";
+import { num2hex, type JSONObject } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 

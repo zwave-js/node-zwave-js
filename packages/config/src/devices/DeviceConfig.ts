@@ -2,10 +2,8 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
 	formatId,
-	JSONObject,
-	ObjectKeyMap,
-	ReadonlyObjectKeyMap,
 	stringify,
+	type JSONObject,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
@@ -20,20 +18,24 @@ import {
 	ConditionalAssociationConfig,
 	type AssociationConfig,
 } from "./AssociationConfig";
-import { CompatConfig, ConditionalCompatConfig } from "./CompatConfig";
+import { ConditionalCompatConfig, type CompatConfig } from "./CompatConfig";
 import { evaluateDeep, validateCondition } from "./ConditionalItem";
 import {
-	ConditionalPrimitive,
 	parseConditionalPrimitive,
+	type ConditionalPrimitive,
 } from "./ConditionalPrimitive";
 import {
 	ConditionalDeviceMetadata,
 	type DeviceMetadata,
 } from "./DeviceMetadata";
-import { ConditionalEndpointConfig, EndpointConfig } from "./EndpointConfig";
 import {
-	ConditionalParamInformation,
-	ParamInformation,
+	ConditionalEndpointConfig,
+	type EndpointConfig,
+} from "./EndpointConfig";
+import {
+	parseConditionalParamInformationMap,
+	type ConditionalParamInfoMap,
+	type ParamInfoMap,
 } from "./ParamInformation";
 import type { DeviceID, FirmwareVersionRange } from "./shared";
 
@@ -59,16 +61,6 @@ export interface FulltextDeviceConfigIndexEntry {
 	rootDir?: string;
 	filename: string;
 }
-
-export type ConditionalParamInfoMap = ReadonlyObjectKeyMap<
-	{ parameter: number; valueBitMask?: number },
-	ConditionalParamInformation[]
->;
-
-export type ParamInfoMap = ReadonlyObjectKeyMap<
-	{ parameter: number; valueBitMask?: number },
-	ParamInformation
->;
 
 export const embeddedDevicesDir = path.join(configDir, "devices");
 const fulltextIndexPath = path.join(embeddedDevicesDir, "fulltext_index.json");
@@ -479,7 +471,7 @@ found non-numeric endpoint index "${key}" in endpoints`,
 				const epIndex = parseInt(key, 10);
 				endpoints.set(
 					epIndex,
-					new ConditionalEndpointConfig(filename, epIndex, ep as any),
+					new ConditionalEndpointConfig(this, epIndex, ep as any),
 				);
 			}
 			this.endpoints = endpoints;
@@ -522,135 +514,10 @@ found non-numeric group id "${key}" in associations`,
 		}
 
 		if (definition.paramInformation != undefined) {
-			const paramInformation = new ObjectKeyMap<
-				{ parameter: number; valueBitMask?: number },
-				ConditionalParamInformation[]
-			>();
-
-			if (isArray(definition.paramInformation)) {
-				// Defining paramInformation as an array is the preferred variant now.
-
-				// Check that every param has a param number
-				if (
-					!definition.paramInformation.every(
-						(entry: any) => "#" in entry,
-					)
-				) {
-					throwInvalidConfig(
-						`device`,
-						`packages/config/config/devices/${filename}: 
-required property "#" missing in at least one entry of paramInformation`,
-					);
-				}
-
-				// And a valid $if condition
-				for (const entry of definition.paramInformation) {
-					validateCondition(
-						filename,
-						entry,
-						`At least one entry of paramInformation contains an`,
-					);
-				}
-
-				for (const paramDefinition of definition.paramInformation) {
-					const { ["#"]: paramNo, ...defn } = paramDefinition;
-					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(
-						paramNo,
-					);
-					if (!match) {
-						throwInvalidConfig(
-							`device`,
-							`packages/config/config/devices/${filename}: 
-found invalid param number "${paramNo}" in paramInformation`,
-						);
-					}
-
-					const keyNum = parseInt(match[1], 10);
-					const bitMask =
-						match[2] != undefined
-							? parseInt(match[2], 16)
-							: undefined;
-					const key = { parameter: keyNum, valueBitMask: bitMask };
-
-					if (!paramInformation.has(key))
-						paramInformation.set(key, []);
-					paramInformation
-						.get(key)!
-						.push(
-							new ConditionalParamInformation(
-								this,
-								keyNum,
-								bitMask,
-								defn,
-							),
-						);
-				}
-			} else if (
-				(process.env.NODE_ENV !== "test" || !!process.env.CI) &&
-				isObject(definition.paramInformation)
-			) {
-				// Prior to v8.1.0, paramDefinition was an object
-				// We need to support parsing legacy files because users might have custom configs
-				// However, we don't allow this on CI or during tests/lint
-
-				for (const [key, paramDefinition] of Object.entries(
-					definition.paramInformation,
-				)) {
-					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(key);
-					if (!match) {
-						throwInvalidConfig(
-							`device`,
-							`packages/config/config/devices/${filename}:
-found invalid param number "${key}" in paramInformation`,
-						);
-					}
-
-					if (
-						!isObject(paramDefinition) &&
-						!(
-							isArray(paramDefinition) &&
-							(paramDefinition as any[]).every((p) => isObject(p))
-						)
-					) {
-						throwInvalidConfig(
-							`device`,
-							`packages/config/config/devices/${filename}:
-paramInformation "${key}" is invalid: Every entry must either be an object or an array of objects!`,
-						);
-					}
-
-					// Normalize to an array
-					const defns: any[] = isArray(paramDefinition)
-						? paramDefinition
-						: [paramDefinition];
-
-					const keyNum = parseInt(match[1], 10);
-					const bitMask =
-						match[2] != undefined
-							? parseInt(match[2], 16)
-							: undefined;
-					paramInformation.set(
-						{ parameter: keyNum, valueBitMask: bitMask },
-						defns.map(
-							(def) =>
-								new ConditionalParamInformation(
-									this,
-									keyNum,
-									bitMask,
-									def,
-								),
-						),
-					);
-				}
-			} else {
-				throwInvalidConfig(
-					`device`,
-					`packages/config/config/devices/${filename}:
-paramInformation must be an array!`,
-				);
-			}
-
-			this.paramInformation = paramInformation;
+			this.paramInformation = parseConditionalParamInformationMap(
+				definition,
+				this,
+			);
 		}
 
 		if (definition.proprietary != undefined) {

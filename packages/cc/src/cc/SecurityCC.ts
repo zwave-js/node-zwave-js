@@ -1,26 +1,26 @@
 import {
 	CommandClasses,
+	EncapsulationFlags,
+	MessagePriority,
+	SecurityClass,
+	TransmitOptions,
+	ZWaveError,
+	ZWaveErrorCodes,
 	computeMAC,
 	decryptAES128OFB,
-	EncapsulationFlags,
 	encodeCCList,
 	encryptAES128OFB,
 	generateAuthKey,
 	generateEncryptionKey,
 	getCCName,
 	isTransmissionError,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	MessageRecord,
 	parseCCList,
-	SecurityClass,
-	SecurityManager,
-	TransmitOptions,
 	validatePayload,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SecurityManager,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -81,7 +81,7 @@ const HALF_NONCE_SIZE = 8;
 // want to pay the cost of validating each call
 @API(CommandClasses.Security)
 export class SecurityCCAPI extends PhysicalCCAPI {
-	public supportsCommand(_cmd: SecurityCommand): Maybe<boolean> {
+	public supportsCommand(_cmd: SecurityCommand): MaybeNotKnown<boolean> {
 		// All commands are mandatory
 		return true;
 	}
@@ -733,11 +733,8 @@ export class SecurityCCSchemeReport extends SecurityCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
-		validatePayload(
-			this.payload.length >= 1,
-			// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
-			(this.payload[0] & 0b1) === 0,
-		);
+		validatePayload(this.payload.length >= 1);
+		// The including controller MUST NOT perform any validation of the Supported Security Schemes byte
 	}
 }
 

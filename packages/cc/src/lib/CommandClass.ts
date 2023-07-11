@@ -1,35 +1,35 @@
 import {
-	BroadcastCC,
 	CommandClasses,
 	EncapsulationFlags,
-	FrameType,
-	getCCName,
-	ICommandClass,
-	isZWaveError,
-	IZWaveEndpoint,
-	IZWaveNode,
-	MessageOrCCLogEntry,
-	MessageRecord,
-	MulticastCC,
-	MulticastDestination,
 	NODE_ID_BROADCAST,
-	parseCCId,
-	SinglecastCC,
-	ValueDB,
-	ValueID,
-	valueIdToString,
-	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	getCCName,
+	isZWaveError,
+	parseCCId,
+	valueIdToString,
+	type BroadcastCC,
+	type FrameType,
+	type ICommandClass,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type MulticastCC,
+	type MulticastDestination,
+	type SinglecastCC,
+	type ValueDB,
+	type ValueID,
+	type ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
 	buffer2hex,
 	getEnumMemberName,
-	JSONObject,
 	num2hex,
 	staticExtends,
+	type JSONObject,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { ValueIDProperties } from "./API";
@@ -45,19 +45,19 @@ import {
 	getImplementedVersion,
 } from "./CommandClassDecorators";
 import {
-	EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
+	type EncapsulatingCommandClass,
 } from "./EncapsulatingCommandClass";
 import {
-	ICommandClassContainer,
 	isCommandClassContainer,
+	type ICommandClassContainer,
 } from "./ICommandClassContainer";
 import {
-	CCValue,
 	defaultCCValueOptions,
-	DynamicCCValue,
-	StaticCCValue,
+	type CCValue,
+	type DynamicCCValue,
+	type StaticCCValue,
 } from "./Values";
 
 export type CommandClassDeserializationOptions = {
@@ -150,6 +150,9 @@ export class CommandClass implements ICommandClass {
 			} else {
 				this.nodeId = options.nodeId;
 			}
+
+			this.frameType = options.frameType;
+
 			({
 				ccId: this.ccId,
 				ccCommand: this.ccCommand,
@@ -171,13 +174,13 @@ export class CommandClass implements ICommandClass {
 		if (options.origin !== MessageOrigin.Host && this.isSinglecast()) {
 			try {
 				// For singlecast CCs, set the CC version as high as possible
-				this.version = this.host.getSafeCCVersionForNode(
+				this.version = this.host.getSafeCCVersion(
 					this.ccId,
 					this.nodeId,
 					this.endpointIndex,
 				);
 				// But remember which version the node supports
-				this._knownVersion = this.host.getSupportedCCVersionForEndpoint(
+				this._knownVersion = this.host.getSupportedCCVersion(
 					this.ccId,
 					this.nodeId,
 					this.endpointIndex,
@@ -258,6 +261,9 @@ export class CommandClass implements ICommandClass {
 
 	/** Contains a reference to the encapsulating CC if this CC is encapsulated */
 	public encapsulatingCC?: EncapsulatingCommandClass;
+
+	/** The type of Z-Wave frame this CC was sent with */
+	public readonly frameType?: FrameType;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
@@ -907,8 +913,8 @@ export class CommandClass implements ICommandClass {
 				valueDB.setMetadata(valueId, value.meta);
 			}
 
-			// The value only gets written if it is not undefined
-			if (sourceValue == undefined) continue;
+			// The value only gets written if it is not undefined. null is a valid value!
+			if (sourceValue === undefined) continue;
 
 			valueDB.setValue(valueId, sourceValue, {
 				stateful: value.options.stateful,

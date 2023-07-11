@@ -2,11 +2,14 @@
 // with support for emitting events on the written side
 
 import {
-	ErrorCallback,
-	OpenOptions,
 	SerialPortStream,
+	type ErrorCallback,
+	type OpenOptions,
 } from "@serialport/stream";
-import { MockBinding, MockBindingInterface } from "./SerialPortBindingMock";
+import {
+	MockBinding,
+	type MockBindingInterface,
+} from "./SerialPortBindingMock";
 
 export type SerialPortMockOpenOptions = Omit<
 	OpenOptions<MockBindingInterface>,

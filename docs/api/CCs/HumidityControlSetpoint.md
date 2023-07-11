@@ -9,7 +9,7 @@
 ```ts
 async get(
 	setpointType: HumidityControlSetpointType,
-): Promise<HumidityControlSetpointValue | undefined>;
+): Promise<MaybeNotKnown<HumidityControlSetpointValue>>;
 ```
 
 ### `set`
@@ -27,14 +27,14 @@ async set(
 ```ts
 async getCapabilities(
 	setpointType: HumidityControlSetpointType,
-): Promise<HumidityControlSetpointCapabilities | undefined>;
+): Promise<MaybeNotKnown<HumidityControlSetpointCapabilities>>;
 ```
 
 ### `getSupportedSetpointTypes`
 
 ```ts
 async getSupportedSetpointTypes(): Promise<
-	readonly HumidityControlSetpointType[] | undefined
+	MaybeNotKnown<readonly HumidityControlSetpointType[]>
 >;
 ```
 
@@ -43,7 +43,7 @@ async getSupportedSetpointTypes(): Promise<
 ```ts
 async getSupportedScales(
 	setpointType: HumidityControlSetpointType,
-): Promise<readonly Scale[] | undefined>;
+): Promise<MaybeNotKnown<readonly Scale[]>>;
 ```
 
 ## Humidity Control Setpoint CC values

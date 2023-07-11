@@ -1,19 +1,18 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	unknownBoolean,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
@@ -26,15 +25,15 @@ import {
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	PhysicalCCAPI,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -242,7 +241,7 @@ export function userCodeToLogString(userCode: string | Buffer): string {
 
 @API(CommandClasses["User Code"])
 export class UserCodeCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: UserCodeCommand): Maybe<boolean> {
+	public supportsCommand(cmd: UserCodeCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case UserCodeCommand.Get:
 			case UserCodeCommand.Set:
@@ -259,134 +258,53 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			case UserCodeCommand.MasterCodeSet:
 			case UserCodeCommand.MasterCodeGet: {
 				if (this.version < 2) return false;
-				return (
-					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						UserCodeCCValues.supportsMasterCode.endpoint(
-							this.endpoint.index,
-						),
-					) ?? unknownBoolean
+				return this.tryGetValueDB()?.getValue<boolean>(
+					UserCodeCCValues.supportsMasterCode.endpoint(
+						this.endpoint.index,
+					),
 				);
 			}
 
 			case UserCodeCommand.UserCodeChecksumGet: {
 				if (this.version < 2) return false;
-				return (
-					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						UserCodeCCValues.supportsUserCodeChecksum.endpoint(
-							this.endpoint.index,
-						),
-					) ?? unknownBoolean
+				return this.tryGetValueDB()?.getValue<boolean>(
+					UserCodeCCValues.supportsUserCodeChecksum.endpoint(
+						this.endpoint.index,
+					),
 				);
 			}
 		}
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		let result: SupervisionResult | undefined;
-		if (property === "keypadMode") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			result = await this.setKeypadMode(value);
-		} else if (property === "masterCode") {
-			if (typeof value !== "string") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"string",
-					typeof value,
-				);
-			}
-			result = await this.setMasterCode(value);
-		} else if (property === "userIdStatus") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-			}
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-
-			if (value === UserIDStatus.Available) {
-				// Clear Code
-				result = await this.clear(propertyKey);
-			} else {
-				// We need to set the user code along with the status
-				const userCode = this.getValueDB().getValue<string>(
-					UserCodeCCValues.userCode(propertyKey).endpoint(
-						this.endpoint.index,
-					),
-				);
-				result = await this.set(propertyKey, value, userCode!);
-			}
-		} else if (property === "userCode") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-			}
-			if (typeof value !== "string" && !Buffer.isBuffer(value)) {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"string or Buffer",
-					typeof value,
-				);
-			}
-
-			// We need to set the user id status along with the code
-			let userIdStatus = this.getValueDB().getValue<UserIDStatus>(
-				UserCodeCCValues.userIdStatus(propertyKey).endpoint(
-					this.endpoint.index,
-				),
-			);
-			if (
-				userIdStatus === UserIDStatus.Available ||
-				userIdStatus == undefined
-			) {
-				userIdStatus = UserIDStatus.Enabled;
-			}
-			result = await this.set(propertyKey, userIdStatus as any, value);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-
-		// Verify the change after a short delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			this.schedulePoll({ property, propertyKey }, value, {
-				transition: "fast",
-			});
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "keypadMode":
-				return this.getKeypadMode();
-			case "masterCode":
-				return this.getMasterCode();
-			case "userIdStatus":
-			case "userCode": {
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: UserCodeCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			let result: SupervisionResult | undefined;
+			if (property === "keypadMode") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				result = await this.setKeypadMode(value);
+			} else if (property === "masterCode") {
+				if (typeof value !== "string") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"string",
+						typeof value,
+					);
+				}
+				result = await this.setMasterCode(value);
+			} else if (property === "userIdStatus") {
 				if (propertyKey == undefined) {
 					throwMissingPropertyKey(this.ccId, property);
 				} else if (typeof propertyKey !== "number") {
@@ -396,14 +314,105 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						propertyKey,
 					);
 				}
-				return (await this.get(propertyKey))?.[property];
-			}
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
 
-	public async getUsersCount(): Promise<number | undefined> {
+				if (value === UserIDStatus.Available) {
+					// Clear Code
+					result = await this.clear(propertyKey);
+				} else {
+					// We need to set the user code along with the status
+					const userCode = this.getValueDB().getValue<string>(
+						UserCodeCCValues.userCode(propertyKey).endpoint(
+							this.endpoint.index,
+						),
+					);
+					result = await this.set(propertyKey, value, userCode!);
+				}
+			} else if (property === "userCode") {
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				if (typeof value !== "string" && !Buffer.isBuffer(value)) {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"string or Buffer",
+						typeof value,
+					);
+				}
+
+				// We need to set the user id status along with the code
+				let userIdStatus = this.getValueDB().getValue<UserIDStatus>(
+					UserCodeCCValues.userIdStatus(propertyKey).endpoint(
+						this.endpoint.index,
+					),
+				);
+				if (
+					userIdStatus === UserIDStatus.Available ||
+					userIdStatus == undefined
+				) {
+					userIdStatus = UserIDStatus.Enabled;
+				}
+				result = await this.set(
+					propertyKey,
+					userIdStatus as any,
+					value,
+				);
+			} else {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+
+			// Verify the change after a short delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property, propertyKey }, value, {
+					transition: "fast",
+				});
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: UserCodeCCAPI, { property, propertyKey }) {
+			switch (property) {
+				case "keypadMode":
+					return this.getKeypadMode();
+				case "masterCode":
+					return this.getMasterCode();
+				case "userIdStatus":
+				case "userCode": {
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
+					return (await this.get(propertyKey))?.[property];
+				}
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
+
+	public async getUsersCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UsersNumberGet,
@@ -424,12 +433,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	public async get(
 		userId: number,
 		multiple?: false,
-	): Promise<Pick<UserCode, "userIdStatus" | "userCode"> | undefined>;
+	): Promise<MaybeNotKnown<Pick<UserCode, "userIdStatus" | "userCode">>>;
 	public async get(
 		userId: number,
 		multiple: true,
 	): Promise<
-		{ userCodes: readonly UserCode[]; nextUserId: number } | undefined
+		MaybeNotKnown<{ userCodes: readonly UserCode[]; nextUserId: number }>
 	>;
 
 	@validateArgs()
@@ -488,7 +497,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		>,
 		userCode: string | Buffer,
 	): Promise<SupervisionResult | undefined> {
-		if (this.version > 1 || userId > 255) {
+		if (userId > 255) {
 			return this.setMany([{ userId, userIdStatus, userCode }]);
 		}
 
@@ -688,7 +697,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	public async getKeypadMode(): Promise<KeypadMode | undefined> {
+	public async getKeypadMode(): Promise<MaybeNotKnown<KeypadMode>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.KeypadModeGet,
@@ -744,7 +753,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getMasterCode(): Promise<string | undefined> {
+	public async getMasterCode(): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeGet,
@@ -811,7 +820,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getUserCodeChecksum(): Promise<number | undefined> {
+	public async getUserCodeChecksum(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UserCodeChecksumGet,
@@ -1007,7 +1016,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedUsersCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): number | undefined {
+	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(UserCodeCCValues.supportedUsers.endpoint(endpoint.index));
@@ -1020,7 +1029,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedKeypadModesCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): KeypadMode[] | undefined {
+	): MaybeNotKnown<KeypadMode[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1035,7 +1044,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedUserIDStatusesCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): UserIDStatus[] | undefined {
+	): MaybeNotKnown<UserIDStatus[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1052,7 +1061,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedASCIICharsCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): string | undefined {
+	): MaybeNotKnown<string> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1102,7 +1111,7 @@ export class UserCodeCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		userId: number,
-	): UserIDStatus | undefined {
+	): MaybeNotKnown<UserIDStatus> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<UserIDStatus>(
@@ -1118,7 +1127,7 @@ export class UserCodeCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 		userId: number,
-	): string | Buffer | undefined {
+	): MaybeNotKnown<string | Buffer> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<string | Buffer>(

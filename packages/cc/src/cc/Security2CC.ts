@@ -1,5 +1,13 @@
 import {
 	CommandClasses,
+	MPANState,
+	MessagePriority,
+	SECURITY_S2_AUTH_TAG_LENGTH,
+	SPANState,
+	SecurityClass,
+	TransmitOptions,
+	ZWaveError,
+	ZWaveErrorCodes,
 	decryptAES128CCM,
 	encodeBitMask,
 	encryptAES128CCM,
@@ -7,30 +15,22 @@ import {
 	highResTimestamp,
 	isTransmissionError,
 	isZWaveError,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	MessageRecord,
-	MPANState,
 	parseBitMask,
 	parseCCList,
-	S2SecurityClass,
-	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
-	SecurityManager2,
-	SECURITY_S2_AUTH_TAG_LENGTH,
-	SPANState,
-	SPANTableEntry,
-	TransmitOptions,
 	validatePayload,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type S2SecurityClass,
+	type SPANTableEntry,
+	type SecurityManager2,
 } from "@zwave-js/core";
 import {
 	EncapsulationFlags,
-	encodeCCList,
 	NODE_ID_BROADCAST,
+	encodeCCList,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
@@ -56,12 +56,12 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
-	isValidExtension,
 	MGRPExtension,
 	MOSExtension,
 	MPANExtension,
-	Security2Extension,
 	SPANExtension,
+	Security2Extension,
+	isValidExtension,
 } from "../lib/Security2/Extension";
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "../lib/Security2/shared";
 import { Security2Command } from "../lib/_Types";
@@ -146,13 +146,14 @@ interface DecryptionResult {
 	authOK: boolean;
 	key?: Buffer;
 	iv?: Buffer;
+	securityClass: SecurityClass | undefined;
 }
 
 // @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
 @API(CommandClasses["Security 2"])
 export class Security2CCAPI extends CCAPI {
-	public supportsCommand(_cmd: Security2Command): Maybe<boolean> {
+	public supportsCommand(_cmd: Security2Command): MaybeNotKnown<boolean> {
 		// All commands are mandatory
 		return true;
 	}
@@ -313,7 +314,7 @@ export class Security2CCAPI extends CCAPI {
 			| SecurityClass.S2_AccessControl
 			| SecurityClass.S2_Authenticated
 			| SecurityClass.S2_Unauthenticated,
-	): Promise<CommandClasses[] | undefined> {
+	): Promise<MaybeNotKnown<CommandClasses[]>> {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.CommandsSupportedGet,
@@ -380,6 +381,7 @@ export class Security2CCAPI extends CCAPI {
 				"supportedKEXSchemes",
 				"supportedECDHProfiles",
 				"requestedKeys",
+				"_reserved",
 			]);
 		}
 	}
@@ -751,7 +753,7 @@ export class Security2CC extends CommandClass {
 		host: ZWaveHost,
 		cc: CommandClass,
 		options?: {
-			securityClass?: SecurityClass;
+			securityClass?: S2SecurityClass;
 			multicastOutOfSync?: boolean;
 			multicastGroupId?: number;
 			verifyDelivery?: boolean;
@@ -791,7 +793,7 @@ export class Security2CC extends CommandClass {
 
 interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
 	/** Can be used to override the default security class for the command */
-	securityClass?: SecurityClass;
+	securityClass?: S2SecurityClass;
 	extensions?: Security2Extension[];
 	encapsulated?: CommandClass;
 	verifyDelivery?: boolean;
@@ -1012,7 +1014,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						ciphertext,
 						authData,
 						authTag,
-						securityClass,
 						spanState,
 					);
 			}
@@ -1021,12 +1022,19 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			let authOK = false;
 			let key: Buffer | undefined;
 			let iv: Buffer | undefined;
+			let decryptionSecurityClass: SecurityClass | undefined;
 
 			// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
 			// the Receiver SHOULD try decrypting the message with one or more of the following SPAN values,
 			// stopping when decryption is successful or the maximum number of iterations is reached.
 			for (let i = 0; i < DECRYPT_ATTEMPTS; i++) {
-				({ plaintext, authOK, key, iv } = decrypt());
+				({
+					plaintext,
+					authOK,
+					key,
+					iv,
+					securityClass: decryptionSecurityClass,
+				} = decrypt());
 				if (!!authOK && !!plaintext) break;
 				// No need to try further SPANs if we just got the sender's EI
 				if (!!this.getSenderEI()) break;
@@ -1058,8 +1066,26 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			}
 
+			// Remember which security class was used to decrypt this message, so we can discard it later
+			this.securityClass = decryptionSecurityClass;
+
 			offset = 0;
 			if (hasEncryptedExtensions) parseExtensions(plaintext);
+
+			// If the MPAN extension was received, store the MPAN
+			if (!ctx.isMulticast) {
+				const mpanExtension = this.getMPANExtension();
+				if (mpanExtension) {
+					this.host.securityManager2.storePeerMPAN(
+						sendingNodeId,
+						mpanExtension.groupId,
+						{
+							type: MPANState.MPAN,
+							currentMPAN: mpanExtension.innerMPANState,
+						},
+					);
+				}
+			}
 
 			// Not every S2 message includes an encapsulated CC
 			const decryptedCCBytes = plaintext.slice(offset);
@@ -1084,7 +1110,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			}
 
-			this._securityClass = options.securityClass;
+			this.securityClass = options.securityClass;
 			if (options.encapsulated) {
 				this.encapsulated = options.encapsulated;
 				options.encapsulated.encapsulatingCC = this as any;
@@ -1105,7 +1131,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 	}
 
-	private _securityClass?: SecurityClass;
+	public readonly securityClass?: SecurityClass;
 
 	// Only used for testing/debugging purposes
 	private key?: Buffer;
@@ -1183,6 +1209,12 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		return mgrpExtension?.groupId;
 	}
 
+	private getMPANExtension(): MPANExtension | undefined {
+		return this.extensions.find(
+			(e): e is MPANExtension => e instanceof MPANExtension,
+		);
+	}
+
 	public hasMOSExtension(): boolean {
 		return this.extensions.some((e) => e instanceof MOSExtension);
 	}
@@ -1227,7 +1259,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			} else {
 				const securityClass =
-					this._securityClass ??
+					this.securityClass ??
 					this.host.getHighestSecurityClass(receiverNodeId);
 
 				if (securityClass == undefined) {
@@ -1308,9 +1340,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			iv = this.host.securityManager2.nextNonce(this.nodeId, true);
 			const { keyCCM } =
 				// Prefer the overridden security class if it was given
-				this._securityClass != undefined
+				this.securityClass != undefined
 					? this.host.securityManager2.getKeysForSecurityClass(
-							this._securityClass,
+							this.securityClass,
 					  )
 					: this.host.securityManager2.getKeysForNode(this.nodeId);
 			key = keyCCM;
@@ -1393,6 +1425,27 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				message["auth tag"] = buffer2hex(this.authTag);
 			}
 		}
+
+		if (this.isSinglecast()) {
+			// TODO: This is ugly, we should probably do this in the constructor or so
+			let securityClass = this.securityClass;
+			if (securityClass == undefined) {
+				const spanState = this.host.securityManager2.getSPANState(
+					this.nodeId,
+				);
+				if (spanState.type === SPANState.SPAN) {
+					securityClass = spanState.securityClass;
+				}
+			}
+
+			if (securityClass != undefined) {
+				message["security class"] = getEnumMemberName(
+					SecurityClass,
+					securityClass,
+				);
+			}
+		}
+
 		return {
 			...super.toLogEntry(applHost),
 			message,
@@ -1405,16 +1458,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		ciphertext: Buffer,
 		authData: Buffer,
 		authTag: Buffer,
-		securityClass: SecurityClass | undefined,
 		spanState: SPANTableEntry & {
 			type: SPANState.SPAN | SPANState.LocalEI;
 		},
-	): {
-		plaintext: Buffer;
-		authOK: boolean;
-		key?: Buffer;
-		iv?: Buffer;
-	} {
+	): DecryptionResult {
 		const decryptWithNonce = (nonce: Buffer) => {
 			const { keyCCM: key } =
 				this.host.securityManager2.getKeysForNode(sendingNodeId);
@@ -1449,14 +1496,20 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			) {
 				const nonce = spanState.currentSPAN.nonce;
 				spanState.currentSPAN = undefined;
-				return decryptWithNonce(nonce);
+				return {
+					...decryptWithNonce(nonce),
+					securityClass: spanState.securityClass,
+				};
 			} else {
 				// forgetting the current SPAN shouldn't be necessary but better be safe than sorry
 				spanState.currentSPAN = undefined;
 			}
 
 			// This can only happen if the security class is known
-			return getNonceAndDecrypt();
+			return {
+				...getNonceAndDecrypt(),
+				securityClass: spanState.securityClass,
+			};
 		} else if (spanState.type === SPANState.LocalEI) {
 			// We've sent the other our receiver's EI and received its sender's EI,
 			// meaning we can now establish an SPAN
@@ -1465,16 +1518,23 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const receiverEI = spanState.receiverEI;
 
 			// How we do this depends on whether we know the security class of the other node
-			if (this.host.securityManager2.tempKeys.has(sendingNodeId)) {
+			const isBootstrappingNode =
+				this.host.securityManager2.tempKeys.has(sendingNodeId);
+			if (isBootstrappingNode) {
 				// We're currently bootstrapping the node, it might be using a temporary key
 				this.host.securityManager2.initializeTempSPAN(
 					sendingNodeId,
 					senderEI,
 					receiverEI,
 				);
+
 				const ret = getNonceAndDecrypt();
 				// Decryption with the temporary key worked
-				if (ret.authOK) return ret;
+				if (ret.authOK)
+					return {
+						...ret,
+						securityClass: SecurityClass.Temporary,
+					};
 
 				// Reset the SPAN state and try with the recently granted security class
 				this.host.securityManager2.setSPANState(
@@ -1483,44 +1543,61 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			}
 
-			if (securityClass != undefined) {
-				this.host.securityManager2.initializeSPAN(
-					sendingNodeId,
-					securityClass,
-					senderEI,
-					receiverEI,
-				);
+			// When ending up here, one of two situations has occured:
+			// a) We've taken over an existing network and do not know the node's security class
+			// b) We know the security class, but we're about to establish a new SPAN. This may happen at a lower
+			//    security class than the one the node normally uses, e.g. when we're being queried for securely
+			//    supported CCs.
+			// In both cases, we should simply try decoding with multiple security classes, starting from the highest one.
+			// If this fails, we restore the previous (partial) SPAN state.
 
-				return getNonceAndDecrypt();
-			} else {
-				// Not knowing it can happen if we just took over an existing network
-				// Try multiple security classes
-				const possibleSecurityClasses = securityClassOrder
-					.filter((s) => securityClassIsS2(s))
-					.filter(
+			// Try all security classes where we do not definitely know that it was not granted
+			// While bootstrapping a node, we consider the key that is being exchanged (including S0) to be the highest. No need to look at others
+			const possibleSecurityClasses = isBootstrappingNode
+				? [this.host.getHighestSecurityClass(sendingNodeId)!]
+				: securityClassOrder.filter(
 						(s) =>
 							this.host.hasSecurityClass(sendingNodeId, s) !==
 							false,
-					);
-				for (const secClass of possibleSecurityClasses) {
-					// Initialize an SPAN with that security class
-					this.host.securityManager2.initializeSPAN(
-						sendingNodeId,
-						secClass,
-						senderEI,
-						receiverEI,
-					);
-					const ret = getNonceAndDecrypt();
+				  );
 
-					// It worked, return the result and remember the security class
-					if (ret.authOK) {
+			for (const secClass of possibleSecurityClasses) {
+				// Skip security classes we don't have keys for
+				if (
+					!this.host.securityManager2.hasKeysForSecurityClass(
+						secClass,
+					)
+				) {
+					continue;
+				}
+
+				// Initialize an SPAN with that security class
+				this.host.securityManager2.initializeSPAN(
+					sendingNodeId,
+					secClass,
+					senderEI,
+					receiverEI,
+				);
+				const ret = getNonceAndDecrypt();
+
+				// It worked, return the result
+				if (ret.authOK) {
+					// Also if we weren't sure before, we now know that the security class is granted
+					if (
+						this.host.hasSecurityClass(sendingNodeId, secClass) ===
+						undefined
+					) {
 						this.host.setSecurityClass(
 							sendingNodeId,
 							secClass,
 							true,
 						);
-						return ret;
 					}
+					return {
+						...ret,
+						securityClass: secClass,
+					};
+				} else {
 					// Reset the SPAN state and try with the next security class
 					this.host.securityManager2.setSPANState(
 						sendingNodeId,
@@ -1531,7 +1608,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 
 		// Nothing worked, fail the decryption
-		return { plaintext: Buffer.from([]), authOK: false };
+		return {
+			plaintext: Buffer.from([]),
+			authOK: false,
+			securityClass: undefined,
+		};
 	}
 
 	private decryptMulticast(
@@ -1540,12 +1621,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		ciphertext: Buffer,
 		authData: Buffer,
 		authTag: Buffer,
-	): {
-		plaintext: Buffer;
-		authOK: boolean;
-		key?: Buffer;
-		iv?: Buffer;
-	} {
+	): DecryptionResult {
 		const iv = this.host.securityManager2.nextPeerMPAN(
 			sendingNodeId,
 			groupId,
@@ -1556,6 +1632,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			key,
 			iv,
 			...decryptAES128CCM(key, iv, ciphertext, authData, authTag),
+			// The security class is irrelevant when decrypting multicast commands
+			securityClass: undefined,
 		};
 	}
 }
@@ -1729,6 +1807,7 @@ export class Security2CCNonceGet extends Security2CC {
 interface Security2CCKEXReportOptions {
 	requestCSA: boolean;
 	echo: boolean;
+	_reserved?: number;
 	supportedKEXSchemes: KEXSchemes[];
 	supportedECDHProfiles: ECDHProfiles[];
 	requestedKeys: SecurityClass[];
@@ -1747,6 +1826,8 @@ export class Security2CCKEXReport extends Security2CC {
 			validatePayload(this.payload.length >= 4);
 			this.requestCSA = !!(this.payload[0] & 0b10);
 			this.echo = !!(this.payload[0] & 0b1);
+			// Remember the reserved bits for the echo
+			this._reserved = this.payload[0] & 0b1111_1100;
 			// The bit mask starts at 0, but bit 0 is not used
 			this.supportedKEXSchemes = parseBitMask(
 				this.payload.slice(1, 2),
@@ -1763,12 +1844,14 @@ export class Security2CCKEXReport extends Security2CC {
 		} else {
 			this.requestCSA = options.requestCSA;
 			this.echo = options.echo;
+			this._reserved = options._reserved ?? 0;
 			this.supportedKEXSchemes = options.supportedKEXSchemes;
 			this.supportedECDHProfiles = options.supportedECDHProfiles;
 			this.requestedKeys = options.requestedKeys;
 		}
 	}
 
+	public readonly _reserved: number;
 	public readonly requestCSA: boolean;
 	public readonly echo: boolean;
 	public readonly supportedKEXSchemes: readonly KEXSchemes[];
@@ -1777,7 +1860,11 @@ export class Security2CCKEXReport extends Security2CC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
-			Buffer.from([(this.requestCSA ? 0b10 : 0) + (this.echo ? 0b1 : 0)]),
+			Buffer.from([
+				this._reserved +
+					(this.requestCSA ? 0b10 : 0) +
+					(this.echo ? 0b1 : 0),
+			]),
 			// The bit mask starts at 0, but bit 0 is not used
 			encodeBitMask(this.supportedKEXSchemes, 7, 0),
 			encodeBitMask(
@@ -2172,7 +2259,7 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				supportedCCs: this.supportedCCs
+				"supported CCs": this.supportedCCs
 					.map((cc) => getCCName(cc))
 					.map((cc) => `\n· ${cc}`)
 					.join(""),

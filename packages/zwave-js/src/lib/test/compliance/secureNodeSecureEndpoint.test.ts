@@ -22,8 +22,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
@@ -195,11 +195,9 @@ integrationTest(
 						frame.payload.encapsulated instanceof
 							Security2CCCommandsSupportedGet
 					) {
-						const isHighestGranted = frame.payload["key"]?.equals(
-							smNode.getKeysForSecurityClass(
-								self.host.getHighestSecurityClass(self.id)!,
-							).keyCCM,
-						);
+						const isHighestGranted =
+							frame.payload.securityClass ===
+							self.host.getHighestSecurityClass(self.id);
 
 						const cc = Security2CC.encapsulate(
 							self.host,

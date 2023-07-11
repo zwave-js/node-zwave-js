@@ -1,30 +1,30 @@
 import {
 	CommandClasses,
 	Duration,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseMaybeNumber,
-	parseNumber,
-	SupervisionResult,
-	unknownNumber,
-	validatePayload,
 	ValueMetadata,
+	maybeUnknownToString,
+	parseMaybeNumber,
+	validatePayload,
+	type MaybeNotKnown,
+	type MaybeUnknown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { AllOrNone, pick } from "@zwave-js/shared/safe";
+import { pick, type AllOrNone } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
-	SetValueImplementationHooksFactory,
 	SET_VALUE,
 	SET_VALUE_HOOKS,
 	throwUnsupportedProperty,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -90,7 +90,7 @@ export const BasicCCValues = Object.freeze({
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	public supportsCommand(cmd: BasicCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BasicCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BasicCommand.Get:
 				return this.isSinglecast();
@@ -100,25 +100,29 @@ export class BasicCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		// Enable restoring the previous non-zero value
-		if (property === "restorePrevious") {
-			property = "targetValue";
-			value = 255;
-		}
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (this: BasicCCAPI, { property }, value) {
+			// Enable restoring the previous non-zero value
+			if (property === "restorePrevious") {
+				property = "targetValue";
+				value = 255;
+			}
 
-		if (property !== "targetValue") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
+			if (property !== "targetValue") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
 
-		return this.set(value);
-	};
+			return this.set(value);
+		};
+	}
 
 	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
 		{ property },
@@ -136,7 +140,9 @@ export class BasicCCAPI extends CCAPI {
 				this.endpoint.index,
 			);
 			return {
-				optimisticallyUpdateRelatedValues: () => {
+				optimisticallyUpdateRelatedValues: (
+					_supervisedAndSuccessful,
+				) => {
 					// Only update currentValue for valid target values
 					if (
 						typeof value === "number" &&
@@ -188,18 +194,18 @@ export class BasicCCAPI extends CCAPI {
 		}
 	};
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentValue":
-			case "targetValue":
-			case "duration":
-				return (await this.get())?.[property];
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: BasicCCAPI, { property }) {
+			switch (property) {
+				case "currentValue":
+				case "targetValue":
+				case "duration":
+					return (await this.get())?.[property];
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
@@ -366,14 +372,16 @@ export class BasicCCReport extends BasicCC {
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this._currentValue = parseMaybeNumber(this.payload[0]);
+			this._currentValue =
+				// 0xff is a legacy value for 100% (99)
+				this.payload[0] === 0xff
+					? 99
+					: parseMaybeNumber(this.payload[0]);
 
-			if (this.version >= 2 && this.payload.length >= 3) {
-				this.targetValue = parseNumber(this.payload[1]);
+			if (this.payload.length >= 3) {
+				this.targetValue = parseMaybeNumber(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
 			}
-			// Do not persist values here. We want to control when this is happening,
-			// in case the report is mapped to another CC
 		} else {
 			this._currentValue = options.currentValue;
 			if ("targetValue" in options) {
@@ -383,25 +391,14 @@ export class BasicCCReport extends BasicCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (
-			this.currentValue === unknownNumber &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._currentValue = undefined;
-		}
-
-		return super.persistValues(applHost);
-	}
-
-	private _currentValue: Maybe<number> | undefined;
+	private _currentValue: MaybeUnknown<number> | undefined;
 	@ccValue(BasicCCValues.currentValue)
-	public get currentValue(): Maybe<number> | undefined {
+	public get currentValue(): MaybeUnknown<number> | undefined {
 		return this._currentValue;
 	}
 
 	@ccValue(BasicCCValues.targetValue)
-	public readonly targetValue: number | undefined;
+	public readonly targetValue: MaybeUnknown<number> | undefined;
 
 	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
@@ -410,8 +407,15 @@ export class BasicCCReport extends BasicCC {
 		const payload: number[] = [
 			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
 		];
-		if (this.version >= 2 && this.targetValue && this.duration) {
-			payload.push(this.targetValue, this.duration.serializeReport());
+		if (
+			this.version >= 2 &&
+			this.targetValue !== undefined &&
+			this.duration
+		) {
+			payload.push(
+				this.targetValue ?? 0xfe,
+				this.duration.serializeReport(),
+			);
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
@@ -419,10 +423,10 @@ export class BasicCCReport extends BasicCC {
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this.currentValue,
+			"current value": maybeUnknownToString(this.currentValue),
 		};
-		if (this.targetValue != undefined) {
-			message["target value"] = this.targetValue;
+		if (this.targetValue !== undefined) {
+			message["target value"] = maybeUnknownToString(this.targetValue);
 		}
 		if (this.duration != undefined) {
 			message.duration = this.duration.toString();

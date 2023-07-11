@@ -1,10 +1,16 @@
-import { pick, type JSONObject } from "@zwave-js/shared/safe";
+import {
+	ObjectKeyMap,
+	pick,
+	type JSONObject,
+	type ReadonlyObjectKeyMap,
+} from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe";
 import {
-	ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
+	validateCondition,
+	type ConditionalItem,
 } from "./ConditionalItem";
 import type { ConditionalDeviceConfig } from "./DeviceConfig";
 import type { DeviceID } from "./shared";
@@ -276,4 +282,86 @@ export class ConditionalConfigOption implements ConditionalItem<ConfigOption> {
 export interface ConfigOption {
 	value: number;
 	label: string;
+}
+
+export type ConditionalParamInfoMap = ReadonlyObjectKeyMap<
+	{ parameter: number; valueBitMask?: number },
+	ConditionalParamInformation[]
+>;
+
+export type ParamInfoMap = ReadonlyObjectKeyMap<
+	{ parameter: number; valueBitMask?: number },
+	ParamInformation
+>;
+
+export function parseConditionalParamInformationMap(
+	definition: JSONObject,
+	parent: ConditionalDeviceConfig,
+	errorPrefix: string = "",
+): ConditionalParamInfoMap {
+	const paramInformation = new ObjectKeyMap<
+		{ parameter: number; valueBitMask?: number },
+		ConditionalParamInformation[]
+	>();
+
+	const filename = parent.filename;
+
+	if (isArray(definition.paramInformation)) {
+		// Check that every param has a param number
+		if (!definition.paramInformation.every((entry: any) => "#" in entry)) {
+			throwInvalidConfig(
+				`device`,
+				`packages/config/config/devices/${filename}: 
+${errorPrefix}required property "#" missing in at least one entry of paramInformation`,
+			);
+		}
+
+		// And a valid $if condition
+		for (const entry of definition.paramInformation) {
+			validateCondition(
+				filename,
+				entry,
+				`${errorPrefix}At least one entry of paramInformation contains an`,
+			);
+		}
+
+		for (const paramDefinition of definition.paramInformation) {
+			const { ["#"]: paramNo, ...defn } = paramDefinition;
+			const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(paramNo);
+			if (!match) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}: 
+${errorPrefix}found invalid param number "${paramNo}" in paramInformation`,
+				);
+			}
+
+			const keyNum = parseInt(match[1], 10);
+			const bitMask =
+				match[2] != undefined ? parseInt(match[2], 16) : undefined;
+			const key = { parameter: keyNum, valueBitMask: bitMask };
+
+			if (!paramInformation.has(key)) paramInformation.set(key, []);
+			paramInformation
+				.get(key)!
+				.push(
+					new ConditionalParamInformation(
+						parent,
+						keyNum,
+						bitMask,
+						defn,
+					),
+				);
+		}
+	} else if (isObject(definition.paramInformation)) {
+		// Silently ignore this old format
+	} else {
+		throwInvalidConfig(
+			`device`,
+			`packages/config/config/devices/${filename}:
+${errorPrefix}paramInformation must be an array!`,
+		);
+	}
+
+	return paramInformation;
 }

@@ -1,31 +1,34 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	parseBitMask,
-	SupervisionResult,
-	validatePayload,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	maybeUnknownToString,
+	parseBitMask,
+	validatePayload,
+	type MaybeNotKnown,
+	type MaybeUnknown,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
-	SetValueImplementationHooksFactory,
 	SET_VALUE,
 	SET_VALUE_HOOKS,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -103,7 +106,9 @@ export const BarrierOperatorCCValues = Object.freeze({
 
 @API(CommandClasses["Barrier Operator"])
 export class BarrierOperatorCCAPI extends CCAPI {
-	public supportsCommand(cmd: BarrierOperatorCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: BarrierOperatorCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BarrierOperatorCommand.Get:
 			case BarrierOperatorCommand.Set:
@@ -155,7 +160,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 	@validateArgs()
 	public async getSignalingCapabilities(): Promise<
-		readonly SubsystemType[] | undefined
+		MaybeNotKnown<readonly SubsystemType[]>
 	> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
@@ -180,7 +185,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async getEventSignaling(
 		subsystemType: SubsystemType,
-	): Promise<SubsystemState | undefined> {
+	): Promise<MaybeNotKnown<SubsystemState>> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.EventSignalingGet,
@@ -219,44 +224,51 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		if (property === "targetState") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: BarrierOperatorCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			if (property === "targetState") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
 
-			const targetValue =
-				value === BarrierState.Closed
-					? BarrierState.Closed
-					: BarrierState.Open;
-			return this.set(targetValue);
-		} else if (property === "signalingState") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+				const targetValue =
+					value === BarrierState.Closed
+						? BarrierState.Closed
+						: BarrierState.Open;
+				return this.set(targetValue);
+			} else if (property === "signalingState") {
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				return this.setEventSignaling(propertyKey, value);
+			} else {
+				throwUnsupportedProperty(this.ccId, property);
 			}
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			return this.setEventSignaling(propertyKey, value);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+		};
+	}
 
 	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
 		{ property, propertyKey },
@@ -300,7 +312,12 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					}
 				},
 
-				optimisticallyUpdateRelatedValues: () => {
+				optimisticallyUpdateRelatedValues: (
+					supervisedAndSuccessful,
+				) => {
+					// For barriers, do not update the current value unless we actually know the command was successful
+					if (!supervisedAndSuccessful) return;
+
 					if (this.isSinglecast()) {
 						this.tryGetValueDB()?.setValue(
 							currentStateValueId,
@@ -352,29 +369,31 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		}
 	};
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentState":
-			case "position":
-				return (await this.get())?.[property];
-			case "signalingState":
-				if (propertyKey == undefined) {
-					throwMissingPropertyKey(this.ccId, property);
-				} else if (typeof propertyKey !== "number") {
-					throwUnsupportedPropertyKey(
-						this.ccId,
-						property,
-						propertyKey,
-					);
-				}
-				return this.getEventSignaling(propertyKey);
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: BarrierOperatorCCAPI,
+			{ property, propertyKey },
+		) {
+			switch (property) {
+				case "currentState":
+				case "position":
+					return (await this.get())?.[property];
+				case "signalingState":
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
+					return this.getEventSignaling(propertyKey);
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 }
 
 @commandClass(CommandClasses["Barrier Operator"])
@@ -521,36 +540,45 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 
 		validatePayload(this.payload.length >= 1);
 
-		// return values state and position value
-		// if state is 0 - 99 or FF (100%) return the appropriate values.
-		// if state is different just use the table and
-		// return undefined position
-
+		// The payload byte encodes information about the state and position in a single value
 		const payloadValue = this.payload[0];
-		this.currentState = payloadValue;
-		this.position = undefined;
 		if (payloadValue <= 99) {
+			// known position
 			this.position = payloadValue;
-			if (payloadValue > 0) {
-				this.currentState = undefined;
-			}
 		} else if (payloadValue === 255) {
+			// known position, fully opened
 			this.position = 100;
+		} else {
+			// unknown position
+			this.position = UNKNOWN_STATE;
+		}
+
+		if (
+			payloadValue === BarrierState.Closed ||
+			payloadValue >= BarrierState.Closing
+		) {
+			// predefined states
 			this.currentState = payloadValue;
+		} else if (payloadValue > 0 && payloadValue <= 99) {
+			// stopped at exact position
+			this.currentState = BarrierState.Stopped;
+		} else {
+			// invalid value, assume unknown
+			this.currentState = UNKNOWN_STATE;
 		}
 	}
 
 	@ccValue(BarrierOperatorCCValues.currentState)
-	public readonly currentState: BarrierState | undefined;
+	public readonly currentState: MaybeUnknown<BarrierState>;
 
 	@ccValue(BarrierOperatorCCValues.position)
-	public readonly position: number | undefined;
+	public readonly position: MaybeUnknown<number>;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"barrier position": this.position,
+				"barrier position": maybeUnknownToString(this.position),
 				"barrier state":
 					this.currentState != undefined
 						? getEnumMemberName(BarrierState, this.currentState)

@@ -1,6 +1,7 @@
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
+import { type S2SecurityClass } from "../security/SecurityClass";
 import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
@@ -169,7 +170,7 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a queued message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
 	/**
 	 * @internal
@@ -216,6 +217,8 @@ export type SupervisionOptions =
 	  };
 
 export type SendCommandSecurityS2Options = {
+	/** Send the command using a different (lower) security class */
+	s2OverrideSecurityClass?: S2SecurityClass;
 	/** Whether delivery of non-supervised SET-type commands is verified by waiting for potential Nonce Reports. Default: true */
 	s2VerifyDelivery?: boolean;
 	/** Whether the MOS extension should be included in S2 message encapsulation. */
@@ -235,6 +238,8 @@ export type SendCommandOptions = SendMessageOptions &
 		encapsulationFlags?: EncapsulationFlags;
 		/** Overwrite the default transmit options */
 		transmitOptions?: TransmitOptions;
+		/** Overwrite the default report timeout */
+		reportTimeoutMs?: number;
 	};
 
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =

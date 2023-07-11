@@ -1,30 +1,30 @@
 import type { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
 	MAX_NODES,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MulticastCC,
-	SinglecastCC,
 	TransmitOptions,
 	TransmitStatus,
-	TXReport,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type MessageOrCCLogEntry,
+	type MulticastCC,
+	type SinglecastCC,
+	type TXReport,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
+	FunctionType,
+	Message,
+	MessageType,
 	expectedCallback,
 	expectedResponse,
-	FunctionType,
 	gotDeserializationOptions,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
-	MessageType,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";

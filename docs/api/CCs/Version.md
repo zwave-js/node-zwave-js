@@ -21,7 +21,7 @@ async sendReport(options: VersionCCReportOptions): Promise<void>;
 ```ts
 async getCCVersion(
 	requestedCC: CommandClasses,
-): Promise<number | undefined>;
+): Promise<MaybeNotKnown<number>>;
 ```
 
 ### `reportCCVersion`

@@ -2,7 +2,7 @@ import { BasicCCValues } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { TestFn } from "ava";
+import ava, { type TestFn } from "ava";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";

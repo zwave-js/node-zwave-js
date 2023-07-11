@@ -1,20 +1,20 @@
 import type { GenericDeviceClass, SpecificDeviceClass } from "@zwave-js/config";
 import {
-	ApplicationNodeInformation,
 	CommandClasses,
+	MessagePriority,
+	ZWaveError,
+	ZWaveErrorCodes,
 	encodeApplicationNodeInformation,
 	encodeBitMask,
 	getCCName,
-	IZWaveNode,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	MessageRecord,
 	parseApplicationNodeInformation,
 	parseBitMask,
 	validatePayload,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type ApplicationNodeInformation,
+	type IZWaveNode,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
@@ -192,7 +192,7 @@ function areEndpointsUnnecessary(
 
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
-	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
+	public supportsCommand(cmd: MultiChannelCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			// Legacy commands:
 			case MultiChannelCommand.GetV1:
@@ -244,7 +244,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	@validateArgs()
 	public async getEndpointCapabilities(
 		endpoint: number,
-	): Promise<EndpointCapability | undefined> {
+	): Promise<MaybeNotKnown<EndpointCapability>> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.CapabilityGet,
@@ -284,7 +284,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	public async findEndpoints(
 		genericClass: number,
 		specificClass: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.EndPointFind,
@@ -307,7 +307,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	@validateArgs()
 	public async getAggregatedMembers(
 		endpoint: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.AggregatedMembersGet,
@@ -349,7 +349,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	@validateArgs()
 	public async getEndpointCountV1(
 		ccId: CommandClasses,
-	): Promise<number | undefined> {
+	): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.GetV1,
@@ -413,7 +413,7 @@ export class MultiChannelCC extends CommandClass {
 	):
 		| MultiChannelCCCommandEncapsulation
 		| MultiChannelCCV1CommandEncapsulation {
-		const ccVersion = host.getSafeCCVersionForNode(
+		const ccVersion = host.getSafeCCVersion(
 			CommandClasses["Multi Channel"],
 			cc.nodeId as number,
 		);
@@ -828,7 +828,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public individualCount: number;
 
 	@ccValue(MultiChannelCCValues.aggregatedEndpointCount)
-	public aggregatedCount: number | undefined;
+	public aggregatedCount: MaybeNotKnown<number>;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([

@@ -1,5 +1,5 @@
 import type { ValueType } from "@zwave-js/core/safe";
-import { JSONObject, num2hex } from "@zwave-js/shared/safe";
+import { num2hex, type JSONObject } from "@zwave-js/shared/safe";
 import { throwInvalidConfig } from "./utils_safe";
 
 export type IndicatorMap = ReadonlyMap<number, string>;

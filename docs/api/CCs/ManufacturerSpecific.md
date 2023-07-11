@@ -15,7 +15,7 @@ async get(): Promise<Pick<ManufacturerSpecificCCReport, "manufacturerId" | "prod
 ```ts
 async deviceSpecificGet(
 	deviceIdType: DeviceIdType,
-): Promise<string | undefined>;
+): Promise<MaybeNotKnown<string>>;
 ```
 
 ## Manufacturer Specific CC values

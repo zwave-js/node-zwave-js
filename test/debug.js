@@ -28,8 +28,8 @@ const { ConfigManager } = require("@zwave-js/config");
 	console.log(Message.getMessageLength(data));
 	/** @type {any} */
 	const host = {
-		getSafeCCVersionForNode: () => 1,
-		getSupportedCCVersionForEndpoint: () => 1,
+		getSafeCCVersion: () => 1,
+		getSupportedCCVersion: () => 1,
 		configManager,
 		controller: {
 			ownNodeId: 1,
