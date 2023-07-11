@@ -4,50 +4,55 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
-import { getErrorMessage, JSONObject, num2hex } from "@zwave-js/shared";
+import { getErrorMessage, num2hex, type JSONObject } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import {
-	BasicDeviceClass,
-	BasicDeviceClassMap,
 	GenericDeviceClass,
-	GenericDeviceClassMap,
 	getDefaultGenericDeviceClass,
 	getDefaultSpecificDeviceClass,
-	SpecificDeviceClass,
+	type BasicDeviceClass,
+	type BasicDeviceClassMap,
+	type GenericDeviceClassMap,
+	type SpecificDeviceClass,
 } from "./DeviceClasses";
 import {
 	ConditionalDeviceConfig,
-	DeviceConfig,
-	DeviceConfigIndex,
-	FulltextDeviceConfigIndex,
 	generatePriorityDeviceIndex,
 	getDevicesPaths,
 	loadDeviceIndexInternal,
 	loadFulltextDeviceIndexInternal,
+	type DeviceConfig,
+	type DeviceConfigIndex,
+	type FulltextDeviceConfigIndex,
 } from "./devices/DeviceConfig";
 import {
-	IndicatorMap,
-	IndicatorPropertiesMap,
 	IndicatorProperty,
+	type IndicatorMap,
+	type IndicatorPropertiesMap,
 } from "./Indicators";
 import { ConfigLogger } from "./Logger";
 import {
 	loadManufacturersInternal,
-	ManufacturersMap,
 	saveManufacturersInternal,
+	type ManufacturersMap,
 } from "./Manufacturers";
-import { getDefaultMeterScale, Meter, MeterMap, MeterScale } from "./Meters";
-import { Notification, NotificationMap } from "./Notifications";
+import {
+	getDefaultMeterScale,
+	Meter,
+	type MeterMap,
+	type MeterScale,
+} from "./Meters";
+import { Notification, type NotificationMap } from "./Notifications";
 import {
 	getDefaultScale,
-	NamedScalesGroupMap,
 	Scale,
-	ScaleGroup,
+	type NamedScalesGroupMap,
+	type ScaleGroup,
 } from "./Scales";
-import { SensorType, SensorTypeMap } from "./SensorTypes";
+import { SensorType, type SensorTypeMap } from "./SensorTypes";
 import {
 	configDir,
 	externalConfigDir,

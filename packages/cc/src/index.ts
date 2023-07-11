@@ -8,16 +8,18 @@ export * from "./lib/CommandClassDecorators";
 export * from "./lib/EncapsulatingCommandClass";
 export * from "./lib/ICommandClassContainer";
 export {
-	extensionType,
-	getExtensionType,
-	getS2ExtensionConstructor,
 	MGRPExtension,
 	MOSExtension,
 	MPANExtension,
-	Security2Extension,
 	SPANExtension,
+	Security2Extension,
+	extensionType,
+	getExtensionType,
+	getS2ExtensionConstructor,
 } from "./lib/Security2/Extension";
 export * from "./lib/Security2/shared";
-export { CCValueOptions, defaultCCValueOptions } from "./lib/Values";
+export * from "./lib/SetValueResult";
+export { defaultCCValueOptions } from "./lib/Values";
+export type { CCValueOptions } from "./lib/Values";
 export * from "./lib/_Types";
 export { utils };

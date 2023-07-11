@@ -1,11 +1,11 @@
 import {
 	BasicCCGet,
 	BasicCCSet,
-	CommandClass,
 	CRC16CC,
-	CRC16CCCommandEncapsulation,
+	CommandClass,
 	InvalidCC,
 	isEncapsulatingCommandClass,
+	type CRC16CCCommandEncapsulation,
 } from "@zwave-js/cc";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";

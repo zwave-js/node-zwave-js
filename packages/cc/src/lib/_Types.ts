@@ -1,11 +1,11 @@
 import type { Scale } from "@zwave-js/config/safe";
 import {
-	CommandClasses,
-	DataRate,
-	FLiRS,
-	Maybe,
-	ValueMetadata,
 	ZWaveDataRate,
+	type CommandClasses,
+	type DataRate,
+	type FLiRS,
+	type MaybeNotKnown,
+	type ValueMetadata,
 } from "@zwave-js/core/safe";
 
 export enum AlarmSensorCommand {
@@ -717,20 +717,8 @@ export interface FirmwareUpdateMetaData {
 	maxFragmentSize?: number;
 	additionalFirmwareIDs: readonly number[];
 	hardwareVersion?: number;
-	continuesToFunction: Maybe<boolean>;
-	supportsActivation: Maybe<boolean>;
-}
-
-export interface FirmwareUpdateMetaData {
-	manufacturerId: number;
-	firmwareId: number;
-	checksum: number;
-	firmwareUpgradable: boolean;
-	maxFragmentSize?: number;
-	additionalFirmwareIDs: readonly number[];
-	hardwareVersion?: number;
-	continuesToFunction: Maybe<boolean>;
-	supportsActivation: Maybe<boolean>;
+	continuesToFunction: MaybeNotKnown<boolean>;
+	supportsActivation: MaybeNotKnown<boolean>;
 }
 
 export enum FirmwareUpdateRequestStatus {
@@ -792,9 +780,9 @@ export type FirmwareUpdateCapabilities =
 			/** An array of firmware targets that can be upgraded */
 			readonly firmwareTargets: readonly number[];
 			/** Indicates whether the node continues to function normally during an upgrade */
-			readonly continuesToFunction: Maybe<boolean>;
+			readonly continuesToFunction: MaybeNotKnown<boolean>;
 			/** Indicates whether the node supports delayed activation of the new firmware */
-			readonly supportsActivation: Maybe<boolean>;
+			readonly supportsActivation: MaybeNotKnown<boolean>;
 	  };
 
 export interface FirmwareUpdateProgress {
@@ -914,6 +902,16 @@ export enum IndicatorCommand {
 	SupportedReport = 0x05,
 	DescriptionGet = 0x06,
 	DescriptionReport = 0x07,
+}
+
+/** Specifies a timeout for an indicator. At least one of the properties must be present. */
+export interface IndicatorTimeout {
+	/** Whole hours (0-255) */
+	hours?: number;
+	/** Whole minutes (0-255) */
+	minutes?: number;
+	/** Whole and 1/100th seconds (0-59.99) */
+	seconds?: number;
 }
 
 export type IndicatorMetadata = ValueMetadata & {
@@ -1265,6 +1263,12 @@ export interface ScheduleEntryLockWeekDaySchedule {
 	startMinute: number;
 	stopHour: number;
 	stopMinute: number;
+}
+
+export enum ScheduleEntryLockScheduleKind {
+	WeekDay,
+	YearDay,
+	DailyRepeating,
 }
 
 export enum Security2Command {

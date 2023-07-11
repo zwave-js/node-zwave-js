@@ -1,4 +1,4 @@
-import { ZWaveApiVersion, ZWaveLibraryTypes } from "@zwave-js/core/safe";
+import { ZWaveLibraryTypes, type ZWaveApiVersion } from "@zwave-js/core/safe";
 import { FunctionType } from "@zwave-js/serial/safe";
 
 export interface MockControllerCapabilities {

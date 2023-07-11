@@ -160,8 +160,6 @@ export type DataRate = 9600 | 40000 | 100000;
 
 export enum NodeType {
 	Controller,
-	/** @deprecated Use `NodeType["End Node"]` instead */
-	"Routing End Node",
 	"End Node" = 1,
 }
 

@@ -29,13 +29,19 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		nonce: number; // [3000...20000], default: 5000 ms
 
 		/**
-		 * @internal
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
 		 * How long to wait for a poll after setting a value without transition duration
 		 */
 		refreshValue: number;
 
 		/**
-		 * @internal
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
 		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
 		 */
 		refreshValueAfterTransition: number;
@@ -132,14 +138,6 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
 	 */
 	inclusionUserCallbacks?: InclusionUserCallbacks;
-
-	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
 
 	/**
 	 * Some SET-type commands optimistically update the current value to match the target value
@@ -263,7 +261,6 @@ export type EditableZWaveOptions = Pick<
 	| "interview"
 	| "logConfig"
 	| "preferences"
-	| "preserveUnknownValues"
 > & {
 	userAgent?: Record<string, string | null | undefined>;
 };

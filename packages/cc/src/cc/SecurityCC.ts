@@ -1,26 +1,26 @@
 import {
 	CommandClasses,
+	EncapsulationFlags,
+	MessagePriority,
+	SecurityClass,
+	TransmitOptions,
+	ZWaveError,
+	ZWaveErrorCodes,
 	computeMAC,
 	decryptAES128OFB,
-	EncapsulationFlags,
 	encodeCCList,
 	encryptAES128OFB,
 	generateAuthKey,
 	generateEncryptionKey,
 	getCCName,
 	isTransmissionError,
-	Maybe,
-	MessageOrCCLogEntry,
-	MessagePriority,
-	MessageRecord,
 	parseCCList,
-	SecurityClass,
-	SecurityManager,
-	TransmitOptions,
 	validatePayload,
-	ZWaveError,
-	ZWaveErrorCodes,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SecurityManager,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -40,7 +40,9 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import { SecurityCommand } from "../lib/_Types";
+import { CRC16CC } from "./CRC16CC";
 import { Security2CC } from "./Security2CC";
+import { TransportServiceCC } from "./TransportServiceCC";
 
 // @noSetValueAPI This is an encapsulation CC
 
@@ -79,7 +81,7 @@ const HALF_NONCE_SIZE = 8;
 // want to pay the cost of validating each call
 @API(CommandClasses.Security)
 export class SecurityCCAPI extends PhysicalCCAPI {
-	public supportsCommand(_cmd: SecurityCommand): Maybe<boolean> {
+	public supportsCommand(_cmd: SecurityCommand): MaybeNotKnown<boolean> {
 		// All commands are mandatory
 		return true;
 	}
@@ -394,17 +396,41 @@ export class SecurityCC extends CommandClass {
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
-		return (
-			!!(cc.encapsulationFlags & EncapsulationFlags.Security) &&
-			// Already encapsulated (SecurityCCCommandEncapsulationNonceGet is a subclass)
-			!(cc instanceof Security2CC) &&
-			!(cc instanceof SecurityCCCommandEncapsulation) &&
-			// Cannot be sent encapsulated
-			!(cc instanceof SecurityCCNonceGet) &&
-			!(cc instanceof SecurityCCNonceReport) &&
-			!(cc instanceof SecurityCCSchemeGet) &&
-			!(cc instanceof SecurityCCSchemeReport)
-		);
+		// No security flag -> no encapsulation
+		if (!(cc.encapsulationFlags & EncapsulationFlags.Security)) {
+			return false;
+		}
+
+		// S2, CRC16, Transport Service -> no S2 encapsulation
+		if (
+			cc instanceof Security2CC ||
+			cc instanceof CRC16CC ||
+			cc instanceof TransportServiceCC
+		) {
+			return false;
+		}
+
+		// S0: check command
+		if (cc instanceof SecurityCC) {
+			switch (cc.ccCommand) {
+				// Already encapsulated
+				case SecurityCommand.CommandEncapsulation:
+				case SecurityCommand.CommandEncapsulationNonceGet:
+				// Cannot be sent encapsulated:
+				case SecurityCommand.NonceGet:
+				case SecurityCommand.NonceReport:
+				case SecurityCommand.SchemeGet:
+				case SecurityCommand.SchemeReport:
+					return false;
+
+				default:
+					// All other commands must be encapsulated
+					return true;
+			}
+		}
+
+		// Everything else needs to be encapsulated if the CC is secure
+		return true;
 	}
 
 	/** Encapsulates a command that should be sent encrypted */
@@ -707,11 +733,8 @@ export class SecurityCCSchemeReport extends SecurityCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
-		validatePayload(
-			this.payload.length >= 1,
-			// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
-			(this.payload[0] & 0b1) === 0,
-		);
+		validatePayload(this.payload.length >= 1);
+		// The including controller MUST NOT perform any validation of the Supported Security Schemes byte
 	}
 }
 

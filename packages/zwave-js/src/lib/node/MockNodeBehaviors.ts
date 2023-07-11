@@ -1,5 +1,4 @@
 import {
-	CommandClass,
 	MultiChannelCCCapabilityGet,
 	MultiChannelCCCapabilityReport,
 	MultiChannelCCEndPointFind,
@@ -14,6 +13,7 @@ import {
 	VersionCCCommandClassReport,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
+	type CommandClass,
 } from "@zwave-js/cc";
 import { ZWavePlusCCGet, ZWavePlusCCReport } from "@zwave-js/cc/ZWavePlusCC";
 import {
@@ -21,10 +21,12 @@ import {
 	ZWaveProtocolCCRequestNodeInformationFrame,
 } from "@zwave-js/cc/ZWaveProtocolCC";
 import {
-	createMockZWaveRequestFrame,
-	MockNodeBehavior,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
+	type MockNodeBehavior,
 } from "@zwave-js/testing";
+import { behaviors as ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
+import { behaviors as EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
 import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { behaviors as SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
 import { behaviors as WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
@@ -273,8 +275,10 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToS0ZWavePlusCCGet,
 		respondToS2ZWavePlusCCGet,
 
+		...ConfigurationCCBehaviors,
 		...NotificationCCBehaviors,
 		...SoundSwitchCCBehaviors,
 		...WindowCoveringCCBehaviors,
+		...EnergyProductionCCBehaviors,
 	];
 }

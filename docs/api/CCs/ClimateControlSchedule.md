@@ -18,13 +18,13 @@ async set(
 ```ts
 async get(
 	weekday: Weekday,
-): Promise<readonly Switchpoint[] | undefined>;
+): Promise<MaybeNotKnown<readonly Switchpoint[]>>;
 ```
 
 ### `getChangeCounter`
 
 ```ts
-async getChangeCounter(): Promise<number | undefined>;
+async getChangeCounter(): Promise<MaybeNotKnown<number>>;
 ```
 
 ### `getOverride`

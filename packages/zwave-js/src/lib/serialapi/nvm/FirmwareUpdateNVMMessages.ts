@@ -1,11 +1,11 @@
 import {
-	createSimpleReflectionDecorator,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	createSimpleReflectionDecorator,
+	validatePayload,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type {
@@ -13,15 +13,15 @@ import type {
 	MessageBaseOptions,
 } from "@zwave-js/serial";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 

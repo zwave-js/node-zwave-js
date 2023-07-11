@@ -1,8 +1,8 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
-import { JSONObject, num2hex } from "@zwave-js/shared/safe";
+import { num2hex, type JSONObject } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ConfigManager } from "./ConfigManager";
-import { Scale, ScaleGroup } from "./Scales";
+import { Scale, type ScaleGroup } from "./Scales";
 import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
 export type SensorTypeMap = ReadonlyMap<number, SensorType>;
@@ -28,9 +28,7 @@ export class SensorType {
 			definition.scales.startsWith(namedScalesMarker)
 		) {
 			// This is referencing a named scale
-			const scaleName = definition.scales.substr(
-				namedScalesMarker.length,
-			);
+			const scaleName = definition.scales.slice(namedScalesMarker.length);
 			const scales = manager.lookupNamedScaleGroup(scaleName);
 			if (!scales) {
 				throw new ZWaveError(

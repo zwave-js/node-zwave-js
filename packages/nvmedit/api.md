@@ -12,7 +12,7 @@ import { NodeProtocolInfo } from '@zwave-js/core/safe';
 import { RFRegion } from '@zwave-js/core/safe';
 import { RouteProtocolDataRate } from '@zwave-js/core/safe';
 
-// Warning: (ae-missing-release-tag) "FragmentType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FragmentType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum FragmentType {
@@ -26,32 +26,32 @@ export enum FragmentType {
     None = 0
 }
 
-// Warning: (ae-missing-release-tag) "json500To700" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "json500To700" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function json500To700(json: NVM500JSON, truncateApplicationData?: boolean): NVMJSON;
 
-// Warning: (ae-missing-release-tag) "json700To500" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "json700To500" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function json700To500(json: NVMJSON): NVM500JSON;
 
-// Warning: (ae-missing-release-tag) "jsonToNVM" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "jsonToNVM" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function jsonToNVM(json: Required<NVMJSON>, targetSDKVersion: string): Buffer;
 
-// Warning: (ae-missing-release-tag) "jsonToNVM500" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "jsonToNVM500" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function jsonToNVM500(json: Required<NVM500JSON>, protocolVersion: string): Buffer;
 
-// Warning: (ae-missing-release-tag) "migrateNVM" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "migrateNVM" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer;
 
-// Warning: (ae-missing-release-tag) "NVM500JSON" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM500JSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVM500JSON {
@@ -65,7 +65,7 @@ export interface NVM500JSON {
     nodes: Record<number, NVM500JSONNode>;
 }
 
-// Warning: (ae-missing-release-tag) "NVM500JSONController" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM500JSONController" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVM500JSONController {
@@ -109,7 +109,7 @@ export interface NVM500JSONController {
     watchdogStarted: number;
 }
 
-// Warning: (ae-missing-release-tag) "NVM500JSONControllerRFConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM500JSONControllerRFConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVM500JSONControllerRFConfig {
@@ -125,13 +125,13 @@ export interface NVM500JSONControllerRFConfig {
     powerModeWutTimeout: number;
 }
 
-// Warning: (ae-missing-release-tag) "NVM500JSONNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM500JSONNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type NVM500JSONNode = NVM500JSONNodeWithInfo | NVM500JSONVirtualNode;
 
 // Warning: (ae-forgotten-export) The symbol "NVM500NodeInfo" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "NVM500JSONNodeWithInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM500JSONNodeWithInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVM500JSONNodeWithInfo extends NVM500NodeInfo {
@@ -157,7 +157,7 @@ export interface NVM500JSONNodeWithInfo extends NVM500NodeInfo {
     sucUpdateIndex: number;
 }
 
-// Warning: (ae-missing-release-tag) "NVM500JSONVirtualNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM500JSONVirtualNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVM500JSONVirtualNode {
@@ -165,7 +165,7 @@ export interface NVM500JSONVirtualNode {
     isVirtual: true;
 }
 
-// Warning: (ae-missing-release-tag) "NVM500Meta" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM500Meta" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVM500Meta {
@@ -183,12 +183,12 @@ export interface NVM500Meta {
     productType: number;
 }
 
-// Warning: (ae-missing-release-tag) "nvm500ToJSON" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "nvm500ToJSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON>;
 
-// Warning: (ae-missing-release-tag) "NVMJSON" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVMJSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVMJSON {
@@ -202,7 +202,7 @@ export interface NVMJSON {
     nodes: Record<number, NVMJSONNode>;
 }
 
-// Warning: (ae-missing-release-tag) "NVMJSONController" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVMJSONController" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVMJSONController {
@@ -264,7 +264,7 @@ export interface NVMJSONController {
     systemState: number;
 }
 
-// Warning: (ae-missing-release-tag) "NVMJSONControllerRFConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVMJSONControllerRFConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVMJSONControllerRFConfig {
@@ -280,12 +280,12 @@ export interface NVMJSONControllerRFConfig {
     txPower: number;
 }
 
-// Warning: (ae-missing-release-tag) "NVMJSONNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVMJSONNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type NVMJSONNode = NVMJSONNodeWithInfo | NVMJSONVirtualNode;
 
-// Warning: (ae-missing-release-tag) "NVMJSONNodeWithInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVMJSONNodeWithInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVMJSONNodeWithInfo extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
@@ -313,7 +313,7 @@ export interface NVMJSONNodeWithInfo extends Omit<NodeProtocolInfo, "hasSpecific
     sucUpdateIndex: number;
 }
 
-// Warning: (ae-missing-release-tag) "NVMJSONVirtualNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVMJSONVirtualNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVMJSONVirtualNode {
@@ -321,7 +321,7 @@ export interface NVMJSONVirtualNode {
     isVirtual: true;
 }
 
-// Warning: (ae-missing-release-tag) "NVMMeta" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVMMeta" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVMMeta {
@@ -335,7 +335,7 @@ export interface NVMMeta {
     writeSize: PageWriteSize;
 }
 
-// Warning: (ae-missing-release-tag) "NVM3Object" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM3Object" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVMObject {
@@ -349,7 +349,7 @@ export interface NVMObject {
     type: ObjectType;
 }
 
-// Warning: (ae-missing-release-tag) "NVM3Page" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM3Page" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NVMPage {
@@ -359,12 +359,12 @@ export interface NVMPage {
     objects: NVMObject[];
 }
 
-// Warning: (ae-missing-release-tag) "nvmToJSON" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "nvmToJSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function nvmToJSON(buffer: Buffer, debugLogs?: boolean): Required<NVMJSON>;
 
-// Warning: (ae-missing-release-tag) "ObjectType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ObjectType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ObjectType {
@@ -380,7 +380,7 @@ export enum ObjectType {
     Deleted = 3
 }
 
-// Warning: (ae-missing-release-tag) "NVM3PageHeader" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NVM3PageHeader" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface PageHeader {
@@ -404,7 +404,7 @@ export interface PageHeader {
     writeSize: PageWriteSize;
 }
 
-// Warning: (ae-missing-release-tag) "PageStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PageStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum PageStatus {
@@ -418,7 +418,7 @@ export enum PageStatus {
     OK_ErasePending = 4294944165
 }
 
-// Warning: (ae-missing-release-tag) "PageWriteSize" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PageWriteSize" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum PageWriteSize {

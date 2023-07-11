@@ -102,7 +102,7 @@ tsConfig.fileNames
 							console.error(
 								`File: ${relativePath}:${
 									location.line + 1
-								} , Member: ${member.name.text}`,
+								}: ${node.name.text} -> ${member.name.text}`,
 							);
 						}
 					}

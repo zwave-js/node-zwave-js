@@ -6,8 +6,8 @@ import {
 	SceneControllerConfigurationCommand,
 } from "@zwave-js/cc";
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
-import { CommandClasses, Duration, IZWaveNode } from "@zwave-js/core";
-import { createTestingHost, TestingHost } from "@zwave-js/host";
+import { CommandClasses, Duration, type IZWaveNode } from "@zwave-js/core";
+import { createTestingHost, type TestingHost } from "@zwave-js/host";
 import test from "ava";
 import { createTestNode } from "../mocks";
 

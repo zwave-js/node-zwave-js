@@ -1,13 +1,13 @@
 import {
-	CommandClasses,
 	ControllerCapabilityFlags,
-	isZWaveError,
-	NodeProtocolInfo,
 	NodeType,
 	RFRegion,
-	stripUndefined,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isZWaveError,
+	stripUndefined,
+	type CommandClasses,
+	type NodeProtocolInfo,
 } from "@zwave-js/core/safe";
 import { cloneDeep, pick } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -26,16 +26,9 @@ import {
 	ApplicationVersionFileID,
 	ControllerInfoFile,
 	ControllerInfoFileID,
-	ControllerInfoFileOptions,
-	getEmptyRoute,
-	nodeIdToNodeInfoFileIDV0,
-	nodeIdToNodeInfoFileIDV1,
-	nodeIdToRouteCacheFileIDV0,
-	nodeIdToRouteCacheFileIDV1,
-	NodeInfo,
+	NVMFile,
 	NodeInfoFileV0,
 	NodeInfoFileV1,
-	NVMFile,
 	ProtocolAppRouteLockNodeMaskFile,
 	ProtocolAppRouteLockNodeMaskFileID,
 	ProtocolNodeListFile,
@@ -54,31 +47,38 @@ import {
 	ProtocolVersionFileID,
 	ProtocolVirtualNodeMaskFile,
 	ProtocolVirtualNodeMaskFileID,
-	Route,
-	RouteCache,
 	RouteCacheFileV0,
 	RouteCacheFileV1,
 	SUCUpdateEntriesFileIDV0,
 	SUCUpdateEntriesFileV0,
 	SUCUpdateEntriesFileV5,
-	SUCUpdateEntry,
-	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
 	SUC_UPDATES_PER_FILE_V5,
+	getEmptyRoute,
+	nodeIdToNodeInfoFileIDV0,
+	nodeIdToNodeInfoFileIDV1,
+	nodeIdToRouteCacheFileIDV0,
+	nodeIdToRouteCacheFileIDV1,
+	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
+	type ControllerInfoFileOptions,
+	type NodeInfo,
+	type Route,
+	type RouteCache,
+	type SUCUpdateEntry,
 } from "./files";
 import {
 	encodeNVM,
 	getNVMMeta,
-	NVM3Objects,
-	NVMMeta,
 	parseNVM,
+	type NVM3Objects,
+	type NVMMeta,
 } from "./nvm3/nvm";
 import type { NVM3Object } from "./nvm3/object";
 import { mapToObject } from "./nvm3/utils";
 import {
+	NVMSerializer,
 	createParser as createNVM500Parser,
 	nmvDetails500,
-	NVM500JSON,
-	NVMSerializer,
+	type NVM500JSON,
 } from "./nvm500/NVMParser";
 
 export interface NVMJSON {

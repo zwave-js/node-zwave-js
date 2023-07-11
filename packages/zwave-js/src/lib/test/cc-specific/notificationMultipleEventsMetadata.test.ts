@@ -1,5 +1,5 @@
 import { NotificationCCValues } from "@zwave-js/cc/NotificationCC";
-import { CommandClasses, ValueMetadataNumeric } from "@zwave-js/core";
+import { CommandClasses, type ValueMetadataNumeric } from "@zwave-js/core";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

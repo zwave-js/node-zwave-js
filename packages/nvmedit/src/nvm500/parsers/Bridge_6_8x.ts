@@ -4,12 +4,12 @@ import type { NVM500Details } from "../NVMParser";
 import {
 	APPL_NODEPARM_MAX,
 	NVMEntryType,
-	NVMLayout,
 	NVM_SERIALAPI_HOST_SIZE,
 	POWERLEVEL_CHANNELS,
 	RTC_TIMER_SIZE,
 	SUC_CONTROLLER_LIST_SIZE,
 	TOTAL_RTC_TIMER_MAX,
+	type NVMLayout,
 } from "../shared";
 
 const NVM_Layout_Bridge_6_8x: NVMLayout = [

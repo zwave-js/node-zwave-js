@@ -84,6 +84,7 @@ async function exec(): Promise<void> {
 	child = cp.spawn("yarn", [task, ...taskArgs], {
 		stdio: "inherit",
 		windowsHide: true,
+		shell: true,
 	});
 	child.on("exit", (code) => {
 		if (code === 0) {

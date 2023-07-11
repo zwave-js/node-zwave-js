@@ -4,10 +4,10 @@ import {
 } from "@zwave-js/cc/WindowCoveringCC";
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
-	WindowCoveringCCCapabilities,
+	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
+	type WindowCoveringCCCapabilities,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: WindowCoveringCCCapabilities = {

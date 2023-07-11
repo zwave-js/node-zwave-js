@@ -61,10 +61,7 @@ export type NodeLogContext = LogContext & { nodeId: number; type: "node" };
 export type ValueLogContext = LogContext &
 	ValueID & { nodeId: number; type: "value" };
 
-export type MessageRecord = Record<
-	string,
-	string | number | boolean | null | undefined
->;
+export type MessageRecord = Record<string, string | number | boolean>;
 
 export interface MessageOrCCLogEntry {
 	tags: string[];

@@ -495,22 +495,34 @@ type ReplaceNodeOptions =
 
 ### Managing routes
 
-The methods shown here can be used to manage routes between nodes. For the most part, these are not particularly relevant for applications or even end users, since they are used automatically by Z-Wave JS when necessary.
+#### Automatic assignment
+
+The methods shown here can be used to manage routes between nodes. For the most part, these are not particularly relevant for applications or even end users, since they are used automatically by Z-Wave JS when necessary. Routes assigned by these methods are determined by the controller, which should be preferred usually.
 
 ```ts
-assignReturnRoute(nodeId: number, destinationNodeId: number): Promise<boolean>;
-deleteReturnRoute(nodeId: number): Promise<boolean>;
+assignReturnRoutes(nodeId: number, destinationNodeId: number): Promise<boolean>;
+deleteReturnRoutes(nodeId: number): Promise<boolean>;
 
-assignSUCReturnRoute(nodeId: number): Promise<boolean>;
-deleteSUCReturnRoute(nodeId: number): Promise<boolean>;
+assignSUCReturnRoutes(nodeId: number): Promise<boolean>;
+deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
 ```
 
--   `assignReturnRoute` instructs the controller to assign node `nodeId` a set of routes to node `destinationNodeId`. These routes are determined by the controller.
--   `deleteReturnRoute` instructs node `nodeId` to delete all previously assigned routes.
--   `assignSUCReturnRoute` works like `assignReturnRoute`, but the routes have the SUC as the destination.
--   `deleteSUCReturnRoute` works like `deleteReturnRoute`, but for routes that have the SUC as the destination.
+-   `assignReturnRoutes` instructs the controller to assign node `nodeId` a set of routes to node `destinationNodeId`.
+-   `deleteReturnRoutes` instructs node `nodeId` to delete all previously assigned routes.
+-   `assignSUCReturnRoutes` works like `assignReturnRoutes`, but the routes have the SUC as the destination.
+-   `deleteSUCReturnRoutes` works like `deleteReturnRoutes`, but for routes that have the SUC as the destination.
 
-In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first instead of the automatically determined routes. This is done with the following methods:
+> [!NOTE] These routes cannot be read back, since they are managed internally by the controller and no API exists to query them.
+
+#### Priority routes (controller → nodes)
+
+In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first before resorting to the automatically determined routes.
+
+> [!WARNING] While these methods are meant to improve the routing and latency in certain situations, they can easily make things worse by choosing the wrong or unreachable repeaters, or by selecting a route speed that is not supported by a node in the route.
+>
+> Typically you'll want to use these methods to force a direct connection as the first attempt.
+
+The following methods control which route is used for the first transmission attempt from the **controller** to the given node.
 
 ```ts
 setPriorityRoute(
@@ -521,30 +533,40 @@ setPriorityRoute(
 
 getPriorityRoute(destinationNodeId: number): Promise<
 	| {
+			routeKind:
+				| RouteKind.LWR
+				| RouteKind.NLWR
+				| RouteKind.Application;
 			repeaters: number[];
 			routeSpeed: ZWaveDataRate;
 	  }
 	| undefined
 >;
 
-assignPriorityReturnRoute(
-	nodeId: number,
-	destinationNodeId: number,
-	repeaters: number[],
-	routeSpeed: ZWaveDataRate,
-): Promise<boolean>;
-
-assignPrioritySUCReturnRoute(
-	nodeId: number,
-	repeaters: number[],
-	routeSpeed: ZWaveDataRate,
-): Promise<boolean>
+removePriorityRoute(destinationNodeId: number): Promise<boolean>;
 ```
 
 -   `setPriorityRoute` sets the priority route which will always be used for the first transmission attempt from the controller to the given node.
--   `getPriorityRoute` returns the priority route to the given node. **Note:** if none is set, this will return the LWR or NLWR instead.
--   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
--   `assignPrioritySUCReturnRoute` does the same, but with the SUC as the destination node.
+-   `getPriorityRoute` returns the priority route to the given node, which can be:
+    -   `undefined` if there is no route at all,
+    -   the priority route if it exists,
+    -   otherwise the LWR/NLWR
+
+`routeKind` identifies which kind of route is returned by `getPriorityRoute` (`None` is only used internally):
+
+<!-- #import RouteKind from "@zwave-js/core" -->
+
+```ts
+enum RouteKind {
+	None = 0x00,
+	/** Last Working Route */
+	LWR = 0x01,
+	/** Next to Last Working Route */
+	NLWR = 0x02,
+	/** Application-defined priority route */
+	Application = 0x10,
+}
+```
 
 The `repeaters` array contains the node IDs of the repeaters (max. 4) that should be used for the route. An empty array means a direct connection.
 
@@ -560,9 +582,93 @@ enum ZWaveDataRate {
 }
 ```
 
-> [!WARNING] While these methods are meant to improve the routing and latency in certain situations, they can easily make things worse by choosing the wrong or unreachable repeaters, or by selecting a route speed that is not supported by a node in the route.
->
-> Typically you'll want to use these methods to force a direct connection as the first attempt.
+#### Priority return routes (nodes → controller or nodes → other nodes)
+
+To control which routes a **node** will use for the first attempt, use the following methods:
+
+```ts
+assignPriorityReturnRoute(
+	nodeId: number,
+	destinationNodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>;
+
+assignPrioritySUCReturnRoute(
+	nodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>
+```
+
+-   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
+-   `assignPrioritySUCReturnRoute` does the same, but with the SUC (controller) as the destination node.
+
+These methods also assign up to 3 fallback routes, which are chosen automatically by the controller.
+
+> [!WARNING] It has been found that assigning return routes to nodes that already have a priority route can cause the priority route to be changed unexpectedly. To avoid this, assigning priority routes should be done last. Otherwise, call `deleteReturnRoutes` or `deleteSUCReturnRoutes` (for routes to the controller) before assigning new routes. Unfortunately, `deleteReturnRoutes` deletes **all** return routes to all destination nodes, so they all have to be set up again afterwards.
+
+As mentioned before, there is unfortunately no way to query return routes from a node. To remedy this, Z-Wave JS caches the routes it has assigned. To read them, use the following methods:
+
+```ts
+getPriorityReturnRouteCached(nodeId: number, destinationNodeId: number): MaybeUnknown<Route> | undefined;
+getPrioritySUCReturnRouteCached(nodeId: number): MaybeUnknown<Route> | undefined;
+```
+
+-   `getPriorityReturnRouteCached` returns a priority return route that was set using `assignPriorityReturnRoute`. If a non-priority return route has been set since assigning the priority route, this will return `UNKNOWN_STATE` (`null`).
+-   `getPrioritySUCReturnRouteCached` does the same for a route set through `assignPrioritySUCReturnRoute`.
+
+The return type `Route` has the following shape:
+
+<!-- #import Route from "@zwave-js/core" -->
+
+```ts
+interface Route {
+	repeaters: number[];
+	routeSpeed: ZWaveDataRate;
+}
+```
+
+> [!NOTE] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
+
+#### Manually assign custom return routes (nodes → controller or nodes → other nodes)
+
+As a last resort, the routes uses by a node can entirely be assigned manually. This uses the `Z-Wave Protocol` command class, which is used internally by the controller and Z-Wave protocol, so this should at least be considered an inofficial way to set return routes.
+
+Up to 4 routes for each combination of source and destination node can be set. If less routes are given, the remaining ones will be cleared. Optionally, a priority route can be set, which will always be used for the first transmission attempt. Up to 3 of the other routes will then be used as fallbacks, but no automatically determined routes will be used.
+
+Note that the same caveats as above in regards to deleting priority non-SUC return routes apply.
+
+```ts
+assignCustomReturnRoutes(
+	nodeId: number,
+	destinationNodeId: number,
+	routes: Route[],
+	priorityRoute?: Route
+): Promise<boolean>;
+assignCustomSUCReturnRoutes(
+	nodeId: number,
+	routes: Route[],
+	priorityRoute?: Route
+): Promise<boolean>;
+```
+
+-   `assignCustomReturnRoutes` assigns node `nodeId` a set of routes to node `destinationNodeId`.
+-   `assignCustomSUCReturnRoutes` does the same, but with the SUC as the destination.
+
+Z-Wave JS caches manually assigned routes, so they can be read back:
+
+```ts
+getCustomReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] | undefined;
+getCustomSUCReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] | undefined;
+```
+
+-   `getCustomReturnRoutesCached` returns routes that were was set using `assignCustomReturnRoutes`.
+-   `getCustomSUCReturnRoutesCached` returns routes that were was set using `assignCustomSUCReturnRoutes`.
+
+To read priority routes assigned using the optional `priorityRoute` parameter, use `getPriorityReturnRouteCached` and `getPrioritySUCReturnRouteCached` as described above.
+
+> [!ATTENTION] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
 
 ### Managing associations
 
@@ -940,15 +1046,16 @@ interface GetFirmwareUpdatesOptions {
 #### `firmwareUpdateOTA`
 
 ```ts
-firmwareUpdateOTA(nodeId: number, update: FirmwareUpdateFileInfo): Promise<boolean>
+firmwareUpdateOTA(nodeId: number, update: FirmwareUpdateFileInfo): Promise<FirmwareUpdateResult>
 ```
 
 > [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
 
-Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and performs an over-the-air (OTA) firmware update for the given node. The return value indicates whether the update was successful.  
-This is very similar to [`ZWaveNode.updateFirmware`](api/node#updatefirmware), except that the updates are officially provided by manufacturers and downloaded in the background.
+Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and performs an over-the-air (OTA) firmware update for the given node. This is very similar to [`ZWaveNode.updateFirmware`](api/node#updatefirmware), except that the updates are officially provided by manufacturers and downloaded in the background.
 
 To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/node#quotfirmware-update-progressquot) of the corresponding node.
+
+The return value indicates whether the update was successful and includes some additional information. This is the same information that is emitted using the `"firmware update finished"` event.
 
 > [!NOTE] Calling this will result in an HTTP request to the URL contained in the `update` parameter.
 
@@ -963,18 +1070,27 @@ Returns whether an OTA firmware update is in progress for any node.
 ### Updating the firmware of the controller (OTW)
 
 ```ts
-firmwareUpdateOTW(data: Buffer): Promise<boolean>
+firmwareUpdateOTW(data: Buffer): Promise<ControllerFirmwareUpdateResult>
 ```
 
 > [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
 
-Performs an over-the-wire (OTW) firmware update for the controller using the given firmware image. The return value indicates whether the update was successful.
-
-To do so, the controller gets put in bootloader mode where a new firmware image can be uploaded.
+Performs an over-the-wire (OTW) firmware update for the controller using the given firmware image. To do so, the controller gets put in bootloader mode where a new firmware image can be uploaded.
 
 > [!WARNING] A failure during this process may leave your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded.
 
 To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/controller#quotfirmware-update-progressquot) of the controller.
+
+The return value indicates whether the update was successful and includes an error code that can be used to determine the reason for a failure. This is the same information that is emitted using the `"firmware update finished"` event:
+
+<!-- #import ControllerFirmwareUpdateResult from "zwave-js" -->
+
+```ts
+interface ControllerFirmwareUpdateResult {
+	success: boolean;
+	status: ControllerFirmwareUpdateStatus;
+}
+```
 
 ### `isFirmwareUpdateInProgress`
 
@@ -1210,6 +1326,8 @@ enum SecurityBootstrapFailure {
 	S2IncorrectPIN,
 	/** There was a mismatch in security keys between the controller and the node */
 	S2WrongSecurityLevel,
+	/** The node has been bootstrapped using S0 in an S2-capable network */
+	S0Downgrade,
 	/** Some other unspecified error happened */
 	Unknown,
 }
@@ -1217,11 +1335,36 @@ enum SecurityBootstrapFailure {
 
 ### `"node removed"`
 
-A node has successfully been replaced or removed from the network. The `replaced` parameter indicates whether the node was replaced with another node.
+A node has successfully been replaced or removed from the network.
 
 ```ts
-(node: ZWaveNode, replaced: boolean) => void
+(node: ZWaveNode, reason: RemoveNodeReason) => void
 ```
+
+The `reason` argument indicates why the node was removed:
+
+<!-- #import RemoveNodeReason from "zwave-js" -->
+
+```ts
+enum RemoveNodeReason {
+	/** The node was excluded by the user or an inclusion controller */
+	Excluded,
+	/** The node was excluded by an inclusion controller */
+	ProxyExcluded,
+	/** The node was removed using the "remove failed node" feature */
+	RemoveFailed,
+	/** The node was replaced using the "replace failed node" feature */
+	Replaced,
+	/** The node was replaced by an inclusion controller */
+	ProxyReplaced,
+	/** The node was reset locally and was auto-removed */
+	Reset,
+	/** SmartStart inclusion failed, and the node was auto-removed as a result. */
+	SmartStartFailed,
+}
+```
+
+> [!NOTE] To comply with the Z-Wave specifications, applications **MUST** indicate that the node was _reset locally and has left the network_ when the `reason` is `RemoveNodeReason.Reset`.
 
 ### `"heal network progress"`
 
@@ -1247,10 +1390,10 @@ The healing process for the network was completed. The event handler is called w
 This event is emitted regularly during and after communication with the controller and gives some insight that would otherwise only be visible by looking at logs. The callback has the signature
 
 ```ts
-(statistics: ControllerStatistics) => void
+(statistics: Readonly<ControllerStatistics>) => void
 ```
 
-where the statistics have the following shape:
+where the statistics are readonly and have the following shape:
 
 <!-- #import ControllerStatistics from "zwave-js" -->
 
@@ -1344,3 +1487,16 @@ enum ControllerFirmwareUpdateStatus {
 	OK = 0xff,
 }
 ```
+
+### `"identify"`
+
+This is emitted when another node instructs Z-Wave JS to identify itself using the `Indicator CC`, indicator ID `0x50`. The callback has no arguments:
+
+```ts
+() => void
+```
+
+> [!NOTE] Although support for this seems to be a certification requirement, it is currently unclear how this requirement must be fulfilled for controllers. The specification only refers to nodes:
+> The node is RECOMMENDED to use a visible LED for an identify function if it has an LED. If the node is itself a light source, e.g. a light bulb, this MAY be used in place of a dedicated LED.
+>
+> The event signature may be extended to accomodate this after clarification.

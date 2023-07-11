@@ -1,7 +1,7 @@
 import { BasicCCValues } from "@zwave-js/cc/BasicCC";
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
-import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
+import { createThrowingMap, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";

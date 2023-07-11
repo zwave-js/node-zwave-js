@@ -2,14 +2,14 @@ import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
-import { Duplex, PassThrough, Readable, Writable } from "stream";
+import { PassThrough, type Duplex, type Readable, type Writable } from "stream";
 import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import {
-	BootloaderChunk,
-	bootloaderMenuPreamble,
 	BootloaderParser,
 	BootloaderScreenParser,
+	bootloaderMenuPreamble,
+	type BootloaderChunk,
 } from "./parsers/BootloaderParsers";
 import { SerialAPIParser } from "./parsers/SerialAPIParser";
 
@@ -85,6 +85,8 @@ export interface ZWaveSerialPortImplementation {
 		port: ReturnType<ZWaveSerialPortImplementation["create"]>,
 	): Promise<void>;
 }
+
+const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;
 
 // This is basically a duplex transform stream wrapper around any stream (network, serial, ...)
 // 0 ┌─────────────────┐ ┌─────────────────┐ ┌──
@@ -173,10 +175,22 @@ export class ZWaveSerialPortBase extends PassThrough {
 					: ZWaveSerialMode.SerialAPI;
 			}
 
-			if (this.mode === ZWaveSerialMode.Bootloader) {
-				this.bootloaderScreenParser.write(data);
+			// On Windows, writing to the parsers immediately seems to lag the event loop
+			// long enough that the state machine sometimes has not transitioned to the next state yet.
+			// By using setImmediate, we "break" the work into manageable chunks.
+			// We have some tests that don't like this though, so we don't do it in tests
+			const write = () => {
+				if (this.mode === ZWaveSerialMode.Bootloader) {
+					this.bootloaderScreenParser.write(data);
+				} else {
+					this.parser.write(data);
+				}
+			};
+
+			if (IS_TEST) {
+				write();
 			} else {
-				this.parser.write(data);
+				setImmediate(write);
 			}
 		});
 

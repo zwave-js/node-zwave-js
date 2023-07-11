@@ -1,17 +1,17 @@
 import {
-	FLiRS,
 	MAX_NODES,
 	MAX_REPEATERS,
-	protocolDataRateMask,
 	RouteProtocolDataRate,
+	protocolDataRateMask,
+	type FLiRS,
 } from "@zwave-js/core/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
-	gotDeserializationOptions,
 	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
+	gotDeserializationOptions,
 	nvmFileID,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export const ROUTECACHES_PER_FILE_V1 = 8;

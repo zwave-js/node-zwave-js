@@ -12,17 +12,16 @@ const options = {
 	repo: "node-zwave-js",
 };
 const branchName = "docs/update-typed-docs";
-const reviewers = ["AlCalzone", "robertsLando"];
-const assignees = [
-	// "AlCalzone",
-	// "robertsLando",
-];
+const reviewers = ["AlCalzone"];
+const assignees = [];
+
+const checkPaths = ["docs/", "packages/*/api.md"];
 
 (async function main() {
 	// check if our local working copy has any changes in the docs directory
 	const isChanged = !!(await exec.exec(
 		"git",
-		["diff", "--exit-code", "--", "docs/"],
+		["diff", "--exit-code", "--", ...checkPaths],
 		{
 			ignoreReturnCode: true,
 		},
@@ -61,7 +60,13 @@ const assignees = [
 		// check if our local working copy is different from the remote branch
 		const isChanged = !!(await exec.exec(
 			"git",
-			["diff", "--exit-code", `origin/${branchName}`, "--", "docs/"],
+			[
+				"diff",
+				"--exit-code",
+				`origin/${branchName}`,
+				"--",
+				...checkPaths,
+			],
 			{
 				ignoreReturnCode: true,
 			},
@@ -90,7 +95,7 @@ const assignees = [
 	await exec.exec("git", ["add", "."]);
 	await exec.exec(
 		"git",
-		["commit", "-m", "docs: update typed documentation"],
+		["commit", "-m", "docs: update typed documentation and API report"],
 		// Don't care if this fails due to no changes
 		{
 			ignoreReturnCode: true,
@@ -117,8 +122,8 @@ const assignees = [
 			...options,
 			head: branchName,
 			base: "master",
-			title: "docs: update typed documentation 🤖",
-			body: `The auto-generated documentation has changed. Please review the changes and merge them if desired.`,
+			title: "docs: update typed documentation and API report 🤖",
+			body: `The auto-generated documentation and/or API reports have changed. Please review the changes and merge them if desired.`,
 			maintainer_can_modify: true,
 		});
 		prNumber = pr.data.number;

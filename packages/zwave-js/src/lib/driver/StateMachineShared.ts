@@ -1,72 +1,41 @@
 import {
-	isZWaveError,
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isZWaveError,
+	type MessagePriority,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
-	assign,
-	DefaultContext,
-	EventObject,
 	Interpreter,
-	InterpreterOptions,
-	Machine,
-	spawn,
-	StateMachine,
-	StateSchema,
-	Typestate,
+	type AnyStateMachine,
+	type InterpreterFrom,
+	type InterpreterOptions,
 } from "xstate";
-import { respond, sendParent } from "xstate/lib/actions";
-import type { DriverLogger } from "../log/Driver";
 import {
 	SendDataBridgeRequest,
-	SendDataBridgeRequestTransmitReport,
 	SendDataMulticastBridgeRequest,
-	SendDataMulticastBridgeRequestTransmitReport,
+	type SendDataBridgeRequestTransmitReport,
+	type SendDataMulticastBridgeRequestTransmitReport,
 } from "../serialapi/transport/SendDataBridgeMessages";
 import {
-	SendDataAbort,
 	SendDataMulticastRequest,
-	SendDataMulticastRequestTransmitReport,
 	SendDataRequest,
-	SendDataRequestTransmitReport,
+	type SendDataMulticastRequestTransmitReport,
+	type SendDataRequestTransmitReport,
 } from "../serialapi/transport/SendDataMessages";
 import { isSendData } from "../serialapi/transport/SendDataShared";
-import type { SendDataErrorData } from "./SendThreadMachine";
-import type {
-	SerialAPICommandError,
-	SerialAPICommandEvent,
-} from "./SerialAPICommandMachine";
+import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine";
 import type { Transaction } from "./Transaction";
 
-export interface ServiceImplementations {
-	timestamp: () => number;
-	sendData: (data: Buffer) => Promise<void>;
-	createSendDataAbort: () => SendDataAbort;
-	notifyRetry?: (
-		command: "SendData" | "SerialAPI",
-		lastError: SerialAPICommandError | undefined,
-		message: Message,
-		attempts: number,
-		maxAttempts: number,
-		delay: number,
-	) => void;
-	notifyUnsolicited: (message: Message) => void;
-	rejectTransaction: (transaction: Transaction, error: ZWaveError) => void;
-	resolveTransaction: (transaction: Transaction, result?: Message) => void;
-	logOutgoingMessage: (message: Message) => void;
-	log: DriverLogger["print"];
-	logQueue: DriverLogger["sendQueue"];
-}
-
-export function sendDataErrorToZWaveError(
-	error: SendDataErrorData["reason"],
-	transaction: Transaction,
+export function serialAPICommandErrorToZWaveError(
+	reason: (SerialAPICommandDoneData & { type: "failure" })["reason"],
+	sentMessage: Message,
 	receivedMessage: Message | undefined,
+	transactionSource: string | undefined,
 ): ZWaveError {
-	switch (error) {
+	switch (reason) {
 		case "send failure":
 		case "CAN":
 		case "NAK":
@@ -74,49 +43,47 @@ export function sendDataErrorToZWaveError(
 				`Failed to send the message after 3 attempts`,
 				ZWaveErrorCodes.Controller_MessageDropped,
 				undefined,
-				transaction.stack,
+				transactionSource,
 			);
 		case "ACK timeout":
 			return new ZWaveError(
 				`Timeout while waiting for an ACK from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
-				undefined,
-				transaction.stack,
+				"ACK",
+				transactionSource,
 			);
 		case "response timeout":
 			return new ZWaveError(
 				`Timeout while waiting for a response from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
-				undefined,
-				transaction.stack,
+				"response",
+				transactionSource,
 			);
 		case "callback timeout":
 			return new ZWaveError(
 				`Timeout while waiting for a callback from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
-				undefined,
-				transaction.stack,
+				"callback",
+				transactionSource,
 			);
 		case "response NOK": {
-			const sentMessage = transaction.getCurrentMessage();
 			if (isSendData(sentMessage)) {
 				return new ZWaveError(
 					`Failed to send the command after ${sentMessage.maxSendAttempts} attempts. Transmission queue full`,
 					ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			} else {
 				return new ZWaveError(
 					`The controller response indicated failure`,
 					ZWaveErrorCodes.Controller_ResponseNOK,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			}
 		}
 		case "callback NOK": {
-			const sentMessage = transaction.getCurrentMessage();
 			if (
 				sentMessage instanceof SendDataRequest ||
 				sentMessage instanceof SendDataBridgeRequest
@@ -137,7 +104,7 @@ export function sendDataErrorToZWaveError(
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			} else if (
 				sentMessage instanceof SendDataMulticastRequest ||
@@ -157,24 +124,25 @@ export function sendDataErrorToZWaveError(
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			} else {
 				return new ZWaveError(
 					`The controller callback indicated failure`,
 					ZWaveErrorCodes.Controller_CallbackNOK,
 					receivedMessage,
-					transaction.stack,
+					transactionSource,
 				);
 			}
 		}
-		case "node timeout":
+		case "aborted": {
 			return new ZWaveError(
-				`Timed out while waiting for a response from the node`,
-				ZWaveErrorCodes.Controller_NodeTimeout,
+				`The transaction was aborted`,
+				ZWaveErrorCodes.Controller_CommandAborted,
 				undefined,
-				transaction.stack,
+				transactionSource,
 			);
+		}
 	}
 }
 
@@ -202,82 +170,25 @@ export function isSerialCommandError(error: unknown): boolean {
 	return false;
 }
 
-// respondUnsolicited and notifyUnsolicited are extremely similar, but we need both.
-// Ideally we'd only use notifyUnsolicited, but then the state machine tests are failing.
-export const respondUnsolicited = respond(
-	(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
-		type: "unsolicited",
-		message: evt.message,
-	}),
-);
+export type ExtendedInterpreterFrom<
+	TMachine extends AnyStateMachine | ((...args: any[]) => AnyStateMachine),
+> = Extended<InterpreterFrom<TMachine>>;
 
-export const notifyUnsolicited = sendParent(
-	(
-		_ctx: any,
-		evt: SerialAPICommandEvent & { type: "message" | "unsolicited" },
-	) => ({
-		type: "unsolicited",
-		message: evt.message,
-	}),
-);
-
-/** Creates an auto-forwarding wrapper state machine that can be used to test machines that use sendParent */
-export function createWrapperMachine(
-	testMachine: StateMachine<any, any, any>,
-): StateMachine<any, any, any, any, any, any, any> {
-	return Machine<any, any, any>({
-		context: {
-			child: undefined,
-		},
-		initial: "main",
-		states: {
-			main: {
-				entry: assign({
-					child: () =>
-						spawn(testMachine, {
-							name: "child",
-							autoForward: true,
-						}),
-				}),
-			},
-		},
-	});
-}
-
-export type ExtendedInterpreter<
-	TContext = DefaultContext,
-	TStateSchema extends StateSchema = any,
-	TEvent extends EventObject = EventObject,
-	TTypestate extends Typestate<TContext> = { value: any; context: TContext },
-> = Interpreter<TContext, TStateSchema, TEvent, TTypestate> & {
-	restart(): Interpreter<TContext, TStateSchema, TEvent, TTypestate>;
+export type Extended<
+	TInterpreter extends Interpreter<any, any, any, any, any>,
+> = TInterpreter & {
+	restart(): TInterpreter;
 };
-export type Extended<TInterpreter extends Interpreter<any, any, any, any>> =
-	TInterpreter extends Interpreter<infer A, infer B, infer C, infer D>
-		? ExtendedInterpreter<A, B, C, D>
-		: never;
 
 /** Extends the default xstate interpreter with a restart function that re-attaches all event handlers */
-export function interpretEx<
-	TContext = DefaultContext,
-	TStateSchema extends StateSchema = any,
-	TEvent extends EventObject = EventObject,
-	TTypestate extends Typestate<TContext> = { value: any; context: TContext },
->(
-	machine: StateMachine<TContext, TStateSchema, TEvent, TTypestate>,
+export function interpretEx<TMachine extends AnyStateMachine>(
+	machine: TMachine,
 	options?: Partial<InterpreterOptions>,
-): ExtendedInterpreter<TContext, TStateSchema, TEvent, TTypestate> {
-	const interpreter = new Interpreter<
-		TContext,
-		TStateSchema,
-		TEvent,
-		TTypestate
-	>(machine, options) as ExtendedInterpreter<
-		TContext,
-		TStateSchema,
-		TEvent,
-		TTypestate
-	>;
+): ExtendedInterpreterFrom<TMachine> {
+	const interpreter = new Interpreter(
+		machine,
+		options,
+	) as ExtendedInterpreterFrom<TMachine>;
 
 	return new Proxy(interpreter, {
 		get(target, key) {
@@ -320,3 +231,36 @@ export function interpretEx<
 		},
 	});
 }
+
+export type TransactionReducerResult =
+	| {
+			// Silently drop the transaction
+			type: "drop";
+	  }
+	| {
+			// Do nothing (useful especially for the current transaction)
+			type: "keep";
+	  }
+	| {
+			// Reject the transaction with the given error
+			type: "reject";
+			message: string;
+			code: ZWaveErrorCodes;
+	  }
+	| {
+			// Resolve the transaction with the given message
+			type: "resolve";
+			message?: Message;
+	  }
+	| {
+			// Changes the priority (and tag) of the transaction if a new one is given,
+			// and moves the current transaction back to the queue
+			type: "requeue";
+			priority?: MessagePriority;
+			tag?: any;
+	  };
+
+export type TransactionReducer = (
+	transaction: Transaction,
+	source: "queue" | "active",
+) => TransactionReducerResult;

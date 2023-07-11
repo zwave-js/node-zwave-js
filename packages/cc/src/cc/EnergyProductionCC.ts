@@ -1,19 +1,21 @@
 import {
 	CommandClasses,
-	Maybe,
 	MessagePriority,
+	ValueMetadata,
+	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
-	ValueMetadata,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -33,8 +35,8 @@ import { V } from "../lib/Values";
 import {
 	EnergyProductionCommand,
 	EnergyProductionParameter,
-	EnergyProductionScale,
 	getEnergyProductionScale,
+	type EnergyProductionScale,
 } from "../lib/_Types";
 
 export const EnergyProductionCCValues = Object.freeze({
@@ -65,7 +67,9 @@ export const EnergyProductionCCValues = Object.freeze({
 
 @API(CommandClasses["Energy Production"])
 export class EnergyProductionCCAPI extends CCAPI {
-	public supportsCommand(cmd: EnergyProductionCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: EnergyProductionCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case EnergyProductionCommand.Get:
 				return true; // This is mandatory
@@ -73,28 +77,30 @@ export class EnergyProductionCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		if (
-			EnergyProductionCCValues.value.is({
-				commandClass: this.ccId,
-				property,
-				propertyKey,
-			})
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: EnergyProductionCCAPI,
+			{ property, propertyKey },
 		) {
-			return (await this.get(property as EnergyProductionParameter))
-				?.value;
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			if (
+				EnergyProductionCCValues.value.is({
+					commandClass: this.ccId,
+					property,
+					propertyKey,
+				})
+			) {
+				return (await this.get(property as EnergyProductionParameter))
+					?.value;
+			} else {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	@validateArgs({ strictEnums: true })
 	public async get(
 		parameter: EnergyProductionParameter,
-	): Promise<{ value: number; scale: EnergyProductionScale } | undefined> {
+	): Promise<MaybeNotKnown<{ value: number; scale: EnergyProductionScale }>> {
 		this.assertSupportsCommand(
 			EnergyProductionCommand,
 			EnergyProductionCommand.Get,
@@ -169,18 +175,32 @@ export class EnergyProductionCC extends CommandClass {
 	}
 }
 
+export interface EnergyProductionCCReportOptions extends CCCommandOptions {
+	parameter: EnergyProductionParameter;
+	scale: EnergyProductionScale;
+	value: number;
+}
+
 @CCCommand(EnergyProductionCommand.Report)
 export class EnergyProductionCCReport extends EnergyProductionCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| EnergyProductionCCReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.parameter = this.payload[0];
-		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
-		this.value = value;
-		this.scale = getEnergyProductionScale(this.parameter, scale);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.parameter = this.payload[0];
+			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			this.value = value;
+			this.scale = getEnergyProductionScale(this.parameter, scale);
+		} else {
+			this.parameter = options.parameter;
+			this.value = options.value;
+			this.scale = options.scale;
+		}
 	}
 
 	public readonly parameter: EnergyProductionParameter;
@@ -202,6 +222,26 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		this.setValue(applHost, valueValue, this.value);
 
 		return true;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.parameter]),
+			encodeFloatWithScale(this.value, this.scale.key),
+		]);
+		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				[getEnumMemberName(
+					EnergyProductionParameter,
+					this.parameter,
+				).toLowerCase()]: `${this.value} ${this.scale.unit}`,
+			},
+		};
 	}
 }
 
@@ -242,5 +282,17 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
+	}
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(applHost),
+			message: {
+				parameter: getEnumMemberName(
+					EnergyProductionParameter,
+					this.parameter,
+				),
+			},
+		};
 	}
 }

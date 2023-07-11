@@ -7,7 +7,7 @@ export function formatWithPrettier(
 	sourceText: string,
 ): string {
 	let rootPath = __dirname.replace(/\\/g, "/");
-	rootPath = rootPath.substr(0, rootPath.lastIndexOf("/packages/"));
+	rootPath = rootPath.slice(0, rootPath.lastIndexOf("/packages/"));
 
 	const prettierOptions = {
 		...require(path.join(rootPath, ".prettierrc")),

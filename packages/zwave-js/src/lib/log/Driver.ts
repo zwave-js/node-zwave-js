@@ -1,19 +1,19 @@
 import * as Sentry from "@sentry/node";
 import {
-	CommandClass,
 	isCommandClassContainer,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
+	type CommandClass,
 } from "@zwave-js/cc";
 import {
-	DataDirection,
-	getDirectionPrefix,
-	LogContext,
 	MessagePriority,
+	ZWaveLoggerBase,
+	getDirectionPrefix,
 	messageRecordToLines,
 	tagify,
-	ZWaveLogContainer,
-	ZWaveLoggerBase,
+	type DataDirection,
+	type LogContext,
+	type ZWaveLogContainer,
 } from "@zwave-js/core";
 import type { Message, ResponseRole } from "@zwave-js/serial";
 import { FunctionType, MessageType } from "@zwave-js/serial";

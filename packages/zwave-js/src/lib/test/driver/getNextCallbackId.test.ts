@@ -1,4 +1,4 @@
-import ava, { TestFn } from "ava";
+import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
 

@@ -2,11 +2,11 @@ import { createModel } from "@xstate/test";
 import type { Message } from "@zwave-js/serial";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import ava, { ExecutionContext, TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
-import { assign, interpret, Machine, State } from "xstate";
+import { assign, interpret, Machine, type State } from "xstate";
 import {
 	dummyCallbackNOK,
 	dummyCallbackOK,
@@ -21,9 +21,10 @@ import {
 } from "../test/messages";
 import {
 	createSerialAPICommandMachine,
-	SerialAPICommandDoneData,
-	SerialAPICommandInterpreter,
-	SerialAPICommandMachineParams,
+	type SerialAPICommandDoneData,
+	type SerialAPICommandInterpreter,
+	type SerialAPICommandMachineParams,
+	type SerialAPICommandServiceImplementations,
 } from "./SerialAPICommandMachine";
 
 interface AvaTestContext {
@@ -172,12 +173,12 @@ const testMachine = Machine<
 						// Skip the wait time if there should be any
 						const att = state.context.attempt;
 						if (att > 1) {
-							t.is(interpreter.state.value, "retryWait");
+							t.is(interpreter.getSnapshot().value, "retryWait");
 							t.context.clock.tick(100 + (att - 1) * 1000);
 						}
 
 						// Assert that sendData was called
-						t.is(interpreter.state.value, "sending");
+						t.is(interpreter.getSnapshot().value, "sending");
 						// but not more than 3 times
 						t.true(att <= 3);
 						t.is(sendData.callCount, att);
@@ -265,7 +266,7 @@ const testMachine = Machine<
 						machineResult,
 					}: TestContext) => {
 						// Ensure that the interpreter is in "success" state
-						t.is(interpreter.state.value, "success");
+						t.is(interpreter.getSnapshot().value, "success");
 						// with the correct reason
 						// expect(machineResult).toBeObject();
 						t.like(machineResult, {
@@ -285,7 +286,7 @@ const testMachine = Machine<
 						implementations: { sendData },
 					}: TestContext) => {
 						// Ensure that the interpreter is in "failure" state
-						t.is(interpreter.state.value, "failure");
+						t.is(interpreter.getSnapshot().value, "failure");
 						// with the correct reason
 						// expect(machineResult).toBeObject();
 						t.like(machineResult, {
@@ -309,7 +310,6 @@ const testMachine = Machine<
 );
 
 const testModel = createModel<TestContext, TestMachineContext>(
-	// @ts-expect-error
 	testMachine,
 ).withEvents({
 	CREATE: {
@@ -395,15 +395,17 @@ testPlans.forEach((plan) => {
 			});
 			const notifyRetry = sinon.stub();
 			const timestamp = () => 0;
-			const log = () => {};
 			const logOutgoingMessage = () => {};
+			const notifyUnsolicited = () => {
+				context.respondedUnsolicited = true;
+			};
 
-			const implementations = {
+			const implementations: SerialAPICommandServiceImplementations = {
 				sendData,
 				notifyRetry,
 				timestamp,
-				log,
 				logOutgoingMessage,
+				notifyUnsolicited,
 			};
 
 			// parse message from test description
@@ -421,24 +423,18 @@ testPlans.forEach((plan) => {
 			const machine = createSerialAPICommandMachine(
 				// @ts-ignore
 				messages[msg.resp][msg.cb],
-				implementations as any,
+				implementations,
 				machineParams,
 			);
 
 			context = {
 				avaExecutionContext: t,
 				interpreter: interpret(machine),
-				implementations,
+				implementations: implementations as any,
 			};
-			context.interpreter
-				.onEvent((evt) => {
-					if (evt.type === "unsolicited") {
-						context.respondedUnsolicited = true;
-					}
-				})
-				.onDone((evt) => {
-					context.machineResult = evt.data;
-				});
+			context.interpreter.onDone((evt) => {
+				context.machineResult = evt.data;
+			});
 			// context.interpreter.onTransition((state) => {
 			// 	if (state.changed) console.log(state.value);
 			// });

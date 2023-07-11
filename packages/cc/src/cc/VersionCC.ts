@@ -1,17 +1,16 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	getCCName,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	unknownBoolean,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLibraryTypes,
+	enumValuesToMetadataStates,
+	getCCName,
+	validatePayload,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
@@ -205,7 +204,7 @@ function parseVersion(buffer: Buffer): string {
 
 @API(CommandClasses.Version)
 export class VersionCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: VersionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case VersionCommand.Get:
 			case VersionCommand.Report:
@@ -216,20 +215,18 @@ export class VersionCCAPI extends PhysicalCCAPI {
 				// The API might have been created before the versions were determined,
 				// so `this.version` may contains a wrong value
 				return (
-					this.applHost.getSafeCCVersionForNode(
+					this.applHost.getSafeCCVersion(
 						this.ccId,
 						this.endpoint.nodeId,
 						this.endpoint.index,
 					) >= 3
 				);
 			case VersionCommand.ZWaveSoftwareGet: {
-				let ret = this.getValueDB().getValue<Maybe<boolean>>(
+				return this.getValueDB().getValue<boolean>(
 					VersionCCValues.supportsZWaveSoftwareGet.endpoint(
 						this.endpoint.index,
 					),
 				);
-				if (ret == undefined) ret = unknownBoolean;
-				return ret;
 			}
 		}
 		return super.supportsCommand(cmd);
@@ -272,7 +269,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getCCVersion(
 		requestedCC: CommandClasses,
-	): Promise<number | undefined> {
+	): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			VersionCommand,
 			VersionCommand.CommandClassGet,
@@ -400,9 +397,10 @@ export class VersionCC extends CommandClass {
 		});
 
 		const queryCCVersion = async (cc: CommandClasses): Promise<void> => {
-			// only query the ones we support a version > 1 for
+			// Only query CCs we support. Theoretically we could skip queries where we support only V1,
+			// but there are Z-Wave certification tests that require us to query all CCs
 			const maxImplemented = getImplementedVersion(cc);
-			if (maxImplemented <= 1) {
+			if (maxImplemented === 0) {
 				applHost.controllerLog.logNode(
 					node.id,
 					`  skipping query for ${CommandClasses[cc]} (${num2hex(
@@ -473,7 +471,7 @@ export class VersionCC extends CommandClass {
 			// Step 1: Query Version CC version
 			await queryCCVersion(CommandClasses.Version);
 			// The CC instance was created before the versions were determined, so `this.version` contains a wrong value
-			this.version = applHost.getSafeCCVersionForNode(
+			this.version = applHost.getSafeCCVersion(
 				CommandClasses.Version,
 				node.id,
 				this.endpointIndex,

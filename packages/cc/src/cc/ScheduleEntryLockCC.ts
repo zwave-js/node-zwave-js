@@ -1,33 +1,34 @@
 import {
 	CommandClasses,
-	encodeBitMask,
-	getDSTInfo,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	SupervisionResult,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	getDSTInfo,
+	isUnsupervisedOrSucceeded,
+	parseBitMask,
+	validatePayload,
+	type IZWaveEndpoint,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import {
-	AllOrNone,
 	formatDate,
 	formatTime,
 	getEnumMemberName,
 	pick,
+	type AllOrNone,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	CCCommandOptions,
 	CommandClass,
-	CommandClassDeserializationOptions,
 	gotDeserializationOptions,
+	type CCCommandOptions,
+	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -39,18 +40,20 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import { encodeTimezone, parseTimezone } from "../lib/serializers";
 import { V } from "../lib/Values";
 import {
 	ScheduleEntryLockCommand,
-	ScheduleEntryLockDailyRepeatingSchedule,
+	ScheduleEntryLockScheduleKind,
 	ScheduleEntryLockSetAction,
-	ScheduleEntryLockSlotId,
 	ScheduleEntryLockWeekday,
-	ScheduleEntryLockWeekDaySchedule,
-	ScheduleEntryLockYearDaySchedule,
-	Timezone,
+	type ScheduleEntryLockDailyRepeatingSchedule,
+	type ScheduleEntryLockSlotId,
+	type ScheduleEntryLockWeekDaySchedule,
+	type ScheduleEntryLockYearDaySchedule,
+	type Timezone,
 } from "../lib/_Types";
+import { encodeTimezone, parseTimezone } from "../lib/serializers";
+import { UserCodeCC } from "./UserCodeCC";
 
 export const ScheduleEntryLockCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Schedule Entry Lock"], {
@@ -60,11 +63,132 @@ export const ScheduleEntryLockCCValues = Object.freeze({
 			internal: true,
 		}),
 	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Schedule Entry Lock"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"userEnabled",
+			"userEnabled",
+			(userId: number) => userId,
+			({ property, propertyKey }) =>
+				property === "userEnabled" && typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"scheduleKind",
+			"scheduleKind",
+			(userId: number) => userId,
+			({ property, propertyKey }) =>
+				property === "scheduleKind" && typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"schedule",
+			"schedule",
+			(
+				scheduleKind: ScheduleEntryLockScheduleKind,
+				userId: number,
+				slotId: number,
+			) => toPropertyKey(scheduleKind, userId, slotId),
+			({ property, propertyKey }) =>
+				property === "schedule" && typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+	}),
 });
+
+function toPropertyKey(
+	scheduleKind: ScheduleEntryLockScheduleKind,
+	userId: number,
+	slotId: number,
+): number {
+	return (scheduleKind << 16) | (userId << 8) | slotId;
+}
+
+/** Caches information about a schedule */
+function persistSchedule(
+	this: ScheduleEntryLockCC,
+	applHost: ZWaveApplicationHost,
+	scheduleKind: ScheduleEntryLockScheduleKind,
+	userId: number,
+	slotId: number,
+	schedule:
+		| ScheduleEntryLockWeekDaySchedule
+		| ScheduleEntryLockYearDaySchedule
+		| ScheduleEntryLockDailyRepeatingSchedule
+		| false
+		| undefined,
+): void {
+	const scheduleValue = ScheduleEntryLockCCValues.schedule(
+		scheduleKind,
+		userId,
+		slotId,
+	);
+
+	if (schedule != undefined) {
+		this.setValue(applHost, scheduleValue, schedule);
+	} else {
+		this.removeValue(applHost, scheduleValue);
+	}
+}
+
+/** Updates the schedule kind assumed to be active for user in the cache */
+function setUserCodeScheduleKindCached(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+	userId: number,
+	scheduleKind: ScheduleEntryLockScheduleKind,
+): void {
+	applHost
+		.getValueDB(endpoint.nodeId)
+		.setValue(
+			ScheduleEntryLockCCValues.scheduleKind(userId).endpoint(
+				endpoint.index,
+			),
+			scheduleKind,
+		);
+}
+
+/** Updates whether scheduling is active for one or all user(s) in the cache */
+function setUserCodeScheduleEnabledCached(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+	userId: number | undefined,
+	enabled: boolean,
+): void {
+	const setEnabled = (userId: number) => {
+		applHost
+			.getValueDB(endpoint.nodeId)
+			.setValue(
+				ScheduleEntryLockCCValues.userEnabled(userId).endpoint(
+					endpoint.index,
+				),
+				enabled,
+			);
+	};
+
+	if (userId == undefined) {
+		// Enable/disable all users
+		const numUsers =
+			UserCodeCC.getSupportedUsersCached(applHost, endpoint) ?? 0;
+
+		for (let userId = 1; userId <= numUsers; userId++) {
+			setEnabled(userId);
+		}
+	} else {
+		setEnabled(userId);
+	}
+}
 
 @API(CommandClasses["Schedule Entry Lock"])
 export class ScheduleEntryLockCCAPI extends CCAPI {
-	public supportsCommand(cmd: ScheduleEntryLockCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ScheduleEntryLockCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ScheduleEntryLockCommand.EnableSet:
 			case ScheduleEntryLockCommand.EnableAllSet:
@@ -96,6 +220,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		enabled: boolean,
 		userId?: number,
 	): Promise<SupervisionResult | undefined> {
+		let result: SupervisionResult | undefined;
 		if (userId != undefined) {
 			this.assertSupportsCommand(
 				ScheduleEntryLockCommand,
@@ -109,7 +234,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				enabled,
 			});
 
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			result = await this.applHost.sendCommand(cc, this.commandOptions);
 		} else {
 			this.assertSupportsCommand(
 				ScheduleEntryLockCommand,
@@ -122,8 +247,20 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				enabled,
 			});
 
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			result = await this.applHost.sendCommand(cc, this.commandOptions);
 		}
+
+		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
+			// Remember the new state in the cache
+			setUserCodeScheduleEnabledCached(
+				this.applHost,
+				this.endpoint,
+				userId,
+				enabled,
+			);
+		}
+
+		return result;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -191,13 +328,44 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				  }),
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
+			// Editing (but not erasing) a schedule will enable scheduling for that user
+			// and switch it to the current scheduling kind
+			if (!!schedule) {
+				setUserCodeScheduleEnabledCached(
+					this.applHost,
+					this.endpoint,
+					slot.userId,
+					true,
+				);
+				setUserCodeScheduleKindCached(
+					this.applHost,
+					this.endpoint,
+					slot.userId,
+					ScheduleEntryLockScheduleKind.WeekDay,
+				);
+			}
+
+			// And cache the schedule
+			persistSchedule.call(
+				cc,
+				this.applHost,
+				ScheduleEntryLockScheduleKind.WeekDay,
+				slot.userId,
+				slot.slotId,
+				schedule ?? false,
+			);
+		}
+
+		return result;
 	}
 
 	@validateArgs()
 	public async getWeekDaySchedule(
 		slot: ScheduleEntryLockSlotId,
-	): Promise<ScheduleEntryLockWeekDaySchedule | undefined> {
+	): Promise<MaybeNotKnown<ScheduleEntryLockWeekDaySchedule>> {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.WeekDayScheduleSet,
@@ -263,13 +431,44 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				  }),
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
+			// Editing (but not erasing) a schedule will enable scheduling for that user
+			// and switch it to the current scheduling kind
+			if (!!schedule) {
+				setUserCodeScheduleEnabledCached(
+					this.applHost,
+					this.endpoint,
+					slot.userId,
+					true,
+				);
+				setUserCodeScheduleKindCached(
+					this.applHost,
+					this.endpoint,
+					slot.userId,
+					ScheduleEntryLockScheduleKind.YearDay,
+				);
+			}
+
+			// And cache the schedule
+			persistSchedule.call(
+				cc,
+				this.applHost,
+				ScheduleEntryLockScheduleKind.YearDay,
+				slot.userId,
+				slot.slotId,
+				schedule ?? false,
+			);
+		}
+
+		return result;
 	}
 
 	@validateArgs()
 	public async getYearDaySchedule(
 		slot: ScheduleEntryLockSlotId,
-	): Promise<ScheduleEntryLockYearDaySchedule | undefined> {
+	): Promise<MaybeNotKnown<ScheduleEntryLockYearDaySchedule>> {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.YearDayScheduleSet,
@@ -344,13 +543,44 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			},
 		);
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
+			// Editing (but not erasing) a schedule will enable scheduling for that user
+			// and switch it to the current scheduling kind
+			if (!!schedule) {
+				setUserCodeScheduleEnabledCached(
+					this.applHost,
+					this.endpoint,
+					slot.userId,
+					true,
+				);
+				setUserCodeScheduleKindCached(
+					this.applHost,
+					this.endpoint,
+					slot.userId,
+					ScheduleEntryLockScheduleKind.DailyRepeating,
+				);
+			}
+
+			// And cache the schedule
+			persistSchedule.call(
+				cc,
+				this.applHost,
+				ScheduleEntryLockScheduleKind.DailyRepeating,
+				slot.userId,
+				slot.slotId,
+				schedule ?? false,
+			);
+		}
+
+		return result;
 	}
 
 	@validateArgs()
 	public async getDailyRepeatingSchedule(
 		slot: ScheduleEntryLockSlotId,
-	): Promise<ScheduleEntryLockDailyRepeatingSchedule | undefined> {
+	): Promise<MaybeNotKnown<ScheduleEntryLockDailyRepeatingSchedule>> {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.DailyRepeatingScheduleSet,
@@ -381,7 +611,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		}
 	}
 
-	public async getTimezone(): Promise<Timezone | undefined> {
+	public async getTimezone(): Promise<MaybeNotKnown<Timezone>> {
 		this.assertSupportsCommand(
 			ScheduleEntryLockCommand,
 			ScheduleEntryLockCommand.TimeOffsetGet,
@@ -540,6 +770,119 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 					),
 				) || 0
 		);
+	}
+
+	/**
+	 * Returns whether scheduling for a given user ID (most likely) enabled. Since the Schedule Entry Lock CC
+	 * provides no way to query the enabled state, Z-Wave JS tracks this in its own cache.
+	 *
+	 * This only works AFTER the interview process and is likely to be wrong if a device
+	 * with existing schedules is queried. To be sure, disable scheduling for all users and enable
+	 * only the desired ones.
+	 */
+	public static getUserCodeScheduleEnabledCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		userId: number,
+	): boolean {
+		return !!applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				ScheduleEntryLockCCValues.userEnabled(userId).endpoint(
+					endpoint.index,
+				),
+			);
+	}
+
+	/**
+	 * Returns which scheduling kind is (most likely) enabled for a given user ID . Since the Schedule Entry Lock CC
+	 * provides no way to query the current state, Z-Wave JS tracks this in its own cache.
+	 *
+	 * This only works AFTER the interview process and is likely to be wrong if a device
+	 * with existing schedules is queried. To be sure, edit a schedule of the desired kind
+	 * which will automatically switch the user to that scheduling kind.
+	 */
+	public static getUserCodeScheduleKindCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		userId: number,
+	): MaybeNotKnown<ScheduleEntryLockScheduleKind> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue<ScheduleEntryLockScheduleKind>(
+				ScheduleEntryLockCCValues.scheduleKind(userId).endpoint(
+					endpoint.index,
+				),
+			);
+	}
+
+	public static getScheduleCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		scheduleKind: ScheduleEntryLockScheduleKind.WeekDay,
+		userId: number,
+		slotId: number,
+	): MaybeNotKnown<ScheduleEntryLockWeekDaySchedule | false>;
+
+	public static getScheduleCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		scheduleKind: ScheduleEntryLockScheduleKind.YearDay,
+		userId: number,
+		slotId: number,
+	): MaybeNotKnown<ScheduleEntryLockYearDaySchedule | false>;
+
+	public static getScheduleCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating,
+		userId: number,
+		slotId: number,
+	): MaybeNotKnown<ScheduleEntryLockDailyRepeatingSchedule | false>;
+
+	// Catch-all overload for applications which haven't narrowed `scheduleKind`
+	public static getScheduleCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		scheduleKind: ScheduleEntryLockScheduleKind,
+		userId: number,
+		slotId: number,
+	): MaybeNotKnown<
+		| ScheduleEntryLockWeekDaySchedule
+		| ScheduleEntryLockYearDaySchedule
+		| ScheduleEntryLockDailyRepeatingSchedule
+		| false
+	>;
+
+	/**
+	 * Returns the assumed state of a schedule. Since the Schedule Entry Lock CC
+	 * provides no way to query the current state, Z-Wave JS tracks this in its own cache.
+	 *
+	 * A return value of `false` means the slot is empty, a return value of `undefined` means the information is not cached yet.
+	 *
+	 * This only works AFTER the interview process.
+	 */
+	public static getScheduleCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		scheduleKind: ScheduleEntryLockScheduleKind,
+		userId: number,
+		slotId: number,
+	): MaybeNotKnown<
+		| ScheduleEntryLockWeekDaySchedule
+		| ScheduleEntryLockYearDaySchedule
+		| ScheduleEntryLockDailyRepeatingSchedule
+		| false
+	> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				ScheduleEntryLockCCValues.schedule(
+					scheduleKind,
+					userId,
+					slotId,
+				).endpoint(endpoint.index),
+			);
 	}
 }
 
@@ -864,6 +1207,29 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
 	public stopHour?: number;
 	public stopMinute?: number;
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		persistSchedule.call(
+			this,
+			applHost,
+			ScheduleEntryLockScheduleKind.WeekDay,
+			this.userId,
+			this.slotId,
+			this.weekday != undefined
+				? {
+						weekday: this.weekday,
+						startHour: this.startHour!,
+						startMinute: this.startMinute!,
+						stopHour: this.stopHour!,
+						stopMinute: this.stopMinute!,
+				  }
+				: false,
+		);
+
+		return true;
+	}
+
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
 			this.userId,
@@ -1162,6 +1528,34 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
 	public stopDay?: number;
 	public stopHour?: number;
 	public stopMinute?: number;
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		persistSchedule.call(
+			this,
+			applHost,
+			ScheduleEntryLockScheduleKind.YearDay,
+			this.userId,
+			this.slotId,
+			this.startYear != undefined
+				? {
+						startYear: this.startYear,
+						startMonth: this.startMonth!,
+						startDay: this.startDay!,
+						startHour: this.startHour!,
+						startMinute: this.startMinute!,
+						stopYear: this.stopYear!,
+						stopMonth: this.stopMonth!,
+						stopDay: this.stopDay!,
+						stopHour: this.stopHour!,
+						stopMinute: this.stopMinute!,
+				  }
+				: false,
+		);
+
+		return true;
+	}
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
@@ -1496,7 +1890,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 			validatePayload(this.payload.length >= 2);
 			this.userId = this.payload[0];
 			this.slotId = this.payload[1];
-			if (this.payload.length >= 7) {
+			// Only parse the schedule if it is present and some weekday is selected
+			if (this.payload.length >= 7 && this.payload[2] !== 0) {
 				this.weekdays = parseBitMask(
 					this.payload.slice(2, 3),
 					ScheduleEntryLockWeekday.Sunday,
@@ -1525,6 +1920,29 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 	public startMinute?: number;
 	public durationHour?: number;
 	public durationMinute?: number;
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		persistSchedule.call(
+			this,
+			applHost,
+			ScheduleEntryLockScheduleKind.DailyRepeating,
+			this.userId,
+			this.slotId,
+			this.weekdays?.length
+				? {
+						weekdays: this.weekdays,
+						startHour: this.startHour!,
+						startMinute: this.startMinute!,
+						durationHour: this.durationHour!,
+						durationMinute: this.durationMinute!,
+				  }
+				: false,
+		);
+
+		return true;
+	}
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.userId, this.slotId]);

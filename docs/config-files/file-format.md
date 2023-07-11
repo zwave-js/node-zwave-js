@@ -75,7 +75,7 @@ Can be used to add instructions for the user to a device:
 
 ## `endpoints`
 
-Optional endpoint-specific configuration. This includes associations and endpoint labels. Example:
+Optional endpoint-specific configuration. This includes associations, paramInformation and endpoint labels. Example:
 
 ```json
 "endpoints": {
@@ -88,7 +88,10 @@ Optional endpoint-specific configuration. This includes associations and endpoin
 		"label": "Relay",
 		"associations": {
 			// Association definitions for endpoint 1, see below for details
-		}
+		},
+		"paramInformation": [
+			// Config parameters that only exist on endpoint 1
+		]
 	},
 	// etc.
 }
@@ -353,6 +356,10 @@ If a device reports support for a CCs but does not correctly support it, this ca
 }
 ```
 
+### `disableAutoRefresh`
+
+Several command classes are refreshed regularly (every couple of hours) if they do not report all of their values automatically. It has been found that some devices respond with invalid reports when queried. By setting `disableAutoRefresh` to `true`, this feature can be disabled.
+
 ### `disableBasicMapping`
 
 By default, received `Basic CC::Report` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
@@ -388,6 +395,60 @@ Some legacy devices emit an NIF when a local event occurs (e.g. a button press) 
 ### `mapRootReportsToEndpoint`
 
 Some multi-channel devices incorrectly report state changes for one of their endpoints via the root device, however there is no way to automatically detect for which endpoint these reports are meant. The flag `mapRootReportsToEndpoint` can be used to specify which endpoint these reports are mapped to. Without this flag, reports to the root device are silently ignored, unless `preserveRootApplicationCCValueIDs` is `true`.
+
+### `overrideQueries`
+
+A frequent reason for device not "working" correctly is that they respond to queries incorrectly, e.g. RGB bulbs not reporting support for the blue color channel, or thermostats reporting the wrong supported modes. Using `overrideQueries`, the responses to these queries can be overridden, so they are not queried from the device anymore. Example:
+
+```js
+"overrideQueries": {
+	// For which CC the queries should be overridden. Also accepts the decimal or hexadecimal CC ID.
+	"Schedule Entry Lock": [
+		{
+			// Which endpoint the query should be overridden for (optional).
+			// Defaults to the root endpoint 0
+			"endpoint": 1,
+			// Which API method should be overridden. Available methods depend on the CC.
+			"method": "getNumSlots",
+			// Multiple overrides can optionally be specified for the same method, distinguished
+			// by the method arguments. If `matchArgs` is not specified, the override
+			// is used for all calls to the method.
+			// The arguments must be exactly the same as in the API call and are
+			// compared using equality (===)
+			"matchArgs": [1, 2, 3]
+			// The result that should be returned by the API method when called.
+			"result": {
+				"numWeekDaySlots": 0,
+				"numYearDaySlots": 0,
+				"numDailyRepeatingSlots": 1
+			},
+			// Which values should be stored in the value DB when the API method is called (optional).
+			// The keys are the names of the predefined values of the given CC,
+			// see the CC documentation for available values.
+			"persistValues": {
+				"numWeekDaySlots": 0,
+				"numYearDaySlots": 0,
+				"numDailyRepeatingSlots": 1,
+				// To pass arguments for dynamic CC values, put them in round brackets (must be parseable by `JSON.parse()`)
+				"userEnabled(1)": true
+			},
+			// Which metadata should be stored in the value DB when the API method is called (optional).
+			// The keys are the names of the predefined values of the given CC,
+			// see the CC documentation for available values.
+			"extendMetadata": {
+				"numWeekDaySlots": {
+					// This metadata will be merged with the statically defined metadata
+					"states": {
+						"0": "none",
+						"1": "one",
+						// ...
+					}
+				},
+			},
+		}
+	]
+}
+```
 
 ### `preserveEndpoints`
 
