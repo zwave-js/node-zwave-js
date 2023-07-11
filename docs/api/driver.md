@@ -399,6 +399,8 @@ The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/a
 | `"all nodes ready"`  | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                                                                                                                                                                                                                                                                                                         |
 | `"bootloader ready"` | Is emitted when the controller is in recovery mode (e.g. after a failed firmware upgrade) and the bootloader has been entered. This behavior is opt-in using the `allowBootloaderOnly` flag of the [`ZWaveOptions`](#ZWaveOptions). If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image. The `"driver ready"` event will not be emitted and commands attempting to talk to the serial API will fail in this mode. |
 
+In addition, the driver forwards events for all nodes, so they don't have to be registered on each node individually. See [`ZWaveNode` events](api/node.md#zwavenode-events) for details.
+
 ## Interfaces
 
 ### `FileSystem`
