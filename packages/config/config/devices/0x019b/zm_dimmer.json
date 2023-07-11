@@ -121,7 +121,7 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Dimmer function",
 					"value": 0
@@ -130,11 +130,11 @@
 					"label": "Scene Controller",
 					"value": 1
 				},
-                {
+				{
 					"label": "Scene Controller and dimming",
 					"value": 2
 				},
-                {
+				{
 					"label": "Disabled",
 					"value": 3
 				}
@@ -148,7 +148,7 @@
 			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Dimmer function",
 					"value": 0
@@ -157,11 +157,11 @@
 					"label": "Scene Controller",
 					"value": 1
 				},
-                {
+				{
 					"label": "Scene Controller and dimming",
 					"value": 2
 				},
-                {
+				{
 					"label": "Disabled",
 					"value": 3
 				}
@@ -175,8 +175,8 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
-			"unsigned": true, 
-            "options": [
+			"unsigned": true,
+			"options": [
 				{
 					"label": "Instant",
 					"value": 0
@@ -231,7 +231,7 @@
 			"defaultValue": 10,
 			"unit": "W",
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Disabled",
 					"value": 0
@@ -256,7 +256,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Dimmer",
 					"value": 0
