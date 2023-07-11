@@ -1,7 +1,6 @@
-// This is a re-brand of the ShenZhen Sunricher SR-ZV9032A-EU, manufacturer ID 0x0330
 {
-	"manufacturer": "Namron",
-	"manufacturerId": "0x0438",
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
+	"manufacturerId": "0x0330",
 	"label": "SR-ZV9032A-EU",
 	"description": "Multisensor",
 	"devices": [
