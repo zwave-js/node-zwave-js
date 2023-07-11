@@ -15,7 +15,7 @@
 	],
 	"firmwareVersion": {
 		"min": "0.0",
-		"max": "3.1W"
+		"max": "3.1"
 	},
 	"associations": {
 		"1": {
