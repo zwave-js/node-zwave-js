@@ -55,7 +55,6 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 import type { Driver } from "./Driver";
-import { sendDataErrorToZWaveError } from "./StateMachineShared";
 import type { MessageGenerator } from "./Transaction";
 
 export type MessageGeneratorImplementation = (
@@ -930,7 +929,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 							break;
 						}
 
-						// Pass the generated message to the transaction machine and remember the result for the next iteration
+						// Pass the generated message to the driver and remember the result for the next iteration
 						generator.current = value;
 						sendResult = yield generator.current;
 					} catch (e) {
@@ -939,24 +938,9 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 							resultPromise.reject(e);
 						} else if (isTransmitReport(e) && !e.isOK()) {
 							// The generator was prematurely ended by throwing a NOK transmit report.
-							// If this cannot be handled (e.g. by moving the messages to the wakeup queue), we need
-							// to treat this as an error
-							if (
-								driver.handleMissingNodeACK(
-									generator.parent as any,
-								)
-							) {
-								resetGenerator();
-								return;
-							} else {
-								resultPromise.reject(
-									sendDataErrorToZWaveError(
-										"callback NOK",
-										generator.parent,
-										e,
-									),
-								);
-							}
+							// The driver may want to retry it, so reset the generator
+							resetGenerator();
+							return;
 						} else {
 							// The generator was prematurely ended by throwing a Message
 							resultPromise.resolve(e as TResponse);

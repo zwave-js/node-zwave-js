@@ -514,9 +514,9 @@ deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
 
 > [!NOTE] These routes cannot be read back, since they are managed internally by the controller and no API exists to query them.
 
-#### Priority routes
+#### Priority routes (controller → nodes)
 
-In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first instead of the automatically determined routes.
+In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first before resorting to the automatically determined routes.
 
 > [!WARNING] While these methods are meant to improve the routing and latency in certain situations, they can easily make things worse by choosing the wrong or unreachable repeaters, or by selecting a route speed that is not supported by a node in the route.
 >
@@ -582,6 +582,8 @@ enum ZWaveDataRate {
 }
 ```
 
+#### Priority return routes (nodes → controller or nodes → other nodes)
+
 To control which routes a **node** will use for the first attempt, use the following methods:
 
 ```ts
@@ -601,6 +603,8 @@ assignPrioritySUCReturnRoute(
 
 -   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
 -   `assignPrioritySUCReturnRoute` does the same, but with the SUC (controller) as the destination node.
+
+These methods also assign up to 3 fallback routes, which are chosen automatically by the controller.
 
 > [!WARNING] It has been found that assigning return routes to nodes that already have a priority route can cause the priority route to be changed unexpectedly. To avoid this, assigning priority routes should be done last. Otherwise, call `deleteReturnRoutes` or `deleteSUCReturnRoutes` (for routes to the controller) before assigning new routes. Unfortunately, `deleteReturnRoutes` deletes **all** return routes to all destination nodes, so they all have to be set up again afterwards.
 
@@ -627,23 +631,32 @@ interface Route {
 
 > [!NOTE] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
 
-#### Custom non-priority return routes
+#### Manually assign custom return routes (nodes → controller or nodes → other nodes)
 
-A middle ground between the two approaches above is to set custom return routes manually. Unlike priority routes, these are not set in stone like priority return routes, so they can change if they fail. This uses the `Z-Wave Protocol` command class, which is used internally by the controller and Z-Wave protocol, so this should at least be considered an inofficial way to set return routes.
+As a last resort, the routes uses by a node can entirely be assigned manually. This uses the `Z-Wave Protocol` command class, which is used internally by the controller and Z-Wave protocol, so this should at least be considered an inofficial way to set return routes.
 
-Routes set by these methods have to be provided manually, up to 4 for each combination of source and destination node. If less routes are given, the remaining ones will be cleared:
+Up to 4 routes for each combination of source and destination node can be set. If less routes are given, the remaining ones will be cleared. Optionally, a priority route can be set, which will always be used for the first transmission attempt. Up to 3 of the other routes will then be used as fallbacks, but no automatically determined routes will be used.
+
+Note that the same caveats as above in regards to deleting priority non-SUC return routes apply.
 
 ```ts
-assignCustomReturnRoutes(nodeId: number, destinationNodeId: number, routes: Route[]): Promise<boolean>;
-assignCustomSUCReturnRoutes(nodeId: number, routes: Route[]): Promise<boolean>;
+assignCustomReturnRoutes(
+	nodeId: number,
+	destinationNodeId: number,
+	routes: Route[],
+	priorityRoute?: Route
+): Promise<boolean>;
+assignCustomSUCReturnRoutes(
+	nodeId: number,
+	routes: Route[],
+	priorityRoute?: Route
+): Promise<boolean>;
 ```
 
 -   `assignCustomReturnRoutes` assigns node `nodeId` a set of routes to node `destinationNodeId`.
 -   `assignCustomSUCReturnRoutes` does the same, but with the SUC as the destination.
 
-To remove these routes, use `deleteReturnRoutes` and `deleteSUCReturnRoutes` as described above.
-
-Like with priority return routes, Z-Wave JS caches the assigned routes, so they can be read back:
+Z-Wave JS caches manually assigned routes, so they can be read back:
 
 ```ts
 getCustomReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] | undefined;
@@ -653,7 +666,9 @@ getCustomSUCReturnRoutesCached(nodeId: number, destinationNodeId: number): Route
 -   `getCustomReturnRoutesCached` returns routes that were was set using `assignCustomReturnRoutes`.
 -   `getCustomSUCReturnRoutesCached` returns routes that were was set using `assignCustomSUCReturnRoutes`.
 
-> [!NOTE] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
+To read priority routes assigned using the optional `priorityRoute` parameter, use `getPriorityReturnRouteCached` and `getPrioritySUCReturnRouteCached` as described above.
+
+> [!ATTENTION] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
 
 ### Managing associations
 

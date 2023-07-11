@@ -4,6 +4,55 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 11.4.1 (2023-07-10)
+### Config file changes
+* Add missing product type to `Aeotec Water Sensor 7 Basic ZWA018` (#5989)
+* Override endpoint indizes for `heatapp! floor` (#5994)
+* Override schedule slot count for `P-KFCON-MOD-YALE` (#5991)
+* Override supported color channels for `Zipato RGBW Bulb2` (#5993)
+* Override supported thermostat modes for Z-Wave.me ZME_FT (#5997)
+
+### Changes under the hood
+* Fixed a typo in the `discoverNodeNeighbors` JSDoc (#5984)
+* Added Node.js 20 to the test matrix (#5983)
+* Added a compat flag to override (almost) arbitrary CC API queries (#5987, #5995)
+* Added the `yarn configfind ...` CLI command to quickly find a config file by ID
+
+## 11.4.0 (2023-07-06)
+### Features
+* Added the ability to assign priority return routes along with custom fallbacks (#5980)
+
+## 11.3.0 (2023-07-06)
+### Features
+* Add `zwaveDataRateToString` method (#5978)
+
+### Config file changes
+* Disable `Window Covering CC` for ZVIDAR Roller Blind (#5976)
+
+### Changes under the hood
+* Upgrade to TypeScript 5.1.6 (#5977)
+
+## 11.2.0 (2023-07-05)
+### Features
+* The `withTXReport` proxy now has the `setValue` and `pollValue` methods available (#3735)
+
+### Bugfixes
+* When checking incoming S2-encapsulated commands for duplicates, only the last command is now considered (#5967)
+* Incoming multicast `SupervisionCC::Get` commands are no longer answered (#5973)
+* Automatically use `...SUC...` variant when assigning custom/priority return routes with the controller as the destination (#5972)
+* Clear cached custom SUC return routes after assigning a priority SUC return route (#5970)
+* Ignore `Transport Service` and `CRC16` encapsulation when checking if a command is received at a lower-than-expected security level (#5966)
+* Respond to `Inclusion Controller CC` commands without requiring support (#5949)
+
+### Config file changes
+* Update Swidget devices to match their June 8th 2023 spec (#5956)
+* Add endpoint configuration parameters to SES 302 (#5954)
+
+### Changes under the hood
+* Upgrade to TypeScript 5.1 (#5950)
+* Most state machines involved with sending commands have been removed. Queue handling is now done entirely in the driver, making it easier to follow and debug. (#5958)
+* Add logging for `Energy Production CC` (#5951)
+
 ## 11.1.0 (2023-06-26)
 ### Features
 * The `ThermostatModeCC.set` API now accepts `manufacturerData` as a hex string instead of just a Buffer (#5929)

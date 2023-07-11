@@ -11,6 +11,18 @@ export enum ZWaveDataRate {
 	"100k" = 0x03,
 }
 
+export function zwaveDataRateToString(rate: ZWaveDataRate): string {
+	switch (rate) {
+		case ZWaveDataRate["9k6"]:
+			return "9.6 kbit/s";
+		case ZWaveDataRate["40k"]:
+			return "40 kbit/s";
+		case ZWaveDataRate["100k"]:
+			return "100 kbit/s";
+	}
+	return `Unknown (${num2hex(rate)})`;
+}
+
 export enum ProtocolDataRate {
 	ZWave_9k6 = 0x01,
 	ZWave_40k = 0x02,

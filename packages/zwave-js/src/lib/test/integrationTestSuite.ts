@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { MockPortBinding } from "@zwave-js/serial/mock";
+import { type DeepPartial } from "@zwave-js/shared";
 import {
 	type MockController,
 	type MockNode,
@@ -39,7 +40,7 @@ interface IntegrationTestOptions {
 		mockController: MockController,
 		mockNode: MockNode,
 	) => Promise<void>;
-	additionalDriverOptions?: Partial<ZWaveOptions>;
+	additionalDriverOptions?: DeepPartial<ZWaveOptions>;
 }
 
 export interface IntegrationTestFn {
@@ -116,8 +117,7 @@ function suite(
 			driver.once("driver ready", () => {
 				// Test code goes here
 
-				node = driver.controller.nodes.getOrThrow(mockNode.id);
-				node.once("ready", () => {
+				const onReady = () => {
 					if (clearMessageStatsBeforeTest) {
 						mockNode.clearReceivedControllerFrames();
 						mockNode.clearSentControllerFrames();
@@ -125,7 +125,18 @@ function suite(
 					}
 
 					process.nextTick(resolve);
-				});
+				};
+
+				node = driver.controller.nodes.getOrThrow(mockNode.id);
+
+				if (
+					options.additionalDriverOptions?.testingHooks
+						?.skipNodeInterview
+				) {
+					onReady();
+				} else {
+					node.once("ready", onReady);
+				}
 			});
 
 			continueStartup();

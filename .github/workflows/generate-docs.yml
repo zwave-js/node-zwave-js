@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     outputs:
       CHANGES: ${{ steps.changes.outputs.CHANGES }}

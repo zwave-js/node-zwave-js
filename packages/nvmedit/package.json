@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/nvmedit",
-  "version": "11.1.0",
+  "version": "11.4.0",
   "description": "zwave-js: library to edit NVM backups",
   "keywords": [],
   "publishConfig": {
@@ -65,9 +65,9 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.35.0",
+    "@microsoft/api-extractor": "^7.36.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.47",
+    "@types/node": "^14.18.52",
     "@types/semver": "^7.3.13",
     "@types/yargs": "^17.0.24",
     "ava": "^4.3.3",
@@ -75,6 +75,6 @@
     "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
     "prettier": "^2.8.8",
-    "typescript": "5.0.4"
+    "typescript": "5.1.6"
   }
 }
