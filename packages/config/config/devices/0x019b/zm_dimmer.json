@@ -25,7 +25,7 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch Multilevel",
+			"label": "Multilevel Switch",
 			"maxNodes": 5
 		}
 	},
@@ -51,8 +51,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Switch On Level",
-			"description": "Dimming level when restored from the OFF state",
+			"label": "Default Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -69,11 +68,11 @@
 			"#": "3",
 			"label": "Auto-Off Timer",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "seconds",
 			"options": [
 				{
 					"label": "Disable",
@@ -85,11 +84,11 @@
 			"#": "4",
 			"label": "Auto-On Timer",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "seconds",
 			"options": [
 				{
 					"label": "Disable",
@@ -123,7 +122,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Dimmer function",
+					"label": "Dimming",
 					"value": 0
 				},
 				{
@@ -150,7 +149,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Dimmer function",
+					"label": "Dimming",
 					"value": 0
 				},
 				{
@@ -202,7 +201,6 @@
 		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#dimmer_type_trail_lead",
-			"defaultValue": 0
 		},
 		{
 			"#": "11",
@@ -226,14 +224,14 @@
 			"#": "13",
 			"label": "Meter Report Threshold",
 			"valueSize": 1,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 10,
-			"unit": "W",
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -242,30 +240,18 @@
 			"#": "14",
 			"label": "Meter Report Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 30,
 			"maxValue": 65535,
 			"defaultValue": 810,
-			"unit": "seconds",
 			"unsigned": true
 		},
 		{
 			"#": "15",
-			"label": "Dimmer mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Dimmer",
-					"value": 0
-				},
-				{
-					"label": "Switch (On / Off)",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Dimmer Functionality",
+			"description": "When disabled, the device will act as a switch (on/off) instead of a dimmer.",
+			"defaultValue": 0
 		}
 	],
 	"metadata": {
