@@ -48,6 +48,9 @@ export interface NodeStatistics {
 	lwr?: RouteStatistics;
 	/** The next to last working route from the controller to this node. */
 	nlwr?: RouteStatistics;
+
+	/** The last time a command was received from or successfully sent to the node. */
+	lastSeen?: Date;
 }
 
 export interface RouteStatistics {

@@ -710,6 +710,14 @@ This property tracks the status a node in the network currently has (or is belie
 
 Changes of a node's status are broadcasted using the corresponding events - see below.
 
+### `lastSeen`
+
+```ts
+readonly lastSeen: MaybeNotKnown<Date>
+```
+
+This property tracks when the node was last seen, meaning a command was either received from the node or successfully sent to it.
+
 ### `isControllerNode`
 
 ```ts
@@ -1399,6 +1407,9 @@ interface NodeStatistics {
 	lwr?: RouteStatistics;
 	/** The next to last working route from the controller to this node. */
 	nlwr?: RouteStatistics;
+
+	/** The last time a command was received from or successfully sent to the node. */
+	lastSeen?: Date;
 }
 ```
 

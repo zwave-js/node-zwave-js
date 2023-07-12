@@ -2760,8 +2760,14 @@ export class Driver
 				data,
 				sdkVersion: this._controller?.sdkVersion,
 			});
-			// Ensure there are no errors
-			if (isCommandClassContainer(msg)) assertValidCCs(msg);
+			if (isCommandClassContainer(msg)) {
+				// Whether successful or not, a message from a node should update last seen
+				const node = this.getNodeUnsafe(msg);
+				if (node) node.lastSeen = new Date();
+
+				// Ensure there are no errors
+				assertValidCCs(msg);
+			}
 			// And update statistics
 			if (!!this._controller) {
 				if (isCommandClassContainer(msg)) {
@@ -4154,6 +4160,8 @@ ${handlers.length} left`,
 				} else {
 					node.incrementStatistics("commandsTX");
 					node.updateRTT(msg);
+					// Update last seen state
+					node.lastSeen = new Date();
 				}
 
 				// Notify listeners about the status report if one was received
