@@ -1429,6 +1429,11 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 // @public (undocumented)
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 
+// Warning: (ae-missing-release-tag) "zWaveNodeEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const zWaveNodeEvents: readonly ["notification", "interview failed", "firmware update progress", "firmware update finished", "wake up", "sleep", "dead", "alive", "interview completed", "ready", "interview stage completed", "interview started", "value added", "value updated", "value removed", "metadata updated", "value notification"];
+
 // Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateFinishedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
