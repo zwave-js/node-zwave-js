@@ -1015,8 +1015,12 @@ When configuring devices or during longer message exchanges, this behavior may b
 
 ## ZWaveNode events
 
-The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are available:
+The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc.
 
+> [!NOTE] All events of the `ZWaveNode` class are also available via the `Driver` class, so they don't have to be registered for each node individually.
+These events are all prefixed with `node`, e.g. `"node ready"` instead of `"ready"`, `"node sleep"` instead of `"sleep"`, etc. Their callback signatures are the same as for the node events.
+
+The following events are defined:
 ### `"wake up"` / `"sleep"`
 
 A sleeping node has woken up or gone back to sleep. The node is passed as the single argument to the callback:
