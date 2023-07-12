@@ -3544,6 +3544,11 @@ supported CCs: ${nodeInfo.supportedCCs
 				return true; // Don't invoke any more handlers
 			}
 
+			case RemoveNodeStatus.Reserved_0x05:
+			// The reserved status can be triggered on some controllers by doing the following:
+			// - factory reset the controller without excluding nodes
+			// - include a new node with the same node ID as one on the previous network
+			// - attempt to exclude the old node while the new node is responsive
 			case RemoveNodeStatus.Done: {
 				// this is called when the exclusion was completed
 				// stop the exclusion process so we don't accidentally remove another node
@@ -3553,7 +3558,10 @@ supported CCs: ${nodeInfo.supportedCCs
 					/* ok */
 				}
 
-				if (!this._nodePendingExclusion) {
+				if (
+					msg.status === RemoveNodeStatus.Reserved_0x05 ||
+					!this._nodePendingExclusion
+				) {
 					// The exclusion did not succeed
 					this.setInclusionState(InclusionState.Idle);
 					return true;
