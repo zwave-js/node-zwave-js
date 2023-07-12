@@ -1862,6 +1862,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				});
 				node.updateNodeInfo(msg.nodeInformation);
 
+				// This came from the node
+				node.lastSeen = new Date();
+
 				// Resolve active pings that would fail otherwise
 				this.driver.resolvePendingPings(node.id);
 

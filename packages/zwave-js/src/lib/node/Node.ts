@@ -908,6 +908,20 @@ export class ZWaveNode
 		}
 	}
 
+	/** The last time a message was received from this node */
+	public get lastSeen(): MaybeNotKnown<Date> {
+		return this.driver.cacheGet(cacheKeys.node(this.id).lastSeen);
+	}
+	/** @internal */
+	public set lastSeen(value: MaybeNotKnown<Date>) {
+		this.driver.cacheSet(cacheKeys.node(this.id).lastSeen, value);
+		// Also update statistics
+		this.updateStatistics((cur) => ({
+			...cur,
+			lastSeen: value,
+		}));
+	}
+
 	private _valueDB: ValueDB;
 	/**
 	 * Provides access to this node's values
