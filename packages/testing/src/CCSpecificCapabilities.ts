@@ -63,12 +63,18 @@ export interface EnergyProductionCCCapabilities {
 	};
 }
 
+export interface ThermostatModeCCCapabilities {
+	// FIXME: This should be ThermostatMode[], but that would introduce a dependency cycle
+	supportedModes: number[];
+}
+
 export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
 	[106 /* Window Covering */]: WindowCoveringCCCapabilities;
 	[144 /* Energy Production */]: EnergyProductionCCCapabilities;
+	[64 /* Thermostat Mode */]: ThermostatModeCCCapabilities;
 };
 
 export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> =

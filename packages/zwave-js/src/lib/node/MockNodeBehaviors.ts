@@ -30,6 +30,7 @@ import { behaviors as EnergyProductionCCBehaviors } from "./mockCCBehaviors/Ener
 import { behaviors as ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
 import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { behaviors as SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
+import { behaviors as ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
 import { behaviors as WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
@@ -281,6 +282,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		...ManufacturerSpecificCCBehaviors,
 		...NotificationCCBehaviors,
 		...SoundSwitchCCBehaviors,
+		...ThermostatModeCCBehaviors,
 		...WindowCoveringCCBehaviors,
 	];
 }
