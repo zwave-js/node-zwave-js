@@ -763,6 +763,7 @@ export interface NodeStatistics {
     commandsDroppedTX: number;
     commandsRX: number;
     commandsTX: number;
+    lastSeen?: Date;
     lwr?: RouteStatistics;
     nlwr?: RouteStatistics;
     rssi?: RSSI_2;
@@ -1339,6 +1340,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     keepAwake: boolean;
     // (undocumented)
     get label(): string | undefined;
+    get lastSeen(): MaybeNotKnown<Date>;
     protected loadDeviceConfig(): Promise<void>;
     get location(): MaybeNotKnown<string>;
     set location(value: string | undefined);
