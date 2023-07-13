@@ -27,8 +27,11 @@ import {
 } from "@zwave-js/testing";
 import { behaviors as ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { behaviors as EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
+import { behaviors as ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
 import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { behaviors as SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
+import { behaviors as ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
+import { behaviors as ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint";
 import { behaviors as WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
@@ -276,9 +279,12 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToS2ZWavePlusCCGet,
 
 		...ConfigurationCCBehaviors,
+		...EnergyProductionCCBehaviors,
+		...ManufacturerSpecificCCBehaviors,
 		...NotificationCCBehaviors,
 		...SoundSwitchCCBehaviors,
+		...ThermostatModeCCBehaviors,
+		...ThermostatSetpointCCBehaviors,
 		...WindowCoveringCCBehaviors,
-		...EnergyProductionCCBehaviors,
 	];
 }

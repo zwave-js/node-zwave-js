@@ -63,12 +63,32 @@ export interface EnergyProductionCCCapabilities {
 	};
 }
 
+export interface ThermostatModeCCCapabilities {
+	// FIXME: This should be ThermostatMode[], but that would introduce a dependency cycle
+	supportedModes: number[];
+}
+
+export interface ThermostatSetpointCCCapabilities {
+	setpoints: Record<
+		// FIXME: This should be ThermostatSetpointType, but that would introduce a dependency cycle
+		number,
+		{
+			minValue: number;
+			maxValue: number;
+			defaultValue?: number;
+			scale: "°C" | "°F";
+		}
+	>;
+}
+
 export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
 	[106 /* Window Covering */]: WindowCoveringCCCapabilities;
 	[144 /* Energy Production */]: EnergyProductionCCCapabilities;
+	[64 /* Thermostat Mode */]: ThermostatModeCCCapabilities;
+	[67 /* Thermostat Setpoint */]: ThermostatSetpointCCCapabilities;
 };
 
 export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> =
