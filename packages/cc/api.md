@@ -9887,13 +9887,16 @@ export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
 //
 // @public (undocumented)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ManufacturerSpecificCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: ManufacturerSpecificCCReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
     readonly manufacturerId: number;
     // (undocumented)
     readonly productId: number;
     // (undocumented)
     readonly productType: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -15539,13 +15542,16 @@ export class ThermostatModeCCGet extends ThermostatModeCC {
 //
 // @public (undocumented)
 export class ThermostatModeCCReport extends ThermostatModeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | CCCommandOptions);
+    // Warning: (ae-forgotten-export) The symbol "ThermostatModeCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatModeCCReportOptions);
     // (undocumented)
     readonly manufacturerData: Buffer | undefined;
     // (undocumented)
     readonly mode: ThermostatMode;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -15576,9 +15582,12 @@ export class ThermostatModeCCSupportedGet extends ThermostatModeCC {
 //
 // @public (undocumented)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ThermostatModeCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatModeCCSupportedReportOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly supportedModes: ThermostatMode[];
     // (undocumented)
@@ -15959,21 +15968,24 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCCapabilitiesReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCCapabilitiesReportOptions);
     // (undocumented)
-    get maxValue(): number;
+    maxValue: number;
     // (undocumented)
-    get maxValueScale(): number;
+    maxValueScale: number;
     // (undocumented)
-    get minValue(): number;
+    minValue: number;
     // (undocumented)
-    get minValueScale(): number;
+    minValueScale: number;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
-    get type(): ThermostatSetpointType;
+    type: ThermostatSetpointType;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15994,17 +16006,20 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCReportOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    readonly scale: number;
+    scale: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
-    get type(): ThermostatSetpointType;
+    type: ThermostatSetpointType;
     // (undocumented)
-    get value(): number;
+    value: number;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16035,7 +16050,10 @@ export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCSupportedReportOptions);
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
     // (undocumented)

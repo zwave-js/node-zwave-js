@@ -38,6 +38,8 @@ export type CCSpecificCapabilities = {
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
     [144]: EnergyProductionCCCapabilities;
+    [64]: ThermostatModeCCCapabilities;
+    [67]: ThermostatSetpointCCCapabilities;
 };
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -338,6 +340,27 @@ export interface SoundSwitchCCCapabilities {
         name: string;
         duration: number;
     }[];
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatModeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatModeCCCapabilities {
+    // (undocumented)
+    supportedModes: number[];
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCCapabilities {
+    // (undocumented)
+    setpoints: Record<number, {
+        minValue: number;
+        maxValue: number;
+        defaultValue?: number;
+        scale: "°C" | "°F";
+    }>;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
