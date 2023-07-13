@@ -27,6 +27,7 @@ import {
 } from "@zwave-js/testing";
 import { behaviors as ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { behaviors as EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
+import { behaviors as ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
 import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { behaviors as SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
 import { behaviors as WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
@@ -276,9 +277,10 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToS2ZWavePlusCCGet,
 
 		...ConfigurationCCBehaviors,
+		...EnergyProductionCCBehaviors,
+		...ManufacturerSpecificCCBehaviors,
 		...NotificationCCBehaviors,
 		...SoundSwitchCCBehaviors,
 		...WindowCoveringCCBehaviors,
-		...EnergyProductionCCBehaviors,
 	];
 }
