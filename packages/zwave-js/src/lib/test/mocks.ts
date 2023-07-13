@@ -15,6 +15,7 @@ import {
 	type FLiRS,
 	type IZWaveEndpoint,
 	type IZWaveNode,
+	type MaybeNotKnown,
 } from "@zwave-js/core";
 import type { TestingHost } from "@zwave-js/host";
 import {
@@ -389,7 +390,7 @@ export function createTestEndpoint(
 			throw new Error("Function not implemented.");
 		},
 		getNodeUnsafe: function (): IZWaveNode | undefined {
-			throw new Error("Function not implemented.");
+			return host.nodes.get(options.nodeId);
 		},
 	};
 
