@@ -201,11 +201,11 @@
 					"value": 1
 				},
 				{
-					"label": "Pulsing Temperature, Flashing Motion",
+					"label": "Flashing with Temperature and Motion",
 					"value": 2
 				},
 				{
-					"label": "Flashing Temperature and Motion",
+					"label": "Flashing with Motion (Default)",
 					"value": 3
 				}
 			]
@@ -240,7 +240,7 @@
 			"#": "8",
 			// Added in firmware version 32.2, still present in HW 3.0
 			"$if": "firmwareVersion >= 32.2 || firmwareVersion >= 1.10 && firmwareVersion < 16.9",
-			"$import": "~/templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Basic Set Reports",
 			"defaultValue": 1
 		},
