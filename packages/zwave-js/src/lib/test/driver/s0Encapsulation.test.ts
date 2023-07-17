@@ -1,5 +1,6 @@
 import {
-	BasicCCSet,
+	BasicCCGet,
+	BasicCCReport,
 	SecurityCC,
 	SecurityCCCommandEncapsulation,
 	SecurityCCCommandsSupportedGet,
@@ -14,15 +15,14 @@ import {
 	type MockNodeBehavior,
 	type MockZWaveFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import path from "path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("communication via Security S0 works", {
 	debug: true,
 
-	// We need the cache to skip the CC interviews and mark S2 as supported
-	provisioningDirectory: path.join(__dirname, "fixtures/s0Encapsulation"),
+	nodeCapabilities: {
+		commandClasses: [CommandClasses.Basic, CommandClasses.Security],
+	},
 
 	customSetup: async (driver, controller, mockNode) => {
 		// Create a security manager for the node
@@ -123,6 +123,57 @@ integrationTest("communication via Security S0 works", {
 		};
 		mockNode.defineBehavior(respondToS0CommandsSupportedGet);
 
+		// Respond to S0-encapsulated Basic Get with a level that increases with each request
+		let queryCount = 0;
+		const respondToS0BasicGet: MockNodeBehavior = {
+			async onControllerFrame(controller, self, frame) {
+				if (
+					frame.type === MockZWaveFrameType.Request &&
+					frame.payload instanceof SecurityCCCommandEncapsulation &&
+					frame.payload.encapsulated instanceof BasicCCGet
+				) {
+					const nonceGet = new SecurityCCNonceGet(self.host, {
+						nodeId: controller.host.ownNodeId,
+					});
+					await self.sendToController(
+						createMockZWaveRequestFrame(nonceGet, {
+							ackRequested: false,
+						}),
+					);
+
+					const nonceReport = await self.expectControllerFrame(
+						1000,
+						(
+							resp,
+						): resp is MockZWaveFrame & {
+							type: MockZWaveFrameType.Request;
+							payload: SecurityCCNonceReport;
+						} =>
+							resp.type === MockZWaveFrameType.Request &&
+							resp.payload instanceof SecurityCCNonceReport,
+					);
+					const receiverNonce = nonceReport.payload.nonce;
+
+					const response = new BasicCCReport(self.host, {
+						nodeId: controller.host.ownNodeId,
+						currentValue: ++queryCount,
+					});
+					const cc = SecurityCC.encapsulate(self.host, response);
+					cc.nonce = receiverNonce;
+
+					await self.sendToController(
+						createMockZWaveRequestFrame(cc, {
+							ackRequested: false,
+						}),
+					);
+
+					return true;
+				}
+				return false;
+			},
+		};
+		mockNode.defineBehavior(respondToS0BasicGet);
+
 		// Parse Security CC commands. This MUST be defined last, since defineBehavior will prepend it to the list
 		const parseS0CC: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
@@ -141,16 +192,9 @@ integrationTest("communication via Security S0 works", {
 	},
 
 	testBody: async (t, driver, node, mockController, mockNode) => {
-		await node.commandClasses.Basic.set(0x55);
+		const result = await node.commandClasses.Basic.get();
 
-		await wait(100);
-		mockNode.assertReceivedControllerFrame(
-			(f) =>
-				f.type === MockZWaveFrameType.Request &&
-				f.payload instanceof SecurityCCCommandEncapsulation &&
-				f.payload.encapsulated instanceof BasicCCSet &&
-				f.payload.encapsulated.targetValue === 0x55,
-		);
+		t.is(result?.currentValue, 2);
 
 		t.pass();
 	},
