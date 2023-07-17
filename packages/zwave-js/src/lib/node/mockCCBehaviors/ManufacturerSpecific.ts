@@ -31,4 +31,6 @@ const respondToManufacturerSpecificGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [respondToManufacturerSpecificGet];
+export const ManufacturerSpecificCCBehaviors = [
+	respondToManufacturerSpecificGet,
+];

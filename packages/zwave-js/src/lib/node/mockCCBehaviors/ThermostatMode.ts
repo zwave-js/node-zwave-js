@@ -101,7 +101,7 @@ const respondToThermostatModeSupportedGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [
+export const ThermostatModeCCBehaviors = [
 	respondToThermostatModeGet,
 	respondToThermostatModeSet,
 	respondToThermostatModeSupportedGet,
