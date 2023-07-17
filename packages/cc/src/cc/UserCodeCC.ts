@@ -19,7 +19,7 @@ import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
-	isPrintableASCIIWithNewlines,
+	isPrintableASCIIWithWhitespace,
 	num2hex,
 	pick,
 } from "@zwave-js/shared/safe";
@@ -1289,12 +1289,10 @@ export class UserCodeCCReport
 					this.userCode = userCodeString;
 				} else if (
 					this.version === 1 &&
-					isPrintableASCIIWithNewlines(userCodeString)
+					isPrintableASCIIWithWhitespace(userCodeString)
 				) {
-					// Ignore leading and trailing newlines in V1 reports if the rest is ASCII
-					this.userCode = userCodeString
-						.replace(/^[\r\n]*/, "")
-						.replace(/[\r\n]*$/, "");
+					// Ignore leading and trailing whitespace in V1 reports if the rest is ASCII
+					this.userCode = userCodeString.trim();
 				} else {
 					this.userCode = userCodeBuffer;
 				}
