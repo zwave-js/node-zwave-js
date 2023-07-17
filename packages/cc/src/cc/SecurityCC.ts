@@ -73,7 +73,7 @@ function throwNoNonce(reason?: string): never {
 	throw new ZWaveError(message, ZWaveErrorCodes.SecurityCC_NoNonce);
 }
 
-const HALF_NONCE_SIZE = 8;
+export const HALF_NONCE_SIZE = 8;
 
 // TODO: Ignore commands if received via multicast
 
