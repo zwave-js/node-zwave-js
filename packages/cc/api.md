@@ -16686,7 +16686,10 @@ export class UserCodeCCCapabilitiesGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "UserCodeCCCapabilitiesReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCCapabilitiesReportOptions);
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly supportedASCIIChars: string;
     // (undocumented)
@@ -16780,11 +16783,14 @@ export class UserCodeCCKeypadModeGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "UserCodeCCKeypadModeReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCKeypadModeReportOptions);
     // (undocumented)
     readonly keypadMode: KeypadMode;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -16813,9 +16819,12 @@ export class UserCodeCCMasterCodeGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCMasterCodeReport extends UserCodeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "UserCodeCCMasterCodeReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCMasterCodeReportOptions);
     // (undocumented)
     readonly masterCode: string;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
@@ -16839,9 +16848,12 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCReport extends UserCodeCC implements NotificationEventPayload {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "UserCodeCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCReportOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
@@ -16883,7 +16895,10 @@ export class UserCodeCCUserCodeChecksumGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "UserCodeCCUserCodeChecksumReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCUserCodeChecksumReportOptions);
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
@@ -16900,7 +16915,10 @@ export class UserCodeCCUsersNumberGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "UserCodeCCUsersNumberReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCUsersNumberReportOptions);
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly supportedUsers: number;
     // (undocumented)
