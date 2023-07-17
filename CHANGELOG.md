@@ -4,6 +4,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add `lastSeen` property to node and node statistics (#6008)
+* Make `ZWaveNode` events available via the `Driver` (#6002)
+
+### Bugfixes
+* Handle when the controller sends a reserved status code after failed exclusion (#6004)
+* Fixed a regression from `v11.2.0` where a node's S0 nonce requests weren't answered during a Get-Report command flow (#6024)
+
+### Config file changes
+fix(config): add new fingerprint for Zooz ZST10-700 (#6022)
+
+### Changes under the hood
+* Add mocks for `User Code CC` and `Schedule Entry Lock CC` (#6023)
+* Add mocks for `Manufacturer Specific`, `Thermostat Mode` and `Thermostat Setpoint CC` (#6013)
+
 ## 11.4.2 (2023-07-11)
 ### Config file changes
 * Add Heatit ZM Dimmer (#5999)
