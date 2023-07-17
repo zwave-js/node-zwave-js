@@ -30,6 +30,7 @@ import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
 import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
 import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
+import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
 import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
 import { ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
 import { ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint";
@@ -284,6 +285,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		...EnergyProductionCCBehaviors,
 		...ManufacturerSpecificCCBehaviors,
 		...NotificationCCBehaviors,
+		...ScheduleEntryLockCCBehaviors,
 		...SoundSwitchCCBehaviors,
 		...ThermostatModeCCBehaviors,
 		...ThermostatSetpointCCBehaviors,

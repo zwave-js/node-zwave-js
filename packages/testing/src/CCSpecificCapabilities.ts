@@ -96,6 +96,12 @@ export interface UserCodeCCCapabilities {
 	supportedASCIIChars?: string;
 }
 
+export interface ScheduleEntryLockCCCapabilities {
+	numWeekDaySlots: number;
+	numYearDaySlots: number;
+	numDailyRepeatingSlots: number;
+}
+
 export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
@@ -105,6 +111,7 @@ export type CCSpecificCapabilities = {
 	[64 /* Thermostat Mode */]: ThermostatModeCCCapabilities;
 	[67 /* Thermostat Setpoint */]: ThermostatSetpointCCCapabilities;
 	[99 /* User Code */]: UserCodeCCCapabilities;
+	[78 /* Schedule Entry Lock */]: ScheduleEntryLockCCCapabilities;
 };
 
 export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> =

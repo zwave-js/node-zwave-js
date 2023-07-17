@@ -24,7 +24,7 @@ import {
 	type UserCodeCCCapabilities,
 } from "@zwave-js/testing";
 
-const defaultCapabilities: UserCodeCCCapabilities = {
+export const defaultCapabilities: UserCodeCCCapabilities = {
 	numUsers: 1,
 	supportedASCIIChars: "0123456789",
 	supportsMasterCode: true,
