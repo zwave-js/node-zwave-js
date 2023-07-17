@@ -316,6 +316,17 @@
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Notification Report: Local Water Leak Sensor Probe Detection",
 			"defaultValue": 1
+		},
+		{
+			"#": "99",
+			"label": "Manual Calibration Offset",
+			"description": "If the valve doesn't fully open after manual calibration, adjust the open angle with an offset.",
+			"valueSize": 1,
+			"unit": "percent",
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"unsigned": true
 		}
 	],
 	"metadata": {
