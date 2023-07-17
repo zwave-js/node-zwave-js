@@ -81,6 +81,21 @@ export interface ThermostatSetpointCCCapabilities {
 	>;
 }
 
+export interface UserCodeCCCapabilities {
+	numUsers: number;
+	supportsMasterCode?: boolean;
+	supportsMasterCodeDeactivation?: boolean;
+	supportsUserCodeChecksum?: boolean;
+	// Not implemented in mocks:
+	// supportsMultipleUserCodeReport?: boolean;
+	// supportsMultipleUserCodeSet?: boolean;
+	// FIXME: This should be UserCodeStatus[], but that would introduce a dependency cycle
+	supportedUserIDStatuses?: number[];
+	// FIXME: This should be KeypadMode[], but that would introduce a dependency cycle
+	supportedKeypadModes?: number[];
+	supportedASCIIChars?: string;
+}
+
 export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
@@ -89,6 +104,7 @@ export type CCSpecificCapabilities = {
 	[144 /* Energy Production */]: EnergyProductionCCCapabilities;
 	[64 /* Thermostat Mode */]: ThermostatModeCCCapabilities;
 	[67 /* Thermostat Setpoint */]: ThermostatSetpointCCCapabilities;
+	[99 /* User Code */]: UserCodeCCCapabilities;
 };
 
 export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> =

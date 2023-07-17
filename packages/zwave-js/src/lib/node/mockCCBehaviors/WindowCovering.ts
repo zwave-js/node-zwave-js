@@ -42,4 +42,4 @@ const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [respondToWindowCoveringSupportedGet];
+export const WindowCoveringCCBehaviors = [respondToWindowCoveringSupportedGet];

@@ -85,7 +85,7 @@ const respondToNotificationEventSupportedGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [
+export const NotificationCCBehaviors = [
 	respondToNotificationSupportedGet,
 	respondToNotificationEventSupportedGet,
 ];

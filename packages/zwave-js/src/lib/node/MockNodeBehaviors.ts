@@ -25,14 +25,16 @@ import {
 	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
-import { behaviors as ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
-import { behaviors as EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
-import { behaviors as ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
-import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
-import { behaviors as SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
-import { behaviors as ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
-import { behaviors as ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint";
-import { behaviors as WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
+
+import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
+import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
+import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
+import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
+import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
+import { ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
+import { ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint";
+import { UserCodeCCBehaviors } from "./mockCCBehaviors/UserCode";
+import { WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
@@ -285,6 +287,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		...SoundSwitchCCBehaviors,
 		...ThermostatModeCCBehaviors,
 		...ThermostatSetpointCCBehaviors,
+		...UserCodeCCBehaviors,
 		...WindowCoveringCCBehaviors,
 	];
 }

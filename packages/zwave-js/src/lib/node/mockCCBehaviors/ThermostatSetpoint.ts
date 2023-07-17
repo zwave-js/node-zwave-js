@@ -213,7 +213,7 @@ const respondToThermostatSetpointCapabilitiesGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [
+export const ThermostatSetpointCCBehaviors = [
 	respondToThermostatSetpointGet,
 	respondToThermostatSetpointSet,
 	respondToThermostatSetpointSupportedGet,
