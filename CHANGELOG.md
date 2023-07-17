@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.5.0 (2023-07-17)
 ### Features
 * Add `lastSeen` property to node and node statistics (#6008)
 * Make `ZWaveNode` events available via the `Driver` (#6002)
