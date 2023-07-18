@@ -145,10 +145,10 @@ export function isEnumMember(enumeration: unknown, value: number): boolean;
 // @public (undocumented)
 export function isPrintableASCII(text: string): boolean;
 
-// Warning: (ae-missing-release-tag) "isPrintableASCIIWithNewlines" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isPrintableASCIIWithWhitespace" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function isPrintableASCIIWithNewlines(text: string): boolean;
+export function isPrintableASCIIWithWhitespace(text: string): boolean;
 
 // Warning: (ae-missing-release-tag) "JSONObject" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
