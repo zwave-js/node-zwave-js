@@ -70,8 +70,32 @@ test("aborting clears all pending items", async (t) => {
 	});
 
 	queue.add(1, 2, 3, 4, 5);
-	await wait(75);
+	await wait(50);
 	queue.abort();
 
 	t.deepEqual(await actual, [1, 2, 3]);
+});
+
+test("items can be removed before they are consumed", async (t) => {
+	const queue = new AsyncQueue<number>();
+
+	const actual = new Promise<number[]>(async (resolve) => {
+		const seen: number[] = [];
+		for await (const item of queue) {
+			seen.push(item);
+			if (seen.length === 2) {
+				await wait(100);
+			}
+		}
+		resolve(seen);
+	});
+
+	queue.add(1, 2, 3, 4, 5);
+	await wait(50);
+	t.is(queue.remove(2), false);
+	t.is(queue.remove(3), true);
+	t.is(queue.remove(4), true);
+	queue.end();
+
+	t.deepEqual(await actual, [1, 2, 5]);
 });

@@ -109,6 +109,7 @@ import {
 	type ZWaveSerialPortImplementation,
 } from "@zwave-js/serial";
 import {
+	AsyncQueue,
 	TypedEventEmitter,
 	buffer2hex,
 	cloneDeep,
@@ -128,7 +129,6 @@ import {
 	createDeferredPromise,
 	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import { SortedList } from "alcalzone-shared/sorted-list";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
@@ -189,6 +189,7 @@ import {
 	migrateLegacyNetworkCache,
 	serializeNetworkCacheValue,
 } from "./NetworkCache";
+import { TransactionQueue, type SerialAPIQueueItem } from "./Queue";
 import {
 	createSerialAPICommandMachine,
 	type SerialAPICommandDoneData,
@@ -488,18 +489,29 @@ export class Driver
 				this._options.storage.deviceConfigPriorityDir,
 		});
 
-		this.queue = new SortedList();
+		this.immediateQueue = new TransactionQueue();
+		this.queue = new TransactionQueue();
+		this.serialAPIQueue = new AsyncQueue();
 		this._sendThreadIdle = false;
 	}
 
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 
-	/** The queue of pending transactions */
-	private queue: SortedList<Transaction>;
+	// We have multiple queues to achieve multiple "layers" of communication priority:
+	// The default queue for most messages
+	private queue: TransactionQueue;
+	// An immediate queue for handling queries that need to be handled ASAP, e.g. Nonce Get
+	private immediateQueue: TransactionQueue;
+	// And all of them feed into the serial API queue, which contains commands that will be sent ASAP
+	private serialAPIQueue: AsyncQueue<SerialAPIQueueItem>;
+
+	/** Gives access to the transaction queues, ordered by priority */
+	private get queues(): TransactionQueue[] {
+		return [this.immediateQueue, this.queue];
+	}
+
 	private queuePaused = false;
-	/** The transaction that is currently being handled */
-	private currentTransaction: Transaction | undefined;
 	/** The interpreter for the currently active Serial API command */
 	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
 
@@ -948,6 +960,9 @@ export class Driver
 			this.driverLog.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
+
+			// Start the serial API queue
+			void this.drainSerialAPIQueue();
 
 			if (
 				typeof this._options.testingHooks?.onSerialPortOpen ===
@@ -2133,10 +2148,9 @@ export class Driver
 		predicate: (t: Transaction) => boolean,
 	): boolean {
 		if (!!this.queue.find((t) => predicate(t))) return true;
-		if (this.currentTransaction && predicate(this.currentTransaction)) {
-			return true;
-		}
-		return false;
+		return this.queues.some(
+			(q) => q.currentTransaction && predicate(q.currentTransaction),
+		);
 	}
 
 	/**
@@ -2639,6 +2653,7 @@ export class Driver
 		this.driverLog.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
+		this.serialAPIQueue.abort();
 		if (this.serialAPIInterpreter?.status === InterpreterStatus.Running) {
 			this.serialAPIInterpreter.stop();
 		}
@@ -3792,7 +3807,8 @@ ${handlers.length} left`,
 
 		// It could also be that this is the node's response for a CC that we sent, but where the ACK is delayed
 		if (isCommandClassContainer(msg)) {
-			const currentMessage = this.currentTransaction?.getCurrentMessage();
+			const currentMessage =
+				this.queue.currentTransaction?.getCurrentMessage();
 			if (
 				currentMessage &&
 				currentMessage.expectsNodeUpdate() &&
@@ -4198,10 +4214,10 @@ ${handlers.length} left`,
 		}
 	}
 
-	private mayStartNextTransaction(): boolean {
+	private mayStartNextTransaction(queue: TransactionQueue): boolean {
 		// We may not send anything if the send thread is paused
 		if (this.queuePaused) return false;
-		const nextTransaction = this.queue.peekStart();
+		const nextTransaction = queue.peek();
 		// We can't send anything if the queue is empty
 		if (!nextTransaction) return false;
 
@@ -4251,25 +4267,26 @@ ${handlers.length} left`,
 	}
 
 	private drainQueueBusy = false;
-	private async drainQueue(): Promise<void> {
+	private async drainQueue(queue: TransactionQueue): Promise<void> {
 		// Don't execute more than once at a time
 		if (this.drainQueueBusy) return;
 		this.drainQueueBusy = true;
 
 		try {
-			while (this.mayStartNextTransaction()) {
-				const transaction = (this.currentTransaction =
-					this.queue.shift()!);
+			while (this.mayStartNextTransaction(queue)) {
+				const transaction = queue.startNextTransaction();
+				if (!transaction) break;
+
 				// We have something to send, so not idle
 				this.sendThreadIdle = false;
 
 				let error: ZWaveError | undefined;
 				try {
-					await this.drainTransactionGenerator(transaction);
+					await this.drainTransactionGenerator(queue, transaction);
 				} catch (e) {
 					error = e as ZWaveError;
 				} finally {
-					this.currentTransaction = undefined;
+					queue.finalizeTransaction();
 				}
 
 				// Handle errors after clearing the current transaction.
@@ -4285,28 +4302,23 @@ ${handlers.length} left`,
 
 		// Avoid a deadlock when a transaction was added after the advanceQueue call,
 		// but before setting the busy flag back to false
-		if (this.mayStartNextTransaction()) this.triggerQueue();
+		if (this.mayStartNextTransaction(queue)) this.triggerQueue();
 	}
 
 	/** Steps through the message generator of a transaction. Throws an error if the transaction should fail. */
 	private async drainTransactionGenerator(
+		queue: TransactionQueue,
 		transaction: Transaction,
 	): Promise<void> {
-		transaction.parts.start();
-		// .self is now guaranteed to be defined
-
 		let prevResult: Message | undefined;
+		let msg: Message | undefined;
 
 		// Step through the transaction as long as it gives us a next message
-		while (!(await transaction.parts.self!.next(prevResult!)).done) {
-			// The .current property of the current transactions's message generator
-			// now contains the next message to send
-			const msg = transaction.getCurrentMessage()!;
-
+		while ((msg = await queue.tryGenerateNextMessage(prevResult!))) {
 			// TODO: refactor this nested loop or make it part of executeSerialAPICommand
 			attemptMessage: for (let attemptNumber = 1; ; attemptNumber++) {
 				try {
-					prevResult = await this.executeSerialAPICommand(
+					prevResult = await this.queueSerialAPICommand(
 						msg,
 						transaction.stack,
 					);
@@ -4374,8 +4386,39 @@ ${handlers.length} left`,
 		// This transaction is finished, try the next one
 	}
 
+	/** Handles sequencing of queued Serial API commands */
+	private async drainSerialAPIQueue(): Promise<void> {
+		for await (const item of this.serialAPIQueue) {
+			const { msg, transactionSource, result } = item;
+			try {
+				const ret = await this.executeSerialAPICommand(
+					msg,
+					transactionSource,
+				);
+				result.resolve(ret);
+			} catch (e) {
+				result.reject(e);
+			}
+		}
+	}
+
 	private triggerQueue(): void {
 		process.nextTick(() => this.drainQueue());
+	}
+
+	/** Puts a message on the serial API queue and returns or throws the command result */
+	private queueSerialAPICommand(
+		msg: Message,
+		transactionSource?: string,
+	): Promise<Message | undefined> {
+		const result = createDeferredPromise<Message | undefined>();
+		this.serialAPIQueue.add({
+			msg,
+			transactionSource,
+			result,
+		});
+
+		return result;
 	}
 
 	private mayRetrySerialAPICommand(
@@ -4399,7 +4442,7 @@ ${handlers.length} left`,
 
 	/**
 	 * Executes a Serial API command and returns or throws the result.
-	 * @param transaction The transaction which contains the message to be executed
+	 * This method should not be called outside of {@link drainSerialAPIQueue}.
 	 */
 	private async executeSerialAPICommand(
 		msg: Message,

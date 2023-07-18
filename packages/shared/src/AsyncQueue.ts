@@ -4,6 +4,7 @@ import {
 } from "alcalzone-shared/deferred-promise";
 
 export class AsyncQueue<T> {
+	/** Adds one or more items onto the queue */
 	public add(...items: T[]): void {
 		if (items.length === 0 || this.ended) return;
 
@@ -16,6 +17,23 @@ export class AsyncQueue<T> {
 
 		// Add the remaining items to the backlog
 		this.backlog.push(...items);
+	}
+
+	/**
+	 * Removes an item from the queue if it was not processed yet.
+	 * The return value indicates whether the item was removed.
+	 */
+	public remove(item: T): boolean {
+		if (this.ended) return false;
+
+		// Remove the item from the backlog
+		const index = this.backlog.indexOf(item);
+		if (index !== -1) {
+			this.backlog.splice(index, 1);
+			return true;
+		}
+
+		return false;
 	}
 
 	// A list of items that have been pushed but not pulled
