@@ -123,6 +123,14 @@
 			"$import": "templates/aeotec_template.json#auto_report_group1_amp_wholehem"
 		},
 		{
+			"#": "101[0x10]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kVarh_wholehem"
+		},
+		{
+			"#": "101[0x20]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kVar_wholehem"
+		},
+		{
 			"#": "101[0x0100]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp1"
 		},
@@ -175,6 +183,32 @@
 			"$import": "templates/aeotec_template.json#auto_report_group1_amp_clamp3"
 		},
 		{
+			"#": "101[0x01000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kVarh_clamp1"
+		},
+		{
+			"#": "101[0x02000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kVarh_clamp2"
+		},
+		{
+			"#": "101[0x04000000]",
+			"$if": "productType === 0x0002 && productId === 0x005f",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kVarh_clamp3"
+		},
+		{
+			"#": "101[0x08000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kVar_clamp1"
+		},
+		{
+			"#": "101[0x10000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kVar_clamp2"
+		},
+		{
+			"#": "101[0x20000000]",
+			"$if": "productType === 0x0002 && productId === 0x005f",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kVar_clamp3"
+		},
+		{
 			"#": "102[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_wholehem"
 		},
@@ -189,6 +223,14 @@
 		{
 			"#": "102[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_amp_wholehem"
+		},
+		{
+			"#": "102[0x10]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kVarh_wholehem"
+		},
+		{
+			"#": "102[0x20]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kVar_wholehem"
 		},
 		{
 			"#": "102[0x0100]",
@@ -243,6 +285,32 @@
 			"$import": "templates/aeotec_template.json#auto_report_group2_amp_clamp3"
 		},
 		{
+			"#": "102[0x01000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kVarh_clamp1"
+		},
+		{
+			"#": "102[0x02000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kVarh_clamp2"
+		},
+		{
+			"#": "102[0x04000000]",
+			"$if": "productType === 0x0002 && productId === 0x005f",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kVarh_clamp3"
+		},
+		{
+			"#": "102[0x08000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kVar_clamp1"
+		},
+		{
+			"#": "102[0x10000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kVar_clamp2"
+		},
+		{
+			"#": "102[0x20000000]",
+			"$if": "productType === 0x0002 && productId === 0x005f",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kVar_clamp3"
+		},
+		{
 			"#": "103[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_wholehem"
 		},
@@ -257,6 +325,14 @@
 		{
 			"#": "103[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp_wholehem"
+		},
+		{
+			"#": "103[0x10]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kVarh_wholehem"
+		},
+		{
+			"#": "103[0x20]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kVar_wholehem"
 		},
 		{
 			"#": "103[0x0100]",
@@ -309,6 +385,32 @@
 			"#": "103[0x200000]",
 			"$if": "productType === 0x0002 && productId === 0x005f",
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp_clamp3"
+		},
+		{
+			"#": "103[0x01000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kVarh_clamp1"
+		},
+		{
+			"#": "103[0x02000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kVarh_clamp2"
+		},
+		{
+			"#": "103[0x04000000]",
+			"$if": "productType === 0x0002 && productId === 0x005f",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kVarh_clamp3"
+		},
+		{
+			"#": "103[0x08000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kVar_clamp1"
+		},
+		{
+			"#": "103[0x10000000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kVar_clamp2"
+		},
+		{
+			"#": "103[0x20000000]",
+			"$if": "productType === 0x0002 && productId === 0x005f",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kVar_clamp3"
 		},
 		{
 			"#": "111",

@@ -4,10 +4,8 @@
 
 ```ts
 
-/// <reference types="jest" />
 /// <reference types="node" />
 
-import type { BindingPortInterface } from '@serialport/bindings-interface';
 import type { DataDirection } from '@zwave-js/core/safe';
 import { DataDirection as DataDirection_2 } from '@zwave-js/core';
 import { Duplex } from 'stream';
@@ -18,46 +16,93 @@ import type { LogContext } from '@zwave-js/core/safe';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessagePriority } from '@zwave-js/core';
 import * as net from 'net';
-import type { OpenOptions } from '@serialport/bindings-interface';
 import { PassThrough } from 'stream';
-import type { PortInfo } from '@serialport/bindings-interface';
-import type { PortStatus } from '@serialport/bindings-interface';
 import { SerialPort } from 'serialport';
-import type { SetOptions } from '@serialport/bindings-interface';
 import { Transform } from 'stream';
 import { TransformCallback } from 'stream';
 import type { TypedClassDecorator } from '@zwave-js/shared/safe';
-import { TypedEventEmitter } from '@zwave-js/shared';
-import type { UpdateOptions } from '@serialport/bindings-interface';
 import type { ZWaveApplicationHost } from '@zwave-js/host';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLogContainer } from '@zwave-js/core';
 import { ZWaveLoggerBase } from '@zwave-js/core';
 
-// Warning: (ae-missing-release-tag) "createAndOpenMockedZWaveSerialPort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BootloaderChunk" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function createAndOpenMockedZWaveSerialPort(path: string): Promise<{
-    port: ZWaveSerialPort;
-    binding: MockPortBinding;
-}>;
+export type BootloaderChunk = {
+    type: BootloaderChunkType.Error;
+    error: string;
+    _raw: string;
+} | {
+    type: BootloaderChunkType.Menu;
+    version: string;
+    options: {
+        num: number;
+        option: string;
+    }[];
+    _raw: string;
+} | {
+    type: BootloaderChunkType.Message;
+    message: string;
+    _raw: string;
+} | {
+    type: BootloaderChunkType.FlowControl;
+    command: XModemMessageHeaders.ACK | XModemMessageHeaders.NAK | XModemMessageHeaders.CAN | XModemMessageHeaders.C;
+};
 
-// Warning: (ae-missing-release-tag) "DeserializingMessageConstructor" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BootloaderChunkType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum BootloaderChunkType {
+    // (undocumented)
+    Error = 0,
+    // (undocumented)
+    FlowControl = 3,
+    // (undocumented)
+    Menu = 1,
+    // (undocumented)
+    Message = 2
+}
+
+// Warning: (ae-missing-release-tag) "bootloaderMenuPreamble" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const bootloaderMenuPreamble = "Gecko Bootloader";
+
+// Warning: (ae-missing-release-tag) "BootloaderParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class BootloaderParser extends Transform {
+    constructor();
+    // (undocumented)
+    _transform(chunk: any, encoding: string, callback: TransformCallback): void;
+}
+
+// Warning: (ae-missing-release-tag) "BootloaderScreenParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class BootloaderScreenParser extends Transform {
+    constructor(logger?: SerialLogger | undefined);
+    // (undocumented)
+    _transform(chunk: any, encoding: string, callback: TransformCallback): void;
+}
+
+// Warning: (ae-missing-release-tag) "DeserializingMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type DeserializingMessageConstructor<T extends Message> = new (host: ZWaveHost, options: MessageDeserializationOptions) => T;
 
-// Warning: (ae-missing-release-tag) "expectedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "expectedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function expectedCallback<TSent extends Message>(typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<TSent>): TypedClassDecorator<Message>;
 
-// Warning: (ae-missing-release-tag) "expectedResponse" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "expectedResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const expectedResponse: <TTarget extends Message>(typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<Message>) => TypedClassDecorator<TTarget>;
 
-// Warning: (ae-missing-release-tag) "FunctionType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FunctionType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export enum FunctionType {
@@ -67,6 +112,10 @@ export enum FunctionType {
     ApplicationCommand = 4,
     // (undocumented)
     ApplicationUpdateRequest = 73,
+    // (undocumented)
+    AssignPriorityReturnRoute = 79,
+    // (undocumented)
+    AssignPrioritySUCReturnRoute = 88,
     // (undocumented)
     AssignReturnRoute = 70,
     // (undocumented)
@@ -78,6 +127,8 @@ export enum FunctionType {
     // (undocumented)
     DeleteSUCReturnRoute = 85,
     // (undocumented)
+    EnterBootloader = 39,
+    // (undocumented)
     ExtExtWriteLongByte = 45,
     // (undocumented)
     ExtNVMReadLongBuffer = 42,
@@ -85,6 +136,8 @@ export enum FunctionType {
     ExtNVMReadLongByte = 44,
     // (undocumented)
     ExtNVMWriteLongBuffer = 43,
+    // (undocumented)
+    FirmwareUpdateNVM = 120,
     // (undocumented)
     FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,
     // (undocumented)
@@ -144,6 +197,8 @@ export enum FunctionType {
     // (undocumented)
     GetNVMId = 41,
     // (undocumented)
+    GetPriorityRoute = 146,
+    // (undocumented)
     GetProtocolVersion = 9,
     // (undocumented)
     GetRoutingInfo = 128,
@@ -186,15 +241,17 @@ export enum FunctionType {
     // (undocumented)
     SetApplicationNodeInformation = 3,
     // (undocumented)
+    SetPriorityRoute = 147,
+    // (undocumented)
     SetRFReceiveMode = 16,
     // (undocumented)
     SetSerialApiTimeouts = 6,
     // (undocumented)
     SetSUCNodeId = 84,
     // (undocumented)
-    SoftReset = 8,
+    Shutdown = 217,
     // (undocumented)
-    UNKNOWN_FUNC_AssignPrioritySUCReturnRoute = 88,
+    SoftReset = 8,
     // (undocumented)
     UNKNOWN_FUNC_ClearNetworkStats = 57,
     // (undocumented)
@@ -204,11 +261,7 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_CLOCK_SET = 48,
     // (undocumented)
-    UNKNOWN_FUNC_FlashAutoProgSet = 39,
-    // (undocumented)
     UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,
-    // (undocumented)
-    UNKNOWN_FUNC_GET_PRIORITY_ROUTE = 146,
     // (undocumented)
     UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 191,
     // (undocumented)
@@ -252,8 +305,6 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_SERIAL_API_TEST = 149,
     // (undocumented)
-    UNKNOWN_FUNC_SET_PRIORITY_ROUTE = 147,
-    // (undocumented)
     UNKNOWN_FUNC_SET_SLEEP_MODE = 17,
     // (undocumented)
     UNKNOWN_FUNC_StoreHomeId = 132,
@@ -273,8 +324,6 @@ export enum FunctionType {
     UNKNOWN_FUNC_UNKNOWN_0x66 = 102,
     // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0x67 = 103,
-    // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0x78 = 120,
     // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0x98 = 152,
     // (undocumented)
@@ -307,62 +356,62 @@ export enum FunctionType {
     UNKNOWN_FUNC_ZMESerialAPIOptions = 248
 }
 
-// Warning: (ae-missing-release-tag) "getDefaultPriority" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDefaultPriority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getDefaultPriority<T extends Message>(messageClass: T): MessagePriority | undefined;
 
-// Warning: (ae-missing-release-tag) "getDefaultPriorityStatic" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getDefaultPriorityStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getDefaultPriorityStatic<T extends MessageConstructor<Message>>(classConstructor: T): MessagePriority | undefined;
 
-// Warning: (ae-missing-release-tag) "getExpectedCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getExpectedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getExpectedCallback<T extends Message>(messageClass: T): FunctionType | typeof Message | ResponsePredicate | undefined;
 
-// Warning: (ae-missing-release-tag) "getExpectedCallbackStatic" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getExpectedCallbackStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getExpectedCallbackStatic<T extends MessageConstructor<Message>>(classConstructor: T): FunctionType | typeof Message | ResponsePredicate | undefined;
 
-// Warning: (ae-missing-release-tag) "getExpectedResponse" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getExpectedResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getExpectedResponse<T extends Message>(messageClass: T): FunctionType | typeof Message | ResponsePredicate | undefined;
 
-// Warning: (ae-missing-release-tag) "getExpectedResponseStatic" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getExpectedResponseStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getExpectedResponseStatic<T extends MessageConstructor<Message>>(classConstructor: T): FunctionType | typeof Message | ResponsePredicate | undefined;
 
-// Warning: (ae-missing-release-tag) "getFunctionType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getFunctionType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getFunctionType<T extends Message>(messageClass: T): FunctionType | undefined;
 
-// Warning: (ae-missing-release-tag) "getFunctionTypeStatic" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getFunctionTypeStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getFunctionTypeStatic<T extends MessageConstructor<Message>>(classConstructor: T): FunctionType | undefined;
 
-// Warning: (ae-missing-release-tag) "getMessageType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getMessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getMessageType<T extends Message>(messageClass: T): MessageType | undefined;
 
-// Warning: (ae-missing-release-tag) "getMessageTypeStatic" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getMessageTypeStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getMessageTypeStatic<T extends MessageConstructor<Message>>(classConstructor: T): MessageType | undefined;
 
-// Warning: (ae-missing-release-tag) "gotDeserializationOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "gotDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function gotDeserializationOptions(options: Record<any, any> | undefined): options is MessageDeserializationOptions;
 
-// Warning: (ae-missing-release-tag) "INodeQuery" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "INodeQuery" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface INodeQuery {
@@ -370,27 +419,27 @@ export interface INodeQuery {
     nodeId: number;
 }
 
-// Warning: (ae-missing-release-tag) "isMultiStageCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isMultiStageCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isMultiStageCallback<T extends Message>(msg: T): msg is T & MultiStageCallback;
 
-// Warning: (ae-missing-release-tag) "isNodeQuery" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isNodeQuery" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function isNodeQuery<T extends Message>(msg: T): msg is T & INodeQuery;
 
-// Warning: (ae-missing-release-tag) "isSuccessIndicator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isSuccessIndicator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isSuccessIndicator<T extends Message>(msg: T): msg is T & SuccessIndicator;
 
-// Warning: (ae-missing-release-tag) "isZWaveSerialPortImplementation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isZWaveSerialPortImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isZWaveSerialPortImplementation(obj: unknown): obj is ZWaveSerialPortImplementation;
 
-// Warning: (ae-missing-release-tag) "Message" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Message" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class Message {
@@ -415,6 +464,7 @@ export class Message {
     static getMessageLength(data: Buffer): number;
     getNodeId(): number | undefined;
     getNodeUnsafe(applHost: ZWaveApplicationHost): IZWaveNode | undefined;
+    getResponseTimeout(): number | undefined;
     hasCallbackId(): boolean;
     // (undocumented)
     protected host: ZWaveHost;
@@ -425,6 +475,7 @@ export class Message {
     markAsCompleted(): void;
     markAsSent(): void;
     needsCallbackId(): boolean;
+    nodeUpdateTimeout: number | undefined;
     // (undocumented)
     payload: Buffer;
     prematureNodeUpdate: Message | undefined;
@@ -437,7 +488,7 @@ export class Message {
     type: MessageType;
 }
 
-// Warning: (ae-missing-release-tag) "MessageBaseOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageBaseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MessageBaseOptions {
@@ -445,12 +496,12 @@ export interface MessageBaseOptions {
     callbackId?: number;
 }
 
-// Warning: (ae-missing-release-tag) "MessageConstructor" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MessageConstructor<T extends Message> = new (host: ZWaveHost, options?: MessageOptions) => T;
 
-// Warning: (ae-missing-release-tag) "MessageCreationOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageCreationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MessageCreationOptions extends MessageBaseOptions {
@@ -466,7 +517,7 @@ export interface MessageCreationOptions extends MessageBaseOptions {
     type?: MessageType;
 }
 
-// Warning: (ae-missing-release-tag) "MessageDeserializationOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MessageDeserializationOptions {
@@ -475,9 +526,10 @@ export interface MessageDeserializationOptions {
     // (undocumented)
     origin?: MessageOrigin;
     parseCCs?: boolean;
+    sdkVersion?: string;
 }
 
-// Warning: (ae-missing-release-tag) "MessageHeaders" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageHeaders" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum MessageHeaders {
@@ -491,12 +543,12 @@ export enum MessageHeaders {
     SOF = 1
 }
 
-// Warning: (ae-missing-release-tag) "MessageOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MessageOptions = MessageCreationOptions | MessageDeserializationOptions;
 
-// Warning: (ae-missing-release-tag) "MessageOrigin" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageOrigin" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export enum MessageOrigin {
@@ -506,7 +558,7 @@ export enum MessageOrigin {
     Host = 1
 }
 
-// Warning: (ae-missing-release-tag) "MessageType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export enum MessageType {
@@ -516,94 +568,43 @@ export enum MessageType {
     Response = 1
 }
 
-// Warning: (ae-missing-release-tag) "messageTypes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "messageTypes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const messageTypes: <TTarget extends Message>(messageType: MessageType, functionType: FunctionType) => TypedClassDecorator<TTarget>;
 
-// Warning: (ae-missing-release-tag) "MockSerialPort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MockSerialPort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface MockSerialPort {
-    // (undocumented)
-    addListener<TEvent extends MockSerialPortEvents>(event: TEvent, callback: MockSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    emit<TEvent extends MockSerialPortEvents>(event: TEvent, ...args: Parameters<MockSerialPortEventCallbacks[TEvent]>): boolean;
-    // (undocumented)
-    off<TEvent extends MockSerialPortEvents>(event: TEvent, callback: MockSerialPortEventCallbacks[TEvent]): this;
-    // Warning: (ae-forgotten-export) The symbol "MockSerialPortEvents" needs to be exported by the entry point index.d.ts
-    // Warning: (ae-forgotten-export) The symbol "MockSerialPortEventCallbacks" needs to be exported by the entry point index.d.ts
-    //
-    // (undocumented)
-    on<TEvent extends MockSerialPortEvents>(event: TEvent, callback: MockSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    once<TEvent extends MockSerialPortEvents>(event: TEvent, callback: MockSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    removeAllListeners(event?: MockSerialPortEvents): this;
-    // (undocumented)
-    removeListener<TEvent extends MockSerialPortEvents>(event: TEvent, callback: MockSerialPortEventCallbacks[TEvent]): this;
-}
-
-// @public (undocumented)
-export class MockSerialPort extends ZWaveSerialPort {
-    constructor(port: string, loggers: ZWaveLogContainer);
-    // (undocumented)
-    close(): Promise<void>;
-    // (undocumented)
-    readonly closeStub: jest.Mock;
-    // (undocumented)
-    static getInstance(port: string): MockSerialPort | undefined;
-    // (undocumented)
-    get isOpen(): boolean;
-    // (undocumented)
-    get lastWrite(): string | number[] | Buffer | undefined;
-    // (undocumented)
-    open(): Promise<void>;
-    // (undocumented)
-    readonly openStub: jest.Mock;
-    // (undocumented)
-    raiseError(err: Error): void;
-    // (undocumented)
-    receiveData(data: Buffer): void;
-    // (undocumented)
-    writeAsync(data: Buffer): Promise<void>;
-    // (undocumented)
-    readonly writeStub: jest.Mock;
-}
-
-// Warning: (ae-missing-release-tag) "MultiStageCallback" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MultiStageCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface MultiStageCallback {
     isFinal(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "priority" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "priority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const priority: <TTarget extends Message>(prio: MessagePriority) => TypedClassDecorator<TTarget>;
 
-// Warning: (ae-missing-release-tag) "ResponsePredicate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ResponsePredicate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type ResponsePredicate<TSent extends Message = Message> = (sentMessage: TSent, receivedMessage: Message) => boolean;
 
-// Warning: (ae-missing-release-tag) "ResponseRole" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ResponseRole" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ResponseRole = "unexpected" | "confirmation" | "final" | "fatal_controller" | "fatal_node";
 
-// Warning: (ae-missing-release-tag) "SerialAPIParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SerialAPIParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SerialAPIParser extends Transform {
-    constructor(logger?: SerialLogger | undefined);
+    constructor(logger?: SerialLogger | undefined, onDiscarded?: ((data: Buffer) => void) | undefined);
     // (undocumented)
     _transform(chunk: any, encoding: string, callback: TransformCallback): void;
 }
 
-// Warning: (ae-missing-release-tag) "SerialLogContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SerialLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface SerialLogContext extends LogContext<"serial"> {
@@ -613,13 +614,15 @@ export interface SerialLogContext extends LogContext<"serial"> {
     header?: string;
 }
 
-// Warning: (ae-missing-release-tag) "SerialLogger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SerialLogger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
     constructor(loggers: ZWaveLogContainer);
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     ACK(direction: DataDirection_2): void;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    bootloaderScreen(screen: string): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     CAN(direction: DataDirection_2): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -632,24 +635,52 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
     NAK(direction: DataDirection_2): void;
 }
 
-// Warning: (ae-missing-release-tag) "skipBytes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "skipBytes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function skipBytes(buf: Buffer, n: number): Buffer;
 
-// Warning: (ae-missing-release-tag) "SuccessIndicator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SuccessIndicator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface SuccessIndicator {
     isOK(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveSerialChunk" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "XModemMessageHeaders" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum XModemMessageHeaders {
+    // (undocumented)
+    ACK = 6,
+    // (undocumented)
+    C = 67,
+    // (undocumented)
+    CAN = 24,
+    // (undocumented)
+    EOT = 4,
+    // (undocumented)
+    NAK = 21,
+    // (undocumented)
+    SOF = 1
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveSerialChunk" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveSerialChunk = MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Buffer;
 
-// Warning: (ae-missing-release-tag) "ZWaveSerialPort" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSerialMode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZWaveSerialMode {
+    // (undocumented)
+    Bootloader = 1,
+    // (undocumented)
+    SerialAPI = 0
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveSerialPort" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class ZWaveSerialPort extends ZWaveSerialPortBase {
@@ -658,8 +689,8 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
     get isOpen(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortBase" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortBase" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSerialPortBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSerialPortBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveSerialPortBase {
@@ -691,6 +722,8 @@ export class ZWaveSerialPortBase extends PassThrough {
     // (undocumented)
     protected logger: SerialLogger;
     // (undocumented)
+    mode: ZWaveSerialMode | undefined;
+    // (undocumented)
     open(): Promise<void>;
     // (undocumented)
     protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
@@ -698,22 +731,26 @@ export class ZWaveSerialPortBase extends PassThrough {
     writeAsync(data: Buffer): Promise<void>;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortEventCallbacks" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSerialPortEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveSerialPortEventCallbacks {
     // (undocumented)
+    bootloaderData: (data: BootloaderChunk) => void;
+    // (undocumented)
     data: (data: ZWaveSerialChunk) => void;
+    // (undocumented)
+    discardedData: (data: Buffer) => void;
     // (undocumented)
     error: (e: Error) => void;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortEvents" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSerialPortEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveSerialPortEvents = Extract<keyof ZWaveSerialPortEventCallbacks, string>;
 
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortImplementation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSerialPortImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveSerialPortImplementation {
@@ -725,21 +762,17 @@ export interface ZWaveSerialPortImplementation {
     open(port: ReturnType<ZWaveSerialPortImplementation["create"]>): Promise<void>;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveSocket" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSocket" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class ZWaveSocket extends ZWaveSerialPortBase {
     constructor(socketOptions: ZWaveSocketOptions, loggers: ZWaveLogContainer);
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveSocketOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSocketOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveSocketOptions = Omit<net.TcpSocketConnectOpts, "onread"> | Omit<net.IpcSocketConnectOpts, "onread">;
-
-// Warnings were encountered during analysis:
-//
-// src/MockSerialPort.ts:109:2 - (ae-forgotten-export) The symbol "MockPortBinding" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

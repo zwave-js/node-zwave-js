@@ -1,0 +1,7 @@
+// Fibaro FGR222
+{"k":"{\"nodeId\":2,\"commandClass\":114,\"endpoint\":0,\"property\":\"manufacturerId\"}","v":271}
+{"k":"{\"nodeId\":2,\"commandClass\":114,\"endpoint\":0,\"property\":\"productType\"}","v":770}
+{"k":"{\"nodeId\":2,\"commandClass\":114,\"endpoint\":0,\"property\":\"productId\"}","v":4096}
+
+// Firmware version 25.25
+{"k":"{\"nodeId\":2,\"commandClass\":134,\"endpoint\":0,\"property\":\"firmwareVersions\"}","v":["25.25"]}

@@ -1,7 +1,11 @@
 // Load sentry.io so we get information about errors
 import * as Integrations from "@sentry/integrations";
 import * as Sentry from "@sentry/node";
-import { getErrorSuffix, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	ZWaveErrorCodes,
+	getErrorSuffix,
+	type ZWaveError,
+} from "@zwave-js/core";
 import { randomBytes } from "crypto";
 import * as fs from "fs-extra";
 import * as path from "path";

@@ -1,4 +1,8 @@
-import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
+import {
+	ZWaveError,
+	ZWaveErrorCodes,
+	type ZWaveLogContainer,
+} from "@zwave-js/core";
 import * as net from "net";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
 
@@ -12,43 +16,40 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 		private socketOptions: ZWaveSocketOptions,
 		loggers: ZWaveLogContainer,
 	) {
+		let removeListeners: (removeOnClose: boolean) => void;
+
 		super(
 			{
 				create: () => new net.Socket(),
 				open: (serial: net.Socket) =>
 					new Promise((resolve, reject) => {
-						// eslint-disable-next-line prefer-const
-						let removeListeners: () => void;
-
-						const onClose = (hadError: boolean) => {
+						const onClose = () => {
 							// detect socket disconnection errors
-							if (hadError) {
-								removeListeners();
-								this.emit(
-									"error",
-									new ZWaveError(
-										`The socket closed unexpectedly!`,
-										ZWaveErrorCodes.Driver_Failed,
-									),
-								);
-							}
+							this.emit(
+								"error",
+								new ZWaveError(
+									`The socket closed unexpectedly!`,
+									ZWaveErrorCodes.Driver_Failed,
+								),
+							);
 						};
 
 						const onError = (err: Error) => {
-							removeListeners();
+							removeListeners(true);
 							reject(err);
 						};
 						const onConnect = () => {
 							serial.setKeepAlive(true, 2500);
-							removeListeners();
+							removeListeners(false);
 							resolve();
 						};
 
 						// We need to remove the listeners again no matter which of the handlers is called
 						// Otherwise this would cause an EventEmitter leak.
 						// Hence this somewhat ugly construct
-						removeListeners = () => {
-							serial.removeListener("close", onClose);
+						removeListeners = (removeOnClose: boolean) => {
+							if (removeOnClose)
+								serial.removeListener("close", onClose);
 							serial.removeListener("error", onError);
 							serial.removeListener("connect", onConnect);
 						};
@@ -61,6 +62,7 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 					}),
 				close: (serial: net.Socket) =>
 					new Promise((resolve) => {
+						removeListeners(true);
 						if (serial.destroyed) {
 							resolve();
 						} else {

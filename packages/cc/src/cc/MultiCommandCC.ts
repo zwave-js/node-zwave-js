@@ -1,8 +1,9 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	EncapsulationFlags,
 	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -28,7 +29,7 @@ import { MultiCommandCommand } from "../lib/_Types";
 
 @API(CommandClasses["Multi Command"])
 export class MultiCommandCCAPI extends CCAPI {
-	public supportsCommand(_cmd: MultiCommandCommand): Maybe<boolean> {
+	public supportsCommand(_cmd: MultiCommandCommand): MaybeNotKnown<boolean> {
 		// switch (cmd) {
 		// 	case MultiCommandCommand.CommandEncapsulation:
 		return true; // This is mandatory
@@ -81,7 +82,7 @@ export class MultiCommandCC extends CommandClass {
 			EncapsulationFlags.Security,
 			EncapsulationFlags.CRC16,
 		] as const) {
-			ret.setEncapsulationFlag(
+			ret.toggleEncapsulationFlag(
 				flag,
 				CCs.some((cc) => cc.encapsulationFlags & flag),
 			);
@@ -96,7 +97,7 @@ interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultiCommandCommand.CommandEncapsulation)
-// TODO: This probably expects multiple commands in return
+// When sending commands encapsulated in this CC, responses to GET-type commands likely won't be encapsulated
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
 		host: ZWaveHost,
@@ -123,6 +124,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 						fromEncapsulation: true,
 						encapCC: this,
 						origin: options.origin,
+						frameType: options.frameType,
 					}),
 				);
 				offset += 1 + cmdLength;

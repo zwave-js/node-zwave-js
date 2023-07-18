@@ -1,18 +1,18 @@
-import { MessagePriority } from "@zwave-js/core";
+import { MessagePriority, type MessageOrCCLogEntry } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
+	FunctionType,
+	Message,
+	MessageType,
 	expectedCallback,
 	expectedResponse,
-	FunctionType,
 	gotDeserializationOptions,
-	INodeQuery,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageType,
 	messageTypes,
 	priority,
-	SuccessIndicator,
+	type INodeQuery,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -49,6 +49,13 @@ export class RequestNodeInfoResponse
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.wasSent ? 0x01 : 0]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "was sent": this.wasSent },
+		};
 	}
 }
 
@@ -94,5 +101,12 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "node id": this.nodeId },
+		};
 	}
 }

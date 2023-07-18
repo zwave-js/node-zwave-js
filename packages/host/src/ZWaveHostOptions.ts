@@ -34,14 +34,6 @@ export interface ZWaveHostOptions {
 	};
 
 	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
-
-	/**
 	 * Some SET-type commands optimistically update the current value to match the target value
 	 * when the device acknowledges the command.
 	 *

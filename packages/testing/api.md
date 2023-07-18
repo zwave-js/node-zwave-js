@@ -4,59 +4,109 @@
 
 ```ts
 
-/// <reference types="jest" />
 /// <reference types="node" />
 
 import { CommandClasses } from '@zwave-js/core';
 import { CommandClassInfo } from '@zwave-js/core';
+import { ConfigValue } from '@zwave-js/core';
+import { ConfigValueFormat } from '@zwave-js/core';
 import { FunctionType } from '@zwave-js/serial/safe';
 import { ICommandClass } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import type { MockPortBinding } from '@zwave-js/serial/mock';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
-import Transport from 'winston-transport';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
-import type { ZWaveLogInfo } from '@zwave-js/core';
 
-// Warning: (ae-missing-release-tag) "assertLogInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function assertLogInfo(transport: SpyTransport, options: Partial<{
-    level: string;
-    predicate: (info: ZWaveLogInfo) => boolean;
-    callNumber: number;
-}>): void;
-
-// Warning: (ae-missing-release-tag) "assertMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ccCaps" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function assertMessage(transport: SpyTransport, options: Partial<{
-    message: string;
-    predicate: (msg: string) => boolean;
-    ignoreColor: boolean;
-    ignoreTimestamp: boolean;
-    ignoreChannel: boolean;
-    callNumber: number;
-}>): void;
+export function ccCaps<T extends CommandClasses>(caps: PartialCCCapabilities<T>): PartialCCCapabilities<T>;
 
-// Warning: (ae-missing-release-tag) "createMockZWaveAckFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CCIdToCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> = T extends keyof CCSpecificCapabilities ? CCSpecificCapabilities[T] : never;
+
+// Warning: (ae-missing-release-tag) "CCSpecificCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CCSpecificCapabilities = {
+    [CommandClasses.Configuration]: ConfigurationCCCapabilities;
+    [CommandClasses.Notification]: NotificationCCCapabilities;
+    [121]: SoundSwitchCCCapabilities;
+    [106]: WindowCoveringCCCapabilities;
+    [144]: EnergyProductionCCCapabilities;
+    [64]: ThermostatModeCCCapabilities;
+    [67]: ThermostatSetpointCCCapabilities;
+    [99]: UserCodeCCCapabilities;
+    [78]: ScheduleEntryLockCCCapabilities;
+};
+
+// Warning: (ae-missing-release-tag) "ConfigurationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCCapabilities {
+    // (undocumented)
+    bulkSupport?: false;
+    // (undocumented)
+    parameters: {
+        "#": number;
+        valueSize: number;
+        name?: string;
+        info?: string;
+        format?: ConfigValueFormat;
+        minValue?: ConfigValue;
+        maxValue?: ConfigValue;
+        defaultValue?: ConfigValue;
+        readonly?: boolean;
+        isAdvanced?: boolean;
+        altersCapabilities?: boolean;
+    }[];
+}
+
+// Warning: (ae-missing-release-tag) "createMockZWaveAckFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function createMockZWaveAckFrame(options?: Partial<Omit<MockZWaveAckFrame, "direction" | "payload">>): MockZWaveAckFrame;
 
-// Warning: (ae-missing-release-tag) "createMockZWaveRequestFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createMockZWaveRequestFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function createMockZWaveRequestFrame(payload: ICommandClass, options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): MockZWaveRequestFrame;
 
-// Warning: (ae-missing-release-tag) "MOCK_FRAME_ACK_TIMEOUT" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnergyProductionCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EnergyProductionCCCapabilities {
+    // (undocumented)
+    values: {
+        Power: {
+            value: number;
+            scale: 0;
+        };
+        "Production Total": {
+            value: number;
+            scale: 0;
+        };
+        "Production Today": {
+            value: number;
+            scale: 0;
+        };
+        "Total Time": {
+            value: number;
+            scale: 0 | 1;
+        };
+    };
+}
+
+// Warning: (ae-missing-release-tag) "MOCK_FRAME_ACK_TIMEOUT" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const MOCK_FRAME_ACK_TIMEOUT = 1000;
 
-// Warning: (ae-missing-release-tag) "MockController" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockController" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/testing" does not have an export "MockSerialPort"
 //
 // @public
@@ -100,7 +150,7 @@ export class MockController {
     readonly state: Map<string, unknown>;
 }
 
-// Warning: (ae-missing-release-tag) "MockControllerBehavior" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockControllerBehavior" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MockControllerBehavior {
@@ -108,7 +158,7 @@ export interface MockControllerBehavior {
     onNodeFrame?: (host: ZWaveHost, controller: MockController, node: MockNode, frame: MockZWaveFrame) => Promise<boolean | undefined> | boolean | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "MockControllerOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockControllerOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MockControllerOptions {
@@ -122,7 +172,7 @@ export interface MockControllerOptions {
     serial: MockPortBinding;
 }
 
-// Warning: (ae-missing-release-tag) "MockEndpoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MockEndpoint {
@@ -141,7 +191,7 @@ export class MockEndpoint {
     removeCC(cc: CommandClasses): void;
 }
 
-// Warning: (ae-missing-release-tag) "MockEndpointOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockEndpointOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MockEndpointOptions {
@@ -155,7 +205,7 @@ export interface MockEndpointOptions {
     node: MockNode;
 }
 
-// Warning: (ae-missing-release-tag) "MockNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class MockNode {
@@ -188,6 +238,8 @@ export class MockNode {
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectControllerFrame<T extends MockZWaveFrame = MockZWaveFrame>(timeout: number, predicate: (msg: MockZWaveFrame) => msg is T): Promise<T>;
     // (undocumented)
+    getCCCapabilities<T extends CommandClasses>(ccId: T, endpointIndex?: number): Partial<CCIdToCapabilities<T>> | undefined;
+    // (undocumented)
     readonly host: ZWaveHost;
     // (undocumented)
     readonly id: number;
@@ -199,14 +251,14 @@ export class MockNode {
     readonly state: Map<string, unknown>;
 }
 
-// Warning: (ae-missing-release-tag) "MockNodeBehavior" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockNodeBehavior" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MockNodeBehavior {
     onControllerFrame?: (controller: MockController, self: MockNode, frame: MockZWaveFrame) => Promise<boolean | undefined> | boolean | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "MockNodeOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockNodeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MockNodeOptions {
@@ -223,7 +275,7 @@ export interface MockNodeOptions {
     id: number;
 }
 
-// Warning: (ae-missing-release-tag) "MockZWaveAckFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockZWaveAckFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MockZWaveAckFrame {
@@ -234,12 +286,12 @@ export interface MockZWaveAckFrame {
     type: MockZWaveFrameType.ACK;
 }
 
-// Warning: (ae-missing-release-tag) "MockZWaveFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockZWaveFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type MockZWaveFrame = MockZWaveRequestFrame | MockZWaveAckFrame;
 
-// Warning: (ae-missing-release-tag) "MockZWaveFrameType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockZWaveFrameType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum MockZWaveFrameType {
@@ -249,7 +301,7 @@ export enum MockZWaveFrameType {
     Request = 0
 }
 
-// Warning: (ae-missing-release-tag) "MockZWaveRequestFrame" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MockZWaveRequestFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MockZWaveRequestFrame {
@@ -260,20 +312,98 @@ export interface MockZWaveRequestFrame {
     type: MockZWaveFrameType.Request;
 }
 
-// Warning: (ae-missing-release-tag) "SpyTransport" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public
-export class SpyTransport extends Transport {
-    constructor();
+// @public (undocumented)
+export interface NotificationCCCapabilities {
     // (undocumented)
-    log(info: any, next: () => void): any;
+    notificationTypesAndEvents: Record<number, number[]>;
     // (undocumented)
-    get spy(): jest.Mock;
+    supportsV1Alarm: false;
 }
 
-// Warnings were encountered during analysis:
+// Warning: (ae-missing-release-tag) "PartialCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// src/MockNode.ts:54:3 - (ae-forgotten-export) The symbol "PartialCCCapabilities" needs to be exported by the entry point index.d.ts
+// @public (undocumented)
+export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> = T | ({
+    ccId: T;
+} & Partial<CommandClassInfo> & Partial<CCIdToCapabilities<T>>);
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockCCCapabilities {
+    // (undocumented)
+    numDailyRepeatingSlots: number;
+    // (undocumented)
+    numWeekDaySlots: number;
+    // (undocumented)
+    numYearDaySlots: number;
+}
+
+// Warning: (ae-missing-release-tag) "SoundSwitchCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SoundSwitchCCCapabilities {
+    // (undocumented)
+    defaultToneId: number;
+    // (undocumented)
+    defaultVolume: number;
+    // (undocumented)
+    tones: {
+        name: string;
+        duration: number;
+    }[];
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatModeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatModeCCCapabilities {
+    // (undocumented)
+    supportedModes: number[];
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCCapabilities {
+    // (undocumented)
+    setpoints: Record<number, {
+        minValue: number;
+        maxValue: number;
+        defaultValue?: number;
+        scale: "°C" | "°F";
+    }>;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCCapabilities {
+    // (undocumented)
+    numUsers: number;
+    // (undocumented)
+    supportedASCIIChars?: string;
+    // (undocumented)
+    supportedKeypadModes?: number[];
+    // (undocumented)
+    supportedUserIDStatuses?: number[];
+    // (undocumented)
+    supportsMasterCode?: boolean;
+    // (undocumented)
+    supportsMasterCodeDeactivation?: boolean;
+    // (undocumented)
+    supportsUserCodeChecksum?: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WindowCoveringCCCapabilities {
+    // (undocumented)
+    supportedParameters: number[];
+}
 
 // (No @packageDocumentation comment for this package)
 

@@ -51,6 +51,17 @@
 			"label": "Send Basic Report on Trigger"
 		}
 	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					// The device reports that it supports Supervision, but it does not support all
+					// commands supervision-encapsulated
+					"endpoints": "*"
+				}
+			}
+		}
+	},
 	"metadata": {
 		"inclusion": "Z-Wave auto inclusion.\nOr manual inclusion : put the Z-Wave controller into inclusion mode, press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode",
 		"exclusion": "Put the Z-Wave Controller into exclusion mode. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode",

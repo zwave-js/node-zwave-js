@@ -2,7 +2,8 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { num2hex } from "./strings";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */
-export function keysOf<T>(obj: T): (keyof T)[] {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function keysOf<T extends {}>(obj: T): (keyof T)[] {
 	return Object.keys(obj) as unknown as (keyof T)[];
 }
 
@@ -64,6 +65,16 @@ export function flatMap<U, T extends any[]>(
  */
 export function getEnumMemberName(enumeration: unknown, value: number): string {
 	return (enumeration as any)[value] || `unknown (${num2hex(value)})`;
+}
+
+/**
+ * Checks if the given value is a member of the given enum object.
+ *
+ * @param enumeration The enumeration object the value comes from
+ * @param value The enum value to be pretty-printed
+ */
+export function isEnumMember(enumeration: unknown, value: number): boolean {
+	return typeof (enumeration as any)[value] === "string";
 }
 
 /** Skips the first n bytes of a buffer and returns the rest */
@@ -211,4 +222,9 @@ export async function discreteLinearSearch(
 
 export function sum(values: number[]): number {
 	return values.reduce((acc, cur) => acc + cur, 0);
+}
+
+/** Does nothing. Can be used for empty `.catch(...)` calls. */
+export function noop(): void {
+	// intentionally empty
 }

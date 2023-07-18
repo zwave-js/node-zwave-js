@@ -1,35 +1,49 @@
 import { BasicCCValues } from "@zwave-js/cc/BasicCC";
-import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
-import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
+import { MessageHeaders } from "@zwave-js/serial";
+import type { MockSerialPort } from "@zwave-js/serial/mock";
+import { createThrowingMap, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
+import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
 import { isFunctionSupported_NoBridge } from "./fixtures";
 
-describe("regression tests", () => {
-	let driver: Driver;
-	let serialport: MockSerialPort;
-	process.env.LOGLEVEL = "debug";
+interface TestContext {
+	driver: Driver;
+	serialport: MockSerialPort;
+}
 
-	beforeEach(async () => {
-		({ driver, serialport } = await createAndStartDriver());
+const test = ava as TestFn<TestContext>;
 
-		driver["_controller"] = {
-			ownNodeId: 1,
-			isFunctionSupported: isFunctionSupported_NoBridge,
-			nodes: createThrowingMap(),
-			incrementStatistics: () => {},
-			removeAllListeners: () => {},
-		} as any;
-	});
+test.beforeEach(async (t) => {
+	t.timeout(5000);
 
-	afterEach(async () => {
-		await driver.destroy();
-		driver.removeAllListeners();
-	});
+	const { driver, serialport } = await createAndStartDriver();
 
-	it("unsolicited commands which need special handling are passed to Node.handleCommand", async () => {
+	driver["_controller"] = {
+		ownNodeId: 1,
+		isFunctionSupported: isFunctionSupported_NoBridge,
+		nodes: createThrowingMap(),
+		incrementStatistics: () => {},
+		removeAllListeners: () => {},
+	} as any;
+
+	t.context = { driver, serialport };
+});
+
+test.afterEach.always(async (t) => {
+	const { driver } = t.context;
+	await driver.destroy();
+	driver.removeAllListeners();
+});
+
+process.env.LOGLEVEL = "debug";
+
+test.serial(
+	"unsolicited commands which need special handling are passed to Node.handleCommand",
+	async (t) => {
+		const { driver, serialport } = t.context;
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
@@ -47,19 +61,23 @@ describe("regression tests", () => {
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		expect(node2.getValue(valueId)).toBeUndefined();
+		t.is(node2.getValue(valueId), undefined);
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 		serialport.receiveData(Buffer.from("01090004000203200105d7", "hex"));
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		expect(serialport.lastWrite).toEqual(ACK);
+		t.deepEqual(serialport.lastWrite, ACK);
 		await wait(10);
-		expect(node2.getValue(valueId)).toEqual(5);
-	}, 5000);
+		t.deepEqual(node2.getValue(valueId), 5);
+	},
+);
 
-	it("unsolicited commands are passed to Node.handleCommand while waiting for a controller response", async () => {
+test.serial(
+	"unsolicited commands are passed to Node.handleCommand while waiting for a controller response",
+	async (t) => {
+		const { driver, serialport } = t.context;
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
@@ -77,7 +95,7 @@ describe("regression tests", () => {
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		expect(node2.getValue(valueId)).toBeUndefined();
+		t.is(node2.getValue(valueId), undefined);
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
@@ -88,7 +106,8 @@ describe("regression tests", () => {
 		//   │ transmit options: 0x25
 		//   │ callback id:      1
 		//   └─[NoOperationCC]
-		expect(serialport.lastWrite).toEqual(
+		t.deepEqual(
+			serialport.lastWrite,
 			Buffer.from("010800130201002501c3", "hex"),
 		);
 		await wait(10);
@@ -102,12 +121,16 @@ describe("regression tests", () => {
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		expect(serialport.lastWrite).toEqual(ACK);
+		t.deepEqual(serialport.lastWrite, ACK);
 		await wait(10);
-		expect(node2.getValue(valueId)).toEqual(5);
-	}, 5000);
+		t.deepEqual(node2.getValue(valueId), 5);
+	},
+);
 
-	it("unsolicited commands are passed to Node.handleCommand while waiting for a controller callback", async () => {
+test.serial(
+	"unsolicited commands are passed to Node.handleCommand while waiting for a controller callback",
+	async (t) => {
+		const { driver, serialport } = t.context;
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
@@ -125,7 +148,7 @@ describe("regression tests", () => {
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		expect(node2.getValue(valueId)).toBeUndefined();
+		t.is(node2.getValue(valueId), undefined);
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
@@ -136,7 +159,8 @@ describe("regression tests", () => {
 		//   │ transmit options: 0x25
 		//   │ callback id:      1
 		//   └─[NoOperationCC]
-		expect(serialport.lastWrite).toEqual(
+		t.deepEqual(
+			serialport.lastWrite,
 			Buffer.from("010800130201002501c3", "hex"),
 		);
 		await wait(10);
@@ -148,7 +172,7 @@ describe("regression tests", () => {
 		//     was sent: true
 		serialport.receiveData(Buffer.from("0104011301e8", "hex"));
 		// » [ACK]
-		expect(serialport.lastWrite).toEqual(ACK);
+		t.deepEqual(serialport.lastWrite, ACK);
 
 		await wait(10);
 
@@ -158,8 +182,8 @@ describe("regression tests", () => {
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		expect(serialport.lastWrite).toEqual(ACK);
+		t.deepEqual(serialport.lastWrite, ACK);
 		await wait(10);
-		expect(node2.getValue(valueId)).toEqual(5);
-	}, 5000);
-});
+		t.deepEqual(node2.getValue(valueId), 5);
+	},
+);

@@ -1,11 +1,12 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
@@ -81,7 +82,9 @@ export const ManufacturerSpecificCCValues = Object.freeze({
 
 @API(CommandClasses["Manufacturer Specific"])
 export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ManufacturerSpecificCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ManufacturerSpecificCommand.Get:
 				return true; // This is mandatory
@@ -119,7 +122,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async deviceSpecificGet(
 		deviceIdType: DeviceIdType,
-	): Promise<string | undefined> {
+	): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			ManufacturerSpecificCommand,
 			ManufacturerSpecificCommand.DeviceSpecificGet,
@@ -193,18 +196,32 @@ export class ManufacturerSpecificCC extends CommandClass {
 	}
 }
 
+export interface ManufacturerSpecificCCReportOptions extends CCCommandOptions {
+	manufacturerId: number;
+	productType: number;
+	productId: number;
+}
+
 @CCCommand(ManufacturerSpecificCommand.Report)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| ManufacturerSpecificCCReportOptions
+			| CommandClassDeserializationOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 6);
-		this.manufacturerId = this.payload.readUInt16BE(0);
-		this.productType = this.payload.readUInt16BE(2);
-		this.productId = this.payload.readUInt16BE(4);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 6);
+			this.manufacturerId = this.payload.readUInt16BE(0);
+			this.productType = this.payload.readUInt16BE(2);
+			this.productId = this.payload.readUInt16BE(4);
+		} else {
+			this.manufacturerId = options.manufacturerId;
+			this.productType = options.productType;
+			this.productId = options.productId;
+		}
 	}
 
 	@ccValue(ManufacturerSpecificCCValues.manufacturerId)
@@ -215,6 +232,14 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 
 	@ccValue(ManufacturerSpecificCCValues.productId)
 	public readonly productId: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(6);
+		this.payload.writeUInt16BE(this.manufacturerId, 0);
+		this.payload.writeUInt16BE(this.productType, 2);
+		this.payload.writeUInt16BE(this.productId, 4);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

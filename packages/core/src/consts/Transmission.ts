@@ -1,7 +1,8 @@
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
-import type { Duration } from "../values/Duration";
+import { type S2SecurityClass } from "../security/SecurityClass";
+import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
@@ -60,6 +61,8 @@ export enum TransmitStatus {
 	NoRoute = 0x04,
 }
 
+export type FrameType = "singlecast" | "broadcast" | "multicast";
+
 /** A number between -128 and +124 dBm or one of the special values in {@link RssiError} indicating an error */
 export type RSSI = number | RssiError;
 
@@ -71,6 +74,32 @@ export enum RssiError {
 
 export function isRssiError(rssi: RSSI): rssi is RssiError {
 	return rssi >= RssiError.NoSignalDetected;
+}
+
+/** Averages RSSI measurements using an exponential moving average with the given weight for the accumulator */
+export function averageRSSI(
+	acc: number | undefined,
+	rssi: RSSI,
+	weight: number,
+): number {
+	if (isRssiError(rssi)) {
+		switch (rssi) {
+			case RssiError.NotAvailable:
+				// If we don't have a value yet, return 0
+				return acc ?? 0;
+			case RssiError.ReceiverSaturated:
+				// Assume rssi is 0 dBm
+				rssi = 0;
+				break;
+			case RssiError.NoSignalDetected:
+				// Assume rssi is -128 dBm
+				rssi = -128;
+				break;
+		}
+	}
+
+	if (acc == undefined) return rssi;
+	return Math.round(acc * weight + rssi * (1 - weight));
 }
 
 /**
@@ -141,7 +170,7 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a queued message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
 	/**
 	 * @internal
@@ -187,8 +216,20 @@ export type SupervisionOptions =
 			useSupervision: false;
 	  };
 
+export type SendCommandSecurityS2Options = {
+	/** Send the command using a different (lower) security class */
+	s2OverrideSecurityClass?: S2SecurityClass;
+	/** Whether delivery of non-supervised SET-type commands is verified by waiting for potential Nonce Reports. Default: true */
+	s2VerifyDelivery?: boolean;
+	/** Whether the MOS extension should be included in S2 message encapsulation. */
+	s2MulticastOutOfSync?: boolean;
+	/** The optional multicast group ID to use for S2 message encapsulation. */
+	s2MulticastGroupId?: number;
+};
+
 export type SendCommandOptions = SendMessageOptions &
-	SupervisionOptions & {
+	SupervisionOptions &
+	SendCommandSecurityS2Options & {
 		/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 		maxSendAttempts?: number;
 		/** Whether the driver should automatically handle the encapsulation. Default: true */
@@ -197,6 +238,8 @@ export type SendCommandOptions = SendMessageOptions &
 		encapsulationFlags?: EncapsulationFlags;
 		/** Overwrite the default transmit options */
 		transmitOptions?: TransmitOptions;
+		/** Overwrite the default report timeout */
+		reportTimeoutMs?: number;
 	};
 
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
@@ -266,4 +309,44 @@ export function isUnsupervisedOrSucceeded(
 			status: SupervisionStatus.Success | SupervisionStatus.Working;
 	  }) {
 	return !result || supervisedCommandSucceeded(result);
+}
+
+/** Figures out the final supervision result from an array of things that may be supervision results */
+export function mergeSupervisionResults(
+	results: unknown[],
+): SupervisionResult | undefined {
+	const supervisionResults = results.filter(isSupervisionResult);
+	if (!supervisionResults.length) return undefined;
+
+	if (supervisionResults.some((r) => r.status === SupervisionStatus.Fail)) {
+		return {
+			status: SupervisionStatus.Fail,
+		};
+	} else if (
+		supervisionResults.some((r) => r.status === SupervisionStatus.NoSupport)
+	) {
+		return {
+			status: SupervisionStatus.NoSupport,
+		};
+	}
+	const working = supervisionResults.filter(
+		(r): r is SupervisionResult & { status: SupervisionStatus.Working } =>
+			r.status === SupervisionStatus.Working,
+	);
+	if (working.length > 0) {
+		const durations = working.map((r) =>
+			r.remainingDuration.serializeSet(),
+		);
+		const maxDuration =
+			(durations.length > 0 &&
+				Duration.parseReport(Math.max(...durations))) ||
+			Duration.unknown();
+		return {
+			status: SupervisionStatus.Working,
+			remainingDuration: maxDuration,
+		};
+	}
+	return {
+		status: SupervisionStatus.Success,
+	};
 }

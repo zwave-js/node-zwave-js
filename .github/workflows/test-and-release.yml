@@ -13,6 +13,8 @@ on:
       # pre-releases
       - "v[0-9]+.[0-9]+.[0-9]+-**"
   pull_request: {}
+  merge_group:
+    types: [checks_requested]
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency: 
@@ -20,26 +22,37 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_FLAGS: "--concurrency=2 ${{ secrets.TURBO_CACHE }}"
+  TURBO_API: "http://127.0.0.1:9080"
+  # The token and team are required by the TurboRepo server, just set them to anything
+  TURBO_TOKEN: foo
+  TURBO_TEAM: me
+  # Additional CLI flags for turbo commands
+  TURBO_FLAGS: "" # "--concurrency=2"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS
+      run: |
+        # yarn clean $TURBO_FLAGS
+        yarn build $TURBO_FLAGS
+
+    - name: Save Turbo Cache between jobs
+      uses: ./.github/actions/build-cache-upload
 
   # ===================
 
@@ -50,16 +63,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -72,7 +89,7 @@ jobs:
         TMP_DIR=$(mktemp -d)
 
         echo "Re-creating a production environment..."
-        yarn prodpack "$TMP_DIR/.tarballs"
+        yarn monopack --target "$TMP_DIR/.tarballs" --no-version
         cd $TMP_DIR
 
         npm init -y
@@ -106,16 +123,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run linters
       run: yarn run lint $TURBO_FLAGS
@@ -135,10 +156,10 @@ jobs:
         if ! git diff --quiet ; then
           echo "has changes"
           git diff > fix.patch
-          echo "::set-output name=changed::true"
+          echo "changed=true" >> $GITHUB_OUTPUT
         else
           echo "unchanged"
-          echo "::set-output name=changed::false"
+          echo "changed=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Upload Patch
@@ -146,7 +167,7 @@ jobs:
         failure() &&
         github.event_name == 'pull_request' &&
         steps.lint.outputs.changed == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: lint-fix
         path: fix.patch
@@ -159,16 +180,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Lint config files and Z-Wave specifics
       run: yarn run lint:zwave $TURBO_FLAGS
@@ -181,64 +206,72 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [14, 16, 18, 20]
         os: [ubuntu-latest]
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run component tests
       run: yarn run test:ci $TURBO_FLAGS
       env:
         CI: true
 
-  # ===================
-  # This job checks if a PR changes the public API surface
-  api-surface:
-    name: Check public API surface
-    # Only run for PRs
-    if: github.event_name == 'pull_request'
+  # # ===================
+  # # This job checks if a PR changes the public API surface
+  # api-surface:
+  #   name: Check public API surface
+  #   # Only run for PRs
+  #   if: github.event_name == 'pull_request'
 
-    needs: [build]
+  #   needs: [build]
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x] # This should be LTS
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [18] # This should be LTS
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
 
-    - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
-      with:
-        node-version: ${{ matrix.node-version }}
+  #   - name: Restore Turbo Cache from previous jobs
+  #     uses: ./.github/actions/build-cache-download
 
-    - name: Generate API report
-      run: yarn run extract-api $TURBO_FLAGS
+  #   - name: Prepare testing environment
+  #     uses: ./.github/actions/prepare-env
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #       githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Show changes
-      if: failure()
-      run: |
-        cat packages/*/.tmp/api.md
+  #   - name: Generate API report
+  #     run: yarn run extract-api $TURBO_FLAGS
 
-    - name: Comment on PR
-      if: failure()
-      run: |
-        echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
-        echo "Please run" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "yarn accept-api" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
+  #   - name: Show changes
+  #     if: failure()
+  #     run: |
+  #       cat packages/*/.tmp/api.md
+
+  #   - name: Comment on PR
+  #     if: failure()
+  #     run: |
+  #       echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
+  #       echo "Please run" >> $GITHUB_STEP_SUMMARY
+  #       echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+  #       echo "yarn accept-api" >> $GITHUB_STEP_SUMMARY
+  #       echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+  #       echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
+  #       echo "" >> $GITHUB_STEP_SUMMARY
 
   # ===================
 
@@ -253,16 +286,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -287,16 +324,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -320,7 +361,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   strategy:
   #     matrix:
-  #       node-version: [16.x] # This should be LTS
+  #       node-version: [18] # This should be LTS
 
   #   steps:
   #   - name: Checkout code
@@ -363,16 +404,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Restore Turbo Cache from previous jobs
+      uses: ./.github/actions/build-cache-download
+
     - name: Prepare testing environment
-      uses: ./.github/actions/install-dependencies
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -383,14 +428,14 @@ jobs:
       run: |
         VERSION="${{ github.ref }}"
         VERSION=${VERSION##*/v}
-        echo "::set-output name=VERSION::$VERSION"
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        EOF=$(od -An -N6 -x /dev/urandom | tr -d ' ')
         BODY=$(git show -s --format=%b)
-        BODY="${BODY//'%'/'%25'}"
-        BODY="${BODY//$'\n'/'%0A'}"
-        BODY="${BODY//$'\r'/'%0D'}"
-        echo "::set-output name=BODY::$BODY"
+        echo "BODY<<$EOF" >> $GITHUB_OUTPUT
+        echo "$BODY" >> $GITHUB_OUTPUT
+        echo "$EOF" >> $GITHUB_OUTPUT
         if [[ $VERSION == *"-"* ]] ; then
-          echo "::set-output name=TAG::--tag next"
+          echo "TAG=--tag next" >> $GITHUB_OUTPUT
         fi
 
     - name: Publish packages to npm
@@ -401,13 +446,14 @@ jobs:
         yarn npm whoami
         yarn workspaces foreach -vti --no-private npm publish --tolerate-republish $TAG
 
+
     - name: Create Github Release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release v${{ steps.extract_release.outputs.VERSION }}
+        name: Release v${{ steps.extract_release.outputs.VERSION }}
         draft: false
         # Prerelease versions create prereleases on Github
         prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}

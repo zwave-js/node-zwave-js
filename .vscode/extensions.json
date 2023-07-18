@@ -3,6 +3,7 @@
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
 		"EditorConfig.EditorConfig",
-		"amodio.toggle-excluded-files"
+		"amodio.toggle-excluded-files",
+		"zwave-js.config-editor"
 	]
 }

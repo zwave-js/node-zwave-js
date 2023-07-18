@@ -19,6 +19,16 @@ export function parseApplicationNodeInformation(
 	};
 }
 
+export function encodeApplicationNodeInformation(
+	nif: ApplicationNodeInformation,
+): Buffer {
+	const ccList = encodeCCList(nif.supportedCCs, []);
+	return Buffer.concat([
+		Buffer.from([nif.genericDeviceClass, nif.specificDeviceClass]),
+		ccList,
+	]);
+}
+
 export interface NodeUpdatePayload extends ApplicationNodeInformation {
 	nodeId: number;
 	basicDeviceClass: number;
@@ -150,8 +160,6 @@ export type DataRate = 9600 | 40000 | 100000;
 
 export enum NodeType {
 	Controller,
-	/** @deprecated Use `NodeType["End Node"]` instead */
-	"Routing End Node",
 	"End Node" = 1,
 }
 

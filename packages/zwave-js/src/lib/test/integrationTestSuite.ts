@@ -1,93 +1,24 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { MockController, MockNode, MockNodeOptions } from "@zwave-js/testing";
+import { type DeepPartial } from "@zwave-js/shared";
+import {
+	type MockController,
+	type MockNode,
+	type MockNodeOptions,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
+import test, { type ExecutionContext } from "ava";
 import crypto from "crypto";
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
-import {
-	createDefaultMockControllerBehaviors,
-	createDefaultMockNodeBehaviors,
-} from "../../Utils";
 import type { Driver } from "../driver/Driver";
-import {
-	createAndStartDriverWithMockPort,
-	CreateAndStartDriverWithMockPortResult,
-} from "../driver/DriverMock";
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";
+import { prepareDriver, prepareMocks } from "./integrationTestSuiteShared";
 
-function prepareDriver(
-	cacheDir: string = path.join(__dirname, "cache"),
-	logToFile: boolean = false,
-	additionalOptions: Partial<ZWaveOptions> = {},
-): Promise<CreateAndStartDriverWithMockPortResult> {
-	return createAndStartDriverWithMockPort({
-		...additionalOptions,
-		portAddress: "/tty/FAKE",
-		...(logToFile
-			? {
-					logConfig: {
-						filename: path.join(
-							cacheDir,
-							"logs",
-							"zwavejs_%DATE%.log",
-						),
-						logToFile: true,
-						enabled: true,
-						level: "debug",
-					},
-			  }
-			: {}),
-		securityKeys: {
-			S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
-			S2_Unauthenticated: Buffer.from(
-				"11111111111111111111111111111111",
-				"hex",
-			),
-			S2_Authenticated: Buffer.from(
-				"22222222222222222222222222222222",
-				"hex",
-			),
-			S2_AccessControl: Buffer.from(
-				"33333333333333333333333333333333",
-				"hex",
-			),
-		},
-		storage: {
-			cacheDir: cacheDir,
-			lockDir: path.join(cacheDir, "locks"),
-		},
-	});
-}
-
-function prepareMocks(
-	mockPort: MockPortBinding,
-	nodeCapabilities?: MockNodeOptions["capabilities"],
-): {
-	mockController: MockController;
-	mockNode: MockNode;
-} {
-	const mockController = new MockController({
-		homeId: 0x7e570001,
-		ownNodeId: 1,
-		serial: mockPort,
-	});
-
-	const mockNode = new MockNode({
-		id: 2,
-		controller: mockController,
-		capabilities: nodeCapabilities,
-	});
-	mockController.addNode(mockNode);
-
-	// Apply default behaviors that are required for interacting with the driver correctly
-	mockController.defineBehavior(...createDefaultMockControllerBehaviors());
-	mockNode.defineBehavior(...createDefaultMockNodeBehaviors());
-
-	return { mockController, mockNode };
-}
+// Integration tests need to run in serial, or they might block the serial port on CI
+const testSerial = test.serial.bind(test);
 
 interface IntegrationTestOptions {
 	/** Enable debugging for this integration tests. When enabled, a driver logfile will be written and the test directory will not be deleted after each test. Default: false */
@@ -103,12 +34,13 @@ interface IntegrationTestOptions {
 		mockNode: MockNode,
 	) => Promise<void>;
 	testBody: (
+		t: ExecutionContext,
 		driver: Driver,
 		node: ZWaveNode,
 		mockController: MockController,
 		mockNode: MockNode,
 	) => Promise<void>;
-	additionalDriverOptions?: Partial<ZWaveOptions>;
+	additionalDriverOptions?: DeepPartial<ZWaveOptions>;
 }
 
 export interface IntegrationTestFn {
@@ -121,7 +53,11 @@ export interface IntegrationTest extends IntegrationTestFn {
 	skip: IntegrationTestFn;
 }
 
-function suite(options: IntegrationTestOptions) {
+function suite(
+	name: string,
+	options: IntegrationTestOptions,
+	modifier?: "only" | "skip",
+) {
 	const {
 		nodeCapabilities,
 		customSetup,
@@ -144,7 +80,7 @@ function suite(options: IntegrationTestOptions) {
 		`zjs_test_cache_${crypto.randomBytes(4).toString("hex")}`,
 	);
 
-	beforeEach(async () => {
+	async function prepareTest() {
 		if (debug) {
 			console.log(`Running integration test in directory ${cacheDir}`);
 		}
@@ -162,10 +98,16 @@ function suite(options: IntegrationTestOptions) {
 			debug,
 			additionalDriverOptions,
 		));
-		({ mockController, mockNode } = prepareMocks(
-			mockPort,
-			nodeCapabilities,
-		));
+
+		({
+			mockController,
+			mockNodes: [mockNode],
+		} = prepareMocks(mockPort, undefined, [
+			{
+				id: 2,
+				capabilities: nodeCapabilities,
+			},
+		]));
 
 		if (customSetup) {
 			await customSetup(driver, mockController, mockNode);
@@ -175,8 +117,7 @@ function suite(options: IntegrationTestOptions) {
 			driver.once("driver ready", () => {
 				// Test code goes here
 
-				node = driver.controller.nodes.getOrThrow(mockNode.id);
-				node.once("ready", () => {
+				const onReady = () => {
 					if (clearMessageStatsBeforeTest) {
 						mockNode.clearReceivedControllerFrames();
 						mockNode.clearSentControllerFrames();
@@ -184,26 +125,42 @@ function suite(options: IntegrationTestOptions) {
 					}
 
 					process.nextTick(resolve);
-				});
+				};
+
+				node = driver.controller.nodes.getOrThrow(mockNode.id);
+
+				if (
+					options.additionalDriverOptions?.testingHooks
+						?.skipNodeInterview
+				) {
+					onReady();
+				} else {
+					node.once("ready", onReady);
+				}
 			});
 
 			continueStartup();
 		});
-	}, 30000);
+	}
 
-	afterEach(async () => {
-		await driver.destroy();
-		if (!debug) await fs.emptyDir(cacheDir).catch(() => {});
-	});
-
-	it("Test body", async () => {
-		try {
-			await testBody(driver, node, mockController, mockNode);
-		} finally {
+	(modifier === "only"
+		? testSerial.only
+		: modifier === "skip"
+		? testSerial.skip
+		: testSerial
+	).bind(testSerial)(name, async (t) => {
+		t.timeout(30000);
+		t.teardown(async () => {
 			// Give everything a chance to settle before destroying the driver.
 			await wait(100);
-		}
-	}, 30000);
+
+			await driver.destroy();
+			if (!debug) await fs.emptyDir(cacheDir).catch(() => {});
+		});
+
+		await prepareTest();
+		await testBody(t, driver, node, mockController, mockNode);
+	});
 }
 
 /** Performs an integration test with a real driver using a mock controller and one mock node */
@@ -211,13 +168,13 @@ export const integrationTest = ((
 	name: string,
 	options: IntegrationTestOptions,
 ): void => {
-	describe(name, () => suite(options));
+	suite(name, options);
 }) as IntegrationTest;
 
 integrationTest.only = (name: string, options: IntegrationTestOptions) => {
-	describe.only(name, () => suite(options));
+	suite(name, options, "only");
 };
 
 integrationTest.skip = (name: string, options: IntegrationTestOptions) => {
-	describe.skip(name, () => suite(options));
+	suite(name, options, "skip");
 };

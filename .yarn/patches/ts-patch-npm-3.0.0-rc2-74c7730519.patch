@@ -1,0 +1,13 @@
+diff --git a/resources/module-patch.js b/resources/module-patch.js
+index ea876511e725fddf498a9fcc6bbcd9864fefb940..cd1e2af71087a2a6b46e071532ceff280ca547fe 100644
+--- a/resources/module-patch.js
++++ b/resources/module-patch.js
+@@ -335,7 +335,7 @@ var tsp = (function () {
+                         request = resolvedPath;
+                     const filePath = Module._resolveFilename(request, this);
+                     const extension = path.extname(filePath);
+-                    if (!tsp.supportedExtensions.includes(extension))
++                    if ((!isEsm && /^\.c?js/.test(extension)) || !tsp.supportedExtensions.includes(extension))
+                         return originalRequire.call(this, request);
+                     const cacheKey = getCachePath(filePath);
+                     const isBuiltFile = builtFiles.has(cacheKey);

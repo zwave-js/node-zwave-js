@@ -1,8 +1,8 @@
 import {
-	CommandClasses,
-	IZWaveEndpoint,
-	ValueID,
 	ValueMetadata,
+	type CommandClasses,
+	type IZWaveEndpoint,
+	type ValueID,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import type { Overwrite } from "alcalzone-shared/types";
@@ -164,6 +164,7 @@ function defineStaticCCValue<
 		property: _blueprint.property,
 		propertyKey: _blueprint.propertyKey,
 	};
+	if (valueId.propertyKey === undefined) delete valueId.propertyKey;
 
 	const ret: InferStaticCCValue<TCommandClass, TBlueprint> = {
 		get id() {
@@ -171,7 +172,7 @@ function defineStaticCCValue<
 		},
 		endpoint: (endpoint: number = 0) => {
 			if (!_blueprint.options.supportsEndpoints) endpoint = 0;
-			return { ...valueId, endpoint };
+			return { ...valueId, endpoint } as any;
 		},
 		is: (testValueId) => {
 			return (
@@ -219,6 +220,7 @@ function defineDynamicCCValue<
 			property: actualBlueprint.property,
 			propertyKey: actualBlueprint.propertyKey,
 		};
+		if (valueId.propertyKey === undefined) delete valueId.propertyKey;
 
 		const value: Omit<
 			InferStaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
@@ -229,7 +231,7 @@ function defineDynamicCCValue<
 			},
 			endpoint: (endpoint: number = 0) => {
 				if (!options.supportsEndpoints) endpoint = 0;
-				return { ...valueId, endpoint };
+				return { ...valueId, endpoint } as any;
 			},
 			get meta() {
 				return { ...ValueMetadata.Any, ...actualBlueprint.meta } as any;
@@ -485,8 +487,8 @@ type MergeOptions<TOptions extends CCValueOptions> = DropOptional<
 type MergeMeta<TMeta extends ValueMetadata> = DropOptional<
 	ValueMetadata extends TMeta
 		? // When the type cannot be inferred exactly (not given), default to ValueMetadata.Any
-		  typeof ValueMetadata["Any"]
-		: Overwrite<typeof ValueMetadata["Any"], TMeta>
+		  (typeof ValueMetadata)["Any"]
+		: Overwrite<(typeof ValueMetadata)["Any"], TMeta>
 >;
 
 /** The common base type of all CC value definitions */
@@ -588,6 +590,7 @@ export interface CCValues {
 	Configuration: typeof import("../cc/ConfigurationCC").ConfigurationCCValues;
 	"Door Lock": typeof import("../cc/DoorLockCC").DoorLockCCValues;
 	"Door Lock Logging": typeof import("../cc/DoorLockLoggingCC").DoorLockLoggingCCValues;
+	"Energy Production": typeof import("../cc/EnergyProductionCC").EnergyProductionCCValues;
 	"Entry Control": typeof import("../cc/EntryControlCC").EntryControlCCValues;
 	"Firmware Update Meta Data": typeof import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCValues;
 	"Humidity Control Mode": typeof import("../cc/HumidityControlModeCC").HumidityControlModeCCValues;
@@ -609,6 +612,7 @@ export interface CCValues {
 	"Scene Activation": typeof import("../cc/SceneActivationCC").SceneActivationCCValues;
 	"Scene Actuator Configuration": typeof import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCValues;
 	"Scene Controller Configuration": typeof import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCValues;
+	"Schedule Entry Lock": typeof import("../cc/ScheduleEntryLockCC").ScheduleEntryLockCCValues;
 	"Sound Switch": typeof import("../cc/SoundSwitchCC").SoundSwitchCCValues;
 	Supervision: typeof import("../cc/SupervisionCC").SupervisionCCValues;
 	"Thermostat Fan Mode": typeof import("../cc/ThermostatFanModeCC").ThermostatFanModeCCValues;
@@ -621,5 +625,6 @@ export interface CCValues {
 	"User Code": typeof import("../cc/UserCodeCC").UserCodeCCValues;
 	Version: typeof import("../cc/VersionCC").VersionCCValues;
 	"Wake Up": typeof import("../cc/WakeUpCC").WakeUpCCValues;
+	"Window Covering": typeof import("../cc/WindowCoveringCC").WindowCoveringCCValues;
 	"Z-Wave Plus Info": typeof import("../cc/ZWavePlusCC").ZWavePlusCCValues;
 }

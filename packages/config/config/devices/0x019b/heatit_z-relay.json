@@ -232,5 +232,15 @@
 			"maxValue": 6000,
 			"defaultValue": 0
 		}
-	]
+	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device does not support Supervision correctly
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }

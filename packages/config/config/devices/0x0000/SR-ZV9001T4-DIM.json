@@ -1,0 +1,38 @@
+{
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0000",
+	"label": "SR-ZV9001T4-DIM",
+	"description": "Z-Wave Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0xa10d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1
+		},
+		"2": {
+			"label": "Launch 1",
+			"maxNodes": 12
+		},
+		"3": {
+			"label": "Launch 2",
+			"maxNodes": 12
+		},
+		"4": {
+			"label": "Launch 3",
+			"maxNodes": 12
+		},
+		"5": {
+			"label": "Launch 4",
+			"maxNodes": 12
+		}
+	}
+}

@@ -388,11 +388,28 @@
 	},
 	"alarm_map_low_battery": {
 		"from": {
+			// Low battery <= 4.8 V
 			"alarmType": 167
 		},
 		"to": {
 			"notificationType": 8, // Power Management
-			"notificationEvent": 10 // Replace battery soon
+			"notificationEvent": 14, // Charge battery soon
+			"eventParameters": {
+				"batteryLevel": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_critical_battery": {
+		"from": {
+			// Low battery <= 4.5 V
+			"alarmType": 168
+		},
+		"to": {
+			"notificationType": 8, // Power Management
+			"notificationEvent": 15, // Charge battery now
+			"eventParameters": {
+				"batteryLevel": "alarmLevel"
+			}
 		}
 	}
 }

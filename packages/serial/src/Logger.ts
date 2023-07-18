@@ -1,12 +1,16 @@
 import * as Sentry from "@sentry/node";
 import {
-	DataDirection,
-	getDirectionPrefix,
-	ZWaveLogContainer,
 	ZWaveLoggerBase,
+	getDirectionPrefix,
+	type DataDirection,
+	type ZWaveLogContainer,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, num2hex } from "@zwave-js/shared";
-import { SerialLogContext, SERIAL_LABEL, SERIAL_LOGLEVEL } from "./Logger_safe";
+import {
+	SERIAL_LABEL,
+	SERIAL_LOGLEVEL,
+	type SerialLogContext,
+} from "./Logger_safe";
 import { MessageHeaders } from "./MessageHeaders";
 
 export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
@@ -130,7 +134,7 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 
 	/**
 	 * Logs a message
-	 * @param msg The message to output
+	 * @param message The message to output
 	 */
 	public message(message: string): void {
 		if (this.isVisible()) {
@@ -141,6 +145,24 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 				context: {
 					source: "serial",
 					direction: "none",
+				},
+			});
+		}
+	}
+
+	/**
+	 * Prints output from the bootloader
+	 * @param screen The "screen" to output
+	 */
+	public bootloaderScreen(screen: string): void {
+		if (this.isVisible()) {
+			this.logger.log({
+				level: "silly",
+				message: screen,
+				direction: getDirectionPrefix("inbound"),
+				context: {
+					source: "serial",
+					direction: "inbound",
 				},
 			});
 		}

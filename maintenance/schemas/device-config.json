@@ -71,18 +71,16 @@
 			"required": ["min", "max"],
 			"additionalProperties": false
 		},
+		"preferred": {
+			"const": true,
+			"description": "Mark this configuration file as preferred over others with overlapping firmware version ranges"
+		},
 		"supportsZWavePlus": {
 			"const": true
 		},
 		"endpoints": { "$ref": "#/definitions/endpoints" },
 		"associations": { "$ref": "#/definitions/associations" },
-		"paramInformation": {
-			"type": "array",
-			"description": "Defines all the existing configuration parameters",
-			"items": { "$ref": "#/definitions/param" },
-			"minItems": 1,
-			"additionalItems": false
-		},
+		"paramInformation": { "$ref": "#/definitions/paramInformation" },
 		"proprietary": {
 			"type": "object",
 			"description": "A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation."
@@ -229,7 +227,15 @@
 					"properties": {
 						"$import": { "$ref": "#/definitions/import" },
 						"$if": { "$ref": "#/definitions/condition" },
-						"associations": { "$ref": "#/definitions/associations" }
+						"label": {
+							"type": "string"
+						},
+						"associations": {
+							"$ref": "#/definitions/associations"
+						},
+						"paramInformation": {
+							"$ref": "#/definitions/paramInformation"
+						}
 					},
 					"additionalProperties": false
 				},
@@ -282,6 +288,13 @@
 				}
 			},
 			"additionalProperties": false
+		},
+		"paramInformation": {
+			"type": "array",
+			"description": "Defines all the existing configuration parameters",
+			"items": { "$ref": "#/definitions/param" },
+			"minItems": 1,
+			"additionalItems": false
 		},
 		"ccInfo": {
 			"type": "object",
@@ -519,40 +532,37 @@
 					"properties": {
 						"add": {
 							"type": "object",
-							"patternProperties": {
-								"^(0x)?[0-9a-f]+$": {
-									"$ref": "#/definitions/ccInfoAndEndpoints"
-								}
-							},
-							"additionalProperties": false
+							"additionalProperties": {
+								"$ref": "#/definitions/ccInfoAndEndpoints"
+							}
 						},
 						"remove": {
 							"type": "object",
-							"patternProperties": {
-								"^(0x)?[0-9a-f]+$": {
-									"type": "object",
-									"properties": {
-										"endpoints": {
-											"anyOf": [
-												{ "const": "*" },
-												{
-													"type": "array",
-													"items": {
-														"type": "integer",
-														"minimum": 0
-													},
-													"minItems": 1
-												}
-											]
-										}
-									},
-									"additionalProperties": false
-								}
-							},
-							"additionalProperties": false
+							"additionalProperties": {
+								"type": "object",
+								"properties": {
+									"endpoints": {
+										"anyOf": [
+											{ "const": "*" },
+											{
+												"type": "array",
+												"items": {
+													"type": "integer",
+													"minimum": 0
+												},
+												"minItems": 1
+											}
+										]
+									}
+								},
+								"additionalProperties": false
+							}
 						}
 					},
 					"additionalProperties": false
+				},
+				"disableAutoRefresh": {
+					"const": true
 				},
 				"disableBasicMapping": {
 					"const": true
@@ -598,6 +608,26 @@
 					"minProperties": 1,
 					"additionalProperties": false
 				},
+				"overrideQueries": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "array",
+						"minItems": 1,
+						"items": {
+							"type": "object",
+							"properties": {
+								"endpoint": { "type": "integer", "minimum": 0 },
+								"method": { "type": "string" },
+								"matchArgs": { "type": "array" },
+								"result": true,
+								"persistValues": { "type": "object" },
+								"extendMetadata": { "type": "object" }
+							},
+							"required": ["method", "result"],
+							"additionalProperties": false
+						}
+					}
+				},
 				"preserveEndpoints": {
 					"oneOf": [
 						{
@@ -630,6 +660,26 @@
 							]
 						}
 					}
+				},
+				"removeEndpoints": {
+					"oneOf": [
+						{
+							"const": "*"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"items": {
+								"type": "integer",
+								"minimum": 1
+							}
+						}
+					]
+				},
+				"reportTimeout": {
+					"type": "number",
+					"minimum": 1000,
+					"maximum": 10000
 				},
 				"skipConfigurationNameQuery": {
 					"const": true

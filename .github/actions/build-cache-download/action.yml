@@ -1,15 +1,18 @@
 name: 'Download Build Cache'
-description: 'Downloads previously cached build artifacts'
+description: 'Downloads the previously stored turborepo cache'
 author: 'AlCalzone'
 
 runs:
   using: "composite"
   steps:
-    - name: Download cached build artifacts
+    - name: Download turbo cache artifact
       uses: actions/download-artifact@v3
       with:
-        name: built
+        name: turbo-cache
+        path: ${{ runner.temp }}
 
-    - name: Extract cached build artifacts
+    - name: Extract turbo cache
       shell: bash
-      run: tar -xvzf built.tgz && rm built.tgz
+      working-directory: ${{ runner.temp }}
+      run: |
+        tar -xvzf turbo-cache.tgz && rm turbo-cache.tgz

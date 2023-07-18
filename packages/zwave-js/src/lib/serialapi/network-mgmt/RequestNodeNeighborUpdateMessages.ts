@@ -3,16 +3,16 @@ import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { MultiStageCallback, SuccessIndicator } from "@zwave-js/serial";
 import {
-	expectedCallback,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageType,
+	expectedCallback,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 

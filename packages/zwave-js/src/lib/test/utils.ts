@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 
-import { MockSerialPort } from "@zwave-js/serial";
+import { MockSerialPort } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
-import { Driver } from "../driver/Driver";
+import proxyquire from "proxyquire";
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
 
 // load the driver with stubbed out Serialport
-jest.mock("@zwave-js/serial", () => {
-	const mdl: typeof import("@zwave-js/serial") =
-		jest.requireActual("@zwave-js/serial");
-	return {
-		...mdl,
-		ZWaveSerialPort: mdl.MockSerialPort,
-	};
-});
+const { Driver } = proxyquire<typeof import("../driver/Driver")>(
+	"../driver/Driver",
+	{
+		"@zwave-js/serial": {
+			ZWaveSerialPort: MockSerialPort,
+		},
+	},
+);
 
 export const PORT_ADDRESS = "/tty/FAKE";
 
@@ -32,6 +32,7 @@ export async function createAndStartDriver(
 	const driver = new Driver(PORT_ADDRESS, {
 		...options,
 		testingHooks: {
+			skipBootloaderCheck: true,
 			skipControllerIdentification: true,
 			skipNodeInterview: true,
 		},
@@ -45,9 +46,9 @@ export async function createAndStartDriver(
 	await driver.start();
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 
-	portInstance.openStub.mockClear();
-	portInstance.closeStub.mockClear();
-	portInstance.writeStub.mockClear();
+	portInstance.openStub.resetHistory();
+	portInstance.closeStub.resetHistory();
+	portInstance.writeStub.resetHistory();
 	portInstance["_lastWrite"] = undefined;
 
 	// Mock the value DB, because the original one will not be initialized

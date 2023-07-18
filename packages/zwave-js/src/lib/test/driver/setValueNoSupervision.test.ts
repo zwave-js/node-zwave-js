@@ -6,9 +6,9 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import {
-	createMockZWaveRequestFrame,
-	MockNodeBehavior,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
+	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
@@ -52,7 +52,7 @@ integrationTest("setValue without supervision: expect validation GET", {
 		};
 		mockNode.defineBehavior(respondToBinarySwitchGet);
 	},
-	testBody: async (driver, node, mockController, mockNode) => {
+	testBody: async (t, driver, node, mockController, mockNode) => {
 		await node.setValue(BinarySwitchCCValues.targetValue.id, true);
 
 		mockNode.assertReceivedControllerFrame(
@@ -86,5 +86,7 @@ integrationTest("setValue without supervision: expect validation GET", {
 					"Node should have sent a BinarySwitchCCReport with currentValue false",
 			},
 		);
+
+		t.pass();
 	},
 });

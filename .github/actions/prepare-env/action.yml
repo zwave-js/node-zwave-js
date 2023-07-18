@@ -1,0 +1,28 @@
+name: 'Install Dependencies'
+description: 'Installs all dependencies needed for testing'
+author: 'AlCalzone'
+inputs:
+  node-version:
+    description: 'Node.js version'
+    required: true
+  githubToken:
+    description: 'The github token to use for authentication'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'yarn'
+
+    - name: Install dependencies
+      shell: bash
+      run: yarn install --immutable
+
+    - name: TurboRepo local server
+      uses: felixmosh/turborepo-gh-artifacts@v2.1.0
+      with:
+        repo-token: ${{ inputs.githubToken }}

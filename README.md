@@ -3,8 +3,7 @@
 <h2 align="center">Z-Wave device driver written entirely in JavaScript/TypeScript</h2>
 
 ![Test and Release](https://github.com/AlCalzone/node-zwave-js/workflows/Test%20and%20Release/badge.svg)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/AlCalzone/node-zwave-js.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/AlCalzone/node-zwave-js/context:javascript)
-[![slack](https://img.shields.io/badge/Chat%20on-Slack-D82167.svg)](https://join.slack.com/t/zwave-js/shared_invite/zt-8ns655f6-d407vtI~KjU~1z11jyaQ9Q)
+[![Discord](https://img.shields.io/discord/1111193770935996459?color=D82167&label=Chat%20on%20Discord&logo=Discord&logoColor=ffffff)](https://discord.gg/HFqcyFNfWd)
 
 [![node](https://img.shields.io/node/v/zwave-js.svg) ![npm](https://img.shields.io/npm/v/zwave-js.svg)](https://www.npmjs.com/package/zwave-js)
 
@@ -51,6 +50,5 @@ If you'd like to help support the future of the project and make the Z-Wave worl
 **Top Sponsors:**
 
 <p align="center">
-  <a href="https://www.nabucasa.com/" target="_blank"><img src="docs/sponsors/nabucasa.png" width="320" alt="Nabu Casa" /></a><br />
-  <a href="https://www.getseam.com/" target="_blank"><img src="docs/sponsors/seam.png" width="120" alt="Seam" /></a>
+  <a href="https://www.nabucasa.com/" target="_blank"><img src="docs/sponsors/nabucasa.png" width="320" alt="Nabu Casa" /></a>
 </p>

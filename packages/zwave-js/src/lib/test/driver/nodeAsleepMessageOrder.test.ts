@@ -1,157 +1,100 @@
-import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
-import type { ThrowingMap } from "@zwave-js/shared";
+import { NoOperationCC } from "@zwave-js/cc";
+import { CommandClasses } from "@zwave-js/core";
+import { FunctionType } from "@zwave-js/serial";
+import { MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import type { Driver } from "../../driver/Driver";
-import { ZWaveNode } from "../../node/Node";
-import { NodeStatus } from "../../node/_Types";
-import { createAndStartDriver } from "../utils";
-import { isFunctionSupported_NoBridge } from "./fixtures";
+import path from "path";
+import { integrationTest } from "../integrationTestSuiteMulti";
 
-describe("regression tests", () => {
-	let driver: Driver;
-	let serialport: MockSerialPort;
-	process.env.LOGLEVEL = "debug";
+// Repro from #1107
+// Node 10's awake timer elapses before its ping is rejected,
+// this causes mismatched responses for all following messages
 
-	beforeEach(async () => {
-		({ driver, serialport } = await createAndStartDriver());
+integrationTest(
+	"marking a node with a pending message as asleep does not mess up the remaining transactions",
+	{
+		// debug: true,
+		provisioningDirectory: path.join(
+			__dirname,
+			"fixtures/nodeAsleepMessageOrder",
+		),
 
-		driver["_controller"] = {
-			ownNodeId: 1,
-			isFunctionSupported: isFunctionSupported_NoBridge,
-			nodes: new Map(),
-			incrementStatistics: () => {},
-			removeAllListeners: () => {},
-		} as any;
-	});
+		nodeCapabilities: [
+			{
+				id: 10,
+				capabilities: {
+					commandClasses: [
+						CommandClasses.Basic,
+						CommandClasses["Wake Up"],
+					],
+					isListening: false,
+					isFrequentListening: false,
+				},
+			},
+			{
+				id: 17,
+				capabilities: {
+					commandClasses: [CommandClasses.Basic],
+				},
+			},
+		],
 
-	afterEach(async () => {
-		await driver.destroy();
-		driver.removeAllListeners();
-	});
+		testBody: async (t, driver, nodes, mockController, mockNodes) => {
+			const [node10, node17] = nodes;
+			const [mockNode10, mockNode17] = mockNodes;
 
-	it("marking a node with a pending message as asleep does not mess up the remaining transactions", async () => {
-		// Repro from #1107
+			node10.markAsAwake();
+			mockNode10.autoAckControllerFrames = false;
+			mockNode17.autoAckControllerFrames = false;
 
-		// Node 10's awake timer elapses before its ping is rejected,
-		// this causes mismatched responses for all following messages
+			const pingPromise10 = node10.ping();
+			node10.commandClasses.Basic.set(60);
+			const pingPromise17 = node17.ping();
 
-		const node10 = new ZWaveNode(10, driver);
-		const node17 = new ZWaveNode(17, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			10,
-			node10,
-		);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			17,
-			node17,
-		);
-		// Add event handlers for the nodes
-		for (const node of driver.controller.nodes.values()) {
-			driver["addNodeEventHandlers"](node);
-		}
+			// Ping for 10 should be sent
+			await wait(50);
+			mockNode10.assertReceivedControllerFrame(
+				(frame) =>
+					frame.type === MockZWaveFrameType.Request &&
+					frame.payload instanceof NoOperationCC,
+				{
+					errorMessage: "Node 10 did not receive the ping",
+				},
+			);
 
-		node10["isListening"] = false;
-		node10["isFrequentListening"] = false;
-		node10.markAsAwake();
-		expect(node10.status).toBe(NodeStatus.Awake);
+			// Mark the node as asleep. This should abort the ongoing transaction.
+			node10.markAsAsleep();
+			await wait(50);
 
-		// TODO: remove hack in packages/shared/src/wrappingCounter.ts when reworking this test to the new testing setup
-		(driver.getNextCallbackId as any).value = 2;
-		const ACK = Buffer.from([MessageHeaders.ACK]);
+			mockController.assertReceivedHostMessage(
+				(msg) => msg.functionType === FunctionType.SendDataAbort,
+				{
+					errorMessage: "The SendData was not aborted",
+				},
+			);
 
-		const pingPromise10 = node10.ping();
-		await wait(1);
-		node10.commandClasses.Basic.set(60);
-		await wait(1);
-		const pingPromise17 = node17.ping();
-		await wait(1);
-		// » [Node 010] [REQ] [SendData]
-		//   │ transmit options: 0x25
-		//   │ callback id:      3
-		//   └─[NoOperationCC]
-		expect(serialport.lastWrite).toEqual(
-			Buffer.from("010800130a01002503c9", "hex"),
-		);
-		await wait(10);
-		serialport.receiveData(ACK);
+			// Now ack the ping so the SendData command will be finished
+			mockNode10.ackControllerRequestFrame();
 
-		await wait(50);
+			// Ping for 10 should be failed now
+			t.false(await pingPromise10);
 
-		// « [RES] [SendData]
-		//     was sent: true
-		serialport.receiveData(Buffer.from("0104011301e8", "hex"));
-		// » [ACK]
-		expect(serialport.lastWrite).toEqual(ACK);
+			// Now the ping for 17 should go out
+			await wait(500);
+			mockNode17.assertReceivedControllerFrame(
+				(frame) =>
+					frame.type === MockZWaveFrameType.Request &&
+					frame.payload instanceof NoOperationCC,
+				{
+					errorMessage: "Node 17 did not receive the ping",
+				},
+			);
 
-		await wait(50);
+			// Ping 17 does not get resolved by the other callback
+			t.is(await Promise.race([pingPromise17, wait(50)]), undefined);
 
-		node10.markAsAsleep();
-		await wait(1);
-		expect(node10.status).toBe(NodeStatus.Asleep);
-
-		// The command queue should now abort the ongoing transaction
-		// » [REQ] [SendDataAbort]
-		expect(serialport.lastWrite).toEqual(Buffer.from("01030016ea", "hex"));
-		await wait(10);
-		serialport.receiveData(ACK);
-
-		await wait(50);
-
-		// Callback for previous message comes
-		// « [REQ] [SendData]
-		//     callback id:     3
-		//     transmit status: NoAck
-		serialport.receiveData(
-			Buffer.from(
-				"011800130301019b007f7f7f7f7f010107000000000204000012",
-				"hex",
-			),
-		);
-		// await wait(1);
-		expect(serialport.lastWrite).toEqual(ACK);
-
-		// Abort was acknowledged, Ping for 10 should be failed
-		await wait(50);
-		await expect(pingPromise10).resolves.toBe(false);
-
-		// Now the Ping for 17 should go out
-		// » [Node 017] [REQ] [SendData]
-		//   │ transmit options: 0x25
-		//   │ callback id:      4
-		//   └─[NoOperationCC]
-		expect(serialport.lastWrite).toEqual(
-			Buffer.from("010800131101002504d5", "hex"),
-		);
-		serialport.receiveData(ACK);
-
-		await wait(50);
-
-		// Ping 17 does not get resolved by the other callback
-		await expect(Promise.race([pingPromise17, wait(50)])).resolves.toBe(
-			undefined,
-		);
-
-		// « [RES] [SendData]
-		//     was sent: true
-		serialport.receiveData(Buffer.from("0104011301e8", "hex"));
-		// » [ACK]
-		expect(serialport.lastWrite).toEqual(ACK);
-
-		await wait(50);
-
-		// Callback for ping node 17 (failed)
-		// « [REQ] [SendData]
-		//     callback id:     4
-		//     transmit status: NoAck
-		serialport.receiveData(
-			Buffer.from(
-				"011800130401019d007f7f7f7f7f010107000000000204000013",
-				"hex",
-			),
-		);
-		expect(serialport.lastWrite).toEqual(ACK);
-		await expect(pingPromise17).resolves.toBeFalse();
-
-		driver.driverLog.sendQueue(driver["sendThread"].state.context.queue);
-	}, 30000);
-});
+			// And it should fail since we don't ack:
+			t.false(await pingPromise17);
+		},
+	},
+);

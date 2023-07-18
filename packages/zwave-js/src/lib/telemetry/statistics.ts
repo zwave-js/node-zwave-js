@@ -56,7 +56,7 @@ export async function sendStatistics(
 	try {
 		const data = await got
 			.post(statisticsUrl, {
-				json: [statistics],
+				json: { data: [statistics] },
 				headers: { "x-api-token": apiToken },
 			})
 			.json();

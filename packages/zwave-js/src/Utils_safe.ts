@@ -1,14 +1,13 @@
 export {
-	Firmware,
-	FirmwareFileFormat,
 	ProtocolDataRate,
-	protocolDataRateToString,
-	Protocols,
 	ProtocolType,
 	ProtocolVersion,
+	Protocols,
 	RouteProtocolDataRate,
+	protocolDataRateToString,
 	rssiToString,
 } from "@zwave-js/core/safe";
+export type { Firmware, FirmwareFileFormat } from "@zwave-js/core/safe";
 export {
 	buffer2hex,
 	formatId,

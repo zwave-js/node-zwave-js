@@ -1,36 +1,41 @@
 import {
 	CommandClasses,
 	Duration,
-	isUnsupervisedOrSucceeded,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	validatePayload,
-	ValueDB,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isUnsupervisedOrSucceeded,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SupervisionResult,
+	type ValueDB,
+	type ValueID,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared/safe";
+import {
+	getEnumMemberName,
+	isEnumMember,
+	keysOf,
+	pick,
+} from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -52,10 +57,10 @@ import { V } from "../lib/Values";
 import {
 	ColorComponent,
 	ColorComponentMap,
-	ColorKey,
 	ColorSwitchCommand,
-	ColorTable,
 	LevelChangeDirection,
+	type ColorKey,
+	type ColorTable,
 } from "../lib/_Types";
 
 const hexColorRegex =
@@ -160,7 +165,7 @@ export const ColorSwitchCCValues = Object.freeze({
 
 @API(CommandClasses["Color Switch"])
 export class ColorSwitchCCAPI extends CCAPI {
-	public supportsCommand(cmd: ColorSwitchCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ColorSwitchCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ColorSwitchCommand.SupportedGet:
 			case ColorSwitchCommand.Get:
@@ -174,7 +179,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 	}
 
 	public async getSupported(): Promise<
-		readonly ColorComponent[] | undefined
+		MaybeNotKnown<readonly ColorComponent[]>
 	> {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
@@ -363,143 +368,150 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-		options,
-	) => {
-		if (property === "targetColor") {
-			const duration = Duration.from(options?.transitionDuration);
-			if (propertyKey != undefined) {
-				// Single color component, only accepts numbers
-				if (typeof propertyKey !== "number") {
-					throwUnsupportedPropertyKey(
-						this.ccId,
-						property,
-						propertyKey,
-					);
-				} else if (typeof value !== "number") {
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function (
+			this: ColorSwitchCCAPI,
+			{ property, propertyKey },
+			value,
+			options,
+		) {
+			if (property === "targetColor") {
+				const duration = Duration.from(options?.transitionDuration);
+				if (propertyKey != undefined) {
+					// Single color component, only accepts numbers
+					if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					} else if (typeof value !== "number") {
+						throwWrongValueType(
+							this.ccId,
+							property,
+							"number",
+							typeof value,
+						);
+					}
+					const result = await this.set({
+						[propertyKey]: value,
+						duration,
+					});
+
+					if (
+						this.isSinglecast() &&
+						!supervisedCommandSucceeded(result)
+					) {
+						// Verify the current value after a (short) delay, unless the command was supervised and successful
+						this.schedulePoll({ property, propertyKey }, value, {
+							duration,
+							transition: "fast",
+						});
+					}
+
+					return result;
+				} else {
+					// Set the compound color object
+
+					// Ensure the value is an object with only valid keys
+					if (
+						!isObject(value) ||
+						!Object.keys(value).every(
+							(key) => key in ColorComponentMap,
+						)
+					) {
+						throw new ZWaveError(
+							`${
+								CommandClasses[this.ccId]
+							}: "${property}" must be set to an object which specifies each color channel`,
+							ZWaveErrorCodes.Argument_Invalid,
+						);
+					}
+
+					// Ensure that each property is numeric
+					for (const [key, val] of Object.entries(value)) {
+						if (typeof val !== "number") {
+							throwWrongValueType(
+								this.ccId,
+								`${property}.${key}`,
+								"number",
+								typeof val,
+							);
+						}
+					}
+
+					// GH#2527: strip unsupported color components, because some devices don't react otherwise
+					if (this.isSinglecast()) {
+						const supportedColors = this.tryGetValueDB()?.getValue<
+							readonly ColorComponent[]
+						>(
+							ColorSwitchCCValues.supportedColorComponents.endpoint(
+								this.endpoint.index,
+							),
+						);
+						if (supportedColors) {
+							value = pick(
+								value,
+								supportedColors
+									.map((c) => colorComponentToTableKey(c))
+									.filter((c) => !!c) as ColorKey[],
+							);
+						}
+					}
+
+					// Avoid sending empty commands
+					if (Object.keys(value as any).length === 0) return;
+
+					return this.set({ ...(value as ColorTable), duration });
+
+					// We're not going to poll each color component separately
+				}
+			} else if (property === "hexColor") {
+				// No property key, this is the hex color #rrggbb
+				if (typeof value !== "string") {
 					throwWrongValueType(
 						this.ccId,
 						property,
-						"number",
+						"string",
 						typeof value,
 					);
 				}
-				const result = await this.set({
-					[propertyKey]: value,
-					duration,
-				});
 
-				if (
-					this.isSinglecast() &&
-					!supervisedCommandSucceeded(result)
-				) {
-					// Verify the current value after a (short) delay, unless the command was supervised and successful
-					this.schedulePoll({ property, propertyKey }, value, {
-						duration,
-						transition: "fast",
-					});
-				}
-
-				return result;
+				const duration = Duration.from(options?.transitionDuration);
+				return this.set({ hexColor: value, duration });
 			} else {
-				// Set the compound color object
-
-				// Ensure the value is an object with only valid keys
-				if (
-					!isObject(value) ||
-					!Object.keys(value).every((key) => key in ColorComponentMap)
-				) {
-					throw new ZWaveError(
-						`${
-							CommandClasses[this.ccId]
-						}: "${property}" must be set to an object which specifies each color channel`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-
-				// Ensure that each property is numeric
-				for (const [key, val] of Object.entries(value)) {
-					if (typeof val !== "number") {
-						throwWrongValueType(
-							this.ccId,
-							`${property}.${key}`,
-							"number",
-							typeof val,
-						);
-					}
-				}
-
-				// GH#2527: strip unsupported color components, because some devices don't react otherwise
-				if (this.isSinglecast()) {
-					const supportedColors = this.tryGetValueDB()?.getValue<
-						readonly ColorComponent[]
-					>(
-						ColorSwitchCCValues.supportedColorComponents.endpoint(
-							this.endpoint.index,
-						),
-					);
-					if (supportedColors) {
-						value = pick(
-							value,
-							supportedColors
-								.map((c) => colorComponentToTableKey(c))
-								.filter((c) => !!c) as ColorKey[],
-						);
-					}
-				}
-
-				// Avoid sending empty commands
-				if (Object.keys(value as any).length === 0) return;
-
-				return this.set({ ...(value as ColorTable), duration });
-
-				// We're not going to poll each color component separately
+				throwUnsupportedProperty(this.ccId, property);
 			}
-		} else if (property === "hexColor") {
-			// No property key, this is the hex color #rrggbb
-			if (typeof value !== "string") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"string",
-					typeof value,
-				);
-			}
-
-			const duration = Duration.from(options?.transitionDuration);
-			return this.set({ hexColor: value, duration });
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+		};
+	}
 
 	public isSetValueOptimistic(_valueId: ValueID): boolean {
 		return false; // Color Switch CC handles updating the value DB itself
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		if (propertyKey == undefined) {
-			throwMissingPropertyKey(this.ccId, property);
-		} else if (typeof propertyKey !== "number") {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: ColorSwitchCCAPI,
+			{ property, propertyKey },
+		) {
+			if (propertyKey == undefined) {
+				throwMissingPropertyKey(this.ccId, property);
+			} else if (typeof propertyKey !== "number") {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+			}
 
-		switch (property) {
-			case "currentColor":
-				return (await this.get(propertyKey))?.currentValue;
-			case "targetColor":
-				return (await this.get(propertyKey))?.targetValue;
-			case "duration":
-				return (await this.get(propertyKey))?.duration;
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			switch (property) {
+				case "currentColor":
+					return (await this.get(propertyKey))?.currentValue;
+				case "targetColor":
+					return (await this.get(propertyKey))?.targetValue;
+				case "duration":
+					return (await this.get(propertyKey))?.duration;
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 }
 
 @commandClass(CommandClasses["Color Switch"])
@@ -606,6 +618,10 @@ export class ColorSwitchCC extends CommandClass {
 			) ?? [];
 
 		for (const color of supportedColors) {
+			// Some devices report invalid colors, but the CC API checks
+			// for valid values and throws otherwise.
+			if (!isEnumMember(ColorComponent, color)) continue;
+
 			const colorName = getEnumMemberName(ColorComponent, color);
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -908,7 +924,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		}
 		if (this.version >= 2) {
 			this.payload[i] = (
-				this.duration ?? Duration.from("default")
+				this.duration ?? Duration.default()
 			).serializeSet();
 		}
 		return super.serialize();
@@ -987,8 +1003,8 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			(this.ignoreStartLevel ? 0b0010_0000 : 0);
 		const payload = [controlByte, this.colorComponent, this.startLevel];
 
-		if (this.version >= 3 && this.duration) {
-			payload.push(this.duration.serializeSet());
+		if (this.version >= 3) {
+			payload.push((this.duration ?? Duration.default()).serializeSet());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();

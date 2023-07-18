@@ -1,26 +1,26 @@
 import {
-	CommandClasses,
 	createSimpleReflectionDecorator,
 	encodeNodeUpdatePayload,
 	getCCName,
-	MessageOrCCLogEntry,
-	MessageRecord,
-	NodeUpdatePayload,
 	parseCCList,
 	parseNodeUpdatePayload,
+	type CommandClasses,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type NodeUpdatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	DeserializingMessageConstructor,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
 	MessageType,
+	gotDeserializationOptions,
 	messageTypes,
-	SuccessIndicator,
+	type DeserializingMessageConstructor,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
+	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
@@ -31,14 +31,15 @@ export enum ApplicationUpdateTypes {
 	NodeInfo_RequestDone = 0x82,
 	NodeInfo_RequestFailed = 0x81,
 	RoutingPending = 0x80,
-	NewIdAssigned = 0x40,
-	DeleteDone = 0x20,
+	Node_Added = 0x40, // A new node was added to the network by another controller
+	Node_Removed = 0x20, // A new node was removed from the network by another controller
 	SUC_IdChanged = 0x10,
 }
 
 const {
 	decorator: applicationUpdateType,
 	lookupConstructor: getApplicationUpdateRequestConstructor,
+	lookupValue: getApplicationUpdateType,
 } = createSimpleReflectionDecorator<
 	ApplicationUpdateRequest,
 	[updateType: ApplicationUpdateTypes],
@@ -47,19 +48,10 @@ const {
 	name: "applicationUpdateType",
 });
 
-interface ApplicationUpdateRequestOptions extends MessageBaseOptions {
-	updateType: ApplicationUpdateTypes;
-}
-
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-	public constructor(
-		host: ZWaveHost,
-		options:
-			| ApplicationUpdateRequestOptions
-			| MessageDeserializationOptions,
-	) {
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
@@ -77,7 +69,7 @@ export class ApplicationUpdateRequest extends Message {
 
 			this.payload = this.payload.slice(1);
 		} else {
-			this.updateType = options.updateType;
+			this.updateType = getApplicationUpdateType(this)!;
 		}
 	}
 
@@ -92,23 +84,19 @@ export class ApplicationUpdateRequest extends Message {
 	}
 }
 
-interface ApplicationUpdateRequestNodeInfoReceivedOptions
+interface ApplicationUpdateRequestWithNodeInfoOptions
 	extends MessageBaseOptions {
 	nodeInformation: NodeUpdatePayload;
 }
 
-@applicationUpdateType(ApplicationUpdateTypes.NodeInfo_Received)
-export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
+export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateRequest {
 	public constructor(
 		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
-			| ApplicationUpdateRequestNodeInfoReceivedOptions,
+			| ApplicationUpdateRequestWithNodeInfoOptions,
 	) {
-		super(host, {
-			...options,
-			updateType: ApplicationUpdateTypes.NodeInfo_Received,
-		});
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			this.nodeInformation = parseNodeUpdatePayload(this.payload);
@@ -128,21 +116,35 @@ export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateR
 	}
 }
 
+@applicationUpdateType(ApplicationUpdateTypes.NodeInfo_Received)
+export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequestWithNodeInfo {}
+
 @applicationUpdateType(ApplicationUpdateTypes.NodeInfo_RequestFailed)
 export class ApplicationUpdateRequestNodeInfoRequestFailed
 	extends ApplicationUpdateRequest
 	implements SuccessIndicator
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, {
-			...options,
-			updateType: ApplicationUpdateTypes.NodeInfo_RequestFailed,
-		});
-	}
-
 	isOK(): boolean {
 		return false;
 	}
+}
+
+@applicationUpdateType(ApplicationUpdateTypes.Node_Added)
+export class ApplicationUpdateRequestNodeAdded extends ApplicationUpdateRequestWithNodeInfo {}
+
+@applicationUpdateType(ApplicationUpdateTypes.Node_Removed)
+export class ApplicationUpdateRequestNodeRemoved extends ApplicationUpdateRequest {
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+
+		this.nodeId = this.payload[0];
+		// byte 1 is 0, meaning unknown
+	}
+
+	public nodeId: number;
 }
 
 @applicationUpdateType(ApplicationUpdateTypes.SmartStart_HomeId_Received)

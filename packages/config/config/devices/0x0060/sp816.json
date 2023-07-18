@@ -77,5 +77,15 @@
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device does not support Supervision correctly
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }

@@ -7,165 +7,187 @@
 /// <reference types="node" />
 
 // Warning: (ae-forgotten-export) The symbol "Constructors" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "AllOf" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllOf" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function AllOf<T extends any[]>(...BaseClasses: Constructors<T>): Constructor<UnionToIntersection<T[number]>>;
 
-// Warning: (ae-missing-release-tag) "AllOrNone" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllOrNone" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export type AllOrNone<T extends Record<string, any>> = T | {
     [key in keyof T]?: undefined;
 };
 
-// Warning: (ae-missing-release-tag) "applyMixin" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "applyMixin" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function applyMixin(target: Constructor, mixin: Constructor, includeConstructor?: boolean): void;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "buffer2hex" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "buffer2hex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function buffer2hex(buffer: Buffer, uppercase?: boolean): string;
 
-// Warning: (ae-missing-release-tag) "cloneDeep" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "cloneDeep" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function cloneDeep<T>(source: T): T;
 
-// Warning: (ae-missing-release-tag) "compareStrings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "compareStrings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function compareStrings(a: string, b: string): number;
 
-// Warning: (ae-missing-release-tag) "Constructor" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Constructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type Constructor<T = {}> = new (...args: any[]) => T;
 
-// Warning: (ae-missing-release-tag) "cpp2js" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "cpp2js" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function cpp2js(str: string): string;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "createThrowingMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createThrowingMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createThrowingMap<K, V>(throwKeyNotFound?: (key: K) => never): ThrowingMap<K, V>;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "createWrappingCounter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createWrappingCounter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createWrappingCounter(maxValue: number, randomSeed?: boolean): () => number;
 
-// Warning: (ae-missing-release-tag) "DeepPartial" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeepPartial" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type DeepPartial<T> = {
     [P in keyof T]+?: DeepPartial<T[P]>;
 };
 
-// Warning: (ae-missing-release-tag) "discreteBinarySearch" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "discreteBinarySearch" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function discreteBinarySearch(rangeMin: number, rangeMax: number, executor: (value: number) => boolean | PromiseLike<boolean>): Promise<number | undefined>;
 
-// Warning: (ae-missing-release-tag) "discreteLinearSearch" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "discreteLinearSearch" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function discreteLinearSearch(rangeMin: number, rangeMax: number, executor: (value: number) => boolean | PromiseLike<boolean>): Promise<number | undefined>;
 
-// Warning: (ae-missing-release-tag) "enumFilesRecursive" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "enumFilesRecursive" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function enumFilesRecursive(rootDir: string, predicate?: (filename: string) => boolean): Promise<string[]>;
 
-// Warning: (ae-missing-release-tag) "EventHandler" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EventHandler" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type EventHandler = ((arg1: any, arg2: any, arg3: any, arg4: any) => void) | ((arg1: any, arg2: any, arg3: any) => void) | ((arg1: any, arg2: any) => void) | ((arg1: any) => void) | ((...args: any[]) => void);
 
-// Warning: (ae-missing-release-tag) "flatMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "flatMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function flatMap<U, T extends any[]>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[];
 
-// Warning: (ae-missing-release-tag) "formatId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "formatDate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function formatDate(year: number, month: number, day: number): string;
+
+// Warning: (ae-missing-release-tag) "formatId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function formatId(id: number | string): string;
 
+// Warning: (ae-missing-release-tag) "formatTime" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function formatTime(hour: number, minute: number): string;
+
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "getEnumMemberName" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getEnumMemberName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getEnumMemberName(enumeration: unknown, value: number): string;
 
-// Warning: (ae-missing-release-tag) "getErrorMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "getErrorMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getErrorMessage(e: unknown, includeStack?: boolean): string;
 
-// Warning: (ae-missing-release-tag) "IsAny" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IsAny" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type IsAny<T> = 0 extends 1 & T ? true : false;
 
-// Warning: (ae-missing-release-tag) "isDocker" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isDocker" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function isDocker(): boolean;
 
-// Warning: (ae-missing-release-tag) "isPrintableASCII" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (ae-missing-release-tag) "isEnumMember" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isEnumMember(enumeration: unknown, value: number): boolean;
+
+// Warning: (ae-missing-release-tag) "isPrintableASCII" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isPrintableASCII(text: string): boolean;
 
-// Warning: (ae-missing-release-tag) "isPrintableASCIIWithNewlines" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isPrintableASCIIWithWhitespace" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function isPrintableASCIIWithNewlines(text: string): boolean;
+export function isPrintableASCIIWithWhitespace(text: string): boolean;
 
-// Warning: (ae-missing-release-tag) "JSONObject" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "JSONObject" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type JSONObject = Record<string, any>;
 
-// Warning: (ae-missing-release-tag) "keysOf" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "keysOf" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function keysOf<T>(obj: T): (keyof T)[];
+export function keysOf<T extends {}>(obj: T): (keyof T)[];
 
-// Warning: (ae-missing-release-tag) "mergeDeep" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "mergeDeep" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function mergeDeep(target: Record<string, any> | undefined, source: Record<string, any>, overwrite?: boolean): Record<string, any>;
 
-// Warning: (ae-missing-release-tag) "MethodsNamesOf" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MethodsNamesOf" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MethodsNamesOf<T> = OnlyMethods<T>[keyof T];
 
-// Warning: (ae-missing-release-tag) "Mixin" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Mixin" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function Mixin(baseCtors: Constructor[]): (derivedCtor: Constructor) => void;
 
+// Warning: (ae-missing-release-tag) "noop" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function noop(): void;
+
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// Warning: (ae-missing-release-tag) "num2hex" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "num2hex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function num2hex(val: number | undefined | null, uppercase?: boolean): string;
 
-// Warning: (ae-missing-release-tag) "ObjectKeyMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ObjectKeyMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
@@ -194,74 +216,74 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
     values(): IterableIterator<TValue>;
 }
 
-// Warning: (ae-missing-release-tag) "OnlyMethods" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OnlyMethods" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type OnlyMethods<T> = {
     [K in keyof T]: T[K] extends (...args: any[]) => any ? T[K] : never;
 };
 
-// Warning: (ae-missing-release-tag) "padVersion" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "padVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function padVersion(version: string): string;
 
-// Warning: (ae-missing-release-tag) "pick" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "pick" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function pick<T extends Record<any, any>, K extends keyof T>(obj: T, keys: readonly K[]): Pick<T, K>;
 
-// Warning: (ae-missing-release-tag) "pickDeep" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "pickDeep" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function pickDeep<T = unknown>(object: Record<string, any>, path: string): T;
 
 // Warning: (ae-forgotten-export) The symbol "PickSymbolIterator" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "ReadonlyObjectKeyMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ReadonlyObjectKeyMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ReadonlyObjectKeyMap<TKey extends Record<string | number, any>, TValue> = Pick<ObjectKeyMap<TKey, TValue>, "has" | "get" | "entries" | "keys" | "values" | "size"> & PickSymbolIterator<ObjectKeyMap<TKey, TValue>>;
 
-// Warning: (ae-missing-release-tag) "ReadonlyThrowingMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ReadonlyThrowingMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
     getOrThrow(key: K): V;
 };
 
-// Warning: (ae-missing-release-tag) "skipBytes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "skipBytes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function skipBytes(buf: Buffer, n: number): Buffer;
 
-// Warning: (ae-missing-release-tag) "staticExtends" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "staticExtends" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function staticExtends<T extends new (...args: any[]) => any>(constructor: unknown, base: T): constructor is T;
 
-// Warning: (ae-missing-release-tag) "stringify" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "stringify" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function stringify(arg: unknown, space?: 4 | "\t"): string;
 
-// Warning: (ae-missing-release-tag) "sum" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "sum" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function sum(values: number[]): number;
 
-// Warning: (ae-missing-release-tag) "throttle" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "throttle" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function throttle<T extends any[]>(fn: (...args: T) => void, intervalMs: number, trailing?: boolean): (...args: T) => void;
 
-// Warning: (ae-missing-release-tag) "ThrowingMap" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ThrowingMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ThrowingMap<K, V> = Map<K, V> & {
     getOrThrow(key: K): V;
 };
 
-// Warning: (ae-missing-release-tag) "TimedExpectation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TimedExpectation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class TimedExpectation<TResult = void, TPredicate = never> implements PromiseLike<TResult> {
@@ -275,13 +297,13 @@ export class TimedExpectation<TResult = void, TPredicate = never> implements Pro
     then<TResult1 = TResult, TResult2 = never>(onfulfilled?: ((value: TResult) => TResult1 | PromiseLike<TResult1>) | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null): PromiseLike<TResult1 | TResult2>;
 }
 
-// Warning: (ae-missing-release-tag) "TypedClassDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedClassDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TypedClassDecorator<TTarget extends Object> = <T extends TTarget, TConstructor extends new (...args: any[]) => T>(apiClass: TConstructor) => TConstructor | void;
 
-// Warning: (ae-missing-release-tag) "TypedEventEmitter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TypedEventEmitter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedEventEmitter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedEventEmitter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHandler>> {
@@ -303,12 +325,12 @@ export interface TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHa
 export class TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHandler>> {
 }
 
-// Warning: (ae-missing-release-tag) "TypedPropertyDecorator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedPropertyDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TypedPropertyDecorator<TTarget extends Object> = <T extends TTarget>(target: T, propertyKey: string | symbol) => void;
 
-// Warning: (ae-missing-release-tag) "UnionToIntersection" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UnionToIntersection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (x: infer R) => any ? R : never;

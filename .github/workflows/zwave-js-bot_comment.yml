@@ -15,7 +15,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - uses: actions/github-script@v6
@@ -87,7 +87,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -149,7 +149,7 @@ jobs:
       run: |
         # Apply the patch
         if ! git apply ../patch/fix.patch ; then
-          echo "::set-output name=result::error"
+          echo "result=error" >> $GITHUB_OUTPUT
           exit 0
         fi
 
@@ -162,9 +162,9 @@ jobs:
           git reset -- .github
           git commit -m "style: fix lint"
           git push
-          echo "::set-output name=result::ok"
+          echo "result=ok" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=result::unchanged"
+          echo "result=unchanged" >> $GITHUB_OUTPUT
           exit 0
         fi
 
@@ -193,7 +193,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -264,7 +264,7 @@ jobs:
           git config user.name "Z-Wave JS Bot"
           git push -f
         else
-          echo "::set-output name=result::error"
+          echo "result=error" >> $GITHUB_OUTPUT
         fi
 
     - name: Give feedback
@@ -291,7 +291,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -354,9 +354,9 @@ jobs:
         if git commit --amend -m "$TITLE" ; then
           # Amending the commit worked
           git push -f
-          echo "::set-output name=result::success"
+          echo "result=success" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=result::error"
+          echo "result=error" >> $GITHUB_OUTPUT
         fi
 
     - name: Give feedback
@@ -381,7 +381,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -452,11 +452,11 @@ jobs:
           git commit -m "$commitmessage"
           git push --set-upstream origin "$branchname"
 
-          echo "::set-output name=result::success"
-          echo "::set-output name=branchname::$branchname"
-          echo "::set-output name=commitmessage::$commitmessage"
+          echo "result=success" >> $GITHUB_OUTPUT
+          echo "branchname=$branchname" >> $GITHUB_OUTPUT
+          echo "commitmessage=$commitmessage" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=result::unchanged"
+          echo "result=unchanged" >> $GITHUB_OUTPUT
           exit 0
         fi
 
@@ -489,7 +489,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -573,11 +573,11 @@ jobs:
           git commit -m "$commitmessage"
           git push --set-upstream origin "$branchname"
 
-          echo "::set-output name=result::success"
-          echo "::set-output name=branchname::$branchname"
-          echo "::set-output name=commitmessage::$commitmessage"
+          echo "result=success" >> $GITHUB_OUTPUT
+          echo "branchname=$branchname" >> $GITHUB_OUTPUT
+          echo "commitmessage=$commitmessage" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=result::unchanged"
+          echo "result=unchanged" >> $GITHUB_OUTPUT
           exit 0
         fi
 
@@ -609,7 +609,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -695,11 +695,11 @@ jobs:
           git commit -m "$commitmessage"
           git push --set-upstream origin "$branchname"
 
-          echo "::set-output name=result::success"
-          echo "::set-output name=branchname::$branchname"
-          echo "::set-output name=commitmessage::$commitmessage"
+          echo "result=success" >> $GITHUB_OUTPUT
+          echo "branchname=$branchname" >> $GITHUB_OUTPUT
+          echo "commitmessage=$commitmessage" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=result::unchanged"
+          echo "result=unchanged" >> $GITHUB_OUTPUT
           exit 0
         fi
 

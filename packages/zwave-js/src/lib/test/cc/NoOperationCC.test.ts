@@ -1,6 +1,7 @@
 import { NoOperationCC } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
+import test from "ava";
 
 const host = createTestingHost();
 
@@ -13,19 +14,17 @@ function buildCCBuffer(payload: Buffer): Buffer {
 	]);
 }
 
-describe("lib/commandclass/NoOperationCC => ", () => {
-	it("the CC should serialize correctly", () => {
-		const cc = new NoOperationCC(host, { nodeId: 1 });
-		const expected = buildCCBuffer(
-			Buffer.from([]), // No command!
-		);
-		expect(cc.serialize()).toEqual(expected);
-	});
+test("the CC should serialize correctly", (t) => {
+	const cc = new NoOperationCC(host, { nodeId: 1 });
+	const expected = buildCCBuffer(
+		Buffer.from([]), // No command!
+	);
+	t.deepEqual(cc.serialize(), expected);
+});
 
-	it("the CC should be deserialized correctly", () => {
-		const ccData = buildCCBuffer(
-			Buffer.from([]), // No command!
-		);
-		void new NoOperationCC(host, { nodeId: 2, data: ccData });
-	});
+test("the CC should be deserialized correctly", (t) => {
+	const ccData = buildCCBuffer(
+		Buffer.from([]), // No command!
+	);
+	t.notThrows(() => new NoOperationCC(host, { nodeId: 2, data: ccData }));
 });

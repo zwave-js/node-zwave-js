@@ -1,8 +1,8 @@
 {
-	"manufacturer": "eZEX Corporation",
+	"manufacturer": "LG U+",
 	"manufacturerId": "0x0233",
 	"label": "SSE-302",
-	"description": "U+ Switch",
+	"description": "Smart Switch",
 	"devices": [
 		{
 			"productType": "0x004c",
@@ -13,6 +13,25 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Switch 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch 2",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Switch 3",
+			"maxNodes": 5
+		}
 	},
 	"metadata": {
 		"inclusion": "1) Prepare the controller for enabling inclusion\n2) Keep touching the lamp low button, then after 5 seconds elapsed, 3 beep sounds can be heard. At that time, withdraw touching the button and then inclusion will be commenced",

@@ -1,82 +1,68 @@
-import {
-	CommandClass,
-	getCommandClass,
-	ZWavePlusCC,
-	ZWavePlusCommand,
-} from "@zwave-js/cc";
-import { CommandClasses, TransmitOptions } from "@zwave-js/core";
+import { ZWavePlusCCGet, ZWavePlusCommand } from "@zwave-js/cc";
+import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
-import type { Driver } from "../../driver/Driver";
-import { ZWaveNode } from "../../node/Node";
-import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
-import { assertCC } from "../assertCC";
-import { createEmptyMockDriver } from "../mocks";
+import test from "ava";
 
 const host = createTestingHost();
 
-describe("lib/commandclass/ZWavePlusCC => ", () => {
-	const cc = new ZWavePlusCC(host, { nodeId: 9 });
-	let serialized: Buffer;
+function buildCCBuffer(payload: Buffer): Buffer {
+	return Buffer.concat([
+		Buffer.from([
+			CommandClasses["Z-Wave Plus Info"], // CC
+		]),
+		payload,
+	]);
+}
 
-	it("should be a CommandClass", () => {
-		expect(cc).toBeInstanceOf(CommandClass);
+test("The Get command should serialize correctly", (t) => {
+	const cc = new ZWavePlusCCGet(host, {
+		nodeId: 1,
 	});
-	it(`with command class "Z-Wave Plus Info"`, () => {
-		expect(getCommandClass(cc)).toBe(CommandClasses["Z-Wave Plus Info"]);
-	});
-
-	it("should serialize correctly", () => {
-		const req = new SendDataRequest(host, {
-			command: cc,
-			transmitOptions: TransmitOptions.DEFAULT,
-			callbackId: 36,
-		});
-		cc.ccCommand = ZWavePlusCommand.Get;
-		serialized = req.serialize();
-		// A real message from OZW
-		expect(serialized).toEqual(
-			Buffer.from("0109001309025e012524b0", "hex"),
-		);
-	});
-
-	describe.skip(`interview()`, () => {
-		const fakeDriver = createEmptyMockDriver();
-		const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
-
-		beforeAll(() => {
-			fakeDriver.sendMessage.mockImplementation(() =>
-				Promise.resolve({ command: {} }),
-			);
-			fakeDriver.controller.nodes.set(node.id, node);
-		});
-		beforeEach(() => fakeDriver.sendMessage.mockClear());
-		afterAll(() => {
-			fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
-			node.destroy();
-		});
-
-		it("should send a ZWavePlusCC.Get", async () => {
-			node.addCC(CommandClasses["Z-Wave Plus Info"], {
-				isSupported: true,
-			});
-			const cc = node.createCCInstance(
-				CommandClasses["Z-Wave Plus Info"],
-			)!;
-			await cc.interview(fakeDriver);
-
-			expect(fakeDriver.sendMessage).toBeCalled();
-
-			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-				cc: ZWavePlusCC,
-				nodeId: node.id,
-				ccValues: {
-					ccCommand: ZWavePlusCommand.Get,
-				},
-			});
-		});
-
-		it.todo("Test the behavior when the request failed");
-
-		it.todo("Test the behavior when the request succeeds");
-	});
+	const expected = buildCCBuffer(
+		Buffer.from([
+			ZWavePlusCommand.Get, // CC Command
+		]),
+	);
+	t.deepEqual(cc.serialize(), expected);
 });
+
+// describe.skip(`interview()`, () => {
+// 	const fakeDriver = createEmptyMockDriver();
+// 	const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
+
+// 	beforeAll(() => {
+// 		fakeDriver.sendMessage.mockImplementation(() =>
+// 			Promise.resolve({ command: {} }),
+// 		);
+// 		fakeDriver.controller.nodes.set(node.id, node);
+// 	});
+// 	beforeEach(() => fakeDriver.sendMessage.mockClear());
+// 	afterAll(() => {
+// 		fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
+// 		node.destroy();
+// 	});
+
+// 	test("should send a ZWavePlusCC.Get", async (t) => {
+// 		node.addCC(CommandClasses["Z-Wave Plus Info"], {
+// 			isSupported: true,
+// 		});
+// 		const cc = node.createCCInstance(
+// 			CommandClasses["Z-Wave Plus Info"],
+// 		)!;
+// 		await cc.interview(fakeDriver);
+
+// 		sinon.assert.called(fakeDriver.sendMessage);
+
+// 		assertCC(t, fakeDriver.sendMessage.mock.calls[0][0], {
+// 			cc: ZWavePlusCC,
+// 			nodeId: node.id,
+// 			ccValues: {
+// 				ccCommand: ZWavePlusCommand.Get,
+// 			},
+// 		});
+// 	});
+
+// 	it.todo("Test the behavior when the request failed");
+
+// 	it.todo("Test the behavior when the request succeeds");
+// });

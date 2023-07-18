@@ -1,13 +1,25 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN51",
-	"description": "Z-Wave Plus 700 Series Dry Contact Relay",
+	"label": [
+		{
+			"$if": "productType === 0x0904",
+			"value": "ZEN51 LR"
+		},
+		"ZEN51"
+	],
+	"description": "700 Series Dry Contact Relay",
 	"devices": [
 		{
+			// Regular Z-Wave version:
 			"productType": "0x0104",
 			"productId": "0x0201",
 			"zwaveAllianceId": 4610
+		},
+		{
+			// Long Range capable version:
+			"productType": "0x0904",
+			"productId": "0x0201"
 		}
 	],
 	"firmwareVersion": {
@@ -32,15 +44,15 @@
 		},
 		{
 			"#": "2",
-			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit"
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit_5x_short"
 		},
 		{
 			"#": "3",
-			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit"
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit_5x_short"
 		},
 		{
 			"#": "10",
-			"$import": "templates/zooz_template.json#auto_timer_unit_select"
+			"$import": "templates/zooz_template.json#auto_timer_unit_select_min_sec"
 		},
 		{
 			"#": "4",
@@ -60,7 +72,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/zooz_template.json#association_reports"
+			"$import": "templates/zooz_template.json#association_reports_binary"
 		},
 		{
 			"#": "9",

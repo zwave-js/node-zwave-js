@@ -9,22 +9,22 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import Piscina from "piscina";
 import {
-	CommentRange,
-	ExportedDeclarations,
-	InterfaceDeclaration,
-	InterfaceDeclarationStructure,
-	JSDocTagStructure,
-	MethodDeclaration,
 	Node,
-	OptionalKind,
 	Project,
-	PropertySignatureStructure,
-	SourceFile,
 	SyntaxKind,
-	ts,
-	Type,
 	TypeFormatFlags,
-	TypeLiteralNode,
+	type CommentRange,
+	type ExportedDeclarations,
+	type InterfaceDeclaration,
+	type InterfaceDeclarationStructure,
+	type JSDocTagStructure,
+	type MethodDeclaration,
+	type OptionalKind,
+	type PropertySignatureStructure,
+	type SourceFile,
+	type Type,
+	type TypeLiteralNode,
+	type ts,
 } from "ts-morph";
 import { isMainThread } from "worker_threads";
 import { formatWithPrettier } from "./prettier";
@@ -166,8 +166,10 @@ export function getTransformedSource(
 		}
 	}
 
-	// Remove exports keyword
+	// Remove exports and declare keywords
 	if (Node.isModifierable(node)) {
+		node = node.toggleModifier("declare", false);
+		// @ts-expect-error
 		node = node.toggleModifier("export", false);
 	}
 
@@ -317,7 +319,7 @@ function printMethodDeclaration(method: MethodDeclaration): string {
 	const end = method.getBody()!.getStart();
 	let ret = method
 		.getText()
-		.substr(0, end - start)
+		.slice(0, end - start)
 		.trim();
 	if (!method.getReturnTypeNode()) {
 		ret += ": " + method.getSignature().getReturnType().getText(method);
@@ -333,6 +335,7 @@ function printOverload(method: MethodDeclaration): string {
 
 async function processCCDocFile(
 	file: SourceFile,
+	dtsFile: SourceFile,
 ): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
 	const APIClass = file
 		.getClasses()
@@ -340,8 +343,9 @@ async function processCCDocFile(
 	if (!APIClass) return;
 
 	const ccId = getCommandClassFromClassDeclaration(
-		file.compilerNode,
-		APIClass.compilerNode,
+		// FIXME: there seems to be some discrepancy between ts-morph's bundled typescript and our typescript
+		file.compilerNode as any,
+		APIClass.compilerNode as any,
 	);
 	if (ccId == undefined) return;
 	const ccName = getCCName(ccId);
@@ -430,7 +434,7 @@ ${
 
 	// List defined value IDs
 	const valueIDsConst = (() => {
-		for (const stmt of file.getVariableStatements()) {
+		for (const stmt of dtsFile.getVariableStatements()) {
 			if (!stmt.hasExportKeyword()) continue;
 			for (const decl of stmt.getDeclarations()) {
 				if (decl.getName()?.endsWith("CCValues")) {
@@ -455,7 +459,7 @@ ${
 
 			// There is probably an official way to do this, but I can't find it
 			ret = ret
-				.replace(/typeof CommandClasses/g, "CommandClasses")
+				.replace(/\(?typeof CommandClasses\)?/g, "CommandClasses")
 				.replace(/^(\s+)readonly /gm, "$1")
 				.replace(/;$/gm, ",");
 
@@ -488,14 +492,21 @@ ${
 			if (valueType.getCallSignatures().length === 1) {
 				const signature = valueType.getCallSignatures()[0];
 
-				// The call signature has a single argument
-				// args: [arg1: type1, arg2: type2, ...]
-				callSignature = `(${signature
-					.getParameters()[0]
-					.getTypeAtLocation(valueIDsConst)
-					.getText(valueIDsConst)
-					// Remove the [] from the tuple
-					.slice(1, -1)})`;
+				callSignature = `(${signature.compilerSignature
+					.declaration!.parameters.map((p) => p.getText())
+					.join(", ")})`;
+
+				// This used to be true. leaving it here in case it becomes true again
+				// // The call signature has a single argument
+				// // args: [arg1: type1, arg2: type2, ...]
+				// callSignature = `(${signature
+				// 	.getParameters()[0]
+				// 	.getTypeAtLocation(valueIDsConst)
+				// 	.getText(valueIDsConst)
+				// 	// Remove the [] from the tuple
+				// 	.slice(1, -1)})`;
+
+				if (!callSignature.includes(":")) debugger;
 
 				valueType = signature.getReturnType();
 			} else if (valueType.getCallSignatures().length > 1) {
@@ -731,9 +742,13 @@ export function processImport(filename: string): Promise<boolean> {
 export async function processCC(
 	filename: string,
 ): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
-	const sourceFile = getProgram().getSourceFileOrThrow(filename);
+	const program = getProgram();
+	const sourceFile = program.getSourceFileOrThrow(filename);
+	const dtsFile = program.addSourceFileAtPath(
+		filename.replace("/src/", "/build/").replace(/(?<!\.d)\.ts$/, ".d.ts"),
+	);
 	try {
-		return await processCCDocFile(sourceFile);
+		return await processCCDocFile(sourceFile, dtsFile);
 	} catch (e: any) {
 		throw new Error(`Error processing CC file: ${filename}\n${e.stack}`);
 	}

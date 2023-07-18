@@ -1,26 +1,27 @@
-import { DeepPartial, flatMap } from "@zwave-js/shared";
+import { flatMap, type DeepPartial } from "@zwave-js/shared";
 import type { Format, TransformFunction } from "logform";
 import * as path from "path";
-import { configs, MESSAGE } from "triple-beam";
+import { MESSAGE, configs } from "triple-beam";
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
 import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
 import { colorizer } from "./Colorizer";
 import {
-	channelPadding,
 	CONTROL_CHAR_WIDTH,
-	directionPrefixPadding,
-	LogConfig,
-	LogContext,
 	LOG_WIDTH,
-	MessageRecord,
+	channelPadding,
+	directionPrefixPadding,
+	nonUndefinedLogConfigKeys,
 	stringToNodeList,
 	timestampFormatShort,
 	timestampPadding,
 	timestampPaddingShort,
-	ZWaveLogger,
-	ZWaveLogInfo,
+	type LogConfig,
+	type LogContext,
+	type MessageRecord,
+	type ZWaveLogInfo,
+	type ZWaveLogger,
 } from "./shared_safe";
 
 const { combine, timestamp, label } = winston.format;
@@ -48,6 +49,7 @@ export class ZWaveLogContainer extends winston.Container {
 		enabled: true,
 		level: getTransportLoglevel(),
 		logToFile: !!process.env.LOGTOFILE,
+		maxFiles: 7,
 		nodeFilter: stringToNodeList(process.env.LOG_NODES),
 		transports: undefined as any,
 		filename: require.main
@@ -79,6 +81,12 @@ export class ZWaveLogContainer extends winston.Container {
 	}
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
+		// Avoid overwriting configuration settings with undefined if they shouldn't be
+		for (const key of nonUndefinedLogConfigKeys) {
+			if (key in config && config[key] === undefined) {
+				delete config[key];
+			}
+		}
 		const changedLoggingTarget =
 			(config.logToFile != undefined &&
 				config.logToFile !== this.logConfig.logToFile) ||
@@ -101,6 +109,19 @@ export class ZWaveLogContainer extends winston.Container {
 			config.filename != undefined &&
 			config.filename !== this.logConfig.filename;
 
+		if (config.maxFiles != undefined) {
+			if (
+				typeof config.maxFiles !== "number" ||
+				config.maxFiles < 1 ||
+				config.maxFiles > 365
+			) {
+				delete config.maxFiles;
+			}
+		}
+		const changedMaxFiles =
+			config.maxFiles != undefined &&
+			config.maxFiles !== this.logConfig.maxFiles;
+
 		this.logConfig = Object.assign(this.logConfig, config);
 
 		// If the loglevel changed, our cached "is visible" info is out of date
@@ -115,7 +136,8 @@ export class ZWaveLogContainer extends winston.Container {
 			(this.fileTransport == undefined &&
 				this.consoleTransport == undefined) ||
 			changedLoggingTarget ||
-			changedFilename;
+			changedFilename ||
+			changedMaxFiles;
 
 		if (recreateInternalTransports) {
 			this.fileTransport?.destroy();
@@ -177,12 +199,29 @@ export class ZWaveLogContainer extends winston.Container {
 
 	private getInternalTransports(): Transport[] {
 		const ret: Transport[] = [];
-		if (this.logConfig.enabled && this.logConfig.logToFile) {
+
+		// If logging is disabled, don't log to any of the default transports
+		if (!this.logConfig.enabled) {
+			return ret;
+		}
+
+		// Log to file only when opted in
+		if (this.logConfig.logToFile) {
 			if (!this.fileTransport) {
 				this.fileTransport = this.createFileTransport();
 			}
 			ret.push(this.fileTransport);
-		} else if (!isUnitTest && (isTTY || this.logConfig.forceConsole)) {
+		}
+
+		// Console logs can be noise, so only log to console...
+		if (
+			// when in production
+			!isUnitTest &&
+			// and stdout is a TTY while we're not already logging to a file
+			((isTTY && !this.logConfig.logToFile) ||
+				// except when the user explicitly wants to
+				this.logConfig.forceConsole)
+		) {
 			if (!this.consoleTransport) {
 				this.consoleTransport = this.createConsoleTransport();
 			}
@@ -225,7 +264,7 @@ export class ZWaveLogContainer extends winston.Container {
 				.basename(this.logConfig.filename)
 				.replace(`_%DATE%`, "_current"),
 			zippedArchive: true,
-			maxFiles: "7d",
+			maxFiles: `${this.logConfig.maxFiles}d`,
 			format: createDefaultTransportFormat(false, false),
 			silent: this.isFileTransportSilent(),
 		});
@@ -353,8 +392,8 @@ export const logMessageFormatter: Format = {
 							: LOG_WIDTH - CONTROL_CHAR_WIDTH,
 					);
 					isFirstLine = false;
-					lines.push(message.substr(0, cut));
-					message = message.substr(cut);
+					lines.push(message.slice(0, cut));
+					message = message.slice(cut);
 				}
 			}
 			info.message = lines.join("\n");

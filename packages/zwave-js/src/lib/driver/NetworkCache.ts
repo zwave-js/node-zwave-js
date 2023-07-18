@@ -1,13 +1,13 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import {
-	CommandClasses,
-	dskFromString,
-	dskToString,
 	NodeType,
 	SecurityClass,
-	securityClassOrder,
 	ZWaveError,
 	ZWaveErrorCodes,
+	dskFromString,
+	dskToString,
+	securityClassOrder,
+	type CommandClasses,
 } from "@zwave-js/core";
 import type { FileSystem } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
@@ -15,7 +15,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "path";
 import {
 	ProvisioningEntryStatus,
-	SmartStartProvisioningEntry,
+	type SmartStartProvisioningEntry,
 } from "../controller/Inclusion";
 import { DeviceClass } from "../node/DeviceClass";
 import { InterviewStage } from "../node/_Types";
@@ -64,6 +64,15 @@ export const cacheKeys = {
 				};
 			},
 			hasSUCReturnRoute: `${nodeBaseKey}hasSUCReturnRoute`,
+			associations: (groupId: number) =>
+				`${nodeBaseKey}associations.${groupId}`,
+			priorityReturnRoute: (destinationNodeId: number) =>
+				`${nodeBaseKey}priorityReturnRoute.${destinationNodeId}`,
+			prioritySUCReturnRoute: `${nodeBaseKey}priorityReturnRoute.SUC`,
+			customReturnRoutes: (destinationNodeId: number) =>
+				`${nodeBaseKey}customReturnRoutes.${destinationNodeId}`,
+			customSUCReturnRoutes: `${nodeBaseKey}customReturnRoutes.SUC`,
+			lastSeen: `${nodeBaseKey}lastSeen`,
 		};
 	},
 } as const;
@@ -171,7 +180,9 @@ function tryParseProvisioningList(
 				return;
 			}
 
-			const parsed = { ...entry } as SmartStartProvisioningEntry;
+			const parsed = {
+				...entry,
+			} as unknown as SmartStartProvisioningEntry;
 			parsed.securityClasses = entry.securityClasses
 				.map((s) => tryParseSerializedSecurityClass(s))
 				.filter((s): s is SecurityClass => s !== undefined);
@@ -247,6 +258,14 @@ function isSerializedProvisioningEntryStatus(
 		s in ProvisioningEntryStatus &&
 		typeof ProvisioningEntryStatus[s as any] === "number"
 	);
+}
+
+function tryParseDate(value: unknown): Date | undefined {
+	// Dates are stored as timestamps
+	if (typeof value === "number") {
+		const ret = new Date(value);
+		if (!isNaN(ret.getTime())) return ret;
+	}
 }
 
 export function deserializeNetworkCacheValue(
@@ -334,6 +353,12 @@ export function deserializeNetworkCacheValue(
 			}
 			throw fail();
 		}
+
+		case "lastSeen": {
+			value = tryParseDate(value);
+			if (value) return value;
+			throw fail();
+		}
 	}
 
 	// Other properties
@@ -381,6 +406,10 @@ export function serializeNetworkCacheValue(
 		}
 		case "dsk": {
 			return dskToString(value as Buffer);
+		}
+		case "lastSeen": {
+			// Dates are stored as timestamps
+			return (value as Date).getTime();
 		}
 	}
 

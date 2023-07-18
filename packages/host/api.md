@@ -12,7 +12,7 @@ import type { ControllerLogger } from '@zwave-js/core';
 import type { DeviceConfig } from '@zwave-js/config';
 import type { ICommandClass } from '@zwave-js/core';
 import { IZWaveNode } from '@zwave-js/core';
-import type { Maybe } from '@zwave-js/core';
+import type { MaybeNotKnown } from '@zwave-js/core';
 import type { Overwrite } from 'alcalzone-shared/types';
 import type { ReadonlyThrowingMap } from '@zwave-js/shared';
 import type { SecurityClass } from '@zwave-js/core';
@@ -24,24 +24,26 @@ import { ThrowingMap } from '@zwave-js/shared';
 import type { ValueDB } from '@zwave-js/core';
 import type { ValueID } from '@zwave-js/core';
 
-// Warning: (ae-missing-release-tag) "createTestingHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "createTestingHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function createTestingHost(options?: Partial<CreateTestingHostOptions>): TestingHost;
 
-// Warning: (ae-missing-release-tag) "CreateTestingHostOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateTestingHostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface CreateTestingHostOptions {
     // (undocumented)
-    getSafeCCVersionForNode: ZWaveHost["getSafeCCVersionForNode"];
+    getSafeCCVersion: ZWaveHost["getSafeCCVersion"];
+    // (undocumented)
+    getSupportedCCVersion?: ZWaveHost["getSupportedCCVersion"];
     // (undocumented)
     homeId: ZWaveHost["homeId"];
     // (undocumented)
     ownNodeId: ZWaveHost["ownNodeId"];
 }
 
-// Warning: (ae-missing-release-tag) "FileSystem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FileSystem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface FileSystem {
@@ -57,7 +59,7 @@ export interface FileSystem {
     } | string): Promise<void>;
 }
 
-// Warning: (ae-missing-release-tag) "NodeSchedulePollOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NodeSchedulePollOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NodeSchedulePollOptions {
@@ -65,14 +67,14 @@ export interface NodeSchedulePollOptions {
     timeoutMs?: number;
 }
 
-// Warning: (ae-missing-release-tag) "TestingHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TestingHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TestingHost = Overwrite<Omit<ZWaveApplicationHost, "__internalIsMockNode">, {
     nodes: ThrowingMap<number, IZWaveNode>;
 }>;
 
-// Warning: (ae-missing-release-tag) "ZWaveApplicationHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveApplicationHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ZWaveApplicationHost extends ZWaveHost {
@@ -93,7 +95,7 @@ export interface ZWaveApplicationHost extends ZWaveHost {
     waitForCommand<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, timeout: number): Promise<T>;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveHost" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface ZWaveHost {
@@ -102,12 +104,13 @@ export interface ZWaveHost {
     // (undocumented)
     getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
     // (undocumented)
-    getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
+    getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
     getNextCallbackId(): number;
     getNextSupervisionSessionId(): number;
-    getSafeCCVersionForNode(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
+    getSafeCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
+    getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
     // (undocumented)
-    hasSecurityClass(nodeId: number, securityClass: SecurityClass): Maybe<boolean>;
+    hasSecurityClass(nodeId: number, securityClass: SecurityClass): MaybeNotKnown<boolean>;
     homeId: number;
     isCCSecure(cc: CommandClasses, nodeId: number, endpointIndex?: number): boolean;
     ownNodeId: number;
@@ -117,7 +120,7 @@ export interface ZWaveHost {
     setSecurityClass(nodeId: number, securityClass: SecurityClass, granted: boolean): void;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveHostOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveHostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ZWaveHostOptions {
@@ -136,7 +139,6 @@ export interface ZWaveHostOptions {
     preferences?: {
         scales: Partial<Record<string | number, string | number>>;
     };
-    preserveUnknownValues?: boolean;
     timeouts: {
         refreshValue: number;
         refreshValueAfterTransition: number;

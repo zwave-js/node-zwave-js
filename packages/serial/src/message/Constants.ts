@@ -51,7 +51,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_MEMORY_GET_BUFFER = 0x23,
 	UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 0x24,
 
-	UNKNOWN_FUNC_FlashAutoProgSet = 0x27, // ??
+	EnterBootloader = 0x27, // Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
 	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
 
 	GetNVMId = 0x29, // Returns information about the external NVM
@@ -93,6 +93,9 @@ export enum FunctionType {
 
 	FUNC_ID_ZW_CREATE_NEW_PRIMARY = 0x4c, // Control the createnewprimary process...start, stop, etc.
 	FUNC_ID_ZW_CONTROLLER_CHANGE = 0x4d, // Control the transferprimary process...start, stop, etc.
+
+	AssignPriorityReturnRoute = 0x4f, // Assign a priority route between two nodes
+
 	FUNC_ID_ZW_SET_LEARN_MODE = 0x50, // Put a controller into learn mode for replication/ receipt of configuration info
 	AssignSUCReturnRoute = 0x51, // Assign a return route to the SUC
 	FUNC_ID_ZW_ENABLE_SUC = 0x52, // Make a controller a Static Update Controller
@@ -102,7 +105,7 @@ export enum FunctionType {
 	GetSUCNodeId = 0x56, // Try to retrieve a Static Update Controller node id (zero if no SUC present)
 
 	UNKNOWN_FUNC_SEND_SUC_ID = 0x57,
-	UNKNOWN_FUNC_AssignPrioritySUCReturnRoute = 0x58,
+	AssignPrioritySUCReturnRoute = 0x58, // Assign a priority route from a node to the SUC
 	UNKNOWN_FUNC_REDISCOVERY_NEEDED = 0x59,
 
 	FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 0x5a, // Allow options for request node neighbor update
@@ -122,7 +125,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_TIMER_CANCEL = 0x72, // ??
 	UNKNOWN_FUNC_TIMER_CALL = 0x73, // ??
 
-	UNKNOWN_FUNC_UNKNOWN_0x78 = 0x78, // ??
+	FirmwareUpdateNVM = 0x78, // Access the NVM section for 500 series OTW firmware updates
 
 	GetRoutingInfo = 0x80, // Get a specified node's neighbor information from the controller
 
@@ -133,8 +136,8 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_LOCK_ROUTE_RESPONSE = 0x90, // ??
 	UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 0x91, // ??
-	UNKNOWN_FUNC_GET_PRIORITY_ROUTE = 0x92, // ??
-	UNKNOWN_FUNC_SET_PRIORITY_ROUTE = 0x93, // ??
+	GetPriorityRoute = 0x92, // Get the route that is used as the first routing attempty when transmitting to a node
+	SetPriorityRoute = 0x93, // Set the route that shall be used as the first routing attempty when transmitting to a node
 	UNKNOWN_FUNC_SERIAL_API_TEST = 0x95, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x98 = 0x98, // ??
 
@@ -168,6 +171,9 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0xD2 = 0xd2, // ??
 	UNKNOWN_FUNC_UNKNOWN_0xD3 = 0xd3, // ??
 	UNKNOWN_FUNC_UNKNOWN_0xD4 = 0xd4, // ??
+
+	Shutdown = 0xd9, // Instruct the Z-Wave API to shut down in order to safely remove the power
+
 	UNKNOWN_FUNC_UNKNOWN_0xEF = 0xef, // ??
 
 	// Special commands for Z-Wave.me sticks

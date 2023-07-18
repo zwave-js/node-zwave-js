@@ -102,7 +102,7 @@ export function dumpPage(page: NVM3Page, json: boolean = false): void {
 export function dumpObject(obj: NVM3Object, json: boolean = false): void {
 	try {
 		if (json) {
-			const file = NVMFile.from(obj);
+			const file = NVMFile.from(obj, "7.0.0");
 			console.log(`${JSON.stringify(file.toJSON(), null, 2)}`);
 			console.log();
 			return;

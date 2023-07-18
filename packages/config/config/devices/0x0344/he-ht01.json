@@ -707,5 +707,16 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// Older firmware versions do not properly support Supervision CC
+		"$if": "firmwareVersion < 2.6",
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }

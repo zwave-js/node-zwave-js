@@ -71,6 +71,11 @@ type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Security_S2;
 			/**
+			 * Allows pre-filling the DSK, e.g. when a DSK-only QR code has been scanned.
+			 * If this is given, the `validateDSKAndEnterPIN` callback will not be called.
+			 */
+			dsk?: string;
+			/**
 			 * Allows overriding the user callbacks for this inclusion.
 			 * If not given, the inclusion user callbacks of the driver options will be used.
 			 */
@@ -383,10 +388,10 @@ interface RouteStatistics {
 
 ```ts
 enum ProtocolDataRate {
-	ZWave_9k6 = 0x01,
-	ZWave_40k = 0x02,
-	ZWave_100k = 0x03,
-	LongRange_100k = 0x04,
+	ZWave_9k6 = 1,
+	ZWave_40k = 2,
+	ZWave_100k = 3,
+	LongRange_100k = 4,
 }
 ```
 
@@ -405,7 +410,7 @@ The `healNode` method performs this step for a given node. The returned promise 
 ### `beginHealingNetwork`
 
 ```ts
-beginHealingNetwork(): boolean
+beginHealingNetwork(options?: HealNetworkOptions): boolean
 ```
 
 Synchronously (!) starts the healing process for all nodes in the network. Returns `true` if the process was started, otherwise `false`. This also returns `false` if a healing process is already active. The using library is notified about the progress with the following events:
@@ -419,6 +424,17 @@ In both cases, the listener is called with a `ReadonlyMap<number, HealNodeStatus
 -   `"done"`: The healing process for this node is done
 -   `"failed"`: There was an error while healing this node
 -   `"skipped"`: The node was skipped because it is dead
+
+The `options` argument can be used to skip healing sleeping nodes:
+
+<!-- #import HealNetworkOptions from "zwave-js" -->
+
+```ts
+interface HealNetworkOptions {
+	/** Whether sleeping nodes should be healed too at the end of the healing process. Default: true */
+	includeSleeping?: boolean;
+}
+```
 
 ### `stopHealingNetwork`
 
@@ -476,6 +492,183 @@ type ReplaceNodeOptions =
 				| InclusionStrategy.Security_S0;
 	  };
 ```
+
+### Managing routes
+
+#### Automatic assignment
+
+The methods shown here can be used to manage routes between nodes. For the most part, these are not particularly relevant for applications or even end users, since they are used automatically by Z-Wave JS when necessary. Routes assigned by these methods are determined by the controller, which should be preferred usually.
+
+```ts
+assignReturnRoutes(nodeId: number, destinationNodeId: number): Promise<boolean>;
+deleteReturnRoutes(nodeId: number): Promise<boolean>;
+
+assignSUCReturnRoutes(nodeId: number): Promise<boolean>;
+deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
+```
+
+-   `assignReturnRoutes` instructs the controller to assign node `nodeId` a set of routes to node `destinationNodeId`.
+-   `deleteReturnRoutes` instructs node `nodeId` to delete all previously assigned routes.
+-   `assignSUCReturnRoutes` works like `assignReturnRoutes`, but the routes have the SUC as the destination.
+-   `deleteSUCReturnRoutes` works like `deleteReturnRoutes`, but for routes that have the SUC as the destination.
+
+> [!NOTE] These routes cannot be read back, since they are managed internally by the controller and no API exists to query them.
+
+#### Priority routes (controller → nodes)
+
+In certain scenarios, the routing algorithm of Z-Wave can break down and produce subpar results. It is possible to manually assign priority routes which will always be attempted first before resorting to the automatically determined routes.
+
+> [!WARNING] While these methods are meant to improve the routing and latency in certain situations, they can easily make things worse by choosing the wrong or unreachable repeaters, or by selecting a route speed that is not supported by a node in the route.
+>
+> Typically you'll want to use these methods to force a direct connection as the first attempt.
+
+The following methods control which route is used for the first transmission attempt from the **controller** to the given node.
+
+```ts
+setPriorityRoute(
+	destinationNodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>
+
+getPriorityRoute(destinationNodeId: number): Promise<
+	| {
+			routeKind:
+				| RouteKind.LWR
+				| RouteKind.NLWR
+				| RouteKind.Application;
+			repeaters: number[];
+			routeSpeed: ZWaveDataRate;
+	  }
+	| undefined
+>;
+
+removePriorityRoute(destinationNodeId: number): Promise<boolean>;
+```
+
+-   `setPriorityRoute` sets the priority route which will always be used for the first transmission attempt from the controller to the given node.
+-   `getPriorityRoute` returns the priority route to the given node, which can be:
+    -   `undefined` if there is no route at all,
+    -   the priority route if it exists,
+    -   otherwise the LWR/NLWR
+
+`routeKind` identifies which kind of route is returned by `getPriorityRoute` (`None` is only used internally):
+
+<!-- #import RouteKind from "@zwave-js/core" -->
+
+```ts
+enum RouteKind {
+	None = 0x00,
+	/** Last Working Route */
+	LWR = 0x01,
+	/** Next to Last Working Route */
+	NLWR = 0x02,
+	/** Application-defined priority route */
+	Application = 0x10,
+}
+```
+
+The `repeaters` array contains the node IDs of the repeaters (max. 4) that should be used for the route. An empty array means a direct connection.
+
+`routeSpeed` is the transmission speed to be used for the route. Make sure that all nodes in the route support this speed.
+
+<!-- #import ZWaveDataRate from "@zwave-js/core" -->
+
+```ts
+enum ZWaveDataRate {
+	"9k6" = 0x01,
+	"40k" = 0x02,
+	"100k" = 0x03,
+}
+```
+
+#### Priority return routes (nodes → controller or nodes → other nodes)
+
+To control which routes a **node** will use for the first attempt, use the following methods:
+
+```ts
+assignPriorityReturnRoute(
+	nodeId: number,
+	destinationNodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>;
+
+assignPrioritySUCReturnRoute(
+	nodeId: number,
+	repeaters: number[],
+	routeSpeed: ZWaveDataRate,
+): Promise<boolean>
+```
+
+-   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
+-   `assignPrioritySUCReturnRoute` does the same, but with the SUC (controller) as the destination node.
+
+These methods also assign up to 3 fallback routes, which are chosen automatically by the controller.
+
+> [!WARNING] It has been found that assigning return routes to nodes that already have a priority route can cause the priority route to be changed unexpectedly. To avoid this, assigning priority routes should be done last. Otherwise, call `deleteReturnRoutes` or `deleteSUCReturnRoutes` (for routes to the controller) before assigning new routes. Unfortunately, `deleteReturnRoutes` deletes **all** return routes to all destination nodes, so they all have to be set up again afterwards.
+
+As mentioned before, there is unfortunately no way to query return routes from a node. To remedy this, Z-Wave JS caches the routes it has assigned. To read them, use the following methods:
+
+```ts
+getPriorityReturnRouteCached(nodeId: number, destinationNodeId: number): MaybeUnknown<Route> | undefined;
+getPrioritySUCReturnRouteCached(nodeId: number): MaybeUnknown<Route> | undefined;
+```
+
+-   `getPriorityReturnRouteCached` returns a priority return route that was set using `assignPriorityReturnRoute`. If a non-priority return route has been set since assigning the priority route, this will return `UNKNOWN_STATE` (`null`).
+-   `getPrioritySUCReturnRouteCached` does the same for a route set through `assignPrioritySUCReturnRoute`.
+
+The return type `Route` has the following shape:
+
+<!-- #import Route from "@zwave-js/core" -->
+
+```ts
+interface Route {
+	repeaters: number[];
+	routeSpeed: ZWaveDataRate;
+}
+```
+
+> [!NOTE] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
+
+#### Manually assign custom return routes (nodes → controller or nodes → other nodes)
+
+As a last resort, the routes uses by a node can entirely be assigned manually. This uses the `Z-Wave Protocol` command class, which is used internally by the controller and Z-Wave protocol, so this should at least be considered an inofficial way to set return routes.
+
+Up to 4 routes for each combination of source and destination node can be set. If less routes are given, the remaining ones will be cleared. Optionally, a priority route can be set, which will always be used for the first transmission attempt. Up to 3 of the other routes will then be used as fallbacks, but no automatically determined routes will be used.
+
+Note that the same caveats as above in regards to deleting priority non-SUC return routes apply.
+
+```ts
+assignCustomReturnRoutes(
+	nodeId: number,
+	destinationNodeId: number,
+	routes: Route[],
+	priorityRoute?: Route
+): Promise<boolean>;
+assignCustomSUCReturnRoutes(
+	nodeId: number,
+	routes: Route[],
+	priorityRoute?: Route
+): Promise<boolean>;
+```
+
+-   `assignCustomReturnRoutes` assigns node `nodeId` a set of routes to node `destinationNodeId`.
+-   `assignCustomSUCReturnRoutes` does the same, but with the SUC as the destination.
+
+Z-Wave JS caches manually assigned routes, so they can be read back:
+
+```ts
+getCustomReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] | undefined;
+getCustomSUCReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] | undefined;
+```
+
+-   `getCustomReturnRoutesCached` returns routes that were was set using `assignCustomReturnRoutes`.
+-   `getCustomSUCReturnRoutesCached` returns routes that were was set using `assignCustomSUCReturnRoutes`.
+
+To read priority routes assigned using the optional `priorityRoute` parameter, use `getPriorityReturnRouteCached` and `getPrioritySUCReturnRouteCached` as described above.
+
+> [!ATTENTION] When another controller also manages routes in a network, the cached information is not guaranteed to be up to date. In this case, use the methods above to set the routes again or clear them.
 
 ### Managing associations
 
@@ -547,30 +740,42 @@ If the target endpoint is not given, the association is a "node association". If
 
 A target endpoint of `0` (i.e. the root endpoint), the association targets the node itself and acts like a node association for the target node. However, you should note that some devices don't like having a root endpoint association as the lifeline and must be configured with a node association.
 
-### `getBroadcastNode`
+### Controlling multiple nodes at once (multicast / broadcast)
 
-```ts
-getBroadcastNode(): VirtualNode
-```
+When controlling multiple nodes, a "waterfall" effect can often be observed, because nodes get the commands after another. This can be avoided by using multicast or broadcast, which sends commands to multiple/all nodes at once.
 
-Returns a reference to the (virtual) broadcast node. This can be used to send a command to all supporting nodes in the network with a single message. You can target individual endpoints as usual.
+> [!NOTE]
+> Multicast does **NOT** reduce the number of messages sent, but it can eliminate the waterfall effect when targeting many nodes. All multicasts are followed up by singlecast messages to the individual nodes. This makes sure that all nodes got the command, and is necessary to make secure (S2) multicast work at all.
 
-### `getMulticastGroup`
+There are some caveats when secure nodes are involved:
+
+-   Nodes that are included via `Security S0` can only be controlled using singlecast.
+-   When controlling nodes with mixed security classes, each group of nodes will automatically be targeted individually. It is not possible to send a single command that both secure and insecure nodes will understand.
+
+> [!NOTE]
+> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details on the available methods and properties.
+
+#### Multicast
 
 ```ts
 getMulticastGroup(nodeIDs: number[]): VirtualNode
 ```
 
-Creates a virtual node that can be used to send commands to multiple supporting nodes with a single (multicast) message. You can target individual endpoints as usual.
+Creates a virtual node that can be used to send commands to multiple supporting nodes with as few multicast messages as possible. Nodes are grouped by security class automatically, and get ignored if they cannot be controlled via multicast. You can target individual endpoints as usual.
 
 > [!NOTE]
-> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details on the available methods and properties.
+> This may actually send **broadcast** frames, since it has been found that some (all?) devices interpret S2 multicast frames as the S2 singlecast followup, causing them to respond incorrectly.
+
+#### Broadcast
+
+```ts
+getBroadcastNode(): VirtualNode
+```
+
+Returns a reference to the (virtual) broadcast node. This can be used to send a command to all nodes in the network with a single command. You can target individual endpoints as usual.
 
 > [!NOTE]
-> Support for secure communication is very limited:
->
-> -   Broadcasting or multicasting commands is not possible using `Security S0`.
-> -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
+> When the network contains devices with mixed security classes, this will do the same as `getMulticastGroup` instead and send multiple commands.
 
 ### Configuring the Z-Wave radio
 
@@ -610,7 +815,12 @@ setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
 getPowerlevel(): Promise<{powerlevel: number, measured0dBm: number}>;
 ```
 
-Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm. Both are in dBm and must be between -12.8 and +12.7.
+Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm and serves as a calibration. Both are in dBm and must satisfy the following constraints:
+
+-   `powerlevel` between `-10` and either `+12.7`, `+14` or `+20` dBm (depending on the controller)
+-   `measured0dBm` between `-10` and `+10` or between `-12.8` and `+12.7` dBm (depending on the controller)
+
+Unfortunately there doesn't seem to be a way to determine which constrains apply for a given controller.
 
 > [!ATTENTION] Not all controllers support configuring the TX powerlevel. These methods will throw if they are not supported.
 
@@ -751,22 +961,46 @@ Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd ar
 
 > [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 
-### `getAvailableFirmwareUpdates`
+### Updating the firmware of a node (OTA)
+
+> [!NOTE]
+> This section describes updating the firmware of a node using the **Z-Wave JS firmware update service**. If you want to update the firmware of a node using a file, see [`ZWaveNode.updateFirmware`](api/node.md#updatefirmware).
+
+#### `getAvailableFirmwareUpdates`
 
 ```ts
 getAvailableFirmwareUpdates(nodeId: number, options?: GetFirmwareUpdatesOptions): Promise<FirmwareUpdateInfo[]>
 ```
 
-Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). Returns an array with all available firmware updates for the given node. The entries of the array have the following form:
+Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). The following options are available to control the behavior:
+
+<!-- TODO: Figure out why this cannot be imported automatically:
+#import GetFirmwareUpdatesOptions from "zwave-js" -->
+
+```ts
+interface GetFirmwareUpdatesOptions {
+	/** Allows overriding the API key for the firmware update service */
+	apiKey?: string;
+	/** Allows adding new components to the user agent sent to the firmware update service (existing components cannot be overwritten) */
+	additionalUserAgentComponents?: Record<string, string>;
+	/** Whether the returned firmware upgrades should include prereleases from the `"beta"` channel. Default: `false`. */
+	includePrereleases?: boolean;
+}
+```
+
+This method returns an array with all available firmware updates for the given node. The entries of the array have the following form:
 
 <!-- #import FirmwareUpdateInfo from "zwave-js" -->
 
 ```ts
-type FirmwareUpdateInfo = {
+interface FirmwareUpdateInfo {
 	version: string;
 	changelog: string;
+	channel: "stable" | "beta";
 	files: FirmwareUpdateFileInfo[];
-};
+	downgrade: boolean;
+	normalizedVersion: string;
+}
 ```
 
 where each entry in `files` looks like this:
@@ -781,11 +1015,16 @@ interface FirmwareUpdateFileInfo {
 }
 ```
 
-The `version` and `changelog` are meant to be presented to the user prior to choosing an update.
+The `version` and `changelog` properties are meant to be **presented to the user** prior to choosing an update.
+The fields `downgrade` and `normalizedVersion` are meant **for applications** to filter and sort the updates.
+In addition, the `channel` property indicates which release channel an upgrade is from:
 
-Many Z-Wave devices only have a single upgradeable firmware target (chip), so the `files` array will usually contain a single entry. If there are more, the user needs to select one.
+-   `"stable"`: Production-ready, well-tested firmwares.
+-   `"beta"`: Beta or pre-release firmwares. This channel is supposed to contain firmwares that are stable enough for a wide audience to test, but may still contain bugs.
 
-> [!WARNING] This method **does not** rely on cached data to identify a node, so sleeping nodes need to be woken up for this to work. If a sleeping node is not woken up within a minute after calling this, the method will throw.
+Many Z-Wave devices only have a single upgradeable firmware target (chip), so the `files` array will usually contain a single entry. If there are more, the entries must be applied in the order they are defined.
+
+> [!WARNING] This method **does not** rely on cached data to identify a node, so sleeping nodes need to be woken up for this to work. If a sleeping node is not woken up within a minute after calling this, the method will throw. You can schedule the check when a node wakes up using the [`waitForWakeup`](api/node#waitForWakeup) method.
 
 > [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
 
@@ -797,29 +1036,69 @@ This method requires an API key to be set in the [driver options](#ZWaveOptions)
 interface GetFirmwareUpdatesOptions {
 	/** Allows overriding the API key for the firmware update service */
 	apiKey?: string;
+	/** Allows adding new components to the user agent sent to the firmware update service (existing components cannot be overwritten) */
+	additionalUserAgentComponents?: Record<string, string>;
+	/** Whether the returned firmware upgrades should include prereleases from the `"beta"` channel. Default: `false`. */
+	includePrereleases?: boolean;
 }
 ```
 
-### `beginOTAFirmwareUpdate`
+#### `firmwareUpdateOTA`
 
 ```ts
-beginOTAFirmwareUpdate(nodeId: number, update: FirmwareUpdateFileInfo): Promise<void>
+firmwareUpdateOTA(nodeId: number, update: FirmwareUpdateFileInfo): Promise<FirmwareUpdateResult>
 ```
 
 > [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
 
-Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and starts an over-the-air (OTA) firmware update for the given node.  
-This is very similar to [`ZWaveNode.beginFirmwareUpdate`](api/node#beginfirmwareupdate), except that the updates are officially provided by manufacturers and downloaded in the background.
+Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and performs an over-the-air (OTA) firmware update for the given node. This is very similar to [`ZWaveNode.updateFirmware`](api/node#updatefirmware), except that the updates are officially provided by manufacturers and downloaded in the background.
+
+To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/node#quotfirmware-update-progressquot) of the corresponding node.
+
+The return value indicates whether the update was successful and includes some additional information. This is the same information that is emitted using the `"firmware update finished"` event.
 
 > [!NOTE] Calling this will result in an HTTP request to the URL contained in the `update` parameter.
 
-### `isAnyOTAFirmwareUpdateInProgress`
+#### `isAnyOTAFirmwareUpdateInProgress`
 
 ```ts
 isAnyOTAFirmwareUpdateInProgress(): boolean;
 ```
 
 Returns whether an OTA firmware update is in progress for any node.
+
+### Updating the firmware of the controller (OTW)
+
+```ts
+firmwareUpdateOTW(data: Buffer): Promise<ControllerFirmwareUpdateResult>
+```
+
+> [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
+
+Performs an over-the-wire (OTW) firmware update for the controller using the given firmware image. To do so, the controller gets put in bootloader mode where a new firmware image can be uploaded.
+
+> [!WARNING] A failure during this process may leave your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded.
+
+To keep track of the update progress, use the [`"firmware update progress"` and `"firmware update finished"` events](api/controller#quotfirmware-update-progressquot) of the controller.
+
+The return value indicates whether the update was successful and includes an error code that can be used to determine the reason for a failure. This is the same information that is emitted using the `"firmware update finished"` event:
+
+<!-- #import ControllerFirmwareUpdateResult from "zwave-js" -->
+
+```ts
+interface ControllerFirmwareUpdateResult {
+	success: boolean;
+	status: ControllerFirmwareUpdateStatus;
+}
+```
+
+### `isFirmwareUpdateInProgress`
+
+```ts
+isFirmwareUpdateInProgress(): boolean;
+```
+
+Return whether a firmware update is in progress for the controller.
 
 ## Controller properties
 
@@ -854,18 +1133,18 @@ Returns the type of the Z-Wave library that is supported by the controller hardw
 
 ```ts
 enum ZWaveLibraryTypes {
-	"Unknown",
-	"Static Controller",
-	"Controller",
-	"Enhanced Slave",
-	"Slave",
-	"Installer",
-	"Routing Slave",
-	"Bridge Controller",
-	"Device under Test",
-	"N/A",
-	"AV Remote",
-	"AV Device",
+	"Unknown" = 0,
+	"Static Controller" = 1,
+	"Controller" = 2,
+	"Enhanced Slave" = 3,
+	"Slave" = 4,
+	"Installer" = 5,
+	"Routing Slave" = 6,
+	"Bridge Controller" = 7,
+	"Device under Test" = 8,
+	"N/A" = 9,
+	"AV Remote" = 10,
+	"AV Device" = 11,
 }
 ```
 
@@ -943,6 +1222,15 @@ enum InclusionState {
 }
 ```
 
+### `rfRegion`
+
+```ts
+readonly rfRegion: RFRegion | undefined
+```
+
+Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet).
+This value is cached and updated automatically when using [`getRFRegion` or `setRFRegion`](#configure-rf-region).
+
 ## Controller events
 
 The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are available:
@@ -1004,19 +1292,79 @@ The second argument gives additional info about the inclusion result.
 <!-- #import InclusionResult from "zwave-js" -->
 
 ```ts
-interface InclusionResult {
-	/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
-	lowSecurity?: boolean;
+type InclusionResult =
+	| {
+			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+			lowSecurity?: false;
+	  }
+	| {
+			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+			lowSecurity: true;
+			lowSecurityReason: SecurityBootstrapFailure;
+	  };
+```
+
+If there was a failure during the inclusion, the `lowSecurity` flag will be `true` and the `lowSecurityReason` property will contain additional information why.
+
+<!-- #import SecurityBootstrapFailure from "zwave-js" -->
+
+```ts
+enum SecurityBootstrapFailure {
+	/** Security bootstrapping was canceled by the user */
+	UserCanceled,
+	/** The required security keys were not configured in the driver */
+	NoKeysConfigured,
+	/** No Security S2 user callbacks (or provisioning info) were provided to grant security classes and/or validate the DSK. */
+	S2NoUserCallbacks,
+	/** An expected message was not received within the corresponding timeout */
+	Timeout,
+	/** There was no possible match in encryption parameters between the controller and the node */
+	ParameterMismatch,
+	/** Security bootstrapping was canceled by the included node */
+	NodeCanceled,
+	/** The PIN was incorrect, so the included node could not decode the key exchange commands */
+	S2IncorrectPIN,
+	/** There was a mismatch in security keys between the controller and the node */
+	S2WrongSecurityLevel,
+	/** The node has been bootstrapped using S0 in an S2-capable network */
+	S0Downgrade,
+	/** Some other unspecified error happened */
+	Unknown,
 }
 ```
 
 ### `"node removed"`
 
-A node has successfully been replaced or removed from the network. The `replaced` parameter indicates whether the node was replaced with another node.
+A node has successfully been replaced or removed from the network.
 
 ```ts
-(node: ZWaveNode, replaced: boolean) => void
+(node: ZWaveNode, reason: RemoveNodeReason) => void
 ```
+
+The `reason` argument indicates why the node was removed:
+
+<!-- #import RemoveNodeReason from "zwave-js" -->
+
+```ts
+enum RemoveNodeReason {
+	/** The node was excluded by the user or an inclusion controller */
+	Excluded,
+	/** The node was excluded by an inclusion controller */
+	ProxyExcluded,
+	/** The node was removed using the "remove failed node" feature */
+	RemoveFailed,
+	/** The node was replaced using the "replace failed node" feature */
+	Replaced,
+	/** The node was replaced by an inclusion controller */
+	ProxyReplaced,
+	/** The node was reset locally and was auto-removed */
+	Reset,
+	/** SmartStart inclusion failed, and the node was auto-removed as a result. */
+	SmartStartFailed,
+}
+```
+
+> [!NOTE] To comply with the Z-Wave specifications, applications **MUST** indicate that the node was _reset locally and has left the network_ when the `reason` is `RemoveNodeReason.Reset`.
 
 ### `"heal network progress"`
 
@@ -1042,10 +1390,10 @@ The healing process for the network was completed. The event handler is called w
 This event is emitted regularly during and after communication with the controller and gives some insight that would otherwise only be visible by looking at logs. The callback has the signature
 
 ```ts
-(statistics: ControllerStatistics) => void
+(statistics: Readonly<ControllerStatistics>) => void
 ```
 
-where the statistics have the following shape:
+where the statistics are readonly and have the following shape:
 
 <!-- #import ControllerStatistics from "zwave-js" -->
 
@@ -1069,5 +1417,86 @@ interface ControllerStatistics {
 	timeoutCallback: number;
 	/** No. of outgoing messages that were dropped because they could not be sent */
 	messagesDroppedTX: number;
+
+	/**
+	 * Background RSSI of the network in dBm. These values are typically between -100 and -30, but can be even smaller (down to -128 dBm) in quiet environments.
+	 *
+	 * The `average` values are calculated using an exponential moving average.
+	 * The `current` values are the most recent measurements, which can be compared to the average to detect interference/jamming.
+	 * The `timestamp` is the time of the most recent update of these measurements, and can be used to draw graphs.
+	 */
+	backgroundRSSI?: {
+		timestamp: number;
+		channel0: {
+			average: number;
+			current: number;
+		};
+		channel1: {
+			average: number;
+			current: number;
+		};
+		channel2?: {
+			average: number;
+			current: number;
+		};
+	};
 }
 ```
+
+### `"firmware update progress"`
+
+```ts
+(progress: ControllerFirmwareUpdateProgress) => void
+```
+
+Firmware update progress has been made. The callback arguments gives information about the progress of the update:
+
+<!-- #import ControllerFirmwareUpdateProgress from "zwave-js" -->
+
+```ts
+interface ControllerFirmwareUpdateProgress {
+	/** How many fragments of the firmware update have been transmitted. Together with `totalFragments` this can be used to display progress. */
+	sentFragments: number;
+	/** How many fragments the firmware update consists of. */
+	totalFragments: number;
+	/** The total progress of the firmware update in %, rounded to two digits. */
+	progress: number;
+}
+```
+
+### `"firmware update finished"`
+
+```ts
+(result: ControllerFirmwareUpdateResult) => void;
+```
+
+The firmware update process is finished. The `result` argument indicates whether the update was successful and a status with more details on potential errors.
+
+<!-- #import ControllerFirmwareUpdateStatus from "zwave-js" -->
+
+```ts
+enum ControllerFirmwareUpdateStatus {
+	Error_Timeout = 0,
+	/** The maximum number of retry attempts for a firmware fragments were reached */
+	Error_RetryLimitReached,
+	/** The update was aborted by the bootloader */
+	Error_Aborted,
+	/** This controller does not support firmware updates */
+	Error_NotSupported,
+
+	OK = 0xff,
+}
+```
+
+### `"identify"`
+
+This is emitted when another node instructs Z-Wave JS to identify itself using the `Indicator CC`, indicator ID `0x50`. The callback has no arguments:
+
+```ts
+() => void
+```
+
+> [!NOTE] Although support for this seems to be a certification requirement, it is currently unclear how this requirement must be fulfilled for controllers. The specification only refers to nodes:
+> The node is RECOMMENDED to use a visible LED for an identify function if it has an LED. If the node is itself a light source, e.g. a light bulb, this MAY be used in place of a dedicated LED.
+>
+> The event signature may be extended to accomodate this after clarification.

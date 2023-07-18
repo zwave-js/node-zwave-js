@@ -1,21 +1,23 @@
-import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
+import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
 import {
-	MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
 	NODE_ID_BROADCAST,
-	RSSI,
 	RssiError,
-	SinglecastCC,
+	parseNodeBitMask,
+	type FrameType,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type RSSI,
+	type SinglecastCC,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
-	MessageDeserializationOptions,
 	MessageType,
 	messageTypes,
 	priority,
+	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { tryParseRSSI } from "../transport/SendDataShared";
@@ -65,6 +67,7 @@ export class BridgeApplicationCommandRequest
 			data: this.payload.slice(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 			origin: options.origin,
+			frameType: this.frameType,
 		}) as SinglecastCC<CommandClass>;
 		offset += commandLength;
 
@@ -72,9 +75,9 @@ export class BridgeApplicationCommandRequest
 		const multicastNodesLength = this.payload[offset];
 		offset++;
 		if (this.frameType === "multicast") {
-			this.targetNodeId = [
-				...this.payload.slice(offset, offset + multicastNodesLength),
-			];
+			this.targetNodeId = parseNodeBitMask(
+				this.payload.slice(offset, offset + multicastNodesLength),
+			);
 		} else if (this.frameType === "singlecast") {
 			this.targetNodeId = this.payload[1];
 		} else {
@@ -86,7 +89,7 @@ export class BridgeApplicationCommandRequest
 	}
 
 	public readonly routedBusy: boolean;
-	public readonly frameType: "singlecast" | "broadcast" | "multicast";
+	public readonly frameType: FrameType;
 	public readonly targetNodeId: number | number[];
 	public readonly isExploreFrame: boolean;
 	public readonly isForeignFrame: boolean;
@@ -109,10 +112,13 @@ export class BridgeApplicationCommandRequest
 			message.type = this.frameType;
 		}
 		if (this.targetNodeId !== this.host.ownNodeId) {
-			message["target node"] =
-				typeof this.targetNodeId === "number"
-					? this.targetNodeId
-					: this.targetNodeId.join(", ");
+			if (typeof this.targetNodeId === "number") {
+				message["target node"] = this.targetNodeId;
+			} else if (this.targetNodeId.length === 1) {
+				message["target node"] = this.targetNodeId[0];
+			} else {
+				message["target nodes"] = this.targetNodeId.join(", ");
+			}
 		}
 		if (this.rssi !== undefined) {
 			switch (true) {

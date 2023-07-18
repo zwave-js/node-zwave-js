@@ -1,24 +1,24 @@
 import {
-	MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
+	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
 import {
+	FunctionType,
+	Message,
+	MessageType,
 	expectedCallback,
 	expectedResponse,
-	FunctionType,
 	gotDeserializationOptions,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
-	MessageType,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
@@ -123,17 +123,17 @@ export class AssignReturnRouteRequestTransmitReport
 		super(host, options);
 
 		this.callbackId = this.payload[0];
-		this._transmitStatus = this.payload[1];
+		this.transmitStatus = this.payload[1];
 	}
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		// The other statuses are technically "not OK", but they are caused by
+		// not being able to contact the node. We don't want the node to be marked
+		// as dead because of that
+		return this.transmitStatus !== TransmitStatus.NoAck;
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
-	}
+	public readonly transmitStatus: TransmitStatus;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {

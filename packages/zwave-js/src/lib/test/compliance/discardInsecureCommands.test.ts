@@ -1,11 +1,11 @@
 import {
 	BasicCCReport,
 	BasicCCValues,
-	CommandClass,
 	InvalidCC,
 	Security2CC,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
+	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityClass,
@@ -13,8 +13,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
@@ -132,7 +132,7 @@ integrationTest(
 			mockNode.defineBehavior(handleInvalidCC);
 		},
 
-		testBody: async (driver, node, mockController, mockNode) => {
+		testBody: async (t, driver, node, mockController, mockNode) => {
 			// Send a secure Basic SET to sync the SPAN
 			await node.commandClasses.Basic.set(1);
 
@@ -158,7 +158,7 @@ integrationTest(
 			await wait(100);
 
 			let currentValue = node.getValue(BasicCCValues.currentValue.id);
-			expect(currentValue).toBe(99);
+			t.is(currentValue, 99);
 
 			// Then send an unencypted one that should be discarded
 			nodeToHost = new BasicCCReport(mockNode.host, {
@@ -176,7 +176,7 @@ integrationTest(
 			await wait(100);
 
 			currentValue = node.getValue(BasicCCValues.currentValue.id);
-			expect(currentValue).toBe(99); // unchanged
+			t.is(currentValue, 99); // unchanged
 		},
 	},
 );

@@ -1,31 +1,33 @@
-import { getDefaultScale, Scale } from "@zwave-js/config";
+import { Scale, getDefaultScale } from "@zwave-js/config";
+import { timespan } from "@zwave-js/core";
 import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
+	SinglecastCC,
 	SupervisionResult,
 	ValueID,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	encodeFloatWithScale,
-	Maybe,
 	MessagePriority,
-	parseBitMask,
-	parseFloatWithScale,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeFloatWithScale,
+	parseBitMask,
+	parseFloatWithScale,
+	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -45,7 +47,10 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { MultilevelSensorCommand, MultilevelSensorValue } from "../lib/_Types";
+import {
+	MultilevelSensorCommand,
+	type MultilevelSensorValue,
+} from "../lib/_Types";
 
 export const MultilevelSensorCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Multilevel Sensor"], {
@@ -71,7 +76,11 @@ export const MultilevelSensorCCValues = Object.freeze({
 			// This should have been the sensor type, but it is too late to change now
 			// Maybe we can migrate this without breaking in the future
 			(sensorTypeName: string) => sensorTypeName,
-			({ property }) => typeof property === "string",
+			({ property, propertyKey }) =>
+				typeof property === "string" &&
+				property !== "supportedSensorTypes" &&
+				property !== "supportedScales" &&
+				propertyKey == undefined,
 			(sensorTypeName: string) =>
 				({
 					// Just the base metadata, to be extended using a config manager
@@ -84,7 +93,7 @@ export const MultilevelSensorCCValues = Object.freeze({
 
 /**
  * Determine the scale to use to query a sensor reading. Uses the user-preferred scale if given,
- * otherwise falls back to the first supported one.
+ * followed by the most recently used scale, otherwile falls back to the first supported one.
  */
 function getPreferredSensorScale(
 	applHost: ZWaveApplicationHost,
@@ -111,6 +120,22 @@ function getPreferredSensorScale(
 	// If the scale is named, we can then try to use the named preference
 	if (preferred == undefined && scaleGroup.name) {
 		preferred = applHost.options.preferences?.scales[scaleGroup.name];
+	}
+	// Then attempt reading the scale from the corresponding value
+	if (preferred == undefined) {
+		const typeName = applHost.configManager.getSensorTypeName(sensorType);
+		const sensorValue = MultilevelSensorCCValues.value(typeName);
+		const metadata = applHost
+			.tryGetValueDB(nodeId)
+			?.getMetadata(sensorValue.endpoint(endpointIndex));
+		const scale = metadata?.ccSpecific?.scale;
+		if (typeof scale === "number" && supportedScales.includes(scale)) {
+			preferred = scale;
+			applHost.controllerLog.logNode(nodeId, {
+				endpoint: endpointIndex,
+				message: `No scale preference for sensor type ${sensorType}, using the last-used scale ${preferred}`,
+			});
+		}
 	}
 	// Then fall back to the first supported scale
 	if (preferred == undefined) {
@@ -162,7 +187,9 @@ function getPreferredSensorScale(
 
 @API(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: MultilevelSensorCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: MultilevelSensorCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MultilevelSensorCommand.Get:
 			case MultilevelSensorCommand.Report:
@@ -174,38 +201,38 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		// Look up the necessary information
-		const valueId: ValueID = {
-			commandClass: CommandClasses["Multilevel Sensor"],
-			endpoint: this.endpoint.index,
-			property,
-		};
-		const ccSpecific =
-			this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific;
-		if (!ccSpecific) {
-			throwUnsupportedProperty(this.ccId, property);
-		}
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (this: MultilevelSensorCCAPI, { property }) {
+			// Look up the necessary information
+			const valueId: ValueID = {
+				commandClass: CommandClasses["Multilevel Sensor"],
+				endpoint: this.endpoint.index,
+				property,
+			};
+			const ccSpecific =
+				this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific;
+			if (!ccSpecific) {
+				throwUnsupportedProperty(this.ccId, property);
+			}
 
-		const { sensorType, scale } = ccSpecific;
-		return this.get(sensorType, scale);
-	};
+			const { sensorType, scale } = ccSpecific;
+			return this.get(sensorType, scale);
+		};
+	}
 
 	/** Query the default sensor value */
 	public async get(): Promise<
-		(MultilevelSensorValue & { type: number }) | undefined
+		MaybeNotKnown<MultilevelSensorValue & { type: number }>
 	>;
 	/** Query the sensor value for the given sensor type using the preferred sensor scale */
 	public async get(
 		sensorType: number,
-	): Promise<MultilevelSensorValue | undefined>;
+	): Promise<MaybeNotKnown<MultilevelSensorValue>>;
 	/** Query the sensor value for the given sensor type using the given sensor scale */
 	public async get(
 		sensorType: number,
 		scale: number,
-	): Promise<number | undefined>;
+	): Promise<MaybeNotKnown<number>>;
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -273,7 +300,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getSupportedSensorTypes(): Promise<
-		readonly number[] | undefined
+		MaybeNotKnown<readonly number[]>
 	> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
@@ -295,7 +322,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getSupportedScales(
 		sensorType: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedScale,
@@ -505,6 +532,27 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 		}
 	}
 
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		applHost: ZWaveApplicationHost,
+	): boolean {
+		// Check when any of the supported values was last updated longer than 6 hours ago.
+		// This may lead to some unnecessary queries, but at least the values are up to date then
+		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		if (!valueDB) return true;
+
+		const values = this.getDefinedValueIDs(applHost).filter((v) =>
+			MultilevelSensorCCValues.value.is(v),
+		);
+		return values.some((v) => {
+			const lastUpdated = valueDB.getTimestamp(v);
+			return (
+				lastUpdated == undefined ||
+				Date.now() - lastUpdated > timespan.hours(6)
+			);
+		});
+	}
+
 	public translatePropertyKey(
 		applHost: ZWaveApplicationHost,
 		property: string | number,
@@ -569,13 +617,6 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		)?.compat?.disableStrictMeasurementValidation;
 
 		if (measurementValidation) {
-			validatePayload.withReason(
-				`Unknown sensor type ${num2hex(this.type)} or corrupted data`,
-			)(!!sensorType);
-			validatePayload.withReason(
-				`Unknown scale ${num2hex(this.scale)} or corrupted data`,
-			)(scale.label !== getDefaultScale(this.scale).label);
-
 			// Filter out unsupported sensor types and scales if possible
 			if (this.version >= 5) {
 				const supportedSensorTypes = this.getValue<number[]>(
@@ -596,9 +637,20 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				);
 				if (supportedScales?.length) {
 					validatePayload.withReason(
-						`Unsupported sensor type ${scale.label} or corrupted data`,
+						`Unsupported scale ${scale.label} or corrupted data`,
 					)(supportedScales.includes(scale.key));
 				}
+			} else {
+				// We support a higher CC version than the device, so any types and scales it uses should be known to us
+				// Filter out unknown ones.
+				validatePayload.withReason(
+					`Unknown sensor type ${num2hex(
+						this.type,
+					)} or corrupted data`,
+				)(!!sensorType);
+				validatePayload.withReason(
+					`Unknown scale ${num2hex(this.scale)} or corrupted data`,
+				)(scale.label !== getDefaultScale(this.scale).label);
 			}
 		}
 

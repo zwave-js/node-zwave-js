@@ -13,6 +13,10 @@
 			"productType": "0x8002",
 			"productId": "0xa570",
 			"zwaveAllianceId": 3882
+		},
+		{
+			"productType": "0x8109",
+			"productId": "0x4dd5"
 		}
 	],
 	"firmwareVersion": {
@@ -93,6 +97,9 @@
 			},
 			{
 				"$import": "templates/yale_template.json#alarm_map_low_battery"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_critical_battery"
 			},
 			{
 				"$import": "templates/yale_template.json#alarm_map_auto_relock"

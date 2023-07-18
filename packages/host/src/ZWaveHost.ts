@@ -4,7 +4,7 @@ import type {
 	ControllerLogger,
 	ICommandClass,
 	IZWaveNode,
-	Maybe,
+	MaybeNotKnown,
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
@@ -33,7 +33,17 @@ export interface ZWaveHost {
 	 * Returns 1 if the node claims that it does not support a CC.
 	 * Throws if the CC is not implemented in this library yet.
 	 */
-	getSafeCCVersionForNode(
+	getSafeCCVersion(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
+	): number;
+
+	/**
+	 * Retrieves the maximum version of a command class the given node/endpoint has reported support for.
+	 * Returns 0 when the CC is not supported or that information is not known yet.
+	 */
+	getSupportedCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex?: number,
@@ -48,12 +58,12 @@ export interface ZWaveHost {
 		endpointIndex?: number,
 	): boolean;
 
-	getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
-	): Maybe<boolean>;
+	): MaybeNotKnown<boolean>;
 
 	setSecurityClass(
 		nodeId: number,

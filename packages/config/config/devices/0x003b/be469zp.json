@@ -284,5 +284,18 @@
 			"defaultValue": 0,
 			"readOnly": true
 		}
-	]
+	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// https://github.com/zwave-js/node-zwave-js/issues/5260#issuecomment-1399682117
+				// The device does not accept all commands using Supervision
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		},
+		// The device is known to randomly take literal ages to respond to commands
+		"reportTimeout": 10000
+	}
 }

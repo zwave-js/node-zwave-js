@@ -24,13 +24,16 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [Color Switch CC](api/CCs/ColorSwitch.md) · `0x33`
 -   [Configuration CC](api/CCs/Configuration.md) · `0x70`
 -   [CRC-16 Encapsulation CC](api/CCs/CRC16.md) · `0x56`
+-   [Device Reset Locally CC](api/CCs/DeviceResetLocally.md) · `0x5a`
 -   [Door Lock CC](api/CCs/DoorLock.md) · `0x62`
 -   [Door Lock Logging CC](api/CCs/DoorLockLogging.md) · `0x4c`
+-   [Energy Production CC](api/CCs/EnergyProduction.md) · `0x90`
 -   [Entry Control CC](api/CCs/EntryControl.md) · `0x6f`
 -   [Firmware Update Meta Data CC](api/CCs/FirmwareUpdateMetaData.md) · `0x7a`
 -   [Humidity Control Mode CC](api/CCs/HumidityControlMode.md) · `0x6d`
 -   [Humidity Control Operating State CC](api/CCs/HumidityControlOperatingState.md) · `0x6e`
 -   [Humidity Control Setpoint CC](api/CCs/HumidityControlSetpoint.md) · `0x64`
+-   [Inclusion Controller CC](api/CCs/InclusionController.md) · `0x74`
 -   [Indicator CC](api/CCs/Indicator.md) · `0x87`
 -   [Irrigation CC](api/CCs/Irrigation.md) · `0x6b`
 -   [Language CC](api/CCs/Language.md) · `0x89`
@@ -51,6 +54,7 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [Scene Activation CC](api/CCs/SceneActivation.md) · `0x2b`
 -   [Scene Actuator Configuration CC](api/CCs/SceneActuatorConfiguration.md) · `0x2c`
 -   [Scene Controller Configuration CC](api/CCs/SceneControllerConfiguration.md) · `0x2d`
+-   [Schedule Entry Lock CC](api/CCs/ScheduleEntryLock.md) · `0x4e`
 -   [Security 2 CC](api/CCs/Security2.md) · `0x9f`
 -   [Security CC](api/CCs/Security.md) · `0x98`
 -   [Sound Switch CC](api/CCs/SoundSwitch.md) · `0x79`
@@ -66,4 +70,5 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [User Code CC](api/CCs/UserCode.md) · `0x63`
 -   [Version CC](api/CCs/Version.md) · `0x86`
 -   [Wake Up CC](api/CCs/WakeUp.md) · `0x84`
+-   [Window Covering CC](api/CCs/WindowCovering.md) · `0x6a`
 -   [Z-Wave Plus Info CC](api/CCs/ZWavePlus.md) · `0x5e`

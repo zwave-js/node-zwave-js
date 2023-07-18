@@ -310,9 +310,10 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "Place the controller into pairing mode and perform the \"wake up\" pattern as described below.\n\n1. Take the magnet and move it to the rounded edge and wait for the blink, then move the magnet away.\n2. Repeat this 3 times. A final short blink will confirm that the user-command was successful",
-		"exclusion": "Place the controller into remove mode and perform the \"wake up\" pattern as described below.\n\n1. Take the magnet and move it to the rounded edge and wait for the blink, then move the magnet away.\n2. Repeat this 3 times. A final short blink will confirm that the user-command was successful",
+		"inclusion": "Place the controller into inclusion mode and perform the \"wake up\" pattern as described below.\n\n1. Take the magnet and move it to the rounded edge and wait for the blink, then move the magnet away.\n2. Repeat this 3 times. A final short blink will confirm that the user-command was successful",
+		"exclusion": "Place the controller into exclusion mode and perform the \"wake up\" pattern as described below.\n\n1. Take the magnet and move it to the rounded edge and wait for the blink, then move the magnet away.\n2. Repeat this 3 times. A final short blink will confirm that the user-command was successful",
 		"reset": "You may need to reset Strips if your Z-Wave controller is missing or not responding. Follow the instructions for Wake Up above, but on the 3rd\nrepetition, keep the magnet at the rounded edge for 10 seconds. A long LED signal indicates success",
+		"wakeup": "Place a magnet at the rounded edge. When the LED blinks, move the magnet away. Repeat a total of 3 times within 10 seconds, A LED blink indicates success.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4106/Strips%20Comfort%20700%20v1.6.pdf"
 	}
 }

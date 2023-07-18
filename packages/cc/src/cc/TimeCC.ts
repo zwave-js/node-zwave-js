@@ -1,16 +1,16 @@
 import {
 	CommandClasses,
-	DSTInfo,
-	formatDate,
-	getDSTInfo,
-	Maybe,
-	MessageOrCCLogEntry,
 	MessagePriority,
-	SupervisionResult,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	formatDate,
+	getDSTInfo,
+	validatePayload,
+	type DSTInfo,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -30,15 +30,15 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import { encodeTimezone, parseTimezone } from "../lib/serializers";
 import { TimeCommand } from "../lib/_Types";
+import { encodeTimezone, parseTimezone } from "../lib/serializers";
 
 // @noSetValueAPI
 // Only the timezone information can be set and that accepts a non-primitive value
 
 @API(CommandClasses.Time)
 export class TimeCCAPI extends CCAPI {
-	public supportsCommand(cmd: TimeCommand): Maybe<boolean> {
+	public supportsCommand(cmd: TimeCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case TimeCommand.TimeGet:
 			case TimeCommand.TimeReport:
@@ -139,7 +139,7 @@ export class TimeCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getTimezone(): Promise<DSTInfo | undefined> {
+	public async getTimezone(): Promise<MaybeNotKnown<DSTInfo>> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetGet);
 
 		const cc = new TimeCCTimeOffsetGet(this.applHost, {
@@ -225,7 +225,6 @@ interface TimeCCTimeReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.TimeReport)
-@useSupervision()
 export class TimeCCTimeReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -285,7 +284,6 @@ interface TimeCCDateReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.DateReport)
-@useSupervision()
 export class TimeCCDateReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -413,7 +411,6 @@ interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.TimeOffsetReport)
-@useSupervision()
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,

@@ -26,7 +26,7 @@ const test = new Test();
 test.foo(1);
 test.foo(My.Hand);
 test.foo(My.Eye);
-test.foo(10000000);
+test.foo(10000000 as any);
 
 test.bar(1);
 test.bar(My.Hand);
@@ -49,4 +49,4 @@ assert.throws(
 	/arg1 is not a My/,
 );
 
-assert.throws(() => test.bar(10000), /arg1 is not a My/);
+assert.throws(() => test.bar(10000 as any), /arg1 is not a My/);

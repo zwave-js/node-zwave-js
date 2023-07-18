@@ -5,11 +5,11 @@ import {
 	FunctionType,
 	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
 	MessageType,
 	messageTypes,
 	priority,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 const NUM_FUNCTIONS = 256;

@@ -1,19 +1,20 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
+	enumValuesToMetadataStates,
+	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	PhysicalCCAPI,
 	throwUnsupportedProperty,
+	type PollValueImplementation,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -50,7 +51,7 @@ export const ThermostatOperatingStateCCValues = Object.freeze({
 export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 	public supportsCommand(
 		cmd: ThermostatOperatingStateCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatOperatingStateCommand.Get:
 				return true; // This is mandatory
@@ -58,18 +59,21 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "state":
-				return this.get();
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function (
+			this: ThermostatOperatingStateCCAPI,
+			{ property },
+		) {
+			switch (property) {
+				case "state":
+					return this.get();
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
-	public async get(): Promise<ThermostatOperatingState | undefined> {
+	public async get(): Promise<MaybeNotKnown<ThermostatOperatingState>> {
 		this.assertSupportsCommand(
 			ThermostatOperatingStateCommand,
 			ThermostatOperatingStateCommand.Get,

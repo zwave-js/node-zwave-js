@@ -13,7 +13,7 @@ async get(
 		valueBitMask?: number;
 		allowUnexpectedResponse?: boolean;
 	},
-): Promise<ConfigValue | undefined>;
+): Promise<MaybeNotKnown<ConfigValue>>;
 ```
 
 Requests the current value of a given config parameter from the device.
@@ -33,7 +33,7 @@ async getBulk(
 	{
 		parameter: number;
 		bitMask?: number;
-		value: ConfigValue | undefined;
+		value: MaybeNotKnown<ConfigValue>;
 	}[]
 >;
 ```
@@ -76,7 +76,9 @@ WARNING: This will throw on legacy devices (ConfigurationCC v3 and below).
 ### `resetBulk`
 
 ```ts
-async resetBulk(parameters: number[]): Promise<void>;
+async resetBulk(
+	parameters: number[],
+): Promise<SupervisionResult | undefined>;
 ```
 
 Resets multiple configuration parameters to their default value. Uses BulkSet if supported, otherwise falls back to individual Set commands.
@@ -100,7 +102,7 @@ async getProperties(parameter: number): Promise<Pick<ConfigurationCCPropertiesRe
 ### `getName`
 
 ```ts
-async getName(parameter: number): Promise<string | undefined>;
+async getName(parameter: number): Promise<MaybeNotKnown<string>>;
 ```
 
 Requests the name of a configuration parameter from the node.
@@ -108,7 +110,7 @@ Requests the name of a configuration parameter from the node.
 ### `getInfo`
 
 ```ts
-async getInfo(parameter: number): Promise<string | undefined>;
+async getInfo(parameter: number): Promise<MaybeNotKnown<string>>;
 ```
 
 Requests usage info for a configuration parameter from the node.

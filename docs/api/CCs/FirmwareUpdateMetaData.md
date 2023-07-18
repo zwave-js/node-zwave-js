@@ -7,7 +7,7 @@
 ### `getMetaData`
 
 ```ts
-async getMetaData(): Promise<Pick<FirmwareUpdateMetaDataCCMetaDataReport, "manufacturerId" | "firmwareId" | "checksum" | "firmwareUpgradable" | "maxFragmentSize" | "additionalFirmwareIDs" | "hardwareVersion" | "continuesToFunction" | "supportsActivation"> | undefined>;
+async getMetaData(): Promise<MaybeNotKnown<FirmwareUpdateMetaData>>;
 ```
 
 Requests information about the current firmware on the device.
@@ -40,7 +40,7 @@ Sends a fragment of the new firmware to the device.
 ```ts
 async activateFirmware(
 	options: FirmwareUpdateMetaDataCCActivationSetOptions,
-): Promise<FirmwareUpdateActivationStatus | undefined>;
+): Promise<MaybeNotKnown<FirmwareUpdateActivationStatus>>;
 ```
 
 Activates a previously transferred firmware image.

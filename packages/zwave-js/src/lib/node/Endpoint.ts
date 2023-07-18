@@ -1,23 +1,25 @@
 import {
-	APIMethodsOf,
 	CCAPI,
-	CCAPIs,
-	CCConstructor,
-	CCToAPI,
 	CommandClass,
 	getCommandClassStatic,
+	normalizeCCNameOrId,
+	type APIMethodsOf,
+	type CCAPIs,
+	type CCConstructor,
+	type CCNameOrId,
+	type CCToAPI,
 } from "@zwave-js/cc";
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
-import type { IZWaveEndpoint } from "@zwave-js/core";
+import type { IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
 import {
-	actuatorCCs,
 	CacheBackedMap,
 	CommandClasses,
-	CommandClassInfo,
-	getCCName,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
+	actuatorCCs,
+	getCCName,
+	type CommandClassInfo,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";
@@ -60,8 +62,8 @@ export class Endpoint implements IZWaveEndpoint {
 	 * Only used for endpoints which store their device class differently than nodes.
 	 * DO NOT ACCESS directly!
 	 */
-	private _deviceClass: DeviceClass | undefined;
-	public get deviceClass(): DeviceClass | undefined {
+	private _deviceClass: MaybeNotKnown<DeviceClass>;
+	public get deviceClass(): MaybeNotKnown<DeviceClass> {
 		if (this.index > 0) {
 			return this._deviceClass;
 		} else {
@@ -70,7 +72,7 @@ export class Endpoint implements IZWaveEndpoint {
 			);
 		}
 	}
-	protected set deviceClass(deviceClass: DeviceClass | undefined) {
+	protected set deviceClass(deviceClass: MaybeNotKnown<DeviceClass>) {
 		if (this.index > 0) {
 			this._deviceClass = deviceClass;
 		} else {
@@ -79,6 +81,12 @@ export class Endpoint implements IZWaveEndpoint {
 				deviceClass,
 			);
 		}
+	}
+
+	/** Can be used to distinguish multiple endpoints of a node */
+	public get endpointLabel(): string | undefined {
+		return this.getNodeUnsafe()?.deviceConfig?.endpoints?.get(this.index)
+			?.label;
 	}
 
 	/** Resets all stored information of this endpoint */
@@ -208,6 +216,16 @@ export class Endpoint implements IZWaveEndpoint {
 	/** Tests if this endpoint controls the given CommandClass */
 	public controlsCC(cc: CommandClasses): boolean {
 		return !!this._implementedCommandClasses.get(cc)?.isControlled;
+	}
+
+	/** Adds Basic CC to the supported CCs if no other actuator CCs are supported */
+	public maybeAddBasicCCAsFallback(): void {
+		if (
+			!this.supportsCC(CommandClasses.Basic) &&
+			!actuatorCCs.some((cc) => this.supportsCC(cc))
+		) {
+			this.addCC(CommandClasses.Basic, { isSupported: true });
+		}
 	}
 
 	/** Removes the BasicCC from the supported CCs if any other actuator CCs are supported */
@@ -369,24 +387,13 @@ export class Endpoint implements IZWaveEndpoint {
 				// ignore all other symbols
 				return undefined;
 			} else {
-				// typeof ccNameOrId === "string"
-				let ccId: CommandClasses | undefined;
 				// The command classes are exposed to library users by their name or the ID
-				if (/^\d+$/.test(ccNameOrId)) {
-					// Since this is a property accessor, ccNameOrID is passed as a string,
-					// even when it was a number (CommandClasses)
-					ccId = +ccNameOrId;
-				} else {
-					// If a name was given, retrieve the corresponding ID
-					ccId = CommandClasses[ccNameOrId as any] as unknown as
-						| CommandClasses
-						| undefined;
-					if (ccId == undefined) {
-						throw new ZWaveError(
-							`Command Class ${ccNameOrId} is not implemented! If you are sure that the name/id is correct, consider opening an issue at https://github.com/AlCalzone/node-zwave-js`,
-							ZWaveErrorCodes.CC_NotImplemented,
-						);
-					}
+				const ccId = normalizeCCNameOrId(ccNameOrId);
+				if (ccId == undefined) {
+					throw new ZWaveError(
+						`Command Class ${ccNameOrId} is not implemented!`,
+						ZWaveErrorCodes.CC_NotImplemented,
+					);
 				}
 
 				// When accessing a CC API for the first time, we need to create it
@@ -420,7 +427,8 @@ export class Endpoint implements IZWaveEndpoint {
 	}
 
 	/** Allows checking whether a CC API is supported before calling it with {@link Endpoint.invokeCCAPI} */
-	public supportsCCAPI(cc: CommandClasses): boolean {
+	public supportsCCAPI(cc: CCNameOrId): boolean {
+		// No need to validate the `cc` parameter, the following line will throw for invalid CCs
 		return ((this.commandClasses as any)[cc] as CCAPI).isSupported();
 	}
 
@@ -429,26 +437,25 @@ export class Endpoint implements IZWaveEndpoint {
 	 * Use {@link Endpoint.supportsCCAPI} to check support first.
 	 */
 	public invokeCCAPI<
-		CC extends CommandClasses,
+		CC extends CCNameOrId,
 		TMethod extends keyof TAPI,
 		TAPI extends Record<
 			string,
 			(...args: any[]) => any
-		> = CommandClasses extends CC ? any : APIMethodsOf<CC>,
+		> = CommandClasses extends CC
+			? any
+			: Omit<CCNameOrId, CommandClasses> extends CC
+			? any
+			: APIMethodsOf<CC>,
 	>(
 		cc: CC,
 		method: TMethod,
 		...args: Parameters<TAPI[TMethod]>
 	): ReturnType<TAPI[TMethod]> {
-		if (typeof cc !== "number" || !(cc in CommandClasses)) {
-			throw new ZWaveError(
-				`Invalid CC ${cc}!`,
-				ZWaveErrorCodes.CC_Invalid,
-			);
-		}
-
-		const ccName = getCCName(cc);
+		// No need to validate the `cc` parameter, the following line will throw for invalid CCs
 		const CCAPI = (this.commandClasses as any)[cc];
+		const ccId = normalizeCCNameOrId(cc)!;
+		const ccName = getCCName(ccId);
 		if (!CCAPI) {
 			throw new ZWaveError(
 				`The API for the ${ccName} CC does not exist or is not implemented!`,
@@ -476,14 +483,14 @@ export class Endpoint implements IZWaveEndpoint {
 	}
 
 	/** Z-Wave+ Icon (for management) */
-	public get installerIcon(): number | undefined {
+	public get installerIcon(): MaybeNotKnown<number> {
 		return this.getNodeUnsafe()?.getValue(
 			ZWavePlusCCValues.installerIcon.endpoint(this.index),
 		);
 	}
 
 	/** Z-Wave+ Icon (for end users) */
-	public get userIcon(): number | undefined {
+	public get userIcon(): MaybeNotKnown<number> {
 		return this.getNodeUnsafe()?.getValue(
 			ZWavePlusCCValues.userIcon.endpoint(this.index),
 		);

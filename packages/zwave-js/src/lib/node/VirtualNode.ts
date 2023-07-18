@@ -1,16 +1,31 @@
-import { BasicCCValues, CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import {
-	actuatorCCs,
-	isZWaveError,
-	IVirtualNode,
-	normalizeValueID,
-	TranslatedValueID,
-	ValueID,
-	valueIdToString,
-	ValueMetadata,
-	ValueMetadataNumeric,
+	BasicCCValues,
+	type CCAPI,
+	type SetValueAPIOptions,
+	type ValueIDProperties,
+} from "@zwave-js/cc";
+import {
+	SetValueStatus,
+	supervisionResultToSetValueResult,
+	type SetValueResult,
+} from "@zwave-js/cc/safe";
+import {
+	SecurityClass,
+	SupervisionStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
+	actuatorCCs,
+	getCCName,
+	isSupervisionResult,
+	isZWaveError,
+	normalizeValueID,
+	supervisedCommandSucceeded,
+	valueIdToString,
+	type IVirtualNode,
+	type TranslatedValueID,
+	type ValueID,
+	type ValueMetadata,
+	type ValueMetadataNumeric,
 } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
@@ -22,6 +37,26 @@ export interface VirtualValueID extends TranslatedValueID {
 	metadata: ValueMetadata;
 	/** The maximum supported CC version among all nodes targeted by this virtual value ID */
 	ccVersion: number;
+}
+
+function groupNodesBySecurityClass(
+	nodes: Iterable<ZWaveNode>,
+): Map<SecurityClass, ZWaveNode[]> {
+	const ret = new Map<SecurityClass, ZWaveNode[]>();
+
+	for (const node of nodes) {
+		const secClass = node.getHighestSecurityClass();
+		if (secClass === SecurityClass.Temporary || secClass == undefined) {
+			continue;
+		}
+
+		if (!ret.has(secClass)) {
+			ret.set(secClass, []);
+		}
+		ret.get(secClass)!.push(node);
+	}
+
+	return ret;
 }
 
 export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
@@ -36,12 +71,29 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		// Set the reference to this and the physical nodes
 		super.setNode(this);
 		this.physicalNodes = [...physicalNodes].filter(
-			// And avoid including the controller node in the support checks
-			(n) => n.id !== driver.controller.ownNodeId,
+			(n) =>
+				// And avoid including the controller node in the support checks
+				n.id !== driver.controller.ownNodeId &&
+				// And omit nodes using Security S0 which does not support broadcast / multicast
+				n.getHighestSecurityClass() !== SecurityClass.S0_Legacy,
 		);
+		this.nodesBySecurityClass = groupNodesBySecurityClass(
+			this.physicalNodes,
+		);
+
+		// If broadcasting is attempted with mixed security classes, automatically fall back to multicast
+		if (this.hasMixedSecurityClasses) this.id = undefined;
 	}
 
-	public readonly physicalNodes: ZWaveNode[];
+	public readonly physicalNodes: readonly ZWaveNode[];
+	public readonly nodesBySecurityClass: ReadonlyMap<
+		SecurityClass,
+		readonly ZWaveNode[]
+	>;
+
+	public get hasMixedSecurityClasses(): boolean {
+		return this.nodesBySecurityClass.size > 1;
+	}
 
 	/**
 	 * Updates a value for a given property of a given CommandClass.
@@ -51,7 +103,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		valueId: ValueID,
 		value: unknown,
 		options?: SetValueAPIOptions,
-	): Promise<boolean> {
+	): Promise<SetValueResult> {
 		// Ensure we're dealing with a valid value ID, with no extra properties
 		valueId = normalizeValueID(valueId);
 
@@ -59,24 +111,65 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		try {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
-			if (!endpointInstance) return false;
-			const api = (endpointInstance.commandClasses as any)[
+			if (!endpointInstance) {
+				return {
+					status: SetValueStatus.EndpointNotFound,
+					message: `Endpoint ${
+						valueId.endpoint
+					} does not exist on virtual node ${this.id ?? "??"}`,
+				};
+			}
+			let api = (endpointInstance.commandClasses as any)[
 				valueId.commandClass
 			] as CCAPI;
 			// Check if the setValue method is implemented
-			if (!api.setValue) return false;
+			if (!api.setValue) {
+				return {
+					status: SetValueStatus.NotImplemented,
+					message: `The ${getCCName(
+						valueId.commandClass,
+					)} CC does not support setting values`,
+				};
+			}
+
+			const valueIdProps: ValueIDProperties = {
+				property: valueId.property,
+				propertyKey: valueId.propertyKey,
+			};
+
+			const hooks = api.setValueHooks?.(valueIdProps, value, options);
+
+			if (hooks?.supervisionDelayedUpdates) {
+				api = api.withOptions({
+					requestStatusUpdates: true,
+					onUpdate: async (update) => {
+						try {
+							if (update.status === SupervisionStatus.Success) {
+								await hooks.supervisionOnSuccess();
+							} else if (
+								update.status === SupervisionStatus.Fail
+							) {
+								await hooks.supervisionOnFailure();
+							}
+						} catch {
+							// TODO: Log error?
+						}
+					},
+				});
+			}
+
 			// And call it
-			await api.setValue(
-				{
-					property: valueId.property,
-					propertyKey: valueId.propertyKey,
-				},
+			const result = await api.setValue!.call(
+				api,
+				valueIdProps,
 				value,
 				options,
 			);
 
 			// api.setValue could technically return a SupervisionResult
 			// but supervision isn't used for multicast / broadcast
+
+			// FIXME: It just may for S2 multicast
 
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value
@@ -92,27 +185,66 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 				}
 			}
 
-			return true;
+			// Depending on the settings of the SET_VALUE implementation, we may have to
+			// optimistically update a different value and/or verify the changes
+			if (hooks) {
+				const supervisedAndSuccessful =
+					isSupervisionResult(result) &&
+					result.status === SupervisionStatus.Success;
+
+				const shouldUpdateOptimistically =
+					api.isSetValueOptimistic(valueId) &&
+					// For successful supervised commands, we know that an optimistic update is ok
+					(supervisedAndSuccessful ||
+						// For unsupervised commands that did not fail, we let the applciation decide whether
+						// to update related value optimistically
+						(!this.driver.options.disableOptimisticValueUpdate &&
+							result == undefined));
+
+				// The actual API implementation handles additional optimistic updates
+				if (shouldUpdateOptimistically) {
+					hooks.optimisticallyUpdateRelatedValues?.(
+						supervisedAndSuccessful,
+					);
+				}
+
+				// Verify the current value after a delay, unless...
+				// ...the command was supervised and successful
+				// ...and the CC API decides not to verify anyways
+				if (
+					!supervisedCommandSucceeded(result) ||
+					hooks.forceVerifyChanges?.()
+				) {
+					// Let the CC API implementation handle the verification.
+					// It may still decide not to do it.
+					await hooks.verifyChanges?.();
+				}
+			}
+
+			return supervisionResultToSetValueResult(result);
 		} catch (e) {
-			// Define which errors during setValue are expected and won't crash
-			// the driver:
+			// Define which errors during setValue are expected and won't throw an error
 			if (isZWaveError(e)) {
-				let handled = false;
-				let emitErrorEvent = false;
+				let result: SetValueResult | undefined;
 				switch (e.code) {
 					// This CC or API is not implemented
 					case ZWaveErrorCodes.CC_NotImplemented:
 					case ZWaveErrorCodes.CC_NoAPI:
-						handled = true;
+						result = {
+							status: SetValueStatus.NotImplemented,
+							message: e.message,
+						};
 						break;
 					// A user tried to set an invalid value
 					case ZWaveErrorCodes.Argument_Invalid:
-						handled = true;
-						emitErrorEvent = true;
+						result = {
+							status: SetValueStatus.InvalidValue,
+							message: e.message,
+						};
 						break;
 				}
-				if (emitErrorEvent) this.driver.emit("error", e);
-				if (handled) return false;
+
+				if (result) return result;
 			}
 			throw e;
 		}
@@ -123,15 +255,14 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 	 * control the physical node(s) this virtual node represents.
 	 */
 	public getDefinedValueIDs(): VirtualValueID[] {
-		// If all nodes are secure, we can't use broadcast/multicast commands
-		if (this.physicalNodes.every((n) => n.isSecure === true)) return [];
-
 		// In order to compare value ids, we need them to be strings
 		const ret = new Map<string, VirtualValueID>();
 
 		for (const pNode of this.physicalNodes) {
-			// Secure nodes cannot be used for broadcast
-			if (pNode.isSecure === true) continue;
+			// // Nodes using Security S0 cannot be used for broadcast
+			// if (pNode.getHighestSecurityClass() === SecurityClass.S0_Legacy) {
+			// 	continue;
+			// }
 
 			// Take only the actuator values
 			const valueIDs: TranslatedValueID[] = pNode

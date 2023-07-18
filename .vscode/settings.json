@@ -1,9 +1,11 @@
 {
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"jest.showCoverageOnLoad": false,
-	"jest.enableCodeLens": true,
-	"editor.formatOnSave": true,
+	"editor.formatOnSave": false, // the default of true interferes with codeActionsOnSave
+	"editor.codeActionsOnSave": [
+		"source.fixAll.eslint",
+		"source.formatDocument"
+	],
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"eslint.validate": [
 		"javascript",
@@ -62,25 +64,24 @@
 	"standard.enable": false,
 	"json.schemas": [
 		{
-			"fileMatch": ["/packages/config/config/devices/*/*.json"],
+			"fileMatch": [
+				"/packages/config/config/devices/*/*.json",
+				"!/packages/config/config/devices/templates/*.json"
+			],
 			"url": "/maintenance/schemas/device-config.json"
 		},
 		{
 			"fileMatch": ["/packages/config/config/deviceClasses.json"],
 			"url": "/maintenance/schemas/deviceClasses.json"
-		},
-		{
-			"fileMatch": ["renovate.json"],
-			"url": "https://docs.renovatebot.com/renovate-schema.json"
 		}
 	],
 	"debug.javascript.unmapMissingSources": true,
-	"jest.jestCommandLine": "yarn jest",
 	"search.exclude": {
 		"**/.yarn": true
 	},
 	"[typescript]": {
 		"editor.autoClosingBrackets": "languageDefined"
 	},
-	"git.ignoredRepositories": ["specs"]
+	"git.ignoredRepositories": ["specs"],
+	"search.followSymlinks": false
 }

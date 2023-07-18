@@ -1,8 +1,8 @@
 import { BasicCCGet, BasicCCReport } from "@zwave-js/cc";
 import {
-	createMockZWaveRequestFrame,
-	MockNodeBehavior,
 	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
+	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "path";
@@ -24,7 +24,7 @@ integrationTest(
 		// 	],
 		// },
 
-		testBody: async (driver, node, _mockController, mockNode) => {
+		testBody: async (t, driver, node, _mockController, mockNode) => {
 			// Make the node respond first before ACKing the command
 			mockNode.autoAckControllerFrames = false;
 
@@ -55,7 +55,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToBasicGetWithDelayedAck);
 
 			const result = await node.commandClasses.Basic.get();
-			expect(result?.currentValue).toBe(55);
+			t.is(result?.currentValue, 55);
 		},
 	},
 );

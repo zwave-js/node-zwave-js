@@ -1,9 +1,9 @@
 import {
+	ZWaveError,
+	ZWaveErrorCodes,
 	createReflectionDecorator,
 	createReflectionDecoratorPair,
 	createValuelessReflectionDecorator,
-	ZWaveError,
-	ZWaveErrorCodes,
 	type CommandClasses,
 } from "@zwave-js/core";
 import type {

@@ -91,5 +91,9 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// The device reports in a different scale than it reports support for
+		"disableStrictMeasurementValidation": true
+	}
 }

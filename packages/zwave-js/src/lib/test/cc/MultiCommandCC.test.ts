@@ -5,18 +5,15 @@ import {
 	MultiCommandCC,
 } from "@zwave-js/cc";
 import { createTestingHost } from "@zwave-js/host";
+import test from "ava";
 
 const host = createTestingHost();
 
-describe("lib/commandclass/MultiCommandCC", () => {
-	describe("MultiCommandCC()", () => {
-		it("is a multi-encapsulating CommandClass", () => {
-			let cc: CommandClass = new BasicCCSet(host, {
-				nodeId: 1,
-				targetValue: 50,
-			});
-			cc = MultiCommandCC.encapsulate(host, [cc]);
-			expect(isMultiEncapsulatingCommandClass(cc)).toBeTrue();
-		});
+test("is a multi-encapsulating CommandClass", (t) => {
+	let cc: CommandClass = new BasicCCSet(host, {
+		nodeId: 1,
+		targetValue: 50,
 	});
+	cc = MultiCommandCC.encapsulate(host, [cc]);
+	t.true(isMultiEncapsulatingCommandClass(cc));
 });

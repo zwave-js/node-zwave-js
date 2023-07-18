@@ -1,0 +1,32 @@
+{
+	"manufacturer": "Dawon",
+	"manufacturerId": "0x018c",
+	"label": "PM-140-ZW",
+	"description": "1-Channel Power Switch",
+	"devices": [
+		{
+			// KR frequency
+			"productType": "0x0061",
+			"productId": "0x0001"
+		},
+		{
+			// US frequency
+			"productType": "0x0064",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device seems to report support for Supervision but ignores the commands
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
+}

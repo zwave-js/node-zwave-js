@@ -61,10 +61,7 @@ export type NodeLogContext = LogContext & { nodeId: number; type: "node" };
 export type ValueLogContext = LogContext &
 	ValueID & { nodeId: number; type: "value" };
 
-export type MessageRecord = Record<
-	string,
-	string | number | boolean | null | undefined
->;
+export type MessageRecord = Record<string, string | number | boolean>;
 
 export interface MessageOrCCLogEntry {
 	tags: string[];
@@ -88,10 +85,22 @@ export interface LogConfig {
 	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
+	maxFiles: number;
 	nodeFilter?: number[];
 	filename: string;
 	forceConsole: boolean;
 }
+
+/** @internal */
+export const nonUndefinedLogConfigKeys = [
+	"enabled",
+	"level",
+	"transports",
+	"logToFile",
+	"maxFiles",
+	"filename",
+	"forceConsole",
+] as const;
 
 /** @internal */
 export function stringToNodeList(nodes?: string): number[] | undefined {

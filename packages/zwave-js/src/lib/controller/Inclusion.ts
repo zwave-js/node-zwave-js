@@ -2,9 +2,38 @@ import type { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
 import type { DeviceClass } from "../node/DeviceClass";
 
 /** Additional information about the outcome of a node inclusion */
-export interface InclusionResult {
-	/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
-	lowSecurity?: boolean;
+export type InclusionResult =
+	| {
+			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+			lowSecurity?: false;
+	  }
+	| {
+			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+			lowSecurity: true;
+			lowSecurityReason: SecurityBootstrapFailure;
+	  };
+
+export enum SecurityBootstrapFailure {
+	/** Security bootstrapping was canceled by the user */
+	UserCanceled,
+	/** The required security keys were not configured in the driver */
+	NoKeysConfigured,
+	/** No Security S2 user callbacks (or provisioning info) were provided to grant security classes and/or validate the DSK. */
+	S2NoUserCallbacks,
+	/** An expected message was not received within the corresponding timeout */
+	Timeout,
+	/** There was no possible match in encryption parameters between the controller and the node */
+	ParameterMismatch,
+	/** Security bootstrapping was canceled by the included node */
+	NodeCanceled,
+	/** The PIN was incorrect, so the included node could not decode the key exchange commands */
+	S2IncorrectPIN,
+	/** There was a mismatch in security keys between the controller and the node */
+	S2WrongSecurityLevel,
+	/** The node has been bootstrapped using S0 in an S2-capable network */
+	S0Downgrade,
+	/** Some other unspecified error happened */
+	Unknown,
 }
 
 export enum InclusionStrategy {
@@ -106,6 +135,11 @@ export type InclusionOptions =
 	  }
 	| {
 			strategy: InclusionStrategy.Security_S2;
+			/**
+			 * Allows pre-filling the DSK, e.g. when a DSK-only QR code has been scanned.
+			 * If this is given, the `validateDSKAndEnterPIN` callback will not be called.
+			 */
+			dsk?: string;
 			/**
 			 * Allows overriding the user callbacks for this inclusion.
 			 * If not given, the inclusion user callbacks of the driver options will be used.
@@ -226,4 +260,22 @@ export interface FoundNode {
 	deviceClass?: DeviceClass;
 	supportedCCs?: CommandClasses[];
 	controlledCCs?: CommandClasses[];
+}
+
+/** Additional information why a node was removed from the network */
+export enum RemoveNodeReason {
+	/** The node was excluded by the user or an inclusion controller */
+	Excluded,
+	/** The node was excluded by an inclusion controller */
+	ProxyExcluded,
+	/** The node was removed using the "remove failed node" feature */
+	RemoveFailed,
+	/** The node was replaced using the "replace failed node" feature */
+	Replaced,
+	/** The node was replaced by an inclusion controller */
+	ProxyReplaced,
+	/** The node was reset locally and was auto-removed */
+	Reset,
+	/** SmartStart inclusion failed, and the node was auto-removed as a result. */
+	SmartStartFailed,
 }

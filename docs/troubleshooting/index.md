@@ -27,7 +27,7 @@ Here's an example how this **DOES** look like (correct log, correct loglevel):
 2021-10-15T16:16:59.888Z CNTRLR   [Node 029] The node is asleep.
 ```
 
-Here's how it **DOES NOT** look like. This is an **application log** from `zwavejs2mqtt`:
+Here's how it **DOES NOT** look like. This is an **application log** from `zwave-js-ui` (formerly `zwavejs2mqtt`):
 
 ```log
 2021-08-04 15:56:59.250 INFO MQTT: MQTT is disabled
@@ -82,6 +82,8 @@ Now that we got this out of the way, here's a collection of **common** issues an
 🐛 [Connectivity issues](troubleshooting/connectivity-issues.md) (unreliable communication, slow network, no responses from devices, etc.)
 
 🐛 [Problems with 700 series sticks](troubleshooting/otw-upgrade.md)
+
+🐛 [Nonsensical values appear randomly](troubleshooting/nonsensical-values.md), like water flow sensors on an electrical outlet, or CO<sub>2</sub> readings on a motion sensor.
 
 🐛 [Missing updates from a device](troubleshooting/no-updates.md), e.g. when toggling it physically
 

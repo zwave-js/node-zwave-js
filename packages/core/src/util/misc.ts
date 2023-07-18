@@ -6,7 +6,9 @@ export function isConsecutiveArray(values: number[]): boolean {
 }
 
 /** Returns an object that includes all non-undefined properties from the original one */
-export function stripUndefined<T>(obj: Record<string, T>): Record<string, T> {
+export function stripUndefined<T>(
+	obj: Record<string, T | undefined>,
+): Record<string, T> {
 	const ret = {} as Record<string, T>;
 	for (const [key, value] of Object.entries(obj)) {
 		if (value !== undefined) ret[key] = value;

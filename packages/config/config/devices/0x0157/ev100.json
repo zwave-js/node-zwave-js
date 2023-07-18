@@ -13,5 +13,16 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"compat": {
+		// The device supports Battery CC, despite the Version query telling otherwise
+		"commandClasses": {
+			"add": {
+				"Battery": {
+					"isSupported": true,
+					"version": 1
+				}
+			}
+		}
 	}
 }

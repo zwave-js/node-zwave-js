@@ -1,6 +1,6 @@
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CommandClass, CommandClassOptions } from "./CommandClass";
+import { CommandClass, type CommandClassOptions } from "./CommandClass";
 
 /** Defines the static side of an encapsulating command class */
 export interface EncapsulatingCommandClassStatic {
@@ -47,6 +47,14 @@ export function isEncapsulatingCommandClass(
 		proto = Object.getPrototypeOf(proto);
 	}
 	return false;
+}
+
+export function getInnermostCommandClass(cc: CommandClass): CommandClass {
+	if (isEncapsulatingCommandClass(cc)) {
+		return getInnermostCommandClass(cc.encapsulated);
+	} else {
+		return cc;
+	}
 }
 
 /** Defines the static side of an encapsulating command class */

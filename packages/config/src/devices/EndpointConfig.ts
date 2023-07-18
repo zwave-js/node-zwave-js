@@ -6,22 +6,29 @@ import {
 	type AssociationConfig,
 } from "./AssociationConfig";
 import {
-	ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
 	validateCondition,
+	type ConditionalItem,
 } from "./ConditionalItem";
+import type { ConditionalDeviceConfig } from "./DeviceConfig";
+import {
+	parseConditionalParamInformationMap,
+	type ConditionalParamInfoMap,
+	type ParamInfoMap,
+} from "./ParamInformation";
 import type { DeviceID } from "./shared";
 
 export class ConditionalEndpointConfig
 	implements ConditionalItem<EndpointConfig>
 {
 	public constructor(
-		filename: string,
+		parent: ConditionalDeviceConfig,
 		index: number,
 		definition: JSONObject,
 	) {
 		this.index = index;
+		const filename = parent.filename;
 
 		validateCondition(
 			filename,
@@ -29,6 +36,17 @@ export class ConditionalEndpointConfig
 			`Endpoint ${index} contains an`,
 		);
 		this.condition = definition.$if;
+
+		if (definition.label != undefined) {
+			if (typeof definition.label !== "string") {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+Endpoint ${index}: label is not a string`,
+				);
+			}
+			this.label = definition.label;
+		}
 
 		if (definition.associations != undefined) {
 			const associations = new Map<
@@ -65,6 +83,14 @@ Endpoint ${index}: found non-numeric group id "${key}" in associations`,
 			}
 			this.associations = associations;
 		}
+
+		if (definition.paramInformation != undefined) {
+			this.paramInformation = parseConditionalParamInformationMap(
+				definition,
+				parent,
+				`Endpoint ${index}: `,
+			);
+		}
 	}
 
 	public readonly index: number;
@@ -73,15 +99,22 @@ Endpoint ${index}: found non-numeric group id "${key}" in associations`,
 		ConditionalAssociationConfig
 	>;
 
+	public readonly paramInformation?: ConditionalParamInfoMap;
+
 	public readonly condition?: string;
+	public readonly label?: string;
 
 	public evaluateCondition(deviceId?: DeviceID): EndpointConfig | undefined {
 		if (!conditionApplies(this, deviceId)) return;
 		const ret: EndpointConfig = {
 			index: this.index,
+			label: this.label,
 		};
 		const associations = evaluateDeep(this.associations, deviceId);
 		if (associations) ret.associations = associations;
+
+		const paramInformation = evaluateDeep(this.paramInformation, deviceId);
+		if (paramInformation) ret.paramInformation = paramInformation;
 
 		return ret;
 	}
@@ -89,7 +122,8 @@ Endpoint ${index}: found non-numeric group id "${key}" in associations`,
 
 export type EndpointConfig = Omit<
 	ConditionalEndpointConfig,
-	"condition" | "evaluateCondition" | "associations"
+	"condition" | "evaluateCondition" | "associations" | "paramInformation"
 > & {
 	associations?: Map<number, AssociationConfig> | undefined;
+	paramInformation?: ParamInfoMap;
 };
