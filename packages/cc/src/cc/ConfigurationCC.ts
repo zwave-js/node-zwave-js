@@ -2693,7 +2693,9 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 						paramInfo,
 					);
 
-					mask <<= 1;
+					// We must use multiplication here, as bitwise shifting works on signed 32-bit integers in JS
+					// which would create an infinite loop if maxValue === 0xffff_ffff
+					mask *= 2;
 				}
 			}
 		}
