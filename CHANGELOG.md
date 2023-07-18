@@ -4,6 +4,11 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an infinite loop that could happen when parsing 4-byte bitfield config parameters where the high bit is set (#6029)
+* Allow associations between insecure devices which support the latest `(Multi Channel) Association CC` (#6011)
+
 ## 11.5.0 (2023-07-17)
 ### Features
 * Add `lastSeen` property to node and node statistics (#6008)
