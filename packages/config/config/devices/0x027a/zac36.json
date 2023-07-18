@@ -318,11 +318,12 @@
 			"defaultValue": 1
 		},
 		{
+			"$if": "firmwareVersion >= 1.15",
 			"#": "99",
 			"label": "Manual Calibration Offset",
 			"description": "If the valve doesn't fully open after manual calibration, adjust the open angle with an offset.",
 			"valueSize": 1,
-			"unit": "percent",
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 9,
