@@ -63,20 +63,26 @@ integrationTest(
 			const sendQueue = driver["queue"];
 			driver.driverLog.sendQueue(sendQueue);
 			t.is(sendQueue.length, 2);
-			t.is(sendQueue.get(0)?.priority, MessagePriority.WakeUp);
-			t.is(sendQueue.get(1)?.priority, MessagePriority.WakeUp);
+			t.is(
+				sendQueue.transactions.get(0)?.priority,
+				MessagePriority.WakeUp,
+			);
+			t.is(
+				sendQueue.transactions.get(1)?.priority,
+				MessagePriority.WakeUp,
+			);
 			t.is(node2.status, NodeStatus.Asleep);
 
 			// And the order should be correct
 			t.is(
 				(
-					(sendQueue.get(0)?.message as SendDataRequest)
+					(sendQueue.transactions.get(0)?.message as SendDataRequest)
 						.command as BasicCCSet
 				).targetValue,
 				99,
 			);
 			t.true(
-				(sendQueue.get(1)?.message as SendDataRequest)
+				(sendQueue.transactions.get(1)?.message as SendDataRequest)
 					.command instanceof BasicCCGet,
 			);
 		},
