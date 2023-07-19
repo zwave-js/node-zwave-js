@@ -1444,21 +1444,19 @@ export enum MessagePriority {
     // (undocumented)
     Controller = 1,
     // (undocumented)
+    Immediate = 0,
+    // (undocumented)
     MultistepController = 2,
     // (undocumented)
-    NodeQuery = 7,
+    NodeQuery = 6,
     // (undocumented)
-    Nonce = 0,
+    Normal = 5,
     // (undocumented)
-    Normal = 6,
+    Ping = 3,
     // (undocumented)
-    Ping = 4,
+    Poll = 7,
     // (undocumented)
-    Poll = 8,
-    // (undocumented)
-    Supervision = 3,
-    // (undocumented)
-    WakeUp = 5
+    WakeUp = 4
 }
 
 // Warning: (ae-missing-release-tag) "MessageRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
