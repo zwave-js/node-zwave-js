@@ -91,7 +91,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			await this.applHost.sendCommand(cc, {
 				...this.commandOptions,
 				// Supervision Reports must be prioritized over normal messages
-				priority: MessagePriority.Supervision,
+				priority: MessagePriority.Immediate,
 				// But we don't want to wait for an ACK because this can lock up the network for seconds
 				// if the target node is asleep or unreachable
 				transmitOptions: TransmitOptions.DEFAULT_NOACK,

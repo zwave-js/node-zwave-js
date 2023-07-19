@@ -12,10 +12,9 @@ import {
 	type CommandClass,
 } from "@zwave-js/cc";
 import {
-	HALF_NONCE_SIZE,
 	SecurityCCCommandEncapsulation,
 	SecurityCCNonceGet,
-	SecurityCCNonceReport,
+	type SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
 import {
 	MAX_SEGMENT_SIZE,
@@ -39,7 +38,6 @@ import {
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
-	isTransmissionError,
 	mergeSupervisionResults,
 	type SendCommandOptions,
 	type SupervisionResult,
@@ -128,77 +126,6 @@ function getNodeUpdateTimeout(
 	);
 }
 
-function assertFrameSize(driver: Driver, msg: Message) {
-	if (isSendData(msg) && exceedsMaxPayloadLength(msg)) {
-		// We use explorer frames by default, but this reduces the maximum payload length by 2 bytes compared to AUTO_ROUTE
-		// Try disabling explorer frames for this message and see if it fits now.
-		const fail = () => {
-			throw new ZWaveError(
-				"Cannot send this message because it would exceed the maximum payload length!",
-				ZWaveErrorCodes.Controller_MessageTooLarge,
-			);
-		};
-		if (msg.transmitOptions & TransmitOptions.Explore) {
-			msg.transmitOptions &= ~TransmitOptions.Explore;
-			if (exceedsMaxPayloadLength(msg)) {
-				// Still too large
-				throw fail();
-			}
-			driver.controllerLog.logNode(msg.getNodeId()!, {
-				message:
-					"Disabling explorer frames for this message due to its size",
-				level: "warn",
-			});
-		} else {
-			throw fail();
-		}
-	}
-}
-
-/**
- * The most basic message generator that simply sends a message and waits for the
- * Serial API command to finish
- */
-// eslint-disable-next-line @typescript-eslint/require-await
-const baseMessageGenerator: MessageGeneratorImplementation = async function* (
-	driver,
-	msg,
-	onMessageSent,
-) {
-	// Make sure we can send this message
-	assertFrameSize(driver, msg);
-
-	// Pass this message to the send thread and wait for it to be sent
-	let result: Message;
-	// At this point we can't have received a premature update
-	msg.prematureNodeUpdate = undefined;
-
-	try {
-		// The yield can throw and must be handled here
-		result = yield msg;
-
-		// Figure out how long the message took to be handled
-		msg.markAsCompleted();
-
-		onMessageSent(msg, result);
-	} catch (e) {
-		msg.markAsCompleted();
-		throw e;
-	}
-
-	// If the message was sent to a node and came back with a NOK callback,
-	// we want to inspect the callback, for example to look at TX statistics
-	// or update the node status.
-	//
-	// We now need to throw because the callback was passed through so we could inspect it.
-	if (isTransmitReport(result) && !result.isOK()) {
-		// Throw the message in order to short-circuit all possible generators
-		throw result;
-	}
-
-	return result;
-};
-
 /** A simple message generator that simply sends a message, waits for the ACK (and the response if one is expected) */
 export const simpleMessageGenerator: MessageGeneratorImplementation =
 	async function* (
@@ -207,7 +134,59 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 		onMessageSent,
 		additionalCommandTimeoutMs = 0,
 	) {
-		const result = yield* baseMessageGenerator(driver, msg, onMessageSent);
+		// Make sure we can send this message
+		if (isSendData(msg) && exceedsMaxPayloadLength(msg)) {
+			// We use explorer frames by default, but this reduces the maximum payload length by 2 bytes compared to AUTO_ROUTE
+			// Try disabling explorer frames for this message and see if it fits now.
+			const fail = () => {
+				throw new ZWaveError(
+					"Cannot send this message because it would exceed the maximum payload length!",
+					ZWaveErrorCodes.Controller_MessageTooLarge,
+				);
+			};
+			if (msg.transmitOptions & TransmitOptions.Explore) {
+				msg.transmitOptions &= ~TransmitOptions.Explore;
+				if (exceedsMaxPayloadLength(msg)) {
+					// Still too large
+					throw fail();
+				}
+				driver.controllerLog.logNode(msg.getNodeId()!, {
+					message:
+						"Disabling explorer frames for this message due to its size",
+					level: "warn",
+				});
+			} else {
+				throw fail();
+			}
+		}
+
+		// Pass this message to the send thread and wait for it to be sent
+		let result: Message;
+		// At this point we can't have received a premature update
+		msg.prematureNodeUpdate = undefined;
+
+		try {
+			// The yield can throw and must be handled here
+			result = yield msg;
+
+			// Figure out how long the message took to be handled
+			msg.markAsCompleted();
+
+			onMessageSent(msg, result);
+		} catch (e) {
+			msg.markAsCompleted();
+			throw e;
+		}
+
+		// If the message was sent to a node and came back with a NOK callback,
+		// we want to inspect the callback, for example to look at TX statistics
+		// or update the node status.
+		//
+		// We now need to throw because the callback was passed through so we could inspect it.
+		if (isTransmitReport(result) && !result.isOK()) {
+			// Throw the message in order to short-circuit all possible generators
+			throw result;
+		}
 
 		// If the sent message expects an update from the node, wait for it
 		if (msg.expectsNodeUpdate()) {
@@ -557,75 +536,12 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 		msg.command.nonce = nonce;
 
 		// Now send the actual secure command
-		const result = yield* baseMessageGenerator(driver, msg, onMessageSent);
-
-		// If the sent message expects an update from the node, wait for it
-		if (msg.expectsNodeUpdate()) {
-			// The node will request a nonce before it can send the update, which we must wait for and handle
-			const totalTimeout = getNodeUpdateTimeout(
-				driver,
-				msg,
-				additionalTimeoutMs,
-			);
-			const start = Date.now();
-
-			const fail = () => {
-				throw new ZWaveError(
-					`Timed out while waiting for a response from the node`,
-					ZWaveErrorCodes.Controller_NodeTimeout,
-				);
-			};
-
-			try {
-				await driver.waitForCommand<SecurityCCNonceGet>(
-					(cc) =>
-						cc.nodeId === msg.command.nodeId &&
-						cc instanceof SecurityCCNonceGet,
-					totalTimeout,
-				);
-			} catch {
-				throw fail();
-			}
-
-			// FIXME: This is more or less duplicated from SecurityCC.sendNonce()
-			// Find a way to unify this
-
-			const nonce = driver.securityManager!.generateNonce(
-				msg.command.nodeId,
-				HALF_NONCE_SIZE,
-			);
-			const nonceId = driver.securityManager!.getNonceId(nonce);
-
-			const cc = new SecurityCCNonceReport(driver, {
-				nodeId: msg.command.nodeId,
-				nonce,
-			});
-			const nonceMsg = driver.createSendDataMessage(cc, {
-				// Seems we need these options or some nodes won't accept the nonce
-				transmitOptions:
-					TransmitOptions.ACK | TransmitOptions.AutoRoute,
-				// Only try sending a nonce once
-				maxSendAttempts: 1,
-			});
-			try {
-				yield* baseMessageGenerator(driver, nonceMsg, onMessageSent);
-			} catch (e) {
-				if (isTransmissionError(e)) {
-					// The nonce could not be sent, invalidate it
-					driver.securityManager!.deleteNonce(nonceId);
-					throw fail();
-				} else {
-					// Pass other errors through
-					throw e;
-				}
-			}
-
-			// Now the node can send us the response to our query
-			const remainingTimeout = totalTimeout - (Date.now() - start);
-			return waitForNodeUpdate(driver, msg, remainingTimeout);
-		}
-
-		return result;
+		return yield* simpleMessageGenerator(
+			driver,
+			msg,
+			onMessageSent,
+			additionalTimeoutMs,
+		);
 	};
 
 /** A message generator for security encapsulated messages (S2) */
@@ -907,7 +823,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 							// Only try sending a nonce once
 							maxSendAttempts: 1,
 							// Nonce requests must be handled immediately
-							priority: MessagePriority.Nonce,
+							priority: MessagePriority.Immediate,
 							// We don't want failures causing us to treat the node as asleep or dead
 							changeNodeStatusOnMissingACK: false,
 						});

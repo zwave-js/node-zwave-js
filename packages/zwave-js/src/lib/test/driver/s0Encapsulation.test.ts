@@ -17,8 +17,8 @@ import {
 } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
-integrationTest("communication via Security S0 works", {
-	debug: true,
+integrationTest("Communication via Security S0 works", {
+	// debug: true,
 
 	nodeCapabilities: {
 		commandClasses: [CommandClasses.Basic, CommandClasses.Security],

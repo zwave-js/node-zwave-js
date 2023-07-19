@@ -198,7 +198,7 @@ export class Security2CCAPI extends CCAPI {
 				// Only try sending a nonce once
 				maxSendAttempts: 1,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Nonce,
+				priority: MessagePriority.Immediate,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 				// And we need to react to
@@ -243,7 +243,7 @@ export class Security2CCAPI extends CCAPI {
 				// Only try sending a nonce once
 				maxSendAttempts: 1,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Nonce,
+				priority: MessagePriority.Immediate,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 			});
@@ -290,7 +290,7 @@ export class Security2CCAPI extends CCAPI {
 				// Only try sending a nonce once
 				maxSendAttempts: 1,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Nonce,
+				priority: MessagePriority.Immediate,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 			});

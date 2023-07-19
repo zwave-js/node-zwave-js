@@ -73,7 +73,7 @@ function throwNoNonce(reason?: string): never {
 	throw new ZWaveError(message, ZWaveErrorCodes.SecurityCC_NoNonce);
 }
 
-export const HALF_NONCE_SIZE = 8;
+const HALF_NONCE_SIZE = 8;
 
 // TODO: Ignore commands if received via multicast
 
@@ -127,8 +127,6 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			cc,
 			{
 				...this.commandOptions,
-				// Nonce requests must be handled immediately
-				priority: MessagePriority.Nonce,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
 			},
@@ -186,7 +184,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				// Only try sending a nonce once
 				maxSendAttempts: 1,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Nonce,
+				priority: MessagePriority.Immediate,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 			});

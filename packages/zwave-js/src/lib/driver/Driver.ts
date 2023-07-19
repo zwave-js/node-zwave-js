@@ -109,6 +109,7 @@ import {
 	type ZWaveSerialPortImplementation,
 } from "@zwave-js/serial";
 import {
+	AsyncQueue,
 	TypedEventEmitter,
 	buffer2hex,
 	cloneDeep,
@@ -128,7 +129,6 @@ import {
 	createDeferredPromise,
 	type DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import { SortedList } from "alcalzone-shared/sorted-list";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
@@ -189,6 +189,7 @@ import {
 	migrateLegacyNetworkCache,
 	serializeNetworkCacheValue,
 } from "./NetworkCache";
+import { TransactionQueue, type SerialAPIQueueItem } from "./Queue";
 import {
 	createSerialAPICommandMachine,
 	type SerialAPICommandDoneData,
@@ -488,30 +489,51 @@ export class Driver
 				this._options.storage.deviceConfigPriorityDir,
 		});
 
-		this.queue = new SortedList();
-		this._sendThreadIdle = false;
+		this.immediateQueue = new TransactionQueue({
+			name: "immediate",
+			// Messages on the immediate queue may always be sent unless the queue is paused
+			mayStartNextTransaction: () => !this.queuePaused,
+		});
+		this.queue = new TransactionQueue({
+			name: "normal",
+			mayStartNextTransaction: (t) => this.mayStartTransaction(t),
+		});
+		this.serialAPIQueue = new AsyncQueue();
+		this._queueIdle = false;
 	}
 
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 
-	/** The queue of pending transactions */
-	private queue: SortedList<Transaction>;
+	// We have multiple queues to achieve multiple "layers" of communication priority:
+	// The default queue for most messages
+	private queue: TransactionQueue;
+	// An immediate queue for handling queries that need to be handled ASAP, e.g. Nonce Get
+	private immediateQueue: TransactionQueue;
+	// And all of them feed into the serial API queue, which contains commands that will be sent ASAP
+	private serialAPIQueue: AsyncQueue<SerialAPIQueueItem>;
+
+	/** Gives access to the transaction queues, ordered by priority */
+	private get queues(): TransactionQueue[] {
+		return [this.immediateQueue, this.queue];
+	}
+
 	private queuePaused = false;
-	/** The transaction that is currently being handled */
-	private currentTransaction: Transaction | undefined;
 	/** The interpreter for the currently active Serial API command */
 	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
 
-	private _sendThreadIdle: boolean;
-	/** Whether the Send Thread is currently idle */
-	public get sendThreadIdle(): boolean {
-		return this._sendThreadIdle;
+	// Keep track of which queues are currently busy
+	private _queuesBusyFlags = 0;
+	private _queueIdle: boolean;
+	/** Whether the queue is currently idle */
+	public get queueIdle(): boolean {
+		return this._queueIdle;
 	}
-	private set sendThreadIdle(value: boolean) {
-		if (this._sendThreadIdle !== value) {
-			this._sendThreadIdle = value;
-			this.handleSendThreadIdleChange(value);
+	private set queueIdle(value: boolean) {
+		if (this._queueIdle !== value) {
+			this.driverLog.print(`all queues ${value ? "idle" : "busy"}`);
+			this._queueIdle = value;
+			this.handleQueueIdleChange(value);
 		}
 	}
 
@@ -948,6 +970,14 @@ export class Driver
 			this.driverLog.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
+
+			// Start draining the queues
+			for (const queue of this.queues) {
+				void this.drainTransactionQueue(queue);
+			}
+
+			// Start the serial API queue
+			void this.drainSerialAPIQueue();
 
 			if (
 				typeof this._options.testingHooks?.onSerialPortOpen ===
@@ -1429,7 +1459,7 @@ export class Driver
 			// If we only have sleeping nodes or a controller-only network, the send
 			// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
 			// So do it manually.
-			this.handleSendThreadIdleChange(this.sendThreadIdle);
+			this.handleQueueIdleChange(this.queueIdle);
 		}
 	}
 
@@ -1598,7 +1628,7 @@ export class Driver
 
 		// Make sure to handle the pending messages as quickly as possible
 		if (oldStatus === NodeStatus.Asleep) {
-			this.reduceQueue(({ message }) => {
+			this.reduceQueues(({ message }) => {
 				// Ignore messages that are not for this node
 				if (message.getNodeId() !== node.id) return { type: "keep" };
 				// Resolve pings, so we don't need to send them (we know the node is awake)
@@ -2133,10 +2163,9 @@ export class Driver
 		predicate: (t: Transaction) => boolean,
 	): boolean {
 		if (!!this.queue.find((t) => predicate(t))) return true;
-		if (this.currentTransaction && predicate(this.currentTransaction)) {
-			return true;
-		}
-		return false;
+		return this.queues.some(
+			(q) => q.currentTransaction && predicate(q.currentTransaction),
+		);
 	}
 
 	/**
@@ -2638,7 +2667,11 @@ export class Driver
 
 		this.driverLog.print("destroying driver instance...");
 
-		// First stop the send thread machine and close the serial port, so nothing happens anymore
+		// First stop all queues and close the serial port, so nothing happens anymore
+		this.serialAPIQueue.abort();
+		for (const queue of this.queues) {
+			queue.abort();
+		}
 		if (this.serialAPIInterpreter?.status === InterpreterStatus.Running) {
 			this.serialAPIInterpreter.stop();
 		}
@@ -3477,7 +3510,7 @@ export class Driver
 						});
 						await this.sendCommand(cc, {
 							maxSendAttempts: 1,
-							priority: MessagePriority.Nonce,
+							priority: MessagePriority.Immediate,
 						});
 					},
 					sendSegmentsComplete: async () => {
@@ -3492,7 +3525,7 @@ export class Driver
 						});
 						await this.sendCommand(cc, {
 							maxSendAttempts: 1,
-							priority: MessagePriority.Nonce,
+							priority: MessagePriority.Immediate,
 						});
 					},
 				},
@@ -3539,7 +3572,7 @@ export class Driver
 				});
 				await this.sendCommand(cc, {
 					maxSendAttempts: 1,
-					priority: MessagePriority.Nonce,
+					priority: MessagePriority.Immediate,
 				});
 			}
 		}
@@ -3792,7 +3825,8 @@ ${handlers.length} left`,
 
 		// It could also be that this is the node's response for a CC that we sent, but where the ACK is delayed
 		if (isCommandClassContainer(msg)) {
-			const currentMessage = this.currentTransaction?.getCurrentMessage();
+			const currentMessage =
+				this.queue.currentTransaction?.getCurrentMessage();
 			if (
 				currentMessage &&
 				currentMessage.expectsNodeUpdate() &&
@@ -4174,11 +4208,8 @@ ${handlers.length} left`,
 			// Track and potentially update the status of the node when communication succeeds
 			if (success) {
 				if (node.canSleep) {
-					// Do not update the node status when we only responded to a nonce request
-					if (
-						options.priority !== MessagePriority.Nonce &&
-						options.priority !== MessagePriority.Supervision
-					) {
+					// Do not update the node status when we only responded to a nonce/supervision request
+					if (options.priority !== MessagePriority.Immediate) {
 						// If the node is not meant to be kept awake, try to send it back to sleep
 						if (!node.keepAwake) {
 							setImmediate(() =>
@@ -4198,14 +4229,11 @@ ${handlers.length} left`,
 		}
 	}
 
-	private mayStartNextTransaction(): boolean {
+	private mayStartTransaction(transaction: Transaction): boolean {
 		// We may not send anything if the send thread is paused
 		if (this.queuePaused) return false;
-		const nextTransaction = this.queue.peekStart();
-		// We can't send anything if the queue is empty
-		if (!nextTransaction) return false;
 
-		const message = nextTransaction.message;
+		const message = transaction.message;
 		const targetNode = message.getNodeUnsafe(this);
 
 		// The transaction queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
@@ -4216,29 +4244,9 @@ ${handlers.length} left`,
 		// 3. Nodes that can sleep but do not support wakeup: https://github.com/zwave-js/node-zwave-js/discussions/1537
 		//    We need to try and send messages to them even if they are asleep, because we might never hear from them
 
-		// 	// While the queue is busy, we may not start any transaction, except nonce responses to the node we're currently communicating with
-		// 	if (meta.state.matches("busy")) {
-		// 		if (nextTransaction.priority === MessagePriority.Nonce) {
-		// 			for (const active of ctx.activeTransactions.values()) {
-		// 				if (
-		// 					active.transaction.message.getNodeId() ===
-		// 					nextTransaction.message.getNodeId()
-		// 				) {
-		// 					return true;
-		// 				}
-		// 			}
-		// 		}
-		// 		return false;
-		// 	}
+		// 2. is handled by putting the message into the immediate queue
 
-		// 	Replies to nonce requests and Supervision Get requests must always be allowed
-		if (
-			nextTransaction.priority === MessagePriority.Nonce ||
-			nextTransaction.priority === MessagePriority.Supervision
-		) {
-			return true;
-		}
-		// Same for pings
+		// Pings may always be sent
 		if (messageIsPing(message)) return true;
 		// Or messages to the controller
 		if (!targetNode) return true;
@@ -4250,71 +4258,68 @@ ${handlers.length} left`,
 		);
 	}
 
-	private drainQueueBusy = false;
-	private async drainQueue(): Promise<void> {
-		// Don't execute more than once at a time
-		if (this.drainQueueBusy) return;
-		this.drainQueueBusy = true;
-
-		try {
-			while (this.mayStartNextTransaction()) {
-				const transaction = (this.currentTransaction =
-					this.queue.shift()!);
-				// We have something to send, so not idle
-				this.sendThreadIdle = false;
-
-				let error: ZWaveError | undefined;
-				try {
-					await this.drainTransactionGenerator(transaction);
-				} catch (e) {
-					error = e as ZWaveError;
-				} finally {
-					this.currentTransaction = undefined;
-				}
-
-				// Handle errors after clearing the current transaction.
-				// Otherwise, it will get considered the active transaction and cause an unnecessary SendDataAbort
-				if (error) {
-					this.rejectTransaction(transaction, error);
-				}
-			}
-		} finally {
-			this.drainQueueBusy = false;
-			this.sendThreadIdle = true;
+	private markQueueBusy(queue: TransactionQueue, busy: boolean): void {
+		const index = this.queues.indexOf(queue);
+		if (busy) {
+			this._queuesBusyFlags |= 1 << index;
+		} else {
+			this._queuesBusyFlags &= ~(1 << index);
 		}
+		this.queueIdle = this._queuesBusyFlags === 0;
+	}
 
-		// Avoid a deadlock when a transaction was added after the advanceQueue call,
-		// but before setting the busy flag back to false
-		if (this.mayStartNextTransaction()) this.triggerQueue();
+	private async drainTransactionQueue(
+		queue: TransactionQueue,
+	): Promise<void> {
+		let setIdleTimer: NodeJS.Immediate | undefined;
+		for await (const transaction of queue) {
+			if (setIdleTimer) {
+				clearImmediate(setIdleTimer);
+				setIdleTimer = undefined;
+			}
+			this.markQueueBusy(queue, true);
+
+			let error: ZWaveError | undefined;
+			try {
+				await this.executeTransaction(transaction);
+			} catch (e) {
+				error = e as ZWaveError;
+			} finally {
+				queue.finalizeTransaction();
+			}
+
+			// Handle errors after clearing the current transaction.
+			// Otherwise, it will get considered the active transaction and cause an unnecessary SendDataAbort
+			if (error) {
+				this.rejectTransaction(transaction, error);
+			}
+
+			setIdleTimer = setImmediate(() => {
+				this.markQueueBusy(queue, false);
+			});
+		}
 	}
 
 	/** Steps through the message generator of a transaction. Throws an error if the transaction should fail. */
-	private async drainTransactionGenerator(
-		transaction: Transaction,
-	): Promise<void> {
-		transaction.parts.start();
-		// .self is now guaranteed to be defined
-
+	private async executeTransaction(transaction: Transaction): Promise<void> {
 		let prevResult: Message | undefined;
+		let msg: Message | undefined;
+
+		transaction.start();
 
 		// Step through the transaction as long as it gives us a next message
-		while (!(await transaction.parts.self!.next(prevResult!)).done) {
-			// The .current property of the current transactions's message generator
-			// now contains the next message to send
-			const msg = transaction.getCurrentMessage()!;
-
+		while ((msg = await transaction.generateNextMessage(prevResult))) {
 			// TODO: refactor this nested loop or make it part of executeSerialAPICommand
 			attemptMessage: for (let attemptNumber = 1; ; attemptNumber++) {
 				try {
-					prevResult = await this.executeSerialAPICommand(
+					prevResult = await this.queueSerialAPICommand(
 						msg,
 						transaction.stack,
 					);
 					if (isTransmitReport(prevResult) && !prevResult.isOK()) {
 						// The node did not acknowledge the command. Convert this into an
-						// error so it can be handled.
-						// First throw into the generator, so it can be reset
-						transaction.parts.self!.throw(prevResult).catch(noop);
+						// error so it can be handled and abort the generator so it can be reset
+						transaction.abort(prevResult);
 
 						throw new ZWaveError(
 							"The node did not acknowledge the command",
@@ -4374,8 +4379,41 @@ ${handlers.length} left`,
 		// This transaction is finished, try the next one
 	}
 
-	private triggerQueue(): void {
-		process.nextTick(() => this.drainQueue());
+	/** Handles sequencing of queued Serial API commands */
+	private async drainSerialAPIQueue(): Promise<void> {
+		for await (const item of this.serialAPIQueue) {
+			const { msg, transactionSource, result } = item;
+			try {
+				const ret = await this.executeSerialAPICommand(
+					msg,
+					transactionSource,
+				);
+				result.resolve(ret);
+			} catch (e) {
+				result.reject(e);
+			}
+		}
+	}
+
+	private triggerQueues(): void {
+		for (const queue of this.queues) {
+			queue.trigger();
+		}
+	}
+
+	/** Puts a message on the serial API queue and returns or throws the command result */
+	private queueSerialAPICommand(
+		msg: Message,
+		transactionSource?: string,
+	): Promise<Message | undefined> {
+		const result = createDeferredPromise<Message | undefined>();
+		this.serialAPIQueue.add({
+			msg,
+			transactionSource,
+			result,
+		});
+
+		return result;
 	}
 
 	private mayRetrySerialAPICommand(
@@ -4399,7 +4437,7 @@ ${handlers.length} left`,
 
 	/**
 	 * Executes a Serial API command and returns or throws the result.
-	 * @param transaction The transaction which contains the message to be executed
+	 * This method should not be called outside of {@link drainSerialAPIQueue}.
 	 */
 	private async executeSerialAPICommand(
 		msg: Message,
@@ -4588,8 +4626,7 @@ ${handlers.length} left`,
 			!(msg instanceof SendDataMulticastRequest) &&
 			!(msg instanceof SendDataMulticastBridgeRequest) &&
 			// Nonces and responses to Supervision Get have to be sent immediately
-			options.priority !== MessagePriority.Nonce &&
-			options.priority !== MessagePriority.Supervision
+			options.priority !== MessagePriority.Immediate
 		) {
 			if (options.priority === MessagePriority.NodeQuery) {
 				// Remember that this transaction was part of an interview
@@ -4625,14 +4662,17 @@ ${handlers.length} left`,
 		transaction.tag = options.tag;
 
 		// And queue it
-		this.queue.add(transaction);
-		this.triggerQueue();
+		if (transaction.priority === MessagePriority.Immediate) {
+			this.immediateQueue.add(transaction);
+		} else {
+			this.queue.add(transaction);
+		}
 
 		// If the transaction should expire, start the timeout
 		let expirationTimeout: NodeJS.Timeout | undefined;
 		if (options.expire) {
 			expirationTimeout = setTimeout(() => {
-				this.reduceQueue((t, _source) => {
+				this.reduceQueues((t, _source) => {
 					if (t === transaction)
 						return {
 							type: "reject",
@@ -4652,8 +4692,7 @@ ${handlers.length} left`,
 			if (isSendData(msg)) {
 				// For SendData messages, make sure the message is not a nonce
 				maybeSendToSleep =
-					options.priority !== MessagePriority.Nonce &&
-					options.priority !== MessagePriority.Supervision &&
+					options.priority !== MessagePriority.Immediate &&
 					// And that the result is either a response from the node
 					// or a transmit report indicating success
 					result &&
@@ -5138,26 +5177,14 @@ ${handlers.length} left`,
 			if (this.handleMissingNodeACK(transaction as any)) return;
 		}
 
-		// If the transaction was already started, we need to throw the error into the message generator
-		// so it correctly gets ended. Otherwise just reject the result promise
-		if (transaction.parts.self) {
-			transaction.parts.self.throw(error).catch(noop);
-		} else {
-			transaction.promise.reject(error);
-		}
+		transaction.abort(error);
 	}
 
 	private resolveTransaction(
 		transaction: Transaction,
 		result?: Message,
 	): void {
-		// If the transaction was already started, we need to end the message generator early by throwing
-		// the result. Otherwise just resolve the result promise
-		if (transaction.parts.self) {
-			transaction.parts.self.throw(result).catch(noop);
-		} else {
-			transaction.promise.resolve(result);
-		}
+		transaction.abort(result);
 	}
 
 	/** Checks if a message is allowed to go into the wakeup queue */
@@ -5166,8 +5193,7 @@ ${handlers.length} left`,
 		switch (true) {
 			// Pings, nonces and Supervision Reports will block the send queue until wakeup, so they must be dropped
 			case messageIsPing(msg):
-			case transaction.priority === MessagePriority.Nonce:
-			case transaction.priority === MessagePriority.Supervision:
+			case transaction.priority === MessagePriority.Immediate:
 			// We also don't want to immediately send the node to sleep when it wakes up
 			case isCommandClassContainer(msg) &&
 				msg.command instanceof WakeUpCCNoMoreInformation:
@@ -5195,7 +5221,7 @@ ${handlers.length} left`,
 			tag: "interview",
 		};
 
-		this.reduceQueue((transaction, _source) => {
+		this.reduceQueues((transaction, _source) => {
 			const msg = transaction.message;
 			if (msg.getNodeId() !== nodeId) return { type: "keep" };
 			// Drop all messages that are not allowed in the wakeup queue
@@ -5217,7 +5243,7 @@ ${handlers.length} left`,
 		errorMsg: string = `The message has been removed from the queue`,
 		errorCode: ZWaveErrorCodes = ZWaveErrorCodes.Controller_MessageDropped,
 	): void {
-		this.reduceQueue((transaction, _source) => {
+		this.reduceQueues((transaction, _source) => {
 			if (predicate(transaction)) {
 				return {
 					type: "reject",
@@ -5258,10 +5284,19 @@ ${handlers.length} left`,
 	 */
 	private unpauseSendQueue(): void {
 		this.queuePaused = false;
-		this.triggerQueue();
+		this.triggerQueues();
 	}
 
-	private reduceQueue(reducer: TransactionReducer): void {
+	private reduceQueues(reducer: TransactionReducer): void {
+		for (const queue of this.queues) {
+			this.reduceQueue(queue, reducer);
+		}
+	}
+
+	private reduceQueue(
+		queue: TransactionQueue,
+		reducer: TransactionReducer,
+	): void {
 		const dropQueued: Transaction[] = [];
 		let stopActive: Transaction | undefined;
 		const requeue: Transaction[] = [];
@@ -5315,35 +5350,35 @@ ${handlers.length} left`,
 			}
 		};
 
-		for (const transaction of this.queue) {
+		for (const transaction of queue.transactions) {
 			reduceTransaction(transaction, "queue");
 		}
 
-		if (this.currentTransaction) {
-			reduceTransaction(this.currentTransaction, "active");
+		if (queue.currentTransaction) {
+			reduceTransaction(queue.currentTransaction, "active");
 		}
 
 		// Now we know what to do with the transactions
-		this.queue.remove(...dropQueued, ...requeue);
-		this.queue.add(...requeue.map((t) => t.clone()));
+		queue.remove(...dropQueued, ...requeue);
+		queue.add(...requeue.map((t) => t.clone()));
 
 		// Abort ongoing SendData messages that should be dropped
 		if (isSendData(stopActive?.message)) {
 			void this.abortSendData();
 		}
-
-		// Continue sending
-		this.triggerQueue();
 	}
 
 	/** @internal */
 	public resolvePendingPings(nodeId: number): void {
 		// When a previously sleeping node sends a NIF after a ping was sent to it, but not acknowledged yet,
 		// the node is awake, but the ping would fail. Resolve pending pings, so communication can continue.
-		const msg = this.currentTransaction?.parts.current;
-		if (!!msg && messageIsPing(msg) && msg.getNodeId() === nodeId) {
-			// The pending transaction is a ping. Short-circuit its message generator by throwing something that's not an error
-			this.currentTransaction?.parts.self!.throw(undefined).catch(noop);
+		for (const { currentTransaction } of this.queues) {
+			if (!currentTransaction) continue;
+			const msg = currentTransaction.parts.current;
+			if (!!msg && messageIsPing(msg) && msg.getNodeId() === nodeId) {
+				// The pending transaction is a ping. Short-circuit its message generator by throwing something that's not an error
+				currentTransaction.abort(undefined);
+			}
 		}
 	}
 
@@ -5801,7 +5836,7 @@ ${handlers.length} left`,
 	private pollBackgroundRSSITimer: NodeJS.Timeout | undefined;
 	private lastBackgroundRSSITimestamp = 0;
 
-	private handleSendThreadIdleChange(idle: boolean): void {
+	private handleQueueIdleChange(idle: boolean): void {
 		if (!this.ready) return;
 		if (
 			this.controller.isFunctionSupported(FunctionType.GetBackgroundRSSI)
