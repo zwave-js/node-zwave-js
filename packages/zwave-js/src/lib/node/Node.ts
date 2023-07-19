@@ -126,6 +126,7 @@ import {
 	CRC16_CCITT,
 	CacheBackedMap,
 	CommandClasses,
+	EncapsulationFlags,
 	MessagePriority,
 	NOT_KNOWN,
 	NodeType,
@@ -3536,8 +3537,11 @@ protocol version:      ${this.protocolVersion}`;
 
 		await endpoint.commandClasses["Z-Wave Plus Info"]
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			})
 			.sendReport({
 				zwavePlusVersion: 2,
@@ -3556,8 +3560,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Version, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.sendReport({
@@ -3577,8 +3584,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Version, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.reportCCVersion(command.requestedCC);
@@ -3599,8 +3609,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses["Association Group Information"], false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.reportGroupName(1, "Lifeline");
@@ -3621,8 +3634,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses["Association Group Information"], false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.reportGroupInfo({
@@ -3654,8 +3670,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses["Association Group Information"], false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.reportCommands(
@@ -3679,8 +3698,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Association, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		// We only "support" the lifeline group
@@ -3705,8 +3727,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Association, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.sendReport({
@@ -3766,8 +3791,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Indicator, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		switch (command.indicatorId) {
@@ -4307,8 +4335,11 @@ protocol version:      ${this.protocolVersion}`;
 			const api = endpoint
 				.createAPI(CommandClasses.Time, false)
 				.withOptions({
-					// Answer with the same encapsulation as asked
-					encapsulationFlags: command.encapsulationFlags,
+					// Answer with the same encapsulation as asked, but omit
+					// Supervision as it shouldn't be used for Get-Report flows
+					encapsulationFlags:
+						command.encapsulationFlags &
+						~EncapsulationFlags.Supervision,
 				});
 			await api.reportTime(hours, minutes, seconds);
 		} catch (e: any) {
@@ -4334,8 +4365,11 @@ protocol version:      ${this.protocolVersion}`;
 			const api = endpoint
 				.createAPI(CommandClasses.Time, false)
 				.withOptions({
-					// Answer with the same encapsulation as asked
-					encapsulationFlags: command.encapsulationFlags,
+					// Answer with the same encapsulation as asked, but omit
+					// Supervision as it shouldn't be used for Get-Report flows
+					encapsulationFlags:
+						command.encapsulationFlags &
+						~EncapsulationFlags.Supervision,
 				});
 			await api.reportDate(year, month, day);
 		} catch (e: any) {
@@ -4360,8 +4394,11 @@ protocol version:      ${this.protocolVersion}`;
 			const api = endpoint
 				.createAPI(CommandClasses.Time, false)
 				.withOptions({
-					// Answer with the same encapsulation as asked
-					encapsulationFlags: command.encapsulationFlags,
+					// Answer with the same encapsulation as asked, but omit
+					// Supervision as it shouldn't be used for Get-Report flows
+					encapsulationFlags:
+						command.encapsulationFlags &
+						~EncapsulationFlags.Supervision,
 				});
 			await api.reportTimezone(timezone);
 		} catch (e) {
