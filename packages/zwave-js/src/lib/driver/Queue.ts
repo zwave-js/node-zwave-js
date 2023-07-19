@@ -56,7 +56,10 @@ export class TransactionQueue implements AsyncIterable<Transaction> {
 			if (this.mayStartNextTransaction(this.transactions.peekStart()!)) {
 				const promise = this.listeners.shift()!;
 				const item = this.transactions.shift()!;
+				this.currentTransaction = item;
 				promise.resolve(item);
+			} else {
+				break;
 			}
 		}
 	}
@@ -101,6 +104,8 @@ export class TransactionQueue implements AsyncIterable<Transaction> {
 					this.listeners.push(promise);
 					value = await promise;
 				}
+
+				this.currentTransaction = value;
 
 				if (value) {
 					// We have a value, return it
