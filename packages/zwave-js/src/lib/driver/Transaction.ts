@@ -88,12 +88,22 @@ export class Transaction implements Comparable<Transaction> {
 		return this.parts.current ?? this.message;
 	}
 
+	/**
+	 * Starts the transaction's message generator if it hasn't been started yet.
+	 * Returns `true` when the generator was started, `false` if it was already started before.
+	 */
+	public start(): boolean {
+		if (!this.parts.self) {
+			this.parts.start();
+			return true;
+		}
+		return false;
+	}
+
 	public async generateNextMessage(
 		prevResult: Message | undefined,
 	): Promise<Message | undefined> {
-		// Start the message generator if it hasn't been started yet
-		if (!this.parts.self) this.parts.start();
-		if (!this.parts.self) return; // This shouldn't happen, but better be sure
+		if (!this.parts.self) return;
 		// Get the next message from the generator
 		const { done, value } = await this.parts.self.next(prevResult!);
 		if (!done) return value;
