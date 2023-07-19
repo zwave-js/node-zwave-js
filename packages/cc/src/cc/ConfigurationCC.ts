@@ -1645,7 +1645,10 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				if (typeof param.propertyKey === "number") {
 					this.setValue(
 						applHost,
-						ConfigurationCCValues.paramInformation(this.parameter),
+						ConfigurationCCValues.paramInformation(
+							this.parameter,
+							param.propertyKey,
+						),
 						parsePartial(
 							this.value as any,
 							param.propertyKey,
