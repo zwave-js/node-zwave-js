@@ -6,7 +6,8 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0079"
+			"productId": "0x0079",
+			"zwaveAllianceId": 2362
 		},
 		{
 			"productType": "0x0103",
@@ -17,54 +18,77 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "20",
-			"label": "LED Strip state at Power ON",
+			"label": "Set The LED Strips State After It is Re-powered On",
+			"description": "Set the LED strips state after it is re-powered on",
 			"valueSize": 1,
-			"defaultValue": 0,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "The last state before re-power on",
 					"value": 0
 				},
 				{
-					"label": "Always On",
+					"label": "Always on",
 					"value": 1
 				},
 				{
-					"label": "Always Off",
+					"label": "Always off",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "32",
-			"label": "Enable/Disable Report on color change.",
+			"label": "Enable/Disable to Send Out a Report When The Color is Changed",
+			"description": "Enable/disable to send out a report when the color is changed",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable (default)",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Hail CC",
+					"label": "Hail cc",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "34",
-			"label": "Brightness Level Control",
+			"label": "Enable/Disable to Turn On The Last Brightness Level of The LED Strip When Using The Color Switch Set Cc to Change Its Color",
+			"description": "Enable/disable to turn on the last brightness level of the LED strip when using the color switch set cc to change its color",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable (default)",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -75,126 +99,158 @@
 		},
 		{
 			"#": "35",
-			"label": "Display mode of Cold/warm white",
+			"label": "Configure The Display Mode of Cold/Warm White",
+			"description": "Configure the display mode of cold/warm white",
 			"valueSize": 1,
-			"defaultValue": 0,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Arbitrary combination (default)",
+					"label": "Arbitrary combination of cold/warm white",
 					"value": 0
 				},
 				{
-					"label": "Complementary combination",
+					"label": "Complementary combination of cold/warm white",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "40",
-			"label": "Colorful mode configuration",
+			"label": "Colorful Mode Configuration",
+			"description": "Colorful mode configuration",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
 			"defaultValue": 0,
+			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default",
-					"value": 0
+					"label": "Fade out and fade in (red)",
+					"value": 3
 				},
 				{
 					"label": "Rainbow mode",
 					"value": 1
 				},
 				{
-					"label": "Multi color mode",
+					"label": "Mutil color mode",
 					"value": 2
 				},
 				{
-					"label": "Fade out and fade in (Red)",
-					"value": 3
-				},
-				{
-					"label": "Fade out and fade in (Green)",
+					"label": "Fade out and fade in (green)",
 					"value": 4
 				},
 				{
-					"label": "Fade out and fade in (Blue)",
+					"label": "Fade out and fade in (blue)",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "80",
-			"label": "Notification (Group 1) when state changes",
+			"label": "To Set Whcih Notification Can Be Sent to The Associated Devices (group 1) When The State of LED Bulb is Changed",
+			"description": "To set whcih notification can be sent to the associated devices (group 1) when the state of LED strip is changed",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "Haill cc when pressing the action button to change its state",
+					"value": 3
+				},
 				{
 					"label": "Nothing",
 					"value": 0
 				},
 				{
-					"label": "Hail CC (default)",
+					"label": "Hail cc",
 					"value": 1
 				},
 				{
-					"label": "Basic CC report",
+					"label": "Basic cc report",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "112",
-			"label": "Dimmer mode",
+			"label": "Set The Dimmer Mode",
+			"description": "Set the dimmer mode",
 			"valueSize": 1,
-			"defaultValue": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Parabolic curve",
+					"label": "Parabolic curve mode",
 					"value": 0
 				},
 				{
-					"label": "Index curve",
+					"label": "Index curve mode",
 					"value": 1
 				},
 				{
-					"label": "(Parabolic * Index)/2",
+					"label": "(parabolic + index)/2 mode",
 					"value": 2
 				},
 				{
-					"label": "Linear",
+					"label": "Linear mode",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "252",
-			"label": "Configuration lock",
+			"label": "Enable/Disable Lock Configuration",
+			"description": "Enable/disable to lock configuration parameters",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Configuration allowed (default)",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Configuration locked",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "255",
-			"label": "Reset to defaults",
-			"valueSize": 1,
+			"label": "Reset The Color Strip",
+			"description": "Reset the color strip to factory default",
+			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1431655765,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset all configuration parameters to factory default settings",
+					"value": 0
+				},
+				{
+					"label": "Reset the color strip to factory default",
+					"value": 1431655765
+				}
+			]
 		},
 		{
 			"#": "37[0x1f]",
@@ -325,6 +381,71 @@
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "33",
+			"label": "Get The LED Strip’s Color Value",
+			"description": "Get the strip’s color value. note: this parameter is a get-only parameter",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16777215,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "36",
+			"label": "Reboot/Save/Exit Colorful Mode",
+			"description": "Reboot/save/exit colorful mode.  note: this parameter is a set-only parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Save the current colorful mode value and then to be exited",
+					"value": 3
+				},
+				{
+					"label": "Un-reboot colorful mode",
+					"value": 0
+				},
+				{
+					"label": "Reboot colorful mode",
+					"value": 1
+				},
+				{
+					"label": "Exit colorful mode",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "38",
+			"label": "Change Speed",
+			"description": "Set the change speed",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 50332416,
+			"unsigned": true
+		},
+		{
+			"#": "39",
+			"label": "Color Index Configuration When The LED Strip is in Multi Color Mode",
+			"description": "Color index configuration when the LED strip is in multi color mode",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 2003125025,
+			"unsigned": true
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, press the Action Button on the Color Strip Controller",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, press the Action Button on the Color Strip Controller",
+		"reset": "Press and hold the Action Button on the Color Strip Controller for 20 seconds and then release it.\nUse this procedure only in the event that your primary network controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2362/Oomi%20ColorStrip%20manual%20-%202.pdf"
+	}
 }
