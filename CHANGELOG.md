@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where partial param values were not exposed correctly (#6035)
+* When a device unnecessarily sends a supervised GET request, the response is no longer sent with Supervision (#6034)
+* Fixed another regression from `v11.2.0` where some time-critical requests weren't answered while waiting for a response from a different node (#6024)
+
+### Config file changes
+* Fix Zooz ZSE40 parameters 7 and 8 (#6019)
+
+### Changes under the hood
+* Reworked how build caching is done (#6040)
+
 ## 11.5.1 (2023-07-18)
 ### Bugfixes
 * Fixed an infinite loop that could happen when parsing 4-byte bitfield config parameters where the high bit is set (#6029)
