@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/testing",
-  "version": "11.5.1",
+  "version": "11.5.2",
   "description": "zwave-js: testing utilities",
   "keywords": [],
   "publishConfig": {

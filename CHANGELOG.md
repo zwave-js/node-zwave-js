@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.5.2 (2023-07-19)
 ### Bugfixes
 * Fixed an issue where partial param values were not exposed correctly (#6035)
 * When a device unnecessarily sends a supervised GET request, the response is no longer sent with Supervision (#6034)
