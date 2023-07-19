@@ -490,14 +490,16 @@ export class Driver
 		});
 
 		this.immediateQueue = new TransactionQueue({
+			name: "immediate",
 			// Messages on the immediate queue may always be sent unless the queue is paused
 			mayStartNextTransaction: () => !this.queuePaused,
 		});
 		this.queue = new TransactionQueue({
+			name: "normal",
 			mayStartNextTransaction: (t) => this.mayStartTransaction(t),
 		});
 		this.serialAPIQueue = new AsyncQueue();
-		this._sendThreadIdle = false;
+		this._queueIdle = false;
 	}
 
 	/** The serial port instance */
@@ -520,15 +522,18 @@ export class Driver
 	/** The interpreter for the currently active Serial API command */
 	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
 
-	private _sendThreadIdle: boolean;
-	/** Whether the Send Thread is currently idle */
-	public get sendThreadIdle(): boolean {
-		return this._sendThreadIdle;
+	// Keep track of which queues are currently busy
+	private _queuesBusyFlags = 0;
+	private _queueIdle: boolean;
+	/** Whether the queue is currently idle */
+	public get queueIdle(): boolean {
+		return this._queueIdle;
 	}
-	private set sendThreadIdle(value: boolean) {
-		if (this._sendThreadIdle !== value) {
-			this._sendThreadIdle = value;
-			this.handleSendThreadIdleChange(value);
+	private set queueIdle(value: boolean) {
+		if (this._queueIdle !== value) {
+			this.driverLog.print(`all queues ${value ? "idle" : "busy"}`);
+			this._queueIdle = value;
+			this.handleQueueIdleChange(value);
 		}
 	}
 
@@ -1454,7 +1459,7 @@ export class Driver
 			// If we only have sleeping nodes or a controller-only network, the send
 			// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
 			// So do it manually.
-			this.handleSendThreadIdleChange(this.sendThreadIdle);
+			this.handleQueueIdleChange(this.queueIdle);
 		}
 	}
 
@@ -4253,10 +4258,27 @@ ${handlers.length} left`,
 		);
 	}
 
+	private markQueueBusy(queue: TransactionQueue, busy: boolean): void {
+		const index = this.queues.indexOf(queue);
+		if (busy) {
+			this._queuesBusyFlags |= 1 << index;
+		} else {
+			this._queuesBusyFlags &= ~(1 << index);
+		}
+		this.queueIdle = this._queuesBusyFlags === 0;
+	}
+
 	private async drainTransactionQueue(
 		queue: TransactionQueue,
 	): Promise<void> {
+		let setIdleTimer: NodeJS.Immediate | undefined;
 		for await (const transaction of queue) {
+			if (setIdleTimer) {
+				clearImmediate(setIdleTimer);
+				setIdleTimer = undefined;
+			}
+			this.markQueueBusy(queue, true);
+
 			let error: ZWaveError | undefined;
 			try {
 				await this.executeTransaction(transaction);
@@ -4271,6 +4293,10 @@ ${handlers.length} left`,
 			if (error) {
 				this.rejectTransaction(transaction, error);
 			}
+
+			setIdleTimer = setImmediate(() => {
+				this.markQueueBusy(queue, false);
+			});
 		}
 	}
 
@@ -5810,7 +5836,7 @@ ${handlers.length} left`,
 	private pollBackgroundRSSITimer: NodeJS.Timeout | undefined;
 	private lastBackgroundRSSITimestamp = 0;
 
-	private handleSendThreadIdleChange(idle: boolean): void {
+	private handleQueueIdleChange(idle: boolean): void {
 		if (!this.ready) return;
 		if (
 			this.controller.isFunctionSupported(FunctionType.GetBackgroundRSSI)

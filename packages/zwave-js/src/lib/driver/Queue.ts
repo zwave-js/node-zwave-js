@@ -7,6 +7,7 @@ import { SortedList } from "alcalzone-shared/sorted-list";
 import { type Transaction } from "./Transaction";
 
 export interface TransactionQueueOptions {
+	name: string;
 	mayStartNextTransaction: (transaction: Transaction) => boolean;
 }
 
@@ -14,13 +15,13 @@ export interface TransactionQueueOptions {
  * The transaction queue offers an async-iterable interface to a list of transactions.
  */
 export class TransactionQueue implements AsyncIterable<Transaction> {
-	public constructor(
-		options: TransactionQueueOptions = {
-			mayStartNextTransaction: () => true,
-		},
-	) {
-		this.mayStartNextTransaction = options.mayStartNextTransaction;
+	public constructor(options?: Partial<TransactionQueueOptions>) {
+		this.name = options?.name ?? "unnamed";
+		this.mayStartNextTransaction =
+			options?.mayStartNextTransaction ?? (() => true);
 	}
+
+	public readonly name: string;
 
 	private mayStartNextTransaction: (transaction: Transaction) => boolean;
 	public readonly transactions = new SortedList<Transaction>();
