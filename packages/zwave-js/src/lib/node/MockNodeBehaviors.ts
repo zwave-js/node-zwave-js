@@ -26,6 +26,8 @@ import {
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 
+import { CommandClasses } from "@zwave-js/core";
+import { BasicCCBehaviors } from "./mockCCBehaviors/Basic";
 import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
 import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
@@ -79,6 +81,14 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 					version = info.version;
 					break;
 				}
+			}
+
+			// Basic CC is always supported implicitly
+			if (
+				version === 0 &&
+				frame.payload.requestedCC === CommandClasses.Basic
+			) {
+				version = 1;
 			}
 
 			const cc = new VersionCCCommandClassReport(self.host, {
@@ -281,6 +291,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToS0ZWavePlusCCGet,
 		respondToS2ZWavePlusCCGet,
 
+		...BasicCCBehaviors,
 		...ConfigurationCCBehaviors,
 		...EnergyProductionCCBehaviors,
 		...ManufacturerSpecificCCBehaviors,
