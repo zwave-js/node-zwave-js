@@ -5896,9 +5896,72 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			} catch {
 				return false;
 			}
-		} else {
-			// No way to set the time
-			return false;
+		} else if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.DateReport) &&
+			timeAPI.supportsCommand(TimeCommand.TimeReport)
+		) {
+			// According to https://github.com/zwave-js/node-zwave-js/issues/6032#issuecomment-1641945555
+			// some devices update their date and time when they receive an unsolicited Time CC report.
+			// Even if this isn't intended, we should at least try.
+
+			const api = timeAPI.withOptions({
+				useSupervision: false,
+			});
+			try {
+				// First date
+				const year = now.getFullYear();
+				const month = now.getMonth() + 1;
+				const day = now.getDate();
+				await api.reportDate(year, month, day);
+
+				const verification = await api.getDate();
+				if (
+					!verification ||
+					verification.year !== year ||
+					verification.month !== month ||
+					verification.day !== day
+				) {
+					// Didn't work
+					return false;
+				}
+			} catch {
+				return false;
+			}
+
+			try {
+				// Then time
+				const hour = now.getHours();
+				const minute = now.getMinutes();
+				const second = now.getSeconds();
+				await api.reportTime(hour, minute, second);
+
+				const verification = await api.getTime();
+				if (!verification) return false;
+				// To leave a bit of tolerance for communication delays, we compare the seconds since midnight
+				const secondsPerDay = 24 * 60 * 60;
+				const expected = hour * 60 * 60 + minute * 60 + second;
+				const expectedMin = expected - 30;
+				const expectedMax = expected + 30;
+				const actual =
+					verification.hour * 60 * 60 +
+					verification.minute * 60 +
+					verification.second;
+				// The time may have wrapped around midnight since we set the date
+				if (actual >= expectedMin && actual <= expectedMax) {
+					// ok
+				} else if (
+					actual + secondsPerDay >= expectedMin &&
+					actual + secondsPerDay <= expectedMax
+				) {
+					// ok
+				} else {
+					// Didn't work
+					return false;
+				}
+			} catch {
+				return false;
+			}
 		}
 
 		// We might also have to change the timezone. That is done with the Time CC.
