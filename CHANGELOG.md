@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Throw when trying to heal or discover neighbors for the controller (#6043)
+
+### Config file changes
+* Correct parameters of Zooz ZEN05 (#6045)
+* Override supported setpoint types for Intermatic PE653 (#6044)
+* Update Inovelli LZW31 parameter 52 for FW 1.54 (#6001)
+
+### Changes under the hood
+* Implement mocks for `Basic CC` (#6041)
+
 ## 11.5.2 (2023-07-19)
 ### Bugfixes
 * Fixed an issue where partial param values were not exposed correctly (#6035)
