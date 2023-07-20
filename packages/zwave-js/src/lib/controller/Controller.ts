@@ -3795,6 +3795,14 @@ supported CCs: ${nodeInfo.supportedCCs
 	 * Returns `true` if the process succeeded, `false` otherwise.
 	 */
 	public async healNode(nodeId: number): Promise<boolean> {
+		// We cannot heal the controller
+		if (nodeId === this._ownNodeId) {
+			throw new ZWaveError(
+				`Healing the controller itself is not possible!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const node = this.nodes.getOrThrow(nodeId);
 
 		// Don't start the process twice
@@ -5429,6 +5437,14 @@ ${associatedNodes.join(", ")}`,
 		// TODO: Consider making this not block the send queue.
 		// However, I haven't actually seen a UpdateStarted callback in the wild,
 		// so we don't know if that would even work.
+
+		// We cannot discover neighbors for the controller
+		if (nodeId === this._ownNodeId) {
+			throw new ZWaveError(
+				`Discovering neighbors for the controller itself is not possible!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
 
 		// During inclusion, the timeout is mainly required for the node to detect all neighbors
 		// We do the same here, so we just reuse the timeout
