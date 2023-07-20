@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.5.3 (2023-07-20)
 ### Bugfixes
 * Throw when trying to heal or discover neighbors for the controller (#6043)
 

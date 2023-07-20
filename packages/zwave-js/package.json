@@ -1,6 +1,6 @@
 {
   "name": "zwave-js",
-  "version": "11.5.2",
+  "version": "11.5.3",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "main": "build/index.js",
