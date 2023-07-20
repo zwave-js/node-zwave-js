@@ -36,21 +36,21 @@
 			]
 		},
 		{
+			"#": "7",
+			"$import": "templates/zooz_template.json#led_indicator_brightness",
+			"defaultValue": 2
+		},
+		{
 			"#": "2",
-			"$import": "templates/zooz_template.json#auto_off_timer_duration"
+			"$import": "templates/zooz_template.json#auto_off_timer_0x_3x_7x"
 		},
 		{
 			"#": "4",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Auto Turn-On Timer"
+			"$import": "templates/zooz_template.json#auto_on_timer_0x_3x_7x"
 		},
 		{
 			"#": "6",
-			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
-		},
-		{
-			"#": "7",
-			"$import": "templates/zooz_template.json#led_indicator_brightness"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "8",
