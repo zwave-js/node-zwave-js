@@ -527,6 +527,20 @@
 			// The device sometimes sends BASIC_SET to the lifeline association when the state of Switch 1
 			// changes but the value is always 0 so treat it as an event.
 			"treatBasicSetAsEvent": true
+		},
+		{
+			"overrideQueries": {
+				// The response to the setpoint query is off by one bit: https://github.com/zwave-js/node-zwave-js/issues/5335
+				"Thermostat Setpoint": [
+					{
+						"method": "getSupportedSetpointTypes",
+						"result": [
+							1, // Heating
+							7 // Furnace
+						]
+					}
+				]
+			}
 		}
 	]
 }
