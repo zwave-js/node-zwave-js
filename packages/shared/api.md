@@ -24,6 +24,20 @@ export type AllOrNone<T extends Record<string, any>> = T | {
 // @public (undocumented)
 export function applyMixin(target: Constructor, mixin: Constructor, includeConstructor?: boolean): void;
 
+// Warning: (ae-missing-release-tag) "AsyncQueue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AsyncQueue<T> implements AsyncIterable<T> {
+    // (undocumented)
+    [Symbol.asyncIterator](): AsyncIterator<T>;
+    abort(): void;
+    add(...items: T[]): void;
+    end(): void;
+    // (undocumented)
+    get length(): number;
+    remove(item: T): boolean;
+}
+
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (ae-missing-release-tag) "buffer2hex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -145,10 +159,10 @@ export function isEnumMember(enumeration: unknown, value: number): boolean;
 // @public (undocumented)
 export function isPrintableASCII(text: string): boolean;
 
-// Warning: (ae-missing-release-tag) "isPrintableASCIIWithNewlines" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isPrintableASCIIWithWhitespace" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function isPrintableASCIIWithNewlines(text: string): boolean;
+export function isPrintableASCIIWithWhitespace(text: string): boolean;
 
 // Warning: (ae-missing-release-tag) "JSONObject" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -174,6 +188,11 @@ export type MethodsNamesOf<T> = OnlyMethods<T>[keyof T];
 //
 // @public
 export function Mixin(baseCtors: Constructor[]): (derivedCtor: Constructor) => void;
+
+// Warning: (ae-missing-release-tag) "noop" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function noop(): void;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen

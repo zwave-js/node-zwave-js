@@ -12,7 +12,7 @@ import {
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -176,7 +176,7 @@ function deserializeMultiChannelAssociationDestination(data: Buffer): {
 export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(
 		cmd: MultiChannelAssociationCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MultiChannelAssociationCommand.Get:
 			case MultiChannelAssociationCommand.Set:
@@ -191,7 +191,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	 * Returns the number of association groups a node supports.
 	 * Association groups are consecutive, starting at 1.
 	 */
-	public async getGroupCount(): Promise<number | undefined> {
+	public async getGroupCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.SupportedGroupingsGet,
@@ -697,7 +697,9 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const message: MessageRecord = { "group id": this.groupId };
+		const message: MessageRecord = {
+			"group id": this.groupId || "(all groups)",
+		};
 		if (this.nodeIds) {
 			message["node ids"] = this.nodeIds.join(", ");
 		}

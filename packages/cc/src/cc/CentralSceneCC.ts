@@ -6,9 +6,10 @@ import {
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	getCCName,
+	maybeUnknownToString,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -86,7 +87,7 @@ export const CentralSceneCCValues = Object.freeze({
 
 @API(CommandClasses["Central Scene"])
 export class CentralSceneCCAPI extends CCAPI {
-	public supportsCommand(cmd: CentralSceneCommand): Maybe<boolean> {
+	public supportsCommand(cmd: CentralSceneCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case CentralSceneCommand.SupportedGet:
 				return this.isSinglecast(); // this is mandatory
@@ -354,8 +355,9 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 2);
 		this.sceneCount = this.payload[0];
-		this.supportsSlowRefresh =
-			this.version >= 3 ? !!(this.payload[1] & 0b1000_0000) : undefined;
+		if (this.version >= 3) {
+			this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
+		}
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
 		const numEntries = identicalKeyAttributes ? 1 : this.sceneCount;
@@ -405,7 +407,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 	// TODO: Only offer `slowRefresh` if this is true
 	@ccValue(CentralSceneCCValues.supportsSlowRefresh)
-	public readonly supportsSlowRefresh: boolean | undefined;
+	public readonly supportsSlowRefresh: MaybeNotKnown<boolean>;
 
 	private _supportedKeyAttributes = new Map<
 		number,
@@ -423,7 +425,9 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"scene count": this.sceneCount,
-			"supports slow refresh": this.supportsSlowRefresh,
+			"supports slow refresh": maybeUnknownToString(
+				this.supportsSlowRefresh,
+			),
 		};
 		for (const [scene, keys] of this.supportedKeyAttributes) {
 			message[`supported attributes (scene #${scene})`] = keys

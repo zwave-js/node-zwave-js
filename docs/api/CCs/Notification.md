@@ -48,7 +48,7 @@ async getSupported(): Promise<Pick<NotificationCCSupportedReport, "supportsV1Ala
 ```ts
 async getSupportedEvents(
 	notificationType: number,
-): Promise<readonly number[] | undefined>;
+): Promise<MaybeNotKnown<readonly number[]>>;
 ```
 
 ## Notification CC values

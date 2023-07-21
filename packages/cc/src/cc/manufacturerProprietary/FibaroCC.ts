@@ -4,9 +4,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseMaybeNumber,
-	unknownNumber,
 	validatePayload,
-	type Maybe,
+	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type ValueID,
@@ -449,19 +448,6 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (
-			this._position === unknownNumber &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._position = undefined;
-		}
-		if (
-			this._tilt === unknownNumber &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._tilt = undefined;
-		}
-
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 
@@ -489,13 +475,13 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		return true;
 	}
 
-	private _position: Maybe<number> | undefined;
-	public get position(): Maybe<number> | undefined {
+	private _position: MaybeUnknown<number> | undefined;
+	public get position(): MaybeUnknown<number> | undefined {
 		return this._position;
 	}
 
-	private _tilt: Maybe<number> | undefined;
-	public get tilt(): Maybe<number> | undefined {
+	private _tilt: MaybeUnknown<number> | undefined;
+	public get tilt(): MaybeUnknown<number> | undefined {
 		return this._tilt;
 	}
 

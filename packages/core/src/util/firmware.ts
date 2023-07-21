@@ -25,6 +25,8 @@ export function guessFirmwareFileFormat(
 	filename: string,
 	rawData: Buffer,
 ): FirmwareFileFormat {
+	filename = filename.toLowerCase();
+
 	if (filename.endsWith(".bin")) {
 		return "bin";
 	} else if (

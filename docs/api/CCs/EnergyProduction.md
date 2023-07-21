@@ -9,7 +9,7 @@
 ```ts
 async get(
 	parameter: EnergyProductionParameter,
-): Promise<{ value: number; scale: EnergyProductionScale } | undefined>;
+): Promise<MaybeNotKnown<{ value: number; scale: EnergyProductionScale }>>;
 ```
 
 ## Energy Production CC values

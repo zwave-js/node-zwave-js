@@ -5,11 +5,17 @@ import {
 	type ValueIDProperties,
 } from "@zwave-js/cc";
 import {
+	SetValueStatus,
+	supervisionResultToSetValueResult,
+	type SetValueResult,
+} from "@zwave-js/cc/safe";
+import {
 	SecurityClass,
 	SupervisionStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 	actuatorCCs,
+	getCCName,
 	isSupervisionResult,
 	isZWaveError,
 	normalizeValueID,
@@ -97,7 +103,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		valueId: ValueID,
 		value: unknown,
 		options?: SetValueAPIOptions,
-	): Promise<boolean> {
+	): Promise<SetValueResult> {
 		// Ensure we're dealing with a valid value ID, with no extra properties
 		valueId = normalizeValueID(valueId);
 
@@ -105,12 +111,26 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		try {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
-			if (!endpointInstance) return false;
+			if (!endpointInstance) {
+				return {
+					status: SetValueStatus.EndpointNotFound,
+					message: `Endpoint ${
+						valueId.endpoint
+					} does not exist on virtual node ${this.id ?? "??"}`,
+				};
+			}
 			let api = (endpointInstance.commandClasses as any)[
 				valueId.commandClass
 			] as CCAPI;
 			// Check if the setValue method is implemented
-			if (!api.setValue) return false;
+			if (!api.setValue) {
+				return {
+					status: SetValueStatus.NotImplemented,
+					message: `The ${getCCName(
+						valueId.commandClass,
+					)} CC does not support setting values`,
+				};
+			}
 
 			const valueIdProps: ValueIDProperties = {
 				property: valueId.property,
@@ -201,27 +221,30 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 				}
 			}
 
-			return true;
+			return supervisionResultToSetValueResult(result);
 		} catch (e) {
-			// Define which errors during setValue are expected and won't crash
-			// the driver:
+			// Define which errors during setValue are expected and won't throw an error
 			if (isZWaveError(e)) {
-				let handled = false;
-				let emitErrorEvent = false;
+				let result: SetValueResult | undefined;
 				switch (e.code) {
 					// This CC or API is not implemented
 					case ZWaveErrorCodes.CC_NotImplemented:
 					case ZWaveErrorCodes.CC_NoAPI:
-						handled = true;
+						result = {
+							status: SetValueStatus.NotImplemented,
+							message: e.message,
+						};
 						break;
 					// A user tried to set an invalid value
 					case ZWaveErrorCodes.Argument_Invalid:
-						handled = true;
-						emitErrorEvent = true;
+						result = {
+							status: SetValueStatus.InvalidValue,
+							message: e.message,
+						};
 						break;
 				}
-				if (emitErrorEvent) this.driver.emit("error", e);
-				if (handled) return false;
+
+				if (result) return result;
 			}
 			throw e;
 		}

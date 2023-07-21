@@ -64,6 +64,15 @@ export const cacheKeys = {
 				};
 			},
 			hasSUCReturnRoute: `${nodeBaseKey}hasSUCReturnRoute`,
+			associations: (groupId: number) =>
+				`${nodeBaseKey}associations.${groupId}`,
+			priorityReturnRoute: (destinationNodeId: number) =>
+				`${nodeBaseKey}priorityReturnRoute.${destinationNodeId}`,
+			prioritySUCReturnRoute: `${nodeBaseKey}priorityReturnRoute.SUC`,
+			customReturnRoutes: (destinationNodeId: number) =>
+				`${nodeBaseKey}customReturnRoutes.${destinationNodeId}`,
+			customSUCReturnRoutes: `${nodeBaseKey}customReturnRoutes.SUC`,
+			lastSeen: `${nodeBaseKey}lastSeen`,
 		};
 	},
 } as const;
@@ -251,6 +260,14 @@ function isSerializedProvisioningEntryStatus(
 	);
 }
 
+function tryParseDate(value: unknown): Date | undefined {
+	// Dates are stored as timestamps
+	if (typeof value === "number") {
+		const ret = new Date(value);
+		if (!isNaN(ret.getTime())) return ret;
+	}
+}
+
 export function deserializeNetworkCacheValue(
 	driver: Driver,
 	key: string,
@@ -336,6 +353,12 @@ export function deserializeNetworkCacheValue(
 			}
 			throw fail();
 		}
+
+		case "lastSeen": {
+			value = tryParseDate(value);
+			if (value) return value;
+			throw fail();
+		}
 	}
 
 	// Other properties
@@ -383,6 +406,10 @@ export function serializeNetworkCacheValue(
 		}
 		case "dsk": {
 			return dskToString(value as Buffer);
+		}
+		case "lastSeen": {
+			// Dates are stored as timestamps
+			return (value as Date).getTime();
 		}
 	}
 

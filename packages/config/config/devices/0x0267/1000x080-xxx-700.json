@@ -195,7 +195,7 @@
 		"commandClasses": {
 			"remove": {
 				// The device identifies as Z-Wave+ v2, but does not support the mandatory Supervision CC
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

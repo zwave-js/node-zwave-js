@@ -3,11 +3,11 @@ import {
 	Duration,
 	MessagePriority,
 	ValueMetadata,
+	maybeUnknownToString,
 	parseMaybeNumber,
-	parseNumber,
-	unknownNumber,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
+	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -90,7 +90,7 @@ export const BasicCCValues = Object.freeze({
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	public supportsCommand(cmd: BasicCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BasicCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BasicCommand.Get:
 				return this.isSinglecast();
@@ -372,14 +372,16 @@ export class BasicCCReport extends BasicCC {
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this._currentValue = parseMaybeNumber(this.payload[0]);
+			this._currentValue =
+				// 0xff is a legacy value for 100% (99)
+				this.payload[0] === 0xff
+					? 99
+					: parseMaybeNumber(this.payload[0]);
 
-			if (this.version >= 2 && this.payload.length >= 3) {
-				this.targetValue = parseNumber(this.payload[1]);
+			if (this.payload.length >= 3) {
+				this.targetValue = parseMaybeNumber(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
 			}
-			// Do not persist values here. We want to control when this is happening,
-			// in case the report is mapped to another CC
 		} else {
 			this._currentValue = options.currentValue;
 			if ("targetValue" in options) {
@@ -389,25 +391,14 @@ export class BasicCCReport extends BasicCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (
-			this.currentValue === unknownNumber &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._currentValue = undefined;
-		}
-
-		return super.persistValues(applHost);
-	}
-
-	private _currentValue: Maybe<number> | undefined;
+	private _currentValue: MaybeUnknown<number> | undefined;
 	@ccValue(BasicCCValues.currentValue)
-	public get currentValue(): Maybe<number> | undefined {
+	public get currentValue(): MaybeUnknown<number> | undefined {
 		return this._currentValue;
 	}
 
 	@ccValue(BasicCCValues.targetValue)
-	public readonly targetValue: number | undefined;
+	public readonly targetValue: MaybeUnknown<number> | undefined;
 
 	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
@@ -416,8 +407,15 @@ export class BasicCCReport extends BasicCC {
 		const payload: number[] = [
 			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
 		];
-		if (this.version >= 2 && this.targetValue && this.duration) {
-			payload.push(this.targetValue, this.duration.serializeReport());
+		if (
+			this.version >= 2 &&
+			this.targetValue !== undefined &&
+			this.duration
+		) {
+			payload.push(
+				this.targetValue ?? 0xfe,
+				this.duration.serializeReport(),
+			);
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
@@ -425,10 +423,10 @@ export class BasicCCReport extends BasicCC {
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this.currentValue,
+			"current value": maybeUnknownToString(this.currentValue),
 		};
-		if (this.targetValue != undefined) {
-			message["target value"] = this.targetValue;
+		if (this.targetValue !== undefined) {
+			message["target value"] = maybeUnknownToString(this.targetValue);
 		}
 		if (this.duration != undefined) {
 			message.duration = this.duration.toString();

@@ -10,7 +10,7 @@ import {
 	type CCToAPI,
 } from "@zwave-js/cc";
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
-import type { IZWaveEndpoint } from "@zwave-js/core";
+import type { IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
 import {
 	CacheBackedMap,
 	CommandClasses,
@@ -62,8 +62,8 @@ export class Endpoint implements IZWaveEndpoint {
 	 * Only used for endpoints which store their device class differently than nodes.
 	 * DO NOT ACCESS directly!
 	 */
-	private _deviceClass: DeviceClass | undefined;
-	public get deviceClass(): DeviceClass | undefined {
+	private _deviceClass: MaybeNotKnown<DeviceClass>;
+	public get deviceClass(): MaybeNotKnown<DeviceClass> {
 		if (this.index > 0) {
 			return this._deviceClass;
 		} else {
@@ -72,7 +72,7 @@ export class Endpoint implements IZWaveEndpoint {
 			);
 		}
 	}
-	protected set deviceClass(deviceClass: DeviceClass | undefined) {
+	protected set deviceClass(deviceClass: MaybeNotKnown<DeviceClass>) {
 		if (this.index > 0) {
 			this._deviceClass = deviceClass;
 		} else {
@@ -483,14 +483,14 @@ export class Endpoint implements IZWaveEndpoint {
 	}
 
 	/** Z-Wave+ Icon (for management) */
-	public get installerIcon(): number | undefined {
+	public get installerIcon(): MaybeNotKnown<number> {
 		return this.getNodeUnsafe()?.getValue(
 			ZWavePlusCCValues.installerIcon.endpoint(this.index),
 		);
 	}
 
 	/** Z-Wave+ Icon (for end users) */
-	public get userIcon(): number | undefined {
+	public get userIcon(): MaybeNotKnown<number> {
 		return this.getNodeUnsafe()?.getValue(
 			ZWavePlusCCValues.userIcon.endpoint(this.index),
 		);

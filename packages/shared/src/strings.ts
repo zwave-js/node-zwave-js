@@ -4,7 +4,7 @@ import { padStart } from "alcalzone-shared/strings";
 export function cpp2js(str: string): string {
 	const nullIndex = str.indexOf("\0");
 	if (nullIndex === -1) return str;
-	return str.substr(0, nullIndex);
+	return str.slice(0, nullIndex);
 }
 
 /**
@@ -56,9 +56,8 @@ export function isPrintableASCII(text: string): boolean {
 	return /^[\u0020-\u007e]*$/.test(text);
 }
 
-export function isPrintableASCIIWithNewlines(text: string): boolean {
-	text = text.replace(/^[\r\n]*/g, "").replace(/[\r\n]*/g, "");
-	return isPrintableASCII(text);
+export function isPrintableASCIIWithWhitespace(text: string): boolean {
+	return isPrintableASCII(text.trim());
 }
 
 export function compareStrings(a: string, b: string): number {

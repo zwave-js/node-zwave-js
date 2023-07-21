@@ -162,11 +162,8 @@ export enum ConfigValueFormat {
 	BitField = 0x03, // Check Boxes
 }
 
-/**
- * @publicAPI
- * A configuration value is either a single number or a bit map
- */
-export type ConfigValue = number | Set<number>;
+/** @publicAPI */
+export type ConfigValue = number;
 
 export interface ConfigurationMetadata extends ValueMetadataAny {
 	// readable and writeable are inherited from ValueMetadataAny
@@ -178,17 +175,10 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	format?: ConfigValueFormat;
 	label?: string;
 	description?: string;
-	/** @deprecated Use the `label` property instead */
-	name?: string;
-	/** @deprecated Use the `description` property instead */
-	info?: string;
 	/** @deprecated */
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	requiresReInclusion?: boolean;
-	// The following information cannot be detected by scanning.
-	// We have to rely on configuration to support them
-	// options?: readonly ConfigOption[];
 	states?: Record<number, string>;
 	allowManualEntry?: boolean;
 	isFromConfig?: boolean;

@@ -8,7 +8,7 @@ import {
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -84,7 +84,7 @@ export const EntryControlCCValues = Object.freeze({
 
 @API(CommandClasses["Entry Control"])
 export class EntryControlCCAPI extends CCAPI {
-	public supportsCommand(cmd: EntryControlCommand): Maybe<boolean> {
+	public supportsCommand(cmd: EntryControlCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case EntryControlCommand.KeySupportedGet:
 			case EntryControlCommand.EventSupportedGet:

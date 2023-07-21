@@ -8,7 +8,7 @@ import {
 	getCCName,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -84,7 +84,7 @@ export const SceneControllerConfigurationCCValues = Object.freeze({
 export class SceneControllerConfigurationCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: SceneControllerConfigurationCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SceneControllerConfigurationCommand.Get:
 				return this.isSinglecast();
@@ -269,11 +269,12 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	}
 
 	public async getLastActivated(): Promise<
-		| Pick<
+		MaybeNotKnown<
+			Pick<
 				SceneControllerConfigurationCCReport,
 				"groupId" | "sceneId" | "dimmingDuration"
-		  >
-		| undefined
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -303,11 +304,12 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	public async get(
 		groupId: number,
 	): Promise<
-		| Pick<
+		MaybeNotKnown<
+			Pick<
 				SceneControllerConfigurationCCReport,
 				"sceneId" | "dimmingDuration"
-		  >
-		| undefined
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,

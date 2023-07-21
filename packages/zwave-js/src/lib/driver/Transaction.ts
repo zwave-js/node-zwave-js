@@ -1,5 +1,11 @@
-import { highResTimestamp, MessagePriority } from "@zwave-js/core";
+import {
+	highResTimestamp,
+	isZWaveError,
+	MessagePriority,
+	type ZWaveError,
+} from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
+import { noop } from "@zwave-js/shared";
 import {
 	compareNumberOrString,
 	type Comparable,
@@ -80,6 +86,41 @@ export class Transaction implements Comparable<Transaction> {
 	 */
 	public getCurrentMessage(): Message | undefined {
 		return this.parts.current ?? this.message;
+	}
+
+	/**
+	 * Starts the transaction's message generator if it hasn't been started yet.
+	 * Returns `true` when the generator was started, `false` if it was already started before.
+	 */
+	public start(): boolean {
+		if (!this.parts.self) {
+			this.parts.start();
+			return true;
+		}
+		return false;
+	}
+
+	public async generateNextMessage(
+		prevResult: Message | undefined,
+	): Promise<Message | undefined> {
+		if (!this.parts.self) return;
+		// Get the next message from the generator
+		const { done, value } = await this.parts.self.next(prevResult!);
+		if (!done) return value;
+	}
+
+	/**
+	 * Forcefully aborts the message generator by throwing the given result.
+	 * Errors will be treated as a rejection of the transaction, everything else as success
+	 */
+	public abort(result: Message | ZWaveError | undefined): void {
+		if (this.parts.self) {
+			this.parts.self.throw(result).catch(noop);
+		} else if (isZWaveError(result)) {
+			this.promise.reject(result);
+		} else {
+			this.promise.resolve(result);
+		}
 	}
 
 	/** The priority of this transaction */

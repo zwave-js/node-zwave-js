@@ -40,7 +40,7 @@ async getSupportedCommands(
 		| SecurityClass.S2_AccessControl
 		| SecurityClass.S2_Authenticated
 		| SecurityClass.S2_Unauthenticated,
-): Promise<CommandClasses[] | undefined>;
+): Promise<MaybeNotKnown<CommandClasses[]>>;
 ```
 
 Queries the securely supported commands for the current security class.
@@ -60,7 +60,7 @@ async reportSupportedCommands(
 ### `getKeyExchangeParameters`
 
 ```ts
-async getKeyExchangeParameters(): Promise<Pick<Security2CCKEXReport, "requestCSA" | "echo" | "supportedKEXSchemes" | "supportedECDHProfiles" | "requestedKeys"> | undefined>;
+async getKeyExchangeParameters(): Promise<Pick<Security2CCKEXReport, "requestCSA" | "echo" | "supportedKEXSchemes" | "supportedECDHProfiles" | "requestedKeys" | "_reserved"> | undefined>;
 ```
 
 ### `grantKeys`

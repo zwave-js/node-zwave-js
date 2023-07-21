@@ -1,11 +1,12 @@
-import type {
-	CommandClasses,
-	CommandClassInfo,
-	ValueID,
+import {
+	getCCName,
+	type CommandClassInfo,
+	type CommandClasses,
+	type ValueID,
 } from "@zwave-js/core/safe";
 import { pick, type JSONObject } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { hexKeyRegex2Digits, throwInvalidConfig } from "../utils_safe";
+import { throwInvalidConfig, tryParseCCId } from "../utils_safe";
 import { conditionApplies, type ConditionalItem } from "./ConditionalItem";
 import type { DeviceID } from "./shared";
 
@@ -50,7 +51,7 @@ error in compat option queryOnWakeup`,
 							this.valueIdRegex.test(arg)
 						) {
 							const tuple = JSON.parse(
-								arg.substr("$value$".length),
+								arg.slice("$value$".length),
 							);
 							return {
 								property: tuple[0],
@@ -438,16 +439,6 @@ error in compat option commandClasses`,
 error in compat option commandClasses.add`,
 					);
 				} else if (
-					!Object.keys(definition.commandClasses.add).every((k) =>
-						hexKeyRegex2Digits.test(k),
-					)
-				) {
-					throwInvalidConfig(
-						"devices",
-						`config/devices/${filename}:
-All keys in compat option commandClasses.add must be 2-digit lowercase hex numbers!`,
-					);
-				} else if (
 					!Object.values(definition.commandClasses.add).every((v) =>
 						isObject(v),
 					)
@@ -460,13 +451,20 @@ All values in compat option commandClasses.add must be objects`,
 				}
 
 				const addCCs = new Map<CommandClasses, CompatAddCC>();
-				for (const [cc, info] of Object.entries(
+				for (const [key, info] of Object.entries(
 					definition.commandClasses.add,
 				)) {
-					addCCs.set(
-						parseInt(cc),
-						new CompatAddCC(filename, info as any),
-					);
+					// Parse the key into a CC ID
+					const cc = tryParseCCId(key);
+					if (cc == undefined) {
+						throwInvalidConfig(
+							"devices",
+							`config/devices/${filename}:
+Invalid Command Class "${key}" specified in compat option commandClasses.add!`,
+						);
+					}
+
+					addCCs.set(cc, new CompatAddCC(filename, info as any));
 				}
 				this.addCCs = addCCs;
 			}
@@ -478,25 +476,24 @@ All values in compat option commandClasses.add must be objects`,
 						`config/devices/${filename}:
 error in compat option commandClasses.remove`,
 					);
-				} else if (
-					!Object.keys(definition.commandClasses.remove).every((k) =>
-						hexKeyRegex2Digits.test(k),
-					)
-				) {
-					throwInvalidConfig(
-						"devices",
-						`config/devices/${filename}:
-All keys in compat option commandClasses.remove must be 2-digit lowercase hex numbers!`,
-					);
 				}
 
 				const removeCCs = new Map<
 					CommandClasses,
 					"*" | readonly number[]
 				>();
-				for (const [cc, info] of Object.entries(
+				for (const [key, info] of Object.entries(
 					definition.commandClasses.remove,
 				)) {
+					// Parse the key into a CC ID
+					const cc = tryParseCCId(key);
+					if (cc == undefined) {
+						throwInvalidConfig(
+							"devices",
+							`config/devices/${filename}:
+Invalid Command Class "${key}" specified in compat option commandClasses.remove!`,
+						);
+					}
 					if (isObject(info) && "endpoints" in info) {
 						if (
 							info.endpoints === "*" ||
@@ -505,7 +502,7 @@ All keys in compat option commandClasses.remove must be 2-digit lowercase hex nu
 									(i) => typeof i === "number",
 								))
 						) {
-							removeCCs.set(parseInt(cc), info.endpoints as any);
+							removeCCs.set(cc, info.endpoints as any);
 						} else {
 							throwInvalidConfig(
 								"devices",
@@ -540,6 +537,20 @@ compat option alarmMapping must be an array where all items are objects!`,
 				(m, i) => new CompatMapAlarm(filename, m, i + 1),
 			);
 		}
+
+		if (definition.overrideQueries != undefined) {
+			if (!isObject(definition.overrideQueries)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option overrideQueries must be an object!`,
+				);
+			}
+			this.overrideQueries = new CompatOverrideQueries(
+				filename,
+				definition.overrideQueries,
+			);
+		}
 	}
 
 	public readonly alarmMapping?: readonly CompatMapAlarm[];
@@ -561,6 +572,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 		size?: number;
 		precision?: number;
 	};
+	public readonly overrideQueries?: CompatOverrideQueries;
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly preserveEndpoints?: "*" | readonly number[];
 	public readonly removeEndpoints?: "*" | readonly number[];
@@ -599,6 +611,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 			"manualValueRefreshDelayMs",
 			"mapRootReportsToEndpoint",
 			"overrideFloatEncoding",
+			"overrideQueries",
 			"reportTimeout",
 			"preserveRootApplicationCCValueIDs",
 			"preserveEndpoints",
@@ -798,4 +811,172 @@ error in compat option alarmMapping, mapping #${index}: property "to.eventParame
 
 	public readonly from: CompatMapAlarmFrom;
 	public readonly to: CompatMapAlarmTo;
+}
+
+export class CompatOverrideQueries {
+	public constructor(filename: string, definition: JSONObject) {
+		const overrides = new Map();
+
+		const parseOverride = (
+			cc: CommandClasses,
+			info: JSONObject,
+		): CompatOverrideQuery => {
+			if (typeof info.method !== "string") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Property "method" in compat option overrideQueries, CC ${getCCName(
+						cc,
+					)} must be a string!`,
+				);
+			} else if (
+				info.matchArgs != undefined &&
+				!isArray(info.matchArgs)
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Property "matchArgs" in compat option overrideQueries, CC ${getCCName(
+						cc,
+					)} must be an array!`,
+				);
+			} else if (!("result" in info)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Property "result" is missing in in compat option overrideQueries, CC ${getCCName(
+						cc,
+					)}!`,
+				);
+			} else if (
+				info.endpoint != undefined &&
+				typeof info.endpoint !== "number"
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Property "endpoint" in compat option overrideQueries, CC ${getCCName(
+						cc,
+					)} must be a number!`,
+				);
+			} else if (info.persistValues && !isObject(info.persistValues)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Property "persistValues" in compat option overrideQueries, CC ${getCCName(
+						cc,
+					)} must be an object!`,
+				);
+			} else if (info.extendMetadata && !isObject(info.extendMetadata)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Property "extendMetadata" in compat option overrideQueries, CC ${getCCName(
+						cc,
+					)} must be an object!`,
+				);
+			}
+
+			return {
+				endpoint: info.endpoint,
+				method: info.method,
+				matchArgs: info.matchArgs,
+				result: info.result,
+				persistValues: info.persistValues,
+				extendMetadata: info.extendMetadata,
+			};
+		};
+
+		for (const [key, value] of Object.entries(definition)) {
+			// Parse the key into a CC ID
+			const cc = tryParseCCId(key);
+			if (cc == undefined) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Invalid Command Class "${key}" specified in compat option overrideQueries!`,
+				);
+			}
+
+			let overrideDefinitions: any;
+			if (isObject(value)) {
+				overrideDefinitions = [value];
+			} else if (!isArray(value)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+Property "${key}" in compat option overrideQueries must be a single override object or an array thereof!`,
+				);
+			} else {
+				overrideDefinitions = value;
+			}
+
+			overrides.set(
+				cc,
+				overrideDefinitions.map((info: any) => parseOverride(cc, info)),
+			);
+		}
+
+		this.overrides = overrides;
+	}
+
+	// CC -> endpoint -> queries
+	private readonly overrides: ReadonlyMap<
+		CommandClasses,
+		CompatOverrideQuery[]
+	>;
+
+	public hasOverride(ccId: CommandClasses): boolean {
+		return this.overrides.has(ccId);
+	}
+
+	public matchOverride(
+		cc: CommandClasses,
+		endpointIndex: number,
+		method: string,
+		args: any[],
+	):
+		| Pick<
+				CompatOverrideQuery,
+				"result" | "persistValues" | "extendMetadata"
+		  >
+		| undefined {
+		const queries = this.overrides.get(cc);
+		if (!queries) return undefined;
+		for (const query of queries) {
+			if ((query.endpoint ?? 0) !== endpointIndex) continue;
+			if (query.method !== method) continue;
+			if (query.matchArgs) {
+				if (query.matchArgs.length !== args.length) continue;
+				if (!query.matchArgs.every((arg, i) => arg === args[i]))
+					continue;
+			}
+			return pick(query, ["result", "persistValues", "extendMetadata"]);
+		}
+	}
+}
+
+export interface CompatOverrideQuery {
+	/** Which endpoint this override is for */
+	endpoint?: number;
+	/** For which API method this override is defined */
+	method: string;
+	/**
+	 * An array of method arguments that needs to match for this override to apply.
+	 * If `undefined`, no matching is performed.
+	 */
+	matchArgs?: any[];
+	/** The result to return from the API call */
+	result: any;
+	/**
+	 * An optional dictionary of values that will be persisted in the cache.
+	 * The keys are properties of the `...CCValues` objects that belong to this CC.
+	 */
+	persistValues?: Record<string, any>;
+	/**
+	 * An optional dictionary of value metadata that will be persisted in the cache.
+	 * The keys are properties of the `...CCValues` objects that belong to this CC.
+	 * The given metadata will be merged with statically defined value metadata.
+	 */
+	extendMetadata?: Record<string, any>;
 }

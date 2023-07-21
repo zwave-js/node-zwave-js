@@ -276,7 +276,7 @@ const respondToConfigurationPropertiesGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [
+export const ConfigurationCCBehaviors = [
 	respondToConfigurationGet,
 	respondToConfigurationSet,
 	respondToConfigurationNameGet,

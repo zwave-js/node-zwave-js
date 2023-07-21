@@ -18,6 +18,7 @@ export {
 	getS2ExtensionConstructor,
 } from "./lib/Security2/Extension";
 export * from "./lib/Security2/shared";
+export * from "./lib/SetValueResult";
 export { defaultCCValueOptions } from "./lib/Values";
 export type { CCValueOptions } from "./lib/Values";
 export * from "./lib/_Types";

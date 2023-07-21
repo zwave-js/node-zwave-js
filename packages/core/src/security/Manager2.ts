@@ -86,7 +86,7 @@ export interface MulticastGroup {
 }
 
 // How many sequence numbers are remembered for each node when checking for duplicates
-const SINGLECAST_MAX_SEQ_NUMS = 10;
+const SINGLECAST_MAX_SEQ_NUMS = 1; // more than 1 will confuse the certification test tool :(
 // How long a singlecast nonce used for encryption will be kept around to attempt decryption of in-flight messages
 const SINGLECAST_NONCE_EXPIRY_NS = 500 * 1000 * 1000; // 500 ms in nanoseconds
 
@@ -502,7 +502,8 @@ export class SecurityManager2 {
 
 		// Compute the next MPAN
 		const stateN = mpanState.currentMPAN;
-		const ret = encryptAES128ECB(stateN, keys.keyMPAN);
+		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
+		const ret = encryptAES128ECB(stateN, keys.keyMPAN).slice(0, 13);
 		// Increment the inner state
 		increment(stateN);
 		return ret;

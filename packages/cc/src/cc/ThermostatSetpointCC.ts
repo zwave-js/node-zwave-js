@@ -5,12 +5,13 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
 	encodeFloatWithScale,
 	parseBitMask,
 	parseFloatWithScale,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 	type ValueMetadataNumeric,
@@ -106,7 +107,9 @@ export const ThermostatSetpointCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatSetpointCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ThermostatSetpointCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatSetpointCommand.Get:
 			case ThermostatSetpointCommand.SupportedGet:
@@ -277,7 +280,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	 * during node interview.
 	 */
 	public async getSupportedSetpointTypes(): Promise<
-		readonly ThermostatSetpointType[] | undefined
+		MaybeNotKnown<readonly ThermostatSetpointType[]>
 	> {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
@@ -639,27 +642,41 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	}
 }
 
+export interface ThermostatSetpointCCReportOptions extends CCCommandOptions {
+	type: ThermostatSetpointType;
+	value: number;
+	scale: number;
+}
+
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatSetpointCCReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this._type = this.payload[0] & 0b1111;
-		if (this._type === 0) {
-			// Not supported
-			this._value = 0;
-			this.scale = 0;
-			return;
-		}
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.type = this.payload[0] & 0b1111;
+			if (this.type === 0) {
+				// Not supported
+				this.value = 0;
+				this.scale = 0;
+				return;
+			}
 
-		// parseFloatWithScale does its own validation
-		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
-		this._value = value;
-		this.scale = scale;
+			// parseFloatWithScale does its own validation
+			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			this.value = value;
+			this.scale = scale;
+		} else {
+			this.type = options.type;
+			this.value = options.value;
+			this.scale = options.scale;
+		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
@@ -680,7 +697,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 				unit: scale.unit,
 			});
 		}
-		this.setValue(applHost, setpointValue, this._value);
+		this.setValue(applHost, setpointValue, this.value);
 
 		// Remember the device-preferred setpoint scale so it can be used in SET commands
 		this.setValue(
@@ -691,16 +708,16 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return true;
 	}
 
-	private _type: ThermostatSetpointType;
-	public get type(): ThermostatSetpointType {
-		return this._type;
-	}
+	public type: ThermostatSetpointType;
+	public scale: number;
+	public value: number;
 
-	public readonly scale: number;
-
-	private _value: number;
-	public get value(): number {
-		return this._value;
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.type & 0b1111]),
+			encodeFloatWithScale(this.value, this.scale),
+		]);
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -744,11 +761,8 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.setpointType = this.payload[0] & 0b1111;
 		} else {
 			this.setpointType = options.setpointType;
 		}
@@ -774,25 +788,44 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	}
 }
 
+export interface ThermostatSetpointCCCapabilitiesReportOptions
+	extends CCCommandOptions {
+	type: ThermostatSetpointType;
+	minValue: number;
+	minValueScale: number;
+	maxValue: number;
+	maxValueScale: number;
+}
+
 @CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatSetpointCCCapabilitiesReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this._type = this.payload[0];
-		let bytesRead: number;
-		// parseFloatWithScale does its own validation
-		({
-			value: this._minValue,
-			scale: this._minValueScale,
-			bytesRead,
-		} = parseFloatWithScale(this.payload.slice(1)));
-		({ value: this._maxValue, scale: this._maxValueScale } =
-			parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.type = this.payload[0];
+			let bytesRead: number;
+			// parseFloatWithScale does its own validation
+			({
+				value: this.minValue,
+				scale: this.minValueScale,
+				bytesRead,
+			} = parseFloatWithScale(this.payload.slice(1)));
+			({ value: this.maxValue, scale: this.maxValueScale } =
+				parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+		} else {
+			this.type = options.type;
+			this.minValue = options.minValue;
+			this.minValueScale = options.minValueScale;
+			this.maxValue = options.maxValue;
+			this.maxValueScale = options.maxValueScale;
+		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
@@ -802,39 +835,27 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		const setpointValue = ThermostatSetpointCCValues.setpoint(this.type);
 		this.setMetadata(applHost, setpointValue, {
 			...setpointValue.meta,
-			min: this._minValue,
-			max: this._maxValue,
+			min: this.minValue,
+			max: this.maxValue,
 			unit:
-				getSetpointUnit(applHost.configManager, this._minValueScale) ||
-				getSetpointUnit(applHost.configManager, this._maxValueScale),
+				getSetpointUnit(applHost.configManager, this.minValueScale) ||
+				getSetpointUnit(applHost.configManager, this.maxValueScale),
 		});
 
 		return true;
 	}
 
-	private _type: ThermostatSetpointType;
-	public get type(): ThermostatSetpointType {
-		return this._type;
-	}
+	public type: ThermostatSetpointType;
+	public minValue: number;
+	public maxValue: number;
+	public minValueScale: number;
+	public maxValueScale: number;
 
-	private _minValue: number;
-	public get minValue(): number {
-		return this._minValue;
-	}
-
-	private _maxValue: number;
-	public get maxValue(): number {
-		return this._maxValue;
-	}
-
-	private _minValueScale: number;
-	public get minValueScale(): number {
-		return this._minValueScale;
-	}
-
-	private _maxValueScale: number;
-	public get maxValueScale(): number {
-		return this._maxValueScale;
+	public serialize(): Buffer {
+		const min = encodeFloatWithScale(this.minValue, this.minValueScale);
+		const max = encodeFloatWithScale(this.maxValue, this.maxValueScale);
+		this.payload = Buffer.concat([Buffer.from([this.type]), min, max]);
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -851,7 +872,7 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
-					this._type,
+					this.type,
 				),
 				"min value": `${this.minValue} ${minValueScale.unit}`,
 				"max value": `${this.maxValue} ${maxValueScale.unit}`,
@@ -875,11 +896,8 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.setpointType = this.payload[0] & 0b1111;
 		} else {
 			this.setpointType = options.setpointType;
 		}
@@ -905,41 +923,73 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	}
 }
 
+export interface ThermostatSetpointCCSupportedReportOptions
+	extends CCCommandOptions {
+	supportedSetpointTypes: ThermostatSetpointType[];
+}
+
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatSetpointCCSupportedReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		const bitMask = this.payload;
-		const supported = parseBitMask(bitMask, ThermostatSetpointType["N/A"]);
-		if (this.version >= 3) {
-			// Interpretation A
-			this.supportedSetpointTypes = supported.map(
-				(i) => thermostatSetpointTypeMap[i],
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			const bitMask = this.payload;
+			const supported = parseBitMask(
+				bitMask,
+				ThermostatSetpointType["N/A"],
 			);
+			if (this.version >= 3) {
+				// Interpretation A
+				this.supportedSetpointTypes = supported.map(
+					(i) => thermostatSetpointTypeMap[i],
+				);
+			} else {
+				// It is unknown which interpretation the device complies to.
+				// This must be tested during the interview
+				this.supportedSetpointTypes = supported;
+			}
+			// TODO:
+			// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
+			// Devices with V3+ must comply with Interpretation A
+			// It is RECOMMENDED that a controlling node determines supported Setpoint Types
+			// by sending one Thermostat Setpoint Get Command at a time while incrementing
+			// the requested Setpoint Type. If the same Setpoint Type is advertised in the
+			// resulting Thermostat Setpoint Report Command, the controlling node MAY conclude
+			// that the actual Setpoint Type is supported. If the Setpoint Type 0x00 (type N/A)
+			// is advertised in the resulting Thermostat Setpoint Report Command, the controlling
+			// node MUST conclude that the actual Setpoint Type is not supported.
 		} else {
-			// It is unknown which interpretation the device complies to.
-			// This must be tested during the interview
-			this.supportedSetpointTypes = supported;
+			if (options.supportedSetpointTypes.length === 0) {
+				throw new ZWaveError(
+					`At least one setpoint type must be supported`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.supportedSetpointTypes = options.supportedSetpointTypes;
 		}
-		// TODO:
-		// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
-		// Devices with V3+ must comply with Interpretation A
-		// It is RECOMMENDED that a controlling node determines supported Setpoint Types
-		// by sending one Thermostat Setpoint Get Command at a time while incrementing
-		// the requested Setpoint Type. If the same Setpoint Type is advertised in the
-		// resulting Thermostat Setpoint Report Command, the controlling node MAY conclude
-		// that the actual Setpoint Type is supported. If the Setpoint Type 0x00 (type N/A)
-		// is advertised in the resulting Thermostat Setpoint Report Command, the controlling
-		// node MUST conclude that the actual Setpoint Type is not supported.
 	}
 
 	@ccValue(ThermostatSetpointCCValues.supportedSetpointTypes)
 	public readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
+
+	public serialize(): Buffer {
+		this.payload = encodeBitMask(
+			// Encode as interpretation A
+			this.supportedSetpointTypes
+				.map((t) => thermostatSetpointTypeMap.indexOf(t))
+				.filter((t) => t !== -1),
+			undefined,
+			ThermostatSetpointType["N/A"],
+		);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

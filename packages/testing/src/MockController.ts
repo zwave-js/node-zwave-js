@@ -55,12 +55,8 @@ export class MockController {
 			getNextSupervisionSessionId: createWrappingCounter(
 				MAX_SUPERVISION_SESSION_ID,
 			),
-			getSafeCCVersionForNode: () => 100,
-			getSupportedCCVersionForEndpoint: (
-				cc,
-				nodeId,
-				endpointIndex = 0,
-			) => {
+			getSafeCCVersion: () => 100,
+			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
 					return 0;
 				}
@@ -371,7 +367,9 @@ export class MockController {
 			ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
 		}
 		process.nextTick(() => {
-			void node.onControllerFrame(frame);
+			void node.onControllerFrame(frame).catch((e) => {
+				console.error(e);
+			});
 		});
 		if (ret) return await ret;
 	}

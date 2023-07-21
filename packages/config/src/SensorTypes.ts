@@ -28,9 +28,7 @@ export class SensorType {
 			definition.scales.startsWith(namedScalesMarker)
 		) {
 			// This is referencing a named scale
-			const scaleName = definition.scales.substr(
-				namedScalesMarker.length,
-			);
+			const scaleName = definition.scales.slice(namedScalesMarker.length);
 			const scales = manager.lookupNamedScaleGroup(scaleName);
 			if (!scales) {
 				throw new ZWaveError(

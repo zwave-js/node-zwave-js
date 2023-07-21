@@ -141,7 +141,7 @@ const respondToSoundSwitchToneInfoGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [
+export const SoundSwitchCCBehaviors = [
 	respondToSoundSwitchConfigurationGet,
 	respondToSoundSwitchConfigurationSet,
 	respondToSoundSwitchToneNumberGet,

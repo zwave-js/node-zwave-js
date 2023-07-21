@@ -9,13 +9,13 @@ import {
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
 	type ValueDB,
 	type ValueID,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
@@ -165,7 +165,7 @@ export const ColorSwitchCCValues = Object.freeze({
 
 @API(CommandClasses["Color Switch"])
 export class ColorSwitchCCAPI extends CCAPI {
-	public supportsCommand(cmd: ColorSwitchCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ColorSwitchCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ColorSwitchCommand.SupportedGet:
 			case ColorSwitchCommand.Get:
@@ -179,7 +179,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 	}
 
 	public async getSupported(): Promise<
-		readonly ColorComponent[] | undefined
+		MaybeNotKnown<readonly ColorComponent[]>
 	> {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,

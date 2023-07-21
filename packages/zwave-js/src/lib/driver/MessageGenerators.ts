@@ -33,6 +33,7 @@ import {
 	MessagePriority,
 	NODE_ID_BROADCAST,
 	SPANState,
+	SecurityClass,
 	SupervisionStatus,
 	TransmitOptions,
 	ZWaveError,
@@ -54,7 +55,6 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 import type { Driver } from "./Driver";
-import { sendDataErrorToZWaveError } from "./StateMachineShared";
 import type { MessageGenerator } from "./Transaction";
 
 export type MessageGeneratorImplementation = (
@@ -569,9 +569,17 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		const spanState = secMan.getSPANState(nodeId);
 		let additionalTimeoutMs: number | undefined;
 
+		// We need a new nonce when there is no shared SPAN state, or the SPAN state is for a lower security class
+		// than the command we want to send
+		const expectedSecurityClass =
+			msg.command.securityClass ?? driver.getHighestSecurityClass(nodeId);
+
 		if (
 			spanState.type === SPANState.None ||
-			spanState.type === SPANState.LocalEI
+			spanState.type === SPANState.LocalEI ||
+			(spanState.type === SPANState.SPAN &&
+				spanState.securityClass !== SecurityClass.Temporary &&
+				spanState.securityClass !== expectedSecurityClass)
 		) {
 			// Request a new nonce
 
@@ -815,7 +823,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 							// Only try sending a nonce once
 							maxSendAttempts: 1,
 							// Nonce requests must be handled immediately
-							priority: MessagePriority.Nonce,
+							priority: MessagePriority.Immediate,
 							// We don't want failures causing us to treat the node as asleep or dead
 							changeNodeStatusOnMissingACK: false,
 						});
@@ -921,7 +929,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 							break;
 						}
 
-						// Pass the generated message to the transaction machine and remember the result for the next iteration
+						// Pass the generated message to the driver and remember the result for the next iteration
 						generator.current = value;
 						sendResult = yield generator.current;
 					} catch (e) {
@@ -930,24 +938,9 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 							resultPromise.reject(e);
 						} else if (isTransmitReport(e) && !e.isOK()) {
 							// The generator was prematurely ended by throwing a NOK transmit report.
-							// If this cannot be handled (e.g. by moving the messages to the wakeup queue), we need
-							// to treat this as an error
-							if (
-								driver.handleMissingNodeACK(
-									generator.parent as any,
-								)
-							) {
-								resetGenerator();
-								return;
-							} else {
-								resultPromise.reject(
-									sendDataErrorToZWaveError(
-										"callback NOK",
-										generator.parent,
-										e,
-									),
-								);
-							}
+							// The driver may want to retry it, so reset the generator
+							resetGenerator();
+							return;
 						} else {
 							// The generator was prematurely ended by throwing a Message
 							resultPromise.resolve(e as TResponse);

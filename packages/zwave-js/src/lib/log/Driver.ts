@@ -18,8 +18,8 @@ import {
 import type { Message, ResponseRole } from "@zwave-js/serial";
 import { FunctionType, MessageType } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { SortedList } from "alcalzone-shared/sorted-list";
 import type { Driver } from "../driver/Driver";
+import { type TransactionQueue } from "../driver/Queue";
 import type { Transaction } from "../driver/Transaction";
 import { NodeStatus } from "../node/_Types";
 
@@ -195,41 +195,43 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 	}
 
 	/** Logs what's currently in the driver's send queue */
-	public sendQueue(queue: SortedList<Transaction>): void {
+	public sendQueue(...queues: TransactionQueue[]): void {
 		if (!this.isSendQueueLogVisible()) return;
 
 		let message = "Send queue:";
-		if (queue.length > 0) {
-			for (const trns of queue) {
-				// TODO: This formatting should be shared with the other logging methods
-				const node = trns.message.getNodeUnsafe(this.driver);
-				const prefix =
-					trns.message.type === MessageType.Request
-						? "[REQ]"
-						: "[RES]";
-				const postfix =
-					node != undefined
-						? ` [Node ${node.id}, ${getEnumMemberName(
-								NodeStatus,
-								node.status,
-						  )}]`
+		let length = 0;
+		for (const queue of queues) {
+			length += queue.length;
+			if (queue.length > 0) {
+				for (const trns of queue.transactions) {
+					// TODO: This formatting should be shared with the other logging methods
+					const node = trns.message.getNodeUnsafe(this.driver);
+					const prefix =
+						trns.message.type === MessageType.Request
+							? "[REQ]"
+							: "[RES]";
+					const postfix =
+						node != undefined
+							? ` [Node ${node.id}, ${getEnumMemberName(
+									NodeStatus,
+									node.status,
+							  )}]`
+							: "";
+					const command = isCommandClassContainer(trns.message)
+						? ` (${trns.message.command.constructor.name})`
 						: "";
-				const command = isCommandClassContainer(trns.message)
-					? ` (${trns.message.command.constructor.name})`
-					: "";
-				message += `\n· ${prefix} ${
-					FunctionType[trns.message.functionType]
-				}${command}${postfix}`;
+					message += `\n· ${prefix} ${
+						FunctionType[trns.message.functionType]
+					}${command}${postfix}`;
+				}
+			} else {
+				message += " (empty)";
 			}
-		} else {
-			message += " (empty)";
 		}
 		this.logger.log({
 			level: SENDQUEUE_LOGLEVEL,
 			message,
-			secondaryTags: `(${queue.length} message${
-				queue.length === 1 ? "" : "s"
-			})`,
+			secondaryTags: `(${length} message${length === 1 ? "" : "s"})`,
 			direction: getDirectionPrefix("none"),
 			context: { source: "driver", direction: "none" },
 		});

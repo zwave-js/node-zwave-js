@@ -3,25 +3,23 @@ import {
 	type ConfigManager,
 	type MeterScale,
 } from "@zwave-js/config";
-import { timespan } from "@zwave-js/core";
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	SinglecastCC,
-	SupervisionResult,
-} from "@zwave-js/core/safe";
+import { timespan, type MaybeUnknown } from "@zwave-js/core";
 import {
 	CommandClasses,
 	MessagePriority,
+	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getMinIntegerSize,
 	parseBitMask,
 	parseFloatWithScale,
-	unknownNumber,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
@@ -168,7 +166,7 @@ function getValueLabel(
 
 @API(CommandClasses.Meter)
 export class MeterCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: MeterCommand): Maybe<boolean> {
+	public supportsCommand(cmd: MeterCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MeterCommand.Get:
 				return true; // This is mandatory
@@ -567,7 +565,7 @@ export class MeterCCReport extends MeterCC {
 			this._deltaTime = this.payload.readUInt16BE(offset);
 			offset += 2;
 			if (this._deltaTime === 0xffff) {
-				this._deltaTime = unknownNumber;
+				this._deltaTime = UNKNOWN_STATE;
 			}
 
 			if (
@@ -695,8 +693,8 @@ export class MeterCCReport extends MeterCC {
 		return this._value;
 	}
 
-	private _previousValue: number | undefined;
-	public get previousValue(): number | undefined {
+	private _previousValue: MaybeNotKnown<number>;
+	public get previousValue(): MaybeNotKnown<number> {
 		return this._previousValue;
 	}
 
@@ -705,8 +703,8 @@ export class MeterCCReport extends MeterCC {
 		return this._rateType;
 	}
 
-	private _deltaTime: Maybe<number>;
-	public get deltaTime(): Maybe<number> {
+	private _deltaTime: MaybeUnknown<number>;
+	public get deltaTime(): MaybeUnknown<number> {
 		return this._deltaTime;
 	}
 
@@ -723,7 +721,7 @@ export class MeterCCReport extends MeterCC {
 			"rate type": getEnumMemberName(RateType, this._rateType),
 			value: this.value,
 		};
-		if (this._deltaTime !== "unknown") {
+		if (this._deltaTime !== UNKNOWN_STATE) {
 			message["time delta"] = `${this.deltaTime} seconds`;
 		}
 		if (this._previousValue != undefined) {

@@ -223,3 +223,8 @@ export async function discreteLinearSearch(
 export function sum(values: number[]): number {
 	return values.reduce((acc, cur) => acc + cur, 0);
 }
+
+/** Does nothing. Can be used for empty `.catch(...)` calls. */
+export function noop(): void {
+	// intentionally empty
+}

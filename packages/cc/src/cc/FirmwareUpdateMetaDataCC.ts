@@ -4,9 +4,8 @@ import {
 	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
-	unknownBoolean,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core/safe";
@@ -65,7 +64,9 @@ export const FirmwareUpdateMetaDataCCValues = Object.freeze({
 
 @API(CommandClasses["Firmware Update Meta Data"])
 export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: FirmwareUpdateMetaDataCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: FirmwareUpdateMetaDataCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case FirmwareUpdateMetaDataCommand.MetaDataGet:
 			case FirmwareUpdateMetaDataCommand.RequestGet:
@@ -93,7 +94,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	/**
 	 * Requests information about the current firmware on the device
 	 */
-	public async getMetaData(): Promise<FirmwareUpdateMetaData | undefined> {
+	public async getMetaData(): Promise<MaybeNotKnown<FirmwareUpdateMetaData>> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.MetaDataGet,
@@ -192,7 +193,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async activateFirmware(
 		options: FirmwareUpdateMetaDataCCActivationSetOptions,
-	): Promise<FirmwareUpdateActivationStatus | undefined> {
+	): Promise<MaybeNotKnown<FirmwareUpdateActivationStatus>> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.ActivationSet,
@@ -333,27 +334,39 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
 	@ccValue(FirmwareUpdateMetaDataCCValues.continuesToFunction)
-	public readonly continuesToFunction: Maybe<boolean> = unknownBoolean;
+	public readonly continuesToFunction: MaybeNotKnown<boolean>;
 
 	@ccValue(FirmwareUpdateMetaDataCCValues.supportsActivation)
-	public readonly supportsActivation: Maybe<boolean> = unknownBoolean;
+	public readonly supportsActivation: MaybeNotKnown<boolean>;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"manufacturer id": this.manufacturerId,
+			"firmware id": this.firmwareId,
+			checksum: this.checksum,
+			"firmware upgradable": this.firmwareUpgradable,
+		};
+		if (this.maxFragmentSize != undefined) {
+			message["max fragment size"] = this.maxFragmentSize;
+		}
+		if (this.additionalFirmwareIDs.length) {
+			message["additional firmware IDs"] = JSON.stringify(
+				this.additionalFirmwareIDs,
+			);
+		}
+		if (this.hardwareVersion != undefined) {
+			message["hardware version"] = this.hardwareVersion;
+		}
+		if (this.continuesToFunction != undefined) {
+			message["continues to function"] = this.continuesToFunction;
+		}
+		if (this.supportsActivation != undefined) {
+			message["supports activation"] = this.supportsActivation;
+		}
+
 		return {
 			...super.toLogEntry(applHost),
-			message: {
-				"manufacturer id": this.manufacturerId,
-				"firmware id": this.firmwareId,
-				checksum: this.checksum,
-				"firmware upgradable": this.firmwareUpgradable,
-				"max fragment size": this.maxFragmentSize,
-				"additional firmware IDs": JSON.stringify(
-					this.additionalFirmwareIDs,
-				),
-				"hardware version": this.hardwareVersion,
-				"continues to function": this.continuesToFunction,
-				"supports activation": this.supportsActivation,
-			},
+			message,
 		};
 	}
 }

@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
 	actuatorCCs,
@@ -21,10 +22,11 @@ import {
 	MultiChannelAssociationCCValues,
 } from "../cc/MultiChannelAssociationCC";
 import { CCAPI } from "./API";
-import type {
-	AssociationAddress,
-	AssociationGroup,
-	EndpointAddress,
+import {
+	AssociationGroupInfoProfile,
+	type AssociationAddress,
+	type AssociationGroup,
+	type EndpointAddress,
 } from "./_Types";
 
 export function getAssociations(
@@ -128,6 +130,9 @@ export function isAssociationAllowed(
 		);
 	}
 
+	// The following checks don't apply to Lifeline associations
+	if (destination.nodeId === applHost.ownNodeId) return true;
+
 	// For Association version 1 and version 2 / MCA version 1-3:
 	// A controlling node MUST NOT associate Node A to a Node B destination
 	// if Node A and Node B’s highest Security Class are not identical.
@@ -162,6 +167,9 @@ export function isAssociationAllowed(
 		) {
 			return false;
 		} else if (
+			// Commands to insecure nodes are allowed
+			targetSecurityClass !== SecurityClass.None &&
+			// Otherwise, the sender must know the target's highest key
 			!securityClassMustMatch &&
 			!sourceNode.hasSecurityClass(targetSecurityClass)
 		) {
@@ -178,9 +186,6 @@ export function isAssociationAllowed(
 	if (!endpoint.supportsCC(CommandClasses["Association Group Information"])) {
 		return true;
 	}
-
-	// The following checks don't apply to Lifeline associations
-	if (destination.nodeId === applHost.ownNodeId) return true;
 
 	const groupCommandList = AssociationGroupInfoCC.getIssuedCommandsCached(
 		applHost,
@@ -586,6 +591,30 @@ export async function configureLifelineAssociations(
 	}
 
 	const lifelineGroups = getLifelineGroupIds(applHost, node);
+	if (lifelineGroups.length === 0) {
+		// We can look for the General Lifeline AGI profile as a last resort
+		if (
+			endpoint.supportsCC(CommandClasses["Association Group Information"])
+		) {
+			const agiAPI = CCAPI.create(
+				CommandClasses["Association Group Information"],
+				applHost,
+				endpoint,
+			);
+
+			// The lifeline MUST be group 1
+			const lifeline = await agiAPI
+				.getGroupInfo(1, true)
+				.catch(() => undefined);
+			if (
+				lifeline?.profile ===
+				AssociationGroupInfoProfile["General: Lifeline"]
+			) {
+				lifelineGroups.push(1);
+			}
+		}
+	}
+
 	if (lifelineGroups.length === 0) {
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: endpoint.index,

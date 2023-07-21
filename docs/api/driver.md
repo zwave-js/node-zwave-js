@@ -8,7 +8,7 @@ The driver is the core of this library. It controls the serial interface, handle
 new (port: string, options?: ZWaveOptions) => Driver
 ```
 
-The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Connect to a hosted serial port over TCP](usage/tcp-connection.md).
+The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Remote serial port over TCP](usage/tcp-connection.md).
 
 For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed description.
 
@@ -88,10 +88,10 @@ disableStatistics(): void
 
 Disable sending usage statistics.
 
-### `getSupportedCCVersionForEndpoint`
+### `getSupportedCCVersion`
 
 ```ts
-getSupportedCCVersionForEndpoint(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
+getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
 ```
 
 Nodes in a Z-Wave network are very likely support different versions of a Command Class (CC) and frequently support older versions than the driver software.  
@@ -110,13 +110,13 @@ This method
 > [!WARNING]
 > This only provides reliable information **after** the node/endpoint interview was completed.
 
-### `getSafeCCVersionForNode`
+### `getSafeCCVersion`
 
 ```ts
-getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number
+getSafeCCVersion(nodeId: number, cc: CommandClasses): number
 ```
 
-Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersionForEndpoint`, but behaves differently. It
+Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersion`, but behaves differently. It
 
 -   returns `1` if the node claims not to support the CC or no information is known
 -   **throws (!)** if the requested CC is not implemented in this library
@@ -307,7 +307,6 @@ Updates a subset of the driver options without having to restart the driver. The
 -   `interview`
 -   `logConfig`
 -   `preferences`
--   `preserveUnknownValues`
 -   `userAgent` (behaves like `updateUserAgent`)
 
 ### `checkForConfigUpdates`
@@ -400,6 +399,8 @@ The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/a
 | `"all nodes ready"`  | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                                                                                                                                                                                                                                                                                                         |
 | `"bootloader ready"` | Is emitted when the controller is in recovery mode (e.g. after a failed firmware upgrade) and the bootloader has been entered. This behavior is opt-in using the `allowBootloaderOnly` flag of the [`ZWaveOptions`](#ZWaveOptions). If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image. The `"driver ready"` event will not be emitted and commands attempting to talk to the serial API will fail in this mode. |
 
+In addition, the driver forwards events for all nodes, so they don't have to be registered on each node individually. See [`ZWaveNode` events](api/node.md#zwavenode-events) for details.
+
 ## Interfaces
 
 ### `FileSystem`
@@ -474,7 +475,7 @@ interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a queued message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
 	/** If a Wake Up On Demand should be requested for the target node. */
 	requestWakeUpOnDemand?: boolean;
@@ -492,18 +493,15 @@ The message priority must one of the following enum values, which are sorted fro
 
 ```ts
 enum MessagePriority {
-	// Outgoing nonces have the highest priority because they are part of other transactions
-	// which may already be in progress.
-	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
-	Nonce = 0,
+	// Some messages like nonces, responses to Supervision and Transport Service
+	// need to be handled before all others. We use this priority to decide which
+	// message goes onto the immediate queue.
+	Immediate = 0,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
 	MultistepController,
-	// Supervision responses must be prioritized over other messages because the nodes requesting them
-	// will get impatient otherwise.
-	Supervision,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
@@ -771,14 +769,6 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
 	 */
 	inclusionUserCallbacks?: InclusionUserCallbacks;
-
-	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
 
 	/**
 	 * Some SET-type commands optimistically update the current value to match the target value

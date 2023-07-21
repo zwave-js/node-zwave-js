@@ -7,13 +7,13 @@
 ### `get`
 
 ```ts
-async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: number; previousValue: number | undefined; deltaTime: Maybe<number>; type: number; scale: MeterScale; } | undefined>;
+async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: MeterScale; } | undefined>;
 ```
 
 ### `getAll`
 
 ```ts
-async getAll(): Promise<{ rateType: RateType; value: number; previousValue: number | undefined; deltaTime: Maybe<number>; type: number; scale: MeterScale; }[]>;
+async getAll(): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: MeterScale; }[]>;
 ```
 
 ### `getSupported`

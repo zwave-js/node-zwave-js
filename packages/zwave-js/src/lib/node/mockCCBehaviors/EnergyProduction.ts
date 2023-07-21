@@ -78,4 +78,4 @@ const respondToEnergyProductionGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [respondToEnergyProductionGet];
+export const EnergyProductionCCBehaviors = [respondToEnergyProductionGet];

@@ -7,7 +7,7 @@
 ### `getName`
 
 ```ts
-async getName(): Promise<string | undefined>;
+async getName(): Promise<MaybeNotKnown<string>>;
 ```
 
 ### `setName`
@@ -19,7 +19,7 @@ async setName(name: string): Promise<SupervisionResult | undefined>;
 ### `getLocation`
 
 ```ts
-async getLocation(): Promise<string | undefined>;
+async getLocation(): Promise<MaybeNotKnown<string>>;
 ```
 
 ### `setLocation`

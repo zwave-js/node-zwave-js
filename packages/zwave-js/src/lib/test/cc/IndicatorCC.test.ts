@@ -111,7 +111,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 		data: ccData,
 	});
 
-	t.is(cc.value, 55);
+	t.is(cc.indicator0Value, 55);
 	t.is(cc.values, undefined);
 });
 
@@ -136,7 +136,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	// Boolean indicators are only interpreted during persistValues
 	cc.persistValues(host);
 
-	t.is(cc.value, undefined);
+	t.is(cc.indicator0Value, undefined);
 	t.deepEqual(cc.values, [
 		{
 			indicatorId: 1,

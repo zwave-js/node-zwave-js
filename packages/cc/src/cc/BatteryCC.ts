@@ -11,7 +11,7 @@ import {
 	enumValuesToMetadataStates,
 	parseFloatWithScale,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick, type AllOrNone } from "@zwave-js/shared/safe";
@@ -179,7 +179,7 @@ export const BatteryCCValues = Object.freeze({
 
 @API(CommandClasses.Battery)
 export class BatteryCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: BatteryCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BatteryCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BatteryCommand.Get:
 				return true; // This is mandatory
@@ -450,12 +450,11 @@ export class BatteryCCReport extends BatteryCC {
 			// Some devices send Notification CC Reports with battery information,
 			// or this information is mapped from legacy V1 alarm values.
 			// We may need to idle the corresponding values when the battery is full
-			const notificationCCVersion =
-				applHost.getSupportedCCVersionForEndpoint(
-					CommandClasses.Notification,
-					this.nodeId as number,
-					this.endpointIndex,
-				);
+			const notificationCCVersion = applHost.getSupportedCCVersion(
+				CommandClasses.Notification,
+				this.nodeId as number,
+				this.endpointIndex,
+			);
 			if (
 				// supported
 				notificationCCVersion > 0 &&

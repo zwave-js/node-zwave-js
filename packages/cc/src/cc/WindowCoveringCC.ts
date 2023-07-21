@@ -8,11 +8,11 @@ import {
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
-	type Maybe,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
 } from "@zwave-js/core";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -235,7 +235,7 @@ export const WindowCoveringCCValues = Object.freeze({
 
 @API(CommandClasses["Window Covering"])
 export class WindowCoveringCCAPI extends CCAPI {
-	public supportsCommand(cmd: WindowCoveringCommand): Maybe<boolean> {
+	public supportsCommand(cmd: WindowCoveringCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case WindowCoveringCommand.Get:
 			case WindowCoveringCommand.Set:
@@ -434,7 +434,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 	}
 
 	public async getSupported(): Promise<
-		readonly WindowCoveringParameter[] | undefined
+		MaybeNotKnown<readonly WindowCoveringParameter[]>
 	> {
 		this.assertSupportsCommand(
 			WindowCoveringCommand,

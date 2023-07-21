@@ -27,7 +27,7 @@ module.exports = {
 		// Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
 		"plugin:prettier/recommended",
 	],
-	plugins: [],
+	plugins: ["deprecation"],
 	reportUnusedDisableDirectives: true,
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -122,6 +122,7 @@ module.exports = {
 			},
 		],
 		"quote-props": ["error", "as-needed"],
+		"deprecation/deprecation": "error",
 	},
 	overrides: [
 		{

@@ -6,8 +6,9 @@ import {
 	ZWaveErrorCodes,
 	getCCName,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
+	type MessageRecord,
 	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -78,7 +79,7 @@ export const SceneActuatorConfigurationCCValues = Object.freeze({
 export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: SceneActuatorConfigurationCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SceneActuatorConfigurationCommand.Get:
 				return this.isSinglecast();
@@ -213,11 +214,12 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	}
 
 	public async getActive(): Promise<
-		| Pick<
+		MaybeNotKnown<
+			Pick<
 				SceneActuatorConfigurationCCReport,
 				"sceneId" | "level" | "dimmingDuration"
-		  >
-		| undefined
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			SceneActuatorConfigurationCommand,
@@ -244,8 +246,12 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	public async get(
 		sceneId: number,
 	): Promise<
-		| Pick<SceneActuatorConfigurationCCReport, "level" | "dimmingDuration">
-		| undefined
+		MaybeNotKnown<
+			Pick<
+				SceneActuatorConfigurationCCReport,
+				"level" | "dimmingDuration"
+			>
+		>
 	> {
 		this.assertSupportsCommand(
 			SceneActuatorConfigurationCommand,
@@ -376,13 +382,17 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			sceneId: this.sceneId,
+			dimmingDuration: this.dimmingDuration.toString(),
+		};
+		if (this.level != undefined) {
+			message.level = this.level;
+		}
+
 		return {
 			...super.toLogEntry(applHost),
-			message: {
-				sceneId: this.sceneId,
-				level: this.level,
-				dimmingDuration: this.dimmingDuration?.toString(),
-			},
+			message,
 		};
 	}
 }
@@ -436,13 +446,19 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			sceneId: this.sceneId,
+		};
+		if (this.dimmingDuration != undefined) {
+			message.dimmingDuration = this.dimmingDuration.toString();
+		}
+		if (this.level != undefined) {
+			message.level = this.level;
+		}
+
 		return {
 			...super.toLogEntry(applHost),
-			message: {
-				sceneId: this.sceneId,
-				level: this.level,
-				dimmingDuration: this.dimmingDuration?.toString(),
-			},
+			message,
 		};
 	}
 }

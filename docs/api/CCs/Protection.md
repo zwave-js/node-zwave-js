@@ -28,7 +28,7 @@ async getSupported(): Promise<Pick<ProtectionCCSupportedReport, "supportsExclusi
 ### `getExclusiveControl`
 
 ```ts
-async getExclusiveControl(): Promise<number | undefined>;
+async getExclusiveControl(): Promise<MaybeNotKnown<number>>;
 ```
 
 ### `setExclusiveControl`
@@ -42,7 +42,7 @@ async setExclusiveControl(
 ### `getTimeout`
 
 ```ts
-async getTimeout(): Promise<Timeout | undefined>;
+async getTimeout(): Promise<MaybeNotKnown<Timeout>>;
 ```
 
 ### `setTimeout`

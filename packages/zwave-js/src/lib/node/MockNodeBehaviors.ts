@@ -25,11 +25,19 @@ import {
 	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
-import { behaviors as ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
-import { behaviors as EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
-import { behaviors as NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
-import { behaviors as SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
-import { behaviors as WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
+
+import { CommandClasses } from "@zwave-js/core";
+import { BasicCCBehaviors } from "./mockCCBehaviors/Basic";
+import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
+import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
+import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
+import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
+import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
+import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
+import { ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
+import { ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint";
+import { UserCodeCCBehaviors } from "./mockCCBehaviors/UserCode";
+import { WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
@@ -73,6 +81,14 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 					version = info.version;
 					break;
 				}
+			}
+
+			// Basic CC is always supported implicitly
+			if (
+				version === 0 &&
+				frame.payload.requestedCC === CommandClasses.Basic
+			) {
+				version = 1;
 			}
 
 			const cc = new VersionCCCommandClassReport(self.host, {
@@ -275,10 +291,16 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToS0ZWavePlusCCGet,
 		respondToS2ZWavePlusCCGet,
 
+		...BasicCCBehaviors,
 		...ConfigurationCCBehaviors,
-		...NotificationCCBehaviors,
-		...SoundSwitchCCBehaviors,
-		...WindowCoveringCCBehaviors,
 		...EnergyProductionCCBehaviors,
+		...ManufacturerSpecificCCBehaviors,
+		...NotificationCCBehaviors,
+		...ScheduleEntryLockCCBehaviors,
+		...SoundSwitchCCBehaviors,
+		...ThermostatModeCCBehaviors,
+		...ThermostatSetpointCCBehaviors,
+		...UserCodeCCBehaviors,
+		...WindowCoveringCCBehaviors,
 	];
 }

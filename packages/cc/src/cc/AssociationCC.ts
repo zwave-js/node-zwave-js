@@ -2,7 +2,7 @@ import type { AssociationConfig } from "@zwave-js/config";
 import type {
 	IZWaveEndpoint,
 	IZWaveNode,
-	Maybe,
+	MaybeNotKnown,
 	MessageRecord,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -118,12 +118,14 @@ export function getLifelineGroupIds(
 
 @API(CommandClasses.Association)
 export class AssociationCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: AssociationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: AssociationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case AssociationCommand.Get:
 			case AssociationCommand.Set:
+			case AssociationCommand.Report:
 			case AssociationCommand.Remove:
 			case AssociationCommand.SupportedGroupingsGet:
+			case AssociationCommand.SupportedGroupingsReport:
 				return true; // This is mandatory
 			// Not implemented:
 			// case AssociationCommand.SpecificGroupGet:
@@ -136,7 +138,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	 * Returns the number of association groups a node supports.
 	 * Association groups are consecutive, starting at 1.
 	 */
-	public async getGroupCount(): Promise<number | undefined> {
+	public async getGroupCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.SupportedGroupingsGet,
@@ -152,6 +154,20 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 				this.commandOptions,
 			);
 		if (response) return response.groupCount;
+	}
+
+	public async reportGroupCount(groupCount: number): Promise<void> {
+		this.assertSupportsCommand(
+			AssociationCommand,
+			AssociationCommand.SupportedGroupingsReport,
+		);
+
+		const cc = new AssociationCCSupportedGroupingsReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			groupCount,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -177,6 +193,22 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 				nodeIds: response.nodeIds,
 			};
 		}
+	}
+
+	public async sendReport(
+		options: AssociationCCReportSpecificOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			AssociationCommand,
+			AssociationCommand.Report,
+		);
+
+		const cc = new AssociationCCReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -453,11 +485,9 @@ export class AssociationCCSet extends AssociationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.groupId = this.payload[0];
+			this.nodeIds = [...this.payload.slice(1)];
 		} else {
 			if (options.groupId < 1) {
 				throw new ZWaveError(
@@ -516,11 +546,11 @@ export class AssociationCCRemove extends AssociationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			if (this.payload[0] !== 0) {
+				this.groupId = this.payload[0];
+			}
+			this.nodeIds = [...this.payload.slice(1)];
 		} else {
 			// Validate options
 			if (!options.groupId) {
@@ -572,56 +602,60 @@ export class AssociationCCRemove extends AssociationCC {
 	}
 }
 
+export interface AssociationCCReportSpecificOptions {
+	groupId: number;
+	maxNodes: number;
+	nodeIds: number[];
+	reportsToFollow: number;
+}
+
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (AssociationCCReportSpecificOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 3);
-		this._groupId = this.payload[0];
-		this._maxNodes = this.payload[1];
-		this._reportsToFollow = this.payload[2];
-		this._nodeIds = [...this.payload.slice(3)];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 3);
+			this.groupId = this.payload[0];
+			this.maxNodes = this.payload[1];
+			this.reportsToFollow = this.payload[2];
+			this.nodeIds = [...this.payload.slice(3)];
+		} else {
+			this.groupId = options.groupId;
+			this.maxNodes = options.maxNodes;
+			this.nodeIds = options.nodeIds;
+			this.reportsToFollow = options.reportsToFollow;
+		}
 	}
 
-	private _groupId: number;
-	public get groupId(): number {
-		return this._groupId;
-	}
+	public groupId: number;
 
-	private _maxNodes: number;
 	@ccValue(
 		AssociationCCValues.maxNodes,
 		(self: AssociationCCReport) => [self.groupId] as const,
 	)
-	public get maxNodes(): number {
-		return this._maxNodes;
-	}
+	public maxNodes: number;
 
-	private _nodeIds: number[];
 	@ccValue(
 		AssociationCCValues.nodeIds,
 		(self: AssociationCCReport) => [self.groupId] as const,
 	)
-	public get nodeIds(): readonly number[] {
-		return this._nodeIds;
-	}
+	public nodeIds: number[];
 
-	private _reportsToFollow: number;
-	public get reportsToFollow(): number {
-		return this._reportsToFollow;
-	}
+	public reportsToFollow: number;
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		// Distinguish sessions by the association group ID
-		return { groupId: this._groupId };
+		return { groupId: this.groupId };
 	}
 
 	public expectMoreMessages(): boolean {
-		return this._reportsToFollow > 0;
+		return this.reportsToFollow > 0;
 	}
 
 	public mergePartialCCs(
@@ -629,9 +663,19 @@ export class AssociationCCReport extends AssociationCC {
 		partials: AssociationCCReport[],
 	): void {
 		// Concat the list of nodes
-		this._nodeIds = [...partials, this]
-			.map((report) => report._nodeIds)
+		this.nodeIds = [...partials, this]
+			.map((report) => report.nodeIds)
 			.reduce((prev, cur) => prev.concat(...cur), []);
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.groupId,
+			this.maxNodes,
+			this.reportsToFollow,
+			...this.nodeIds,
+		]);
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -660,11 +704,8 @@ export class AssociationCCGet extends AssociationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.groupId = this.payload[0];
 		} else {
 			if (options.groupId < 1) {
 				throw new ZWaveError(
@@ -691,22 +732,35 @@ export class AssociationCCGet extends AssociationCC {
 	}
 }
 
+export interface AssociationCCSupportedGroupingsReportOptions
+	extends CCCommandOptions {
+	groupCount: number;
+}
+
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| AssociationCCSupportedGroupingsReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this._groupCount = this.payload[0];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.groupCount = this.payload[0];
+		} else {
+			this.groupCount = options.groupCount;
+		}
 	}
 
-	private _groupCount: number;
 	@ccValue(AssociationCCValues.groupCount)
-	public get groupCount(): number {
-		return this._groupCount;
+	public groupCount: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.groupCount]);
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

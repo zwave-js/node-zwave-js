@@ -2,11 +2,14 @@ import {
 	CommandClasses,
 	MessagePriority,
 	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
+	encodeBitMask,
 	enumValuesToMetadataStates,
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SupervisionResult,
@@ -61,7 +64,7 @@ export const ThermostatModeCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Mode"])
 export class ThermostatModeCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatModeCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ThermostatModeCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatModeCommand.Get:
 			case ThermostatModeCommand.SupportedGet:
@@ -139,18 +142,32 @@ export class ThermostatModeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined>;
 	public async set(
 		mode: (typeof ThermostatMode)["Manufacturer specific"],
-		manufacturerData: Buffer,
+		manufacturerData: Buffer | string,
 	): Promise<SupervisionResult | undefined>;
 
 	@validateArgs({ strictEnums: true })
 	public async set(
 		mode: ThermostatMode,
-		manufacturerData?: Buffer,
+		manufacturerData?: Buffer | string,
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ThermostatModeCommand,
 			ThermostatModeCommand.Set,
 		);
+
+		if (typeof manufacturerData === "string") {
+			// We accept the manufacturer data as a hex string. Make sure it's valid
+			if (
+				manufacturerData.length % 2 !== 0 ||
+				!manufacturerData.match(/^[0-9a-f]+$/i)
+			) {
+				throw new ZWaveError(
+					`Manufacturer data must be represented as hexadecimal when passed as a string!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			manufacturerData = Buffer.from(manufacturerData, "hex");
+		}
 
 		const cc = new ThermostatModeCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
@@ -162,7 +179,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 	}
 
 	public async getSupportedModes(): Promise<
-		readonly ThermostatMode[] | undefined
+		MaybeNotKnown<readonly ThermostatMode[]>
 	> {
 		this.assertSupportsCommand(
 			ThermostatModeCommand,
@@ -268,7 +285,7 @@ export class ThermostatModeCC extends CommandClass {
 	}
 }
 
-type ThermostatModeCCSetOptions = CCCommandOptions &
+export type ThermostatModeCCSetOptions = CCCommandOptions &
 	(
 		| {
 				mode: Exclude<
@@ -346,27 +363,51 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	}
 }
 
+export type ThermostatModeCCReportOptions = CCCommandOptions &
+	(
+		| {
+				mode: Exclude<
+					ThermostatMode,
+					(typeof ThermostatMode)["Manufacturer specific"]
+				>;
+				manufacturerData?: undefined;
+		  }
+		| {
+				mode: (typeof ThermostatMode)["Manufacturer specific"];
+				manufacturerData?: Buffer;
+		  }
+	);
+
 @CCCommand(ThermostatModeCommand.Report)
 export class ThermostatModeCCReport extends ThermostatModeCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatModeCCReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this.mode = this.payload[0] & 0b11111;
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.mode = this.payload[0] & 0b11111;
 
-		if (this.version >= 3) {
-			const manufacturerDataLength = this.payload[0] >>> 5;
+			if (this.version >= 3) {
+				const manufacturerDataLength = this.payload[0] >>> 5;
 
-			validatePayload(this.payload.length >= 1 + manufacturerDataLength);
-			if (manufacturerDataLength) {
-				this.manufacturerData = this.payload.slice(
-					1,
-					1 + manufacturerDataLength,
+				validatePayload(
+					this.payload.length >= 1 + manufacturerDataLength,
 				);
+				if (manufacturerDataLength) {
+					this.manufacturerData = this.payload.slice(
+						1,
+						1 + manufacturerDataLength,
+					);
+				}
 			}
+		} else {
+			this.mode = options.mode;
+			this.manufacturerData = options.manufacturerData;
 		}
 	}
 
@@ -409,6 +450,25 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 	@ccValue(ThermostatModeCCValues.manufacturerData)
 	public readonly manufacturerData: Buffer | undefined;
 
+	public serialize(): Buffer {
+		const manufacturerDataLength =
+			this.mode === ThermostatMode["Manufacturer specific"] &&
+			this.manufacturerData
+				? Math.min(0b111, this.manufacturerData.length)
+				: 0;
+		this.payload = Buffer.allocUnsafe(1 + manufacturerDataLength);
+		this.payload[0] = (manufacturerDataLength << 5) + (this.mode & 0b11111);
+		if (manufacturerDataLength) {
+			this.manufacturerData!.copy(
+				this.payload,
+				1,
+				0,
+				manufacturerDataLength,
+			);
+		}
+		return super.serialize();
+	}
+
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatMode, this.mode),
@@ -427,14 +487,28 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 @expectedCCResponse(ThermostatModeCCReport)
 export class ThermostatModeCCGet extends ThermostatModeCC {}
 
+export interface ThermostatModeCCSupportedReportOptions
+	extends CCCommandOptions {
+	supportedModes: ThermostatMode[];
+}
+
 @CCCommand(ThermostatModeCommand.SupportedReport)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatModeCCSupportedReportOptions,
 	) {
 		super(host, options);
-		this.supportedModes = parseBitMask(this.payload, ThermostatMode.Off);
+		if (gotDeserializationOptions(options)) {
+			this.supportedModes = parseBitMask(
+				this.payload,
+				ThermostatMode.Off,
+			);
+		} else {
+			this.supportedModes = options.supportedModes;
+		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
@@ -455,6 +529,15 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 
 	@ccValue(ThermostatModeCCValues.supportedModes)
 	public readonly supportedModes: ThermostatMode[];
+
+	public serialize(): Buffer {
+		this.payload = encodeBitMask(
+			this.supportedModes,
+			ThermostatMode["Manufacturer specific"],
+			ThermostatMode.Off,
+		);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

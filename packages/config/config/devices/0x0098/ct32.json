@@ -223,5 +223,10 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// The device has two endpoints, but all reports are received via the root.
+		"preserveRootApplicationCCValueIDs": true,
+		"removeEndpoints": "*"
+	}
 }

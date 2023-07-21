@@ -103,7 +103,7 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 -   `unit`: An optional unit for numeric values
 
 > [!WARNING]
-> A value with `type: "number"` can contain the literal string `"unknown"` if the driver option `preserveUnknownValues` is `true`.
+> A value with `type: "number"` can be `null` to indicate a (known to be) unknown state!
 
 #### `boolean`
 
@@ -123,7 +123,7 @@ interface ValueMetadataBoolean extends ValueMetadataAny {
 -   `default`: The default value
 
 > [!WARNING]
-> A value with `type: "boolean"` can contain the literal string `"unknown"` if the driver option `preserveUnknownValues` is `true`.
+> A value with `type: "boolean"` can be `null` to indicate a (known to be) unknown state!
 
 #### `string`
 
@@ -141,6 +141,9 @@ interface ValueMetadataString extends ValueMetadataAny {
 -   `minLength`: The minimum length this string must have
 -   `maxLength`: The maximum length this string may have
 -   `default`: The default value
+
+> [!WARNING]
+> A value with `type: "string"` can be `null` to indicate a (known to be) unknown state!
 
 ### CC-specific fields
 

@@ -1,5 +1,4 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -10,6 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -66,7 +66,9 @@ export const ThermostatSetbackCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatSetbackCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ThermostatSetbackCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatSetbackCommand.Get:
 				return this.isSinglecast();

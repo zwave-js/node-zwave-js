@@ -33,7 +33,7 @@
 		"commandClasses": {
 			"remove": {
 				// The device does not properly implement Supervision CC
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

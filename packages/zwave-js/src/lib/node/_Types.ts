@@ -4,7 +4,6 @@ import type {
 	EntryControlEventTypes,
 	FirmwareUpdateProgress,
 	FirmwareUpdateResult,
-	FirmwareUpdateStatus,
 	MultilevelSwitchCommand,
 	Powerlevel,
 	PowerlevelTestStatus,
@@ -80,14 +79,10 @@ export type ZWaveInterviewFailedCallback = (
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,
-	__DEPRECATED__sentFragments: number,
-	__DEPRECATED__totalFragments: number,
 	progress: FirmwareUpdateProgress,
 ) => void;
 export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 	node: ZWaveNode,
-	__DEPRECATED__status: FirmwareUpdateStatus,
-	__DEPRECATED__waitTime: number | undefined,
 	result: FirmwareUpdateResult,
 ) => void;
 export type ZWaveNodeStatusChangeCallback = (
@@ -209,6 +204,26 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 }
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
+
+export const zWaveNodeEvents = [
+	"notification",
+	"interview failed",
+	"firmware update progress",
+	"firmware update finished",
+	"wake up",
+	"sleep",
+	"dead",
+	"alive",
+	"interview completed",
+	"ready",
+	"interview stage completed",
+	"interview started",
+	"value added",
+	"value updated",
+	"value removed",
+	"metadata updated",
+	"value notification",
+] as const satisfies readonly ZWaveNodeEvents[];
 
 /** Represents the result of one health check round of a node's lifeline */
 export interface LifelineHealthCheckResult {

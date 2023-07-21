@@ -10,7 +10,7 @@ import {
 	isTransmissionError,
 	validatePayload,
 	type IZWaveEndpoint,
-	type Maybe,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type SinglecastCC,
@@ -59,7 +59,7 @@ export const SupervisionCCValues = Object.freeze({
 // want to pay the cost of validating each call
 @API(CommandClasses.Supervision)
 export class SupervisionCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: SupervisionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SupervisionCommand.Get:
 			case SupervisionCommand.Report:
@@ -91,7 +91,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			await this.applHost.sendCommand(cc, {
 				...this.commandOptions,
 				// Supervision Reports must be prioritized over normal messages
-				priority: MessagePriority.Supervision,
+				priority: MessagePriority.Immediate,
 				// But we don't want to wait for an ACK because this can lock up the network for seconds
 				// if the target node is asleep or unreachable
 				transmitOptions: TransmitOptions.DEFAULT_NOACK,
@@ -170,7 +170,10 @@ export class SupervisionCC extends CommandClass {
 				CommandClasses.Supervision,
 				SupervisionCommand.Get,
 			) as SupervisionCCGet;
-			if (!supervisionEncapsulation.isMulticast()) {
+			if (
+				supervisionEncapsulation.frameType !== "broadcast" &&
+				supervisionEncapsulation.frameType !== "multicast"
+			) {
 				return supervisionEncapsulation.sessionId;
 			}
 		}

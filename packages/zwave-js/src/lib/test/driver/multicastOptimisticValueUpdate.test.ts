@@ -7,7 +7,7 @@ import { integrationTest } from "../integrationTestSuiteMulti";
 // Regression test for #5844
 
 integrationTest("multicast setValue: do optimistic value update after ACK", {
-	debug: true,
+	// debug: true,
 	// provisioningDirectory: path.join(
 	// 	__dirname,
 	// 	"__fixtures/supervision_binary_switch",

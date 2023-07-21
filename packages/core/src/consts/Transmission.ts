@@ -1,22 +1,20 @@
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
+import { type S2SecurityClass } from "../security/SecurityClass";
 import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
-	// Outgoing nonces have the highest priority because they are part of other transactions
-	// which may already be in progress.
-	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
-	Nonce = 0,
+	// Some messages like nonces, responses to Supervision and Transport Service
+	// need to be handled before all others. We use this priority to decide which
+	// message goes onto the immediate queue.
+	Immediate = 0,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
 	MultistepController,
-	// Supervision responses must be prioritized over other messages because the nodes requesting them
-	// will get impatient otherwise.
-	Supervision,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
@@ -169,7 +167,7 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a queued message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
 	/**
 	 * @internal
@@ -216,6 +214,8 @@ export type SupervisionOptions =
 	  };
 
 export type SendCommandSecurityS2Options = {
+	/** Send the command using a different (lower) security class */
+	s2OverrideSecurityClass?: S2SecurityClass;
 	/** Whether delivery of non-supervised SET-type commands is verified by waiting for potential Nonce Reports. Default: true */
 	s2VerifyDelivery?: boolean;
 	/** Whether the MOS extension should be included in S2 message encapsulation. */
@@ -235,6 +235,8 @@ export type SendCommandOptions = SendMessageOptions &
 		encapsulationFlags?: EncapsulationFlags;
 		/** Overwrite the default transmit options */
 		transmitOptions?: TransmitOptions;
+		/** Overwrite the default report timeout */
+		reportTimeoutMs?: number;
 	};
 
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =

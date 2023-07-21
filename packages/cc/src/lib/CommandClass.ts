@@ -150,6 +150,9 @@ export class CommandClass implements ICommandClass {
 			} else {
 				this.nodeId = options.nodeId;
 			}
+
+			this.frameType = options.frameType;
+
 			({
 				ccId: this.ccId,
 				ccCommand: this.ccCommand,
@@ -171,13 +174,13 @@ export class CommandClass implements ICommandClass {
 		if (options.origin !== MessageOrigin.Host && this.isSinglecast()) {
 			try {
 				// For singlecast CCs, set the CC version as high as possible
-				this.version = this.host.getSafeCCVersionForNode(
+				this.version = this.host.getSafeCCVersion(
 					this.ccId,
 					this.nodeId,
 					this.endpointIndex,
 				);
 				// But remember which version the node supports
-				this._knownVersion = this.host.getSupportedCCVersionForEndpoint(
+				this._knownVersion = this.host.getSupportedCCVersion(
 					this.ccId,
 					this.nodeId,
 					this.endpointIndex,
@@ -258,6 +261,9 @@ export class CommandClass implements ICommandClass {
 
 	/** Contains a reference to the encapsulating CC if this CC is encapsulated */
 	public encapsulatingCC?: EncapsulatingCommandClass;
+
+	/** The type of Z-Wave frame this CC was sent with */
+	public readonly frameType?: FrameType;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
@@ -907,8 +913,8 @@ export class CommandClass implements ICommandClass {
 				valueDB.setMetadata(valueId, value.meta);
 			}
 
-			// The value only gets written if it is not undefined
-			if (sourceValue == undefined) continue;
+			// The value only gets written if it is not undefined. null is a valid value!
+			if (sourceValue === undefined) continue;
 
 			valueDB.setValue(valueId, sourceValue, {
 				stateful: value.options.stateful,

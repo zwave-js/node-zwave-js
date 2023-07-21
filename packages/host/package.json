@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/host",
-  "version": "10.23.0",
+  "version": "11.5.3",
   "description": "zwave-js: Host abstractions",
   "keywords": [],
   "publishConfig": {
@@ -58,10 +58,10 @@
     "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.35.0",
-    "@types/node": "^14.18.47",
+    "@microsoft/api-extractor": "^7.36.0",
+    "@types/node": "^14.18.52",
     "del-cli": "^5.0.0",
     "prettier": "^2.8.8",
-    "typescript": "5.0.4"
+    "typescript": "5.1.6"
   }
 }

@@ -8,7 +8,7 @@
 
 ```ts
 async getSupported(): Promise<
-	readonly WindowCoveringParameter[] | undefined
+	MaybeNotKnown<readonly WindowCoveringParameter[]>
 >;
 ```
 

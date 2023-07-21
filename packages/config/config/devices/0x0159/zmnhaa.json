@@ -148,12 +148,12 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
-				"0x72": {
+				"Manufacturer Specific": {
 					// Manufacturer Specific CC is supported, but comes back as version 0
 					"version": 1,
 					"isSupported": true
 				},
-				"0x85": {
+				"Association": {
 					// Association CC is supported, but comes back as version 0
 					"version": 1,
 					"isSupported": true

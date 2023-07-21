@@ -22,7 +22,7 @@ async set(
 
 async set(
 	mode: (typeof ThermostatMode)["Manufacturer specific"],
-	manufacturerData: Buffer,
+	manufacturerData: Buffer | string,
 ): Promise<SupervisionResult | undefined>;
 ```
 
@@ -30,7 +30,7 @@ async set(
 
 ```ts
 async getSupportedModes(): Promise<
-	readonly ThermostatMode[] | undefined
+	MaybeNotKnown<readonly ThermostatMode[]>
 >;
 ```
 

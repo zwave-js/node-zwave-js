@@ -1,10 +1,10 @@
 import {
+	NOT_KNOWN,
 	SecurityClass,
 	securityClassOrder,
-	unknownBoolean,
 	type CommandClassInfo,
 	type CommandClasses,
-	type Maybe,
+	type MaybeNotKnown,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
@@ -119,10 +119,9 @@ export class MockNode {
 			hasSecurityClass(
 				nodeId: number,
 				securityClass: SecurityClass,
-			): Maybe<boolean> {
+			): MaybeNotKnown<boolean> {
 				return (
-					securityClasses.get(nodeId)?.get(securityClass) ??
-					unknownBoolean
+					securityClasses.get(nodeId)?.get(securityClass) ?? NOT_KNOWN
 				);
 			},
 			setSecurityClass(
@@ -135,7 +134,9 @@ export class MockNode {
 				}
 				securityClasses.get(nodeId)!.set(securityClass, granted);
 			},
-			getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+			getHighestSecurityClass(
+				nodeId: number,
+			): MaybeNotKnown<SecurityClass> {
 				const map = securityClasses.get(nodeId);
 				if (!map?.size) return undefined;
 				let missingSome = false;
