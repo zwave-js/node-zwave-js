@@ -21,7 +21,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "BASIC SET Group 1",
+			"label": "Basic Set",
 			"maxNodes": 5
 		}
 	},
@@ -29,11 +29,11 @@
 		{
 			"#": "1",
 			"$import": "~/templates/master_template.json#led_indicator_four_options",
-			"label": "Led Indicator Behavior"
+			"label": "LED Indicator Behavior"
 		},
 		{
 			"#": "2",
-			"label": "Led Indicator Color",
+			"label": "LED Indicator Color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -74,131 +74,143 @@
 		{
 			"#": "3",
 			"$import": "templates/minoston_template.json#led_indicator_brightness_mr40z",
-			"label": "Led Indicator Brightness"
+			"label": "LED Indicator Brightness"
 		},
 		{
 			"#": "4",
-			"label": "Knob Step",
-			"description": "Rotate once to adjust 1%-10%",
+			"label": "Knob Step Size",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 2,
 			"unsigned": true
 		},
 		{
+			"#": "10",
+			"label": "Up Press: Behavior",
+			"description": "Adjust brightness value with parameter 5",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Scene control",
+					"value": 1
+				},
+				{
+					"label": "Brightness control",
+					"value": 2
+				},
+				{
+					"label": "Both",
+					"value": 3
+				}
+			]
+		},
+		{
 			"#": "5",
-			"label": "Up Press Value",
-			"description": "NOTE: This parameter will be invalid when #10 is value 0 or 1",
-			// This has more complicated values, but I don't know how to make a valid configuration for them
-			//   0 - Turn off
-			//   1~99 -Custom Brightness
-			//   100 -Maximum Brightness
-			//   101 -Minimum Brightness
-			//   Others -Turn on
+			"label": "Up Press: Brightness",
+			"description": "Values 102...255 turn on to the previous brightness. Only applies when parameter10 has brightness control enabled.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
-			"unsigned": true
-		},
-		{
-			"#": "6",
-			"label": "Down Press Value",
-			"description": "NOTE: This parameter will be invalid when #11 is value 0 or 1",
-			// This has more complicated values, but I don't know how to make a valid configuration for them
-			//   0 - Turn off
-			//   1~99 -Custom Brightness
-			//   100 -Maximum Brightness
-			//   101 -Minimum Brightness
-			//   Others -Turn on
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 20,
-			"unsigned": true
-		},
-		{
-			"#": "7",
-			"label": "Left Press Value",
-			"description": "NOTE: This parameter will be invalid when #12 is value 0 or 1",
-			// This has more complicated values, but I don't know how to make a valid configuration for them
-			//   0 - Turn off
-			//   1~99 -Custom Brightness
-			//   100 -Maximum Brightness
-			//   101 -Minimum Brightness
-			//   Others -Turn on
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "8",
-			"label": "Right Press Value",
-			"description": "NOTE: This parameter will be invalid when #13 is value 0 or 1",
-			// This has more complicated values, but I don't know how to make a valid configuration for them
-			//   0 - Turn off
-			//   1~99 -Custom Brightness
-			//   100 -Maximum Brightness
-			//   101 -Minimum Brightness
-			//   Others -Turn on
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
-		},
-		{
-			"#": "9",
-			"label": "Center Press Behavior",
-			"description": "Enable or disable scene message",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
 			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
-				{ "label": "Disable Scene", "value": 0 },
-				{ "label": "Enable Scene", "value": 1 }
-			]
-		},
-		{
-			"#": "10",
-			"label": "Up Behavior",
-			"description": "If value 2, adjust brightness value with parameter 5",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{ "label": "Disable", "value": 0 },
-				{ "label": "Only enable scene", "value": 1 },
-				{ "label": "Only enable #PARAM", "value": 2 },
-				{ "label": "Enable Both", "value": 3 }
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Minimum Brightness",
+					"value": 100
+				},
+				{
+					"label": "Maximum Brightness",
+					"value": 101
+				},
+				{
+					"label": "Turn on",
+					"value": 255
+				}
 			]
 		},
 		{
 			"#": "11",
 			"$import": "#paramInformation/10",
-			"label": "Down Behavior",
-			"description": "If value 2, adjust brightness value with parameter 6"
+			"label": "Down Press: Behavior",
+			"description": "Adjust brightness value with parameter 6"
+		},
+		{
+			"#": "6",
+			"$import": "#paramInformation/5",
+			"label": "Down Press: Brightness",
+			"description": "Values 102...255 turn on to the previous brightness. Only applies when parameter11 has brightness control enabled."
 		},
 		{
 			"#": "12",
 			"$import": "#paramInformation/10",
-			"label": "Left Behavior",
-			"description": "If value 2, adjust brightness value with parameter 7"
+			"label": "Left Press: Behavior",
+			"description": "Adjust brightness value with parameter 7"
+		},
+
+		{
+			"#": "7",
+			"$import": "#paramInformation/5",
+			"label": "Left Press: Brightness",
+			"description": "Values 102...255 turn on to the previous brightness. Only applies when parameter12 has brightness control enabled."
 		},
 		{
 			"#": "13",
 			"$import": "#paramInformation/10",
-			"label": "Right Behavior",
-			"description": "If value 2, adjust brightness value with parameter 8"
+			"label": "Right Press: Behavior",
+			"description": "Adjust brightness value with parameter 8"
+		},
+		{
+			"#": "8",
+			"$import": "#paramInformation/5",
+			"label": "Right Press: Brightness",
+			"description": "Values 102...255 turn on to the previous brightness. Only applies when parameter13 has brightness control enabled."
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Center Press: Scene Control",
+			"defaultValue": 1
+		},
+		{
+			"#": "24",
+			"label": "Center Press: Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default brightness (parameter 25)",
+					"value": 0
+				},
+				{
+					"label": "100 %",
+					"value": 1
+				},
+				{
+					"label": "Maximum brightness (parameter 18)",
+					"value": 2
+				},
+				{
+					"label": "Previous brightness",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "14",
@@ -221,9 +233,17 @@
 			"$import": "~/templates/master_template.json#maximum_dim_level_0-99"
 		},
 		{
+			"#": "25",
+			"label": "Default Brightness",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 80,
+			"unsigned": true
+		},
+		{
 			"#": "19",
 			"label": "External Switch Type",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -231,74 +251,73 @@
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
-				{ "value": 0, "label": "Toggle switch" },
-				{ "value": 1, "label": "Momentary button" }
+				{
+					"label": "Toggle switch",
+					"value": 0
+				},
+				{
+					"label": "Momentary button",
+					"value": 1
+				}
 			]
 		},
 		{
 			"#": "20",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
-			"label": "Rate For Physical On",
-			"description": "When activated by knob or external switch",
+			"label": "Diming Rate (Manual On)",
 			"unit": "seconds",
-			"options": [{ "label": "Instant", "value": 0 }]
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "21",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
-			"label": "Rate For Physical Off",
-			"description": "When activated by knob or external switch",
+			"label": "Diming Rate (Manual Off)",
 			"unit": "seconds",
-			"options": [{ "label": "Instant", "value": 0 }]
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "22",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Rate For Hub On",
+			"label": "Diming Rate (Z-Wave On)",
 			"defaultValue": 255,
 			"unit": "seconds",
 			"options": [
-				{ "label": "Instant", "value": 0 },
-				{ "label": "Same as #PARAM 20", "value": 255 }
+				{
+					"label": "Instant",
+					"value": 0
+				},
+				{
+					"label": "Same as manual on",
+					"value": 255
+				}
 			]
 		},
 		{
 			"#": "23",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Rate For Hub Off",
+			"label": "Diming Rate (Z-Wave Off)",
 			"defaultValue": 255,
 			"unit": "seconds",
 			"options": [
-				{ "label": "Instant", "value": 0 },
-				{ "label": "Same as #PARAM 21", "value": 255 }
+				{
+					"label": "Instant",
+					"value": 0
+				},
+				{
+					"label": "Same as manual off",
+					"value": 255
+				}
 			]
-		},
-		{
-			"#": "24",
-			"label": "Single Tap Behavior",
-			"description": "When CENTER pressed on device",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{ "label": "Turn to brightness from #PARAM 25", "value": 0 },
-				{ "label": "Always turn on to 100%", "value": 1 },
-				{ "label": "Always turn on to maximum brightness from #PARAM 18", "value": 2 },
-				{ "label": "Turn on to last brightness before power off", "value": 3 }
-			]
-		},
-		{
-			"#": "25",
-			"label": "Custom Brightness",
-			"description": "0",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 80,
-			"unsigned": true
 		}
 	],
 	"metadata": {
