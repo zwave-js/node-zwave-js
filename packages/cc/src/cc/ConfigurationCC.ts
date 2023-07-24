@@ -1268,7 +1268,8 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 */
 	protected paramExistsInConfigFile(
 		applHost: ZWaveApplicationHost,
-		param: number,
+		parameter: number,
+		valueBitMask?: number,
 	): boolean {
 		if (
 			this.getValue(
@@ -1286,9 +1287,13 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		if (!paramInformation) return false;
 
 		// Check if the param is defined in the config file, either as a normal param or a partial
-		if (paramInformation.has({ parameter: param })) return true;
-		for (const key of paramInformation.keys()) {
-			if (key.parameter === param) return true;
+		if (paramInformation.has({ parameter, valueBitMask })) {
+			return true;
+		} else if (valueBitMask == undefined) {
+			// Also consider partials when looking for plain params
+			for (const key of paramInformation.keys()) {
+				if (key.parameter === parameter) return true;
+			}
 		}
 
 		return false;
@@ -2686,25 +2691,39 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			} as const;
 
 			if (this.valueFormat !== ConfigValueFormat.BitField) {
-				const paramInfo = stripUndefined({
-					...baseInfo,
-					min: this.minValue,
-					max: this.maxValue,
-					default: this.defaultValue,
-				} as const satisfies ConfigurationMetadata);
+				// Do not override param information from a config file
+				if (!this.paramExistsInConfigFile(applHost, this.parameter)) {
+					const paramInfo = stripUndefined({
+						...baseInfo,
+						min: this.minValue,
+						max: this.maxValue,
+						default: this.defaultValue,
+					} as const satisfies ConfigurationMetadata);
 
-				this.extendParamInformation(
-					applHost,
-					this.parameter,
-					undefined,
-					paramInfo,
-				);
+					this.extendParamInformation(
+						applHost,
+						this.parameter,
+						undefined,
+						paramInfo,
+					);
+				}
 			} else {
 				// Bit fields are split into multiple single-bit partial parameters
 				const bits = this.maxValue!;
 				let mask = 1;
 				while (mask <= bits) {
 					if (!!(mask & bits)) {
+						// Do not override param information from a config file
+						if (
+							this.paramExistsInConfigFile(
+								applHost,
+								this.parameter,
+								mask,
+							)
+						) {
+							continue;
+						}
+
 						const paramInfo = stripUndefined({
 							...baseInfo,
 							min: 0,
