@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/minoston_template.json#power_reporting_threshold",
+			"$import": "templates/minoston_template.json#power_reporting_threshold"
 		},
 		{
 			"#": "6",

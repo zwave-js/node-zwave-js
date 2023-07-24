@@ -1,7 +1,7 @@
 {
-	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
-	"label": "MP21Z",
+	"label": "MP21Z / MP31Z",
 	"description": "Mini Smart Plug",
 	"devices": [
 		{
@@ -37,16 +37,6 @@
 			"defaultValue": 2
 		}
 	],
-	"compat": {
-		"commandClasses": {
-			"remove": {
-				// The device does not properly implement Supervision CC
-				"Supervision": {
-					"endpoints": "*"
-				}
-			}
-		}
-	},
 	"metadata": {
 		"inclusion": "ADD the MP21Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP21Z to/from a Z-Wave Gateway with supporting Security.The MP21Z can support the Primary Controller that implemented the security S2",
 		"exclusion": "Remove the MP21Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP21Z to/from a Z-Wave Gateway with supporting Security.The MP21Z can support the Primary Controller that implemented the security S2",
