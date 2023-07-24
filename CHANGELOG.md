@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.6.0 (2023-07-24)
 ### Features
 * Setting the date and time on a node will now also attempt sending unsolicited `Time CC` reports if no other way is supported (#6042)
 
