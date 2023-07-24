@@ -3311,8 +3311,9 @@ export class Driver
 			return false;
 		} else if (node.canSleep) {
 			if (node.status === NodeStatus.Asleep) {
-				// We already moved the messages to the wakeup queue
-				return true;
+				// We already moved the messages to the wakeup queue before. If we end up here, this means a command
+				// was sent that may be sent to potentially asleep nodes - including pings.
+				return false;
 			}
 			this.controllerLog.logNode(
 				node.id,
