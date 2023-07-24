@@ -2682,19 +2682,21 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				const bits = this.maxValue!;
 				let mask = 1;
 				while (mask <= bits) {
-					const paramInfo = stripUndefined({
-						...baseInfo,
-						min: 0,
-						max: 1,
-						default: this.defaultValue! & mask ? 1 : 0,
-					} as const satisfies ConfigurationMetadata);
+					if (!!(mask & bits)) {
+						const paramInfo = stripUndefined({
+							...baseInfo,
+							min: 0,
+							max: 1,
+							default: this.defaultValue! & mask ? 1 : 0,
+						} as const satisfies ConfigurationMetadata);
 
-					this.extendParamInformation(
-						applHost,
-						this.parameter,
-						mask,
-						paramInfo,
-					);
+						this.extendParamInformation(
+							applHost,
+							this.parameter,
+							mask,
+							paramInfo,
+						);
+					}
 
 					// We must use multiplication here, as bitwise shifting works on signed 32-bit integers in JS
 					// which would create an infinite loop if maxValue === 0xffff_ffff
