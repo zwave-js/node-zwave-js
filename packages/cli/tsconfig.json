@@ -1,0 +1,22 @@
+// tsconfig for IntelliSense - active in all files in the current package
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"module": "Node16",
+		"moduleResolution": "node16"
+	},
+	"references": [
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../shared"
+		},
+		{
+			"path": "../zwave-js"
+		}
+	],
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["build/**", "node_modules/**"]
+}

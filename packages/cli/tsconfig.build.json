@@ -1,0 +1,24 @@
+// tsconfig for building - only applies to the src directory
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "build",
+		"jsx": "react-jsx",
+		"module": "Node16",
+		"moduleResolution": "node16"
+	},
+	"references": [
+		{
+			"path": "../core/tsconfig.build.json"
+		},
+		{
+			"path": "../shared/tsconfig.build.json"
+		},
+		{
+			"path": "../zwave-js/tsconfig.build.json"
+		}
+	],
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["src/**/*.test.ts"]
+}

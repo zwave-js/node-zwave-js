@@ -4,6 +4,10 @@ export {
 	RssiError,
 	isRssiError,
 } from "@zwave-js/core/safe";
+export type {
+	ControllerEventCallbacks,
+	ControllerEvents,
+} from "./lib/controller/Controller";
 export type { RSSI, TXReport } from "@zwave-js/core/safe";
 export type { ControllerStatistics } from "./lib/controller/ControllerStatistics";
 export { ZWaveFeature } from "./lib/controller/Features";

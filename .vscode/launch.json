@@ -5,10 +5,29 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Start CLI",
+			"request": "launch",
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": [
+				"node",
+				"--async-stack-traces",
+				"${workspaceFolder}/packages/cli/build/cli.js",
+				"--start"
+			],
+			"env": {
+				"NODE_ENV": "development"
+				// "DEV": "true"
+			},
+			"skipFiles": ["<node_internals>/**"],
+			"type": "node",
+			"console": "integratedTerminal",
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build:cli"
+		},
+		{
 			"type": "node",
 			"request": "launch",
 			"name": "Debug locally",
-			"port": 9229,
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
@@ -27,6 +46,7 @@
 			"sourceMaps": true,
 			"preLaunchTask": "npm: build"
 		},
+
 		{
 			"type": "node",
 			"request": "launch",

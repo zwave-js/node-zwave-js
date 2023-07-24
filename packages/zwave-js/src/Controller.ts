@@ -12,7 +12,10 @@ export {
 } from "@zwave-js/core/safe";
 export type { RSSI, TXReport } from "@zwave-js/core/safe";
 export { ZWaveController } from "./lib/controller/Controller";
-export type { ControllerEvents } from "./lib/controller/Controller";
+export type {
+	ControllerEventCallbacks,
+	ControllerEvents,
+} from "./lib/controller/Controller";
 export type { ControllerStatistics } from "./lib/controller/ControllerStatistics";
 export { ZWaveFeature } from "./lib/controller/Features";
 export * from "./lib/controller/Inclusion";

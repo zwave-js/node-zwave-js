@@ -13,13 +13,13 @@
     "RoboPhred (https://github.com/RoboPhred)"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "homepage": "https://github.com/zwave-js/node-zwave-js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+    "url": "git+https://github.com/zwave-js/node-zwave-js.git"
   },
   "bugs": {
-    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+    "url": "https://github.com/zwave-js/node-zwave-js/issues"
   },
   "funding": {
     "url": "https://github.com/sponsors/AlCalzone/"
@@ -48,6 +48,7 @@
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "@zwave-js/cc": "workspace:*",
+    "@zwave-js/cli": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/flash": "workspace:*",
@@ -87,7 +88,9 @@
   "resolutions": {
     "minimist": "^1.2.6",
     "colors": "1.4.0",
-    "ts-patch@3.0.0-rc2": "patch:ts-patch@npm%3A3.0.0-rc2#./.yarn/patches/ts-patch-npm-3.0.0-rc2-74c7730519.patch"
+    "yoga-layout-prebuilt@^1.9.6": "patch:yoga-layout-prebuilt@npm%3A1.10.0#./.yarn/patches/yoga-layout-prebuilt-npm-1.10.0-855b15449f.patch",
+    "react-devtools-core@^4.27.2": "patch:react-devtools-core@npm%3A4.27.2#./.yarn/patches/react-devtools-core-npm-4.27.2-7a013e485e.patch",
+    "@alcalzone/ink-table@^1.0.0": "patch:@alcalzone/ink-table@npm%3A1.0.0#./.yarn/patches/@alcalzone-ink-table-npm-1.0.0-65fbd8d761.patch"
   },
   "scripts": {
     "w": "yarn ts maintenance/watch.ts",
@@ -95,6 +98,7 @@
     "clean": "yarn turbo run clean",
     "build": "yarn turbo run build:turbo --",
     "build:turbo": "yarn ts maintenance/build.ts",
+    "build:cli": "yarn workspace @zwave-js/cli run build:dev",
     "watch": "yarn w build",
     "test:ts": "FORCE_COLOR=1 yarn turbo run test:ts ${TURBO_FLAGS:-'--concurrency=1'} --",
     "test": "yarn w test:ts",

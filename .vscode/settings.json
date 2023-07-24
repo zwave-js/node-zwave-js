@@ -32,7 +32,7 @@
 		".husky/_/**/*": true,
 		"packages/config/config/devices/index.json": true,
 		"packages/*/package-lock.json": true,
-		".yarn/*": true,
+		".yarn/*.*": true,
 		".yarn/patches": false,
 		".yarn/releases": false,
 		".yarn/plugins": false,

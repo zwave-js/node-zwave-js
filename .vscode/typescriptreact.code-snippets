@@ -1,0 +1,16 @@
+{
+	"React Functional Component": {
+		"prefix": "rfc",
+		"body": [
+			"import { Text } from \"ink\";",
+			"",
+			"export interface ${0:$TM_FILENAME_BASE}Props {",
+			"\t// TODO:",
+			"}",
+			"",
+			"export const ${0:$TM_FILENAME_BASE}: React.FC<${0:$TM_FILENAME_BASE}Props> = (props) => {",
+			"\treturn <Text>TODO</Text>;",
+			"};"
+		]
+	}
+}
