@@ -4016,7 +4016,7 @@ export class ConfigurationCC extends CommandClass {
     getQueriedParamInfos(applHost: ZWaveApplicationHost_2): Record<number, ConfigurationMetadata>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
-    protected isParamInformationFromConfig(applHost: ZWaveApplicationHost_2): boolean;
+    protected paramExistsInConfigFile(applHost: ZWaveApplicationHost_2, parameter: number, valueBitMask?: number): boolean;
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
