@@ -1266,15 +1266,32 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Whether this node's param information was loaded from a config file.
 	 * If this is true, we don't trust what the node reports
 	 */
-	protected isParamInformationFromConfig(
+	protected paramExistsInConfigFile(
 		applHost: ZWaveApplicationHost,
+		param: number,
 	): boolean {
-		return (
+		if (
 			this.getValue(
 				applHost,
 				ConfigurationCCValues.isParamInformationFromConfig,
-			) === true
+			) !== true
+		) {
+			return false;
+		}
+		const paramInformation = getParamInformationFromConfigFile(
+			applHost,
+			this.nodeId as number,
+			this.endpointIndex,
 		);
+		if (!paramInformation) return false;
+
+		// Check if the param is defined in the config file, either as a normal param or a partial
+		if (paramInformation.has({ parameter: param })) return true;
+		for (const key of paramInformation.keys()) {
+			if (key.parameter === param) return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -1288,7 +1305,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		info: Partial<ConfigurationMetadata>,
 	): void {
 		// Don't trust param information that a node reports if we have already loaded it from a config file
-		if (this.isParamInformationFromConfig(applHost)) return;
+		if (
+			valueBitMask === undefined &&
+			this.paramExistsInConfigFile(applHost, parameter)
+		) {
+			return;
+		}
 
 		// Retrieve the base metadata
 		const metadata = this.getParamInformation(
@@ -1608,7 +1630,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			});
 			if (
 				this.version < 3 &&
-				!this.isParamInformationFromConfig &&
+				!this.paramExistsInConfigFile(applHost, this.parameter) &&
 				oldParamInformation.min == undefined &&
 				oldParamInformation.max == undefined
 			) {
