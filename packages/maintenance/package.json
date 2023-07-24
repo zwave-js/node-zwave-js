@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/maintenance",
-  "version": "11.4.0",
+  "version": "11.5.2",
   "description": "zwave-js: maintenance scripts",
   "private": true,
   "keywords": [],
@@ -30,13 +30,13 @@
   },
   "scripts": {
     "ts": "node -r esbuild-register",
-    "prebuild": "yarn ts src/lintForbiddenImports.ts",
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:prettier:fix": "yarn run lint:prettier -w",
+    "lint:zwave": "yarn ts src/lintForbiddenImports.ts"
   },
   "devDependencies": {
     "@types/clipboardy": "^2.0.1",

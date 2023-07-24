@@ -6,18 +6,15 @@ import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
-	// Outgoing nonces have the highest priority because they are part of other transactions
-	// which may already be in progress.
-	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
-	Nonce = 0,
+	// Some messages like nonces, responses to Supervision and Transport Service
+	// need to be handled before all others. We use this priority to decide which
+	// message goes onto the immediate queue.
+	Immediate = 0,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
 	MultistepController,
-	// Supervision responses must be prioritized over other messages because the nodes requesting them
-	// will get impatient otherwise.
-	Supervision,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly

@@ -1266,15 +1266,32 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Whether this node's param information was loaded from a config file.
 	 * If this is true, we don't trust what the node reports
 	 */
-	protected isParamInformationFromConfig(
+	protected paramExistsInConfigFile(
 		applHost: ZWaveApplicationHost,
+		param: number,
 	): boolean {
-		return (
+		if (
 			this.getValue(
 				applHost,
 				ConfigurationCCValues.isParamInformationFromConfig,
-			) === true
+			) !== true
+		) {
+			return false;
+		}
+		const paramInformation = getParamInformationFromConfigFile(
+			applHost,
+			this.nodeId as number,
+			this.endpointIndex,
 		);
+		if (!paramInformation) return false;
+
+		// Check if the param is defined in the config file, either as a normal param or a partial
+		if (paramInformation.has({ parameter: param })) return true;
+		for (const key of paramInformation.keys()) {
+			if (key.parameter === param) return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -1288,7 +1305,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		info: Partial<ConfigurationMetadata>,
 	): void {
 		// Don't trust param information that a node reports if we have already loaded it from a config file
-		if (this.isParamInformationFromConfig(applHost)) return;
+		if (
+			valueBitMask === undefined &&
+			this.paramExistsInConfigFile(applHost, parameter)
+		) {
+			return;
+		}
 
 		// Retrieve the base metadata
 		const metadata = this.getParamInformation(
@@ -1608,7 +1630,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			});
 			if (
 				this.version < 3 &&
-				!this.isParamInformationFromConfig &&
+				!this.paramExistsInConfigFile(applHost, this.parameter) &&
 				oldParamInformation.min == undefined &&
 				oldParamInformation.max == undefined
 			) {
@@ -1645,7 +1667,10 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				if (typeof param.propertyKey === "number") {
 					this.setValue(
 						applHost,
-						ConfigurationCCValues.paramInformation(this.parameter),
+						ConfigurationCCValues.paramInformation(
+							this.parameter,
+							param.propertyKey,
+						),
 						parsePartial(
 							this.value as any,
 							param.propertyKey,
@@ -2679,21 +2704,25 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				const bits = this.maxValue!;
 				let mask = 1;
 				while (mask <= bits) {
-					const paramInfo = stripUndefined({
-						...baseInfo,
-						min: 0,
-						max: 1,
-						default: this.defaultValue! & mask ? 1 : 0,
-					} as const satisfies ConfigurationMetadata);
+					if (!!(mask & bits)) {
+						const paramInfo = stripUndefined({
+							...baseInfo,
+							min: 0,
+							max: 1,
+							default: this.defaultValue! & mask ? 1 : 0,
+						} as const satisfies ConfigurationMetadata);
 
-					this.extendParamInformation(
-						applHost,
-						this.parameter,
-						mask,
-						paramInfo,
-					);
+						this.extendParamInformation(
+							applHost,
+							this.parameter,
+							mask,
+							paramInfo,
+						);
+					}
 
-					mask <<= 1;
+					// We must use multiplication here, as bitwise shifting works on signed 32-bit integers in JS
+					// which would create an infinite loop if maxValue === 0xffff_ffff
+					mask *= 2;
 				}
 			}
 		}

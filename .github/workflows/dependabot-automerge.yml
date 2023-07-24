@@ -25,6 +25,7 @@ jobs:
         uses: dependabot/fetch-metadata@v1
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
+          alert-lookup: true
 
       - name: Check if PR should be auto-merged
         uses: actions/github-script@v6

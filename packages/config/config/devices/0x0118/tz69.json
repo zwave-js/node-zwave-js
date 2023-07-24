@@ -110,7 +110,7 @@
 		"commandClasses": {
 			"add": {
 				// This device is a binary switch, but claims not to support the Binary Switch CC
-				"0x25": {
+				"Binary Switch": {
 					"isSupported": true
 				}
 			}

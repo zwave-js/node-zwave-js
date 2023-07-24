@@ -2,8 +2,8 @@
 {
 	"manufacturer": "Silicon Labs",
 	"manufacturerId": "0x0000",
-	"label": "ZST10-700",
-	"description": "700 Series-based Controller",
+	"label": "700 Series",
+	"description": "USB Controller",
 	"devices": [
 		{
 			"productType": "0x0004",

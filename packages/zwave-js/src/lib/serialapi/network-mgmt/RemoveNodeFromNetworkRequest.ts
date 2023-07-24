@@ -30,6 +30,8 @@ export enum RemoveNodeStatus {
 	NodeFound = 2,
 	RemovingSlave = 3,
 	RemovingController = 4,
+	// Some controllers send this value when stopping a failed exclusion
+	Reserved_0x05 = 5,
 	Done = 6,
 	Failed = 7,
 }
@@ -78,6 +80,8 @@ function testCallbackForRemoveNodeRequest(
 		case RemoveNodeType.Stop:
 			return (
 				received.status === RemoveNodeStatus.Done ||
+				// This status is sent by some controllers when stopping a failed exclusion
+				received.status === RemoveNodeStatus.Reserved_0x05 ||
 				received.status === RemoveNodeStatus.Failed
 			);
 		default:

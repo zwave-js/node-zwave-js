@@ -1,6 +1,6 @@
 {
 	// Auto-On/Off-Timers for ZEN3x and ZEN7x
-	"auto_timer_base_3x_7x": {
+	"auto_timer_base_0x_3x_7x": {
 		"valueSize": 4,
 		"unit": "minutes",
 		"minValue": 0,
@@ -14,13 +14,13 @@
 			}
 		]
 	},
-	"auto_off_timer_3x_7x": {
+	"auto_off_timer_0x_3x_7x": {
 		"label": "Auto Turn-Off Timer",
-		"$import": "#auto_timer_base_3x_7x"
+		"$import": "#auto_timer_base_0x_3x_7x"
 	},
-	"auto_on_timer_3x_7x": {
+	"auto_on_timer_0x_3x_7x": {
 		"label": "Auto Turn-On Timer",
-		"$import": "#auto_timer_base_3x_7x"
+		"$import": "#auto_timer_base_0x_3x_7x"
 	},
 
 	// Auto-On/Off-Timers for ZEN5x with fixed time unit

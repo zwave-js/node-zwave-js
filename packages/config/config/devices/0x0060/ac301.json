@@ -158,7 +158,7 @@
 		"commandClasses": {
 			"remove": {
 				// The device does not support Supervision correctly
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

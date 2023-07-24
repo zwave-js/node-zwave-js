@@ -710,6 +710,14 @@ This property tracks the status a node in the network currently has (or is belie
 
 Changes of a node's status are broadcasted using the corresponding events - see below.
 
+### `lastSeen`
+
+```ts
+readonly lastSeen: MaybeNotKnown<Date>
+```
+
+This property tracks when the node was last seen, meaning a command was either received from the node or successfully sent to it.
+
 ### `isControllerNode`
 
 ```ts
@@ -1015,7 +1023,12 @@ When configuring devices or during longer message exchanges, this behavior may b
 
 ## ZWaveNode events
 
-The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are available:
+The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc.
+
+> [!NOTE] All events of the `ZWaveNode` class are also available via the `Driver` class, so they don't have to be registered for each node individually.
+> These events are all prefixed with `node`, e.g. `"node ready"` instead of `"ready"`, `"node sleep"` instead of `"sleep"`, etc. Their callback signatures are the same as for the node events.
+
+The following events are defined:
 
 ### `"wake up"` / `"sleep"`
 
@@ -1394,6 +1407,9 @@ interface NodeStatistics {
 	lwr?: RouteStatistics;
 	/** The next to last working route from the controller to this node. */
 	nlwr?: RouteStatistics;
+
+	/** The last time a command was received from or successfully sent to the node. */
+	lastSeen?: Date;
 }
 ```
 

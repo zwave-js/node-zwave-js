@@ -4,6 +4,79 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 11.5.3 (2023-07-20)
+### Bugfixes
+* Throw when trying to heal or discover neighbors for the controller (#6043)
+
+### Config file changes
+* Correct parameters of Zooz ZEN05 (#6045)
+* Override supported setpoint types for Intermatic PE653 (#6044)
+* Update Inovelli LZW31 parameter 52 for FW 1.54 (#6001)
+
+### Changes under the hood
+* Implement mocks for `Basic CC` (#6041)
+
+## 11.5.2 (2023-07-19)
+### Bugfixes
+* Fixed an issue where partial param values were not exposed correctly (#6035)
+* When a device unnecessarily sends a supervised GET request, the response is no longer sent with Supervision (#6034)
+* Fixed another regression from `v11.2.0` where some time-critical requests weren't answered while waiting for a response from a different node (#6024)
+
+### Config file changes
+* Fix Zooz ZSE40 parameters 7 and 8 (#6019)
+
+### Changes under the hood
+* Reworked how build caching is done (#6040)
+
+## 11.5.1 (2023-07-18)
+### Bugfixes
+* Fixed an infinite loop that could happen when parsing 4-byte bitfield config parameters where the high bit is set (#6029)
+* Allow associations between insecure devices which support the latest `(Multi Channel) Association CC` (#6011)
+
+## 11.5.0 (2023-07-17)
+### Features
+* Add `lastSeen` property to node and node statistics (#6008)
+* Make `ZWaveNode` events available via the `Driver` (#6002)
+
+### Bugfixes
+* Handle when the controller sends a reserved status code after failed exclusion (#6004)
+* Fixed a regression from `v11.2.0` where a node's S0 nonce requests weren't answered during a Get-Report command flow (#6024)
+
+### Config file changes
+fix(config): add new fingerprint for Zooz ZST10-700 (#6022)
+
+### Changes under the hood
+* Add mocks for `User Code CC` and `Schedule Entry Lock CC` (#6023)
+* Add mocks for `Manufacturer Specific`, `Thermostat Mode` and `Thermostat Setpoint CC` (#6013)
+
+## 11.4.2 (2023-07-11)
+### Config file changes
+* Add Heatit ZM Dimmer (#5999)
+* Add Heatit Z-HAN2 (#5998)
+* Add Remotec ZXT-800 (#5955)
+* Clarify Hand Button action for `ZVIDAR Z-CM-V01 Smart Curtain Motor` (#5946)
+* Add MCOHome MH-S220 FW 3.2 (#5832)
+* Add another device ID for Switch IO On/Off Power Switch (#5801)
+* Add/fix params for Intermatic PE653 (#5822)
+* Add ShenZhen Sunricher Technology Multisensor SR-ZV9032A-EU (#5718)
+
+### Changes under the hood
+* The `commandClasses.add/remove` compat flags now support specifying the CC name instead of its hexadecimal ID (#6000)
+
+## 11.4.1 (2023-07-10)
+### Config file changes
+* Add missing product type to `Aeotec Water Sensor 7 Basic ZWA018` (#5989)
+* Override endpoint indizes for `heatapp! floor` (#5994)
+* Override schedule slot count for `P-KFCON-MOD-YALE` (#5991)
+* Override supported color channels for `Zipato RGBW Bulb2` (#5993)
+* Override supported thermostat modes for Z-Wave.me ZME_FT (#5997)
+
+### Changes under the hood
+* Fixed a typo in the `discoverNodeNeighbors` JSDoc (#5984)
+* Added Node.js 20 to the test matrix (#5983)
+* Added a compat flag to override (almost) arbitrary CC API queries (#5987, #5995)
+* Added the `yarn configfind ...` CLI command to quickly find a config file by ID
+
 ## 11.4.0 (2023-07-06)
 ### Features
 * Added the ability to assign priority return routes along with custom fallbacks (#5980)

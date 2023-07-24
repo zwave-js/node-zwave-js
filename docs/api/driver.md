@@ -399,6 +399,8 @@ The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/a
 | `"all nodes ready"`  | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                                                                                                                                                                                                                                                                                                         |
 | `"bootloader ready"` | Is emitted when the controller is in recovery mode (e.g. after a failed firmware upgrade) and the bootloader has been entered. This behavior is opt-in using the `allowBootloaderOnly` flag of the [`ZWaveOptions`](#ZWaveOptions). If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image. The `"driver ready"` event will not be emitted and commands attempting to talk to the serial API will fail in this mode. |
 
+In addition, the driver forwards events for all nodes, so they don't have to be registered on each node individually. See [`ZWaveNode` events](api/node.md#zwavenode-events) for details.
+
 ## Interfaces
 
 ### `FileSystem`
@@ -491,18 +493,15 @@ The message priority must one of the following enum values, which are sorted fro
 
 ```ts
 enum MessagePriority {
-	// Outgoing nonces have the highest priority because they are part of other transactions
-	// which may already be in progress.
-	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
-	Nonce = 0,
+	// Some messages like nonces, responses to Supervision and Transport Service
+	// need to be handled before all others. We use this priority to decide which
+	// message goes onto the immediate queue.
+	Immediate = 0,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
 	MultistepController,
-	// Supervision responses must be prioritized over other messages because the nodes requesting them
-	// will get impatient otherwise.
-	Supervision,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly

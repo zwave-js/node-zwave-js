@@ -38,6 +38,10 @@ export type CCSpecificCapabilities = {
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
     [144]: EnergyProductionCCCapabilities;
+    [64]: ThermostatModeCCCapabilities;
+    [67]: ThermostatSetpointCCCapabilities;
+    [99]: UserCodeCCCapabilities;
+    [78]: ScheduleEntryLockCCCapabilities;
 };
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -325,6 +329,18 @@ export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> = T
     ccId: T;
 } & Partial<CommandClassInfo> & Partial<CCIdToCapabilities<T>>);
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockCCCapabilities {
+    // (undocumented)
+    numDailyRepeatingSlots: number;
+    // (undocumented)
+    numWeekDaySlots: number;
+    // (undocumented)
+    numYearDaySlots: number;
+}
+
 // Warning: (ae-missing-release-tag) "SoundSwitchCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -338,6 +354,47 @@ export interface SoundSwitchCCCapabilities {
         name: string;
         duration: number;
     }[];
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatModeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatModeCCCapabilities {
+    // (undocumented)
+    supportedModes: number[];
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCCapabilities {
+    // (undocumented)
+    setpoints: Record<number, {
+        minValue: number;
+        maxValue: number;
+        defaultValue?: number;
+        scale: "°C" | "°F";
+    }>;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCCapabilities {
+    // (undocumented)
+    numUsers: number;
+    // (undocumented)
+    supportedASCIIChars?: string;
+    // (undocumented)
+    supportedKeypadModes?: number[];
+    // (undocumented)
+    supportedUserIDStatuses?: number[];
+    // (undocumented)
+    supportsMasterCode?: boolean;
+    // (undocumented)
+    supportsMasterCodeDeactivation?: boolean;
+    // (undocumented)
+    supportsUserCodeChecksum?: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

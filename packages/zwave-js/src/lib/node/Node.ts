@@ -126,6 +126,7 @@ import {
 	CRC16_CCITT,
 	CacheBackedMap,
 	CommandClasses,
+	EncapsulationFlags,
 	MessagePriority,
 	NOT_KNOWN,
 	NodeType,
@@ -906,6 +907,20 @@ export class ZWaveNode
 			const firmwareVersion = this.firmwareVersion || "0.0";
 			return `https://devices.zwave-js.io/?jumpTo=${manufacturerId}:${productType}:${productId}:${firmwareVersion}`;
 		}
+	}
+
+	/** The last time a message was received from this node */
+	public get lastSeen(): MaybeNotKnown<Date> {
+		return this.driver.cacheGet(cacheKeys.node(this.id).lastSeen);
+	}
+	/** @internal */
+	public set lastSeen(value: MaybeNotKnown<Date>) {
+		this.driver.cacheSet(cacheKeys.node(this.id).lastSeen, value);
+		// Also update statistics
+		this.updateStatistics((cur) => ({
+			...cur,
+			lastSeen: value,
+		}));
 	}
 
 	private _valueDB: ValueDB;
@@ -3522,8 +3537,11 @@ protocol version:      ${this.protocolVersion}`;
 
 		await endpoint.commandClasses["Z-Wave Plus Info"]
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			})
 			.sendReport({
 				zwavePlusVersion: 2,
@@ -3542,8 +3560,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Version, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.sendReport({
@@ -3563,8 +3584,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Version, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.reportCCVersion(command.requestedCC);
@@ -3585,8 +3609,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses["Association Group Information"], false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.reportGroupName(1, "Lifeline");
@@ -3607,8 +3634,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses["Association Group Information"], false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.reportGroupInfo({
@@ -3640,8 +3670,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses["Association Group Information"], false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.reportCommands(
@@ -3665,8 +3698,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Association, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		// We only "support" the lifeline group
@@ -3691,8 +3727,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Association, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		await api.sendReport({
@@ -3752,8 +3791,11 @@ protocol version:      ${this.protocolVersion}`;
 		const api = endpoint
 			.createAPI(CommandClasses.Indicator, false)
 			.withOptions({
-				// Answer with the same encapsulation as asked
-				encapsulationFlags: command.encapsulationFlags,
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags:
+					command.encapsulationFlags &
+					~EncapsulationFlags.Supervision,
 			});
 
 		switch (command.indicatorId) {
@@ -4293,8 +4335,11 @@ protocol version:      ${this.protocolVersion}`;
 			const api = endpoint
 				.createAPI(CommandClasses.Time, false)
 				.withOptions({
-					// Answer with the same encapsulation as asked
-					encapsulationFlags: command.encapsulationFlags,
+					// Answer with the same encapsulation as asked, but omit
+					// Supervision as it shouldn't be used for Get-Report flows
+					encapsulationFlags:
+						command.encapsulationFlags &
+						~EncapsulationFlags.Supervision,
 				});
 			await api.reportTime(hours, minutes, seconds);
 		} catch (e: any) {
@@ -4320,8 +4365,11 @@ protocol version:      ${this.protocolVersion}`;
 			const api = endpoint
 				.createAPI(CommandClasses.Time, false)
 				.withOptions({
-					// Answer with the same encapsulation as asked
-					encapsulationFlags: command.encapsulationFlags,
+					// Answer with the same encapsulation as asked, but omit
+					// Supervision as it shouldn't be used for Get-Report flows
+					encapsulationFlags:
+						command.encapsulationFlags &
+						~EncapsulationFlags.Supervision,
 				});
 			await api.reportDate(year, month, day);
 		} catch (e: any) {
@@ -4346,8 +4394,11 @@ protocol version:      ${this.protocolVersion}`;
 			const api = endpoint
 				.createAPI(CommandClasses.Time, false)
 				.withOptions({
-					// Answer with the same encapsulation as asked
-					encapsulationFlags: command.encapsulationFlags,
+					// Answer with the same encapsulation as asked, but omit
+					// Supervision as it shouldn't be used for Get-Report flows
+					encapsulationFlags:
+						command.encapsulationFlags &
+						~EncapsulationFlags.Supervision,
 				});
 			await api.reportTimezone(timezone);
 		} catch (e) {
@@ -5845,9 +5896,72 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			} catch {
 				return false;
 			}
-		} else {
-			// No way to set the time
-			return false;
+		} else if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.DateReport) &&
+			timeAPI.supportsCommand(TimeCommand.TimeReport)
+		) {
+			// According to https://github.com/zwave-js/node-zwave-js/issues/6032#issuecomment-1641945555
+			// some devices update their date and time when they receive an unsolicited Time CC report.
+			// Even if this isn't intended, we should at least try.
+
+			const api = timeAPI.withOptions({
+				useSupervision: false,
+			});
+			try {
+				// First date
+				const year = now.getFullYear();
+				const month = now.getMonth() + 1;
+				const day = now.getDate();
+				await api.reportDate(year, month, day);
+
+				const verification = await api.getDate();
+				if (
+					!verification ||
+					verification.year !== year ||
+					verification.month !== month ||
+					verification.day !== day
+				) {
+					// Didn't work
+					return false;
+				}
+			} catch {
+				return false;
+			}
+
+			try {
+				// Then time
+				const hour = now.getHours();
+				const minute = now.getMinutes();
+				const second = now.getSeconds();
+				await api.reportTime(hour, minute, second);
+
+				const verification = await api.getTime();
+				if (!verification) return false;
+				// To leave a bit of tolerance for communication delays, we compare the seconds since midnight
+				const secondsPerDay = 24 * 60 * 60;
+				const expected = hour * 60 * 60 + minute * 60 + second;
+				const expectedMin = expected - 30;
+				const expectedMax = expected + 30;
+				const actual =
+					verification.hour * 60 * 60 +
+					verification.minute * 60 +
+					verification.second;
+				// The time may have wrapped around midnight since we set the date
+				if (actual >= expectedMin && actual <= expectedMax) {
+					// ok
+				} else if (
+					actual + secondsPerDay >= expectedMin &&
+					actual + secondsPerDay <= expectedMax
+				) {
+					// ok
+				} else {
+					// Didn't work
+					return false;
+				}
+			} catch {
+				return false;
+			}
 		}
 
 		// We might also have to change the timezone. That is done with the Time CC.

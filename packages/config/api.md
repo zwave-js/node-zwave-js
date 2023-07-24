@@ -5,12 +5,12 @@
 ```ts
 
 import { CommandClasses } from '@zwave-js/core/safe';
-import type { CommandClassInfo } from '@zwave-js/core/safe';
+import { CommandClassInfo } from '@zwave-js/core/safe';
 import { JSONObject } from '@zwave-js/shared/safe';
 import { JSONObject as JSONObject_2 } from '@zwave-js/shared';
 import type { LogContext } from '@zwave-js/core/safe';
 import { ReadonlyObjectKeyMap } from '@zwave-js/shared/safe';
-import type { ValueID } from '@zwave-js/core/safe';
+import { ValueID } from '@zwave-js/core/safe';
 import type { ValueType } from '@zwave-js/core/safe';
 import { ZWaveLogContainer } from '@zwave-js/core';
 
@@ -81,6 +81,29 @@ export interface CompatMapAlarmTo {
     notificationType: number;
 }
 
+// Warning: (ae-missing-release-tag) "CompatOverrideQueries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CompatOverrideQueries {
+    constructor(filename: string, definition: JSONObject);
+    // (undocumented)
+    hasOverride(ccId: CommandClasses): boolean;
+    // (undocumented)
+    matchOverride(cc: CommandClasses, endpointIndex: number, method: string, args: any[]): Pick<CompatOverrideQuery, "result" | "persistValues" | "extendMetadata"> | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "CompatOverrideQuery" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface CompatOverrideQuery {
+    endpoint?: number;
+    extendMetadata?: Record<string, any>;
+    matchArgs?: any[];
+    method: string;
+    persistValues?: Record<string, any>;
+    result: any;
+}
+
 // Warning: (ae-forgotten-export) The symbol "ConditionalItem" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "ConditionalAssociationConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -139,6 +162,8 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
         size?: number;
         precision?: number;
     };
+    // (undocumented)
+    readonly overrideQueries?: CompatOverrideQueries;
     // (undocumented)
     readonly preserveEndpoints?: "*" | readonly number[];
     // (undocumented)

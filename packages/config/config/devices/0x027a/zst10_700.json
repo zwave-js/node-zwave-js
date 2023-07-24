@@ -1,0 +1,16 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZST10-700",
+	"description": "700 Series USB Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x000d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

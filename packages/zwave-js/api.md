@@ -159,6 +159,7 @@ import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveApplicationHost } from '@zwave-js/host';
 import { ZWaveDataRate } from '@zwave-js/core';
 import { ZWaveError } from '@zwave-js/core/safe';
+import { ZWaveError as ZWaveError_2 } from '@zwave-js/core';
 import { ZWaveErrorCodes } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import type { ZWaveHostOptions } from '@zwave-js/host';
@@ -355,6 +356,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // (undocumented)
     get options(): Readonly<ZWaveOptions>;
     get ownNodeId(): number;
+    get queueIdle(): boolean;
     get ready(): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     registerCommandHandler<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, handler: (cc: T) => void): {
@@ -376,7 +378,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     sendMessage<TResponse extends Message = Message>(msg: Message, options?: SendMessageOptions): Promise<TResponse>;
-    get sendThreadIdle(): boolean;
     setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void;
     setSecurityClass(nodeId: number, securityClass: SecurityClass_2, granted: boolean): void;
     shutdown(): Promise<boolean>;
@@ -763,6 +764,7 @@ export interface NodeStatistics {
     commandsDroppedTX: number;
     commandsRX: number;
     commandsTX: number;
+    lastSeen?: Date;
     lwr?: RouteStatistics;
     nlwr?: RouteStatistics;
     rssi?: RSSI_2;
@@ -1103,7 +1105,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // @deprecated (undocumented)
     deleteSUCReturnRoute(nodeId: number): Promise<boolean>;
     deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getKnownNodeNeighbors"
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getNodeNeighbors"
     discoverNodeNeighbors(nodeId: number): Promise<boolean>;
     externalNVMClose(): Promise<void>;
     externalNVMOpen(): Promise<number>;
@@ -1339,6 +1341,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     keepAwake: boolean;
     // (undocumented)
     get label(): string | undefined;
+    get lastSeen(): MaybeNotKnown<Date>;
     protected loadDeviceConfig(): Promise<void>;
     get location(): MaybeNotKnown<string>;
     set location(value: string | undefined);
@@ -1428,6 +1431,11 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 //
 // @public (undocumented)
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
+
+// Warning: (ae-missing-release-tag) "zWaveNodeEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const zWaveNodeEvents: readonly ["notification", "interview failed", "firmware update progress", "firmware update finished", "wake up", "sleep", "dead", "alive", "interview completed", "ready", "interview stage completed", "interview started", "value added", "value updated", "value removed", "metadata updated", "value notification"];
 
 // Warning: (ae-missing-release-tag) "ZWaveNodeFirmwareUpdateFinishedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

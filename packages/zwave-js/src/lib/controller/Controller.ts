@@ -1862,6 +1862,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				});
 				node.updateNodeInfo(msg.nodeInformation);
 
+				// This came from the node
+				node.lastSeen = new Date();
+
 				// Resolve active pings that would fail otherwise
 				this.driver.resolvePendingPings(node.id);
 
@@ -3544,6 +3547,11 @@ supported CCs: ${nodeInfo.supportedCCs
 				return true; // Don't invoke any more handlers
 			}
 
+			case RemoveNodeStatus.Reserved_0x05:
+			// The reserved status can be triggered on some controllers by doing the following:
+			// - factory reset the controller without excluding nodes
+			// - include a new node with the same node ID as one on the previous network
+			// - attempt to exclude the old node while the new node is responsive
 			case RemoveNodeStatus.Done: {
 				// this is called when the exclusion was completed
 				// stop the exclusion process so we don't accidentally remove another node
@@ -3553,7 +3561,10 @@ supported CCs: ${nodeInfo.supportedCCs
 					/* ok */
 				}
 
-				if (!this._nodePendingExclusion) {
+				if (
+					msg.status === RemoveNodeStatus.Reserved_0x05 ||
+					!this._nodePendingExclusion
+				) {
 					// The exclusion did not succeed
 					this.setInclusionState(InclusionState.Idle);
 					return true;
@@ -3784,6 +3795,14 @@ supported CCs: ${nodeInfo.supportedCCs
 	 * Returns `true` if the process succeeded, `false` otherwise.
 	 */
 	public async healNode(nodeId: number): Promise<boolean> {
+		// We cannot heal the controller
+		if (nodeId === this._ownNodeId) {
+			throw new ZWaveError(
+				`Healing the controller itself is not possible!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const node = this.nodes.getOrThrow(nodeId);
 
 		// Don't start the process twice
@@ -5412,12 +5431,20 @@ ${associatedNodes.join(", ")}`,
 	 * **WARNING:** On some controllers, this can cause new SUC return routes to be assigned.
 	 *
 	 * @returns `true` if the update was successful and the new neighbors can be retrieved using
-	 * {@link getKnownNodeNeighbors}. `false` if the update failed.
+	 * {@link getNodeNeighbors}. `false` if the update failed.
 	 */
 	public async discoverNodeNeighbors(nodeId: number): Promise<boolean> {
 		// TODO: Consider making this not block the send queue.
 		// However, I haven't actually seen a UpdateStarted callback in the wild,
 		// so we don't know if that would even work.
+
+		// We cannot discover neighbors for the controller
+		if (nodeId === this._ownNodeId) {
+			throw new ZWaveError(
+				`Discovering neighbors for the controller itself is not possible!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
 
 		// During inclusion, the timeout is mainly required for the node to detect all neighbors
 		// We do the same here, so we just reuse the timeout

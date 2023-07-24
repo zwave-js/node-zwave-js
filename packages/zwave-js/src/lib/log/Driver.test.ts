@@ -11,12 +11,12 @@ import {
 } from "@zwave-js/core/test";
 import { FunctionType, Message, MessageType } from "@zwave-js/serial";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";
 import ava, { type TestFn } from "ava";
 import MockDate from "mockdate";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
+import { TransactionQueue } from "../driver/Queue";
 import { Transaction } from "../driver/Transaction";
 import { DriverLogger } from "./Driver";
 
@@ -299,7 +299,7 @@ test.serial(
 
 test.serial("sendQueue() prints the send queue length", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
-	const queue = new SortedList<Transaction>();
+	const queue = new TransactionQueue();
 	driverLogger.sendQueue(queue);
 	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("(0 messages)"),
@@ -330,7 +330,7 @@ test.serial("sendQueue() prints the send queue length", (t) => {
 
 test.serial("sendQueue() prints the function type for each message", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
-	const queue = new SortedList<Transaction>();
+	const queue = new TransactionQueue();
 	queue.add(
 		createTransaction(driver, {
 			functionType: FunctionType.GetSUCNodeId,
@@ -351,7 +351,7 @@ test.serial("sendQueue() prints the function type for each message", (t) => {
 
 test.serial("sendQueue() prints the message type for each message", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
-	const queue = new SortedList<Transaction>();
+	const queue = new TransactionQueue();
 	queue.add(
 		createTransaction(driver, {
 			functionType: FunctionType.GetSUCNodeId,

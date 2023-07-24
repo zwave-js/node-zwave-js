@@ -69,22 +69,22 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/zooz_template.json#auto_timer_base_3x_7x",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_3x_7x",
 			"label": "Auto Turn-Off Timer for Dimmer"
 		},
 		{
 			"#": "9",
-			"$import": "templates/zooz_template.json#auto_timer_base_3x_7x",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_3x_7x",
 			"label": "Auto Turn-On Timer for Dimmer"
 		},
 		{
 			"#": "10",
-			"$import": "templates/zooz_template.json#auto_timer_base_3x_7x",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_3x_7x",
 			"label": "Auto Turn-Off Timer for Relay"
 		},
 		{
 			"#": "11",
-			"$import": "templates/zooz_template.json#auto_timer_base_3x_7x",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_3x_7x",
 			"label": "Auto Turn-On Timer for Relay"
 		},
 		{
