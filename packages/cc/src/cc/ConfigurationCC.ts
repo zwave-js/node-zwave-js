@@ -2712,18 +2712,16 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				const bits = this.maxValue!;
 				let mask = 1;
 				while (mask <= bits) {
-					if (!!(mask & bits)) {
+					if (
+						// Only create partials that exist
+						!!(mask & bits) &&
 						// Do not override param information from a config file
-						if (
-							this.paramExistsInConfigFile(
-								applHost,
-								this.parameter,
-								mask,
-							)
-						) {
-							continue;
-						}
-
+						!this.paramExistsInConfigFile(
+							applHost,
+							this.parameter,
+							mask,
+						)
+					) {
 						const paramInfo = stripUndefined({
 							...baseInfo,
 							min: 0,
