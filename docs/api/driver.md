@@ -445,17 +445,26 @@ interface LogConfig {
 }
 ```
 
--   `enable`: If `false`, logging will be disabled. Default: `true`.
+By default, Z-Wave JS has two internal transports, a file transport and a console transport. Both share the following options:
+
+-   `enable`: If `false`, the internal transports will be disabled. Default: `true`.
 -   `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.  
     For convenience, the numeric loglevels `0` (`"error"`) to `6` (`"silly"`) can be used instead, but will be converted to their string counterpart internally.
--   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
--   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
 -   `nodeFilter`: If set, only messages regarding the given node IDs are logged
--   `filename`: When `logToFile` is `true`, this is the path to the log file. The default file is called `zwave_%DATE%.log` (where `%DATE%` is replaced with the current date) and located in the same directory as the main executable.
--   `forceConsole`: By default, `zwave-js` does not log to the console if it is not a TTY in order to reduce the CPU load. By setting this option to `true`, the TTY check will be skipped and all logs will be printed to the console, **except if `logToFile` is `true`**. Default: `false`.
 
 > [!NOTE]
 > The `level` property is a numeric value (0-6), but the `LOGLEVEL` environment variable uses the string representation (`error`, ..., `silly`)!
+
+The **file transport** can be configured with the following properties:
+
+-   `logToFile`: Enables the file transport and disables the console transport. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
+-   `filename`: The path to the logfile. The default file is called `zwave_%DATE%.log` (where `%DATE%` is replaced with the current date) and located in the same directory as the main executable.
+
+The **console transport** has the following options:
+
+-   `forceConsole`: In order to reduce the CPU load, `zwave-js` does not log to the console if it is not connected to a TTY or if logging to file is enabled. By setting this option to `true`, these checks will be skipped and all logs will be printed to the console, Default: `false`.
+
+Using the `transports` option, providing custom [`winston`](https://github.com/winstonjs/winston) log transports is also possible. See [Custom log transports](usage/log-transports.md) for details. These will be used **in addition** to the internal transports. If that is not desired, disable them by setting `enabled` to `false`.
 
 ### `SendMessageOptions`
 
