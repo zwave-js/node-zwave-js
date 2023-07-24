@@ -4,6 +4,26 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Setting the date and time on a node will now also attempt sending unsolicited `Time CC` reports if no other way is supported (#6042)
+
+### Bugfixes
+* Fixed an issue where auto-discovered config parameters could create non-existing partial parameters (#6059)
+* Auto-discovered config parameters that are missing from a config file are now preserved and exposed to applications. These can be distinguished from known parameters by checking the `isFromConfig` metadata property (#6058)
+* Fixed an issue where config parameter metadata from a config file could be overridden with auto-discovered information (#6060)
+* Fixed a regression where unsuccessful pings to sleeping nodes would not resolve. Among other things, this could prevent the remove failed node function from working (#6064)
+
+### Config file changes
+* Add new product id to `Fakro ZWS12` (#6027)
+* Disable Supervision for `NICE Spa IBT4ZWAVE` (#6050)
+* Add variant of `Inovelli NZW31T` with manufacturer ID `0x015d` (#6057)
+* Split and correct `Minoston MP21Z/MP31Z/MP21ZP/MP31ZP` config files (#6056)
+* Add `EVA LOGIK (NIE Tech) ZKS31` Rotary Dimmer (#5877)
+
+### Changes under the hood
+* Added a section to the documentation that explains how to use custom log transports (#6061)
+
 ## 11.5.3 (2023-07-20)
 ### Bugfixes
 * Throw when trying to heal or discover neighbors for the controller (#6043)
