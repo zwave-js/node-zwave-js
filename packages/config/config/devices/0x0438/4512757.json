@@ -493,6 +493,7 @@
         "label": "Week program time",
         "description": "4 bytes",
         "valueSize": 4,
+        "defaultValue": 11000000000,
         "unsigned": true
       },
       {
@@ -500,6 +501,7 @@
         "label": "Week program celsius temp",
         "description": "4 bytes",
         "valueSize": 4,
+        "defaultValue": 11010010,
         "unsigned": true
       },
       {
@@ -507,6 +509,7 @@
         "label": "Week program fahrenheit temp",
         "description": "4 bytes",
         "valueSize": 4,
+        "defaultValue": 1010111100,
         "unsigned": true
       }
     ],
