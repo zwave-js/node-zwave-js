@@ -5994,6 +5994,131 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		return true;
 	}
 
+	/**
+	 * Returns the current date, time and timezone (or a subset of those) on the node using one or more of the respective CCs.
+	 */
+	public async getDateAndTime(): Promise<object> {
+		const timeParametersAPI = this.commandClasses["Time Parameters"];
+		const timeAPI = this.commandClasses.Time;
+		const clockAPI = this.commandClasses.Clock;
+		const scheduleEntryLockAPI = this.commandClasses["Schedule Entry Lock"];
+
+		// We'll go through the various CCs filling this out and return whatever we've got at the end
+		const response: {
+			hour?: number;
+			minute?: number;
+			second?: number;
+			timezone?: number;
+			weekday?: number;
+			day?: number;
+			month?: number;
+			year?: number;
+		} = {};
+
+		if (
+			timeParametersAPI.isSupported() &&
+			timeParametersAPI.supportsCommand(TimeParametersCommand.Get)
+		) {
+			try {
+				const result = await timeParametersAPI.get();
+				if (result) {
+					// Time Parameters is all UTC per the spec
+					response.hour = result.getUTCHours();
+					response.minute = result.getUTCMinutes();
+					response.second = result.getUTCSeconds();
+					response.timezone = 0;
+					response.weekday = result.getUTCDay();
+					response.day = result.getUTCDate();
+					response.month = result.getUTCMonth();
+					response.year = result.getUTCFullYear();
+				}
+				// That's everything
+				return response;
+			} catch (e) {}
+		}
+
+		if (
+			clockAPI.isSupported() &&
+			clockAPI.supportsCommand(ClockCommand.Get)
+		) {
+			try {
+				const result = await clockAPI.get();
+				if (result) {
+					response.hour = result.hour;
+					response.minute = result.minute;
+					response.weekday = result.weekday;
+				}
+			} catch (e) {}
+		}
+
+		if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.TimeGet)
+		) {
+			try {
+				const result = await timeAPI.getTime();
+				if (result) {
+					response.hour = result.hour;
+					response.minute = result.minute;
+					response.second = result.second;
+				}
+			} catch (e) {}
+		}
+
+		if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.DateGet)
+		) {
+			try {
+				const result = await timeAPI.getDate();
+				if (result) {
+					response.day = result.day;
+					response.month = result.month;
+					response.year = result.year;
+				}
+			} catch (e) {}
+		}
+
+		if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.TimeOffsetGet)
+		) {
+			try {
+				const result = await timeAPI.getTimezone();
+				if (result) {
+					const now: Date = new Date();
+					if (now > result.startDate && now < result.endDate) {
+						response.timezone = result.dstOffset;
+					} else {
+						response.timezone = result.standardOffset;
+					}
+				}
+			} catch (e) {}
+		}
+
+		if (
+			scheduleEntryLockAPI.isSupported() &&
+			scheduleEntryLockAPI.supportsCommand(
+				ScheduleEntryLockCommand.TimeOffsetGet,
+			)
+		) {
+			try {
+				const result = await scheduleEntryLockAPI.getTimezone();
+				if (result) {
+					/* How can I tell if the node is using DST or not?
+					I'll just assume no, I guess.
+
+					Also, Time CC returns offset in hours and minutes
+					while Schedule Entry Lock returns in just minutes?  Oy. */
+
+					response.timezone = result.standardOffset / 60;
+				}
+			} catch (e) {}
+		}
+
+		return response;
+	}
+
 	public async sendResetLocallyNotification(): Promise<void> {
 		// We don't care if the CC is supported by the receiving node
 		const api = this.createAPI(
