@@ -71,6 +71,7 @@ import { migrateNVM } from "@zwave-js/nvmedit";
 import {
 	BootloaderChunkType,
 	FunctionType,
+	NodeIDType,
 	XModemMessageHeaders,
 	type BootloaderChunk,
 	type Message,
@@ -110,11 +111,7 @@ import {
 	NodeStatus,
 	type LifelineRoutes,
 } from "../node/_Types";
-import {
-	ZWaveLibraryTypes,
-	type NodeIDType,
-	type ZWaveApiVersion,
-} from "../serialapi/_Types";
+import { ZWaveLibraryTypes, type ZWaveApiVersion } from "../serialapi/_Types";
 import {
 	ApplicationUpdateRequestNodeAdded,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -628,6 +625,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._nodes;
 	}
 
+	private _nodeIdType: NodeIDType = NodeIDType.Short;
+	/** Whether the controller is configured to use 8 or 16 bit node IDs */
+	public get nodeIdType(): NodeIDType {
+		return this._nodeIdType;
+	}
+
 	/** Returns the node with the given DSK */
 	public getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined {
 		try {
@@ -1033,6 +1036,31 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					"warn",
 				);
 			}
+		}
+
+		// Switch to 16 bit node IDs if supported
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetNodeIDType,
+			)
+		) {
+			this.driver.controllerLog.print(
+				`Switching serial API to 16-bit node IDs...`,
+			);
+			const resp =
+				await this.driver.sendMessage<SerialAPISetup_SetNodeIDTypeResponse>(
+					new SerialAPISetup_SetNodeIDTypeRequest(this.driver, {
+						nodeIdType: NodeIDType.Long,
+					}),
+				);
+			if (resp.success) {
+				this._nodeIdType = NodeIDType.Long;
+			}
+			this.driver.controllerLog.print(
+				`Switching to 16-bit node IDs ${
+					resp.success ? "successful" : "failed"
+				}`,
+			);
 		}
 
 		// find the SUC
