@@ -6,6 +6,7 @@ import {
 	ZWaveErrorCodes,
 	parseBitMask,
 	validatePayload,
+	type IZWaveEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
@@ -249,6 +250,23 @@ export class BinarySensorCC extends CommandClass {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns which sensor types are supported.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedSensorTypesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<BinarySensorType[]> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				BinarySensorCCValues.supportedSensorTypes.endpoint(
+					endpoint.index,
+				),
+			);
 	}
 
 	public setMappedBasicValue(

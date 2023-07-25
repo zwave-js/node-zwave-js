@@ -1,6 +1,7 @@
 import { Scale, getDefaultScale } from "@zwave-js/config";
 import { timespan } from "@zwave-js/core";
 import type {
+	IZWaveEndpoint,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SinglecastCC,
@@ -551,6 +552,41 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				Date.now() - lastUpdated > timespan.hours(6)
 			);
 		});
+	}
+
+	/**
+	 * Returns which sensor types are supported.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedSensorTypesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<number[]> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				MultilevelSensorCCValues.supportedSensorTypes.endpoint(
+					endpoint.index,
+				),
+			);
+	}
+
+	/**
+	 * Returns which scales are supported for a given sensor type.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedScalesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		sensorType: number,
+	): MaybeNotKnown<number[]> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				MultilevelSensorCCValues.supportedScales(sensorType).endpoint(
+					endpoint.index,
+				),
+			);
 	}
 
 	public translatePropertyKey(
