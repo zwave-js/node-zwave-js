@@ -1,0 +1,519 @@
+{
+    "manufacturer": "Namron",
+    "manufacturerId": "0x0438",
+    "label": "4512757",
+    "description": "16A zwave thermostat - White",
+    "devices": [
+      {
+        "productType": "0x0004",
+        "productId": "0x0108"
+      }
+    ],
+    "firmwareVersion": {
+      "min": "0.0",
+      "max": "255.255"
+    },
+    "associations": {
+      "1": {
+        "label": "Lifeline",
+        "maxNodes": 5,
+        "isLifeline": true
+      }
+    },
+    "paramInformation": [
+      {
+        "#": "3[0x04]",
+        "label": "ECO Mode",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "minValue": 0,
+        "maxValue": 1,
+        "defaultValue": 0,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "OFF",
+            "value": 0
+          },
+          {
+            "label": "ON",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0x08]",
+        "label": "Window check",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "defaultValue": 1,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "OFF",
+            "value": 0
+          },
+          {
+            "label": "ON",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0x0A]",
+        "label": "Frost",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "defaultValue": 0,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "OFF",
+            "value": 0
+          },
+          {
+            "label": "ON",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0x17]",
+        "label": "Temp Unit",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "unit": "°C",
+        "minValue": 0,
+        "maxValue": 1,
+        "defaultValue": 0,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "°C",
+            "value": 0
+          },
+          {
+            "label": "°F",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0x1B]",
+        "label": "Temp correction",
+        "description": "Allowable range: -10~10",
+        "valueSize": 4,
+        "minValue": -10,
+        "maxValue": 10,
+        "defaultValue": 0,
+        "unsigned": false
+      },
+      {
+        "#": "3[0x1F]",
+        "label": "Work days set",
+        "valueSize": 4,
+        "minValue": 0,
+        "maxValue": 3,
+        "defaultValue": 0,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "5_2",
+            "value": 0
+          },
+          {
+            "label": "6_1",
+            "value": 1
+          },
+          {
+            "label": "7_0",
+            "value": 2
+          },
+          {
+            "label": "0_7",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "#": "3[0x28]",
+        "label": "Child lock",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "defaultValue": 0,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "OFF",
+            "value": 0
+          },
+          {
+            "label": "ON",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0x2B]",
+        "label": "Sensor mode",
+        "valueSize": 4,
+        "minValue": 0,
+        "maxValue": 6,
+        "defaultValue": 1,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "A",
+            "value": 0
+          },
+          {
+            "label": "F",
+            "value": 1
+          },
+          {
+            "label": "AF",
+            "value": 2
+          },
+          {
+            "label": "A2",
+            "value": 3
+          },
+          {
+            "label": "A2F",
+            "value": 4
+          },
+          {
+            "label": "P",
+            "value": 6
+          }
+        ]
+      },
+      {
+        "#": "3[0x3A]",
+        "label": "Run mode",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "defaultValue": 1,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "Manual",
+            "value": 0
+          },
+          {
+            "label": "Program",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0x70]",
+        "label": "Adaption",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "defaultValue": 0,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "OFF",
+            "value": 0
+          },
+          {
+            "label": "ON",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0x76]",
+        "label": "Regulator",
+        "description": "Allowable range: 0-30",
+        "valueSize": 4,
+        "defaultValue": 30,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "OFF",
+            "value": 0
+          },
+          {
+            "label": "30M",
+            "value": 30
+          }
+        ]
+      },
+      {
+        "#": "3[0x7B]",
+        "label": "LCD Backlight standby",
+        "description": "Allowable range: 10-100 (increment by 10)",
+        "valueSize": 4,
+        "defaultValue": 10,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "10%",
+            "value": 10
+          },
+          {
+            "label": "20%",
+            "value": 20
+          },
+          {
+            "label": "30%",
+            "value": 30
+          },
+          {
+            "label": "40%",
+            "value": 40
+          },
+          {
+            "label": "50%",
+            "value": 50
+          },
+          {
+            "label": "60%",
+            "value": 60
+          },
+          {
+            "label": "70%",
+            "value": 70
+          },
+          {
+            "label": "80%",
+            "value": 80
+          },
+          {
+            "label": "90%",
+            "value": 90
+          },
+          {
+            "label": "100%",
+            "value": 100
+          }
+        ]
+      },
+      {
+        "#": "3[0x7C]",
+        "label": "LCD Backlight work",
+        "description": "Allowable range: 10-100 (increment by 10)",
+        "valueSize": 4,
+        "defaultValue": 100,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "10%",
+            "value": 10
+          },
+          {
+            "label": "20%",
+            "value": 20
+          },
+          {
+            "label": "30%",
+            "value": 30
+          },
+          {
+            "label": "40%",
+            "value": 40
+          },
+          {
+            "label": "50%",
+            "value": 50
+          },
+          {
+            "label": "60%",
+            "value": 60
+          },
+          {
+            "label": "70%",
+            "value": 70
+          },
+          {
+            "label": "80%",
+            "value": 80
+          },
+          {
+            "label": "90%",
+            "value": 90
+          },
+          {
+            "label": "100%",
+            "value": 100
+          }
+        ]
+      },
+      {
+        "#": "3[0x7F]",
+        "label": "Regulator percentage",
+        "description": "Allowable range: 0-100 (increment by 10)",
+        "valueSize": 4,
+        "defaultValue": 20,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "0%",
+            "value": 0
+          },
+          {
+            "label": "10%",
+            "value": 10
+          },
+          {
+            "label": "20%",
+            "value": 20
+          },
+          {
+            "label": "30%",
+            "value": 30
+          },
+          {
+            "label": "40%",
+            "value": 40
+          },
+          {
+            "label": "50%",
+            "value": 50
+          },
+          {
+            "label": "60%",
+            "value": 60
+          },
+          {
+            "label": "70%",
+            "value": 70
+          },
+          {
+            "label": "80%",
+            "value": 80
+          },
+          {
+            "label": "90%",
+            "value": 90
+          },
+          {
+            "label": "100%",
+            "value": 100
+          }
+        ]
+      },
+      {
+        "#": "3[0x86]",
+        "label": "DIF Celsius",
+        "description": "Allowable range: 5-100 (increment by 5)",
+        "valueSize": 4,
+        "defaultValue": 0,
+        "unsigned": true
+      },
+      {
+        "#": "3[0x87]",
+        "label": "DIF Fahrenheit",
+        "description": "Allowable range: 10-180 (increment by 10)",
+        "valueSize": 4,
+        "defaultValue": 20,
+        "unsigned": true
+      },
+      {
+        "#": "3[0x88]",
+        "label": "Frost Celsius",
+        "description": "Allowable range: 50-100 (increment by 10)",
+        "valueSize": 4,
+        "defaultValue": 50,
+        "unsigned": true
+      },
+      {
+        "#": "3[0x89]",
+        "label": "Frost Fahrenheit",
+        "description": "Allowable range: 410-500 (increment by 20)",
+        "valueSize": 4,
+        "defaultValue": 410,
+        "unsigned": true
+      },
+      {
+        "#": "3[0xB7]",
+        "label": "Dry",
+        "description": "Allowable range: 0-120 (increment by 5)",
+        "valueSize": 4,
+        "defaultValue": 30,
+        "unsigned": true
+      },
+      {
+        "#": "3[0xB9]",
+        "label": "Celsius FLT",
+        "description": "Allowable range: 50-600 (increment by 5)",
+        "valueSize": 4,
+        "defaultValue": 270,
+        "unsigned": true
+      },
+      {
+        "#": "3[0xBA]",
+        "label": "Fahrenheit FLT",
+        "description": "Allowable range: 410-1400 (increment by 10)",
+        "valueSize": 4,
+        "defaultValue": 810,
+        "unsigned": true
+      },
+      {
+        "#": "3[0xBC]",
+        "label": "LCD Display Switch",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "defaultValue": 1,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "OFF",
+            "value": 0
+          },
+          {
+            "label": "ON",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0xBD]",
+        "label": "Automatically get network time",
+        "description": "Allowable range: 0-1",
+        "valueSize": 4,
+        "defaultValue": 0,
+        "unsigned": true,
+        "options": [
+          {
+            "label": "OFF",
+            "value": 0
+          },
+          {
+            "label": "ON",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "#": "3[0xC7]",
+        "label": "Week program time",
+        "description": "4 bytes",
+        "valueSize": 4,
+        "unsigned": true
+      },
+      {
+        "#": "3[0xC8]",
+        "label": "Week program celsius temp",
+        "description": "4 bytes",
+        "valueSize": 4,
+        "unsigned": true
+      },
+      {
+        "#": "3[0xC9]",
+        "label": "Week program fahrenheit temp",
+        "description": "4 bytes",
+        "valueSize": 4,
+        "unsigned": true
+      }
+    ],
+    "metadata": {
+      "inclusion": "Select menu item “Net”, then find IN and long-press M for 2s.",
+      "exclusion": "Select menu item “Net”, then find OUT and long-press M for 2s.",
+      "reset": "Select menu item “Net”, then find OUT and long-press M for 2s.",
+      "manual": "https://www.elektroimportoren.no/docs/lib/4512757-Manual-18.pdf"
+    }
+  }  
