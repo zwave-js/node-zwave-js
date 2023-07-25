@@ -47,6 +47,8 @@
         "description": "Allowable range: 0-1",
         "valueSize": 4,
         "defaultValue": 1,
+        "minValue": 0,
+        "maxValue": 1,
         "unsigned": true,
         "options": [
           {
@@ -65,6 +67,8 @@
         "description": "Allowable range: 0-1",
         "valueSize": 4,
         "defaultValue": 0,
+        "minValue": 0,
+        "maxValue": 1,
         "unsigned": true,
         "options": [
           {
@@ -141,6 +145,8 @@
         "description": "Allowable range: 0-1",
         "valueSize": 4,
         "defaultValue": 0,
+        "minValue": 0,
+        "maxValue": 1,
         "unsigned": true,
         "options": [
           {
@@ -194,6 +200,8 @@
         "description": "Allowable range: 0-1",
         "valueSize": 4,
         "defaultValue": 1,
+        "minValue": 0,
+        "maxValue": 1,
         "unsigned": true,
         "options": [
           {
@@ -212,6 +220,8 @@
         "description": "Allowable range: 0-1",
         "valueSize": 4,
         "defaultValue": 0,
+        "minValue": 0,
+        "maxValue": 1,
         "unsigned": true,
         "options": [
           {
@@ -230,6 +240,8 @@
         "description": "Allowable range: 0-30",
         "valueSize": 4,
         "defaultValue": 30,
+        "minValue": 0,
+        "maxValue": 30,
         "unsigned": true,
         "options": [
           {
@@ -248,6 +260,8 @@
         "description": "Allowable range: 10-100 (increment by 10)",
         "valueSize": 4,
         "defaultValue": 10,
+        "minValue": 10,
+        "maxValue": 100,
         "unsigned": true,
         "options": [
           {
@@ -298,6 +312,8 @@
         "description": "Allowable range: 10-100 (increment by 10)",
         "valueSize": 4,
         "defaultValue": 100,
+        "minValue": 10,
+        "maxValue": 100,
         "unsigned": true,
         "options": [
           {
@@ -348,6 +364,8 @@
         "description": "Allowable range: 0-100 (increment by 10)",
         "valueSize": 4,
         "defaultValue": 20,
+        "minValue": 0,
+        "maxValue": 100,
         "unsigned": true,
         "options": [
           {
@@ -402,6 +420,8 @@
         "description": "Allowable range: 5-100 (increment by 5)",
         "valueSize": 4,
         "defaultValue": 0,
+        "minValue": 5,
+        "maxValue": 100,
         "unsigned": true
       },
       {
@@ -410,6 +430,8 @@
         "description": "Allowable range: 10-180 (increment by 10)",
         "valueSize": 4,
         "defaultValue": 20,
+        "minValue": 10,
+        "maxValue": 180,
         "unsigned": true
       },
       {
@@ -418,6 +440,8 @@
         "description": "Allowable range: 50-100 (increment by 10)",
         "valueSize": 4,
         "defaultValue": 50,
+        "minValue": 50,
+        "maxValue": 100,
         "unsigned": true
       },
       {
@@ -426,6 +450,8 @@
         "description": "Allowable range: 410-500 (increment by 20)",
         "valueSize": 4,
         "defaultValue": 410,
+        "minValue": 410,
+        "maxValue": 500,
         "unsigned": true
       },
       {
@@ -434,6 +460,8 @@
         "description": "Allowable range: 0-120 (increment by 5)",
         "valueSize": 4,
         "defaultValue": 30,
+        "minValue": 0,
+        "maxValue": 120,
         "unsigned": true
       },
       {
@@ -442,6 +470,8 @@
         "description": "Allowable range: 50-600 (increment by 5)",
         "valueSize": 4,
         "defaultValue": 270,
+        "minValue": 50,
+        "maxValue": 600,
         "unsigned": true
       },
       {
@@ -450,6 +480,8 @@
         "description": "Allowable range: 410-1400 (increment by 10)",
         "valueSize": 4,
         "defaultValue": 810,
+        "minValue": 410,
+        "maxValue": 1400,
         "unsigned": true
       },
       {
@@ -458,6 +490,8 @@
         "description": "Allowable range: 0-1",
         "valueSize": 4,
         "defaultValue": 1,
+        "minValue": 0,
+        "maxValue": 1,
         "unsigned": true,
         "options": [
           {
@@ -476,6 +510,8 @@
         "description": "Allowable range: 0-1",
         "valueSize": 4,
         "defaultValue": 0,
+        "minValue": 0,
+        "maxValue": 1,
         "unsigned": true,
         "options": [
           {
@@ -494,6 +530,8 @@
         "description": "4 bytes",
         "valueSize": 4,
         "defaultValue": 11000000000,
+        "minValue": 00000000000,
+        "maxValue": 11111111111,
         "unsigned": true
       },
       {
@@ -502,6 +540,8 @@
         "description": "4 bytes",
         "valueSize": 4,
         "defaultValue": 11010010,
+        "minValue": 00000000000,
+        "maxValue": 11111111111,
         "unsigned": true
       },
       {
@@ -510,6 +550,8 @@
         "description": "4 bytes",
         "valueSize": 4,
         "defaultValue": 1010111100,
+        "minValue": 00000000000,
+        "maxValue": 11111111111,
         "unsigned": true
       }
     ],
