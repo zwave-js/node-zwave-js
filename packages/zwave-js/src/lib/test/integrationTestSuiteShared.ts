@@ -55,6 +55,7 @@ export function prepareDriver(
 			),
 		},
 		storage: {
+			...(additionalOptions.storage ?? {}),
 			cacheDir: cacheDir,
 			lockDir: path.join(cacheDir, "locks"),
 		},
