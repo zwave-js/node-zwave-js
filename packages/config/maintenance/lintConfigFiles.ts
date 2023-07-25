@@ -15,12 +15,12 @@ import type { RulesLogic } from "json-logic-js";
 import * as path from "path";
 import type { ConditionalParamInfoMap, ParamInfoMap } from "../src";
 import { ConfigManager } from "../src/ConfigManager";
+import { parseLogic } from "../src/Logic";
 import {
 	ConditionalDeviceConfig,
-	DeviceConfig,
+	type DeviceConfig,
 } from "../src/devices/DeviceConfig";
 import type { DeviceID } from "../src/devices/shared";
-import { parseLogic } from "../src/Logic";
 import {
 	configDir,
 	getDeviceEntryPredicate,
