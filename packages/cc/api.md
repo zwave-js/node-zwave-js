@@ -99,6 +99,7 @@ export class AlarmSensorCC extends CommandClass {
     ccCommand: AlarmSensorCommand;
     // (undocumented)
     protected createMetadataForSensorType(applHost: ZWaveApplicationHost_2, sensorType: AlarmSensorType): void;
+    static getSupportedSensorTypesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<AlarmSensorType[]>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
@@ -2194,6 +2195,7 @@ export enum BatteryReplacementStatus {
 export class BinarySensorCC extends CommandClass {
     // (undocumented)
     ccCommand: BinarySensorCommand;
+    static getSupportedSensorTypesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<BinarySensorType[]>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
@@ -10048,12 +10050,16 @@ export function messageIsPing<T extends Message>(msg: T): msg is T & {
 export class MeterCC extends CommandClass {
     // (undocumented)
     ccCommand: MeterCommand;
+    static getMeterTypeCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint): MaybeNotKnown<number>;
+    static getSupportedRateTypesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint): MaybeNotKnown<RateType[]>;
+    static getSupportedScalesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint): MaybeNotKnown<number[]>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     shouldRefreshValues(this: SinglecastCC_2<this>, applHost: ZWaveApplicationHost_2): boolean;
+    static supportsResetCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint): MaybeNotKnown<boolean>;
     // (undocumented)
     translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey: string | number): string | undefined;
 }
@@ -11160,6 +11166,8 @@ export interface MultiEncapsulatingCommandClassStatic {
 export class MultilevelSensorCC extends CommandClass {
     // (undocumented)
     ccCommand: MultilevelSensorCommand;
+    static getSupportedScalesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2, sensorType: number): MaybeNotKnown<number[]>;
+    static getSupportedSensorTypesCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): MaybeNotKnown<number[]>;
     // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
