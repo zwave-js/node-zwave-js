@@ -248,6 +248,7 @@ export class ConditionalDeviceConfig {
     // (undocumented)
     static from(filename: string, isEmbedded: boolean, options: {
         rootDir: string;
+        fallbackDirs?: string[];
         relative?: boolean;
     }): Promise<ConditionalDeviceConfig>;
     readonly isEmbedded: boolean;
@@ -517,6 +518,7 @@ export class DeviceConfig {
     // (undocumented)
     static from(filename: string, isEmbedded: boolean, options: {
         rootDir: string;
+        fallbackDirs?: string[];
         relative?: boolean;
         deviceId?: DeviceID;
     }): Promise<DeviceConfig>;
