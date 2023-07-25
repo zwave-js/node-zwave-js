@@ -12,7 +12,7 @@ import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { MessageHeaders } from "../MessageHeaders";
-import { FunctionType, MessageType, type NodeIDType } from "./Constants";
+import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
 
 export type MessageConstructor<T extends Message> = new (
@@ -38,8 +38,6 @@ export interface MessageDeserializationOptions {
 	parseCCs?: boolean;
 	/** If known already, this contains the SDK version of the stick which can be used to interpret payloads differently */
 	sdkVersion?: string;
-	/** How many bytes a node ID occupies in Serial API commands */
-	nodeIdType?: NodeIDType;
 }
 
 /**

@@ -1,5 +1,6 @@
 import {
 	MessagePriority,
+	NodeIDType,
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -18,7 +19,6 @@ import {
 	FunctionType,
 	Message,
 	MessageType,
-	NodeIDType,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,

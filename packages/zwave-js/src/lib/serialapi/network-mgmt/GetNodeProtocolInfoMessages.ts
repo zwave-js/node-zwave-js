@@ -1,5 +1,6 @@
 import {
 	MessagePriority,
+	encodeNodeID,
 	encodeNodeProtocolInfo,
 	parseNodeProtocolInfo,
 	type DataRate,
@@ -48,7 +49,7 @@ export class GetNodeProtocolInfoRequest extends Message {
 	public requestedNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.requestedNodeId]);
+		this.payload = encodeNodeID(this.requestedNodeId, this.host.nodeIdType);
 		return super.serialize();
 	}
 }

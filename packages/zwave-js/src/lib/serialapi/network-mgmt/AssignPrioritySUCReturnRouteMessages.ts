@@ -6,6 +6,7 @@ import {
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
@@ -87,14 +88,17 @@ export class AssignPrioritySUCReturnRouteRequest extends AssignPrioritySUCReturn
 	public routeSpeed: ZWaveDataRate;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.nodeId,
-			this.repeaters[0] ?? 0,
-			this.repeaters[1] ?? 0,
-			this.repeaters[2] ?? 0,
-			this.repeaters[3] ?? 0,
-			this.routeSpeed,
-			this.callbackId,
+		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+		this.payload = Buffer.concat([
+			nodeId,
+			Buffer.from([
+				this.repeaters[0] ?? 0,
+				this.repeaters[1] ?? 0,
+				this.repeaters[2] ?? 0,
+				this.repeaters[3] ?? 0,
+				this.routeSpeed,
+				this.callbackId,
+			]),
 		]);
 
 		return super.serialize();

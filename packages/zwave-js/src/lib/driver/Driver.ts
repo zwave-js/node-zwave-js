@@ -54,6 +54,7 @@ import {
 	MAX_TRANSPORT_SERVICE_SESSION_ID,
 	MPANState,
 	MessagePriority,
+	NodeIDType,
 	SPANState,
 	SecurityClass,
 	SecurityManager,
@@ -95,7 +96,6 @@ import {
 	Message,
 	MessageHeaders,
 	MessageType,
-	NodeIDType,
 	XModemMessageHeaders,
 	ZWaveSerialMode,
 	ZWaveSerialPort,
@@ -678,6 +678,10 @@ export class Driver
 	public get ownNodeId(): number {
 		// This is needed for the ZWaveHost interface
 		return this.controller.ownNodeId!;
+	}
+
+	public get nodeIdType(): NodeIDType {
+		return this._controller?.nodeIdType ?? NodeIDType.Short;
 	}
 
 	/**
@@ -2793,7 +2797,6 @@ export class Driver
 			msg = Message.from(this, {
 				data,
 				sdkVersion: this._controller?.sdkVersion,
-				nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
 			});
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen

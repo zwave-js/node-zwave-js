@@ -1,4 +1,9 @@
-import { MessagePriority, type MessageOrCCLogEntry } from "@zwave-js/core";
+import {
+	MessagePriority,
+	encodeNodeID,
+	parseNodeID,
+	type MessageOrCCLogEntry,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
@@ -85,7 +90,11 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			this.nodeId = this.payload[0];
+			this.nodeId = parseNodeID(
+				this.payload,
+				this.host.nodeIdType,
+				0,
+			).nodeId;
 		} else {
 			this.nodeId = options.nodeId;
 		}
@@ -99,7 +108,7 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	}
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.nodeId]);
+		this.payload = encodeNodeID(this.nodeId, this.host.nodeIdType);
 		return super.serialize();
 	}
 

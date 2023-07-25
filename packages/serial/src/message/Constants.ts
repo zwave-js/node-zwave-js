@@ -183,8 +183,3 @@ export enum FunctionType {
 	UNKNOWN_FUNC_ZMECapabilities = 0xf5,
 	UNKNOWN_FUNC_ZMESerialAPIOptions = 0xf8,
 }
-
-export enum NodeIDType {
-	Short = 0x01,
-	Long = 0x02,
-}

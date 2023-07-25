@@ -5,6 +5,7 @@ import {
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 } from "@zwave-js/core";
@@ -76,18 +77,24 @@ export class SetPriorityRouteRequest extends Message {
 	public routeSpeed: ZWaveDataRate | undefined;
 
 	public serialize(): Buffer {
+		const nodeId = encodeNodeID(
+			this.destinationNodeId,
+			this.host.nodeIdType,
+		);
 		if (this.repeaters == undefined || this.routeSpeed == undefined) {
 			// Remove the priority route
-			this.payload = Buffer.from([this.destinationNodeId]);
+			this.payload = nodeId;
 		} else {
 			// Set the priority route
-			this.payload = Buffer.from([
-				this.destinationNodeId,
-				this.repeaters[0] ?? 0,
-				this.repeaters[1] ?? 0,
-				this.repeaters[2] ?? 0,
-				this.repeaters[3] ?? 0,
-				this.routeSpeed,
+			this.payload = Buffer.concat([
+				nodeId,
+				Buffer.from([
+					this.repeaters[0] ?? 0,
+					this.repeaters[1] ?? 0,
+					this.repeaters[2] ?? 0,
+					this.repeaters[3] ?? 0,
+					this.routeSpeed,
+				]),
 			]);
 		}
 

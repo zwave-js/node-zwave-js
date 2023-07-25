@@ -33,6 +33,7 @@ import {
 	EMPTY_ROUTE,
 	MAX_NODES,
 	NODE_ID_BROADCAST,
+	NodeIDType,
 	NodeType,
 	ProtocolType,
 	RFRegion,
@@ -71,7 +72,6 @@ import { migrateNVM } from "@zwave-js/nvmedit";
 import {
 	BootloaderChunkType,
 	FunctionType,
-	NodeIDType,
 	XModemMessageHeaders,
 	type BootloaderChunk,
 	type Message,
