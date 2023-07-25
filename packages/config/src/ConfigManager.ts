@@ -649,14 +649,17 @@ export class ConfigManager {
 				.relative(devicesDir, filePath)
 				.startsWith("..");
 
+			// When a device file is located in a different root directory than the embedded config files,
+			// we use the embedded dir a fallback
+			const rootDir = indexEntry.rootDir ?? devicesDir;
+			const fallbackDirs =
+				rootDir === devicesDir ? undefined : [devicesDir];
+
 			try {
 				return await ConditionalDeviceConfig.from(
 					filePath,
 					isEmbedded,
-					{
-						// When looking for device files, fall back to the embedded config dir
-						rootDir: indexEntry.rootDir ?? devicesDir,
-					},
+					{ rootDir, fallbackDirs },
 				);
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {

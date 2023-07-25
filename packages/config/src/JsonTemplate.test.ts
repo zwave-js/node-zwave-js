@@ -741,7 +741,7 @@ test.serial(
 					path.join(mockDir, rootDir),
 				),
 			{
-				messageMatches: "outside of root",
+				messageMatches: "outside all root directories",
 				errorCode: ZWaveErrorCodes.Config_Invalid,
 			},
 		);

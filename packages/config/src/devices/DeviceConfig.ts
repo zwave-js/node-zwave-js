@@ -126,6 +126,10 @@ async function generateIndex<T extends Record<string, unknown>>(
 			!file.includes("\\templates\\"),
 	);
 
+	// Add the embedded devices dir as a fallback if necessary
+	const fallbackDirs =
+		devicesDir !== embeddedDevicesDir ? [embeddedDevicesDir] : undefined;
+
 	for (const file of configFiles) {
 		const relativePath = path
 			.relative(devicesDir, file)
@@ -134,6 +138,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 		try {
 			const config = await DeviceConfig.from(file, isEmbedded, {
 				rootDir: devicesDir,
+				fallbackDirs,
 				relative: true,
 			});
 			// Add the file to the index
@@ -363,6 +368,7 @@ export class ConditionalDeviceConfig {
 		isEmbedded: boolean,
 		options: {
 			rootDir: string;
+			fallbackDirs?: string[];
 			relative?: boolean;
 		},
 	): Promise<ConditionalDeviceConfig> {
@@ -371,7 +377,10 @@ export class ConditionalDeviceConfig {
 		const relativePath = relative
 			? path.relative(rootDir, filename).replace(/\\/g, "/")
 			: filename;
-		const json = await readJsonWithTemplate(filename, options.rootDir);
+		const json = await readJsonWithTemplate(filename, [
+			options.rootDir,
+			...(options.fallbackDirs ?? []),
+		]);
 		return new ConditionalDeviceConfig(relativePath, isEmbedded, json);
 	}
 
@@ -638,6 +647,7 @@ export class DeviceConfig {
 		isEmbedded: boolean,
 		options: {
 			rootDir: string;
+			fallbackDirs?: string[];
 			relative?: boolean;
 			deviceId?: DeviceID;
 		},

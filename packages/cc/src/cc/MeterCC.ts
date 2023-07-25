@@ -3,7 +3,11 @@ import {
 	type ConfigManager,
 	type MeterScale,
 } from "@zwave-js/config";
-import { timespan, type MaybeUnknown } from "@zwave-js/core";
+import {
+	timespan,
+	type IZWaveEndpoint,
+	type MaybeUnknown,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -506,6 +510,60 @@ supports reset:       ${suppResp.supportsReset}`;
 				Date.now() - lastUpdated > timespan.hours(6)
 			);
 		});
+	}
+
+	/**
+	 * Returns which type this meter has.
+	 * This only works AFTER the interview process
+	 */
+	public static getMeterTypeCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<number> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(MeterCCValues.type.endpoint(endpoint.index));
+	}
+
+	/**
+	 * Returns which scales are supported by this meter.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedScalesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<number[]> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(MeterCCValues.supportedScales.endpoint(endpoint.index));
+	}
+
+	/**
+	 * Returns whether reset is supported by this meter.
+	 * This only works AFTER the interview process
+	 */
+	public static supportsResetCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<boolean> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(MeterCCValues.supportsReset.endpoint(endpoint.index));
+	}
+
+	/**
+	 * Returns which rate types are supported by this meter.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedRateTypesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<RateType[]> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				MeterCCValues.supportedRateTypes.endpoint(endpoint.index),
+			);
 	}
 
 	public translatePropertyKey(

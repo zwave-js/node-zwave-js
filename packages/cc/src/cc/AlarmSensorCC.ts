@@ -6,6 +6,7 @@ import {
 	ZWaveErrorCodes,
 	parseBitMask,
 	validatePayload,
+	type IZWaveEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
@@ -272,6 +273,23 @@ duration: ${currentValue.duration}`;
 				});
 			}
 		}
+	}
+
+	/**
+	 * Returns which sensor types are supported.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedSensorTypesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<AlarmSensorType[]> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				AlarmSensorCCValues.supportedSensorTypes.endpoint(
+					endpoint.index,
+				),
+			);
 	}
 
 	protected createMetadataForSensorType(
