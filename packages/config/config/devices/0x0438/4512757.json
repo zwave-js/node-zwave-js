@@ -530,7 +530,7 @@
         "description": "4 bytes",
         "valueSize": 4,
         "defaultValue": 11000000000,
-        "minValue": 00000000000,
+        "minValue": 0,
         "maxValue": 11111111111,
         "unsigned": true
       },
@@ -540,7 +540,7 @@
         "description": "4 bytes",
         "valueSize": 4,
         "defaultValue": 11010010,
-        "minValue": 00000000000,
+        "minValue": 0,
         "maxValue": 11111111111,
         "unsigned": true
       },
@@ -550,7 +550,7 @@
         "description": "4 bytes",
         "valueSize": 4,
         "defaultValue": 1010111100,
-        "minValue": 00000000000,
+        "minValue": 0,
         "maxValue": 11111111111,
         "unsigned": true
       }
