@@ -101,7 +101,7 @@ type SetValueResult = {
 };
 ```
 
-See the [updated documentation](../api/node.md#setValue) for a more detailed explanation on working with `SetValueResult`s.
+See the [updated documentation](api/node.md#setValue) for a more detailed explanation on working with `SetValueResult`s.
 
 Since the result now contains error information, calling `setValue` will no longer emit an `"error"` event in case of a usage error (unimplemented CC, invalid value).
 It will however still throw an error if the communication fails.
