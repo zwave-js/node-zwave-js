@@ -888,7 +888,7 @@ export class MultiChannelCCCapabilityReport
 			// Only validate the bytes we expect to see here
 			// parseApplicationNodeInformation does its own validation
 			validatePayload(this.payload.length >= 1);
-			this.endpointIndex = this.payload[0] & 0b01111111;
+			this.requestedEndpoint = this.payload[0] & 0b01111111;
 			this.isDynamic = !!(this.payload[0] & 0b10000000);
 
 			const NIF = parseApplicationNodeInformation(this.payload.slice(1));
@@ -902,7 +902,7 @@ export class MultiChannelCCCapabilityReport
 				this.genericDeviceClass === 0xff && // "Non-Interoperable"
 				this.specificDeviceClass === 0x00;
 		} else {
-			this.endpointIndex = options.endpointIndex;
+			this.requestedEndpoint = options.endpointIndex;
 			this.genericDeviceClass = options.genericDeviceClass;
 			this.specificDeviceClass = options.specificDeviceClass;
 			this.supportedCCs = options.supportedCCs;
@@ -930,7 +930,7 @@ export class MultiChannelCCCapabilityReport
 		return true;
 	}
 
-	public readonly endpointIndex: number;
+	public readonly requestedEndpoint: number;
 	public readonly genericDeviceClass: number;
 	public readonly specificDeviceClass: number;
 	public readonly supportedCCs: CommandClasses[];
@@ -940,7 +940,7 @@ export class MultiChannelCCCapabilityReport
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
-				(this.endpointIndex & 0b01111111) |
+				(this.requestedEndpoint & 0b01111111) |
 					(this.isDynamic ? 0b10000000 : 0),
 			]),
 			encodeApplicationNodeInformation(this),
@@ -959,7 +959,7 @@ export class MultiChannelCCCapabilityReport
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"endpoint index": this.endpointIndex,
+				"endpoint index": this.requestedEndpoint,
 				"generic device class": generic.label,
 				"specific device class": specific.label,
 				"is dynamic end point": this.isDynamic,
@@ -975,8 +975,18 @@ interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
 	requestedEndpoint: number;
 }
 
+function testResponseForMultiChannelCapabilityGet(
+	sent: MultiChannelCCCapabilityGet,
+	received: MultiChannelCCCapabilityReport,
+) {
+	return received.requestedEndpoint === sent.requestedEndpoint;
+}
+
 @CCCommand(MultiChannelCommand.CapabilityGet)
-@expectedCCResponse(MultiChannelCCCapabilityReport)
+@expectedCCResponse(
+	MultiChannelCCCapabilityReport,
+	testResponseForMultiChannelCapabilityGet,
+)
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
 		host: ZWaveHost,
