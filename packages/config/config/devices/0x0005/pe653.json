@@ -488,7 +488,7 @@
 			// Firmware v3.3 and v3.1 do not appear to have the same issues.
 			"$if": "firmwareVersion === 3.4",
 			"commandClasses": {
-				// Force use of MultiChannelCC v1.
+				// Force use of Multi Channel CC V1 despite the device reporting V2
 				"add": {
 					"Multi Channel": {
 						"isSupported": true,
@@ -529,6 +529,15 @@
 			"treatBasicSetAsEvent": true
 		},
 		{
+			"commandClasses": {
+				// Force use of Multi Channel CC V1 despite the device reporting V2
+				"add": {
+					"Multi Channel": {
+						"isSupported": true,
+						"version": 1
+					}
+				}
+			},
 			"overrideQueries": {
 				// The response to the setpoint query is off by one bit: https://github.com/zwave-js/node-zwave-js/issues/5335
 				"Thermostat Setpoint": [
