@@ -292,7 +292,7 @@ function shouldAutoCreateHoldAndReleaseConfigValue(
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
-		DoorLockCCValues.autoRelockSupported.endpoint(endpoint.index),
+		DoorLockCCValues.holdAndReleaseSupported.endpoint(endpoint.index),
 	);
 }
 
@@ -1009,17 +1009,64 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.lockTimeoutConfiguration)
 	public readonly lockTimeoutConfiguration?: number;
 
-	@ccValue(DoorLockCCValues.autoRelockTime)
+	// These are not always supported and have to be persisted manually
+	// to avoid unsupported values being exposed to the user
 	public readonly autoRelockTime?: number;
-
-	@ccValue(DoorLockCCValues.holdAndReleaseTime)
 	public readonly holdAndReleaseTime?: number;
-
-	@ccValue(DoorLockCCValues.twistAssist)
 	public readonly twistAssist?: boolean;
-
-	@ccValue(DoorLockCCValues.blockToBlock)
 	public readonly blockToBlock?: boolean;
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		// Only store the autoRelockTime etc. params if the lock supports it
+		const supportsAutoRelock = !!this.getValue(
+			applHost,
+			DoorLockCCValues.autoRelockSupported,
+		);
+		if (supportsAutoRelock) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.autoRelockTime,
+				this.autoRelockTime,
+			);
+		}
+		const supportsHoldAndRelease = !!this.getValue(
+			applHost,
+			DoorLockCCValues.holdAndReleaseSupported,
+		);
+		if (supportsHoldAndRelease) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.holdAndReleaseTime,
+				this.holdAndReleaseTime,
+			);
+		}
+		const supportsTwistAssist = !!this.getValue(
+			applHost,
+			DoorLockCCValues.twistAssistSupported,
+		);
+		if (supportsTwistAssist) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.twistAssist,
+				this.twistAssist,
+			);
+		}
+		const supportsBlockToBlock = !!this.getValue(
+			applHost,
+			DoorLockCCValues.blockToBlockSupported,
+		);
+		if (supportsBlockToBlock) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.blockToBlock,
+				this.blockToBlock,
+			);
+		}
+
+		return true;
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
