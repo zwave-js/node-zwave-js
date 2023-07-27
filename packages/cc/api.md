@@ -10720,8 +10720,6 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC implements Ap
     // Warning: (ae-forgotten-export) The symbol "MultiChannelCCCapabilityReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCCapabilityReportOptions);
     // (undocumented)
-    readonly endpointIndex: number;
-    // (undocumented)
     readonly genericDeviceClass: number;
     // (undocumented)
     readonly isDynamic: boolean;

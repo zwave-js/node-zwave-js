@@ -13,6 +13,7 @@ import type { DeviceConfig } from '@zwave-js/config';
 import type { ICommandClass } from '@zwave-js/core';
 import { IZWaveNode } from '@zwave-js/core';
 import type { MaybeNotKnown } from '@zwave-js/core';
+import type { NodeIDType } from '@zwave-js/core';
 import type { Overwrite } from 'alcalzone-shared/types';
 import type { ReadonlyThrowingMap } from '@zwave-js/shared';
 import type { SecurityClass } from '@zwave-js/core';
@@ -113,6 +114,7 @@ export interface ZWaveHost {
     hasSecurityClass(nodeId: number, securityClass: SecurityClass): MaybeNotKnown<boolean>;
     homeId: number;
     isCCSecure(cc: CommandClasses, nodeId: number, endpointIndex?: number): boolean;
+    readonly nodeIdType?: NodeIDType;
     ownNodeId: number;
     securityManager: SecurityManager | undefined;
     securityManager2: SecurityManager2 | undefined;
