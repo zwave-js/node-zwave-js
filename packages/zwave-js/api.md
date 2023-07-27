@@ -85,6 +85,7 @@ import { MulticastDestination } from '@zwave-js/core/safe';
 import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_MAX } from '@zwave-js/core/safe';
+import { NodeIDType } from '@zwave-js/core';
 import type { NodeSchedulePollOptions } from '@zwave-js/host';
 import { NodeStatus } from '@zwave-js/core/safe';
 import { NodeType } from '@zwave-js/core/safe';
@@ -352,6 +353,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     isControllerNode(nodeId: number): boolean;
     // (undocumented)
     isInBootloader(): boolean;
+    // (undocumented)
+    get nodeIdType(): NodeIDType;
     get nodes(): ReadonlyThrowingMap<number, ZWaveNode>;
     // (undocumented)
     get options(): Readonly<ZWaveOptions>;
@@ -1183,6 +1186,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     get isUsingHomeIdFromOtherNetwork(): MaybeNotKnown<boolean>;
     // (undocumented)
     get manufacturerId(): MaybeNotKnown<number>;
+    get nodeIdType(): NodeIDType;
     get nodes(): ReadonlyThrowingMap<number, ZWaveNode>;
     // (undocumented)
     get nodeType(): MaybeNotKnown<NodeType_2>;
