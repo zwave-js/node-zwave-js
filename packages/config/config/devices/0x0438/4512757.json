@@ -523,36 +523,6 @@
             "value": 1
           }
         ]
-      },
-      {
-        "#": "199",
-        "label": "Week program time",
-        "description": "4 bytes",
-        "valueSize": 4,
-        "defaultValue": 11000000000,
-        "minValue": 0,
-        "maxValue": 11111111111,
-        "unsigned": true
-      },
-      {
-        "#": "200",
-        "label": "Week program celsius temp",
-        "description": "4 bytes",
-        "valueSize": 4,
-        "defaultValue": 11010010,
-        "minValue": 0,
-        "maxValue": 11111111111,
-        "unsigned": true
-      },
-      {
-        "#": "201",
-        "label": "Week program fahrenheit temp",
-        "description": "4 bytes",
-        "valueSize": 4,
-        "defaultValue": 1010111100,
-        "minValue": 0,
-        "maxValue": 11111111111,
-        "unsigned": true
       }
     ],
     "metadata": {
