@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.7.0 (2023-07-27)
 ### Features
 * Add methods to read sensor/meter support information from cache for `Alarm/Binary/Multilevel Sensor CC` and `Meter CC` (#6065)
 * Fall back to the embedded config directory when looking up `$import` targets from user-defined config files (#6067)
