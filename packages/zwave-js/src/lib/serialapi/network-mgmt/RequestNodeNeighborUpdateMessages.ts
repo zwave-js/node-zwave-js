@@ -1,5 +1,5 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
-import { MessagePriority } from "@zwave-js/core";
+import { MessagePriority, encodeNodeID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { MultiStageCallback, SuccessIndicator } from "@zwave-js/serial";
 import {
@@ -58,7 +58,8 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 	public discoveryTimeout: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.nodeId, this.callbackId]);
+		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 		return super.serialize();
 	}
 

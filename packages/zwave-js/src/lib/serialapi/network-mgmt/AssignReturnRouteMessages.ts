@@ -3,6 +3,7 @@ import {
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
@@ -75,10 +76,16 @@ export class AssignReturnRouteRequest
 	public destinationNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.nodeId,
+		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+		const destinationNodeId = encodeNodeID(
 			this.destinationNodeId,
-			this.callbackId,
+			this.host.nodeIdType,
+		);
+
+		this.payload = Buffer.concat([
+			nodeId,
+			destinationNodeId,
+			Buffer.from([this.callbackId]),
 		]);
 
 		return super.serialize();

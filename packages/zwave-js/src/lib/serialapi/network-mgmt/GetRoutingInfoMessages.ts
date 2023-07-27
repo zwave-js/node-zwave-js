@@ -1,6 +1,7 @@
 import {
 	MessagePriority,
 	NUM_NODEMASK_BYTES,
+	encodeNodeID,
 	parseNodeBitMask,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
@@ -38,11 +39,16 @@ export class GetRoutingInfoRequest extends Message {
 	public removeBadLinks: boolean;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.sourceNodeId,
-			this.removeNonRepeaters ? 1 : 0,
-			this.removeBadLinks ? 1 : 0,
-			0, // callbackId - this must be 0 as per the docs
+		const nodeId = encodeNodeID(this.sourceNodeId, this.host.nodeIdType);
+		const optionsByte =
+			(this.removeBadLinks ? 0b1000_0000 : 0) |
+			(this.removeNonRepeaters ? 0b0100_0000 : 0);
+		this.payload = Buffer.concat([
+			nodeId,
+			Buffer.from([
+				optionsByte,
+				0, // callbackId - this must be 0 as per the docs
+			]),
 		]);
 		return super.serialize();
 	}

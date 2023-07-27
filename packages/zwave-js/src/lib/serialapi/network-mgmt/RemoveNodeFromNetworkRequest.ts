@@ -148,6 +148,7 @@ export class RemoveNodeFromNetworkRequestStatusReport
 				// the payload contains a node information frame
 				this.statusContext = parseNodeUpdatePayload(
 					this.payload.slice(2),
+					this.host.nodeIdType,
 				);
 				break;
 		}

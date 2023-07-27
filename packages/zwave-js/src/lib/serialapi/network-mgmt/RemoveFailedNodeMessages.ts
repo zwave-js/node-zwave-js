@@ -1,4 +1,4 @@
-import { MessagePriority } from "@zwave-js/core";
+import { MessagePriority, encodeNodeID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
@@ -76,7 +76,8 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	public failedNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.failedNodeId, this.callbackId]);
+		const nodeId = encodeNodeID(this.failedNodeId, this.host.nodeIdType);
+		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 		return super.serialize();
 	}
 }
