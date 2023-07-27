@@ -1,11 +1,11 @@
 {
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
-	"label": "RZI10-1L",
-	"description": "Dimmer Switch 1000 W Incandescent",
+	"label": "RZM10-1L",
+	"description": "Dimmer Switch 1000 W Magnetic Low-Voltage",
 	"devices": [
 		{
-			"productType": "0x0501",
+			"productType": "0x0601",
 			"productId": "0x0206"
 		}
 	],
