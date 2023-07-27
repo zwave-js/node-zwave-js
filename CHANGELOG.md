@@ -4,6 +4,24 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add methods to read sensor/meter support information from cache for `Alarm/Binary/Multilevel Sensor CC` and `Meter CC` (#6065)
+* Fall back to the embedded config directory when looking up `$import` targets from user-defined config files (#6067)
+
+### Bugfixes
+* Fixed an issue where a delayed endpoint capability report could be associated with the wrong query (#6076)
+* During NVM migration, some invalid/unexpected bytes in the 500 series NVM can now be corrected (#6082)
+* Hide configuration values for `Door Lock CC v4` functionality that is not supported by a lock (#6075)
+
+### Config file changes
+* Add Leviton RZM10-1L (#6080)
+* Force use of Multi Channel CC v1 for all versions of PE653 (#6077)
+
+### Changes under the hood
+* Enable 16-bit node IDs in Serial API communication (#6070)
+* Fix link in v11 Migration guide (#6071)
+
 ## 11.6.0 (2023-07-24)
 ### Features
 * Setting the date and time on a node will now also attempt sending unsolicited `Time CC` reports if no other way is supported (#6042)
