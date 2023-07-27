@@ -127,7 +127,10 @@ export const DoorLockCCValues = Object.freeze({
 				...ValueMetadata.UInt16,
 				label: "Duration in seconds until lock returns to secure state",
 			} as const,
-			{ minVersion: 4 } as const,
+			{
+				minVersion: 4,
+				autoCreate: shouldAutoCreateAutoRelockConfigValue,
+			} as const,
 		),
 
 		...V.staticProperty("holdAndReleaseSupported", undefined, {
@@ -140,7 +143,10 @@ export const DoorLockCCValues = Object.freeze({
 				...ValueMetadata.UInt16,
 				label: "Duration in seconds the latch stays retracted",
 			} as const,
-			{ minVersion: 4 } as const,
+			{
+				minVersion: 4,
+				autoCreate: shouldAutoCreateHoldAndReleaseConfigValue,
+			} as const,
 		),
 
 		...V.staticProperty("twistAssistSupported", undefined, {
@@ -153,7 +159,10 @@ export const DoorLockCCValues = Object.freeze({
 				...ValueMetadata.Boolean,
 				label: "Twist Assist enabled",
 			} as const,
-			{ minVersion: 4 } as const,
+			{
+				minVersion: 4,
+				autoCreate: shouldAutoCreateTwistAssistConfigValue,
+			} as const,
 		),
 
 		...V.staticProperty("blockToBlockSupported", undefined, {
@@ -166,7 +175,10 @@ export const DoorLockCCValues = Object.freeze({
 				...ValueMetadata.Boolean,
 				label: "Block-to-block functionality enabled",
 			} as const,
-			{ minVersion: 4 } as const,
+			{
+				minVersion: 4,
+				autoCreate: shouldAutoCreateBlockToBlockConfigValue,
+			} as const,
 		),
 
 		...V.staticProperty("latchSupported", undefined, { internal: true }),
@@ -237,6 +249,50 @@ function shouldAutoCreateDoorStatusValue(
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
 		DoorLockCCValues.doorSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateTwistAssistConfigValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.twistAssistSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateBlockToBlockConfigValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.blockToBlockSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateAutoRelockConfigValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.autoRelockSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateHoldAndReleaseConfigValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.holdAndReleaseSupported.endpoint(endpoint.index),
 	);
 }
 
@@ -953,17 +1009,64 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.lockTimeoutConfiguration)
 	public readonly lockTimeoutConfiguration?: number;
 
-	@ccValue(DoorLockCCValues.autoRelockTime)
+	// These are not always supported and have to be persisted manually
+	// to avoid unsupported values being exposed to the user
 	public readonly autoRelockTime?: number;
-
-	@ccValue(DoorLockCCValues.holdAndReleaseTime)
 	public readonly holdAndReleaseTime?: number;
-
-	@ccValue(DoorLockCCValues.twistAssist)
 	public readonly twistAssist?: boolean;
-
-	@ccValue(DoorLockCCValues.blockToBlock)
 	public readonly blockToBlock?: boolean;
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		// Only store the autoRelockTime etc. params if the lock supports it
+		const supportsAutoRelock = !!this.getValue(
+			applHost,
+			DoorLockCCValues.autoRelockSupported,
+		);
+		if (supportsAutoRelock) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.autoRelockTime,
+				this.autoRelockTime,
+			);
+		}
+		const supportsHoldAndRelease = !!this.getValue(
+			applHost,
+			DoorLockCCValues.holdAndReleaseSupported,
+		);
+		if (supportsHoldAndRelease) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.holdAndReleaseTime,
+				this.holdAndReleaseTime,
+			);
+		}
+		const supportsTwistAssist = !!this.getValue(
+			applHost,
+			DoorLockCCValues.twistAssistSupported,
+		);
+		if (supportsTwistAssist) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.twistAssist,
+				this.twistAssist,
+			);
+		}
+		const supportsBlockToBlock = !!this.getValue(
+			applHost,
+			DoorLockCCValues.blockToBlockSupported,
+		);
+		if (supportsBlockToBlock) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.blockToBlock,
+				this.blockToBlock,
+			);
+		}
+
+		return true;
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -1233,6 +1336,8 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.supportedInsideHandles)
 	public readonly supportedInsideHandles: DoorHandleStatus;
 
+	// These 3 are not automatically persisted because in CC version 3
+	// we have to assume them to be supported. In v4 we can query this.
 	public readonly latchSupported: boolean;
 	public readonly boltSupported: boolean;
 	public readonly doorSupported: boolean;
