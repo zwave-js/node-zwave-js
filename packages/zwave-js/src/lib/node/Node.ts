@@ -5353,6 +5353,7 @@ protocol version:      ${this.protocolVersion}`;
 			round: number,
 			totalRounds: number,
 			lastRating: number,
+			lastResult: LifelineHealthCheckResult,
 		) => void,
 	): Promise<LifelineHealthCheckSummary> {
 		if (rounds > 10 || rounds < 1) {
@@ -5551,7 +5552,7 @@ protocol version:      ${this.protocolVersion}`;
 
 			ret.rating = computeRating(ret);
 			results.push(ret);
-			onProgress?.(round, rounds, ret.rating);
+			onProgress?.(round, rounds, ret.rating, { ...ret });
 		}
 
 		const duration = Date.now() - start;
@@ -5577,6 +5578,7 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 			round: number,
 			totalRounds: number,
 			lastRating: number,
+			lastResult: RouteHealthCheckResult,
 		) => void,
 	): Promise<RouteHealthCheckSummary> {
 		if (rounds > 10 || rounds < 1) {
@@ -5776,7 +5778,7 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 			};
 			ret.rating = computeRating(ret);
 			results.push(ret);
-			onProgress?.(round, rounds, ret.rating);
+			onProgress?.(round, rounds, ret.rating, { ...ret });
 		}
 
 		const duration = Date.now() - start;
