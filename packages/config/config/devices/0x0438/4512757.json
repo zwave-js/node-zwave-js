@@ -22,7 +22,7 @@
     },
     "paramInformation": [
       {
-        "#": "3[0x04]",
+        "#": "4",
         "label": "ECO Mode",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -42,7 +42,7 @@
         ]
       },
       {
-        "#": "3[0x08]",
+        "#": "8",
         "label": "Window check",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -62,7 +62,7 @@
         ]
       },
       {
-        "#": "3[0x0A]",
+        "#": "10",
         "label": "Frost",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -82,7 +82,7 @@
         ]
       },
       {
-        "#": "3[0x17]",
+        "#": "23",
         "label": "Temp Unit",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -103,7 +103,7 @@
         ]
       },
       {
-        "#": "3[0x1B]",
+        "#": "27",
         "label": "Temp correction",
         "description": "Allowable range: -10~10",
         "valueSize": 4,
@@ -113,7 +113,7 @@
         "unsigned": false
       },
       {
-        "#": "3[0x1F]",
+        "#": "31",
         "label": "Work days set",
         "valueSize": 4,
         "minValue": 0,
@@ -140,7 +140,7 @@
         ]
       },
       {
-        "#": "3[0x28]",
+        "#": "40",
         "label": "Child lock",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -160,7 +160,7 @@
         ]
       },
       {
-        "#": "3[0x2B]",
+        "#": "43",
         "label": "Sensor mode",
         "valueSize": 4,
         "minValue": 0,
@@ -195,7 +195,7 @@
         ]
       },
       {
-        "#": "3[0x3A]",
+        "#": "58",
         "label": "Run mode",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -215,7 +215,7 @@
         ]
       },
       {
-        "#": "3[0x70]",
+        "#": "112",
         "label": "Adaption",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -235,7 +235,7 @@
         ]
       },
       {
-        "#": "3[0x76]",
+        "#": "118",
         "label": "Regulator",
         "description": "Allowable range: 0-30",
         "valueSize": 4,
@@ -255,7 +255,7 @@
         ]
       },
       {
-        "#": "3[0x7B]",
+        "#": "123",
         "label": "LCD Backlight standby",
         "description": "Allowable range: 10-100 (increment by 10)",
         "valueSize": 4,
@@ -307,7 +307,7 @@
         ]
       },
       {
-        "#": "3[0x7C]",
+        "#": "124",
         "label": "LCD Backlight work",
         "description": "Allowable range: 10-100 (increment by 10)",
         "valueSize": 4,
@@ -359,7 +359,7 @@
         ]
       },
       {
-        "#": "3[0x7F]",
+        "#": "127",
         "label": "Regulator percentage",
         "description": "Allowable range: 0-100 (increment by 10)",
         "valueSize": 4,
@@ -415,7 +415,7 @@
         ]
       },
       {
-        "#": "3[0x86]",
+        "#": "134",
         "label": "DIF Celsius",
         "description": "Allowable range: 5-100 (increment by 5)",
         "valueSize": 4,
@@ -425,7 +425,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0x87]",
+        "#": "135",
         "label": "DIF Fahrenheit",
         "description": "Allowable range: 10-180 (increment by 10)",
         "valueSize": 4,
@@ -435,7 +435,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0x88]",
+        "#": "136",
         "label": "Frost Celsius",
         "description": "Allowable range: 50-100 (increment by 10)",
         "valueSize": 4,
@@ -445,7 +445,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0x89]",
+        "#": "137",
         "label": "Frost Fahrenheit",
         "description": "Allowable range: 410-500 (increment by 20)",
         "valueSize": 4,
@@ -455,7 +455,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0xB7]",
+        "#": "183",
         "label": "Dry",
         "description": "Allowable range: 0-120 (increment by 5)",
         "valueSize": 4,
@@ -465,7 +465,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0xB9]",
+        "#": "185",
         "label": "Celsius FLT",
         "description": "Allowable range: 50-600 (increment by 5)",
         "valueSize": 4,
@@ -475,7 +475,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0xBA]",
+        "#": "186",
         "label": "Fahrenheit FLT",
         "description": "Allowable range: 410-1400 (increment by 10)",
         "valueSize": 4,
@@ -485,7 +485,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0xBC]",
+        "#": "188",
         "label": "LCD Display Switch",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -505,7 +505,7 @@
         ]
       },
       {
-        "#": "3[0xBD]",
+        "#": "189",
         "label": "Automatically get network time",
         "description": "Allowable range: 0-1",
         "valueSize": 4,
@@ -525,7 +525,7 @@
         ]
       },
       {
-        "#": "3[0xC7]",
+        "#": "199",
         "label": "Week program time",
         "description": "4 bytes",
         "valueSize": 4,
@@ -535,7 +535,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0xC8]",
+        "#": "200",
         "label": "Week program celsius temp",
         "description": "4 bytes",
         "valueSize": 4,
@@ -545,7 +545,7 @@
         "unsigned": true
       },
       {
-        "#": "3[0xC9]",
+        "#": "201",
         "label": "Week program fahrenheit temp",
         "description": "4 bytes",
         "valueSize": 4,
