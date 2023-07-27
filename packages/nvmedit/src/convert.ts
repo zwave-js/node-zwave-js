@@ -1155,11 +1155,19 @@ export function json500To700(
 		applicationData = raw.toString("hex");
 	}
 
+	// https://github.com/zwave-js/node-zwave-js/issues/6055
+	// On some controllers this byte can be 0xff (effectively not set)
+	let controllerConfiguration = source.controller.controllerConfiguration;
+	if (source.controller.controllerConfiguration === 0xff) {
+		// Default to SUC/Primary
+		controllerConfiguration =
+			ControllerCapabilityFlags.SISPresent |
+			ControllerCapabilityFlags.WasRealPrimary |
+			ControllerCapabilityFlags.SUC;
+	}
+
 	let homeId: string;
-	if (
-		source.controller.controllerConfiguration &
-		ControllerCapabilityFlags.OnOtherNetwork
-	) {
+	if (controllerConfiguration & ControllerCapabilityFlags.OnOtherNetwork) {
 		// The controller did not start the network itself
 		if (!source.controller.learnedHomeId) {
 			throw new ZWaveError(
@@ -1180,6 +1188,13 @@ export function json500To700(
 		source.controller.nodeId = 1;
 	}
 
+	// https://github.com/zwave-js/node-zwave-js/issues/6055
+	// Some controllers have invalid information for the IDs
+	let maxNodeId = source.controller.maxNodeId;
+	if (maxNodeId === 0xff) maxNodeId = source.controller.lastNodeId;
+	let reservedId = source.controller.reservedId;
+	if (reservedId === 0xff) reservedId = 0;
+
 	const ret: NVMJSON = {
 		// Start out with format 0 (= protocol version 7.0.0), the jsonToNVM routines will do further conversion
 		format: 0,
@@ -1192,10 +1207,10 @@ export function json500To700(
 			lastNodeId: source.controller.lastNodeId,
 			staticControllerNodeId: source.controller.staticControllerNodeId,
 			sucLastIndex: source.controller.sucLastIndex,
-			controllerConfiguration: source.controller.controllerConfiguration,
+			controllerConfiguration,
 			sucUpdateEntries: source.controller.sucUpdateEntries,
-			maxNodeId: source.controller.maxNodeId,
-			reservedId: source.controller.reservedId,
+			maxNodeId,
+			reservedId,
 			systemState: source.controller.systemState,
 			preferredRepeaters: source.controller.preferredRepeaters,
 
