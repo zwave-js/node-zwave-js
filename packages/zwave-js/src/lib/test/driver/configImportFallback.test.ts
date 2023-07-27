@@ -5,7 +5,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"$imports from user-defined config files fall back to the internal DB",
 	{
-		debug: true,
+		// debug: true,
 
 		provisioningDirectory: path.join(
 			__dirname,
