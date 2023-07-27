@@ -930,7 +930,7 @@ export class MultiChannelCCCapabilityReport
 		return true;
 	}
 
-	public readonly endpointIndex: number;
+	// The endpoint index must be overridden to be able to attribute the information to the correct endpoint
 	public readonly genericDeviceClass: number;
 	public readonly specificDeviceClass: number;
 	public readonly supportedCCs: CommandClasses[];
@@ -975,8 +975,18 @@ interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
 	requestedEndpoint: number;
 }
 
+function testResponseForMultiChannelCapabilityGet(
+	sent: MultiChannelCCCapabilityGet,
+	received: MultiChannelCCCapabilityReport,
+) {
+	return received.endpointIndex === sent.requestedEndpoint;
+}
+
 @CCCommand(MultiChannelCommand.CapabilityGet)
-@expectedCCResponse(MultiChannelCCCapabilityReport)
+@expectedCCResponse(
+	MultiChannelCCCapabilityReport,
+	testResponseForMultiChannelCapabilityGet,
+)
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
 		host: ZWaveHost,
