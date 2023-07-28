@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Health checks now include the intermediate results in progress callbacks (#6086)
+* Added the ability to abort health checks and testing whether a health check is in progress (#6091)
+
+### Bugfixes
+* When a CC version query times out, the CC version is now actually assumed to be 1 instead of only logging this (#6089)
+
+### Config file changes
+* Correct state after power failure for Minoston MP21Z/31Z (#6087)
+* Add Namron 4512757 (#6072)
+
 ## 11.7.0 (2023-07-27)
 ### Features
 * Add methods to read sensor/meter support information from cache for `Alarm/Binary/Multilevel Sensor CC` and `Meter CC` (#6065)
