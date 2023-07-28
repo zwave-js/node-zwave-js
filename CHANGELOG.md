@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.8.0 (2023-07-28)
 ### Features
 * Health checks now include the intermediate results in progress callbacks (#6086)
 * Added the ability to abort health checks and testing whether a health check is in progress (#6091)
