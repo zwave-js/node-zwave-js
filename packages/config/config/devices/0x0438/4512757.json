@@ -26,9 +26,6 @@
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "ECO Mode",
 			"valueSize": 4,
-			"defaultValue": 0,
-			"minValue": 0,
-			"maxValue": 1
 		},
 		{
 			"#": "8",
@@ -36,27 +33,21 @@
 			"label": "Window Check",
 			"valueSize": 4,
 			"defaultValue": 1,
-			"minValue": 0,
-			"maxValue": 1
 		},
 		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Frost",
 			"valueSize": 4,
-			"defaultValue": 0,
-			"minValue": 0,
-			"maxValue": 1
 		},
 		{
 			"#": "23",
-			"label": "Temp Unit",
-			"description": "Allowable range: 0-1",
+			"label": "Temperature Unit",
 			"valueSize": 4,
 			"unit": "°C",
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "°C",
@@ -70,20 +61,19 @@
 		},
 		{
 			"#": "27",
-			"label": "Temp Correction",
+			"label": "Temperature Calibration",
 			"valueSize": 4,
 			"minValue": -10,
 			"maxValue": 10,
 			"defaultValue": 0,
-			"unsigned": false
 		},
 		{
 			"#": "31",
 			"label": "Work Days Set",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "5_2",
@@ -108,9 +98,6 @@
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Child Lock",
 			"valueSize": 4,
-			"defaultValue": 0,
-			"minValue": 0,
-			"maxValue": 1
 		},
 		{
 			"#": "43",
@@ -149,11 +136,10 @@
 		{
 			"#": "58",
 			"label": "Run Mode",
-			"description": "Allowable range: 0-1",
 			"valueSize": 4,
 			"defaultValue": 1,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Manual",
@@ -170,18 +156,15 @@
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Adaption",
 			"valueSize": 4,
-			"defaultValue": 0,
-			"minValue": 0,
-			"maxValue": 1
 		},
 		{
 			"#": "118",
 			"label": "Regulator",
 			"valueSize": 4,
-			"defaultValue": 30,
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 30,
+			"defaultValue": 30,
 			"unsigned": true
 		},
 		{
@@ -190,47 +173,47 @@
 			"description": "Allowable range: 10-100 (increment by 10)",
 			"valueSize": 4,
 			"defaultValue": 10,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "10%",
+					"label": "10 %",
 					"value": 10
 				},
 				{
-					"label": "20%",
+					"label": "20 %",
 					"value": 20
 				},
 				{
-					"label": "30%",
+					"label": "30 %",
 					"value": 30
 				},
 				{
-					"label": "40%",
+					"label": "40 %",
 					"value": 40
 				},
 				{
-					"label": "50%",
+					"label": "50 %",
 					"value": 50
 				},
 				{
-					"label": "60%",
+					"label": "60 %",
 					"value": 60
 				},
 				{
-					"label": "70%",
+					"label": "70 %",
 					"value": 70
 				},
 				{
-					"label": "80%",
+					"label": "80 %",
 					"value": 80
 				},
 				{
-					"label": "90%",
+					"label": "90 %",
 					"value": 90
 				},
 				{
-					"label": "100%",
+					"label": "100 %",
 					"value": 100
 				}
 			]
@@ -241,47 +224,47 @@
 			"description": "Allowable range: 10-100 (increment by 10)",
 			"valueSize": 4,
 			"defaultValue": 100,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "10%",
+					"label": "10 %",
 					"value": 10
 				},
 				{
-					"label": "20%",
+					"label": "20 %",
 					"value": 20
 				},
 				{
-					"label": "30%",
+					"label": "30 %",
 					"value": 30
 				},
 				{
-					"label": "40%",
+					"label": "40 %",
 					"value": 40
 				},
 				{
-					"label": "50%",
+					"label": "50 %",
 					"value": 50
 				},
 				{
-					"label": "60%",
+					"label": "60 %",
 					"value": 60
 				},
 				{
-					"label": "70%",
+					"label": "70 %",
 					"value": 70
 				},
 				{
-					"label": "80%",
+					"label": "80 %",
 					"value": 80
 				},
 				{
-					"label": "90%",
+					"label": "90 %",
 					"value": 90
 				},
 				{
-					"label": "100%",
+					"label": "100 %",
 					"value": 100
 				}
 			]
@@ -292,58 +275,58 @@
 			"description": "Allowable range: 0-100 (increment by 10)",
 			"valueSize": 4,
 			"defaultValue": 20,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0%",
+					"label": "0 %",
 					"value": 0
 				},
 				{
-					"label": "10%",
+					"label": "10 %",
 					"value": 10
 				},
 				{
-					"label": "20%",
+					"label": "20 %",
 					"value": 20
 				},
 				{
-					"label": "30%",
+					"label": "30 %",
 					"value": 30
 				},
 				{
-					"label": "40%",
+					"label": "40 %",
 					"value": 40
 				},
 				{
-					"label": "50%",
+					"label": "50 %",
 					"value": 50
 				},
 				{
-					"label": "60%",
+					"label": "60 %",
 					"value": 60
 				},
 				{
-					"label": "70%",
+					"label": "70 %",
 					"value": 70
 				},
 				{
-					"label": "80%",
+					"label": "80 %",
 					"value": 80
 				},
 				{
-					"label": "90%",
+					"label": "90 %",
 					"value": 90
 				},
 				{
-					"label": "100%",
+					"label": "100 %",
 					"value": 100
 				}
 			]
 		},
 		{
 			"#": "134",
-			"label": "Differential In Celsius",
+			"label": "Differential (Celsius)",
 			"description": "Allowable range: 5-100 (increment by 5)",
 			"valueSize": 4,
 			"unit": "°C",
@@ -354,7 +337,7 @@
 		},
 		{
 			"#": "135",
-			"label": "Differential In Fahrenheit",
+			"label": "Differential (Fahrenheit)",
 			"description": "Allowable range: 10-180 (increment by 10)",
 			"valueSize": 4,
 			"unit": "°C",
@@ -365,7 +348,7 @@
 		},
 		{
 			"#": "136",
-			"label": "Frost Celsius",
+			"label": "Frost (Celsius)",
 			"description": "Allowable range: 50-100 (increment by 10)",
 			"valueSize": 4,
 			"defaultValue": 50,
@@ -376,7 +359,7 @@
 		},
 		{
 			"#": "137",
-			"label": "Frost Fahrenheit",
+			"label": "Frost (Fahrenheit)",
 			"description": "Allowable range: 410-500 (increment by 20)",
 			"valueSize": 4,
 			"defaultValue": 410,
@@ -423,17 +406,12 @@
 			"label": "LCD Display Switch",
 			"valueSize": 4,
 			"defaultValue": 1,
-			"minValue": 0,
-			"maxValue": 1
 		},
 		{
 			"#": "189",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Automatically Get Network Time",
 			"valueSize": 4,
-			"defaultValue": 0,
-			"minValue": 0,
-			"maxValue": 1
 		}
 	],
 	"metadata": {
