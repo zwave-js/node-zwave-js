@@ -462,6 +462,7 @@ export class VersionCC extends CommandClass {
 					} supports version 1...`,
 					level: "warn",
 				});
+				endpoint.addCC(cc, { version: 1 });
 			}
 		};
 
