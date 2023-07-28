@@ -3186,6 +3186,7 @@ export enum ZWaveErrorCodes {
     FWUpdateService_IntegrityCheckFailed = 262,
     FWUpdateService_MissingInformation = 260,
     FWUpdateService_RequestError = 261,
+    HealthCheck_Busy = 400,
     Invalid_Firmware_File = 1506,
     ManufacturerProprietaryCC_NoManufacturerId = 1200,
     NVM_InvalidFormat = 283,
