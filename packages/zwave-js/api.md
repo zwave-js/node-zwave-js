@@ -1293,8 +1293,8 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get aggregatedEndpointCount(): MaybeNotKnown<number>;
     // (undocumented)
     get canSleep(): MaybeNotKnown<boolean>;
-    checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number) => void): Promise<LifelineHealthCheckSummary>;
-    checkRouteHealth(targetNodeId: number, rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number) => void): Promise<RouteHealthCheckSummary>;
+    checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: LifelineHealthCheckResult) => void): Promise<LifelineHealthCheckSummary>;
+    checkRouteHealth(targetNodeId: number, rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: RouteHealthCheckResult) => void): Promise<RouteHealthCheckSummary>;
     destroy(): void;
     get deviceConfig(): DeviceConfig | undefined;
     // (undocumented)
