@@ -9,6 +9,11 @@ on:
   merge_group:
     types: [checks_requested]
 
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # This job checks if the docs can be generated and produce changes
   # If they do, a PR will be created with the changes
