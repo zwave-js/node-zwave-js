@@ -446,18 +446,43 @@ Depending on the number of test frames and involved hops, this may take a while.
 
 > [!ATTENTION] This will throw when the target node is a FLiRS node or a sleeping node that is not awake.
 
+### `isHealthCheckInProgress`
+
+```ts
+isHealthCheckInProgress(): boolean
+```
+
+Returns whether a health check is currently in progress for this node.
+
+### `abortHealthCheck`
+
+```ts
+abortHealthCheck(): void
+```
+
+Aborts an ongoing health check if one is currently in progress.
+
+Depending on the stage it is in, the health check may take a few seconds to actually be aborted. When it is, the promise returned by `checkLifelineHealth` or `checkRouteHealth` will be resolved with the results obtained so far.
+
 ### `checkLifelineHealth`
 
 ```ts
 checkLifelineHealth(
 	rounds?: number,
-	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
+	onProgress?: (
+		round: number,
+		totalRounds: number,
+		lastRating: number,
+		lastResult: LifelineHealthCheckResult
+	) => void,
 ): Promise<HealthCheckSummary>
 ```
 
-Checks the health of the connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+Checks the health of the connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress and intermediate results, the optional `onProgress` callback can be used.
 
 > [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
+
+> [!NOTE] This call will throw when there is another health check for this node already in progress. Before starting a health check, you should first check this using `node.isHealthCheckInProgress()`.
 
 The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
 
@@ -545,15 +570,22 @@ The health rating is computed similar to Silabs' PC Controller IMA tool where 10
 checkRouteHealth(
 	targetNodeId: number,
 	rounds?: number,
-	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
-): Promise<HealthCheckSummary>
+	onProgress?: (
+		round: number,
+		totalRounds: number,
+		lastRating: number,
+		lastResult: RouteHealthCheckResult
+	) => void,
+): Promise<RouteHealthCheckSummary>
 ```
 
 Checks the health of connection between this node and the target node and returns the results. At least one of the nodes **must** support `Powerlevel CC`.
 
-The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress and intermediate results, the optional `onProgress` callback can be used.
 
 > [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
+
+> [!NOTE] This call will throw when there is another health check for this node already in progress. Before starting a health check, you should first check this using `node.isHealthCheckInProgress()`.
 
 The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
 
