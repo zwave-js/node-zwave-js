@@ -1289,6 +1289,9 @@ export interface ZWaveNode extends TypedEventEmitter<ZWaveNodeEventCallbacks & S
 export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNode {
     constructor(id: number, driver: Driver, deviceClass?: DeviceClass, supportedCCs?: CommandClasses_2[], controlledCCs?: CommandClasses_2[], valueDB?: ValueDB);
     abortFirmwareUpdate(): Promise<void>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkLifelineHealth"
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkRouteHealth"
+    abortHealthCheck(): void;
     // (undocumented)
     get aggregatedEndpointCount(): MaybeNotKnown<number>;
     // (undocumented)
@@ -1339,6 +1342,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get isControllerNode(): boolean;
     isFirmwareUpdateInProgress(): boolean;
     get isFrequentListening(): MaybeNotKnown<FLiRS_2>;
+    isHealthCheckInProgress(): boolean;
     get isListening(): MaybeNotKnown<boolean>;
     get isRouting(): MaybeNotKnown<boolean>;
     get isSecure(): MaybeNotKnown<boolean>;
