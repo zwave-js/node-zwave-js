@@ -63,6 +63,7 @@
 			"#": "27",
 			"label": "Temperature Calibration",
 			"valueSize": 4,
+			"unit": "°C",
 			"minValue": -10,
 			"maxValue": 10,
 			"defaultValue": 0,
@@ -76,19 +77,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "5_2",
+					"label": "Monday - Friday",
 					"value": 0
 				},
 				{
-					"label": "6_1",
+					"label": "Monday - Saturday",
 					"value": 1
 				},
 				{
-					"label": "7_0",
+					"label": "Monday - Sunday",
 					"value": 2
 				},
 				{
-					"label": "0_7",
+					"label": "None",
 					"value": 3
 				}
 			]
@@ -374,13 +375,14 @@
 			"description": "Allowable range: 0-120 (increment by 5)",
 			"valueSize": 4,
 			"defaultValue": 30,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
 			"unsigned": true
 		},
 		{
 			"#": "185",
-			"label": "Celsius FLT",
+			"label": "Floor Limit Temp (Celsius)",
 			"description": "Allowable range: 50-600 (increment by 5)",
 			"valueSize": 4,
 			"defaultValue": 270,
@@ -391,7 +393,7 @@
 		},
 		{
 			"#": "186",
-			"label": "Fahrenheit FLT",
+			"label": "Floor Limit Temp (Fahrenheit)",
 			"description": "Allowable range: 410-1400 (increment by 10)",
 			"valueSize": 4,
 			"defaultValue": 810,
