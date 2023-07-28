@@ -29,7 +29,7 @@
 		},
 		{
 			"#": "6",
-			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "7",
