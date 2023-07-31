@@ -381,16 +381,6 @@ export class MockController {
 			target: node.id,
 			...frame,
 		});
-		// let ret: Promise<MockZWaveAckFrame> | undefined;
-		// if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
-		// 	ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
-		// }
-		// process.nextTick(() => {
-		// 	void node.onControllerFrame(frame).catch((e) => {
-		// 		console.error(e);
-		// 	});
-		// });
-		// if (ret) return await ret;
 
 		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
 			return await this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);

@@ -262,23 +262,15 @@ export class MockNode {
 	public async sendToController(
 		frame: LazyMockZWaveFrame,
 	): Promise<MockZWaveAckFrame | undefined> {
-		// let ret: Promise<MockZWaveAckFrame> | undefined;
-		// if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
-		// 	ret = this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
-		// }
 		this.controller["air"].add({
 			source: this.id,
 			onTransmit: (frame) => this.sentControllerFrames.push(frame),
 			...frame,
 		});
-		// process.nextTick(() => {
-		// 	void this.controller.onNodeFrame(this, frame);
-		// });
+
 		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
 			return await this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
 		}
-
-		// if (ret) return await ret;
 	}
 
 	/** Gets called when a {@link MockZWaveFrame} is received from the {@link MockController} */
