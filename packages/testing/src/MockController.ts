@@ -7,7 +7,9 @@ import {
 	SerialAPIParser,
 } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
+import { AsyncQueue } from "@zwave-js/shared";
 import { TimedExpectation, createWrappingCounter } from "@zwave-js/shared/safe";
+import { wait } from "alcalzone-shared/async";
 import {
 	getDefaultMockControllerCapabilities,
 	type MockControllerCapabilities,
@@ -17,6 +19,8 @@ import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	MockZWaveFrameType,
 	createMockZWaveAckFrame,
+	unlazyMockZWaveFrame,
+	type LazyMockZWaveFrame,
 	type MockZWaveAckFrame,
 	type MockZWaveFrame,
 	type MockZWaveRequestFrame,
@@ -91,6 +95,8 @@ export class MockController {
 			...getDefaultMockControllerCapabilities(),
 			...options.capabilities,
 		};
+
+		void this.execute();
 	}
 
 	public readonly serial: MockPortBinding;
@@ -102,6 +108,15 @@ export class MockController {
 		TimedExpectation<MockZWaveFrame, MockZWaveFrame>[]
 	> = new Map();
 	private behaviors: MockControllerBehavior[] = [];
+
+	/** Shared medium for sending messages back and forth */
+	private air = new AsyncQueue<
+		LazyMockZWaveFrame & {
+			source?: number;
+			target?: number;
+			onTransmit?: (frame: MockZWaveFrame) => void;
+		}
+	>();
 
 	/** Records the messages received from the host to perform assertions on them */
 	private receivedHostMessages: Message[] = [];
@@ -322,7 +337,7 @@ export class MockController {
 			this.autoAckNodeFrames &&
 			frame.type === MockZWaveFrameType.Request
 		) {
-			await this.ackNodeRequestFrame(node, frame);
+			void this.ackNodeRequestFrame(node, frame);
 		}
 
 		// Handle message buffer. Check for pending expectations first.
@@ -360,18 +375,26 @@ export class MockController {
 	 */
 	public async sendToNode(
 		node: MockNode,
-		frame: MockZWaveFrame,
+		frame: LazyMockZWaveFrame,
 	): Promise<MockZWaveAckFrame | undefined> {
-		let ret: Promise<MockZWaveAckFrame> | undefined;
-		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
-			ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
-		}
-		process.nextTick(() => {
-			void node.onControllerFrame(frame).catch((e) => {
-				console.error(e);
-			});
+		this.air.add({
+			target: node.id,
+			...frame,
 		});
-		if (ret) return await ret;
+		// let ret: Promise<MockZWaveAckFrame> | undefined;
+		// if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
+		// 	ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
+		// }
+		// process.nextTick(() => {
+		// 	void node.onControllerFrame(frame).catch((e) => {
+		// 		console.error(e);
+		// 	});
+		// });
+		// if (ret) return await ret;
+
+		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
+			return await this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
+		}
 	}
 
 	public defineBehavior(...behaviors: MockControllerBehavior[]): void {
@@ -400,6 +423,40 @@ export class MockController {
 	/** Forgets all recorded messages received from the host */
 	public clearReceivedHostMessages(): void {
 		this.receivedHostMessages = [];
+	}
+
+	public async execute(): Promise<void> {
+		for await (const { source, target, onTransmit, ...frame } of this.air) {
+			if (!source && target) {
+				// controller -> node
+				const node = this._nodes.get(target);
+				if (!node) continue;
+
+				await wait(node.capabilities.txDelay);
+
+				const unlazy = unlazyMockZWaveFrame(frame);
+				onTransmit?.(unlazy);
+				node.onControllerFrame(unlazy).catch((e) => {
+					console.error(e);
+				});
+			} else if (source && !target) {
+				// node -> controller
+				const node = this._nodes.get(source);
+				if (!node) continue;
+
+				await wait(node.capabilities.txDelay);
+
+				const unlazy = unlazyMockZWaveFrame(frame);
+				onTransmit?.(unlazy);
+				this.onNodeFrame(node, unlazy).catch((e) => {
+					console.error(e);
+				});
+			}
+		}
+	}
+
+	public destroy(): void {
+		this.air.abort();
 	}
 }
 
