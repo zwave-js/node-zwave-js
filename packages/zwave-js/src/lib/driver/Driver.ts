@@ -4279,10 +4279,11 @@ ${handlers.length} left`,
 		}
 
 		// This has potential for a conflict, use low priority
-		this.controllerLog.logNode(
-			targetNode.id,
-			"S2 collision, reducing priority for Supervision report",
-		);
+		this.controllerLog.logNode(targetNode.id, {
+			message:
+				"S2 collision detected, reducing priority for Supervision report",
+			level: "debug",
+		});
 		return true;
 	}
 
