@@ -23,6 +23,7 @@ import {
 	TimeCCTimeOffsetGet,
 	TimeCommand,
 	TimeParametersCommand,
+	Weekday,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 	defaultCCValueOptions,
@@ -6198,7 +6199,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 					Object.assign(response, {
 						hour: result.hour,
 						minute: result.minute,
-						weekday: response.weekday,
+						weekday: Weekday[result.weekday],
 					});
 				}
 			} catch (e) {}
