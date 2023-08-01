@@ -2843,6 +2843,8 @@ export class Driver
 										node.getEndpoint(
 											msg.command.endpointIndex,
 										) ?? node;
+									const encapsulationFlags =
+										msg.command.encapsulationFlags;
 									await endpoint
 										.createAPI(
 											CommandClasses.Supervision,
@@ -2856,8 +2858,12 @@ export class Driver
 												this.shouldRequestWakeupOnDemand(
 													node,
 												),
-											encapsulationFlags:
-												msg.command.encapsulationFlags,
+											encapsulationFlags,
+											lowPriority:
+												this.shouldUseLowPriorityForSupervisionReport(
+													node,
+													encapsulationFlags,
+												),
 										});
 								}
 								return;
@@ -3951,6 +3957,11 @@ ${handlers.length} left`,
 								requestWakeUpOnDemand:
 									this.shouldRequestWakeupOnDemand(node),
 								encapsulationFlags,
+								lowPriority:
+									this.shouldUseLowPriorityForSupervisionReport(
+										node,
+										encapsulationFlags,
+									),
 							});
 				} else {
 					// Unsupervised, reply is a no-op
@@ -4233,6 +4244,46 @@ ${handlers.length} left`,
 		} else {
 			this._controller?.incrementStatistics("messagesTX");
 		}
+	}
+
+	private shouldUseLowPriorityForSupervisionReport(
+		targetNode: ZWaveNode,
+		encapsulationFlags: EncapsulationFlags,
+	): boolean {
+		// To avoid S2 collisions, we reduce the priority of Supervision reports
+		// when they are S2-encapsulated, and another S2-encapsulated transaction is in
+		// progress for the same node
+
+		// Use Immediate priority if there is no other transaction for this node in progress
+		const currentNormalMsg = this.queue.currentTransaction?.message;
+		if (currentNormalMsg?.getNodeId() !== targetNode.id) {
+			return false;
+		}
+		if (!isCommandClassContainer(currentNormalMsg)) {
+			return false;
+		}
+
+		// Use Immediate priority if the node isn't using Security S2
+		if (!securityClassIsS2(targetNode.getHighestSecurityClass())) {
+			return false;
+		}
+
+		// Use Immediate priority unless both messages are S2-encapsulated
+		const currentMsgIsSecure =
+			currentNormalMsg.command instanceof Security2CCMessageEncapsulation;
+		const reportIsSecure = !!(
+			encapsulationFlags & EncapsulationFlags.Security
+		);
+		if (!currentMsgIsSecure || !reportIsSecure) {
+			return false;
+		}
+
+		// This has potential for a conflict, use low priority
+		this.controllerLog.logNode(
+			targetNode.id,
+			"S2 collision, reducing priority for Supervision report",
+		);
+		return true;
 	}
 
 	private mayStartTransaction(transaction: Transaction): boolean {
