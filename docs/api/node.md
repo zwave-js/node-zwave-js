@@ -679,6 +679,31 @@ The following CCs will be used (when supported or necessary) in this process:
 -   Time CC
 -   Schedule Entry Lock CC (for setting the timezone)
 
+### `getDateAndTime`
+
+```ts
+getDateAndTime(): Promise<DateAndTime>
+```
+
+This method gathers and returns as much information as possible about the state of the clock and calendar on the node.  Depending on the CCs supported by the node, it may return none or more of the following:
+
+-   hour
+-   minute
+-   second
+-   standardOffset (the number of minutes the local timezone differs from UTC)
+-   dstOffset (the number of minutes the local timezone differs from UTC while observing Daylight Saving Time)
+-   weekday
+-   day (of the month)
+-   month (numerical)
+-   year
+
+The following CCs will be used (when supported or necessary) in this process:
+
+-   Time Parameters CC
+-   Clock CC
+-   Time CC
+-   Schedule Entry Lock CC (for getting the timezone)
+
 ### `manuallyIdleNotificationValue`
 
 ```ts
