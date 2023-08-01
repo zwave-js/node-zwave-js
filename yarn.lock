@@ -1054,26 +1054,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:7.12.1":
-  version: 7.12.1
-  resolution: "@sentry/core@npm:7.12.1"
+"@sentry-internal/tracing@npm:7.61.0":
+  version: 7.61.0
+  resolution: "@sentry-internal/tracing@npm:7.61.0"
   dependencies:
-    "@sentry/hub": 7.12.1
-    "@sentry/types": 7.12.1
-    "@sentry/utils": 7.12.1
-    tslib: ^1.9.3
-  checksum: c8cd62220a327bb4f7b1a97503c19b40710da0d880d7b881384e224aa470c983410c836d5dd85a2cd88166301771a0cea3fd2f93b53d17b29e82457282bb7d01
+    "@sentry/core": 7.61.0
+    "@sentry/types": 7.61.0
+    "@sentry/utils": 7.61.0
+    tslib: ^2.4.1 || ^1.9.3
+  checksum: 653d52e57b95cf673c6b4fc59684774adef988439e7f58c8ba94ae64fe2bdd613c0734a1365eba6b135ba25c49f3e311146f0324d1d36dc5772a37276fab5a73
   languageName: node
   linkType: hard
 
-"@sentry/hub@npm:7.12.1":
-  version: 7.12.1
-  resolution: "@sentry/hub@npm:7.12.1"
+"@sentry/core@npm:7.61.0":
+  version: 7.61.0
+  resolution: "@sentry/core@npm:7.61.0"
   dependencies:
-    "@sentry/types": 7.12.1
-    "@sentry/utils": 7.12.1
-    tslib: ^1.9.3
-  checksum: f6607969a0dd16e6892ec56675a5dadcde20f39a031a39541816ae1a56a65cc4f26b942859c85ce40992c8a0959020bf0c27e4bd68bdc96adcf499ce6f147252
+    "@sentry/types": 7.61.0
+    "@sentry/utils": 7.61.0
+    tslib: ^2.4.1 || ^1.9.3
+  checksum: 785fbb28a6a7eb7068905f7e860b7f0d14a5b3a0266dadbf530523315289a8b1bf1729bced7faf17fb83ef7c668b8798838fc02f27ce44d8811174f5a8cd9c9e
   languageName: node
   linkType: hard
 
@@ -1089,19 +1089,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/node@npm:^7.12.1":
-  version: 7.12.1
-  resolution: "@sentry/node@npm:7.12.1"
+"@sentry/node@npm:^7.61.0":
+  version: 7.61.0
+  resolution: "@sentry/node@npm:7.61.0"
   dependencies:
-    "@sentry/core": 7.12.1
-    "@sentry/hub": 7.12.1
-    "@sentry/types": 7.12.1
-    "@sentry/utils": 7.12.1
+    "@sentry-internal/tracing": 7.61.0
+    "@sentry/core": 7.61.0
+    "@sentry/types": 7.61.0
+    "@sentry/utils": 7.61.0
     cookie: ^0.4.1
     https-proxy-agent: ^5.0.0
     lru_map: ^0.3.3
-    tslib: ^1.9.3
-  checksum: 57a06fb397ce72ff7df10c9397022c4ae109ade63bc3df530ac1be94f2fd3c3ef2b78ae0f2820ce9c52710cb8b44e382cd72d001e6429964bb6e70c7d4901d02
+    tslib: ^2.4.1 || ^1.9.3
+  checksum: ce0180cb002429738ee4fb806f3086a991b1ba22c1e7fd00a14ef5ec12f3a3df245d7c5cd92d9796f7036c81668c168ae6a19fd8a7658f4197e70f1032a3063b
   languageName: node
   linkType: hard
 
@@ -1112,6 +1112,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/types@npm:7.61.0":
+  version: 7.61.0
+  resolution: "@sentry/types@npm:7.61.0"
+  checksum: b61cbade0870a377e4bc26274c0d471cc5ee0114a2a29519be121176f68821af708248a3c1033b65b2b74a5214331029c79f37e6c542fb43f8ad16d6a3d34ce6
+  languageName: node
+  linkType: hard
+
 "@sentry/utils@npm:7.12.1":
   version: 7.12.1
   resolution: "@sentry/utils@npm:7.12.1"
@@ -1119,6 +1126,16 @@ __metadata:
     "@sentry/types": 7.12.1
     tslib: ^1.9.3
   checksum: 22fa506c6e3116ec950a10aaf98929b70264c90fa83bfb4752da779753f312277a44f705c45102ce06b1781d99db2ea4e4e66662d0fde1792e8cae2559e63b5b
+  languageName: node
+  linkType: hard
+
+"@sentry/utils@npm:7.61.0":
+  version: 7.61.0
+  resolution: "@sentry/utils@npm:7.61.0"
+  dependencies:
+    "@sentry/types": 7.61.0
+    tslib: ^2.4.1 || ^1.9.3
+  checksum: c377b8e4b37e9fd6baca839ca5e9d53fa12ed5cf11c1ba37b296d16dc23a9e549d0e71d32935016b3b78ce364159e038d6973f0a86b714c753a8f1dbdd60ce40
   languageName: node
   linkType: hard
 
@@ -2046,7 +2063,7 @@ __metadata:
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
     "@microsoft/api-extractor": ^7.36.0
-    "@sentry/node": ^7.12.1
+    "@sentry/node": ^7.61.0
     "@serialport/binding-mock": ^10.2.2
     "@serialport/bindings-interface": "*"
     "@serialport/stream": ^10.3.0
@@ -8464,6 +8481,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:^2.4.1 || ^1.9.3":
+  version: 2.6.1
+  resolution: "tslib@npm:2.6.1"
+  checksum: b0d176d176487905b66ae4d5856647df50e37beea7571c53b8d10ba9222c074b81f1410fb91da13debaf2cbc970663609068bdebafa844ea9d69b146527c38fe
+  languageName: node
+  linkType: hard
+
 "tsutils@npm:^3.21.0":
   version: 3.21.0
   resolution: "tsutils@npm:3.21.0"
@@ -9102,7 +9126,7 @@ __metadata:
     "@esm2cjs/p-queue": ^7.3.0
     "@microsoft/api-extractor": ^7.36.0
     "@sentry/integrations": ^7.12.1
-    "@sentry/node": ^7.12.1
+    "@sentry/node": ^7.61.0
     "@types/fs-extra": ^9.0.13
     "@types/node": ^14.18.52
     "@types/proper-lockfile": ^4.1.2
