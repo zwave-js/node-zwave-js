@@ -246,6 +246,7 @@ import {
 	type NodeStatusInterpreter,
 } from "./NodeStatusMachine";
 import type {
+	DateAndTime,
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
 	RefreshInfoOptions,
@@ -5997,23 +5998,13 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 	/**
 	 * Returns the current date, time and timezone (or a subset of those) on the node using one or more of the respective CCs.
 	 */
-	public async getDateAndTime(): Promise<object> {
+	public async getDateAndTime(): Promise<DateAndTime> {
 		const timeParametersAPI = this.commandClasses["Time Parameters"];
 		const timeAPI = this.commandClasses.Time;
 		const clockAPI = this.commandClasses.Clock;
 		const scheduleEntryLockAPI = this.commandClasses["Schedule Entry Lock"];
 
-		// We'll go through the various CCs filling this out and return whatever we've got at the end
-		const response: {
-			hour?: number;
-			minute?: number;
-			second?: number;
-			timezone?: number;
-			weekday?: number;
-			day?: number;
-			month?: number;
-			year?: number;
-		} = {};
+		const response: DateAndTime = {};
 
 		if (
 			timeParametersAPI.isSupported() &&
@@ -6023,14 +6014,17 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 				const result = await timeParametersAPI.get();
 				if (result) {
 					// Time Parameters is all UTC per the spec
-					response.hour = result.getUTCHours();
-					response.minute = result.getUTCMinutes();
-					response.second = result.getUTCSeconds();
-					response.timezone = 0;
-					response.weekday = result.getUTCDay();
-					response.day = result.getUTCDate();
-					response.month = result.getUTCMonth();
-					response.year = result.getUTCFullYear();
+					Object.assign(response, {
+						hour: result.getUTCHours(),
+						minute: result.getUTCMinutes(),
+						second: result.getUTCSeconds(),
+						standardOffset: 0,
+						dstOffset: 0,
+						weekday: result.getUTCDay(),
+						day: result.getUTCDate(),
+						month: result.getUTCMonth() + 1,
+						year: result.getUTCFullYear(),
+					});
 				}
 				// That's everything
 				return response;
@@ -6044,9 +6038,11 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			try {
 				const result = await clockAPI.get();
 				if (result) {
-					response.hour = result.hour;
-					response.minute = result.minute;
-					response.weekday = result.weekday;
+					Object.assign(response, {
+						hour: result.hour,
+						minute: result.minute,
+						weekday: response.weekday,
+					});
 				}
 			} catch (e) {}
 		}
@@ -6058,9 +6054,11 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			try {
 				const result = await timeAPI.getTime();
 				if (result) {
-					response.hour = result.hour;
-					response.minute = result.minute;
-					response.second = result.second;
+					Object.assign(response, {
+						hour: result.hour,
+						minute: result.minute,
+						second: response.second,
+					});
 				}
 			} catch (e) {}
 		}
@@ -6072,9 +6070,11 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			try {
 				const result = await timeAPI.getDate();
 				if (result) {
-					response.day = result.day;
-					response.month = result.month;
-					response.year = result.year;
+					Object.assign(response, {
+						day: result.day,
+						month: result.month,
+						year: result.year,
+					});
 				}
 			} catch (e) {}
 		}
@@ -6086,12 +6086,10 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			try {
 				const result = await timeAPI.getTimezone();
 				if (result) {
-					const now: Date = new Date();
-					if (now > result.startDate && now < result.endDate) {
-						response.timezone = result.dstOffset;
-					} else {
-						response.timezone = result.standardOffset;
-					}
+					Object.assign(response, {
+						standardOffset: result.standardOffset,
+						dstOffset: result.dstOffset,
+					});
 				}
 			} catch (e) {}
 		}
@@ -6105,13 +6103,10 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			try {
 				const result = await scheduleEntryLockAPI.getTimezone();
 				if (result) {
-					/* How can I tell if the node is using DST or not?
-					I'll just assume no, I guess.
-
-					Also, Time CC returns offset in hours and minutes
-					while Schedule Entry Lock returns in just minutes?  Oy. */
-
-					response.timezone = result.standardOffset / 60;
+					Object.assign(response, {
+						standardOffset: result.standardOffset,
+						dstOffset: result.dstOffset,
+					});
 				}
 			} catch (e) {}
 		}

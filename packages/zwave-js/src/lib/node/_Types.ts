@@ -7,6 +7,7 @@ import type {
 	MultilevelSwitchCommand,
 	Powerlevel,
 	PowerlevelTestStatus,
+	Weekday,
 } from "@zwave-js/cc/safe";
 import type {
 	CommandClasses,
@@ -18,6 +19,7 @@ import type {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "@zwave-js/core/safe";
+import { type AllOrNone } from "@zwave-js/shared";
 import type { ZWaveNode } from "./Node";
 import type { RouteStatistics } from "./NodeStatistics";
 
@@ -376,3 +378,21 @@ export interface LifelineRoutes {
 	/** The next to last working route from the controller to this node. */
 	nlwr?: RouteStatistics;
 }
+
+export type DateAndTime = AllOrNone<{
+	hour: number;
+	minute: number;
+}> &
+	(
+		| { weekday?: Weekday; second?: undefined }
+		| { weekday?: undefined; second?: number }
+	) &
+	AllOrNone<{
+		year: number;
+		month: number;
+		day: number;
+	}> &
+	AllOrNone<{
+		dstOffset: number;
+		standardOffset: number;
+	}>;
