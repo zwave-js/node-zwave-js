@@ -6215,7 +6215,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 					Object.assign(response, {
 						hour: result.hour,
 						minute: result.minute,
-						second: response.second,
+						second: result.second,
 					});
 				}
 			} catch (e) {}
