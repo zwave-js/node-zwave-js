@@ -93,7 +93,7 @@ export function discreteBinarySearch(rangeMin: number, rangeMax: number, executo
 // Warning: (ae-missing-release-tag) "discreteLinearSearch" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function discreteLinearSearch(rangeMin: number, rangeMax: number, executor: (value: number) => boolean | PromiseLike<boolean>): Promise<number | undefined>;
+export function discreteLinearSearch(rangeMin: number, rangeMax: number, executor: (value: number) => boolean | undefined | PromiseLike<boolean | undefined>): Promise<number | undefined>;
 
 // Warning: (ae-missing-release-tag) "enumFilesRecursive" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

@@ -870,6 +870,11 @@ export function encodeMaybeBoolean(val: MaybeUnknown<boolean>): number;
 // @public (undocumented)
 export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer;
 
+// Warning: (ae-missing-release-tag) "encodeNodeID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function encodeNodeID(nodeId: number, type?: NodeIDType): Buffer;
+
 // Warning: (ae-missing-release-tag) "encodeNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -888,7 +893,7 @@ export function encodeNodeProtocolInfoAndDeviceClass(info: NodeProtocolInfoAndDe
 // Warning: (ae-missing-release-tag) "encodeNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeUpdatePayload(nif: NodeUpdatePayload): Buffer;
+export function encodeNodeUpdatePayload(nif: NodeUpdatePayload, nodeIdType?: NodeIDType): Buffer;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -1535,6 +1540,16 @@ export const NODE_ID_BROADCAST = 255;
 // @public
 export const NODE_ID_MAX = 232;
 
+// Warning: (ae-missing-release-tag) "NodeIDType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum NodeIDType {
+    // (undocumented)
+    Long = 2,
+    // (undocumented)
+    Short = 1
+}
+
 // Warning: (ae-missing-release-tag) "NodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1716,6 +1731,14 @@ export function parseMaybeNumber(val: number): MaybeUnknown<number> | undefined;
 // @public (undocumented)
 export function parseNodeBitMask(mask: Buffer): number[];
 
+// Warning: (ae-missing-release-tag) "parseNodeID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function parseNodeID(buffer: Buffer, type?: NodeIDType, offset?: number): {
+    nodeId: number;
+    bytesRead: number;
+};
+
 // Warning: (ae-missing-release-tag) "parseNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1737,7 +1760,7 @@ export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
 // Warning: (ae-missing-release-tag) "parseNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload;
+export function parseNodeUpdatePayload(nif: Buffer, nodeIdType?: NodeIDType): NodeUpdatePayload;
 
 // Warning: (ae-missing-release-tag) "parseNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3163,6 +3186,7 @@ export enum ZWaveErrorCodes {
     FWUpdateService_IntegrityCheckFailed = 262,
     FWUpdateService_MissingInformation = 260,
     FWUpdateService_RequestError = 261,
+    HealthCheck_Busy = 400,
     Invalid_Firmware_File = 1506,
     ManufacturerProprietaryCC_NoManufacturerId = 1200,
     NVM_InvalidFormat = 283,

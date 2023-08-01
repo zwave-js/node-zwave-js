@@ -4,6 +4,7 @@ import {
 	NODE_ID_BROADCAST,
 	RssiError,
 	parseNodeBitMask,
+	parseNodeID,
 	type FrameType,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
@@ -59,10 +60,18 @@ export class BridgeApplicationCommandRequest
 			status & ApplicationCommandStatusFlags.ForeignHomeId
 		);
 
-		const sourceNodeId = this.payload[2];
+		let offset = 1;
+		const { nodeId: destinationNodeId, bytesRead: dstNodeIdBytes } =
+			parseNodeID(this.payload, host.nodeIdType, offset);
+		offset += dstNodeIdBytes;
+		const { nodeId: sourceNodeId, bytesRead: srcNodeIdBytes } = parseNodeID(
+			this.payload,
+			host.nodeIdType,
+			offset,
+		);
+		offset += srcNodeIdBytes;
 		// Parse the CC
-		const commandLength = this.payload[3];
-		let offset = 4;
+		const commandLength = this.payload[offset++];
 		this.command = CommandClass.from(this.host, {
 			data: this.payload.slice(offset, offset + commandLength),
 			nodeId: sourceNodeId,
@@ -79,7 +88,7 @@ export class BridgeApplicationCommandRequest
 				this.payload.slice(offset, offset + multicastNodesLength),
 			);
 		} else if (this.frameType === "singlecast") {
-			this.targetNodeId = this.payload[1];
+			this.targetNodeId = destinationNodeId;
 		} else {
 			this.targetNodeId = NODE_ID_BROADCAST;
 		}

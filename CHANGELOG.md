@@ -4,6 +4,47 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 11.8.1 (2023-08-01)
+### Bugfixes
+* Recover from Security S2 collisions in a common scenario where nodes send a supervised command at the same time Z-Wave JS is trying to control them (#6106)
+* During NVM migration, an incorrect flag for "on other network" is now automatically corrected instead of raising an error (#6108)
+
+### Config file changes
+* Preserve endpoint 0 for Zooz ZEN14 to toggle both outlets at once (#6099)
+
+### Changes under the hood
+* Fixed the message sequencing between mock controller and mock nodes in integration tests and the `mock-server` (#6101)
+
+## 11.8.0 (2023-07-28)
+### Features
+* Health checks now include the intermediate results in progress callbacks (#6086)
+* Added the ability to abort health checks and testing whether a health check is in progress (#6091)
+
+### Bugfixes
+* When a CC version query times out, the CC version is now actually assumed to be 1 instead of only logging this (#6089)
+
+### Config file changes
+* Correct state after power failure for Minoston MP21Z/31Z (#6087)
+* Add Namron 4512757 (#6072)
+
+## 11.7.0 (2023-07-27)
+### Features
+* Add methods to read sensor/meter support information from cache for `Alarm/Binary/Multilevel Sensor CC` and `Meter CC` (#6065)
+* Fall back to the embedded config directory when looking up `$import` targets from user-defined config files (#6067)
+
+### Bugfixes
+* Fixed an issue where a delayed endpoint capability report could be associated with the wrong query (#6076)
+* During NVM migration, some invalid/unexpected bytes in the 500 series NVM can now be corrected (#6082)
+* Hide configuration values for `Door Lock CC v4` functionality that is not supported by a lock (#6075)
+
+### Config file changes
+* Add Leviton RZM10-1L (#6080)
+* Force use of Multi Channel CC v1 for all versions of PE653 (#6077)
+
+### Changes under the hood
+* Enable 16-bit node IDs in Serial API communication (#6070)
+* Fix link in v11 Migration guide (#6071)
+
 ## 11.6.0 (2023-07-24)
 ### Features
 * Setting the date and time on a node will now also attempt sending unsolicited `Time CC` reports if no other way is supported (#6042)

@@ -1,6 +1,7 @@
 import {
 	MessagePriority,
 	NodeType,
+	parseNodeID,
 	parseNodeUpdatePayload,
 	type CommandClasses,
 	type MessageOrCCLogEntry,
@@ -270,15 +271,22 @@ export class AddNodeToNetworkRequestStatusReport
 				// no context for the status to parse
 				break;
 
-			case AddNodeStatus.Done:
-				this.statusContext = { nodeId: this.payload[2] };
+			case AddNodeStatus.Done: {
+				const { nodeId } = parseNodeID(
+					this.payload,
+					host.nodeIdType,
+					2,
+				);
+				this.statusContext = { nodeId };
 				break;
+			}
 
 			case AddNodeStatus.AddingController:
 			case AddNodeStatus.AddingSlave: {
 				// the payload contains a node information frame
 				this.statusContext = parseNodeUpdatePayload(
 					this.payload.slice(2),
+					host.nodeIdType,
 				);
 				break;
 			}

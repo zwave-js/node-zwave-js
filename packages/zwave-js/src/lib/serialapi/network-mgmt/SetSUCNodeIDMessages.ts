@@ -3,6 +3,7 @@ import {
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
 	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
@@ -75,12 +76,15 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public transmitOptions: TransmitOptions;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.sucNodeId,
-			this.enableSUC ? 0x01 : 0x00,
-			this.transmitOptions,
-			this.enableSIS ? 0x01 : 0x00,
-			this.callbackId,
+		const nodeId = encodeNodeID(this.sucNodeId, this.host.nodeIdType);
+		this.payload = Buffer.concat([
+			nodeId,
+			Buffer.from([
+				this.enableSUC ? 0x01 : 0x00,
+				this.transmitOptions,
+				this.enableSIS ? 0x01 : 0x00,
+				this.callbackId,
+			]),
 		]);
 
 		return super.serialize();

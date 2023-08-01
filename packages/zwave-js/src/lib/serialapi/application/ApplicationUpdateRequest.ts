@@ -3,6 +3,7 @@ import {
 	encodeNodeUpdatePayload,
 	getCCName,
 	parseCCList,
+	parseNodeID,
 	parseNodeUpdatePayload,
 	type CommandClasses,
 	type MessageOrCCLogEntry,
@@ -99,7 +100,10 @@ export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateReque
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			this.nodeInformation = parseNodeUpdatePayload(this.payload);
+			this.nodeInformation = parseNodeUpdatePayload(
+				this.payload,
+				this.host.nodeIdType,
+			);
 			this.nodeId = this.nodeInformation.nodeId;
 		} else {
 			this.nodeId = options.nodeInformation.nodeId;
@@ -111,7 +115,10 @@ export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateReque
 	public nodeInformation: NodeUpdatePayload;
 
 	public serialize(): Buffer {
-		this.payload = encodeNodeUpdatePayload(this.nodeInformation);
+		this.payload = encodeNodeUpdatePayload(
+			this.nodeInformation,
+			this.host.nodeIdType,
+		);
 		return super.serialize();
 	}
 }
@@ -140,8 +147,9 @@ export class ApplicationUpdateRequestNodeRemoved extends ApplicationUpdateReques
 	) {
 		super(host, options);
 
-		this.nodeId = this.payload[0];
-		// byte 1 is 0, meaning unknown
+		const { nodeId } = parseNodeID(this.payload, host.nodeIdType, 0);
+		this.nodeId = nodeId;
+		// byte 1/2 is 0, meaning unknown
 	}
 
 	public nodeId: number;
@@ -154,16 +162,27 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived extends Applicatio
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
-		this.remoteNodeId = this.payload[0];
-		// payload[1] is rxStatus
-		this.nwiHomeId = this.payload.slice(2, 6);
+		let offset = 0;
+		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			this.payload,
+			host.nodeIdType,
+			offset,
+		);
+		offset += nodeIdBytes;
+		this.remoteNodeId = nodeId;
 
-		const ccLength = this.payload[6];
-		this.basicDeviceClass = this.payload[7];
-		this.genericDeviceClass = this.payload[8];
-		this.specificDeviceClass = this.payload[9];
+		// next byte is rxStatus
+		offset++;
+
+		this.nwiHomeId = this.payload.slice(offset, offset + 4);
+		offset += 4;
+
+		const ccLength = this.payload[offset++];
+		this.basicDeviceClass = this.payload[offset++];
+		this.genericDeviceClass = this.payload[offset++];
+		this.specificDeviceClass = this.payload[offset++];
 		this.supportedCCs = parseCCList(
-			this.payload.slice(10, 10 + ccLength),
+			this.payload.slice(offset, offset + ccLength),
 		).supportedCCs;
 	}
 

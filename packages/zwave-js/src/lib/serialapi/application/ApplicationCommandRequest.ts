@@ -3,6 +3,8 @@ import {
 	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
+	parseNodeID,
 	type FrameType,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
@@ -82,11 +84,17 @@ export class ApplicationCommandRequest
 			);
 
 			// followed by a node ID
-			const nodeId = this.payload[1];
+			let offset = 1;
+			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+				this.payload,
+				host.nodeIdType,
+				offset,
+			);
+			offset += nodeIdBytes;
 			// and a command class
-			const commandLength = this.payload[2];
+			const commandLength = this.payload[offset++];
 			this.command = CommandClass.from(this.host, {
-				data: this.payload.slice(3, 3 + commandLength),
+				data: this.payload.slice(offset, offset + commandLength),
 				nodeId,
 				origin: options.origin,
 				frameType: this.frameType,
@@ -135,12 +143,14 @@ export class ApplicationCommandRequest
 			(this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
 
 		const serializedCC = this.command.serialize();
+		const nodeId = encodeNodeID(
+			this.getNodeId() ?? this.host.ownNodeId,
+			this.host.nodeIdType,
+		);
 		this.payload = Buffer.concat([
-			Buffer.from([
-				statusByte,
-				this.getNodeId() ?? this.host.ownNodeId,
-				serializedCC.length,
-			]),
+			Buffer.from([statusByte]),
+			nodeId,
+			Buffer.from([serializedCC.length]),
 			serializedCC,
 		]);
 

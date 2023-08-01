@@ -6,6 +6,8 @@ import {
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
+	parseNodeID,
 	type MessageOrCCLogEntry,
 	type MulticastCC,
 	type MulticastDestination,
@@ -77,15 +79,26 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			this._nodeId = this.payload[0];
-			const serializedCCLength = this.payload[1];
-			this.transmitOptions = this.payload[2 + serializedCCLength];
-			this.callbackId = this.payload[3 + serializedCCLength];
-			this.payload = this.payload.slice(2, 2 + serializedCCLength);
+			let offset = 0;
+			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+				this.payload,
+				host.nodeIdType,
+				offset,
+			);
+			offset += nodeIdBytes;
+			this._nodeId = nodeId;
+
+			const serializedCCLength = this.payload[offset++];
+			this.transmitOptions = this.payload[offset + serializedCCLength];
+			this.callbackId = this.payload[offset + 1 + serializedCCLength];
+			this.payload = this.payload.slice(
+				offset,
+				offset + serializedCCLength,
+			);
 
 			if (options.parseCCs !== false) {
 				this.command = CommandClass.from(host, {
-					nodeId: this._nodeId,
+					nodeId,
 					data: this.payload,
 					origin: options.origin,
 				}) as SinglecastCC<CCType>;
@@ -150,9 +163,11 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public serialize(): Buffer {
+		const nodeId = encodeNodeID(this.command.nodeId, this.host.nodeIdType);
 		const serializedCC = this.serializeCC();
 		this.payload = Buffer.concat([
-			Buffer.from([this.command.nodeId, serializedCC.length]),
+			nodeId,
+			Buffer.from([serializedCC.length]),
 			serializedCC,
 			Buffer.from([this.transmitOptions, this.callbackId]),
 		]);
@@ -350,11 +365,19 @@ export class SendDataMulticastRequest<
 
 		if (gotDeserializationOptions(options)) {
 			const numNodeIDs = this.payload[0];
-			this._nodeIds = [
-				...this.payload.slice(1, numNodeIDs + 1),
-			] as MulticastDestination;
+			let offset = 1;
+			const nodeIds: number[] = [];
+			for (let i = 0; i < numNodeIDs; i++) {
+				const { nodeId, bytesRead } = parseNodeID(
+					this.payload,
+					host.nodeIdType,
+					offset,
+				);
+				nodeIds.push(nodeId);
+				offset += bytesRead;
+			}
+			this._nodeIds = nodeIds as MulticastDestination;
 
-			let offset = numNodeIDs + 1;
 			const serializedCCLength = this.payload[offset];
 			offset++;
 			const serializedCC = this.payload.slice(
@@ -446,13 +469,14 @@ export class SendDataMulticastRequest<
 
 	public serialize(): Buffer {
 		const serializedCC = this.serializeCC();
+		const destinationNodeIDs = this.command.nodeId.map((id) =>
+			encodeNodeID(id, this.host.nodeIdType),
+		);
 		this.payload = Buffer.concat([
-			// # of target nodes and nodeIds
-			Buffer.from([
-				this.command.nodeId.length,
-				...this.command.nodeId,
-				serializedCC.length,
-			]),
+			// # of target nodes, not # of bytes
+			Buffer.from([this.command.nodeId.length]),
+			...destinationNodeIDs,
+			Buffer.from([serializedCC.length]),
 			// payload
 			serializedCC,
 			Buffer.from([this.transmitOptions, this.callbackId]),

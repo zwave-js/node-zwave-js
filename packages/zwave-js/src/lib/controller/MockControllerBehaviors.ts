@@ -12,13 +12,17 @@ import {
 	ZWaveDataRate,
 	ZWaveErrorCodes,
 	isZWaveError,
+	type ICommandClass,
 } from "@zwave-js/core";
+import { type ZWaveHost } from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
+	type MockController,
 	type MockControllerBehavior,
+	type MockNode,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
@@ -82,6 +86,57 @@ import {
 	MockControllerStateKeys,
 } from "./MockControllerState";
 import { determineNIF } from "./NodeInformationFrame";
+
+function createLazySendDataPayload(
+	host: ZWaveHost,
+	controller: MockController,
+	node: MockNode,
+	msg: SendDataRequest | SendDataMulticastRequest,
+): () => ICommandClass {
+	return () => {
+		try {
+			const cmd = CommandClass.from(node.host, {
+				nodeId: controller.host.ownNodeId,
+				data: msg.payload,
+				origin: MessageOrigin.Host,
+			});
+			// Store the command because assertReceivedHostMessage needs it
+			// @ts-expect-error
+			msg.command = cmd;
+			return cmd;
+		} catch (e) {
+			if (isZWaveError(e)) {
+				if (e.code === ZWaveErrorCodes.CC_NotImplemented) {
+					// The whole CC is not implemented yet. If this happens in tests, it is because we sent a raw CC.
+					try {
+						const cmd = new CommandClass(host, {
+							nodeId: controller.host.ownNodeId,
+							ccId: msg.payload[0],
+							ccCommand: msg.payload[1],
+							payload: msg.payload.slice(2),
+						});
+						// Store the command because assertReceivedHostMessage needs it
+						// @ts-expect-error
+						msg.command = cmd;
+						return cmd;
+					} catch (e: any) {
+						console.error(e.message);
+						throw e;
+					}
+				} else if (
+					e.code === ZWaveErrorCodes.Deserialization_NotImplemented
+				) {
+					// We want to know when we're using a command in tests that cannot be decoded yet
+					console.error(e.message);
+					throw e;
+				}
+			}
+
+			console.error(e);
+			throw e;
+		}
+	};
+}
 
 const respondToGetControllerId: MockControllerBehavior = {
 	async onHostMessage(host, controller, msg) {
@@ -238,65 +293,27 @@ const handleSendData: MockControllerBehavior = {
 				MockControllerCommunicationState.Sending,
 			);
 
-			// We deferred parsing of the CC because it requires the node's host to do so.
-			// Now we can do that. Also set the CC node ID to the controller's own node ID,
-			// so CC knows it came from the controller's node ID.
-			const node = controller.nodes.get(msg.getNodeId()!)!;
-			// Simulate the frame being transmitted via radio
-			const ackPromise = wait(node.capabilities.txDelay).then(() => {
-				// Deserialize on the node after a short delay
-				try {
-					msg.command = CommandClass.from(node.host, {
-						nodeId: controller.host.ownNodeId,
-						data: msg.payload,
-						origin: MessageOrigin.Host,
-					});
-				} catch (e) {
-					let handled = false;
-					if (isZWaveError(e)) {
-						// We want to know when we're using a command in tests that cannot be decoded yet
-						if (
-							e.code ===
-							ZWaveErrorCodes.Deserialization_NotImplemented
-						) {
-							console.error(e.message);
-						} else if (
-							e.code === ZWaveErrorCodes.CC_NotImplemented
-						) {
-							// The whole CC is not implemented yet. If this happens in tests, it is because we sent a raw CC.
-							try {
-								msg.command = new CommandClass(host, {
-									nodeId: controller.host.ownNodeId,
-									ccId: msg.payload[0],
-									ccCommand: msg.payload[1],
-									payload: msg.payload.slice(2),
-								});
-								handled = true;
-							} catch (e: any) {
-								console.error(e.message);
-							}
-						}
-					}
-
-					if (!handled) {
-						console.error(e);
-						throw e;
-					}
-				}
-
-				// Send the data to the node
-				const frame = createMockZWaveRequestFrame(msg.command, {
-					ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
-				});
-
-				return controller.sendToNode(node, frame);
-			});
-
 			// Notify the host that the message was sent
 			const res = new SendDataResponse(host, {
 				wasSent: true,
 			});
 			await controller.sendToHost(res.serialize());
+
+			// We deferred parsing of the CC because it requires the node's host to do so.
+			// Now we can do that. Also set the CC node ID to the controller's own node ID,
+			// so CC knows it came from the controller's node ID.
+			const node = controller.nodes.get(msg.getNodeId()!)!;
+			// Create a lazy frame, so it can be deserialized on the node after a short delay to simulate radio transmission
+			const lazyPayload = createLazySendDataPayload(
+				host,
+				controller,
+				node,
+				msg,
+			);
+			const lazyFrame = createMockZWaveRequestFrame(lazyPayload, {
+				ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
+			});
+			const ackPromise = controller.sendToNode(node, lazyFrame);
 
 			if (msg.callbackId !== 0) {
 				// Put the controller into waiting state
@@ -370,6 +387,12 @@ const handleSendDataMulticast: MockControllerBehavior = {
 				MockControllerCommunicationState.Sending,
 			);
 
+			// Notify the host that the message was sent
+			const res = new SendDataMulticastResponse(host, {
+				wasSent: true,
+			});
+			await controller.sendToHost(res.serialize());
+
 			// We deferred parsing of the CC because it requires the node's host to do so.
 			// Now we can do that. Also set the CC node ID to the controller's own node ID,
 			// so CC knows it came from the controller's node ID.
@@ -377,62 +400,19 @@ const handleSendDataMulticast: MockControllerBehavior = {
 
 			const ackPromises = nodeIds.map((nodeId) => {
 				const node = controller.nodes.get(nodeId)!;
-				// Simulate the frame being transmitted via radio
-				const ackPromise = wait(node.capabilities.txDelay).then(() => {
-					// Deserialize on the node after a short delay
-					try {
-						msg.command = CommandClass.from(node.host, {
-							nodeId: controller.host.ownNodeId,
-							data: msg.payload,
-							origin: MessageOrigin.Host,
-						});
-					} catch (e) {
-						let handled = false;
-						if (isZWaveError(e)) {
-							// We want to know when we're using a command in tests that cannot be decoded yet
-							if (
-								e.code ===
-								ZWaveErrorCodes.Deserialization_NotImplemented
-							) {
-								console.error(e.message);
-							} else if (
-								e.code === ZWaveErrorCodes.CC_NotImplemented
-							) {
-								// The whole CC is not implemented yet. If this happens in tests, it is because we sent a raw CC.
-								try {
-									msg.command = new CommandClass(host, {
-										nodeId: controller.host.ownNodeId,
-										ccId: msg.payload[0],
-										ccCommand: msg.payload[1],
-										payload: msg.payload.slice(2),
-									});
-									handled = true;
-								} catch (e: any) {
-									console.error(e.message);
-								}
-							}
-						}
-
-						if (!handled) throw e;
-					}
-
-					// Send the data to the node
-					const frame = createMockZWaveRequestFrame(msg.command, {
-						ackRequested: !!(
-							msg.transmitOptions & TransmitOptions.ACK
-						),
-					});
-
-					return controller.sendToNode(node, frame);
+				// Create a lazy frame, so it can be deserialized on the node after a short delay to simulate radio transmission
+				const lazyPayload = createLazySendDataPayload(
+					host,
+					controller,
+					node,
+					msg,
+				);
+				const lazyFrame = createMockZWaveRequestFrame(lazyPayload, {
+					ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
 				});
+				const ackPromise = controller.sendToNode(node, lazyFrame);
 				return ackPromise;
 			});
-
-			// Notify the host that the message was sent
-			const res = new SendDataMulticastResponse(host, {
-				wasSent: true,
-			});
-			await controller.sendToHost(res.serialize());
 
 			if (msg.callbackId !== 0) {
 				// Put the controller into waiting state

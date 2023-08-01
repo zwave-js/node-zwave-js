@@ -1,4 +1,5 @@
 import { sum } from "@zwave-js/shared/safe";
+import { NodeIDType } from "../consts";
 import { validatePayload } from "../util/misc";
 import { CommandClasses } from "./CommandClasses";
 
@@ -34,22 +35,37 @@ export interface NodeUpdatePayload extends ApplicationNodeInformation {
 	basicDeviceClass: number;
 }
 
-export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload {
-	const nodeId = nif[0];
-	const remainingLength = nif[1];
-	validatePayload(nif.length >= 2 + remainingLength);
+export function parseNodeUpdatePayload(
+	nif: Buffer,
+	nodeIdType: NodeIDType = NodeIDType.Short,
+): NodeUpdatePayload {
+	let offset = 0;
+	const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+		nif,
+		nodeIdType,
+		offset,
+	);
+	offset += nodeIdBytes;
+	const remainingLength = nif[offset++];
+	validatePayload(nif.length >= offset + remainingLength);
 	return {
 		nodeId,
-		basicDeviceClass: nif[2],
-		...parseApplicationNodeInformation(nif.slice(3, 2 + remainingLength)),
+		basicDeviceClass: nif[offset],
+		...parseApplicationNodeInformation(
+			nif.slice(offset + 1, offset + remainingLength),
+		),
 	};
 }
 
-export function encodeNodeUpdatePayload(nif: NodeUpdatePayload): Buffer {
+export function encodeNodeUpdatePayload(
+	nif: NodeUpdatePayload,
+	nodeIdType: NodeIDType = NodeIDType.Short,
+): Buffer {
 	const ccList = encodeCCList(nif.supportedCCs, []);
+	const nodeId = encodeNodeID(nif.nodeId, nodeIdType);
 	return Buffer.concat([
+		nodeId,
 		Buffer.from([
-			nif.nodeId,
 			3 + ccList.length,
 			nif.basicDeviceClass,
 			nif.genericDeviceClass,
@@ -345,4 +361,26 @@ export function encodeNodeInformationFrame(info: NodeInformationFrame): Buffer {
 		encodeNodeProtocolInfoAndDeviceClass(info),
 		encodeCCList(info.supportedCCs, []),
 	]);
+}
+
+export function parseNodeID(
+	buffer: Buffer,
+	type: NodeIDType = NodeIDType.Short,
+	offset: number = 0,
+): {
+	nodeId: number;
+	bytesRead: number;
+} {
+	validatePayload(buffer.length >= offset + type);
+	const nodeId = buffer.readUIntBE(offset, type);
+	return { nodeId, bytesRead: type };
+}
+
+export function encodeNodeID(
+	nodeId: number,
+	type: NodeIDType = NodeIDType.Short,
+): Buffer {
+	const ret = Buffer.allocUnsafe(type);
+	ret.writeUIntBE(nodeId, 0, type);
+	return ret;
 }

@@ -4547,6 +4547,8 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
     // (undocumented)
     readonly outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
     // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly twistAssist?: boolean;
@@ -4808,8 +4810,8 @@ export const DoorLockCCValues: Readonly<{
             readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly minVersion: 4;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     blockToBlockSupported: {
@@ -4859,8 +4861,8 @@ export const DoorLockCCValues: Readonly<{
             readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly minVersion: 4;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     twistAssistSupported: {
@@ -4912,8 +4914,8 @@ export const DoorLockCCValues: Readonly<{
             readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly minVersion: 4;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     holdAndReleaseSupported: {
@@ -4965,8 +4967,8 @@ export const DoorLockCCValues: Readonly<{
             readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly minVersion: 4;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     autoRelockSupported: {
@@ -10717,8 +10719,6 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 export class MultiChannelCCCapabilityReport extends MultiChannelCC implements ApplicationNodeInformation {
     // Warning: (ae-forgotten-export) The symbol "MultiChannelCCCapabilityReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCCapabilityReportOptions);
-    // (undocumented)
-    readonly endpointIndex: number;
     // (undocumented)
     readonly genericDeviceClass: number;
     // (undocumented)

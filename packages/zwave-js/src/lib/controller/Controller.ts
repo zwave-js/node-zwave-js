@@ -33,6 +33,7 @@ import {
 	EMPTY_ROUTE,
 	MAX_NODES,
 	NODE_ID_BROADCAST,
+	NodeIDType,
 	NodeType,
 	ProtocolType,
 	RFRegion,
@@ -110,11 +111,7 @@ import {
 	NodeStatus,
 	type LifelineRoutes,
 } from "../node/_Types";
-import {
-	ZWaveLibraryTypes,
-	type NodeIDType,
-	type ZWaveApiVersion,
-} from "../serialapi/_Types";
+import { ZWaveLibraryTypes, type ZWaveApiVersion } from "../serialapi/_Types";
 import {
 	ApplicationUpdateRequestNodeAdded,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -628,6 +625,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._nodes;
 	}
 
+	private _nodeIdType: NodeIDType = NodeIDType.Short;
+	/** Whether the controller is configured to use 8 or 16 bit node IDs */
+	public get nodeIdType(): NodeIDType {
+		return this._nodeIdType;
+	}
+
 	/** Returns the node with the given DSK */
 	public getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined {
 		try {
@@ -1032,6 +1035,19 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					`Querying the RF region failed!`,
 					"warn",
 				);
+			}
+		}
+
+		// Switch to 16 bit node IDs if supported
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetNodeIDType,
+			)
+		) {
+			try {
+				await this.setNodeIDType(NodeIDType.Long);
+			} catch {
+				// ignore
 			}
 		}
 
@@ -4746,9 +4762,27 @@ ${associatedNodes.join(", ")}`,
 		repeaters: number[],
 		routeSpeed: ZWaveDataRate,
 	): Promise<boolean> {
+		// 7.xx firmwares (up to at least 7.19.2) have a bug where the response to
+		// SetPriorityRoute is missing the result byte when used with 16-bit node IDs.
+		// So we temporarily switch back to 8-bit node IDs for this message
+
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetNodeIDType,
+			)
+		) {
+			try {
+				await this.setNodeIDType(NodeIDType.Short);
+			} catch {
+				// ignore
+			}
+		}
+
 		this.driver.controllerLog.print(
 			`Setting priority route to node ${destinationNodeId}...`,
 		);
+
+		let ret: boolean;
 
 		try {
 			const result = await this.driver.sendMessage<
@@ -4761,14 +4795,29 @@ ${associatedNodes.join(", ")}`,
 				}),
 			);
 
-			return result.isOK();
+			ret = result.isOK();
 		} catch (e) {
 			this.driver.controllerLog.print(
 				`Setting priority route failed: ${getErrorMessage(e)}`,
 				"error",
 			);
-			return false;
+			ret = false;
 		}
+
+		// Switch back to 16-bit node IDs
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetNodeIDType,
+			)
+		) {
+			try {
+				await this.setNodeIDType(NodeIDType.Long);
+			} catch {
+				// ignore
+			}
+		}
+
+		return ret;
 	}
 
 	/**
@@ -5370,6 +5419,12 @@ ${associatedNodes.join(", ")}`,
 	 * Configure whether the Z-Wave API should use short (8 bit) or long (16 bit) Node IDs
 	 */
 	public async setNodeIDType(nodeIdType: NodeIDType): Promise<boolean> {
+		this.driver.controllerLog.print(
+			`Switching serial API to ${
+				nodeIdType === NodeIDType.Short ? 8 : 16
+			}-bit node IDs...`,
+		);
+
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_SetNodeIDTypeResponse
 			| SerialAPISetup_CommandUnsupportedResponse
@@ -5383,6 +5438,16 @@ ${associatedNodes.join(", ")}`,
 				`Your hardware does not support switching between short and long node IDs!`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
+		} else {
+			this.driver.controllerLog.print(
+				`Switching to ${
+					nodeIdType === NodeIDType.Short ? 8 : 16
+				}-bit node IDs ${result.success ? "successful" : "failed"}`,
+			);
+
+			if (result.success) {
+				this._nodeIdType = nodeIdType;
+			}
 		}
 		return result.success;
 	}

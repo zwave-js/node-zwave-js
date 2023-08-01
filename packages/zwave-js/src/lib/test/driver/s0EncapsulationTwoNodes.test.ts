@@ -21,7 +21,7 @@ import { integrationTest } from "../integrationTestSuiteMulti";
 integrationTest(
 	"Security S0 Nonce Get is answered while waiting for a reply from another node",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: [
 			{

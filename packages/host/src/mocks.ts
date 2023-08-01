@@ -2,6 +2,7 @@
 import { ConfigManager } from "@zwave-js/config";
 import {
 	MAX_SUPERVISION_SESSION_ID,
+	NodeIDType,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -38,6 +39,7 @@ export function createTestingHost(
 	const ret: TestingHost = {
 		homeId: options.homeId ?? 0x7e570001,
 		ownNodeId: options.ownNodeId ?? 1,
+		nodeIdType: NodeIDType.Short,
 		isControllerNode: (nodeId) => nodeId === ret.ownNodeId,
 		securityManager: undefined,
 		securityManager2: undefined,

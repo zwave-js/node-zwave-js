@@ -116,6 +116,9 @@ export enum ZWaveErrorCodes {
 	/** The controller is currently busy with something that prevents an OTW update */
 	OTW_Update_Busy = 380,
 
+	/** The node is currently busy with another health check */
+	HealthCheck_Busy = 400,
+
 	// Here follow CC specific errors
 
 	/**

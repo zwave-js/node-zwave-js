@@ -22,6 +22,7 @@ import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	MockZWaveFrameType,
 	createMockZWaveAckFrame,
+	type LazyMockZWaveFrame,
 	type MockZWaveAckFrame,
 	type MockZWaveFrame,
 	type MockZWaveRequestFrame,
@@ -259,17 +260,17 @@ export class MockNode {
 	 * Sends a {@link MockZWaveFrame} to the {@link MockController}
 	 */
 	public async sendToController(
-		frame: MockZWaveFrame,
+		frame: LazyMockZWaveFrame,
 	): Promise<MockZWaveAckFrame | undefined> {
-		let ret: Promise<MockZWaveAckFrame> | undefined;
-		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
-			ret = this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
-		}
-		this.sentControllerFrames.push(frame);
-		process.nextTick(() => {
-			void this.controller.onNodeFrame(this, frame);
+		this.controller["air"].add({
+			source: this.id,
+			onTransmit: (frame) => this.sentControllerFrames.push(frame),
+			...frame,
 		});
-		if (ret) return await ret;
+
+		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
+			return await this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
+		}
 	}
 
 	/** Gets called when a {@link MockZWaveFrame} is received from the {@link MockController} */
@@ -281,7 +282,7 @@ export class MockNode {
 			this.autoAckControllerFrames &&
 			frame.type === MockZWaveFrameType.Request
 		) {
-			await this.ackControllerRequestFrame(frame);
+			void this.ackControllerRequestFrame(frame);
 		}
 
 		// Handle message buffer. Check for pending expectations first.

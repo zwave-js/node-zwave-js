@@ -5,6 +5,7 @@ import type {
 	ICommandClass,
 	IZWaveNode,
 	MaybeNotKnown,
+	NodeIDType,
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
@@ -22,6 +23,9 @@ export interface ZWaveHost {
 	ownNodeId: number;
 	/** The Home ID of the current network */
 	homeId: number;
+
+	/** How many bytes a node ID occupies in serial API commands */
+	readonly nodeIdType?: NodeIDType;
 
 	/** Management of Security S0 keys and nonces */
 	securityManager: SecurityManager | undefined;

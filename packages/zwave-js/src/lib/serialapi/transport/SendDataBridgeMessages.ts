@@ -6,6 +6,7 @@ import {
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
 	type MessageOrCCLogEntry,
 	type MulticastCC,
 	type SinglecastCC,
@@ -123,13 +124,20 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public serialize(): Buffer {
+		const sourceNodeId = encodeNodeID(
+			this.sourceNodeId,
+			this.host.nodeIdType,
+		);
+		const destinationNodeId = encodeNodeID(
+			this.command.nodeId,
+			this.host.nodeIdType,
+		);
 		const serializedCC = this.serializeCC();
+
 		this.payload = Buffer.concat([
-			Buffer.from([
-				this.sourceNodeId,
-				this.command.nodeId,
-				serializedCC.length,
-			]),
+			sourceNodeId,
+			destinationNodeId,
+			Buffer.from([serializedCC.length]),
 			serializedCC,
 			Buffer.from([this.transmitOptions, 0, 0, 0, 0, this.callbackId]),
 		]);
@@ -366,15 +374,20 @@ export class SendDataMulticastBridgeRequest<
 
 	public serialize(): Buffer {
 		const serializedCC = this.serializeCC();
+		const sourceNodeId = encodeNodeID(
+			this.sourceNodeId,
+			this.host.nodeIdType,
+		);
+		const destinationNodeIDs = this.command.nodeId.map((id) =>
+			encodeNodeID(id, this.host.nodeIdType),
+		);
 
 		this.payload = Buffer.concat([
-			// # of target nodes and nodeIds
-			Buffer.from([
-				this.sourceNodeId,
-				this.command.nodeId.length,
-				...this.command.nodeId,
-				serializedCC.length,
-			]),
+			sourceNodeId,
+			// # of target nodes, not # of bytes
+			Buffer.from([this.command.nodeId.length]),
+			...destinationNodeIDs,
+			Buffer.from([serializedCC.length]),
 			// payload
 			serializedCC,
 			Buffer.from([this.transmitOptions, this.callbackId]),

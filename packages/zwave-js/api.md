@@ -85,6 +85,7 @@ import { MulticastDestination } from '@zwave-js/core/safe';
 import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_MAX } from '@zwave-js/core/safe';
+import { NodeIDType } from '@zwave-js/core';
 import type { NodeSchedulePollOptions } from '@zwave-js/host';
 import { NodeStatus } from '@zwave-js/core/safe';
 import { NodeType } from '@zwave-js/core/safe';
@@ -352,6 +353,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     isControllerNode(nodeId: number): boolean;
     // (undocumented)
     isInBootloader(): boolean;
+    // (undocumented)
+    get nodeIdType(): NodeIDType;
     get nodes(): ReadonlyThrowingMap<number, ZWaveNode>;
     // (undocumented)
     get options(): Readonly<ZWaveOptions>;
@@ -1183,6 +1186,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     get isUsingHomeIdFromOtherNetwork(): MaybeNotKnown<boolean>;
     // (undocumented)
     get manufacturerId(): MaybeNotKnown<number>;
+    get nodeIdType(): NodeIDType;
     get nodes(): ReadonlyThrowingMap<number, ZWaveNode>;
     // (undocumented)
     get nodeType(): MaybeNotKnown<NodeType_2>;
@@ -1285,12 +1289,15 @@ export interface ZWaveNode extends TypedEventEmitter<ZWaveNodeEventCallbacks & S
 export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNode {
     constructor(id: number, driver: Driver, deviceClass?: DeviceClass, supportedCCs?: CommandClasses_2[], controlledCCs?: CommandClasses_2[], valueDB?: ValueDB);
     abortFirmwareUpdate(): Promise<void>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkLifelineHealth"
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkRouteHealth"
+    abortHealthCheck(): void;
     // (undocumented)
     get aggregatedEndpointCount(): MaybeNotKnown<number>;
     // (undocumented)
     get canSleep(): MaybeNotKnown<boolean>;
-    checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number) => void): Promise<LifelineHealthCheckSummary>;
-    checkRouteHealth(targetNodeId: number, rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number) => void): Promise<RouteHealthCheckSummary>;
+    checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: LifelineHealthCheckResult) => void): Promise<LifelineHealthCheckSummary>;
+    checkRouteHealth(targetNodeId: number, rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: RouteHealthCheckResult) => void): Promise<RouteHealthCheckSummary>;
     destroy(): void;
     get deviceConfig(): DeviceConfig | undefined;
     // (undocumented)
@@ -1335,6 +1342,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get isControllerNode(): boolean;
     isFirmwareUpdateInProgress(): boolean;
     get isFrequentListening(): MaybeNotKnown<FLiRS_2>;
+    isHealthCheckInProgress(): boolean;
     get isListening(): MaybeNotKnown<boolean>;
     get isRouting(): MaybeNotKnown<boolean>;
     get isSecure(): MaybeNotKnown<boolean>;

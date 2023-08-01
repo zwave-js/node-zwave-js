@@ -5345,6 +5345,29 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
+	private _healthCheckInProgress: boolean = false;
+	/**
+	 * Returns whether a health check is currently in progress for this node
+	 */
+	public isHealthCheckInProgress(): boolean {
+		return this._healthCheckInProgress;
+	}
+
+	private _healthCheckAborted: boolean = false;
+	private _abortHealthCheckPromise: DeferredPromise<void> | undefined;
+
+	/**
+	 * Aborts an ongoing health check if one is currently in progress.
+	 *
+	 * **Note:** The health check may take a few seconds to actually be aborted.
+	 * When it is, the promise returned by {@link checkLifelineHealth} or
+	 * {@link checkRouteHealth} will be resolved with the results obtained so far.
+	 */
+	public abortHealthCheck(): void {
+		this._healthCheckAborted = true;
+		this._abortHealthCheckPromise?.resolve();
+	}
+
 	/**
 	 * Checks the health of connection between the controller and this node and returns the results.
 	 */
@@ -5354,8 +5377,16 @@ protocol version:      ${this.protocolVersion}`;
 			round: number,
 			totalRounds: number,
 			lastRating: number,
+			lastResult: LifelineHealthCheckResult,
 		) => void,
 	): Promise<LifelineHealthCheckSummary> {
+		if (this._healthCheckInProgress) {
+			throw new ZWaveError(
+				"A health check is already in progress for this node!",
+				ZWaveErrorCodes.HealthCheck_Busy,
+			);
+		}
+
 		if (rounds > 10 || rounds < 1) {
 			throw new ZWaveError(
 				"The number of health check rounds must be between 1 and 10!",
@@ -5363,6 +5394,27 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
+		try {
+			this._healthCheckInProgress = true;
+			this._abortHealthCheckPromise = createDeferredPromise();
+
+			return await this.checkLifelineHealthInternal(rounds, onProgress);
+		} finally {
+			this._healthCheckInProgress = false;
+			this._healthCheckAborted = false;
+			this._abortHealthCheckPromise = undefined;
+		}
+	}
+
+	private async checkLifelineHealthInternal(
+		rounds: number,
+		onProgress?: (
+			round: number,
+			totalRounds: number,
+			lastRating: number,
+			lastResult: LifelineHealthCheckResult,
+		) => void,
+	): Promise<LifelineHealthCheckSummary> {
 		// No. of pings per round
 		const start = Date.now();
 
@@ -5399,17 +5451,41 @@ protocol version:      ${this.protocolVersion}`;
 			})...`,
 		);
 
+		const results: LifelineHealthCheckResult[] = [];
+		const aborted = () => {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`Lifeline health check aborted`,
+			);
+			if (results.length === 0) {
+				return {
+					rating: 0,
+					results: [],
+				};
+			} else {
+				return {
+					rating: Math.min(...results.map((r) => r.rating)),
+					results,
+				};
+			}
+		};
+
 		if (this.canSleep && this.status !== NodeStatus.Awake) {
 			// Wait for node to wake up to avoid incorrectly long delays in the first health check round
 			this.driver.controllerLog.logNode(
 				this.id,
 				`waiting for node to wake up...`,
 			);
-			await this.waitForWakeup();
+			await Promise.race([
+				this.waitForWakeup(),
+				this._abortHealthCheckPromise,
+			]);
+			if (this._healthCheckAborted) return aborted();
 		}
 
-		const results: LifelineHealthCheckResult[] = [];
 		for (let round = 1; round <= rounds; round++) {
+			if (this._healthCheckAborted) return aborted();
+
 			// Determine the number of repeating neighbors
 			const numNeighbors = (
 				await this.driver.controller.getNodeNeighbors(this.nodeId, true)
@@ -5430,6 +5506,8 @@ protocol version:      ${this.protocolVersion}`;
 			});
 
 			for (let i = 1; i <= healthCheckTestFrameCount; i++) {
+				if (this._healthCheckAborted) return aborted();
+
 				const start = Date.now();
 				// Reset TX report before each ping
 				txReport = undefined as any;
@@ -5497,6 +5575,9 @@ protocol version:      ${this.protocolVersion}`;
 				let failedPingsController = 0;
 
 				const executor = async (powerlevel: Powerlevel) => {
+					// Abort the search if the health check was aborted
+					if (this._healthCheckAborted) return undefined;
+
 					this.driver.controllerLog.logNode(
 						this.id,
 						`Sending ${healthCheckTestFrameCount} pings to controller at ${getEnumMemberName(
@@ -5529,6 +5610,8 @@ protocol version:      ${this.protocolVersion}`;
 						Powerlevel["-9 dBm"], // maximum reduction
 						executor,
 					);
+					if (this._healthCheckAborted) return aborted();
+
 					if (powerlevel == undefined) {
 						// There were still failures at normal power, report it
 						ret.minPowerlevel = Powerlevel["Normal Power"];
@@ -5552,7 +5635,7 @@ protocol version:      ${this.protocolVersion}`;
 
 			ret.rating = computeRating(ret);
 			results.push(ret);
-			onProgress?.(round, rounds, ret.rating);
+			onProgress?.(round, rounds, ret.rating, { ...ret });
 		}
 
 		const duration = Date.now() - start;
@@ -5578,8 +5661,16 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 			round: number,
 			totalRounds: number,
 			lastRating: number,
+			lastResult: RouteHealthCheckResult,
 		) => void,
 	): Promise<RouteHealthCheckSummary> {
+		if (this._healthCheckInProgress) {
+			throw new ZWaveError(
+				"A health check is already in progress for this node!",
+				ZWaveErrorCodes.HealthCheck_Busy,
+			);
+		}
+
 		if (rounds > 10 || rounds < 1) {
 			throw new ZWaveError(
 				"The number of health check rounds must be between 1 and 10!",
@@ -5587,6 +5678,32 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 			);
 		}
 
+		try {
+			this._healthCheckInProgress = true;
+			this._abortHealthCheckPromise = createDeferredPromise();
+
+			return await this.checkRouteHealthInternal(
+				targetNodeId,
+				rounds,
+				onProgress,
+			);
+		} finally {
+			this._healthCheckInProgress = false;
+			this._healthCheckAborted = false;
+			this._abortHealthCheckPromise = undefined;
+		}
+	}
+
+	private async checkRouteHealthInternal(
+		targetNodeId: number,
+		rounds: number,
+		onProgress?: (
+			round: number,
+			totalRounds: number,
+			lastRating: number,
+			lastResult: RouteHealthCheckResult,
+		) => void,
+	): Promise<RouteHealthCheckSummary> {
 		const otherNode = this.driver.controller.nodes.getOrThrow(targetNodeId);
 		if (otherNode.canSleep) {
 			throw new ZWaveError(
@@ -5598,7 +5715,7 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 			!this.supportsCC(CommandClasses.Powerlevel)
 		) {
 			throw new ZWaveError(
-				"Route health checks require that nodes which can sleep support Powerlevel CC!",
+				"For a route health check, nodes which can sleep must support Powerlevel CC!",
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		} else if (
@@ -5647,7 +5764,40 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 		);
 
 		const results: RouteHealthCheckResult[] = [];
+		const aborted = () => {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`Route health check to node ${targetNodeId} aborted`,
+			);
+			if (results.length === 0) {
+				return {
+					rating: 0,
+					results: [],
+				};
+			} else {
+				return {
+					rating: Math.min(...results.map((r) => r.rating)),
+					results,
+				};
+			}
+		};
+
+		if (this.canSleep && this.status !== NodeStatus.Awake) {
+			// Wait for node to wake up to avoid incorrectly long delays in the first health check round
+			this.driver.controllerLog.logNode(
+				this.id,
+				`waiting for node to wake up...`,
+			);
+			await Promise.race([
+				this.waitForWakeup(),
+				this._abortHealthCheckPromise,
+			]);
+			if (this._healthCheckAborted) return aborted();
+		}
+
 		for (let round = 1; round <= rounds; round++) {
+			if (this._healthCheckAborted) return aborted();
+
 			// Determine the minimum number of repeating neighbors between the
 			// source and target node
 			const numNeighbors = Math.min(
@@ -5673,6 +5823,9 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 			const executor =
 				(node: ZWaveNode, otherNode: ZWaveNode) =>
 				async (powerlevel: Powerlevel) => {
+					// Abort the search if the health check was aborted
+					if (this._healthCheckAborted) return undefined;
+
 					this.driver.controllerLog.logNode(
 						node.id,
 						`Sending ${healthCheckTestFrameCount} pings to node ${
@@ -5712,6 +5865,8 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 						Powerlevel["-9 dBm"], // maximum reduction
 						executor(this, otherNode),
 					);
+					if (this._healthCheckAborted) return aborted();
+
 					if (powerlevel == undefined) {
 						// There were still failures at normal power, report it
 						minPowerlevelSource = Powerlevel["Normal Power"];
@@ -5733,6 +5888,8 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 					}
 				}
 			}
+
+			if (this._healthCheckAborted) return aborted();
 
 			// And do the same with the other node - unless the current node is a sleeping node, then this doesn't make sense
 			if (
@@ -5777,7 +5934,7 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 			};
 			ret.rating = computeRating(ret);
 			results.push(ret);
-			onProgress?.(round, rounds, ret.rating);
+			onProgress?.(round, rounds, ret.rating, { ...ret });
 		}
 
 		const duration = Date.now() - start;

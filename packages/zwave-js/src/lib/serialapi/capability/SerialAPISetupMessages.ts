@@ -1,5 +1,6 @@
 import {
 	MessagePriority,
+	NodeIDType,
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -28,7 +29,6 @@ import {
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { sdkVersionLt } from "../../controller/utils";
-import { NodeIDType } from "../_Types";
 
 export enum SerialAPISetupCommand {
 	Unsupported = 0x00,

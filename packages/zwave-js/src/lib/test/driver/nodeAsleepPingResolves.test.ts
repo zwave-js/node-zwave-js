@@ -8,7 +8,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"when a node does not respond because it is asleep, pings should resolve",
 	{
-		debug: true,
+		// debug: true,
 		provisioningDirectory: path.join(
 			__dirname,
 			"fixtures/nodeAsleepNoReject",

@@ -1155,30 +1155,46 @@ export function json500To700(
 		applicationData = raw.toString("hex");
 	}
 
+	// https://github.com/zwave-js/node-zwave-js/issues/6055
+	// On some controllers this byte can be 0xff (effectively not set)
+	let controllerConfiguration = source.controller.controllerConfiguration;
+	if (source.controller.controllerConfiguration === 0xff) {
+		// Default to SUC/Primary
+		controllerConfiguration =
+			ControllerCapabilityFlags.SISPresent |
+			ControllerCapabilityFlags.WasRealPrimary |
+			ControllerCapabilityFlags.SUC;
+	}
+
 	let homeId: string;
 	if (
-		source.controller.controllerConfiguration &
-		ControllerCapabilityFlags.OnOtherNetwork
+		!!(
+			controllerConfiguration & ControllerCapabilityFlags.OnOtherNetwork
+		) &&
+		source.controller.learnedHomeId &&
+		source.controller.nodeId
 	) {
-		// The controller did not start the network itself
-		if (!source.controller.learnedHomeId) {
-			throw new ZWaveError(
-				"Invalid NVM JSON: Controller is part of another network but has no learned Home ID!",
-				ZWaveErrorCodes.NVM_InvalidJSON,
-			);
-		} else if (!source.controller.nodeId) {
-			throw new ZWaveError(
-				"Invalid NVM JSON: Controller is part of another network but node ID is zero!",
-				ZWaveErrorCodes.NVM_InvalidJSON,
-			);
-		}
+		// The controller did not start the network itself. We only keep this if we have a home ID and node ID
 		homeId = source.controller.learnedHomeId;
 	} else {
 		// The controller did start the network itself
 		homeId = source.controller.ownHomeId;
-		// it is safe to set the node ID to 1
-		source.controller.nodeId = 1;
+		controllerConfiguration &= ~ControllerCapabilityFlags.OnOtherNetwork;
+		// Reconstruct the node ID. If we don't know, 1 is a good default
+		if (controllerConfiguration & ControllerCapabilityFlags.SUC) {
+			source.controller.nodeId =
+				source.controller.staticControllerNodeId || 1;
+		} else {
+			source.controller.nodeId = 1;
+		}
 	}
+
+	// https://github.com/zwave-js/node-zwave-js/issues/6055
+	// Some controllers have invalid information for the IDs
+	let maxNodeId = source.controller.maxNodeId;
+	if (maxNodeId === 0xff) maxNodeId = source.controller.lastNodeId;
+	let reservedId = source.controller.reservedId;
+	if (reservedId === 0xff) reservedId = 0;
 
 	const ret: NVMJSON = {
 		// Start out with format 0 (= protocol version 7.0.0), the jsonToNVM routines will do further conversion
@@ -1192,10 +1208,10 @@ export function json500To700(
 			lastNodeId: source.controller.lastNodeId,
 			staticControllerNodeId: source.controller.staticControllerNodeId,
 			sucLastIndex: source.controller.sucLastIndex,
-			controllerConfiguration: source.controller.controllerConfiguration,
+			controllerConfiguration,
 			sucUpdateEntries: source.controller.sucUpdateEntries,
-			maxNodeId: source.controller.maxNodeId,
-			reservedId: source.controller.reservedId,
+			maxNodeId,
+			reservedId,
 			systemState: source.controller.systemState,
 			preferredRepeaters: source.controller.preferredRepeaters,
 
