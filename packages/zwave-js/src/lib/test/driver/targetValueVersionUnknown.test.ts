@@ -17,7 +17,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	`targetValue properties are exposed for CCs where the version could not be queried`,
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			commandClasses: [

@@ -10,6 +10,9 @@ export enum MessagePriority {
 	// need to be handled before all others. We use this priority to decide which
 	// message goes onto the immediate queue.
 	Immediate = 0,
+	// To avoid S2 collisions, some commands that normally have Immediate priority
+	// have to go onto the normal queue, but still before all other messages
+	ImmediateLow,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
 	// Multistep controller commands typically require user interaction but still

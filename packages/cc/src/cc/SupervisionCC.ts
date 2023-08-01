@@ -71,13 +71,17 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 	public async sendReport(
 		options: SupervisionCCReportOptions & {
 			encapsulationFlags?: EncapsulationFlags;
+			lowPriority?: boolean;
 		},
 	): Promise<void> {
 		// Here we don't assert support - some devices only half-support Supervision, so we treat them
 		// as if they don't support it. We still need to be able to respond to the Get command though.
 
-		const { encapsulationFlags = EncapsulationFlags.None, ...cmdOptions } =
-			options;
+		const {
+			encapsulationFlags = EncapsulationFlags.None,
+			lowPriority = false,
+			...cmdOptions
+		} = options;
 		const cc = new SupervisionCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -91,7 +95,9 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			await this.applHost.sendCommand(cc, {
 				...this.commandOptions,
 				// Supervision Reports must be prioritized over normal messages
-				priority: MessagePriority.Immediate,
+				priority: lowPriority
+					? MessagePriority.ImmediateLow
+					: MessagePriority.Immediate,
 				// But we don't want to wait for an ACK because this can lock up the network for seconds
 				// if the target node is asleep or unreachable
 				transmitOptions: TransmitOptions.DEFAULT_NOACK,
