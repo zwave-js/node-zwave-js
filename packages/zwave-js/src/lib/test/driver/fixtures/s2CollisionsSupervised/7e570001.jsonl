@@ -24,6 +24,7 @@
 {"k":"node.2.deviceClass","v":{"basic":4,"generic":6,"specific":1}}
 {"k":"node.2.interviewStage","v":"Complete"}
 {"k":"node.2.endpoint.0.commandClass.0x20","v":{"isSupported":true,"isControlled":false,"secure":true,"version":1}}
+{"k":"node.2.endpoint.0.commandClass.0x25","v":{"isSupported":true,"isControlled":false,"secure":true,"version":1}}
 {"k":"node.2.endpoint.0.commandClass.0x6c","v":{"isSupported":true,"isControlled":false,"secure":true,"version":1}}
 {"k":"node.2.endpoint.0.commandClass.0x9f","v":{"isSupported":true,"isControlled":false,"secure":true,"version":1}}
 {"k":"node.2.securityClasses.S2_AccessControl","v":false}
