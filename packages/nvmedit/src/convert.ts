@@ -1167,25 +1167,26 @@ export function json500To700(
 	}
 
 	let homeId: string;
-	if (controllerConfiguration & ControllerCapabilityFlags.OnOtherNetwork) {
-		// The controller did not start the network itself
-		if (!source.controller.learnedHomeId) {
-			throw new ZWaveError(
-				"Invalid NVM JSON: Controller is part of another network but has no learned Home ID!",
-				ZWaveErrorCodes.NVM_InvalidJSON,
-			);
-		} else if (!source.controller.nodeId) {
-			throw new ZWaveError(
-				"Invalid NVM JSON: Controller is part of another network but node ID is zero!",
-				ZWaveErrorCodes.NVM_InvalidJSON,
-			);
-		}
+	if (
+		!!(
+			controllerConfiguration & ControllerCapabilityFlags.OnOtherNetwork
+		) &&
+		source.controller.learnedHomeId &&
+		source.controller.nodeId
+	) {
+		// The controller did not start the network itself. We only keep this if we have a home ID and node ID
 		homeId = source.controller.learnedHomeId;
 	} else {
 		// The controller did start the network itself
 		homeId = source.controller.ownHomeId;
-		// it is safe to set the node ID to 1
-		source.controller.nodeId = 1;
+		controllerConfiguration &= ~ControllerCapabilityFlags.OnOtherNetwork;
+		// Reconstruct the node ID. If we don't know, 1 is a good default
+		if (controllerConfiguration & ControllerCapabilityFlags.SUC) {
+			source.controller.nodeId =
+				source.controller.staticControllerNodeId || 1;
+		} else {
+			source.controller.nodeId = 1;
+		}
 	}
 
 	// https://github.com/zwave-js/node-zwave-js/issues/6055
