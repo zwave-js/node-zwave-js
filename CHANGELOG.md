@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Recover from Security S2 collisions in a common scenario where nodes send a supervised command at the same time Z-Wave JS is trying to control them (#6106)
+* During NVM migration, an incorrect flag for "on other network" is now automatically corrected instead of raising an error (#6108)
+
+### Config file changes
+* Preserve endpoint 0 for Zooz ZEN14 to toggle both outlets at once (#6099)
+
+### Changes under the hood
+* Fixed the message sequencing between mock controller and mock nodes in integration tests and the `mock-server` (#6101)
+
 ## 11.8.0 (2023-07-28)
 ### Features
 * Health checks now include the intermediate results in progress callbacks (#6086)
