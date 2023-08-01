@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.8.1 (2023-08-01)
 ### Bugfixes
 * Recover from Security S2 collisions in a common scenario where nodes send a supervised command at the same time Z-Wave JS is trying to control them (#6106)
 * During NVM migration, an incorrect flag for "on other network" is now automatically corrected instead of raising an error (#6108)
