@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add `getDateAndTime` method to `ZWaveNode` (#6073)
+
+### Bugfixes
+* Fixed an issue where turning on a `Multilevel Switch` with transition duration could update the `currentValue` to an illegal value (#6111)
+* Fixed an issue where empty daily repeating schedules were encoded incorrectly in mocks (#6113)
+
+### Changes under the hood
+* Support absolute config paths in `mock-server` (#6112)
+
 ## 11.8.1 (2023-08-01)
 ### Bugfixes
 * Recover from Security S2 collisions in a common scenario where nodes send a supervised command at the same time Z-Wave JS is trying to control them (#6106)
