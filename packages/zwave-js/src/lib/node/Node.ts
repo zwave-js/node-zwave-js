@@ -246,6 +246,7 @@ import {
 	type NodeStatusInterpreter,
 } from "./NodeStatusMachine";
 import type {
+	DateAndTime,
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
 	RefreshInfoOptions,
@@ -6149,6 +6150,125 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns the current date, time and timezone (or a subset of those) on the node using one or more of the respective CCs.
+	 */
+	public async getDateAndTime(): Promise<DateAndTime> {
+		const timeParametersAPI = this.commandClasses["Time Parameters"];
+		const timeAPI = this.commandClasses.Time;
+		const clockAPI = this.commandClasses.Clock;
+		const scheduleEntryLockAPI = this.commandClasses["Schedule Entry Lock"];
+
+		const response: DateAndTime = {};
+
+		if (
+			timeParametersAPI.isSupported() &&
+			timeParametersAPI.supportsCommand(TimeParametersCommand.Get)
+		) {
+			try {
+				const result = await timeParametersAPI.get();
+				if (result) {
+					// Time Parameters is all UTC per the spec
+					Object.assign(response, {
+						hour: result.getUTCHours(),
+						minute: result.getUTCMinutes(),
+						second: result.getUTCSeconds(),
+						standardOffset: 0,
+						dstOffset: 0,
+						weekday: result.getUTCDay(),
+						day: result.getUTCDate(),
+						month: result.getUTCMonth() + 1,
+						year: result.getUTCFullYear(),
+					});
+				}
+				// That's everything
+				return response;
+			} catch (e) {}
+		}
+
+		if (
+			clockAPI.isSupported() &&
+			clockAPI.supportsCommand(ClockCommand.Get)
+		) {
+			try {
+				const result = await clockAPI.get();
+				if (result) {
+					Object.assign(response, {
+						hour: result.hour,
+						minute: result.minute,
+						weekday: result.weekday,
+					} satisfies DateAndTime);
+				}
+			} catch (e) {}
+		}
+
+		if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.TimeGet)
+		) {
+			try {
+				const result = await timeAPI.getTime();
+				if (result) {
+					Object.assign(response, {
+						hour: result.hour,
+						minute: result.minute,
+						second: result.second,
+					} satisfies DateAndTime);
+				}
+			} catch (e) {}
+		}
+
+		if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.DateGet)
+		) {
+			try {
+				const result = await timeAPI.getDate();
+				if (result) {
+					Object.assign(response, {
+						day: result.day,
+						month: result.month,
+						year: result.year,
+					} satisfies DateAndTime);
+				}
+			} catch (e) {}
+		}
+
+		if (
+			timeAPI.isSupported() &&
+			timeAPI.supportsCommand(TimeCommand.TimeOffsetGet)
+		) {
+			try {
+				const result = await timeAPI.getTimezone();
+				if (result) {
+					Object.assign(response, {
+						standardOffset: result.standardOffset,
+						dstOffset: result.dstOffset,
+					} satisfies DateAndTime);
+				}
+			} catch (e) {}
+		}
+
+		if (
+			scheduleEntryLockAPI.isSupported() &&
+			scheduleEntryLockAPI.supportsCommand(
+				ScheduleEntryLockCommand.TimeOffsetGet,
+			)
+		) {
+			try {
+				const result = await scheduleEntryLockAPI.getTimezone();
+				if (result) {
+					Object.assign(response, {
+						standardOffset: result.standardOffset,
+						dstOffset: result.dstOffset,
+					} satisfies DateAndTime);
+				}
+			} catch (e) {}
+		}
+
+		return response;
 	}
 
 	public async sendResetLocallyNotification(): Promise<void> {
