@@ -10,8 +10,8 @@ on:
     types: [checks_requested]
 
 # Cancel previous PR/branch runs when a new commit is pushed
-concurrency: 
-  group: ${{ github.ref }}
+concurrency:
+  group: 'generate-docs-${{ github.ref }}'
   cancel-in-progress: true
 
 jobs:
