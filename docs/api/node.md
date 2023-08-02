@@ -685,17 +685,34 @@ The following CCs will be used (when supported or necessary) in this process:
 getDateAndTime(): Promise<DateAndTime>
 ```
 
-This method gathers and returns as much information as possible about the state of the clock and calendar on the node.  Depending on the CCs supported by the node, it may return none or more of the following:
+This method gathers and returns as much information as possible about the state of the clock and calendar on the node. Depending on the CCs supported by the node, it may return none or more of the following:
 
--   hour
--   minute
--   second
--   standardOffset (the number of minutes the local timezone differs from UTC)
--   dstOffset (the number of minutes the local timezone differs from UTC while observing Daylight Saving Time)
--   weekday
--   day (of the month)
--   month (numerical)
--   year
+-   `hour`
+-   `minute`
+-   `second`
+-   `standardOffset` (the number of minutes the local timezone differs from UTC)
+-   `dstOffset` (the number of minutes the local timezone differs from UTC while observing Daylight Saving Time)
+-   `weekday`
+-   `day` (of the month)
+-   `month` (numerical, 1-based)
+-   `year`
+
+The weekday is a value from the following enum:
+
+<!-- #import Weekday from "@zwave-js/cc" -->
+
+```ts
+enum Weekday {
+	Unknown = 0x00,
+	Monday = 0x01,
+	Tuesday = 0x02,
+	Wednesday = 0x03,
+	Thursday = 0x04,
+	Friday = 0x05,
+	Saturday = 0x06,
+	Sunday = 0x07,
+}
+```
 
 The following CCs will be used (when supported or necessary) in this process:
 

@@ -23,7 +23,6 @@ import {
 	TimeCCTimeOffsetGet,
 	TimeCommand,
 	TimeParametersCommand,
-	Weekday,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 	defaultCCValueOptions,
@@ -6199,8 +6198,8 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 					Object.assign(response, {
 						hour: result.hour,
 						minute: result.minute,
-						weekday: Weekday[result.weekday],
-					});
+						weekday: result.weekday,
+					} satisfies DateAndTime);
 				}
 			} catch (e) {}
 		}
@@ -6216,7 +6215,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 						hour: result.hour,
 						minute: result.minute,
 						second: result.second,
-					});
+					} satisfies DateAndTime);
 				}
 			} catch (e) {}
 		}
@@ -6232,7 +6231,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 						day: result.day,
 						month: result.month,
 						year: result.year,
-					});
+					} satisfies DateAndTime);
 				}
 			} catch (e) {}
 		}
@@ -6247,7 +6246,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 					Object.assign(response, {
 						standardOffset: result.standardOffset,
 						dstOffset: result.dstOffset,
-					});
+					} satisfies DateAndTime);
 				}
 			} catch (e) {}
 		}
@@ -6264,7 +6263,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 					Object.assign(response, {
 						standardOffset: result.standardOffset,
 						dstOffset: result.dstOffset,
-					});
+					} satisfies DateAndTime);
 				}
 			} catch (e) {}
 		}
