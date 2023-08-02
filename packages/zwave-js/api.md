@@ -6,6 +6,7 @@
 
 /// <reference types="node" />
 
+import { AllOrNone } from '@zwave-js/shared';
 import { APIMethodsOf } from '@zwave-js/cc';
 import { AssociationAddress } from '@zwave-js/cc';
 import { AssociationGroup } from '@zwave-js/cc';
@@ -156,6 +157,7 @@ import type { ValueNotificationArgs } from '@zwave-js/core/safe';
 import type { ValueRemovedArgs } from '@zwave-js/core/safe';
 import { ValueType } from '@zwave-js/core/safe';
 import type { ValueUpdatedArgs } from '@zwave-js/core/safe';
+import type { Weekday } from '@zwave-js/cc/safe';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveApplicationHost } from '@zwave-js/host';
 import { ZWaveDataRate } from '@zwave-js/core';
@@ -259,6 +261,27 @@ export function createDefaultMockControllerBehaviors(): MockControllerBehavior[]
 export function createDefaultMockNodeBehaviors(): MockNodeBehavior[];
 
 export { DataRate }
+
+// Warning: (ae-missing-release-tag) "DateAndTime" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type DateAndTime = AllOrNone<{
+    hour: number;
+    minute: number;
+}> & ({
+    weekday?: Weekday;
+    second?: undefined;
+} | {
+    weekday?: undefined;
+    second?: number;
+}) & AllOrNone<{
+    year: number;
+    month: number;
+    day: number;
+}> & AllOrNone<{
+    dstOffset: number;
+    standardOffset: number;
+}>;
 
 // Warning: (ae-missing-release-tag) "DeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1310,6 +1333,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // (undocumented)
     get firmwareVersion(): MaybeNotKnown<string>;
     getAllEndpoints(): Endpoint[];
+    getDateAndTime(): Promise<DateAndTime>;
     getDefinedValueIDs(): TranslatedValueID_2[];
     getEndpoint(index: 0): Endpoint;
     // (undocumented)
