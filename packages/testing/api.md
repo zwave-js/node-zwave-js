@@ -74,7 +74,7 @@ export function createMockZWaveAckFrame(options?: Partial<Omit<MockZWaveAckFrame
 // Warning: (ae-missing-release-tag) "createMockZWaveRequestFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function createMockZWaveRequestFrame(payload: ICommandClass, options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): MockZWaveRequestFrame;
+export function createMockZWaveRequestFrame(payload: ICommandClass | (() => ICommandClass), options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): LazyMockZWaveRequestFrame;
 
 // Warning: (ae-missing-release-tag) "EnergyProductionCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -99,6 +99,22 @@ export interface EnergyProductionCCCapabilities {
             scale: 0 | 1;
         };
     };
+}
+
+// Warning: (ae-missing-release-tag) "LazyMockZWaveFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type LazyMockZWaveFrame = LazyMockZWaveRequestFrame | MockZWaveAckFrame;
+
+// Warning: (ae-missing-release-tag) "LazyMockZWaveRequestFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LazyMockZWaveRequestFrame {
+    ackRequested: boolean;
+    payload: ICommandClass | (() => ICommandClass);
+    repeaters: number[];
+    // (undocumented)
+    type: MockZWaveFrameType.Request;
 }
 
 // Warning: (ae-missing-release-tag) "MOCK_FRAME_ACK_TIMEOUT" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -126,6 +142,10 @@ export class MockController {
     clearReceivedHostMessages(): void;
     // (undocumented)
     defineBehavior(...behaviors: MockControllerBehavior[]): void;
+    // (undocumented)
+    destroy(): void;
+    // (undocumented)
+    execute(): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectHostACK(timeout: number): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -144,7 +164,7 @@ export class MockController {
     // (undocumented)
     removeNode(node: MockNode): void;
     sendToHost(data: Buffer): Promise<void>;
-    sendToNode(node: MockNode, frame: MockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
+    sendToNode(node: MockNode, frame: LazyMockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
     // (undocumented)
     readonly serial: MockPortBinding;
     readonly state: Map<string, unknown>;
@@ -247,7 +267,7 @@ export class MockNode {
     readonly implementedCCs: Map<CommandClasses, CommandClassInfo>;
     onControllerFrame(frame: MockZWaveFrame): Promise<void>;
     removeCC(cc: CommandClasses): void;
-    sendToController(frame: MockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
+    sendToController(frame: LazyMockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
     readonly state: Map<string, unknown>;
 }
 
@@ -376,6 +396,11 @@ export interface ThermostatSetpointCCCapabilities {
         scale: "°C" | "°F";
     }>;
 }
+
+// Warning: (ae-missing-release-tag) "unlazyMockZWaveFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function unlazyMockZWaveFrame(frame: LazyMockZWaveFrame): MockZWaveFrame;
 
 // Warning: (ae-missing-release-tag) "UserCodeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

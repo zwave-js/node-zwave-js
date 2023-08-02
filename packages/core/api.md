@@ -1447,21 +1447,23 @@ export interface MessageOrCCLogEntry {
 // @public
 export enum MessagePriority {
     // (undocumented)
-    Controller = 1,
+    Controller = 2,
     // (undocumented)
     Immediate = 0,
     // (undocumented)
-    MultistepController = 2,
+    ImmediateLow = 1,
     // (undocumented)
-    NodeQuery = 6,
+    MultistepController = 3,
     // (undocumented)
-    Normal = 5,
+    NodeQuery = 7,
     // (undocumented)
-    Ping = 3,
+    Normal = 6,
     // (undocumented)
-    Poll = 7,
+    Ping = 4,
     // (undocumented)
-    WakeUp = 4
+    Poll = 8,
+    // (undocumented)
+    WakeUp = 5
 }
 
 // Warning: (ae-missing-release-tag) "MessageRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
