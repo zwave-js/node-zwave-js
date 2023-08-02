@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.9.0 (2023-08-02)
 ### Features
 * Add `getDateAndTime` method to `ZWaveNode` (#6073)
 
