@@ -24,11 +24,17 @@ Options:
 const configIndex = args.findIndex((arg) => arg === "--config" || arg === "-c");
 const configPath = configIndex === -1 ? undefined : args[configIndex + 1];
 let config;
-if (configPath?.endsWith(".js")) {
-	config = require(path.join(process.cwd(), configPath)).default;
-} else if (configPath?.endsWith(".json")) {
-	// TODO: JSON5 support
-	config = JSON.parse(readFileSync(configPath, "utf8"));
+if (configPath) {
+	const absolutePath = path.isAbsolute(configPath)
+		? configPath
+		: path.join(process.cwd(), configPath);
+
+	if (absolutePath.endsWith(".js")) {
+		config = require(absolutePath).default;
+	} else if (absolutePath.endsWith(".json")) {
+		// TODO: JSON5 support
+		config = JSON.parse(readFileSync(absolutePath, "utf8"));
+	}
 }
 
 // Parse interface
