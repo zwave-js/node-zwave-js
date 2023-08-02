@@ -172,7 +172,7 @@ integrationTest(
 				},
 			);
 
-			await wait(2000);
+			await wait(1000);
 
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
