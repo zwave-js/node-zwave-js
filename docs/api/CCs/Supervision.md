@@ -10,6 +10,7 @@
 async sendReport(
 	options: SupervisionCCReportOptions & {
 		encapsulationFlags?: EncapsulationFlags;
+		lowPriority?: boolean;
 	},
 ): Promise<void>;
 ```
