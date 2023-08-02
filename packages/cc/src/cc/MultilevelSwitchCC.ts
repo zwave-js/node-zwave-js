@@ -398,8 +398,25 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				// Therefore we try to supervise the command execution and delay the
 				// optimistic update until the final result is received.
 				supervisionDelayedUpdates: true,
-				supervisionOnSuccess: () => {
-					this.tryGetValueDB()?.setValue(currentValueValueId, value);
+				supervisionOnSuccess: async () => {
+					// Only update currentValue for valid target values
+					if (
+						typeof value === "number" &&
+						value >= 0 &&
+						value <= 99
+					) {
+						this.tryGetValueDB()?.setValue(
+							currentValueValueId,
+							value,
+						);
+					} else if (value === 255) {
+						// We don't know the status now, so refresh the current value
+						try {
+							await this.get();
+						} catch {
+							// ignore
+						}
+					}
 				},
 				supervisionOnFailure: async () => {
 					// The transition failed, so now we don't know the status - refresh the current value
