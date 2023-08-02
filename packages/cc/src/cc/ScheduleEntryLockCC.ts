@@ -1962,8 +1962,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 				]),
 			]);
 		} else {
-			// Not sure if this is correct
-			this.payload = Buffer.concat([this.payload, Buffer.alloc(5, 0xff)]);
+			// Not sure if this is correct, but at least we won't parse it incorrectly ourselves when setting everything to 0
+			this.payload = Buffer.concat([this.payload, Buffer.alloc(5, 0)]);
 		}
 
 		return super.serialize();
