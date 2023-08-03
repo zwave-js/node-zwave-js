@@ -25,6 +25,7 @@ import {
 	TimeParametersCommand,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
+	utils as ccUtils,
 	defaultCCValueOptions,
 	entryControlEventTypeLabels,
 	getCCValues,
@@ -2531,10 +2532,15 @@ protocol version:      ${this.protocolVersion}`;
 
 		// This is not the handler for wakeup notifications, but some legacy devices send this
 		// message whenever there's an update and want to be polled.
+		// We do this unless we know for certain that the device sends unsolicited reports for its actuator or sensor CCs
 		if (
 			this.interviewStage === InterviewStage.Complete &&
 			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
-			!this.valueDB.getValue(AssociationCCValues.hasLifeline.id)
+			(!this.valueDB.getValue(AssociationCCValues.hasLifeline.id) ||
+				!ccUtils.doesAnyLifelineSendActuatorOrSensorReports(
+					this.driver,
+					this,
+				))
 		) {
 			const delay =
 				this.deviceConfig?.compat?.manualValueRefreshDelayMs || 0;
