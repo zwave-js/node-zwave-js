@@ -45,6 +45,7 @@ import {
 	AssociationCCRemove,
 	AssociationCCSet,
 	AssociationCCSupportedGroupingsGet,
+	AssociationCCValues,
 } from "@zwave-js/cc/AssociationCC";
 import {
 	AssociationGroupInfoCCCommandListGet,
@@ -2535,10 +2536,11 @@ protocol version:      ${this.protocolVersion}`;
 		if (
 			this.interviewStage === InterviewStage.Complete &&
 			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
-			ccUtils.doesAnyLifelineSendActuatorOrSensorReports(
-				this.driver,
-				this,
-			) !== true
+			(!this.valueDB.getValue(AssociationCCValues.hasLifeline.id) ||
+				!ccUtils.doesAnyLifelineSendActuatorOrSensorReports(
+					this.driver,
+					this,
+				))
 		) {
 			const delay =
 				this.deviceConfig?.compat?.manualValueRefreshDelayMs || 0;
