@@ -18,7 +18,7 @@ integrationTest(
 	{
 		// Repro for #6117
 
-		debug: true,
+		// debug: true,
 		// provisioningDirectory: path.join(__dirname, "fixtures/base_2_nodes"),
 
 		nodeCapabilities: {
