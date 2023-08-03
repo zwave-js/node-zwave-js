@@ -2171,6 +2171,18 @@ protocol version:      ${this.protocolVersion}`;
 
 			// At this point we may need to make some changes to the CCs the device reports
 			this.applyCommandClassesCompatFlag();
+		} else {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Version CC is not supported. Assuming all CCs are at version 1.",
+				"debug",
+			);
+
+			for (const [ccId, info] of this.getCCs()) {
+				if (info.isSupported) {
+					this.addCC(ccId, { version: 1 });
+				}
+			}
 		}
 
 		// The Wakeup interview should be done as early as possible
@@ -2444,6 +2456,19 @@ protocol version:      ${this.protocolVersion}`;
 				});
 
 				await interviewEndpoint(endpoint, CommandClasses.Version, true);
+			} else {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message:
+						"Version CC is not supported. Assuming all CCs are at version 1.",
+					level: "debug",
+				});
+
+				for (const [ccId, info] of endpoint.getCCs()) {
+					if (info.isSupported) {
+						endpoint.addCC(ccId, { version: 1 });
+					}
+				}
 			}
 
 			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
