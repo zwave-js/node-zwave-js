@@ -1,21 +1,22 @@
+import type { AssociationConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
+	NOT_KNOWN,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
 	actuatorCCs,
 	getCCName,
+	isActuatorCC,
+	isSensorCC,
 	type IZWaveEndpoint,
 	type IZWaveNode,
+	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
 import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
-import {
-	AssociationCC,
-	AssociationCCValues,
-	getLifelineGroupIds,
-} from "../cc/AssociationCC";
+import { AssociationCC, AssociationCCValues } from "../cc/AssociationCC";
 import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC";
 import {
 	MultiChannelAssociationCC,
@@ -553,6 +554,49 @@ export async function removeAssociations(
 	}
 }
 
+export function getLifelineGroupIds(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): number[] {
+	// For now only support this for the root endpoint - i.e. node
+	if (endpoint.index > 0) return [];
+	const node = endpoint as IZWaveNode;
+
+	// Some nodes define multiple lifeline groups, so we need to assign us to
+	// all of them
+	const lifelineGroups: number[] = [];
+
+	// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
+	if (endpoint.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+		lifelineGroups.push(1);
+	}
+
+	// We have a device config file that tells us which (additional) association to assign
+	let associations: ReadonlyMap<number, AssociationConfig> | undefined;
+	const deviceConfig = applHost.getDeviceConfig?.(node.id);
+	if (endpoint.index === 0) {
+		// The root endpoint's associations may be configured separately or as part of "endpoints"
+		associations =
+			deviceConfig?.associations ??
+			deviceConfig?.endpoints?.get(0)?.associations;
+	} else {
+		// The other endpoints can only have a configuration as part of "endpoints"
+		associations = deviceConfig?.endpoints?.get(
+			endpoint.index,
+		)?.associations;
+	}
+
+	if (associations?.size) {
+		lifelineGroups.push(
+			...[...associations.values()]
+				.filter((a) => a.isLifeline)
+				.map((a) => a.groupId),
+		);
+	}
+
+	return distinct(lifelineGroups).sort();
+}
+
 export async function configureLifelineAssociations(
 	applHost: ZWaveApplicationHost,
 	endpoint: IZWaveEndpoint,
@@ -1081,4 +1125,54 @@ export async function assignLifelineIssueingCommand(
 			}
 		}
 	}
+}
+
+export function doesAnyLifelineSendActuatorOrSensorReports(
+	applHost: ZWaveApplicationHost,
+	node: IZWaveNode,
+): MaybeNotKnown<boolean> {
+	// No association support means no unsolicited reports
+	if (
+		!node.supportsCC(CommandClasses.Association) &&
+		!node.supportsCC(CommandClasses["Multi Channel Association"])
+	) {
+		return false;
+	}
+
+	// No AGI support means we cannot know
+	if (!node.supportsCC(CommandClasses["Association Group Information"])) {
+		return NOT_KNOWN;
+	}
+
+	// Lifeline group IDs include the ones we added via a config file, so they may not be considered true lifelines
+	const lifelineGroupIds = getLifelineGroupIds(applHost, node);
+	// If any potential lifeline group has the "General: Lifeline" profile, the node MUST send unsolicited reports that way
+	if (
+		lifelineGroupIds.some(
+			(id) =>
+				AssociationGroupInfoCC.getGroupProfileCached(
+					applHost,
+					node,
+					id,
+				) === AssociationGroupInfoProfile["General: Lifeline"],
+		)
+	) {
+		return true;
+	}
+
+	// Otherwise check if any of the groups sends any actuator or sensor commands. We'll assume that those are reports
+	for (const groupId of lifelineGroupIds) {
+		const issuedCommands = AssociationGroupInfoCC.getIssuedCommandsCached(
+			applHost,
+			node,
+			groupId,
+		);
+		if (!issuedCommands) continue;
+		const commands = [...issuedCommands.keys()];
+		if (commands.some((c) => isActuatorCC(c) || isSensorCC(c))) {
+			return true;
+		}
+	}
+
+	return false;
 }

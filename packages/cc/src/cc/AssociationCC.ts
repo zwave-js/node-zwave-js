@@ -1,7 +1,5 @@
-import type { AssociationConfig } from "@zwave-js/config";
 import type {
 	IZWaveEndpoint,
-	IZWaveNode,
 	MaybeNotKnown,
 	MessageRecord,
 	SupervisionResult,
@@ -70,49 +68,6 @@ export const AssociationCCValues = Object.freeze({
 		),
 	}),
 });
-
-export function getLifelineGroupIds(
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
-): number[] {
-	// For now only support this for the root endpoint - i.e. node
-	if (endpoint.index > 0) return [];
-	const node = endpoint as IZWaveNode;
-
-	// Some nodes define multiple lifeline groups, so we need to assign us to
-	// all of them
-	const lifelineGroups: number[] = [];
-
-	// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
-	if (endpoint.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-		lifelineGroups.push(1);
-	}
-
-	// We have a device config file that tells us which (additional) association to assign
-	let associations: ReadonlyMap<number, AssociationConfig> | undefined;
-	const deviceConfig = applHost.getDeviceConfig?.(node.id);
-	if (endpoint.index === 0) {
-		// The root endpoint's associations may be configured separately or as part of "endpoints"
-		associations =
-			deviceConfig?.associations ??
-			deviceConfig?.endpoints?.get(0)?.associations;
-	} else {
-		// The other endpoints can only have a configuration as part of "endpoints"
-		associations = deviceConfig?.endpoints?.get(
-			endpoint.index,
-		)?.associations;
-	}
-
-	if (associations?.size) {
-		lifelineGroups.push(
-			...[...associations.values()]
-				.filter((a) => a.isLifeline)
-				.map((a) => a.groupId),
-		);
-	}
-
-	return distinct(lifelineGroups).sort();
-}
 
 // @noSetValueAPI
 
