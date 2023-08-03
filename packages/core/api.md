@@ -1158,6 +1158,16 @@ export enum InterviewStage {
     ProtocolInfo = 1
 }
 
+// Warning: (ae-missing-release-tag) "isActuatorCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isActuatorCC(cc: CommandClasses): boolean;
+
+// Warning: (ae-missing-release-tag) "isApplicationCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isApplicationCC(cc: CommandClasses): boolean;
+
 // Warning: (ae-missing-release-tag) "isConsecutiveArray" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1168,10 +1178,20 @@ export function isConsecutiveArray(values: number[]): boolean;
 // @public (undocumented)
 export function isEmptyRoute(route: Route): boolean;
 
+// Warning: (ae-missing-release-tag) "isEncapsulationCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isEncapsulationCC(cc: CommandClasses): boolean;
+
 // Warning: (ae-missing-release-tag) "isExtendedCCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isExtendedCCId(ccId: CommandClasses): boolean;
+
+// Warning: (ae-missing-release-tag) "isManagementCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isManagementCC(cc: CommandClasses): boolean;
 
 // Warning: (ae-missing-release-tag) "isMessagePriority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1187,6 +1207,11 @@ export function isRecoverableZWaveError(e: unknown): e is ZWaveError;
 //
 // @public (undocumented)
 export function isRssiError(rssi: RSSI): rssi is RssiError;
+
+// Warning: (ae-missing-release-tag) "isSensorCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isSensorCC(cc: CommandClasses): boolean;
 
 // Warning: (ae-missing-release-tag) "isSupervisionResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
