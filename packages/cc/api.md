@@ -4467,6 +4467,11 @@ export enum DeviceResetLocallyCommand {
     Notification = 1
 }
 
+// Warning: (ae-missing-release-tag) "doesAnyLifelineSendActuatorOrSensorReports" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+function doesAnyLifelineSendActuatorOrSensorReports(applHost: ZWaveApplicationHost_2, node: IZWaveNode): MaybeNotKnown<boolean>;
+
 // Warning: (ae-missing-release-tag) "DoorHandleStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6806,6 +6811,11 @@ export function getImplementedVersionStatic<T extends CCConstructor<CommandClass
 //
 // @public (undocumented)
 export function getInnermostCommandClass(cc: CommandClass): CommandClass;
+
+// Warning: (ae-missing-release-tag) "getLifelineGroupIds" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+function getLifelineGroupIds(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): number[];
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "getManufacturerId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17375,8 +17385,10 @@ declare namespace utils {
         getAllAssociationGroups,
         addAssociations,
         removeAssociations,
+        getLifelineGroupIds,
         configureLifelineAssociations,
-        assignLifelineIssueingCommand
+        assignLifelineIssueingCommand,
+        doesAnyLifelineSendActuatorOrSensorReports
     }
 }
 export { utils }
