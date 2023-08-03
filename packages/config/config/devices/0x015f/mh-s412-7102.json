@@ -214,15 +214,15 @@
 		}
 	],
 	"compat": {
-                "commandClasses" : {
-                        "remove" : {
-                                "0x2c": {
-                                        "endpoints": "*"
+		"commandClasses": {
+			"remove": {
+				"Scene Actuator Configuration": {
+					"endpoints": "*"
 				},
-                                "0x80": {
-                                        "endpoints": "*"
-                                }
-                        }
-                }
-        }
+				"Battery": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }

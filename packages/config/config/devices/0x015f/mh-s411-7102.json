@@ -214,16 +214,18 @@
 		}
 	],
 	"compat": {
-                "commandClasses" : {
-                        "remove" : {
-                                "0x2c": {
-                                        "endpoints": "*"
-                                },
-                                "0x80": {
-                                        "endpoints": "*"
-                                }
-                        }
-                },
-        	"preserveEndpoints": [1]
+		"commandClasses": {
+			"remove": {
+				"Scene Actuator Configuration": {
+					"endpoints": "*"
+				},
+				"Battery": {
+					"endpoints": "*"
+				}
+			}
+		},
+		// The device only has a single (unnecessary) endpoint, but it cannot be configured
+		// to report to the root endpoint. So we need to preserve it.
+		"preserveEndpoints": [1]
 	}
 }
