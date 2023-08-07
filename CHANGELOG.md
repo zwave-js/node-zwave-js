@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a regression from `v11.7.0` where the controller was incorrectly assumed to encode node IDs as 16-bit after a soft reset (#6130)
+* Improve heuristic to refresh values from legacy nodes when receiving a node information frame (#6121)
+* Fixed an issue where no control values were exposed for devices that do not support/advertise `Version CC` (#6123)
+
+### Config file changes
+* Correct value size for some Nortek `PD300EMZ5-1` params that were previously swapped (#6124)
+* Add new MCOHome MH-S411/S412 models (#6120)
+
 ## 11.9.0 (2023-08-02)
 ### Features
 * Add `getDateAndTime` method to `ZWaveNode` (#6073)
