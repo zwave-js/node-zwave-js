@@ -1100,6 +1100,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					frameType: options.frameType,
 				});
 			}
+			this.plaintext = decryptedCCBytes;
 			this.key = key;
 			this.iv = iv;
 		} else {
@@ -1139,6 +1140,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	private authData?: Buffer;
 	private authTag?: Buffer;
 	private ciphertext?: Buffer;
+	private plaintext?: Buffer;
 
 	public readonly verifyDelivery: boolean = true;
 
@@ -1417,6 +1419,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			}
 			if (this.ciphertext) {
 				message.ciphertext = buffer2hex(this.ciphertext);
+			} else if (this.plaintext) {
+				message.plaintext = buffer2hex(this.plaintext);
 			}
 			if (this.authData) {
 				message["auth data"] = buffer2hex(this.authData);
