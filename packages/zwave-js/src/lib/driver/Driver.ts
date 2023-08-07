@@ -156,6 +156,7 @@ import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUp
 import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
 import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
+import { SerialAPISetupCommand } from "../serialapi/capability/SerialAPISetupMessages";
 import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
 	SendDataBridgeRequest,
@@ -2417,6 +2418,15 @@ export class Driver
 			);
 		}
 
+		if (this._controller) {
+			// Soft-reset resets the node ID type back to 8 bit
+			this._controller["_nodeIdType"] = NodeIDType.Short;
+
+			// Soft-resetting disables any ongoing inclusion, so we need to reset
+			// the state that is tracked in the controller
+			this._controller.setInclusionState(InclusionState.Idle);
+		}
+
 		// Make sure we're able to communicate with the controller again
 		if (!(await this.ensureSerialAPI())) {
 			if (destroyOnError) {
@@ -2433,11 +2443,19 @@ export class Driver
 
 		// This is a bit hacky, but what the heck...
 		if (!this._enteringBootloader) {
+			// If desired, re-configure the controller to use 16 bit node IDs
+			if (
+				this._controller?.isSerialAPISetupCommandSupported(
+					SerialAPISetupCommand.SetNodeIDType,
+				)
+			) {
+				void this._controller
+					.setNodeIDType(NodeIDType.Long)
+					.catch(noop);
+			}
+
 			// Resume sending
 			this.unpauseSendQueue();
-			// Soft-resetting disables any ongoing inclusion, so we need to reset
-			// the state that is tracked in the controller
-			this._controller?.setInclusionState(InclusionState.Idle);
 		}
 	}
 
