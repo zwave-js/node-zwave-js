@@ -152,7 +152,7 @@ integrationTest(
 					ackRequested: false,
 				}),
 			);
-			await wait(200);
+			await wait(500);
 
 			// The controller should NOT have sent a NonceReport in response
 			mockNode.assertReceivedControllerFrame(

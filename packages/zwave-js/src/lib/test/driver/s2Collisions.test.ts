@@ -370,7 +370,7 @@ integrationTest.only(
 	"S2 Collisions: Node sends supervised command at the same time as the controller",
 	{
 		// Repro for #6100
-		debug: true,
+		// debug: true,
 
 		// We need the cache to skip the CC interviews and mark S2 as supported
 		provisioningDirectory: path.join(

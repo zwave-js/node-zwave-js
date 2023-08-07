@@ -29,6 +29,7 @@ import {
 	defaultCCValueOptions,
 	entryControlEventTypeLabels,
 	getCCValues,
+	getImplementedVersion,
 	isCommandClassContainer,
 	type CCAPI,
 	type CCValueOptions,
@@ -2174,13 +2175,13 @@ protocol version:      ${this.protocolVersion}`;
 		} else {
 			this.driver.controllerLog.logNode(
 				this.nodeId,
-				"Version CC is not supported. Assuming all CCs are at version 1.",
+				"Version CC is not supported. Using the highest implemented version for each CC",
 				"debug",
 			);
 
 			for (const [ccId, info] of this.getCCs()) {
 				if (info.isSupported) {
-					this.addCC(ccId, { version: 1 });
+					this.addCC(ccId, { version: getImplementedVersion(ccId) });
 				}
 			}
 		}
@@ -2460,13 +2461,15 @@ protocol version:      ${this.protocolVersion}`;
 				this.driver.controllerLog.logNode(this.nodeId, {
 					endpoint: endpoint.index,
 					message:
-						"Version CC is not supported. Assuming all CCs are at version 1.",
+						"Version CC is not supported. Using the highest implemented version for each CC",
 					level: "debug",
 				});
 
 				for (const [ccId, info] of endpoint.getCCs()) {
 					if (info.isSupported) {
-						endpoint.addCC(ccId, { version: 1 });
+						endpoint.addCC(ccId, {
+							version: getImplementedVersion(ccId),
+						});
 					}
 				}
 			}
