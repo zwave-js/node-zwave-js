@@ -216,9 +216,11 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
+				// This CC is noisy and its functionality is exposed via configuration parameters
 				"Scene Actuator Configuration": {
 					"endpoints": "*"
 				},
+				// This is a mains-powered device that identifies as FLiRS for some reason
 				"Battery": {
 					"endpoints": "*"
 				}
