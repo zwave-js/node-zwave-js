@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.9.1 (2023-08-07)
 ### Bugfixes
 * Fixed a regression from `v11.7.0` where the controller was incorrectly assumed to encode node IDs as 16-bit after a soft reset (#6130)
 * Improve heuristic to refresh values from legacy nodes when receiving a node information frame (#6121)
