@@ -1,13 +1,12 @@
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRD226-ZW3",
-	"description": "Assure Keyed Touch Screen Deadbolt",
+	"label": "YRC642-ZW3",
+	"description": "Assure 2nd Generation Fire Rated Keyless Interconnected Touch Screen Deadbolt",
 	"devices": [
 		{
-			"productType": "0x8002",
-			"productId": "0x46d2",
-			"zwaveAllianceId": 4092
+			"productType": "0x8103",
+			"productId": "0x52c4"
 		}
 	],
 	"firmwareVersion": {
@@ -41,7 +40,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy_passage"
 		},
 		{
 			"#": "11",
@@ -55,6 +54,14 @@
 		{
 			"#": "13",
 			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "16",
+			"$import": "templates/yale_template.json#enable_escape_mode"
+		},
+		{
+			"#": "21",
+			"$import": "templates/yale_template.json#eco_mode"
 		},
 		{
 			"#": "28",

@@ -1,13 +1,12 @@
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRD226-ZW3",
-	"description": "Assure Keyed Touch Screen Deadbolt",
+	"label": "NF-YRC622-ZW3",
+	"description": "Assure 2nd Generation Interconnected Keyed Touch Screen Deadbolt",
 	"devices": [
 		{
-			"productType": "0x8002",
-			"productId": "0x46d2",
-			"zwaveAllianceId": 4092
+			"productType": "0x8109",
+			"productId": "0x4dc2"
 		}
 	],
 	"firmwareVersion": {
