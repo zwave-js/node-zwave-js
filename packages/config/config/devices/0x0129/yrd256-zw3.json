@@ -2,7 +2,7 @@
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRD256-ZW3",
-	"description": "Assure SL Lock",
+	"description": "Assure Keyless Touch Screen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8002",
@@ -13,10 +13,6 @@
 			"productType": "0x8002",
 			"productId": "0xa570",
 			"zwaveAllianceId": 3882
-		},
-		{
-			"productType": "0x8109",
-			"productId": "0x4dd5"
 		}
 	],
 	"firmwareVersion": {
@@ -38,7 +34,7 @@
 		},
 		{
 			"#": "4",
-			"$import": "templates/yale_template.json#wrong_code_limit_10"
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
 		{
 			"#": "5",
@@ -46,15 +42,16 @@
 		},
 		{
 			"#": "7",
-			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_132"
 		},
 		{
 			"#": "8",
-			"$import": "templates/yale_template.json#operating_mode"
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
 		},
 		{
 			"#": "11",
-			"$import": "templates/yale_template.json#one_touch"
+			"$import": "templates/yale_template.json#one_touch",
+			"defaultValue": 255
 		},
 		{
 			"#": "12",
@@ -65,8 +62,8 @@
 			"$import": "templates/yale_template.json#lock_status_led"
 		},
 		{
-			"#": "15",
-			"$import": "templates/yale_template.json#reset_factory"
+			"#": "28",
+			"$import": "templates/yale_template.json#expiring_pin_lifetime"
 		}
 	],
 	"compat": {

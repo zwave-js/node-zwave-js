@@ -2,7 +2,7 @@
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRC256-ZW3",
-	"description": "Assure Interconnected Z-Wave Enabled SL Touch Screen Deadbolt",
+	"description": "Assure Interconnected Keyless Touch Screen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8002",
@@ -13,13 +13,6 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
-	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 3,
-			"isLifeline": true
-		}
 	},
 	"paramInformation": [
 		{
@@ -32,27 +25,28 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/yale_template.json#auto_relock_time_127"
+			"$import": "templates/yale_template.json#auto_relock_time_180"
 		},
 		{
 			"#": "4",
-			"$import": "templates/yale_template.json#wrong_code_limit_5"
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
 		{
 			"#": "5",
 			"$import": "templates/yale_template.json#language"
 		},
 		{
-			"#": "6",
-			"$import": "templates/yale_template.json#wrong_code_lockout_0_to_127"
+			"#": "7",
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_132"
 		},
 		{
-			"#": "7",
-			"$import": "templates/yale_template.json#operating_mode"
+			"#": "8",
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
 		},
 		{
 			"#": "11",
-			"$import": "templates/yale_template.json#one_touch"
+			"$import": "templates/yale_template.json#one_touch",
+			"defaultValue": 255
 		},
 		{
 			"#": "12",
@@ -63,8 +57,8 @@
 			"$import": "templates/yale_template.json#lock_status_led"
 		},
 		{
-			"#": "8",
-			"$import": "templates/yale_template.json#reset_factory"
+			"#": "28",
+			"$import": "templates/yale_template.json#expiring_pin_lifetime"
 		}
 	],
 	"metadata": {

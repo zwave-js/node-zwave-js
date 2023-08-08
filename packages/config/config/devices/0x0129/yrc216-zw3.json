@@ -2,7 +2,7 @@
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRC216-ZW3",
-	"description": "Interconnected Z-Wave Enabled Keypad Deadbolt",
+	"description": "Interconnected Push Button Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8004",
@@ -14,39 +14,10 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 3,
-			"isLifeline": true
-		}
-	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Volume",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "High",
-					"value": 1
-				},
-				{
-					"label": "Medium",
-					"value": 2
-				},
-				{
-					"label": "Low",
-					"value": 3
-				}
-			]
+			"$import": "templates/yale_template.json#volume_two_options"
 		},
 		{
 			"#": "2",
@@ -54,27 +25,24 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/yale_template.json#auto_relock_time_127"
+			"$import": "templates/yale_template.json#auto_relock_time_180"
 		},
 		{
 			"#": "4",
 			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
 		{
-			"#": "5",
-			"$import": "templates/yale_template.json#language"
-		},
-		{
 			"#": "7",
-			"$import": "templates/yale_template.json#wrong_code_lockout_0_to_127"
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_132"
 		},
 		{
 			"#": "8",
-			"$import": "templates/yale_template.json#operating_mode"
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
 		},
 		{
 			"#": "11",
-			"$import": "templates/yale_template.json#one_touch"
+			"$import": "templates/yale_template.json#one_touch",
+			"defaultValue": 255
 		},
 		{
 			"#": "12",
@@ -85,12 +53,8 @@
 			"$import": "templates/yale_template.json#lock_status_led"
 		},
 		{
-			"#": "15",
-			"$import": "templates/yale_template.json#reset_factory_255"
-		},
-		{
-			"#": "6",
-			"$import": "templates/yale_template.json#wrong_code_lockout_0_to_127"
+			"#": "28",
+			"$import": "templates/yale_template.json#expiring_pin_lifetime"
 		}
 	],
 	"metadata": {

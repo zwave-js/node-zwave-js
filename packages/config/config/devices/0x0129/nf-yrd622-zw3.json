@@ -1,13 +1,12 @@
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "NTT610",
-	"description": "NexTouch Keypad Exit Rim Trim",
+	"label": "NF-YRD622-ZW3",
+	"description": "Assure 2nd Generation Keyed Touch Screen Deadbolt",
 	"devices": [
 		{
-			"productType": "0x8009",
-			"productId": "0x0c00",
-			"zwaveAllianceId": 3458
+			"productType": "0x8109",
+			"productId": "0x4dd2"
 		}
 	],
 	"firmwareVersion": {
@@ -29,7 +28,7 @@
 		},
 		{
 			"#": "4",
-			"$import": "templates/yale_template.json#wrong_code_limit_10"
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
 		{
 			"#": "5",
@@ -37,7 +36,7 @@
 		},
 		{
 			"#": "7",
-			"$import": "templates/yale_template.json#wrong_code_lockout"
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_132"
 		},
 		{
 			"#": "8",
@@ -45,7 +44,8 @@
 		},
 		{
 			"#": "11",
-			"$import": "templates/yale_template.json#one_touch"
+			"$import": "templates/yale_template.json#one_touch",
+			"defaultValue": 255
 		},
 		{
 			"#": "12",
@@ -56,27 +56,14 @@
 			"$import": "templates/yale_template.json#lock_status_led"
 		},
 		{
-			"#": "15",
-			"$import": "templates/yale_template.json#reset_factory"
-		},
-		{
-			"#": "18",
-			"$import": "templates/yale_template.json#door_propped_timer",
-			"minValue": 10
-		},
-		{
-			"#": "19",
-			"$import": "templates/yale_template.json#dps_alarm"
-		},
-		{
-			"#": "21",
-			"$import": "templates/yale_template.json#eco_mode"
+			"#": "28",
+			"$import": "templates/yale_template.json#expiring_pin_lifetime"
 		}
 	],
 	"metadata": {
 		"inclusion": "Enter the 4-8 master Pin code followed by the gear key.\nPress the 7 key followed by the gear key\nPress the 1 key followed by the gear key",
 		"exclusion": "Enter the 4-8 digit master pin code followed by the gear key\nPress the 7 key followed by the gear key\nPress the 3 key followed by the gear key",
 		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3458/NTT610_620_YaleRealLivingAssureDeadbolt_Z-WavePlus_SystemIntegratorsGuid....pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4645/Binder1.pdf"
 	}
 }

@@ -1,17 +1,12 @@
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "NF-YRD612-ZW3",
-	"description": "Assure 2nd Generation Keyed Push Button Deadbolt",
+	"label": "YRD450-ZW3",
+	"description": "Assure 2nd Generation Assure Keyless Touch Screen Deadbolt",
 	"devices": [
 		{
-			"productType": "0x8101",
-			"productId": "0x810a",
-			"zwaveAllianceId": 4681
-		},
-		{
-			"productType": "0x810a",
-			"productId": "0x4dd1"
+			"productType": "0x8104",
+			"productId": "0x45d5"
 		}
 	],
 	"firmwareVersion": {
@@ -41,7 +36,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
+			"$import": "templates/yale_template.json#operating_mode_normal_privacy_passage"
 		},
 		{
 			"#": "11",
@@ -62,6 +57,8 @@
 		}
 	],
 	"metadata": {
+		"inclusion": "1. Install the Yale Smart Module into the slot above the battery compartment\nIMPORTANT: The batteries must be removed before removing the Yale Smart Module:\n• Remove battery cover\n• Remove batteries\n• Insert or remove Yale Smart Module\n• Reinstall batteries\n• Reinstall battery cover\n2. Open the Z-Wave system''s smart home or alarm app on your smartphone or tablet\n3. Follow the in-app instructions for adding a new device\n4. On your lock keypad, enter your master entry code followed by the gear icon\n5. Press the 7 key followed by the gear icon\n6. Press the 1 key followed by the gear icon",
+		"exclusion": "1. On your lock keypad, enter your master entry code followed by the gear icon\n2. Press the 7 key followed by the gear icon\n3. Press the 3 key followed by the gear icon\n4. Open the Z-Wave system''s smart home or alarm app and follow the instructions for\nremoving a device\n5. Remove the Yale Smart Module from the slot above the battery compartment\nIMPORTANT: The batteries must be removed before removing the Yale Smart Module:\n• Remove battery cover\n• Remove batteries\n• Insert or remove Yale Smart Module\n• Reinstall batteries\n• Reinstall battery cover\n6. If you''re adding a new Yale Smart Module, follow the instructions included with it",
 		"reset": "When lock is reset to factory defaults all Entry Codes\n(including the Master Entry Code*) are deleted and all\nprogramming features are reset to original default\nsettings (see below).\n1. Remove battery cover and batteries.\n2. Remove inside lock to access reset button.\n3. Reset button (see image at right) is located beside\ncable adapter.\n4. While pressing reset button reinstall batteries. Hold\nreset button a minimum of 3 seconds then release.\n5. Replace battery cover.\nAfter reset, Master Entry Code creation is the only\noption available and must be performed prior to\nany other programming of the lock"
 	}
 }
