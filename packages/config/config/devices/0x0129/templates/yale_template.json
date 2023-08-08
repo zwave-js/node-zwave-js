@@ -560,5 +560,15 @@
 				"userId": "alarmLevel"
 			}
 		}
+	},
+	"assure_zw3_metadata": {
+		"inclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key\n2. Press the 7 key followed by the gear key\n3. Press the 1 key followed by the gear key\n4. Enter the first 5 digits of the DSK when prompted",
+		"exclusion": "1. Enter the 4-8 digit master PIN code, followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4753/YRC622final.pdf"
+	},
+	"assure2_zw3_metadata": {
+		"inclusion": "1. Enter the 4-8 digit programming code, followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 1 key followed by the gear key.\n4. Press the gear key again. The lock is now in Z-Wave inclusion mode for 30 seconds.",
+		"exclusion": "1. Enter the 4-8 digit programming code, followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4753/YRC622final.pdf"
 	}
 }
