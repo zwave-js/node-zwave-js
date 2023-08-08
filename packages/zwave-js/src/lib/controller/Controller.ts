@@ -33,6 +33,7 @@ import {
 	EMPTY_ROUTE,
 	MAX_NODES,
 	NODE_ID_BROADCAST,
+	NOT_KNOWN,
 	NodeIDType,
 	NodeType,
 	ProtocolType,
@@ -537,14 +538,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._supportedFunctionTypes;
 	}
 
-	/** Checks if a given Z-Wave function type is supported by this controller */
-	public isFunctionSupported(functionType: FunctionType): boolean {
-		if (this._supportedFunctionTypes == null) {
-			throw new ZWaveError(
-				"Cannot check yet if a function is supported by the controller. The interview process has not been completed.",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
+	/**
+	 * Checks if a given Z-Wave function type is supported by this controller.
+	 * Returns `NOT_KNOWN`/`undefined` if this information isn't known yet.
+	 */
+	public isFunctionSupported(
+		functionType: FunctionType,
+	): MaybeNotKnown<boolean> {
+		if (!this._supportedFunctionTypes) return NOT_KNOWN;
 		return this._supportedFunctionTypes.indexOf(functionType) > -1;
 	}
 
@@ -557,16 +558,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._supportedSerialAPISetupCommands;
 	}
 
-	/** Checks if a given Serial API setup command is supported by this controller */
+	/**
+	 * Checks if a given Serial API setup command is supported by this controller.
+	 * Returns `NOT_KNOWN`/`undefined` if this information isn't known yet.
+	 */
 	public isSerialAPISetupCommandSupported(
 		command: SerialAPISetupCommand,
-	): boolean {
-		if (!this._supportedSerialAPISetupCommands) {
-			throw new ZWaveError(
-				"Cannot check yet if a Serial API setup command is supported by the controller. The interview process has not been completed.",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
+	): MaybeNotKnown<boolean> {
+		if (!this._supportedSerialAPISetupCommands) return NOT_KNOWN;
 		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
 	}
 
