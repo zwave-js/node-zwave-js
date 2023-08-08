@@ -376,7 +376,7 @@ interface ControllerEventCallbacks
 	"firmware update finished": (
 		result: ControllerFirmwareUpdateResult,
 	) => void;
-	identify: () => void;
+	"identify": (node: ZWaveNode) => void;
 }
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;

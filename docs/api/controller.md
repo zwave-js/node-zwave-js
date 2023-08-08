@@ -1490,10 +1490,10 @@ enum ControllerFirmwareUpdateStatus {
 
 ### `"identify"`
 
-This is emitted when another node instructs Z-Wave JS to identify itself using the `Indicator CC`, indicator ID `0x50`. The callback has no arguments:
+This is emitted when another node instructs Z-Wave JS to identify itself using the `Indicator CC`, indicator ID `0x50`.
 
 ```ts
-() => void
+(node: ZWaveNode) => void
 ```
 
 > [!NOTE] Although support for this seems to be a certification requirement, it is currently unclear how this requirement must be fulfilled for controllers. The specification only refers to nodes:
