@@ -141,7 +141,8 @@
 		"valueSize": 1,
 		"minValue": 10,
 		"maxValue": 132,
-		"defaultValue": 60
+		"defaultValue": 60,
+		"unsigned": true
 	},
 	"wrong_tag_limit": {
 		"label": "Wrong Tag Limit",
@@ -424,6 +425,7 @@
 		"unit": "hours",
 		"minValue": 0,
 		"maxValue": 127,
+		"defaultValue": 0,
 		"options": [
 			{
 				"label": "Disable",
