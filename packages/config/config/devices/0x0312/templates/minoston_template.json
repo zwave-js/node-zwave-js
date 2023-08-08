@@ -499,5 +499,67 @@
 		"maxValue": 20,
 		"defaultValue": 5,
 		"unsigned": true
-	}
+	},
+    "power_reporting": {
+		"label": "Power Reporting",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+        "allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enabled",
+				"value": 0
+			},
+			{
+				"label": "Disabled",
+				"value": 1
+			}
+		]
+    },
+    "current_reporting": {
+        "label": "Current Reporting",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+        "allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enabled",
+				"value": 0
+			},
+			{
+				"label": "Disabled",
+				"value": 1
+			}
+		]
+    },
+	"current_reporting_interval": {
+		"label": "Current Reporting Interval",
+		"valueSize": 4,
+		"unit": "minutes",
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 60,
+		"unsigned": true
+     },
+	"voltage_reporting_interval": {
+		"label": "Voltage Reporting Interval",
+		"valueSize": 4,
+		"unit": "minutes",
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 60,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			}
+		]
+   }
 }
