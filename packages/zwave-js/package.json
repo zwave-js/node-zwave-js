@@ -123,6 +123,7 @@
     "@xstate/test": "^0.5.1",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
+    "@zwave-js/ts-plugins": "workspace:*",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
     "esbuild": "0.15.18",

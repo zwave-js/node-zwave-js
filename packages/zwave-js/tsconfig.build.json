@@ -40,6 +40,9 @@
 		},
 		{
 			"path": "../transformers/tsconfig.build.json"
+		},
+		{
+			"path": "../ts-plugins/tsconfig.build.json"
 		}
 	],
 	"include": ["src/**/*.ts"],
