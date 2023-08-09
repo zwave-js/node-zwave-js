@@ -72,7 +72,7 @@
 			"$if": "firmwareVersion >= 1.11.1",
 			"$import": "templates/minoston_template.json#voltage_reporting_interval"
 		}
-    ],
+	],
 	"metadata": {
 		"inclusion": "ADD or Remove the MP21ZP from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button Three times in one second.\nInclude MP21ZP to/from a Z-Wave Gateway with supporting Security.The MP21ZP can support the Primary Controller that implemented the\nNotice: Including a node ID allocated by Z-WaveTM Controller means “Add” or “Inclusion”. Excluding a node ID allocated by\nZ-WaveTM Controller means “Remove” or “Exclusion”",
 		"exclusion": "ADD or Remove the MP21ZP from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button Three times in one second.\nInclude MP21ZP to/from a Z-Wave Gateway with supporting Security.The MP21ZP can support the Primary Controller that implemented the\nNotice: Including a node ID allocated by Z-WaveTM Controller means “Add” or “Inclusion”. Excluding a node ID allocated by\nZ-WaveTM Controller means “Remove” or “Exclusion”",
