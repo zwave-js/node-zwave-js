@@ -3860,7 +3860,7 @@ protocol version:      ${this.protocolVersion}`;
 			direction: "inbound",
 		});
 
-		this.driver.controller.emit("identify");
+		this.driver.controller.emit("identify", this);
 	}
 
 	private async handleSecurityCommandsSupportedGet(
