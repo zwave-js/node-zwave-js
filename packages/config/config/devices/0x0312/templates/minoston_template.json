@@ -499,5 +499,39 @@
 		"maxValue": 20,
 		"defaultValue": 5,
 		"unsigned": true
+	},
+	"power_reporting": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Power Reporting",
+		"defaultValue": 0
+	},
+	"current_reporting": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Current Reporting",
+		"defaultValue": 0
+	},
+	"current_reporting_interval": {
+		"label": "Current Reporting Interval",
+		"valueSize": 4,
+		"unit": "minutes",
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 60,
+		"unsigned": true
+	},
+	"voltage_reporting_interval": {
+		"label": "Voltage Reporting Interval",
+		"valueSize": 4,
+		"unit": "minutes",
+		"minValue": 0,
+		"maxValue": 65535,
+		"defaultValue": 60,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
 	}
 }
