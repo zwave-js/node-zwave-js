@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.10.0 (2023-08-10)
 ### Features
 * The controller `identify` event callback now includes a reference to the node that requested the identification (#6140)
 
