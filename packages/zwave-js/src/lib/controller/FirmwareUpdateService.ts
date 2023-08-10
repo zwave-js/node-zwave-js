@@ -121,6 +121,10 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 	return responseJson;
 }
 
+function hasExtension(pathname: string): boolean {
+	return /\.[a-z0-9_]+$/i.test(pathname);
+}
+
 export interface GetAvailableFirmwareUpdateOptions {
 	userAgent: string;
 	apiKey?: string;
@@ -225,6 +229,16 @@ export async function downloadFirmwareUpdate(
 
 	const rawData = downloadResponse.body;
 
+	const requestedPathname = new URL(file.url).pathname;
+	// The response may be redirected, so the filename information may be different
+	// from the requested URL
+	let actualPathname: string | undefined;
+	try {
+		actualPathname = new URL(downloadResponse.url).pathname;
+	} catch {
+		// ignore
+	}
+
 	// Infer the file type from the content-disposition header or the filename
 	let filename: string;
 	if (
@@ -236,9 +250,12 @@ export async function downloadFirmwareUpdate(
 			.split("filename=")[1]
 			.replace(/^"/, "")
 			.replace(/[";]$/, "");
+	} else if (actualPathname && hasExtension(actualPathname)) {
+		filename = actualPathname;
 	} else {
-		filename = new URL(file.url).pathname;
+		filename = requestedPathname;
 	}
+
 	// Extract the raw data
 	const format = guessFirmwareFileFormat(filename, rawData);
 	const firmware = extractFirmware(rawData, format);
