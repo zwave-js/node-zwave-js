@@ -1095,6 +1095,27 @@ keepAwake: boolean;
 In order to save energy, battery powered devices should go back to sleep after they no longer need to communicate with the controller. This library honors this requirement by sending nodes back to sleep as soon as there are no more pending messages.
 When configuring devices or during longer message exchanges, this behavior may be annoying. You can set the `keepAwake` property of a node to `true` to avoid sending the node back to sleep immediately.
 
+### `defaultTransitionDuration`
+
+```ts
+get defaultTransitionDuration(): string | undefined;
+set defaultTransitionDuration(value: string | Duration | undefined);
+```
+
+While the duration of transitions, e.g. dimming lights or activating scenes, can be provided on a per-command basis as part of the [`setValue`](#setvalue) method, it may be desirable to configure a persistent default for all transitions of a node.
+
+This can be done using the `defaultTransitionDuration` property. It accepts a duration string in the format "Xs", "Xm", "XhYm" or "XmYs" (e.g. 17m8s) and will be used for all transitions that do not specify a duration. Setting a `Duration` instance is also possible.
+
+### `defaultVolume`
+
+```ts
+defaultVolume: number | undefined;
+```
+
+While the volume for sound switch commands can be provided on a per-command basis as part of the [`setValue`](#setvalue) method, it may be desirable to configure a persistent default for a node.
+
+This can be done using the `defaultVolume` property. It accepts a volume between 0 and 100 (in `%`) and will be used for all sound switch commands that do not specify a volume.
+
 ## ZWaveNode events
 
 The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc.

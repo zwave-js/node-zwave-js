@@ -129,6 +129,7 @@ import {
 	CRC16_CCITT,
 	CacheBackedMap,
 	CommandClasses,
+	Duration,
 	EncapsulationFlags,
 	MessagePriority,
 	NOT_KNOWN,
@@ -927,6 +928,45 @@ export class ZWaveNode
 		}));
 	}
 
+	/**
+	 * The default volume level to be used for activating a Sound Switch.
+	 * Can be overridden by command-specific options.
+	 */
+	public get defaultVolume(): number | undefined {
+		return this.driver.cacheGet(cacheKeys.node(this.id).defaultVolume);
+	}
+
+	public set defaultVolume(value: number | undefined) {
+		if (value != undefined && (value < 0 || value > 100)) {
+			throw new ZWaveError(
+				`The default volume must be a number between 0 and 100!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.driver.cacheSet(cacheKeys.node(this.id).defaultVolume, value);
+	}
+
+	/**
+	 * The default transition duration to be used for transitions like dimming lights or activating scenes.
+	 * Can be overridden by command-specific options.
+	 */
+	public get defaultTransitionDuration(): string | undefined {
+		return this.driver.cacheGet(
+			cacheKeys.node(this.id).defaultTransitionDuration,
+		);
+	}
+
+	public set defaultTransitionDuration(value: string | Duration | undefined) {
+		// Normalize to strings
+		if (typeof value === "string") value = Duration.from(value);
+		if (value instanceof Duration) value = value.toString();
+
+		this.driver.cacheSet(
+			cacheKeys.node(this.id).defaultTransitionDuration,
+			value,
+		);
+	}
+
 	private _valueDB: ValueDB;
 	/**
 	 * Provides access to this node's values
@@ -1035,6 +1075,11 @@ export class ZWaveNode
 					level: "silly",
 				});
 			}
+
+			// Merge the provided value change options with the defaults
+			options ??= {};
+			options.transitionDuration ??= this.defaultTransitionDuration;
+			options.volume ??= this.defaultVolume;
 
 			const valueIdProps: ValueIDProperties = {
 				property: valueId.property,
