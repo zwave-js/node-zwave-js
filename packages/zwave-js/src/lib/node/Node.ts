@@ -23,6 +23,7 @@ import {
 	TimeCCTimeOffsetGet,
 	TimeCommand,
 	TimeParametersCommand,
+	UserCodeCCValues,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 	utils as ccUtils,
@@ -1568,6 +1569,29 @@ export class ZWaveNode
 		const name = this.name;
 		const location = this.location;
 
+		// Preserve user codes if they aren't queried during the interview
+		const preservedValues: (ValueID & { value: unknown })[] = [];
+		const preservedMetadata: (ValueID & { metadata: ValueMetadata })[] = [];
+		if (
+			this.supportsCC(CommandClasses["User Code"]) &&
+			!this.driver.options.interview.queryAllUserCodes
+		) {
+			const mustBackup = (v: ValueID) =>
+				UserCodeCCValues.userCode.is(v) ||
+				UserCodeCCValues.userIdStatus.is(v) ||
+				UserCodeCCValues.userCodeChecksum.is(v);
+
+			const values = this.valueDB
+				.getValues(CommandClasses["User Code"])
+				.filter(mustBackup);
+			preservedValues.push(...values);
+
+			const meta = this.valueDB
+				.getAllMetadata(CommandClasses["User Code"])
+				.filter(mustBackup);
+			preservedMetadata.push(...meta);
+		}
+
 		// Force a new detection of security classes if desired
 		if (resetSecurityClasses) this.securityClasses.clear();
 
@@ -1602,6 +1626,14 @@ export class ZWaveNode
 		// Restore the previously saved name/location
 		if (name != undefined) this.name = name;
 		if (location != undefined) this.location = location;
+
+		// And preserved values/metadata
+		for (const { value, ...valueId } of preservedValues) {
+			this.valueDB.setValue(valueId, value, { noEvent: true });
+		}
+		for (const { metadata, ...valueId } of preservedMetadata) {
+			this.valueDB.setMetadata(valueId, metadata, { noEvent: true });
+		}
 
 		// Don't keep the node awake after the interview
 		this.keepAwake = false;
