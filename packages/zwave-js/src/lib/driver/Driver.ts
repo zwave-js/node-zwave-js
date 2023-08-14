@@ -156,7 +156,6 @@ import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUp
 import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
 import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
-import { SerialAPISetupCommand } from "../serialapi/capability/SerialAPISetupMessages";
 import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
 	SendDataBridgeRequest,
@@ -2444,15 +2443,7 @@ export class Driver
 		// This is a bit hacky, but what the heck...
 		if (!this._enteringBootloader) {
 			// If desired, re-configure the controller to use 16 bit node IDs
-			if (
-				this._controller?.isSerialAPISetupCommandSupported(
-					SerialAPISetupCommand.SetNodeIDType,
-				)
-			) {
-				void this._controller
-					.setNodeIDType(NodeIDType.Long)
-					.catch(noop);
-			}
+			void this._controller?.trySetNodeIDType(NodeIDType.Long);
 
 			// Resume sending
 			this.unpauseSendQueue();

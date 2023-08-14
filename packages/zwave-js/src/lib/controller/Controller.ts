@@ -838,21 +838,58 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Queries the controller IDs and its Serial API capabilities
 	 */
 	public async identify(): Promise<void> {
-		// get the home and node id of the controller
-		this.driver.controllerLog.print(`querying controller IDs...`);
-		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
-			new GetControllerIdRequest(this.driver),
-			{ supportCheck: false },
-		);
-		this._homeId = ids.homeId;
-		this._ownNodeId = ids.ownNodeId;
+		// Get basic controller version info
+		this.driver.controllerLog.print(`querying version info...`);
+		const version =
+			await this.driver.sendMessage<GetControllerVersionResponse>(
+				new GetControllerVersionRequest(this.driver),
+				{
+					supportCheck: false,
+				},
+			);
+		this._protocolVersion = version.libraryVersion;
+		this._type = version.controllerType;
 		this.driver.controllerLog.print(
-			`received controller IDs:
-  home ID:     ${num2hex(this._homeId)}
-  own node ID: ${this._ownNodeId}`,
+			`received version info:
+	  controller type: ${getEnumMemberName(ZWaveLibraryTypes, this._type)}
+	  library version: ${this._protocolVersion}`,
 		);
 
-		// Figure out what the serial API can do
+		// If supported, get more fine-grained version info
+		if (this.isFunctionSupported(FunctionType.GetProtocolVersion)) {
+			this.driver.controllerLog.print(
+				`querying protocol version info...`,
+			);
+			const protocol =
+				await this.driver.sendMessage<GetProtocolVersionResponse>(
+					new GetProtocolVersionRequest(this.driver),
+				);
+
+			this._protocolVersion = protocol.protocolVersion;
+
+			let message = `received protocol version info:
+	  protocol type:             ${getEnumMemberName(
+			ProtocolType,
+			protocol.protocolType,
+		)}
+	  protocol version:          ${protocol.protocolVersion}`;
+			if (protocol.applicationFrameworkBuildNumber) {
+				message += `
+	  appl. framework build no.: ${protocol.applicationFrameworkBuildNumber}`;
+			}
+			if (protocol.gitCommitHash) {
+				message += `
+	  git commit hash:           ${protocol.gitCommitHash}`;
+			}
+
+			this.driver.controllerLog.print(message);
+		}
+
+		// The SDK version cannot be queried directly, but we can deduce it from the protocol version
+		this._sdkVersion = protocolVersionToSDKVersion(this._protocolVersion);
+
+		// Figure out what the serial API can do. This MUST be done after querying the SDK version due to
+		// a bug in some 7.xx firmwares.
 		this.driver.controllerLog.print(`querying API capabilities...`);
 		const apiCaps =
 			await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
@@ -876,6 +913,49 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
 		.join("")}`,
 		);
+
+		// If the serial API can be configured, figure out which sub commands are supported
+		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
+			this.driver.controllerLog.print(
+				`querying serial API setup capabilities...`,
+			);
+			const setupCaps =
+				await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
+					new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
+				);
+			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
+			this.driver.controllerLog.print(
+				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
+					.map(
+						(cmd) =>
+							`\n· ${getEnumMemberName(
+								SerialAPISetupCommand,
+								cmd,
+							)}`,
+					)
+					.join("")}`,
+			);
+		} else {
+			this._supportedSerialAPISetupCommands = [];
+		}
+
+		// Switch to 16 bit node IDs if supported. We need to do this here, as a controller may still be
+		// in 16 bit mode when Z-Wave starts up. This would lead to an invalid node ID being reported.
+		await this.trySetNodeIDType(NodeIDType.Long);
+
+		// get the home and node id of the controller
+		this.driver.controllerLog.print(`querying controller IDs...`);
+		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
+			new GetControllerIdRequest(this.driver),
+			{ supportCheck: false },
+		);
+		this._homeId = ids.homeId;
+		this._ownNodeId = ids.ownNodeId;
+		this.driver.controllerLog.print(
+			`received controller IDs:
+  home ID:     ${num2hex(this._homeId)}
+  own node ID: ${this._ownNodeId}`,
+		);
 	}
 
 	/**
@@ -886,56 +966,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public async interview(
 		restoreFromCache: () => Promise<void>,
 	): Promise<void> {
-		// get basic controller version info
-		this.driver.controllerLog.print(`querying version info...`);
-		const version =
-			await this.driver.sendMessage<GetControllerVersionResponse>(
-				new GetControllerVersionRequest(this.driver),
-				{
-					supportCheck: false,
-				},
-			);
-		this._protocolVersion = version.libraryVersion;
-		this._type = version.controllerType;
-		this.driver.controllerLog.print(
-			`received version info:
-  controller type: ${getEnumMemberName(ZWaveLibraryTypes, this._type)}
-  library version: ${this._protocolVersion}`,
-		);
-
-		// If supported, get more fine-grained version info
-		if (this.isFunctionSupported(FunctionType.GetProtocolVersion)) {
-			this.driver.controllerLog.print(
-				`querying protocol version info...`,
-			);
-			const protocol =
-				await this.driver.sendMessage<GetProtocolVersionResponse>(
-					new GetProtocolVersionRequest(this.driver),
-				);
-
-			this._protocolVersion = protocol.protocolVersion;
-
-			let message = `received protocol version info:
-  protocol type:             ${getEnumMemberName(
-		ProtocolType,
-		protocol.protocolType,
-  )}
-  protocol version:          ${protocol.protocolVersion}`;
-			if (protocol.applicationFrameworkBuildNumber) {
-				message += `
-  appl. framework build no.: ${protocol.applicationFrameworkBuildNumber}`;
-			}
-			if (protocol.gitCommitHash) {
-				message += `
-  git commit hash:           ${protocol.gitCommitHash}`;
-			}
-
-			this.driver.controllerLog.print(message);
-		}
-
-		// The SDK version cannot be queried directly, but we can deduce it from the protocol version
-		this._sdkVersion = protocolVersionToSDKVersion(this._protocolVersion);
-
 		this.driver.controllerLog.print(
 			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
 				.filter((k) => /^\d+$/.test(k))
@@ -969,30 +999,30 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   was real primary:     ${this._wasRealPrimary}`,
 		);
 
-		// Figure out which sub commands of SerialAPISetup are supported
-		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
-			this.driver.controllerLog.print(
-				`querying serial API setup capabilities...`,
-			);
-			const setupCaps =
-				await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
-					new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
-				);
-			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
-			this.driver.controllerLog.print(
-				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
-					.map(
-						(cmd) =>
-							`\n· ${getEnumMemberName(
-								SerialAPISetupCommand,
-								cmd,
-							)}`,
-					)
-					.join("")}`,
-			);
-		} else {
-			this._supportedSerialAPISetupCommands = [];
-		}
+		// // Figure out which sub commands of SerialAPISetup are supported
+		// if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
+		// 	this.driver.controllerLog.print(
+		// 		`querying serial API setup capabilities...`,
+		// 	);
+		// 	const setupCaps =
+		// 		await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
+		// 			new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
+		// 		);
+		// 	this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
+		// 	this.driver.controllerLog.print(
+		// 		`supported serial API setup commands:${this._supportedSerialAPISetupCommands
+		// 			.map(
+		// 				(cmd) =>
+		// 					`\n· ${getEnumMemberName(
+		// 						SerialAPISetupCommand,
+		// 						cmd,
+		// 					)}`,
+		// 			)
+		// 			.join("")}`,
+		// 	);
+		// } else {
+		// 	this._supportedSerialAPISetupCommands = [];
+		// }
 
 		// Enable TX status report if supported
 		if (
@@ -1034,19 +1064,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					`Querying the RF region failed!`,
 					"warn",
 				);
-			}
-		}
-
-		// Switch to 16 bit node IDs if supported
-		if (
-			this.isSerialAPISetupCommandSupported(
-				SerialAPISetupCommand.SetNodeIDType,
-			)
-		) {
-			try {
-				await this.setNodeIDType(NodeIDType.Long);
-			} catch {
-				// ignore
 			}
 		}
 
@@ -4764,18 +4781,7 @@ ${associatedNodes.join(", ")}`,
 		// 7.xx firmwares (up to at least 7.19.2) have a bug where the response to
 		// SetPriorityRoute is missing the result byte when used with 16-bit node IDs.
 		// So we temporarily switch back to 8-bit node IDs for this message
-
-		if (
-			this.isSerialAPISetupCommandSupported(
-				SerialAPISetupCommand.SetNodeIDType,
-			)
-		) {
-			try {
-				await this.setNodeIDType(NodeIDType.Short);
-			} catch {
-				// ignore
-			}
-		}
+		await this.trySetNodeIDType(NodeIDType.Short);
 
 		this.driver.controllerLog.print(
 			`Setting priority route to node ${destinationNodeId}...`,
@@ -4804,17 +4810,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		// Switch back to 16-bit node IDs
-		if (
-			this.isSerialAPISetupCommandSupported(
-				SerialAPISetupCommand.SetNodeIDType,
-			)
-		) {
-			try {
-				await this.setNodeIDType(NodeIDType.Long);
-			} catch {
-				// ignore
-			}
-		}
+		await this.trySetNodeIDType(NodeIDType.Long);
 
 		return ret;
 	}
@@ -5449,6 +5445,21 @@ ${associatedNodes.join(", ")}`,
 			}
 		}
 		return result.success;
+	}
+
+	public async trySetNodeIDType(nodeIdType: NodeIDType): Promise<boolean> {
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetNodeIDType,
+			)
+		) {
+			try {
+				return await this.setNodeIDType(nodeIdType);
+			} catch {
+				// ignore
+			}
+		}
+		return false;
 	}
 
 	/**
