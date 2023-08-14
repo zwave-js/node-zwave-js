@@ -1194,11 +1194,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     isFailedNode(nodeId: number): Promise<boolean>;
     isFirmwareUpdateInProgress(): boolean;
-    isFunctionSupported(functionType: FunctionType): boolean;
+    isFunctionSupported(functionType: FunctionType): MaybeNotKnown<boolean>;
     get isHealNetworkActive(): boolean;
     // (undocumented)
     get isPrimary(): MaybeNotKnown<boolean>;
-    isSerialAPISetupCommandSupported(command: SerialAPISetupCommand): boolean;
+    isSerialAPISetupCommandSupported(command: SerialAPISetupCommand): MaybeNotKnown<boolean>;
     // (undocumented)
     get isSIS(): MaybeNotKnown<boolean>;
     // (undocumented)
@@ -1266,6 +1266,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // (undocumented)
     get supportsTimers(): MaybeNotKnown<boolean>;
     toggleRF(enabled: boolean): Promise<boolean>;
+    // (undocumented)
+    trySetNodeIDType(nodeIdType: NodeIDType): Promise<boolean>;
     // (undocumented)
     get type(): MaybeNotKnown<ZWaveLibraryTypes>;
     unprovisionSmartStartNode(dskOrNodeId: string | number): void;
