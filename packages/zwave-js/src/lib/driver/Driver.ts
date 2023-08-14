@@ -55,6 +55,7 @@ import {
 	MPANState,
 	MessagePriority,
 	NodeIDType,
+	RFRegion,
 	SPANState,
 	SecurityClass,
 	SecurityManager,
@@ -376,6 +377,38 @@ function checkOptions(options: ZWaveOptions): void {
 				`The inclusionUserCallbacks must contain the following functions: grantSecurityClasses, validateDSKAndEnterPIN, abort!`,
 				ZWaveErrorCodes.Driver_InvalidOptions,
 			);
+		}
+	}
+
+	if (options.rf != undefined) {
+		if (options.rf.region != undefined) {
+			if (
+				typeof options.rf.region !== "number" ||
+				!(options.rf.region in RFRegion) ||
+				options.rf.region === RFRegion.Unknown
+			) {
+				throw new ZWaveError(
+					`${options.rf.region} is not a valid RF region!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+		}
+
+		if (options.rf.txPower != undefined) {
+			if (!isObject(options.rf.txPower)) {
+				throw new ZWaveError(
+					`rf.txPower must be an object!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			} else if (
+				typeof options.rf.txPower.powerlevel !== "number" ||
+				typeof options.rf.txPower.measured0dBm !== "number"
+			) {
+				throw new ZWaveError(
+					`rf.txPower must contain the following numeric properties: powerlevel, measured0dBm!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
 		}
 	}
 }

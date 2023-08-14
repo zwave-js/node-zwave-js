@@ -844,6 +844,23 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		scales: Partial<Record<string | number, string | number>>;
 	};
 
+	/**
+	 * RF-related settings that should automatically be configured on startup. If Z-Wave JS detects
+	 * a discrepancy between these settings and the actual configuration, it will automatically try to
+	 * re-configure the controller to match.
+	 */
+	rf?: {
+		/** The RF region the radio should be tuned to. */
+		region?: RFRegion;
+
+		txPower?: {
+			/** The desired TX power in dBm. */
+			powerlevel: number;
+			/** A hardware-specific calibration value. */
+			measured0dBm: number;
+		};
+	};
+
 	apiKeys?: {
 		/** API key for the Z-Wave JS Firmware Update Service (https://github.com/zwave-js/firmware-updates/) */
 		firmwareUpdateService?: string;
