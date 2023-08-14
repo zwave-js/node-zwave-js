@@ -72,6 +72,8 @@ export const cacheKeys = {
 			customReturnRoutes: (destinationNodeId: number) =>
 				`${nodeBaseKey}customReturnRoutes.${destinationNodeId}`,
 			customSUCReturnRoutes: `${nodeBaseKey}customReturnRoutes.SUC`,
+			defaultTransitionDuration: `${nodeBaseKey}defaultTransitionDuration`,
+			defaultVolume: `${nodeBaseKey}defaultVolume`,
 			lastSeen: `${nodeBaseKey}lastSeen`,
 		};
 	},
