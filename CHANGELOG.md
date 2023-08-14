@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Change order of commands so the startup does not fail when a controller is already set to use 16-bit node IDs and soft-reset is disabled (#6153)
+* Soft-reset is now always enabled on 700+ series controllers (#6154)
+* Queried user codes and their status are now preserved during re-interview when they won't be re-queried automatically (#6152)
+
+### Config file changes
+* Remove unnecessary endpoint functionality for CT101 (#6146)
+
+### Changes under the hood
+* The `mock-server` now supports loading a directory of mocks (#6145)
+
 ## 11.10.0 (2023-08-10)
 ### Features
 * The controller `identify` event callback now includes a reference to the node that requested the identification (#6140)
