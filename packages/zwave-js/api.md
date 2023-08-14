@@ -35,6 +35,7 @@ import { DeepPartial } from '@zwave-js/shared';
 import type { DeferredPromise } from 'alcalzone-shared/deferred-promise';
 import { DeviceConfig } from '@zwave-js/config';
 import { Duration } from '@zwave-js/core/safe';
+import { Duration as Duration_2 } from '@zwave-js/core';
 import { DurationUnit } from '@zwave-js/core/safe';
 import { EntryControlDataTypes } from '@zwave-js/cc/safe';
 import { EntryControlEventTypes } from '@zwave-js/cc/safe';
@@ -1323,6 +1324,10 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get canSleep(): MaybeNotKnown<boolean>;
     checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: LifelineHealthCheckResult) => void): Promise<LifelineHealthCheckSummary>;
     checkRouteHealth(targetNodeId: number, rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: RouteHealthCheckResult) => void): Promise<RouteHealthCheckSummary>;
+    get defaultTransitionDuration(): string | undefined;
+    set defaultTransitionDuration(value: string | Duration_2 | undefined);
+    get defaultVolume(): number | undefined;
+    set defaultVolume(value: number | undefined);
     destroy(): void;
     get deviceConfig(): DeviceConfig | undefined;
     // (undocumented)
@@ -1667,6 +1672,13 @@ export interface ZWaveOptions extends ZWaveHostOptions {
     // (undocumented)
     preferences: {
         scales: Partial<Record<string | number, string | number>>;
+    };
+    rf?: {
+        region?: RFRegion_2;
+        txPower?: {
+            powerlevel: number;
+            measured0dBm: number;
+        };
     };
     securityKeys?: {
         S2_Unauthenticated?: Buffer;
