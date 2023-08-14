@@ -1,11 +1,11 @@
 // @ts-check
 const { MockServer } = require("../build/mockServer");
 const { readFileSync, statSync, readdirSync } = require("fs");
-const { get } = require("http");
 const path = require("path");
 
 const args = process.argv.slice(2);
 
+/** @returns {never} */
 function printUsage() {
 	// Print a help text explaining the usage of this script and mention the options it supports
 	console.log(`
@@ -20,7 +20,7 @@ Options:
                     the mock(s)
 
 `);
-	process.exit(0);
+	throw process.exit(0);
 }
 
 if (args.includes("--help") || args.includes("-h")) {
