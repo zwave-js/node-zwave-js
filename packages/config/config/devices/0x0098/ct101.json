@@ -353,6 +353,9 @@
 		// Remove all Thermostat CCs from endpoints 1 and 2, as well as the sensor on endpoint 1
 		"commandClasses": {
 			"remove": {
+				"Basic": {
+					"endpoints": [1, 2]
+				},
 				"Thermostat Mode": {
 					"endpoints": [1, 2]
 				},
