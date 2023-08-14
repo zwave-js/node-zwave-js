@@ -851,8 +851,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
 			`received version info:
-	  controller type: ${getEnumMemberName(ZWaveLibraryTypes, this._type)}
-	  library version: ${this._protocolVersion}`,
+  controller type: ${getEnumMemberName(ZWaveLibraryTypes, this._type)}
+  library version: ${this._protocolVersion}`,
 		);
 
 		// If supported, get more fine-grained version info
@@ -868,18 +868,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this._protocolVersion = protocol.protocolVersion;
 
 			let message = `received protocol version info:
-	  protocol type:             ${getEnumMemberName(
-			ProtocolType,
-			protocol.protocolType,
-		)}
-	  protocol version:          ${protocol.protocolVersion}`;
+  protocol type:             ${getEnumMemberName(
+		ProtocolType,
+		protocol.protocolType,
+  )}
+  protocol version:          ${protocol.protocolVersion}`;
 			if (protocol.applicationFrameworkBuildNumber) {
 				message += `
-	  appl. framework build no.: ${protocol.applicationFrameworkBuildNumber}`;
+  appl. framework build no.: ${protocol.applicationFrameworkBuildNumber}`;
 			}
 			if (protocol.gitCommitHash) {
 				message += `
-	  git commit hash:           ${protocol.gitCommitHash}`;
+  git commit hash:           ${protocol.gitCommitHash}`;
 			}
 
 			this.driver.controllerLog.print(message);
@@ -937,6 +937,114 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			);
 		} else {
 			this._supportedSerialAPISetupCommands = [];
+		}
+
+		// Check and possibly update the RF region to the desired value
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetRFRegion,
+			)
+		) {
+			this.driver.controllerLog.print(`Querying configured RF region...`);
+			const resp = await this.getRFRegion().catch(() => undefined);
+			if (resp != undefined) {
+				this.driver.controllerLog.print(
+					`The controller is using RF region ${getEnumMemberName(
+						RFRegion,
+						resp,
+					)}`,
+				);
+			} else {
+				this.driver.controllerLog.print(
+					`Querying the RF region failed!`,
+					"warn",
+				);
+			}
+		}
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetRFRegion,
+			) &&
+			this.driver.options.rf?.region != undefined &&
+			this.rfRegion != this.driver.options.rf.region
+		) {
+			const desiredRegion = this.driver.options.rf.region;
+			this.driver.controllerLog.print(
+				`Current RF region (${getEnumMemberName(
+					RFRegion,
+					this.rfRegion ?? RFRegion.Unknown,
+				)}) differs from desired region (${getEnumMemberName(
+					RFRegion,
+					desiredRegion,
+				)}), configuring it...`,
+			);
+			const resp = await this.setRFRegionInternal(
+				desiredRegion,
+				// Do not soft reset here, we'll do it later
+				false,
+			).catch((e) => (e as Error).message);
+			if (resp === true) {
+				this.driver.controllerLog.print(
+					`Changed RF region to ${getEnumMemberName(
+						RFRegion,
+						desiredRegion,
+					)}`,
+				);
+			} else {
+				this.driver.controllerLog.print(
+					`Changing the RF region failed!${
+						resp ? ` Reason: ${resp}` : ""
+					}`,
+					"warn",
+				);
+			}
+		}
+
+		// Check and possibly update the powerlevel settings
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetPowerlevel,
+			) &&
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetPowerlevel,
+			) &&
+			this.driver.options.rf?.txPower != undefined
+		) {
+			const desired = this.driver.options.rf.txPower;
+			this.driver.controllerLog.print(
+				`Querying configured powerlevel...`,
+			);
+			const current = await this.getPowerlevel().catch(() => undefined);
+			if (current != undefined) {
+				if (
+					current.powerlevel !== desired.powerlevel ||
+					current.measured0dBm !== desired.measured0dBm
+				) {
+					this.driver.controllerLog.print(
+						`Current powerlevel ${current.powerlevel} dBm (${current.measured0dBm} dBm) differs from desired powerlevel ${desired.powerlevel} dBm (${desired.measured0dBm} dBm), configuring it...`,
+					);
+
+					const resp = await this.setPowerlevel(
+						desired.powerlevel,
+						desired.measured0dBm,
+					).catch((e) => (e as Error).message);
+					if (resp === true) {
+						this.driver.controllerLog.print(`Powerlevel updated`);
+					} else {
+						this.driver.controllerLog.print(
+							`Changing the powerlevel failed!${
+								resp ? ` Reason: ${resp}` : ""
+							}`,
+							"warn",
+						);
+					}
+				}
+			} else {
+				this.driver.controllerLog.print(
+					`Querying the powerlevel failed!`,
+					"warn",
+				);
+			}
 		}
 
 		// Switch to 16 bit node IDs if supported. We need to do this here, as a controller may still be
@@ -999,31 +1107,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   was real primary:     ${this._wasRealPrimary}`,
 		);
 
-		// // Figure out which sub commands of SerialAPISetup are supported
-		// if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
-		// 	this.driver.controllerLog.print(
-		// 		`querying serial API setup capabilities...`,
-		// 	);
-		// 	const setupCaps =
-		// 		await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
-		// 			new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
-		// 		);
-		// 	this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
-		// 	this.driver.controllerLog.print(
-		// 		`supported serial API setup commands:${this._supportedSerialAPISetupCommands
-		// 			.map(
-		// 				(cmd) =>
-		// 					`\n· ${getEnumMemberName(
-		// 						SerialAPISetupCommand,
-		// 						cmd,
-		// 					)}`,
-		// 			)
-		// 			.join("")}`,
-		// 	);
-		// } else {
-		// 	this._supportedSerialAPISetupCommands = [];
-		// }
-
 		// Enable TX status report if supported
 		if (
 			this.isSerialAPISetupCommandSupported(
@@ -1042,29 +1125,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					resp.success ? "successful" : "failed"
 				}...`,
 			);
-		}
-
-		// Also query the controller's current RF region if possible
-		if (
-			this.isSerialAPISetupCommandSupported(
-				SerialAPISetupCommand.GetRFRegion,
-			)
-		) {
-			this.driver.controllerLog.print(`Querying configured RF region...`);
-			const resp = await this.getRFRegion().catch(() => undefined);
-			if (resp != undefined) {
-				this.driver.controllerLog.print(
-					`The controller is using RF region ${getEnumMemberName(
-						RFRegion,
-						resp,
-					)}`,
-				);
-			} else {
-				this.driver.controllerLog.print(
-					`Querying the RF region failed!`,
-					"warn",
-				);
-			}
 		}
 
 		// find the SUC
@@ -5305,6 +5365,14 @@ ${associatedNodes.join(", ")}`,
 
 	/** Configure the RF region at the Z-Wave API Module */
 	public async setRFRegion(region: RFRegion): Promise<boolean> {
+		return this.setRFRegionInternal(region, true);
+	}
+
+	/** Configure the RF region at the Z-Wave API Module */
+	private async setRFRegionInternal(
+		region: RFRegion,
+		softReset: boolean = true,
+	): Promise<boolean> {
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_SetRFRegionResponse
 			| SerialAPISetup_CommandUnsupportedResponse
@@ -5316,7 +5384,7 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
-		if (result.success) await this.driver.trySoftReset();
+		if (softReset && result.success) await this.driver.trySoftReset();
 		this._rfRegion = region;
 		return result.success;
 	}
