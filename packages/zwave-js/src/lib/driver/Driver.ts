@@ -1280,7 +1280,8 @@ export class Driver
 			await this.controller.identify();
 			await this.initNetworkCache(this.controller.homeId!);
 
-			if (this._options.enableSoftReset && !this.maySoftReset()) {
+			const maySoftReset = this.maySoftReset();
+			if (this._options.enableSoftReset && !maySoftReset) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
@@ -1288,7 +1289,7 @@ export class Driver
 				this._options.enableSoftReset = false;
 			}
 
-			if (this._options.enableSoftReset) {
+			if (maySoftReset) {
 				try {
 					await this.softResetInternal(false);
 				} catch (e) {
@@ -1311,10 +1312,8 @@ export class Driver
 
 			// There are situations where a controller claims it has the ID 0,
 			// which isn't valid. In this case try again after having soft-reset the stick
-			if (
-				this.controller.ownNodeId === 0 &&
-				this._options.enableSoftReset
-			) {
+			// TODO: Check if this is still necessary now that we support 16-bit node IDs
+			if (this.controller.ownNodeId === 0 && maySoftReset) {
 				this.driverLog.print(
 					`Controller identification returned invalid node ID 0 - trying again...`,
 					"warn",
@@ -2320,6 +2319,9 @@ export class Driver
 	private isSoftResetting: boolean = false;
 
 	private maySoftReset(): boolean {
+		// 700+ series controllers have no problems with soft reset and MUST even be soft reset in some cases
+		if (this._controller?.sdkVersionGt("7.0")) return true;
+
 		// If we've previously determined a stick not to support soft reset, don't bother trying again
 		const supportsSoftReset = this._networkCache!.get(
 			cacheKeys.controller.supportsSoftReset,
@@ -2357,17 +2359,18 @@ export class Driver
 			return false;
 		}
 
-		return true;
+		// No clear indication, make the result depend on the config option
+		return !!this._options.enableSoftReset;
 	}
 
 	/**
 	 * Soft-resets the controller if the feature is enabled
 	 */
 	public async trySoftReset(): Promise<void> {
-		if (this._options.enableSoftReset && this.maySoftReset()) {
+		if (this.maySoftReset()) {
 			await this.softReset();
 		} else {
-			const message = `The soft reset feature is not enabled, skipping API call.`;
+			const message = `The controller should not or cannot be soft reset, skipping API call.`;
 			this.controllerLog.print(message, "warn");
 		}
 	}
