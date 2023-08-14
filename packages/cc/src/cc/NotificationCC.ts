@@ -858,11 +858,9 @@ export class NotificationCCSet extends NotificationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.notificationType = this.payload[0];
+			this.notificationStatus = this.payload[1] === 0xff;
 		} else {
 			this.notificationType = options.notificationType;
 			this.notificationStatus = options.notificationStatus;
