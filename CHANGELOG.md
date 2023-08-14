@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.10.1 (2023-08-14)
 ### Bugfixes
 * Change order of commands so the startup does not fail when a controller is already set to use 16-bit node IDs and soft-reset is disabled (#6153)
 * Soft-reset is now always enabled on 700+ series controllers (#6154)
