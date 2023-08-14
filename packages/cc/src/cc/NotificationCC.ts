@@ -472,17 +472,19 @@ export class NotificationCC extends CommandClass {
 		// it may be concluded that the supporting node implements Pull Mode and discovery may be aborted.
 		if (!node.supportsCC(CommandClasses.Association)) return "pull";
 
-		try {
-			const groupsIssueingNotifications =
-				AssociationGroupInfoCC.findGroupsForIssuedCommand(
-					applHost,
-					node,
-					this.ccId,
-					NotificationCommand.Report,
-				);
-			return groupsIssueingNotifications.length > 0 ? "push" : "pull";
-		} catch {
-			// We might be dealing with an older cache file, fall back to testing
+		if (node.supportsCC(CommandClasses["Association Group Information"])) {
+			try {
+				const groupsIssueingNotifications =
+					AssociationGroupInfoCC.findGroupsForIssuedCommand(
+						applHost,
+						node,
+						this.ccId,
+						NotificationCommand.Report,
+					);
+				return groupsIssueingNotifications.length > 0 ? "push" : "pull";
+			} catch {
+				// We might be dealing with an older cache file, fall back to testing
+			}
 		}
 
 		applHost.controllerLog.logNode(node.id, {
@@ -511,6 +513,7 @@ export class NotificationCC extends CommandClass {
 				/* ignore */
 			}
 		}
+
 		// If everything failed, e.g. because the node is V1/V2, assume this is a "push" node.
 		// If we assumed "pull", we would have to query the node regularly, which can cause
 		// the node to return old (already handled) notifications.
@@ -855,11 +858,9 @@ export class NotificationCCSet extends NotificationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.notificationType = this.payload[0];
+			this.notificationStatus = this.payload[1] === 0xff;
 		} else {
 			this.notificationType = options.notificationType;
 			this.notificationStatus = options.notificationStatus;
