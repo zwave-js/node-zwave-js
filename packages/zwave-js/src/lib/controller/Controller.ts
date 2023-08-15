@@ -18,6 +18,7 @@ import {
 	Security2CCTransferEnd,
 	Security2Command,
 	VersionCCValues,
+	VersionCommand,
 	ZWaveProtocolCCAssignReturnRoute,
 	ZWaveProtocolCCAssignReturnRoutePriority,
 	ZWaveProtocolCCAssignSUCReturnRoute,
@@ -6450,7 +6451,13 @@ ${associatedNodes.join(", ")}`,
 			}
 		}
 
-		// Do not rely on stale information, query everything fresh from the node
+		// Do not rely on potentially stale information, query everything fresh from the node.
+		// The results will be stored as node properties we can read afterwards.
+		// This ensures that we get the firmware version in the correct format (x.y or x.y.z)
+
+		// Remember the RF region used to communicate with the node - just to make sure it doesn't change inbetween.
+		const rfRegion = this.rfRegion;
+
 		const manufacturerResponse = await node.commandClasses[
 			"Manufacturer Specific"
 		].get();
@@ -6461,8 +6468,8 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.FWUpdateService_MissingInformation,
 			);
 		}
-		const { manufacturerId, productType, productId } = manufacturerResponse;
 
+		// Query the version using both possible commands to ensure we have the full version
 		const versionResponse = await node.commandClasses.Version.get();
 		if (!versionResponse) {
 			throw new ZWaveError(
@@ -6470,7 +6477,35 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.FWUpdateService_MissingInformation,
 			);
 		}
-		const firmwareVersion = versionResponse.firmwareVersions[0];
+		if (
+			node.commandClasses.Version.supportsCommand(
+				VersionCommand.ZWaveSoftwareGet,
+			)
+		) {
+			const softwareResponse =
+				await node.commandClasses.Version.getZWaveSoftware();
+			if (!softwareResponse) {
+				throw new ZWaveError(
+					`Cannot check for firmware updates for node ${nodeId}: Failed to query firmware version from the node!`,
+					ZWaveErrorCodes.FWUpdateService_MissingInformation,
+				);
+			}
+		}
+
+		const { manufacturerId, productType, productId, firmwareVersion } =
+			node;
+		// Be really sure that we have all the information we need
+		if (
+			typeof manufacturerId !== "number" ||
+			typeof productType !== "number" ||
+			typeof productId !== "number" ||
+			typeof firmwareVersion !== "string"
+		) {
+			throw new ZWaveError(
+				`Cannot check for firmware updates for node ${nodeId}: Failed to query fingerprint or firmware version from the node!`,
+				ZWaveErrorCodes.FWUpdateService_MissingInformation,
+			);
+		}
 
 		// Now invoke the service
 		try {
@@ -6480,7 +6515,7 @@ ${associatedNodes.join(", ")}`,
 					productType,
 					productId,
 					firmwareVersion,
-					rfRegion: this.rfRegion,
+					rfRegion,
 				},
 				{
 					userAgent: this.driver.getUserAgentStringWithComponents(
