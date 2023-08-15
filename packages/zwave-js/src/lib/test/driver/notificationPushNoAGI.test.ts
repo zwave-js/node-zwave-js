@@ -16,8 +16,7 @@ integrationTest(
 	"Notification CC: Push nodes without AGI support are detected as push, not pull",
 	{
 		// Repro of #6143
-
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			commandClasses: [
@@ -36,8 +35,7 @@ integrationTest(
 		},
 
 		customSetup: async (driver, controller, mockNode) => {
-			// Respond to Basic CC Get, so the driver doesn't assume Basic CC is unsupported
-			const respondToBasicGet: MockNodeBehavior = {
+			const respondToNotificationGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request &&
@@ -63,7 +61,7 @@ integrationTest(
 					return false;
 				},
 			};
-			mockNode.defineBehavior(respondToBasicGet);
+			mockNode.defineBehavior(respondToNotificationGet);
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
