@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.11.0 (2023-08-15)
 ### Features
 * The driver configuration now includes settings for RF region and TX power which will automatically be configured on startup (#6159)
 * Add support for persistent node-specific defaults for transition duration and volume (#6162)
