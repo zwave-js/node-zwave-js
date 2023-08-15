@@ -5752,7 +5752,10 @@ ${handlers.length} left`,
 		// Now try to apply them to all known devices
 		if (this._controller) {
 			for (const node of this._controller.nodes.values()) {
-				if (node.ready) await node["loadDeviceConfig"]();
+				if (node.ready) {
+					await node["loadDeviceConfig"]();
+					// TODO: If the device config did change, expose this information
+				}
 			}
 		}
 

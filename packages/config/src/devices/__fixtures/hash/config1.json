@@ -1,0 +1,61 @@
+{
+	"manufacturer": "Z-Wave JS",
+	"manufacturerId": "0xffff",
+	"label": "700 Series",
+	"description": "USB Controller",
+	"devices": [
+		{
+			"productType": "0xcafe",
+			"productId": "0xbeef"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true,
+			"multiChannel": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Latch Hold Time",
+			"description": "Defines how long the latch is kept open.",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 20,
+			"defaultValue": 3
+		},
+		{
+			"#": "2",
+			"label": "Latch Torque",
+			"description": "Defines the torque of the latch.",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		}
+	],
+	"compat": {
+		"preserveEndpoints": "*"
+	}
+}

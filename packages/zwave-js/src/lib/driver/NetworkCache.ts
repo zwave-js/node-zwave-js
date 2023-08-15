@@ -75,6 +75,7 @@ export const cacheKeys = {
 			defaultTransitionDuration: `${nodeBaseKey}defaultTransitionDuration`,
 			defaultVolume: `${nodeBaseKey}defaultVolume`,
 			lastSeen: `${nodeBaseKey}lastSeen`,
+			deviceConfigHash: `${nodeBaseKey}deviceConfigHash`,
 		};
 	},
 } as const;
