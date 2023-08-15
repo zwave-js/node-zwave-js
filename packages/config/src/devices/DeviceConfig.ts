@@ -2,6 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
 	formatId,
+	padVersion,
 	stringify,
 	type JSONObject,
 } from "@zwave-js/shared";
@@ -10,6 +11,7 @@ import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
+import semver from "semver";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
 import type { ConfigLogger } from "../Logger";
 import { configDir, externalConfigDir } from "../utils";
@@ -444,6 +446,13 @@ firmwareVersion is malformed or invalid. Must be x.y or x.y.z where x, y, and z 
 			);
 		} else {
 			const { min, max } = definition.firmwareVersion;
+			if (semver.gt(padVersion(min), padVersion(max))) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+firmwareVersion.min ${min} must not be greater than firmwareVersion.max ${max}`,
+				);
+			}
 			this.firmwareVersion = { min, max };
 		}
 
