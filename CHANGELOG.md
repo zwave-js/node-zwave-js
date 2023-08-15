@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* The driver configuration now includes settings for RF region and TX power which will automatically be configured on startup (#6159)
+* Add support for persistent node-specific defaults for transition duration and volume (#6162)
+
+### Bugfixes
+* Fixed a regression from `v11.10.1` where the controller's firmware version was not fully queried (`x.y` instead of `x.y.z`) (#6165)
+* Fixed an issue where devices supporting `Notification CC` in push mode were incorrectly detected as using pull mode when `Association Group Information CC` is not supported (#6157)
+* Requests to the firmware update service now include the full `x.y.z` firmware version where known (#6166)
+* Fixed an issue where region-specific firmware updates would not be returned from the firmware update service (#6167)
+
+### Config file changes
+* Disable Supervision for Kwikset HC620 to work around a device bug causing it to flood the network (#6155)
+* Add fingerprint for Ring Outdoor Contact Sensor (#6163)
+
 ## 11.10.1 (2023-08-14)
 ### Bugfixes
 * Change order of commands so the startup does not fail when a controller is already set to use 16-bit node IDs and soft-reset is disabled (#6153)
