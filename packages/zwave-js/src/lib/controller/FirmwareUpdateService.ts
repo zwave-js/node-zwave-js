@@ -188,11 +188,12 @@ export function getAvailableFirmwareUpdates(
 		body.region = rfRegion;
 	}
 
+	// Prereleases and/or RF region-specific updates are only available in v3
+	const apiVersion = options.includePrereleases || !!rfRegion ? "v3" : "v1";
+
 	const config: OptionsOfTextResponseBody = {
 		method: "POST",
-		url: `${serviceURL()}/api/${
-			options.includePrereleases ? "v3" : "v1"
-		}/updates`,
+		url: `${serviceURL()}/api/${apiVersion}/updates`,
 		json: body,
 		// Consider re-enabling this instead of using cachedGot()
 		// At the moment, the built-in caching has some issues though, so we stick
