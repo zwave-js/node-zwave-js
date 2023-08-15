@@ -839,6 +839,31 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Queries the controller IDs and its Serial API capabilities
 	 */
 	public async identify(): Promise<void> {
+		// Figure out what the serial API can do
+		this.driver.controllerLog.print(`querying Serial API capabilities...`);
+		const apiCaps =
+			await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
+				new GetSerialApiCapabilitiesRequest(this.driver),
+				{
+					supportCheck: false,
+				},
+			);
+		this._firmwareVersion = apiCaps.firmwareVersion;
+		this._manufacturerId = apiCaps.manufacturerId;
+		this._productType = apiCaps.productType;
+		this._productId = apiCaps.productId;
+		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
+		this.driver.controllerLog.print(
+			`received API capabilities:
+  firmware version:    ${this._firmwareVersion}
+  manufacturer ID:     ${num2hex(this._manufacturerId)}
+  product type:        ${num2hex(this._productType)}
+  product ID:          ${num2hex(this._productId)}
+  supported functions: ${this._supportedFunctionTypes
+		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
+		.join("")}`,
+		);
+
 		// Get basic controller version info
 		this.driver.controllerLog.print(`querying version info...`);
 		const version =
@@ -889,33 +914,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// The SDK version cannot be queried directly, but we can deduce it from the protocol version
 		this._sdkVersion = protocolVersionToSDKVersion(this._protocolVersion);
 
-		// Figure out what the serial API can do. This MUST be done after querying the SDK version due to
-		// a bug in some 7.xx firmwares.
-		this.driver.controllerLog.print(`querying API capabilities...`);
-		const apiCaps =
-			await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
-				new GetSerialApiCapabilitiesRequest(this.driver),
-				{
-					supportCheck: false,
-				},
-			);
-		this._firmwareVersion = apiCaps.firmwareVersion;
-		this._manufacturerId = apiCaps.manufacturerId;
-		this._productType = apiCaps.productType;
-		this._productId = apiCaps.productId;
-		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
-		this.driver.controllerLog.print(
-			`received API capabilities:
-  firmware version:    ${this._firmwareVersion}
-  manufacturer ID:     ${num2hex(this._manufacturerId)}
-  product type:        ${num2hex(this._productType)}
-  product ID:          ${num2hex(this._productId)}
-  supported functions: ${this._supportedFunctionTypes
-		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
-		.join("")}`,
-		);
-
 		// If the serial API can be configured, figure out which sub commands are supported
+		// This MUST be done after querying the SDK version due to a bug in some 7.xx firmwares, which incorrectly encode the bitmask
 		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
 			this.driver.controllerLog.print(
 				`querying serial API setup capabilities...`,
