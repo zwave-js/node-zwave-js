@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.12.0 (2023-08-16)
 ### Features
 * When the controller cannot transmit due to being jammed, this is now detected and exposed to applications. In this situation, nodes are no longer being marked as dead. (#6174)
 * A hash of the device config used during the interview is now stored and can be used to detect whether a node needs to be re-interviewed after a configuration update (#6170)
