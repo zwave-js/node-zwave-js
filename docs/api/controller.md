@@ -1189,6 +1189,29 @@ Returns the ID of the controller in the current network.
 * readonly supportsTimers: boolean
 -->
 
+### `status`
+
+```ts
+readonly status: ControllerStatus
+```
+
+This property tracks the status of the controller. Valid values are:
+
+<!-- #import ControllerStatus from "zwave-js" -->
+
+```ts
+enum ControllerStatus {
+	/** The controller is ready to accept commands and transmit */
+	Ready = 0,
+	/** The controller is unresponsive */
+	Unresponsive = 1,
+	/** The controller is unable to transmit */
+	Jammed = 2,
+}
+```
+
+The status is `ControllerStatus.Ready` by default and should not change unless there is a problem with the controller. Changes to the status are exposed using the [`"status changed"`](#status-changed) event.
+
 ### `isHealNetworkActive`
 
 ```ts
@@ -1365,6 +1388,14 @@ enum RemoveNodeReason {
 ```
 
 > [!NOTE] To comply with the Z-Wave specifications, applications **MUST** indicate that the node was _reset locally and has left the network_ when the `reason` is `RemoveNodeReason.Reset`.
+
+### `"status changed"`
+
+```ts
+(status: ControllerStatus) => void;
+```
+
+This event is used to inform applications about changes in the controller status.
 
 ### `"heal network progress"`
 
