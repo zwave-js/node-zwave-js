@@ -4,6 +4,8 @@
 
 ```ts
 
+/// <reference types="node" />
+
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClassInfo } from '@zwave-js/core/safe';
 import { JSONObject } from '@zwave-js/shared/safe';
@@ -523,6 +525,7 @@ export class DeviceConfig {
         deviceId?: DeviceID;
     }): Promise<DeviceConfig>;
     getAssociationConfigForEndpoint(endpointIndex: number, group: number): AssociationConfig | undefined;
+    getHash(): Buffer;
     readonly isEmbedded: boolean;
     // (undocumented)
     readonly label: string;
