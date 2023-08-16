@@ -4301,13 +4301,19 @@ ${handlers.length} left`,
 	 */
 	public readonly getNextCallbackId = createWrappingCounter(0xff);
 
+	private readonly supervisionSessionIDs = new Map<number, () => number>();
 	/**
 	 * Returns the next session ID for Supervision CC
 	 */
-	public readonly getNextSupervisionSessionId = createWrappingCounter(
-		MAX_SUPERVISION_SESSION_ID,
-		true,
-	);
+	public getNextSupervisionSessionId(nodeId: number): number {
+		if (!this.supervisionSessionIDs.has(nodeId)) {
+			this.supervisionSessionIDs.set(
+				nodeId,
+				createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
+			);
+		}
+		return this.supervisionSessionIDs.get(nodeId)!();
+	}
 
 	/**
 	 * Returns the next session ID for Transport Service CC

@@ -389,7 +389,7 @@ export class SupervisionCCGet extends SupervisionCC {
 				origin: options.origin,
 			});
 		} else {
-			this.sessionId = host.getNextSupervisionSessionId();
+			this.sessionId = host.getNextSupervisionSessionId(this.nodeId);
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;

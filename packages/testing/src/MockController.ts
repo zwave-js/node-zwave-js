@@ -48,6 +48,7 @@ export class MockController {
 		// const valuesStorage = new Map();
 		// const metadataStorage = new Map();
 		// const valueDBCache = new Map<number, ValueDB>();
+		const supervisionSessionIDs = new Map<number, () => number>();
 
 		this.host = {
 			ownNodeId: options.ownNodeId ?? 1,
@@ -56,9 +57,15 @@ export class MockController {
 			securityManager2: undefined,
 			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
-			getNextSupervisionSessionId: createWrappingCounter(
-				MAX_SUPERVISION_SESSION_ID,
-			),
+			getNextSupervisionSessionId: (nodeId) => {
+				if (!supervisionSessionIDs.has(nodeId)) {
+					supervisionSessionIDs.set(
+						nodeId,
+						createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
+					);
+				}
+				return supervisionSessionIDs.get(nodeId)!();
+			},
 			getSafeCCVersion: () => 100,
 			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
