@@ -64,11 +64,11 @@
 			"options": [
 				{
 					"label": "Normal",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Frequent",
-					"value": 1
+					"value": 2
 				}
 			]
 		},
