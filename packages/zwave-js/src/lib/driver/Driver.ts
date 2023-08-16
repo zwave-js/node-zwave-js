@@ -48,6 +48,7 @@ import {
 import {
 	CommandClasses,
 	ControllerLogger,
+	ControllerStatus,
 	Duration,
 	EncapsulationFlags,
 	MAX_SUPERVISION_SESSION_ID,
@@ -62,6 +63,7 @@ import {
 	SecurityManager2,
 	SupervisionStatus,
 	TransmitOptions,
+	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
@@ -4419,17 +4421,34 @@ ${handlers.length} left`,
 						msg,
 						transaction.stack,
 					);
-					if (isTransmitReport(prevResult) && !prevResult.isOK()) {
-						// The node did not acknowledge the command. Convert this into an
-						// error so it can be handled and abort the generator so it can be reset
-						transaction.abort(prevResult);
+					if (isTransmitReport(prevResult)) {
+						if (prevResult.transmitStatus === TransmitStatus.Fail) {
+							// The controller is jammed. Wait a second, then try again.
+							this.controller.setStatus(ControllerStatus.Jammed);
+							await wait(1000, true);
 
-						throw new ZWaveError(
-							"The node did not acknowledge the command",
-							ZWaveErrorCodes.Controller_CallbackNOK,
-							prevResult,
-							transaction.stack,
-						);
+							continue attemptMessage;
+						}
+
+						if (
+							this.controller.status === ControllerStatus.Jammed
+						) {
+							// The controller status is no longer uncertain
+							this.controller.setStatus(ControllerStatus.Ready);
+						}
+
+						if (!prevResult.isOK()) {
+							// The node did not acknowledge the command. Convert this into an
+							// error so it can be handled and abort the generator so it can be reset
+							transaction.abort(prevResult);
+
+							throw new ZWaveError(
+								"The node did not acknowledge the command",
+								ZWaveErrorCodes.Controller_CallbackNOK,
+								prevResult,
+								transaction.stack,
+							);
+						}
 					}
 					// We got a result - it will be passed to the next iteration
 					break attemptMessage;

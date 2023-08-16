@@ -31,6 +31,7 @@ import {
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
+	ControllerStatus,
 	EMPTY_ROUTE,
 	MAX_NODES,
 	NODE_ID_BROADCAST,
@@ -378,6 +379,7 @@ interface ControllerEventCallbacks
 		result: ControllerFirmwareUpdateResult,
 	) => void;
 	identify: (node: ZWaveNode) => void;
+	"status changed": (status: ControllerStatus) => void;
 }
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
@@ -537,6 +539,50 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		readonly FunctionType[]
 	> {
 		return this._supportedFunctionTypes;
+	}
+
+	private _status: ControllerStatus = ControllerStatus.Ready;
+	/**
+	 * Which status the controller is believed to be in
+	 */
+	public get status(): ControllerStatus {
+		return this._status;
+	}
+
+	/**
+	 * @internal
+	 */
+	public setStatus(newStatus: ControllerStatus): void {
+		// Ignore duplicate events
+		if (newStatus === this._status) return;
+
+		const oldStatus = this._status;
+		this._status = newStatus;
+
+		if (newStatus === ControllerStatus.Jammed) {
+			this.driver.controllerLog.print("The controller is jammed", "warn");
+		} else if (newStatus === ControllerStatus.Unresponsive) {
+			this.driver.controllerLog.print(
+				"The controller is unresponsive",
+				"warn",
+			);
+		} else if (newStatus === ControllerStatus.Ready) {
+			if (oldStatus === ControllerStatus.Jammed) {
+				this.driver.controllerLog.print(
+					"The controller is no longer jammed",
+					"warn",
+				);
+			} else if (oldStatus === ControllerStatus.Unresponsive) {
+				this.driver.controllerLog.print(
+					"The controller is no longer unresponsive",
+					"warn",
+				);
+			} else {
+				this.driver.controllerLog.print("The controller is ready");
+			}
+		}
+
+		this.emit("status changed", newStatus);
 	}
 
 	/**

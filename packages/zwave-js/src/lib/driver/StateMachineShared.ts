@@ -25,7 +25,10 @@ import {
 	type SendDataMulticastRequestTransmitReport,
 	type SendDataRequestTransmitReport,
 } from "../serialapi/transport/SendDataMessages";
-import { isSendData } from "../serialapi/transport/SendDataShared";
+import {
+	isSendData,
+	isSendDataTransmitReport,
+} from "../serialapi/transport/SendDataShared";
 import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine";
 import type { Transaction } from "./Transaction";
 
@@ -84,6 +87,19 @@ export function serialAPICommandErrorToZWaveError(
 			}
 		}
 		case "callback NOK": {
+			if (
+				isSendData(sentMessage) &&
+				isSendDataTransmitReport(receivedMessage) &&
+				receivedMessage.transmitStatus === TransmitStatus.Fail
+			) {
+				return new ZWaveError(
+					`Failed to send the command, the controller is jammed`,
+					ZWaveErrorCodes.Controller_Jammed,
+					receivedMessage,
+					transactionSource,
+				);
+			}
+
 			if (
 				sentMessage instanceof SendDataRequest ||
 				sentMessage instanceof SendDataBridgeRequest

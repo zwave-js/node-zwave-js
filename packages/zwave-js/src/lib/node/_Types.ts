@@ -31,7 +31,11 @@ export {
 	Powerlevel,
 	PowerlevelTestStatus,
 } from "@zwave-js/cc/safe";
-export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
+export {
+	ControllerStatus,
+	InterviewStage,
+	NodeStatus,
+} from "@zwave-js/core/safe";
 
 export type NodeInterviewFailedEventArgs = {
 	errorMessage: string;
