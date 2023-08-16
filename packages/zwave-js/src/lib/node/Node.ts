@@ -967,6 +967,18 @@ export class ZWaveNode
 		);
 	}
 
+	/**
+	 * @internal
+	 * The hash of the device config that was applied during the last interview.
+	 */
+	public get deviceConfigHash(): Buffer | undefined {
+		return this.driver.cacheGet(cacheKeys.node(this.id).deviceConfigHash);
+	}
+
+	private set deviceConfigHash(value: Buffer | undefined) {
+		this.driver.cacheSet(cacheKeys.node(this.id).deviceConfigHash, value);
+	}
+
 	private _valueDB: ValueDB;
 	/**
 	 * Provides access to this node's values
@@ -1653,6 +1665,7 @@ export class ZWaveNode
 		this.supportsSecurity = undefined;
 		this.supportsBeaming = undefined;
 		this._deviceConfig = undefined;
+		this.deviceConfigHash = undefined;
 		this._hasEmittedNoS0NetworkKeyError = false;
 		this._hasEmittedNoS2NetworkKeyError = false;
 		this._valueDB.clear({ noEvent: true });
@@ -1780,6 +1793,9 @@ export class ZWaveNode
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
 		}
+
+		// Remember the state of the device config that is used for this node
+		this.deviceConfigHash = this._deviceConfig?.getHash();
 
 		this.setInterviewStage(InterviewStage.Complete);
 		this.readyMachine.send("INTERVIEW_DONE");
@@ -6390,5 +6406,26 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		);
 
 		await api.sendNotification();
+	}
+
+	/**
+	 * Returns whether the device config for this node has changed since the last interview.
+	 * If it has, the node likely needs to be re-interviewed for the changes to be picked up.
+	 */
+	public hasDeviceConfigChanged(): MaybeNotKnown<boolean> {
+		// We can't know if the node is not fully interviewed
+		if (this.interviewStage !== InterviewStage.Complete) return NOT_KNOWN;
+
+		// If the hash was never stored, we can only (very likely) know if the config has not changed
+		const actualHash = this.deviceConfig?.getHash();
+		if (this.deviceConfigHash == undefined) {
+			return actualHash == undefined ? false : NOT_KNOWN;
+		}
+
+		// If it was, a change in hash means the config has changed
+		if (actualHash && this.deviceConfigHash) {
+			return actualHash.equals(this.deviceConfigHash);
+		}
+		return true;
 	}
 }

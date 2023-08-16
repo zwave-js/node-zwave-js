@@ -2,11 +2,14 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
 	formatId,
+	num2hex,
 	padVersion,
+	pick,
 	stringify,
 	type JSONObject,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { createHash } from "crypto";
 import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
@@ -38,6 +41,7 @@ import {
 	parseConditionalParamInformationMap,
 	type ConditionalParamInfoMap,
 	type ParamInfoMap,
+	type ParamInformation,
 } from "./ParamInformation";
 import type { DeviceID, FirmwareVersionRange } from "./shared";
 
@@ -714,5 +718,148 @@ export class DeviceConfig {
 			// The other endpoints can only have a configuration as part of "endpoints"
 			return this.endpoints?.get(endpointIndex)?.associations?.get(group);
 		}
+	}
+
+	/**
+	 * Returns a hash code that can be used to check whether a device config has changed enough to require a re-interview.
+	 */
+	public getHash(): Buffer {
+		// We only need to compare the information that is persisted elsewhere:
+		// - config parameters
+		// - functional association settings
+		// - CC-related compat flags
+
+		let hashable: Record<string, any> = {
+			// endpoints: {
+			// 	associations: {},
+			// 	paramInformation: []
+			// },
+			// proprietary: {},
+			// compat: {},
+		};
+
+		const sortObject = (obj: Record<string, any>) => {
+			const ret: Record<string, any> = {};
+			for (const key of Object.keys(obj).sort()) {
+				ret[key] = obj[key];
+			}
+			return ret;
+		};
+
+		const cloneAssociationConfig = (a: AssociationConfig) => {
+			return sortObject(
+				pick(a, ["maxNodes", "multiChannel", "isLifeline"]),
+			);
+		};
+		const cloneAssociationMap = (
+			target: Record<string, any>,
+			map: ReadonlyMap<number, AssociationConfig> | undefined,
+		) => {
+			if (!map || !map.size) return;
+			target.associations = {};
+			for (const [key, value] of map) {
+				target.associations[key] = cloneAssociationConfig(value);
+			}
+			target.associations = sortObject(target.associations);
+		};
+
+		const cloneParamInformationMap = (
+			target: Record<string, any>,
+			map: ParamInfoMap | undefined,
+		) => {
+			if (!map || !map.size) return;
+			const getParamKey = (param: ParamInformation) =>
+				`${param.parameterNumber}${
+					param.valueBitMask ? `[${num2hex(param.valueBitMask)}]` : ""
+				}`;
+			target.paramInformation = [...map.values()].sort((a, b) =>
+				getParamKey(a).localeCompare(getParamKey(b)),
+			);
+		};
+
+		// Clone associations and param information on the root (ep 0) and endpoints
+		{
+			let ep0: Record<string, any> = {};
+			cloneAssociationMap(ep0, this.associations);
+			cloneParamInformationMap(ep0, this.paramInformation);
+			ep0 = sortObject(ep0);
+
+			if (Object.keys(ep0).length > 0) {
+				hashable.endpoints ??= {};
+				hashable.endpoints[0] = ep0;
+			}
+		}
+
+		if (this.endpoints) {
+			for (const [index, endpoint] of this.endpoints) {
+				let ep: Record<string, any> = {};
+
+				cloneAssociationMap(ep, endpoint.associations);
+				cloneParamInformationMap(ep, endpoint.paramInformation);
+
+				ep = sortObject(ep);
+
+				if (Object.keys(ep).length > 0) {
+					hashable.endpoints ??= {};
+					hashable.endpoints[index] = ep;
+				}
+			}
+		}
+
+		// Clone proprietary config
+		if (this.proprietary && Object.keys(hashable.proprietary).length > 0) {
+			hashable.proprietary = sortObject({ ...this.proprietary });
+		}
+
+		// Clone relevant compat flags
+		if (this.compat) {
+			let c: Record<string, any> = {};
+
+			// Copy some simple flags over
+			for (const prop of [
+				"enableBasicSetMapping",
+				"forceSceneControllerGroupCount",
+				"mapRootReportsToEndpoint",
+				"preserveRootApplicationCCValueIDs",
+				"preserveEndpoints",
+				"removeEndpoints",
+				"treatBasicSetAsEvent",
+				"treatMultilevelSwitchSetAsEvent",
+			] as const) {
+				if (this.compat[prop] != undefined) {
+					c[prop] = this.compat[prop];
+				}
+			}
+
+			// Copy other, more complex flags
+			if (this.compat.overrideQueries) {
+				c.overrideQueries = Object.fromEntries(
+					this.compat.overrideQueries["overrides"],
+				);
+			}
+			if (this.compat.addCCs) {
+				c.addCCs = Object.fromEntries(
+					[...this.compat.addCCs].map(([ccId, def]) => [
+						ccId,
+						Object.fromEntries(def.endpoints),
+					]),
+				);
+			}
+			if (this.compat.removeCCs) {
+				c.removeCCs = Object.fromEntries(this.compat.removeCCs);
+			}
+
+			c = sortObject(c);
+			if (Object.keys(c).length > 0) {
+				hashable.compat = c;
+			}
+		}
+
+		hashable = sortObject(hashable);
+
+		// And create a hash from it. This does not need to be cryptographically secure, just good enough to detect changes.
+		const buffer = Buffer.from(JSON.stringify(hashable), "utf8");
+		const md5 = createHash("md5");
+		return md5.update(buffer).digest();
 	}
 }

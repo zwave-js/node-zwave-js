@@ -75,6 +75,7 @@ export const cacheKeys = {
 			defaultTransitionDuration: `${nodeBaseKey}defaultTransitionDuration`,
 			defaultVolume: `${nodeBaseKey}defaultVolume`,
 			lastSeen: `${nodeBaseKey}lastSeen`,
+			deviceConfigHash: `${nodeBaseKey}deviceConfigHash`,
 		};
 	},
 } as const;
@@ -361,6 +362,15 @@ export function deserializeNetworkCacheValue(
 			if (value) return value;
 			throw fail();
 		}
+
+		case "deviceConfigHash": {
+			if (typeof value !== "string") throw fail();
+			try {
+				return Buffer.from(value, "hex");
+			} catch {
+				throw fail();
+			}
+		}
 	}
 
 	// Other properties
@@ -412,6 +422,10 @@ export function serializeNetworkCacheValue(
 		case "lastSeen": {
 			// Dates are stored as timestamps
 			return (value as Date).getTime();
+		}
+
+		case "deviceConfigHash": {
+			return (value as Buffer).toString("hex");
 		}
 	}
 

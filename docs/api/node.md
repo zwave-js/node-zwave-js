@@ -736,6 +736,16 @@ Many devices using `Notification CC` do not idle their notification values, sinc
 
 > [!NOTE] This method will only do something if the node supports `Notification CC`, and the selected notification variable has an idle state.
 
+### `hasDeviceConfigChanged`
+
+```ts
+hasDeviceConfigChanged(): MaybeNotKnown<boolean>
+```
+
+Z-Wave JS discovers a lot of device metadata by interviewing the device. However, some of the information has to be loaded from a configuration file. Some of this information is only evaluated once, during the device interview.
+
+When a device config file is updated, this information may be stale and and the device must be re-interviewed using `refreshInfo()` to pick up the changes. This method can be used to determine whether a re-interview is necessary.
+
 ## ZWaveNode properties
 
 ### `id`
@@ -1077,6 +1087,8 @@ readonly deviceConfig: DeviceConfig | undefined
 ```
 
 Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
+
+This information may change after an update of the config files. To check whether a change occured that requires a re-interview, use the [`hasDeviceConfigChanged`](#hasdeviceconfigchanged) method.
 
 ### `deviceDatabaseUrl`
 
