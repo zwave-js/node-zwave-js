@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* When the controller cannot transmit due to being jammed, this is now detected and exposed to applications. In this situation, nodes are no longer being marked as dead. (#6174)
+* A hash of the device config used during the interview is now stored and can be used to detect whether a node needs to be re-interviewed after a configuration update (#6170)
+
+### Bugfixes
+* Fixed an issue where 700 series controllers were not soft-reset after NVM backup when soft-reset was disabled via config (#6176)
+
+### Config file changes
+* Correct reporting frequency parameter values for Sensative AB Strips Comfort / Drips Multisensor (#6171)
+
+### Changes under the hood
+* Config file checks now detect invalid firmware version ranges where `min > max` (#6169)
+
 ## 11.11.0 (2023-08-15)
 ### Features
 * The driver configuration now includes settings for RF region and TX power which will automatically be configured on startup (#6159)
