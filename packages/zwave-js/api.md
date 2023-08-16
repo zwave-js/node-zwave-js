@@ -27,6 +27,8 @@ import { ControllerLogContext } from '@zwave-js/core';
 import { ControllerLogger } from '@zwave-js/core';
 import { ControllerNodeLogContext } from '@zwave-js/core';
 import { ControllerSelfLogContext } from '@zwave-js/core';
+import { ControllerStatus } from '@zwave-js/core/safe';
+import { ControllerStatus as ControllerStatus_2 } from '@zwave-js/core';
 import { ControllerValueLogContext } from '@zwave-js/core';
 import { DataDirection } from '@zwave-js/core';
 import { DataRate } from '@zwave-js/core/safe';
@@ -248,6 +250,8 @@ export interface ControllerStatistics {
     timeoutCallback: number;
     timeoutResponse: number;
 }
+
+export { ControllerStatus }
 
 export { ControllerValueLogContext }
 
@@ -1253,6 +1257,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     setPriorityRoute(destinationNodeId: number, repeaters: number[], routeSpeed: ZWaveDataRate): Promise<boolean>;
     setRFRegion(region: RFRegion_2): Promise<boolean>;
+    get status(): ControllerStatus_2;
     stopExclusion(): Promise<boolean>;
     stopHealingNetwork(): boolean;
     stopInclusion(): Promise<boolean>;
@@ -1355,6 +1360,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     getValue<T = unknown>(valueId: ValueID_2): MaybeNotKnown<T>;
     getValueMetadata(valueId: ValueID_2): ValueMetadata_2;
     getValueTimestamp(valueId: ValueID_2): MaybeNotKnown<number>;
+    hasDeviceConfigChanged(): MaybeNotKnown<boolean>;
     // (undocumented)
     hasSecurityClass(securityClass: SecurityClass_2): MaybeNotKnown<boolean>;
     get hasSUCReturnRoute(): boolean;

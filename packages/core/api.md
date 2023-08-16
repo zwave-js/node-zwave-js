@@ -568,6 +568,15 @@ export type ControllerSelfLogContext = LogContext<"controller"> & {
     type: "controller";
 };
 
+// Warning: (ae-missing-release-tag) "ControllerStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ControllerStatus {
+    Jammed = 2,
+    Ready = 0,
+    Unresponsive = 1
+}
+
 // Warning: (ae-missing-release-tag) "ControllerValueLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3159,23 +3168,25 @@ export enum ZWaveErrorCodes {
     // (undocumented)
     Controller_CallbackNOK = 204,
     // (undocumented)
-    Controller_CommandAborted = 205,
-    Controller_CommandError = 215,
-    Controller_EndpointNotFound = 211,
+    Controller_CommandAborted = 206,
+    Controller_CommandError = 216,
+    Controller_EndpointNotFound = 212,
     // (undocumented)
-    Controller_ExclusionFailed = 207,
+    Controller_ExclusionFailed = 208,
     // (undocumented)
-    Controller_InclusionFailed = 206,
-    Controller_InterviewRestarted = 209,
+    Controller_InclusionFailed = 207,
+    Controller_InterviewRestarted = 210,
+    // (undocumented)
+    Controller_Jammed = 205,
     // (undocumented)
     Controller_MessageDropped = 202,
-    Controller_MessageExpired = 214,
-    Controller_MessageTooLarge = 216,
-    Controller_NodeInsecureCommunication = 213,
-    Controller_NodeNotFound = 210,
-    Controller_NodeRemoved = 212,
+    Controller_MessageExpired = 215,
+    Controller_MessageTooLarge = 217,
+    Controller_NodeInsecureCommunication = 214,
+    Controller_NodeNotFound = 211,
+    Controller_NodeRemoved = 213,
     Controller_NodeTimeout = 201,
-    Controller_NotSupported = 208,
+    Controller_NotSupported = 209,
     // (undocumented)
     Controller_ResponseNOK = 203,
     Controller_Timeout = 200,
