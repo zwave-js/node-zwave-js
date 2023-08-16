@@ -971,11 +971,11 @@ export class ZWaveNode
 	 * @internal
 	 * The hash of the device config that was applied during the last interview.
 	 */
-	public get deviceConfigHash(): number | undefined {
+	public get deviceConfigHash(): Buffer | undefined {
 		return this.driver.cacheGet(cacheKeys.node(this.id).deviceConfigHash);
 	}
 
-	private set deviceConfigHash(value: number | undefined) {
+	private set deviceConfigHash(value: Buffer | undefined) {
 		this.driver.cacheSet(cacheKeys.node(this.id).deviceConfigHash, value);
 	}
 
@@ -6423,6 +6423,9 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		}
 
 		// If it was, a change in hash means the config has changed
-		return actualHash !== this.deviceConfigHash;
+		if (actualHash && this.deviceConfigHash) {
+			return actualHash.equals(this.deviceConfigHash);
+		}
+		return true;
 	}
 }

@@ -19,7 +19,7 @@ test("hash() works", async (t) => {
 	t.not(config, undefined);
 
 	const hash = config.getHash();
-	t.is(typeof hash, "number");
+	t.true(Buffer.isBuffer(hash));
 });
 
 test("hash() changes when changing a parameter info", async (t) => {
@@ -43,7 +43,7 @@ test("hash() changes when changing a parameter info", async (t) => {
 	config.paramInformation!.get({ parameter: 2 })!.unit = "lightyears";
 	const hash2 = config.getHash();
 
-	t.not(hash1, hash2);
+	t.notDeepEqual(hash1, hash2);
 });
 
 test("hash() changes when removing a CC", async (t) => {
@@ -70,5 +70,5 @@ test("hash() changes when removing a CC", async (t) => {
 
 	const hash2 = config.getHash();
 
-	t.not(hash1, hash2);
+	t.notDeepEqual(hash1, hash2);
 });

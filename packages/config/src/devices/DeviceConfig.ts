@@ -1,4 +1,4 @@
-import { CRC16_CCITT, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
 	formatId,
@@ -9,6 +9,7 @@ import {
 	type JSONObject,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { createHash } from "crypto";
 import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
@@ -722,7 +723,7 @@ export class DeviceConfig {
 	/**
 	 * Returns a hash code that can be used to check whether a device config has changed enough to require a re-interview.
 	 */
-	public getHash(): number {
+	public getHash(): Buffer {
 		// We only need to compare the information that is persisted elsewhere:
 		// - config parameters
 		// - functional association settings
@@ -856,8 +857,9 @@ export class DeviceConfig {
 
 		hashable = sortObject(hashable);
 
-		// And create a 16-bit hash from it. This should be enough to detect changes
+		// And create a hash from it. This does not need to be cryptographically secure, just good enough to detect changes.
 		const buffer = Buffer.from(JSON.stringify(hashable), "utf8");
-		return CRC16_CCITT(buffer);
+		const md5 = createHash("md5");
+		return md5.update(buffer).digest();
 	}
 }
