@@ -2,8 +2,6 @@ import {
 	CommandClasses,
 	MessagePriority,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 	parseBitMask,
 	validatePayload,
 	type IZWaveEndpoint,
@@ -282,48 +280,58 @@ export class BinarySensorCC extends CommandClass {
 	}
 }
 
+export interface BinarySensorCCReportOptions extends CCCommandOptions {
+	type?: BinarySensorType;
+	value: boolean;
+}
+
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| BinarySensorCCReportOptions
+			| CommandClassDeserializationOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this._value = this.payload[0] === 0xff;
-		this._type = BinarySensorType.Any;
-		if (this.version >= 2 && this.payload.length >= 2) {
-			this._type = this.payload[1];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.value = this.payload[0] === 0xff;
+			this.type = BinarySensorType.Any;
+			if (this.payload.length >= 2) {
+				this.type = this.payload[1];
+			}
+		} else {
+			this.type = options.type ?? BinarySensorType.Any;
+			this.value = options.value;
 		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const binarySensorValue = BinarySensorCCValues.state(this._type);
+		const binarySensorValue = BinarySensorCCValues.state(this.type);
 		this.setMetadata(applHost, binarySensorValue, binarySensorValue.meta);
-		this.setValue(applHost, binarySensorValue, this._value);
+		this.setValue(applHost, binarySensorValue, this.value);
 
 		return true;
 	}
 
-	private _type: BinarySensorType;
-	public get type(): BinarySensorType {
-		return this._type;
-	}
+	public type: BinarySensorType;
+	public value: boolean;
 
-	private _value: boolean;
-	public get value(): boolean {
-		return this._value;
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.value ? 0xff : 0x00, this.type]);
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				type: getEnumMemberName(BinarySensorType, this._type),
-				value: this._value,
+				type: getEnumMemberName(BinarySensorType, this.type),
+				value: this.value,
 			},
 		};
 	}
@@ -354,10 +362,9 @@ export class BinarySensorCCGet extends BinarySensorCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			if (this.payload.length >= 1) {
+				this.sensorType = this.payload[0];
+			}
 		} else {
 			this.sensorType = options.sensorType;
 		}

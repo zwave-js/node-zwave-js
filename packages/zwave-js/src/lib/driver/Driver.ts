@@ -2,6 +2,7 @@ import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
 import {
 	CRC16CC,
+	CRC16CCCommandEncapsulation,
 	DeviceResetLocallyCCNotification,
 	InvalidCC,
 	KEXFailType,
@@ -68,6 +69,7 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 	deserializeCacheValue,
+	getCCName,
 	highResTimestamp,
 	isZWaveError,
 	messageRecordToLines,
@@ -2986,7 +2988,10 @@ export class Driver
 				}
 
 				// Make sure we are allowed to handle this command
-				if (this.shouldDiscardCC(msg.command)) {
+				if (
+					this.isSecurityLevelTooLow(msg.command) ||
+					this.shouldDiscardCC(msg.command)
+				) {
 					if (!wasMessageLogged) {
 						this.driverLog.logMessage(msg, {
 							direction: "inbound",
@@ -3722,10 +3727,9 @@ ${handlers.length} left`,
 	}
 
 	/**
-	 * Checks whether a CC may be handled or should be ignored.
-	 * This method expects `cc` to be unwrapped.
+	 * Checks whether a CC has a lower than expected security level and needs to be discarded
 	 */
-	private shouldDiscardCC(cc: CommandClass): boolean {
+	private isSecurityLevelTooLow(cc: CommandClass): boolean {
 		// With Security S0, some commands may be accepted without encryption, some require it
 		// With Security S2, a node MUST support its command classes only when communication is using its
 		// highest Security Class granted during security bootstrapping.
@@ -3744,9 +3748,11 @@ ${handlers.length} left`,
 			return true;
 		}
 
-		// CRC16, Transport Service belong outside of Security encapsulation
-		if (cc instanceof CRC16CC || cc instanceof TransportServiceCC) {
-			return false;
+		// Transport Service has a special handler
+		if (cc instanceof TransportServiceCC) return false;
+		// CRC16 belongs outside of Security encapsulation
+		if (cc instanceof CRC16CCCommandEncapsulation) {
+			return this.isSecurityLevelTooLow(cc.encapsulated);
 		}
 
 		if (
@@ -3852,6 +3858,46 @@ ${handlers.length} left`,
 				"warn",
 			);
 			return true;
+		}
+
+		return false;
+	}
+
+	/** Checks whether a CC should be discarded */
+	private shouldDiscardCC(cc: CommandClass): boolean {
+		if (isEncapsulatingCommandClass(cc)) {
+			return this.shouldDiscardCC(cc.encapsulated);
+		}
+
+		const node = this._controller?.nodes.get(cc.nodeId as number);
+		// We should have checked this before, but better be safe than sorry
+		if (!node) {
+			// Node does not exist, don't accept the CC
+			this.controllerLog.logNode(
+				cc.nodeId as number,
+				`is unknown - discarding received command...`,
+				"warn",
+			);
+			return true;
+		}
+
+		// Do not accept Meter CC and/or Multilevel Sensor CC if the node does not support them
+		// https://github.com/zwave-js/node-zwave-js/issues/5510
+		// TODO: Consider expanding this to all CCs and not only reports
+		if (
+			cc.ccId === CommandClasses.Meter ||
+			cc.ccId === CommandClasses["Multilevel Sensor"]
+		) {
+			if (!node.supportsCC(cc.ccId) && !node.controlsCC(cc.ccId)) {
+				this.controllerLog.logNode(
+					cc.nodeId as number,
+					`does not support CC ${getCCName(
+						cc.ccId,
+					)} - discarding received command...`,
+					"warn",
+				);
+				return true;
+			}
 		}
 
 		return false;
