@@ -130,6 +130,7 @@ import {
 	type ReadonlyThrowingMap,
 	type ThrowingMap,
 } from "@zwave-js/shared";
+import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -139,6 +140,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
 import fsExtra from "fs-extra";
+import os from "os";
 import path from "path";
 import { SerialPort } from "serialport";
 import { URL } from "url";
@@ -845,9 +847,32 @@ export class Driver
 		local?: boolean;
 		remote?: boolean;
 	} = {}): Promise<string[]> {
+		const symlinkedPorts: string[] = [];
 		const localPorts: string[] = [];
 		const remotePorts: string[] = [];
 		if (local) {
+			// Put symlinks to the serial ports first if possible
+			if (os.platform() === "linux") {
+				const dir = "/dev/serial/by-id";
+				const symlinks = await fsExtra.readdir(dir).catch(() => []);
+
+				for (const l of symlinks) {
+					try {
+						const fullPath = path.join(dir, l);
+						const target = path.join(
+							dir,
+							await fsExtra.readlink(fullPath),
+						);
+						if (!target.startsWith("/dev/tty")) continue;
+
+						symlinkedPorts.push(fullPath);
+					} catch {
+						// Ignore. The target might not exist or we might not have access.
+					}
+				}
+			}
+
+			// Then the actual serial ports
 			const ports = await SerialPort.list();
 			localPorts.push(...ports.map((port) => port.path));
 		}
@@ -858,7 +883,7 @@ export class Driver
 			}
 		}
 
-		return [...remotePorts, ...localPorts];
+		return distinct([...symlinkedPorts, ...remotePorts, ...localPorts]);
 	}
 
 	/** Updates a subset of the driver options on the fly */
