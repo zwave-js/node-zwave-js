@@ -14,7 +14,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"Discard Multilevel Sensor CC on nodes that do not support them",
 	{
-		debug: true,
+		// debug: true,
 		// provisioningDirectory: path.join(__dirname, "fixtures/configurationCC"),
 
 		nodeCapabilities: {
