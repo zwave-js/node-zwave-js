@@ -6,7 +6,29 @@ Under the `zwave-js/Utils` export, some helper functions are exported that may b
 
 Modern Z-Wave devices have a QR code that can be scanned to simplify the inclusion process. This QR code contains text-encoded provisioning information like the device types, requested security classes and DSK.
 
-While `zwave-js` does not support scanning the QR code, it can parse the encoded information. To do so, pass the QR code string to the `parseQRCodeString` function
+While `zwave-js` does not support scanning the QR code, it can parse the encoded information. However, there are multiple different formats of QR codes, some of which require a different inclusion process. The recommended procedure after scanning a QR code is the following:
+
+First, pass the QR code string to the `tryParseDSKFromQRCodeString` function
+
+```ts
+tryParseDSKFromQRCodeString(qr: string): string | undefined
+```
+
+### DSK-only QR codes
+
+If this method returns a string, the QR code only contains the DSK of the device and no other information. The inclusion must be done via the [conventional inclusion process](api/controller.md#beginInclusion) and the DSK should be passed as part of the `InclusionOptions`:
+
+```ts
+controller.beginInclusion({
+	strategy: InclusionStrategy.Security_S2,
+	dsk: /* Put the extracted DSK here */,
+	userCallbacks: /* Optionally put user callbacks here */
+})
+```
+
+### Other QR codes
+
+If `tryParseDSKFromQRCodeString` returns `undefined`, the QR code may be a valid S2 or SmartStart QR code. To figure this out, pass the QR code string to the `parseQRCodeString` function
 
 ```ts
 parseQRCodeString(qr: string): QRProvisioningInformation
