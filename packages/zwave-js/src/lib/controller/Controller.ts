@@ -3251,6 +3251,15 @@ supported CCs: ${nodeInfo.supportedCCs
 					this.setInclusionState(InclusionState.Idle);
 					this._nodePendingInclusion = undefined;
 					return true;
+				} else if (this._nodes.has(nodeId)) {
+					// Someone tried to include a node again, although it is part of the network already.
+					this.driver.controllerLog.print(
+						`Cannot add node ${nodeId} as it is already part of the network. Aborting...`,
+						"warn",
+					);
+					this.setInclusionState(InclusionState.Idle);
+					this._nodePendingInclusion = undefined;
+					return true;
 				}
 
 				// We're technically done with the inclusion but should not include
