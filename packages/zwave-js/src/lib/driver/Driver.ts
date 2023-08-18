@@ -500,7 +500,10 @@ export class Driver
 		}
 
 		// merge given options with defaults
-		this._options = mergeDeep(options, defaultOptions) as ZWaveOptions;
+		this._options = mergeDeep(
+			options,
+			cloneDeep(defaultOptions),
+		) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this._options);
 		if (options?.userAgent) {

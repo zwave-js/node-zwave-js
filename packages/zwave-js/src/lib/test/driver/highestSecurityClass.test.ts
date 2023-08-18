@@ -20,7 +20,7 @@ integrationTest(`An insecurely-included node has security class None`, {
 
 	customSetup: async (driver, mockController, mockNode) => {
 		// Don't wait too long for timed-out responses
-		driver.options.timeouts.report = 500;
+		driver.options.timeouts.report = 200;
 	},
 
 	testBody: async (t, driver, node, mockController, mockNode) => {
@@ -45,7 +45,7 @@ integrationTest(
 
 		customSetup: async (driver, mockController, mockNode) => {
 			// Don't wait too long for timed-out responses
-			driver.options.timeouts.report = 500;
+			driver.options.timeouts.report = 200;
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
@@ -71,7 +71,7 @@ integrationTest(
 
 		customSetup: async (driver, controller, mockNode) => {
 			// Don't wait too long for timed-out responses
-			driver.options.timeouts.report = 500;
+			driver.options.timeouts.report = 200;
 
 			// Create a security manager for the node
 			const smNode = new SecurityManager2();
