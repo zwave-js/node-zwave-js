@@ -169,6 +169,14 @@ test("cloneDeep -> works with arrays nested in objects", (t) => {
 	t.not(target.a, source.a);
 });
 
+test("cloneDeep -> creates new object instances", (t) => {
+	const source = { a: { b: { c: 3, d: 4 } } };
+	const target = cloneDeep(source);
+
+	target.a.b.c = 0;
+	t.not(source.a.b.c, 0);
+});
+
 test("mergeDeep -> can delete keys when undefined is passed", (t) => {
 	const target = { a: 1, b: 2, c: 3 };
 	const result = mergeDeep(target, { a: undefined }, true);
