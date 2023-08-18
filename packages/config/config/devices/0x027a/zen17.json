@@ -579,7 +579,7 @@
 		},
 		{
 			"#": "27",
-			"$if":"firmwareVersion >= 1.30",
+			"$if": "firmwareVersion >= 1.30",
 			"label": "Fixed Input Actions",
 			"description": "Set a fixed action to the inputs. This enables custom input behavior where dedicated inputs trigger only one action for the selected relay",
 			"valueSize": 1,
