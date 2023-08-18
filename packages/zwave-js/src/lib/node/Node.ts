@@ -137,7 +137,6 @@ import {
 	RssiError,
 	SecurityClass,
 	SupervisionStatus,
-	UNKNOWN_STATE,
 	ValueDB,
 	ValueMetadata,
 	ZWaveError,
@@ -2179,7 +2178,7 @@ protocol version:      ${this.protocolVersion}`;
 				SecurityClass.S2_Authenticated,
 				SecurityClass.S2_Unauthenticated,
 			] as const) {
-				if (this.hasSecurityClass(secClass) === UNKNOWN_STATE) {
+				if (this.hasSecurityClass(secClass) === NOT_KNOWN) {
 					this.securityClasses.set(secClass, false);
 				}
 			}
@@ -2224,9 +2223,7 @@ protocol version:      ${this.protocolVersion}`;
 				}
 			}
 		} else {
-			if (
-				this.hasSecurityClass(SecurityClass.S0_Legacy) === UNKNOWN_STATE
-			) {
+			if (this.hasSecurityClass(SecurityClass.S0_Legacy) === NOT_KNOWN) {
 				// Remember that this node hasn't been granted the S0 security class
 				this.securityClasses.set(SecurityClass.S0_Legacy, false);
 			}
