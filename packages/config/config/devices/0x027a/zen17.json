@@ -558,52 +558,6 @@
 					"value": 1
 				}
 			]
-		},
-		{
-			"#": "25",
-			"$if": "firmwareVersion >= 1.30",
-			"label": "Input 1 Trigger Duration",
-			"description": "Set trigger duration for input 1 to ensure the contact made at the input is recorded by the device, the output is triggered and the status is updated",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 5,
-			"unsigned": true
-		},
-		{
-			"#": "26",
-			"$if": "firmwareVersion >= 1.30",
-			"$import": "#paramInformation/25",
-			"label": "Input 2 Trigger Duration",
-			"description": "Set trigger duration for input 2 to ensure the contact made at the input is recorded by the device, the output is triggered and the status is updated"
-		},
-		{
-			"#": "27",
-			"$if":"firmwareVersion >= 1.30",
-			"label": "Fixed Input Actions",
-			"description": "Set a fixed action to the inputs. This enables custom input behavior where dedicated inputs trigger only one action for the selected relay",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "IN1 for ON R1, IN2 for OFF R1",
-					"value": 1
-				},
-				{
-					"label": "IN1 for ON on R2, IN2 for OFF on R2",
-					"value": 2
-				},
-				{
-					"label": "IN1 for ON on R1 and R2, IN2 for OFF on R1 and R2",
-					"value": 3
-				}
-			]
 		}
 	],
 	"compat": {
