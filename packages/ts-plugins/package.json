@@ -1,0 +1,66 @@
+{
+  "name": "@zwave-js/ts-plugins",
+  "version": "11.3.0",
+  "description": "zwave-js: TypeScript plugins",
+  "private": true,
+  "keywords": [],
+  "main": "build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./package.json": "./package.json",
+    "./tsc": "./build/index_tsc.js",
+    "./lsp": "./build/index_lsp.js"
+  },
+  "types": "build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "tsc": [
+        "build/index_tsc.d.ts"
+      ],
+      "lsp": [
+        "build/index_lsp.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "build/**/*.{js,d.ts,map}"
+  ],
+  "author": {
+    "name": "AlCalzone",
+    "email": "d.griesel@gmx.net"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/AlCalzone/"
+  },
+  "engines": {
+    "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json --pretty",
+    "clean": "del-cli build/ \"*.tsbuildinfo\"",
+    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix",
+    "lint:prettier": "prettier -c \"src/**/*.ts\"",
+    "lint:prettier:fix": "yarn run lint:prettier -w",
+    "//test:ts": "ava",
+    "//test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^14.18.52",
+    "del-cli": "^5.0.0",
+    "esbuild": "0.15.18",
+    "esbuild-register": "^3.4.2",
+    "prettier": "^2.8.8",
+    "typescript": "5.1.6"
+  }
+}

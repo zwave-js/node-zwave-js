@@ -1,6 +1,11 @@
 {
 	"extends": "@tsconfig/node14/tsconfig.json",
 	"compilerOptions": {
+		"plugins": [
+			{
+				"name": "@zwave-js/ts-plugins"
+			}
+		],
 		"composite": true,
 		"incremental": true,
 		"declaration": true,

@@ -9,6 +9,9 @@
 			{
 				"transform": "ts-nameof",
 				"type": "raw"
+			},
+			{
+				"name": "@zwave-js/ts-plugins"
 			}
 		],
 		"typeRoots": [
@@ -47,6 +50,9 @@
 		},
 		{
 			"path": "../transformers"
+		},
+		{
+			"path": "../ts-plugins"
 		}
 	],
 	"include": ["src/**/*.ts"],

@@ -57,6 +57,7 @@
     "@zwave-js/serial": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "@zwave-js/testing": "workspace:*",
+    "@zwave-js/ts-plugins": "workspace:*",
     "alcalzone-shared": "^4.0.8",
     "ansi-colors": "^4.1.3",
     "chokidar": "^3.5.3",
