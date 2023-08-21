@@ -990,22 +990,29 @@ interface GetFirmwareUpdatesOptions {
 
 This method returns an array with all available firmware updates for the given node. The entries of the array have the following form:
 
-<!-- #import FirmwareUpdateInfo from "zwave-js" -->
-
 ```ts
-interface FirmwareUpdateInfo {
+type FirmwareUpdateInfo = {
+	device: FirmwareUpdateDeviceID;
 	version: string;
 	changelog: string;
 	channel: "stable" | "beta";
 	files: FirmwareUpdateFileInfo[];
 	downgrade: boolean;
 	normalizedVersion: string;
-}
+};
 ```
 
-where the `device` field stores which device the update is for
+where the `device` field stores which device the update is for,
 
-<!-- #import FirmwareUpdateDeviceID from "zwave-js" -->
+```ts
+interface FirmwareUpdateDeviceID {
+	manufacturerId: number;
+	productType: number;
+	productId: number;
+	firmwareVersion: string;
+	rfRegion?: RFRegion;
+}
+```
 
 and each entry in `files` looks like this:
 
