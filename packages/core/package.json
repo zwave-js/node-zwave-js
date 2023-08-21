@@ -52,8 +52,6 @@
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
@@ -80,7 +78,6 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.8",
     "sinon": "^14.0.2",
     "typescript": "5.1.6"
   }

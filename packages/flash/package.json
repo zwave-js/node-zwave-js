@@ -41,16 +41,13 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
-    "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^14.18.52",
     "@types/yargs": "^17.0.24",
     "del-cli": "^5.0.0",
-    "prettier": "^2.8.8",
     "typescript": "5.1.6"
   }
 }

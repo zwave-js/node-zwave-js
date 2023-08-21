@@ -47,9 +47,7 @@
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
-    "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "dependencies": {
     "@zwave-js/config": "workspace:*",
@@ -61,7 +59,6 @@
     "@microsoft/api-extractor": "^7.36.0",
     "@types/node": "^14.18.52",
     "del-cli": "^5.0.0",
-    "prettier": "^2.8.8",
     "typescript": "5.1.6"
   }
 }

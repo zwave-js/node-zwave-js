@@ -34,8 +34,6 @@
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w",
     "lint:zwave": "yarn ts src/lintForbiddenImports.ts"
   },
   "devDependencies": {

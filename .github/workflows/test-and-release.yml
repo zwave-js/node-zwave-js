@@ -149,8 +149,7 @@ jobs:
       run: |
         # Run all lint commands and abort if one has unfixable errors
         yarn run lint:ts:fix $TURBO_FLAGS
-        yarn run lint:prettier:fix $TURBO_FLAGS
-        yarn run lint:configjson:fix $TURBO_FLAGS
+        yarn fmt $TURBO_FLAGS
 
         git diff --name-only || true
         if ! git diff --quiet ; then
