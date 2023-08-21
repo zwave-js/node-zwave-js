@@ -55,7 +55,7 @@
     "extract-api": "yarn api-extractor run",
     "lint:zwave": "yarn task lint",
     "ts": "node -r esbuild-register",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier": "prettier -c \"src/**/*.ts\"",
     "lint:prettier:fix": "yarn run lint:prettier -w",

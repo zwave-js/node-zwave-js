@@ -57,7 +57,7 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:prettier": "prettier -c \"src/**/*.ts\"",
     "lint:prettier:fix": "yarn run lint:prettier -w",
