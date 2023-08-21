@@ -64,6 +64,7 @@
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^5.0.0",
+    "dprint": "^0.40.2",
     "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
     "eslint": "^8.44.0",

@@ -1,0 +1,45 @@
+{
+	"lineWidth": 80,
+	"useTabs": true,
+	"indentWidth": 4,
+	"newLineKind": "lf",
+
+	"typescript": {
+		"semiColons": "prefer",
+		"quoteStyle": "alwaysDouble",
+		"module.sortImportDeclarations": "caseSensitive",
+		"importDeclaration.sortNamedImports": "caseSensitive",
+		"module.sortExportDeclarations": "caseSensitive",
+		"exportDeclaration.sortNamedExports": "caseSensitive",
+		// Preserve maximum overlap with the current formatter,
+		// then consider turning these off one by one.
+		"operatorPosition": "sameLine",
+		"conditionalExpression.operatorPosition": "nextLine",
+		"conditionalType.operatorPosition": "nextLine",
+		"functionExpression.spaceBeforeParentheses": true,
+		"constructorType.spaceAfterNewKeyword": true,
+		"constructSignature.spaceAfterNewKeyword": true
+	},
+
+	"json": {},
+
+	"markdown": {},
+
+	"excludes": [
+		"**/build",
+		"**/node_modules",
+		"**/package.json",
+		"**/*-lock.json",
+		".github/workflows",
+		".yarn/plugins",
+		".yarn/releases",
+		"cache/",
+		"packages/*/api.md",
+		"CHANGELOG*.md"
+	],
+	"plugins": [
+		"https://plugins.dprint.dev/typescript-0.86.2.wasm",
+		"https://plugins.dprint.dev/json-0.17.4.wasm",
+		"https://plugins.dprint.dev/markdown-0.15.3.wasm"
+	]
+}

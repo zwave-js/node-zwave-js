@@ -6,7 +6,7 @@
 		"source.fixAll.eslint",
 		"source.formatDocument"
 	],
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.defaultFormatter": "dprint.dprint",
 	"eslint.validate": [
 		"javascript",
 		"javascriptreact",
