@@ -14,7 +14,7 @@
 		"arrowFunction.useParentheses": "force",
 		// Preserve maximum overlap with the current formatter,
 		// then consider turning these off one by one.
-		"operatorPosition": "sameLine",
+		// "operatorPosition": "sameLine",
 		"conditionalExpression.operatorPosition": "nextLine",
 		"conditionalType.operatorPosition": "nextLine",
 		"constructorType.spaceAfterNewKeyword": true,
