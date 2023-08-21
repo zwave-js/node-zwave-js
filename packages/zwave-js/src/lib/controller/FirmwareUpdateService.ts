@@ -3,7 +3,6 @@ import got, {
 	type OptionsOfTextResponseBody,
 } from "@esm2cjs/got";
 import PQueue from "@esm2cjs/p-queue";
-import type { DeviceID } from "@zwave-js/config";
 import {
 	type Firmware,
 	RFRegion,
@@ -14,7 +13,12 @@ import {
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
 import crypto from "crypto";
-import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
+import type {
+	FirmwareUpdateDeviceID,
+	FirmwareUpdateFileInfo,
+	FirmwareUpdateInfo,
+	FirmwareUpdateServiceResponse,
+} from "./_Types";
 
 function serviceURL(): string {
 	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
@@ -165,8 +169,8 @@ function rfRegionToUpdateServiceRegion(
  * Retrieves the available firmware updates for the node with the given fingerprint.
  * Returns the service response or `undefined` in case of an error.
  */
-export function getAvailableFirmwareUpdates(
-	deviceId: DeviceID & { firmwareVersion: string; rfRegion?: RFRegion },
+export async function getAvailableFirmwareUpdates(
+	deviceId: FirmwareUpdateDeviceID,
 	options: GetAvailableFirmwareUpdateOptions,
 ): Promise<FirmwareUpdateInfo[]> {
 	const headers: Headers = {
@@ -205,7 +209,16 @@ export function getAvailableFirmwareUpdates(
 		headers,
 	};
 
-	return requestQueue.add(() => cachedGot(config));
+	const ret: FirmwareUpdateServiceResponse[] = await requestQueue.add(() =>
+		cachedGot(config)
+	);
+
+	// Remember the device ID in the response, so we can use it later
+	// to ensure the update is for the correct device
+	return ret.map((update) => ({
+		device: deviceId,
+		...update,
+	}));
 }
 
 export async function downloadFirmwareUpdate(
