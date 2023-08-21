@@ -11,12 +11,12 @@
 		"importDeclaration.sortNamedImports": "caseSensitive",
 		"module.sortExportDeclarations": "caseSensitive",
 		"exportDeclaration.sortNamedExports": "caseSensitive",
+		"arrowFunction.useParentheses": "force",
 		// Preserve maximum overlap with the current formatter,
 		// then consider turning these off one by one.
 		"operatorPosition": "sameLine",
 		"conditionalExpression.operatorPosition": "nextLine",
 		"conditionalType.operatorPosition": "nextLine",
-		"functionExpression.spaceBeforeParentheses": true,
 		"constructorType.spaceAfterNewKeyword": true,
 		"constructSignature.spaceAfterNewKeyword": true
 	},
