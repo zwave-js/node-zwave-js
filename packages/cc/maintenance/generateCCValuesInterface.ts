@@ -4,7 +4,7 @@
  * `ZWaveNode.commandClasses.xyz`
  */
 
-import { formatWithPrettier } from "@zwave-js/maintenance";
+import { formatWithDprint } from "@zwave-js/maintenance";
 import * as fs from "fs-extra";
 import * as path from "path";
 
@@ -69,7 +69,7 @@ export async function generateCCValuesInterface(): Promise<void> {
 		"\n" +
 		valuesFileContent.slice(endTokenStart);
 
-	valuesFileContent = formatWithPrettier(valuesFile, valuesFileContent);
+	valuesFileContent = formatWithDprint(valuesFile, valuesFileContent);
 	// Only update file if necessary - this reduces build time
 	if (valuesFileContent !== originalValuesFileContent) {
 		console.log("API interface changed");

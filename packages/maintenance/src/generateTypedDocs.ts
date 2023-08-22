@@ -9,25 +9,25 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import Piscina from "piscina";
 import {
-	Node,
-	Project,
-	SyntaxKind,
-	TypeFormatFlags,
 	type CommentRange,
 	type ExportedDeclarations,
 	type InterfaceDeclaration,
 	type InterfaceDeclarationStructure,
 	type JSDocTagStructure,
 	type MethodDeclaration,
+	Node,
 	type OptionalKind,
+	Project,
 	type PropertySignatureStructure,
 	type SourceFile,
+	SyntaxKind,
 	type Type,
+	TypeFormatFlags,
 	type TypeLiteralNode,
 	type ts,
 } from "ts-morph";
 import { isMainThread } from "worker_threads";
-import { formatWithPrettier } from "./prettier";
+import { formatWithDprint } from "./dprint";
 import {
 	getCommandClassFromClassDeclaration,
 	projectRoot,
@@ -52,10 +52,10 @@ export function stripComments(
 		// Remove some comments if desired
 		const ranges: { pos: number; end: number }[] = [];
 		const removePredicate = (c: CommentRange) =>
-			(!options.comments &&
-				c.getKind() === SyntaxKind.SingleLineCommentTrivia) ||
-			(!options.jsdoc &&
-				c.getKind() === SyntaxKind.MultiLineCommentTrivia);
+			(!options.comments
+				&& c.getKind() === SyntaxKind.SingleLineCommentTrivia)
+			|| (!options.jsdoc
+				&& c.getKind() === SyntaxKind.MultiLineCommentTrivia);
 
 		const getCommentRangesForNode = (
 			node: Node,
@@ -63,10 +63,9 @@ export function stripComments(
 			const comments = node.getLeadingCommentRanges();
 			const ret = comments.map((c, i) => ({
 				pos: c.getPos(),
-				end:
-					i < comments.length - 1
-						? comments[i + 1].getPos()
-						: Math.max(node.getStart(), c.getEnd()),
+				end: i < comments.length - 1
+					? comments[i + 1].getPos()
+					: Math.max(node.getStart(), c.getEnd()),
 				remove: removePredicate(c),
 			}));
 			// Only use comment ranges that should be removed
@@ -103,8 +102,8 @@ function shouldStripPropertySignature(
 ): boolean {
 	return !!p.docs?.some(
 		(d) =>
-			typeof d !== "string" &&
-			d.tags?.some((t) => /(deprecated|internal)/.test(t.tagName)),
+			typeof d !== "string"
+			&& d.tags?.some((t) => /(deprecated|internal)/.test(t.tagName)),
 	);
 }
 
@@ -145,7 +144,7 @@ export function getTransformedSource(
 					member
 						.getJsDocs()
 						.some((doc) =>
-							/@(deprecated|internal)/.test(doc.getInnerText()),
+							/@(deprecated|internal)/.test(doc.getInnerText())
 						)
 				) {
 					commentsToRemove.push(member);
@@ -185,7 +184,7 @@ export function getTransformedSource(
 	}
 
 	// Format with Prettier so we get the original formatting back
-	ret = formatWithPrettier("index.ts", ret).trim();
+	ret = formatWithDprint("index.ts", ret).trim();
 	return ret;
 }
 
@@ -226,9 +225,11 @@ function stripQuotes(str: string): string {
 function expectLiteralString(strType: string, context: string): void {
 	if (strType === "string") {
 		console.warn(
-			yellow(`WARNING: Received type "string" where a string literal was expected.
+			yellow(
+				`WARNING: Received type "string" where a string literal was expected.
 		Make sure to define this string or the entire object using "as const".
-		Context: ${context}`),
+		Context: ${context}`,
+			),
 		);
 	}
 }
@@ -236,9 +237,11 @@ function expectLiteralString(strType: string, context: string): void {
 function expectLiteralNumber(numType: string, context: string): void {
 	if (numType === "number") {
 		console.warn(
-			yellow(`WARNING: Received type "number" where a number literal was expected.
+			yellow(
+				`WARNING: Received type "number" where a number literal was expected.
 Make sure to define this number or the entire object using "as const".
-Context: ${context}`),
+Context: ${context}`,
+			),
 		);
 	}
 }
@@ -281,7 +284,7 @@ ${source}
 	}
 	console.log(`formatting ${docFile}...`);
 	fileContent = fileContent.replace(/\r\n/g, "\n");
-	fileContent = formatWithPrettier(docFile, fileContent);
+	fileContent = formatWithDprint(docFile, fileContent);
 	if (!hasErrors) {
 		await fs.writeFile(docFile, fileContent, "utf8");
 	}
@@ -356,9 +359,11 @@ async function processCCDocFile(
 
 ?> CommandClass ID: \`${num2hex((CommandClasses as any)[ccName])}\`
 `;
-	const generatedIndex = `\n- [${ccName} CC](api/CCs/${filename}) · \`${num2hex(
-		(CommandClasses as any)[ccName],
-	)}\``;
+	const generatedIndex = `\n- [${ccName} CC](api/CCs/${filename}) · \`${
+		num2hex(
+			(CommandClasses as any)[ccName],
+		)
+	}\``;
 	const generatedSidebar = `\n\t\t- [${ccName} CC](api/CCs/${filename})`;
 
 	// Enumerate all useful public methods
@@ -380,10 +385,10 @@ async function processCCDocFile(
 		text += `### \`${method.getName()}\`
 \`\`\`ts
 ${
-	signatures.length > 0
-		? signatures.map(printOverload).join("\n\n")
-		: printMethodDeclaration(method)
-}
+			signatures.length > 0
+				? signatures.map(printOverload).join("\n\n")
+				: printMethodDeclaration(method)
+		}
 \`\`\`
 
 `;
@@ -405,8 +410,8 @@ ${
 							t,
 						): t is OptionalKind<JSDocTagStructure> & {
 							text: string;
-						} =>
-							t.tagName === "param" && typeof t.text === "string",
+						} => t.tagName === "param"
+							&& typeof t.text === "string",
 					)
 					.map((t) => {
 						const firstSpace = t.text.indexOf(" ");
@@ -449,10 +454,10 @@ ${
 		const type = valueIDsConst.getType();
 		const formatValueType = (type: Type<ts.Type>): string => {
 			const prefix = "type _ = ";
-			let ret = formatWithPrettier(
+			let ret = formatWithDprint(
 				"type.ts",
-				prefix +
-					type.getText(valueIDsConst, TypeFormatFlags.NoTruncation),
+				prefix
+					+ type.getText(valueIDsConst, TypeFormatFlags.NoTruncation),
 			)
 				.trim()
 				.slice(prefix.length, -1);
@@ -492,9 +497,11 @@ ${
 			if (valueType.getCallSignatures().length === 1) {
 				const signature = valueType.getCallSignatures()[0];
 
-				callSignature = `(${signature.compilerSignature
-					.declaration!.parameters.map((p) => p.getText())
-					.join(", ")})`;
+				callSignature = `(${
+					signature.compilerSignature
+						.declaration!.parameters.map((p) => p.getText())
+						.join(", ")
+				})`;
 
 				// This used to be true. leaving it here in case it becomes true again
 				// // The call signature has a single argument
@@ -618,7 +625,7 @@ ${formatValueType(idType)}
 	}
 
 	text = text.replace(/\r\n/g, "\n");
-	text = formatWithPrettier(filename, text);
+	text = formatWithDprint(filename, text);
 
 	await fs.writeFile(path.join(ccDocsDir, filename), text, "utf8");
 
@@ -659,7 +666,7 @@ async function generateCCDocs(
 
 	// Process them in parallel
 	const tasks = ccFiles.map((f) =>
-		piscina.run(f.getFilePath(), { name: "processCC" }),
+		piscina.run(f.getFilePath(), { name: "processCC" })
 	);
 	const results = await Promise.all(tasks);
 	for (const result of results) {
@@ -670,12 +677,11 @@ async function generateCCDocs(
 	}
 
 	// Write the generated index file and sidebar
-	indexFileContent =
-		indexFileContent.slice(
-			0,
-			indexAutoGenStart + indexAutoGenToken.length,
-		) + generatedIndex;
-	indexFileContent = formatWithPrettier("index.md", indexFileContent);
+	indexFileContent = indexFileContent.slice(
+		0,
+		indexAutoGenStart + indexAutoGenToken.length,
+	) + generatedIndex;
+	indexFileContent = formatWithDprint("index.md", indexFileContent);
 	await fs.writeFile(indexFilename, indexFileContent, "utf8");
 
 	const sidebarInputFilename = path.join(docsDir, "_sidebar.md");
@@ -688,13 +694,12 @@ async function generateCCDocs(
 		);
 		return false;
 	}
-	sidebarFileContent =
-		sidebarFileContent.slice(0, sidebarAutoGenStart) +
-		generatedSidebar +
-		sidebarFileContent.slice(
+	sidebarFileContent = sidebarFileContent.slice(0, sidebarAutoGenStart)
+		+ generatedSidebar
+		+ sidebarFileContent.slice(
 			sidebarAutoGenStart + sidebarAutoGenToken.length,
 		);
-	sidebarFileContent = formatWithPrettier("_sidebar.md", sidebarFileContent);
+	sidebarFileContent = formatWithDprint("_sidebar.md", sidebarFileContent);
 	await fs.writeFile(
 		path.join(ccDocsDir, "_sidebar.md"),
 		sidebarFileContent,
@@ -705,7 +710,6 @@ async function generateCCDocs(
 }
 
 async function main(): Promise<void> {
-	const program = new Project({ tsConfigFilePath });
 	const piscina = new Piscina({
 		filename: path.join(__dirname, "generateTypedDocsWorker.js"),
 		maxThreads: 4,
@@ -718,7 +722,10 @@ async function main(): Promise<void> {
 	}
 	if (!process.argv.includes("--no-cc")) {
 		// Regenerate all CC documentation files
-		if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
+		if (!hasErrors) {
+			const program = new Project({ tsConfigFilePath });
+			hasErrors ||= await generateCCDocs(program, piscina);
+		}
 	}
 
 	if (hasErrors) {

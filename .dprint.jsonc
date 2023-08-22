@@ -52,6 +52,7 @@
 		".github/workflows",
 		".yarn/plugins",
 		".yarn/releases",
+		".tmp/",
 		"cache/",
 		"packages/*/api.md",
 		"CHANGELOG*.md",

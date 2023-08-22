@@ -25,7 +25,7 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@typescript-eslint/recommended-requiring-type-checking",
 	],
-	plugins: ["deprecation"],
+	plugins: ["deprecation", "unused-imports"],
 	reportUnusedDisableDirectives: true,
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -121,6 +121,8 @@ module.exports = {
 		],
 		"quote-props": ["error", "as-needed"],
 		"deprecation/deprecation": "error",
+		"unused-imports/no-unused-imports-ts": "error",
+		"unused-imports/no-unused-imports": "error",
 	},
 	overrides: [
 		{
