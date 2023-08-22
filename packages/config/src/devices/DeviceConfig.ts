@@ -807,7 +807,7 @@ export class DeviceConfig {
 		}
 
 		// Clone proprietary config
-		if (this.proprietary && Object.keys(hashable.proprietary).length > 0) {
+		if (this.proprietary && Object.keys(this.proprietary).length > 0) {
 			hashable.proprietary = sortObject({ ...this.proprietary });
 		}
 

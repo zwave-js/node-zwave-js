@@ -72,3 +72,21 @@ test("hash() changes when removing a CC", async (t) => {
 
 	t.notDeepEqual(hash1, hash2);
 });
+
+test("hash() does not crash for devices with a proprietary field", async (t) => {
+	// This test might take a while
+	t.timeout(60000);
+
+	const configManager = new ConfigManager({
+		deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
+	});
+	const config = (await configManager.lookupDevice(
+		0xffff,
+		0xdead,
+		0xbeef,
+		"1.0",
+	))!;
+	t.not(config, undefined);
+
+	config.getHash();
+});
