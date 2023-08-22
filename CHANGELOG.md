@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.13.0 (2023-08-22)
 ### Features
 * Auto-detected serialports now prominently include `/dev/serial/by-id/*` paths (#6182)
 
