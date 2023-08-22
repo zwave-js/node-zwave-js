@@ -1548,13 +1548,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:^2.7.3":
-  version: 2.7.3
-  resolution: "@types/prettier@npm:2.7.3"
-  checksum: 705384209cea6d1433ff6c187c80dcc0b95d99d5c5ce21a46a9a58060c527973506822e428789d842761e0280d25e3359300f017fbe77b9755bc772ab3dc2f83
-  languageName: node
-  linkType: hard
-
 "@types/proper-lockfile@npm:^4.1.2":
   version: 4.1.2
   resolution: "@types/proper-lockfile@npm:4.1.2"
@@ -1999,7 +1992,6 @@ __metadata:
     "@types/fs-extra": ^9.0.13
     "@types/globrex": ^0.1.2
     "@types/node": ^14.18.52
-    "@types/prettier": ^2.7.3
     "@types/yargs": ^17.0.24
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -2102,7 +2094,6 @@ __metadata:
     fs-extra: ^10.1.0
     husky: ^8.0.3
     json5: ^2.2.3
-    prettier: ^2.8.8
     reflect-metadata: ^0.1.13
     semver: ^7.5.2
     source-map-support: ^0.5.21
@@ -7173,15 +7164,6 @@ __metadata:
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
   checksum: cd192ec0d0a8e4c6da3bb80e4f62afe336df3f76271ac6deb0e6a36187133b6073a19e9727a1ff108cd8b9982e4768850d413baa71214dd80c7979617dca827a
-  languageName: node
-  linkType: hard
-
-"prettier@npm:^2.8.8":
-  version: 2.8.8
-  resolution: "prettier@npm:2.8.8"
-  bin:
-    prettier: bin-prettier.js
-  checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
   languageName: node
   linkType: hard
 

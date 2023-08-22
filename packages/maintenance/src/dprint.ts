@@ -4,11 +4,11 @@ import {
 	createFromBuffer,
 } from "@dprint/formatter";
 import { getPath as jsonGetPath } from "@dprint/json";
-import { getPath as tsGetPath } from "@dprint/typescript";
 import { getPath as mdGetPath } from "@dprint/markdown";
+import { getPath as tsGetPath } from "@dprint/typescript";
 import fs from "fs";
-import path from "path";
 import JSON5 from "json5";
+import path from "path";
 import { repoRoot } from "./tsAPITools";
 
 const formatterCache = new Map<string, Formatter>();

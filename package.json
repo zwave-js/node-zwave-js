@@ -78,7 +78,6 @@
     "fs-extra": "^10.1.0",
     "husky": "^8.0.3",
     "json5": "^2.2.3",
-    "prettier": "^2.8.8",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.5.2",
     "source-map-support": "^0.5.21",
@@ -141,7 +140,7 @@
     "accept-api": "yarn extract-api -- --local",
     "monopack": "yarn exec monopack",
     "check-references": "workspaces-to-typescript-project-references --check && workspaces-to-typescript-project-references --check --tsconfigPath tsconfig.build.json",
-    "sync-references": "workspaces-to-typescript-project-references && workspaces-to-typescript-project-references --tsconfigPath tsconfig.build.json && prettier -c '{,packages/*/}{tsconfig,tsconfig.*}.json' -w --loglevel silent"
+    "sync-references": "workspaces-to-typescript-project-references && workspaces-to-typescript-project-references --tsconfigPath tsconfig.build.json && yarn fmt > /dev/null"
   },
   "readme": "README.md",
   "config": {

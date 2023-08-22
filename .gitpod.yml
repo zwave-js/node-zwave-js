@@ -19,7 +19,6 @@ vscode:
   extensions:
     - dprint.dprint
     - dbaeumer.vscode-eslint
-    - esbenp.prettier-vscode
     - EditorConfig.EditorConfig
     - zwave-js.config-editor
 

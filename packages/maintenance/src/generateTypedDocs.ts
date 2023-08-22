@@ -183,7 +183,7 @@ export function getTransformedSource(
 		ret = node.getText();
 	}
 
-	// Format with Prettier so we get the original formatting back
+	// Format so we get the original formatting back
 	ret = formatWithDprint("index.ts", ret).trim();
 	return ret;
 }

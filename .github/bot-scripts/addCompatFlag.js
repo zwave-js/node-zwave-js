@@ -5,7 +5,7 @@
 const { ConfigManager } = require("@zwave-js/config");
 const JSONC = require("comment-json");
 const fs = require("fs-extra");
-const { formatWithPrettier } = require("./utils");
+const { formatWithDprint } = require("./utils");
 
 /**
  * @param {{github: Github, context: Context}} param
@@ -23,9 +23,9 @@ async function main(param) {
 	const firmwareVersion = idParts[3];
 
 	// Parse the given flags while preserving comments
-	// We need to format the flags with Prettier because someone might have forgotten quotes
+	// We need to format the flags because someone might have forgotten quotes
 	const flags = JSONC.parse(
-		formatWithPrettier("file.json", `{${process.env.flag}}`),
+		formatWithDprint("file.json", `{${process.env.flag}}`),
 	);
 
 	const device = await cm.lookupDevice(
@@ -46,7 +46,7 @@ async function main(param) {
 
 		// And save it again
 		content = JSONC.stringify(json, undefined, "\t");
-		content = formatWithPrettier("file.json", content);
+		content = formatWithDprint("file.json", content);
 		await fs.writeFile(filename, content, "utf8");
 	}
 }
