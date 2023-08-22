@@ -31,9 +31,9 @@ I can understand the sentiment of making things work when you're using unofficia
 
 Only when we **stop solving the manufacturers' mistakes for them** and make them fix them, then we can get to a point where it becomes a benefit for the smart home community. Many issues I keep seeing would have been caught by QA if they bothered to test it at all, e.g.:
 
--   RGB controllers that are missing the blue channel from their list of supported colors
--   Thermostats with off-by-one errors, leading to the wrong scales/units being advertised (or none at all)
--   Power meters that randomly flip the most significant bit in their reports
+- RGB controllers that are missing the blue channel from their list of supported colors
+- Thermostats with off-by-one errors, leading to the wrong scales/units being advertised (or none at all)
+- Power meters that randomly flip the most significant bit in their reports
 
 Unfortunately, I can't make manufacturers do that, but I can take a stance and choose not to fix their mistakes (and neither should the other projects), even if it is annoying for users.
 But maybe **having a majority of their users complain** because their stuff does not work with a standards-compliant software will change that mentality:
@@ -41,8 +41,8 @@ But maybe **having a majority of their users complain** because their stuff does
 1. When there are issues with a device, contact the manufacturer support. Open Source projects are not free tech support for manufacturers.
 1. Hold them accountable. If there is clearly an issue with the device firmware, demand them to fix it. Even if they initially claim its not their fault. European law recently even made it mandatory to provide updates for ~5 years.
 1. Vote with your wallet:
-    - Don't buy from manufacturers that don't provide any support
-    - Don't buy from manufacturers that don't provide firmware updates or make you pay for them. Nowadays there is really not a reason not to provide them online.
-    - Don't buy from manufacturers that tend to seek fault elsewhere (_"The device is certified, cannot be our fault..."_)
-    - **DO** buy from manufacturers that have reliable devices and give good support.
-    - [Inform yourself](getting-started/device-review.md) beforehand
+   - Don't buy from manufacturers that don't provide any support
+   - Don't buy from manufacturers that don't provide firmware updates or make you pay for them. Nowadays there is really not a reason not to provide them online.
+   - Don't buy from manufacturers that tend to seek fault elsewhere (_"The device is certified, cannot be our fault..."_)
+   - **DO** buy from manufacturers that have reliable devices and give good support.
+   - [Inform yourself](getting-started/device-review.md) beforehand

@@ -1,7 +1,7 @@
 import {
-	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";

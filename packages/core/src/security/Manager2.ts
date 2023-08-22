@@ -5,7 +5,7 @@ import * as crypto from "crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { encodeNodeBitMask } from "../index_safe";
 import { highResTimestamp } from "../util/date";
-import { SecurityClass, type S2SecurityClass } from "./SecurityClass";
+import { type S2SecurityClass, SecurityClass } from "./SecurityClass";
 import { increment } from "./bufferUtils";
 import {
 	computeNoncePRK,
@@ -49,35 +49,35 @@ export enum MPANState {
 
 export type SPANTableEntry =
 	| {
-			// We know the other node's receiver's entropy input, but we didn't send it our sender's EI yet
-			type: SPANState.RemoteEI;
-			receiverEI: Buffer;
-	  }
+		// We know the other node's receiver's entropy input, but we didn't send it our sender's EI yet
+		type: SPANState.RemoteEI;
+		receiverEI: Buffer;
+	}
 	| {
-			// We've sent the other node our receiver's entropy input, but we didn't receive its sender's EI yet
-			type: SPANState.LocalEI;
-			receiverEI: Buffer;
-	  }
+		// We've sent the other node our receiver's entropy input, but we didn't receive its sender's EI yet
+		type: SPANState.LocalEI;
+		receiverEI: Buffer;
+	}
 	| {
-			// We've established an SPAN with the other node
-			type: SPANState.SPAN;
-			securityClass: SecurityClass;
-			rng: CtrDRBG;
-			/** The most recent generated SPAN */
-			currentSPAN?: {
-				nonce: Buffer;
-				expires: number;
-			};
-	  };
+		// We've established an SPAN with the other node
+		type: SPANState.SPAN;
+		securityClass: SecurityClass;
+		rng: CtrDRBG;
+		/** The most recent generated SPAN */
+		currentSPAN?: {
+			nonce: Buffer;
+			expires: number;
+		};
+	};
 
 export type MPANTableEntry =
 	| {
-			type: MPANState.OutOfSync;
-	  }
+		type: MPANState.OutOfSync;
+	}
 	| {
-			type: MPANState.MPAN;
-			currentMPAN: Buffer;
-	  };
+		type: MPANState.MPAN;
+		currentMPAN: Buffer;
+	};
 
 export interface MulticastGroup {
 	nodeIDs: readonly number[];
@@ -132,8 +132,8 @@ export class SecurityManager2 {
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		} else if (
-			!(securityClass in SecurityClass) ||
-			securityClass <= SecurityClass.None
+			!(securityClass in SecurityClass)
+			|| securityClass <= SecurityClass.None
 		) {
 			throw new ZWaveError(
 				`Invalid security class!`,
@@ -198,10 +198,12 @@ export class SecurityManager2 {
 		const keys = this.networkKeys.get(securityClass);
 		if (!keys) {
 			throw new ZWaveError(
-				`The network key for the security class ${getEnumMemberName(
-					SecurityClass,
-					securityClass,
-				)} has not been set up yet!`,
+				`The network key for the security class ${
+					getEnumMemberName(
+						SecurityClass,
+						securityClass,
+					)
+				} has not been set up yet!`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
@@ -214,11 +216,12 @@ export class SecurityManager2 {
 		// Meaning if an SPAN for the temporary inclusion key is established,
 		// we need to return that temporary key
 		if (
-			spanState.type === SPANState.SPAN &&
-			spanState.securityClass === SecurityClass.Temporary
+			spanState.type === SPANState.SPAN
+			&& spanState.securityClass === SecurityClass.Temporary
 		) {
-			if (this.tempKeys.has(peerNodeID))
+			if (this.tempKeys.has(peerNodeID)) {
 				return this.tempKeys.get(peerNodeID)!;
+			}
 			throw new ZWaveError(
 				`Temporary encryption key for node ${peerNodeID} is not known!`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
@@ -403,9 +406,9 @@ export class SecurityManager2 {
 		const nonce = spanState.rng.generate(16).slice(0, 13);
 		spanState.currentSPAN = store
 			? {
-					nonce,
-					expires: highResTimestamp() + SINGLECAST_NONCE_EXPIRY_NS,
-			  }
+				nonce,
+				expires: highResTimestamp() + SINGLECAST_NONCE_EXPIRY_NS,
+			}
 			: undefined;
 		return nonce;
 	}

@@ -1,5 +1,5 @@
 import type { ValueType } from "@zwave-js/core/safe";
-import { num2hex, type JSONObject } from "@zwave-js/shared/safe";
+import { type JSONObject, num2hex } from "@zwave-js/shared/safe";
 import { throwInvalidConfig } from "./utils_safe";
 
 export type IndicatorMap = ReadonlyMap<number, string>;
@@ -18,8 +18,8 @@ export class IndicatorProperty {
 		this.label = definition.label;
 
 		if (
-			definition.description != undefined &&
-			typeof definition.description !== "string"
+			definition.description != undefined
+			&& typeof definition.description !== "string"
 		) {
 			throwInvalidConfig(
 				"indicators",
@@ -31,9 +31,11 @@ export class IndicatorProperty {
 		if (definition.min != undefined && typeof definition.min !== "number") {
 			throwInvalidConfig(
 				"indicators",
-				`The minimum value for property ${num2hex(
-					id,
-				)} is not a number!`,
+				`The minimum value for property ${
+					num2hex(
+						id,
+					)
+				} is not a number!`,
 			);
 		}
 		this.min = definition.min;
@@ -41,16 +43,18 @@ export class IndicatorProperty {
 		if (definition.max != undefined && typeof definition.max !== "number") {
 			throwInvalidConfig(
 				"indicators",
-				`The maximum value for property ${num2hex(
-					id,
-				)} is not a number!`,
+				`The maximum value for property ${
+					num2hex(
+						id,
+					)
+				} is not a number!`,
 			);
 		}
 		this.max = definition.max;
 
 		if (
-			definition.readonly != undefined &&
-			typeof definition.readonly !== "boolean"
+			definition.readonly != undefined
+			&& typeof definition.readonly !== "boolean"
 		) {
 			throwInvalidConfig(
 				"indicators",
@@ -60,8 +64,8 @@ export class IndicatorProperty {
 		this.readonly = definition.readonly;
 
 		if (
-			definition.type != undefined &&
-			typeof definition.type !== "string"
+			definition.type != undefined
+			&& typeof definition.type !== "string"
 		) {
 			throwInvalidConfig(
 				"indicators",

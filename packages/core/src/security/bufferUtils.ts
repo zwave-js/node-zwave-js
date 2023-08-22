@@ -2,10 +2,9 @@ export function zeroPad(
 	input: Buffer,
 	blockSize: number,
 ): { output: Buffer; paddingLength: number } {
-	const padding =
-		input.length % blockSize === 0
-			? Buffer.from([])
-			: Buffer.alloc(blockSize - (input.length % blockSize), 0);
+	const padding = input.length % blockSize === 0
+		? Buffer.from([])
+		: Buffer.alloc(blockSize - (input.length % blockSize), 0);
 	return {
 		output: Buffer.concat([input, padding]),
 		paddingLength: padding.length,

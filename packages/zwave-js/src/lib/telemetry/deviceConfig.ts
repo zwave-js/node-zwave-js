@@ -18,9 +18,11 @@ export async function reportMissingDeviceConfig(
 		firmwareVersion: string;
 	},
 ): Promise<void> {
-	const configFingerprint = `${formatId(node.manufacturerId)}:${formatId(
-		node.productType,
-	)}:${formatId(node.productId)}:${node.firmwareVersion}`;
+	const configFingerprint = `${formatId(node.manufacturerId)}:${
+		formatId(
+			node.productType,
+		)
+	}:${formatId(node.productId)}:${node.firmwareVersion}`;
 
 	// We used to get a LOT of false positives, so we should check with our device
 	// database whether this config file is actually unknown
@@ -31,17 +33,19 @@ export async function reportMissingDeviceConfig(
 	try {
 		const data = await got
 			.get(
-				`https://devices.zwave-js.io/public_api/getdeviceinfo/${configFingerprint.replace(
-					/:/g,
-					"/",
-				)}`,
+				`https://devices.zwave-js.io/public_api/getdeviceinfo/${
+					configFingerprint.replace(
+						/:/g,
+						"/",
+					)
+				}`,
 			)
 			.json();
 
 		if (
-			isObject(data) &&
-			typeof data.deviceFound === "boolean" &&
-			data.deviceFound
+			isObject(data)
+			&& typeof data.deviceFound === "boolean"
+			&& data.deviceFound
 		) {
 			// This is a false positive - remember it
 			missingDeviceConfigCache.add(configFingerprint);

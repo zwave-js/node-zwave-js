@@ -2,8 +2,8 @@ import { CommandClass } from "@zwave-js/cc";
 import { TransmitOptions, ZWaveErrorCodes, isZWaveError } from "@zwave-js/core";
 import { FunctionType, MessageOrigin } from "@zwave-js/serial";
 import {
-	createMockZWaveRequestFrame,
 	type MockControllerBehavior,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import {
@@ -40,8 +40,8 @@ integrationTest("abort if SendData is missing the callback", {
 						MockControllerStateKeys.CommunicationState,
 					) as MockControllerCommunicationState | undefined;
 					if (
-						state != undefined &&
-						state !== MockControllerCommunicationState.Idle
+						state != undefined
+						&& state !== MockControllerCommunicationState.Idle
 					) {
 						throw new Error(
 							"Received SendDataRequest while not idle",
@@ -73,13 +73,15 @@ integrationTest("abort if SendData is missing the callback", {
 								if (isZWaveError(e)) {
 									// We want to know when we're using a command in tests that cannot be decoded yet
 									if (
-										e.code ===
-										ZWaveErrorCodes.Deserialization_NotImplemented
+										e.code
+											=== ZWaveErrorCodes
+												.Deserialization_NotImplemented
 									) {
 										console.error(e.message);
 									} else if (
-										e.code ===
-										ZWaveErrorCodes.CC_NotImplemented
+										e.code
+											=== ZWaveErrorCodes
+												.CC_NotImplemented
 									) {
 										// The whole CC is not implemented yet. If this happens in tests, it is because we sent a raw CC.
 										try {
@@ -90,8 +92,9 @@ integrationTest("abort if SendData is missing the callback", {
 														.ownNodeId,
 													ccId: msg.payload[0],
 													ccCommand: msg.payload[1],
-													payload:
-														msg.payload.slice(2),
+													payload: msg.payload.slice(
+														2,
+													),
 												},
 											);
 											handled = true;
@@ -112,8 +115,8 @@ integrationTest("abort if SendData is missing the callback", {
 								msg.command,
 								{
 									ackRequested: !!(
-										msg.transmitOptions &
-										TransmitOptions.ACK
+										msg.transmitOptions
+										& TransmitOptions.ACK
 									),
 								},
 							);

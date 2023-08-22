@@ -1,7 +1,7 @@
 import {
+	type ScheduleEntryLockDailyRepeatingSchedule,
 	ScheduleEntryLockScheduleKind,
 	ScheduleEntryLockSetAction,
-	type ScheduleEntryLockDailyRepeatingSchedule,
 	type ScheduleEntryLockWeekDaySchedule,
 	type ScheduleEntryLockYearDaySchedule,
 } from "@zwave-js/cc";
@@ -26,10 +26,10 @@ import {
 import { CommandClasses } from "@zwave-js/core/safe";
 import { type AllOrNone } from "@zwave-js/shared/safe";
 import {
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
+	MockZWaveFrameType,
 	type ScheduleEntryLockCCCapabilities,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { defaultCapabilities as defaultUserCodeCapabilities } from "./UserCode";
 
@@ -53,8 +53,8 @@ const StateKeys = {
 const respondToScheduleEntryLockSupportedGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCSupportedGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCSupportedGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -81,8 +81,8 @@ const respondToScheduleEntryLockSupportedGet: MockNodeBehavior = {
 const respondToScheduleEntryLockTimeOffsetSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCTimeOffsetSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCTimeOffsetSet
 		) {
 			self.state.set(
 				StateKeys.standardOffset,
@@ -99,13 +99,13 @@ const respondToScheduleEntryLockTimeOffsetSet: MockNodeBehavior = {
 const respondToScheduleEntryLockTimeOffsetGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCTimeOffsetGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCTimeOffsetGet
 		) {
 			const cc = new ScheduleEntryLockCCTimeOffsetReport(self.host, {
 				nodeId: controller.host.ownNodeId,
-				standardOffset: (self.state.get(StateKeys.standardOffset) ??
-					0) as number,
+				standardOffset: (self.state.get(StateKeys.standardOffset)
+					?? 0) as number,
 				dstOffset: (self.state.get(StateKeys.dstOffset) ?? 0) as number,
 			});
 			await self.sendToController(
@@ -122,8 +122,8 @@ const respondToScheduleEntryLockTimeOffsetGet: MockNodeBehavior = {
 const respondToScheduleEntryLockEnableSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCEnableSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCEnableSet
 		) {
 			// No need to do anything, this cannot be queried
 			return true;
@@ -135,8 +135,8 @@ const respondToScheduleEntryLockEnableSet: MockNodeBehavior = {
 const respondToScheduleEntryLockEnableAllSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCEnableAllSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCEnableAllSet
 		) {
 			// No need to do anything, this cannot be queried
 			return true;
@@ -148,8 +148,8 @@ const respondToScheduleEntryLockEnableAllSet: MockNodeBehavior = {
 const respondToScheduleEntryLockWeekDayScheduleSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCWeekDayScheduleSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCWeekDayScheduleSet
 		) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
@@ -178,12 +178,12 @@ const respondToScheduleEntryLockWeekDayScheduleSet: MockNodeBehavior = {
 			const schedule =
 				frame.payload.action === ScheduleEntryLockSetAction.Set
 					? {
-							weekday: frame.payload.weekday!,
-							startHour: frame.payload.startHour!,
-							startMinute: frame.payload.startMinute!,
-							stopHour: frame.payload.stopHour!,
-							stopMinute: frame.payload.stopMinute!,
-					  }
+						weekday: frame.payload.weekday!,
+						startHour: frame.payload.startHour!,
+						startMinute: frame.payload.startMinute!,
+						stopHour: frame.payload.stopHour!,
+						stopMinute: frame.payload.stopMinute!,
+					}
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
@@ -197,8 +197,8 @@ const respondToScheduleEntryLockWeekDayScheduleSet: MockNodeBehavior = {
 const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCWeekDayScheduleGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCWeekDayScheduleGet
 		) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
@@ -248,8 +248,8 @@ const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
 const respondToScheduleEntryLockYearDayScheduleSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCYearDayScheduleSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCYearDayScheduleSet
 		) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
@@ -278,17 +278,17 @@ const respondToScheduleEntryLockYearDayScheduleSet: MockNodeBehavior = {
 			const schedule =
 				frame.payload.action === ScheduleEntryLockSetAction.Set
 					? {
-							startYear: frame.payload.startYear!,
-							startMonth: frame.payload.startMonth!,
-							startDay: frame.payload.startDay!,
-							startHour: frame.payload.startHour!,
-							startMinute: frame.payload.startMinute!,
-							stopYear: frame.payload.stopYear!,
-							stopMonth: frame.payload.stopMonth!,
-							stopDay: frame.payload.stopDay!,
-							stopHour: frame.payload.stopHour!,
-							stopMinute: frame.payload.stopMinute!,
-					  }
+						startYear: frame.payload.startYear!,
+						startMonth: frame.payload.startMonth!,
+						startDay: frame.payload.startDay!,
+						startHour: frame.payload.startHour!,
+						startMinute: frame.payload.startMinute!,
+						stopYear: frame.payload.stopYear!,
+						stopMonth: frame.payload.stopMonth!,
+						stopDay: frame.payload.stopDay!,
+						stopHour: frame.payload.stopHour!,
+						stopMinute: frame.payload.stopMinute!,
+					}
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
@@ -302,8 +302,8 @@ const respondToScheduleEntryLockYearDayScheduleSet: MockNodeBehavior = {
 const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ScheduleEntryLockCCYearDayScheduleGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ScheduleEntryLockCCYearDayScheduleGet
 		) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
@@ -353,9 +353,9 @@ const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
 const respondToScheduleEntryLockDailyRepeatingScheduleSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof
-				ScheduleEntryLockCCDailyRepeatingScheduleSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload
+				instanceof ScheduleEntryLockCCDailyRepeatingScheduleSet
 		) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
@@ -384,12 +384,12 @@ const respondToScheduleEntryLockDailyRepeatingScheduleSet: MockNodeBehavior = {
 			const schedule =
 				frame.payload.action === ScheduleEntryLockSetAction.Set
 					? {
-							weekdays: frame.payload.weekdays!,
-							startHour: frame.payload.startHour!,
-							startMinute: frame.payload.startMinute!,
-							durationHour: frame.payload.durationHour!,
-							durationMinute: frame.payload.durationMinute!,
-					  }
+						weekdays: frame.payload.weekdays!,
+						startHour: frame.payload.startHour!,
+						startMinute: frame.payload.startMinute!,
+						durationHour: frame.payload.durationHour!,
+						durationMinute: frame.payload.durationMinute!,
+					}
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
@@ -403,9 +403,9 @@ const respondToScheduleEntryLockDailyRepeatingScheduleSet: MockNodeBehavior = {
 const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof
-				ScheduleEntryLockCCDailyRepeatingScheduleGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload
+				instanceof ScheduleEntryLockCCDailyRepeatingScheduleGet
 		) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,

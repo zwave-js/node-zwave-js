@@ -49,9 +49,7 @@ ${filesWithControllerMock.map((f) => `- ${f.filename}\n`).join()}
 				nodeConfigFiles.set(nodeConfig.id, file);
 			} else {
 				console.error(`
-Each node ID may only be used once in mock configs. Node ID ${
-					nodeConfig.id
-				} is duplicated in the following files:
+Each node ID may only be used once in mock configs. Node ID ${nodeConfig.id} is duplicated in the following files:
 - ${nodeConfigFiles.get(nodeConfig.id).filename}
 - ${file.filename}
 `);

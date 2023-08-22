@@ -117,9 +117,8 @@ export function getLegalRangeForBitMask(
 	if (mask === 0) return [0, 0];
 	const bitMaskWidth = getBitMaskWidth(mask);
 	const min = unsigned || bitMaskWidth == 1 ? 0 : -(2 ** (bitMaskWidth - 1));
-	const max =
-		unsigned || bitMaskWidth == 1
-			? 2 ** bitMaskWidth - 1
-			: 2 ** (bitMaskWidth - 1) - 1;
+	const max = unsigned || bitMaskWidth == 1
+		? 2 ** bitMaskWidth - 1
+		: 2 ** (bitMaskWidth - 1) - 1;
 	return [min, max];
 }

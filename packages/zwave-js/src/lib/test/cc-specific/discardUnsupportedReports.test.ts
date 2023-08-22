@@ -2,9 +2,9 @@ import {
 	BinarySensorCCReport,
 	BinarySensorCCValues,
 	BinarySensorType,
+	type CommandClass,
 	MultilevelSensorCCReport,
 	MultilevelSensorCCValues,
-	type CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";

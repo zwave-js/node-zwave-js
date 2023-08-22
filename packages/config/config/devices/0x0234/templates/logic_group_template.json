@@ -370,7 +370,7 @@
 		"unsigned": true
 	},
 	"input_precision": {
-		//number of decimal points
+		// number of decimal points
 		"label": "Input: Precision",
 		"valueSize": 1,
 		"minValue": 0,

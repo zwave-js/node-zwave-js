@@ -28,8 +28,7 @@ export type TypedPropertyDecorator<TTarget extends Object> = <
 
 export type UnionToIntersection<T> = (
 	T extends any ? (x: T) => any : never
-) extends (x: infer R) => any
-	? R
+) extends (x: infer R) => any ? R
 	: never;
 
 export type OnlyMethods<T> = {

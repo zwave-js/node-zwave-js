@@ -122,12 +122,12 @@ function visitClassType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	const identifier = type.symbol.getName();
 
 	// Figure out if something needs to be imported
-	const typeSourceFileName =
-		type.symbol.valueDeclaration?.getSourceFile().fileName;
+	const typeSourceFileName = type.symbol.valueDeclaration?.getSourceFile()
+		.fileName;
 	let importPath: string | undefined;
 	if (
-		typeSourceFileName &&
-		typeSourceFileName !== visitorContext.sourceFile.fileName
+		typeSourceFileName
+		&& typeSourceFileName !== visitorContext.sourceFile.fileName
 	) {
 		// We don't rely on the resolved path because the import specifier might refer to an absolute node_module
 		importPath = VisitorUtils.resolveModuleSpecifierForType(
@@ -153,13 +153,13 @@ function visitClassType(type: ts.ObjectType, visitorContext: VisitorContext) {
 						// Create an import for classes in other files
 						importPath
 							? f.createPropertyAccessExpression(
-									f.createCallExpression(
-										f.createIdentifier("require"),
-										undefined,
-										[f.createStringLiteral(importPath)],
-									),
-									f.createIdentifier(identifier),
-							  )
+								f.createCallExpression(
+									f.createIdentifier("require"),
+									undefined,
+									[f.createStringLiteral(importPath)],
+								),
+								f.createIdentifier(identifier),
+							)
 							: f.createIdentifier(identifier),
 					),
 				),
@@ -338,7 +338,7 @@ function visitTupleObjectType(
 							f.createStringLiteral(`[${index}]`),
 							visitorContext,
 						),
-					),
+					)
 				),
 				f.createReturnStatement(f.createNull()),
 			]),
@@ -464,7 +464,7 @@ function visitRegularObjectType(
 		const propertyInfos = visitorContext.checker
 			.getPropertiesOfType(type)
 			.map((property) =>
-				VisitorUtils.getPropertyInfo(type, property, visitorContext),
+				VisitorUtils.getPropertyInfo(type, property, visitorContext)
 			);
 		const stringIndexType = visitorContext.checker.getIndexTypeOfType(
 			type,
@@ -533,8 +533,8 @@ function visitRegularObjectType(
 						const functionName =
 							propertyInfo.isMethod || propertyInfo.isFunction
 								? VisitorUtils.getIgnoredTypeFunction(
-										visitorContext,
-								  )
+									visitorContext,
+								)
 								: visitType(propertyInfo.type!, visitorContext);
 						return [
 							f.createIfStatement(
@@ -582,54 +582,54 @@ function visitRegularObjectType(
 								propertyInfo.optional
 									? undefined
 									: f.createReturnStatement(
-											VisitorUtils.createErrorObject(
-												{
-													type: "missing-property",
-													property: propertyInfo.name,
-												},
-												visitorContext,
-											),
-									  ),
+										VisitorUtils.createErrorObject(
+											{
+												type: "missing-property",
+												property: propertyInfo.name,
+											},
+											visitorContext,
+										),
+									),
 							),
 						];
 					})
 					.reduce((a, b) => a.concat(b), []),
 				...(stringIndexFunctionName
 					? [
-							f.createForOfStatement(
-								undefined,
-								f.createVariableDeclarationList(
-									[
-										f.createVariableDeclaration(
-											keyIdentifier,
-											undefined,
-											undefined,
-										),
-									],
-									ts.NodeFlags.Const,
-								),
-								f.createCallExpression(
-									f.createPropertyAccessExpression(
-										f.createIdentifier("Object"),
-										"keys",
-									),
-									undefined,
-									[VisitorUtils.objectIdentifier],
-								),
-								VisitorUtils.createBlock(
-									f,
-									createRecursiveCall(
-										stringIndexFunctionName,
-										f.createElementAccessExpression(
-											VisitorUtils.objectIdentifier,
-											keyIdentifier,
-										),
+						f.createForOfStatement(
+							undefined,
+							f.createVariableDeclarationList(
+								[
+									f.createVariableDeclaration(
 										keyIdentifier,
-										visitorContext,
+										undefined,
+										undefined,
 									),
+								],
+								ts.NodeFlags.Const,
+							),
+							f.createCallExpression(
+								f.createPropertyAccessExpression(
+									f.createIdentifier("Object"),
+									"keys",
+								),
+								undefined,
+								[VisitorUtils.objectIdentifier],
+							),
+							VisitorUtils.createBlock(
+								f,
+								createRecursiveCall(
+									stringIndexFunctionName,
+									f.createElementAccessExpression(
+										VisitorUtils.objectIdentifier,
+										keyIdentifier,
+									),
+									keyIdentifier,
+									visitorContext,
 								),
 							),
-					  ]
+						),
+					]
 					: []),
 				f.createReturnStatement(f.createNull()),
 			]),
@@ -641,8 +641,9 @@ function visitTypeAliasReference(
 	type: ts.TypeReference,
 	visitorContext: VisitorContext,
 ) {
-	const mapping: Map<ts.Type, ts.Type> =
-		VisitorUtils.getTypeAliasMapping(type);
+	const mapping: Map<ts.Type, ts.Type> = VisitorUtils.getTypeAliasMapping(
+		type,
+	);
 	const previousTypeReference = visitorContext.previousTypeReference;
 	visitorContext.typeMapperStack.push(mapping);
 	visitorContext.previousTypeReference = type;
@@ -703,18 +704,18 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 		// Index type is number -> array type.
 		return visitArrayObjectType(type, visitorContext);
 	} else if (
-		"valueDeclaration" in type.symbol &&
-		type.symbol.valueDeclaration &&
-		(type.symbol.valueDeclaration.kind ===
-			ts.SyntaxKind.MethodDeclaration ||
-			type.symbol.valueDeclaration.kind === ts.SyntaxKind.FunctionType)
+		"valueDeclaration" in type.symbol
+		&& type.symbol.valueDeclaration
+		&& (type.symbol.valueDeclaration.kind
+				=== ts.SyntaxKind.MethodDeclaration
+			|| type.symbol.valueDeclaration.kind === ts.SyntaxKind.FunctionType)
 	) {
 		return VisitorUtils.getIgnoredTypeFunction(visitorContext);
 	} else if (
-		type.symbol &&
-		type.symbol.declarations &&
-		type.symbol.declarations.length >= 1 &&
-		ts.isFunctionTypeNode(type.symbol.declarations[0])
+		type.symbol
+		&& type.symbol.declarations
+		&& type.symbol.declarations.length >= 1
+		&& ts.isFunctionTypeNode(type.symbol.declarations[0])
 	) {
 		return VisitorUtils.getIgnoredTypeFunction(visitorContext);
 	} else {
@@ -867,7 +868,7 @@ function visitUnionOrIntersectionType(
 			type: "type-check",
 		});
 		const functionNames = typeUnion.types.map((type) =>
-			visitType(type, visitorContext),
+			visitType(type, visitorContext)
 		);
 		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 			return VisitorUtils.createDisjunctionFunction(
@@ -884,7 +885,7 @@ function visitUnionOrIntersectionType(
 		});
 		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 			const functionNames = intersectionType.types.map((type) =>
-				visitType(type, { ...visitorContext }),
+				visitType(type, { ...visitorContext })
 			);
 			return VisitorUtils.createConjunctionFunction(functionNames, name);
 		});
@@ -1073,483 +1074,280 @@ function visitTemplateLiteralType(
 		},
 		visitorContext,
 	);
-	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () =>
-		f.createFunctionDeclaration(
-			undefined,
-			undefined,
-			name,
-			undefined,
-			[
-				f.createParameterDeclaration(
-					undefined,
-					undefined,
-					VisitorUtils.objectIdentifier,
-					undefined,
-					f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-				),
-			],
-			undefined,
-			VisitorUtils.createBlock(f, [
-				f.createVariableStatement(
-					undefined,
-					f.createVariableDeclarationList(
-						[
-							f.createVariableDeclaration(
-								f.createIdentifier("typePairs"),
-								undefined,
-								undefined,
-								f.createArrayLiteralExpression(
-									typePairs.map(([text, type]) =>
-										f.createArrayLiteralExpression([
-											f.createStringLiteral(text),
-											typeof type === "undefined"
-												? f.createIdentifier(
-														"undefined",
-												  )
-												: f.createStringLiteral(type),
-										]),
-									),
-									false,
-								),
-							),
-						],
-						ts.NodeFlags.Const,
-					),
-				),
-				f.createVariableStatement(
-					undefined,
-					f.createVariableDeclarationList(
-						[
-							f.createVariableDeclaration(
-								f.createIdentifier("position"),
-								undefined,
-								undefined,
-								f.createNumericLiteral("0"),
-							),
-						],
-						ts.NodeFlags.Let,
-					),
-				),
-				f.createForOfStatement(
-					undefined,
-					f.createVariableDeclarationList(
-						[
-							f.createVariableDeclaration(
-								f.createArrayBindingPattern([
-									f.createBindingElement(
-										undefined,
-										undefined,
-										f.createIdentifier("index"),
-										undefined,
-									),
-									f.createBindingElement(
-										undefined,
-										undefined,
-										f.createIdentifier("typePair"),
-										undefined,
-									),
-								]),
-								undefined,
-								undefined,
-								undefined,
-							),
-						],
-						ts.NodeFlags.Const,
-					),
-					f.createCallExpression(
-						f.createPropertyAccessExpression(
-							f.createIdentifier("typePairs"),
-							f.createIdentifier("entries"),
-						),
+	return VisitorUtils.setFunctionIfNotExists(
+		name,
+		visitorContext,
+		() =>
+			f.createFunctionDeclaration(
+				undefined,
+				undefined,
+				name,
+				undefined,
+				[
+					f.createParameterDeclaration(
 						undefined,
-						[],
+						undefined,
+						VisitorUtils.objectIdentifier,
+						undefined,
+						f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
 					),
-					VisitorUtils.createBlock(f, [
-						f.createVariableStatement(
-							undefined,
-							f.createVariableDeclarationList(
-								[
-									f.createVariableDeclaration(
-										f.createArrayBindingPattern([
-											f.createBindingElement(
-												undefined,
-												undefined,
-												f.createIdentifier(
-													"currentText",
-												),
-												undefined,
-											),
-											f.createBindingElement(
-												undefined,
-												undefined,
-												f.createIdentifier(
-													"currentType",
-												),
-												undefined,
-											),
-										]),
-										undefined,
-										undefined,
-										f.createIdentifier("typePair"),
-									),
-								],
-								ts.NodeFlags.Const,
-							),
-						),
-						f.createVariableStatement(
-							undefined,
-							f.createVariableDeclarationList(
-								[
-									f.createVariableDeclaration(
-										f.createArrayBindingPattern([
-											f.createBindingElement(
-												undefined,
-												undefined,
-												f.createIdentifier("nextText"),
-												undefined,
-											),
-											f.createBindingElement(
-												undefined,
-												undefined,
-												f.createIdentifier("nextType"),
-												undefined,
-											),
-										]),
-										undefined,
-										undefined,
-										f.createBinaryExpression(
-											f.createElementAccessExpression(
-												f.createIdentifier("typePairs"),
-												f.createBinaryExpression(
-													f.createIdentifier("index"),
-													f.createToken(
-														ts.SyntaxKind.PlusToken,
-													),
-													f.createNumericLiteral("1"),
-												),
-											),
-											f.createToken(
-												ts.SyntaxKind
-													.QuestionQuestionToken,
-											),
-											f.createArrayLiteralExpression(
-												[
-													f.createIdentifier(
-														"undefined",
-													),
-													f.createIdentifier(
-														"undefined",
-													),
-												],
-												false,
-											),
-										),
-									),
-								],
-								ts.NodeFlags.Const,
-							),
-						),
-						f.createIfStatement(
-							f.createBinaryExpression(
-								f.createCallExpression(
-									f.createPropertyAccessExpression(
-										VisitorUtils.objectIdentifier,
-										f.createIdentifier("substr"),
-									),
+				],
+				undefined,
+				VisitorUtils.createBlock(f, [
+					f.createVariableStatement(
+						undefined,
+						f.createVariableDeclarationList(
+							[
+								f.createVariableDeclaration(
+									f.createIdentifier("typePairs"),
 									undefined,
+									undefined,
+									f.createArrayLiteralExpression(
+										typePairs.map(([text, type]) =>
+											f.createArrayLiteralExpression([
+												f.createStringLiteral(text),
+												typeof type === "undefined"
+													? f.createIdentifier(
+														"undefined",
+													)
+													: f.createStringLiteral(
+														type,
+													),
+											])
+										),
+										false,
+									),
+								),
+							],
+							ts.NodeFlags.Const,
+						),
+					),
+					f.createVariableStatement(
+						undefined,
+						f.createVariableDeclarationList(
+							[
+								f.createVariableDeclaration(
+									f.createIdentifier("position"),
+									undefined,
+									undefined,
+									f.createNumericLiteral("0"),
+								),
+							],
+							ts.NodeFlags.Let,
+						),
+					),
+					f.createForOfStatement(
+						undefined,
+						f.createVariableDeclarationList(
+							[
+								f.createVariableDeclaration(
+									f.createArrayBindingPattern([
+										f.createBindingElement(
+											undefined,
+											undefined,
+											f.createIdentifier("index"),
+											undefined,
+										),
+										f.createBindingElement(
+											undefined,
+											undefined,
+											f.createIdentifier("typePair"),
+											undefined,
+										),
+									]),
+									undefined,
+									undefined,
+									undefined,
+								),
+							],
+							ts.NodeFlags.Const,
+						),
+						f.createCallExpression(
+							f.createPropertyAccessExpression(
+								f.createIdentifier("typePairs"),
+								f.createIdentifier("entries"),
+							),
+							undefined,
+							[],
+						),
+						VisitorUtils.createBlock(f, [
+							f.createVariableStatement(
+								undefined,
+								f.createVariableDeclarationList(
 									[
-										f.createIdentifier("position"),
-										f.createPropertyAccessExpression(
-											f.createIdentifier("currentText"),
-											f.createIdentifier("length"),
+										f.createVariableDeclaration(
+											f.createArrayBindingPattern([
+												f.createBindingElement(
+													undefined,
+													undefined,
+													f.createIdentifier(
+														"currentText",
+													),
+													undefined,
+												),
+												f.createBindingElement(
+													undefined,
+													undefined,
+													f.createIdentifier(
+														"currentType",
+													),
+													undefined,
+												),
+											]),
+											undefined,
+											undefined,
+											f.createIdentifier("typePair"),
 										),
 									],
-								),
-								f.createToken(
-									ts.SyntaxKind.ExclamationEqualsEqualsToken,
-								),
-								f.createIdentifier("currentText"),
-							),
-							f.createReturnStatement(templateLiteralTypeError),
-							undefined,
-						),
-						f.createExpressionStatement(
-							f.createBinaryExpression(
-								f.createIdentifier("position"),
-								f.createToken(ts.SyntaxKind.PlusEqualsToken),
-								f.createPropertyAccessExpression(
-									f.createIdentifier("currentText"),
-									f.createIdentifier("length"),
+									ts.NodeFlags.Const,
 								),
 							),
-						),
-						f.createIfStatement(
-							f.createBinaryExpression(
-								f.createBinaryExpression(
-									f.createIdentifier("nextText"),
-									f.createToken(
-										ts.SyntaxKind.EqualsEqualsEqualsToken,
-									),
-									f.createStringLiteral(""),
-								),
-								f.createToken(
-									ts.SyntaxKind.AmpersandAmpersandToken,
-								),
-								f.createBinaryExpression(
-									f.createIdentifier("nextType"),
-									f.createToken(
-										ts.SyntaxKind
-											.ExclamationEqualsEqualsToken,
-									),
-									f.createIdentifier("undefined"),
-								),
-							),
-							VisitorUtils.createBlock(f, [
-								f.createVariableStatement(
-									undefined,
-									f.createVariableDeclarationList(
-										[
-											f.createVariableDeclaration(
-												f.createIdentifier("char"),
-												undefined,
-												undefined,
-												f.createCallExpression(
-													f.createPropertyAccessExpression(
-														VisitorUtils.objectIdentifier,
-														f.createIdentifier(
-															"charAt",
-														),
+							f.createVariableStatement(
+								undefined,
+								f.createVariableDeclarationList(
+									[
+										f.createVariableDeclaration(
+											f.createArrayBindingPattern([
+												f.createBindingElement(
+													undefined,
+													undefined,
+													f.createIdentifier(
+														"nextText",
 													),
 													undefined,
-													[
-														f.createIdentifier(
-															"position",
-														),
-													],
 												),
-											),
-										],
-										ts.NodeFlags.Const,
-									),
-								),
-								f.createIfStatement(
-									f.createBinaryExpression(
-										f.createParenthesizedExpression(
-											f.createBinaryExpression(
-												f.createParenthesizedExpression(
-													f.createBinaryExpression(
-														f.createBinaryExpression(
-															f.createIdentifier(
-																"currentType",
-															),
-															f.createToken(
-																ts.SyntaxKind
-																	.EqualsEqualsEqualsToken,
-															),
-															f.createStringLiteral(
-																"number",
-															),
-														),
-														f.createToken(
-															ts.SyntaxKind
-																.BarBarToken,
-														),
-														f.createBinaryExpression(
-															f.createIdentifier(
-																"currentType",
-															),
-															f.createToken(
-																ts.SyntaxKind
-																	.EqualsEqualsEqualsToken,
-															),
-															f.createStringLiteral(
-																"bigint",
-															),
-														),
-													),
-												),
-												f.createToken(
-													ts.SyntaxKind
-														.AmpersandAmpersandToken,
-												),
-												f.createCallExpression(
-													f.createIdentifier("isNaN"),
+												f.createBindingElement(
 													undefined,
-													[
-														f.createCallExpression(
-															f.createIdentifier(
-																"Number",
-															),
-															undefined,
-															[
-																f.createIdentifier(
-																	"char",
-																),
-															],
-														),
-													],
-												),
-											),
-										),
-										f.createToken(
-											ts.SyntaxKind.BarBarToken,
-										),
-										f.createParenthesizedExpression(
-											f.createBinaryExpression(
-												f.createParenthesizedExpression(
-													f.createBinaryExpression(
-														f.createBinaryExpression(
-															f.createIdentifier(
-																"currentType",
-															),
-															f.createToken(
-																ts.SyntaxKind
-																	.EqualsEqualsEqualsToken,
-															),
-															f.createStringLiteral(
-																"string",
-															),
-														),
-														f.createToken(
-															ts.SyntaxKind
-																.BarBarToken,
-														),
-														f.createBinaryExpression(
-															f.createIdentifier(
-																"currentType",
-															),
-															f.createToken(
-																ts.SyntaxKind
-																	.EqualsEqualsEqualsToken,
-															),
-															f.createStringLiteral(
-																"any",
-															),
-														),
+													undefined,
+													f.createIdentifier(
+														"nextType",
 													),
+													undefined,
 												),
-												f.createToken(
-													ts.SyntaxKind
-														.AmpersandAmpersandToken,
-												),
-												f.createBinaryExpression(
-													f.createIdentifier("char"),
-													f.createToken(
-														ts.SyntaxKind
-															.EqualsEqualsEqualsToken,
-													),
-													f.createStringLiteral(""),
-												),
-											),
-										),
-									),
-									f.createReturnStatement(
-										templateLiteralTypeError,
-									),
-									undefined,
-								),
-							]),
-							undefined,
-						),
-						f.createVariableStatement(
-							undefined,
-							f.createVariableDeclarationList(
-								[
-									f.createVariableDeclaration(
-										f.createIdentifier("nextTextOrType"),
-										undefined,
-										undefined,
-										f.createConditionalExpression(
-											f.createBinaryExpression(
-												f.createIdentifier("nextText"),
-												f.createToken(
-													ts.SyntaxKind
-														.EqualsEqualsEqualsToken,
-												),
-												f.createStringLiteral(""),
-											),
-											f.createToken(
-												ts.SyntaxKind.QuestionToken,
-											),
-											f.createIdentifier("nextType"),
-											f.createToken(
-												ts.SyntaxKind.ColonToken,
-											),
-											f.createIdentifier("nextText"),
-										),
-									),
-								],
-								ts.NodeFlags.Const,
-							),
-						),
-						f.createVariableStatement(
-							undefined,
-							f.createVariableDeclarationList(
-								[
-									f.createVariableDeclaration(
-										f.createIdentifier(
-											"resolvedPlaceholder",
-										),
-										undefined,
-										undefined,
-										f.createCallExpression(
-											f.createPropertyAccessExpression(
-												VisitorUtils.objectIdentifier,
-												f.createIdentifier("substring"),
-											),
+											]),
 											undefined,
-											[
-												f.createIdentifier("position"),
-												f.createConditionalExpression(
+											undefined,
+											f.createBinaryExpression(
+												f.createElementAccessExpression(
+													f.createIdentifier(
+														"typePairs",
+													),
 													f.createBinaryExpression(
-														f.createTypeOfExpression(
-															f.createIdentifier(
-																"nextTextOrType",
-															),
+														f.createIdentifier(
+															"index",
 														),
 														f.createToken(
 															ts.SyntaxKind
-																.EqualsEqualsEqualsToken,
-														),
-														f.createStringLiteral(
-															"undefined",
-														),
-													),
-													f.createToken(
-														ts.SyntaxKind
-															.QuestionToken,
-													),
-													f.createBinaryExpression(
-														f.createPropertyAccessExpression(
-															VisitorUtils.objectIdentifier,
-															f.createIdentifier(
-																"length",
-															),
-														),
-														f.createToken(
-															ts.SyntaxKind
-																.MinusToken,
+																.PlusToken,
 														),
 														f.createNumericLiteral(
 															"1",
 														),
 													),
-													f.createToken(
-														ts.SyntaxKind
-															.ColonToken,
-													),
+												),
+												f.createToken(
+													ts.SyntaxKind
+														.QuestionQuestionToken,
+												),
+												f.createArrayLiteralExpression(
+													[
+														f.createIdentifier(
+															"undefined",
+														),
+														f.createIdentifier(
+															"undefined",
+														),
+													],
+													false,
+												),
+											),
+										),
+									],
+									ts.NodeFlags.Const,
+								),
+							),
+							f.createIfStatement(
+								f.createBinaryExpression(
+									f.createCallExpression(
+										f.createPropertyAccessExpression(
+											VisitorUtils.objectIdentifier,
+											f.createIdentifier("substr"),
+										),
+										undefined,
+										[
+											f.createIdentifier("position"),
+											f.createPropertyAccessExpression(
+												f.createIdentifier(
+													"currentText",
+												),
+												f.createIdentifier("length"),
+											),
+										],
+									),
+									f.createToken(
+										ts.SyntaxKind
+											.ExclamationEqualsEqualsToken,
+									),
+									f.createIdentifier("currentText"),
+								),
+								f.createReturnStatement(
+									templateLiteralTypeError,
+								),
+								undefined,
+							),
+							f.createExpressionStatement(
+								f.createBinaryExpression(
+									f.createIdentifier("position"),
+									f.createToken(
+										ts.SyntaxKind.PlusEqualsToken,
+									),
+									f.createPropertyAccessExpression(
+										f.createIdentifier("currentText"),
+										f.createIdentifier("length"),
+									),
+								),
+							),
+							f.createIfStatement(
+								f.createBinaryExpression(
+									f.createBinaryExpression(
+										f.createIdentifier("nextText"),
+										f.createToken(
+											ts.SyntaxKind
+												.EqualsEqualsEqualsToken,
+										),
+										f.createStringLiteral(""),
+									),
+									f.createToken(
+										ts.SyntaxKind.AmpersandAmpersandToken,
+									),
+									f.createBinaryExpression(
+										f.createIdentifier("nextType"),
+										f.createToken(
+											ts.SyntaxKind
+												.ExclamationEqualsEqualsToken,
+										),
+										f.createIdentifier("undefined"),
+									),
+								),
+								VisitorUtils.createBlock(f, [
+									f.createVariableStatement(
+										undefined,
+										f.createVariableDeclarationList(
+											[
+												f.createVariableDeclaration(
+													f.createIdentifier("char"),
+													undefined,
+													undefined,
 													f.createCallExpression(
 														f.createPropertyAccessExpression(
-															VisitorUtils.objectIdentifier,
+															VisitorUtils
+																.objectIdentifier,
 															f.createIdentifier(
-																"indexOf",
+																"charAt",
 															),
 														),
 														undefined,
 														[
-															f.createIdentifier(
-																"nextTextOrType",
-															),
 															f.createIdentifier(
 																"position",
 															),
@@ -1557,50 +1355,364 @@ function visitTemplateLiteralType(
 													),
 												),
 											],
+											ts.NodeFlags.Const,
 										),
 									),
-								],
-								ts.NodeFlags.Const,
+									f.createIfStatement(
+										f.createBinaryExpression(
+											f.createParenthesizedExpression(
+												f.createBinaryExpression(
+													f.createParenthesizedExpression(
+														f.createBinaryExpression(
+															f.createBinaryExpression(
+																f.createIdentifier(
+																	"currentType",
+																),
+																f.createToken(
+																	ts.SyntaxKind
+																		.EqualsEqualsEqualsToken,
+																),
+																f.createStringLiteral(
+																	"number",
+																),
+															),
+															f.createToken(
+																ts.SyntaxKind
+																	.BarBarToken,
+															),
+															f.createBinaryExpression(
+																f.createIdentifier(
+																	"currentType",
+																),
+																f.createToken(
+																	ts.SyntaxKind
+																		.EqualsEqualsEqualsToken,
+																),
+																f.createStringLiteral(
+																	"bigint",
+																),
+															),
+														),
+													),
+													f.createToken(
+														ts.SyntaxKind
+															.AmpersandAmpersandToken,
+													),
+													f.createCallExpression(
+														f.createIdentifier(
+															"isNaN",
+														),
+														undefined,
+														[
+															f.createCallExpression(
+																f.createIdentifier(
+																	"Number",
+																),
+																undefined,
+																[
+																	f.createIdentifier(
+																		"char",
+																	),
+																],
+															),
+														],
+													),
+												),
+											),
+											f.createToken(
+												ts.SyntaxKind.BarBarToken,
+											),
+											f.createParenthesizedExpression(
+												f.createBinaryExpression(
+													f.createParenthesizedExpression(
+														f.createBinaryExpression(
+															f.createBinaryExpression(
+																f.createIdentifier(
+																	"currentType",
+																),
+																f.createToken(
+																	ts.SyntaxKind
+																		.EqualsEqualsEqualsToken,
+																),
+																f.createStringLiteral(
+																	"string",
+																),
+															),
+															f.createToken(
+																ts.SyntaxKind
+																	.BarBarToken,
+															),
+															f.createBinaryExpression(
+																f.createIdentifier(
+																	"currentType",
+																),
+																f.createToken(
+																	ts.SyntaxKind
+																		.EqualsEqualsEqualsToken,
+																),
+																f.createStringLiteral(
+																	"any",
+																),
+															),
+														),
+													),
+													f.createToken(
+														ts.SyntaxKind
+															.AmpersandAmpersandToken,
+													),
+													f.createBinaryExpression(
+														f.createIdentifier(
+															"char",
+														),
+														f.createToken(
+															ts.SyntaxKind
+																.EqualsEqualsEqualsToken,
+														),
+														f.createStringLiteral(
+															"",
+														),
+													),
+												),
+											),
+										),
+										f.createReturnStatement(
+											templateLiteralTypeError,
+										),
+										undefined,
+									),
+								]),
+								undefined,
 							),
-						),
-						f.createIfStatement(
-							f.createBinaryExpression(
-								f.createBinaryExpression(
-									f.createBinaryExpression(
-										f.createParenthesizedExpression(
-											f.createBinaryExpression(
+							f.createVariableStatement(
+								undefined,
+								f.createVariableDeclarationList(
+									[
+										f.createVariableDeclaration(
+											f.createIdentifier(
+												"nextTextOrType",
+											),
+											undefined,
+											undefined,
+											f.createConditionalExpression(
 												f.createBinaryExpression(
 													f.createIdentifier(
-														"currentType",
+														"nextText",
 													),
 													f.createToken(
 														ts.SyntaxKind
 															.EqualsEqualsEqualsToken,
 													),
-													f.createStringLiteral(
-														"number",
-													),
+													f.createStringLiteral(""),
 												),
 												f.createToken(
-													ts.SyntaxKind
-														.AmpersandAmpersandToken,
+													ts.SyntaxKind.QuestionToken,
 												),
-												f.createCallExpression(
-													f.createIdentifier("isNaN"),
-													undefined,
-													[
+												f.createIdentifier("nextType"),
+												f.createToken(
+													ts.SyntaxKind.ColonToken,
+												),
+												f.createIdentifier("nextText"),
+											),
+										),
+									],
+									ts.NodeFlags.Const,
+								),
+							),
+							f.createVariableStatement(
+								undefined,
+								f.createVariableDeclarationList(
+									[
+										f.createVariableDeclaration(
+											f.createIdentifier(
+												"resolvedPlaceholder",
+											),
+											undefined,
+											undefined,
+											f.createCallExpression(
+												f.createPropertyAccessExpression(
+													VisitorUtils
+														.objectIdentifier,
+													f.createIdentifier(
+														"substring",
+													),
+												),
+												undefined,
+												[
+													f.createIdentifier(
+														"position",
+													),
+													f.createConditionalExpression(
+														f.createBinaryExpression(
+															f.createTypeOfExpression(
+																f.createIdentifier(
+																	"nextTextOrType",
+																),
+															),
+															f.createToken(
+																ts.SyntaxKind
+																	.EqualsEqualsEqualsToken,
+															),
+															f.createStringLiteral(
+																"undefined",
+															),
+														),
+														f.createToken(
+															ts.SyntaxKind
+																.QuestionToken,
+														),
+														f.createBinaryExpression(
+															f.createPropertyAccessExpression(
+																VisitorUtils
+																	.objectIdentifier,
+																f.createIdentifier(
+																	"length",
+																),
+															),
+															f.createToken(
+																ts.SyntaxKind
+																	.MinusToken,
+															),
+															f.createNumericLiteral(
+																"1",
+															),
+														),
+														f.createToken(
+															ts.SyntaxKind
+																.ColonToken,
+														),
 														f.createCallExpression(
-															f.createIdentifier(
-																"Number",
+															f.createPropertyAccessExpression(
+																VisitorUtils
+																	.objectIdentifier,
+																f.createIdentifier(
+																	"indexOf",
+																),
 															),
 															undefined,
 															[
 																f.createIdentifier(
-																	"resolvedPlaceholder",
+																	"nextTextOrType",
+																),
+																f.createIdentifier(
+																	"position",
 																),
 															],
 														),
-													],
+													),
+												],
+											),
+										),
+									],
+									ts.NodeFlags.Const,
+								),
+							),
+							f.createIfStatement(
+								f.createBinaryExpression(
+									f.createBinaryExpression(
+										f.createBinaryExpression(
+											f.createParenthesizedExpression(
+												f.createBinaryExpression(
+													f.createBinaryExpression(
+														f.createIdentifier(
+															"currentType",
+														),
+														f.createToken(
+															ts.SyntaxKind
+																.EqualsEqualsEqualsToken,
+														),
+														f.createStringLiteral(
+															"number",
+														),
+													),
+													f.createToken(
+														ts.SyntaxKind
+															.AmpersandAmpersandToken,
+													),
+													f.createCallExpression(
+														f.createIdentifier(
+															"isNaN",
+														),
+														undefined,
+														[
+															f.createCallExpression(
+																f.createIdentifier(
+																	"Number",
+																),
+																undefined,
+																[
+																	f.createIdentifier(
+																		"resolvedPlaceholder",
+																	),
+																],
+															),
+														],
+													),
+												),
+											),
+											f.createToken(
+												ts.SyntaxKind.BarBarToken,
+											),
+											f.createParenthesizedExpression(
+												f.createBinaryExpression(
+													f.createBinaryExpression(
+														f.createIdentifier(
+															"currentType",
+														),
+														f.createToken(
+															ts.SyntaxKind
+																.EqualsEqualsEqualsToken,
+														),
+														f.createStringLiteral(
+															"bigint",
+														),
+													),
+													f.createToken(
+														ts.SyntaxKind
+															.AmpersandAmpersandToken,
+													),
+													f.createParenthesizedExpression(
+														f.createBinaryExpression(
+															f.createCallExpression(
+																f.createPropertyAccessExpression(
+																	f.createIdentifier(
+																		"resolvedPlaceholder",
+																	),
+																	f.createIdentifier(
+																		"includes",
+																	),
+																),
+																undefined,
+																[
+																	f.createStringLiteral(
+																		".",
+																	),
+																],
+															),
+															f.createToken(
+																ts.SyntaxKind
+																	.BarBarToken,
+															),
+															f.createCallExpression(
+																f.createIdentifier(
+																	"isNaN",
+																),
+																undefined,
+																[
+																	f.createCallExpression(
+																		f.createIdentifier(
+																			"Number",
+																		),
+																		undefined,
+																		[
+																			f.createIdentifier(
+																				"resolvedPlaceholder",
+																			),
+																		],
+																	),
+																],
+															),
+														),
+													),
 												),
 											),
 										),
@@ -1618,54 +1730,23 @@ function visitTemplateLiteralType(
 															.EqualsEqualsEqualsToken,
 													),
 													f.createStringLiteral(
-														"bigint",
+														"undefined",
 													),
 												),
 												f.createToken(
 													ts.SyntaxKind
 														.AmpersandAmpersandToken,
 												),
-												f.createParenthesizedExpression(
-													f.createBinaryExpression(
-														f.createCallExpression(
-															f.createPropertyAccessExpression(
-																f.createIdentifier(
-																	"resolvedPlaceholder",
-																),
-																f.createIdentifier(
-																	"includes",
-																),
-															),
-															undefined,
-															[
-																f.createStringLiteral(
-																	".",
-																),
-															],
-														),
-														f.createToken(
-															ts.SyntaxKind
-																.BarBarToken,
-														),
-														f.createCallExpression(
-															f.createIdentifier(
-																"isNaN",
-															),
-															undefined,
-															[
-																f.createCallExpression(
-																	f.createIdentifier(
-																		"Number",
-																	),
-																	undefined,
-																	[
-																		f.createIdentifier(
-																			"resolvedPlaceholder",
-																		),
-																	],
-																),
-															],
-														),
+												f.createBinaryExpression(
+													f.createIdentifier(
+														"resolvedPlaceholder",
+													),
+													f.createToken(
+														ts.SyntaxKind
+															.ExclamationEqualsEqualsToken,
+													),
+													f.createStringLiteral(
+														"undefined",
 													),
 												),
 											),
@@ -1682,9 +1763,7 @@ function visitTemplateLiteralType(
 													ts.SyntaxKind
 														.EqualsEqualsEqualsToken,
 												),
-												f.createStringLiteral(
-													"undefined",
-												),
+												f.createStringLiteral("null"),
 											),
 											f.createToken(
 												ts.SyntaxKind
@@ -1698,59 +1777,35 @@ function visitTemplateLiteralType(
 													ts.SyntaxKind
 														.ExclamationEqualsEqualsToken,
 												),
-												f.createStringLiteral(
-													"undefined",
-												),
+												f.createStringLiteral("null"),
 											),
 										),
 									),
 								),
-								f.createToken(ts.SyntaxKind.BarBarToken),
-								f.createParenthesizedExpression(
-									f.createBinaryExpression(
-										f.createBinaryExpression(
-											f.createIdentifier("currentType"),
-											f.createToken(
-												ts.SyntaxKind
-													.EqualsEqualsEqualsToken,
-											),
-											f.createStringLiteral("null"),
+								f.createReturnStatement(
+									templateLiteralTypeError,
+								),
+								undefined,
+							),
+							f.createExpressionStatement(
+								f.createBinaryExpression(
+									f.createIdentifier("position"),
+									f.createToken(
+										ts.SyntaxKind.PlusEqualsToken,
+									),
+									f.createPropertyAccessExpression(
+										f.createIdentifier(
+											"resolvedPlaceholder",
 										),
-										f.createToken(
-											ts.SyntaxKind
-												.AmpersandAmpersandToken,
-										),
-										f.createBinaryExpression(
-											f.createIdentifier(
-												"resolvedPlaceholder",
-											),
-											f.createToken(
-												ts.SyntaxKind
-													.ExclamationEqualsEqualsToken,
-											),
-											f.createStringLiteral("null"),
-										),
+										f.createIdentifier("length"),
 									),
 								),
 							),
-							f.createReturnStatement(templateLiteralTypeError),
-							undefined,
-						),
-						f.createExpressionStatement(
-							f.createBinaryExpression(
-								f.createIdentifier("position"),
-								f.createToken(ts.SyntaxKind.PlusEqualsToken),
-								f.createPropertyAccessExpression(
-									f.createIdentifier("resolvedPlaceholder"),
-									f.createIdentifier("length"),
-								),
-							),
-						),
-					]),
-				),
-				f.createReturnStatement(f.createNull()),
-			]),
-		),
+						]),
+					),
+					f.createReturnStatement(f.createNull()),
+				]),
+			),
 	);
 }
 
@@ -1789,15 +1844,15 @@ export function visitType(
 		// Boolean literal (true/false)
 		return visitBooleanLiteral(type, visitorContext);
 	} else if (
-		tsutils.isTypeReference(type) &&
-		visitorContext.previousTypeReference !== type
+		tsutils.isTypeReference(type)
+		&& visitorContext.previousTypeReference !== type
 	) {
 		// Type references.
 		return visitTypeReference(type, visitorContext);
 	} else if (
-		type.aliasTypeArguments &&
-		visitorContext.previousTypeReference !== type &&
-		(type as ts.TypeReference).target
+		type.aliasTypeArguments
+		&& visitorContext.previousTypeReference !== type
+		&& (type as ts.TypeReference).target
 	) {
 		return visitTypeAliasReference(
 			type as ts.TypeReference,

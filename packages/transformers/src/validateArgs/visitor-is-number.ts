@@ -35,7 +35,7 @@ function visitUnionOrIntersectionType(
 	visitorContext: VisitorContext,
 ) {
 	const numberTypes = type.types.map((type) =>
-		visitType(type, visitorContext),
+		visitType(type, visitorContext)
 	);
 
 	if (tsutils.isUnionType(type)) {
@@ -196,8 +196,8 @@ export function visitType(
 		// Boolean literal (true/false)
 		return visitBooleanLiteral();
 	} else if (
-		tsutils.isTypeReference(type) &&
-		visitorContext.previousTypeReference !== type
+		tsutils.isTypeReference(type)
+		&& visitorContext.previousTypeReference !== type
 	) {
 		// Type references.
 		return visitTypeReference(type, visitorContext);

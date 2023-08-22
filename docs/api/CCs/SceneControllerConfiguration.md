@@ -63,13 +63,13 @@ async get(
 }
 ```
 
--   **label:** `Dimming duration (${number})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** `Dimming duration (${number})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `sceneId(groupId: number)`
 
@@ -82,12 +82,12 @@ async get(
 }
 ```
 
--   **label:** `Associated Scene ID (${number})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Associated Scene ID (${number})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

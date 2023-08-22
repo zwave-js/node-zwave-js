@@ -1,17 +1,17 @@
 import {
+	type FLiRS,
 	MAX_NODES,
 	MAX_REPEATERS,
 	RouteProtocolDataRate,
 	protocolDataRateMask,
-	type FLiRS,
 } from "@zwave-js/core/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	NVMFile,
-	gotDeserializationOptions,
-	nvmFileID,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
+	gotDeserializationOptions,
+	nvmFileID,
 } from "./NVMFile";
 
 export const ROUTECACHES_PER_FILE_V1 = 8;
@@ -136,15 +136,15 @@ export interface RouteCacheFileV1Options extends NVMFileCreationOptions {
 export const RouteCacheFileV1IDBase = 0x51400;
 export function nodeIdToRouteCacheFileIDV1(nodeId: number): number {
 	return (
-		RouteCacheFileV1IDBase +
-		Math.floor((nodeId - 1) / ROUTECACHES_PER_FILE_V1)
+		RouteCacheFileV1IDBase
+		+ Math.floor((nodeId - 1) / ROUTECACHES_PER_FILE_V1)
 	);
 }
 
 @nvmFileID(
 	(id) =>
-		id >= RouteCacheFileV1IDBase &&
-		id < RouteCacheFileV1IDBase + MAX_NODES / ROUTECACHES_PER_FILE_V1,
+		id >= RouteCacheFileV1IDBase
+		&& id < RouteCacheFileV1IDBase + MAX_NODES / ROUTECACHES_PER_FILE_V1,
 )
 export class RouteCacheFileV1 extends NVMFile {
 	public constructor(
@@ -161,11 +161,10 @@ export class RouteCacheFileV1 extends NVMFile {
 				);
 				if (entry.equals(emptyRouteCache)) continue;
 
-				const nodeId =
-					(this.fileId - RouteCacheFileV1IDBase) *
-						ROUTECACHES_PER_FILE_V1 +
-					1 +
-					i;
+				const nodeId = (this.fileId - RouteCacheFileV1IDBase)
+						* ROUTECACHES_PER_FILE_V1
+					+ 1
+					+ i;
 				const lwr = parseRoute(this.payload, offset);
 				const nlwr = parseRoute(
 					this.payload,
@@ -193,13 +192,13 @@ export class RouteCacheFileV1 extends NVMFile {
 		);
 
 		const minFileNodeId =
-			Math.floor((minNodeId - 1) / ROUTECACHES_PER_FILE_V1) *
-				ROUTECACHES_PER_FILE_V1 +
-			1;
+			Math.floor((minNodeId - 1) / ROUTECACHES_PER_FILE_V1)
+				* ROUTECACHES_PER_FILE_V1
+			+ 1;
 
 		for (const routeCache of this.routeCaches) {
-			const offset =
-				(routeCache.nodeId - minFileNodeId) * ROUTECACHE_SIZE;
+			const offset = (routeCache.nodeId - minFileNodeId)
+				* ROUTECACHE_SIZE;
 			Buffer.concat([
 				encodeRoute(routeCache.lwr),
 				encodeRoute(routeCache.nlwr),

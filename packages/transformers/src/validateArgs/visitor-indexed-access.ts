@@ -23,7 +23,7 @@ function visitRegularObjectType(
 
 		const properties = visitorContext.checker.getPropertiesOfType(type);
 		const propertiesInfo = properties.map((property) =>
-			VisitorUtils.getPropertyInfo(type, property, visitorContext),
+			VisitorUtils.getPropertyInfo(type, property, visitorContext)
 		);
 		const stringType = VisitorIsString.visitType(indexType, visitorContext);
 		if (typeof stringType === "boolean") {
@@ -36,9 +36,9 @@ function visitRegularObjectType(
 				propertyInfo.isMethod
 					? VisitorUtils.getIgnoredTypeFunction(visitorContext)
 					: VisitorTypeCheck.visitType(
-							propertyInfo.type!,
-							visitorContext,
-					  ),
+						propertyInfo.type!,
+						visitorContext,
+					)
 			);
 			return VisitorUtils.createDisjunctionFunction(
 				functionNames,
@@ -51,7 +51,7 @@ function visitRegularObjectType(
 				strings.some((value) =>
 					propertiesInfo.every(
 						(propertyInfo) => propertyInfo.name !== value,
-					),
+					)
 				)
 			) {
 				throw new Error(
@@ -68,9 +68,9 @@ function visitRegularObjectType(
 				propertyInfo.isMethod
 					? VisitorUtils.getIgnoredTypeFunction(visitorContext)
 					: VisitorTypeCheck.visitType(
-							propertyInfo.type!,
-							visitorContext,
-					  ),
+						propertyInfo.type!,
+						visitorContext,
+					)
 			);
 			return VisitorUtils.createDisjunctionFunction(
 				functionNames,
@@ -102,7 +102,7 @@ function visitTupleObjectType(
 				);
 			}
 			const functionNames = type.typeArguments.map((type) =>
-				VisitorTypeCheck.visitType(type, visitorContext),
+				VisitorTypeCheck.visitType(type, visitorContext)
 			);
 			return VisitorUtils.createDisjunctionFunction(
 				functionNames,
@@ -120,7 +120,7 @@ function visitTupleObjectType(
 				VisitorTypeCheck.visitType(
 					type.typeArguments![value],
 					visitorContext,
-				),
+				)
 			);
 			return VisitorUtils.createDisjunctionFunction(
 				functionNames,
@@ -183,7 +183,7 @@ function visitUnionOrIntersectionType(
 	});
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 		const functionNames = type.types.map((type) =>
-			visitType(type, indexType, visitorContext),
+			visitType(type, indexType, visitorContext)
 		);
 		if (tsutils.isUnionType(type)) {
 			// (T | U)[I] = T[I] & U[I]
@@ -335,8 +335,8 @@ export function visitType(
 		// Boolean literal (true/false)
 		return visitBooleanLiteral();
 	} else if (
-		tsutils.isTypeReference(type) &&
-		visitorContext.previousTypeReference !== type
+		tsutils.isTypeReference(type)
+		&& visitorContext.previousTypeReference !== type
 	) {
 		// Type references.
 		return visitTypeReference(type, indexType, visitorContext);

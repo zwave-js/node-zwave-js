@@ -48,8 +48,9 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 						// Otherwise this would cause an EventEmitter leak.
 						// Hence this somewhat ugly construct
 						removeListeners = (removeOnClose: boolean) => {
-							if (removeOnClose)
+							if (removeOnClose) {
 								serial.removeListener("close", onClose);
+							}
 							serial.removeListener("error", onError);
 							serial.removeListener("connect", onConnect);
 						};

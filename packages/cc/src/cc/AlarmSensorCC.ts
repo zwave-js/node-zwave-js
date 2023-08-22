@@ -1,25 +1,25 @@
 import {
 	CommandClasses,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseBitMask,
 	validatePayload,
-	type IZWaveEndpoint,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -148,11 +148,12 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<AlarmSensorCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			AlarmSensorCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) return response.supportedSensorTypes;
 	}
 }
@@ -171,7 +172,8 @@ export class AlarmSensorCC extends CommandClass {
 		if (endpoint.supportsCC(CommandClasses.Notification)) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `${this.constructor.name}: skipping interview because Notification CC is supported...`,
+				message:
+					`${this.constructor.name}: skipping interview because Notification CC is supported...`,
 				direction: "none",
 			});
 			this.setInterviewComplete(applHost, true);
@@ -200,10 +202,12 @@ export class AlarmSensorCC extends CommandClass {
 		});
 		const supportedSensorTypes = await api.getSupportedSensorTypes();
 		if (supportedSensorTypes) {
-			const logMessage = `received supported sensor types: ${supportedSensorTypes
-				.map((type) => getEnumMemberName(AlarmSensorType, type))
-				.map((name) => `\n· ${name}`)
-				.join("")}`;
+			const logMessage = `received supported sensor types: ${
+				supportedSensorTypes
+					.map((type) => getEnumMemberName(AlarmSensorType, type))
+					.map((name) => `\n· ${name}`)
+					.join("")
+			}`;
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -238,8 +242,8 @@ export class AlarmSensorCC extends CommandClass {
 		});
 
 		const supportedSensorTypes: readonly AlarmSensorType[] =
-			this.getValue(applHost, AlarmSensorCCValues.supportedSensorTypes) ??
-			[];
+			this.getValue(applHost, AlarmSensorCCValues.supportedSensorTypes)
+				?? [];
 
 		// Always query (all of) the sensor's current value(s)
 		for (const type of supportedSensorTypes) {
@@ -377,8 +381,8 @@ function testResponseForAlarmSensorGet(
 ) {
 	// We expect a Alarm Sensor Report that matches the requested sensor type (if a type was requested)
 	return (
-		sent.sensorType === AlarmSensorType.Any ||
-		received.sensorType === sent.sensorType
+		sent.sensorType === AlarmSensorType.Any
+		|| received.sensorType === sent.sensorType
 	);
 }
 

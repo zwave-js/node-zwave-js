@@ -1,23 +1,23 @@
 import {
 	CommandClasses,
-	NodeStatus,
-	ZWaveError,
-	ZWaveErrorCodes,
-	validatePayload,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
+	NodeStatus,
 	type SupervisionResult,
+	ZWaveError,
+	ZWaveErrorCodes,
+	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -150,11 +150,12 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<PowerlevelCCTestNodeReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			PowerlevelCCTestNodeReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"testNodeId",
@@ -171,16 +172,17 @@ export class PowerlevelCC extends CommandClass {
 	declare ccCommand: PowerlevelCommand;
 }
 
-type PowerlevelCCSetOptions = CCCommandOptions &
-	(
+type PowerlevelCCSetOptions =
+	& CCCommandOptions
+	& (
 		| {
-				powerlevel: Powerlevel;
-				timeout: number;
-		  }
+			powerlevel: Powerlevel;
+			timeout: number;
+		}
 		| {
-				powerlevel: (typeof Powerlevel)["Normal Power"];
-				timeout?: undefined;
-		  }
+			powerlevel: (typeof Powerlevel)["Normal Power"];
+			timeout?: undefined;
+		}
 	);
 
 @CCCommand(PowerlevelCommand.Set)

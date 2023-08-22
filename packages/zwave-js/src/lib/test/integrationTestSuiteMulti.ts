@@ -150,12 +150,11 @@ function suite(
 	}
 
 	// Integration tests need to run in serial, or they might block the serial port on CI
-	const fn =
-		modifier === "only"
-			? test.serial.only
-			: modifier === "skip"
-			? test.serial.skip
-			: test.serial;
+	const fn = modifier === "only"
+		? test.serial.only
+		: modifier === "skip"
+		? test.serial.skip
+		: test.serial;
 	fn(name, async (t) => {
 		t.timeout(30000);
 		t.teardown(async () => {

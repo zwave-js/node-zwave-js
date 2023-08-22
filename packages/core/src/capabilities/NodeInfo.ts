@@ -144,9 +144,9 @@ export function encodeCCList(
 	controlledCCs: readonly CommandClasses[],
 ): Buffer {
 	const bufferLength =
-		sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1))) +
-		(controlledCCs.length > 0 ? 1 : 0) + // support/control mark
-		sum(controlledCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)));
+		sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)))
+		+ (controlledCCs.length > 0 ? 1 : 0) // support/control mark
+		+ sum(controlledCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)));
 
 	const ret = Buffer.allocUnsafe(bufferLength);
 	let offset = 0;
@@ -201,14 +201,16 @@ export interface NodeProtocolInfo {
 }
 
 export interface NodeProtocolInfoAndDeviceClass
-	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass">
+{
 	basicDeviceClass: number;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
 }
 
-export type NodeInformationFrame = NodeProtocolInfoAndDeviceClass &
-	ApplicationNodeInformation;
+export type NodeInformationFrame =
+	& NodeProtocolInfoAndDeviceClass
+	& ApplicationNodeInformation;
 
 export function parseNodeProtocolInfo(
 	buffer: Buffer,
@@ -346,8 +348,9 @@ export function encodeNodeProtocolInfoAndDeviceClass(
 export function parseNodeInformationFrame(
 	buffer: Buffer,
 ): NodeInformationFrame {
-	const { info, bytesRead: offset } =
-		parseNodeProtocolInfoAndDeviceClass(buffer);
+	const { info, bytesRead: offset } = parseNodeProtocolInfoAndDeviceClass(
+		buffer,
+	);
 	const supportedCCs = parseCCList(buffer.slice(offset)).supportedCCs;
 
 	return {

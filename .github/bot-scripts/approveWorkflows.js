@@ -33,12 +33,13 @@ async function main(param) {
 		status: "action_required",
 	});
 	const pendingRuns = workflow_runs.filter((run) =>
-		workflowIDs.includes(run.workflow_id),
+		workflowIDs.includes(run.workflow_id)
 	);
 
 	/** @type {number[]} */
 	const whitelistedRuns = [];
-	runs: for (const run of pendingRuns) {
+	runs:
+	for (const run of pendingRuns) {
 		console.log(`Checking run ${run.id}...`);
 
 		// Find the pull request for the current run
@@ -77,9 +78,11 @@ async function main(param) {
 		}
 
 		console.log(
-			`Changed files in PR #${pulls[0].number}: ${[...filenames]
-				.map((f) => `\n· ${f}`)
-				.join("")}`,
+			`Changed files in PR #${pulls[0].number}: ${
+				[...filenames]
+					.map((f) => `\n· ${f}`)
+					.join("")
+			}`,
 		);
 
 		console.log(`Check okay... workflow run will be approved`);

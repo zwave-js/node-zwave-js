@@ -1,11 +1,11 @@
 import {
 	CommandClasses,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
 	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
@@ -14,14 +14,14 @@ import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	POLL_VALUE,
-	throwUnsupportedProperty,
 	type PollValueImplementation,
+	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -35,8 +35,8 @@ import { V } from "../lib/Values";
 import {
 	EnergyProductionCommand,
 	EnergyProductionParameter,
-	getEnergyProductionScale,
 	type EnergyProductionScale,
+	getEnergyProductionScale,
 } from "../lib/_Types";
 
 export const EnergyProductionCCValues = Object.freeze({
@@ -52,15 +52,14 @@ export const EnergyProductionCCValues = Object.freeze({
 			(parameter: EnergyProductionParameter) => parameter,
 			({ property, propertyKey }) =>
 				property === "value" && typeof propertyKey === "number",
-			(parameter: EnergyProductionParameter) =>
-				({
-					...ValueMetadata.ReadOnlyNumber,
-					label: getEnumMemberName(
-						EnergyProductionParameter,
-						parameter,
-					),
-					// unit and ccSpecific are set dynamically
-				} as const),
+			(parameter: EnergyProductionParameter) => ({
+				...ValueMetadata.ReadOnlyNumber,
+				label: getEnumMemberName(
+					EnergyProductionParameter,
+					parameter,
+				),
+				// unit and ccSpecific are set dynamically
+			} as const),
 		),
 	}),
 });
@@ -78,7 +77,7 @@ export class EnergyProductionCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (
+		return async function(
 			this: EnergyProductionCCAPI,
 			{ property, propertyKey },
 		) {
@@ -111,11 +110,12 @@ export class EnergyProductionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			parameter,
 		});
-		const response =
-			await this.applHost.sendCommand<EnergyProductionCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			EnergyProductionCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["value", "scale"]);
 		}
@@ -155,18 +155,22 @@ export class EnergyProductionCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		for (const parameter of [
-			EnergyProductionParameter.Power,
-			EnergyProductionParameter["Production Total"],
-			EnergyProductionParameter["Production Today"],
-			EnergyProductionParameter["Total Time"],
-		] as const) {
+		for (
+			const parameter of [
+				EnergyProductionParameter.Power,
+				EnergyProductionParameter["Production Total"],
+				EnergyProductionParameter["Production Today"],
+				EnergyProductionParameter["Total Time"],
+			] as const
+		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `querying energy production (${getEnumMemberName(
-					EnergyProductionParameter,
-					parameter,
-				)})...`,
+				message: `querying energy production (${
+					getEnumMemberName(
+						EnergyProductionParameter,
+						parameter,
+					)
+				})...`,
 				direction: "outbound",
 			});
 
@@ -236,10 +240,12 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				[getEnumMemberName(
-					EnergyProductionParameter,
-					this.parameter,
-				).toLowerCase()]: `${this.value} ${this.scale.unit}`,
+				[
+					getEnumMemberName(
+						EnergyProductionParameter,
+						this.parameter,
+					).toLowerCase()
+				]: `${this.value} ${this.scale.unit}`,
 			},
 		};
 	}

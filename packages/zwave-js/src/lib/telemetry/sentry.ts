@@ -2,9 +2,9 @@
 import * as Integrations from "@sentry/integrations";
 import * as Sentry from "@sentry/node";
 import {
+	type ZWaveError,
 	ZWaveErrorCodes,
 	getErrorSuffix,
-	type ZWaveError,
 } from "@zwave-js/core";
 import { randomBytes } from "crypto";
 import * as fs from "fs-extra";
@@ -37,20 +37,22 @@ const errorMessageTests = (() => {
 	// For some reason, working with ZWaveError instances directly doesn't work always.
 	// Therefore check for the error codes' string representations.
 	tests.push((msg) => {
-		for (const code of [
-			// we don't care about timeouts
-			ZWaveErrorCodes.Controller_MessageDropped,
-			// We don't care about failed node removal
-			ZWaveErrorCodes.RemoveFailedNode_Failed,
-			ZWaveErrorCodes.RemoveFailedNode_NodeOK,
-			// Or failed inclusion processes:
-			ZWaveErrorCodes.Controller_InclusionFailed,
-			ZWaveErrorCodes.Controller_ExclusionFailed,
-			// Or users that don't read the changelog:
-			ZWaveErrorCodes.Driver_NoErrorHandler,
-			// Or incorrect driver options:
-			ZWaveErrorCodes.Driver_InvalidOptions,
-		] as const) {
+		for (
+			const code of [
+				// we don't care about timeouts
+				ZWaveErrorCodes.Controller_MessageDropped,
+				// We don't care about failed node removal
+				ZWaveErrorCodes.RemoveFailedNode_Failed,
+				ZWaveErrorCodes.RemoveFailedNode_NodeOK,
+				// Or failed inclusion processes:
+				ZWaveErrorCodes.Controller_InclusionFailed,
+				ZWaveErrorCodes.Controller_ExclusionFailed,
+				// Or users that don't read the changelog:
+				ZWaveErrorCodes.Driver_NoErrorHandler,
+				// Or incorrect driver options:
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			] as const
+		) {
 			if (msg.includes(getErrorSuffix(code))) {
 				return true;
 			}
@@ -60,8 +62,8 @@ const errorMessageTests = (() => {
 	// Don't care about users that try to manage associations on nodes that don't support it
 	tests.push(
 		(msg) =>
-			msg.includes(getErrorSuffix(ZWaveErrorCodes.CC_NotSupported)) &&
-			/does not support.+associations/.test(msg),
+			msg.includes(getErrorSuffix(ZWaveErrorCodes.CC_NotSupported))
+			&& /does not support.+associations/.test(msg),
 	);
 
 	// No such file or directory, cannot open /dev/ttyACM0
@@ -80,8 +82,10 @@ const errorMessageTests = (() => {
 	// ENOSPC: no space left on device, write
 	tests.push(
 		(msg) =>
-			/(EROFS|ENODEV|ENOSPC)/i.test(msg) &&
-			/(read-only file system|no such device|no space left)/i.test(msg),
+			/(EROFS|ENODEV|ENOSPC)/i.test(msg)
+			&& /(read-only file system|no such device|no space left)/i.test(
+				msg,
+			),
 	);
 
 	// Unknown system error -116: Unknown system error -116, write
@@ -101,9 +105,9 @@ export function createSentryContext(libraryRootDir: string): SentryContext {
 	function isPartOfThisLib(filename: string): boolean {
 		const relative = path.relative(libraryRootDir, filename);
 		return (
-			!!relative &&
-			!relative.startsWith("..") &&
-			!path.isAbsolute(relative)
+			!!relative
+			&& !relative.startsWith("..")
+			&& !path.isAbsolute(relative)
 		);
 	}
 
@@ -129,17 +133,17 @@ export function createSentryContext(libraryRootDir: string): SentryContext {
 	function anyWhitelisted(filenames: string[]): boolean {
 		const normalizedFilenames = filenames.map((f) => path.normalize(f));
 		const normalizedWhitelists = pathWhitelists.map((w) =>
-			path.normalize(w),
+			path.normalize(w)
 		);
 		const normalizedBlacklists = pathBlacklists.map((b) =>
-			path.normalize(b),
+			path.normalize(b)
 		);
 		return (
 			normalizedFilenames.some((f) =>
-				normalizedWhitelists.some((w) => f.includes(w)),
-			) &&
-			!normalizedFilenames.some((f) =>
-				normalizedBlacklists.some((b) => f.includes(b)),
+				normalizedWhitelists.some((w) => f.includes(w))
+			)
+			&& !normalizedFilenames.some((f) =>
+				normalizedBlacklists.some((b) => f.includes(b))
 			)
 		);
 	}
@@ -148,10 +152,10 @@ export function createSentryContext(libraryRootDir: string): SentryContext {
 	function anyBlacklistedExact(filenames: string[]): boolean {
 		const normalizedFilenames = filenames.map((f) => path.normalize(f));
 		const normalizedBlacklistsExact = pathBlacklistsExact.map((b) =>
-			path.normalize(b),
+			path.normalize(b)
 		);
 		return normalizedFilenames.some((f) =>
-			normalizedBlacklistsExact.some((b) => f === b),
+			normalizedBlacklistsExact.some((b) => f === b)
 		);
 	}
 
@@ -163,12 +167,11 @@ export function createSentryContext(libraryRootDir: string): SentryContext {
 		// Sentry orders stack traces from outside (index 0) to inside (index 0).
 		// In order to figure out if the error was caused inside zwave-js, we need to
 		// ignore all traces without a filename or from Node.js internals
-		const filenames =
-			event.exception?.values?.[0]?.stacktrace?.frames
-				?.map((f) => f.filename)
-				?.filter(
-					(f): f is string => !!f && !f.startsWith("internal/"),
-				) ?? [];
+		const filenames = event.exception?.values?.[0]?.stacktrace?.frames
+			?.map((f) => f.filename)
+			?.filter(
+				(f): f is string => !!f && !f.startsWith("internal/"),
+			) ?? [];
 		// Definitely ignore errors which have nothing to do with this library, unless whitelisted
 		if (!filenames.some((f) => isPartOfThisLib(f))) {
 			return !anyWhitelisted(filenames);
@@ -203,9 +206,9 @@ export function createSentryContext(libraryRootDir: string): SentryContext {
 
 				// Try to attach transaction context if this is an actual ZWaveError instance
 				if (
-					!ignore &&
-					isZWaveError(hint.originalException) &&
-					hint.originalException.transactionSource
+					!ignore
+					&& isZWaveError(hint.originalException)
+					&& hint.originalException.transactionSource
 				) {
 					event.contexts = {
 						transaction: {

@@ -1,22 +1,22 @@
 import { NoOperationCC } from "@zwave-js/cc/NoOperationCC";
 import { MessagePriority } from "@zwave-js/core";
-import { getDefaultPriority, type Message } from "@zwave-js/serial";
+import { type Message, getDefaultPriority } from "@zwave-js/serial";
 import test from "ava";
-import { NodeStatus } from "../node/_Types";
 import type { ZWaveNode } from "../node/Node";
+import { NodeStatus } from "../node/_Types";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
 import { RemoveFailedNodeRequest } from "../serialapi/network-mgmt/RemoveFailedNodeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import type { Driver } from "./Driver";
 import {
-	Transaction,
 	type MessageGenerator,
+	Transaction,
 	type TransactionOptions,
 } from "./Transaction";
 
 function createDummyMessageGenerator(msg: Message): MessageGenerator {
 	return {
-		start: async function* () {
+		start: async function*() {
 			this.current = msg;
 			yield msg;
 		},
@@ -163,14 +163,13 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 		priority: MessagePriority = MessagePriority.NodeQuery,
 	) {
 		const driver = driverMock as any as Driver;
-		const msg =
-			nodeId != undefined
-				? new SendDataRequest(driver, {
-						command: new NoOperationCC(driver, {
-							nodeId,
-						}),
-				  })
-				: new GetControllerVersionRequest(driver);
+		const msg = nodeId != undefined
+			? new SendDataRequest(driver, {
+				command: new NoOperationCC(driver, {
+					nodeId,
+				}),
+			})
+			: new GetControllerVersionRequest(driver);
 		const ret = createDummyTransaction(driverMock, {
 			priority,
 			message: msg,

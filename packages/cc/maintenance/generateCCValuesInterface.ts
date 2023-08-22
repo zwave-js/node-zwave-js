@@ -50,24 +50,24 @@ export async function generateCCValuesInterface(): Promise<void> {
 	let valuesFileContent = originalValuesFileContent;
 
 	// Generate interface
-	const startTokenEnd =
-		valuesFileContent.indexOf(startTokenInterface) +
-		startTokenInterface.length;
+	const startTokenEnd = valuesFileContent.indexOf(startTokenInterface)
+		+ startTokenInterface.length;
 	const endTokenStart = valuesFileContent.indexOf(
 		endTokenInterface,
 		startTokenEnd,
 	);
-	valuesFileContent =
-		valuesFileContent.slice(0, startTokenEnd) +
-		"\n" +
-		CCsWithValues.map(
+	valuesFileContent = valuesFileContent.slice(0, startTokenEnd)
+		+ "\n"
+		+ CCsWithValues.map(
 			({ name, className, file }) =>
-				`\t${name}: typeof import("${path
-					.relative(libDir, ccDir)
-					.replace(/\\/g, "/")}/${file}").${className};`,
-		).join("\n") +
-		"\n" +
-		valuesFileContent.slice(endTokenStart);
+				`\t${name}: typeof import("${
+					path
+						.relative(libDir, ccDir)
+						.replace(/\\/g, "/")
+				}/${file}").${className};`,
+		).join("\n")
+		+ "\n"
+		+ valuesFileContent.slice(endTokenStart);
 
 	valuesFileContent = formatWithDprint(valuesFile, valuesFileContent);
 	// Only update file if necessary - this reduces build time

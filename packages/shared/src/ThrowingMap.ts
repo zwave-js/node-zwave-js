@@ -11,7 +11,7 @@ export function createThrowingMap<K, V>(
 	throwKeyNotFound?: (key: K) => never,
 ): ThrowingMap<K, V> {
 	const map = new Map<K, V>() as ThrowingMap<K, V>;
-	map.getOrThrow = function (this: Map<K, V>, key: K) {
+	map.getOrThrow = function(this: Map<K, V>, key: K) {
 		if (!this.has(key)) {
 			if (typeof throwKeyNotFound === "function") {
 				throwKeyNotFound(key);

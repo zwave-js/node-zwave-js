@@ -59,13 +59,13 @@ async getSupportedScales(
 }
 ```
 
--   **label:** `Setpoint (${string})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** `Setpoint (${string})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `setpointScale(setpointType: number)`
 
@@ -78,12 +78,12 @@ async getSupportedScales(
 }
 ```
 
--   **label:** `Setpoint scale (${string})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Setpoint scale (${string})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

@@ -1,7 +1,7 @@
 import { type Message } from "@zwave-js/serial";
 import {
-	createDeferredPromise,
 	type DeferredPromise,
+	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { type Transaction } from "./Transaction";
@@ -17,8 +17,8 @@ export interface TransactionQueueOptions {
 export class TransactionQueue implements AsyncIterable<Transaction> {
 	public constructor(options?: Partial<TransactionQueueOptions>) {
 		this.name = options?.name ?? "unnamed";
-		this.mayStartNextTransaction =
-			options?.mayStartNextTransaction ?? (() => true);
+		this.mayStartNextTransaction = options?.mayStartNextTransaction
+			?? (() => true);
 	}
 
 	public readonly name: string;
@@ -92,8 +92,10 @@ export class TransactionQueue implements AsyncIterable<Transaction> {
 				let value: Transaction | undefined;
 
 				if (
-					this.transactions.length > 0 &&
-					this.mayStartNextTransaction(this.transactions.peekStart()!)
+					this.transactions.length > 0
+					&& this.mayStartNextTransaction(
+						this.transactions.peekStart()!,
+					)
 				) {
 					// If the next transaction may be started, return it
 					value = this.transactions.shift()!;

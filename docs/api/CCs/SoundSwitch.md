@@ -64,15 +64,15 @@ async getPlaying(): Promise<Pick<SoundSwitchCCTonePlayReport, "toneId" | "volume
 }
 ```
 
--   **label:** Default tone ID
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 254
+- **label:** Default tone ID
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 254
 
 ### `defaultVolume`
 
@@ -84,15 +84,15 @@ async getPlaying(): Promise<Pick<SoundSwitchCCTonePlayReport, "toneId" | "volume
 }
 ```
 
--   **label:** Default volume
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 100
+- **label:** Default volume
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 100
 
 ### `toneId`
 
@@ -104,15 +104,15 @@ async getPlaying(): Promise<Pick<SoundSwitchCCTonePlayReport, "toneId" | "volume
 }
 ```
 
--   **label:** Play Tone
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Play Tone
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `volume`
 
@@ -124,12 +124,12 @@ async getPlaying(): Promise<Pick<SoundSwitchCCTonePlayReport, "toneId" | "volume
 }
 ```
 
--   **label:** Volume
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 100
+- **label:** Volume
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 100

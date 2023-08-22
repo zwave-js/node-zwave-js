@@ -1,36 +1,40 @@
 import type { ZWaveSerialPort } from "@zwave-js/serial";
 import {
-	createAndOpenMockedZWaveSerialPort,
 	type MockPortBinding,
+	createAndOpenMockedZWaveSerialPort,
 } from "@zwave-js/serial/mock";
 import {
 	MockController,
-	MockNode,
 	type MockControllerBehavior,
 	type MockControllerOptions,
+	MockNode,
 	type MockNodeBehavior,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import { createServer, type AddressInfo, type Server } from "net";
+import { type AddressInfo, type Server, createServer } from "net";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
 } from "./Utils";
 
-export type MockServerControllerOptions = Pick<
-	MockControllerOptions,
-	"ownNodeId" | "homeId" | "capabilities"
-> & {
-	behaviors?: MockControllerBehavior[];
-};
+export type MockServerControllerOptions =
+	& Pick<
+		MockControllerOptions,
+		"ownNodeId" | "homeId" | "capabilities"
+	>
+	& {
+		behaviors?: MockControllerBehavior[];
+	};
 
-export type MockServerNodeOptions = Pick<
-	MockNodeOptions,
-	"id" | "capabilities"
-> & {
-	behaviors?: MockNodeBehavior[];
-};
+export type MockServerNodeOptions =
+	& Pick<
+		MockNodeOptions,
+		"id" | "capabilities"
+	>
+	& {
+		behaviors?: MockNodeBehavior[];
+	};
 export interface MockServerOptions {
 	interface?: string;
 	port?: number;

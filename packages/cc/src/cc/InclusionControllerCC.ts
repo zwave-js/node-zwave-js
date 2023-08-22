@@ -1,17 +1,17 @@
 import {
 	CommandClasses,
-	validatePayload,
 	type MessageOrCCLogEntry,
+	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,

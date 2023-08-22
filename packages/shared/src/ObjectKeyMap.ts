@@ -50,7 +50,7 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 
 	public entries(): IterableIterator<[TKey, TValue]> {
 		const map = this._map;
-		return (function* () {
+		return (function*() {
 			const _entries = map.entries();
 			let entry = _entries.next();
 			while (!entry.done) {
@@ -67,7 +67,7 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 
 	public keys(): IterableIterator<TKey> {
 		const map = this._map;
-		return (function* () {
+		return (function*() {
 			const _keys = map.entries();
 			let key = _keys.next();
 			while (!key.done) {
@@ -85,9 +85,11 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 	private keyToString(key: TKey): string {
 		const filledKey = { ...key };
 		if (this.defaultKeyProps) {
-			for (const [required, def] of Object.entries(
-				this.defaultKeyProps,
-			)) {
+			for (
+				const [required, def] of Object.entries(
+					this.defaultKeyProps,
+				)
+			) {
 				if (!(required in filledKey)) filledKey[required as any] = def;
 			}
 		}
@@ -95,7 +97,7 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 			entries(filledKey)
 				.filter(([, value]) => value != undefined)
 				.sort(([keyA], [keyB]) =>
-					keyA > keyB ? 1 : keyA < keyB ? -1 : 0,
+					keyA > keyB ? 1 : keyA < keyB ? -1 : 0
 				),
 		);
 		return JSON.stringify(_key);
@@ -109,8 +111,9 @@ type PickSymbolIterator<T> = T extends { [Symbol.iterator]: infer V }
 export type ReadonlyObjectKeyMap<
 	TKey extends Record<string | number, any>,
 	TValue,
-> = Pick<
-	ObjectKeyMap<TKey, TValue>,
-	"has" | "get" | "entries" | "keys" | "values" | "size"
-> &
-	PickSymbolIterator<ObjectKeyMap<TKey, TValue>>;
+> =
+	& Pick<
+		ObjectKeyMap<TKey, TValue>,
+		"has" | "get" | "entries" | "keys" | "values" | "size"
+	>
+	& PickSymbolIterator<ObjectKeyMap<TKey, TValue>>;

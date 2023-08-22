@@ -1,15 +1,15 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
 	TransmitOptions,
 	validatePayload,
-	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveHost } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
 	CommandClass,
-	gotDeserializationOptions,
 	type CommandClassOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,

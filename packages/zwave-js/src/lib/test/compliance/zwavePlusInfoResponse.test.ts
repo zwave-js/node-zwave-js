@@ -6,8 +6,8 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import {
 	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type MockZWaveRequestFrame,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import path from "path";
 import { integrationTest } from "../integrationTestSuite";
@@ -40,9 +40,8 @@ integrationTest("Response to Z-Wave Plus Info Get", {
 				msg,
 			): msg is MockZWaveRequestFrame & {
 				payload: ZWavePlusCCReport;
-			} =>
-				msg.type === MockZWaveFrameType.Request &&
-				msg.payload instanceof ZWavePlusCCReport,
+			} => msg.type === MockZWaveFrameType.Request
+				&& msg.payload instanceof ZWavePlusCCReport,
 		);
 
 		// Z-Wave+ v2 specifications, section 3.1

@@ -22,12 +22,12 @@ async get(): Promise<ThermostatFanState | undefined>;
 }
 ```
 
--   **label:** Thermostat fan state
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Thermostat fan state
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

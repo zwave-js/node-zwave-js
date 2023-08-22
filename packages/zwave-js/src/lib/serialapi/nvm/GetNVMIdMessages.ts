@@ -1,13 +1,13 @@
-import { MessagePriority, type MessageOrCCLogEntry } from "@zwave-js/core";
+import { type MessageOrCCLogEntry, MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 

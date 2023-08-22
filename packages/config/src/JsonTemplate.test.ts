@@ -1,4 +1,4 @@
-import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import test from "ava";
 import * as fs from "fs-extra";
 import { tmpdir } from "os";

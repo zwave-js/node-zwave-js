@@ -1,22 +1,22 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
 	MessagePriority,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -66,9 +66,9 @@ export const ManufacturerSpecificCCValues = Object.freeze({
 			"deviceId",
 			(type: DeviceIdType) => getEnumMemberName(DeviceIdType, type),
 			({ property, propertyKey }) =>
-				property === "deviceId" &&
-				typeof propertyKey === "string" &&
-				propertyKey in DeviceIdType,
+				property === "deviceId"
+				&& typeof propertyKey === "string"
+				&& propertyKey in DeviceIdType,
 			(type: DeviceIdType) => ({
 				...ValueMetadata.ReadOnlyString,
 				label: `Device ID (${getEnumMemberName(DeviceIdType, type)})`,
@@ -105,11 +105,12 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ManufacturerSpecificCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ManufacturerSpecificCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"manufacturerId",
@@ -133,11 +134,12 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			deviceIdType,
 		});
-		const response =
-			await this.applHost.sendCommand<ManufacturerSpecificCCDeviceSpecificReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ManufacturerSpecificCCDeviceSpecificReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.deviceId;
 	}
 }
@@ -176,11 +178,14 @@ export class ManufacturerSpecificCC extends CommandClass {
 			});
 			const mfResp = await api.get();
 			if (mfResp) {
-				const logMessage = `received response for manufacturer information:
+				const logMessage =
+					`received response for manufacturer information:
   manufacturer: ${
-		applHost.configManager.lookupManufacturer(mfResp.manufacturerId) ||
-		"unknown"
-  } (${num2hex(mfResp.manufacturerId)})
+						applHost.configManager.lookupManufacturer(
+							mfResp.manufacturerId,
+						)
+						|| "unknown"
+					} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
 				applHost.controllerLog.logNode(node.id, {
@@ -258,7 +263,9 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {}
 
 @CCCommand(ManufacturerSpecificCommand.DeviceSpecificReport)
-export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpecificCC {
+export class ManufacturerSpecificCCDeviceSpecificReport
+	extends ManufacturerSpecificCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -272,10 +279,9 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 
 		validatePayload(dataLength > 0, this.payload.length >= 2 + dataLength);
 		const deviceIdData = this.payload.slice(2, 2 + dataLength);
-		this.deviceId =
-			dataFormat === 0
-				? deviceIdData.toString("utf8")
-				: "0x" + deviceIdData.toString("hex");
+		this.deviceId = dataFormat === 0
+			? deviceIdData.toString("utf8")
+			: "0x" + deviceIdData.toString("hex");
 	}
 
 	public readonly type: DeviceIdType;
@@ -299,13 +305,16 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 }
 
 interface ManufacturerSpecificCCDeviceSpecificGetOptions
-	extends CCCommandOptions {
+	extends CCCommandOptions
+{
 	deviceIdType: DeviceIdType;
 }
 
 @CCCommand(ManufacturerSpecificCommand.DeviceSpecificGet)
 @expectedCCResponse(ManufacturerSpecificCCDeviceSpecificReport)
-export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
+export class ManufacturerSpecificCCDeviceSpecificGet
+	extends ManufacturerSpecificCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:

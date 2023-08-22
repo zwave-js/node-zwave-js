@@ -1,20 +1,20 @@
 import {
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	NUM_NODEMASK_BYTES,
 	encodeNodeID,
 	parseNodeBitMask,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
@@ -40,9 +40,8 @@ export class GetRoutingInfoRequest extends Message {
 
 	public serialize(): Buffer {
 		const nodeId = encodeNodeID(this.sourceNodeId, this.host.nodeIdType);
-		const optionsByte =
-			(this.removeBadLinks ? 0b1000_0000 : 0) |
-			(this.removeNonRepeaters ? 0b0100_0000 : 0);
+		const optionsByte = (this.removeBadLinks ? 0b1000_0000 : 0)
+			| (this.removeNonRepeaters ? 0b0100_0000 : 0);
 		this.payload = Buffer.concat([
 			nodeId,
 			Buffer.from([

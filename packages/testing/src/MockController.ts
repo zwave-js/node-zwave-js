@@ -1,4 +1,4 @@
-import { MAX_SUPERVISION_SESSION_ID, type ICommandClass } from "@zwave-js/core";
+import { type ICommandClass, MAX_SUPERVISION_SESSION_ID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
@@ -11,19 +11,19 @@ import { AsyncQueue } from "@zwave-js/shared";
 import { TimedExpectation, createWrappingCounter } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
 import {
-	getDefaultMockControllerCapabilities,
 	type MockControllerCapabilities,
+	getDefaultMockControllerCapabilities,
 } from "./MockControllerCapabilities";
 import type { MockNode } from "./MockNode";
 import {
-	MOCK_FRAME_ACK_TIMEOUT,
-	MockZWaveFrameType,
-	createMockZWaveAckFrame,
-	unlazyMockZWaveFrame,
 	type LazyMockZWaveFrame,
+	MOCK_FRAME_ACK_TIMEOUT,
 	type MockZWaveAckFrame,
 	type MockZWaveFrame,
+	MockZWaveFrameType,
 	type MockZWaveRequestFrame,
+	createMockZWaveAckFrame,
+	unlazyMockZWaveFrame,
 } from "./MockZWaveFrame";
 
 export interface MockControllerOptions {
@@ -75,7 +75,6 @@ export class MockController {
 			hasSecurityClass: () => false,
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			setSecurityClass: () => {},
-
 			// getValueDB: (nodeId) => {
 			// 	if (!valueDBCache.has(nodeId)) {
 			// 		valueDBCache.set(
@@ -196,8 +195,9 @@ export class MockController {
 			handler.resolve(msg);
 		} else {
 			for (const behavior of this.behaviors) {
-				if (await behavior.onHostMessage?.(this.host, this, msg))
+				if (await behavior.onHostMessage?.(this.host, this, msg)) {
 					return;
+				}
 			}
 		}
 	}
@@ -292,8 +292,8 @@ export class MockController {
 			node,
 			timeout,
 			(msg): msg is MockZWaveRequestFrame & { payload: T } =>
-				msg.type === MockZWaveFrameType.Request &&
-				predicate(msg.payload),
+				msg.type === MockZWaveFrameType.Request
+				&& predicate(msg.payload),
 		);
 		return ret.payload;
 	}
@@ -334,8 +334,8 @@ export class MockController {
 	): Promise<void> {
 		// Ack the frame if desired
 		if (
-			this.autoAckNodeFrames &&
-			frame.type === MockZWaveFrameType.Request
+			this.autoAckNodeFrames
+			&& frame.type === MockZWaveFrameType.Request
 		) {
 			void this.ackNodeRequestFrame(node, frame);
 		}
@@ -349,8 +349,11 @@ export class MockController {
 		} else {
 			// Then apply generic predefined behavior
 			for (const behavior of this.behaviors) {
-				if (await behavior.onNodeFrame?.(this.host, this, node, frame))
+				if (
+					await behavior.onNodeFrame?.(this.host, this, node, frame)
+				) {
 					return;
+				}
 			}
 		}
 	}

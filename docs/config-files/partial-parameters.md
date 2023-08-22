@@ -76,7 +76,7 @@ For example, value 13 (8 + 4 + 1) enables **physical tap on ZEN21**, **Z-Wave co
 
 These single-bit parameters which can be freely combined are **partial parameters** in `zwave-js`. They are addressed by the parameter number (7 in this case) and the bitmask, represented as hexadecimal, for example `7[0x01]`.
 
-> [!NOTE] All values of partial parameters are relative to the bitmask, and `zwave-js` takes care of the math for you.  
+> [!NOTE] All values of partial parameters are relative to the bitmask, and `zwave-js` takes care of the math for you.\
 > This means a single-bit partial parameter always has the values `0` and `1`, independently of the actual bitmask which could be `00010000` or `00000001`. Likewise, a partial parameter with three bits (e.g. `01110000` or `00001110`) always accepts the values `0` to `7`.
 
 With this knowledge, the above parameters are translated to partial parameters as follows:

@@ -8,6 +8,6 @@ Z-Wave JS expects to **be the primary controller** in the network and it will tr
 
 It does however support **having secondary controllers in the network**. This includes:
 
--   Including/excluding a secondary controller
--   Letting secondary controllers (inclusion controllers) include and exclude devices
--   Perform network key exchange with devices included by a secondary controller
+- Including/excluding a secondary controller
+- Letting secondary controllers (inclusion controllers) include and exclude devices
+- Perform network key exchange with devices included by a secondary controller

@@ -48,8 +48,8 @@ integrationTest("All CCs contained in a Multi Command CC are handled", {
 		const expectResponse = mockNode.expectControllerFrame(
 			1000,
 			(msg): msg is any =>
-				msg.type === MockZWaveFrameType.Request &&
-				msg.payload instanceof ZWavePlusCCReport,
+				msg.type === MockZWaveFrameType.Request
+				&& msg.payload instanceof ZWavePlusCCReport,
 		);
 
 		const scaValue = SceneActivationCCValues.sceneId;
@@ -61,7 +61,7 @@ integrationTest("All CCs contained in a Multi Command CC are handled", {
 			});
 		});
 		const expectNotification = valueNotification.then((val) =>
-			t.is(val, 7),
+			t.is(val, 7)
 		);
 
 		await Promise.all([expectResponse, expectNotification]);

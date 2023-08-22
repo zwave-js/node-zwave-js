@@ -22,12 +22,12 @@ async get(): Promise<HumidityControlOperatingState | undefined>;
 }
 ```
 
--   **label:** Humidity control operating state
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Humidity control operating state
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

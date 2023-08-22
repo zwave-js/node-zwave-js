@@ -61,7 +61,7 @@ export class SyntaxError extends Error {
 		function literalEscape(s: string): string {
 			return s
 				.replace(/\\/g, "\\\\")
-				.replace(/"/g, '\\"')
+				.replace(/"/g, "\\\"")
 				.replace(/\0/g, "\\0")
 				.replace(/\t/g, "\\t")
 				.replace(/\n/g, "\\n")
@@ -87,21 +87,21 @@ export class SyntaxError extends Error {
 		function describeExpectation(expectation: Expectation) {
 			switch (expectation.type) {
 				case "literal":
-					return '"' + literalEscape(expectation.text) + '"';
+					return "\"" + literalEscape(expectation.text) + "\"";
 				case "class":
 					const escapedParts = expectation.parts.map((part) => {
 						return Array.isArray(part)
-							? classEscape(part[0] as string) +
-									"-" +
-									classEscape(part[1] as string)
+							? classEscape(part[0] as string)
+								+ "-"
+								+ classEscape(part[1] as string)
 							: classEscape(part);
 					});
 
 					return (
-						"[" +
-						(expectation.inverted ? "^" : "") +
-						escapedParts +
-						"]"
+						"["
+						+ (expectation.inverted ? "^" : "")
+						+ escapedParts
+						+ "]"
 					);
 				case "any":
 					return "any character";
@@ -138,23 +138,25 @@ export class SyntaxError extends Error {
 
 				default:
 					return (
-						descriptions.slice(0, -1).join(", ") +
-						", or " +
-						descriptions[descriptions.length - 1]
+						descriptions.slice(0, -1).join(", ")
+						+ ", or "
+						+ descriptions[descriptions.length - 1]
 					);
 			}
 		}
 
 		function describeFound(found1: string | null) {
-			return found1 ? '"' + literalEscape(found1) + '"' : "end of input";
+			return found1
+				? "\"" + literalEscape(found1) + "\""
+				: "end of input";
 		}
 
 		return (
-			"Expected " +
-			describeExpected(expected) +
-			" but " +
-			describeFound(found) +
-			" found."
+			"Expected "
+			+ describeExpected(expected)
+			+ " but "
+			+ describeFound(found)
+			+ " found."
 		);
 	}
 
@@ -198,20 +200,20 @@ function peg$parse(input: string, options?: IParseOptions) {
 	const peg$c2 = peg$literalExpectation("(", false);
 	const peg$c3 = ")";
 	const peg$c4 = peg$literalExpectation(")", false);
-	const peg$c5 = function (group: any): any {
+	const peg$c5 = function(group: any): any {
 		return group;
 	};
 	const peg$c6 = peg$otherExpectation("logical OR");
-	const peg$c7 = function (head: any, tails: any): any {
+	const peg$c7 = function(head: any, tails: any): any {
 		return { or: [head, ...tails] };
 	};
 	const peg$c8 = "||";
 	const peg$c9 = peg$literalExpectation("||", false);
-	const peg$c10 = function (tail: any): any {
+	const peg$c10 = function(tail: any): any {
 		return tail;
 	};
 	const peg$c11 = peg$otherExpectation("logical AND");
-	const peg$c12 = function (head: any, tails: any): any {
+	const peg$c12 = function(head: any, tails: any): any {
 		return { and: [head, ...tails] };
 	};
 	const peg$c13 = "&&";
@@ -227,11 +229,11 @@ function peg$parse(input: string, options?: IParseOptions) {
 	const peg$c23 = peg$literalExpectation("<", false);
 	const peg$c24 = "===";
 	const peg$c25 = peg$literalExpectation("===", false);
-	const peg$c26 = function (head: any, expr: any, tail: any): any {
+	const peg$c26 = function(head: any, expr: any, tail: any): any {
 		return { [expr]: [head, tail] };
 	};
 	const peg$c27 = peg$otherExpectation("version comparison");
-	const peg$c28 = function (head: any, expr: any, tail: any): any {
+	const peg$c28 = function(head: any, expr: any, tail: any): any {
 		return { ["ver " + expr]: [head, tail] };
 	};
 	const peg$c29 = peg$otherExpectation("variable");
@@ -254,7 +256,7 @@ function peg$parse(input: string, options?: IParseOptions) {
 		false,
 		false,
 	);
-	const peg$c34 = function (variable: any): any {
+	const peg$c34 = function(variable: any): any {
 		return { var: variable[1].join("") };
 	};
 	const peg$c35 = peg$otherExpectation("number");
@@ -262,7 +264,7 @@ function peg$parse(input: string, options?: IParseOptions) {
 	const peg$c37 = peg$literalExpectation("-", false);
 	const peg$c38 = /^[0-9]/;
 	const peg$c39 = peg$classExpectation([["0", "9"]], false, false);
-	const peg$c40 = function (): any {
+	const peg$c40 = function(): any {
 		return parseInt(text(), 10);
 	};
 	const peg$c41 = peg$otherExpectation("hex number");
@@ -277,21 +279,21 @@ function peg$parse(input: string, options?: IParseOptions) {
 		false,
 		true,
 	);
-	const peg$c46 = function (): any {
+	const peg$c46 = function(): any {
 		return parseInt(text(), 16);
 	};
 	const peg$c47 = peg$otherExpectation("version string");
 	const peg$c48 = ".";
 	const peg$c49 = peg$literalExpectation(".", false);
-	const peg$c50 = function (version: any): any {
+	const peg$c50 = function(version: any): any {
 		return text();
 	};
 	const peg$c51 = peg$otherExpectation("string");
-	const peg$c52 = '"';
-	const peg$c53 = peg$literalExpectation('"', false);
+	const peg$c52 = "\"";
+	const peg$c53 = peg$literalExpectation("\"", false);
 	const peg$c54 = /^[^"]/;
-	const peg$c55 = peg$classExpectation(['"'], true, false);
-	const peg$c56 = function (): any {
+	const peg$c55 = peg$classExpectation(["\""], true, false);
+	const peg$c56 = function(): any {
 		return text();
 	};
 	const peg$c57 = "'";
@@ -314,7 +316,7 @@ function peg$parse(input: string, options?: IParseOptions) {
 	if (options.startRule !== undefined) {
 		if (!(options.startRule in peg$startRuleFunctions)) {
 			throw new Error(
-				"Can't start parsing from rule \"" + options.startRule + '".',
+				"Can't start parsing from rule \"" + options.startRule + "\".",
 			);
 		}
 
@@ -330,10 +332,9 @@ function peg$parse(input: string, options?: IParseOptions) {
 	}
 
 	function expected(description: string, location1?: IFileRange) {
-		location1 =
-			location1 !== undefined
-				? location1
-				: peg$computeLocation(peg$savedPos, peg$currPos);
+		location1 = location1 !== undefined
+			? location1
+			: peg$computeLocation(peg$savedPos, peg$currPos);
 
 		throw peg$buildStructuredError(
 			[peg$otherExpectation(description)],
@@ -343,10 +344,9 @@ function peg$parse(input: string, options?: IParseOptions) {
 	}
 
 	function error(message: string, location1?: IFileRange) {
-		location1 =
-			location1 !== undefined
-				? location1
-				: peg$computeLocation(peg$savedPos, peg$currPos);
+		location1 = location1 !== undefined
+			? location1
+			: peg$computeLocation(peg$savedPos, peg$currPos);
 
 		throw peg$buildSimpleError(message, location1);
 	}

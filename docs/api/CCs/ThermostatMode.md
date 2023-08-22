@@ -46,13 +46,13 @@ async getSupportedModes(): Promise<
 }
 ```
 
--   **label:** Manufacturer data
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"buffer"`
+- **label:** Manufacturer data
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"buffer"`
 
 ### `thermostatMode`
 
@@ -64,12 +64,12 @@ async getSupportedModes(): Promise<
 }
 ```
 
--   **label:** Thermostat mode
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Thermostat mode
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

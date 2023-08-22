@@ -1,8 +1,8 @@
 import {
-	createReflectionDecoratorPair,
-	createSimpleReflectionDecorator,
 	ZWaveError,
 	ZWaveErrorCodes,
+	createReflectionDecoratorPair,
+	createSimpleReflectionDecorator,
 } from "@zwave-js/core";
 import type { APIConstructor, CCAPI } from "../../lib/API";
 import type {

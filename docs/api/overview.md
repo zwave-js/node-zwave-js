@@ -7,13 +7,13 @@
 
 In addition to the root entry point `"zwave-js"`, this module provides the following secondary entry points:
 
--   `"zwave-js/Controller"`: The `Controller` class as well as types and enums used in its public API
--   `"zwave-js/Driver"`: The `Driver` class and `ZWaveOptions` interface.
--   `"zwave-js/Error"`: The `ZWaveError` type and `ZWaveErrorCodes` enumeration.
--   `"zwave-js/Node"`: The `ZWaveNode` class as well as types and enums used in its public API
--   `"zwave-js/Testing"`: Utilities for integration testing
--   `"zwave-js/Utils"`: [Helper functions](api/utils.md) that may be of use in applications
--   `"zwave-js/Values"`: `ValueID`, `Metadata` definitions, value event definitions and specialized value types.
+- `"zwave-js/Controller"`: The `Controller` class as well as types and enums used in its public API
+- `"zwave-js/Driver"`: The `Driver` class and `ZWaveOptions` interface.
+- `"zwave-js/Error"`: The `ZWaveError` type and `ZWaveErrorCodes` enumeration.
+- `"zwave-js/Node"`: The `ZWaveNode` class as well as types and enums used in its public API
+- `"zwave-js/Testing"`: Utilities for integration testing
+- `"zwave-js/Utils"`: [Helper functions](api/utils.md) that may be of use in applications
+- `"zwave-js/Values"`: `ValueID`, `Metadata` definitions, value event definitions and specialized value types.
 
 Everything exported here is also exported from the root entry point.
 
@@ -25,7 +25,7 @@ In addition, there is also `"zwave-js/safe"`, an entry point that can be used fr
 
 The `"zwave-js"` package depends on several other scoped packages which are installed along with it:
 
--   `"@zwave-js/cc"`: Everything related to CCs (including the `CommandClasses` enum). This also excludes exports for each CC implementation, e.g. `"@zwave-js/cc/BasicCC"`, `"@zwave-js/cc/IrrigationCC"`, etc.
+- `"@zwave-js/cc"`: Everything related to CCs (including the `CommandClasses` enum). This also excludes exports for each CC implementation, e.g. `"@zwave-js/cc/BasicCC"`, `"@zwave-js/cc/IrrigationCC"`, etc.
 
 ## [Driver](api/driver.md)
 

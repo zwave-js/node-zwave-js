@@ -1,8 +1,8 @@
 import type { CommandClass } from "@zwave-js/cc";
 import {
 	BasicCCSet,
-	isMultiEncapsulatingCommandClass,
 	MultiCommandCC,
+	isMultiEncapsulatingCommandClass,
 } from "@zwave-js/cc";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";

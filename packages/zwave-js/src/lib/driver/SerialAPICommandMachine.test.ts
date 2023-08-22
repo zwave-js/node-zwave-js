@@ -1,12 +1,12 @@
 import { createModel } from "@xstate/test";
 import type { Message } from "@zwave-js/serial";
 import {
-	createDeferredPromise,
 	type DeferredPromise,
+	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
-import { assign, interpret, Machine, type State } from "xstate";
+import { Machine, type State, assign, interpret } from "xstate";
 import {
 	dummyCallbackNOK,
 	dummyCallbackOK,
@@ -20,11 +20,11 @@ import {
 	dummyResponseOK,
 } from "../test/messages";
 import {
-	createSerialAPICommandMachine,
 	type SerialAPICommandDoneData,
 	type SerialAPICommandInterpreter,
 	type SerialAPICommandMachineParams,
 	type SerialAPICommandServiceImplementations,
+	createSerialAPICommandMachine,
 } from "./SerialAPICommandMachine";
 
 interface AvaTestContext {
@@ -57,10 +57,10 @@ interface TestMachineContext {
 
 type TestMachineEvents =
 	| {
-			type: "CREATE";
-			expectsResponse: boolean;
-			expectsCallback: boolean;
-	  }
+		type: "CREATE";
+		expectsResponse: boolean;
+		expectsCallback: boolean;
+	}
 	| { type: "SEND_SUCCESS" }
 	| { type: "SEND_FAILURE" }
 	| { type: "ACK" }

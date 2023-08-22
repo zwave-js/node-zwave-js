@@ -6,24 +6,24 @@ import type {
 import {
 	CommandClasses,
 	Duration,
+	type MaybeNotKnown,
 	ValueMetadata,
 	validatePayload,
-	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -50,10 +50,13 @@ export const SceneActivationCCValues = Object.freeze({
 			{ stateful: false },
 		),
 
-		...V.staticProperty("dimmingDuration", {
-			...ValueMetadata.Duration,
-			label: "Dimming duration",
-		} as const),
+		...V.staticProperty(
+			"dimmingDuration",
+			{
+				...ValueMetadata.Duration,
+				label: "Dimming duration",
+			} as const,
+		),
 	}),
 });
 
@@ -69,7 +72,7 @@ export class SceneActivationCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: SceneActivationCCAPI,
 			{ property },
 			value,

@@ -14,7 +14,7 @@ Retrieves the current value from this sensor.
 
 **Parameters:**
 
--   `sensorType`: The (optional) sensor type to retrieve the value for
+- `sensorType`: The (optional) sensor type to retrieve the value for
 
 ### `getSupportedSensorTypes`
 
@@ -35,14 +35,14 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 }
 ```
 
--   **label:** `${string} duration`
--   **description:** For how long the alarm should be active
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** `${string} duration`
+- **description:** For how long the alarm should be active
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `severity(sensorType: AlarmSensorType)`
 
@@ -55,15 +55,15 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 }
 ```
 
--   **label:** `${string} severity`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 1
--   **max. value:** 100
+- **label:** `${string} severity`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 1
+- **max. value:** 100
 
 ### `state(sensorType: AlarmSensorType)`
 
@@ -76,11 +76,11 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 }
 ```
 
--   **label:** `${string} state`
--   **description:** Whether the alarm is active
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string} state`
+- **description:** Whether the alarm is active
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`

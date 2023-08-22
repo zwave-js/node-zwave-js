@@ -12,10 +12,10 @@ import {
 test("isConsecutiveArray() -> returns true for consecutive arrays", (t) => {
 	// prettier-ignore
 	const tests = [
-		[1], 
-		[1, 2, 3], 
-		[2, 3, 4], 
-		[-2, -1, 0]
+		[1],
+		[1, 2, 3],
+		[2, 3, 4],
+		[-2, -1, 0],
 	];
 	for (const test of tests) {
 		t.true(isConsecutiveArray(test));

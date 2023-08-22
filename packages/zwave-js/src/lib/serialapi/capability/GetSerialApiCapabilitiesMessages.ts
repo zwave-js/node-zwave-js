@@ -1,15 +1,15 @@
-import { encodeBitMask, MessagePriority, parseBitMask } from "@zwave-js/core";
+import { MessagePriority, encodeBitMask, parseBitMask } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageType,
-	messageTypes,
-	priority,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
+	messageTypes,
+	priority,
 } from "@zwave-js/serial";
 
 const NUM_FUNCTIONS = 256;
@@ -21,7 +21,8 @@ const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 export class GetSerialApiCapabilitiesRequest extends Message {}
 
 export interface GetSerialApiCapabilitiesResponseOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	firmwareVersion: string;
 	manufacturerId: number;
 	productType: number;

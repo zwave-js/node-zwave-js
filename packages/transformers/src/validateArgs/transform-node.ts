@@ -171,8 +171,9 @@ function getValidateArgsOptions(
 	if (!ts.isObjectLiteralExpression(options)) return;
 	const ret: ValidateArgsOptions = {};
 	for (const prop of options.properties) {
-		if (!ts.isPropertyAssignment(prop) || !ts.isIdentifier(prop.name))
+		if (!ts.isPropertyAssignment(prop) || !ts.isIdentifier(prop.name)) {
 			continue;
+		}
 		switch (prop.name.escapedText) {
 			case "strictEnums":
 				if (prop.initializer.kind === ts.SyntaxKind.TrueKeyword) {
@@ -218,17 +219,16 @@ function transformDecoratedMethod(
 			case ts.SyntaxKind.BooleanKeyword:
 			case ts.SyntaxKind.BigIntKeyword:
 			case ts.SyntaxKind.TypeReference:
-				const hasTypeArguments =
-					ts.isTypeReferenceNode(param.type) &&
-					param.type.typeArguments;
+				const hasTypeArguments = ts.isTypeReferenceNode(param.type)
+					&& param.type.typeArguments;
 
 				if (!hasTypeArguments) {
 					// This is a type with an "easy" name we can factor out of the method body
 
 					// Disable strict value checks for numeric enums
 					if (
-						VisitorUtils.isNumericEnum(type) &&
-						!options?.strictEnums
+						VisitorUtils.isNumericEnum(type)
+						&& !options?.strictEnums
 					) {
 						// Fake the number type
 						type = { flags: ts.TypeFlags.Number } as ts.Type;
@@ -273,9 +273,8 @@ function transformDecoratedMethod(
 						typeIdMap: new Map(),
 					};
 
-					typeName =
-						(optional ? "optional_" : "") +
-						visitType(type, typeContext);
+					typeName = (optional ? "optional_" : "")
+						+ visitType(type, typeContext);
 					arrowFunction = createArrowFunction(
 						type,
 						typeName,
@@ -300,8 +299,8 @@ function transformDecoratedMethod(
 	body = f.updateBlock(body, [...newStatements, ...body.statements]);
 	const modifiers = method.modifiers?.filter(
 		(m) =>
-			ts.isModifier(m) ||
-			(ts.isDecorator(m) && m !== validateArgsDecorator),
+			ts.isModifier(m)
+			|| (ts.isDecorator(m) && m !== validateArgsDecorator),
 	);
 
 	return f.updateMethodDeclaration(
@@ -427,22 +426,26 @@ export function createGenericAssertFunction(
 												),
 												[
 													factory.createTemplateSpan(
-														factory.createIdentifier(
-															"argName",
-														),
-														factory.createTemplateMiddle(
-															" is not a ",
-															" is not a ",
-														),
+														factory
+															.createIdentifier(
+																"argName",
+															),
+														factory
+															.createTemplateMiddle(
+																" is not a ",
+																" is not a ",
+															),
 													),
 													factory.createTemplateSpan(
-														factory.createIdentifier(
-															"typeName",
-														),
-														factory.createTemplateTail(
-															"",
-															"",
-														),
+														factory
+															.createIdentifier(
+																"typeName",
+															),
+														factory
+															.createTemplateTail(
+																"",
+																"",
+															),
 													),
 												],
 											),
@@ -456,13 +459,15 @@ export function createGenericAssertFunction(
 												),
 												[
 													factory.createTemplateSpan(
-														factory.createIdentifier(
-															"argName",
-														),
-														factory.createTemplateTail(
-															" has the wrong type",
-															" has the wrong type",
-														),
+														factory
+															.createIdentifier(
+																"argName",
+															),
+														factory
+															.createTemplateTail(
+																" has the wrong type",
+																" has the wrong type",
+															),
 													),
 												],
 											),
@@ -543,8 +548,8 @@ export function transformNode(
 			);
 		}
 	} else if (
-		visitorContext.options.transformNonNullExpressions &&
-		ts.isNonNullExpression(node)
+		visitorContext.options.transformNonNullExpressions
+		&& ts.isNonNullExpression(node)
 	) {
 		const expression = node.expression;
 		return f.updateNonNullExpression(

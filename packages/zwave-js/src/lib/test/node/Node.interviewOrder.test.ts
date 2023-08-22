@@ -1,7 +1,7 @@
 import { getCCConstructor } from "@zwave-js/cc";
 import {
-	applicationCCs,
 	CommandClasses,
+	applicationCCs,
 	getCCName,
 	nonApplicationCCs,
 	topologicalSort,

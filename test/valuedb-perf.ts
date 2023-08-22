@@ -1,7 +1,7 @@
 import { JsonlDB } from "@alcalzone/jsonl-db";
-import { highResTimestamp } from "../packages/core/src/util/date";
-import { indexDBsByNode, ValueDB } from "../packages/core/src/values/ValueDB";
 import * as fs from "fs-extra";
+import { highResTimestamp } from "../packages/core/src/util/date";
+import { ValueDB, indexDBsByNode } from "../packages/core/src/values/ValueDB";
 
 const values: JsonlDB<any> = new JsonlDB("test.values.jsonl", {
 	autoCompress: { onClose: false },

@@ -27,10 +27,9 @@ export function assertZWaveError<T>(
 	function handleError(e: any): void {
 		_assertZWaveError(e);
 		if (messageMatches != undefined) {
-			const regex =
-				messageMatches instanceof RegExp
-					? messageMatches
-					: new RegExp(messageMatches);
+			const regex = messageMatches instanceof RegExp
+				? messageMatches
+				: new RegExp(messageMatches);
 			t.regex(e.message, regex);
 		}
 		if (errorCode != undefined) t.is(e.code, errorCode);

@@ -123,7 +123,8 @@ const checkPaths = ["docs/", "packages/*/api.md"];
 			head: branchName,
 			base: "master",
 			title: "docs: update typed documentation and API report 🤖",
-			body: `The auto-generated documentation and/or API reports have changed. Please review the changes and merge them if desired.`,
+			body:
+				`The auto-generated documentation and/or API reports have changed. Please review the changes and merge them if desired.`,
 			maintainer_can_modify: true,
 		});
 		prNumber = pr.data.number;

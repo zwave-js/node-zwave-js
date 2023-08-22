@@ -1,14 +1,14 @@
 import {
 	CommandClasses,
+	type DSTInfo,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type SupervisionResult,
 	ZWaveError,
 	ZWaveErrorCodes,
 	formatDate,
 	getDSTInfo,
 	validatePayload,
-	type DSTInfo,
-	type MessageOrCCLogEntry,
-	type SupervisionResult,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -17,10 +17,10 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -146,11 +146,12 @@ export class TimeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<TimeCCTimeOffsetReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			TimeCCTimeOffsetReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return {
 				standardOffset: response.standardOffset,
@@ -263,11 +264,13 @@ export class TimeCCTimeReport extends TimeCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				time: `${padStart(this.hour.toString(), 2, "0")}:${padStart(
-					this.minute.toString(),
-					2,
-					"0",
-				)}:${padStart(this.second.toString(), 2, "0")}`,
+				time: `${padStart(this.hour.toString(), 2, "0")}:${
+					padStart(
+						this.minute.toString(),
+						2,
+						"0",
+					)
+				}:${padStart(this.second.toString(), 2, "0")}`,
 			},
 		};
 	}
@@ -322,11 +325,13 @@ export class TimeCCDateReport extends TimeCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				date: `${padStart(this.year.toString(), 4, "0")}-${padStart(
-					this.month.toString(),
-					2,
-					"0",
-				)}-${padStart(this.day.toString(), 2, "0")}`,
+				date: `${padStart(this.year.toString(), 4, "0")}-${
+					padStart(
+						this.month.toString(),
+						2,
+						"0",
+					)
+				}-${padStart(this.day.toString(), 2, "0")}`,
 			},
 		};
 	}

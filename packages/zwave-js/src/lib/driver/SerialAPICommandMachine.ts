@@ -1,17 +1,17 @@
 import type { Message } from "@zwave-js/serial";
 import {
+	MessageType,
 	isMultiStageCallback,
 	isSuccessIndicator,
-	MessageType,
 } from "@zwave-js/serial";
 import {
-	assign,
-	createMachine,
-	raise,
 	type InterpreterFrom,
 	type MachineConfig,
 	type MachineOptions,
 	type StateMachine,
+	assign,
+	createMachine,
+	raise,
 } from "xstate";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
@@ -62,30 +62,33 @@ export type SerialAPICommandEvent =
 
 export type SerialAPICommandDoneData =
 	| {
-			type: "success";
-			// TODO: Can we get rid of this?
-			txTimestamp: number;
-			result?: Message;
-	  }
-	| ({
+		type: "success";
+		// TODO: Can we get rid of this?
+		txTimestamp: number;
+		result?: Message;
+	}
+	| (
+		& {
 			type: "failure";
-	  } & (
+		}
+		& (
 			| {
-					reason:
-						| "send failure"
-						| "CAN"
-						| "NAK"
-						| "ACK timeout"
-						| "response timeout"
-						| "callback timeout"
-						| "aborted";
-					result?: undefined;
-			  }
+				reason:
+					| "send failure"
+					| "CAN"
+					| "NAK"
+					| "ACK timeout"
+					| "response timeout"
+					| "callback timeout"
+					| "aborted";
+				result?: undefined;
+			}
 			| {
-					reason: "response NOK" | "callback NOK";
-					result: Message;
-			  }
-	  ));
+				reason: "response NOK" | "callback NOK";
+				result: Message;
+			}
+		)
+	);
 
 export interface SerialAPICommandServiceImplementations {
 	timestamp: () => number;
@@ -124,8 +127,9 @@ export type SerialAPICommandMachine = StateMachine<
 	SerialAPICommandEvent
 >;
 
-export type SerialAPICommandInterpreter =
-	InterpreterFrom<SerialAPICommandMachine>;
+export type SerialAPICommandInterpreter = InterpreterFrom<
+	SerialAPICommandMachine
+>;
 export type SerialAPICommandMachineOptions = Partial<
 	MachineOptions<SerialAPICommandContext, SerialAPICommandEvent>
 >;
@@ -370,38 +374,39 @@ export function getSerialAPICommandMachineOptions(
 					? ctx.msg.isExpectedCallback((evt as any).message)
 					: false,
 			responseIsNOK: (ctx, evt) =>
-				evt.type === "response" &&
+				evt.type === "response"
 				// assume responses without success indication to be OK
-				isSuccessIndicator(evt.message) &&
-				!evt.message.isOK(),
+				&& isSuccessIndicator(evt.message)
+				&& !evt.message.isOK(),
 			callbackIsNOK: (ctx, evt) =>
-				evt.type === "callback" &&
+				evt.type === "callback"
 				// assume callbacks without success indication to be OK
-				isSuccessIndicator(evt.message) &&
-				!evt.message.isOK(),
+				&& isSuccessIndicator(evt.message)
+				&& !evt.message.isOK(),
 			callbackIsFinal: (ctx, evt) =>
-				evt.type === "callback" &&
+				evt.type === "callback"
 				// assume callbacks without success indication to be OK
-				(!isSuccessIndicator(evt.message) || evt.message.isOK()) &&
+				&& (!isSuccessIndicator(evt.message) || evt.message.isOK())
 				// assume callbacks without isFinal method to be final
-				(!isMultiStageCallback(evt.message) || evt.message.isFinal()),
+				&& (!isMultiStageCallback(evt.message)
+					|| evt.message.isFinal()),
 		},
 		delays: {
 			RETRY_DELAY: (ctx) => computeRetryDelay(ctx),
 			RESPONSE_TIMEOUT: (ctx) => {
 				return (
 					// Ask the message for its callback timeout
-					ctx.msg.getResponseTimeout() ||
+					ctx.msg.getResponseTimeout()
 					// and fall back to default values
-					timeoutConfig.response
+					|| timeoutConfig.response
 				);
 			},
 			CALLBACK_TIMEOUT: (ctx) => {
 				return (
 					// Ask the message for its callback timeout
-					ctx.msg.getCallbackTimeout() ||
+					ctx.msg.getCallbackTimeout()
 					// and fall back to default values
-					timeoutConfig.sendDataCallback
+					|| timeoutConfig.sendDataCallback
 				);
 			},
 			ACK_TIMEOUT: timeoutConfig.ack,

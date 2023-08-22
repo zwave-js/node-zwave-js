@@ -5,9 +5,9 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { ApplicationUpdateRequestNodeInfoReceived } from "../../serialapi/application/ApplicationUpdateRequest";
@@ -35,16 +35,17 @@ integrationTest(
 			const respondToMultilevelSwitchSet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof MultilevelSwitchCCSet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof MultilevelSwitchCCSet
 					) {
 						const targetValue = frame.payload.targetValue;
 						if (targetValue === 255) {
 							currentBrightness = lastBrightness;
 						} else {
 							currentBrightness = targetValue;
-							if (currentBrightness > 0)
+							if (currentBrightness > 0) {
 								lastBrightness = currentBrightness;
+							}
 						}
 
 						return true;
@@ -58,8 +59,8 @@ integrationTest(
 			const respondToMultilevelSwitchGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof MultilevelSwitchCCGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof MultilevelSwitchCCGet
 					) {
 						const cc = new MultilevelSwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
@@ -101,8 +102,8 @@ integrationTest(
 
 			mockNode.assertReceivedControllerFrame(
 				(f) =>
-					f.type === MockZWaveFrameType.Request &&
-					f.payload instanceof MultilevelSwitchCCGet,
+					f.type === MockZWaveFrameType.Request
+					&& f.payload instanceof MultilevelSwitchCCGet,
 			);
 
 			t.pass();

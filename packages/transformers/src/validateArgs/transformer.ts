@@ -10,8 +10,8 @@ function getEmitDetailedErrors(options?: {
 }): PartialVisitorContext["options"]["emitDetailedErrors"] {
 	if (options) {
 		if (
-			options.emitDetailedErrors === "auto" ||
-			typeof options.emitDetailedErrors === "boolean"
+			options.emitDetailedErrors === "auto"
+			|| typeof options.emitDetailedErrors === "boolean"
 		) {
 			return options.emitDetailedErrors;
 		}
@@ -25,9 +25,7 @@ export default function transformer(
 ): ts.TransformerFactory<ts.SourceFile> {
 	if (options?.verbose) {
 		console.log(
-			`@zwave-js/transformer: transforming program with ${
-				program.getSourceFiles().length
-			} source files; using TypeScript ${ts.version}.`,
+			`@zwave-js/transformer: transforming program with ${program.getSourceFiles().length} source files; using TypeScript ${ts.version}.`,
 		);
 	}
 
@@ -77,8 +75,8 @@ export default function transformer(
 				(i) =>
 					i.moduleSpecifier
 						.getText(file)
-						.replace(/^["']|["']$/g, "") ===
-					"@zwave-js/transformers",
+						.replace(/^["']|["']$/g, "")
+						=== "@zwave-js/transformers",
 			);
 		if (selfImports.length > 0) {
 			file = context.factory.updateSourceFile(
@@ -99,10 +97,12 @@ export default function transformer(
 			// Generic assert function used by all assertions
 			newStatements.push(createGenericAssertFunction(factory));
 			// And the individual "named" assertions
-			for (const [
-				typeName,
-				assertion,
-			] of fileVisitorContext.typeAssertions) {
+			for (
+				const [
+					typeName,
+					assertion,
+				] of fileVisitorContext.typeAssertions
+			) {
 				newStatements.push(
 					factory.createVariableStatement(
 						undefined,
