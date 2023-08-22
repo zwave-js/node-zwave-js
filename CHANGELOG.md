@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Auto-detected serialports now prominently include `/dev/serial/by-id/*` paths (#6182)
+
+### Bugfixes
+* Discard `Meter CC` and `Multilevel Sensor CC` reports when the node they supposedly come from does not support them (#6178)
+* Abort inclusion when a node with the same ID is already part of the network (#6180)
+* Fixed an issue where a node that does not support S0 and/or S2 was shown with an unknown security class (#6187)
+* Fixed a regression from `v11.12.0` where devices with a `proprietary` field in the device config would not finish the interview (#6202)
+
+### Config file changes
+* Remove unnecessary endpoint functionality for CT100 (#6185)
+
+### Changes under the hood
+* Extended documentation for parsing QR codes (#6181)
+* Fixed an issue where directly editing `driver.options` in tests would modify the `defaultOptions` and influence future driver instances (#6188)
+
 ## 11.12.0 (2023-08-16)
 ### Features
 * When the controller cannot transmit due to being jammed, this is now detected and exposed to applications. In this situation, nodes are no longer being marked as dead. (#6174)
