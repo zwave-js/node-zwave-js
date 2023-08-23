@@ -1,19 +1,19 @@
 import * as Sentry from "@sentry/node";
 import {
+	type CommandClass,
 	isCommandClassContainer,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
-	type CommandClass,
 } from "@zwave-js/cc";
 import {
+	type DataDirection,
+	type LogContext,
 	MessagePriority,
+	type ZWaveLogContainer,
 	ZWaveLoggerBase,
 	getDirectionPrefix,
 	messageRecordToLines,
 	tagify,
-	type DataDirection,
-	type LogContext,
-	type ZWaveLogContainer,
 } from "@zwave-js/core";
 import type { Message, ResponseRole } from "@zwave-js/serial";
 import { FunctionType, MessageType } from "@zwave-js/serial";
@@ -142,9 +142,8 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 				msg = msg.filter((line) => !line.startsWith("│ payload:"));
 
 				const logCC = (cc: CommandClass, indent: number = 0) => {
-					const isEncapCC =
-						isEncapsulatingCommandClass(cc) ||
-						isMultiEncapsulatingCommandClass(cc);
+					const isEncapCC = isEncapsulatingCommandClass(cc)
+						|| isMultiEncapsulatingCommandClass(cc);
 					const loggedCC = cc.toLogEntry(this.driver);
 					msg.push(
 						" ".repeat(indent * 2) + "└─" + tagify(loggedCC.tags),
@@ -176,10 +175,9 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 
 			this.logger.log({
 				level: DRIVER_LOGLEVEL,
-				secondaryTags:
-					secondaryTags && secondaryTags.length > 0
-						? tagify(secondaryTags)
-						: undefined,
+				secondaryTags: secondaryTags && secondaryTags.length > 0
+					? tagify(secondaryTags)
+					: undefined,
 				message: msg,
 				// Since we are programming a controller, responses are always inbound
 				// (not to confuse with the message type, which may be Request or Response)
@@ -206,17 +204,17 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 				for (const trns of queue.transactions) {
 					// TODO: This formatting should be shared with the other logging methods
 					const node = trns.message.getNodeUnsafe(this.driver);
-					const prefix =
-						trns.message.type === MessageType.Request
-							? "[REQ]"
-							: "[RES]";
-					const postfix =
-						node != undefined
-							? ` [Node ${node.id}, ${getEnumMemberName(
-									NodeStatus,
-									node.status,
-							  )}]`
-							: "";
+					const prefix = trns.message.type === MessageType.Request
+						? "[REQ]"
+						: "[RES]";
+					const postfix = node != undefined
+						? ` [Node ${node.id}, ${
+							getEnumMemberName(
+								NodeStatus,
+								node.status,
+							)
+						}]`
+						: "";
 					const command = isCommandClassContainer(trns.message)
 						? ` (${trns.message.command.constructor.name})`
 						: "";

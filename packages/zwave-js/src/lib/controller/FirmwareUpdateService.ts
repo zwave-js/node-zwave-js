@@ -5,12 +5,12 @@ import got, {
 import PQueue from "@esm2cjs/p-queue";
 import type { DeviceID } from "@zwave-js/config";
 import {
+	type Firmware,
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
 	extractFirmware,
 	guessFirmwareFileFormat,
-	type Firmware,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
 import crypto from "crypto";
@@ -92,8 +92,8 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 			if (response.headers.age) {
 				currentAge = parseInt(response.headers.age, 10);
 			} else if (response.headers.date) {
-				currentAge =
-					(Date.now() - Date.parse(response.headers.date)) / 1000;
+				currentAge = (Date.now() - Date.parse(response.headers.date))
+					/ 1000;
 			} else {
 				currentAge = 0;
 			}
@@ -102,9 +102,9 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 			if (maxAge > currentAge) {
 				requestCache.set(cacheKey, {
 					response: responseJson,
-					staleDate:
-						Date.now() +
-						Math.min(MAX_CACHE_SECONDS, maxAge - currentAge) * 1000,
+					staleDate: Date.now()
+						+ Math.min(MAX_CACHE_SECONDS, maxAge - currentAge)
+							* 1000,
 				});
 			}
 		}

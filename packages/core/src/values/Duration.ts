@@ -109,11 +109,12 @@ export class Duration {
 	/** Serializes a duration for a Set command */
 	public serializeSet(): number {
 		if (this.unit === "default") return 0xff;
-		if (this.unit === "unknown")
+		if (this.unit === "unknown") {
 			throw new ZWaveError(
 				"Set commands don't support unknown durations",
 				ZWaveErrorCodes.CC_Invalid,
 			);
+		}
 		const isMinutes = this.unit === "minutes";
 		let payload = isMinutes ? 0b1000_0000 : 0;
 		payload += (this._value - (isMinutes ? 1 : 0)) & 0b0111_1111;
@@ -130,8 +131,9 @@ export class Duration {
 	}
 
 	public toJSON(): string | JSONObject {
-		if (this.unit === "default" || this.unit === "unknown")
+		if (this.unit === "default" || this.unit === "unknown") {
 			return this.unit;
+		}
 		return {
 			value: this.value,
 			unit: this.unit,

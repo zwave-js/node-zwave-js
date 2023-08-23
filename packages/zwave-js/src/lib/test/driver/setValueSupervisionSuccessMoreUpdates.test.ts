@@ -6,9 +6,9 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import sinon from "sinon";
@@ -35,8 +35,8 @@ integrationTest(
 			const respondToSupervisionGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof SupervisionCCGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof SupervisionCCGet
 					) {
 						const cc = new SupervisionCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,

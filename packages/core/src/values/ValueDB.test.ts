@@ -4,9 +4,9 @@ import sinon from "sinon";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
-import type { ValueID } from "./_Types";
 import { ValueMetadata } from "./Metadata";
-import { dbKeyToValueIdFast, ValueDB } from "./ValueDB";
+import { ValueDB, dbKeyToValueIdFast } from "./ValueDB";
+import type { ValueID } from "./_Types";
 
 function setup(): {
 	valueDB: ValueDB;
@@ -910,7 +910,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 		for (const valueId of invalidValueIDs) {
 			t.notThrows(() =>
-				valueDB.setValue(valueId as any, 0, { noThrow: true }),
+				valueDB.setValue(valueId as any, 0, { noThrow: true })
 			);
 		}
 	});
@@ -921,7 +921,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 			t.notThrows(() =>
 				valueDB.setMetadata(valueId as any, {} as any, {
 					noThrow: true,
-				}),
+				})
 			);
 		}
 	});

@@ -54,13 +54,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Application build number
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Application build number
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `applicationFrameworkAPIVersion`
 
@@ -72,13 +72,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Z-Wave application framework API version
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Z-Wave application framework API version
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `applicationFrameworkBuildNumber`
 
@@ -90,13 +90,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Z-Wave application framework API build number
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Z-Wave application framework API build number
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `applicationVersion`
 
@@ -108,13 +108,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Application version
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Application version
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `firmwareVersions`
 
@@ -126,13 +126,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Z-Wave chip firmware versions
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string[]"`
+- **label:** Z-Wave chip firmware versions
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string[]"`
 
 ### `hardwareVersion`
 
@@ -144,13 +144,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Z-Wave chip hardware version
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** Z-Wave chip hardware version
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `libraryType`
 
@@ -162,13 +162,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Library type
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** Library type
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `protocolVersion`
 
@@ -180,13 +180,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Z-Wave protocol version
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Z-Wave protocol version
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `sdkVersion`
 
@@ -198,13 +198,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** SDK version
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** SDK version
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `serialAPIBuildNumber`
 
@@ -216,13 +216,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Serial API build number
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Serial API build number
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `serialAPIVersion`
 
@@ -234,13 +234,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Serial API version
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Serial API version
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `zWaveProtocolBuildNumber`
 
@@ -252,13 +252,13 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Z-Wave protocol build number
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Z-Wave protocol build number
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `zWaveProtocolVersion`
 
@@ -270,10 +270,10 @@ async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion
 }
 ```
 
--   **label:** Z-Wave protocol version
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Z-Wave protocol version
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`

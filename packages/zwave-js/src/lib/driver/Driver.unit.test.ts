@@ -1,10 +1,10 @@
-import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 // import { Message, MessageType, messageTypes } from "@zwave-js/serial";
 import { MockSerialPort } from "@zwave-js/serial/mock";
 import test from "ava";
 import proxyquire from "proxyquire";
 import sinon from "sinon";
-import { createAndStartDriver, PORT_ADDRESS } from "../test/utils";
+import { PORT_ADDRESS, createAndStartDriver } from "../test/utils";
 
 // @messageTypes(MessageType.Request, 0xff)
 // class TestMessage extends Message {}
@@ -100,7 +100,7 @@ test.serial(
 		// fail opening of the serialport
 		const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 		portInstance.openStub.callsFake(() =>
-			Promise.reject(new Error("NOPE")),
+			Promise.reject(new Error("NOPE"))
 		);
 
 		await t.throwsAsync(startPromise, { message: /NOPE/ });

@@ -44,8 +44,8 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 						MockControllerStateKeys.CommunicationState,
 					) as MockControllerCommunicationState | undefined;
 					if (
-						state != undefined &&
-						state !== MockControllerCommunicationState.Idle
+						state != undefined
+						&& state !== MockControllerCommunicationState.Idle
 					) {
 						throw new Error(
 							"Received SendDataRequest while not idle",

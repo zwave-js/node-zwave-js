@@ -94,7 +94,7 @@ integrationTest(
 			await wait(100);
 			t.is(
 				node.getValue(alarmStatusValueId),
-				0x03 /* Smoke alarm test */,
+				0x03, /* Smoke alarm test */
 			);
 
 			// Idling with a valueId does work

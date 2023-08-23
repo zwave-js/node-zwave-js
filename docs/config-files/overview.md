@@ -4,9 +4,9 @@ Since older versions of the Z-Wave standard don't allow us to request all the in
 
 Device configuration files commonly include the following information:
 
--   Device identification: manufacturer, label, firmware versions
--   Associations: to improve what the device reports or to provide info the device does not report
--   Configuration parameters
--   Toggling device-specific workarounds for firmware bugs
+- Device identification: manufacturer, label, firmware versions
+- Associations: to improve what the device reports or to provide info the device does not report
+- Configuration parameters
+- Toggling device-specific workarounds for firmware bugs
 
 > [!NOTE] A missing config file **does not** mean that the device is unsupported. Their primary purpose is to improve the user experience. Most of the Z-Wave functionality is exposed through standardized messages (called Command Classes).

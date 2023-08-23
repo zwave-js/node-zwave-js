@@ -6,27 +6,27 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
 	MessagePriority,
 	ValueMetadata,
 	enumValuesToMetadataStates,
 	parseFloatWithScale,
 	validatePayload,
-	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, pick, type AllOrNone } from "@zwave-js/shared/safe";
+import { type AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
 	POLL_VALUE,
 	PhysicalCCAPI,
-	throwUnsupportedProperty,
 	type PollValueImplementation,
+	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -47,17 +47,23 @@ import { NotificationCCValues } from "./NotificationCC";
 
 export const BatteryCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Battery, {
-		...V.staticProperty("level", {
-			...ValueMetadata.ReadOnlyUInt8,
-			max: 100,
-			unit: "%",
-			label: "Battery level",
-		} as const),
+		...V.staticProperty(
+			"level",
+			{
+				...ValueMetadata.ReadOnlyUInt8,
+				max: 100,
+				unit: "%",
+				label: "Battery level",
+			} as const,
+		),
 
-		...V.staticProperty("isLow", {
-			...ValueMetadata.ReadOnlyBoolean,
-			label: "Low battery level",
-		} as const),
+		...V.staticProperty(
+			"isLow",
+			{
+				...ValueMetadata.ReadOnlyBoolean,
+				label: "Low battery level",
+			} as const,
+		),
 
 		...V.staticProperty(
 			"maximumCapacity",
@@ -190,7 +196,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: BatteryCCAPI, { property }) {
+		return async function(this: BatteryCCAPI, { property }) {
 			switch (property) {
 				case "level":
 				case "isLow":
@@ -361,26 +367,27 @@ temperature:   ${batteryHealth.temperature} °C`;
 			BatteryCCValues.level.endpoint(this.endpointIndex),
 		);
 		return (
-			lastUpdated == undefined ||
+			lastUpdated == undefined
 			// The specs say once per month, but that's a bit too unfrequent IMO
 			// Also the maximum that setInterval supports is ~24.85 days
-			Date.now() - lastUpdated > timespan.days(7)
+			|| Date.now() - lastUpdated > timespan.days(7)
 		);
 	}
 }
 
-export type BatteryCCReportOptions = CCCommandOptions &
-	(
+export type BatteryCCReportOptions =
+	& CCCommandOptions
+	& (
 		| {
-				isLow?: false;
-				level: number;
-		  }
+			isLow?: false;
+			level: number;
+		}
 		| {
-				isLow: true;
-				level?: undefined;
-		  }
-	) &
-	AllOrNone<{
+			isLow: true;
+			level?: undefined;
+		}
+	)
+	& AllOrNone<{
 		// V2+
 		chargingStatus: BatteryChargingStatus;
 		rechargeable: boolean;
@@ -389,8 +396,8 @@ export type BatteryCCReportOptions = CCCommandOptions &
 		lowFluid: boolean;
 		rechargeOrReplace: BatteryReplacementStatus;
 		disconnected: boolean;
-	}> &
-	AllOrNone<{
+	}>
+	& AllOrNone<{
 		// V3+
 		lowTemperatureStatus: boolean;
 	}>;
@@ -457,12 +464,12 @@ export class BatteryCCReport extends BatteryCC {
 			);
 			if (
 				// supported
-				notificationCCVersion > 0 &&
+				notificationCCVersion > 0
 				// but idling is not required
-				notificationCCVersion < 8
+				&& notificationCCVersion < 8
 			) {
-				const batteryLevelStatusValue =
-					NotificationCCValues.notificationVariable(
+				const batteryLevelStatusValue = NotificationCCValues
+					.notificationVariable(
 						"Power Management",
 						"Battery level status",
 					);
@@ -471,7 +478,7 @@ export class BatteryCCReport extends BatteryCC {
 					this.setValue(
 						applHost,
 						batteryLevelStatusValue,
-						0 /* idle */,
+						0, /* idle */
 					);
 				}
 			}
@@ -516,19 +523,19 @@ export class BatteryCCReport extends BatteryCC {
 			this.payload = Buffer.concat([
 				this.payload,
 				Buffer.from([
-					(this.chargingStatus << 6) +
-						(this.rechargeable ? 0b0010_0000 : 0) +
-						(this.backup ? 0b0001_0000 : 0) +
-						(this.overheating ? 0b1000 : 0) +
-						(this.lowFluid ? 0b0100 : 0) +
-						(this.rechargeOrReplace === BatteryReplacementStatus.Now
-							? 0b10
-							: this.rechargeOrReplace ===
-							  BatteryReplacementStatus.Soon
-							? 0b1
-							: 0),
-					(this.lowTemperatureStatus ? 0b10 : 0) +
-						(this.disconnected ? 0b1 : 0),
+					(this.chargingStatus << 6)
+					+ (this.rechargeable ? 0b0010_0000 : 0)
+					+ (this.backup ? 0b0001_0000 : 0)
+					+ (this.overheating ? 0b1000 : 0)
+					+ (this.lowFluid ? 0b0100 : 0)
+					+ (this.rechargeOrReplace === BatteryReplacementStatus.Now
+						? 0b10
+						: this.rechargeOrReplace
+								=== BatteryReplacementStatus.Soon
+						? 0b1
+						: 0),
+					(this.lowTemperatureStatus ? 0b10 : 0)
+					+ (this.disconnected ? 0b1 : 0),
 				]),
 			]);
 		}
@@ -628,14 +635,12 @@ export class BatteryCCHealthReport extends BatteryCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				temperature:
-					this.temperature != undefined
-						? this.temperature
-						: "unknown",
-				"max capacity":
-					this.maximumCapacity != undefined
-						? `${this.maximumCapacity} %`
-						: "unknown",
+				temperature: this.temperature != undefined
+					? this.temperature
+					: "unknown",
+				"max capacity": this.maximumCapacity != undefined
+					? `${this.maximumCapacity} %`
+					: "unknown",
 			},
 		};
 	}

@@ -29,8 +29,8 @@ const ignoredImports = ["@zwave-js/transformers"];
 
 function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	if (
-		ts.isImportEqualsDeclaration(node) &&
-		ts.isExternalModuleReference(node.moduleReference)
+		ts.isImportEqualsDeclaration(node)
+		&& ts.isExternalModuleReference(node.moduleReference)
 	) {
 		return node.moduleReference.expression;
 	} else if (ts.isImportDeclaration(node)) {
@@ -39,14 +39,14 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 			// import "bar"
 			return node.moduleSpecifier;
 		} else if (
-			!node.importClause.isTypeOnly &&
+			!node.importClause.isTypeOnly
 			// import foo from "bar"
-			(!node.importClause.namedBindings ||
+			&& (!node.importClause.namedBindings
 				// import * as foo from "bar"
-				ts.isNamespaceImport(node.importClause.namedBindings) ||
+				|| ts.isNamespaceImport(node.importClause.namedBindings)
 				// import {foo, type baz} from "bar"
-				(ts.isNamedImports(node.importClause.namedBindings) &&
-					node.importClause.namedBindings.elements.some(
+				|| (ts.isNamedImports(node.importClause.namedBindings)
+					&& node.importClause.namedBindings.elements.some(
 						(e) => !e.isTypeOnly,
 					)))
 		) {
@@ -55,14 +55,14 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	} else if (ts.isExportDeclaration(node)) {
 		// Only return export declarations where there is at least one non-typeonly export specifier
 		if (
-			!node.isTypeOnly &&
+			!node.isTypeOnly
 			// export * from "bar"
-			(!node.exportClause ||
+			&& (!node.exportClause
 				// export * as foo from "bar"
-				ts.isNamespaceExport(node.exportClause) ||
+				|| ts.isNamespaceExport(node.exportClause)
 				// export {foo, type baz} from "bar"
-				(ts.isNamedExports(node.exportClause) &&
-					node.exportClause.elements.some((e) => !e.isTypeOnly)))
+				|| (ts.isNamedExports(node.exportClause)
+					&& node.exportClause.elements.some((e) => !e.isTypeOnly)))
 		) {
 			return node.moduleSpecifier;
 		}
@@ -85,8 +85,8 @@ function getImports(
 		const moduleNameExpr = getExternalModuleName(node);
 		// if they have a name, that is a string, i.e. not alias definition `import x = y`
 		if (
-			moduleNameExpr &&
-			moduleNameExpr.kind === ts.SyntaxKind.StringLiteral
+			moduleNameExpr
+			&& moduleNameExpr.kind === ts.SyntaxKind.StringLiteral
 		) {
 			// Ask the checker about the "symbol: for this module name
 			// it would be undefined if the module was not found (i.e. error)
@@ -95,11 +95,10 @@ function getImports(
 			if (file) {
 				output.push({
 					name: moduleNameExpr.getText(sourceFile),
-					line:
-						ts.getLineAndCharacterOfPosition(
-							sourceFile,
-							moduleNameExpr.getStart(),
-						).line + 1,
+					line: ts.getLineAndCharacterOfPosition(
+						sourceFile,
+						moduleNameExpr.getStart(),
+					).line + 1,
 					sourceFile: file,
 				});
 			}
@@ -217,19 +216,24 @@ export function lintNoExternalImports(): Promise<void> {
 				if (ignoredImports.includes(trimmedImport)) continue;
 
 				if (
-					imp.sourceFile.fileName.includes("node_modules") &&
-					!whitelistedImports.includes(trimmedImport)
+					imp.sourceFile.fileName.includes("node_modules")
+					&& !whitelistedImports.includes(trimmedImport)
 				) {
 					numErrors++;
 
-					const message = `Found forbidden import of external module ${
-						imp.name
-					}:
-${[...importStack, `❌ ${imp.name}`]
-	.map((file, indent) =>
-		indent === 0 ? file : `${"   ".repeat(indent - 1)}└─ ${file}`,
-	)
-	.join("\n")}`;
+					const message =
+						`Found forbidden import of external module ${imp.name}:
+${
+							[...importStack, `❌ ${imp.name}`]
+								.map((file, indent) =>
+									indent === 0
+										? file
+										: `${
+											"   ".repeat(indent - 1)
+										}└─ ${file}`
+								)
+								.join("\n")
+						}`;
 
 					reportProblem({
 						severity: "error",
@@ -244,9 +248,9 @@ ${[...importStack, `❌ ${imp.name}`]
 					// try to resolve the original source file for declaration files
 					const next: ts.SourceFile = imp.sourceFile.isDeclarationFile
 						? resolveSourceFileFromDefinition(
-								context,
-								imp.sourceFile,
-						  )
+							context,
+							imp.sourceFile,
+						)
 						: imp.sourceFile;
 
 					if (!visitedSourceFiles.has(next.fileName)) {

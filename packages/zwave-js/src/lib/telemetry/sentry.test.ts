@@ -1,4 +1,4 @@
-import { getErrorSuffix, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes, getErrorSuffix } from "@zwave-js/core";
 import test from "ava";
 import path from "path";
 import { createSentryContext } from "./sentry";
@@ -112,7 +112,8 @@ test("should ignore errors that must be handled by the developer", (t) => {
 			values: [
 				{
 					type: "ZWaveError",
-					value: "Node 6 did not respond after 3 attempts, it is presumed dead",
+					value:
+						"Node 6 did not respond after 3 attempts, it is presumed dead",
 					stacktrace: {
 						frames: [
 							{
@@ -163,7 +164,8 @@ test("should ignore errors that must be handled by the developer", (t) => {
 							},
 							{
 								function: "Proxy.set",
-								module: "zwave-js.src.lib.commandclass:BinarySwitchCC.ts",
+								module:
+									"zwave-js.src.lib.commandclass:BinarySwitchCC.ts",
 								filename:
 									"/home/michel/dashboard/servers/zwave/node_modules/zwave-js/src/lib/commandclass/BinarySwitchCC.ts",
 								abs_path:
@@ -211,7 +213,8 @@ test("should ignore errors that must be handled by the developer, unless whiteli
 			values: [
 				{
 					type: "ZWaveError",
-					value: "Timeout while waiting for an ACK from the controller",
+					value:
+						"Timeout while waiting for an ACK from the controller",
 					stacktrace: {
 						frames: [
 							{
@@ -222,7 +225,8 @@ test("should ignore errors that must be handled by the developer, unless whiteli
 							},
 							{
 								function: "Immediate._onImmediate",
-								module: "@iobroker.db-states-redis.lib.states:statesInRedisClient",
+								module:
+									"@iobroker.db-states-redis.lib.states:statesInRedisClient",
 								filename:
 									"/opt/iobroker/node_modules/@iobroker/db-states-redis/lib/states/statesInRedisClient.js",
 								abs_path:
@@ -267,7 +271,8 @@ test("should ignore errors that must be handled by the developer, unless whiteli
 							},
 							{
 								function: "ZWaveController.getNodeNeighbors",
-								module: "zwave-js.src.lib.controller:Controller.ts",
+								module:
+									"zwave-js.src.lib.controller:Controller.ts",
 								filename:
 									"/opt/iobroker/node_modules/zwave-js/src/lib/controller/Controller.ts",
 								abs_path:
@@ -350,7 +355,8 @@ test("regression test for ignored errors 1: testing in the REPL", (t) => {
 							},
 							{
 								function: "ZWaveController.addAssociations",
-								module: "zwave-js.src.lib.controller:Controller.ts",
+								module:
+									"zwave-js.src.lib.controller:Controller.ts",
 								filename:
 									"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
 								abs_path:
@@ -360,7 +366,8 @@ test("regression test for ignored errors 1: testing in the REPL", (t) => {
 							{ function: "Array.filter", in_app: true },
 							{
 								function: "null.<anonymous>",
-								module: "zwave-js.src.lib.controller:Controller.ts",
+								module:
+									"zwave-js.src.lib.controller:Controller.ts",
 								filename:
 									"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
 								abs_path:
@@ -370,7 +377,8 @@ test("regression test for ignored errors 1: testing in the REPL", (t) => {
 							{
 								function:
 									"ZWaveController.isAssociationAllowed",
-								module: "zwave-js.src.lib.controller:Controller.ts",
+								module:
+									"zwave-js.src.lib.controller:Controller.ts",
 								filename:
 									"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
 								abs_path:
@@ -379,7 +387,8 @@ test("regression test for ignored errors 1: testing in the REPL", (t) => {
 							},
 							{
 								function: "Map.<anonymous>",
-								module: "zwave-js.src.lib.controller:Controller.ts",
+								module:
+									"zwave-js.src.lib.controller:Controller.ts",
 								filename:
 									"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
 								abs_path:
@@ -450,7 +459,8 @@ test("regression test for ignored errors 2: clearly a connection issue", (t) => 
 							},
 							{
 								function: "Proxy.ConfigurationCCAPI.<computed>",
-								module: "zwave-js.src.lib.commandclass:ConfigurationCC.ts",
+								module:
+									"zwave-js.src.lib.commandclass:ConfigurationCC.ts",
 								filename:
 									"/home/pi/zwave/node_modules/zwave-js/src/lib/commandclass/ConfigurationCC.ts",
 								abs_path:
@@ -459,7 +469,8 @@ test("regression test for ignored errors 2: clearly a connection issue", (t) => 
 							},
 							{
 								function: "ConfigurationCCAPI.set",
-								module: "zwave-js.src.lib.commandclass:ConfigurationCC.ts",
+								module:
+									"zwave-js.src.lib.commandclass:ConfigurationCC.ts",
 								filename:
 									"/home/pi/zwave/node_modules/zwave-js/src/lib/commandclass/ConfigurationCC.ts",
 								abs_path:
@@ -495,9 +506,11 @@ test("regression test for ignored errors 2: clearly a connection issue", (t) => 
 		},
 	} as any;
 	const hint = {
-		originalException: `Failed to send the message after 3 attempts (${getErrorSuffix(
-			ZWaveErrorCodes.Controller_MessageDropped,
-		)})`,
+		originalException: `Failed to send the message after 3 attempts (${
+			getErrorSuffix(
+				ZWaveErrorCodes.Controller_MessageDropped,
+			)
+		})`,
 	} as any;
 	t.true(context.shouldIgnore(event, hint));
 });

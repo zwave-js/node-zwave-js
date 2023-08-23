@@ -1,25 +1,25 @@
 import {
+	type CommandClasses,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	NodeType,
 	parseNodeID,
 	parseNodeUpdatePayload,
-	type CommandClasses,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
@@ -74,10 +74,10 @@ export function computeNeighborDiscoveryTimeout(
 
 	// According to the Appl-Programmers-Guide
 	return (
-		76000 +
-		numListeningNodes * 217 +
-		numFlirsNodes * 3517 +
-		(nodeType === NodeType.Controller ? numNodes * 732 : 0)
+		76000
+		+ numListeningNodes * 217
+		+ numFlirsNodes * 3517
+		+ (nodeType === NodeType.Controller ? numNodes * 732 : 0)
 	);
 }
 
@@ -87,8 +87,8 @@ export function computeNeighborDiscoveryTimeout(
 export class AddNodeToNetworkRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== AddNodeToNetworkRequestStatusReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== AddNodeToNetworkRequestStatusReport
 		) {
 			return new AddNodeToNetworkRequestStatusReport(host, options);
 		}
@@ -109,14 +109,14 @@ function testCallbackForAddNodeRequest(
 		case AddNodeType.Slave:
 		case AddNodeType.Existing:
 			return (
-				received.status === AddNodeStatus.Ready ||
-				received.status === AddNodeStatus.Failed
+				received.status === AddNodeStatus.Ready
+				|| received.status === AddNodeStatus.Failed
 			);
 		case AddNodeType.Stop:
 		case AddNodeType.StopControllerReplication:
 			return (
-				received.status === AddNodeStatus.Done ||
-				received.status === AddNodeStatus.Failed
+				received.status === AddNodeStatus.Done
+				|| received.status === AddNodeStatus.Failed
 			);
 		default:
 			return false;
@@ -180,8 +180,8 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 
 export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 	public serialize(): Buffer {
-		const control: number =
-			AddNodeType.SmartStartListen | AddNodeFlags.NetworkWide;
+		const control: number = AddNodeType.SmartStartListen
+			| AddNodeFlags.NetworkWide;
 		// The Serial API does not send a callback, so disable waiting for one
 		this.callbackId = 0;
 

@@ -5,22 +5,22 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
 	MessagePriority,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -37,15 +37,21 @@ import { LanguageCommand } from "../lib/_Types";
 
 export const LanguageCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Language, {
-		...V.staticProperty("language", {
-			...ValueMetadata.ReadOnlyString,
-			label: "Language code",
-		} as const),
+		...V.staticProperty(
+			"language",
+			{
+				...ValueMetadata.ReadOnlyString,
+				label: "Language code",
+			} as const,
+		),
 
-		...V.staticProperty("country", {
-			...ValueMetadata.ReadOnlyString,
-			label: "Country code",
-		} as const),
+		...V.staticProperty(
+			"country",
+			{
+				...ValueMetadata.ReadOnlyString,
+				label: "Country code",
+			} as const,
+		),
 	}),
 });
 
@@ -193,8 +199,8 @@ export class LanguageCCSet extends LanguageCC {
 	}
 	public set country(value: MaybeNotKnown<string>) {
 		if (
-			typeof value === "string" &&
-			(value.length !== 2 || value.toUpperCase() !== value)
+			typeof value === "string"
+			&& (value.length !== 2 || value.toUpperCase() !== value)
 		) {
 			throw new ZWaveError(
 				"country must be a 2 digit (uppercase) code according to ISO 3166-1",

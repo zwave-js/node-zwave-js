@@ -44,8 +44,8 @@ integrationTest(
 			// We take the driver asking for a nonce for a sign that it correctly identified the CC as needing S0
 			mockController.assertReceivedHostMessage(
 				(msg) =>
-					msg instanceof SendDataRequest &&
-					msg.command instanceof SecurityCCNonceGet,
+					msg instanceof SendDataRequest
+					&& msg.command instanceof SecurityCCNonceGet,
 				{
 					errorMessage:
 						"The driver should have sent an S0-encapsulated command",

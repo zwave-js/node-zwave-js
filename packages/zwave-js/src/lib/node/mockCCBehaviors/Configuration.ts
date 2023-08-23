@@ -12,10 +12,10 @@ import {
 } from "@zwave-js/cc/ConfigurationCC";
 import { CommandClasses, ConfigValueFormat } from "@zwave-js/core/safe";
 import {
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type ConfigurationCCCapabilities,
 	type MockNodeBehavior,
+	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: ConfigurationCCCapabilities = {
@@ -31,8 +31,8 @@ const StateKeys = {
 const respondToConfigurationGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ConfigurationCCGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ConfigurationCCGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -51,10 +51,9 @@ const respondToConfigurationGet: MockNodeBehavior = {
 			// Do not respond if the parameter is not supported
 			if (!paramInfo) return true;
 
-			const value =
-				(self.state.get(StateKeys.value(parameter)) as number) ??
-				paramInfo.defaultValue ??
-				0;
+			const value = (self.state.get(StateKeys.value(parameter)) as number)
+				?? paramInfo.defaultValue
+				?? 0;
 
 			const cc = new ConfigurationCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
@@ -77,8 +76,8 @@ const respondToConfigurationGet: MockNodeBehavior = {
 const respondToConfigurationSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ConfigurationCCSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ConfigurationCCSet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -105,8 +104,8 @@ const respondToConfigurationSet: MockNodeBehavior = {
 			if (paramInfo.minValue != undefined && value < paramInfo.minValue) {
 				return true;
 			} else if (
-				paramInfo.maxValue != undefined &&
-				value > paramInfo.maxValue
+				paramInfo.maxValue != undefined
+				&& value > paramInfo.maxValue
 			) {
 				return true;
 			}
@@ -122,8 +121,8 @@ const respondToConfigurationSet: MockNodeBehavior = {
 const respondToConfigurationDefaultReset: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ConfigurationCCDefaultReset
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ConfigurationCCDefaultReset
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -145,8 +144,8 @@ const respondToConfigurationDefaultReset: MockNodeBehavior = {
 const respondToConfigurationNameGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ConfigurationCCNameGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ConfigurationCCNameGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -182,8 +181,8 @@ const respondToConfigurationNameGet: MockNodeBehavior = {
 const respondToConfigurationInfoGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ConfigurationCCInfoGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ConfigurationCCInfoGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -219,8 +218,8 @@ const respondToConfigurationInfoGet: MockNodeBehavior = {
 const respondToConfigurationPropertiesGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ConfigurationCCPropertiesGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ConfigurationCCPropertiesGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -252,8 +251,8 @@ const respondToConfigurationPropertiesGet: MockNodeBehavior = {
 					nodeId: controller.host.ownNodeId,
 					parameter,
 					valueSize: paramInfo.valueSize,
-					valueFormat:
-						paramInfo.format ?? ConfigValueFormat.SignedInteger,
+					valueFormat: paramInfo.format
+						?? ConfigValueFormat.SignedInteger,
 					minValue: paramInfo.minValue,
 					maxValue: paramInfo.maxValue,
 					defaultValue: paramInfo.defaultValue,

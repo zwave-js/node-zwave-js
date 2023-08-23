@@ -4,14 +4,14 @@ import type { DeviceClass } from "../node/DeviceClass";
 /** Additional information about the outcome of a node inclusion */
 export type InclusionResult =
 	| {
-			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
-			lowSecurity?: false;
-	  }
+		/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+		lowSecurity?: false;
+	}
 	| {
-			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
-			lowSecurity: true;
-			lowSecurityReason: SecurityBootstrapFailure;
-	  };
+		/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+		lowSecurity: true;
+		lowSecurityReason: SecurityBootstrapFailure;
+	};
 
 export enum SecurityBootstrapFailure {
 	/** Security bootstrapping was canceled by the user */
@@ -121,44 +121,44 @@ export interface InclusionUserCallbacks {
 /** Options for inclusion of a new node */
 export type InclusionOptions =
 	| {
-			strategy: InclusionStrategy.Default;
-			/**
-			 * Allows overriding the user callbacks for this inclusion.
-			 * If not given, the inclusion user callbacks of the driver options will be used.
-			 */
-			userCallbacks?: InclusionUserCallbacks;
-			/**
-			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
-			 * This is not recommended due to the overhead caused by S0.
-			 */
-			forceSecurity?: boolean;
-	  }
+		strategy: InclusionStrategy.Default;
+		/**
+		 * Allows overriding the user callbacks for this inclusion.
+		 * If not given, the inclusion user callbacks of the driver options will be used.
+		 */
+		userCallbacks?: InclusionUserCallbacks;
+		/**
+		 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
+		 * This is not recommended due to the overhead caused by S0.
+		 */
+		forceSecurity?: boolean;
+	}
 	| {
-			strategy: InclusionStrategy.Security_S2;
-			/**
-			 * Allows pre-filling the DSK, e.g. when a DSK-only QR code has been scanned.
-			 * If this is given, the `validateDSKAndEnterPIN` callback will not be called.
-			 */
-			dsk?: string;
-			/**
-			 * Allows overriding the user callbacks for this inclusion.
-			 * If not given, the inclusion user callbacks of the driver options will be used.
-			 */
-			userCallbacks?: InclusionUserCallbacks;
-	  }
+		strategy: InclusionStrategy.Security_S2;
+		/**
+		 * Allows pre-filling the DSK, e.g. when a DSK-only QR code has been scanned.
+		 * If this is given, the `validateDSKAndEnterPIN` callback will not be called.
+		 */
+		dsk?: string;
+		/**
+		 * Allows overriding the user callbacks for this inclusion.
+		 * If not given, the inclusion user callbacks of the driver options will be used.
+		 */
+		userCallbacks?: InclusionUserCallbacks;
+	}
 	| {
-			strategy: InclusionStrategy.Security_S2;
-			/**
-			 * The optional provisioning entry for the device to be included.
-			 * If not given, the inclusion user callbacks of the driver options will be used.
-			 */
-			provisioning?: PlannedProvisioningEntry;
-	  }
+		strategy: InclusionStrategy.Security_S2;
+		/**
+		 * The optional provisioning entry for the device to be included.
+		 * If not given, the inclusion user callbacks of the driver options will be used.
+		 */
+		provisioning?: PlannedProvisioningEntry;
+	}
 	| {
-			strategy:
-				| InclusionStrategy.Insecure
-				| InclusionStrategy.Security_S0;
-	  };
+		strategy:
+			| InclusionStrategy.Insecure
+			| InclusionStrategy.Security_S0;
+	};
 
 /**
  * Options for inclusion of a new node, including SmartStart
@@ -167,9 +167,9 @@ export type InclusionOptions =
 export type InclusionOptionsInternal =
 	| InclusionOptions
 	| {
-			strategy: InclusionStrategy.SmartStart;
-			provisioning: PlannedProvisioningEntry;
-	  };
+		strategy: InclusionStrategy.SmartStart;
+		provisioning: PlannedProvisioningEntry;
+	};
 
 export type ExclusionOptions = {
 	strategy:
@@ -183,26 +183,26 @@ export type ReplaceNodeOptions =
 	// We don't know which security CCs a node supports when it is a replacement
 	// Therefore we need the user to specify how the node should be included
 	| {
-			strategy: InclusionStrategy.Security_S2;
-			/**
-			 * Allows overriding the user callbacks for this inclusion.
-			 * If not given, the inclusion user callbacks of the driver options will be used.
-			 */
-			userCallbacks?: InclusionUserCallbacks;
-	  }
+		strategy: InclusionStrategy.Security_S2;
+		/**
+		 * Allows overriding the user callbacks for this inclusion.
+		 * If not given, the inclusion user callbacks of the driver options will be used.
+		 */
+		userCallbacks?: InclusionUserCallbacks;
+	}
 	| {
-			strategy: InclusionStrategy.Security_S2;
-			/**
-			 * The optional provisioning entry for the device to be included.
-			 * If not given, the inclusion user callbacks of the driver options will be used.
-			 */
-			provisioning?: PlannedProvisioningEntry;
-	  }
+		strategy: InclusionStrategy.Security_S2;
+		/**
+		 * The optional provisioning entry for the device to be included.
+		 * If not given, the inclusion user callbacks of the driver options will be used.
+		 */
+		provisioning?: PlannedProvisioningEntry;
+	}
 	| {
-			strategy:
-				| InclusionStrategy.Insecure
-				| InclusionStrategy.Security_S0;
-	  };
+		strategy:
+			| InclusionStrategy.Insecure
+			| InclusionStrategy.Security_S0;
+	};
 
 export enum ProvisioningEntryStatus {
 	Active,

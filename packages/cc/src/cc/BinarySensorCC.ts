@@ -1,12 +1,12 @@
 import {
 	CommandClasses,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
 	parseBitMask,
 	validatePayload,
-	type IZWaveEndpoint,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember } from "@zwave-js/shared/safe";
@@ -15,14 +15,14 @@ import {
 	CCAPI,
 	POLL_VALUE,
 	PhysicalCCAPI,
-	throwUnsupportedProperty,
 	type PollValueImplementation,
+	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -50,15 +50,16 @@ export const BinarySensorCCValues = Object.freeze({
 				getEnumMemberName(BinarySensorType, sensorType),
 			({ property }) =>
 				typeof property === "string" && property in BinarySensorType,
-			/* meta */ (sensorType: BinarySensorType) =>
-				({
-					...ValueMetadata.ReadOnlyBoolean,
-					label: `Sensor state (${getEnumMemberName(
+			/* meta */ (sensorType: BinarySensorType) => ({
+				...ValueMetadata.ReadOnlyBoolean,
+				label: `Sensor state (${
+					getEnumMemberName(
 						BinarySensorType,
 						sensorType,
-					)})`,
-					ccSpecific: { sensorType },
-				} as const),
+					)
+				})`,
+				ccSpecific: { sensorType },
+			} as const),
 		),
 	}),
 });
@@ -78,7 +79,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: BinarySensorCCAPI, { property }) {
+		return async function(this: BinarySensorCCAPI, { property }) {
 			if (typeof property === "string") {
 				const sensorType = (BinarySensorType as any)[property] as
 					| BinarySensorType
@@ -126,11 +127,12 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<BinarySensorCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			BinarySensorCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		// We don't want to repeat the sensor type
 		return response?.supportedSensorTypes;
 	}
@@ -168,10 +170,14 @@ export class BinarySensorCC extends CommandClass {
 			});
 			const supportedSensorTypes = await api.getSupportedSensorTypes();
 			if (supportedSensorTypes) {
-				const logMessage = `received supported sensor types: ${supportedSensorTypes
-					.map((type) => getEnumMemberName(BinarySensorType, type))
-					.map((name) => `\n· ${name}`)
-					.join("")}`;
+				const logMessage = `received supported sensor types: ${
+					supportedSensorTypes
+						.map((type) =>
+							getEnumMemberName(BinarySensorType, type)
+						)
+						.map((name) => `\n· ${name}`)
+						.join("")
+				}`;
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
@@ -242,7 +248,8 @@ export class BinarySensorCC extends CommandClass {
 				if (currentValue != undefined) {
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `received current value for ${sensorName}: ${currentValue}`,
+						message:
+							`received current value for ${sensorName}: ${currentValue}`,
 						direction: "inbound",
 					});
 				}
@@ -343,9 +350,9 @@ function testResponseForBinarySensorGet(
 ) {
 	// We expect a Binary Sensor Report that matches the requested sensor type (if a type was requested)
 	return (
-		sent.sensorType == undefined ||
-		sent.sensorType === BinarySensorType.Any ||
-		received.type === sent.sensorType
+		sent.sensorType == undefined
+		|| sent.sensorType === BinarySensorType.Any
+		|| received.type === sent.sensorType
 	);
 }
 

@@ -1,11 +1,11 @@
-import { interpret, type Interpreter } from "xstate";
+import { type Interpreter, interpret } from "xstate";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import test, { type ExecutionContext } from "ava";
 import {
-	createNodeStatusMachine,
 	type NodeStatusEvent,
 	type NodeStatusMachine,
 	type NodeStatusStateSchema,
+	createNodeStatusMachine,
 } from "./NodeStatusMachine";
 
 const testNodeNonSleeping = { canSleep: false } as any;
@@ -162,25 +162,22 @@ const transitions: {
 ];
 
 for (const testCase of transitions) {
-	const prefix =
-		testCase.canSleep != undefined
-			? `Node ${testCase.canSleep ? "can sleep" : "can't sleep"} -> `
-			: "";
-	const name =
-		testCase.start === testCase.target
-			? `${prefix}The ${testCase.event} event should not do anything in the "${testCase.start}" state`
-			: `${prefix}When the ${testCase.event} event is received, it should transition from "${testCase.start}" to "${testCase.target}"`;
+	const prefix = testCase.canSleep != undefined
+		? `Node ${testCase.canSleep ? "can sleep" : "can't sleep"} -> `
+		: "";
+	const name = testCase.start === testCase.target
+		? `${prefix}The ${testCase.event} event should not do anything in the "${testCase.start}" state`
+		: `${prefix}When the ${testCase.event} event is received, it should transition from "${testCase.start}" to "${testCase.target}"`;
 
 	test(name, (t) => {
 		// For these tests, assume that the node does or does not support Wakeup, whatever fits
-		const testNode =
-			testCase.canSleep == undefined
-				? testCase.event === "ASLEEP" || testCase.event === "AWAKE"
-					? testNodeSleeping
-					: testNodeNonSleeping
-				: testCase.canSleep
+		const testNode = testCase.canSleep == undefined
+			? testCase.event === "ASLEEP" || testCase.event === "AWAKE"
 				? testNodeSleeping
-				: testNodeNonSleeping;
+				: testNodeNonSleeping
+			: testCase.canSleep
+			? testNodeSleeping
+			: testNodeNonSleeping;
 
 		const testMachine = createNodeStatusMachine(testNode);
 		testMachine.initial = testCase.start;

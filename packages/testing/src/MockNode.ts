@@ -1,10 +1,10 @@
 import {
-	NOT_KNOWN,
-	SecurityClass,
-	securityClassOrder,
 	type CommandClassInfo,
 	type CommandClasses,
 	type MaybeNotKnown,
+	NOT_KNOWN,
+	SecurityClass,
+	securityClassOrder,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
@@ -12,20 +12,20 @@ import { isDeepStrictEqual } from "util";
 import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 import type { MockController } from "./MockController";
 import {
-	getDefaultMockEndpointCapabilities,
-	getDefaultMockNodeCapabilities,
 	type MockEndpointCapabilities,
 	type MockNodeCapabilities,
 	type PartialCCCapabilities,
+	getDefaultMockEndpointCapabilities,
+	getDefaultMockNodeCapabilities,
 } from "./MockNodeCapabilities";
 import {
-	MOCK_FRAME_ACK_TIMEOUT,
-	MockZWaveFrameType,
-	createMockZWaveAckFrame,
 	type LazyMockZWaveFrame,
+	MOCK_FRAME_ACK_TIMEOUT,
 	type MockZWaveAckFrame,
 	type MockZWaveFrame,
+	MockZWaveFrameType,
 	type MockZWaveRequestFrame,
+	createMockZWaveAckFrame,
 } from "./MockZWaveFrame";
 
 const defaultCCInfo: CommandClassInfo = {
@@ -62,8 +62,8 @@ export class MockEndpoint {
 		this.index = options.index;
 		this.node = options.node;
 
-		const { commandClasses = [], ...capabilities } =
-			options.capabilities ?? {};
+		const { commandClasses = [], ...capabilities } = options.capabilities
+			?? {};
 		this.capabilities = {
 			...getDefaultMockEndpointCapabilities(this.node.capabilities),
 			...capabilities,
@@ -279,8 +279,8 @@ export class MockNode {
 
 		// Ack the frame if desired
 		if (
-			this.autoAckControllerFrames &&
-			frame.type === MockZWaveFrameType.Request
+			this.autoAckControllerFrames
+			&& frame.type === MockZWaveFrameType.Request
 		) {
 			void this.ackControllerRequestFrame(frame);
 		}
@@ -350,17 +350,13 @@ export class MockNode {
 		const index = this.receivedControllerFrames.findIndex(predicate);
 		if (index === -1 && !noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} did not receive a Z-Wave frame matching the predicate!${
+				`Node ${this.id} did not receive a Z-Wave frame matching the predicate!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
 		} else if (index > -1 && noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} received a Z-Wave frame matching the predicate, but this was not expected!${
+				`Node ${this.id} received a Z-Wave frame matching the predicate, but this was not expected!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
@@ -384,17 +380,13 @@ export class MockNode {
 		const index = this.sentControllerFrames.findIndex(predicate);
 		if (index === -1 && !noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} did not send a Z-Wave frame matching the predicate!${
+				`Node ${this.id} did not send a Z-Wave frame matching the predicate!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
 		} else if (index > -1 && noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} sent a Z-Wave frame matching the predicate, but this was not expected!${
+				`Node ${this.id} sent a Z-Wave frame matching the predicate, but this was not expected!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);

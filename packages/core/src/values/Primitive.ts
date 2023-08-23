@@ -148,18 +148,21 @@ export function getMinIntegerSize(
 	signed: boolean,
 ): 1 | 2 | 4 | undefined {
 	if (signed) {
-		if (value >= IntegerLimits.Int8.min && value <= IntegerLimits.Int8.max)
+		if (
+			value >= IntegerLimits.Int8.min && value <= IntegerLimits.Int8.max
+		) {
 			return 1;
-		else if (
-			value >= IntegerLimits.Int16.min &&
-			value <= IntegerLimits.Int16.max
-		)
+		} else if (
+			value >= IntegerLimits.Int16.min
+			&& value <= IntegerLimits.Int16.max
+		) {
 			return 2;
-		else if (
-			value >= IntegerLimits.Int32.min &&
-			value <= IntegerLimits.Int32.max
-		)
+		} else if (
+			value >= IntegerLimits.Int32.min
+			&& value <= IntegerLimits.Int32.max
+		) {
 			return 4;
+		}
 	} else if (value >= 0) {
 		if (value <= IntegerLimits.UInt8.max) return 1;
 		if (value <= IntegerLimits.UInt16.max) return 2;
@@ -199,8 +202,9 @@ export function encodeFloatWithScale(
 		size = override.size;
 	}
 	const ret = Buffer.allocUnsafe(1 + size);
-	ret[0] =
-		((precision & 0b111) << 5) | ((scale & 0b11) << 3) | (size & 0b111);
+	ret[0] = ((precision & 0b111) << 5)
+		| ((scale & 0b11) << 3)
+		| (size & 0b111);
 	ret.writeIntBE(value, 1, size);
 	return ret;
 }
@@ -213,8 +217,9 @@ export function parseBitMask(mask: Buffer, startValue: number = 1): number[] {
 	for (let index = 1; index <= numBits; index++) {
 		const byteNum = (index - 1) >>> 3; // id / 8
 		const bitNum = (index - 1) % 8;
-		if ((mask[byteNum] & (2 ** bitNum)) !== 0)
+		if ((mask[byteNum] & (2 ** bitNum)) !== 0) {
 			ret.push(index + startValue - 1);
+		}
 	}
 	return ret;
 }
@@ -292,8 +297,7 @@ export function encodePartial(
 	partialValue: number,
 	bitMask: number,
 ): number {
-	const ret =
-		(fullValue & ~bitMask) |
-		((partialValue << getMinimumShiftForBitMask(bitMask)) & bitMask);
+	const ret = (fullValue & ~bitMask)
+		| ((partialValue << getMinimumShiftForBitMask(bitMask)) & bitMask);
 	return ret >>> 0; // convert to unsigned if necessary
 }

@@ -150,7 +150,7 @@ test("initializeSPAN() -> should not throw otherwise", (t) => {
 			SecurityClass.S2_Authenticated,
 			Buffer.alloc(16),
 			Buffer.alloc(16),
-		),
+		)
 	);
 });
 

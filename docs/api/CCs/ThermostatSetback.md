@@ -31,15 +31,15 @@ async set(
 }
 ```
 
--   **label:** Setback state
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** -12.8
--   **max. value:** 12
+- **label:** Setback state
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** -12.8
+- **max. value:** 12
 
 ### `setbackType`
 
@@ -51,10 +51,10 @@ async set(
 }
 ```
 
--   **label:** Setback type
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Setback type
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`

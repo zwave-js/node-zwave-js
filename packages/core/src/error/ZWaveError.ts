@@ -250,13 +250,13 @@ export function isTransmissionError(e: unknown): e is ZWaveError & {
 		| ZWaveErrorCodes.Security2CC_CannotDecode;
 } {
 	return (
-		isZWaveError(e) &&
-		(e.code === ZWaveErrorCodes.Controller_Timeout ||
-			e.code === ZWaveErrorCodes.Controller_MessageDropped ||
-			e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
-			e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-			e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
-			e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
+		isZWaveError(e)
+		&& (e.code === ZWaveErrorCodes.Controller_Timeout
+			|| e.code === ZWaveErrorCodes.Controller_MessageDropped
+			|| e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			|| e.code === ZWaveErrorCodes.Controller_ResponseNOK
+			|| e.code === ZWaveErrorCodes.Controller_NodeTimeout
+			|| e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
 	);
 }
 

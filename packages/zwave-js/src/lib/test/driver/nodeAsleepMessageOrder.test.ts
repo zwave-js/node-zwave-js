@@ -55,8 +55,8 @@ integrationTest(
 			await wait(50);
 			mockNode10.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof NoOperationCC,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof NoOperationCC,
 				{
 					errorMessage: "Node 10 did not receive the ping",
 				},
@@ -83,8 +83,8 @@ integrationTest(
 			await wait(500);
 			mockNode17.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof NoOperationCC,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof NoOperationCC,
 				{
 					errorMessage: "Node 17 did not receive the ping",
 				},

@@ -14,7 +14,7 @@ function visitRegularObjectType(type: ts.Type, visitorContext: VisitorContext) {
 	}
 	const properties = visitorContext.checker.getPropertiesOfType(type);
 	const propertiesInfo = properties.map((property) =>
-		VisitorUtils.getPropertyInfo(type, property, visitorContext),
+		VisitorUtils.getPropertyInfo(type, property, visitorContext)
 	);
 	const propertiesName = propertiesInfo.map(
 		(propertyInfo) => propertyInfo.name,
@@ -50,7 +50,7 @@ function visitUnionOrIntersectionType(
 	visitorContext: VisitorContext,
 ) {
 	const stringTypes = type.types.map((type) =>
-		visitType(type, visitorContext),
+		visitType(type, visitorContext)
 	);
 
 	if (tsutils.isUnionType(type)) {
@@ -226,8 +226,8 @@ export function visitType(
 		// Boolean literal (true/false)
 		return visitBooleanLiteral();
 	} else if (
-		tsutils.isTypeReference(type) &&
-		visitorContext.previousTypeReference !== type
+		tsutils.isTypeReference(type)
+		&& visitorContext.previousTypeReference !== type
 	) {
 		// Type references.
 		return visitTypeReference(type, visitorContext);

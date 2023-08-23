@@ -19,13 +19,13 @@ Version comparisons support versions with and without a patch number. If the pat
 
 You can use `"$if"` in the following locations:
 
--   In the top-level `manufacturer`, `label` or `description` properties
--   Inside endpoint definitions
--   Inside association groups
--   Inside config parameters
--   Inside config parameter options
--   As part of the `compat` flag definition
--   In each property of the device `metadata`, including `comments`
+- In the top-level `manufacturer`, `label` or `description` properties
+- Inside endpoint definitions
+- Inside association groups
+- Inside config parameters
+- Inside config parameter options
+- As part of the `compat` flag definition
+- In each property of the device `metadata`, including `comments`
 
 Whenever a primitive value (usually a string) should be made conditional, it needs to be converted into an object and put into the `"value"` property. The fallback value may be specified as a string:
 

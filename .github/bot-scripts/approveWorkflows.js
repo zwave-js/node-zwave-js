@@ -33,7 +33,7 @@ async function main(param) {
 		status: "action_required",
 	});
 	const pendingRuns = workflow_runs.filter((run) =>
-		workflowIDs.includes(run.workflow_id),
+		workflowIDs.includes(run.workflow_id)
 	);
 
 	/** @type {number[]} */
@@ -77,9 +77,11 @@ async function main(param) {
 		}
 
 		console.log(
-			`Changed files in PR #${pulls[0].number}: ${[...filenames]
-				.map((f) => `\n· ${f}`)
-				.join("")}`,
+			`Changed files in PR #${pulls[0].number}: ${
+				[...filenames]
+					.map((f) => `\n· ${f}`)
+					.join("")
+			}`,
 		);
 
 		console.log(`Check okay... workflow run will be approved`);

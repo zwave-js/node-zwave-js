@@ -55,10 +55,8 @@
     "extract-api": "yarn api-extractor run",
     "lint:zwave": "yarn task lint",
     "ts": "node -r esbuild-register",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
@@ -81,7 +79,6 @@
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
     "fs-extra": "^10.1.0",
-    "prettier": "^2.8.8",
     "typescript": "5.1.6"
   }
 }

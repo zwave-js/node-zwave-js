@@ -1,13 +1,13 @@
 import {
-	createDefaultTransportFormat,
-	getDirectionPrefix,
 	MessagePriority,
 	ZWaveLogContainer,
+	createDefaultTransportFormat,
+	getDirectionPrefix,
 } from "@zwave-js/core";
 import {
+	SpyTransport,
 	assertLogInfo,
 	assertMessage,
-	SpyTransport,
 } from "@zwave-js/core/test";
 import { FunctionType, Message, MessageType } from "@zwave-js/serial";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
@@ -122,7 +122,8 @@ test.serial("print() logs long messages correctly", (t) => {
 		"This is a very long message that should be broken into multiple lines maybe sometimes...",
 	);
 	assertMessage(t, spyTransport, {
-		message: `  This is a very long message that should be broken into multiple lines maybe so
+		message:
+			`  This is a very long message that should be broken into multiple lines maybe so
   metimes...`,
 	});
 });
@@ -383,13 +384,13 @@ test.serial("primary tags are printed in inverse colors", (t) => {
 	driverLogger.transactionResponse(msg, undefined, null as any);
 
 	const expected1 = colors.cyan(
-		colors.bgCyan("[") +
-			colors.inverse("RES") +
-			colors.bgCyan("]") +
-			" " +
-			colors.bgCyan("[") +
-			colors.inverse("HardReset") +
-			colors.bgCyan("]"),
+		colors.bgCyan("[")
+			+ colors.inverse("RES")
+			+ colors.bgCyan("]")
+			+ " "
+			+ colors.bgCyan("[")
+			+ colors.inverse("HardReset")
+			+ colors.bgCyan("]"),
 	);
 
 	assertMessage(t, spyTransport, {
@@ -402,14 +403,13 @@ test.serial("inline tags are printed in inverse colors", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print(`This is a message [with] [inline] tags...`);
 
-	const expected1 =
-		colors.bgCyan("[") +
-		colors.inverse("with") +
-		colors.bgCyan("]") +
-		" " +
-		colors.bgCyan("[") +
-		colors.inverse("inline") +
-		colors.bgCyan("]");
+	const expected1 = colors.bgCyan("[")
+		+ colors.inverse("with")
+		+ colors.bgCyan("]")
+		+ " "
+		+ colors.bgCyan("[")
+		+ colors.inverse("inline")
+		+ colors.bgCyan("]");
 
 	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes(expected1),

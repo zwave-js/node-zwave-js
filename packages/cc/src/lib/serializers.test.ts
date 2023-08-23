@@ -1,4 +1,4 @@
-import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import test from "ava";
 import {
 	decodeSetbackState,
@@ -9,9 +9,11 @@ import {
 } from "./serializers";
 
 test("encodeSetbackState() should return the defined values for the special states", (t) => {
-	for (const state of Object.keys(
-		setbackSpecialStateValues,
-	) as (keyof typeof setbackSpecialStateValues)[]) {
+	for (
+		const state of Object.keys(
+			setbackSpecialStateValues,
+		) as (keyof typeof setbackSpecialStateValues)[]
+	) {
 		t.is(
 			encodeSetbackState(state as any),
 			setbackSpecialStateValues[state],
@@ -26,9 +28,11 @@ test("encodeSetbackState() should return the value times 10 otherwise", (t) => {
 });
 
 test("decodeSetbackState() should return the defined values for the special states", (t) => {
-	for (const state of Object.keys(
-		setbackSpecialStateValues,
-	) as (keyof typeof setbackSpecialStateValues)[]) {
+	for (
+		const state of Object.keys(
+			setbackSpecialStateValues,
+		) as (keyof typeof setbackSpecialStateValues)[]
+	) {
 		t.is(decodeSetbackState(setbackSpecialStateValues[state]), state);
 	}
 });

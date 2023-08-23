@@ -42,9 +42,9 @@ integrationTest(
 			await wait(50);
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof BasicCCSet &&
-					frame.payload.targetValue === 99,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof BasicCCSet
+					&& frame.payload.targetValue === 99,
 				{
 					errorMessage: "The first command was not received",
 				},

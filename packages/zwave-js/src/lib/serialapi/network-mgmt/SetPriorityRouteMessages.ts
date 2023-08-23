@@ -1,36 +1,38 @@
 import {
 	MAX_NODES,
 	MAX_REPEATERS,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeNodeID,
 	parseNodeID,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	type SuccessIndicator,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type SuccessIndicator,
 } from "@zwave-js/serial";
-import { getEnumMemberName, type AllOrNone } from "@zwave-js/shared";
+import { type AllOrNone, getEnumMemberName } from "@zwave-js/shared";
 
-export type SetPriorityRouteRequestOptions = {
-	destinationNodeId: number;
-} & AllOrNone<{
-	repeaters: number[];
-	routeSpeed: ZWaveDataRate;
-}>;
+export type SetPriorityRouteRequestOptions =
+	& {
+		destinationNodeId: number;
+	}
+	& AllOrNone<{
+		repeaters: number[];
+		routeSpeed: ZWaveDataRate;
+	}>;
 
 @messageTypes(MessageType.Request, FunctionType.SetPriorityRoute)
 @priority(MessagePriority.Normal)
@@ -51,8 +53,8 @@ export class SetPriorityRouteRequest extends Message {
 		} else {
 			if (options.repeaters) {
 				if (
-					options.repeaters.length > MAX_REPEATERS ||
-					options.repeaters.some((id) => id < 1 || id > MAX_NODES)
+					options.repeaters.length > MAX_REPEATERS
+					|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
 				) {
 					throw new ZWaveError(
 						`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
@@ -109,10 +111,9 @@ export class SetPriorityRouteRequest extends Message {
 		if (this.repeaters != undefined && this.routeSpeed != undefined) {
 			message = {
 				...message,
-				repeaters:
-					this.repeaters.length > 0
-						? this.repeaters.join(" -> ")
-						: "none",
+				repeaters: this.repeaters.length > 0
+					? this.repeaters.join(" -> ")
+					: "none",
 				"route speed": getEnumMemberName(
 					ZWaveDataRate,
 					this.routeSpeed,
@@ -127,8 +128,7 @@ export class SetPriorityRouteRequest extends Message {
 }
 
 @messageTypes(MessageType.Response, FunctionType.SetPriorityRoute)
-export class SetPriorityRouteResponse
-	extends Message
+export class SetPriorityRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(

@@ -37,27 +37,32 @@ export {
 	NodeStatus,
 } from "@zwave-js/core/safe";
 
-export type NodeInterviewFailedEventArgs = {
-	errorMessage: string;
-	isFinal: boolean;
-} & (
-	| {
+export type NodeInterviewFailedEventArgs =
+	& {
+		errorMessage: string;
+		isFinal: boolean;
+	}
+	& (
+		| {
 			attempt: number;
 			maxAttempts: number;
-	  }
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	| {}
-);
+		}
+		// eslint-disable-next-line @typescript-eslint/ban-types
+		| {}
+	);
 
 export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
-export type ZWaveNodeValueUpdatedArgs = Omit<ValueUpdatedArgs, "source"> &
-	TranslatedValueID;
+export type ZWaveNodeValueUpdatedArgs =
+	& Omit<ValueUpdatedArgs, "source">
+	& TranslatedValueID;
 export type ZWaveNodeValueRemovedArgs = ValueRemovedArgs & TranslatedValueID;
-export type ZWaveNodeValueNotificationArgs = ValueNotificationArgs &
-	TranslatedValueID;
+export type ZWaveNodeValueNotificationArgs =
+	& ValueNotificationArgs
+	& TranslatedValueID;
 
-export type ZWaveNodeMetadataUpdatedArgs = MetadataUpdatedArgs &
-	TranslatedValueID;
+export type ZWaveNodeMetadataUpdatedArgs =
+	& MetadataUpdatedArgs
+	& TranslatedValueID;
 
 export type ZWaveNodeValueAddedCallback = (
 	node: ZWaveNode,
@@ -383,20 +388,21 @@ export interface LifelineRoutes {
 	nlwr?: RouteStatistics;
 }
 
-export type DateAndTime = AllOrNone<{
-	hour: number;
-	minute: number;
-}> &
-	(
+export type DateAndTime =
+	& AllOrNone<{
+		hour: number;
+		minute: number;
+	}>
+	& (
 		| { weekday?: Weekday; second?: undefined }
 		| { weekday?: undefined; second?: number }
-	) &
-	AllOrNone<{
+	)
+	& AllOrNone<{
 		year: number;
 		month: number;
 		day: number;
-	}> &
-	AllOrNone<{
+	}>
+	& AllOrNone<{
 		dstOffset: number;
 		standardOffset: number;
 	}>;

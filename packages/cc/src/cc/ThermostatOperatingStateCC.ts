@@ -1,11 +1,11 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
 	MessagePriority,
 	ValueMetadata,
 	enumValuesToMetadataStates,
 	validatePayload,
-	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
@@ -13,8 +13,8 @@ import {
 	CCAPI,
 	POLL_VALUE,
 	PhysicalCCAPI,
-	throwUnsupportedProperty,
 	type PollValueImplementation,
+	throwUnsupportedProperty,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -37,11 +37,15 @@ import {
 
 export const ThermostatOperatingStateCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Thermostat Operating State"], {
-		...V.staticPropertyWithName("operatingState", "state", {
-			...ValueMetadata.ReadOnlyUInt8,
-			label: "Operating state",
-			states: enumValuesToMetadataStates(ThermostatOperatingState),
-		} as const),
+		...V.staticPropertyWithName(
+			"operatingState",
+			"state",
+			{
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Operating state",
+				states: enumValuesToMetadataStates(ThermostatOperatingState),
+			} as const,
+		),
 	}),
 });
 
@@ -60,7 +64,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (
+		return async function(
 			this: ThermostatOperatingStateCCAPI,
 			{ property },
 		) {
@@ -83,11 +87,12 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ThermostatOperatingStateCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ThermostatOperatingStateCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.state;
 	}
 }
@@ -135,10 +140,12 @@ export class ThermostatOperatingStateCC extends CommandClass {
 		if (state) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `received current thermostat operating state: ${getEnumMemberName(
-					ThermostatOperatingState,
-					state,
-				)}`,
+				message: `received current thermostat operating state: ${
+					getEnumMemberName(
+						ThermostatOperatingState,
+						state,
+					)
+				}`,
 				direction: "inbound",
 			});
 		}
@@ -146,7 +153,9 @@ export class ThermostatOperatingStateCC extends CommandClass {
 }
 
 @CCCommand(ThermostatOperatingStateCommand.Report)
-export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC {
+export class ThermostatOperatingStateCCReport
+	extends ThermostatOperatingStateCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,

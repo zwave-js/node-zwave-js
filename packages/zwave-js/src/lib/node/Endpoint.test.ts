@@ -2,9 +2,9 @@ import "@zwave-js/cc";
 import { BatteryCCAPI } from "@zwave-js/cc/BatteryCC";
 import { VersionCCAPI } from "@zwave-js/cc/VersionCC";
 import {
-	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";

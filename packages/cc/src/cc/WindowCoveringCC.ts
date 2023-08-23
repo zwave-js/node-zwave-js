@@ -1,16 +1,16 @@
 import {
 	CommandClasses,
 	Duration,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
@@ -19,21 +19,21 @@ import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
 	SET_VALUE_HOOKS,
+	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
-	type SetValueImplementationHooksFactory,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -47,9 +47,9 @@ import {
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
+	type LevelChangeDirection,
 	WindowCoveringCommand,
 	WindowCoveringParameter,
-	type LevelChangeDirection,
 } from "../lib/_Types";
 
 function parameterToMetadataStates(
@@ -122,10 +122,12 @@ export const WindowCoveringCCValues = Object.freeze({
 			(parameter: WindowCoveringParameter) => {
 				return {
 					...ValueMetadata.ReadOnlyLevel,
-					label: `Current value - ${getEnumMemberName(
-						WindowCoveringParameter,
-						parameter,
-					)}`,
+					label: `Current value - ${
+						getEnumMemberName(
+							WindowCoveringParameter,
+							parameter,
+						)
+					}`,
 					states: parameterToMetadataStates(parameter),
 					ccSpecific: { parameter },
 				} as const;
@@ -143,10 +145,12 @@ export const WindowCoveringCCValues = Object.freeze({
 				const writeable = parameter % 2 === 1;
 				return {
 					...ValueMetadata.Level,
-					label: `Target value - ${getEnumMemberName(
-						WindowCoveringParameter,
-						parameter,
-					)}`,
+					label: `Target value - ${
+						getEnumMemberName(
+							WindowCoveringParameter,
+							parameter,
+						)
+					}`,
 					// Only odd-numbered parameters have position support and are writable
 					writeable: parameter % 2 === 1,
 					states: parameterToMetadataStates(parameter),
@@ -163,17 +167,18 @@ export const WindowCoveringCCValues = Object.freeze({
 			(parameter: WindowCoveringParameter) => parameter,
 			({ property, propertyKey }) =>
 				property === "duration" && typeof propertyKey === "number",
-			(parameter: WindowCoveringParameter) =>
-				({
-					...ValueMetadata.ReadOnlyDuration,
-					label: `Remaining duration - ${getEnumMemberName(
+			(parameter: WindowCoveringParameter) => ({
+				...ValueMetadata.ReadOnlyDuration,
+				label: `Remaining duration - ${
+					getEnumMemberName(
 						WindowCoveringParameter,
 						parameter,
-					)}`,
-					ccSpecific: {
-						parameter,
-					},
-				} as const),
+					)
+				}`,
+				ccSpecific: {
+					parameter,
+				},
+			} as const),
 		),
 
 		...V.dynamicPropertyAndKeyWithName(
@@ -186,13 +191,17 @@ export const WindowCoveringCCValues = Object.freeze({
 			(parameter: WindowCoveringParameter) => {
 				return {
 					...ValueMetadata.WriteOnlyBoolean,
-					label: `${parameterToLevelChangeLabel(
-						parameter,
-						"up",
-					)} - ${getEnumMemberName(
-						WindowCoveringParameter,
-						parameter,
-					)}`,
+					label: `${
+						parameterToLevelChangeLabel(
+							parameter,
+							"up",
+						)
+					} - ${
+						getEnumMemberName(
+							WindowCoveringParameter,
+							parameter,
+						)
+					}`,
 					valueChangeOptions: ["transitionDuration"],
 					states: {
 						true: "Start",
@@ -209,18 +218,22 @@ export const WindowCoveringCCValues = Object.freeze({
 			"levelChangeDown",
 			(parameter: WindowCoveringParameter) => parameter,
 			({ property, propertyKey }) =>
-				property === "levelChangeDown" &&
-				typeof propertyKey === "number",
+				property === "levelChangeDown"
+				&& typeof propertyKey === "number",
 			(parameter: WindowCoveringParameter) => {
 				return {
 					...ValueMetadata.WriteOnlyBoolean,
-					label: `${parameterToLevelChangeLabel(
-						parameter,
-						"down",
-					)} - ${getEnumMemberName(
-						WindowCoveringParameter,
-						parameter,
-					)}`,
+					label: `${
+						parameterToLevelChangeLabel(
+							parameter,
+							"down",
+						)
+					} - ${
+						getEnumMemberName(
+							WindowCoveringParameter,
+							parameter,
+						)
+					}`,
 					valueChangeOptions: ["transitionDuration"],
 					states: {
 						true: "Start",
@@ -248,7 +261,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: WindowCoveringCCAPI,
 			{ property, propertyKey },
 			value,
@@ -262,9 +275,9 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 			if (WindowCoveringCCValues.targetValue.is(valueId)) {
 				if (
-					typeof propertyKey !== "number" ||
+					typeof propertyKey !== "number"
 					// Only odd-numbered parameters have position support and are writable
-					propertyKey % 2 === 0
+					|| propertyKey % 2 === 0
 				) {
 					throwUnsupportedPropertyKey(
 						this.ccId,
@@ -287,8 +300,8 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 				return this.set([{ parameter, value }], duration);
 			} else if (
-				WindowCoveringCCValues.levelChangeUp.is(valueId) ||
-				WindowCoveringCCValues.levelChangeDown.is(valueId)
+				WindowCoveringCCValues.levelChangeUp.is(valueId)
+				|| WindowCoveringCCValues.levelChangeDown.is(valueId)
 			) {
 				if (typeof value !== "boolean") {
 					throwWrongValueType(
@@ -301,8 +314,8 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 				const parameter = propertyKey as number;
 				const direction = WindowCoveringCCValues.levelChangeUp.is(
-					valueId,
-				)
+						valueId,
+					)
 					? "up"
 					: "down";
 
@@ -352,9 +365,9 @@ export class WindowCoveringCCAPI extends CCAPI {
 				supervisionOnSuccess: async () => {
 					// Only update currentValue for valid target values
 					if (
-						typeof value === "number" &&
-						value >= 0 &&
-						value <= 99
+						typeof value === "number"
+						&& value >= 0
+						&& value <= 99
 					) {
 						this.tryGetValueDB()?.setValue(
 							currentValueValueId,
@@ -383,9 +396,9 @@ export class WindowCoveringCCAPI extends CCAPI {
 				) => {
 					// Only update currentValue for valid target values
 					if (
-						typeof value === "number" &&
-						value >= 0 &&
-						value <= 99
+						typeof value === "number"
+						&& value >= 0
+						&& value <= 99
 					) {
 						if (this.isSinglecast()) {
 							this.tryGetValueDB()?.setValue(
@@ -394,8 +407,8 @@ export class WindowCoveringCCAPI extends CCAPI {
 							);
 						} else if (this.isMulticast()) {
 							// Figure out which nodes were affected by this command
-							const affectedNodes =
-								this.endpoint.node.physicalNodes.filter(
+							const affectedNodes = this.endpoint.node
+								.physicalNodes.filter(
 									(node) =>
 										node
 											.getEndpoint(this.endpoint.index)
@@ -426,7 +439,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 	};
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (
+		return async function(
 			this: WindowCoveringCCAPI,
 			{ property, propertyKey },
 		) {
@@ -462,11 +475,12 @@ export class WindowCoveringCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<WindowCoveringCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			WindowCoveringCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.supportedParameters;
 	}
 
@@ -483,11 +497,12 @@ export class WindowCoveringCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			parameter,
 		});
-		const response =
-			await this.applHost.sendCommand<WindowCoveringCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			WindowCoveringCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["currentValue", "targetValue", "duration"]);
 		}
@@ -588,9 +603,13 @@ export class WindowCoveringCC extends CommandClass {
 		const supported = await api.getSupported();
 		if (supported?.length) {
 			const logMessage = `supported window covering parameters:
-${supported
-	.map((p) => `· ${getEnumMemberName(WindowCoveringParameter, p)}`)
-	.join("\n")}`;
+${
+				supported
+					.map((p) =>
+						`· ${getEnumMemberName(WindowCoveringParameter, p)}`
+					)
+					.join("\n")
+			}`;
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -627,10 +646,12 @@ ${supported
 				if (param % 2 === 1) {
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `querying position for parameter ${getEnumMemberName(
-							WindowCoveringParameter,
-							param,
-						)}...`,
+						message: `querying position for parameter ${
+							getEnumMemberName(
+								WindowCoveringParameter,
+								param,
+							)
+						}...`,
 						direction: "outbound",
 					});
 					await api.get(param);
@@ -655,7 +676,8 @@ ${supported
 }
 
 export interface WindowCoveringCCSupportedReportOptions
-	extends CCCommandOptions {
+	extends CCCommandOptions
+{
 	supportedParameters: readonly WindowCoveringParameter[];
 }
 
@@ -710,10 +732,12 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 				"supported parameters": this.supportedParameters
 					.map(
 						(p) =>
-							`\n· ${getEnumMemberName(
-								WindowCoveringParameter,
-								p,
-							)}`,
+							`\n· ${
+								getEnumMemberName(
+									WindowCoveringParameter,
+									p,
+								)
+							}`,
 					)
 					.join(""),
 			},
@@ -736,8 +760,8 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 		this.parameter = this.payload[0];
 		this.currentValue = this.payload[1];
 		this.targetValue = this.payload[2];
-		this.duration =
-			Duration.parseReport(this.payload[3]) ?? Duration.unknown();
+		this.duration = Duration.parseReport(this.payload[3])
+			?? Duration.unknown();
 	}
 
 	public readonly parameter: WindowCoveringParameter;
@@ -894,7 +918,8 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 }
 
 export interface WindowCoveringCCStartLevelChangeOptions
-	extends CCCommandOptions {
+	extends CCCommandOptions
+{
 	parameter: WindowCoveringParameter;
 	direction: keyof typeof LevelChangeDirection;
 	duration?: Duration | string;

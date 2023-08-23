@@ -10,10 +10,10 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, SecurityManager } from "@zwave-js/core";
 import {
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
 	type MockZWaveFrame,
+	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -45,8 +45,8 @@ integrationTest("Communication via Security S0 works", {
 		const respondToS0NonceGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof SecurityCCNonceGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof SecurityCCNonceGet
 				) {
 					const nonce = sm0Node.generateNonce(
 						controller.host.ownNodeId,
@@ -72,10 +72,10 @@ integrationTest("Communication via Security S0 works", {
 		const respondToS0CommandsSupportedGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof SecurityCCCommandEncapsulation &&
-					frame.payload.encapsulated instanceof
-						SecurityCCCommandsSupportedGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof SecurityCCCommandEncapsulation
+					&& frame.payload.encapsulated
+						instanceof SecurityCCCommandsSupportedGet
 				) {
 					const nonceGet = new SecurityCCNonceGet(self.host, {
 						nodeId: controller.host.ownNodeId,
@@ -93,9 +93,8 @@ integrationTest("Communication via Security S0 works", {
 						): resp is MockZWaveFrame & {
 							type: MockZWaveFrameType.Request;
 							payload: SecurityCCNonceReport;
-						} =>
-							resp.type === MockZWaveFrameType.Request &&
-							resp.payload instanceof SecurityCCNonceReport,
+						} => resp.type === MockZWaveFrameType.Request
+							&& resp.payload instanceof SecurityCCNonceReport,
 					);
 					const receiverNonce = nonceReport.payload.nonce;
 
@@ -128,9 +127,9 @@ integrationTest("Communication via Security S0 works", {
 		const respondToS0BasicGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof SecurityCCCommandEncapsulation &&
-					frame.payload.encapsulated instanceof BasicCCGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof SecurityCCCommandEncapsulation
+					&& frame.payload.encapsulated instanceof BasicCCGet
 				) {
 					const nonceGet = new SecurityCCNonceGet(self.host, {
 						nodeId: controller.host.ownNodeId,
@@ -148,9 +147,8 @@ integrationTest("Communication via Security S0 works", {
 						): resp is MockZWaveFrame & {
 							type: MockZWaveFrameType.Request;
 							payload: SecurityCCNonceReport;
-						} =>
-							resp.type === MockZWaveFrameType.Request &&
-							resp.payload instanceof SecurityCCNonceReport,
+						} => resp.type === MockZWaveFrameType.Request
+							&& resp.payload instanceof SecurityCCNonceReport,
 					);
 					const receiverNonce = nonceReport.payload.nonce;
 
@@ -179,8 +177,8 @@ integrationTest("Communication via Security S0 works", {
 			async onControllerFrame(controller, self, frame) {
 				// We don't support sequenced commands here
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof SecurityCCCommandEncapsulation
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof SecurityCCCommandEncapsulation
 				) {
 					frame.payload.mergePartialCCs(undefined as any, []);
 				}

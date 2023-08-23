@@ -1,6 +1,6 @@
 import { BasicCommand, SetValueStatus } from "@zwave-js/cc";
 import { BasicCC, BasicCCValues } from "@zwave-js/cc/BasicCC";
-import { CommandClasses, ValueMetadata, type ValueID } from "@zwave-js/core";
+import { CommandClasses, type ValueID, ValueMetadata } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import ava, { type ExecutionContext, type TestFn } from "ava";

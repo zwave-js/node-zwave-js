@@ -3,7 +3,7 @@
  */
 
 import {
-	formatWithPrettier,
+	formatWithDprint,
 	hasComment,
 	loadTSConfig,
 	projectRoot,
@@ -70,8 +70,8 @@ function findExports() {
 		}
 		// Ignore test files and the index
 		if (
-			relativePath.endsWith(".test.ts") ||
-			relativePath.endsWith("index.ts")
+			relativePath.endsWith(".test.ts")
+			|| relativePath.endsWith("index.ts")
 		) {
 			continue;
 		}
@@ -80,20 +80,20 @@ function findExports() {
 		ts.forEachChild(sourceFile, (node) => {
 			// Define which declaration types we need to export
 			if (
-				ts.isEnumDeclaration(node) ||
-				ts.isTypeAliasDeclaration(node) ||
-				ts.isInterfaceDeclaration(node) ||
-				ts.isClassDeclaration(node) ||
-				ts.isFunctionDeclaration(node) ||
-				ts.isArrowFunction(node)
+				ts.isEnumDeclaration(node)
+				|| ts.isTypeAliasDeclaration(node)
+				|| ts.isInterfaceDeclaration(node)
+				|| ts.isClassDeclaration(node)
+				|| ts.isFunctionDeclaration(node)
+				|| ts.isArrowFunction(node)
 			) {
 				if (!node.name) return;
 
 				// Export all CommandClass implementations
 				if (
-					ts.isClassDeclaration(node) &&
-					node.name.text.includes("CC") &&
-					inheritsFromCommandClass(node)
+					ts.isClassDeclaration(node)
+					&& node.name.text.includes("CC")
+					&& inheritsFromCommandClass(node)
 				) {
 					addExport(sourceFile.fileName, node.name.text, false);
 					return;
@@ -118,14 +118,14 @@ function findExports() {
 				addExport(
 					sourceFile.fileName,
 					node.name.text,
-					ts.isTypeAliasDeclaration(node) ||
-						ts.isInterfaceDeclaration(node),
+					ts.isTypeAliasDeclaration(node)
+						|| ts.isInterfaceDeclaration(node),
 				);
 			} else if (
-				ts.isExportDeclaration(node) &&
-				hasPublicAPIComment(node, sourceFile) &&
-				node.exportClause &&
-				ts.isNamedExports(node.exportClause)
+				ts.isExportDeclaration(node)
+				&& hasPublicAPIComment(node, sourceFile)
+				&& node.exportClause
+				&& ts.isNamedExports(node.exportClause)
 			) {
 				// Also include all re-exports from other locations in the project
 				for (const exportSpecifier of node.exportClause.elements) {
@@ -136,15 +136,15 @@ function findExports() {
 					);
 				}
 			} else if (
-				ts.isVariableStatement(node) &&
-				node.modifiers?.some(
+				ts.isVariableStatement(node)
+				&& node.modifiers?.some(
 					(m) => m.kind === ts.SyntaxKind.ExportKeyword,
-				) &&
+				)
 				// Export consts marked with @publicAPI
-				(hasPublicAPIComment(node, sourceFile) ||
+				&& (hasPublicAPIComment(node, sourceFile)
 					// and the xyzCCValues const
-					node.declarationList.declarations.some((d) =>
-						d.name.getText().endsWith("CCValues"),
+					|| node.declarationList.declarations.some((d) =>
+						d.name.getText().endsWith("CCValues")
 					))
 			) {
 				for (const variable of node.declarationList.declarations) {
@@ -170,9 +170,11 @@ export async function generateCCExports(): Promise<void> {
 `;
 
 	// Generate type and value exports for all found symbols
-	for (const [filename, fileExports] of [...findExports().entries()].sort(
-		([fileA], [fileB]) => compareStrings(fileA, fileB),
-	)) {
+	for (
+		const [filename, fileExports] of [...findExports().entries()].sort(
+			([fileA], [fileB]) => compareStrings(fileA, fileB),
+		)
+	) {
 		const relativePath = path
 			.relative(ccIndexFile, filename)
 			// normalize to slashes
@@ -183,15 +185,19 @@ export async function generateCCExports(): Promise<void> {
 			.replace(/^\.\.\//, "./");
 		const typeExports = fileExports.filter((e) => e.typeOnly);
 		if (typeExports.length) {
-			fileContent += `export type { ${typeExports
-				.map((e) => e.name)
-				.join(", ")} } from "${relativePath}"\n`;
+			fileContent += `export type { ${
+				typeExports
+					.map((e) => e.name)
+					.join(", ")
+			} } from "${relativePath}"\n`;
 		}
 		const valueExports = fileExports.filter((e) => !e.typeOnly);
 		if (valueExports.length) {
-			fileContent += `export { ${valueExports
-				.map((e) => e.name)
-				.join(", ")} } from "${relativePath}"\n`;
+			fileContent += `export { ${
+				valueExports
+					.map((e) => e.name)
+					.join(", ")
+			} } from "${relativePath}"\n`;
 		}
 	}
 
@@ -199,7 +205,7 @@ export async function generateCCExports(): Promise<void> {
 	const originalFileContent = (await fs.pathExists(ccIndexFile))
 		? await fs.readFile(ccIndexFile, "utf8")
 		: "";
-	fileContent = formatWithPrettier(ccIndexFile, fileContent);
+	fileContent = formatWithDprint(ccIndexFile, fileContent);
 	if (fileContent !== originalFileContent) {
 		console.log("CC index file changed");
 		await fs.writeFile(ccIndexFile, fileContent, "utf8");

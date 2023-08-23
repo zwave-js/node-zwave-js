@@ -268,34 +268,34 @@ An exception is parameters that accept a single special value outside the normal
 
 Whenever possible, a unit should be defined for configuration parameters. Unit symbols should be used instead of full words where they are more common, e.g.:
 
--   `%` instead of `percent`/`percentage`/...
--   `°C` instead of `degrees Celsius`/...
--   `°F` instead of `Fahrenheit`/...
--   `W`/`V`/`A`/... instead of `watts`/`volts`/`Ampere`/...
+- `%` instead of `percent`/`percentage`/...
+- `°C` instead of `degrees Celsius`/...
+- `°F` instead of `Fahrenheit`/...
+- `W`/`V`/`A`/... instead of `watts`/`volts`/`Ampere`/...
 
 Time units (`seconds`, `minutes`, `hours`) should not be abbreviated. `ms` for `milliseconds` is an exception to keep the units short.
 
 Some devices use multiples of the base units - these should be represented as a decimal number in front of the base unit, e.g.
 
--   `0.01 V`
--   `10 seconds`
--   `100 ms`
+- `0.01 V`
+- `10 seconds`
+- `100 ms`
 
 ```json
-	"1": {
-		"label": "Countdown Timer",
-		"valueSize": 1,
-		"unit": "minutes",
-		"minValue": 0,
-		"maxValue": 254,
-		"defaultValue": 0,
-		"unsigned": true
-	}
+"1": {
+	"label": "Countdown Timer",
+	"valueSize": 1,
+	"unit": "minutes",
+	"minValue": 0,
+	"maxValue": 254,
+	"defaultValue": 0,
+	"unsigned": true
+}
 ```
 
 > [!NOTE] The range 0-99 should **not** be defined as a percent. Why?
 >
-> Well, it is a little unfortunate, but the Z-Wave standard defines most multilevel values as 0-99. We don't know why this range was chosen when 0-100 was an option, but we're stuck with it now.  
+> Well, it is a little unfortunate, but the Z-Wave standard defines most multilevel values as 0-99. We don't know why this range was chosen when 0-100 was an option, but we're stuck with it now.\
 > Although it is very close, this is not the same as 0% - 100%, so we're not going to define the range 0-99 as percentages. Granted, it is a little subjective, but the maintainer does not like mathematical inaccuracies 🤓. Just roll with it.
 
 ### Read/Write Only

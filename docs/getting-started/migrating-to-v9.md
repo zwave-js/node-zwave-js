@@ -19,10 +19,10 @@ It has been found that no relevant version of the Serial API uses this parameter
 
 While working on the SmartStart feature it was noticed that some properties and methods of the `Controller` class and by extension some of the message classes had a misleading name. This has been fixed in version 9. The individual changes are:
 
--   Renamed the `libraryVersion` property to `sdkVersion` because it references the Z-Wave SDK version. This affects the `Controller` and the `GetControllerVersionResponse` classes.
--   Renamed the `serialApiGt(e)` and `serialApiLt(e)` methods to `sdkVersionGt(e)` and `sdkVersionLt(e)` respectively. These methods were checking the Z-Wave SDK version and not the Serial API which is versioned differently. This affects the `Controller` class.
--   Renamed the `SerialAPIVersion` type to `SDKVersion`.
--   Renamed the `serialApiVersion` property to `firmwareVersion`, because it was referring to a Z-Wave Stick's firmware version and not the Serial API version. This affects the `Controller` and the `GetSerialApiCapabilitiesResponse` classes.
+- Renamed the `libraryVersion` property to `sdkVersion` because it references the Z-Wave SDK version. This affects the `Controller` and the `GetControllerVersionResponse` classes.
+- Renamed the `serialApiGt(e)` and `serialApiLt(e)` methods to `sdkVersionGt(e)` and `sdkVersionLt(e)` respectively. These methods were checking the Z-Wave SDK version and not the Serial API which is versioned differently. This affects the `Controller` class.
+- Renamed the `SerialAPIVersion` type to `SDKVersion`.
+- Renamed the `serialApiVersion` property to `firmwareVersion`, because it was referring to a Z-Wave Stick's firmware version and not the Serial API version. This affects the `Controller` and the `GetSerialApiCapabilitiesResponse` classes.
 
 ## Converted the `isControllerNode` method on the `ZWaveNode` class to a readonly property
 

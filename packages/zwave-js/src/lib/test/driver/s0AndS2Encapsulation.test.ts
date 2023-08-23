@@ -1,4 +1,5 @@
 import {
+	type CommandClass,
 	InvalidCC,
 	Security2CC,
 	Security2CCMessageEncapsulation,
@@ -10,7 +11,6 @@ import {
 	SecurityCCNonceReport,
 	SupervisionCCGet,
 	SupervisionCCReport,
-	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityClass,
@@ -20,9 +20,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "path";
@@ -94,8 +94,8 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		const respondToS0NonceGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof SecurityCCNonceGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof SecurityCCNonceGet
 				) {
 					const nonce = sm0Node.generateNonce(
 						controller.host.ownNodeId,
@@ -122,8 +122,8 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			async onControllerFrame(controller, self, frame) {
 				// We don't support sequenced commands here
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof SecurityCCCommandEncapsulation
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof SecurityCCCommandEncapsulation
 				) {
 					frame.payload.mergePartialCCs(undefined as any, []);
 				}
@@ -136,8 +136,8 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		const respondToS2NonceGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof Security2CCNonceGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof Security2CCNonceGet
 				) {
 					const nonce = sm2Node.generateNonce(
 						controller.host.ownNodeId,
@@ -164,14 +164,14 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		const handleInvalidCC: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof InvalidCC
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof InvalidCC
 				) {
 					if (
-						frame.payload.reason ===
-							ZWaveErrorCodes.Security2CC_CannotDecode ||
-						frame.payload.reason ===
-							ZWaveErrorCodes.Security2CC_NoSPAN
+						frame.payload.reason
+							=== ZWaveErrorCodes.Security2CC_CannotDecode
+						|| frame.payload.reason
+							=== ZWaveErrorCodes.Security2CC_NoSPAN
 					) {
 						const nonce = sm2Node.generateNonce(
 							controller.host.ownNodeId,
@@ -199,9 +199,9 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		const respondToSupervisionGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof Security2CCMessageEncapsulation &&
-					frame.payload.encapsulated instanceof SupervisionCCGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof Security2CCMessageEncapsulation
+					&& frame.payload.encapsulated instanceof SupervisionCCGet
 				) {
 					let cc: CommandClass = new SupervisionCCReport(self.host, {
 						nodeId: controller.host.ownNodeId,
@@ -229,10 +229,10 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		await wait(100);
 		mockNode.assertReceivedControllerFrame(
 			(f) =>
-				f.type === MockZWaveFrameType.Request &&
-				f.payload instanceof SecurityCCCommandEncapsulation &&
-				f.payload.encapsulated instanceof
-					SecurityCCCommandsSupportedGet,
+				f.type === MockZWaveFrameType.Request
+				&& f.payload instanceof SecurityCCCommandEncapsulation
+				&& f.payload.encapsulated
+					instanceof SecurityCCCommandsSupportedGet,
 		);
 
 		t.pass();

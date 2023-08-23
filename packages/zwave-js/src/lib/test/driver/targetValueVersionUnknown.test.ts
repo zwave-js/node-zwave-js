@@ -6,9 +6,9 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -31,8 +31,8 @@ integrationTest(
 			const noResponseToVersionCommandClassGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof VersionCCCommandClassGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof VersionCCCommandClassGet
 					) {
 						return true;
 					}
@@ -45,8 +45,8 @@ integrationTest(
 			const respondToBinarySwitchGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof BinarySwitchCCGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof BinarySwitchCCGet
 					) {
 						const cc = new BinarySwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
@@ -90,8 +90,8 @@ integrationTest(
 			const respondToBinarySwitchGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof BinarySwitchCCGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof BinarySwitchCCGet
 					) {
 						const cc = new BinarySwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,

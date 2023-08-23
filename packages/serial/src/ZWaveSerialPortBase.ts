@@ -2,14 +2,14 @@ import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
-import { PassThrough, type Duplex, type Readable, type Writable } from "stream";
+import { type Duplex, PassThrough, type Readable, type Writable } from "stream";
 import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import {
+	type BootloaderChunk,
 	BootloaderParser,
 	BootloaderScreenParser,
 	bootloaderMenuPreamble,
-	type BootloaderChunk,
 } from "./parsers/BootloaderParsers";
 import { SerialAPIParser } from "./parsers/SerialAPIParser";
 
@@ -69,10 +69,10 @@ export function isZWaveSerialPortImplementation(
 	obj: unknown,
 ): obj is ZWaveSerialPortImplementation {
 	return (
-		isObject(obj) &&
-		typeof obj.create === "function" &&
-		typeof obj.open === "function" &&
-		typeof obj.close === "function"
+		isObject(obj)
+		&& typeof obj.create === "function"
+		&& typeof obj.open === "function"
+		&& typeof obj.close === "function"
 	);
 }
 
@@ -111,7 +111,9 @@ export class ZWaveSerialPortBase extends PassThrough {
 	public mode: ZWaveSerialMode | undefined;
 
 	// Allow strongly-typed async iteration
-	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<ZWaveSerialChunk>;
+	declare public [Symbol.asyncIterator]: () => AsyncIterableIterator<
+		ZWaveSerialChunk
+	>;
 
 	constructor(
 		private implementation: ZWaveSerialPortImplementation,
@@ -120,14 +122,16 @@ export class ZWaveSerialPortBase extends PassThrough {
 		super({ readableObjectMode: true });
 
 		// Route the data event handlers to the parser and handle everything else ourselves
-		for (const method of [
-			"on",
-			"once",
-			"off",
-			"addListener",
-			"removeListener",
-			"removeAllListeners",
-		] as const) {
+		for (
+			const method of [
+				"on",
+				"once",
+				"off",
+				"addListener",
+				"removeListener",
+				"removeAllListeners",
+			] as const
+		) {
 			const original = this[method].bind(this);
 			this[method] = (event: any, ...args: any[]) => {
 				if (event === "data") {
@@ -152,8 +156,9 @@ export class ZWaveSerialPortBase extends PassThrough {
 
 		// Prepare parsers to hook up to the serial port
 		// -> Serial API mode
-		this.parser = new SerialAPIParser(this.logger, (discarded) =>
-			this.emit("discardedData", discarded),
+		this.parser = new SerialAPIParser(
+			this.logger,
+			(discarded) => this.emit("discardedData", discarded),
 		);
 
 		// -> Bootloader mode

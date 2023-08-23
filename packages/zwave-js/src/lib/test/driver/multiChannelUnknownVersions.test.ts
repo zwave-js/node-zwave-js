@@ -22,10 +22,10 @@ integrationTest(
 
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof
-						MultiChannelCCCommandEncapsulation &&
-					frame.payload.encapsulated instanceof BinarySwitchCCSet,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload
+						instanceof MultiChannelCCCommandEncapsulation
+					&& frame.payload.encapsulated instanceof BinarySwitchCCSet,
 			);
 
 			t.pass();

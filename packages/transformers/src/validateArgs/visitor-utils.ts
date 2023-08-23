@@ -27,31 +27,31 @@ export function checkIsClass(
 ): boolean {
 	// Hacky: using internal TypeScript API.
 	if (
-		"isArrayType" in visitorContext.checker &&
-		(visitorContext.checker as any).isArrayType(type)
+		"isArrayType" in visitorContext.checker
+		&& (visitorContext.checker as any).isArrayType(type)
 	) {
 		return false;
 	}
 	if (
-		"isArrayLikeType" in visitorContext.checker &&
-		(visitorContext.checker as any).isArrayLikeType(type)
+		"isArrayLikeType" in visitorContext.checker
+		&& (visitorContext.checker as any).isArrayLikeType(type)
 	) {
 		return false;
 	}
 
 	let hasConstructSignatures = false;
 	if (
-		type.symbol !== undefined &&
-		type.symbol.valueDeclaration !== undefined &&
-		ts.isVariableDeclaration(type.symbol.valueDeclaration) &&
-		type.symbol.valueDeclaration.type
+		type.symbol !== undefined
+		&& type.symbol.valueDeclaration !== undefined
+		&& ts.isVariableDeclaration(type.symbol.valueDeclaration)
+		&& type.symbol.valueDeclaration.type
 	) {
-		const variableDeclarationType =
-			visitorContext.checker.getTypeAtLocation(
+		const variableDeclarationType = visitorContext.checker
+			.getTypeAtLocation(
 				type.symbol.valueDeclaration.type,
 			);
-		const constructSignatures =
-			variableDeclarationType.getConstructSignatures();
+		const constructSignatures = variableDeclarationType
+			.getConstructSignatures();
 		hasConstructSignatures = constructSignatures.length >= 1;
 	}
 
@@ -60,36 +60,36 @@ export function checkIsClass(
 
 export function checkIsDateClass(type: ts.ObjectType): boolean {
 	return (
-		type.symbol !== undefined &&
-		type.symbol.valueDeclaration !== undefined &&
-		type.symbol.escapedName === "Date" &&
-		!!(
-			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
-			ts.ModifierFlags.Ambient
+		type.symbol !== undefined
+		&& type.symbol.valueDeclaration !== undefined
+		&& type.symbol.escapedName === "Date"
+		&& !!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration)
+			& ts.ModifierFlags.Ambient
 		)
 	);
 }
 
 export function checkIsNodeBuffer(type: ts.ObjectType): boolean {
 	return (
-		type.symbol !== undefined &&
-		type.symbol.valueDeclaration !== undefined &&
-		type.symbol.escapedName === "Buffer" &&
-		!!(
-			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
-			ts.ModifierFlags.Ambient
+		type.symbol !== undefined
+		&& type.symbol.valueDeclaration !== undefined
+		&& type.symbol.escapedName === "Buffer"
+		&& !!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration)
+			& ts.ModifierFlags.Ambient
 		)
 	);
 }
 
 export function checkIsIgnoredIntrinsic(type: ts.ObjectType): boolean {
 	return (
-		type.symbol !== undefined &&
-		type.symbol.valueDeclaration !== undefined &&
-		["Set", "Map"].includes(type.symbol.name) &&
-		!!(
-			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
-			ts.ModifierFlags.Ambient
+		type.symbol !== undefined
+		&& type.symbol.valueDeclaration !== undefined
+		&& ["Set", "Map"].includes(type.symbol.name)
+		&& !!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration)
+			& ts.ModifierFlags.Ambient
 		)
 	);
 }
@@ -98,9 +98,9 @@ export function isNumericEnum(
 	type: ts.Type,
 ): type is ts.UnionType & { types: ts.NumberLiteralType[] } {
 	return (
-		!!(type.flags & ts.TypeFlags.EnumLiteral) &&
-		type.isUnion() &&
-		type.types.every((t) => t.isNumberLiteral())
+		!!(type.flags & ts.TypeFlags.EnumLiteral)
+		&& type.isUnion()
+		&& type.types.every((t) => t.isNumberLiteral())
 	);
 }
 
@@ -145,17 +145,16 @@ export function getPropertyInfo(
 
 		const valueDeclaration = symbol.valueDeclaration;
 		if (
-			!ts.isPropertySignature(valueDeclaration) &&
-			!ts.isMethodSignature(valueDeclaration)
+			!ts.isPropertySignature(valueDeclaration)
+			&& !ts.isMethodSignature(valueDeclaration)
 		) {
 			throw new Error(
 				`Unsupported declaration kind: ${valueDeclaration.kind}`,
 			);
 		}
 		isMethod = ts.isMethodSignature(valueDeclaration);
-		isFunction =
-			valueDeclaration.type !== undefined &&
-			ts.isFunctionTypeNode(valueDeclaration.type);
+		isFunction = valueDeclaration.type !== undefined
+			&& ts.isFunctionTypeNode(valueDeclaration.type);
 		if (valueDeclaration.type === undefined) {
 			if (!isMethod) {
 				throw new Error("Found property without type.");
@@ -190,9 +189,9 @@ export function getPropertyInfo(
 	}
 
 	if (
-		optional !== undefined &&
-		isMethod !== undefined &&
-		isFunction !== undefined
+		optional !== undefined
+		&& isMethod !== undefined
+		&& isFunction !== undefined
 	) {
 		return {
 			name,
@@ -212,8 +211,8 @@ export function getTypeAliasMapping(
 ): Map<ts.Type, ts.Type> {
 	const mapping: Map<ts.Type, ts.Type> = new Map();
 	if (
-		type.aliasTypeArguments !== undefined &&
-		type.target.aliasTypeArguments !== undefined
+		type.aliasTypeArguments !== undefined
+		&& type.target.aliasTypeArguments !== undefined
 	) {
 		const typeParameters = type.target.aliasTypeArguments;
 		const typeArguments = type.aliasTypeArguments;
@@ -236,14 +235,14 @@ export function getTypeReferenceMapping(
 			const baseTypes = visitorContext.checker.getBaseTypes(type.target);
 			for (const baseType of baseTypes) {
 				if (
-					baseType.aliasTypeArguments &&
-					visitorContext.previousTypeReference !== baseType &&
-					(baseType as ts.TypeReference).target
+					baseType.aliasTypeArguments
+					&& visitorContext.previousTypeReference !== baseType
+					&& (baseType as ts.TypeReference).target
 				) {
 					const typeReference = baseType as ts.TypeReference;
 					if (
-						typeReference.aliasTypeArguments !== undefined &&
-						typeReference.target.aliasTypeArguments !== undefined
+						typeReference.aliasTypeArguments !== undefined
+						&& typeReference.target.aliasTypeArguments !== undefined
 					) {
 						const typeParameters =
 							typeReference.target.aliasTypeArguments;
@@ -260,9 +259,9 @@ export function getTypeReferenceMapping(
 				}
 
 				if (
-					tsutils.isTypeReference(baseType) &&
-					baseType.target.typeParameters !== undefined &&
-					baseType.typeArguments !== undefined
+					tsutils.isTypeReference(baseType)
+					&& baseType.target.typeParameters !== undefined
+					&& baseType.typeArguments !== undefined
 				) {
 					const typeParameters = baseType.target.typeParameters;
 					const typeArguments = baseType.typeArguments;
@@ -277,8 +276,8 @@ export function getTypeReferenceMapping(
 		}
 	})(type);
 	if (
-		type.target.typeParameters !== undefined &&
-		type.typeArguments !== undefined
+		type.target.typeParameters !== undefined
+		&& type.typeArguments !== undefined
 	) {
 		const typeParameters = type.target.typeParameters;
 		const typeArguments = type.typeArguments;
@@ -490,7 +489,7 @@ export function createBinaries(
 ): ts.Expression {
 	if (expressions.length >= 1 || baseExpression === undefined) {
 		return expressions.reduce((previous, expression) =>
-			ts.factory.createBinaryExpression(previous, operator, expression),
+			ts.factory.createBinaryExpression(previous, operator, expression)
 		);
 	} else {
 		return baseExpression;
@@ -552,7 +551,7 @@ export function createConjunctionFunction(
 									functionNames.map((functionName) =>
 										ts.factory.createIdentifier(
 											functionName,
-										),
+										)
 									),
 								),
 							),
@@ -662,7 +661,7 @@ export function createDisjunctionFunction(
 								undefined,
 								f.createArrayLiteralExpression(
 									functionNames.map((functionName) =>
-										f.createIdentifier(functionName),
+										f.createIdentifier(functionName)
 									),
 								),
 							),
@@ -852,7 +851,7 @@ export function createSuperfluousPropertiesLoop(
 							f.createStrictInequality(
 								keyIdentifier,
 								f.createStringLiteral(propertyName),
-							),
+							)
 						),
 						ts.SyntaxKind.AmpersandAmpersandToken,
 						f.createTrue(),
@@ -1018,9 +1017,11 @@ function createErrorMessage(reason: Reason): ts.Expression {
 			return createAssertionString("expected null");
 		case "object-keyof":
 			return createAssertionString(
-				`expected ${reason.properties
-					.map((property) => `'${property}'`)
-					.join("|")}`,
+				`expected ${
+					reason.properties
+						.map((property) => `'${property}'`)
+						.join("|")
+				}`,
 			);
 		case "string-literal":
 			return createAssertionString(`expected string '${reason.value}'`);
@@ -1048,15 +1049,17 @@ function createErrorMessage(reason: Reason): ts.Expression {
 			return createAssertionString("expected a function");
 		case "template-literal":
 			return createAssertionString(
-				`expected \`${reason.value
-					.map(
-						([text, type]) =>
-							text +
-							(typeof type === "undefined"
-								? ""
-								: "${" + type + "}"),
-					)
-					.join("")}\``,
+				`expected \`${
+					reason.value
+						.map(
+							([text, type]) =>
+								text
+								+ (typeof type === "undefined"
+									? ""
+									: "${" + type + "}"),
+						)
+						.join("")
+				}\``,
 			);
 	}
 	throw new Error("Not implemented");

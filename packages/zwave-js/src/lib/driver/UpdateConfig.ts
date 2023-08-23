@@ -1,4 +1,4 @@
-import { detectPackageManager, type PackageManager } from "@alcalzone/pak";
+import { type PackageManager, detectPackageManager } from "@alcalzone/pak";
 import got from "@esm2cjs/got";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getErrorMessage } from "@zwave-js/shared";
@@ -42,10 +42,12 @@ export async function checkForConfigUpdates(
 	const allVersions = Object.keys(registry.versions)
 		.filter((v) => !!semver.valid(v))
 		.filter((v) => /\-\d{8}$/.test(v));
-	const updateRange = `>${currentVersion} <${semver.inc(
-		currentVersion,
-		"patch",
-	)}`;
+	const updateRange = `>${currentVersion} <${
+		semver.inc(
+			currentVersion,
+			"patch",
+		)
+	}`;
 	const updateVersion = semver.maxSatisfying(allVersions, updateRange, {
 		includePrerelease: true,
 	});
@@ -92,8 +94,9 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 
 	// Free the lock
 	try {
-		if (await lockfile.check(packageJsonPath))
+		if (await lockfile.check(packageJsonPath)) {
 			await lockfile.unlock(packageJsonPath);
+		}
 	} catch {
 		// whatever - just don't crash
 	}
@@ -181,8 +184,9 @@ export async function installConfigUpdateInDocker(
 
 	const freeLock = async () => {
 		try {
-			if (await lockfile.check(lockfilePath, lockfileOptions))
+			if (await lockfile.check(lockfilePath, lockfileOptions)) {
 				await lockfile.unlock(lockfilePath, lockfileOptions);
+			}
 		} catch {
 			// whatever - just don't crash
 		}
@@ -210,9 +214,11 @@ export async function installConfigUpdateInDocker(
 	} catch (e) {
 		await freeLock();
 		throw new ZWaveError(
-			`Config update failed: Could not download tarball. Reason: ${getErrorMessage(
-				e,
-			)}`,
+			`Config update failed: Could not download tarball. Reason: ${
+				getErrorMessage(
+					e,
+				)
+			}`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
 	}

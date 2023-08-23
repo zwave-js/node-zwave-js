@@ -88,8 +88,8 @@ export function isMultiEncapsulatingCommandClass(
 	// The encapsulated property must  array of CCs
 	if (
 		!(
-			isArray((cc as any).encapsulated) &&
-			(cc as any).encapsulated.every(
+			isArray((cc as any).encapsulated)
+			&& (cc as any).encapsulated.every(
 				(item: any) => item instanceof CommandClass,
 			)
 		)

@@ -1,18 +1,18 @@
 import {
 	CommandClasses,
 	Duration,
+	type MaybeNotKnown,
+	type MaybeUnknown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	UNKNOWN_STATE,
 	ValueMetadata,
 	encodeMaybeBoolean,
 	maybeUnknownToString,
 	parseMaybeBoolean,
 	validatePayload,
-	type MaybeNotKnown,
-	type MaybeUnknown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import type { AllOrNone } from "@zwave-js/shared";
@@ -20,19 +20,19 @@ import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
 	SET_VALUE_HOOKS,
-	throwUnsupportedProperty,
-	throwWrongValueType,
-	type PollValueImplementation,
 	type SetValueImplementation,
 	type SetValueImplementationHooksFactory,
+	throwUnsupportedProperty,
+	throwWrongValueType,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -49,16 +49,22 @@ import { BinarySwitchCommand } from "../lib/_Types";
 
 export const BinarySwitchCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Binary Switch"], {
-		...V.staticProperty("currentValue", {
-			...ValueMetadata.ReadOnlyBoolean,
-			label: "Current value",
-		} as const),
+		...V.staticProperty(
+			"currentValue",
+			{
+				...ValueMetadata.ReadOnlyBoolean,
+				label: "Current value",
+			} as const,
+		),
 
-		...V.staticProperty("targetValue", {
-			...ValueMetadata.Boolean,
-			label: "Target value",
-			valueChangeOptions: ["transitionDuration"],
-		} as const),
+		...V.staticProperty(
+			"targetValue",
+			{
+				...ValueMetadata.Boolean,
+				label: "Target value",
+				valueChangeOptions: ["transitionDuration"],
+			} as const,
+		),
 
 		...V.staticProperty(
 			"duration",
@@ -133,7 +139,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: BinarySwitchCCAPI,
 			{ property },
 			value,
@@ -161,8 +167,8 @@ export class BinarySwitchCCAPI extends CCAPI {
 		options,
 	) => {
 		if (property === "targetValue") {
-			const currentValueValueId =
-				BinarySwitchCCValues.currentValue.endpoint(this.endpoint.index);
+			const currentValueValueId = BinarySwitchCCValues.currentValue
+				.endpoint(this.endpoint.index);
 
 			return {
 				optimisticallyUpdateRelatedValues: (
@@ -176,11 +182,11 @@ export class BinarySwitchCCAPI extends CCAPI {
 						);
 					} else if (this.isMulticast()) {
 						// Figure out which nodes were affected by this command
-						const affectedNodes =
-							this.endpoint.node.physicalNodes.filter((node) =>
+						const affectedNodes = this.endpoint.node.physicalNodes
+							.filter((node) =>
 								node
 									.getEndpoint(this.endpoint.index)
-									?.supportsCC(this.ccId),
+									?.supportsCC(this.ccId)
 							);
 						// and optimistically update the currentValue
 						for (const node of affectedNodes) {
@@ -210,7 +216,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 	};
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: BinarySwitchCCAPI, { property }) {
+		return async function(this: BinarySwitchCCAPI, { property }) {
 			switch (property) {
 				case "currentValue":
 				case "targetValue":
@@ -339,9 +345,12 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	}
 }
 
-export type BinarySwitchCCReportOptions = CCCommandOptions & {
-	currentValue: MaybeUnknown<boolean>;
-} & AllOrNone<{
+export type BinarySwitchCCReportOptions =
+	& CCCommandOptions
+	& {
+		currentValue: MaybeUnknown<boolean>;
+	}
+	& AllOrNone<{
 		targetValue: MaybeUnknown<boolean>;
 		duration: Duration | string;
 	}>;

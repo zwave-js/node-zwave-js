@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type SupervisionResult,
 	TransmitOptions,
 	ValueMetadata,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
@@ -16,17 +16,17 @@ import { clamp } from "alcalzone-shared/math";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -89,7 +89,7 @@ export class WakeUpCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (this: WakeUpCCAPI, { property }, value) {
+		return async function(this: WakeUpCCAPI, { property }, value) {
 			if (property !== "wakeUpInterval") {
 				throwUnsupportedProperty(this.ccId, property);
 			}
@@ -116,7 +116,7 @@ export class WakeUpCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: WakeUpCCAPI, { property }) {
+		return async function(this: WakeUpCCAPI, { property }) {
 			switch (property) {
 				case "wakeUpInterval":
 					return (await this.getInterval())?.[property];
@@ -134,11 +134,12 @@ export class WakeUpCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<WakeUpCCIntervalReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			WakeUpCCIntervalReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["wakeUpInterval", "controllerNodeId"]);
 		}
@@ -155,11 +156,12 @@ export class WakeUpCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<WakeUpCCIntervalCapabilitiesReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			WakeUpCCIntervalCapabilitiesReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"defaultWakeUpInterval",
@@ -491,7 +493,8 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 				"minimum interval": `${this.minWakeUpInterval} seconds`,
 				"maximum interval": `${this.maxWakeUpInterval} seconds`,
 				"interval steps": `${this.wakeUpIntervalSteps} seconds`,
-				"wake up on demand supported": `${this.wakeUpOnDemandSupported}`,
+				"wake up on demand supported":
+					`${this.wakeUpOnDemandSupported}`,
 			},
 		};
 	}

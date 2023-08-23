@@ -2,6 +2,7 @@ import {
 	BasicCCReport,
 	BasicCCValues,
 	BinarySwitchCCReport,
+	type CommandClass,
 	InvalidCC,
 	Security2CC,
 	Security2CCMessageEncapsulation,
@@ -10,7 +11,6 @@ import {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
-	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityClass,
@@ -19,10 +19,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
+	MockZWaveFrameType,
 	type MockZWaveRequestFrame,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "path";
@@ -82,8 +82,8 @@ integrationTest(
 			const respondToNonceGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof Security2CCNonceGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof Security2CCNonceGet
 					) {
 						const nonce = smNode.generateNonce(
 							controller.host.ownNodeId,
@@ -110,14 +110,14 @@ integrationTest(
 			const handleInvalidCC: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof InvalidCC
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof InvalidCC
 					) {
 						if (
-							frame.payload.reason ===
-								ZWaveErrorCodes.Security2CC_CannotDecode ||
-							frame.payload.reason ===
-								ZWaveErrorCodes.Security2CC_NoSPAN
+							frame.payload.reason
+								=== ZWaveErrorCodes.Security2CC_CannotDecode
+							|| frame.payload.reason
+								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
 								controller.host.ownNodeId,
@@ -145,10 +145,11 @@ integrationTest(
 			const respondToSupervisionGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof
-							Security2CCMessageEncapsulation &&
-						frame.payload.encapsulated instanceof SupervisionCCGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload
+							instanceof Security2CCMessageEncapsulation
+						&& frame.payload.encapsulated
+							instanceof SupervisionCCGet
 					) {
 						let cc: CommandClass = new SupervisionCCReport(
 							self.host,
@@ -269,8 +270,8 @@ integrationTest(
 			const respondToNonceGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof Security2CCNonceGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof Security2CCNonceGet
 					) {
 						const nonce = smNode.generateNonce(
 							controller.host.ownNodeId,
@@ -297,14 +298,14 @@ integrationTest(
 			const handleInvalidCC: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof InvalidCC
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof InvalidCC
 					) {
 						if (
-							frame.payload.reason ===
-								ZWaveErrorCodes.Security2CC_CannotDecode ||
-							frame.payload.reason ===
-								ZWaveErrorCodes.Security2CC_NoSPAN
+							frame.payload.reason
+								=== ZWaveErrorCodes.Security2CC_CannotDecode
+							|| frame.payload.reason
+								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
 								controller.host.ownNodeId,
@@ -421,8 +422,8 @@ integrationTest.only(
 			const respondToNonceGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof Security2CCNonceGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof Security2CCNonceGet
 					) {
 						const nonce = smNode.generateNonce(
 							controller.host.ownNodeId,
@@ -449,14 +450,14 @@ integrationTest.only(
 			const handleInvalidCC: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof InvalidCC
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof InvalidCC
 					) {
 						if (
-							frame.payload.reason ===
-								ZWaveErrorCodes.Security2CC_CannotDecode ||
-							frame.payload.reason ===
-								ZWaveErrorCodes.Security2CC_NoSPAN
+							frame.payload.reason
+								=== ZWaveErrorCodes.Security2CC_CannotDecode
+							|| frame.payload.reason
+								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
 								controller.host.ownNodeId,
@@ -484,10 +485,11 @@ integrationTest.only(
 			const respondToSupervisionGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof
-							Security2CCMessageEncapsulation &&
-						frame.payload.encapsulated instanceof SupervisionCCGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload
+							instanceof Security2CCMessageEncapsulation
+						&& frame.payload.encapsulated
+							instanceof SupervisionCCGet
 					) {
 						let cc: CommandClass = new SupervisionCCReport(
 							self.host,
@@ -550,10 +552,11 @@ integrationTest.only(
 			const reportConfirmation = mockNode.expectControllerFrame(
 				500,
 				(f): f is MockZWaveRequestFrame =>
-					f.type === MockZWaveFrameType.Request &&
-					f.payload instanceof Security2CCMessageEncapsulation &&
-					f.payload.encapsulated instanceof SupervisionCCReport &&
-					f.payload.encapsulated.status === SupervisionStatus.Success,
+					f.type === MockZWaveFrameType.Request
+					&& f.payload instanceof Security2CCMessageEncapsulation
+					&& f.payload.encapsulated instanceof SupervisionCCReport
+					&& f.payload.encapsulated.status
+						=== SupervisionStatus.Success,
 			);
 
 			// We want both transactions to be completed successfully

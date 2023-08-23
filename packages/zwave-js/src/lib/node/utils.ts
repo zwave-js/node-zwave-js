@@ -2,17 +2,17 @@ import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
 	CommandClasses,
-	ZWaveError,
-	ZWaveErrorCodes,
-	allCCs,
-	applicationCCs,
-	getCCName,
 	type IZWaveEndpoint,
 	type IZWaveNode,
 	type MaybeNotKnown,
 	type SetValueOptions,
 	type TranslatedValueID,
 	type ValueID,
+	ZWaveError,
+	ZWaveErrorCodes,
+	allCCs,
+	applicationCCs,
+	getCCName,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 
@@ -83,8 +83,8 @@ export function getEndpointCount(
 	node: IZWaveNode,
 ): number {
 	return (
-		(getIndividualEndpointCount(applHost, node) || 0) +
-		(getAggregatedEndpointCount(applHost, node) || 0)
+		(getIndividualEndpointCount(applHost, node) || 0)
+		+ (getAggregatedEndpointCount(applHost, node) || 0)
 	);
 }
 
@@ -201,9 +201,9 @@ export function shouldHideRootApplicationCCValues(
 	// This is not the case when only individual endpoints should be preserved in addition to the root
 	const preserveEndpoints = compatConfig?.preserveEndpoints;
 	if (
-		preserveEndpoints != undefined &&
-		preserveEndpoints !== "*" &&
-		preserveEndpoints.length !== endpointIndizes.length
+		preserveEndpoints != undefined
+		&& preserveEndpoints !== "*"
+		&& preserveEndpoints.length !== endpointIndizes.length
 	) {
 		return false;
 	}
@@ -233,9 +233,11 @@ export function translateValueID<T extends ValueID>(
 	);
 	if (!ccInstance) {
 		throw new ZWaveError(
-			`Cannot translate a value ID for the non-implemented CC ${getCCName(
-				valueId.commandClass,
-			)}`,
+			`Cannot translate a value ID for the non-implemented CC ${
+				getCCName(
+					valueId.commandClass,
+				)
+			}`,
 			ZWaveErrorCodes.CC_NotImplemented,
 		);
 	}
@@ -277,12 +279,12 @@ export function filterRootApplicationCCValueIDs<T extends ValueID>(
 		const valueExistsOnAnotherEndpoint = allValueIds.some(
 			(other) =>
 				// same CC
-				other.commandClass === valueId.commandClass &&
+				other.commandClass === valueId.commandClass
 				// non-root endpoint
-				!!other.endpoint &&
+				&& !!other.endpoint
 				// same property and key
-				other.property === valueId.property &&
-				other.propertyKey === valueId.propertyKey,
+				&& other.property === valueId.property
+				&& other.propertyKey === valueId.propertyKey,
 		);
 		return valueExistsOnAnotherEndpoint;
 	};
@@ -304,8 +306,8 @@ export function getDefinedValueIDs(
 	for (const endpoint of getAllEndpoints(applHost, node)) {
 		for (const cc of allCCs) {
 			if (
-				endpoint.supportsCC(cc) ||
-				(endpoint.controlsCC(cc) && allowControlled.includes(cc))
+				endpoint.supportsCC(cc)
+				|| (endpoint.controlsCC(cc) && allowControlled.includes(cc))
 			) {
 				const ccInstance = CommandClass.createInstanceUnchecked(
 					applHost,

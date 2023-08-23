@@ -61,7 +61,7 @@ test("write rejects if the port is not open", async (t) => {
 	const { port } = t.context;
 	await port.close();
 	await t.throwsAsync(() =>
-		port.writeAsync(Buffer.from([MessageHeaders.ACK])),
+		port.writeAsync(Buffer.from([MessageHeaders.ACK]))
 	);
 });
 

@@ -1,28 +1,28 @@
 import {
 	MAX_NODES,
 	MAX_REPEATERS,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeNodeID,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
+	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
-	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
@@ -31,9 +31,9 @@ import { getEnumMemberName } from "@zwave-js/shared";
 export class AssignPriorityReturnRouteRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !==
-				AssignPriorityReturnRouteRequestTransmitReport
+			gotDeserializationOptions(options)
+			&& (new.target as any)
+				!== AssignPriorityReturnRouteRequestTransmitReport
 		) {
 			return new AssignPriorityReturnRouteRequestTransmitReport(
 				host,
@@ -45,7 +45,8 @@ export class AssignPriorityReturnRouteRequestBase extends Message {
 }
 
 export interface AssignPriorityReturnRouteRequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	nodeId: number;
 	destinationNodeId: number;
 	repeaters: number[];
@@ -54,7 +55,9 @@ export interface AssignPriorityReturnRouteRequestOptions
 
 @expectedResponse(FunctionType.AssignPriorityReturnRoute)
 @expectedCallback(FunctionType.AssignPriorityReturnRoute)
-export class AssignPriorityReturnRouteRequest extends AssignPriorityReturnRouteRequestBase {
+export class AssignPriorityReturnRouteRequest
+	extends AssignPriorityReturnRouteRequestBase
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -75,8 +78,8 @@ export class AssignPriorityReturnRouteRequest extends AssignPriorityReturnRouteR
 				);
 			}
 			if (
-				options.repeaters.length > MAX_REPEATERS ||
-				options.repeaters.some((id) => id < 1 || id > MAX_NODES)
+				options.repeaters.length > MAX_REPEATERS
+				|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
 			) {
 				throw new ZWaveError(
 					`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
@@ -124,10 +127,9 @@ export class AssignPriorityReturnRouteRequest extends AssignPriorityReturnRouteR
 			message: {
 				"source node ID": this.nodeId,
 				"destination node ID": this.destinationNodeId,
-				repeaters:
-					this.repeaters.length > 0
-						? this.repeaters.join(" -> ")
-						: "none",
+				repeaters: this.repeaters.length > 0
+					? this.repeaters.join(" -> ")
+					: "none",
 				"route speed": getEnumMemberName(
 					ZWaveDataRate,
 					this.routeSpeed,
@@ -139,8 +141,7 @@ export class AssignPriorityReturnRouteRequest extends AssignPriorityReturnRouteR
 }
 
 @messageTypes(MessageType.Response, FunctionType.AssignPriorityReturnRoute)
-export class AssignPriorityReturnRouteResponse
-	extends Message
+export class AssignPriorityReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(

@@ -1,0 +1,69 @@
+{
+	"lineWidth": 80,
+	"useTabs": true,
+	"indentWidth": 4,
+	"newLineKind": "lf",
+
+	"typescript": {
+		"semiColons": "prefer",
+		"quoteStyle": "alwaysDouble",
+		"module.sortImportDeclarations": "caseSensitive",
+		"importDeclaration.sortNamedImports": "caseSensitive",
+		"module.sortExportDeclarations": "caseSensitive",
+		"exportDeclaration.sortNamedExports": "caseSensitive",
+		"arrowFunction.useParentheses": "force",
+		// Preserve maximum overlap with the current formatter,
+		// then consider turning these off one by one.
+		// "operatorPosition": "sameLine",
+		"conditionalExpression.operatorPosition": "nextLine",
+		"conditionalType.operatorPosition": "nextLine",
+		"constructorType.spaceAfterNewKeyword": true,
+		"constructSignature.spaceAfterNewKeyword": true,
+		"binaryExpression.linePerExpression": true,
+		"quoteProps": "asNeeded"
+	},
+
+	"json": {},
+
+	"markdown": {},
+
+	"prettier": {
+		"associations": [
+			// Prettier formats those better
+			"packages/nvmedit/test/fixtures/**/*.json",
+			"**/*.yml",
+			"**/*.yaml"
+		],
+
+		"semi": true,
+		"trailingComma": "all",
+		"singleQuote": false,
+		"printWidth": 80,
+		"endOfLine": "lf",
+
+		"yml.useTabs": false,
+		"yml.tabWidth": 2,
+		"yml.singleQuote": true
+	},
+
+	"excludes": [
+		"**/build",
+		"**/node_modules",
+		"**/package.json",
+		"**/*-lock.json",
+		".github/workflows",
+		".yarn/plugins",
+		".yarn/releases",
+		".tmp/",
+		"cache/",
+		"packages/*/api.md",
+		"CHANGELOG*.md",
+		".yarnrc.yml"
+	],
+	"plugins": [
+		"https://github.com/AlCalzone/dprint-plugin-typescript/releases/download/loop-label/dprint_plugin_typescript.wasm",
+		"https://plugins.dprint.dev/json-0.17.4.wasm",
+		"https://plugins.dprint.dev/markdown-0.15.3.wasm",
+		"https://plugins.dprint.dev/prettier-0.27.0.json@3557a62b4507c55a47d8cde0683195b14d13c41dda66d0f0b0e111aed107e2fe"
+	]
+}

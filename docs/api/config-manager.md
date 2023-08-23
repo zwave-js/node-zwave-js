@@ -260,10 +260,10 @@ lookupDevice(manufacturerId: number, productType: number, productId: number, fir
 
 Looks up the definition of a given device in the configuration DB. It is not necessary to use `loadDeviceIndex` first.
 
--   `manufacturerId`: The manufacturer id of the device
--   `productType`: The product type of the device
--   `productId`: The product id of the device
--   `firmwareVersion`: If known, configuration for a specific firmware version can be loaded. If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
+- `manufacturerId`: The manufacturer id of the device
+- `productType`: The product type of the device
+- `productId`: The product id of the device
+- `firmwareVersion`: If known, configuration for a specific firmware version can be loaded. If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
 
 For details on the available properties, refer to the [config file documentation](development/config-files.md).
 

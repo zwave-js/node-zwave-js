@@ -4,11 +4,11 @@ import type {
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
 	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -16,10 +16,10 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -176,14 +176,18 @@ export class ClockCCSet extends ClockCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"clock setting": `${getEnumMemberName(
-					Weekday,
-					this.weekday,
-				)}, ${padStart(this.hour.toString(), 2, "0")}:${padStart(
-					this.minute.toString(),
-					2,
-					"0",
-				)}`,
+				"clock setting": `${
+					getEnumMemberName(
+						Weekday,
+						this.weekday,
+					)
+				}, ${padStart(this.hour.toString(), 2, "0")}:${
+					padStart(
+						this.minute.toString(),
+						2,
+						"0",
+					)
+				}`,
 			},
 		};
 	}
@@ -216,14 +220,18 @@ export class ClockCCReport extends ClockCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"clock setting": `${getEnumMemberName(
-					Weekday,
-					this.weekday,
-				)}, ${padStart(this.hour.toString(), 2, "0")}:${padStart(
-					this.minute.toString(),
-					2,
-					"0",
-				)}`,
+				"clock setting": `${
+					getEnumMemberName(
+						Weekday,
+						this.weekday,
+					)
+				}, ${padStart(this.hour.toString(), 2, "0")}:${
+					padStart(
+						this.minute.toString(),
+						2,
+						"0",
+					)
+				}`,
 			},
 		};
 	}

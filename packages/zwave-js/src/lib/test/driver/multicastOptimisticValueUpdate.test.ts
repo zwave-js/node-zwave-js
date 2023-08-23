@@ -43,10 +43,11 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 		for (const mockNode of mockNodes) {
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof BinarySwitchCCSet,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof BinarySwitchCCSet,
 				{
-					errorMessage: `Node ${mockNode.id} should have received a BinarySwitchCCSet`,
+					errorMessage:
+						`Node ${mockNode.id} should have received a BinarySwitchCCSet`,
 				},
 			);
 		}

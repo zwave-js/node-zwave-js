@@ -200,21 +200,24 @@ export enum EncapsulationFlags {
 }
 
 export type SupervisionOptions =
-	| ({
+	| (
+		& {
 			/** Whether supervision may be used. `false` disables supervision. Default: `"auto"`. */
 			useSupervision?: "auto";
-	  } & (
+		}
+		& (
 			| {
-					requestStatusUpdates?: false;
-			  }
+				requestStatusUpdates?: false;
+			}
 			| {
-					requestStatusUpdates: true;
-					onUpdate: SupervisionUpdateHandler;
-			  }
-	  ))
+				requestStatusUpdates: true;
+				onUpdate: SupervisionUpdateHandler;
+			}
+		)
+	)
 	| {
-			useSupervision: false;
-	  };
+		useSupervision: false;
+	};
 
 export type SendCommandSecurityS2Options = {
 	/** Send the command using a different (lower) security class */
@@ -227,9 +230,11 @@ export type SendCommandSecurityS2Options = {
 	s2MulticastGroupId?: number;
 };
 
-export type SendCommandOptions = SendMessageOptions &
-	SupervisionOptions &
-	SendCommandSecurityS2Options & {
+export type SendCommandOptions =
+	& SendMessageOptions
+	& SupervisionOptions
+	& SendCommandSecurityS2Options
+	& {
 		/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 		maxSendAttempts?: number;
 		/** Whether the driver should automatically handle the encapsulation. Default: true */
@@ -243,8 +248,7 @@ export type SendCommandOptions = SendMessageOptions &
 	};
 
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
-	undefined extends TResponse
-		? SupervisionResult | undefined
+	undefined extends TResponse ? SupervisionResult | undefined
 		: TResponse | undefined;
 
 export enum SupervisionStatus {
@@ -256,24 +260,24 @@ export enum SupervisionStatus {
 
 export type SupervisionResult =
 	| {
-			status:
-				| SupervisionStatus.NoSupport
-				| SupervisionStatus.Fail
-				| SupervisionStatus.Success;
-			remainingDuration?: undefined;
-	  }
+		status:
+			| SupervisionStatus.NoSupport
+			| SupervisionStatus.Fail
+			| SupervisionStatus.Success;
+		remainingDuration?: undefined;
+	}
 	| {
-			status: SupervisionStatus.Working;
-			remainingDuration: Duration;
-	  };
+		status: SupervisionStatus.Working;
+		remainingDuration: Duration;
+	};
 
 export type SupervisionUpdateHandler = (update: SupervisionResult) => void;
 
 export function isSupervisionResult(obj: unknown): obj is SupervisionResult {
 	return (
-		isObject(obj) &&
-		"status" in obj &&
-		typeof SupervisionStatus[obj.status as any] === "string"
+		isObject(obj)
+		&& "status" in obj
+		&& typeof SupervisionStatus[obj.status as any] === "string"
 	);
 }
 
@@ -283,9 +287,9 @@ export function supervisedCommandSucceeded(
 	status: SupervisionStatus.Success | SupervisionStatus.Working;
 } {
 	return (
-		isSupervisionResult(result) &&
-		(result.status === SupervisionStatus.Success ||
-			result.status === SupervisionStatus.Working)
+		isSupervisionResult(result)
+		&& (result.status === SupervisionStatus.Success
+			|| result.status === SupervisionStatus.Working)
 	);
 }
 
@@ -295,9 +299,9 @@ export function supervisedCommandFailed(
 	status: SupervisionStatus.Fail | SupervisionStatus.NoSupport;
 } {
 	return (
-		isSupervisionResult(result) &&
-		(result.status === SupervisionStatus.Fail ||
-			result.status === SupervisionStatus.NoSupport)
+		isSupervisionResult(result)
+		&& (result.status === SupervisionStatus.Fail
+			|| result.status === SupervisionStatus.NoSupport)
 	);
 }
 
@@ -306,8 +310,9 @@ export function isUnsupervisedOrSucceeded(
 ): result is
 	| undefined
 	| (SupervisionResult & {
-			status: SupervisionStatus.Success | SupervisionStatus.Working;
-	  }) {
+		status: SupervisionStatus.Success | SupervisionStatus.Working;
+	})
+{
 	return !result || supervisedCommandSucceeded(result);
 }
 
@@ -335,12 +340,11 @@ export function mergeSupervisionResults(
 	);
 	if (working.length > 0) {
 		const durations = working.map((r) =>
-			r.remainingDuration.serializeSet(),
+			r.remainingDuration.serializeSet()
 		);
-		const maxDuration =
-			(durations.length > 0 &&
-				Duration.parseReport(Math.max(...durations))) ||
-			Duration.unknown();
+		const maxDuration = (durations.length > 0
+			&& Duration.parseReport(Math.max(...durations)))
+			|| Duration.unknown();
 		return {
 			status: SupervisionStatus.Working,
 			remainingDuration: maxDuration,

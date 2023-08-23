@@ -116,12 +116,16 @@ const dummyScales = {
 		pathExistsStub.reset();
 
 		pathExistsStub.resolves(true);
-		readFileStub.callsFake(((path: string) => {
-			if (path.endsWith("sensorTypes.json"))
-				return Promise.resolve(JSON.stringify(dummySensorTypes));
-			if (path.endsWith("scales.json"))
-				return Promise.resolve(JSON.stringify(dummyScales));
-		}) as any);
+		readFileStub.callsFake(
+			((path: string) => {
+				if (path.endsWith("sensorTypes.json")) {
+					return Promise.resolve(JSON.stringify(dummySensorTypes));
+				}
+				if (path.endsWith("scales.json")) {
+					return Promise.resolve(JSON.stringify(dummyScales));
+				}
+			}) as any,
+		);
 
 		const configManager = new ConfigManager();
 		await configManager.loadNamedScales();
@@ -153,12 +157,16 @@ const dummyScales = {
 		pathExistsStub.reset();
 
 		pathExistsStub.resolves(true);
-		readFileStub.callsFake(((path: string) => {
-			if (path.endsWith("sensorTypes.json"))
-				return Promise.resolve(JSON.stringify(dummySensorTypes));
-			if (path.endsWith("scales.json"))
-				return Promise.resolve(JSON.stringify(dummyScales));
-		}) as any);
+		readFileStub.callsFake(
+			((path: string) => {
+				if (path.endsWith("sensorTypes.json")) {
+					return Promise.resolve(JSON.stringify(dummySensorTypes));
+				}
+				if (path.endsWith("scales.json")) {
+					return Promise.resolve(JSON.stringify(dummyScales));
+				}
+			}) as any,
+		);
 
 		const configManager = new ConfigManager();
 		await configManager.loadNamedScales();

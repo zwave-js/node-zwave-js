@@ -1,4 +1,5 @@
 import {
+	type CommandClass,
 	MGRPExtension,
 	MPANExtension,
 	Security2CCMessageEncapsulation,
@@ -9,7 +10,6 @@ import {
 	SupervisionCommand,
 	getInnermostCommandClass,
 	isCommandClassContainer,
-	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityCCCommandEncapsulation,
@@ -19,13 +19,13 @@ import {
 import {
 	MAX_SEGMENT_SIZE,
 	RELAXED_TIMING_THRESHOLD,
+	type TransportServiceCC,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
 	TransportServiceCCSegmentRequest,
 	TransportServiceCCSegmentWait,
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
-	type TransportServiceCC,
 } from "@zwave-js/cc/TransportServiceCC";
 import {
 	CommandClasses,
@@ -34,20 +34,20 @@ import {
 	NODE_ID_BROADCAST,
 	SPANState,
 	SecurityClass,
+	type SendCommandOptions,
+	type SupervisionResult,
 	SupervisionStatus,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
 	mergeSupervisionResults,
-	type SendCommandOptions,
-	type SupervisionResult,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
-	createDeferredPromise,
 	type DeferredPromise,
+	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import {
 	exceedsMaxPayloadLength,
@@ -67,7 +67,6 @@ export type MessageGeneratorImplementation = (
 	 * without waiting for the message generator to finish completely.
 	 */
 	onMessageSent: (msg: Message, result: Message | undefined) => void,
-
 	/** Can be used to extend the timeout waiting for a response from a node to the sent message */
 	additionalCommandTimeoutMs?: number,
 ) => AsyncGenerator<Message, Message, Message>;
@@ -120,15 +119,15 @@ function getNodeUpdateTimeout(
 ): number {
 	const commandTimeMs = Math.ceil((msg.rtt ?? 0) / 1e6);
 	return (
-		commandTimeMs +
-		driver.getReportTimeout(msg) +
-		additionalCommandTimeoutMs
+		commandTimeMs
+		+ driver.getReportTimeout(msg)
+		+ additionalCommandTimeoutMs
 	);
 }
 
 /** A simple message generator that simply sends a message, waits for the ACK (and the response if one is expected) */
 export const simpleMessageGenerator: MessageGeneratorImplementation =
-	async function* (
+	async function*(
 		driver,
 		msg,
 		onMessageSent,
@@ -208,7 +207,7 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 
 /** A generator for singlecast SendData messages that automatically uses Transport Service when necessary */
 export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
-	async function* (driver, msg, onMessageSent, additionalCommandTimeoutMs) {
+	async function*(driver, msg, onMessageSent, additionalCommandTimeoutMs) {
 		// Make sure we can send this message
 		if (!isSendData(msg)) {
 			throw new ZWaveError(
@@ -224,8 +223,8 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 
 		const node = msg.getNodeUnsafe(driver);
 		const mayUseTransportService =
-			node?.supportsCC(CommandClasses["Transport Service"]) &&
-			node.getCCVersion(CommandClasses["Transport Service"]) >= 2;
+			node?.supportsCC(CommandClasses["Transport Service"])
+			&& node.getCCVersion(CommandClasses["Transport Service"]) >= 2;
 
 		if (!mayUseTransportService || !exceedsMaxPayloadLength(msg)) {
 			// Transport Service isn't needed for this message
@@ -240,10 +239,9 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 		// Send the command split into multiple segments
 		const payload = msg.serializeCC();
 		const numSegments = Math.ceil(payload.length / MAX_SEGMENT_SIZE);
-		const segmentDelay =
-			numSegments > RELAXED_TIMING_THRESHOLD
-				? TransportServiceTimeouts.relaxedTimingDelayR2
-				: 0;
+		const segmentDelay = numSegments > RELAXED_TIMING_THRESHOLD
+			? TransportServiceTimeouts.relaxedTimingDelayR2
+			: 0;
 		const sessionId = driver.getNextTransportServiceSessionId();
 		const nodeId = msg.command.nodeId;
 
@@ -260,10 +258,10 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 		let unhandledResponses: TransportServiceCC[] = [];
 		const { unregister: unregisterHandler } = driver.registerCommandHandler(
 			(cc) =>
-				cc.nodeId === nodeId &&
-				(cc instanceof TransportServiceCCSegmentWait ||
-					(cc instanceof TransportServiceCCSegmentRequest &&
-						cc.sessionId === sessionId)),
+				cc.nodeId === nodeId
+				&& (cc instanceof TransportServiceCCSegmentWait
+					|| (cc instanceof TransportServiceCCSegmentRequest
+						&& cc.sessionId === sessionId)),
 			(cc) => {
 				unhandledResponses.push(cc as TransportServiceCC);
 			},
@@ -302,7 +300,8 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 		try {
 			attempts: for (let attempt = 1; attempt <= 2; attempt++) {
 				driver.controllerLog.logNode(nodeId, {
-					message: `Beginning Transport Service TX session #${sessionId}...`,
+					message:
+						`Beginning Transport Service TX session #${sessionId}...`,
 					level: "debug",
 					direction: "outbound",
 				});
@@ -367,10 +366,10 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 						segmentComplete = await driver
 							.waitForCommand<TransportServiceCCSegmentComplete>(
 								(cc) =>
-									cc.nodeId === nodeId &&
-									cc instanceof
-										TransportServiceCCSegmentComplete &&
-									cc.sessionId === sessionId,
+									cc.nodeId === nodeId
+									&& cc
+										instanceof TransportServiceCCSegmentComplete
+									&& cc.sessionId === sessionId,
 								TransportServiceTimeouts.segmentCompleteR2,
 							)
 							.catch(() => undefined);
@@ -379,7 +378,8 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 					if (segmentComplete) {
 						// We're done!
 						driver.controllerLog.logNode(nodeId, {
-							message: `Transport Service TX session #${sessionId} complete`,
+							message:
+								`Transport Service TX session #${sessionId} complete`,
 							level: "debug",
 							direction: "outbound",
 						});
@@ -391,7 +391,8 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 					if (segmentWait) {
 						const waitTime = segmentWait.pendingSegments * 100;
 						driver.controllerLog.logNode(nodeId, {
-							message: `Restarting Transport Service TX session #${sessionId} in ${waitTime} ms...`,
+							message:
+								`Restarting Transport Service TX session #${sessionId} in ${waitTime} ms...`,
 							level: "debug",
 						});
 
@@ -416,7 +417,8 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 					if (segment === numSegments - 1) {
 						if (didRetryLastSegment) {
 							driver.controllerLog.logNode(nodeId, {
-								message: `Transport Service TX session #${sessionId} failed`,
+								message:
+									`Transport Service TX session #${sessionId} failed`,
 								level: "debug",
 								direction: "outbound",
 							});
@@ -424,7 +426,8 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 						} else {
 							// Try the last segment again
 							driver.controllerLog.logNode(nodeId, {
-								message: `Transport Service TX session #${sessionId}: Segment Complete missing - re-transmitting last segment...`,
+								message:
+									`Transport Service TX session #${sessionId}: Segment Complete missing - re-transmitting last segment...`,
 								level: "debug",
 								direction: "outbound",
 							});
@@ -481,7 +484,7 @@ async function* sendCommandGenerator<
 
 /** A message generator for security encapsulated messages (S0) */
 export const secureMessageGeneratorS0: MessageGeneratorImplementation =
-	async function* (driver, msg, onMessageSent) {
+	async function*(driver, msg, onMessageSent) {
 		if (!isSendData(msg)) {
 			throw new ZWaveError(
 				"Cannot use the S0 message generator for a command that's not a SendData message!",
@@ -512,19 +515,20 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 				nodeId: nodeId,
 				endpoint: msg.command.endpointIndex,
 			});
-			const nonceResp =
-				yield* sendCommandGenerator<SecurityCCNonceReport>(
-					driver,
-					cc,
-					(msg, result) => {
-						additionalTimeoutMs = Math.ceil(msg.rtt! / 1e6);
-						onMessageSent(msg, result);
-					},
-					{
-						// Only try getting a nonce once
-						maxSendAttempts: 1,
-					},
-				);
+			const nonceResp = yield* sendCommandGenerator<
+				SecurityCCNonceReport
+			>(
+				driver,
+				cc,
+				(msg, result) => {
+					additionalTimeoutMs = Math.ceil(msg.rtt! / 1e6);
+					onMessageSent(msg, result);
+				},
+				{
+					// Only try getting a nonce once
+					maxSendAttempts: 1,
+				},
+			);
 			if (!nonceResp) {
 				throw new ZWaveError(
 					"No nonce received from the node, cannot send secure command!",
@@ -546,7 +550,7 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 
 /** A message generator for security encapsulated messages (S2) */
 export const secureMessageGeneratorS2: MessageGeneratorImplementation =
-	async function* (driver, msg, onMessageSent) {
+	async function*(driver, msg, onMessageSent) {
 		if (!isSendData(msg)) {
 			throw new ZWaveError(
 				"Cannot use the S2 message generator for a command that's not a SendData message!",
@@ -571,15 +575,15 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 
 		// We need a new nonce when there is no shared SPAN state, or the SPAN state is for a lower security class
 		// than the command we want to send
-		const expectedSecurityClass =
-			msg.command.securityClass ?? driver.getHighestSecurityClass(nodeId);
+		const expectedSecurityClass = msg.command.securityClass
+			?? driver.getHighestSecurityClass(nodeId);
 
 		if (
-			spanState.type === SPANState.None ||
-			spanState.type === SPANState.LocalEI ||
-			(spanState.type === SPANState.SPAN &&
-				spanState.securityClass !== SecurityClass.Temporary &&
-				spanState.securityClass !== expectedSecurityClass)
+			spanState.type === SPANState.None
+			|| spanState.type === SPANState.LocalEI
+			|| (spanState.type === SPANState.SPAN
+				&& spanState.securityClass !== SecurityClass.Temporary
+				&& spanState.securityClass !== expectedSecurityClass)
 		) {
 			// Request a new nonce
 
@@ -588,19 +592,20 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				nodeId: nodeId,
 				endpoint: msg.command.endpointIndex,
 			});
-			const nonceResp =
-				yield* sendCommandGenerator<Security2CCNonceReport>(
-					driver,
-					cc,
-					(msg, result) => {
-						additionalTimeoutMs = Math.ceil(msg.rtt! / 1e6);
-						onMessageSent(msg, result);
-					},
-					{
-						// Only try getting a nonce once
-						maxSendAttempts: 1,
-					},
-				);
+			const nonceResp = yield* sendCommandGenerator<
+				Security2CCNonceReport
+			>(
+				driver,
+				cc,
+				(msg, result) => {
+					additionalTimeoutMs = Math.ceil(msg.rtt! / 1e6);
+					onMessageSent(msg, result);
+				},
+				{
+					// Only try getting a nonce once
+					maxSendAttempts: 1,
+				},
+			);
 			if (!nonceResp) {
 				throw new ZWaveError(
 					"No nonce received from the node, cannot send secure command!",
@@ -625,10 +630,10 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		// However, in situations where timing is critical (e.g. S2 bootstrapping), verifyDelivery is set to false, and we don't do this.
 		let nonceReport: Security2CCNonceReport | undefined;
 		if (
-			isTransmitReport(response) &&
-			msg.command.verifyDelivery &&
-			!msg.command.expectsCCResponse() &&
-			!msg.command.getEncapsulatedCC(
+			isTransmitReport(response)
+			&& msg.command.verifyDelivery
+			&& !msg.command.expectsCCResponse()
+			&& !msg.command.getEncapsulatedCC(
 				CommandClasses.Supervision,
 				SupervisionCommand.Get,
 			)
@@ -636,14 +641,14 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			nonceReport = await driver
 				.waitForCommand<Security2CCNonceReport>(
 					(cc) =>
-						cc.nodeId === nodeId &&
-						cc instanceof Security2CCNonceReport,
+						cc.nodeId === nodeId
+						&& cc instanceof Security2CCNonceReport,
 					500,
 				)
 				.catch(() => undefined);
 		} else if (
-			isCommandClassContainer(response) &&
-			response.command instanceof Security2CCNonceReport
+			isCommandClassContainer(response)
+			&& response.command instanceof Security2CCNonceReport
 		) {
 			nonceReport = response.command;
 		}
@@ -674,7 +679,8 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				}
 			}
 			driver.controllerLog.logNode(nodeId, {
-				message: `failed to decode the message, retrying with SPAN extension...`,
+				message:
+					`failed to decode the message, retrying with SPAN extension...`,
 				direction: "none",
 			});
 
@@ -688,12 +694,13 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			);
 
 			if (
-				isCommandClassContainer(response) &&
-				response.command instanceof Security2CCNonceReport
+				isCommandClassContainer(response)
+				&& response.command instanceof Security2CCNonceReport
 			) {
 				// No dice
 				driver.controllerLog.logNode(nodeId, {
-					message: `failed to decode the message after re-transmission with SPAN extension, dropping the message.`,
+					message:
+						`failed to decode the message after re-transmission with SPAN extension, dropping the message.`,
 					direction: "none",
 					level: "warn",
 				});
@@ -709,7 +716,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 
 /** A message generator for security encapsulated messages (S2 Multicast) */
 export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
-	async function* (driver, msg, onMessageSent) {
+	async function*(driver, msg, onMessageSent) {
 		if (!isSendData(msg)) {
 			throw new ZWaveError(
 				"Cannot use the S2 multicast message generator for a command that's not a SendData message!",
@@ -795,10 +802,10 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 					onMessageSent,
 				);
 				if (
-					isCommandClassContainer(scResponse) &&
-					scResponse.command instanceof
-						Security2CCMessageEncapsulation &&
-					scResponse.command.hasMOSExtension()
+					isCommandClassContainer(scResponse)
+					&& scResponse.command
+						instanceof Security2CCMessageEncapsulation
+					&& scResponse.command.hasMOSExtension()
 				) {
 					// The node understood the S2 singlecast followup, but told us that its MPAN is out of sync
 
@@ -818,8 +825,8 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 						// Send it the MPAN
 						yield* sendCommandGenerator(driver, cc, onMessageSent, {
 							// Seems we need these options or some nodes won't accept the nonce
-							transmitOptions:
-								TransmitOptions.ACK | TransmitOptions.AutoRoute,
+							transmitOptions: TransmitOptions.ACK
+								| TransmitOptions.AutoRoute,
 							// Only try sending a nonce once
 							maxSendAttempts: 1,
 							// Nonce requests must be handled immediately
@@ -832,8 +839,8 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 
 				// Collect supervision results if possible
 				if (isCommandClassContainer(scResponse)) {
-					const supervisionReport =
-						scResponse.command.getEncapsulatedCC(
+					const supervisionReport = scResponse.command
+						.getEncapsulatedCC(
 							CommandClasses.Supervision,
 							SupervisionCommand.Report,
 						) as SupervisionCCReport | undefined;
@@ -853,8 +860,9 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 			}
 		}
 
-		const finalSupervisionResult =
-			mergeSupervisionResults(supervisionResults);
+		const finalSupervisionResult = mergeSupervisionResults(
+			supervisionResults,
+		);
 		if (finalSupervisionResult) {
 			// We can return return information about the success of this multicast - so we should
 			// TODO: Not sure if we need to "wrap" the response for something. For now, try faking it

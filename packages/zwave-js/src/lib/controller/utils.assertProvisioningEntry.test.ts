@@ -1,4 +1,4 @@
-import { assertZWaveError, SecurityClass } from "@zwave-js/core";
+import { SecurityClass, assertZWaveError } from "@zwave-js/core";
 import test from "ava";
 import { ProvisioningEntryStatus } from "./Inclusion";
 import { assertProvisioningEntry } from "./utils";

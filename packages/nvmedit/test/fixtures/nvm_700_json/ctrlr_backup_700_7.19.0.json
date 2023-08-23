@@ -23,22 +23,8 @@
 		"specificDeviceClass": 7,
 		"commandClasses": {
 			"includedInsecurely": [
-				94,
-				34,
-				133,
-				112,
-				86,
-				122,
-				114,
-				115,
-				85,
-				134,
-				89,
-				90,
-				108,
-				116,
-				152,
-				159
+				94, 34, 133, 112, 86, 122, 114, 115, 85, 134, 89, 90, 108, 116,
+				152, 159
 			],
 			"includedSecurelyInsecureCCs": [],
 			"includedSecurelySecureCCs": []
@@ -61,10 +47,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 0,
@@ -72,9 +55,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 2,
 			"specificDeviceClass": 7,
-			"neighbors": [
-				2
-			],
+			"neighbors": [2],
 			"sucUpdateIndex": 255,
 			"appRouteLock": false,
 			"routeSlaveSUC": true,
@@ -88,10 +69,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": false,
 			"nodeType": 0,
@@ -99,9 +77,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 2,
 			"specificDeviceClass": 7,
-			"neighbors": [
-				1
-			],
+			"neighbors": [1],
 			"sucUpdateIndex": 26,
 			"appRouteLock": false,
 			"routeSlaveSUC": true,
@@ -123,10 +99,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -156,10 +129,7 @@
 			"isListening": false,
 			"isFrequentListening": "1000ms",
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -167,9 +137,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 64,
 			"specificDeviceClass": 3,
-			"neighbors": [
-				1
-			],
+			"neighbors": [1],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,

@@ -1,12 +1,14 @@
-const prettier = require("prettier");
+const path = require("path");
+const { formatWithDprint: format } = require("@zwave-js/fmt");
 
-function formatWithPrettier(filename, sourceText) {
-	const prettierOptions = {
-		...require("../../.prettierrc"),
-		// To infer the correct parser
-		filepath: filename,
-	};
-	return prettier.format(sourceText, prettierOptions);
+const repoRoot = path.join(__dirname, "../..");
+
+/**
+ * @param {string} filename
+ * @param {string} sourceText
+ */
+function formatWithDprint(filename, sourceText) {
+	return format(repoRoot, filename, sourceText);
 }
 
 const urls = {
@@ -15,6 +17,6 @@ const urls = {
 };
 
 module.exports = {
-	formatWithPrettier,
+	formatWithDprint,
 	urls,
 };

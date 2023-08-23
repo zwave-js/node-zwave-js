@@ -4,7 +4,6 @@ import {
 	BasicCCReport,
 	BasicCCSet,
 	BasicCommand,
-	isEncapsulatingCommandClass,
 	MultiChannelCC,
 	MultiChannelCCAggregatedMembersGet,
 	MultiChannelCCCapabilityGet,
@@ -14,6 +13,7 @@ import {
 	MultiChannelCCV1CommandEncapsulation,
 	MultiChannelCommand,
 	MultiCommandCC,
+	isEncapsulatingCommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";

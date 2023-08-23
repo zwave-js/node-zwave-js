@@ -32,17 +32,17 @@ Starts the inclusion process for a new node. The returned promise resolves to `t
 
 The options parameter is used to specify the inclusion strategy and provide callbacks to the application which are necessary to support inclusion with Security S2. The following inclusion strategies are defined:
 
--   `InclusionStrategy.Default`: Prefer _Security S2_ if supported, use _Security S0_ if absolutely necessary (e.g. for legacy locks) or if opted in with the `forceSecurity` flag, don't use encryption otherwise.  
-    **This is the recommended** strategy and should be used unless there is a good reason not to.
+- `InclusionStrategy.Default`: Prefer _Security S2_ if supported, use _Security S0_ if absolutely necessary (e.g. for legacy locks) or if opted in with the `forceSecurity` flag, don't use encryption otherwise.\
+  **This is the recommended** strategy and should be used unless there is a good reason not to.
 
--   `InclusionStrategy.Insecure`: Don't use encryption, even if supported.  
-    **Not recommended**, because S2 should be used where possible.
+- `InclusionStrategy.Insecure`: Don't use encryption, even if supported.\
+  **Not recommended**, because S2 should be used where possible.
 
--   `InclusionStrategy.Security_S0`: Use _Security S0_, even if a higher security mode is supported. Issues a warning if _Security S0_ is not supported or the secure bootstrapping fails.  
-    **Not recommended** because S0 should be used sparingly and S2 preferred wherever possible.
+- `InclusionStrategy.Security_S0`: Use _Security S0_, even if a higher security mode is supported. Issues a warning if _Security S0_ is not supported or the secure bootstrapping fails.\
+  **Not recommended** because S0 should be used sparingly and S2 preferred wherever possible.
 
--   `InclusionStrategy.Security_S2`: Use _Security S2_ and issue a warning if it is not supported or the secure bootstrapping fails.  
-    **Not recommended** because `Default` is more versatile and less complicated for the user.
+- `InclusionStrategy.Security_S2`: Use _Security S2_ and issue a warning if it is not supported or the secure bootstrapping fails.\
+  **Not recommended** because `Default` is more versatile and less complicated for the user.
 
 > [!NOTE]
 > For some devices, a special inclusion sequence needs to be performed in order to include it securely. Please refer to the device manual for further information.
@@ -56,44 +56,44 @@ Depending on the chosen inclusion strategy, the options object requires addition
 ```ts
 type InclusionOptions =
 	| {
-			strategy: InclusionStrategy.Default;
-			/**
-			 * Allows overriding the user callbacks for this inclusion.
-			 * If not given, the inclusion user callbacks of the driver options will be used.
-			 */
-			userCallbacks?: InclusionUserCallbacks;
-			/**
-			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
-			 * This is not recommended due to the overhead caused by S0.
-			 */
-			forceSecurity?: boolean;
-	  }
+		strategy: InclusionStrategy.Default;
+		/**
+		 * Allows overriding the user callbacks for this inclusion.
+		 * If not given, the inclusion user callbacks of the driver options will be used.
+		 */
+		userCallbacks?: InclusionUserCallbacks;
+		/**
+		 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
+		 * This is not recommended due to the overhead caused by S0.
+		 */
+		forceSecurity?: boolean;
+	}
 	| {
-			strategy: InclusionStrategy.Security_S2;
-			/**
-			 * Allows pre-filling the DSK, e.g. when a DSK-only QR code has been scanned.
-			 * If this is given, the `validateDSKAndEnterPIN` callback will not be called.
-			 */
-			dsk?: string;
-			/**
-			 * Allows overriding the user callbacks for this inclusion.
-			 * If not given, the inclusion user callbacks of the driver options will be used.
-			 */
-			userCallbacks?: InclusionUserCallbacks;
-	  }
+		strategy: InclusionStrategy.Security_S2;
+		/**
+		 * Allows pre-filling the DSK, e.g. when a DSK-only QR code has been scanned.
+		 * If this is given, the `validateDSKAndEnterPIN` callback will not be called.
+		 */
+		dsk?: string;
+		/**
+		 * Allows overriding the user callbacks for this inclusion.
+		 * If not given, the inclusion user callbacks of the driver options will be used.
+		 */
+		userCallbacks?: InclusionUserCallbacks;
+	}
 	| {
-			strategy: InclusionStrategy.Security_S2;
-			/**
-			 * The optional provisioning entry for the device to be included.
-			 * If not given, the inclusion user callbacks of the driver options will be used.
-			 */
-			provisioning?: PlannedProvisioningEntry;
-	  }
+		strategy: InclusionStrategy.Security_S2;
+		/**
+		 * The optional provisioning entry for the device to be included.
+		 * If not given, the inclusion user callbacks of the driver options will be used.
+		 */
+		provisioning?: PlannedProvisioningEntry;
+	}
 	| {
-			strategy:
-				| InclusionStrategy.Insecure
-				| InclusionStrategy.Security_S0;
-	  };
+		strategy:
+			| InclusionStrategy.Insecure
+			| InclusionStrategy.Security_S0;
+	};
 ```
 
 For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](#ZWaveOptions) (`inclusionUserCallbacks`). They can optionally be overridden for individual inclusion attempts by setting the `userCallbacks` property in the `InclusionOptions`. The callbacks are defined as follows:
@@ -340,9 +340,9 @@ getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>
 
 This has some limitations:
 
--   The information is dynamically built using TX status reports and may not be accurate at all times.
--   It may not be available immediately after startup or at all if the controller doesn't support this feature.
--   It only includes information about the routes between the controller and nodes, not between individual nodes.
+- The information is dynamically built using TX status reports and may not be accurate at all times.
+- It may not be available immediately after startup or at all if the controller doesn't support this feature.
+- It only includes information about the routes between the controller and nodes, not between individual nodes.
 
 > [!NOTE] To keep information returned by this method updated, subscribe to each node's `"statistics"` event and use the included information.
 
@@ -415,15 +415,15 @@ beginHealingNetwork(options?: HealNetworkOptions): boolean
 
 Synchronously (!) starts the healing process for all nodes in the network. Returns `true` if the process was started, otherwise `false`. This also returns `false` if a healing process is already active. The using library is notified about the progress with the following events:
 
--   `"heal network progress"`: The healing progress has changed
--   `"heal network done"`: The healing process for each node was completed (or failed)
+- `"heal network progress"`: The healing progress has changed
+- `"heal network done"`: The healing process for each node was completed (or failed)
 
 In both cases, the listener is called with a `ReadonlyMap<number, HealNodeStatus>` which contains the current healing status. The healing status is one of the following values:
 
--   `"pending"`: The healing process for this node was not started yet
--   `"done"`: The healing process for this node is done
--   `"failed"`: There was an error while healing this node
--   `"skipped"`: The node was skipped because it is dead
+- `"pending"`: The healing process for this node was not started yet
+- `"done"`: The healing process for this node is done
+- `"failed"`: There was an error while healing this node
+- `"skipped"`: The node was skipped because it is dead
 
 The `options` argument can be used to skip healing sleeping nodes:
 
@@ -479,18 +479,18 @@ type ReplaceNodeOptions =
 	// We don't know which security CCs a node supports when it is a replacement
 	// we we need the user to specify how the node should be included
 	| {
-			strategy: InclusionStrategy.Security_S2;
-			userCallbacks: InclusionUserCallbacks;
-	  }
+		strategy: InclusionStrategy.Security_S2;
+		userCallbacks: InclusionUserCallbacks;
+	}
 	| {
-			strategy: InclusionStrategy.Security_S2;
-			provisioning: PlannedProvisioningEntry;
-	  }
+		strategy: InclusionStrategy.Security_S2;
+		provisioning: PlannedProvisioningEntry;
+	}
 	| {
-			strategy:
-				| InclusionStrategy.Insecure
-				| InclusionStrategy.Security_S0;
-	  };
+		strategy:
+			| InclusionStrategy.Insecure
+			| InclusionStrategy.Security_S0;
+	};
 ```
 
 ### Managing routes
@@ -507,10 +507,10 @@ assignSUCReturnRoutes(nodeId: number): Promise<boolean>;
 deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
 ```
 
--   `assignReturnRoutes` instructs the controller to assign node `nodeId` a set of routes to node `destinationNodeId`.
--   `deleteReturnRoutes` instructs node `nodeId` to delete all previously assigned routes.
--   `assignSUCReturnRoutes` works like `assignReturnRoutes`, but the routes have the SUC as the destination.
--   `deleteSUCReturnRoutes` works like `deleteReturnRoutes`, but for routes that have the SUC as the destination.
+- `assignReturnRoutes` instructs the controller to assign node `nodeId` a set of routes to node `destinationNodeId`.
+- `deleteReturnRoutes` instructs node `nodeId` to delete all previously assigned routes.
+- `assignSUCReturnRoutes` works like `assignReturnRoutes`, but the routes have the SUC as the destination.
+- `deleteSUCReturnRoutes` works like `deleteReturnRoutes`, but for routes that have the SUC as the destination.
 
 > [!NOTE] These routes cannot be read back, since they are managed internally by the controller and no API exists to query them.
 
@@ -546,11 +546,11 @@ getPriorityRoute(destinationNodeId: number): Promise<
 removePriorityRoute(destinationNodeId: number): Promise<boolean>;
 ```
 
--   `setPriorityRoute` sets the priority route which will always be used for the first transmission attempt from the controller to the given node.
--   `getPriorityRoute` returns the priority route to the given node, which can be:
-    -   `undefined` if there is no route at all,
-    -   the priority route if it exists,
-    -   otherwise the LWR/NLWR
+- `setPriorityRoute` sets the priority route which will always be used for the first transmission attempt from the controller to the given node.
+- `getPriorityRoute` returns the priority route to the given node, which can be:
+  - `undefined` if there is no route at all,
+  - the priority route if it exists,
+  - otherwise the LWR/NLWR
 
 `routeKind` identifies which kind of route is returned by `getPriorityRoute` (`None` is only used internally):
 
@@ -601,8 +601,8 @@ assignPrioritySUCReturnRoute(
 ): Promise<boolean>
 ```
 
--   `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
--   `assignPrioritySUCReturnRoute` does the same, but with the SUC (controller) as the destination node.
+- `assignPriorityReturnRoute` sets the priority route from node `nodeId` to the destination node.
+- `assignPrioritySUCReturnRoute` does the same, but with the SUC (controller) as the destination node.
 
 These methods also assign up to 3 fallback routes, which are chosen automatically by the controller.
 
@@ -615,8 +615,8 @@ getPriorityReturnRouteCached(nodeId: number, destinationNodeId: number): MaybeUn
 getPrioritySUCReturnRouteCached(nodeId: number): MaybeUnknown<Route> | undefined;
 ```
 
--   `getPriorityReturnRouteCached` returns a priority return route that was set using `assignPriorityReturnRoute`. If a non-priority return route has been set since assigning the priority route, this will return `UNKNOWN_STATE` (`null`).
--   `getPrioritySUCReturnRouteCached` does the same for a route set through `assignPrioritySUCReturnRoute`.
+- `getPriorityReturnRouteCached` returns a priority return route that was set using `assignPriorityReturnRoute`. If a non-priority return route has been set since assigning the priority route, this will return `UNKNOWN_STATE` (`null`).
+- `getPrioritySUCReturnRouteCached` does the same for a route set through `assignPrioritySUCReturnRoute`.
 
 The return type `Route` has the following shape:
 
@@ -653,8 +653,8 @@ assignCustomSUCReturnRoutes(
 ): Promise<boolean>;
 ```
 
--   `assignCustomReturnRoutes` assigns node `nodeId` a set of routes to node `destinationNodeId`.
--   `assignCustomSUCReturnRoutes` does the same, but with the SUC as the destination.
+- `assignCustomReturnRoutes` assigns node `nodeId` a set of routes to node `destinationNodeId`.
+- `assignCustomSUCReturnRoutes` does the same, but with the SUC as the destination.
 
 Z-Wave JS caches manually assigned routes, so they can be read back:
 
@@ -663,8 +663,8 @@ getCustomReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] 
 getCustomSUCReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[] | undefined;
 ```
 
--   `getCustomReturnRoutesCached` returns routes that were was set using `assignCustomReturnRoutes`.
--   `getCustomSUCReturnRoutesCached` returns routes that were was set using `assignCustomSUCReturnRoutes`.
+- `getCustomReturnRoutesCached` returns routes that were was set using `assignCustomReturnRoutes`.
+- `getCustomSUCReturnRoutesCached` returns routes that were was set using `assignCustomSUCReturnRoutes`.
 
 To read priority routes assigned using the optional `priorityRoute` parameter, use `getPriorityReturnRouteCached` and `getPrioritySUCReturnRouteCached` as described above.
 
@@ -692,13 +692,13 @@ removeAssociations(source: AssociationAddress, group: number, destinations: Asso
 removeNodeFromAllAssociations(nodeId: number): Promise<void>;
 ```
 
--   `getAssociationGroups` returns all association groups for a given node **or** endpoint.
--   `getAllAssociationGroups` returns all association groups of a given **node and all its endpoints**. The returned `Map` uses the endpoint index as keys and its values are `Map`s of group IDs to their definition
--   `getAssociations` returns all defined associations of a given node **or** endpoint. If no endpoint is given, the associations for the root endpoint (`0`) are returned.
--   `getAllAssociations` returns all defined associations of a given **node and all its endpoints**. The returned `Map` uses the source node+endpoint as keys and its values are `Map`s of association group IDs to target node+endpoint.
--   `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
--   To remove a previously added association, use `removeAssociations`
--   A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`
+- `getAssociationGroups` returns all association groups for a given node **or** endpoint.
+- `getAllAssociationGroups` returns all association groups of a given **node and all its endpoints**. The returned `Map` uses the endpoint index as keys and its values are `Map`s of group IDs to their definition
+- `getAssociations` returns all defined associations of a given node **or** endpoint. If no endpoint is given, the associations for the root endpoint (`0`) are returned.
+- `getAllAssociations` returns all defined associations of a given **node and all its endpoints**. The returned `Map` uses the source node+endpoint as keys and its values are `Map`s of association group IDs to target node+endpoint.
+- `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
+- To remove a previously added association, use `removeAssociations`
+- A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`
 
 #### `AssociationGroup` interface
 
@@ -749,8 +749,8 @@ When controlling multiple nodes, a "waterfall" effect can often be observed, bec
 
 There are some caveats when secure nodes are involved:
 
--   Nodes that are included via `Security S0` can only be controlled using singlecast.
--   When controlling nodes with mixed security classes, each group of nodes will automatically be targeted individually. It is not possible to send a single command that both secure and insecure nodes will understand.
+- Nodes that are included via `Security S0` can only be controlled using singlecast.
+- When controlling nodes with mixed security classes, each group of nodes will automatically be targeted individually. It is not possible to send a single command that both secure and insecure nodes will understand.
 
 > [!NOTE]
 > Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details on the available methods and properties.
@@ -817,8 +817,8 @@ getPowerlevel(): Promise<{powerlevel: number, measured0dBm: number}>;
 
 Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm and serves as a calibration. Both are in dBm and must satisfy the following constraints:
 
--   `powerlevel` between `-10` and either `+12.7`, `+14` or `+20` dBm (depending on the controller)
--   `measured0dBm` between `-10` and `+10` or between `-12.8` and `+12.7` dBm (depending on the controller)
+- `powerlevel` between `-10` and either `+12.7`, `+14` or `+20` dBm (depending on the controller)
+- `measured0dBm` between `-10` and `+10` or between `-12.8` and `+12.7` dBm (depending on the controller)
 
 Unfortunately there doesn't seem to be a way to determine which constrains apply for a given controller.
 
@@ -1019,8 +1019,8 @@ The `version` and `changelog` properties are meant to be **presented to the user
 The fields `downgrade` and `normalizedVersion` are meant **for applications** to filter and sort the updates.
 In addition, the `channel` property indicates which release channel an upgrade is from:
 
--   `"stable"`: Production-ready, well-tested firmwares.
--   `"beta"`: Beta or pre-release firmwares. This channel is supposed to contain firmwares that are stable enough for a wide audience to test, but may still contain bugs.
+- `"stable"`: Production-ready, well-tested firmwares.
+- `"beta"`: Beta or pre-release firmwares. This channel is supposed to contain firmwares that are stable enough for a wide audience to test, but may still contain bugs.
 
 Many Z-Wave devices only have a single upgradeable firmware target (chip), so the `files` array will usually contain a single entry. If there are more, the entries must be applied in the order they are defined.
 
@@ -1317,14 +1317,14 @@ The second argument gives additional info about the inclusion result.
 ```ts
 type InclusionResult =
 	| {
-			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
-			lowSecurity?: false;
-	  }
+		/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+		lowSecurity?: false;
+	}
 	| {
-			/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
-			lowSecurity: true;
-			lowSecurityReason: SecurityBootstrapFailure;
-	  };
+		/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+		lowSecurity: true;
+		lowSecurityReason: SecurityBootstrapFailure;
+	};
 ```
 
 If there was a failure during the inclusion, the `lowSecurity` flag will be `true` and the `lowSecurityReason` property will contain additional information why.
@@ -1407,10 +1407,10 @@ This event is used to inform listeners about the progress of an ongoing network 
 
 The healing status is one of the following values:
 
--   `"pending"` - The network healing process has not been started for this node yet.
--   `"done"` - The process was completed for this node.
--   `"failed"` - This node failed to be healed. This means that certain commands of the healing process could not be executed.
--   `"skipped"` - This node was not healed because it is dead
+- `"pending"` - The network healing process has not been started for this node yet.
+- `"done"` - The process was completed for this node.
+- `"failed"` - This node failed to be healed. This means that certain commands of the healing process could not be executed.
+- `"skipped"` - This node was not healed because it is dead
 
 ### `"heal network done"`
 

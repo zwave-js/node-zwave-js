@@ -16,7 +16,7 @@ Retrieves the current value from this sensor.
 
 **Parameters:**
 
--   `sensorType`: The (optional) sensor type to retrieve the value for
+- `sensorType`: The (optional) sensor type to retrieve the value for
 
 ### `getSupportedSensorTypes`
 
@@ -36,10 +36,10 @@ async getSupportedSensorTypes(): Promise<readonly BinarySensorType[] | undefined
 }
 ```
 
--   **label:** `Sensor state (${string})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `Sensor state (${string})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`

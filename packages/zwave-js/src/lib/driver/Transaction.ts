@@ -1,15 +1,15 @@
 import {
-	highResTimestamp,
-	isZWaveError,
 	MessagePriority,
 	type ZWaveError,
+	highResTimestamp,
+	isZWaveError,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { noop } from "@zwave-js/shared";
 import {
-	compareNumberOrString,
 	type Comparable,
 	type CompareResult,
+	compareNumberOrString,
 } from "alcalzone-shared/comparable";
 import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { NodeStatus } from "../node/_Types";
@@ -58,13 +58,15 @@ export class Transaction implements Comparable<Transaction> {
 
 	public clone(): Transaction {
 		const ret = new Transaction(this.driver, this.options);
-		for (const prop of [
-			"_stack",
-			"creationTimestamp",
-			"changeNodeStatusOnTimeout",
-			"pauseSendThread",
-			"requestWakeUpOnDemand",
-		] as const) {
+		for (
+			const prop of [
+				"_stack",
+				"creationTimestamp",
+				"changeNodeStatusOnTimeout",
+				"pauseSendThread",
+				"requestWakeUpOnDemand",
+			] as const
+		) {
 			(ret as any)[prop] = this[prop];
 		}
 		return ret;
@@ -185,10 +187,10 @@ export class Transaction implements Comparable<Transaction> {
 			const otherNode = _other.message.getNodeUnsafe(this.driver);
 			if (thisNode && otherNode) {
 				// Both nodes exist
-				const thisListening =
-					thisNode.isListening || thisNode.isFrequentListening;
-				const otherListening =
-					otherNode.isListening || otherNode.isFrequentListening;
+				const thisListening = thisNode.isListening
+					|| thisNode.isFrequentListening;
+				const otherListening = otherNode.isListening
+					|| otherNode.isFrequentListening;
 				// prioritize (-1) the one node that is listening when the other is not
 				if (thisListening && !otherListening) return -1;
 				if (!thisListening && otherListening) return 1;

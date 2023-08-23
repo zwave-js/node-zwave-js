@@ -28,8 +28,8 @@ export function getDeviceEntryPredicate(
 				semver.lte(
 					padVersion(entry.firmwareVersion.min),
 					padVersion(firmwareVersion),
-				) &&
-				semver.gte(
+				)
+				&& semver.gte(
 					padVersion(entry.firmwareVersion.max),
 					padVersion(firmwareVersion),
 				)
@@ -45,12 +45,12 @@ export async function getEmbeddedConfigVersion(): Promise<string> {
 
 export type SyncExternalConfigDirResult =
 	| {
-			success: false;
-	  }
+		success: false;
+	}
 	| {
-			success: true;
-			version: string;
-	  };
+		success: true;
+		version: string;
+	};
 
 /**
  * Synchronizes or updates the external config directory and returns whether the directory is in a state that can be used
@@ -74,10 +74,12 @@ export async function syncExternalConfigDir(
 
 	const externalVersionFilename = path.join(extConfigDir, "version");
 	const currentVersion = await getEmbeddedConfigVersion();
-	const supportedRange = `>=${currentVersion} <${semver.inc(
-		currentVersion,
-		"patch",
-	)}`;
+	const supportedRange = `>=${currentVersion} <${
+		semver.inc(
+			currentVersion,
+			"patch",
+		)
+	}`;
 
 	// We remember the config version that was copied there in a file called "version"
 	// If that either...
@@ -135,7 +137,7 @@ export function versionInRange(
 	max: string,
 ): boolean {
 	return (
-		semver.gte(padVersion(version), padVersion(min)) &&
-		semver.lte(padVersion(version), padVersion(max))
+		semver.gte(padVersion(version), padVersion(min))
+		&& semver.lte(padVersion(version), padVersion(max))
 	);
 }

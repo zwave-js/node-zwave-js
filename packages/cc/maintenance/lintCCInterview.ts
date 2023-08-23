@@ -4,7 +4,7 @@
  * the interview for application CCs on the root endpoint is deferred
  */
 
-import { applicationCCs, CommandClasses, getCCName } from "@zwave-js/core";
+import { CommandClasses, applicationCCs, getCCName } from "@zwave-js/core";
 import {
 	expressionToCommandClass,
 	getCommandClassFromDecorator,
@@ -21,9 +21,9 @@ function getRequiredInterviewCCsFromMethod(
 ): CommandClasses[] | undefined {
 	const returnExpression = method.body?.statements.find(
 		(statement) =>
-			ts.isReturnStatement(statement) &&
-			statement.expression &&
-			ts.isArrayLiteralExpression(statement.expression),
+			ts.isReturnStatement(statement)
+			&& statement.expression
+			&& ts.isArrayLiteralExpression(statement.expression),
 	) as ts.ReturnStatement | undefined;
 	if (!returnExpression) return;
 	const elements = (returnExpression.expression as ts.ArrayLiteralExpression)
@@ -59,8 +59,8 @@ export function lintCCInterview(): Promise<void> {
 		}
 		// Ignore test files and the index
 		if (
-			relativePath.endsWith(".test.ts") ||
-			relativePath.endsWith("index.ts")
+			relativePath.endsWith(".test.ts")
+			|| relativePath.endsWith("index.ts")
 		) {
 			continue;
 		}
@@ -69,9 +69,9 @@ export function lintCCInterview(): Promise<void> {
 		ts.forEachChild(sourceFile, (node) => {
 			// Only look at class declarations ending with "CC" that have a commandClass decorator
 			if (
-				ts.isClassDeclaration(node) &&
-				node.name &&
-				node.name.text.endsWith("CC")
+				ts.isClassDeclaration(node)
+				&& node.name
+				&& node.name.text.endsWith("CC")
 			) {
 				let ccId: CommandClasses | undefined;
 				if (node.decorators && node.decorators.length > 0) {
@@ -93,7 +93,8 @@ export function lintCCInterview(): Promise<void> {
 							severity: "warn",
 							filename: relativePath,
 							line: location.line + 1,
-							message: `Could not determine defined CC for ${node.name.text}!`,
+							message:
+								`Could not determine defined CC for ${node.name.text}!`,
 						});
 					}
 					return;
@@ -104,16 +105,17 @@ export function lintCCInterview(): Promise<void> {
 					reportProblem({
 						severity: "error",
 						filename: relativePath,
-						message: `Files containing CC implementations MUST end with "CC.ts"!`,
+						message:
+							`Files containing CC implementations MUST end with "CC.ts"!`,
 					});
 				}
 
 				// Only look at implementations of determineRequiredCCInterviews
 				for (const member of node.members) {
 					if (
-						ts.isMethodDeclaration(member) &&
-						member.name.getText(sourceFile) ===
-							"determineRequiredCCInterviews"
+						ts.isMethodDeclaration(member)
+						&& member.name.getText(sourceFile)
+							=== "determineRequiredCCInterviews"
 					) {
 						const location = ts.getLineAndCharacterOfPosition(
 							sourceFile,
@@ -131,22 +133,26 @@ export function lintCCInterview(): Promise<void> {
 								);
 							} else if (!applicationCCs.includes(ccId)) {
 								// This is a non-application CC
-								const requiredApplicationCCs =
-									requiredCCs.filter((cc) =>
-										applicationCCs.includes(cc),
+								const requiredApplicationCCs = requiredCCs
+									.filter((cc) =>
+										applicationCCs.includes(cc)
 									);
 								if (requiredApplicationCCs.length > 0) {
 									// that depends on an application CC
 									throw new Error(
-										`Interview procedure of the non-application CC ${getCCName(
-											ccId,
-										)} must not depend on application CCs, but depends on the CC${
+										`Interview procedure of the non-application CC ${
+											getCCName(
+												ccId,
+											)
+										} must not depend on application CCs, but depends on the CC${
 											requiredApplicationCCs.length > 1
 												? "s"
 												: ""
-										} ${requiredApplicationCCs
-											.map((cc) => getCCName(cc))
-											.join(", ")}!`,
+										} ${
+											requiredApplicationCCs
+												.map((cc) => getCCName(cc))
+												.join(", ")
+										}!`,
 									);
 								}
 							}
@@ -175,7 +181,8 @@ export function lintCCInterview(): Promise<void> {
 	}
 }
 
-if (require.main === module)
+if (require.main === module) {
 	lintCCInterview()
 		.then(() => process.exit(0))
 		.catch(() => process.exit(1));
+}

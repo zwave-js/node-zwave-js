@@ -1,4 +1,4 @@
-import { flatMap, type DeepPartial } from "@zwave-js/shared";
+import { type DeepPartial, flatMap } from "@zwave-js/shared";
 import type { Format, TransformFunction } from "logform";
 import * as path from "path";
 import { MESSAGE, configs } from "triple-beam";
@@ -10,6 +10,11 @@ import { colorizer } from "./Colorizer";
 import {
 	CONTROL_CHAR_WIDTH,
 	LOG_WIDTH,
+	type LogConfig,
+	type LogContext,
+	type MessageRecord,
+	type ZWaveLogInfo,
+	type ZWaveLogger,
 	channelPadding,
 	directionPrefixPadding,
 	nonUndefinedLogConfigKeys,
@@ -17,11 +22,6 @@ import {
 	timestampFormatShort,
 	timestampPadding,
 	timestampPaddingShort,
-	type LogConfig,
-	type LogContext,
-	type MessageRecord,
-	type ZWaveLogInfo,
-	type ZWaveLogger,
 } from "./shared_safe";
 
 const { combine, timestamp, label } = winston.format;
@@ -54,9 +54,9 @@ export class ZWaveLogContainer extends winston.Container {
 		transports: undefined as any,
 		filename: require.main
 			? path.join(
-					path.dirname(require.main.filename),
-					`zwavejs_%DATE%.log`,
-			  )
+				path.dirname(require.main.filename),
+				`zwavejs_%DATE%.log`,
+			)
 			: path.join(__dirname, "../../..", `zwavejs_%DATE%.log`),
 		forceConsole: false,
 	};
@@ -87,40 +87,37 @@ export class ZWaveLogContainer extends winston.Container {
 				delete config[key];
 			}
 		}
-		const changedLoggingTarget =
-			(config.logToFile != undefined &&
-				config.logToFile !== this.logConfig.logToFile) ||
-			(config.forceConsole != undefined &&
-				config.forceConsole !== this.logConfig.forceConsole);
+		const changedLoggingTarget = (config.logToFile != undefined
+			&& config.logToFile !== this.logConfig.logToFile)
+			|| (config.forceConsole != undefined
+				&& config.forceConsole !== this.logConfig.forceConsole);
 
 		if (typeof config.level === "number") {
 			config.level = loglevelFromNumber(config.level);
 		}
-		const changedLogLevel =
-			config.level != undefined && config.level !== this.logConfig.level;
+		const changedLogLevel = config.level != undefined
+			&& config.level !== this.logConfig.level;
 
 		if (
-			config.filename != undefined &&
-			!config.filename.includes("%DATE%")
+			config.filename != undefined
+			&& !config.filename.includes("%DATE%")
 		) {
 			config.filename += "_%DATE%.log";
 		}
-		const changedFilename =
-			config.filename != undefined &&
-			config.filename !== this.logConfig.filename;
+		const changedFilename = config.filename != undefined
+			&& config.filename !== this.logConfig.filename;
 
 		if (config.maxFiles != undefined) {
 			if (
-				typeof config.maxFiles !== "number" ||
-				config.maxFiles < 1 ||
-				config.maxFiles > 365
+				typeof config.maxFiles !== "number"
+				|| config.maxFiles < 1
+				|| config.maxFiles > 365
 			) {
 				delete config.maxFiles;
 			}
 		}
-		const changedMaxFiles =
-			config.maxFiles != undefined &&
-			config.maxFiles !== this.logConfig.maxFiles;
+		const changedMaxFiles = config.maxFiles != undefined
+			&& config.maxFiles !== this.logConfig.maxFiles;
 
 		this.logConfig = Object.assign(this.logConfig, config);
 
@@ -132,12 +129,11 @@ export class ZWaveLogContainer extends winston.Container {
 		// When the log target (console, file, filename) was changed, recreate the internal transports
 		// because at least the filename does not update dynamically
 		// Also do this when configuring the logger for the first time
-		const recreateInternalTransports =
-			(this.fileTransport == undefined &&
-				this.consoleTransport == undefined) ||
-			changedLoggingTarget ||
-			changedFilename ||
-			changedMaxFiles;
+		const recreateInternalTransports = (this.fileTransport == undefined
+			&& this.consoleTransport == undefined)
+			|| changedLoggingTarget
+			|| changedFilename
+			|| changedMaxFiles;
 
 		if (recreateInternalTransports) {
 			this.fileTransport?.destroy();
@@ -149,7 +145,7 @@ export class ZWaveLogContainer extends winston.Container {
 		// When the internal transports or the custom transports were changed, we need to update the loggers
 		if (recreateInternalTransports || config.transports != undefined) {
 			this.loggers.forEach((logger) =>
-				logger.configure({ transports: this.getAllTransports() }),
+				logger.configure({ transports: this.getAllTransports() })
 			);
 		}
 	}
@@ -162,10 +158,10 @@ export class ZWaveLogContainer extends winston.Container {
 	public isLoglevelVisible(loglevel: string): boolean {
 		// If we are not connected to a TTY, not logging to a file and don't have any custom transports, we won't see anything
 		if (
-			!this.fileTransport &&
-			!this.consoleTransport &&
-			(!this.logConfig.transports ||
-				this.logConfig.transports.length === 0)
+			!this.fileTransport
+			&& !this.consoleTransport
+			&& (!this.logConfig.transports
+				|| this.logConfig.transports.length === 0)
 		) {
 			return false;
 		}
@@ -173,8 +169,8 @@ export class ZWaveLogContainer extends winston.Container {
 		if (!this.loglevelVisibleCache.has(loglevel)) {
 			this.loglevelVisibleCache.set(
 				loglevel,
-				loglevel in loglevels &&
-					loglevels[loglevel] <= loglevels[this.logConfig.level],
+				loglevel in loglevels
+					&& loglevels[loglevel] <= loglevels[this.logConfig.level],
 			);
 		}
 		return this.loglevelVisibleCache.get(loglevel)!;
@@ -216,11 +212,11 @@ export class ZWaveLogContainer extends winston.Container {
 		// Console logs can be noise, so only log to console...
 		if (
 			// when in production
-			!isUnitTest &&
+			!isUnitTest
 			// and stdout is a TTY while we're not already logging to a file
-			((isTTY && !this.logConfig.logToFile) ||
+			&& ((isTTY && !this.logConfig.logToFile)
 				// except when the user explicitly wants to
-				this.logConfig.forceConsole)
+				|| this.logConfig.forceConsole)
 		) {
 			if (!this.consoleTransport) {
 				this.consoleTransport = this.createConsoleTransport();
@@ -255,9 +251,11 @@ export class ZWaveLogContainer extends winston.Container {
 	private createFileTransport(): DailyRotateFile {
 		const ret = new DailyRotateFile({
 			filename: this.logConfig.filename,
-			auditFile: `${this.logConfig.filename
-				.replace("_%DATE%", "_logrotate")
-				.replace(/\.log$/, "")}.json`,
+			auditFile: `${
+				this.logConfig.filename
+					.replace("_%DATE%", "_logrotate")
+					.replace(/\.log$/, "")
+			}.json`,
 			datePattern: "YYYY-MM-DD",
 			createSymlink: true,
 			symlinkName: path
@@ -314,8 +312,9 @@ export function createLogMessagePrinter(shortTimestamps: boolean): Format {
 			// The formatter has already split the message into multiple lines
 			const messageLines = messageToLines(info.message);
 			// Also this can only happen if the user forgot to call the formatter first
-			if (info.secondaryTagPadding == undefined)
+			if (info.secondaryTagPadding == undefined) {
 				info.secondaryTagPadding = -1;
+			}
 			// Format the first message line
 			let firstLine = [
 				info.primaryTags,
@@ -333,7 +332,8 @@ export function createLogMessagePrinter(shortTimestamps: boolean): Format {
 				.join(" ");
 			// The directional arrows and the optional grouping lines must be prepended
 			// without adding spaces
-			firstLine = `${info.timestamp} ${info.label} ${info.direction}${firstLine}`;
+			firstLine =
+				`${info.timestamp} ${info.label} ${info.direction}${firstLine}`;
 			const lines = [firstLine];
 			if (info.multiline) {
 				// Format all message lines but the first
@@ -343,11 +343,11 @@ export function createLogMessagePrinter(shortTimestamps: boolean): Format {
 							// Skip the columns for the timestamp and the channel name
 							(shortTimestamps
 								? timestampPaddingShort
-								: timestampPadding) +
-							channelPadding +
+								: timestampPadding)
+							+ channelPadding
 							// Skip the columns for directional arrows
-							directionPrefixPadding +
-							line,
+							+ directionPrefixPadding
+							+ line,
 					),
 				);
 			}
@@ -362,9 +362,8 @@ export const logMessageFormatter: Format = {
 	transform: ((info: ZWaveLogInfo) => {
 		const messageLines = messageToLines(info.message);
 		const firstMessageLineLength = messageLines[0].length;
-		info.multiline =
-			messageLines.length > 1 ||
-			!messageFitsIntoOneLine(info, info.message.length);
+		info.multiline = messageLines.length > 1
+			|| !messageFitsIntoOneLine(info, info.message.length);
 		// Align postfixes to the right
 		if (info.secondaryTags) {
 			// Calculate how many spaces are needed to right-align the postfix
@@ -373,9 +372,9 @@ export const logMessageFormatter: Format = {
 				// -1 has the special meaning that we don't print any padding,
 				// because the message takes all the available space
 				-1,
-				LOG_WIDTH -
-					1 -
-					calculateFirstLineLength(info, firstMessageLineLength),
+				LOG_WIDTH
+					- 1
+					- calculateFirstLineLength(info, firstMessageLineLength),
 			);
 		}
 
@@ -473,12 +472,13 @@ export function messageRecordToLines(message: MessageRecord): string[] {
 
 	const maxKeyLength = Math.max(...entries.map(([key]) => key.length));
 	return flatMap(entries, ([key, value]) =>
-		`${key}:${" ".repeat(
-			Math.max(maxKeyLength - key.length + 1, 1),
-		)}${value}`
+		`${key}:${
+			" ".repeat(
+				Math.max(maxKeyLength - key.length + 1, 1),
+			)
+		}${value}`
 			.split("\n")
-			.map((line) => line.trimRight()),
-	);
+			.map((line) => line.trimRight()));
 }
 
 /** Wraps an array of strings in square brackets and joins them with spaces */

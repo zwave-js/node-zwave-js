@@ -6,7 +6,19 @@
 		"source.fixAll.eslint",
 		"source.formatDocument"
 	],
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.defaultFormatter": "dprint.dprint",
+	"[jsonc]": {
+		"editor.defaultFormatter": "dprint.dprint"
+	},
+	"[javascript]": {
+		// Not sure why this is needed, but it is
+		"editor.defaultFormatter": "dprint.dprint"
+	},
+	"[typescript]": {
+		// Not sure why this is needed, but it is
+		"editor.defaultFormatter": "dprint.dprint",
+		"editor.autoClosingBrackets": "languageDefined"
+	},
 	"eslint.validate": [
 		"javascript",
 		"javascriptreact",
@@ -58,9 +70,6 @@
 	"editor.rulers": [72, 80, 120],
 	"files.participants.timeout": 10000,
 	"typescript.preferences.importModuleSpecifier": "project-relative",
-	"[jsonc]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
 	"standard.enable": false,
 	"json.schemas": [
 		{
@@ -78,9 +87,6 @@
 	"debug.javascript.unmapMissingSources": true,
 	"search.exclude": {
 		"**/.yarn": true
-	},
-	"[typescript]": {
-		"editor.autoClosingBrackets": "languageDefined"
 	},
 	"git.ignoredRepositories": ["specs"],
 	"search.followSymlinks": false

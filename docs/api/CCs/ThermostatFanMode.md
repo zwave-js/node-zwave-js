@@ -39,15 +39,15 @@ async getSupportedModes(): Promise<
 }
 ```
 
--   **label:** Thermostat fan mode
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Thermostat fan mode
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `turnedOff`
 
@@ -59,10 +59,10 @@ async getSupportedModes(): Promise<
 }
 ```
 
--   **label:** Thermostat fan turned off
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Thermostat fan turned off
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`

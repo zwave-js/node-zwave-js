@@ -33,10 +33,11 @@ export function readObject(
 	offset: number,
 ):
 	| {
-			object: NVM3Object;
-			bytesRead: number;
-	  }
-	| undefined {
+		object: NVM3Object;
+		bytesRead: number;
+	}
+	| undefined
+{
 	let headerSize = 4;
 	const hdr1 = buffer.readUInt32LE(offset);
 
@@ -47,8 +48,8 @@ export function readObject(
 	let objType: ObjectType = hdr1 & NVM3_OBJ_TYPE_MASK;
 	let fragmentLength = 0;
 	let hdr2: number | undefined;
-	const isLarge =
-		objType === ObjectType.DataLarge || objType === ObjectType.CounterLarge;
+	const isLarge = objType === ObjectType.DataLarge
+		|| objType === ObjectType.CounterLarge;
 	if (isLarge) {
 		hdr2 = buffer.readUInt32LE(offset + 4);
 		headerSize += 4;
@@ -86,8 +87,8 @@ export function readObject(
 		);
 	}
 
-	const alignedLength =
-		(fragmentLength + NVM3_WORD_SIZE - 1) & ~(NVM3_WORD_SIZE - 1);
+	const alignedLength = (fragmentLength + NVM3_WORD_SIZE - 1)
+		& ~(NVM3_WORD_SIZE - 1);
 	const bytesRead = headerSize + alignedLength;
 
 	const obj: NVM3Object = {
@@ -125,9 +126,8 @@ export function readObjects(buffer: Buffer): {
 }
 
 export function writeObject(obj: NVM3Object): Buffer {
-	const isLarge =
-		obj.type === ObjectType.DataLarge ||
-		obj.type === ObjectType.CounterLarge;
+	const isLarge = obj.type === ObjectType.DataLarge
+		|| obj.type === ObjectType.CounterLarge;
 	const headerSize = isLarge
 		? NVM3_OBJ_HEADER_SIZE_LARGE
 		: NVM3_OBJ_HEADER_SIZE_SMALL;
@@ -138,11 +138,10 @@ export function writeObject(obj: NVM3Object): Buffer {
 	if (isLarge) {
 		let hdr2 = dataLength & NVM3_OBJ_LARGE_LEN_MASK;
 
-		const hdr1 =
-			(obj.type & NVM3_OBJ_TYPE_MASK) |
-			((obj.key & NVM3_OBJ_KEY_MASK) << NVM3_OBJ_KEY_SHIFT) |
-			((obj.fragmentType & NVM3_OBJ_FRAGTYPE_MASK) <<
-				NVM3_OBJ_FRAGTYPE_SHIFT);
+		const hdr1 = (obj.type & NVM3_OBJ_TYPE_MASK)
+			| ((obj.key & NVM3_OBJ_KEY_MASK) << NVM3_OBJ_KEY_SHIFT)
+			| ((obj.fragmentType & NVM3_OBJ_FRAGTYPE_MASK)
+				<< NVM3_OBJ_FRAGTYPE_SHIFT);
 
 		const bergerCode = computeBergerCodeMulti(
 			[hdr1, hdr2],
@@ -157,9 +156,8 @@ export function writeObject(obj: NVM3Object): Buffer {
 		if (typeAndLen === ObjectType.DataSmall && dataLength > 0) {
 			typeAndLen += dataLength;
 		}
-		let hdr1 =
-			(typeAndLen & NVM3_OBJ_TYPE_MASK) |
-			((obj.key & NVM3_OBJ_KEY_MASK) << NVM3_OBJ_KEY_SHIFT);
+		let hdr1 = (typeAndLen & NVM3_OBJ_TYPE_MASK)
+			| ((obj.key & NVM3_OBJ_KEY_MASK) << NVM3_OBJ_KEY_SHIFT);
 		const bergerCode = computeBergerCode(hdr1, NVM3_CODE_SMALL_SHIFT);
 		hdr1 |= bergerCode << NVM3_CODE_SMALL_SHIFT;
 
@@ -181,30 +179,28 @@ export function fragmentLargeObject(
 	const ret: NVM3Object[] = [];
 
 	if (
-		obj.data!.length + NVM3_OBJ_HEADER_SIZE_LARGE <=
-		maxFirstFragmentSizeWithHeader
+		obj.data!.length + NVM3_OBJ_HEADER_SIZE_LARGE
+			<= maxFirstFragmentSizeWithHeader
 	) {
 		return [obj];
 	}
 
 	let offset = 0;
 	while (offset < obj.data!.length) {
-		const fragmentSize =
-			offset === 0
-				? maxFirstFragmentSizeWithHeader - NVM3_OBJ_HEADER_SIZE_LARGE
-				: maxFragmentSizeWithHeader - NVM3_OBJ_HEADER_SIZE_LARGE;
+		const fragmentSize = offset === 0
+			? maxFirstFragmentSizeWithHeader - NVM3_OBJ_HEADER_SIZE_LARGE
+			: maxFragmentSizeWithHeader - NVM3_OBJ_HEADER_SIZE_LARGE;
 		const data = obj.data!.slice(offset, offset + fragmentSize);
 
 		ret.push({
 			type: obj.type,
 			key: obj.key,
-			fragmentType:
-				offset === 0
-					? FragmentType.First
-					: data.length + NVM3_OBJ_HEADER_SIZE_LARGE <
-					  maxFragmentSizeWithHeader
-					? FragmentType.Last
-					: FragmentType.Next,
+			fragmentType: offset === 0
+				? FragmentType.First
+				: data.length + NVM3_OBJ_HEADER_SIZE_LARGE
+						< maxFragmentSizeWithHeader
+				? FragmentType.Last
+				: FragmentType.Next,
 			data,
 		});
 

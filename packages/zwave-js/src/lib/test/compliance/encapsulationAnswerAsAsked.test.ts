@@ -12,8 +12,8 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import {
 	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type MockZWaveRequestFrame,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import path from "path";
 import { integrationTest } from "../integrationTestSuite";
@@ -47,12 +47,13 @@ integrationTest(
 			const cc = CRC16CC.encapsulate(mockNode.host, zwpRequest);
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
-			const { payload: response } =
-				await mockNode.expectControllerFrame<MockZWaveRequestFrame>(
-					1000,
-					(msg): msg is MockZWaveRequestFrame =>
-						msg.type === MockZWaveFrameType.Request,
-				);
+			const { payload: response } = await mockNode.expectControllerFrame<
+				MockZWaveRequestFrame
+			>(
+				1000,
+				(msg): msg is MockZWaveRequestFrame =>
+					msg.type === MockZWaveFrameType.Request,
+			);
 
 			t.true(response instanceof CRC16CCCommandEncapsulation);
 			t.true(
@@ -98,12 +99,13 @@ integrationTest(
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
-			const { payload: response } =
-				await mockNode.expectControllerFrame<MockZWaveRequestFrame>(
-					1000,
-					(msg): msg is MockZWaveRequestFrame =>
-						msg.type === MockZWaveFrameType.Request,
-				);
+			const { payload: response } = await mockNode.expectControllerFrame<
+				MockZWaveRequestFrame
+			>(
+				1000,
+				(msg): msg is MockZWaveRequestFrame =>
+					msg.type === MockZWaveFrameType.Request,
+			);
 
 			t.true(response instanceof MultiChannelCCCommandEncapsulation);
 			const mcc = response as MultiChannelCCCommandEncapsulation;
@@ -147,12 +149,13 @@ integrationTest(
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
-			const { payload: response } =
-				await mockNode.expectControllerFrame<MockZWaveRequestFrame>(
-					1000,
-					(msg): msg is MockZWaveRequestFrame =>
-						msg.type === MockZWaveFrameType.Request,
-				);
+			const { payload: response } = await mockNode.expectControllerFrame<
+				MockZWaveRequestFrame
+			>(
+				1000,
+				(msg): msg is MockZWaveRequestFrame =>
+					msg.type === MockZWaveFrameType.Request,
+			);
 
 			t.true(response instanceof SupervisionCCReport);
 		},
@@ -202,12 +205,13 @@ integrationTest(
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
-			const { payload: response } =
-				await mockNode.expectControllerFrame<MockZWaveRequestFrame>(
-					1000,
-					(msg): msg is MockZWaveRequestFrame =>
-						msg.type === MockZWaveFrameType.Request,
-				);
+			const { payload: response } = await mockNode.expectControllerFrame<
+				MockZWaveRequestFrame
+			>(
+				1000,
+				(msg): msg is MockZWaveRequestFrame =>
+					msg.type === MockZWaveFrameType.Request,
+			);
 
 			t.true(response instanceof MultiChannelCCCommandEncapsulation);
 			const mcc = response as MultiChannelCCCommandEncapsulation;

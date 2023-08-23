@@ -13,12 +13,12 @@ import {
 	ZWAVE_PROTOCOL_NVM_SIZE,
 } from "./consts";
 import {
+	type NVM3Object,
 	compressObjects,
 	fragmentLargeObject,
 	writeObject,
-	type NVM3Object,
 } from "./object";
-import { readPage, writePageHeader, type NVM3Page } from "./page";
+import { type NVM3Page, readPage, writePageHeader } from "./page";
 import { dumpObject, dumpPage } from "./utils";
 
 function comparePages(p1: NVM3Page, p2: NVM3Page) {
@@ -173,8 +173,8 @@ export function encodeNVM(
 			remainingSpace = pageSize - offsetInPage;
 		};
 		const incrementOffset = (by: number) => {
-			const alignedDelta =
-				(by + NVM3_WORD_SIZE - 1) & ~(NVM3_WORD_SIZE - 1);
+			const alignedDelta = (by + NVM3_WORD_SIZE - 1)
+				& ~(NVM3_WORD_SIZE - 1);
 
 			offsetInPage += alignedDelta;
 			remainingSpace = pageSize - offsetInPage;
@@ -186,18 +186,18 @@ export function encodeNVM(
 
 			if (obj.type === ObjectType.Deleted) continue;
 			if (
-				(obj.type === ObjectType.CounterSmall &&
-					remainingSpace <
-						NVM3_OBJ_HEADER_SIZE_SMALL + NVM3_COUNTER_SIZE) ||
-				(obj.type === ObjectType.DataSmall &&
-					remainingSpace <
-						NVM3_OBJ_HEADER_SIZE_SMALL + (obj.data?.length ?? 0))
+				(obj.type === ObjectType.CounterSmall
+					&& remainingSpace
+						< NVM3_OBJ_HEADER_SIZE_SMALL + NVM3_COUNTER_SIZE)
+				|| (obj.type === ObjectType.DataSmall
+					&& remainingSpace
+						< NVM3_OBJ_HEADER_SIZE_SMALL + (obj.data?.length ?? 0))
 			) {
 				// Small objects cannot be fragmented and need to go on the next page
 				nextPage();
 			} else if (
-				obj.type === ObjectType.CounterLarge ||
-				obj.type === ObjectType.DataLarge
+				obj.type === ObjectType.CounterLarge
+				|| obj.type === ObjectType.DataLarge
 			) {
 				// Large objects may be fragmented
 				fragments = fragmentLargeObject(

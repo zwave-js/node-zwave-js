@@ -1,8 +1,8 @@
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import {
 	MockBinding,
-	SerialPortMock,
 	type MockPortBinding,
+	SerialPortMock,
 } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
@@ -115,8 +115,9 @@ export interface CreateAndStartTestingDriverOptions {
 }
 
 export async function createAndStartTestingDriver(
-	options: Partial<CreateAndStartTestingDriverOptions> &
-		DeepPartial<ZWaveOptions> = {},
+	options:
+		& Partial<CreateAndStartTestingDriverOptions>
+		& DeepPartial<ZWaveOptions> = {},
 ): Promise<CreateAndStartTestingDriverResult> {
 	const {
 		beforeStartup,

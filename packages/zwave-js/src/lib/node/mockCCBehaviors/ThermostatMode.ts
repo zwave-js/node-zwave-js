@@ -8,10 +8,10 @@ import {
 } from "@zwave-js/cc/ThermostatModeCC";
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
+	MockZWaveFrameType,
 	type ThermostatModeCCCapabilities,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: ThermostatModeCCCapabilities = {
@@ -27,8 +27,8 @@ const StateKeys = {
 const respondToThermostatModeSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ThermostatModeCCSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ThermostatModeCCSet
 		) {
 			self.state.set(StateKeys.mode, frame.payload.mode);
 			self.state.set(
@@ -44,11 +44,11 @@ const respondToThermostatModeSet: MockNodeBehavior = {
 const respondToThermostatModeGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ThermostatModeCCGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ThermostatModeCCGet
 		) {
-			const mode = (self.state.get(StateKeys.mode) ??
-				ThermostatMode.Off) as ThermostatMode;
+			const mode = (self.state.get(StateKeys.mode)
+				?? ThermostatMode.Off) as ThermostatMode;
 			const manufacturerData =
 				mode === ThermostatMode["Manufacturer specific"]
 					? self.state.get(StateKeys.manufacturerData)
@@ -75,8 +75,8 @@ const respondToThermostatModeGet: MockNodeBehavior = {
 const respondToThermostatModeSupportedGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ThermostatModeCCSupportedGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ThermostatModeCCSupportedGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,

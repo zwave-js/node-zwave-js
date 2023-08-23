@@ -84,8 +84,8 @@ Formats a number as a hexadecimal string, while making sure that the length is a
 
 Parameters:
 
--   `val` - The value to be formatted as hexadecimal
--   `uppercase` - Whether uppercase letters should be used
+- `val` - The value to be formatted as hexadecimal
+- `uppercase` - Whether uppercase letters should be used
 
 ### `formatId`
 
@@ -105,8 +105,8 @@ Formats a buffer as an hexadecimal string, with an even number of digits. Return
 
 Parameters:
 
--   `buffer` - The value to be formatted as hexadecimal
--   `uppercase` - Whether uppercase letters should be used
+- `buffer` - The value to be formatted as hexadecimal
+- `uppercase` - Whether uppercase letters should be used
 
 ### `getEnumMemberName`
 
@@ -119,8 +119,8 @@ If the given value is not found in the enum object, `"unknown (<value-as-hex>)"`
 
 Parameters:
 
--   `enumeration` - The enumeration object the value comes from
--   `value` - The enum value to be pretty-printed
+- `enumeration` - The enumeration object the value comes from
+- `value` - The enum value to be pretty-printed
 
 ### `rssiToString`
 

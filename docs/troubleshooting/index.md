@@ -4,7 +4,7 @@ Z-Wave is a complex protocol and many things can go wrong in the communication. 
 
 ## Rule #1: Use the driver log, Luke!
 
-Many, many, many issues can **only** be sorted out by looking at driver logs. Try to familiarize yourself with them - it will help.  
+Many, many, many issues can **only** be sorted out by looking at driver logs. Try to familiarize yourself with them - it will help.\
 Unless you are inquiring about a missing device configuration, you **should** have a driver log at hand. Also, make sure you have the correct log!
 
 <details>

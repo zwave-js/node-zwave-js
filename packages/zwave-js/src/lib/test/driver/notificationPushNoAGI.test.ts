@@ -5,10 +5,10 @@ import {
 } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	ccCaps,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -38,18 +38,17 @@ integrationTest(
 			const respondToNotificationGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof NotificationCCGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof NotificationCCGet
 					) {
-						const notificationType =
-							frame.payload.notificationType || 0x06;
+						const notificationType = frame.payload.notificationType
+							|| 0x06;
 						const cc = new NotificationCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							notificationType,
-							notificationEvent:
-								notificationType === 0x06
-									? 0x06 /* Keypad unlock */
-									: 0xfe,
+							notificationEvent: notificationType === 0x06
+								? 0x06 /* Keypad unlock */
+								: 0xfe,
 						});
 						await self.sendToController(
 							createMockZWaveRequestFrame(cc, {

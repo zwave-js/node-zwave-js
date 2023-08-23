@@ -1,23 +1,24 @@
 import {
+	type CommandClasses,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	encodeCCList,
 	getCCName,
-	type CommandClasses,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
 	MessageType,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
 } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 
 export interface SetApplicationNodeInformationRequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	isListening: boolean;
 	genericDeviceClass: number;
 	specificDeviceClass: number;

@@ -1,6 +1,6 @@
 /*
 	Note to future self:
-	
+
 	If ESLint is ever extremely slow again, check if there are .js and/or .map files in the source directories
 	and delete them:
 
@@ -24,10 +24,8 @@ module.exports = {
 		// Use the recommended rules from the @typescript-eslint/eslint-plugin
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@typescript-eslint/recommended-requiring-type-checking",
-		// Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
-		"plugin:prettier/recommended",
 	],
-	plugins: ["deprecation"],
+	plugins: ["deprecation", "unused-imports"],
 	reportUnusedDisableDirectives: true,
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -123,6 +121,8 @@ module.exports = {
 		],
 		"quote-props": ["error", "as-needed"],
 		"deprecation/deprecation": "error",
+		"unused-imports/no-unused-imports-ts": "error",
+		"unused-imports/no-unused-imports": "error",
 	},
 	overrides: [
 		{

@@ -1,7 +1,12 @@
 import type { GenericDeviceClass, SpecificDeviceClass } from "@zwave-js/config";
 import {
+	type ApplicationNodeInformation,
 	CommandClasses,
+	type IZWaveNode,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeApplicationNodeInformation,
@@ -10,11 +15,6 @@ import {
 	parseApplicationNodeInformation,
 	parseBitMask,
 	validatePayload,
-	type ApplicationNodeInformation,
-	type IZWaveNode,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
@@ -22,10 +22,10 @@ import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -136,8 +136,8 @@ function areEndpointsUnnecessary(
 		}
 	>();
 	for (const endpoint of endpointIndizes) {
-		const devClassValueId =
-			MultiChannelCCValues.endpointDeviceClass.endpoint(endpoint);
+		const devClassValueId = MultiChannelCCValues.endpointDeviceClass
+			.endpoint(endpoint);
 		const deviceClass = applHost.getValueDB(node.id).getValue<{
 			generic: number;
 			specific: number;
@@ -226,11 +226,12 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<MultiChannelCCEndPointReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			MultiChannelCCEndPointReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return {
 				isDynamicEndpointCount: response.countIsDynamic,
@@ -255,18 +256,19 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response =
-			await this.applHost.sendCommand<MultiChannelCCCapabilityReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			MultiChannelCCCapabilityReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
-			const generic =
-				this.applHost.configManager.lookupGenericDeviceClass(
+			const generic = this.applHost.configManager
+				.lookupGenericDeviceClass(
 					response.genericDeviceClass,
 				);
-			const specific =
-				this.applHost.configManager.lookupSpecificDeviceClass(
+			const specific = this.applHost.configManager
+				.lookupSpecificDeviceClass(
 					response.genericDeviceClass,
 					response.specificDeviceClass,
 				);
@@ -296,11 +298,12 @@ export class MultiChannelCCAPI extends CCAPI {
 			genericClass,
 			specificClass,
 		});
-		const response =
-			await this.applHost.sendCommand<MultiChannelCCEndPointFindReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			MultiChannelCCEndPointFindReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.foundEndpoints;
 	}
 
@@ -318,11 +321,12 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response =
-			await this.applHost.sendCommand<MultiChannelCCAggregatedMembersReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			MultiChannelCCAggregatedMembersReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.members;
 	}
 
@@ -359,11 +363,12 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			requestedCC: ccId,
 		});
-		const response =
-			await this.applHost.sendCommand<MultiChannelCCV1Report>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			MultiChannelCCV1Report
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.endpointCount;
 	}
 
@@ -400,9 +405,9 @@ export class MultiChannelCC extends CommandClass {
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
-			cc.endpointIndex !== 0 &&
-			!(cc instanceof MultiChannelCCCommandEncapsulation) &&
-			!(cc instanceof MultiChannelCCV1CommandEncapsulation)
+			cc.endpointIndex !== 0
+			&& !(cc instanceof MultiChannelCCCommandEncapsulation)
+			&& !(cc instanceof MultiChannelCCV1CommandEncapsulation)
 		);
 	}
 
@@ -412,7 +417,8 @@ export class MultiChannelCC extends CommandClass {
 		cc: CommandClass,
 	):
 		| MultiChannelCCCommandEncapsulation
-		| MultiChannelCCV1CommandEncapsulation {
+		| MultiChannelCCV1CommandEncapsulation
+	{
 		const ccVersion = host.getSafeCCVersion(
 			CommandClasses["Multi Channel"],
 			cc.nodeId as number,
@@ -452,7 +458,8 @@ export class MultiChannelCC extends CommandClass {
 		if (removeEndpoints === "*") {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `Skipping ${this.ccName} interview b/c all endpoints are ignored by the device config file...`,
+				message:
+					`Skipping ${this.ccName} interview b/c all endpoints are ignored by the device config file...`,
 				direction: "none",
 			});
 			return;
@@ -499,7 +506,8 @@ endpoint count (individual): ${multiResponse.individualEndpointCount}
 count is dynamic:            ${multiResponse.isDynamicEndpointCount}
 identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		if (multiResponse.aggregatedEndpointCount != undefined) {
-			logMessage += `\nendpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
+			logMessage +=
+				`\nendpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
 		}
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -511,9 +519,9 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		const addSequentialEndpoints = (): void => {
 			for (
 				let i = 1;
-				i <=
-				multiResponse.individualEndpointCount +
-					(multiResponse.aggregatedEndpointCount ?? 0);
+				i
+					<= multiResponse.individualEndpointCount
+						+ (multiResponse.aggregatedEndpointCount ?? 0);
 				i++
 			) {
 				allEndpoints.push(i);
@@ -533,16 +541,19 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				// Create a sequential list of endpoints
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `Endpoint query returned no results, assuming that endpoints are sequential`,
+					message:
+						`Endpoint query returned no results, assuming that endpoints are sequential`,
 					direction: "inbound",
 				});
 				addSequentialEndpoints();
 			} else {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `received endpoints: ${allEndpoints
-						.map(String)
-						.join(", ")}`,
+					message: `received endpoints: ${
+						allEndpoints
+							.map(String)
+							.join(", ")
+					}`,
 					direction: "inbound",
 				});
 			}
@@ -550,7 +561,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			// Step 2b: Assume that the endpoints are in sequential order
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `does not support EndPointFind, assuming that endpoints are sequential`,
+				message:
+					`does not support EndPointFind, assuming that endpoints are sequential`,
 				direction: "none",
 			});
 			addSequentialEndpoints();
@@ -560,9 +572,12 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		if (removeEndpoints?.length) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `The following endpoints are ignored through the config file: ${removeEndpoints.join(
-					", ",
-				)}`,
+				message:
+					`The following endpoints are ignored through the config file: ${
+						removeEndpoints.join(
+							", ",
+						)
+					}`,
 				direction: "none",
 			});
 			allEndpoints = allEndpoints.filter(
@@ -574,22 +589,26 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		let hasQueriedCapabilities = false;
 		for (const endpoint of allEndpoints) {
 			if (
-				endpoint > multiResponse.individualEndpointCount &&
-				this.version >= 4
+				endpoint > multiResponse.individualEndpointCount
+				&& this.version >= 4
 			) {
 				// Find members of aggregated end point
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `querying members of aggregated endpoint #${endpoint}...`,
+					message:
+						`querying members of aggregated endpoint #${endpoint}...`,
 					direction: "outbound",
 				});
 				const members = await api.getAggregatedMembers(endpoint);
 				if (members) {
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `aggregated endpoint #${endpoint} has members ${members
-							.map(String)
-							.join(", ")}`,
+						message:
+							`aggregated endpoint #${endpoint} has members ${
+								members
+									.map(String)
+									.join(", ")
+							}`,
 						direction: "inbound",
 					});
 				}
@@ -600,7 +619,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			if (multiResponse.identicalCapabilities && hasQueriedCapabilities) {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `all endpoints identical, skipping capability query for endpoint #${endpoint}...`,
+					message:
+						`all endpoints identical, skipping capability query for endpoint #${endpoint}...`,
 					direction: "none",
 				});
 
@@ -633,7 +653,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			const caps = await api.getEndpointCapabilities(endpoint);
 			if (caps) {
 				hasQueriedCapabilities = true;
-				logMessage = `received response for endpoint capabilities (#${endpoint}):
+				logMessage =
+					`received response for endpoint capabilities (#${endpoint}):
 generic device class:  ${caps.generic.label}
 specific device class: ${caps.specific.label}
 is dynamic end point:  ${caps.isDynamic}
@@ -650,7 +671,8 @@ supported CCs:`;
 			} else {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `Querying endpoint #${endpoint} capabilities timed out, aborting interview...`,
+					message:
+						`Querying endpoint #${endpoint} capabilities timed out, aborting interview...`,
 					level: "warn",
 				});
 				return this.throwMissingCriticalInterviewResponse();
@@ -660,29 +682,33 @@ supported CCs:`;
 		// Now that all endpoints have been interviewed, remember which ones are there
 		// But first figure out if they seem unnecessary and if they do, which ones should be preserved
 		if (
-			!multiResponse.identicalCapabilities &&
-			areEndpointsUnnecessary(applHost, node, allEndpoints)
+			!multiResponse.identicalCapabilities
+			&& areEndpointsUnnecessary(applHost, node, allEndpoints)
 		) {
 			const preserve = applHost.getDeviceConfig?.(node.id)?.compat
 				?.preserveEndpoints;
 			if (!preserve) {
 				allEndpoints = [];
 				applHost.controllerLog.logNode(node.id, {
-					message: `Endpoints seem unnecessary b/c they have different device classes, ignoring all...`,
+					message:
+						`Endpoints seem unnecessary b/c they have different device classes, ignoring all...`,
 				});
 			} else if (preserve === "*") {
 				// preserve all endpoints, do nothing
 				applHost.controllerLog.logNode(node.id, {
-					message: `Endpoints seem unnecessary, but are configured to be preserved.`,
+					message:
+						`Endpoints seem unnecessary, but are configured to be preserved.`,
 				});
 			} else {
 				allEndpoints = allEndpoints.filter((ep) =>
-					preserve.includes(ep),
+					preserve.includes(ep)
 				);
 				applHost.controllerLog.logNode(node.id, {
-					message: `Endpoints seem unnecessary, but endpoints ${allEndpoints.join(
-						", ",
-					)} are configured to be preserved.`,
+					message: `Endpoints seem unnecessary, but endpoints ${
+						allEndpoints.join(
+							", ",
+						)
+					} are configured to be preserved.`,
 				});
 			}
 		}
@@ -724,9 +750,11 @@ supported CCs:`;
 		const endpointCounts = new Map<CommandClasses, number>();
 		for (const ccId of supportedCCs) {
 			applHost.controllerLog.logNode(node.id, {
-				message: `Querying endpoint count for CommandClass ${getCCName(
-					ccId,
-				)}...`,
+				message: `Querying endpoint count for CommandClass ${
+					getCCName(
+						ccId,
+					)
+				}...`,
 				direction: "outbound",
 			});
 			const endpointCount = await api.getEndpointCountV1(ccId);
@@ -734,9 +762,11 @@ supported CCs:`;
 				endpointCounts.set(ccId, endpointCount);
 
 				applHost.controllerLog.logNode(node.id, {
-					message: `CommandClass ${getCCName(
-						ccId,
-					)} has ${endpointCount} endpoints`,
+					message: `CommandClass ${
+						getCCName(
+							ccId,
+						)
+					} has ${endpointCount} endpoints`,
 					direction: "inbound",
 				});
 			}
@@ -832,8 +862,8 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			(this.countIsDynamic ? 0b10000000 : 0) |
-				(this.identicalCapabilities ? 0b01000000 : 0),
+			(this.countIsDynamic ? 0b10000000 : 0)
+			| (this.identicalCapabilities ? 0b01000000 : 0),
 			this.individualCount & 0b01111111,
 			this.aggregatedCount ?? 0,
 		]);
@@ -862,7 +892,8 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 export class MultiChannelCCEndPointGet extends MultiChannelCC {}
 
 export interface MultiChannelCCCapabilityReportOptions
-	extends CCCommandOptions {
+	extends CCCommandOptions
+{
 	endpointIndex: number;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
@@ -872,8 +903,7 @@ export interface MultiChannelCCCapabilityReportOptions
 }
 
 @CCCommand(MultiChannelCommand.CapabilityReport)
-export class MultiChannelCCCapabilityReport
-	extends MultiChannelCC
+export class MultiChannelCCCapabilityReport extends MultiChannelCC
 	implements ApplicationNodeInformation
 {
 	public constructor(
@@ -897,10 +927,9 @@ export class MultiChannelCCCapabilityReport
 			this.supportedCCs = NIF.supportedCCs;
 
 			// Removal reports have very specific information
-			this.wasRemoved =
-				this.isDynamic &&
-				this.genericDeviceClass === 0xff && // "Non-Interoperable"
-				this.specificDeviceClass === 0x00;
+			this.wasRemoved = this.isDynamic
+				&& this.genericDeviceClass === 0xff // "Non-Interoperable"
+				&& this.specificDeviceClass === 0x00;
 		} else {
 			this.endpointIndex = options.endpointIndex;
 			this.genericDeviceClass = options.genericDeviceClass;
@@ -940,8 +969,8 @@ export class MultiChannelCCCapabilityReport
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
-				(this.endpointIndex & 0b01111111) |
-					(this.isDynamic ? 0b10000000 : 0),
+				(this.endpointIndex & 0b01111111)
+				| (this.isDynamic ? 0b10000000 : 0),
 			]),
 			encodeApplicationNodeInformation(this),
 		]);
@@ -1019,7 +1048,8 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 }
 
 export interface MultiChannelCCEndPointFindReportOptions
-	extends CCCommandOptions {
+	extends CCCommandOptions
+{
 	genericClass: number;
 	specificClass: number;
 	foundEndpoints: number[];
@@ -1258,8 +1288,8 @@ function getCCResponseForCommandEncapsulation(
 	sent: MultiChannelCCCommandEncapsulation,
 ) {
 	if (
-		typeof sent.destination === "number" &&
-		sent.encapsulated.expectsCCResponse()
+		typeof sent.destination === "number"
+		&& sent.encapsulated.expectsCCResponse()
 	) {
 		// Allow both versions of the encapsulation command
 		// Our implementation check is a bit too strict, so change the return type
@@ -1277,8 +1307,8 @@ function testResponseForCommandEncapsulation(
 		| MultiChannelCCV1CommandEncapsulation,
 ) {
 	if (
-		typeof sent.destination === "number" &&
-		sent.destination === received.endpointIndex
+		typeof sent.destination === "number"
+		&& sent.destination === received.endpointIndex
 	) {
 		return "checkEncapsulated";
 	}
@@ -1338,8 +1368,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 					?.treatDestinationEndpointAsSource
 			) {
 				// This device incorrectly responds from the endpoint we've passed as our source endpoint
-				if (typeof this.destination === "number")
+				if (typeof this.destination === "number") {
 					this.endpointIndex = this.destination;
+				}
 			}
 		}
 	}
@@ -1349,12 +1380,11 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public destination: MultiChannelCCDestination;
 
 	public serialize(): Buffer {
-		const destination =
-			typeof this.destination === "number"
-				? // The destination is a single number
-				  this.destination & 0b0111_1111
-				: // The destination is a bit mask
-				  encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
+		const destination = typeof this.destination === "number"
+			// The destination is a single number
+			? this.destination & 0b0111_1111
+			// The destination is a bit mask
+			: encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Buffer.concat([
 			Buffer.from([this.endpointIndex & 0b0111_1111, destination]),
 			this.encapsulated.serialize(),
@@ -1367,10 +1397,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			...super.toLogEntry(applHost),
 			message: {
 				source: this.endpointIndex,
-				destination:
-					typeof this.destination === "number"
-						? this.destination
-						: this.destination.join(", "),
+				destination: typeof this.destination === "number"
+					? this.destination
+					: this.destination.join(", "),
 			},
 		};
 	}
@@ -1496,8 +1525,8 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 
 			// Some devices send invalid reports, i.e. MultiChannelCCV1CommandEncapsulation, but with V2+ binary format
 			// This would be a NoOp CC, but it makes no sense to encapsulate that.
-			const isV2withV1Header =
-				this.payload.length >= 2 && this.payload[1] === 0x00;
+			const isV2withV1Header = this.payload.length >= 2
+				&& this.payload[1] === 0x00;
 
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.host, {

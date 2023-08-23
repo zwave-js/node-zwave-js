@@ -1,23 +1,23 @@
 import {
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	encodeNodeID,
 	parseNodeID,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
+	type INodeQuery,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type INodeQuery,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -29,8 +29,7 @@ interface RequestNodeInfoResponseOptions extends MessageBaseOptions {
 }
 
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
-export class RequestNodeInfoResponse
-	extends Message
+export class RequestNodeInfoResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
@@ -73,9 +72,9 @@ function testCallbackForRequestNodeInfoRequest(
 	received: Message,
 ) {
 	return (
-		(received instanceof ApplicationUpdateRequestNodeInfoReceived &&
-			received.nodeId === sent.nodeId) ||
-		received instanceof ApplicationUpdateRequestNodeInfoRequestFailed
+		(received instanceof ApplicationUpdateRequestNodeInfoReceived
+			&& received.nodeId === sent.nodeId)
+		|| received instanceof ApplicationUpdateRequestNodeInfoRequestFailed
 	);
 }
 

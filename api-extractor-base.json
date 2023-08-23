@@ -186,7 +186,6 @@
 		 * (REQUIRED) Whether to generate a doc model file.
 		 */
 		"enabled": false
-
 		/**
 		 * The output path for the doc model file.  The file extension should be ".api.json".
 		 *
@@ -207,7 +206,6 @@
 		 * (REQUIRED) Whether to generate the .d.ts rollup file.
 		 */
 		"enabled": false
-
 		/**
 		 * Specifies the output path for a .d.ts rollup file to be generated without any trimming.
 		 * This file will include all declarations that are exported by the main entry point.
@@ -338,7 +336,6 @@
 				 */
 				"addToApiReportFile": true
 			}
-
 			// "TS2551": {
 			//   "logLevel": "warning",
 			//   "addToApiReportFile": true
@@ -387,7 +384,6 @@
 				"logLevel": "warning",
 				"addToApiReportFile": true
 			}
-
 			// "tsdoc-link-tag-unescaped-text": {
 			//   "logLevel": "warning",
 			//   "addToApiReportFile": true

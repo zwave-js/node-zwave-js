@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
 import {
+	type IZWaveNode,
 	MAX_SUPERVISION_SESSION_ID,
 	NodeIDType,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type IZWaveNode,
 } from "@zwave-js/core";
 import {
+	type ThrowingMap,
 	createThrowingMap,
 	createWrappingCounter,
-	type ThrowingMap,
 } from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
@@ -71,10 +71,9 @@ export function createTestingHost(
 			);
 		}),
 		getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
-		getSupportedCCVersion:
-			options.getSupportedCCVersion ??
-			options.getSafeCCVersion ??
-			(() => 100),
+		getSupportedCCVersion: options.getSupportedCCVersion
+			?? options.getSafeCCVersion
+			?? (() => 100),
 		getNextCallbackId: createWrappingCounter(0xff),
 		getNextSupervisionSessionId: createWrappingCounter(
 			MAX_SUPERVISION_SESSION_ID,
@@ -99,9 +98,9 @@ export function createTestingHost(
 			const node = ret.nodes.get(nodeId);
 			const endpoint = node?.getEndpoint(endpointIndex);
 			return (
-				node?.isSecure !== false &&
-				!!(endpoint ?? node)?.isCCSecure(ccId) &&
-				!!(ret.securityManager || ret.securityManager2)
+				node?.isSecure !== false
+				&& !!(endpoint ?? node)?.isCCSecure(ccId)
+				&& !!(ret.securityManager || ret.securityManager2)
 			);
 		},
 		getHighestSecurityClass: (nodeId) => {

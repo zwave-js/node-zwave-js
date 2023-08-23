@@ -1,4 +1,4 @@
-import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes, isZWaveError } from "@zwave-js/core";
 import { formatId, stringify } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";

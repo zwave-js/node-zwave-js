@@ -30,15 +30,15 @@ async set(
 }
 ```
 
--   **label:** Event value
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** false
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Event value
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** false
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `currentValue`
 
@@ -50,15 +50,15 @@ async set(
 }
 ```
 
--   **label:** Current value
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 99
+- **label:** Current value
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 99
 
 ### `duration`
 
@@ -70,13 +70,13 @@ async set(
 }
 ```
 
--   **label:** Remaining duration
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** Remaining duration
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `restorePrevious`
 
@@ -88,13 +88,13 @@ async set(
 }
 ```
 
--   **label:** Restore previous value
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Restore previous value
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `targetValue`
 
@@ -106,12 +106,12 @@ async set(
 }
 ```
 
--   **label:** Target value
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Target value
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

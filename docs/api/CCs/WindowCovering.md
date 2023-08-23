@@ -61,15 +61,15 @@ async stopLevelChange(
 }
 ```
 
--   **label:** `Current value - ${string}`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 99
+- **label:** `Current value - ${string}`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 99
 
 ### `duration(parameter: WindowCoveringParameter)`
 
@@ -82,13 +82,13 @@ async stopLevelChange(
 }
 ```
 
--   **label:** `Remaining duration - ${string}`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** `Remaining duration - ${string}`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `levelChangeDown(parameter: WindowCoveringParameter)`
 
@@ -101,13 +101,13 @@ async stopLevelChange(
 }
 ```
 
--   **label:** `${string} - ${string}`
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string} - ${string}`
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `levelChangeUp(parameter: WindowCoveringParameter)`
 
@@ -120,13 +120,13 @@ async stopLevelChange(
 }
 ```
 
--   **label:** `${string} - ${string}`
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string} - ${string}`
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `targetValue(parameter: WindowCoveringParameter)`
 
@@ -139,12 +139,12 @@ async stopLevelChange(
 }
 ```
 
--   **label:** `Target value - ${string}`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** boolean
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 99
+- **label:** `Target value - ${string}`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** boolean
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 99

@@ -1,16 +1,16 @@
 import {
-	ObjectKeyMap,
-	pick,
 	type JSONObject,
+	ObjectKeyMap,
 	type ReadonlyObjectKeyMap,
+	pick,
 } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe";
 import {
+	type ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
 	validateCondition,
-	type ConditionalItem,
 } from "./ConditionalItem";
 import type { ConditionalDeviceConfig } from "./DeviceConfig";
 import type { DeviceID } from "./shared";
@@ -40,8 +40,8 @@ Parameter #${parameterNumber} has a non-string label`,
 		this.label = definition.label;
 
 		if (
-			definition.description != undefined &&
-			typeof definition.description !== "string"
+			definition.description != undefined
+			&& typeof definition.description !== "string"
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -52,8 +52,8 @@ Parameter #${parameterNumber} has a non-string description`,
 		this.description = definition.description;
 
 		if (
-			typeof definition.valueSize !== "number" ||
-			definition.valueSize <= 0
+			typeof definition.valueSize !== "number"
+			|| definition.valueSize <= 0
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -64,8 +64,8 @@ Parameter #${parameterNumber} has an invalid value size`,
 		this.valueSize = definition.valueSize;
 
 		if (
-			definition.minValue != undefined &&
-			typeof definition.minValue !== "number"
+			definition.minValue != undefined
+			&& typeof definition.minValue !== "number"
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -76,8 +76,8 @@ Parameter #${parameterNumber} has a non-numeric property minValue`,
 		this.minValue = definition.minValue;
 
 		if (
-			definition.maxValue != undefined &&
-			typeof definition.maxValue !== "number"
+			definition.maxValue != undefined
+			&& typeof definition.maxValue !== "number"
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -88,8 +88,8 @@ Parameter #${parameterNumber} has a non-numeric property maxValue`,
 		this.maxValue = definition.maxValue;
 
 		if (
-			definition.unsigned != undefined &&
-			typeof definition.unsigned !== "boolean"
+			definition.unsigned != undefined
+			&& typeof definition.unsigned !== "boolean"
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -100,8 +100,8 @@ Parameter #${parameterNumber} has a non-boolean property unsigned`,
 		this.unsigned = definition.unsigned === true;
 
 		if (
-			definition.unit != undefined &&
-			typeof definition.unit !== "string"
+			definition.unit != undefined
+			&& typeof definition.unit !== "string"
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -121,8 +121,8 @@ Parameter #${parameterNumber} has a non-string unit`,
 		this.readOnly = definition.readOnly;
 
 		if (
-			definition.writeOnly != undefined &&
-			definition.writeOnly !== true
+			definition.writeOnly != undefined
+			&& definition.writeOnly !== true
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -150,8 +150,8 @@ Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 		this.defaultValue = definition.defaultValue;
 
 		if (
-			definition.allowManualEntry != undefined &&
-			definition.allowManualEntry !== false
+			definition.allowManualEntry != undefined
+			&& definition.allowManualEntry !== false
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -160,16 +160,16 @@ Parameter #${parameterNumber}: allowManualEntry must be false or omitted!`,
 			);
 		}
 		// Default to allowing manual entry, except if the param is readonly
-		this.allowManualEntry =
-			definition.allowManualEntry ?? (this.readOnly ? false : true);
+		this.allowManualEntry = definition.allowManualEntry
+			?? (this.readOnly ? false : true);
 
 		if (
-			isArray(definition.options) &&
-			!definition.options.every(
+			isArray(definition.options)
+			&& !definition.options.every(
 				(opt: unknown) =>
-					isObject(opt) &&
-					typeof opt.label === "string" &&
-					typeof opt.value === "number",
+					isObject(opt)
+					&& typeof opt.label === "string"
+					&& typeof opt.value === "number",
 			)
 		) {
 			throwInvalidConfig(
@@ -179,11 +179,10 @@ Parameter #${parameterNumber}: options is malformed!`,
 			);
 		}
 
-		this.options =
-			definition.options?.map(
-				(opt: any) =>
-					new ConditionalConfigOption(opt.value, opt.label, opt.$if),
-			) ?? [];
+		this.options = definition.options?.map(
+			(opt: any) =>
+				new ConditionalConfigOption(opt.value, opt.label, opt.$if),
+		) ?? [];
 	}
 
 	private parent: ConditionalDeviceConfig;
@@ -256,14 +255,16 @@ Parameter #${this.parameterNumber} is missing required property "maxValue"!`,
 	}
 }
 
-export type ParamInformation = Omit<
-	ConditionalParamInformation,
-	"condition" | "evaluateCondition" | "options" | "minValue" | "maxValue"
-> & {
-	options: readonly ConfigOption[];
-	minValue: NonNullable<ConditionalParamInformation["minValue"]>;
-	maxValue: NonNullable<ConditionalParamInformation["maxValue"]>;
-};
+export type ParamInformation =
+	& Omit<
+		ConditionalParamInformation,
+		"condition" | "evaluateCondition" | "options" | "minValue" | "maxValue"
+	>
+	& {
+		options: readonly ConfigOption[];
+		minValue: NonNullable<ConditionalParamInformation["minValue"]>;
+		maxValue: NonNullable<ConditionalParamInformation["maxValue"]>;
+	};
 
 export class ConditionalConfigOption implements ConditionalItem<ConfigOption> {
 	public constructor(
@@ -337,8 +338,9 @@ ${errorPrefix}found invalid param number "${paramNo}" in paramInformation`,
 			}
 
 			const keyNum = parseInt(match[1], 10);
-			const bitMask =
-				match[2] != undefined ? parseInt(match[2], 16) : undefined;
+			const bitMask = match[2] != undefined
+				? parseInt(match[2], 16)
+				: undefined;
 			const key = { parameter: keyNum, valueBitMask: bitMask };
 
 			if (!paramInformation.has(key)) paramInformation.set(key, []);
