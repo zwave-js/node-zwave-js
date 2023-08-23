@@ -1,0 +1,3 @@
+{
+	"*.{js,ts,json,jsonc,md,yaml,yml}": "node maintenance/fmt-staged.js"
+}
