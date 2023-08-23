@@ -371,7 +371,7 @@ async function processCCDocFile(
 			(CommandClasses as any)[ccName],
 		)
 	}\``;
-	const generatedSidebar = `\n\t\t- [${ccName} CC](api/CCs/${filename})`;
+	const generatedSidebar = `\n\t- [${ccName} CC](api/CCs/${filename})`;
 
 	// Enumerate all useful public methods
 	const ignoredMethods: string[] = [
