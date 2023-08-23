@@ -133,6 +133,13 @@ export function getTransformedSource(
 	node: ExportedDeclarations,
 	options: ImportRange["options"],
 ): string {
+	// Create a temporary project with a temporary source file to print the node
+	const project = new Project();
+	const sourceFile = project.createSourceFile("index.ts", node.getText());
+	node = [
+		...sourceFile.getExportedDeclarations().values(),
+	][0][0];
+
 	// Remove @internal and @deprecated members
 	if (Node.isInterfaceDeclaration(node)) {
 		const commentsToRemove: { remove(): void }[] = [];
