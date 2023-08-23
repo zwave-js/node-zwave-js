@@ -46,7 +46,7 @@ async function main(param) {
 
 		// And save it again
 		content = JSONC.stringify(json, undefined, "\t");
-		content = formatWithDprint("file.json", content);
+		content = formatWithDprint(filename, content);
 		await fs.writeFile(filename, content, "utf8");
 	}
 }

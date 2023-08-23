@@ -6177,7 +6177,8 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			const newStats: RouteStatistics = {
 				protocolDataRate: txReport.routeSpeed,
 				repeaters: (txReport.repeaterNodeIds ?? []) as number[],
-				rssi: txReport.ackRSSI ?? ret.lwr?.rssi
+				rssi: txReport.ackRSSI
+					?? ret.lwr?.rssi
 					?? RssiError.NotAvailable,
 			};
 			if (txReport.ackRepeaterRSSI != undefined) {

@@ -471,7 +471,8 @@ export class FirmwareUpdateMetaDataCCRequestGet
 			&& this.firmwareTarget != undefined
 			&& this.fragmentSize != undefined;
 		const isV4 = isV3 && this.version >= 4 && this.activation != undefined;
-		const isV5 = isV4 && this.version >= 5
+		const isV5 = isV4
+			&& this.version >= 5
 			&& this.hardwareVersion != undefined;
 		this.payload = Buffer.allocUnsafe(
 			6 + (isV3 ? 3 : 0) + (isV4 ? 1 : 0) + (isV5 ? 1 : 0),

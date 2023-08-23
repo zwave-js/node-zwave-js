@@ -22,7 +22,7 @@ let code = `// THIS FILE WAS AUTO GENERATED
 
 ${parserCode}`;
 
-code = formatWithDprint("parser.ts", code);
-
 const logicParserFilename = path.join(sourceDir, "LogicParser.ts");
+code = formatWithDprint(logicParserFilename, code);
+
 fs.writeFileSync(logicParserFilename, code, "utf8");

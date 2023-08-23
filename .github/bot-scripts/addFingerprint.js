@@ -48,7 +48,7 @@ async function main(param) {
 
 		// And save it again
 		content = JSONC.stringify(json, undefined, "\t");
-		content = formatWithDprint("file.json", content);
+		content = formatWithDprint(filename, content);
 		await fs.writeFile(filename, content, "utf8");
 
 		// Return the device label so it can be used in the PR title

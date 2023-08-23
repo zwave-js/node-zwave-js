@@ -202,7 +202,8 @@ export function encodeFloatWithScale(
 		size = override.size;
 	}
 	const ret = Buffer.allocUnsafe(1 + size);
-	ret[0] = ((precision & 0b111) << 5) | ((scale & 0b11) << 3)
+	ret[0] = ((precision & 0b111) << 5)
+		| ((scale & 0b11) << 3)
 		| (size & 0b111);
 	ret.writeIntBE(value, 1, size);
 	return ret;
