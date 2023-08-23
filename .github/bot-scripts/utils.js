@@ -1,4 +1,3 @@
-// const prettier = require("prettier");
 const path = require("path");
 const { formatWithDprint: format } = require("@zwave-js/fmt");
 

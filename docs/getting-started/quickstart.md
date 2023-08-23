@@ -11,7 +11,6 @@ It is recommended to either use TypeScript when consuming the library or work in
 2. Load the module.\
    **IMPORTANT:** The main entry point of this library is the very first thing you need to load. It installs a polyfill that is required for this library to work.
 
-   <!--prettier-ignore-->
    ```ts
    import { Driver } from "zwave-js";
    //    main entry point ⤴
@@ -19,7 +18,6 @@ It is recommended to either use TypeScript when consuming the library or work in
 
 3. Create and start a driver instance
 
-   <!--prettier-ignore-->
    ```ts
    // Tell the driver which serial port to use
    const driver = new Driver("COM3");
@@ -53,7 +51,6 @@ It is recommended to either use TypeScript when consuming the library or work in
 
 4. Shut down the driver before the application exits. The `destroy` method must be called under any circumstances. Take care to handle the `SIGINT` and `SIGTERM` signals, which would exit the process without shutting down the driver otherwise:
 
-   <!--prettier-ignore-->
    ```ts
    // When you want to exit:
    await driver.destroy();

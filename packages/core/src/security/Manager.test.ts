@@ -3,7 +3,6 @@ import crypto, { randomBytes } from "crypto";
 import sinon from "sinon";
 import { SecurityManager } from "./Manager";
 
-// prettier-ignore
 const networkKey = Buffer.from([
 	1,
 	2,

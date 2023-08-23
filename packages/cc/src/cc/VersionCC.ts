@@ -497,7 +497,6 @@ export class VersionCC extends CommandClass {
 			});
 			const versionGetResponse = await api.get();
 			if (versionGetResponse) {
-				// prettier-ignore
 				let logMessage = `received response for node versions:
   library type:      ${ZWaveLibraryTypes[versionGetResponse.libraryType]} (${
 					num2hex(versionGetResponse.libraryType)

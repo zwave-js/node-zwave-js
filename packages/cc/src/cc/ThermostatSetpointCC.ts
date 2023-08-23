@@ -52,7 +52,6 @@ import {
 
 // This array is used to map the advertised supported types (interpretation A)
 // to the actual enum values
-// prettier-ignore
 const thermostatSetpointTypeMap = [
 	0x00,
 	0x01,

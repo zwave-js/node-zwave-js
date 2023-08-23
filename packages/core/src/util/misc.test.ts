@@ -10,7 +10,6 @@ import {
 } from "./misc";
 
 test("isConsecutiveArray() -> returns true for consecutive arrays", (t) => {
-	// prettier-ignore
 	const tests = [
 		[1],
 		[1, 2, 3],
@@ -27,7 +26,6 @@ test("isConsecutiveArray() -> returns true for empty arrays", (t) => {
 });
 
 test("isConsecutiveArray() -> returns false otherwise", (t) => {
-	// prettier-ignore
 	const tests = [
 		[1, 3],
 		[1, 2, 3, 2],
