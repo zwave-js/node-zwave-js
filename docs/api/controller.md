@@ -1501,7 +1501,18 @@ interface ControllerFirmwareUpdateProgress {
 (result: ControllerFirmwareUpdateResult) => void;
 ```
 
-The firmware update process is finished. The `result` argument indicates whether the update was successful and a status with more details on potential errors.
+The firmware update process is finished. The `result` argument looks like this indicates whether the update was successful:
+
+<!-- TODO: #import ControllerFirmwareUpdateResult from "zwave-js" -->
+
+```ts
+interface ControllerFirmwareUpdateResult {
+	success: boolean;
+	status: ControllerFirmwareUpdateStatus;
+}
+```
+
+Its `status` property contains more details on potential errors.
 
 <!-- #import ControllerFirmwareUpdateStatus from "zwave-js" -->
 
