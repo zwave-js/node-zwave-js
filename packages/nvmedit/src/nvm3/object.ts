@@ -219,8 +219,7 @@ export function compressObjects(objects: NVM3Object[]) {
 	const ret = new Map<number, NVM3Object>();
 	// Only insert valid objects. This means non-fragmented ones, non-deleted ones
 	// and fragmented ones in the correct and complete order
-	outer:
-	for (let i = 0; i < objects.length; i++) {
+	outer: for (let i = 0; i < objects.length; i++) {
 		const obj = objects[i];
 		if (obj.type === ObjectType.Deleted) {
 			ret.delete(obj.key);

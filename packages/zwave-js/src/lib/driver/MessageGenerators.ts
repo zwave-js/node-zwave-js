@@ -298,8 +298,7 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 		let result!: Message;
 
 		try {
-			attempts:
-			for (let attempt = 1; attempt <= 2; attempt++) {
+			attempts: for (let attempt = 1; attempt <= 2; attempt++) {
 				driver.controllerLog.logNode(nodeId, {
 					message:
 						`Beginning Transport Service TX session #${sessionId}...`,

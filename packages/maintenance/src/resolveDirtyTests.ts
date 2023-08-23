@@ -215,8 +215,7 @@ export async function resolveDirtyTests(): Promise<void> {
 	const dirtySourceFiles = new Set<string>(changedFiles);
 
 	// Scan all source files
-	files:
-	for (const sourceFile of program.getSourceFiles()) {
+	files: for (const sourceFile of program.getSourceFiles()) {
 		const relativePath = relativeToProject(sourceFile.fileName);
 
 		// Only look at files inside the packages directory

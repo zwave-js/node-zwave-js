@@ -4532,8 +4532,7 @@ ${handlers.length} left`,
 		// Step through the transaction as long as it gives us a next message
 		while ((msg = await transaction.generateNextMessage(prevResult))) {
 			// TODO: refactor this nested loop or make it part of executeSerialAPICommand
-			attemptMessage:
-			for (let attemptNumber = 1;; attemptNumber++) {
+			attemptMessage: for (let attemptNumber = 1;; attemptNumber++) {
 				try {
 					prevResult = await this.queueSerialAPICommand(
 						msg,

@@ -38,8 +38,7 @@ async function main(param) {
 
 	/** @type {number[]} */
 	const whitelistedRuns = [];
-	runs:
-	for (const run of pendingRuns) {
+	runs: for (const run of pendingRuns) {
 		console.log(`Checking run ${run.id}...`);
 
 		// Find the pull request for the current run

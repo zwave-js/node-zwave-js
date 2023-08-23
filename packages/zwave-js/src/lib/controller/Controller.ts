@@ -7033,8 +7033,7 @@ ${associatedNodes.join(", ")}`,
 
 			let aborted = false;
 
-			transfer:
-			for (
+			transfer: for (
 				let fragment = 1;
 				fragment <= numFragments;
 				fragment++
@@ -7044,8 +7043,7 @@ ${associatedNodes.join(", ")}`,
 					fragment * BLOCK_SIZE,
 				);
 
-				retry:
-				for (let retry = 0; retry < 3; retry++) {
+				retry: for (let retry = 0; retry < 3; retry++) {
 					await this.driver.bootloader.uploadFragment(
 						fragment,
 						fragmentData,

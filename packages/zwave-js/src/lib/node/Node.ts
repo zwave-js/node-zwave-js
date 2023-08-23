@@ -5091,8 +5091,7 @@ protocol version:      ${this.protocolVersion}`;
 		// ================================
 		// STEP 4:
 		// Respond to fragment requests from the node
-		update:
-		while (true) {
+		update: while (true) {
 			// During ongoing firmware updates, it can happen that the next request is received before the callback for the previous response
 			// is back. In that case we can immediately handle the premature request. Otherwise wait for the next request.
 			const fragmentRequest = this._firmwareUpdatePrematureRequest
@@ -5145,8 +5144,7 @@ protocol version:      ${this.protocolVersion}`;
 			}
 
 			// Actually send the requested frames
-			request:
-			for (
+			request: for (
 				let num = fragmentRequest.reportNumber;
 				num < fragmentRequest.reportNumber + fragmentRequest.numReports;
 				num++
