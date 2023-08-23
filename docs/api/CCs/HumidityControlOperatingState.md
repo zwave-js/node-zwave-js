@@ -16,7 +16,8 @@ async get(): Promise<HumidityControlOperatingState | undefined>;
 
 ```ts
 {
-	commandClass: CommandClasses["Humidity Control Operating State"],
+	commandClass:
+		CommandClasses["Humidity Control Operating State"],
 	endpoint: number,
 	property: "state",
 }

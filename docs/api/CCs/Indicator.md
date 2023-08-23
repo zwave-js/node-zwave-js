@@ -25,10 +25,10 @@ async set(
 ```ts
 async getSupported(indicatorId: number): Promise<
 	| {
-			indicatorId?: number;
-			supportedProperties: readonly number[];
-			nextIndicatorId: number;
-	  }
+		indicatorId?: number;
+		supportedProperties: readonly number[];
+		nextIndicatorId: number;
+	}
 	| undefined
 >;
 ```

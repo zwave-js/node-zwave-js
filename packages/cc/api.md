@@ -2222,15 +2222,18 @@ export class BinarySensorCCGet extends BinarySensorCC {
 //
 // @public (undocumented)
 export class BinarySensorCCReport extends BinarySensorCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "BinarySensorCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: BinarySensorCCReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
-    get type(): BinarySensorType;
+    type: BinarySensorType;
     // (undocumented)
-    get value(): boolean;
+    value: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "BinarySensorCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
