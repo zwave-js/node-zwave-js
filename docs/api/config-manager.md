@@ -306,10 +306,10 @@ interface ConditionalDeviceConfig {
 
 ```ts
 interface ConditionalAssociationConfig {
-	readonly condition?: string | undefined;
+	readonly condition?: string;
 	readonly groupId: number;
 	readonly label: string;
-	readonly description?: string | undefined;
+	readonly description?: string;
 	readonly maxNodes: number;
 	readonly isLifeline: boolean;
 	readonly multiChannel: boolean | "auto";
@@ -321,20 +321,20 @@ interface ConditionalAssociationConfig {
 ```ts
 interface ConditionalParamInformation {
 	readonly parameterNumber: number;
-	readonly valueBitMask?: number | undefined;
+	readonly valueBitMask?: number;
 	readonly label: string;
-	readonly description?: string | undefined;
+	readonly description?: string;
 	readonly valueSize: number;
-	readonly minValue?: number | undefined;
-	readonly maxValue?: number | undefined;
-	readonly unsigned?: boolean | undefined;
+	readonly minValue?: number;
+	readonly maxValue?: number;
+	readonly unsigned?: boolean;
 	readonly defaultValue: number;
-	readonly unit?: string | undefined;
-	readonly readOnly?: true | undefined;
-	readonly writeOnly?: true | undefined;
+	readonly unit?: string;
+	readonly readOnly?: true;
+	readonly writeOnly?: true;
 	readonly allowManualEntry: boolean;
 	readonly options: readonly ConditionalConfigOption[];
-	readonly condition?: string | undefined;
+	readonly condition?: string;
 }
 ```
 
@@ -344,7 +344,7 @@ interface ConditionalParamInformation {
 interface ConditionalConfigOption {
 	readonly value: number;
 	readonly label: string;
-	readonly condition?: string | undefined;
+	readonly condition?: string;
 }
 ```
 
@@ -412,7 +412,7 @@ type GenericDeviceClassMap = ReadonlyMap<number, GenericDeviceClass>;
 interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly requiresSecurity?: boolean | undefined;
+	readonly requiresSecurity?: boolean;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
@@ -425,8 +425,8 @@ interface GenericDeviceClass {
 interface SpecificDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly zwavePlusDeviceType?: string | undefined;
-	readonly requiresSecurity?: boolean | undefined;
+	readonly zwavePlusDeviceType?: string;
+	readonly requiresSecurity?: boolean;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 }
@@ -466,11 +466,11 @@ type IndicatorPropertiesMap = ReadonlyMap<number, IndicatorProperty>;
 interface IndicatorProperty {
 	readonly id: number;
 	readonly label: string;
-	readonly description: string | undefined;
-	readonly min: number | undefined;
-	readonly max: number | undefined;
-	readonly readonly: boolean | undefined;
-	readonly type: ValueType | undefined;
+	readonly description: string;
+	readonly min: number;
+	readonly max: number;
+	readonly readonly: boolean;
+	readonly type: any;
 }
 ```
 
@@ -549,9 +549,9 @@ type ScaleGroup = ReadonlyMap<number, Scale> & {
 ```ts
 interface Scale {
 	readonly key: number;
-	readonly unit: string | undefined;
+	readonly unit: string;
 	readonly label: string;
-	readonly description: string | undefined;
+	readonly description: string;
 }
 ```
 
@@ -586,9 +586,9 @@ interface Notification {
 interface NotificationEvent {
 	readonly id: number;
 	readonly label: string;
-	readonly description?: string | undefined;
-	readonly parameter?: NotificationParameter | undefined;
-	readonly idleVariables?: number[] | undefined;
+	readonly description?: string;
+	readonly parameter?: NotificationParameter;
+	readonly idleVariables?: number[];
 }
 ```
 
