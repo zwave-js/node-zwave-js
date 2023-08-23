@@ -18,7 +18,9 @@
 		"conditionalExpression.operatorPosition": "nextLine",
 		"conditionalType.operatorPosition": "nextLine",
 		"constructorType.spaceAfterNewKeyword": true,
-		"constructSignature.spaceAfterNewKeyword": true
+		"constructSignature.spaceAfterNewKeyword": true,
+		"binaryExpression.linePerExpression": true,
+		"quoteProps": "asNeeded"
 	},
 
 	"json": {},
