@@ -298,21 +298,19 @@ Retrieves the firmware update capabilities of a node to decide which options (e.
 <!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
 
 ```ts
-type FirmwareUpdateCapabilities =
-	| {
-		/** Indicates whether the node's firmware can be upgraded */
-		readonly firmwareUpgradable: false;
-	}
-	| {
-		/** Indicates whether the node's firmware can be upgraded */
-		readonly firmwareUpgradable: true;
-		/** An array of firmware targets that can be upgraded */
-		readonly firmwareTargets: readonly number[];
-		/** Indicates whether the node continues to function normally during an upgrade */
-		readonly continuesToFunction: MaybeNotKnown<boolean>;
-		/** Indicates whether the node supports delayed activation of the new firmware */
-		readonly supportsActivation: MaybeNotKnown<boolean>;
-	};
+type FirmwareUpdateCapabilities = {
+	/** Indicates whether the node's firmware can be upgraded */
+	readonly firmwareUpgradable: false;
+} | {
+	/** Indicates whether the node's firmware can be upgraded */
+	readonly firmwareUpgradable: true;
+	/** An array of firmware targets that can be upgraded */
+	readonly firmwareTargets: readonly number[];
+	/** Indicates whether the node continues to function normally during an upgrade */
+	readonly continuesToFunction: MaybeNotKnown<boolean>;
+	/** Indicates whether the node supports delayed activation of the new firmware */
+	readonly supportsActivation: MaybeNotKnown<boolean>;
+};
 ```
 
 ### `updateFirmware`

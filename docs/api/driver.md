@@ -415,11 +415,9 @@ interface FileSystem {
 	writeFile(
 		file: string,
 		data: string | Buffer,
-		options?:
-			| {
-				encoding: string;
-			}
-			| string,
+		options?: {
+			encoding: string;
+		} | string,
 	): Promise<void>;
 	readFile(file: string, encoding: string): Promise<string>;
 	pathExists(path: string): Promise<boolean>;

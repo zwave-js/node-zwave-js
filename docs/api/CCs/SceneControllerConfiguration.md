@@ -56,7 +56,8 @@ async get(
 
 ```ts
 {
-	commandClass: CommandClasses["Scene Controller Configuration"],
+	commandClass:
+		CommandClasses["Scene Controller Configuration"],
 	endpoint: number,
 	property: "dimmingDuration",
 	propertyKey: number,
@@ -75,7 +76,8 @@ async get(
 
 ```ts
 {
-	commandClass: CommandClasses["Scene Controller Configuration"],
+	commandClass:
+		CommandClasses["Scene Controller Configuration"],
 	endpoint: number,
 	property: "sceneId",
 	propertyKey: number,

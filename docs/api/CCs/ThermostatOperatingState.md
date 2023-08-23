@@ -16,7 +16,8 @@ async get(): Promise<MaybeNotKnown<ThermostatOperatingState>>;
 
 ```ts
 {
-	commandClass: CommandClasses["Thermostat Operating State"],
+	commandClass:
+		CommandClasses["Thermostat Operating State"],
 	endpoint: number,
 	property: "state",
 }
