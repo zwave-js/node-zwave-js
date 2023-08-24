@@ -65,6 +65,18 @@ getDefinedValueIDs(): TranslatedValueID[]
 
 When building a user interface for a Z-Wave application, you might need to know all possible values in advance. This method returns an array of all ValueIDs that are available for this node.
 
+### `interview`
+
+```ts
+interview(): Promise<void>
+```
+
+Starts or resumes the interview of a Z-Wave node.
+
+> [!WARNING] This is only allowed when the initial interview was bypassed using the `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
+
+> [!NOTE] It is advised to NOT await this method as it can take a very long time (minutes to hours)!
+
 ### `setValue`
 
 ```ts
