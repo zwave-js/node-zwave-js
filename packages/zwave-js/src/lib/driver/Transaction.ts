@@ -3,6 +3,8 @@ import {
 	type ZWaveError,
 	highResTimestamp,
 	isZWaveError,
+	type TransactionProgressListener,
+	type TransactionProgress,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { noop } from "@zwave-js/shared";
@@ -37,6 +39,9 @@ export interface TransactionOptions {
 	priority: MessagePriority;
 	/** Will be resolved/rejected by the Send Thread Machine when the entire transaction is handled */
 	promise: DeferredPromise<Message | void>;
+
+	/** Gets called with progress updates for a transaction */
+	listener?: TransactionProgressListener;
 }
 
 /**
@@ -69,6 +74,10 @@ export class Transaction implements Comparable<Transaction> {
 		) {
 			(ret as any)[prop] = this[prop];
 		}
+
+		// The listener callback now lives on the clone
+		this.listener = undefined;
+
 		return ret;
 	}
 
@@ -81,6 +90,13 @@ export class Transaction implements Comparable<Transaction> {
 
 	/** The message generator to create the actual messages for this transaction */
 	public readonly parts: MessageGenerator = this.options.parts;
+
+	/** A callback which gets called with updates about this transaction */
+	private listener?: TransactionProgressListener = this.options.listener;
+
+	public notifyListener(progress: TransactionProgress): void {
+		this.listener?.(progress);
+	}
 
 	/**
 	 * Returns the current message of this transaction. This is either the currently active partial message
