@@ -30,6 +30,8 @@
 	"prettier": {
 		"associations": [
 			// Prettier formats those better
+			"package.json",
+			"**/package.json",
 			"packages/nvmedit/test/fixtures/**/*.json",
 			"**/*.yml",
 			"**/*.yaml"
