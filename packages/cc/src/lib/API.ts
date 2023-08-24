@@ -431,7 +431,7 @@ export class CCAPI {
 	}
 
 	/** Creates an instance of this API, scoped to use the given options */
-	public withOptions(options: Partial<SendCommandOptions>): this {
+	public withOptions(options: SendCommandOptions): this {
 		const mergedOptions = {
 			...this.commandOptions,
 			...options,
