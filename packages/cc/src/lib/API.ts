@@ -81,7 +81,9 @@ export type SetValueImplementationHooksFactory = (
  * Each implementation will choose the options that are relevant for it, so you can use the same options everywhere.
  * @publicAPI
  */
-export type SetValueAPIOptions = Partial<ValueChangeOptions>;
+export type SetValueAPIOptions =
+	& Partial<ValueChangeOptions>
+	& Pick<SendCommandOptions, "onProgress">;
 
 /** Used to identify the method on the CC API class that handles polling values from nodes */
 export const POLL_VALUE: unique symbol = Symbol.for("CCAPI_POLL_VALUE");
@@ -429,7 +431,7 @@ export class CCAPI {
 	}
 
 	/** Creates an instance of this API, scoped to use the given options */
-	public withOptions(options: SendCommandOptions): this {
+	public withOptions(options: Partial<SendCommandOptions>): this {
 		const mergedOptions = {
 			...this.commandOptions,
 			...options,

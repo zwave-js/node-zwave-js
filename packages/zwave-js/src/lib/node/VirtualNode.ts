@@ -161,6 +161,13 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 				});
 			}
 
+			// If the caller wants progress updates, they shall have them
+			if (typeof options?.onProgress === "function") {
+				api = api.withOptions({
+					onProgress: options.onProgress,
+				});
+			}
+
 			// And call it
 			const result = await api.setValue!.call(
 				api,
