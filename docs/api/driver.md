@@ -42,18 +42,6 @@ If supported by the controller, this instructs it to shut down the Z-Wave API, s
 
 > [!WARNING] The controller will have to be restarted manually (e.g. by unplugging and plugging it back in) before it can be used again!
 
-### `interviewNode`
-
-```ts
-interviewNode(node: ZWaveNode): Promise<void>
-```
-
-Starts or resumes the interview of a Z-Wave node.
-
-> [!WARNING] This is only allowed when the initial interview was bypassed using the `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
-
-> [!NOTE] It is advised to NOT await this method as it can take a very long time (minutes to hours)!
-
 ### `enableErrorReporting`
 
 ```ts
