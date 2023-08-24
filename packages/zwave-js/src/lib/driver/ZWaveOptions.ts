@@ -88,7 +88,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 * Disable the automatic node interview after successful inclusion.
 		 * Note: When this is `true`, the interview must be started manually using
 		 * ```ts
-		 * driver.interviewNode(node: ZWaveNode)
+		 * node.interview()
 		 * ```
 		 *
 		 * Default: `false` (automatic interviews enabled)
