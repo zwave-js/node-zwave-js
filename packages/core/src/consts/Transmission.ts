@@ -118,6 +118,7 @@ export function rssiToString(rssi: RSSI): string {
 	}
 }
 
+/** Information about the transmission as received by the controller */
 export interface TXReport {
 	/** Transmission time in ticks (multiples of 10ms) */
 	txTicks: number;
@@ -158,6 +159,11 @@ export interface TXReport {
 	/** Noise floor measured by the destination during the ACK transmission */
 	destinationAckMeasuredNoiseFloor?: RSSI;
 }
+
+/** Information about the transmission, but for serialization in mocks */
+export type SerializableTXReport =
+	& Partial<Omit<TXReport, "numRepeaters">>
+	& Pick<TXReport, "txTicks" | "routeSpeed">;
 
 export interface SendMessageOptions {
 	/** The priority of the message to send. If none is given, the defined default priority of the message class will be used. */
