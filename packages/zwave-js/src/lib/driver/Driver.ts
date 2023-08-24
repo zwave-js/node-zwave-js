@@ -4545,10 +4545,10 @@ ${handlers.length} left`,
 						// In some cases, the transmit status can be Fail, even after transmitting for a couple of seconds.
 						// Not sure what causes this, but it doesn't mean that the controller is jammed.
 						if (
-							hasTXReport(prevResult)
-							&& prevResult.transmitStatus === TransmitStatus.Fail
+							prevResult.transmitStatus === TransmitStatus.Fail
+							&& "txReport" in prevResult
 							// Ensure the controller didn't actually transmit
-							&& prevResult.txReport.txTicks === 0
+							&& prevResult.txReport?.txTicks === 0
 						) {
 							// The controller is jammed. Wait a second, then try again.
 							this.controller.setStatus(ControllerStatus.Jammed);

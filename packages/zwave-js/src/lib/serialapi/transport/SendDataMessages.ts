@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	type MulticastCC,
 	type MulticastDestination,
+	type SerializableTXReport,
 	type SinglecastCC,
 	type TXReport,
 	TransmitOptions,
@@ -34,7 +35,11 @@ import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
-import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
+import {
+	encodeTXReport,
+	parseTXReport,
+	txReportToMessageRecord,
+} from "./SendDataShared";
 
 export const MAX_SEND_ATTEMPTS = 5;
 
@@ -215,7 +220,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 	transmitStatus: TransmitStatus;
 	callbackId: number;
-	txReport?: TXReport;
+	txReport?: SerializableTXReport;
 }
 
 export class SendDataRequestTransmitReport extends SendDataRequestBase
@@ -240,18 +245,25 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 		} else {
 			this.callbackId = options.callbackId;
 			this.transmitStatus = options.transmitStatus;
+			this._txReport = options.txReport;
 		}
 	}
 
 	public transmitStatus: TransmitStatus;
+	private _txReport: SerializableTXReport | undefined;
 	public txReport: TXReport | undefined;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
 			this.callbackId,
 			this.transmitStatus,
-			// TODO: Serialize TXReport
 		]);
+		if (this._txReport) {
+			this.payload = Buffer.concat([
+				this.payload,
+				encodeTXReport(this._txReport),
+			]);
+		}
 
 		return super.serialize();
 	}

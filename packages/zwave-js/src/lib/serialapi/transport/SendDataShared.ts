@@ -2,6 +2,7 @@ import {
 	type MessageRecord,
 	type RSSI,
 	RssiError,
+	type SerializableTXReport,
 	type TXReport,
 	TransmitStatus,
 	protocolDataRateToString,
@@ -136,6 +137,44 @@ export function parseTXReport(
 	}
 
 	return stripUndefined(ret as any) as any;
+}
+
+export function encodeTXReport(report: SerializableTXReport): Buffer {
+	const ret = Buffer.alloc(24, 0);
+	ret.writeUInt16BE(report.txTicks, 0);
+	ret[2] = report.repeaterNodeIds?.length ?? 0;
+	ret.writeInt8(report.ackRSSI ?? RssiError.NotAvailable, 3);
+	for (let i = 0; i < 4; i++) {
+		ret.writeInt8(
+			report.ackRepeaterRSSI?.[i] ?? RssiError.NotAvailable,
+			4 + i,
+		);
+	}
+	ret[8] = report.ackChannelNo ?? 0;
+	ret[9] = report.txChannelNo ?? 0;
+	ret[10] = report.routeSchemeState ?? 0;
+	ret[11] = report.repeaterNodeIds?.[0] ?? 0;
+	ret[12] = report.repeaterNodeIds?.[1] ?? 0;
+	ret[13] = report.repeaterNodeIds?.[2] ?? 0;
+	ret[14] = report.repeaterNodeIds?.[3] ?? 0;
+	ret[15] = (report.beam1000ms ? 0b0100_0000 : 0)
+		| (report.beam250ms ? 0b0010_0000 : 0)
+		| report.routeSpeed;
+	ret[16] = report.routingAttempts ?? 1;
+	ret[17] = report.failedRouteLastFunctionalNodeId ?? 0;
+	ret[18] = report.failedRouteFirstNonFunctionalNodeId ?? 0;
+	ret.writeInt8(report.txPower ?? 0, 19);
+	ret.writeInt8(report.measuredNoiseFloor ?? RssiError.NotAvailable, 20);
+	ret.writeInt8(report.destinationAckTxPower ?? 0, 21);
+	ret.writeInt8(
+		report.destinationAckMeasuredRSSI ?? RssiError.NotAvailable,
+		22,
+	);
+	ret.writeInt8(
+		report.destinationAckMeasuredNoiseFloor ?? RssiError.NotAvailable,
+		23,
+	);
+	return ret;
 }
 
 export function txReportToMessageRecord(report: TXReport): MessageRecord {
