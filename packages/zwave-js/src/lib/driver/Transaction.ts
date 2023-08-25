@@ -66,6 +66,7 @@ export class Transaction implements Comparable<Transaction> {
 		for (
 			const prop of [
 				"_stack",
+				"_progress",
 				"creationTimestamp",
 				"changeNodeStatusOnTimeout",
 				"pauseSendThread",
@@ -91,11 +92,15 @@ export class Transaction implements Comparable<Transaction> {
 	/** The message generator to create the actual messages for this transaction */
 	public readonly parts: MessageGenerator = this.options.parts;
 
-	/** A callback which gets called with updates about this transaction */
+	/** A callback which gets called with state updates of this transaction */
 	private listener?: TransactionProgressListener = this.options.listener;
 
-	public notifyListener(progress: TransactionProgress): void {
-		this.listener?.(progress);
+	private _progress: TransactionProgress | undefined;
+	public setProgress(progress: TransactionProgress): void {
+		// Ignore duplicate updates
+		if (this._progress?.state === progress.state) return;
+		this._progress = progress;
+		this.listener?.({ ...progress });
 	}
 
 	/**
