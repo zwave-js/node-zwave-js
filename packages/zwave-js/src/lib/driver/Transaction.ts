@@ -1,10 +1,10 @@
 import {
 	MessagePriority,
+	type TransactionProgress,
+	type TransactionProgressListener,
 	type ZWaveError,
 	highResTimestamp,
 	isZWaveError,
-	type TransactionProgressListener,
-	type TransactionProgress,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { noop } from "@zwave-js/shared";
