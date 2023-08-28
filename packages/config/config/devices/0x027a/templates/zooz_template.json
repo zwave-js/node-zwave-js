@@ -155,8 +155,12 @@
 
 	"enable_scene_control": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Enable/Disable Scene Control",
+		"label": "Scene Control",
 		"description": "Enable or disable scene control functionality for quick double tap triggers."
+	},
+	"enable_scene_control_3way": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Scene Control: Remote 3-Way Switch"
 	},
 	"led_indicator_color": {
 		"label": "LED Indicator Color",
@@ -207,6 +211,12 @@
 				"value": 2
 			}
 		]
+	},
+	"led_confirm_config_change": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "LED Indicator: Confirm Configuration Change",
+		"description": "Disable this feature when using the LED indicators in automations.",
+		"defaultValue": 0
 	},
 	"smart_switch_mode_reporting": {
 		"label": "Smart Bulb Mode: Reporting Behavior",

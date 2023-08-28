@@ -1,8 +1,21 @@
+// The firmware versions on this device are a mess
+// 1.1 -> (10.0 = 2.0) -> (10.10 = 2.10) -> (10.20 = 2.20 = 3.10) -> 3.20
+
+// Conditionals:
+// 2.0 / 10.0 and later: firmwareVersion >= 2.0
+// 800 series: firmwareVersion >= 3.10 && firmwareVersion < 10.0
+
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN71",
-	"description": "Z-Wave Plus 700 Series ON/OFF Switch",
+	"label": [
+		{
+			"$if": "firmwareVersion >= 3.10 && firmwareVersion < 10.0",
+			"value": "ZEN71 800LR"
+		},
+		"ZEN71"
+	],
+	"description": "ON/OFF Switch",
 	"devices": [
 		{
 			"productType": "0x7000",
@@ -76,7 +89,6 @@
 		},
 		{
 			"#": "17",
-			// This parameter was added in firmware 10.0, which the 2.0 firmware is based on
 			"$if": "firmwareVersion >= 2.0",
 			"$import": "templates/zooz_template.json#local_programming"
 		}
