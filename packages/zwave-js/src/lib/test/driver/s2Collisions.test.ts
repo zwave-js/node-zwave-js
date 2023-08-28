@@ -367,7 +367,7 @@ integrationTest(
 	},
 );
 
-integrationTest.only(
+integrationTest(
 	"S2 Collisions: Node sends supervised command at the same time as the controller",
 	{
 		// Repro for #6100
