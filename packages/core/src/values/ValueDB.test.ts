@@ -606,25 +606,25 @@ test("getAllMetadata() -> returns all metadata for a given CC", (t) => {
 
 	valueDB.setMetadata(
 		{
-			commandClass: 5,
+			commandClass: 55,
 			endpoint: 2,
 			property: "3",
 		},
 		ValueMetadata.Any,
 	);
 	t.is(valueDB.getAllMetadata(1).length, 1);
-	t.is(valueDB.getAllMetadata(5).length, 1);
+	t.is(valueDB.getAllMetadata(55).length, 1);
 
 	valueDB.setMetadata(
 		{
-			commandClass: 5,
+			commandClass: 55,
 			endpoint: 2,
 			property: "5",
 		},
 		ValueMetadata.Any,
 	);
 	t.is(valueDB.getAllMetadata(1).length, 1);
-	t.is(valueDB.getAllMetadata(5).length, 2);
+	t.is(valueDB.getAllMetadata(55).length, 2);
 });
 
 test("getAllMetadata() -> should ignore values from another node", (t) => {
@@ -931,33 +931,33 @@ test("dbKeyToValueIdFast() -> should work correctly", (t) => {
 	const tests: ({ nodeId: number } & ValueID)[] = [
 		{
 			nodeId: 1,
-			commandClass: 2,
+			commandClass: 32,
 			endpoint: 3,
 			property: "4",
 			propertyKey: "5",
 		},
 		{
 			nodeId: 2,
-			commandClass: 4,
+			commandClass: 33,
 			endpoint: 7,
 			property: "44",
 			propertyKey: 6,
 		},
 		{
 			nodeId: 3,
-			commandClass: 6,
+			commandClass: 37,
 			endpoint: 11,
 			property: 48,
 			propertyKey: "8",
 		},
 		{
 			nodeId: 4,
-			commandClass: 9,
+			commandClass: 38,
 			endpoint: 17,
 			property: 48,
 			propertyKey: 9,
 		},
-		{ nodeId: 6, commandClass: 13, endpoint: 0, property: "c" },
+		{ nodeId: 6, commandClass: 1, endpoint: 0, property: "c" },
 	];
 
 	for (const test of tests) {
@@ -965,7 +965,7 @@ test("dbKeyToValueIdFast() -> should work correctly", (t) => {
 	}
 });
 
-test.only("keys that are invalid JSON should not cause a crash", (t) => {
+test("keys that are invalid JSON should not cause a crash", (t) => {
 	const valueDB = new ValueDB(
 		30,
 		new Map([
