@@ -3958,10 +3958,17 @@ ${handlers.length} left`,
 			cc.ccId === CommandClasses.Meter
 			|| cc.ccId === CommandClasses["Multilevel Sensor"]
 		) {
-			if (!node.supportsCC(cc.ccId) && !node.controlsCC(cc.ccId)) {
+			const endpoint = node.getEndpoint(cc.endpointIndex) ?? node;
+			if (
+				!endpoint.supportsCC(cc.ccId) && !endpoint.controlsCC(cc.ccId)
+			) {
 				this.controllerLog.logNode(
 					cc.nodeId as number,
-					`does not support CC ${
+					`${
+						cc.endpointIndex > 0
+							? `Endpoint ${cc.endpointIndex} `
+							: ""
+					}does not support CC ${
 						getCCName(
 							cc.ccId,
 						)

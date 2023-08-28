@@ -178,6 +178,27 @@ export function getIntegerLimits(
 	return (IntegerLimits as any)[`${signed ? "" : "U"}Int${size * 8}`];
 }
 
+export function getFloatParameters(value: number): {
+	precision: number;
+	size: number;
+	roundedValue: number;
+} {
+	const precision = Math.min(getPrecision(value), 7);
+	value = Math.round(value * Math.pow(10, precision));
+	const size: number | undefined = getMinIntegerSize(value, true);
+	if (size == undefined) {
+		throw new ZWaveError(
+			`Cannot encode the value ${value} because its too large or too small to fit into 4 bytes`,
+			ZWaveErrorCodes.Arithmetic,
+		);
+	}
+	return {
+		precision,
+		size,
+		roundedValue: value,
+	};
+}
+
 /**
  * Encodes a floating point value with a scale into a buffer
  * @param override can be used to overwrite the automatic computation of precision and size with fixed values
