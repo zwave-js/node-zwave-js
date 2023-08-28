@@ -1321,10 +1321,10 @@ export class ZWaveController
 				`Controller reports no nodes in its network. This could be an indication of a corrupted controller memory.`,
 				"warn",
 			);
-			nodeIds.push(this._ownNodeId!);
+			nodeIds.unshift(this._ownNodeId!);
 		}
 
-		for (const nodeId of initData.nodeIds) {
+		for (const nodeId of nodeIds) {
 			this._nodes.set(
 				nodeId,
 				new ZWaveNode(
