@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a regression from `v11.13.0` where `Meter CC` and `Multilevel Sensor CC` reports from an endpoint were discarded, although the endpoint did support them, but the root endpoint didn't (#6222)
+* Fixed a startup crash that happens when the controller returns an empty list of nodes (#6220)
+* Fixed an issue where API calls would be rejected early or incorrectly resolved while the driver was still retrying a command to an unresponsive node (#6219)
+* Fixed an issue where the controller would be considered jammed if it responds with a `Fail` status, even after transmitting (#6211)
+
+### Changes under the hood
+* Switched formatting from `Prettier` to the much faster `Dprint` (#6198)
+* Added a precommit hook to format files (#6205)
+* Fix type definitions in the documentation for the `"firmware update finished"` controller event (#6206)
+* Fixed an issue during documentation generation where referencing the same type definition multiple times would not work (#6207)
+* Moved the documentation for `Driver.interviewNode` to `Node.interview` (#6209)
+
 ## 11.13.0 (2023-08-22)
 ### Features
 * Auto-detected serialports now prominently include `/dev/serial/by-id/*` paths (#6182)
