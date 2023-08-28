@@ -606,14 +606,14 @@ test("getAllMetadata() -> returns all metadata for a given CC", (t) => {
 
 	valueDB.setMetadata(
 		{
-			commandClass: 50,
+			commandClass: 55,
 			endpoint: 2,
 			property: "3",
 		},
 		ValueMetadata.Any,
 	);
 	t.is(valueDB.getAllMetadata(1).length, 1);
-	t.is(valueDB.getAllMetadata(50).length, 1);
+	t.is(valueDB.getAllMetadata(55).length, 1);
 
 	valueDB.setMetadata(
 		{
