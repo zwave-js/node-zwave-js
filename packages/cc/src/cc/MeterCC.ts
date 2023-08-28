@@ -6,6 +6,8 @@ import {
 import {
 	type IZWaveEndpoint,
 	type MaybeUnknown,
+	encodeFloatWithScale,
+	getFloatParameters,
 	timespan,
 } from "@zwave-js/core";
 import {
@@ -603,73 +605,91 @@ supports reset:       ${suppResp.supportsReset}`;
 	}
 }
 
+export interface MeterCCReportOptions extends CCCommandOptions {
+	type: number;
+	scale: number;
+	value: number;
+	previousValue?: MaybeNotKnown<number>;
+	rateType?: RateType;
+	deltaTime?: MaybeUnknown<number>;
+}
+
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: CommandClassDeserializationOptions | MeterCCReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 2);
-		this._type = this.payload[0] & 0b0_00_11111;
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.type = this.payload[0] & 0b0_00_11111;
 
-		this._rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
-		const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
+			this.rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
+			const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
 
-		const {
-			scale: scale1Bits10,
-			value,
-			bytesRead,
-		} = parseFloatWithScale(this.payload.slice(1));
-		let offset = 2 + (bytesRead - 1);
-		// The scale is composed of two fields (see SDS13781)
-		const scale1 = (scale1Bit2 << 2) | scale1Bits10;
-		let scale2 = 0;
-		this._value = value;
+			const {
+				scale: scale1Bits10,
+				value,
+				bytesRead,
+			} = parseFloatWithScale(this.payload.slice(1));
+			let offset = 2 + (bytesRead - 1);
+			// The scale is composed of two fields (see SDS13781)
+			const scale1 = (scale1Bit2 << 2) | scale1Bits10;
+			let scale2 = 0;
+			this.value = value;
 
-		if (this.version >= 2 && this.payload.length >= offset + 2) {
-			this._deltaTime = this.payload.readUInt16BE(offset);
-			offset += 2;
-			if (this._deltaTime === 0xffff) {
-				this._deltaTime = UNKNOWN_STATE;
-			}
+			if (this.version >= 2 && this.payload.length >= offset + 2) {
+				this.deltaTime = this.payload.readUInt16BE(offset);
+				offset += 2;
+				if (this.deltaTime === 0xffff) {
+					this.deltaTime = UNKNOWN_STATE;
+				}
 
-			if (
+				if (
+					// 0 means that no previous value is included
+					this.deltaTime !== 0
+					&& this.payload.length >= offset + (bytesRead - 1)
+				) {
+					const { value: prevValue } = parseFloatWithScale(
+						// This float is split in the payload
+						Buffer.concat([
+							Buffer.from([this.payload[1]]),
+							this.payload.slice(offset),
+						]),
+					);
+					offset += bytesRead - 1;
+					this.previousValue = prevValue;
+				}
+				if (
+					this.version >= 4
+					&& scale1 === 7
+					&& this.payload.length >= offset + 1
+				) {
+					scale2 = this.payload[offset];
+				}
+			} else {
 				// 0 means that no previous value is included
-				this.deltaTime !== 0
-				&& this.payload.length >= offset + (bytesRead - 1)
-			) {
-				const { value: prevValue } = parseFloatWithScale(
-					// This float is split in the payload
-					Buffer.concat([
-						Buffer.from([this.payload[1]]),
-						this.payload.slice(offset),
-					]),
-				);
-				offset += bytesRead - 1;
-				this._previousValue = prevValue;
+				this.deltaTime = 0;
 			}
-			if (
-				this.version >= 4
-				&& scale1 === 7
-				&& this.payload.length >= offset + 1
-			) {
-				scale2 = this.payload[offset];
-			}
+			this.scale = scale1 === 7 ? scale1 + scale2 : scale1;
 		} else {
-			// 0 means that no previous value is included
-			this._deltaTime = 0;
+			this.type = options.type;
+			this.scale = options.scale;
+			this.value = options.value;
+			this.previousValue = options.previousValue;
+			this.rateType = options.rateType ?? RateType.Unspecified;
+			this.deltaTime = options.deltaTime ?? UNKNOWN_STATE;
 		}
-		this.scale = scale1 === 7 ? scale1 + scale2 : scale1;
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const meterType = applHost.configManager.lookupMeter(this._type);
+		const meterType = applHost.configManager.lookupMeter(this.type);
 		const scale = applHost.configManager.lookupMeterScale(
-			this._type,
+			this.type,
 			this.scale,
 		);
 
@@ -695,7 +715,7 @@ export class MeterCCReport extends MeterCC {
 				if (expectedType != undefined) {
 					validatePayload.withReason(
 						"Unexpected meter type or corrupted data",
-					)(this._type === expectedType);
+					)(this.type === expectedType);
 				}
 
 				const supportedScales = this.getValue<number[]>(
@@ -717,84 +737,103 @@ export class MeterCCReport extends MeterCC {
 						`Unsupported rate type ${
 							getEnumMemberName(
 								RateType,
-								this._rateType,
+								this.rateType,
 							)
 						} or corrupted data`,
-					)(supportedRateTypes.includes(this._rateType));
+					)(supportedRateTypes.includes(this.rateType));
 				}
 			}
 		}
 
 		const valueValue = MeterCCValues.value(
-			this._type,
-			this._rateType,
+			this.type,
+			this.rateType,
 			this.scale,
 		);
 		this.setMetadata(applHost, valueValue, {
 			...valueValue.meta,
 			label: getValueLabel(
 				applHost.configManager,
-				this._type,
+				this.type,
 				scale,
-				this._rateType,
+				this.rateType,
 			),
 			unit: scale.label,
 			ccSpecific: {
-				meterType: this._type,
+				meterType: this.type,
 				scale: this.scale,
-				rateType: this._rateType,
+				rateType: this.rateType,
 			},
 		});
-		this.setValue(applHost, valueValue, this._value);
+		this.setValue(applHost, valueValue, this.value);
 
 		return true;
 	}
 
-	private _type: number;
-	public get type(): number {
-		return this._type;
-	}
+	public type: number;
+	public scale: number;
+	public value: number;
+	public previousValue: MaybeNotKnown<number>;
+	public rateType: RateType;
+	public deltaTime: MaybeUnknown<number>;
 
-	public readonly scale: number;
+	public serialize(): Buffer {
+		const scale1 = this.scale >= 7 ? 7 : this.scale & 0b111;
+		const scale1Bits10 = scale1 & 0b11;
+		const scale1Bit2 = scale1 >>> 2;
+		const scale2 = this.scale >= 7 ? this.scale - 7 : 0;
 
-	private _value: number;
-	public get value(): number {
-		return this._value;
-	}
+		const typeByte = (this.type & 0b0_00_11111)
+			| ((this.rateType & 0b11) << 5)
+			| (scale1Bit2 << 7);
 
-	private _previousValue: MaybeNotKnown<number>;
-	public get previousValue(): MaybeNotKnown<number> {
-		return this._previousValue;
-	}
+		const floatParams = getFloatParameters(this.value);
+		const valueBytes = encodeFloatWithScale(
+			this.value,
+			scale1Bits10,
+			floatParams,
+		);
+		const prevValueBytes = this.previousValue != undefined
+			? encodeFloatWithScale(
+				this.previousValue,
+				scale1Bits10,
+				floatParams,
+			)
+			: Buffer.from([]);
 
-	private _rateType: RateType;
-	public get rateType(): RateType {
-		return this._rateType;
-	}
+		const deltaTime = this.deltaTime ?? 0xffff;
+		const deltaTimeBytes = Buffer.allocUnsafe(2);
+		deltaTimeBytes.writeUInt16BE(deltaTime, 0);
 
-	private _deltaTime: MaybeUnknown<number>;
-	public get deltaTime(): MaybeUnknown<number> {
-		return this._deltaTime;
+		this.payload = Buffer.concat([
+			Buffer.from([typeByte]),
+			valueBytes,
+			deltaTimeBytes,
+			prevValueBytes,
+			Buffer.from([scale2]),
+		]);
+
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const meterType = applHost.configManager.lookupMeter(this._type);
+		const meterType = applHost.configManager.lookupMeter(this.type);
 		const scale = applHost.configManager.lookupMeterScale(
-			this._type,
+			this.type,
 			this.scale,
 		);
 
 		const message: MessageRecord = {
-			type: meterType?.name ?? `Unknown (${num2hex(this._type)})`,
+			type: meterType?.name ?? `Unknown (${num2hex(this.type)})`,
 			scale: scale.label,
-			"rate type": getEnumMemberName(RateType, this._rateType),
+			"rate type": getEnumMemberName(RateType, this.rateType),
 			value: this.value,
 		};
-		if (this._deltaTime !== UNKNOWN_STATE) {
+		if (this.deltaTime !== UNKNOWN_STATE) {
 			message["time delta"] = `${this.deltaTime} seconds`;
 		}
-		if (this._previousValue != undefined) {
-			message["prev. value"] = this._previousValue;
+		if (this.previousValue != undefined) {
+			message["prev. value"] = this.previousValue;
 		}
 		return {
 			...super.toLogEntry(applHost),
