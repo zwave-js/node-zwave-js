@@ -3421,6 +3421,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		transaction: Transaction & {
 			message: INodeQuery;
 		},
+		error: ZWaveError,
 	): boolean {
 		const node = this.getNodeUnsafe(transaction.message);
 		if (!node) return false; // This should never happen, but whatever
@@ -3460,9 +3461,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			this.controllerLog.logNode(node.id, errorMsg, "warn");
 
 			node.markAsDead();
+
+			// There is no longer a reference to the current transaction on the queue, so we need to reject it separately.
+			transaction.abort(error);
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
-			// The above call will reject the transaction, no need to do it again
-			return false;
+
+			return true;
 		}
 	}
 
@@ -4565,10 +4569,6 @@ ${handlers.length} left`,
 						}
 
 						if (!prevResult.isOK()) {
-							// The node did not acknowledge the command. Convert this into an
-							// error so it can be handled and abort the generator so it can be reset
-							transaction.abort(prevResult);
-
 							throw new ZWaveError(
 								"The node did not acknowledge the command",
 								ZWaveErrorCodes.Controller_CallbackNOK,
@@ -5425,7 +5425,7 @@ ${handlers.length} left`,
 	): void {
 		// If a node failed to respond in time, it might be sleeping
 		if (this.isMissingNodeACK(transaction, error)) {
-			if (this.handleMissingNodeACK(transaction as any)) return;
+			if (this.handleMissingNodeACK(transaction as any, error)) return;
 		}
 
 		transaction.abort(error);
