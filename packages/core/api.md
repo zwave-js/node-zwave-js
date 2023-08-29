@@ -1020,6 +1020,15 @@ export function getDSTInfo(now?: Date): DSTInfo;
 // @public (undocumented)
 export function getErrorSuffix(code: ZWaveErrorCodes): string;
 
+// Warning: (ae-missing-release-tag) "getFloatParameters" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getFloatParameters(value: number): {
+    precision: number;
+    size: number;
+    roundedValue: number;
+};
+
 // Warning: (ae-missing-release-tag) "getHighestSecurityClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2293,6 +2302,11 @@ export interface SendMessageOptions {
 // @public
 export const sensorCCs: readonly CommandClasses[];
 
+// Warning: (ae-missing-release-tag) "SerializableTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type SerializableTXReport = Partial<Omit<TXReport, "numRepeaters">> & Pick<TXReport, "txTicks" | "routeSpeed">;
+
 // Warning: (ae-missing-release-tag) "serializeCacheValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -2553,7 +2567,7 @@ export function tryParseDSKFromQRCodeString(qr: string): string | undefined;
 
 // Warning: (ae-missing-release-tag) "TXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public
 export interface TXReport {
     ackChannelNo?: number;
     ackRepeaterRSSI?: [RSSI?, RSSI?, RSSI?, RSSI?];

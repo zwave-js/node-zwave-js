@@ -10099,23 +10099,26 @@ export class MeterCCGet extends MeterCC {
 //
 // @public (undocumented)
 export class MeterCCReport extends MeterCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "MeterCCReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MeterCCReportOptions);
     // (undocumented)
-    get deltaTime(): MaybeUnknown_2<number>;
+    deltaTime: MaybeUnknown_2<number>;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
-    get previousValue(): MaybeNotKnown<number>;
+    previousValue: MaybeNotKnown<number>;
     // (undocumented)
-    get rateType(): RateType;
+    rateType: RateType;
     // (undocumented)
-    readonly scale: number;
+    scale: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
-    get type(): number;
+    type: number;
     // (undocumented)
-    get value(): number;
+    value: number;
 }
 
 // Warning: (ae-missing-release-tag) "MeterCCReset" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
