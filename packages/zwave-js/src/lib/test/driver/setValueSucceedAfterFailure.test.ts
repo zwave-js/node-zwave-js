@@ -11,10 +11,12 @@ import {
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
+// Repro for https://github.com/home-assistant/core/issues/98491
+
 integrationTest(
 	"setValue calls resolve on success after the first attempt failed",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			commandClasses: [
