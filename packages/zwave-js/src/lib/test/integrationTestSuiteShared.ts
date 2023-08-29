@@ -35,7 +35,7 @@ export function prepareDriver(
 					),
 					logToFile: true,
 					enabled: true,
-					level: "debug",
+					level: additionalOptions.logConfig?.level ?? "debug",
 				},
 			}
 			: {}),
