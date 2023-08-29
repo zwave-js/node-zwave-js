@@ -1087,6 +1087,7 @@ export class ZWaveNode extends Endpoint
 
 			if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
+					endpoint: valueId.endpoint,
 					message:
 						`[setValue] calling SET_VALUE API ${api.constructor.name}:
   property:     ${valueId.property}
@@ -1154,6 +1155,7 @@ export class ZWaveNode extends Endpoint
 					message += " undefined";
 				}
 				this.driver.controllerLog.logNode(this.id, {
+					endpoint: valueId.endpoint,
 					message,
 					level: "silly",
 				});
@@ -1174,6 +1176,7 @@ export class ZWaveNode extends Endpoint
 						? "updating value with event"
 						: "updating value without event";
 					this.driver.controllerLog.logNode(this.id, {
+						endpoint: valueId.endpoint,
 						message: `[setValue] ${message}`,
 						level: "silly",
 					});
@@ -1194,6 +1197,7 @@ export class ZWaveNode extends Endpoint
 				this._valueDB.setValue(valueId, value, options);
 			} else if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
+					endpoint: valueId.endpoint,
 					message: `[setValue] not updating value`,
 					level: "silly",
 				});
@@ -1259,6 +1263,7 @@ export class ZWaveNode extends Endpoint
 
 				if (loglevel === "silly") {
 					this.driver.controllerLog.logNode(this.id, {
+						endpoint: valueId.endpoint,
 						message: `[setValue] raised ZWaveError (${
 							!!result ? "handled" : "not handled"
 						}, code ${
