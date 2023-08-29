@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/node";
 import {
 	type CommandClass,
 	isCommandClassContainer,
@@ -184,12 +183,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 				direction: getDirectionPrefix(direction),
 				context: { source: "driver", direction },
 			});
-		} catch (e) {
-			// When logging fails, send the message to Sentry
-			try {
-				Sentry.captureException(e);
-			} catch {}
-		}
+		} catch {}
 	}
 
 	/** Logs what's currently in the driver's send queue */

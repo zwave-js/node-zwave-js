@@ -1,3 +1,5 @@
+<!-- TODO: This is no longer true -->
+
 # Using telemetry data to create config files
 
 We use [Sentry](https://sentry.io) to capture basic information about devices that were successfully interviewed but have no config file. These often have suboptimal labels that we can improve on (or no information at all). The reports include the following fields.

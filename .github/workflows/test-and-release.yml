@@ -458,16 +458,16 @@ jobs:
         prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
         body: ${{ steps.extract_release.outputs.BODY }}
 
-    - name: Notify Sentry.io about the release
-      run: |
-        npm i -g @sentry/cli
-        export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-        export SENTRY_URL=https://sentry.iobroker.net
-        export SENTRY_ORG=iobroker
-        export SENTRY_PROJECT=zwave-js
-        export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
-        sentry-cli releases new $SENTRY_VERSION
-        # Commits disabled until the Github integration can be enabled
-        sentry-cli releases set-commits $SENTRY_VERSION --auto
-        sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
-        sentry-cli releases finalize $SENTRY_VERSION
+    # - name: Notify Sentry.io about the release
+    #   run: |
+    #     npm i -g @sentry/cli
+    #     export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+    #     export SENTRY_URL=https://sentry.iobroker.net
+    #     export SENTRY_ORG=iobroker
+    #     export SENTRY_PROJECT=zwave-js
+    #     export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
+    #     sentry-cli releases new $SENTRY_VERSION
+    #     # Commits disabled until the Github integration can be enabled
+    #     sentry-cli releases set-commits $SENTRY_VERSION --auto
+    #     sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
+    #     sentry-cli releases finalize $SENTRY_VERSION

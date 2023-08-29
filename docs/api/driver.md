@@ -42,16 +42,6 @@ If supported by the controller, this instructs it to shut down the Z-Wave API, s
 
 > [!WARNING] The controller will have to be restarted manually (e.g. by unplugging and plugging it back in) before it can be used again!
 
-### `enableErrorReporting`
-
-```ts
-enableErrorReporting(): void
-```
-
-Enable sending crash reports using [Sentry](https://sentry.io). These reports are important for quickly discovering unhandled errors in the library, so we **we kindly ask you** to enable them. Please do **not** enable them in dev environments where frequent errors are to be expected.
-
-> [!NOTE] Sentry registers a global `unhandledRejection` event handler, which has an influence how the application will behave in case of an unhandled rejection. This can affect applications on Node.js before `v15`, which are going to crash instead of logging a warning.
-
 ### `enableStatistics`
 
 ```ts
