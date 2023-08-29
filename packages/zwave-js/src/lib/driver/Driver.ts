@@ -1,5 +1,4 @@
 import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
-import * as Sentry from "@sentry/node";
 import {
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
@@ -183,7 +182,6 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
-import { initSentry } from "../telemetry/sentry";
 import {
 	type AppInfo,
 	compileStatistics,
@@ -1818,22 +1816,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		});
 	}
 
-	/**
-	 * Enables error reporting via Sentry. This is turned off by default, because it registers a
-	 * global `unhandledRejection` event handler, which has an influence how the application will
-	 * behave in case of an unhandled rejection.
-	 */
+	/** @deprecated This does nothing */
 	public enableErrorReporting(): void {
-		// Init sentry, unless we're running a a test or some custom-built userland or PR test versions
-		if (
-			process.env.NODE_ENV !== "test"
-			&& !/\-[a-f0-9]{7,}$/.test(libVersion)
-			&& !/\-pr\-\d+\-$/.test(libVersion)
-		) {
-			void initSentry(libraryRootDir, libName, libVersion).catch(() => {
-				/* ignore */
-			});
-		}
+		// Intentionally empty
 	}
 
 	private _statisticsEnabled: boolean = false;
@@ -3086,34 +3071,17 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				}
 			}
 
-			try {
-				if (!wasMessageLogged) {
+			if (!wasMessageLogged) {
+				try {
 					this.driverLog.logMessage(msg, {
 						direction: "inbound",
 					});
+				} catch (e) {
+					// We shouldn't throw just because logging a message fails
+					this.driverLog.print(
+						`Logging a message failed: ${getErrorMessage(e)}`,
+					);
 				}
-
-				if (process.env.NODE_ENV !== "test") {
-					// Enrich error data in case something goes wrong
-					Sentry.addBreadcrumb({
-						category: "message",
-						timestamp: Date.now() / 1000,
-						type: "debug",
-						data: {
-							direction: "inbound",
-							msgType: msg.type,
-							functionType: msg.functionType,
-							name: msg.constructor.name,
-							nodeId: msg.getNodeId(),
-							...msg.toLogEntry(),
-						},
-					});
-				}
-			} catch (e) {
-				// We shouldn't throw just because logging a message fails
-				this.driverLog.print(
-					`Logging a message failed: ${getErrorMessage(e)}`,
-				);
 			}
 
 			// Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
@@ -4756,22 +4724,6 @@ ${handlers.length} left`,
 					this.driverLog.logMessage(msg, {
 						direction: "outbound",
 					});
-					if (process.env.NODE_ENV !== "test") {
-						// Enrich error data in case something goes wrong
-						Sentry.addBreadcrumb({
-							category: "message",
-							timestamp: Date.now() / 1000,
-							type: "debug",
-							data: {
-								direction: "outbound",
-								msgType: msg.type,
-								functionType: msg.functionType,
-								name: msg.constructor.name,
-								nodeId: msg.getNodeId(),
-								...msg.toLogEntry(),
-							},
-						});
-					}
 				},
 			},
 			pick(this._options, ["timeouts", "attempts"]),

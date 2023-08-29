@@ -12,14 +12,14 @@ We use [Sentry](https://sentry.io) for automatic crash reporting. We self-host o
 - A fingerprint which is **randomly generated** during the installation. This is used to gauge how many users an issue affects (and to quickly ignore crashes caused by devs who are just messing around).
 - A Node.js stacktrace including an error message and the function calls which lead to the error.
 
-## Device telemetry
+<!-- ## Device telemetry
 
 We also use [Sentry](https://sentry.io) to capture basic information about devices that were successfully interviewed but have no config file. These often have suboptimal labels that we can improve on (or no information at all). The reports include the following data:
 
 - Whether the device supports `Configuration CC V3+` - if yes, the discovered metadata for the config parameters is recorded
 - Whether the device supports `Association Group Information CC` - if yes, the discovered association group labels are recorded
 - Whether the device supports `Z-Wave Plus` and if yes, which version of the standard it implements
-- A fingerprint which is **randomly generated** during the installation. This is used to gauge how many users have this device.
+- A fingerprint which is **randomly generated** during the installation. This is used to gauge how many users have this device. -->
 
 ## Usage statistics
 

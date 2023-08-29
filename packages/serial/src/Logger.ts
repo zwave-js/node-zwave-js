@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/node";
 import {
 	type DataDirection,
 	type ZWaveLogContainer,
@@ -106,15 +105,6 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 					source: "serial",
 					direction,
 				},
-			});
-		}
-		if (process.env.NODE_ENV !== "test") {
-			// Enrich error data in case something goes wrong
-			Sentry.addBreadcrumb({
-				category: "serial",
-				timestamp: Date.now() / 1000,
-				type: "debug",
-				message: `${getDirectionPrefix(direction)}${buffer2hex(data)}`,
 			});
 		}
 	}
