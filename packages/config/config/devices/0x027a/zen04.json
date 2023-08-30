@@ -1,7 +1,19 @@
+// Firmware versions
+// 1.10 -> 1.20 -> (1.30 = 2.10)
+
+// Conditionals:
+// 800 series: firmwareVersion >= 2.10
+
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN04",
+	"label": [
+		{
+			"$if": "firmwareVersion >= 2.10",
+			"value": "ZEN04 800LR"
+		},
+		"ZEN04"
+	],
 	"description": "Indoor Smart Plug",
 	"devices": [
 		{
