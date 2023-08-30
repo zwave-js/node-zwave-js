@@ -3454,6 +3454,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			node.markAsDead();
 
 			// There is no longer a reference to the current transaction on the queue, so we need to reject it separately.
+			transaction.setProgress({
+				state: TransactionState.Failed,
+				reason: errorMsg,
+			});
+
 			transaction.abort(error);
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
 
