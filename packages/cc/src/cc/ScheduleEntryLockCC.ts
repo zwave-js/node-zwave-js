@@ -315,6 +315,19 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			}
 		}
 
+		if (schedule) {
+			if (
+				schedule.stopHour < schedule.startHour
+				|| schedule.stopHour === schedule.startHour
+					&& schedule.stopMinute <= schedule.startMinute
+			) {
+				throw new ZWaveError(
+					`The stop time must be after the start time.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+
 		const cc = new ScheduleEntryLockCCWeekDayScheduleSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -414,6 +427,29 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			if (slot.slotId < 1 || slot.slotId > numSlots) {
 				throw new ZWaveError(
 					`The schedule slot # must be between 1 and the number of supported day-of-year slots ${numSlots}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+
+		if (schedule) {
+			const startDate = new Date(
+				schedule.startYear,
+				schedule.startMonth - 1,
+				schedule.startDay,
+				schedule.startHour,
+				schedule.startMinute,
+			);
+			const stopDate = new Date(
+				schedule.stopYear,
+				schedule.stopMonth - 1,
+				schedule.stopDay,
+				schedule.stopHour,
+				schedule.stopMinute,
+			);
+			if (stopDate <= startDate) {
+				throw new ZWaveError(
+					`The stop date must be after the start date.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
