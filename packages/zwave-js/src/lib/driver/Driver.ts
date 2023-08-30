@@ -72,6 +72,7 @@ import {
 	type SupervisionResult,
 	SupervisionStatus,
 	type SupervisionUpdateHandler,
+	TransactionState,
 	TransmitOptions,
 	TransmitStatus,
 	type ValueDB,
@@ -3453,6 +3454,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			node.markAsDead();
 
 			// There is no longer a reference to the current transaction on the queue, so we need to reject it separately.
+			transaction.setProgress({
+				state: TransactionState.Failed,
+				reason: errorMsg,
+			});
+
 			transaction.abort(error);
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
 
@@ -4529,6 +4535,7 @@ ${handlers.length} left`,
 		let msg: Message | undefined;
 
 		transaction.start();
+		transaction.setProgress({ state: TransactionState.Active });
 
 		// Step through the transaction as long as it gives us a next message
 		while ((msg = await transaction.generateNextMessage(prevResult))) {
@@ -4589,6 +4596,10 @@ ${handlers.length} left`,
 							// This transaction was aborted by the driver due to a controller timeout.
 							// Rejections, re-queuing etc. have been handled, so just drop it silently and
 							// continue with the next message
+							transaction.setProgress({
+								state: TransactionState.Failed,
+								reason: "Aborted due to controller timeout",
+							});
 							return;
 						} else if (
 							isSendData(msg)
@@ -4622,7 +4633,8 @@ ${handlers.length} left`,
 			}
 		}
 
-		// This transaction is finished, try the next one
+		// This transaction completed successfully, try the next one
+		transaction.setProgress({ state: TransactionState.Completed });
 	}
 
 	/** Handles sequencing of queued Serial API commands */
@@ -4879,6 +4891,7 @@ ${handlers.length} left`,
 			priority: options.priority,
 			parts: generator,
 			promise: resultPromise,
+			listener: options.onProgress,
 		});
 
 		// Configure its options
@@ -4898,6 +4911,7 @@ ${handlers.length} left`,
 		} else {
 			this.queue.add(transaction);
 		}
+		transaction.setProgress({ state: TransactionState.Queued });
 
 		// If the transaction should expire, start the timeout
 		let expirationTimeout: NodeJS.Timeout | undefined;
@@ -4945,6 +4959,9 @@ ${handlers.length} left`,
 			if (maybeSendToSleep && node && node.canSleep && !node.keepAwake) {
 				setImmediate(() => this.debounceSendNodeToSleep(node!));
 			}
+
+			// Set the transaction progress to completed before resolving the Promise
+			transaction.setProgress({ state: TransactionState.Completed });
 
 			return result;
 		} catch (e) {
@@ -5409,6 +5426,11 @@ ${handlers.length} left`,
 			if (this.handleMissingNodeACK(transaction as any, error)) return;
 		}
 
+		transaction.setProgress({
+			state: TransactionState.Failed,
+			reason: error.message,
+		});
+
 		transaction.abort(error);
 	}
 
@@ -5541,6 +5563,13 @@ ${handlers.length} left`,
 				case "drop":
 					if (source === "queue") {
 						dropQueued.push(transaction);
+
+						// This will silently drop the transaction, so awaiting it will never resolve.
+						// At least notify the listeners about it.
+						transaction.setProgress({
+							state: TransactionState.Failed,
+							reason: "The message was dropped",
+						});
 					} else {
 						stopActive = transaction;
 					}
@@ -5592,7 +5621,13 @@ ${handlers.length} left`,
 
 		// Now we know what to do with the transactions
 		queue.remove(...dropQueued, ...requeue);
-		queue.add(...requeue.map((t) => t.clone()));
+		const requeued = requeue.map((t) => t.clone());
+		queue.add(...requeued);
+
+		// Notify listeners about re-queued transactions
+		for (const t of requeued) {
+			t.setProgress({ state: TransactionState.Queued });
+		}
 
 		// Abort ongoing SendData messages that should be dropped
 		if (isSendData(stopActive?.message)) {

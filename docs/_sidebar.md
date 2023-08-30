@@ -55,7 +55,7 @@
   - [File format](config-files/file-format.md)
   - [Contributing device files](config-files/contributing-files.md)
   - [Importing files from other sources](config-files/importing-from-others.md)
-  - [Using telemetry data](config-files/using-telemetry-data.md)
+  <!-- - [Using telemetry data](config-files/using-telemetry-data.md) -->
   - [Style guide](config-files/style-guide.md)
   - [Conditional parameters and settings](config-files/conditional-settings.md)
   - [Using templates](config-files/using-templates.md)

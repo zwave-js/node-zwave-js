@@ -1,5 +1,7 @@
 import {
 	MessagePriority,
+	type TransactionProgress,
+	type TransactionProgressListener,
 	type ZWaveError,
 	highResTimestamp,
 	isZWaveError,
@@ -37,6 +39,9 @@ export interface TransactionOptions {
 	priority: MessagePriority;
 	/** Will be resolved/rejected by the Send Thread Machine when the entire transaction is handled */
 	promise: DeferredPromise<Message | void>;
+
+	/** Gets called with progress updates for a transaction */
+	listener?: TransactionProgressListener;
 }
 
 /**
@@ -61,6 +66,7 @@ export class Transaction implements Comparable<Transaction> {
 		for (
 			const prop of [
 				"_stack",
+				"_progress",
 				"creationTimestamp",
 				"changeNodeStatusOnTimeout",
 				"pauseSendThread",
@@ -69,6 +75,10 @@ export class Transaction implements Comparable<Transaction> {
 		) {
 			(ret as any)[prop] = this[prop];
 		}
+
+		// The listener callback now lives on the clone
+		this.listener = undefined;
+
 		return ret;
 	}
 
@@ -81,6 +91,17 @@ export class Transaction implements Comparable<Transaction> {
 
 	/** The message generator to create the actual messages for this transaction */
 	public readonly parts: MessageGenerator = this.options.parts;
+
+	/** A callback which gets called with state updates of this transaction */
+	private listener?: TransactionProgressListener = this.options.listener;
+
+	private _progress: TransactionProgress | undefined;
+	public setProgress(progress: TransactionProgress): void {
+		// Ignore duplicate updates
+		if (this._progress?.state === progress.state) return;
+		this._progress = progress;
+		this.listener?.({ ...progress });
+	}
 
 	/**
 	 * Returns the current message of this transaction. This is either the currently active partial message
