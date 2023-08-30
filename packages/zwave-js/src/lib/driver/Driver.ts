@@ -1506,8 +1506,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			const nodeInterviewOrder = [...this._controller.nodes.values()]
 				.filter((n) => n.id !== this._controller!.ownNodeId)
 				.sort((a, b) =>
-					// Listening devices first
-					(
+					// Fully-interviewed devices first (need the least amount of communication now)
+					(b.interviewStage - a.interviewStage)
+					// Always listening -> FLiRS -> sleeping
+					|| (
 						(b.isListening ? 2 : b.isFrequentListening ? 1 : 0)
 						- (a.isListening ? 2 : a.isFrequentListening ? 1 : 0)
 					)
@@ -1516,7 +1518,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 						(b.lastSeen?.getTime() ?? 0)
 						- (a.lastSeen?.getTime() ?? 0)
 					)
-					// Then ascending by node ID
+					// Lastly ascending by node ID
 					|| (a.nodeId - b.nodeId)
 				);
 
