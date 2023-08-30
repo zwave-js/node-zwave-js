@@ -4955,6 +4955,9 @@ ${handlers.length} left`,
 				setImmediate(() => this.debounceSendNodeToSleep(node!));
 			}
 
+			// Set the transaction progress to completed before resolving the Promise
+			transaction.setProgress({ state: TransactionState.Completed });
+
 			return result;
 		} catch (e) {
 			if (isZWaveError(e)) {
@@ -5556,7 +5559,8 @@ ${handlers.length} left`,
 					if (source === "queue") {
 						dropQueued.push(transaction);
 
-						// This transaction isn't active, so `executeTransaction` will not notify the listeners. Need to do it here.
+						// This will silently drop the transaction, so awaiting it will never resolve.
+						// At least notify the listeners about it.
 						transaction.setProgress({
 							state: TransactionState.Failed,
 							reason: "The message was dropped",
@@ -5580,10 +5584,10 @@ ${handlers.length} left`,
 					if (source === "queue") {
 						dropQueued.push(transaction);
 
-						// This transaction isn't active, so `executeTransaction` will not notify the listeners. Need to do it here.
-						transaction.setProgress({
-							state: TransactionState.Completed,
-						});
+						// // This transaction isn't active, so `executeTransaction` will not notify the listeners. Need to do it here.
+						// transaction.setProgress({
+						// 	state: TransactionState.Completed,
+						// });
 					} else {
 						stopActive = transaction;
 					}
@@ -5600,12 +5604,6 @@ ${handlers.length} left`,
 					);
 					if (source === "queue") {
 						dropQueued.push(transaction);
-
-						// This transaction isn't active, so `executeTransaction` will not notify the listeners. Need to do it here.
-						transaction.setProgress({
-							state: TransactionState.Failed,
-							reason: reducerResult.message,
-						});
 					} else {
 						stopActive = transaction;
 					}
