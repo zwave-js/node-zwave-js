@@ -1499,12 +1499,36 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this._controller.ownNodeId!,
 			)!;
 			await this.interviewNodeInternal(controllerNode);
+			// The controller node is always alive
+			controllerNode.markAsAlive();
 
-			// Then do all the nodes in parallel
-			for (const node of this._controller.nodes.values()) {
+			// Then do all the nodes in parallel, but prioritize nodes that are more likely to be ready
+			const nodeInterviewOrder = [...this._controller.nodes.values()]
+				.filter((n) => n.id !== this._controller!.ownNodeId)
+				.sort((a, b) =>
+					// Fully-interviewed devices first (need the least amount of communication now)
+					(b.interviewStage - a.interviewStage)
+					// Always listening -> FLiRS -> sleeping
+					|| (
+						(b.isListening ? 2 : b.isFrequentListening ? 1 : 0)
+						- (a.isListening ? 2 : a.isFrequentListening ? 1 : 0)
+					)
+					// Then by last seen, more recently first
+					|| (
+						(b.lastSeen?.getTime() ?? 0)
+						- (a.lastSeen?.getTime() ?? 0)
+					)
+					// Lastly ascending by node ID
+					|| (a.id - b.id)
+				);
+
+			this.controllerLog.print(
+				`Interviewing nodes and/or determining their status: ${
+					nodeInterviewOrder.map((n) => n.id).join(", ")
+				}`,
+			);
+			for (const node of nodeInterviewOrder) {
 				if (node.id === this._controller.ownNodeId) {
-					// The controller is always alive
-					node.markAsAlive();
 					continue;
 				} else if (node.canSleep) {
 					// A node that can sleep should be assumed to be sleeping after resuming from cache
@@ -1515,8 +1539,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					// Continue the interview if necessary. If that is not necessary, at least
 					// determine the node's status
 					if (node.interviewStage < InterviewStage.Complete) {
-						// don't await the interview, because it may take a very long time
-						// if a node is asleep
 						await this.interviewNodeInternal(node);
 					} else if (node.isListening || node.isFrequentListening) {
 						// Ping non-sleeping nodes to determine their status
