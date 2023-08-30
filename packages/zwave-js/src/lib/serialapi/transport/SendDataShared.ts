@@ -6,6 +6,7 @@ import {
 	type TXReport,
 	TransmitStatus,
 	protocolDataRateToString,
+	routingSchemeToString,
 	rssiToString,
 	stripUndefined,
 } from "@zwave-js/core/safe";
@@ -190,6 +191,7 @@ export function txReportToMessageRecord(report: TXReport): MessageRecord {
 			: {}),
 		"routing attempts": report.routingAttempts,
 		"protocol & route speed": protocolDataRateToString(report.routeSpeed),
+		"routing scheme": routingSchemeToString(report.routeSchemeState),
 		"ACK RSSI": report.ackRSSI != undefined
 			? rssiToString(report.ackRSSI)
 			: undefined,
