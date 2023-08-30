@@ -1,8 +1,8 @@
-import { TransactionState } from "@zwave-js/core";
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { wait as _wait } from "alcalzone-shared/async";
 import path from "path";
 import "reflect-metadata";
-import { Driver, getEnumMemberName } from "zwave-js";
+import { Driver } from "zwave-js";
 
 const wait = _wait;
 
@@ -10,11 +10,11 @@ process.on("unhandledRejection", (_r) => {
 	debugger;
 });
 
-const port = "tcp://Z-Net-R2v2.local:2001";
+// const port = "tcp://Z-Net-R2v2.local:2001";
 // 500/700 series
-// const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
+// const port = require("os").platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 // 800 series
-// const port = os.platform() === "win32" ? "COM5" : "/dev/ttyACM0";
+const port = require("os").platform() === "win32" ? "COM5" : "/dev/ttyACM0";
 
 const driver = new Driver(port, {
 	// logConfig: {
@@ -48,20 +48,7 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-
-		const node = driver.controller.nodes.get(12)!;
-		node.once("ready", async () => {
-			await wait(3000);
-			await node.commandClasses["No Operation"]
-				.withOptions({
-					onProgress: (progress) => {
-						console.log(
-							getEnumMemberName(TransactionState, progress.state),
-						);
-					},
-				}).send();
-			console.log("promise resolved");
-		});
+		await wait(2000);
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader
