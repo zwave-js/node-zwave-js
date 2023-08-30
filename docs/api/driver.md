@@ -470,8 +470,12 @@ interface SendMessageOptions {
 	 * For multi-stage messages, the callback may be called multiple times.
 	 */
 	onTXReport?: (report: TXReport) => void;
+	/** Will be called when the transaction for this message progresses. */
+	onProgress?: TransactionProgressListener;
 }
 ```
+
+#### Priority
 
 The message priority must one of the following enum values, which are sorted from high (0) to low (> 0). Consuming applications typically don't need to overwrite the priority.
 
@@ -511,6 +515,46 @@ enum MessagePriority {
 > DO NOT rely on the numeric values of the enum if you're using it in your application.
 > The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
 
+#### Transaction progress
+
+The `onProgress` callback can be used to track the progress of a command/transaction and has the following shape:
+
+```ts
+type TransactionProgressListener = (progress: TransactionProgress) => void;
+```
+
+Whenever the transaction's progresses, it will be called with the current state:
+
+```ts
+type TransactionProgress = {
+	state: TransactionState;
+	/**
+	 * Why the transaction failed.
+	 * Only present when `state` is `TransactionState.Failed`, but optional.
+	 */
+	reason?: string;
+};
+```
+
+The following states are possible:
+
+<!-- #import TransactionState from "@zwave-js/core" -->
+
+```ts
+enum TransactionState {
+	/** The transaction is currently queued */
+	Queued,
+	/** The transaction is currently being handled */
+	Active,
+	/** The transaction was completed */
+	Completed,
+	/** The transaction failed */
+	Failed,
+}
+```
+
+#### Transmit status reports
+
 TX status reports are supported by the more modern controllers and contain details about the message transmission to other nodes, e.g. routing attempts, RSSI, speed, etc.:
 
 <!-- #import TXReport from "zwave-js" -->
@@ -529,8 +573,8 @@ interface TXReport {
 	ackChannelNo?: number;
 	/** Channel number used to transmit the data */
 	txChannelNo: number;
-	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. */
-	routeSchemeState: number;
+	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. Z-Wave JS uses the Silicon Labs interpretation. */
+	routeSchemeState: RoutingScheme;
 	/** Node IDs of the repeater 0..3 used in the route. */
 	repeaterNodeIds: [number?, number?, number?, number?];
 	/** Whether the destination requires a 1000ms beam to be reached */

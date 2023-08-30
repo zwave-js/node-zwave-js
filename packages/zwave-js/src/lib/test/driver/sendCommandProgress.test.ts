@@ -109,7 +109,7 @@ integrationTest(
 			await promise;
 
 			await wait(200);
-		
+
 			t.deepEqual(states, [
 				TransactionState.Queued,
 				TransactionState.Active,

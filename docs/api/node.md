@@ -92,11 +92,19 @@ It method takes the following arguments:
 - `options?: SetValueAPIOptions` - Optional options for the resulting commands
 
 The `options` bag contains options that influence the resulting commands, for example a transition duration. Each implementation will choose the options that are relevant for it, so you can use the same options everywhere.
+In addition, the `onProgress` property can be used to get notified when the transaction for this command progresses. For details see [Transaction progress](api/driver.md#transaction-progress).
 
-<!-- #import SetValueAPIOptions from "zwave-js" -->
+<!-- TODO: Auto-Expand this type: #import SetValueAPIOptions from "zwave-js" -->
 
 ```ts
-type SetValueAPIOptions = Partial<ValueChangeOptions>;
+type SetValueAPIOptions = {
+	/** A duration to be used for transitions like dimming lights or activating scenes. */
+	transitionDuration?: Duration | string;
+	/** A volume level to be used for activating a Sound Switch CC. */
+	volume?: number;
+	/** Will be called when the transaction for this message progresses. */
+	onProgress?: TransactionProgressListener;
+};
 ```
 
 > [!ATTENTION] By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call is enough for the application to know that the value was changed and update its own cache or UI. Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
