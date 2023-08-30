@@ -1519,7 +1519,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 						- (a.lastSeen?.getTime() ?? 0)
 					)
 					// Lastly ascending by node ID
-					|| (a.nodeId - b.nodeId)
+					|| (a.id - b.id)
 				);
 
 			this.controllerLog.print(
