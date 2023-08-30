@@ -5588,11 +5588,6 @@ ${handlers.length} left`,
 					this.resolveTransaction(transaction, reducerResult.message);
 					if (source === "queue") {
 						dropQueued.push(transaction);
-
-						// // This transaction isn't active, so `executeTransaction` will not notify the listeners. Need to do it here.
-						// transaction.setProgress({
-						// 	state: TransactionState.Completed,
-						// });
 					} else {
 						stopActive = transaction;
 					}
