@@ -1502,7 +1502,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			// The controller node is always alive
 			controllerNode.markAsAlive();
 
-			// Then do all the nodes in parallel, but prioritize nodes that have more recently been in contact with the controller
+			// Then do all the nodes in parallel, but prioritize nodes that are more likely to be ready
 			const nodeInterviewOrder = [...this._controller.nodes.values()]
 				.filter((n) => n.id !== this._controller!.ownNodeId)
 				.sort((a, b) =>
