@@ -1,3 +1,4 @@
+import { num2hex } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
@@ -118,6 +119,46 @@ export function rssiToString(rssi: RSSI): string {
 	}
 }
 
+/**
+ * How the controller transmitted a frame to a node.
+ */
+export enum RoutingScheme {
+	Idle,
+	Direct,
+	Priority,
+	LWR,
+	NLWR,
+	Auto,
+	ResortDirect,
+	Explore,
+}
+
+/**
+ * Converts a routing scheme value to a human readable format.
+ */
+export function routingSchemeToString(scheme: RoutingScheme): string {
+	switch (scheme) {
+		case RoutingScheme.Idle:
+			return "Idle";
+		case RoutingScheme.Direct:
+			return "Direct";
+		case RoutingScheme.Priority:
+			return "Priority Route";
+		case RoutingScheme.LWR:
+			return "LWR";
+		case RoutingScheme.NLWR:
+			return "NLWR";
+		case RoutingScheme.Auto:
+			return "Auto Route";
+		case RoutingScheme.ResortDirect:
+			return "Resort to Direct";
+		case RoutingScheme.Explore:
+			return "Explorer Frame";
+		default:
+			return `Unknown (${num2hex(scheme)})`;
+	}
+}
+
 /** Information about the transmission as received by the controller */
 export interface TXReport {
 	/** Transmission time in ticks (multiples of 10ms) */
@@ -132,8 +173,8 @@ export interface TXReport {
 	ackChannelNo?: number;
 	/** Channel number used to transmit the data */
 	txChannelNo: number;
-	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. */
-	routeSchemeState: number;
+	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. Z-Wave JS uses the Silicon Labs interpretation. */
+	routeSchemeState: RoutingScheme;
 	/** Node IDs of the repeater 0..3 used in the route. */
 	repeaterNodeIds: [number?, number?, number?, number?];
 	/** Whether the destination requires a 1000ms beam to be reached */
