@@ -6513,7 +6513,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 
 		// If it was, a change in hash means the config has changed
 		if (actualHash && this.deviceConfigHash) {
-			return actualHash.equals(this.deviceConfigHash);
+			return !actualHash.equals(this.deviceConfigHash);
 		}
 		return true;
 	}
