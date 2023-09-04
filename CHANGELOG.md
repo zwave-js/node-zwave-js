@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.14.0 (2023-09-04)
 ### Features
 * `Driver.sendCommand`, `Driver.sendMessage` and `Node.setValue` now accept an optional callback as part of the options that will be called with the transaction progress (queued, active, failed, complete) (#6212)
 * Optimized the order of node communication during startup to ensure responsive nodes are ready first (#6233)
