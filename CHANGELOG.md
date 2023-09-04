@@ -4,6 +4,26 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* `Driver.sendCommand`, `Driver.sendMessage` and `Node.setValue` now accept an optional callback as part of the options that will be called with the transaction progress (queued, active, failed, complete) (#6212)
+* Optimized the order of node communication during startup to ensure responsive nodes are ready first (#6233)
+* Transmit reports now include the routing scheme (direct, LWR, ...) used for the transmission (#6232)
+
+### Bugfixes
+* The start/stop time and date values in `Schedule Entry Lock CC` commands are now validated (#6231)
+* Fixed an issue where `hasDeviceConfigChanged` would return the opposite of what it should (#6240)
+
+### Config file changes
+* Delay value refresh for `ZW500D` (#6230)
+* Update several Zooz devices to their 800 series revisions (#6218)
+* Extend version range for `Vesternet VES-ZW-DIM-001` (#6216)
+
+### Changes under the hood
+* No longer report errors to Sentry (#6225)
+* `silly` level logging for `setValue` calls now includes the endpoint index (#6223)
+* Added a regression test for `setValue` with a temporary communication failure (#6224)
+
 ## 11.13.1 (2023-08-28)
 ### Bugfixes
 * Fixed a regression from `v11.13.0` where `Meter CC` and `Multilevel Sensor CC` reports from an endpoint were discarded, although the endpoint did support them, but the root endpoint didn't (#6222)
