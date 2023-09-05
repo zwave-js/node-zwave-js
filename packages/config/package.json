@@ -50,7 +50,7 @@
     "extract-api": "yarn api-extractor run",
     "lint:zwave": "yarn ts maintenance/lintConfigFiles.ts",
     "ts": "node -r esbuild-register",
-    "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
