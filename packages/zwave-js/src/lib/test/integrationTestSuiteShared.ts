@@ -6,7 +6,7 @@ import {
 	MockNode,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
-import path from "path";
+import path from "node:path";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,

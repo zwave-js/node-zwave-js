@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 import { Protocols } from "../capabilities/Protocols";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask } from "../values/Primitive";

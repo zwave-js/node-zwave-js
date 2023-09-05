@@ -5,7 +5,7 @@
 
 import { enumFilesRecursive } from "@zwave-js/shared";
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import { Project, ts } from "ts-morph";
 import { formatWithDprint } from "./dprint";
 

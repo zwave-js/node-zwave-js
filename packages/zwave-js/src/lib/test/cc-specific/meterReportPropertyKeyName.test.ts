@@ -1,6 +1,6 @@
 // repro from https://github.com/zwave-js/zwave-js-ui/issues/101#issuecomment-749007701
 
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

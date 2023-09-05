@@ -6,7 +6,7 @@ import { SpyTransport, assertMessage } from "@zwave-js/core/test";
 import { SerialLogger } from "@zwave-js/serial";
 import colors from "ansi-colors";
 import ava, { type TestFn } from "ava";
-import { pseudoRandomBytes } from "crypto";
+import { pseudoRandomBytes } from "node:crypto";
 
 interface TestContext {
 	serialLogger: SerialLogger;

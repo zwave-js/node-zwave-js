@@ -101,8 +101,8 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
-import crypto from "crypto";
-import util from "util";
+import crypto from "node:crypto";
+import util from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";

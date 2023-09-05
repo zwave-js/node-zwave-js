@@ -1,7 +1,7 @@
 /** Management class and utils for Security S2 */
 
 import { createWrappingCounter, getEnumMemberName } from "@zwave-js/shared";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { encodeNodeBitMask } from "../index_safe";
 import { highResTimestamp } from "../util/date";

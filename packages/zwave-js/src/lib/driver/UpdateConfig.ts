@@ -4,8 +4,8 @@ import { getErrorMessage } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import execa from "execa";
 import fs from "fs-extra";
-import os from "os";
-import * as path from "path";
+import os from "node:os";
+import * as path from "node:path";
 import * as lockfile from "proper-lockfile";
 import * as semver from "semver";
 

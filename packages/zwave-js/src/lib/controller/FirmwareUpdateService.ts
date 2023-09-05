@@ -8,7 +8,7 @@ import {
 	guessFirmwareFileFormat,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529

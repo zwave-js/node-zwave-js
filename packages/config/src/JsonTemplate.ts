@@ -3,7 +3,7 @@ import { getErrorMessage } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
 import JSON5 from "json5";
-import * as path from "path";
+import * as path from "node:path";
 
 const IMPORT_KEY = "$import";
 const importSpecifierRegex =

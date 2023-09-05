@@ -3,7 +3,7 @@ import { CommandClasses } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
 import { MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuiteMulti";
 
 // Repro from #1107

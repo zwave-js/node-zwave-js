@@ -9,11 +9,11 @@ import {
 	stringify,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { createHash } from "crypto";
 import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
-import path from "path";
+import { createHash } from "node:crypto";
+import path from "node:path";
 import semver from "semver";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
 import type { ConfigLogger } from "../Logger";

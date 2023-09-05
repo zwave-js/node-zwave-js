@@ -204,9 +204,9 @@ import {
 import { roundTo } from "alcalzone-shared/math";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { randomBytes } from "crypto";
-import { EventEmitter } from "events";
-import { isDeepStrictEqual } from "util";
+import { randomBytes } from "node:crypto";
+import { EventEmitter } from "node:events";
+import { isDeepStrictEqual } from "node:util";
 import { determineNIF } from "../controller/NodeInformationFrame";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";

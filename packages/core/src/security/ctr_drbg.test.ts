@@ -1,6 +1,6 @@
 import test from "ava";
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { CtrDRBG } from "./ctr_drbg";
 
 function getVectors(alg: string) {

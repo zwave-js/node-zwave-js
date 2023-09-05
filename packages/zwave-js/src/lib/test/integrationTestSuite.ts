@@ -8,10 +8,10 @@ import {
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import test, { type ExecutionContext } from "ava";
-import crypto from "crypto";
 import fs from "fs-extra";
-import os from "os";
-import path from "path";
+import crypto from "node:crypto";
+import os from "node:os";
+import path from "node:path";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";

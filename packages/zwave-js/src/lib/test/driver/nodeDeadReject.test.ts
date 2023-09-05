@@ -2,7 +2,7 @@ import { BasicCCGet, BasicCCSet } from "@zwave-js/cc";
 import { NodeStatus, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

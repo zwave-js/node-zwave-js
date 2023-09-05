@@ -1,5 +1,5 @@
 import test from "ava";
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 import { TypedEventEmitter } from "./EventEmitter";
 import { AllOf, Mixin } from "./inheritance";
 import type { Constructor } from "./types";

@@ -15,7 +15,7 @@
 module.exports = {
 	parser: "@typescript-eslint/parser", // Specifies the ESLint parser
 	parserOptions: {
-		ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
+		ecmaVersion: 2023, // Allows for the parsing of modern ECMAScript features
 		sourceType: "module", // Allows for the use of imports
 		project: "./tsconfig.eslint.json",
 		tsconfigRootDir: __dirname,
@@ -25,7 +25,11 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@typescript-eslint/recommended-requiring-type-checking",
 	],
-	plugins: ["deprecation", "unused-imports"],
+	plugins: [
+		"deprecation",
+		"unused-imports",
+		"unicorn",
+	],
 	reportUnusedDisableDirectives: true,
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -123,6 +127,8 @@ module.exports = {
 		"deprecation/deprecation": "error",
 		"unused-imports/no-unused-imports-ts": "error",
 		"unused-imports/no-unused-imports": "error",
+
+		"unicorn/prefer-node-protocol": "warn",
 	},
 	overrides: [
 		{

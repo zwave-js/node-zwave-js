@@ -4,8 +4,8 @@
  */
 
 import { bold, red } from "ansi-colors";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import ts from "typescript";
 import { reportProblem } from "./reportProblem";
 import { loadTSConfig, projectRoot } from "./tsAPITools";

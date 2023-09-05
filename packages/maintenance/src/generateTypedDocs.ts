@@ -6,7 +6,8 @@ import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
 import { red, yellow } from "ansi-colors";
 import * as fs from "fs-extra";
-import * as path from "path";
+import * as path from "node:path";
+import { isMainThread } from "node:worker_threads";
 import Piscina from "piscina";
 import {
 	type CommentRange,
@@ -26,7 +27,6 @@ import {
 	type TypeLiteralNode,
 	type ts,
 } from "ts-morph";
-import { isMainThread } from "worker_threads";
 import { formatWithDprint } from "./dprint";
 import {
 	getCommandClassFromClassDeclaration,

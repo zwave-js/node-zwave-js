@@ -1,8 +1,8 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import test from "ava";
 import * as fs from "fs-extra";
-import { tmpdir } from "os";
-import * as path from "path";
+import { tmpdir } from "node:os";
+import * as path from "node:path";
 import { readJsonWithTemplate } from "./JsonTemplate";
 
 const mockDir = path.join(tmpdir(), `zwave-js-template-test`);
