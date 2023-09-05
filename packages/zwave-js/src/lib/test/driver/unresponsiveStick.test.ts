@@ -9,7 +9,7 @@ import { integrationTest } from "../integrationTestSuite";
 let shouldRespond = true;
 
 integrationTest("Attempt to soft-reset the stick when it is unresponsive", {
-	debug: true,
+	// debug: true,
 
 	async customSetup(driver, mockController, mockNode) {
 		const doNotRespond: MockControllerBehavior = {
