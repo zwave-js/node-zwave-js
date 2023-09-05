@@ -184,7 +184,7 @@ export class MockController {
 			this.receivedHostMessages.push(msg);
 			if (this.autoAckHostMessages) {
 				// all good, respond with ACK
-				this.sendHeaderToHost(MessageHeaders.ACK);
+				this.ackHostMessage();
 			}
 		} catch (e: any) {
 			throw new Error(
@@ -330,6 +330,13 @@ export class MockController {
 		this.serial.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
 		await this.expectHostACK(1000);
+	}
+
+	/**
+	 * Sends an ACK frame to the host
+	 */
+	public ackHostMessage(): void {
+		this.sendHeaderToHost(MessageHeaders.ACK);
 	}
 
 	/** Gets called when a {@link MockZWaveFrame} is received from a {@link MockNode} */

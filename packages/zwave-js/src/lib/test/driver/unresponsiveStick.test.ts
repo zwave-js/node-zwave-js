@@ -3,17 +3,31 @@ import {
 	GetControllerIdRequest,
 	type GetControllerIdResponse,
 } from "../../serialapi/memory/GetControllerIdMessages";
+import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
 import { integrationTest } from "../integrationTestSuite";
 
 let shouldRespond = true;
 
-integrationTest("Detect an unresponsive stick and reset it", {
+integrationTest("Attempt to soft-reset the stick when it is unresponsive", {
 	debug: true,
 
 	async customSetup(driver, mockController, mockNode) {
 		const doNotRespond: MockControllerBehavior = {
 			onHostMessage(host, controller, msg) {
-				if (!shouldRespond) return true;
+				if (!shouldRespond) {
+					// Soft reset should restore normal operation
+					if (msg instanceof SoftResetRequest) {
+						// The ACK was not sent, so we need to do it here
+						mockController.ackHostMessage();
+
+						shouldRespond = true;
+						mockController.autoAckHostMessages = true;
+
+						// Call the original handler
+						return false;
+					}
+					return true;
+				}
 
 				return false;
 			},
@@ -30,6 +44,6 @@ integrationTest("Detect an unresponsive stick and reset it", {
 			{ supportCheck: false },
 		);
 
-		t.not(ids, undefined);
+		t.is(ids.ownNodeId, mockController.host.ownNodeId);
 	},
 });
