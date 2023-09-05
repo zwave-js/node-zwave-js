@@ -128,7 +128,10 @@ module.exports = {
 		"unused-imports/no-unused-imports-ts": "error",
 		"unused-imports/no-unused-imports": "error",
 
-		"unicorn/prefer-node-protocol": "warn",
+		"unicorn/prefer-modern-math-apis": "error",
+		"unicorn/prefer-node-protocol": "error",
+		"unicorn/prefer-negative-index": "error",
+		"unicorn/prefer-string-slice": "error",
 	},
 	overrides: [
 		{
