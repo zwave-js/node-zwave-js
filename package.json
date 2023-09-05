@@ -40,7 +40,6 @@
     "@dprint/json": "^0.17.4",
     "@dprint/markdown": "^0.15.3",
     "@dprint/typescript": "^0.86.2",
-    "@esm2cjs/p-queue": "^7.3.0",
     "@microsoft/api-extractor": "^7.36.0",
     "@monorepo-utils/workspaces-to-typescript-project-references": "^2.9.0",
     "@tsconfig/node18": "^18.2.1",
@@ -80,6 +79,7 @@
     "husky": "^8.0.3",
     "json5": "^2.2.3",
     "lint-staged": "^14.0.1",
+    "p-queue": "^7.3.4",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.5.2",
     "source-map-support": "^0.5.21",
@@ -95,6 +95,7 @@
     "ts-patch@3.0.0-rc2": "patch:ts-patch@npm%3A3.0.0-rc2#./.yarn/patches/ts-patch-npm-3.0.0-rc2-74c7730519.patch"
   },
   "scripts": {
+    "ts": "node -r source-map-support/register -r ./maintenance/esbuild-register.js",
     "w": "yarn ts maintenance/watch.ts",
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
     "clean": "yarn turbo run clean",
@@ -132,7 +133,6 @@
     "docs:generate": "yarn ts packages/maintenance/src/generateTypedDocs.ts",
     "test:perf": "yarn ts test/valuedb-perf.ts",
     "test:firmware": "yarn ts test/firmware-extraction.ts",
-    "ts": "node -r source-map-support/register -r ./maintenance/esbuild-register.js",
     "nvmedit": "yarn ts packages/nvmedit/src/cli.ts",
     "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
     "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
