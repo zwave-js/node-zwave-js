@@ -526,7 +526,7 @@ function visitRegularObjectType(
 					),
 				),
 				...propertyInfos
-					.map((propertyInfo) => {
+					.flatMap((propertyInfo) => {
 						if (propertyInfo.isSymbol) {
 							return [];
 						}
@@ -592,8 +592,7 @@ function visitRegularObjectType(
 									),
 							),
 						];
-					})
-					.reduce((a, b) => a.concat(b), []),
+					}),
 				...(stringIndexFunctionName
 					? [
 						f.createForOfStatement(

@@ -72,9 +72,7 @@ rating:                   ${summary.rating} (${
 			summary.rating,
 		)
 	})
-no. of routing neighbors: ${
-		summary.results[summary.results.length - 1].numNeighbors
-	}
+no. of routing neighbors: ${summary.results.at(-1)!.numNeighbors}
  
 Check rounds:
 ${
@@ -142,9 +140,7 @@ rating:                   ${summary.rating} (${
 			summary.rating,
 		)
 	})
-no. of routing neighbors: ${
-		summary.results[summary.results.length - 1].numNeighbors
-	}
+no. of routing neighbors: ${summary.results.at(-1)!.numNeighbors}
  
 Check rounds:
 ${

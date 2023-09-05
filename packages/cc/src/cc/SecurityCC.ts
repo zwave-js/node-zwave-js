@@ -548,7 +548,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			);
 			const iv = this.payload.slice(0, HALF_NONCE_SIZE);
 			const encryptedPayload = this.payload.slice(HALF_NONCE_SIZE, -9);
-			const nonceId = this.payload[this.payload.length - 9];
+			const nonceId = this.payload.at(-9)!;
 			const authCode = this.payload.slice(-8);
 
 			// Retrieve the used nonce from the nonce store

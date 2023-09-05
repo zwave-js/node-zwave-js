@@ -12,11 +12,12 @@ export function zeroPad(
 }
 /** Left-Shifts a buffer by 1 bit */
 export function leftShift1(input: Buffer): Buffer {
+	if (input.length === 0) return Buffer.from([]);
 	const ret = Buffer.allocUnsafe(input.length);
 	for (let i = 0; i < input.length - 1; i++) {
 		ret[i] = (input[i] << 1) + (!!(input[i + 1] & 0x80) ? 1 : 0);
 	}
-	ret[ret.length - 1] = input[input.length - 1] << 1;
+	ret[ret.length - 1] = input.at(-1)! << 1;
 	return ret;
 }
 

@@ -2254,6 +2254,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	public hasPendingTransactions(
 		predicate: (t: Transaction) => boolean,
 	): boolean {
+		// Queue is not an array
+		// eslint-disable-next-line unicorn/prefer-array-some
 		if (!!this.queue.find((t) => predicate(t))) return true;
 		return this.queues.some(
 			(q) => q.currentTransaction && predicate(q.currentTransaction),

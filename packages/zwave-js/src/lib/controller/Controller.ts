@@ -4445,7 +4445,7 @@ ${associatedNodes.join(", ")}`,
 		// if an assignment fails.
 		while (
 			assignedRoutes.length > 0
-			&& isEmptyRoute(assignedRoutes[assignedRoutes.length - 1])
+			&& isEmptyRoute(assignedRoutes.at(-1))
 		) {
 			assignedRoutes.pop();
 		}
@@ -4710,7 +4710,7 @@ ${associatedNodes.join(", ")}`,
 		// if an assignment fails.
 		while (
 			assignedRoutes.length > 0
-			&& isEmptyRoute(assignedRoutes[assignedRoutes.length - 1])
+			&& isEmptyRoute(assignedRoutes.at(-1))
 		) {
 			assignedRoutes.pop();
 		}

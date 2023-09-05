@@ -369,7 +369,7 @@ export class SecurityManager2 {
 		if (this.peerSequenceNumbers.has(peerNodeId)) {
 			// Store the last SINGLECAST_MAX_SEQ_NUMS sequence numbers
 			const arr = this.peerSequenceNumbers.get(peerNodeId)!;
-			const prev = arr[arr.length - 1];
+			const prev = arr.at(-1);
 			arr.push(sequenceNumber);
 			if (arr.length > SINGLECAST_MAX_SEQ_NUMS) arr.shift();
 			return prev;
