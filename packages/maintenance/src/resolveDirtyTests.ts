@@ -147,7 +147,7 @@ function resolveSourceFileFromDefinition(
 }
 
 function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+	return path.relative(projectRoot, filename).replaceAll("\\", "/");
 }
 
 function isExternalModule(imp: ResolvedImport): boolean {

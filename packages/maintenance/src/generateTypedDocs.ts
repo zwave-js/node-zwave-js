@@ -226,7 +226,7 @@ export function findImportRanges(docFile: string): ImportRange[] {
 }
 
 function stripQuotes(str: string): string {
-	return str.replace(/^['"]|['"]$/g, "");
+	return str.replaceAll(/^['"]|['"]$/g, "");
 }
 
 function expectLiteralString(strType: string, context: string): void {
@@ -290,7 +290,7 @@ ${source}
 		}
 	}
 	console.log(`formatting ${docFile}...`);
-	fileContent = fileContent.replace(/\r\n/g, "\n");
+	fileContent = fileContent.replaceAll("\r\n", "\n");
 	fileContent = formatWithDprint(docFile, fileContent);
 	if (!hasErrors) {
 		await fs.writeFile(docFile, fileContent, "utf8");
@@ -316,9 +316,12 @@ function fixPrinterErrors(text: string): string {
 	return (
 		text
 			// The text includes one too many tabs at the start of each line
-			.replace(/^\t(\t*)/gm, "$1")
+			.replaceAll(/^\t(\t*)/gm, "$1")
 			// TS 4.2+ has some weird printing bug for aliases: https://github.com/microsoft/TypeScript/issues/43031
-			.replace(/(\w+) \| \("unknown" & { __brand: \1; }\)/g, "Maybe<$1>")
+			.replaceAll(
+				/(\w+) \| \("unknown" & { __brand: \1; }\)/g,
+				"Maybe<$1>",
+			)
 	);
 }
 
@@ -471,9 +474,9 @@ ${
 
 			// There is probably an official way to do this, but I can't find it
 			ret = ret
-				.replace(/\(?typeof CommandClasses\)?/g, "CommandClasses")
-				.replace(/^(\s+)readonly /gm, "$1")
-				.replace(/;$/gm, ",");
+				.replaceAll(/\(?typeof CommandClasses\)?/g, "CommandClasses")
+				.replaceAll(/^(\s+)readonly /gm, "$1")
+				.replaceAll(/;$/gm, ",");
 
 			return ret;
 		};
@@ -631,7 +634,7 @@ ${formatValueType(idType)}
 		}
 	}
 
-	text = text.replace(/\r\n/g, "\n");
+	text = text.replaceAll("\r\n", "\n");
 	text = formatWithDprint(filename, text);
 
 	await fs.writeFile(path.join(ccDocsDir, filename), text, "utf8");

@@ -228,8 +228,8 @@ export async function installConfigUpdateInDocker(
 	// This should not be necessary in Docker. Leaving it here anyways in case
 	// we want to use this method on Windows at some point
 	function normalizeToUnixStyle(path: string): string {
-		path = path.replace(/:/g, "");
-		path = path.replace(/\\/g, "/");
+		path = path.replaceAll(":", "");
+		path = path.replaceAll("\\", "/");
 		if (!path.startsWith("/")) path = `/${path}`;
 		return path;
 	}

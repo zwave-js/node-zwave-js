@@ -143,7 +143,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 	for (const file of configFiles) {
 		const relativePath = path
 			.relative(devicesDir, file)
-			.replace(/\\/g, "/");
+			.replaceAll("\\", "/");
 		// Try parsing the file
 		try {
 			const config = await DeviceConfig.from(file, isEmbedded, {
@@ -385,7 +385,7 @@ export class ConditionalDeviceConfig {
 		const { relative, rootDir } = options;
 
 		const relativePath = relative
-			? path.relative(rootDir, filename).replace(/\\/g, "/")
+			? path.relative(rootDir, filename).replaceAll("\\", "/")
 			: filename;
 		const json = await readJsonWithTemplate(filename, [
 			options.rootDir,

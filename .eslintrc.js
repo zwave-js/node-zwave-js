@@ -133,6 +133,7 @@ module.exports = {
 		"unicorn/prefer-negative-index": "error",
 		"unicorn/prefer-string-slice": "error",
 		"unicorn/prefer-string-starts-ends-with": "error",
+		"unicorn/prefer-string-replace-all": "error",
 	},
 	overrides: [
 		{

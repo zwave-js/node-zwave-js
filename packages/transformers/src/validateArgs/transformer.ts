@@ -75,7 +75,7 @@ export default function transformer(
 				(i) =>
 					i.moduleSpecifier
 						.getText(file)
-						.replace(/^["']|["']$/g, "")
+						.replaceAll(/^["']|["']$/g, "")
 						=== "@zwave-js/transformers",
 			);
 		if (selfImports.length > 0) {

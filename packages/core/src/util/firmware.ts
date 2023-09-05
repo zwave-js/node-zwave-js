@@ -250,7 +250,7 @@ function extractFirmwareHEC(data: Buffer): Firmware {
 		decipher.final(),
 	])
 		.toString("ascii")
-		.replace(/ /g, "\n");
+		.replaceAll(" ", "\n");
 
 	return extractFirmwareHEX(plaintext);
 }

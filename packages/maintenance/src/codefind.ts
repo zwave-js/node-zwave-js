@@ -19,7 +19,7 @@ import yargs from "yargs";
 import { loadTSConfig, projectRoot } from "./tsAPITools";
 
 function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+	return path.relative(projectRoot, filename).replaceAll("\\", "/");
 }
 
 export interface CodeFindQuery {
