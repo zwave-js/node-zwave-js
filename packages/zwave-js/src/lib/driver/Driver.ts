@@ -2529,6 +2529,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				`Soft reset failed: ${getErrorMessage(e)}`,
 				"error",
 			);
+			// Don't continue if the controller is unresponsive
+			if (isMissingControllerACK(e)) throw e;
 		}
 
 		if (this._controller) {
@@ -3486,7 +3488,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 	private handleMissingControllerACK(
 		transaction: Transaction,
-		_error: ZWaveError,
+		error: ZWaveError,
 	): boolean {
 		if (!this._controller) return false;
 
@@ -3520,15 +3522,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				// The controller responded. It is no longer unresponsive
 				this._controller?.setStatus(ControllerStatus.Ready);
 			}).catch(() => {
-				// Soft-reset failed, try restarting the driver
+				// Soft-reset failed.
+				// Reject the original transaction and try restarting the driver.
+				this.rejectTransaction(transaction, error);
 				fail();
 			});
 
 			return true;
 		} else {
 			// We already attempted to recover from an unresponsive controller.
-			// Ending up here means the soft-reset also failed
-			fail();
+			// Ending up here means the soft-reset also failed and the driver is about to be destroyed
 			return false;
 		}
 	}
@@ -4594,7 +4597,7 @@ ${handlers.length} left`,
 			// Handle errors after clearing the current transaction.
 			// Otherwise, it will get considered the active transaction and cause an unnecessary SendDataAbort
 			if (error) {
-				this.rejectTransaction(transaction, error);
+				this.handleFailedTransaction(transaction, error);
 			}
 
 			setIdleTimer = setImmediate(() => {
@@ -5496,7 +5499,7 @@ ${handlers.length} left`,
 		};
 	}
 
-	private rejectTransaction(
+	private handleFailedTransaction(
 		transaction: Transaction,
 		error: ZWaveError,
 	): void {
@@ -5508,6 +5511,13 @@ ${handlers.length} left`,
 			if (this.handleMissingControllerACK(transaction, error)) return;
 		}
 
+		this.rejectTransaction(transaction, error);
+	}
+
+	private rejectTransaction(
+		transaction: Transaction,
+		error: ZWaveError,
+	): void {
 		transaction.setProgress({
 			state: TransactionState.Failed,
 			reason: error.message,

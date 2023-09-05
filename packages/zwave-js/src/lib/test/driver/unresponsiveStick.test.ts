@@ -1,3 +1,4 @@
+import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import {
 	GetControllerIdRequest,
@@ -8,42 +9,81 @@ import { integrationTest } from "../integrationTestSuite";
 
 let shouldRespond = true;
 
-integrationTest("Attempt to soft-reset the stick when it is unresponsive", {
-	// debug: true,
+integrationTest(
+	"When the controller is unresponsive, soft-reset it to recover",
+	{
+		// debug: true,
 
-	async customSetup(driver, mockController, mockNode) {
-		const doNotRespond: MockControllerBehavior = {
-			onHostMessage(host, controller, msg) {
-				if (!shouldRespond) {
-					// Soft reset should restore normal operation
-					if (msg instanceof SoftResetRequest) {
-						// The ACK was not sent, so we need to do it here
-						mockController.ackHostMessage();
+		async customSetup(driver, mockController, mockNode) {
+			const doNotRespond: MockControllerBehavior = {
+				onHostMessage(host, controller, msg) {
+					if (!shouldRespond) {
+						// Soft reset should restore normal operation
+						if (msg instanceof SoftResetRequest) {
+							// The ACK was not sent, so we need to do it here
+							mockController.ackHostMessage();
 
-						shouldRespond = true;
-						mockController.autoAckHostMessages = true;
+							shouldRespond = true;
+							mockController.autoAckHostMessages = true;
 
-						// Call the original handler
-						return false;
+							// Call the original handler
+							return false;
+						}
+						return true;
 					}
-					return true;
-				}
 
-				return false;
-			},
-		};
-		mockController.defineBehavior(doNotRespond);
+					return false;
+				},
+			};
+			mockController.defineBehavior(doNotRespond);
+		},
+
+		async testBody(t, driver, node, mockController, mockNode) {
+			shouldRespond = false;
+			mockController.autoAckHostMessages = false;
+
+			const ids = await driver.sendMessage<GetControllerIdResponse>(
+				new GetControllerIdRequest(driver),
+				{ supportCheck: false },
+			);
+
+			t.is(ids.ownNodeId, mockController.host.ownNodeId);
+		},
 	},
+);
 
-	async testBody(t, driver, node, mockController, mockNode) {
-		shouldRespond = false;
-		mockController.autoAckHostMessages = false;
+integrationTest(
+	"When the controller is still unresponsive after soft reset, destroy the driver",
+	{
+		// debug: true,
 
-		const ids = await driver.sendMessage<GetControllerIdResponse>(
-			new GetControllerIdRequest(driver),
-			{ supportCheck: false },
-		);
+		async customSetup(driver, mockController, mockNode) {
+			const doNotRespond: MockControllerBehavior = {
+				onHostMessage(host, controller, msg) {
+					if (!shouldRespond) return true;
 
-		t.is(ids.ownNodeId, mockController.host.ownNodeId);
+					return false;
+				},
+			};
+			mockController.defineBehavior(doNotRespond);
+		},
+
+		async testBody(t, driver, node, mockController, mockNode) {
+			shouldRespond = false;
+			mockController.autoAckHostMessages = false;
+
+			await assertZWaveError(
+				t,
+				() =>
+					driver.sendMessage<GetControllerIdResponse>(
+						new GetControllerIdRequest(driver),
+						{ supportCheck: false },
+					),
+				{
+					errorCode: ZWaveErrorCodes.Controller_Timeout,
+					context: "ACK",
+				},
+			);
+		},
 	},
-});
+);
