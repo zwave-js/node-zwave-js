@@ -1357,17 +1357,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node14@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@tsconfig/node14@npm:1.0.3"
-  checksum: 19275fe80c4c8d0ad0abed6a96dbf00642e88b220b090418609c4376e1cef81bf16237bf170ad1b341452feddb8115d8dd2e5acdfdea1b27422071163dc9ba9d
-  languageName: node
-  linkType: hard
-
 "@tsconfig/node16@npm:^1.0.2":
   version: 1.0.2
   resolution: "@tsconfig/node16@npm:1.0.2"
   checksum: ca94d3639714672bbfd55f03521d3f56bb6a25479bd425da81faf21f13e1e9d15f40f97377dedbbf477a5841c5b0c8f4cd1b391f33553d750b9202c54c2c07aa
+  languageName: node
+  linkType: hard
+
+"@tsconfig/node18@npm:^18.2.1":
+  version: 18.2.1
+  resolution: "@tsconfig/node18@npm:18.2.1"
+  checksum: 9d969456125f37c4d14baa7fe028cfcd448fde4bec7072f7518acf83919bd1e5b25695897954e1bad6fabd54658583c44a56d140a8dc87039ad9d96fd4c5a1ed
   languageName: node
   linkType: hard
 
@@ -2006,7 +2006,7 @@ __metadata:
     "@esm2cjs/p-queue": ^7.3.0
     "@microsoft/api-extractor": ^7.36.0
     "@monorepo-utils/workspaces-to-typescript-project-references": ^2.9.0
-    "@tsconfig/node14": ^1.0.3
+    "@tsconfig/node18": ^18.2.1
     "@types/fs-extra": ^9.0.13
     "@types/node": ^14.18.52
     "@types/semver": ^7.3.13
