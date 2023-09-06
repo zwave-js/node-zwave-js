@@ -107,7 +107,7 @@ export interface ZWaveHost {
     // (undocumented)
     getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
     getNextCallbackId(): number;
-    getNextSupervisionSessionId(): number;
+    getNextSupervisionSessionId(nodeId: number): number;
     getSafeCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
     getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
     // (undocumented)

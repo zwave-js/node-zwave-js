@@ -3293,6 +3293,7 @@ export enum ZWaveErrorCodes {
     FirmwareUpdateCC_NotUpgradable = 1501,
     FirmwareUpdateCC_TargetNotFound = 1502,
     FirmwareUpdateCC_Timeout = 1505,
+    FWUpdateService_DeviceMismatch = 263,
     FWUpdateService_IntegrityCheckFailed = 262,
     FWUpdateService_MissingInformation = 260,
     FWUpdateService_RequestError = 261,

@@ -6,27 +6,50 @@
 
 /// <reference types="node" />
 
+import { AlarmSensorCCAPI } from '../cc/AlarmSensorCC';
 import { AllOrNone } from '@zwave-js/shared/safe';
 import { AllOrNone as AllOrNone_2 } from '@zwave-js/shared';
 import { ApplicationNodeInformation } from '@zwave-js/core/safe';
+import { AssociationCCAPI } from '../cc/AssociationCC';
+import { AssociationGroupInfoCCAPI } from '../cc/AssociationGroupInfoCC';
+import { BarrierOperatorCCAPI } from '../cc/BarrierOperatorCC';
+import { BasicCCAPI } from '../cc/BasicCC';
+import { BatteryCCAPI } from '../cc/BatteryCC';
+import { BinarySensorCCAPI } from '../cc/BinarySensorCC';
+import { BinarySwitchCCAPI } from '../cc/BinarySwitchCC';
 import { BroadcastCC } from '@zwave-js/core';
+import { CentralSceneCCAPI } from '../cc/CentralSceneCC';
+import { ClimateControlScheduleCCAPI } from '../cc/ClimateControlScheduleCC';
+import { ClockCCAPI } from '../cc/ClockCC';
+import { ColorSwitchCCAPI } from '../cc/ColorSwitchCC';
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
+import { ConfigurationCCAPI } from '../cc/ConfigurationCC';
 import { ConfigurationMetadata } from '@zwave-js/core/safe';
 import { ConfigValue } from '@zwave-js/core/safe';
 import { ConfigValueFormat } from '@zwave-js/core/safe';
+import { CRC16CCAPI } from '../cc/CRC16CC';
 import { DataRate } from '@zwave-js/core';
 import { DataRate as DataRate_2 } from '@zwave-js/core/safe';
-import { DSTInfo } from '@zwave-js/core';
+import { DeviceResetLocallyCCAPI } from '../cc/DeviceResetLocallyCC';
+import { DoorLockCCAPI } from '../cc/DoorLockCC';
+import { DoorLockLoggingCCAPI } from '../cc/DoorLockLoggingCC';
 import { Duration } from '@zwave-js/core/safe';
 import { Duration as Duration_2 } from '@zwave-js/core';
 import { EncapsulationFlags } from '@zwave-js/core';
-import { EncapsulationFlags as EncapsulationFlags_2 } from '@zwave-js/core/safe';
+import { EnergyProductionCCAPI } from '../cc/EnergyProductionCC';
+import { EntryControlCCAPI } from '../cc/EntryControlCC';
+import { FirmwareUpdateMetaDataCCAPI } from '../cc/FirmwareUpdateMetaDataCC';
 import { FLiRS } from '@zwave-js/core';
 import { FLiRS as FLiRS_2 } from '@zwave-js/core/safe';
 import { FrameType } from '@zwave-js/core';
-import type { GenericDeviceClass } from '@zwave-js/config';
+import { HumidityControlModeCCAPI } from '../cc/HumidityControlModeCC';
+import { HumidityControlOperatingStateCCAPI } from '../cc/HumidityControlOperatingStateCC';
+import { HumidityControlSetpointCCAPI } from '../cc/HumidityControlSetpointCC';
 import { ICommandClass } from '@zwave-js/core';
+import { InclusionControllerCCAPI } from '../cc/InclusionControllerCC';
+import { IndicatorCCAPI } from '../cc/IndicatorCC';
+import { IrrigationCCAPI } from '../cc/IrrigationCC';
 import { IVirtualEndpoint } from '@zwave-js/core';
 import { IVirtualEndpoint as IVirtualEndpoint_2 } from '@zwave-js/core/safe';
 import { IZWaveEndpoint } from '@zwave-js/core';
@@ -34,6 +57,10 @@ import { IZWaveEndpoint as IZWaveEndpoint_2 } from '@zwave-js/core/safe';
 import { IZWaveNode } from '@zwave-js/core/safe';
 import { IZWaveNode as IZWaveNode_2 } from '@zwave-js/core';
 import { JSONObject } from '@zwave-js/shared';
+import { LanguageCCAPI } from '../cc/LanguageCC';
+import { LockCCAPI } from '../cc/LockCC';
+import { ManufacturerProprietaryCCAPI } from '../cc/ManufacturerProprietaryCC';
+import { ManufacturerSpecificCCAPI } from '../cc/ManufacturerSpecificCC';
 import { MaybeNotKnown } from '@zwave-js/core/safe';
 import { MaybeNotKnown as MaybeNotKnown_2 } from '@zwave-js/core';
 import { MaybeUnknown } from '@zwave-js/core/safe';
@@ -42,41 +69,70 @@ import type { Message } from '@zwave-js/serial';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessageOrCCLogEntry as MessageOrCCLogEntry_2 } from '@zwave-js/core/safe';
 import { MessageOrigin } from '@zwave-js/serial';
-import { MeterScale } from '@zwave-js/config';
+import { MeterCCAPI } from '../cc/MeterCC';
 import { MulticastCC } from '@zwave-js/core';
 import { MulticastDestination } from '@zwave-js/core';
+import { MultiChannelAssociationCCAPI } from '../cc/MultiChannelAssociationCC';
+import { MultiChannelCCAPI } from '../cc/MultiChannelCC';
+import { MultiCommandCCAPI } from '../cc/MultiCommandCC';
+import { MultilevelSensorCCAPI } from '../cc/MultilevelSensorCC';
+import { MultilevelSwitchCCAPI } from '../cc/MultilevelSwitchCC';
 import { NODE_ID_BROADCAST } from '@zwave-js/core';
 import { NodeInformationFrame } from '@zwave-js/core';
+import { NodeNamingAndLocationCCAPI } from '../cc/NodeNamingCC';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core';
+import { NoOperationCCAPI } from '../cc/NoOperationCC';
+import { NotificationCCAPI } from '../cc/NotificationCC';
 import { OnlyMethods } from '@zwave-js/shared';
 import type { ParamInfoMap } from '@zwave-js/config';
+import { PowerlevelCCAPI } from '../cc/PowerlevelCC';
+import { ProtectionCCAPI } from '../cc/ProtectionCC';
 import { ProtocolVersion } from '@zwave-js/core';
 import { ReadonlyObjectKeyMap } from '@zwave-js/shared/safe';
 import { S2SecurityClass } from '@zwave-js/core';
 import { Scale } from '@zwave-js/config';
 import type { Scale as Scale_2 } from '@zwave-js/config/safe';
+import { SceneActivationCCAPI } from '../cc/SceneActivationCC';
+import { SceneActuatorConfigurationCCAPI } from '../cc/SceneActuatorConfigurationCC';
+import { SceneControllerConfigurationCCAPI } from '../cc/SceneControllerConfigurationCC';
+import { ScheduleEntryLockCCAPI } from '../cc/ScheduleEntryLockCC';
+import { Security2CCAPI } from '../cc/Security2CC';
+import { SecurityCCAPI } from '../cc/SecurityCC';
 import { SecurityClass } from '@zwave-js/core';
 import { SecurityManager } from '@zwave-js/core';
 import { SecurityManager2 } from '@zwave-js/core';
 import { SendCommandOptions } from '@zwave-js/core';
 import { SinglecastCC } from '@zwave-js/core';
 import { SinglecastCC as SinglecastCC_2 } from '@zwave-js/core/safe';
-import type { SpecificDeviceClass } from '@zwave-js/config';
+import { SoundSwitchCCAPI } from '../cc/SoundSwitchCC';
+import { SupervisionCCAPI } from '../cc/SupervisionCC';
 import { SupervisionResult } from '@zwave-js/core/safe';
 import { SupervisionResult as SupervisionResult_2 } from '@zwave-js/core';
 import { SupervisionStatus } from '@zwave-js/core/safe';
+import { ThermostatFanModeCCAPI } from '../cc/ThermostatFanModeCC';
+import { ThermostatFanStateCCAPI } from '../cc/ThermostatFanStateCC';
+import { ThermostatModeCCAPI } from '../cc/ThermostatModeCC';
+import { ThermostatOperatingStateCCAPI } from '../cc/ThermostatOperatingStateCC';
+import { ThermostatSetbackCCAPI } from '../cc/ThermostatSetbackCC';
+import { ThermostatSetpointCCAPI } from '../cc/ThermostatSetpointCC';
+import { TimeCCAPI } from '../cc/TimeCC';
 import { Timeout } from '@zwave-js/core/safe';
+import { TimeParametersCCAPI } from '../cc/TimeParametersCC';
 import { TXReport } from '@zwave-js/core';
 import { TypedClassDecorator } from '@zwave-js/shared/safe';
 import { TypedClassDecorator as TypedClassDecorator_2 } from '@zwave-js/shared';
 import type { TypedPropertyDecorator } from '@zwave-js/shared';
+import { UserCodeCCAPI } from '../cc/UserCodeCC';
 import { ValueChangeOptions } from '@zwave-js/core';
 import { ValueDB } from '@zwave-js/core';
 import { ValueID } from '@zwave-js/core';
 import { ValueID as ValueID_2 } from '@zwave-js/core/safe';
 import { ValueMetadata } from '@zwave-js/core';
 import { ValueMetadata as ValueMetadata_2 } from '@zwave-js/core/safe';
+import { VersionCCAPI } from '../cc/VersionCC';
+import { WakeUpCCAPI } from '../cc/WakeUpCC';
+import { WindowCoveringCCAPI } from '../cc/WindowCoveringCC';
 import type { ZWaveApplicationHost } from '@zwave-js/host';
 import type { ZWaveApplicationHost as ZWaveApplicationHost_2 } from '@zwave-js/host/safe';
 import { ZWaveDataRate } from '@zwave-js/core';
@@ -85,6 +141,7 @@ import { ZWaveErrorCodes } from '@zwave-js/core';
 import type { ZWaveHost } from '@zwave-js/host';
 import type { ZWaveHost as ZWaveHost_2 } from '@zwave-js/host/safe';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
+import { ZWavePlusCCAPI } from '../cc/ZWavePlusCC';
 
 // Warning: (ae-missing-release-tag) "addAssociations" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2582,254 +2639,130 @@ export class CCAPI {
 //
 // @public (undocumented)
 export interface CCAPIs {
-    // Warning: (ae-forgotten-export) The symbol "AlarmSensorCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Alarm Sensor": AlarmSensorCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Association Group Information": AssociationGroupInfoCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "BarrierOperatorCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Barrier Operator": BarrierOperatorCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "BinarySensorCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Binary Sensor": BinarySensorCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "BinarySwitchCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Binary Switch": BinarySwitchCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "CentralSceneCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Central Scene": CentralSceneCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ClimateControlScheduleCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Climate Control Schedule": ClimateControlScheduleCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ColorSwitchCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Color Switch": ColorSwitchCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "CRC16CCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "CRC-16 Encapsulation": CRC16CCAPI;
-    // Warning: (ae-forgotten-export) The symbol "DeviceResetLocallyCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Device Reset Locally": DeviceResetLocallyCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "DoorLockLoggingCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Door Lock Logging": DoorLockLoggingCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "DoorLockCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Door Lock": DoorLockCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "EnergyProductionCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Energy Production": EnergyProductionCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "EntryControlCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Entry Control": EntryControlCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "FirmwareUpdateMetaDataCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Firmware Update Meta Data": FirmwareUpdateMetaDataCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "HumidityControlModeCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Humidity Control Mode": HumidityControlModeCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "HumidityControlOperatingStateCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Humidity Control Operating State": HumidityControlOperatingStateCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "HumidityControlSetpointCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Humidity Control Setpoint": HumidityControlSetpointCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "InclusionControllerCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Inclusion Controller": InclusionControllerCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ManufacturerProprietaryCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Manufacturer Proprietary": ManufacturerProprietaryCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ManufacturerSpecificCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Manufacturer Specific": ManufacturerSpecificCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelAssociationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Multi Channel Association": MultiChannelAssociationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Multi Channel": MultiChannelCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "MultiCommandCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Multi Command": MultiCommandCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "MultilevelSensorCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Multilevel Sensor": MultilevelSensorCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "MultilevelSwitchCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Multilevel Switch": MultilevelSwitchCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "NoOperationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "No Operation": NoOperationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "NodeNamingAndLocationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Node Naming and Location": NodeNamingAndLocationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "SceneActivationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Scene Activation": SceneActivationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "SceneActuatorConfigurationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Scene Actuator Configuration": SceneActuatorConfigurationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "SceneControllerConfigurationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Scene Controller Configuration": SceneControllerConfigurationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Schedule Entry Lock": ScheduleEntryLockCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "Security2CCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Security 2": Security2CCAPI;
-    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Sound Switch": SoundSwitchCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ThermostatFanModeCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Thermostat Fan Mode": ThermostatFanModeCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ThermostatFanStateCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Thermostat Fan State": ThermostatFanStateCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ThermostatModeCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Thermostat Mode": ThermostatModeCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ThermostatOperatingStateCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Thermostat Operating State": ThermostatOperatingStateCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetbackCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Thermostat Setback": ThermostatSetbackCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Thermostat Setpoint": ThermostatSetpointCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "TimeParametersCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Time Parameters": TimeParametersCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "User Code": UserCodeCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "WakeUpCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Wake Up": WakeUpCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Window Covering": WindowCoveringCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ZWavePlusCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     "Z-Wave Plus Info": ZWavePlusCCAPI;
     // (undocumented)
     [Symbol.iterator](): Iterator<CCAPI>;
-    // Warning: (ae-forgotten-export) The symbol "AssociationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Association: AssociationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "BasicCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Basic: BasicCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "BatteryCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Battery: BatteryCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ClockCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Clock: ClockCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Configuration: ConfigurationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "IndicatorCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Indicator: IndicatorCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "IrrigationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Irrigation: IrrigationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "LanguageCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Language: LanguageCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "LockCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Lock: LockCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "MeterCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Meter: MeterCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "NotificationCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Notification: NotificationCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "PowerlevelCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Powerlevel: PowerlevelCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "ProtectionCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Protection: ProtectionCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "SecurityCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Security: SecurityCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "SupervisionCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Supervision: SupervisionCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "TimeCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Time: TimeCCAPI;
-    // Warning: (ae-forgotten-export) The symbol "VersionCCAPI" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     Version: VersionCCAPI;
 }
@@ -6833,10 +6766,11 @@ export const getManufacturerId: (target: ManufacturerProprietaryCC) => number | 
 export function getManufacturerIdStatic<T extends ManufacturerProprietaryCCConstructor>(classConstructor: T): number;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-forgotten-export) The symbol "ManufacturerProprietaryCCAPI_2" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "getManufacturerProprietaryAPI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export const getManufacturerProprietaryAPI: (manufacturerId: number) => APIConstructor<ManufacturerProprietaryCCAPI> | undefined;
+export const getManufacturerProprietaryAPI: (manufacturerId: number) => APIConstructor<ManufacturerProprietaryCCAPI_2> | undefined;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "getManufacturerProprietaryCCConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
