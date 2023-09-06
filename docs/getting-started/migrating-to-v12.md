@@ -65,3 +65,13 @@ interface ZWaveHost {
 +	getNextSupervisionSessionId(nodeId: number): number;
 }
 ```
+
+## Removed some deprecated methods
+
+The following methods were deprecated/renamed and have now been removed:
+
+- `Controller.assignSUCReturnRoute`: Use `Controller.assignSUCReturnRoutes` instead
+- `Controller.deleteSUCReturnRoute`: Use `Controller.deleteSUCReturnRoutes` instead
+- `Controller.assignReturnRoute`: Use `Controller.assignReturnRoutes` instead
+- `Controller.deleteReturnRoute`: Use `Controller.deleteReturnRoutes` instead
+- `Driver.enableErrorReporting`: Error reporting has been fully removed
