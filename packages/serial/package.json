@@ -6,22 +6,21 @@
     "access": "public"
   },
   "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./mock": "./build/index_mock.js",
-    "./safe": "./build/index_safe.js"
-  },
   "types": "build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "mock": [
-        "build/index_mock.d.ts"
-      ],
-      "safe": [
-        "build/index_safe.d.ts"
-      ]
-    }
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./safe": {
+      "types": "./build/index_safe.d.ts",
+      "default": "./build/index_safe.js"
+    },
+    "./mock": {
+      "types": "./build/index_mock.d.ts",
+      "default": "./build/index_mock.js"
+    },
+    "./package.json": "./package.json"
   },
   "keywords": [],
   "files": [
