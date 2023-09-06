@@ -14,8 +14,8 @@ export type {
 	ControllerFirmwareUpdateResult,
 	FirmwareUpdateDeviceID,
 	GetFirmwareUpdatesOptions,
-	HealNetworkOptions,
-	HealNodeStatus,
+	RebuildRoutesOptions,
+	RebuildRoutesStatus,
 	SDKVersion,
 } from "./lib/controller/_Types";
 export type { ZWaveLibraryTypes } from "./lib/serialapi/_Types";

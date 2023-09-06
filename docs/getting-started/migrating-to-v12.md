@@ -11,6 +11,22 @@ Aside from the runtime changes, this has implications for applications using Typ
 This means applications have to switch to `moduleResolution: "node16"` too, which can cause issues with other dependencies if their `exports` aren't set up correctly, e.g. hybrid CJS/ESM packages with a single `.d.ts` file for both. As described in [the TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/esm-node.html#packagejson-exports-imports-and-self-referencing), hybrid packages need a separate `.d.ts` file for the `ESM` and `CommonJS` entry points, even if their content is identical.\
 Unfortunately, affected dependencies have to be fixed, like [in this example](https://github.com/express-rate-limit/express-rate-limit/issues/355). Short-term workarounds can be enabled by `yarn`'s [patch feature](https://yarnpkg.com/cli/patch).
 
+## Renamed _(network) heal_ to _rebuild routes_
+
+It has been found that there is a lot of misconception about "healing" the network, be it outdated information, a too positive connotation of the word "heal" or simply not understanding what it can and cannot do. Contrary to popular belief, this process does not magically make the mesh better. If devices have a physically bad connection, assigning new routes will not help. In fact, it can make the situation worse by deleting routes that were found to be working and assigning other bad routes.\
+Due to this, we're often faced with feature requests for automatically and regularly performing a network heal. While this is certainly doable, it's absolutely not a good idea.
+
+In an attempt to mitigate, this process has been renamed to "rebuild routes", and the documentation has been updated to explain the process better. In summary, the following methods, properties and types have been renamed:
+
+- `HealNodeStatus` → `RebuildRoutesStatus`
+- `HealNetworkOptions` → `RebuildRoutesOptions`
+- `Controller.isHealNetworkActive` → `Controller.isRebuildingRoutes`
+- `Controller.beginHealingNetwork` → `Controller.beginRebuildingRoutes`
+- `Controller.stopHealingNetwork` → `Controller.stopRebuildingRoutes`
+- `Controller.healNode` → `Controller.rebuildNodeRoutes`
+
+It is strongly suggested that applications update their UIs around this feature too, in order to manage expectations. A positive impression of the feature, e.g. by using positive icons like a band-aid, should be avoided.
+
 ## Reference the endpoint in `"notification"` events
 
 Endpoints can send notifications, but when those were translated to `"notification"` events, the endpoint was not included in the event, only the node. To solve this, the first parameter of the event callback is now the endpoint that sent the notification. This can still be the node itself (which inherits from `Endpoint`), but this is no longer guaranteed.
