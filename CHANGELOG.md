@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.0.0-beta.0 (2023-09-06)
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v12)
 * Remove support for Node.js 14 and 16 (#6245)
 * Subpath exports are now exposed using the `exports` field in `package.json` instead of `typesVersions` (#5839)
