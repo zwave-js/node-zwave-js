@@ -395,54 +395,56 @@ enum ProtocolDataRate {
 }
 ```
 
-### `healNode`
+### Rebuilding routes
+
+While Z-Wave meshes have the ability to heal themselves - at least for somewhat modern devices - the routing algorithm tends to stick to routes that work, even if those are not optimal. In an ideal situation, nodes get assigned multiple good routes upon inclusion, so this is usually not an issue.
+
+However, when physically moving devices, the optimal routes are likely to change. In this case, it can make sense to assign them new routes to the controller and association targets. This can be done for individual nodes or the whole network.
+
+> [!NOTE] Contrary to popular belief, this process does not magically make the mesh better. If devices have a physically bad connection, assigning new routes will not help. In fact, it can make the situation worse by deleting routes that were found to be working and assigning other bad routes.\
+> In this case, [checking the network health](troubleshooting/network-health.md) and acting upon the results should be preferred.
+
+> [!ATTENTION] Rebuilding routes for a Z-Wave network causes a lot of traffic and can take very long. Degraded performance **must** be expected while this process is active.
+
+#### `rebuildNodeRoutes`
 
 ```ts
-async healNode(nodeId: number): Promise<boolean>
+async rebuildNodeRoutes(nodeId: number): Promise<boolean>
 ```
 
-A Z-Wave network needs to be reorganized (healed) from time to time. To do so, the nodes must update their neighbor list and the controller must update the return routes for optimal lifeline associations.
+Rebuilds routes for a single alive node in the network, updating the neighbor list and assigning fresh routes to association targets. The returned promise resolves to `true` if the process was completed, or `false` if it was unsuccessful.
 
-The `healNode` method performs this step for a given node. The returned promise resolves to `true` if the process was completed, or `false` if it was unsuccessful.
-
-> [!ATTENTION] Healing a Z-Wave network causes a lot of traffic and can take very long. Degraded performance **must** be expected while a healing process is active.
-
-### `beginHealingNetwork`
+#### `beginRebuildingRoutes`
 
 ```ts
-beginHealingNetwork(options?: HealNetworkOptions): boolean
+beginRebuildingRoutes(options?: RebuildRoutesOptions): boolean
 ```
 
-Synchronously (!) starts the healing process for all nodes in the network. Returns `true` if the process was started, otherwise `false`. This also returns `false` if a healing process is already active. The using library is notified about the progress with the following events:
+Starts the process of rebuilding routes for all alive nodes in the network. Returns `true` if the process was started, otherwise `false`. Also returns `false` if the process was already active.
 
-- `"heal network progress"`: The healing progress has changed
-- `"heal network done"`: The healing process for each node was completed (or failed)
+The application will be notified about the progress with the following events:
 
-In both cases, the listener is called with a `ReadonlyMap<number, HealNodeStatus>` which contains the current healing status. The healing status is one of the following values:
+- `"rebuild routes progress"`: The route rebuilding progress has changed. [See details](#quotrebuild-routes-progressquot).
+- `"rebuild routes done"`: The route rebuilding process for all nodes was completed (or failed). [See details](#quotrebuild-routes-donequot).
 
-- `"pending"`: The healing process for this node was not started yet
-- `"done"`: The healing process for this node is done
-- `"failed"`: There was an error while healing this node
-- `"skipped"`: The node was skipped because it is dead
+The `options` argument can be used to skip sleeping nodes:
 
-The `options` argument can be used to skip healing sleeping nodes:
-
-<!-- #import HealNetworkOptions from "zwave-js" -->
+<!-- #import RebuildRoutesOptions from "zwave-js" -->
 
 ```ts
-interface HealNetworkOptions {
-	/** Whether sleeping nodes should be healed too at the end of the healing process. Default: true */
+interface RebuildRoutesOptions {
+	/** Whether the routes of sleeping nodes should be rebuilt too at the end of the process. Default: true */
 	includeSleeping?: boolean;
 }
 ```
 
-### `stopHealingNetwork`
+#### `stopRebuildingRoutes`
 
 ```ts
-stopHealingNetwork(): boolean
+stopRebuildingRoutes(): boolean
 ```
 
-Stops an ongoing healing process. Returns `true` if the process was stopped or no process was active, otherwise `false`.
+Stops the route rebuilding process. Returns `true` if the process was stopped or no process was active, otherwise `false`.
 
 ### `isFailedNode`
 
@@ -1223,13 +1225,13 @@ enum ControllerStatus {
 
 The status is `ControllerStatus.Ready` by default and should not change unless there is a problem with the controller. Changes to the status are exposed using the [`"status changed"`](#status-changed) event.
 
-### `isHealNetworkActive`
+### `isRebuildingRoutes`
 
 ```ts
-readonly isHealNetworkActive: boolean;
+readonly isRebuildingRoutes: boolean;
 ```
 
-Returns whether the network or a node is currently being healed.
+Returns whether the routes are currently being rebuilt for one or more nodes.
 
 ### `inclusionState`
 
@@ -1408,24 +1410,24 @@ enum RemoveNodeReason {
 
 This event is used to inform applications about changes in the controller status.
 
-### `"heal network progress"`
+### `"rebuild routes progress"`
 
-This event is used to inform listeners about the progress of an ongoing network heal process. The progress is reported as a map of each node's ID and its healing status.
+This event is used to inform listeners about the progress of an ongoing route rebuilding process. The progress is reported as a map of each node's ID and its status.
 
 ```ts
-(progress: ReadonlyMap<number, HealNodeStatus>) => void
+(progress: ReadonlyMap<number, RebuildRoutesStatus>) => void
 ```
 
-The healing status is one of the following values:
+The status is one of the following values:
 
-- `"pending"` - The network healing process has not been started for this node yet.
-- `"done"` - The process was completed for this node.
-- `"failed"` - This node failed to be healed. This means that certain commands of the healing process could not be executed.
-- `"skipped"` - This node was not healed because it is dead
+- `"pending"`: The process for this node was not started yet
+- `"done"`: The process for this node is done
+- `"failed"`: There was an error while rebuilding routes for this node
+- `"skipped"`: The node was skipped because it is dead
 
-### `"heal network done"`
+### `"rebuild routes done"`
 
-The healing process for the network was completed. The event handler is called with the final healing status, see the [`"heal network progress"` event](#quotheal-network-progressquot) for details
+The route rebuilding process for the network was completed. The event handler is called with the final status, see the [`"rebuild routes progress"` event](#quotrebuild-routes-progressquot) for details
 
 ### `"statistics updated"`
 

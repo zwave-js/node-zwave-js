@@ -344,8 +344,8 @@ import {
 	type FirmwareUpdateDeviceID,
 	type FirmwareUpdateInfo,
 	type GetFirmwareUpdatesOptions,
-	type HealNetworkOptions,
-	type HealNodeStatus,
+	type RebuildRoutesOptions,
+	type RebuildRoutesStatus,
 	type SDKVersion,
 } from "./_Types";
 import {
@@ -369,10 +369,12 @@ interface ControllerEventCallbacks
 	"node found": (node: FoundNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, reason: RemoveNodeReason) => void;
-	"heal network progress": (
-		progress: ReadonlyMap<number, HealNodeStatus>,
+	"rebuild routes progress": (
+		progress: ReadonlyMap<number, RebuildRoutesStatus>,
 	) => void;
-	"heal network done": (result: ReadonlyMap<number, HealNodeStatus>) => void;
+	"rebuild routes done": (
+		result: ReadonlyMap<number, RebuildRoutesStatus>,
+	) => void;
 	"firmware update progress": (
 		progress: ControllerFirmwareUpdateProgress,
 	) => void;
@@ -706,10 +708,10 @@ export class ZWaveController
 		return this._nodes.get(this._ownNodeId!)!.valueDB;
 	}
 
-	private _healNetworkActive: boolean = false;
-	/** Returns whether the network or a node is currently being healed. */
-	public get isHealNetworkActive(): boolean {
-		return this._healNetworkActive;
+	private _isRebuildingRoutes: boolean = false;
+	/** Returns whether the routes are currently being rebuilt for one or more nodes. */
+	public get isRebuildingRoutes(): boolean {
+		return this._isRebuildingRoutes;
 	}
 
 	/**
@@ -3847,28 +3849,31 @@ supported CCs: ${
 		return false;
 	}
 
-	private _healNetworkProgress = new Map<number, HealNodeStatus>();
+	private _rebuildRoutesProgress = new Map<number, RebuildRoutesStatus>();
 
 	/**
-	 * Performs a healing process for all alive nodes in the network,
+	 * Starts the process of rebuilding routes for all alive nodes in the network,
 	 * requesting updated neighbor lists and assigning fresh routes to
 	 * association targets.
+	 *
+	 * Returns `true` if the process was started, otherwise `false`. Also returns
+	 * `false` if the process was already active.
 	 */
-	public beginHealingNetwork(options: HealNetworkOptions = {}): boolean {
+	public beginRebuildingRoutes(options: RebuildRoutesOptions = {}): boolean {
 		// Don't start the process twice
-		if (this._healNetworkActive) return false;
-		this._healNetworkActive = true;
+		if (this._isRebuildingRoutes) return false;
+		this._isRebuildingRoutes = true;
 
 		options.includeSleeping ??= true;
 
 		this.driver.controllerLog.print(
-			`starting network heal${
+			`rebuilding routes${
 				options.includeSleeping ? "" : " for mains-powered nodes"
 			}...`,
 		);
 
-		// Reset all nodes to "not healed"
-		this._healNetworkProgress.clear();
+		// Reset the progress for all nodes
+		this._rebuildRoutesProgress.clear();
 		for (const [id, node] of this._nodes) {
 			if (id === this._ownNodeId) continue;
 			if (
@@ -3879,33 +3884,36 @@ supported CCs: ${
 				|| (node.status === NodeStatus.Asleep
 					&& node.interviewStage === InterviewStage.ProtocolInfo)
 			) {
-				// Don't heal dead nodes
+				// Skip dead nodes
 				this.driver.controllerLog.logNode(
 					id,
-					`Skipping heal because the node is not responding.`,
+					`Skipping route rebuild because the node is not responding.`,
 				);
-				this._healNetworkProgress.set(id, "skipped");
+				this._rebuildRoutesProgress.set(id, "skipped");
 			} else if (!options.includeSleeping && node.canSleep) {
-				this._healNetworkProgress.set(id, "skipped");
+				this._rebuildRoutesProgress.set(id, "skipped");
 			} else {
-				this._healNetworkProgress.set(id, "pending");
+				this._rebuildRoutesProgress.set(id, "pending");
 			}
 		}
 
-		// Do the heal process in the background
-		void this.healNetwork(options).catch(() => {
+		// Rebuild routes in the background
+		void this.rebuildRoutes(options).catch(() => {
 			/* ignore errors */
 		});
 
 		// And update the progress once at the start
-		this.emit("heal network progress", new Map(this._healNetworkProgress));
+		this.emit(
+			"rebuild routes progress",
+			new Map(this._rebuildRoutesProgress),
+		);
 
 		return true;
 	}
 
-	private async healNetwork(options: HealNetworkOptions): Promise<void> {
+	private async rebuildRoutes(options: RebuildRoutesOptions): Promise<void> {
 		const pendingNodes = new Set(
-			[...this._healNetworkProgress]
+			[...this._rebuildRoutesProgress]
 				.filter(([, status]) => status === "pending")
 				.map(([nodeId]) => nodeId),
 		);
@@ -3921,21 +3929,21 @@ supported CCs: ${
 					if (options.includeSleeping) {
 						this.driver.controllerLog.logNode(
 							nodeId,
-							"added to healing queue for sleeping nodes",
+							"added to route rebuilding queue for sleeping nodes",
 						);
 						todoSleeping.push(nodeId);
 					}
 				} else {
 					this.driver.controllerLog.logNode(
 						nodeId,
-						"added to healing queue for listening nodes",
+						"added to route rebuilding queue for listening nodes",
 					);
 					todoListening.push(nodeId);
 				}
 			}
 		};
 
-		// We heal outwards from the controller and start with non-sleeping nodes that are healed one by one
+		// We work our way outwards from the controller and start with non-sleeping nodes, one by one
 		try {
 			const neighbors = await this.getNodeNeighbors(this._ownNodeId!);
 			neighbors.forEach((id) => addTodo(id));
@@ -3943,22 +3951,22 @@ supported CCs: ${
 			// ignore
 		}
 
-		const doHeal = async (nodeId: number) => {
-			// await the heal process for each node and treat errors as a non-successful heal
-			const result = await this.healNodeInternal(nodeId).catch(
+		const doRebuildRoutes = async (nodeId: number) => {
+			// await the process for each node and convert errors to a non-successful result
+			const result = await this.rebuildNodeRoutesInternal(nodeId).catch(
 				() => false,
 			);
-			if (!this._healNetworkActive) return;
+			if (!this._isRebuildingRoutes) return;
 
 			// Track the success in a map
-			this._healNetworkProgress.set(nodeId, result ? "done" : "failed");
+			this._rebuildRoutesProgress.set(nodeId, result ? "done" : "failed");
 			// Notify listeners about the progress
 			this.emit(
-				"heal network progress",
-				new Map(this._healNetworkProgress),
+				"rebuild routes progress",
+				new Map(this._rebuildRoutesProgress),
 			);
 
-			// Figure out which nodes to heal next
+			// Figure out which nodes to do next
 			try {
 				const neighbors = await this.getNodeNeighbors(nodeId);
 				neighbors.forEach((id) => addTodo(id));
@@ -3967,54 +3975,57 @@ supported CCs: ${
 			}
 		};
 
-		// First try to heal as many nodes as possible one by one
+		// First try to rebuild routes for as many nodes as possible one by one
 		while (todoListening.length > 0) {
 			const nodeId = todoListening.shift()!;
-			await doHeal(nodeId);
-			if (!this._healNetworkActive) return;
+			await doRebuildRoutes(nodeId);
+			if (!this._isRebuildingRoutes) return;
 		}
 
-		// We might end up with a few unconnected listening nodes, try to heal them too
+		// We might end up with a few unconnected listening nodes, try to rebuild routes for them too
 		pendingNodes.forEach((nodeId) => addTodo(nodeId));
 		while (todoListening.length > 0) {
 			const nodeId = todoListening.shift()!;
-			await doHeal(nodeId);
-			if (!this._healNetworkActive) return;
+			await doRebuildRoutes(nodeId);
+			if (!this._isRebuildingRoutes) return;
 		}
 
 		if (options.includeSleeping) {
-			// Now heal all sleeping nodes at once
+			// Now do all sleeping nodes at once
 			this.driver.controllerLog.print(
-				"Healing sleeping nodes in parallel. Wake them up to heal.",
+				"Rebuilding routes for sleeping nodes when they wake up",
 			);
 
-			const tasks = todoSleeping.map((nodeId) => doHeal(nodeId));
+			const tasks = todoSleeping.map((nodeId) => doRebuildRoutes(nodeId));
 			await Promise.all(tasks);
 		}
 
 		// Only emit the done event when the process wasn't stopped in the meantime
-		if (this._healNetworkActive) {
-			this.driver.controllerLog.print("network heal completed");
+		if (this._isRebuildingRoutes) {
+			this.driver.controllerLog.print("rebuilding routes completed");
 
-			this.emit("heal network done", new Map(this._healNetworkProgress));
+			this.emit(
+				"rebuild routes done",
+				new Map(this._rebuildRoutesProgress),
+			);
 		} else {
-			this.driver.controllerLog.print("network heal aborted");
+			this.driver.controllerLog.print("rebuilding routes aborted");
 		}
 		// We're done!
-		this._healNetworkActive = false;
+		this._isRebuildingRoutes = false;
 	}
 
 	/**
-	 * Stops an network healing process. Resolves false if the process was not active, true otherwise.
+	 * Stops the route rebuilding process. Resolves false if the process was not active, true otherwise.
 	 */
-	public stopHealingNetwork(): boolean {
+	public stopRebuildingRoutes(): boolean {
 		// don't stop it twice
-		if (!this._healNetworkActive) return false;
-		this._healNetworkActive = false;
+		if (!this._isRebuildingRoutes) return false;
+		this._isRebuildingRoutes = false;
 
-		this.driver.controllerLog.print(`stopping network heal...`);
+		this.driver.controllerLog.print(`stopping route rebuilding process...`);
 
-		// Cancel all transactions that were created by the healing process
+		// Cancel all transactions that were created by the route rebuilding process
 		this.driver.rejectTransactions(
 			(t) =>
 				t.message instanceof RequestNodeNeighborUpdateRequest
@@ -4026,17 +4037,17 @@ supported CCs: ${
 	}
 
 	/**
-	 * Performs a healing process for a single alive node in the network,
+	 * Rebuilds routes for a single alive node in the network,
 	 * updating the neighbor list and assigning fresh routes to
 	 * association targets.
 	 *
 	 * Returns `true` if the process succeeded, `false` otherwise.
 	 */
-	public async healNode(nodeId: number): Promise<boolean> {
-		// We cannot heal the controller
+	public async rebuildNodeRoutes(nodeId: number): Promise<boolean> {
+		// We cannot rebuild routes for the controller
 		if (nodeId === this._ownNodeId) {
 			throw new ZWaveError(
-				`Healing the controller itself is not possible!`,
+				`Rebuilding routes for the controller itself is not possible!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
@@ -4044,16 +4055,16 @@ supported CCs: ${
 		const node = this.nodes.getOrThrow(nodeId);
 
 		// Don't start the process twice
-		if (this._healNetworkActive) {
+		if (this._isRebuildingRoutes) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Skipping individual node heal because another heal is in progress.`,
+				`Cannot rebuild routes because another rebuilding process is in progress.`,
 			);
 			return false;
 		}
-		this._healNetworkActive = true;
+		this._isRebuildingRoutes = true;
 
-		// Don't try to heal actually dead nodes
+		// Figure out if nodes are responsive before attempting to rebuild routes
 		if (
 			// The node is known to be dead
 			node.status === NodeStatus.Dead
@@ -4062,45 +4073,43 @@ supported CCs: ${
 			|| (node.status === NodeStatus.Asleep
 				&& node.interviewStage === InterviewStage.ProtocolInfo)
 		) {
-			// To avoid skipping the heal when the node has a flaky connection, ping first though
 			if (!(await node.ping())) {
 				this.driver.controllerLog.logNode(
 					nodeId,
-					`Skipping heal because the node is not responding.`,
+					`Cannot rebuild routes because the node is not responding.`,
 				);
 				return false;
 			}
 		}
 
 		try {
-			return await this.healNodeInternal(nodeId);
+			return await this.rebuildNodeRoutesInternal(nodeId);
 		} finally {
-			this._healNetworkActive = false;
+			this._isRebuildingRoutes = false;
 		}
 	}
 
-	private async healNodeInternal(nodeId: number): Promise<boolean> {
+	private async rebuildNodeRoutesInternal(nodeId: number): Promise<boolean> {
 		const node = this.nodes.getOrThrow(nodeId);
 
-		// Keep battery powered nodes awake during the healing process
+		// Keep battery powered nodes awake during the process
 		// and make sure that the flag gets reset at the end
 		const keepAwake = node.keepAwake;
 		try {
 			node.keepAwake = true;
 
 			this.driver.controllerLog.logNode(nodeId, {
-				message: `Healing node...`,
+				message: `Rebuilding routes...`,
 				direction: "none",
 			});
 
-			// The healing process consists of four steps
-			// Each step is tried up to 5 times before the healing process is considered failed
+			// The process consists of four steps, each step is tried up to 5 times before i is considered failed
 			const maxAttempts = 5;
 
 			// 1. command the node to refresh its neighbor list
 			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
 				// If the process was stopped in the meantime, cancel
-				if (!this._healNetworkActive) return false;
+				if (!this._isRebuildingRoutes) return false;
 
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `refreshing neighbor list (attempt ${attempt})...`,
@@ -4137,7 +4146,7 @@ supported CCs: ${
 				if (attempt === maxAttempts) {
 					this.driver.controllerLog.logNode(nodeId, {
 						message:
-							`failed to update the neighbor list after ${maxAttempts} attempts, healing failed`,
+							`rebuilding routes failed: could not update the neighbor list after ${maxAttempts} attempts`,
 						level: "warn",
 						direction: "none",
 					});
@@ -4162,7 +4171,7 @@ supported CCs: ${
 				if (attempt === maxAttempts) {
 					this.driver.controllerLog.logNode(nodeId, {
 						message:
-							`failed to delete return routes after ${maxAttempts} attempts, healing failed`,
+							`rebuilding routes failed: failed to delete return routes after ${maxAttempts} attempts`,
 						level: "warn",
 						direction: "none",
 					});
@@ -4210,7 +4219,7 @@ ${associatedNodes.join(", ")}`,
 					if (attempt === maxAttempts) {
 						this.driver.controllerLog.logNode(nodeId, {
 							message:
-								`failed to assign return route after ${maxAttempts} attempts, healing failed`,
+								`rebuilding routes failed: failed to assign return route after ${maxAttempts} attempts`,
 							level: "warn",
 							direction: "none",
 						});
@@ -4220,7 +4229,7 @@ ${associatedNodes.join(", ")}`,
 			}
 
 			this.driver.controllerLog.logNode(nodeId, {
-				message: `healed successfully`,
+				message: `rebuilt routes successfully`,
 				direction: "none",
 			});
 

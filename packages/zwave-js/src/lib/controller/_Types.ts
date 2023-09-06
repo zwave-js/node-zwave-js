@@ -2,10 +2,10 @@ import { type DeviceID } from "@zwave-js/config";
 import { type RFRegion } from "@zwave-js/core";
 import { type Expand } from "@zwave-js/shared/safe";
 
-export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+export type RebuildRoutesStatus = "pending" | "done" | "failed" | "skipped";
 
-export interface HealNetworkOptions {
-	/** Whether sleeping nodes should be healed too at the end of the healing process. Default: true */
+export interface RebuildRoutesOptions {
+	/** Whether the routes of sleeping nodes should be rebuilt too at the end of the process. Default: true */
 	includeSleeping?: boolean;
 }
 
