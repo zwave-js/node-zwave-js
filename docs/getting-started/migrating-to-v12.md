@@ -14,4 +14,3 @@ type ZWaveNotificationCallback = (
 	args: Record<string, unknown>,
 ): void;
 ```
-
