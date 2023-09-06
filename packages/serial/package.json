@@ -74,7 +74,7 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "sinon": "^14.0.2",
+    "sinon": "^15.2.0",
     "typescript": "5.1.6"
   }
 }
