@@ -3,7 +3,7 @@ import {
 	ZWaveErrorCodes,
 	type ZWaveLogContainer,
 } from "@zwave-js/core";
-import * as net from "net";
+import * as net from "node:net";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
 
 export type ZWaveSocketOptions =

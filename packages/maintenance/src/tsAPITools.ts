@@ -1,5 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import * as path from "path";
+import * as path from "node:path";
 import ts from "typescript";
 
 // Find this project's root dir

@@ -1,5 +1,5 @@
 import test from "ava";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
 import { SecurityManager2 } from "./Manager2";

@@ -3,7 +3,7 @@
 import { enumFilesRecursive } from "@zwave-js/shared";
 import * as JSONC from "comment-json";
 import * as fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import { formatWithDprint } from "./dprint";
 
 async function main() {

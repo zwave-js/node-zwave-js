@@ -7,7 +7,7 @@ export function mergeUserAgent(
 
 	// Remove everything that's not a letter, number, . or -
 	function normalize(str: string): string {
-		return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
+		return str.replaceAll(/[^a-zA-Z0-9\.\-]/g, "");
 	}
 	for (let [name, version] of Object.entries(additionalComponents)) {
 		name = normalize(name);

@@ -1,4 +1,4 @@
-import * as path from "path";
+import * as path from "node:path";
 import ts from "typescript";
 import type { ValidateArgsOptions } from "..";
 import { sliceMapValues } from "./utils";

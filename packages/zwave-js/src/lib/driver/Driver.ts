@@ -138,14 +138,14 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { randomBytes } from "crypto";
-import type { EventEmitter } from "events";
 import fsExtra from "fs-extra";
-import os from "os";
-import path from "path";
+import { randomBytes } from "node:crypto";
+import type { EventEmitter } from "node:events";
+import os from "node:os";
+import path from "node:path";
+import { URL } from "node:url";
+import * as util from "node:util";
 import { SerialPort } from "serialport";
-import { URL } from "url";
-import * as util from "util";
 import { InterpreterStatus, interpret } from "xstate";
 import { ZWaveController } from "../controller/Controller";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion";
@@ -2272,6 +2272,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	public hasPendingTransactions(
 		predicate: (t: Transaction) => boolean,
 	): boolean {
+		// Queue is not an array
+		// eslint-disable-next-line unicorn/prefer-array-some
 		if (!!this.queue.find((t) => predicate(t))) return true;
 		return this.queues.some(
 			(q) => q.currentTransaction && predicate(q.currentTransaction),

@@ -235,18 +235,18 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 			throw new TypeError("\"buffer\" is not a Buffer");
 		}
 
-		if (typeof offset !== "number" || isNaN(offset)) {
+		if (typeof offset !== "number" || Number.isNaN(offset)) {
 			throw new TypeError(
 				`"offset" is not an integer got "${
-					isNaN(offset) ? "NaN" : typeof offset
+					Number.isNaN(offset) ? "NaN" : typeof offset
 				}"`,
 			);
 		}
 
-		if (typeof length !== "number" || isNaN(length)) {
+		if (typeof length !== "number" || Number.isNaN(length)) {
 			throw new TypeError(
 				`"length" is not an integer got "${
-					isNaN(length) ? "NaN" : typeof length
+					Number.isNaN(length) ? "NaN" : typeof length
 				}"`,
 			);
 		}

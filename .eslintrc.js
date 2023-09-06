@@ -15,7 +15,7 @@
 module.exports = {
 	parser: "@typescript-eslint/parser", // Specifies the ESLint parser
 	parserOptions: {
-		ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
+		ecmaVersion: 2023, // Allows for the parsing of modern ECMAScript features
 		sourceType: "module", // Allows for the use of imports
 		project: "./tsconfig.eslint.json",
 		tsconfigRootDir: __dirname,
@@ -25,7 +25,11 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@typescript-eslint/recommended-requiring-type-checking",
 	],
-	plugins: ["deprecation", "unused-imports"],
+	plugins: [
+		"deprecation",
+		"unused-imports",
+		"unicorn",
+	],
 	reportUnusedDisableDirectives: true,
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -123,6 +127,22 @@ module.exports = {
 		"deprecation/deprecation": "error",
 		"unused-imports/no-unused-imports-ts": "error",
 		"unused-imports/no-unused-imports": "error",
+
+		"unicorn/prefer-array-find": ["error", { checkFromLast: true }],
+		"unicorn/prefer-array-flat-map": "error",
+		"unicorn/prefer-array-flat": "error",
+		"unicorn/prefer-array-index-of": "error",
+		"unicorn/prefer-array-some": "error",
+		"unicorn/prefer-at": "error",
+		"unicorn/prefer-includes": "error",
+		"unicorn/prefer-logical-operator-over-ternary": "error",
+		"unicorn/prefer-modern-math-apis": "error",
+		"unicorn/prefer-negative-index": "error",
+		"unicorn/prefer-node-protocol": "error",
+		"unicorn/prefer-regexp-test": "error",
+		"unicorn/prefer-string-slice": "error",
+		"unicorn/prefer-string-starts-ends-with": "error",
+		"unicorn/prefer-string-replace-all": "error",
 	},
 	overrides: [
 		{

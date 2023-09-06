@@ -8,7 +8,7 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
-import { isDeepStrictEqual } from "util";
+import { isDeepStrictEqual } from "node:util";
 import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 import type { MockController } from "./MockController";
 import {

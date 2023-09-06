@@ -3,10 +3,10 @@
  * anything they are not supposed to.
  */
 
-import crypto from "crypto";
 import execa from "execa";
-import fs from "fs";
-import path from "path";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import ts from "typescript";
 import { loadTSConfig, projectRoot, repoRoot } from "./tsAPITools";
 
@@ -147,7 +147,7 @@ function resolveSourceFileFromDefinition(
 }
 
 function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+	return path.relative(projectRoot, filename).replaceAll("\\", "/");
 }
 
 function isExternalModule(imp: ResolvedImport): boolean {

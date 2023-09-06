@@ -4,8 +4,8 @@
  */
 
 import { bold, red } from "ansi-colors";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import ts from "typescript";
 import { reportProblem } from "./reportProblem";
 import { loadTSConfig, projectRoot } from "./tsAPITools";
@@ -162,7 +162,7 @@ function resolveSourceFileFromDefinition(
 }
 
 function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+	return path.relative(projectRoot, filename).replaceAll("\\", "/");
 }
 
 const forbiddenImportsRegex =
@@ -203,7 +203,7 @@ export function lintForbiddenImports(): Promise<void> {
 		function checkImport(
 			imp: ResolvedImport,
 		): "ignored" | "forbidden" | "ok" {
-			const trimmedImport = imp.name.replace(/"/g, "");
+			const trimmedImport = imp.name.replaceAll("\"", "");
 			if (ignoredImports.includes(trimmedImport)) return "ignored";
 
 			if (forbidden.includes("external")) {
@@ -262,7 +262,7 @@ ${
 							// The line number is relative to the declaration file, so we cannot resolve it to the .ts file here
 							filename: path
 								.relative(projectRoot, current.file.fileName)
-								.replace(/\\/g, "/"),
+								.replaceAll("\\", "/"),
 							line: imp.line,
 							message: message,
 						});

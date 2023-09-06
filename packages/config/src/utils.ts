@@ -1,6 +1,6 @@
 import { formatId, padVersion } from "@zwave-js/shared";
 import * as fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import * as semver from "semver";
 import type { ConfigLogger } from "./Logger";
 import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig";

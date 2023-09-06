@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import test from "ava";
-import path from "path";
+import path from "node:path";
 import { ConfigManager } from "../ConfigManager";
 
 test("hash() works", async (t) => {

@@ -1,7 +1,7 @@
 import test from "ava";
 import execa from "execa";
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 
 const fixturesDir = path.join(__dirname, "../test/fixtures");
 const files: string[] = [];

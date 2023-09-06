@@ -3,7 +3,7 @@ import {
 	MultiChannelCCCommandEncapsulation,
 } from "@zwave-js/cc";
 import { MockZWaveFrameType } from "@zwave-js/testing";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

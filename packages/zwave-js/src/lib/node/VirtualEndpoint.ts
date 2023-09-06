@@ -185,8 +185,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 			this._node.physicalNodes
 				.map((n) => n.getEndpoint(this.index))
 				.filter((e): e is Endpoint => !!e)
-				.map((e) => [...e.implementedCommandClasses.keys()])
-				.reduce((acc, cur) => [...acc, ...cur], []),
+				.flatMap((e) => [...e.implementedCommandClasses.keys()]),
 		);
 		for (const cc of allCCs) {
 			if (this.supportsCC(cc)) {

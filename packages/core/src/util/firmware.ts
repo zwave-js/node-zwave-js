@@ -1,5 +1,5 @@
 import { getErrorMessage } from "@zwave-js/shared";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 // @ts-expect-error There are no type definitions for nrf-intel-hex
 import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -250,7 +250,7 @@ function extractFirmwareHEC(data: Buffer): Firmware {
 		decipher.final(),
 	])
 		.toString("ascii")
-		.replace(/ /g, "\n");
+		.replaceAll(" ", "\n");
 
 	return extractFirmwareHEX(plaintext);
 }

@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("Fibaro FGR222 should support the Fibaro CC", {

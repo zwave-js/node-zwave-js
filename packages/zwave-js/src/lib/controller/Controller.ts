@@ -101,8 +101,8 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
-import crypto from "crypto";
-import util from "util";
+import crypto from "node:crypto";
+import util from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
@@ -596,7 +596,7 @@ export class ZWaveController
 		functionType: FunctionType,
 	): MaybeNotKnown<boolean> {
 		if (!this._supportedFunctionTypes) return NOT_KNOWN;
-		return this._supportedFunctionTypes.indexOf(functionType) > -1;
+		return this._supportedFunctionTypes.includes(functionType);
 	}
 
 	private _supportedSerialAPISetupCommands:
@@ -617,7 +617,7 @@ export class ZWaveController
 		command: SerialAPISetupCommand,
 	): MaybeNotKnown<boolean> {
 		if (!this._supportedSerialAPISetupCommands) return NOT_KNOWN;
-		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
+		return this._supportedSerialAPISetupCommands.includes(command);
 	}
 
 	/**
@@ -4445,7 +4445,7 @@ ${associatedNodes.join(", ")}`,
 		// if an assignment fails.
 		while (
 			assignedRoutes.length > 0
-			&& isEmptyRoute(assignedRoutes[assignedRoutes.length - 1])
+			&& isEmptyRoute(assignedRoutes.at(-1))
 		) {
 			assignedRoutes.pop();
 		}
@@ -4710,7 +4710,7 @@ ${associatedNodes.join(", ")}`,
 		// if an assignment fails.
 		while (
 			assignedRoutes.length > 0
-			&& isEmptyRoute(assignedRoutes[assignedRoutes.length - 1])
+			&& isEmptyRoute(assignedRoutes.at(-1))
 		) {
 			assignedRoutes.pop();
 		}

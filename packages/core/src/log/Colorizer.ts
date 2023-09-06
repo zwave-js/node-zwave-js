@@ -21,7 +21,7 @@ function colorizeTextAndTags(
 	bgColor: (input: string) => string,
 ): string {
 	return textColor(
-		textWithTags.replace(
+		textWithTags.replaceAll(
 			primaryAndInlineTagRegex,
 			(match, group1) =>
 				bgColor("[") + colors.inverse(group1) + bgColor("]"),

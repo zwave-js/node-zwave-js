@@ -9,11 +9,11 @@ import {
 	stringify,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { createHash } from "crypto";
 import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
-import path from "path";
+import { createHash } from "node:crypto";
+import path from "node:path";
 import semver from "semver";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
 import type { ConfigLogger } from "../Logger";
@@ -143,7 +143,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 	for (const file of configFiles) {
 		const relativePath = path
 			.relative(devicesDir, file)
-			.replace(/\\/g, "/");
+			.replaceAll("\\", "/");
 		// Try parsing the file
 		try {
 			const config = await DeviceConfig.from(file, isEmbedded, {
@@ -385,7 +385,7 @@ export class ConditionalDeviceConfig {
 		const { relative, rootDir } = options;
 
 		const relativePath = relative
-			? path.relative(rootDir, filename).replace(/\\/g, "/")
+			? path.relative(rootDir, filename).replaceAll("\\", "/")
 			: filename;
 		const json = await readJsonWithTemplate(filename, [
 			options.rootDir,

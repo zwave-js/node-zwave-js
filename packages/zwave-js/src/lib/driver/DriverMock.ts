@@ -7,8 +7,8 @@ import {
 import type { DeepPartial } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import fs from "fs-extra";
-import { tmpdir } from "os";
-import path from "path";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import type { SerialPort } from "serialport";
 import { Driver } from "./Driver";
 import type { ZWaveOptions } from "./ZWaveOptions";

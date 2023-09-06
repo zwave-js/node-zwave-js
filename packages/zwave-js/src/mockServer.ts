@@ -12,7 +12,7 @@ import {
 	type MockNodeOptions,
 } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import { type AddressInfo, type Server, createServer } from "net";
+import { type AddressInfo, type Server, createServer } from "node:net";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,

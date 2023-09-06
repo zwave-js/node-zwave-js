@@ -1,8 +1,3 @@
-import got, {
-	type Headers,
-	type OptionsOfTextResponseBody,
-} from "@esm2cjs/got";
-import PQueue from "@esm2cjs/p-queue";
 import {
 	type Firmware,
 	RFRegion,
@@ -12,13 +7,19 @@ import {
 	guessFirmwareFileFormat,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import type {
 	FirmwareUpdateDeviceID,
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
 	FirmwareUpdateServiceResponse,
 } from "./_Types";
+
+// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
+import type { Headers, OptionsOfTextResponseBody } from "got";
+
+// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
+import type PQueue from "p-queue";
 
 function serviceURL(): string {
 	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
@@ -36,7 +37,7 @@ interface CachedRequest<T> {
 }
 
 // Queue requests to the firmware update service. Only allow few parallel requests so we can make some use of the cache.
-const requestQueue = new PQueue({ concurrency: 2 });
+let requestQueue: PQueue | undefined;
 
 let cleanCacheTimeout: NodeJS.Timeout | undefined;
 function cleanCache() {
@@ -78,6 +79,7 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 		}
 	}
 
+	const { got } = await import("got");
 	const response = await got(config);
 	const responseJson = JSON.parse(response.body) as T;
 
@@ -209,13 +211,19 @@ export async function getAvailableFirmwareUpdates(
 		headers,
 	};
 
-	const ret: FirmwareUpdateServiceResponse[] = await requestQueue.add(() =>
-		cachedGot(config)
-	);
+	if (!requestQueue) {
+		// I just love ESM
+		const PQueue = (await import("p-queue")).default;
+		requestQueue = new PQueue({ concurrency: 2 });
+	}
+	// Weird types...
+	const result = (
+		await requestQueue.add(() => cachedGot(config))
+	) as FirmwareUpdateServiceResponse[];
 
 	// Remember the device ID in the response, so we can use it later
 	// to ensure the update is for the correct device
-	return ret.map((update) => ({
+	return result.map((update) => ({
 		device: deviceId,
 		...update,
 	}));
@@ -235,6 +243,7 @@ export async function downloadFirmwareUpdate(
 	// TODO: Make request abort-able (requires AbortController, Node 14.17+ / Node 16)
 
 	// Download the firmware file
+	const { got } = await import("got");
 	const downloadResponse = await got.get(file.url, {
 		timeout: { request: DOWNLOAD_TIMEOUT },
 		responseType: "buffer",
