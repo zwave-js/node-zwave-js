@@ -596,7 +596,7 @@ export class ZWaveController
 		functionType: FunctionType,
 	): MaybeNotKnown<boolean> {
 		if (!this._supportedFunctionTypes) return NOT_KNOWN;
-		return this._supportedFunctionTypes.indexOf(functionType) > -1;
+		return this._supportedFunctionTypes.includes(functionType);
 	}
 
 	private _supportedSerialAPISetupCommands:
@@ -617,7 +617,7 @@ export class ZWaveController
 		command: SerialAPISetupCommand,
 	): MaybeNotKnown<boolean> {
 		if (!this._supportedSerialAPISetupCommands) return NOT_KNOWN;
-		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
+		return this._supportedSerialAPISetupCommands.includes(command);
 	}
 
 	/**

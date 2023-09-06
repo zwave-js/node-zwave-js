@@ -330,7 +330,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			}
 		}
 		// Expect more messages as long as we haven't received everything
-		return receivedBytes.some((b) => b === false);
+		return receivedBytes.includes(false);
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {

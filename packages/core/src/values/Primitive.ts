@@ -254,7 +254,7 @@ export function encodeBitMask(
 	const numBytes = Math.ceil((maxValue - startValue + 1) / 8);
 	const ret = Buffer.alloc(numBytes, 0);
 	for (let val = startValue; val <= maxValue; val++) {
-		if (values.indexOf(val) === -1) continue;
+		if (!values.includes(val)) continue;
 		const byteNum = (val - startValue) >>> 3; // id / 8
 		const bitNum = (val - startValue) % 8;
 		ret[byteNum] |= 2 ** bitNum;

@@ -44,7 +44,7 @@ export default function transformer(
 	};
 	return (context: ts.TransformationContext) => (file: ts.SourceFile) => {
 		// Bail early if there is no import for "@zwave-js/transformers". In this case, there's nothing to transform
-		if (file.getFullText().indexOf("@zwave-js/transformers") === -1) {
+		if (!file.getFullText().includes("@zwave-js/transformers")) {
 			if (options?.verbose) {
 				console.log(
 					`@zwave-js/transformers not imported in ${file.fileName}, skipping`,
