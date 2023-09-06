@@ -35,6 +35,7 @@ export function createTestingHost(
 	const valuesStorage = new Map();
 	const metadataStorage = new Map();
 	const valueDBCache = new Map<number, ValueDB>();
+	const supervisionSessionIDs = new Map<number, () => number>();
 
 	const ret: TestingHost = {
 		homeId: options.homeId ?? 0x7e570001,
@@ -75,9 +76,15 @@ export function createTestingHost(
 			?? options.getSafeCCVersion
 			?? (() => 100),
 		getNextCallbackId: createWrappingCounter(0xff),
-		getNextSupervisionSessionId: createWrappingCounter(
-			MAX_SUPERVISION_SESSION_ID,
-		),
+		getNextSupervisionSessionId: (nodeId) => {
+			if (!supervisionSessionIDs.has(nodeId)) {
+				supervisionSessionIDs.set(
+					nodeId,
+					createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
+				);
+			}
+			return supervisionSessionIDs.get(nodeId)!();
+		},
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
 				valueDBCache.set(
