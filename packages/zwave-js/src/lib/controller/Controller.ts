@@ -4275,11 +4275,6 @@ ${associatedNodes.join(", ")}`,
 	// means that a previously-assigned priority route can randomly change if assignReturnRoute assigns enough routes.
 	// deleteReturnRoute does also clear the priority byte.
 
-	/** @deprecated Use {@link assignSUCReturnRoutes} instead */
-	public assignSUCReturnRoute(nodeId: number): Promise<boolean> {
-		return this.assignSUCReturnRoutes(nodeId);
-	}
-
 	/**
 	 * Instructs the controller to assign static routes from the given end node to the SUC.
 	 * This will assign up to 4 routes, depending on the network topology (that the controller knows about).
@@ -4457,11 +4452,6 @@ ${associatedNodes.join(", ")}`,
 		return result;
 	}
 
-	/** @deprecated use {@link deleteSUCReturnRoutes} instead */
-	public deleteSUCReturnRoute(nodeId: number): Promise<boolean> {
-		return this.deleteReturnRoutes(nodeId);
-	}
-
 	/**
 	 * Instructs the controller to assign static routes from the given end node to the SUC.
 	 * This will assign up to 4 routes, depending on the network topology (that the controller knows about).
@@ -4534,14 +4524,6 @@ ${associatedNodes.join(", ")}`,
 		for (let dest = 1; dest <= MAX_NODES; dest++) {
 			this.setCustomReturnRoutesCached(nodeId, dest, undefined);
 		}
-	}
-
-	/** @deprecated use {@link assignReturnRoutes} instead */
-	public assignReturnRoute(
-		nodeId: number,
-		destinationNodeId: number,
-	): Promise<boolean> {
-		return this.assignReturnRoutes(nodeId, destinationNodeId);
 	}
 
 	/**
@@ -4739,11 +4721,6 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		return result;
-	}
-
-	/** @deprecated use {@link deleteReturnRoutes} instead */
-	public deleteReturnRoute(nodeId: number): Promise<boolean> {
-		return this.deleteReturnRoutes(nodeId);
 	}
 
 	/**
