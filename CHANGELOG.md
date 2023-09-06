@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v12)
+* Remove support for Node.js 14 and 16 (#6245)
+* Subpath exports are now exposed using the `exports` field in `package.json` instead of `typesVersions` (#5839)
+* The `"notification"` event now includes a reference to the endpoint that sent the notification (#6083)
+* Keep separate Supervision session ID counters for each node (#6175)
+* Validate the device fingerprint before installing firmware update instead of when checking for updates (#6192)
+* Removed some deprecated methods (#6250)
+* Managing SUC routes with the non-SUC method variants is no longer allowed (#6251)
+* "Heal (network)" was renamed to "rebuild routes" to better reflect what it does (#6252)
+
+### Features
+* Detect an unresponsive stick and reset it (#6244)
+
 ## 11.14.0 (2023-09-04)
 ### Features
 * `Driver.sendCommand`, `Driver.sendMessage` and `Node.setValue` now accept an optional callback as part of the options that will be called with the transaction progress (queued, active, failed, complete) (#6212)
