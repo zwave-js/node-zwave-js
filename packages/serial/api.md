@@ -8,18 +8,18 @@
 
 import type { DataDirection } from '@zwave-js/core/safe';
 import { DataDirection as DataDirection_2 } from '@zwave-js/core';
-import { Duplex } from 'stream';
-import { EventEmitter } from 'events';
+import { Duplex } from 'node:stream';
+import { EventEmitter } from 'node:events';
 import { IZWaveNode } from '@zwave-js/core';
 import type { JSONObject } from '@zwave-js/shared/safe';
 import type { LogContext } from '@zwave-js/core/safe';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessagePriority } from '@zwave-js/core';
-import * as net from 'net';
-import { PassThrough } from 'stream';
+import * as net from 'node:net';
+import { PassThrough } from 'node:stream';
 import { SerialPort } from 'serialport';
-import { Transform } from 'stream';
-import { TransformCallback } from 'stream';
+import { Transform } from 'node:stream';
+import { TransformCallback } from 'node:stream';
 import type { TypedClassDecorator } from '@zwave-js/shared/safe';
 import type { ZWaveApplicationHost } from '@zwave-js/host';
 import type { ZWaveHost } from '@zwave-js/host';

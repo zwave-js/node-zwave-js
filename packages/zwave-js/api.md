@@ -36,11 +36,13 @@ import { DataRate as DataRate_2 } from '@zwave-js/core';
 import { DeepPartial } from '@zwave-js/shared';
 import type { DeferredPromise } from 'alcalzone-shared/deferred-promise';
 import { DeviceConfig } from '@zwave-js/config';
+import { DeviceID } from '@zwave-js/config';
 import { Duration } from '@zwave-js/core/safe';
 import { Duration as Duration_2 } from '@zwave-js/core';
 import { DurationUnit } from '@zwave-js/core/safe';
 import { EntryControlDataTypes } from '@zwave-js/cc/safe';
 import { EntryControlEventTypes } from '@zwave-js/cc/safe';
+import { Expand } from '@zwave-js/shared/safe';
 import { extractFirmware } from '@zwave-js/core';
 import { FileSystem } from '@zwave-js/host/safe';
 import type { FileSystem as FileSystem_2 } from '@zwave-js/host';
@@ -147,7 +149,7 @@ import { TranslatedValueID as TranslatedValueID_2 } from '@zwave-js/core';
 import { TransmitOptions } from '@zwave-js/core';
 import { TXReport } from '@zwave-js/core/safe';
 import { TypedEventEmitter } from '@zwave-js/shared';
-import * as util from 'util';
+import * as util from 'node:util';
 import type { ValueAddedArgs } from '@zwave-js/core/safe';
 import { ValueDB } from '@zwave-js/core';
 import { ValueID } from '@zwave-js/core/safe';
@@ -334,8 +336,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     createSendDataMessage(command: CommandClass, options?: Omit<SendCommandOptions, keyof SendMessageOptions>): SendDataMessage;
     destroy(): Promise<void>;
     disableStatistics(): void;
-    // @deprecated (undocumented)
-    enableErrorReporting(): void;
     // Warning: (ae-forgotten-export) The symbol "AppInfo" needs to be exported by the entry point index.d.ts
     enableStatistics(appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -351,7 +351,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass_2>;
     getLogConfig(): LogConfig;
     readonly getNextCallbackId: () => number;
-    readonly getNextSupervisionSessionId: () => number;
+    getNextSupervisionSessionId(nodeId: number): number;
     readonly getNextTransportServiceSessionId: () => number;
     // (undocumented)
     getNodeUnsafe(msg: Message): ZWaveNode | undefined;
@@ -538,6 +538,14 @@ export { Firmware }
 
 export { FirmwareFileFormat }
 
+// Warning: (ae-missing-release-tag) "FirmwareUpdateDeviceID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type FirmwareUpdateDeviceID = Expand<DeviceID & {
+    firmwareVersion: string;
+    rfRegion?: RFRegion_2;
+}>;
+
 // Warning: (ae-missing-release-tag) "FirmwareUpdateFileInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -550,23 +558,13 @@ export interface FirmwareUpdateFileInfo {
     url: string;
 }
 
+// Warning: (ae-forgotten-export) The symbol "FirmwareUpdateServiceResponse" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "FirmwareUpdateInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface FirmwareUpdateInfo {
-    // (undocumented)
-    changelog: string;
-    // (undocumented)
-    channel: "stable" | "beta";
-    // (undocumented)
-    downgrade: boolean;
-    // (undocumented)
-    files: FirmwareUpdateFileInfo[];
-    // (undocumented)
-    normalizedVersion: string;
-    // (undocumented)
-    version: string;
-}
+export type FirmwareUpdateInfo = Expand<FirmwareUpdateServiceResponse & {
+    device: FirmwareUpdateDeviceID;
+}>;
 
 export { FirmwareUpdateStatus }
 
@@ -622,18 +620,6 @@ export interface GetFirmwareUpdatesOptions {
 }
 
 export { guessFirmwareFileFormat }
-
-// Warning: (ae-missing-release-tag) "HealNetworkOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface HealNetworkOptions {
-    includeSleeping?: boolean;
-}
-
-// Warning: (ae-missing-release-tag) "HealNodeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
 
 // Warning: (ae-missing-release-tag) "healthCheckRatingToWord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -853,6 +839,18 @@ export enum ProvisioningEntryStatus {
 export { QRCodeVersion }
 
 export { QRProvisioningInformation }
+
+// Warning: (ae-missing-release-tag) "RebuildRoutesOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RebuildRoutesOptions {
+    includeSleeping?: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "RebuildRoutesStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type RebuildRoutesStatus = "pending" | "done" | "failed" | "skipped";
 
 // Warning: (ae-missing-release-tag) "RefreshInfoOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1109,35 +1107,19 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     assignPrioritySUCReturnRoute(nodeId: number, repeaters: number[], routeSpeed: ZWaveDataRate): Promise<boolean>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignReturnRoutes"
-    //
-    // @deprecated (undocumented)
-    assignReturnRoute(nodeId: number, destinationNodeId: number): Promise<boolean>;
     assignReturnRoutes(nodeId: number, destinationNodeId: number): Promise<boolean>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignSUCReturnRoutes"
-    //
-    // @deprecated (undocumented)
-    assignSUCReturnRoute(nodeId: number): Promise<boolean>;
     assignSUCReturnRoutes(nodeId: number): Promise<boolean>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     backupNVMRaw(onProgress?: (bytesRead: number, total: number) => void): Promise<Buffer>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     beginExclusion(options?: ExclusionOptions): Promise<boolean>;
-    beginHealingNetwork(options?: HealNetworkOptions): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     beginInclusion(options?: InclusionOptions): Promise<boolean>;
+    beginRebuildingRoutes(options?: RebuildRoutesOptions): boolean;
     // (undocumented)
     cancelSecureBootstrapS2(reason: KEXFailType): void;
     configureSUC(nodeId: number, enableSUC: boolean, enableSIS: boolean): Promise<boolean>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "deleteReturnRoutes"
-    //
-    // @deprecated (undocumented)
-    deleteReturnRoute(nodeId: number): Promise<boolean>;
     deleteReturnRoutes(nodeId: number): Promise<boolean>;
-    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "deleteSUCReturnRoutes"
-    //
-    // @deprecated (undocumented)
-    deleteSUCReturnRoute(nodeId: number): Promise<boolean>;
     deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getNodeNeighbors"
     discoverNodeNeighbors(nodeId: number): Promise<boolean>;
@@ -1154,7 +1136,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         endOfFile: boolean;
     }>;
     externalNVMWriteByte(offset: number, data: number): Promise<boolean>;
-    firmwareUpdateOTA(nodeId: number, updates: FirmwareUpdateFileInfo[]): Promise<FirmwareUpdateResult_2>;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "getAvailableFirmwareUpdates"
+    firmwareUpdateOTA(nodeId: number, updateInfo: FirmwareUpdateInfo): Promise<FirmwareUpdateResult_2>;
     firmwareUpdateOTW(data: Buffer): Promise<ControllerFirmwareUpdateResult>;
     // (undocumented)
     get firmwareVersion(): MaybeNotKnown<string>;
@@ -1193,7 +1177,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     getProvisioningEntry(dskOrNodeId: string | number): Readonly<SmartStartProvisioningEntry> | undefined;
     getRFRegion(): Promise<RFRegion_2>;
     hasPlannedProvisioningEntries(): boolean;
-    healNode(nodeId: number): Promise<boolean>;
     get homeId(): MaybeNotKnown<number>;
     // (undocumented)
     get inclusionState(): InclusionState;
@@ -1203,9 +1186,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     isFailedNode(nodeId: number): Promise<boolean>;
     isFirmwareUpdateInProgress(): boolean;
     isFunctionSupported(functionType: FunctionType): MaybeNotKnown<boolean>;
-    get isHealNetworkActive(): boolean;
     // (undocumented)
     get isPrimary(): MaybeNotKnown<boolean>;
+    get isRebuildingRoutes(): boolean;
     isSerialAPISetupCommandSupported(command: SerialAPISetupCommand): MaybeNotKnown<boolean>;
     // (undocumented)
     get isSIS(): MaybeNotKnown<boolean>;
@@ -1229,6 +1212,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // (undocumented)
     get protocolVersion(): MaybeNotKnown<string>;
     provisionSmartStartNode(entry: PlannedProvisioningEntry): void;
+    rebuildNodeRoutes(nodeId: number): Promise<boolean>;
     removeAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     removeFailedNode(nodeId: number): Promise<void>;
@@ -1262,8 +1246,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     setRFRegion(region: RFRegion_2): Promise<boolean>;
     get status(): ControllerStatus_2;
     stopExclusion(): Promise<boolean>;
-    stopHealingNetwork(): boolean;
     stopInclusion(): Promise<boolean>;
+    stopRebuildingRoutes(): boolean;
     // (undocumented)
     get sucNodeId(): MaybeNotKnown<number>;
     // (undocumented)
@@ -1621,7 +1605,7 @@ export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
 //
 // @public
 export type ZWaveNotificationCallbackParams_EntryControlCC = [
-node: ZWaveNode,
+endpoint: Endpoint,
 ccId: (typeof CommandClasses)["Entry Control"],
 args: ZWaveNotificationCallbackArgs_EntryControlCC
 ];
@@ -1630,7 +1614,7 @@ args: ZWaveNotificationCallbackArgs_EntryControlCC
 //
 // @public
 export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-node: ZWaveNode,
+endpoint: Endpoint,
 ccId: (typeof CommandClasses)["Multilevel Switch"],
 args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 ];
@@ -1639,7 +1623,7 @@ args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 //
 // @public
 export type ZWaveNotificationCallbackParams_NotificationCC = [
-node: ZWaveNode,
+endpoint: Endpoint,
 ccId: CommandClasses.Notification,
 args: ZWaveNotificationCallbackArgs_NotificationCC
 ];
@@ -1648,7 +1632,7 @@ args: ZWaveNotificationCallbackArgs_NotificationCC
 //
 // @public
 export type ZWaveNotificationCallbackParams_PowerlevelCC = [
-node: ZWaveNode,
+endpoint: Endpoint,
 ccId: CommandClasses.Powerlevel,
 args: ZWaveNotificationCallbackArgs_PowerlevelCC
 ];
