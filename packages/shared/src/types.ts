@@ -37,3 +37,13 @@ export type OnlyMethods<T> = {
 export type MethodsNamesOf<T> = OnlyMethods<T>[keyof T];
 
 export type IsAny<T> = 0 extends 1 & T ? true : false;
+
+// expands object types recursively
+export type Expand<T> =
+	// Expand object types
+	T extends object
+		? T extends infer O
+			? { [K in keyof O]: O[K] }
+			: never
+		: // Fallback to the type itself if no match
+		  T;
