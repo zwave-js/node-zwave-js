@@ -226,11 +226,11 @@ test.serial(
 		const { driver, driverLogger, spyTransport } = t.context;
 		driverLogger.transaction(
 			createTransaction(driver, {
-				priority: MessagePriority.MultistepController,
+				priority: MessagePriority.Controller,
 			}),
 		);
 		assertMessage(t, spyTransport, {
-			predicate: (msg) => msg.includes("[P: MultistepController]"),
+			predicate: (msg) => msg.includes("[P: Controller]"),
 		});
 	},
 );

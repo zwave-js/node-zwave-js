@@ -7,18 +7,18 @@ import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
-	// Some messages like nonces, responses to Supervision and Transport Service
-	// need to be handled before all others. We use this priority to decide which
-	// message goes onto the immediate queue.
-	Immediate = 0,
+	// High-priority controller commands that must be handled before all other commands.
+	// We use this priority to decide which messages go onto the immediate queue.
+	ControllerImmediate = 0,
+	// Controller commands finish quickly and should be preferred over node queries
+	Controller,
+	// Some node commands like nonces, responses to Supervision and Transport Service
+	// need to be handled before all node commands.
+	// We use this priority to decide which messages go onto the immediate queue.
+	Immediate,
 	// To avoid S2 collisions, some commands that normally have Immediate priority
 	// have to go onto the normal queue, but still before all other messages
 	ImmediateLow,
-	// Controller commands usually finish quickly and should be preferred over node queries
-	Controller,
-	// Multistep controller commands typically require user interaction but still
-	// should happen at a higher priority than any node data exchange
-	MultistepController,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly

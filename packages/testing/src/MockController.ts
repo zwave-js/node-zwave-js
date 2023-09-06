@@ -100,6 +100,7 @@ export class MockController {
 
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
+
 	private expectedHostACKs: TimedExpectation[] = [];
 	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
 	private expectedNodeFrames: Map<
@@ -140,6 +141,8 @@ export class MockController {
 	/** Can be used by behaviors to store controller related state */
 	public readonly state = new Map<string, unknown>();
 
+	/** Controls whether the controller automatically ACKs messages from the host before handling them */
+	public autoAckHostMessages: boolean = true;
 	/** Controls whether the controller automatically ACKs node frames before handling them */
 	public autoAckNodeFrames: boolean = true;
 
@@ -179,8 +182,10 @@ export class MockController {
 				parseCCs: false,
 			});
 			this.receivedHostMessages.push(msg);
-			// all good, respond with ACK
-			this.sendHeaderToHost(MessageHeaders.ACK);
+			if (this.autoAckHostMessages) {
+				// all good, respond with ACK
+				this.ackHostMessage();
+			}
 		} catch (e: any) {
 			throw new Error(
 				`Mock controller received an invalid message from the host: ${e.stack}`,
@@ -325,6 +330,13 @@ export class MockController {
 		this.serial.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
 		await this.expectHostACK(1000);
+	}
+
+	/**
+	 * Sends an ACK frame to the host
+	 */
+	public ackHostMessage(): void {
+		this.sendHeaderToHost(MessageHeaders.ACK);
 	}
 
 	/** Gets called when a {@link MockZWaveFrame} is received from a {@link MockNode} */

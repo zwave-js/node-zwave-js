@@ -225,7 +225,7 @@ const respondToGetSerialApiInitData: MockControllerBehavior = {
 };
 
 const respondToSoftReset: MockControllerBehavior = {
-	async onHostMessage(host, controller, msg) {
+	onHostMessage(host, controller, msg) {
 		if (msg instanceof SoftResetRequest) {
 			const ret = new SerialAPIStartedRequest(host, {
 				wakeUpReason: SerialAPIWakeUpReason.SoftwareReset,
@@ -234,7 +234,9 @@ const respondToSoftReset: MockControllerBehavior = {
 				...determineNIF(),
 				supportsLongRange: controller.capabilities.supportsLongRange,
 			});
-			await controller.sendToHost(ret.serialize());
+			setImmediate(async () => {
+				await controller.sendToHost(ret.serialize());
+			});
 			return true;
 		}
 	},

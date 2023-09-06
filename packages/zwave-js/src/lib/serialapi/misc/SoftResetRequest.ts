@@ -8,5 +8,5 @@ import {
 } from "@zwave-js/serial";
 
 @messageTypes(MessageType.Request, FunctionType.SoftReset)
-@priority(MessagePriority.Controller)
+@priority(MessagePriority.ControllerImmediate)
 export class SoftResetRequest extends Message {}

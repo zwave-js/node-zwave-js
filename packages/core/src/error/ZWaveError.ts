@@ -275,3 +275,11 @@ export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
 	}
 	return false;
 }
+
+export function isMissingControllerACK(
+	e: unknown,
+): e is ZWaveError {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Timeout
+		&& e.context === "ACK";
+}

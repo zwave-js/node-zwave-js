@@ -84,6 +84,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	highResTimestamp,
+	isMissingControllerACK,
 	isZWaveError,
 	messageRecordToLines,
 	securityClassIsS2,
@@ -533,8 +534,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		this.immediateQueue = new TransactionQueue({
 			name: "immediate",
-			// Messages on the immediate queue may always be sent unless the queue is paused
-			mayStartNextTransaction: () => !this.queuePaused,
+			mayStartNextTransaction: (t) => {
+				// While the controller is unresponsive, only soft resetting is allowed
+				if (this.controller.status === ControllerStatus.Unresponsive) {
+					return t.message instanceof SoftResetRequest;
+				}
+
+				// All other messages on the immediate queue may always be sent as long as the controller is ready to send
+				return !this.queuePaused
+					&& this.controller.status === ControllerStatus.Ready;
+			},
 		});
 		this.queue = new TransactionQueue({
 			name: "normal",
@@ -1341,7 +1350,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			this._controller = new ZWaveController(this);
 			this._controller
 				.on("node added", this.onNodeAdded.bind(this))
-				.on("node removed", this.onNodeRemoved.bind(this));
+				.on("node removed", this.onNodeRemoved.bind(this))
+				.on(
+					"status changed",
+					this.onControllerStatusChanged.bind(this),
+				);
 		}
 
 		if (!this._options.testingHooks?.skipControllerIdentification) {
@@ -2105,6 +2118,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		this.checkAllNodesReady();
 	}
 
+	private onControllerStatusChanged(_status: ControllerStatus): void {
+		this.triggerQueues();
+	}
+
 	/**
 	 * Returns the time in seconds to actually wait after a firmware upgrade, depending on what the device said.
 	 * This number will always be a bit greater than the advertised duration, because devices have been found to take longer to actually reboot.
@@ -2512,6 +2529,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				`Soft reset failed: ${getErrorMessage(e)}`,
 				"error",
 			);
+			// Don't continue if the controller is unresponsive
+			if (isMissingControllerACK(e)) throw e;
 		}
 
 		if (this._controller) {
@@ -2634,6 +2653,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this.unpauseSendQueue();
 				await this.sendMessage(new GetControllerVersionRequest(this), {
 					supportCheck: false,
+					priority: MessagePriority.ControllerImmediate,
 				});
 				this.pauseSendQueue();
 				this.controllerLog.print("Serial API responded");
@@ -3463,6 +3483,56 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
 
 			return true;
+		}
+	}
+
+	private handleMissingControllerACK(
+		transaction: Transaction,
+		error: ZWaveError,
+	): boolean {
+		if (!this._controller) return false;
+
+		const fail = () => {
+			this.driverLog.print(
+				"Recovering unresponsive controller failed. Restarting the driver...",
+				"error",
+			);
+			void this.destroy();
+		};
+
+		if (this._controller.status !== ControllerStatus.Unresponsive) {
+			// The controller was responsive before this transaction failed.
+			// Mark it as unresponsive and try to soft-reset it.
+			this.controller.setStatus(
+				ControllerStatus.Unresponsive,
+			);
+
+			this.driverLog.print(
+				"Attempting to recover unresponsive controller...",
+				"warn",
+			);
+
+			// Re-queue the transaction.
+			// Its message generator may have finished, so reset that too.
+			transaction.reset();
+			this.queue.add(transaction.clone());
+
+			// Execute the soft-reset asynchronously
+			void this.softReset().then(() => {
+				// The controller responded. It is no longer unresponsive
+				this._controller?.setStatus(ControllerStatus.Ready);
+			}).catch(() => {
+				// Soft-reset failed.
+				// Reject the original transaction and try restarting the driver.
+				this.rejectTransaction(transaction, error);
+				fail();
+			});
+
+			return true;
+		} else {
+			// We already attempted to recover from an unresponsive controller.
+			// Ending up here means the soft-reset also failed and the driver is about to be destroyed
+			return false;
 		}
 	}
 
@@ -4459,11 +4529,20 @@ ${handlers.length} left`,
 	}
 
 	private mayStartTransaction(transaction: Transaction): boolean {
-		// We may not send anything if the send thread is paused
-		if (this.queuePaused) return false;
+		// We may not send anything on the normal queue if the send thread is paused
+		// or the controller is unresponsive
+		if (
+			this.queuePaused
+			|| this.controller.status === ControllerStatus.Unresponsive
+		) {
+			return false;
+		}
 
 		const message = transaction.message;
 		const targetNode = message.getNodeUnsafe(this);
+
+		// Messages to the controller may always be sent...
+		if (!targetNode) return true;
 
 		// The transaction queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
 		// There are a few exceptions:
@@ -4477,8 +4556,6 @@ ${handlers.length} left`,
 
 		// Pings may always be sent
 		if (messageIsPing(message)) return true;
-		// Or messages to the controller
-		if (!targetNode) return true;
 
 		return (
 			targetNode.status !== NodeStatus.Asleep
@@ -4520,7 +4597,7 @@ ${handlers.length} left`,
 			// Handle errors after clearing the current transaction.
 			// Otherwise, it will get considered the active transaction and cause an unnecessary SendDataAbort
 			if (error) {
-				this.rejectTransaction(transaction, error);
+				this.handleFailedTransaction(transaction, error);
 			}
 
 			setIdleTimer = setImmediate(() => {
@@ -4548,7 +4625,6 @@ ${handlers.length} left`,
 					);
 					if (isTransmitReport(prevResult)) {
 						// Figure out if the controller is jammed. If it is, wait a second and try again.
-
 						// https://github.com/zwave-js/node-zwave-js/issues/6199
 						// In some cases, the transmit status can be Fail, even after transmitting for a couple of seconds.
 						// Not sure what causes this, but it doesn't mean that the controller is jammed.
@@ -4568,7 +4644,7 @@ ${handlers.length} left`,
 						if (
 							this.controller.status === ControllerStatus.Jammed
 						) {
-							// The controller status is no longer uncertain
+							// A command could be sent, so the controller is no longer jammed
 							this.controller.setStatus(ControllerStatus.Ready);
 						}
 
@@ -4610,6 +4686,9 @@ ${handlers.length} left`,
 							await this.abortSendData();
 							// Wait a short amount of time so everything can settle
 							delay = 50;
+						} else if (isMissingControllerACK(e)) {
+							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
+							throw e;
 						}
 
 						if (
@@ -4906,7 +4985,10 @@ ${handlers.length} left`,
 		transaction.tag = options.tag;
 
 		// And queue it
-		if (transaction.priority === MessagePriority.Immediate) {
+		if (
+			transaction.priority === MessagePriority.Immediate
+			|| transaction.priority === MessagePriority.ControllerImmediate
+		) {
 			this.immediateQueue.add(transaction);
 		} else {
 			this.queue.add(transaction);
@@ -5417,15 +5499,25 @@ ${handlers.length} left`,
 		};
 	}
 
-	private rejectTransaction(
+	private handleFailedTransaction(
 		transaction: Transaction,
 		error: ZWaveError,
 	): void {
 		// If a node failed to respond in time, it might be sleeping
 		if (this.isMissingNodeACK(transaction, error)) {
 			if (this.handleMissingNodeACK(transaction as any, error)) return;
+		} else if (isMissingControllerACK(error)) {
+			// If the controller failed to respond in time, we attempt to recover from this
+			if (this.handleMissingControllerACK(transaction, error)) return;
 		}
 
+		this.rejectTransaction(transaction, error);
+	}
+
+	private rejectTransaction(
+		transaction: Transaction,
+		error: ZWaveError,
+	): void {
 		transaction.setProgress({
 			state: TransactionState.Failed,
 			reason: error.message,
