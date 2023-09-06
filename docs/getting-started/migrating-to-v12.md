@@ -54,6 +54,23 @@ const updateInfo = updateInfos[0];
 await controller.firmwareUpdateOTA(nodeId, updateInfo);
 ```
 
+## Managing (custom/priority) return routes to the SUC (primary controller) must be done with the `...SUCReturnRoutes` methods
+
+Managing return routes has been an inconsistent topic before. Since the protocol distinguishes between SUC return routes and return routes between end nodes, we do the same.
+Previously, calling `assignReturnRoutes` (and similar) with the SUC (Z-Wave JS's node ID) as the destination would automatically do the correct thing and call `assignSUCReturnRoutes` (and similar). However, calling `deleteReturnRoutes` would not delete the SUC return routes, but the return routes between end nodes. This was inconsistent and confusing.
+
+Attempting to manage the return routes to the SUC (where the destination node ID is `controller.ownNodeId`) without using the `...SUCReturnRoutes` methods will now throw an error, explaining which method to use instead.
+
+## Removed some deprecated methods
+
+The following methods were deprecated/renamed and have now been removed:
+
+- `Controller.assignSUCReturnRoute`: Use `Controller.assignSUCReturnRoutes` instead
+- `Controller.deleteSUCReturnRoute`: Use `Controller.deleteSUCReturnRoutes` instead
+- `Controller.assignReturnRoute`: Use `Controller.assignReturnRoutes` instead
+- `Controller.deleteReturnRoute`: Use `Controller.deleteReturnRoutes` instead
+- `Driver.enableErrorReporting`: Error reporting has been fully removed
+
 ## `ZWaveHost.getNextSupervisionSessionId` requires a node ID now
 
 This change only concerns custom implementations of the `ZWaveHost` interface and should not affect most users/codebases. The `Supervision` session IDs must be tracked per node now and not globally:
@@ -65,13 +82,3 @@ interface ZWaveHost {
 +	getNextSupervisionSessionId(nodeId: number): number;
 }
 ```
-
-## Removed some deprecated methods
-
-The following methods were deprecated/renamed and have now been removed:
-
-- `Controller.assignSUCReturnRoute`: Use `Controller.assignSUCReturnRoutes` instead
-- `Controller.deleteSUCReturnRoute`: Use `Controller.deleteSUCReturnRoutes` instead
-- `Controller.assignReturnRoute`: Use `Controller.assignReturnRoutes` instead
-- `Controller.deleteReturnRoute`: Use `Controller.deleteReturnRoutes` instead
-- `Driver.enableErrorReporting`: Error reporting has been fully removed
