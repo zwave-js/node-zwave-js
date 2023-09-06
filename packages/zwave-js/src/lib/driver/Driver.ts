@@ -1852,11 +1852,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		});
 	}
 
-	/** @deprecated This does nothing */
-	public enableErrorReporting(): void {
-		// Intentionally empty
-	}
-
 	private _statisticsEnabled: boolean = false;
 	/** Whether reporting usage statistics is currently enabled */
 	public get statisticsEnabled(): boolean {
