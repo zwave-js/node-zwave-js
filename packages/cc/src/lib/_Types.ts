@@ -1,11 +1,11 @@
 import type { Scale } from "@zwave-js/config/safe";
 import {
-	ZWaveDataRate,
 	type CommandClasses,
 	type DataRate,
 	type FLiRS,
 	type MaybeNotKnown,
 	type ValueMetadata,
+	ZWaveDataRate,
 } from "@zwave-js/core/safe";
 
 export enum AlarmSensorCommand {
@@ -527,16 +527,16 @@ export function getEnergyProductionScale(
 			unit: "W",
 		};
 	} else if (
-		parameter === EnergyProductionParameter["Production Total"] &&
-		key === 0x00
+		parameter === EnergyProductionParameter["Production Total"]
+		&& key === 0x00
 	) {
 		return {
 			key,
 			unit: "Wh",
 		};
 	} else if (
-		parameter === EnergyProductionParameter["Production Today"] &&
-		key === 0x00
+		parameter === EnergyProductionParameter["Production Today"]
+		&& key === 0x00
 	) {
 		return {
 			key,
@@ -771,19 +771,19 @@ export enum FirmwareDownloadStatus {
 
 export type FirmwareUpdateCapabilities =
 	| {
-			/** Indicates whether the node's firmware can be upgraded */
-			readonly firmwareUpgradable: false;
-	  }
+		/** Indicates whether the node's firmware can be upgraded */
+		readonly firmwareUpgradable: false;
+	}
 	| {
-			/** Indicates whether the node's firmware can be upgraded */
-			readonly firmwareUpgradable: true;
-			/** An array of firmware targets that can be upgraded */
-			readonly firmwareTargets: readonly number[];
-			/** Indicates whether the node continues to function normally during an upgrade */
-			readonly continuesToFunction: MaybeNotKnown<boolean>;
-			/** Indicates whether the node supports delayed activation of the new firmware */
-			readonly supportsActivation: MaybeNotKnown<boolean>;
-	  };
+		/** Indicates whether the node's firmware can be upgraded */
+		readonly firmwareUpgradable: true;
+		/** An array of firmware targets that can be upgraded */
+		readonly firmwareTargets: readonly number[];
+		/** Indicates whether the node continues to function normally during an upgrade */
+		readonly continuesToFunction: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports delayed activation of the new firmware */
+		readonly supportsActivation: MaybeNotKnown<boolean>;
+	};
 
 export interface FirmwareUpdateProgress {
 	/** Which part/file of the firmware update process is currently in progress. This is a number from 1 to `totalFiles` and can be used to display progress. */

@@ -43,6 +43,24 @@
 			}
 		]
 	},
+	"volume_two_options": {
+		"label": "Volume",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "High",
+				"value": 1
+			},
+			{
+				"label": "Silent",
+				"value": 3
+			}
+		]
+	},
 	"auto_relock": {
 		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Auto Relock"
@@ -117,6 +135,15 @@
 		"maxValue": 127,
 		"defaultValue": 60
 	},
+	"wrong_code_lockout_10_to_132": {
+		"label": "Wrong Code Lockout Time",
+		"unit": "seconds",
+		"valueSize": 1,
+		"minValue": 10,
+		"maxValue": 132,
+		"defaultValue": 60,
+		"unsigned": true
+	},
 	"wrong_tag_limit": {
 		"label": "Wrong Tag Limit",
 		"description": "Number of wrong attempts before the lockout a triggered",
@@ -185,11 +212,9 @@
 			}
 		]
 	},
-	"operating_mode": {
+	"operating_mode_normal_vacation_privacy": {
 		"label": "Operating Mode",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -208,11 +233,9 @@
 			}
 		]
 	},
-	"operating_mode_3": {
+	"operating_mode_normal_vacation_privacy_passage": {
 		"label": "Operating Mode",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 3,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -224,6 +247,30 @@
 			{
 				"label": "Vacation mode",
 				"value": 1
+			},
+			{
+				"label": "Privacy mode",
+				"value": 2
+			},
+			{
+				"label": "Passage mode",
+				"value": 3
+			}
+		]
+	},
+	"operating_mode_normal_privacy_passage": {
+		// The manual calls this normal/keypad disable/passage
+		// but there's no "keypad disable" mode defined. Privacy mode however
+		// disables the keypad according to the Z-Wave specs
+		"label": "Operating Mode",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal mode",
+				"value": 0
 			},
 			{
 				"label": "Privacy mode",
@@ -371,6 +418,21 @@
 		"defaultValue": 10,
 		"unsigned": true
 	},
+	"expiring_pin_lifetime": {
+		"label": "Expiring PIN Lifetime",
+		"description": "How long user codes in expiring PIN mode stay enabled after first use",
+		"valueSize": 1,
+		"unit": "hours",
+		"minValue": 0,
+		"maxValue": 127,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
 	"alarm_map_keypad_limit": {
 		"from": {
 			"alarmType": 161,
@@ -500,5 +562,15 @@
 				"userId": "alarmLevel"
 			}
 		}
+	},
+	"assure_zw3_metadata": {
+		"inclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key\n2. Press the 7 key followed by the gear key\n3. Press the 1 key followed by the gear key\n4. Enter the first 5 digits of the DSK when prompted",
+		"exclusion": "1. Enter the 4-8 digit master PIN code, followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4753/YRC622final.pdf"
+	},
+	"assure2_zw3_metadata": {
+		"inclusion": "1. Enter the 4-8 digit programming code, followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 1 key followed by the gear key.\n4. Press the gear key again. The lock is now in Z-Wave inclusion mode for 30 seconds.",
+		"exclusion": "1. Enter the 4-8 digit programming code, followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4753/YRC622final.pdf"
 	}
 }

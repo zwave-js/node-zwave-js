@@ -1,22 +1,22 @@
 import {
-	createDefaultTransportFormat,
-	getDirectionPrefix,
 	MessagePriority,
 	ZWaveLogContainer,
+	createDefaultTransportFormat,
+	getDirectionPrefix,
 } from "@zwave-js/core";
 import {
+	SpyTransport,
 	assertLogInfo,
 	assertMessage,
-	SpyTransport,
 } from "@zwave-js/core/test";
 import { FunctionType, Message, MessageType } from "@zwave-js/serial";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";
 import ava, { type TestFn } from "ava";
 import MockDate from "mockdate";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
+import { TransactionQueue } from "../driver/Queue";
 import { Transaction } from "../driver/Transaction";
 import { DriverLogger } from "./Driver";
 
@@ -122,7 +122,8 @@ test.serial("print() logs long messages correctly", (t) => {
 		"This is a very long message that should be broken into multiple lines maybe sometimes...",
 	);
 	assertMessage(t, spyTransport, {
-		message: `  This is a very long message that should be broken into multiple lines maybe so
+		message:
+			`  This is a very long message that should be broken into multiple lines maybe so
   metimes...`,
 	});
 });
@@ -225,11 +226,11 @@ test.serial(
 		const { driver, driverLogger, spyTransport } = t.context;
 		driverLogger.transaction(
 			createTransaction(driver, {
-				priority: MessagePriority.MultistepController,
+				priority: MessagePriority.Controller,
 			}),
 		);
 		assertMessage(t, spyTransport, {
-			predicate: (msg) => msg.includes("[P: MultistepController]"),
+			predicate: (msg) => msg.includes("[P: Controller]"),
 		});
 	},
 );
@@ -299,7 +300,7 @@ test.serial(
 
 test.serial("sendQueue() prints the send queue length", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
-	const queue = new SortedList<Transaction>();
+	const queue = new TransactionQueue();
 	driverLogger.sendQueue(queue);
 	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes("(0 messages)"),
@@ -330,7 +331,7 @@ test.serial("sendQueue() prints the send queue length", (t) => {
 
 test.serial("sendQueue() prints the function type for each message", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
-	const queue = new SortedList<Transaction>();
+	const queue = new TransactionQueue();
 	queue.add(
 		createTransaction(driver, {
 			functionType: FunctionType.GetSUCNodeId,
@@ -351,7 +352,7 @@ test.serial("sendQueue() prints the function type for each message", (t) => {
 
 test.serial("sendQueue() prints the message type for each message", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
-	const queue = new SortedList<Transaction>();
+	const queue = new TransactionQueue();
 	queue.add(
 		createTransaction(driver, {
 			functionType: FunctionType.GetSUCNodeId,
@@ -383,13 +384,13 @@ test.serial("primary tags are printed in inverse colors", (t) => {
 	driverLogger.transactionResponse(msg, undefined, null as any);
 
 	const expected1 = colors.cyan(
-		colors.bgCyan("[") +
-			colors.inverse("RES") +
-			colors.bgCyan("]") +
-			" " +
-			colors.bgCyan("[") +
-			colors.inverse("HardReset") +
-			colors.bgCyan("]"),
+		colors.bgCyan("[")
+			+ colors.inverse("RES")
+			+ colors.bgCyan("]")
+			+ " "
+			+ colors.bgCyan("[")
+			+ colors.inverse("HardReset")
+			+ colors.bgCyan("]"),
 	);
 
 	assertMessage(t, spyTransport, {
@@ -402,14 +403,13 @@ test.serial("inline tags are printed in inverse colors", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print(`This is a message [with] [inline] tags...`);
 
-	const expected1 =
-		colors.bgCyan("[") +
-		colors.inverse("with") +
-		colors.bgCyan("]") +
-		" " +
-		colors.bgCyan("[") +
-		colors.inverse("inline") +
-		colors.bgCyan("]");
+	const expected1 = colors.bgCyan("[")
+		+ colors.inverse("with")
+		+ colors.bgCyan("]")
+		+ " "
+		+ colors.bgCyan("[")
+		+ colors.inverse("inline")
+		+ colors.bgCyan("]");
 
 	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes(expected1),

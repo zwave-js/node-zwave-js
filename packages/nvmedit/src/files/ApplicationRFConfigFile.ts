@@ -1,21 +1,24 @@
 import { RFRegion, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
-import { getEnumMemberName, type AllOrNone } from "@zwave-js/shared/safe";
+import { type AllOrNone, getEnumMemberName } from "@zwave-js/shared/safe";
 import semver from "semver";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	NVMFile,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
-	type NVMFileCreationOptions,
-	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
-export type ApplicationRFConfigFileOptions = NVMFileCreationOptions & {
-	rfRegion: RFRegion;
-	txPower: number;
-	measured0dBm: number;
-} & AllOrNone<{
+export type ApplicationRFConfigFileOptions =
+	& NVMFileCreationOptions
+	& {
+		rfRegion: RFRegion;
+		txPower: number;
+		measured0dBm: number;
+	}
+	& AllOrNone<{
 		enablePTI?: number;
 		maxTXPower?: number;
 	}>;

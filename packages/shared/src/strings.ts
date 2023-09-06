@@ -56,9 +56,8 @@ export function isPrintableASCII(text: string): boolean {
 	return /^[\u0020-\u007e]*$/.test(text);
 }
 
-export function isPrintableASCIIWithNewlines(text: string): boolean {
-	text = text.replace(/^[\r\n]*/g, "").replace(/[\r\n]*/g, "");
-	return isPrintableASCII(text);
+export function isPrintableASCIIWithWhitespace(text: string): boolean {
+	return isPrintableASCII(text.trim());
 }
 
 export function compareStrings(a: string, b: string): number {
@@ -68,17 +67,21 @@ export function compareStrings(a: string, b: string): number {
 }
 
 export function formatTime(hour: number, minute: number): string {
-	return `${padStart(hour.toString(), 2, "0")}:${padStart(
-		minute.toString(),
-		2,
-		"0",
-	)}`;
+	return `${padStart(hour.toString(), 2, "0")}:${
+		padStart(
+			minute.toString(),
+			2,
+			"0",
+		)
+	}`;
 }
 
 export function formatDate(year: number, month: number, day: number): string {
-	return `${padStart(year.toString(), 4, "0")}-${padStart(
-		month.toString(),
-		2,
-		"0",
-	)}-${padStart(day.toString(), 2, "0")}`;
+	return `${padStart(year.toString(), 4, "0")}-${
+		padStart(
+			month.toString(),
+			2,
+			"0",
+		)
+	}-${padStart(day.toString(), 2, "0")}`;
 }

@@ -43,7 +43,7 @@
 		"treatBasicSetAsEvent": true,
 		"commandClasses": {
 			"remove": {
-				"0x6c": {
+				"Supervision": {
 					// The device does not support supervision although it is mandatory for the device type
 					"endpoints": "*"
 				}

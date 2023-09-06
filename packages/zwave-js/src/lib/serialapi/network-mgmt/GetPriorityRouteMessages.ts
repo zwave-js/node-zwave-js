@@ -1,24 +1,26 @@
 import {
 	MAX_REPEATERS,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	RouteKind,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
+	encodeNodeID,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
@@ -48,7 +50,10 @@ export class GetPriorityRouteRequest extends Message {
 	public destinationNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.destinationNodeId]);
+		this.payload = encodeNodeID(
+			this.destinationNodeId,
+			this.host.nodeIdType,
+		);
 
 		return super.serialize();
 	}
@@ -70,13 +75,20 @@ export class GetPriorityRouteResponse extends Message {
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
-		this.destinationNodeId = this.payload[0];
-		this.routeKind = this.payload[1];
+		let offset = 0;
+		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			this.payload,
+			host.nodeIdType,
+			offset,
+		);
+		offset += nodeIdBytes;
+		this.destinationNodeId = nodeId;
+		this.routeKind = this.payload[offset++];
 		if (this.routeKind) {
 			this.repeaters = [
-				...this.payload.slice(2, 2 + MAX_REPEATERS),
+				...this.payload.slice(offset, offset + MAX_REPEATERS),
 			].filter((id) => id > 0);
-			this.routeSpeed = this.payload[2 + MAX_REPEATERS];
+			this.routeSpeed = this.payload[offset + MAX_REPEATERS];
 		}
 	}
 

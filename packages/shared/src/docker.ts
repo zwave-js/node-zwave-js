@@ -1,6 +1,6 @@
 // Shamelessly copied from https://github.com/sindresorhus/is-docker
 
-import fs from "fs";
+import fs from "node:fs";
 
 function hasDockerEnv(): boolean {
 	try {

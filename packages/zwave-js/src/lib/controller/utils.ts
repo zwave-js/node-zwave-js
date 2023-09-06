@@ -1,16 +1,16 @@
 import {
+	type MaybeNotKnown,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
 	isValidDSK,
-	type MaybeNotKnown,
 } from "@zwave-js/core/safe";
 import { padVersion } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import semver from "semver";
 import {
-	ProvisioningEntryStatus,
 	type PlannedProvisioningEntry,
+	ProvisioningEntryStatus,
 } from "./Inclusion";
 
 export function assertProvisioningEntry(
@@ -26,13 +26,14 @@ export function assertProvisioningEntry(
 	if (!isObject(arg)) throw fail("not an object");
 
 	if (typeof arg.dsk !== "string") throw fail("dsk must be a string");
-	else if (!isValidDSK(arg.dsk))
+	else if (!isValidDSK(arg.dsk)) {
 		throw fail("dsk does not have the correct format");
+	}
 
 	if (
-		arg.status != undefined &&
-		(typeof arg.status !== "number" ||
-			!(arg.status in ProvisioningEntryStatus))
+		arg.status != undefined
+		&& (typeof arg.status !== "number"
+			|| !(arg.status in ProvisioningEntryStatus))
 	) {
 		throw fail("status is not a ProvisioningEntryStatus");
 	}

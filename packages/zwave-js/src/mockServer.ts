@@ -1,36 +1,40 @@
 import type { ZWaveSerialPort } from "@zwave-js/serial";
 import {
-	createAndOpenMockedZWaveSerialPort,
 	type MockPortBinding,
+	createAndOpenMockedZWaveSerialPort,
 } from "@zwave-js/serial/mock";
 import {
 	MockController,
-	MockNode,
 	type MockControllerBehavior,
 	type MockControllerOptions,
+	MockNode,
 	type MockNodeBehavior,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import { createServer, type AddressInfo, type Server } from "net";
+import { type AddressInfo, type Server, createServer } from "node:net";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
 } from "./Utils";
 
-export type MockServerControllerOptions = Pick<
-	MockControllerOptions,
-	"ownNodeId" | "homeId" | "capabilities"
-> & {
-	behaviors?: MockControllerBehavior[];
-};
+export type MockServerControllerOptions =
+	& Pick<
+		MockControllerOptions,
+		"ownNodeId" | "homeId" | "capabilities"
+	>
+	& {
+		behaviors?: MockControllerBehavior[];
+	};
 
-export type MockServerNodeOptions = Pick<
-	MockNodeOptions,
-	"id" | "capabilities"
-> & {
-	behaviors?: MockNodeBehavior[];
-};
+export type MockServerNodeOptions =
+	& Pick<
+		MockNodeOptions,
+		"id" | "capabilities"
+	>
+	& {
+		behaviors?: MockNodeBehavior[];
+	};
 export interface MockServerOptions {
 	interface?: string;
 	port?: number;
@@ -46,6 +50,8 @@ export class MockServer {
 	private serialport: ZWaveSerialPort | undefined;
 	private binding: MockPortBinding | undefined;
 	private server: Server | undefined;
+	private mockController: MockController | undefined;
+	private mockNodes: MockNode[] | undefined;
 
 	public async start(): Promise<void> {
 		const { port: serialport, binding } =
@@ -57,11 +63,12 @@ export class MockServer {
 		console.log("Mock serial port opened");
 
 		// Hook up a fake controller and nodes
-		prepareMocks(
-			binding,
-			this.options.config?.controller,
-			this.options.config?.nodes,
-		);
+		({ mockController: this.mockController, mockNodes: this.mockNodes } =
+			prepareMocks(
+				binding,
+				this.options.config?.controller,
+				this.options.config?.nodes,
+			));
 
 		// Start a TCP server, listen for connections, and forward them to the serial port
 		this.server = createServer((socket) => {
@@ -117,6 +124,7 @@ export class MockServer {
 
 	public async stop(): Promise<void> {
 		console.log("Shutting down mock server...");
+		this.mockController?.destroy();
 		this.server?.close();
 		await this.serialport?.close();
 		if (this.binding?.isOpen) await this.binding?.close();
@@ -128,7 +136,7 @@ function prepareMocks(
 	mockPort: MockPortBinding,
 	controller: MockServerControllerOptions = {},
 	nodes: MockServerNodeOptions[] = [],
-): void {
+): { mockController: MockController; mockNodes: MockNode[] } {
 	const mockController = new MockController({
 		homeId: 0x7e570001,
 		ownNodeId: 1,
@@ -142,12 +150,14 @@ function prepareMocks(
 		mockController.defineBehavior(...controller.behaviors);
 	}
 
+	const mockNodes: MockNode[] = [];
 	for (const node of nodes) {
 		const mockNode = new MockNode({
 			...node,
 			controller: mockController,
 		});
 		mockController.addNode(mockNode);
+		mockNodes.push(mockNode);
 
 		// Apply default behaviors that are required for interacting with the driver correctly
 		mockNode.defineBehavior(...createDefaultMockNodeBehaviors());
@@ -156,4 +166,9 @@ function prepareMocks(
 			mockNode.defineBehavior(...node.behaviors);
 		}
 	}
+
+	return {
+		mockController,
+		mockNodes,
+	};
 }

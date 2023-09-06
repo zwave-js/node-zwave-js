@@ -14,9 +14,9 @@ import {
 	UNKNOWN_STATE,
 } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
@@ -44,8 +44,8 @@ integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {
 		const respondToBasicGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof BasicCCGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof BasicCCGet
 				) {
 					const cc = new BasicCCReport(self.host, {
 						nodeId: controller.host.ownNodeId,

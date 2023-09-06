@@ -38,6 +38,10 @@ export type CCSpecificCapabilities = {
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
     [144]: EnergyProductionCCCapabilities;
+    [64]: ThermostatModeCCCapabilities;
+    [67]: ThermostatSetpointCCCapabilities;
+    [99]: UserCodeCCCapabilities;
+    [78]: ScheduleEntryLockCCCapabilities;
 };
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -70,7 +74,7 @@ export function createMockZWaveAckFrame(options?: Partial<Omit<MockZWaveAckFrame
 // Warning: (ae-missing-release-tag) "createMockZWaveRequestFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function createMockZWaveRequestFrame(payload: ICommandClass, options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): MockZWaveRequestFrame;
+export function createMockZWaveRequestFrame(payload: ICommandClass | (() => ICommandClass), options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): LazyMockZWaveRequestFrame;
 
 // Warning: (ae-missing-release-tag) "EnergyProductionCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -95,6 +99,22 @@ export interface EnergyProductionCCCapabilities {
             scale: 0 | 1;
         };
     };
+}
+
+// Warning: (ae-missing-release-tag) "LazyMockZWaveFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type LazyMockZWaveFrame = LazyMockZWaveRequestFrame | MockZWaveAckFrame;
+
+// Warning: (ae-missing-release-tag) "LazyMockZWaveRequestFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LazyMockZWaveRequestFrame {
+    ackRequested: boolean;
+    payload: ICommandClass | (() => ICommandClass);
+    repeaters: number[];
+    // (undocumented)
+    type: MockZWaveFrameType.Request;
 }
 
 // Warning: (ae-missing-release-tag) "MOCK_FRAME_ACK_TIMEOUT" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -122,6 +142,10 @@ export class MockController {
     clearReceivedHostMessages(): void;
     // (undocumented)
     defineBehavior(...behaviors: MockControllerBehavior[]): void;
+    // (undocumented)
+    destroy(): void;
+    // (undocumented)
+    execute(): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectHostACK(timeout: number): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -140,7 +164,7 @@ export class MockController {
     // (undocumented)
     removeNode(node: MockNode): void;
     sendToHost(data: Buffer): Promise<void>;
-    sendToNode(node: MockNode, frame: MockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
+    sendToNode(node: MockNode, frame: LazyMockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
     // (undocumented)
     readonly serial: MockPortBinding;
     readonly state: Map<string, unknown>;
@@ -243,7 +267,7 @@ export class MockNode {
     readonly implementedCCs: Map<CommandClasses, CommandClassInfo>;
     onControllerFrame(frame: MockZWaveFrame): Promise<void>;
     removeCC(cc: CommandClasses): void;
-    sendToController(frame: MockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
+    sendToController(frame: LazyMockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
     readonly state: Map<string, unknown>;
 }
 
@@ -325,6 +349,18 @@ export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> = T
     ccId: T;
 } & Partial<CommandClassInfo> & Partial<CCIdToCapabilities<T>>);
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockCCCapabilities {
+    // (undocumented)
+    numDailyRepeatingSlots: number;
+    // (undocumented)
+    numWeekDaySlots: number;
+    // (undocumented)
+    numYearDaySlots: number;
+}
+
 // Warning: (ae-missing-release-tag) "SoundSwitchCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -338,6 +374,52 @@ export interface SoundSwitchCCCapabilities {
         name: string;
         duration: number;
     }[];
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatModeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatModeCCCapabilities {
+    // (undocumented)
+    supportedModes: number[];
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCCapabilities {
+    // (undocumented)
+    setpoints: Record<number, {
+        minValue: number;
+        maxValue: number;
+        defaultValue?: number;
+        scale: "°C" | "°F";
+    }>;
+}
+
+// Warning: (ae-missing-release-tag) "unlazyMockZWaveFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function unlazyMockZWaveFrame(frame: LazyMockZWaveFrame): MockZWaveFrame;
+
+// Warning: (ae-missing-release-tag) "UserCodeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCCapabilities {
+    // (undocumented)
+    numUsers: number;
+    // (undocumented)
+    supportedASCIIChars?: string;
+    // (undocumented)
+    supportedKeypadModes?: number[];
+    // (undocumented)
+    supportedUserIDStatuses?: number[];
+    // (undocumented)
+    supportsMasterCode?: boolean;
+    // (undocumented)
+    supportsMasterCodeDeactivation?: boolean;
+    // (undocumented)
+    supportsUserCodeChecksum?: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

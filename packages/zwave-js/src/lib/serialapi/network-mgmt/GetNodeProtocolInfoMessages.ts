@@ -1,24 +1,25 @@
 import {
-	MessagePriority,
-	encodeNodeProtocolInfo,
-	parseNodeProtocolInfo,
 	type DataRate,
 	type FLiRS,
+	MessagePriority,
 	type NodeProtocolInfoAndDeviceClass,
 	type NodeType,
 	type ProtocolVersion,
+	encodeNodeID,
+	encodeNodeProtocolInfo,
+	parseNodeProtocolInfo,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
@@ -48,14 +49,14 @@ export class GetNodeProtocolInfoRequest extends Message {
 	public requestedNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.requestedNodeId]);
+		this.payload = encodeNodeID(this.requestedNodeId, this.host.nodeIdType);
 		return super.serialize();
 	}
 }
 
 interface GetNodeProtocolInfoResponseOptions
-	extends MessageBaseOptions,
-		NodeProtocolInfoAndDeviceClass {}
+	extends MessageBaseOptions, NodeProtocolInfoAndDeviceClass
+{}
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {

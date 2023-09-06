@@ -2,18 +2,18 @@ import { type MockPortBinding } from "@zwave-js/serial/mock";
 import { type DeepPartial } from "@zwave-js/shared";
 import {
 	MockController,
-	MockNode,
 	type MockControllerOptions,
+	MockNode,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
-import path from "path";
+import path from "node:path";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
 } from "../../Utils";
 import {
-	createAndStartDriverWithMockPort,
 	type CreateAndStartDriverWithMockPortResult,
+	createAndStartDriverWithMockPort,
 } from "../driver/DriverMock";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 
@@ -27,17 +27,17 @@ export function prepareDriver(
 		portAddress: "/tty/FAKE",
 		...(logToFile
 			? {
-					logConfig: {
-						filename: path.join(
-							cacheDir,
-							"logs",
-							"zwavejs_%DATE%.log",
-						),
-						logToFile: true,
-						enabled: true,
-						level: "debug",
-					},
-			  }
+				logConfig: {
+					filename: path.join(
+						cacheDir,
+						"logs",
+						"zwavejs_%DATE%.log",
+					),
+					logToFile: true,
+					enabled: true,
+					level: additionalOptions.logConfig?.level ?? "debug",
+				},
+			}
 			: {}),
 		securityKeys: {
 			S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
@@ -55,6 +55,7 @@ export function prepareDriver(
 			),
 		},
 		storage: {
+			...(additionalOptions.storage ?? {}),
 			cacheDir: cacheDir,
 			lockDir: path.join(cacheDir, "locks"),
 		},

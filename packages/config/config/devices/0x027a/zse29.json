@@ -147,7 +147,7 @@
 		"$if": "firmwareVersion < 2.2",
 		"commandClasses": {
 			"remove": {
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

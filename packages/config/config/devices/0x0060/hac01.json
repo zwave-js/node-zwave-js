@@ -48,7 +48,7 @@
 		// The device supports Binary Switch CC, despite the Version query telling otherwise
 		"commandClasses": {
 			"add": {
-				"0x25": {
+				"Binary Switch": {
 					"isSupported": true,
 					"version": 1
 				}

@@ -11,6 +11,10 @@
 		},
 		{
 			"productType": "0x8002",
+			"productId": "0x1600"
+		},
+		{
+			"productType": "0x8002",
 			"productId": "0x4600"
 		}
 	],
@@ -50,7 +54,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/yale_template.json#operating_mode"
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
 		},
 		{
 			"#": "11",

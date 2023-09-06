@@ -321,7 +321,7 @@
 			"remove": {
 				// Alarm Sensor CC is reported as supported, but we either get no response
 				// or the supported sensor types are incorrectly encoded
-				"0x9c": {
+				"Alarm Sensor": {
 					"endpoints": "*"
 				}
 			}

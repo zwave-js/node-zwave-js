@@ -1,15 +1,15 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
@@ -18,18 +18,18 @@ import { clamp } from "alcalzone-shared/math";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CCResponsePredicate,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -46,37 +46,49 @@ import { SoundSwitchCommand, type ToneId } from "../lib/_Types";
 
 export const SoundSwitchCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Sound Switch"], {
-		...V.staticProperty("volume", {
-			...ValueMetadata.UInt8,
-			min: 0,
-			max: 100,
-			unit: "%",
-			label: "Volume",
-			states: {
-				0: "default",
-			},
-		} as const),
+		...V.staticProperty(
+			"volume",
+			{
+				...ValueMetadata.UInt8,
+				min: 0,
+				max: 100,
+				unit: "%",
+				label: "Volume",
+				states: {
+					0: "default",
+				},
+			} as const,
+		),
 
-		...V.staticProperty("toneId", {
-			...ValueMetadata.UInt8,
-			label: "Play Tone",
-			valueChangeOptions: ["volume"],
-		} as const),
+		...V.staticProperty(
+			"toneId",
+			{
+				...ValueMetadata.UInt8,
+				label: "Play Tone",
+				valueChangeOptions: ["volume"],
+			} as const,
+		),
 
-		...V.staticProperty("defaultVolume", {
-			...ValueMetadata.Number,
-			min: 0,
-			max: 100,
-			unit: "%",
-			label: "Default volume",
-		} as const),
+		...V.staticProperty(
+			"defaultVolume",
+			{
+				...ValueMetadata.Number,
+				min: 0,
+				max: 100,
+				unit: "%",
+				label: "Default volume",
+			} as const,
+		),
 
-		...V.staticProperty("defaultToneId", {
-			...ValueMetadata.Number,
-			min: 0,
-			max: 254,
-			label: "Default tone ID",
-		} as const),
+		...V.staticProperty(
+			"defaultToneId",
+			{
+				...ValueMetadata.Number,
+				min: 0,
+				max: 254,
+				label: "Default tone ID",
+			} as const,
+		),
 	}),
 });
 
@@ -106,11 +118,12 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<SoundSwitchCCTonesNumberReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			SoundSwitchCCTonesNumberReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.toneCount;
 	}
 
@@ -127,11 +140,12 @@ export class SoundSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			toneId,
 		});
-		const response =
-			await this.applHost.sendCommand<SoundSwitchCCToneInfoReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			SoundSwitchCCToneInfoReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) return pick(response, ["duration", "name"]);
 	}
 
@@ -165,11 +179,12 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<SoundSwitchCCConfigurationReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			SoundSwitchCCConfigurationReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["defaultToneId", "defaultVolume"]);
 		}
@@ -227,18 +242,19 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<SoundSwitchCCTonePlayReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			SoundSwitchCCTonePlayReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["toneId", "volume"]);
 		}
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: SoundSwitchCCAPI,
 			{ property },
 			value,
@@ -255,7 +271,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 				}
 				return this.setConfiguration(
 					value,
-					0xff /* keep current volume */,
+					0xff, /* keep current volume */
 				);
 			} else if (property === "defaultVolume") {
 				if (typeof value !== "number") {
@@ -267,7 +283,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 					);
 				}
 				return this.setConfiguration(
-					0x00 /* keep current tone */,
+					0x00, /* keep current tone */
 					value,
 				);
 			} else if (property === "toneId") {
@@ -282,21 +298,20 @@ export class SoundSwitchCCAPI extends CCAPI {
 				let result: SupervisionResult | undefined;
 				if (value > 0) {
 					// Use provided volume or try to use the current volume if it exists
-					const volume =
-						options?.volume !== undefined
-							? options.volume
-							: this.tryGetValueDB()?.getValue<number>(
-									SoundSwitchCCValues.volume.endpoint(
-										this.endpoint.index,
-									),
-							  );
+					const volume = options?.volume !== undefined
+						? options.volume
+						: this.tryGetValueDB()?.getValue<number>(
+							SoundSwitchCCValues.volume.endpoint(
+								this.endpoint.index,
+							),
+						);
 					result = await this.play(value, volume);
 				} else {
 					result = await this.stopPlaying();
 				}
 				if (
-					this.isSinglecast() &&
-					!supervisedCommandSucceeded(result)
+					this.isSinglecast()
+					&& !supervisedCommandSucceeded(result)
 				) {
 					// Verify the current value after a (short) delay, unless the command was supervised and successful
 					this.schedulePoll({ property }, value, {
@@ -312,7 +327,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: SoundSwitchCCAPI, { property }) {
+		return async function(this: SoundSwitchCCAPI, { property }) {
 			switch (property) {
 				case "defaultToneId":
 				case "defaultVolume":

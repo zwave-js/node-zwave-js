@@ -92,9 +92,9 @@ export class NVMFile {
 
 	public toJSON(): Record<string, any> {
 		return {
-			"file ID": `0x${this.fileId.toString(16)} (${
-				this.constructor.name
-			})`,
+			"file ID": `0x${
+				this.fileId.toString(16)
+			} (${this.constructor.name})`,
 		};
 	}
 }
@@ -137,10 +137,9 @@ export function getNVMFileID<T extends NVMFile>(
 	// get the class constructor
 	const constr = id.constructor;
 	// retrieve the current metadata
-	const ret: number | undefined =
-		id instanceof NVMFile
-			? Reflect.getMetadata(METADATA_nvmFileID, constr)
-			: undefined;
+	const ret: number | undefined = id instanceof NVMFile
+		? Reflect.getMetadata(METADATA_nvmFileID, constr)
+		: undefined;
 	if (ret == undefined) {
 		throw new ZWaveError(
 			`No NVM file ID defined for ${constr.name}!`,

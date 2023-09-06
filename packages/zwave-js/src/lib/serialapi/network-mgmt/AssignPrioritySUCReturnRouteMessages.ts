@@ -1,27 +1,28 @@
 import {
 	MAX_NODES,
 	MAX_REPEATERS,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type MessageOrCCLogEntry,
+	encodeNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
+	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
-	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
@@ -30,9 +31,9 @@ import { getEnumMemberName } from "@zwave-js/shared";
 export class AssignPrioritySUCReturnRouteRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !==
-				AssignPrioritySUCReturnRouteRequestTransmitReport
+			gotDeserializationOptions(options)
+			&& (new.target as any)
+				!== AssignPrioritySUCReturnRouteRequestTransmitReport
 		) {
 			return new AssignPrioritySUCReturnRouteRequestTransmitReport(
 				host,
@@ -44,7 +45,8 @@ export class AssignPrioritySUCReturnRouteRequestBase extends Message {
 }
 
 export interface AssignPrioritySUCReturnRouteRequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	nodeId: number;
 	repeaters: number[];
 	routeSpeed: ZWaveDataRate;
@@ -52,7 +54,9 @@ export interface AssignPrioritySUCReturnRouteRequestOptions
 
 @expectedResponse(FunctionType.AssignPrioritySUCReturnRoute)
 @expectedCallback(FunctionType.AssignPrioritySUCReturnRoute)
-export class AssignPrioritySUCReturnRouteRequest extends AssignPrioritySUCReturnRouteRequestBase {
+export class AssignPrioritySUCReturnRouteRequest
+	extends AssignPrioritySUCReturnRouteRequestBase
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -67,8 +71,8 @@ export class AssignPrioritySUCReturnRouteRequest extends AssignPrioritySUCReturn
 			);
 		} else {
 			if (
-				options.repeaters.length > MAX_REPEATERS ||
-				options.repeaters.some((id) => id < 1 || id > MAX_NODES)
+				options.repeaters.length > MAX_REPEATERS
+				|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
 			) {
 				throw new ZWaveError(
 					`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
@@ -87,14 +91,17 @@ export class AssignPrioritySUCReturnRouteRequest extends AssignPrioritySUCReturn
 	public routeSpeed: ZWaveDataRate;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.nodeId,
-			this.repeaters[0] ?? 0,
-			this.repeaters[1] ?? 0,
-			this.repeaters[2] ?? 0,
-			this.repeaters[3] ?? 0,
-			this.routeSpeed,
-			this.callbackId,
+		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+		this.payload = Buffer.concat([
+			nodeId,
+			Buffer.from([
+				this.repeaters[0] ?? 0,
+				this.repeaters[1] ?? 0,
+				this.repeaters[2] ?? 0,
+				this.repeaters[3] ?? 0,
+				this.routeSpeed,
+				this.callbackId,
+			]),
 		]);
 
 		return super.serialize();
@@ -105,10 +112,9 @@ export class AssignPrioritySUCReturnRouteRequest extends AssignPrioritySUCReturn
 			...super.toLogEntry(),
 			message: {
 				"node ID": this.nodeId,
-				repeaters:
-					this.repeaters.length > 0
-						? this.repeaters.join(" -> ")
-						: "none",
+				repeaters: this.repeaters.length > 0
+					? this.repeaters.join(" -> ")
+					: "none",
 				"route speed": getEnumMemberName(
 					ZWaveDataRate,
 					this.routeSpeed,
@@ -120,8 +126,7 @@ export class AssignPrioritySUCReturnRouteRequest extends AssignPrioritySUCReturn
 }
 
 @messageTypes(MessageType.Response, FunctionType.AssignPrioritySUCReturnRoute)
-export class AssignPrioritySUCReturnRouteResponse
-	extends Message
+export class AssignPrioritySUCReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(

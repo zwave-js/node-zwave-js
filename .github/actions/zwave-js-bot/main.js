@@ -40,10 +40,12 @@ async function publishPr() {
 		await exec.exec("yarn", ["config", "set", "npmAuthToken", npmToken]);
 
 		// Figure out the next version
-		newVersion = `${semver.inc(
-			require(`${process.env.GITHUB_WORKSPACE}/package.json`).version,
-			"prerelease",
-		)}-pr-${pr}-${pull.merge_commit_sha.slice(0, 7)}`;
+		newVersion = `${
+			semver.inc(
+				require(`${process.env.GITHUB_WORKSPACE}/package.json`).version,
+				"prerelease",
+			)
+		}-pr-${pr}-${pull.merge_commit_sha.slice(0, 7)}`;
 
 		// Bump versions
 		await exec.exec(
@@ -55,9 +57,10 @@ async function publishPr() {
 		// and release changed packages
 		await exec.exec(
 			"yarn",
-			`workspaces foreach -vti --no-private npm publish --tolerate-republish --tag next`.split(
-				" ",
-			),
+			`workspaces foreach -vti --no-private npm publish --tolerate-republish --tag next`
+				.split(
+					" ",
+				),
 		);
 		success = true;
 	} catch (e) {
@@ -78,7 +81,8 @@ yarn add zwave-js@${newVersion}
 		octokit.issues.createComment({
 			...options,
 			issue_number: pr,
-			body: `😥 Unfortunately I could not publish the new packages. Check out the logs to see what went wrong.`,
+			body:
+				`😥 Unfortunately I could not publish the new packages. Check out the logs to see what went wrong.`,
 		});
 	}
 }

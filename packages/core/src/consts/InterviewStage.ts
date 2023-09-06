@@ -1,4 +1,3 @@
-// prettier-ignore
 export enum InterviewStage {
 	/** The interview process hasn't started for this node */
 	None,

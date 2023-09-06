@@ -14,7 +14,7 @@ function visitUnionOrIntersectionType(
 	});
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 		const functionNames = type.types.map((type) =>
-			visitType(type, visitorContext),
+			visitType(type, visitorContext)
 		);
 		if (tsutils.isUnionType(type)) {
 			// keyof (T | U) = (keyof T) & (keyof U)
@@ -78,7 +78,7 @@ function visitRegularObjectType(
 					ts.factory.createStrictInequality(
 						VisitorUtils.objectIdentifier,
 						ts.factory.createStringLiteral(name),
-					),
+					)
 				),
 				ts.SyntaxKind.AmpersandAmpersandToken,
 				ts.factory.createTrue(),
@@ -232,8 +232,8 @@ export function visitType(
 		// Boolean literal (true/false)
 		return visitBooleanLiteral(visitorContext);
 	} else if (
-		tsutils.isTypeReference(type) &&
-		visitorContext.previousTypeReference !== type
+		tsutils.isTypeReference(type)
+		&& visitorContext.previousTypeReference !== type
 	) {
 		// Type references.
 		return visitTypeReference(type, visitorContext);

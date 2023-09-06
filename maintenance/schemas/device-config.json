@@ -532,37 +532,31 @@
 					"properties": {
 						"add": {
 							"type": "object",
-							"patternProperties": {
-								"^(0x)?[0-9a-f]+$": {
-									"$ref": "#/definitions/ccInfoAndEndpoints"
-								}
-							},
-							"additionalProperties": false
+							"additionalProperties": {
+								"$ref": "#/definitions/ccInfoAndEndpoints"
+							}
 						},
 						"remove": {
 							"type": "object",
-							"patternProperties": {
-								"^(0x)?[0-9a-f]+$": {
-									"type": "object",
-									"properties": {
-										"endpoints": {
-											"anyOf": [
-												{ "const": "*" },
-												{
-													"type": "array",
-													"items": {
-														"type": "integer",
-														"minimum": 0
-													},
-													"minItems": 1
-												}
-											]
-										}
-									},
-									"additionalProperties": false
-								}
-							},
-							"additionalProperties": false
+							"additionalProperties": {
+								"type": "object",
+								"properties": {
+									"endpoints": {
+										"anyOf": [
+											{ "const": "*" },
+											{
+												"type": "array",
+												"items": {
+													"type": "integer",
+													"minimum": 0
+												},
+												"minItems": 1
+											}
+										]
+									}
+								},
+								"additionalProperties": false
+							}
 						}
 					},
 					"additionalProperties": false
@@ -613,6 +607,26 @@
 					},
 					"minProperties": 1,
 					"additionalProperties": false
+				},
+				"overrideQueries": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "array",
+						"minItems": 1,
+						"items": {
+							"type": "object",
+							"properties": {
+								"endpoint": { "type": "integer", "minimum": 0 },
+								"method": { "type": "string" },
+								"matchArgs": { "type": "array" },
+								"result": true,
+								"persistValues": { "type": "object" },
+								"extendMetadata": { "type": "object" }
+							},
+							"required": ["method", "result"],
+							"additionalProperties": false
+						}
+					}
 				},
 				"preserveEndpoints": {
 					"oneOf": [

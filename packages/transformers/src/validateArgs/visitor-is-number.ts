@@ -35,14 +35,14 @@ function visitUnionOrIntersectionType(
 	visitorContext: VisitorContext,
 ) {
 	const numberTypes = type.types.map((type) =>
-		visitType(type, visitorContext),
+		visitType(type, visitorContext)
 	);
 
 	if (tsutils.isUnionType(type)) {
-		if (numberTypes.some((numberType) => numberType === false)) {
+		if (numberTypes.includes(false)) {
 			return false;
 		}
-		if (numberTypes.some((numberType) => numberType === true)) {
+		if (numberTypes.includes(true)) {
 			return true;
 		}
 		const numbers: Set<number> = new Set();
@@ -67,7 +67,7 @@ function visitUnionOrIntersectionType(
 		if (numbers.size > 1) {
 			return false;
 		}
-		if (numberTypes.some((numberType) => numberType === true)) {
+		if (numberTypes.includes(true)) {
 			return true;
 		}
 		return false;
@@ -196,8 +196,8 @@ export function visitType(
 		// Boolean literal (true/false)
 		return visitBooleanLiteral();
 	} else if (
-		tsutils.isTypeReference(type) &&
-		visitorContext.previousTypeReference !== type
+		tsutils.isTypeReference(type)
+		&& visitorContext.previousTypeReference !== type
 	) {
 		// Type references.
 		return visitTypeReference(type, visitorContext);

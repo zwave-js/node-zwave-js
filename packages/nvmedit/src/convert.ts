@@ -1,13 +1,13 @@
 import {
+	type CommandClasses,
 	ControllerCapabilityFlags,
+	type NodeProtocolInfo,
 	NodeType,
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
 	isZWaveError,
 	stripUndefined,
-	type CommandClasses,
-	type NodeProtocolInfo,
 } from "@zwave-js/core/safe";
 import { cloneDeep, pick } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -26,7 +26,9 @@ import {
 	ApplicationVersionFileID,
 	ControllerInfoFile,
 	ControllerInfoFileID,
+	type ControllerInfoFileOptions,
 	NVMFile,
+	type NodeInfo,
 	NodeInfoFileV0,
 	NodeInfoFileV1,
 	ProtocolAppRouteLockNodeMaskFile,
@@ -47,11 +49,14 @@ import {
 	ProtocolVersionFileID,
 	ProtocolVirtualNodeMaskFile,
 	ProtocolVirtualNodeMaskFileID,
+	type Route,
+	type RouteCache,
 	RouteCacheFileV0,
 	RouteCacheFileV1,
 	SUCUpdateEntriesFileIDV0,
 	SUCUpdateEntriesFileV0,
 	SUCUpdateEntriesFileV5,
+	type SUCUpdateEntry,
 	SUC_UPDATES_PER_FILE_V5,
 	getEmptyRoute,
 	nodeIdToNodeInfoFileIDV0,
@@ -59,26 +64,21 @@ import {
 	nodeIdToRouteCacheFileIDV0,
 	nodeIdToRouteCacheFileIDV1,
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
-	type ControllerInfoFileOptions,
-	type NodeInfo,
-	type Route,
-	type RouteCache,
-	type SUCUpdateEntry,
 } from "./files";
 import {
+	type NVM3Objects,
+	type NVMMeta,
 	encodeNVM,
 	getNVMMeta,
 	parseNVM,
-	type NVM3Objects,
-	type NVMMeta,
 } from "./nvm3/nvm";
 import type { NVM3Object } from "./nvm3/object";
 import { mapToObject } from "./nvm3/utils";
 import {
+	type NVM500JSON,
 	NVMSerializer,
 	createParser as createNVM500Parser,
 	nmvDetails500,
-	type NVM500JSON,
 } from "./nvm500/NVMParser";
 
 export interface NVMJSON {
@@ -133,7 +133,8 @@ export interface NVMJSONControllerRFConfig {
 }
 
 export interface NVMJSONNodeWithInfo
-	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass">
+{
 	isVirtual: boolean;
 
 	genericDeviceClass: number;
@@ -159,16 +160,16 @@ export type NVMJSONNode = NVMJSONNodeWithInfo | NVMJSONVirtualNode;
 
 type ParsedNVM =
 	| {
-			type: 500;
-			json: Required<NVM500JSON>;
-	  }
+		type: 500;
+		json: Required<NVM500JSON>;
+	}
 	| {
-			type: 700;
-			json: Required<NVMJSON>;
-	  }
+		type: 700;
+		json: Required<NVMJSON>;
+	}
 	| {
-			type: "unknown";
-	  };
+		type: "unknown";
+	};
 
 export function nodeHasInfo(node: NVMJSONNode): node is NVMJSONNodeWithInfo {
 	return !node.isVirtual || Object.keys(node).length > 1;
@@ -261,7 +262,8 @@ export function nvmObjectsToJSON(
 		"7.0.0", // We don't know the version here yet
 	);
 	const protocolFileFormat = protocolVersionFile.format;
-	const protocolVersion = `${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`;
+	const protocolVersion =
+		`${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`;
 
 	// Bail early if the NVM uses a protocol file format that's newer than we support
 	if (protocolFileFormat > MAX_PROTOCOL_FILE_FORMAT) {
@@ -416,7 +418,8 @@ export function nvmObjectsToJSON(
 		ApplicationVersionFileID,
 		"7.0.0", // We don't know the version here yet
 	);
-	const applicationVersion = `${applicationVersionFile.major}.${applicationVersionFile.minor}.${applicationVersionFile.patch}`;
+	const applicationVersion =
+		`${applicationVersionFile.major}.${applicationVersionFile.minor}.${applicationVersionFile.patch}`;
 
 	const rfConfigFile = getFile<ApplicationRFConfigFile>(
 		ApplicationRFConfigFileID,
@@ -456,8 +459,10 @@ export function nvmObjectsToJSON(
 		"dcdcConfig",
 	] as const;
 	const controller: NVMJSONController = {
-		protocolVersion: `${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`,
-		applicationVersion: `${applicationVersionFile.major}.${applicationVersionFile.minor}.${applicationVersionFile.patch}`,
+		protocolVersion:
+			`${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`,
+		applicationVersion:
+			`${applicationVersionFile.major}.${applicationVersionFile.minor}.${applicationVersionFile.patch}`,
 		homeId: `0x${controllerInfoFile.homeId.toString("hex")}`,
 		...pick(controllerInfoFile, controllerProps),
 		...pick(applicationTypeFile, [
@@ -474,14 +479,14 @@ export function nvmObjectsToJSON(
 		preferredRepeaters,
 		...(rfConfigFile
 			? {
-					rfConfig: {
-						rfRegion: rfConfigFile.rfRegion,
-						txPower: rfConfigFile.txPower,
-						measured0dBm: rfConfigFile.measured0dBm,
-						enablePTI: rfConfigFile.enablePTI ?? null,
-						maxTXPower: rfConfigFile.maxTXPower ?? null,
-					},
-			  }
+				rfConfig: {
+					rfRegion: rfConfigFile.rfRegion,
+					txPower: rfConfigFile.txPower,
+					measured0dBm: rfConfigFile.measured0dBm,
+					enablePTI: rfConfigFile.enablePTI ?? null,
+					maxTXPower: rfConfigFile.maxTXPower ?? null,
+				},
+			}
 			: {}),
 		sucUpdateEntries,
 		applicationData: applicationDataFile?.data.toString("hex") ?? null,
@@ -1044,11 +1049,12 @@ export function nvmToJSON(
 /** Reads an NVM buffer of a 500-series stick and returns its JSON representation */
 export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON> {
 	const parser = createNVM500Parser(buffer);
-	if (!parser)
+	if (!parser) {
 		throw new ZWaveError(
 			"Did not find a matching NVM 500 parser implementation! Make sure that the NVM data belongs to a controller with Z-Wave SDK 6.61 or higher.",
 			ZWaveErrorCodes.NVM_NotSupported,
 		);
+	}
 	return parser.toJSON();
 }
 
@@ -1092,8 +1098,8 @@ export function jsonToNVM500(
 	// Try to find a matching implementation
 	const impl = nmvDetails500.find(
 		(p) =>
-			p.protocolVersions.includes(protocolVersion) &&
-			p.name.toLowerCase().startsWith(json.meta.library),
+			p.protocolVersions.includes(protocolVersion)
+			&& p.name.toLowerCase().startsWith(json.meta.library),
 	);
 
 	if (!impl) {
@@ -1155,30 +1161,45 @@ export function json500To700(
 		applicationData = raw.toString("hex");
 	}
 
+	// https://github.com/zwave-js/node-zwave-js/issues/6055
+	// On some controllers this byte can be 0xff (effectively not set)
+	let controllerConfiguration = source.controller.controllerConfiguration;
+	if (source.controller.controllerConfiguration === 0xff) {
+		// Default to SUC/Primary
+		controllerConfiguration = ControllerCapabilityFlags.SISPresent
+			| ControllerCapabilityFlags.WasRealPrimary
+			| ControllerCapabilityFlags.SUC;
+	}
+
 	let homeId: string;
 	if (
-		source.controller.controllerConfiguration &
-		ControllerCapabilityFlags.OnOtherNetwork
+		!!(
+			controllerConfiguration & ControllerCapabilityFlags.OnOtherNetwork
+		)
+		&& source.controller.learnedHomeId
+		&& source.controller.nodeId
 	) {
-		// The controller did not start the network itself
-		if (!source.controller.learnedHomeId) {
-			throw new ZWaveError(
-				"Invalid NVM JSON: Controller is part of another network but has no learned Home ID!",
-				ZWaveErrorCodes.NVM_InvalidJSON,
-			);
-		} else if (!source.controller.nodeId) {
-			throw new ZWaveError(
-				"Invalid NVM JSON: Controller is part of another network but node ID is zero!",
-				ZWaveErrorCodes.NVM_InvalidJSON,
-			);
-		}
+		// The controller did not start the network itself. We only keep this if we have a home ID and node ID
 		homeId = source.controller.learnedHomeId;
 	} else {
 		// The controller did start the network itself
 		homeId = source.controller.ownHomeId;
-		// it is safe to set the node ID to 1
-		source.controller.nodeId = 1;
+		controllerConfiguration &= ~ControllerCapabilityFlags.OnOtherNetwork;
+		// Reconstruct the node ID. If we don't know, 1 is a good default
+		if (controllerConfiguration & ControllerCapabilityFlags.SUC) {
+			source.controller.nodeId = source.controller.staticControllerNodeId
+				|| 1;
+		} else {
+			source.controller.nodeId = 1;
+		}
 	}
+
+	// https://github.com/zwave-js/node-zwave-js/issues/6055
+	// Some controllers have invalid information for the IDs
+	let maxNodeId = source.controller.maxNodeId;
+	if (maxNodeId === 0xff) maxNodeId = source.controller.lastNodeId;
+	let reservedId = source.controller.reservedId;
+	if (reservedId === 0xff) reservedId = 0;
 
 	const ret: NVMJSON = {
 		// Start out with format 0 (= protocol version 7.0.0), the jsonToNVM routines will do further conversion
@@ -1192,10 +1213,10 @@ export function json500To700(
 			lastNodeId: source.controller.lastNodeId,
 			staticControllerNodeId: source.controller.staticControllerNodeId,
 			sucLastIndex: source.controller.sucLastIndex,
-			controllerConfiguration: source.controller.controllerConfiguration,
+			controllerConfiguration,
 			sucUpdateEntries: source.controller.sucUpdateEntries,
-			maxNodeId: source.controller.maxNodeId,
-			reservedId: source.controller.reservedId,
+			maxNodeId,
+			reservedId,
 			systemState: source.controller.systemState,
 			preferredRepeaters: source.controller.preferredRepeaters,
 
@@ -1228,8 +1249,8 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 	let learnedHomeId: string | null = null;
 	let nodeId: number;
 	if (
-		source.controller.controllerConfiguration &
-		ControllerCapabilityFlags.OnOtherNetwork
+		source.controller.controllerConfiguration
+		& ControllerCapabilityFlags.OnOtherNetwork
 	) {
 		// The controller did not start the network itself
 		ownHomeId = learnedHomeId = source.controller.homeId;
@@ -1305,10 +1326,10 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 				json: nvm500ToJSON(sourceNVM),
 			};
 		} else if (
-			isZWaveError(e) &&
-			e.code === ZWaveErrorCodes.NVM_NotSupported &&
-			isObject(e.context) &&
-			typeof e.context.protocolFileFormat === "number"
+			isZWaveError(e)
+			&& e.code === ZWaveErrorCodes.NVM_NotSupported
+			&& isObject(e.context)
+			&& typeof e.context.protocolFileFormat === "number"
 		) {
 			// This is a 700 series NVM, but the protocol version is not (yet) supported
 			source = { type: "unknown" };
@@ -1332,11 +1353,11 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 				json: nvm500ToJSON(targetNVM),
 			};
 		} else if (
-			isZWaveError(e) &&
-			e.code === ZWaveErrorCodes.NVM_NotSupported &&
-			source.type === 700 &&
-			isObject(e.context) &&
-			typeof e.context.protocolFileFormat === "number"
+			isZWaveError(e)
+			&& e.code === ZWaveErrorCodes.NVM_NotSupported
+			&& source.type === 700
+			&& isObject(e.context)
+			&& typeof e.context.protocolFileFormat === "number"
 		) {
 			// This is a 700 series NVM, but the protocol version is not (yet) supported
 			target = { type: "unknown" };
@@ -1348,18 +1369,18 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 
 	// Short circuit if...
 	if (
-		target.type === "unknown" &&
-		targetProtocolFileFormat &&
-		targetProtocolFileFormat > MAX_PROTOCOL_FILE_FORMAT &&
-		sourceProtocolFileFormat &&
-		sourceProtocolFileFormat <= targetProtocolFileFormat
+		target.type === "unknown"
+		&& targetProtocolFileFormat
+		&& targetProtocolFileFormat > MAX_PROTOCOL_FILE_FORMAT
+		&& sourceProtocolFileFormat
+		&& sourceProtocolFileFormat <= targetProtocolFileFormat
 	) {
 		// ...both the source and the target are 700 series, but at least the target uses an unsupported protocol version.
 		// We can be sure hwoever that the target can upgrade any 700 series NVM to its protocol version, as long as the
 		// source protocol version is not higher than the target's
 		return sourceNVM;
 	} else if (source.type === 700 && target.type === 700) {
-		//... the source and target protocol versions are compatible without conversion
+		// ... the source and target protocol versions are compatible without conversion
 		const sourceProtocolVersion = source.json.controller.protocolVersion;
 		const targetProtocolVersion = target.json.controller.protocolVersion;
 		// ... and the application version on the both is compatible with the respective protocol version
@@ -1371,15 +1392,15 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 		// The 700 series firmware can automatically upgrade backups from a previous protocol version
 		// Not sure when that ability was added. To be on the safe side, allow it for 7.16+ which definitely supports it.
 		if (
-			semver.gte(targetProtocolVersion, "7.16.0") &&
-			semver.gte(targetProtocolVersion, sourceProtocolVersion) &&
+			semver.gte(targetProtocolVersion, "7.16.0")
+			&& semver.gte(targetProtocolVersion, sourceProtocolVersion)
 			// the application version is updated on every update, protocol version only when the format changes
 			// so this is a good indicator if the NVMs are in a compatible state
-			semver.gte(targetApplicationVersion, targetProtocolVersion) &&
-			semver.gte(sourceApplicationVersion, sourceProtocolVersion) &&
+			&& semver.gte(targetApplicationVersion, targetProtocolVersion)
+			&& semver.gte(sourceApplicationVersion, sourceProtocolVersion)
 			// avoid preserving broken 255.x versions which appear on some controllers
-			semver.lt(sourceApplicationVersion, "255.0.0") &&
-			semver.lt(targetApplicationVersion, "255.0.0")
+			&& semver.lt(sourceApplicationVersion, "255.0.0")
+			&& semver.lt(targetApplicationVersion, "255.0.0")
 		) {
 			return sourceNVM;
 		}
@@ -1406,8 +1427,8 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 
 	// Some 700 series NVMs have a strange 255.x application version - fix that first
 	if (
-		target.type === 700 &&
-		semver.gte(target.json.controller.applicationVersion, "255.0.0")
+		target.type === 700
+		&& semver.gte(target.json.controller.applicationVersion, "255.0.0")
 	) {
 		// replace both with the protocol version
 		target.json.controller.applicationVersion =

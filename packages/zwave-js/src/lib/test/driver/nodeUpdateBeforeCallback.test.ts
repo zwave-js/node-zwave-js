@@ -1,11 +1,11 @@
 import { BasicCCGet, BasicCCReport } from "@zwave-js/cc";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
@@ -31,8 +31,8 @@ integrationTest(
 			const respondToBasicGetWithDelayedAck: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof BasicCCGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof BasicCCGet
 					) {
 						const cc = new BasicCCReport(controller.host, {
 							nodeId: self.id,

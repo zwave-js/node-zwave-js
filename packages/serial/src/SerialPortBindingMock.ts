@@ -51,7 +51,8 @@ export class CanceledError extends Error {
 }
 
 export interface MockBindingInterface
-	extends BindingInterface<MockPortBinding> {
+	extends BindingInterface<MockPortBinding>
+{
 	reset(): void;
 	createPort(path: string, opt?: CreatePortOptions): void;
 	getInstance(path: string): MockPortBinding | undefined;
@@ -100,15 +101,15 @@ export const MockBinding: MockBindingInterface = {
 
 	async open(options) {
 		if (!options || typeof options !== "object" || Array.isArray(options)) {
-			throw new TypeError('"options" is not an object');
+			throw new TypeError("\"options\" is not an object");
 		}
 
 		if (!options.path) {
-			throw new TypeError('"path" is not a valid port');
+			throw new TypeError("\"path\" is not a valid port");
 		}
 
 		if (!options.baudRate) {
-			throw new TypeError('"baudRate" is not a valid baudRate');
+			throw new TypeError("\"baudRate\" is not a valid baudRate");
 		}
 
 		const openOptions: Required<OpenOptions> = {
@@ -155,8 +156,7 @@ interface MockPortBindingEvents {
 /**
  * Mock bindings for pretend serialport access
  */
-export class MockPortBinding
-	extends TypedEventEmitter<MockPortBindingEvents>
+export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 	implements BindingPortInterface
 {
 	readonly openOptions: Required<OpenOptions>;
@@ -232,21 +232,21 @@ export class MockPortBinding
 		bytesRead: number;
 	}> {
 		if (!Buffer.isBuffer(buffer)) {
-			throw new TypeError('"buffer" is not a Buffer');
+			throw new TypeError("\"buffer\" is not a Buffer");
 		}
 
-		if (typeof offset !== "number" || isNaN(offset)) {
+		if (typeof offset !== "number" || Number.isNaN(offset)) {
 			throw new TypeError(
 				`"offset" is not an integer got "${
-					isNaN(offset) ? "NaN" : typeof offset
+					Number.isNaN(offset) ? "NaN" : typeof offset
 				}"`,
 			);
 		}
 
-		if (typeof length !== "number" || isNaN(length)) {
+		if (typeof length !== "number" || Number.isNaN(length)) {
 			throw new TypeError(
 				`"length" is not an integer got "${
-					isNaN(length) ? "NaN" : typeof length
+					Number.isNaN(length) ? "NaN" : typeof length
 				}"`,
 			);
 		}
@@ -274,8 +274,9 @@ export class MockPortBinding
 			});
 		}
 
-		const lengthToRead =
-			this.port.maxReadSize > length ? length : this.port.maxReadSize;
+		const lengthToRead = this.port.maxReadSize > length
+			? length
+			: this.port.maxReadSize;
 
 		const data = this.port.data.slice(0, lengthToRead);
 		const bytesRead = data.copy(buffer, offset);
@@ -285,7 +286,7 @@ export class MockPortBinding
 
 	async write(buffer: Buffer): Promise<void> {
 		if (!Buffer.isBuffer(buffer)) {
-			throw new TypeError('"buffer" is not a Buffer');
+			throw new TypeError("\"buffer\" is not a Buffer");
 		}
 
 		if (!this.isOpen || !this.port) {
@@ -323,11 +324,11 @@ export class MockPortBinding
 
 	async update(options: UpdateOptions): Promise<void> {
 		if (typeof options !== "object") {
-			throw TypeError('"options" is not an object');
+			throw TypeError("\"options\" is not an object");
 		}
 
 		if (typeof options.baudRate !== "number") {
-			throw new TypeError('"options.baudRate" is not a number');
+			throw new TypeError("\"options.baudRate\" is not a number");
 		}
 
 		if (!this.isOpen || !this.port) {
@@ -341,7 +342,7 @@ export class MockPortBinding
 
 	async set(options: SetOptions): Promise<void> {
 		if (typeof options !== "object") {
-			throw new TypeError('"options" is not an object');
+			throw new TypeError("\"options\" is not an object");
 		}
 		if (!this.isOpen) {
 			throw new Error("Port is not open");

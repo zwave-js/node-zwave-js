@@ -225,6 +225,10 @@ export {
 	IndicatorCCSupportedReport,
 	IndicatorCCValues,
 } from "./IndicatorCC";
+export type {
+	IrrigationCCSystemConfigSetOptions,
+	IrrigationCCValveConfigSetOptions,
+} from "./IrrigationCC";
 export {
 	IrrigationCC,
 	IrrigationCCSystemConfigGet,
@@ -246,10 +250,6 @@ export {
 	IrrigationCCValveTableReport,
 	IrrigationCCValveTableRun,
 	IrrigationCCValveTableSet,
-} from "./IrrigationCC";
-export type {
-	IrrigationCCSystemConfigSetOptions,
-	IrrigationCCValveConfigSetOptions,
 } from "./IrrigationCC";
 export {
 	LanguageCC,
@@ -313,6 +313,7 @@ export {
 	MultiCommandCC,
 	MultiCommandCCCommandEncapsulation,
 } from "./MultiCommandCC";
+export type { MultilevelSensorCCReportOptions } from "./MultilevelSensorCC";
 export {
 	MultilevelSensorCC,
 	MultilevelSensorCCGet,
@@ -323,7 +324,6 @@ export {
 	MultilevelSensorCCSupportedSensorReport,
 	MultilevelSensorCCValues,
 } from "./MultilevelSensorCC";
-export type { MultilevelSensorCCReportOptions } from "./MultilevelSensorCC";
 export {
 	MultilevelSwitchCC,
 	MultilevelSwitchCCGet,
@@ -400,6 +400,11 @@ export {
 	SceneControllerConfigurationCCSet,
 	SceneControllerConfigurationCCValues,
 } from "./SceneControllerConfigurationCC";
+export type {
+	ScheduleEntryLockCCDailyRepeatingScheduleSetOptions,
+	ScheduleEntryLockCCWeekDayScheduleSetOptions,
+	ScheduleEntryLockCCYearDayScheduleSetOptions,
+} from "./ScheduleEntryLockCC";
 export {
 	ScheduleEntryLockCC,
 	ScheduleEntryLockCCDailyRepeatingScheduleGet,
@@ -419,11 +424,6 @@ export {
 	ScheduleEntryLockCCYearDayScheduleGet,
 	ScheduleEntryLockCCYearDayScheduleReport,
 	ScheduleEntryLockCCYearDayScheduleSet,
-} from "./ScheduleEntryLockCC";
-export type {
-	ScheduleEntryLockCCDailyRepeatingScheduleSetOptions,
-	ScheduleEntryLockCCWeekDayScheduleSetOptions,
-	ScheduleEntryLockCCYearDayScheduleSetOptions,
 } from "./ScheduleEntryLockCC";
 export {
 	Security2CC,

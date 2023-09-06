@@ -1,21 +1,21 @@
 import {
+	type APIMethodsOf,
 	CCAPI,
+	type CCAPIs,
+	type CCNameOrId,
 	PhysicalCCAPI,
 	getAPI,
 	normalizeCCNameOrId,
-	type APIMethodsOf,
-	type CCAPIs,
-	type CCNameOrId,
 } from "@zwave-js/cc";
 import {
-	ZWaveError,
-	ZWaveErrorCodes,
-	getCCName,
-	securityClassIsS2,
 	type CommandClasses,
 	type IVirtualEndpoint,
 	type MulticastDestination,
 	type SecurityClass,
+	ZWaveError,
+	ZWaveErrorCodes,
+	getCCName,
+	securityClassIsS2,
 } from "@zwave-js/core/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
@@ -96,14 +96,14 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 			secClass: SecurityClass,
 		) => {
 			if (
-				securityClassIsS2(secClass) &&
+				securityClassIsS2(secClass)
 				// No need to do multicast if there is only one node
-				endpoint.node.physicalNodes.length > 1
+				&& endpoint.node.physicalNodes.length > 1
 			) {
 				// The API for S2 needs to know the multicast group ID
 				return CCAPI.create(ccId, this.driver, endpoint).withOptions({
-					s2MulticastGroupId:
-						this.driver.securityManager2?.createMulticastGroup(
+					s2MulticastGroupId: this.driver.securityManager2
+						?.createMulticastGroup(
 							endpoint.node.physicalNodes.map((n) => n.id),
 							secClass,
 						),
@@ -137,11 +137,11 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 		get: (target, ccNameOrId: string | symbol) => {
 			// Avoid ultra-weird error messages during testing
 			if (
-				process.env.NODE_ENV === "test" &&
-				typeof ccNameOrId === "string" &&
-				(ccNameOrId === "$$typeof" ||
-					ccNameOrId === "constructor" ||
-					ccNameOrId.includes("@@__IMMUTABLE"))
+				process.env.NODE_ENV === "test"
+				&& typeof ccNameOrId === "string"
+				&& (ccNameOrId === "$$typeof"
+					|| ccNameOrId === "constructor"
+					|| ccNameOrId.includes("@@__IMMUTABLE"))
 			) {
 				return undefined;
 			}
@@ -178,15 +178,14 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 	/**
 	 * Used to iterate over the commandClasses API without throwing errors by accessing unsupported CCs
 	 */
-	private readonly commandClassesIterator: () => Iterator<CCAPI> = function* (
+	private readonly commandClassesIterator: () => Iterator<CCAPI> = function*(
 		this: VirtualEndpoint,
 	) {
 		const allCCs = distinct(
 			this._node.physicalNodes
 				.map((n) => n.getEndpoint(this.index))
 				.filter((e): e is Endpoint => !!e)
-				.map((e) => [...e.implementedCommandClasses.keys()])
-				.reduce((acc, cur) => [...acc, ...cur], []),
+				.flatMap((e) => [...e.implementedCommandClasses.keys()]),
 		);
 		for (const cc of allCCs) {
 			if (this.supportsCC(cc)) {
@@ -226,10 +225,8 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 		TAPI extends Record<
 			string,
 			(...args: any[]) => any
-		> = CommandClasses extends CC
-			? any
-			: Omit<CCNameOrId, CommandClasses> extends CC
-			? any
+		> = CommandClasses extends CC ? any
+			: Omit<CCNameOrId, CommandClasses> extends CC ? any
 			: APIMethodsOf<CC>,
 	>(
 		cc: CC,
@@ -250,9 +247,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 		const apiMethod = CCAPI[method];
 		if (typeof apiMethod !== "function") {
 			throw new ZWaveError(
-				`Method "${
-					method as string
-				}" does not exist on the API for the ${ccName} CC!`,
+				`Method "${method as string}" does not exist on the API for the ${ccName} CC!`,
 				ZWaveErrorCodes.CC_NotImplemented,
 			);
 		}

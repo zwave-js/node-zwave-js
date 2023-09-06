@@ -43,13 +43,13 @@ async sendNoMoreInformation(): Promise<void>;
 }
 ```
 
--   **label:** Node ID of the controller
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Node ID of the controller
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `wakeUpInterval`
 
@@ -61,12 +61,12 @@ async sendNoMoreInformation(): Promise<void>;
 }
 ```
 
--   **label:** Wake Up interval
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 16777215
+- **label:** Wake Up interval
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 16777215

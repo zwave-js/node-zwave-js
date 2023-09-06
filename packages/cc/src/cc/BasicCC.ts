@@ -1,36 +1,36 @@
 import {
 	CommandClasses,
 	Duration,
+	type MaybeNotKnown,
+	type MaybeUnknown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	ValueMetadata,
 	maybeUnknownToString,
 	parseMaybeNumber,
 	validatePayload,
-	type MaybeNotKnown,
-	type MaybeUnknown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { pick, type AllOrNone } from "@zwave-js/shared/safe";
+import { type AllOrNone, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
 	SET_VALUE_HOOKS,
-	throwUnsupportedProperty,
-	throwWrongValueType,
-	type PollValueImplementation,
 	type SetValueImplementation,
 	type SetValueImplementationHooksFactory,
+	throwUnsupportedProperty,
+	throwWrongValueType,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -101,7 +101,7 @@ export class BasicCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (this: BasicCCAPI, { property }, value) {
+		return async function(this: BasicCCAPI, { property }, value) {
 			// Enable restoring the previous non-zero value
 			if (property === "restorePrevious") {
 				property = "targetValue";
@@ -145,9 +145,9 @@ export class BasicCCAPI extends CCAPI {
 				) => {
 					// Only update currentValue for valid target values
 					if (
-						typeof value === "number" &&
-						value >= 0 &&
-						value <= 99
+						typeof value === "number"
+						&& value >= 0
+						&& value <= 99
 					) {
 						if (this.isSinglecast()) {
 							this.tryGetValueDB()?.setValue(
@@ -156,8 +156,8 @@ export class BasicCCAPI extends CCAPI {
 							);
 						} else if (this.isMulticast()) {
 							// Figure out which nodes were affected by this command
-							const affectedNodes =
-								this.endpoint.node.physicalNodes.filter(
+							const affectedNodes = this.endpoint.node
+								.physicalNodes.filter(
 									(node) =>
 										node
 											.getEndpoint(this.endpoint.index)
@@ -178,10 +178,10 @@ export class BasicCCAPI extends CCAPI {
 				},
 				verifyChanges: () => {
 					if (
-						this.isSinglecast() ||
+						this.isSinglecast()
 						// We generally don't want to poll for multicasts because of how much traffic it can cause
 						// However, when setting the value 255 (ON), we don't know the actual state
-						(this.isMulticast() && value === 255)
+						|| (this.isMulticast() && value === 255)
 					) {
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 						(this as this).schedulePoll(
@@ -195,7 +195,7 @@ export class BasicCCAPI extends CCAPI {
 	};
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: BasicCCAPI, { property }) {
+		return async function(this: BasicCCAPI, { property }) {
 			switch (property) {
 				case "currentValue":
 				case "targetValue":
@@ -266,8 +266,8 @@ export class BasicCC extends CommandClass {
 		// but only if the compat event shouldn't be used.
 		if (
 			!applHost.getDeviceConfig?.(node.id)?.compat
-				?.treatBasicSetAsEvent &&
-			this.getValue(applHost, BasicCCValues.currentValue) == undefined
+				?.treatBasicSetAsEvent
+			&& this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -354,9 +354,12 @@ export class BasicCCSet extends BasicCC {
 	}
 }
 
-type BasicCCReportOptions = CCCommandOptions & {
-	currentValue: number;
-} & AllOrNone<{
+type BasicCCReportOptions =
+	& CCCommandOptions
+	& {
+		currentValue: number;
+	}
+	& AllOrNone<{
 		targetValue: number;
 		duration: Duration;
 	}>;
@@ -408,9 +411,9 @@ export class BasicCCReport extends BasicCC {
 			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
 		];
 		if (
-			this.version >= 2 &&
-			this.targetValue !== undefined &&
-			this.duration
+			this.version >= 2
+			&& this.targetValue !== undefined
+			&& this.duration
 		) {
 			payload.push(
 				this.targetValue ?? 0xfe,

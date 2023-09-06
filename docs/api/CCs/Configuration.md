@@ -144,9 +144,9 @@ WARNING: On nodes implementing V2, all parameters after 255 will be ignored.
 }
 ```
 
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`

@@ -7,9 +7,9 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import type { NotificationCCCapabilities } from "@zwave-js/testing";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: NotificationCCCapabilities = {
@@ -20,8 +20,8 @@ const defaultCapabilities: NotificationCCCapabilities = {
 const respondToNotificationSupportedGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof NotificationCCSupportedGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof NotificationCCSupportedGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -51,8 +51,8 @@ const respondToNotificationSupportedGet: MockNodeBehavior = {
 const respondToNotificationEventSupportedGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof NotificationCCEventSupportedGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof NotificationCCEventSupportedGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -62,16 +62,15 @@ const respondToNotificationEventSupportedGet: MockNodeBehavior = {
 				),
 			};
 			if (
-				frame.payload.notificationType in
-				capabilities.notificationTypesAndEvents
+				frame.payload.notificationType
+					in capabilities.notificationTypesAndEvents
 			) {
 				const cc = new NotificationCCEventSupportedReport(self.host, {
 					nodeId: controller.host.ownNodeId,
 					notificationType: frame.payload.notificationType,
-					supportedEvents:
-						capabilities.notificationTypesAndEvents[
-							frame.payload.notificationType
-						],
+					supportedEvents: capabilities.notificationTypesAndEvents[
+						frame.payload.notificationType
+					],
 				});
 				await self.sendToController(
 					createMockZWaveRequestFrame(cc, {
@@ -85,7 +84,7 @@ const respondToNotificationEventSupportedGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [
+export const NotificationCCBehaviors = [
 	respondToNotificationSupportedGet,
 	respondToNotificationEventSupportedGet,
 ];

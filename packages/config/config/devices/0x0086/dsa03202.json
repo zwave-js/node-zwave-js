@@ -86,7 +86,7 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
-				"0x84": {
+				"Wake Up": {
 					// To fix issue #1536
 					"isSupported": true,
 					"version": 1

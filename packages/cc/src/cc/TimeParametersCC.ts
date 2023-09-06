@@ -1,12 +1,12 @@
 import {
 	CommandClasses,
+	type IZWaveEndpoint,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type SupervisionResult,
 	ValueMetadata,
 	formatDate,
 	validatePayload,
-	type IZWaveEndpoint,
-	type MessageOrCCLogEntry,
-	type SupervisionResult,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -14,17 +14,17 @@ import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -41,10 +41,13 @@ import { TimeParametersCommand } from "../lib/_Types";
 
 export const TimeParametersCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Time Parameters"], {
-		...V.staticProperty("dateAndTime", {
-			...ValueMetadata.Any,
-			label: "Date and Time",
-		} as const),
+		...V.staticProperty(
+			"dateAndTime",
+			{
+				...ValueMetadata.Any,
+				label: "Date and Time",
+			} as const,
+		),
 	}),
 });
 
@@ -60,10 +63,12 @@ function shouldUseLocalTime(endpoint: IZWaveEndpoint): boolean {
 	// 2. DON'T support TimeCC V2, so the controller cannot specify the timezone offset
 	// Incidentally, this is also true when they don't support TimeCC at all
 	const ccVersion = endpoint.getCCVersion(CommandClasses.Time);
-	if (ccVersion >= 1 && endpoint.controlsCC(CommandClasses.Time))
+	if (ccVersion >= 1 && endpoint.controlsCC(CommandClasses.Time)) {
 		return false;
-	if (ccVersion >= 2 && endpoint.supportsCC(CommandClasses.Time))
+	}
+	if (ccVersion >= 2 && endpoint.supportsCC(CommandClasses.Time)) {
 		return false;
+	}
 
 	return true;
 }
@@ -125,7 +130,7 @@ export class TimeParametersCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (this: TimeParametersCCAPI, { property }, value) {
+		return async function(this: TimeParametersCCAPI, { property }, value) {
 			if (property !== "dateAndTime") {
 				throwUnsupportedProperty(this.ccId, property);
 			}
@@ -137,7 +142,7 @@ export class TimeParametersCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: TimeParametersCCAPI, { property }) {
+		return async function(this: TimeParametersCCAPI, { property }) {
 			switch (property) {
 				case "dateAndTime":
 					return this.get();
@@ -157,11 +162,12 @@ export class TimeParametersCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<TimeParametersCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			TimeParametersCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.dateAndTime;
 	}
 
@@ -176,10 +182,10 @@ export class TimeParametersCCAPI extends CCAPI {
 
 		const useLocalTime = this.endpoint.virtual
 			? shouldUseLocalTime(
-					this.endpoint.node.physicalNodes[0].getEndpoint(
-						this.endpoint.index,
-					)!,
-			  )
+				this.endpoint.node.physicalNodes[0].getEndpoint(
+					this.endpoint.index,
+				)!,
+			)
 			: shouldUseLocalTime(this.endpoint);
 
 		const cc = new TimeParametersCCSet(this.applHost, {

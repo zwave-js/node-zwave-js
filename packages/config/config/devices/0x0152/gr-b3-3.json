@@ -34,7 +34,7 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
-				"0x60": {
+				"Multi Channel": {
 					// This device has 3 channels, but it responds to the CC version request with 0
 					"isSupported": true,
 					"version": 2

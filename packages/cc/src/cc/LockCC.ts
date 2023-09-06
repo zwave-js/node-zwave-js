@@ -1,14 +1,14 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -16,17 +16,17 @@ import {
 	CCAPI,
 	POLL_VALUE,
 	PhysicalCCAPI,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -43,11 +43,14 @@ import { LockCommand } from "../lib/_Types";
 
 export const LockCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Lock, {
-		...V.staticProperty("locked", {
-			...ValueMetadata.Boolean,
-			label: "Locked",
-			description: "Whether the lock is locked",
-		} as const),
+		...V.staticProperty(
+			"locked",
+			{
+				...ValueMetadata.Boolean,
+				label: "Locked",
+				description: "Whether the lock is locked",
+			} as const,
+		),
 	}),
 });
 
@@ -93,7 +96,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (this: LockCCAPI, { property }, value) {
+		return async function(this: LockCCAPI, { property }, value) {
 			if (property !== "locked") {
 				throwUnsupportedProperty(this.ccId, property);
 			}
@@ -117,7 +120,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: LockCCAPI, { property }) {
+		return async function(this: LockCCAPI, { property }) {
 			if (property === "locked") return this.get();
 			throwUnsupportedProperty(this.ccId, property);
 		};

@@ -1,8 +1,14 @@
 // @ts-check
-const { CommandClasses, ConfigValueFormat, SupervisionStatus } = require("@zwave-js/core");
-const { ccCaps, MockZWaveFrameType, createMockZWaveRequestFrame } = require("@zwave-js/testing");
+const { CommandClasses, ConfigValueFormat, SupervisionStatus } = require(
+	"@zwave-js/core",
+);
+const { ccCaps, MockZWaveFrameType, createMockZWaveRequestFrame } = require(
+	"@zwave-js/testing",
+);
 const { wait } = require("alcalzone-shared/async");
-const { SupervisionCCGet, SupervisionCCReport, ConfigurationCCSet } = require("zwave-js");
+const { SupervisionCCGet, SupervisionCCReport, ConfigurationCCSet } = require(
+	"zwave-js",
+);
 
 /** @type {import("zwave-js/Testing").MockServerOptions["config"]} */
 module.exports.default = {
@@ -45,9 +51,10 @@ module.exports.default = {
 				{
 					async onControllerFrame(controller, self, frame) {
 						if (
-							frame.type === MockZWaveFrameType.Request &&
-							frame.payload instanceof SupervisionCCGet &&
-							frame.payload.encapsulated instanceof ConfigurationCCSet
+							frame.type === MockZWaveFrameType.Request
+							&& frame.payload instanceof SupervisionCCGet
+							&& frame.payload.encapsulated
+								instanceof ConfigurationCCSet
 						) {
 							const cc = new SupervisionCCReport(self.host, {
 								nodeId: controller.host.ownNodeId,
@@ -65,8 +72,8 @@ module.exports.default = {
 						}
 						return false;
 					},
-				}
-			]
+				},
+			],
 		},
 	],
 };

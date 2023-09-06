@@ -1,12 +1,23 @@
 import {
-	getDefaultMeterScale,
 	type ConfigManager,
 	type MeterScale,
+	getDefaultMeterScale,
 } from "@zwave-js/config";
-import { timespan, type MaybeUnknown } from "@zwave-js/core";
+import {
+	type IZWaveEndpoint,
+	type MaybeUnknown,
+	encodeFloatWithScale,
+	getFloatParameters,
+	timespan,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
 	UNKNOWN_STATE,
 	ValueMetadata,
 	ZWaveError,
@@ -15,11 +26,6 @@ import {
 	parseBitMask,
 	parseFloatWithScale,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SinglecastCC,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
@@ -28,19 +34,19 @@ import {
 	CCAPI,
 	POLL_VALUE,
 	PhysicalCCAPI,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -65,13 +71,17 @@ export const MeterCCValues = Object.freeze({
 			internal: true,
 		}),
 
-		...V.staticPropertyWithName("resetAll", "reset", {
-			...ValueMetadata.WriteOnlyBoolean,
-			label: `Reset accumulated values`,
-			states: {
-				true: "Reset",
-			},
-		} as const),
+		...V.staticPropertyWithName(
+			"resetAll",
+			"reset",
+			{
+				...ValueMetadata.WriteOnlyBoolean,
+				label: `Reset accumulated values`,
+				states: {
+					true: "Reset",
+				},
+			} as const,
+		),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses.Meter, {
@@ -81,17 +91,16 @@ export const MeterCCValues = Object.freeze({
 			(meterType: number) => meterType,
 			({ property, propertyKey }) =>
 				property === "reset" && typeof propertyKey === "number",
-			(meterType: number) =>
-				({
-					...ValueMetadata.WriteOnlyBoolean,
-					// This is only a placeholder label. A config manager is needed to
-					// determine the actual label.
-					label: `Reset (${num2hex(meterType)})`,
-					states: {
-						true: "Reset",
-					},
-					ccSpecific: { meterType },
-				} as const),
+			(meterType: number) => ({
+				...ValueMetadata.WriteOnlyBoolean,
+				// This is only a placeholder label. A config manager is needed to
+				// determine the actual label.
+				label: `Reset (${num2hex(meterType)})`,
+				states: {
+					true: "Reset",
+				},
+				ccSpecific: { meterType },
+			} as const),
 		),
 
 		...V.dynamicPropertyAndKeyWithName(
@@ -100,16 +109,15 @@ export const MeterCCValues = Object.freeze({
 			toPropertyKey,
 			({ property, propertyKey }) =>
 				property === "value" && typeof propertyKey === "number",
-			(meterType: number, rateType: RateType, scale: number) =>
-				({
-					...ValueMetadata.ReadOnlyNumber,
-					// Label and unit can only be determined with a config manager
-					ccSpecific: {
-						meterType,
-						rateType,
-						scale,
-					},
-				} as const),
+			(meterType: number, rateType: RateType, scale: number) => ({
+				...ValueMetadata.ReadOnlyNumber,
+				// Label and unit can only be determined with a config manager
+				ccSpecific: {
+					meterType,
+					rateType,
+					scale,
+				},
+			} as const),
 		),
 	}),
 });
@@ -185,7 +193,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: MeterCCAPI, { property, propertyKey }) {
+		return async function(this: MeterCCAPI, { property, propertyKey }) {
 			switch (property) {
 				case "value":
 				case "previousValue":
@@ -250,16 +258,14 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		const valueDB = this.tryGetValueDB();
 
 		if (this.version >= 2) {
-			const supportedScales =
-				valueDB?.getValue<number[]>(
-					MeterCCValues.supportedScales.endpoint(this.endpoint.index),
-				) ?? [];
-			const supportedRateTypes =
-				valueDB?.getValue<RateType[]>(
-					MeterCCValues.supportedRateTypes.endpoint(
-						this.endpoint.index,
-					),
-				) ?? [];
+			const supportedScales = valueDB?.getValue<number[]>(
+				MeterCCValues.supportedScales.endpoint(this.endpoint.index),
+			) ?? [];
+			const supportedRateTypes = valueDB?.getValue<RateType[]>(
+				MeterCCValues.supportedRateTypes.endpoint(
+					this.endpoint.index,
+				),
+			) ?? [];
 
 			const rateTypes = supportedRateTypes.length
 				? supportedRateTypes
@@ -290,11 +296,12 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<MeterCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			MeterCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"type",
@@ -320,7 +327,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: MeterCCAPI,
 			{ property, propertyKey },
 			value,
@@ -328,8 +335,8 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			if (property !== "reset") {
 				throwUnsupportedProperty(this.ccId, property);
 			} else if (
-				propertyKey != undefined &&
-				typeof propertyKey !== "number"
+				propertyKey != undefined
+				&& typeof propertyKey !== "number"
 			) {
 				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 			} else if (value !== true) {
@@ -341,13 +348,12 @@ export class MeterCCAPI extends PhysicalCCAPI {
 				);
 			}
 
-			const resetOptions: MeterCCResetOptions =
-				propertyKey != undefined
-					? {
-							type: propertyKey,
-							targetValue: 0,
-					  }
-					: {};
+			const resetOptions: MeterCCResetOptions = propertyKey != undefined
+				? {
+					type: propertyKey,
+					targetValue: 0,
+				}
+				: {};
 			await this.reset(resetOptions);
 
 			// Refresh values
@@ -392,20 +398,24 @@ export class MeterCC extends CommandClass {
 			if (suppResp) {
 				const logMessage = `received meter support:
 type:                 ${getMeterTypeName(applHost.configManager, suppResp.type)}
-supported scales:     ${suppResp.supportedScales
-					.map(
-						(s) =>
-							applHost.configManager.lookupMeterScale(
-								suppResp.type,
-								s,
-							).label,
-					)
-					.map((label) => `\n· ${label}`)
-					.join("")}
-supported rate types: ${suppResp.supportedRateTypes
-					.map((rt) => getEnumMemberName(RateType, rt))
-					.map((label) => `\n· ${label}`)
-					.join("")}
+supported scales:     ${
+					suppResp.supportedScales
+						.map(
+							(s) =>
+								applHost.configManager.lookupMeterScale(
+									suppResp.type,
+									s,
+								).label,
+						)
+						.map((label) => `\n· ${label}`)
+						.join("")
+				}
+supported rate types: ${
+					suppResp.supportedRateTypes
+						.map((rt) => getEnumMemberName(RateType, rt))
+						.map((label) => `\n· ${label}`)
+						.join("")
+				}
 supports reset:       ${suppResp.supportsReset}`;
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -449,8 +459,8 @@ supports reset:       ${suppResp.supportsReset}`;
 			});
 			await api.get();
 		} else {
-			const type: number =
-				this.getValue(applHost, MeterCCValues.type) ?? 0;
+			const type: number = this.getValue(applHost, MeterCCValues.type)
+				?? 0;
 
 			const supportedScales: readonly number[] =
 				this.getValue(applHost, MeterCCValues.supportedScales) ?? [];
@@ -465,18 +475,22 @@ supports reset:       ${suppResp.supportsReset}`;
 				for (const scale of supportedScales) {
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `querying meter value (type = ${getMeterTypeName(
-							applHost.configManager,
-							type,
-						)}, scale = ${
+						message: `querying meter value (type = ${
+							getMeterTypeName(
+								applHost.configManager,
+								type,
+							)
+						}, scale = ${
 							applHost.configManager.lookupMeterScale(type, scale)
 								.label
 						}${
 							rateType != undefined
-								? `, rate type = ${getEnumMemberName(
+								? `, rate type = ${
+									getEnumMemberName(
 										RateType,
 										rateType,
-								  )}`
+									)
+								}`
 								: ""
 						})...`,
 						direction: "outbound",
@@ -497,15 +511,69 @@ supports reset:       ${suppResp.supportsReset}`;
 		if (!valueDB) return true;
 
 		const values = this.getDefinedValueIDs(applHost).filter((v) =>
-			MeterCCValues.value.is(v),
+			MeterCCValues.value.is(v)
 		);
 		return values.some((v) => {
 			const lastUpdated = valueDB.getTimestamp(v);
 			return (
-				lastUpdated == undefined ||
-				Date.now() - lastUpdated > timespan.hours(6)
+				lastUpdated == undefined
+				|| Date.now() - lastUpdated > timespan.hours(6)
 			);
 		});
+	}
+
+	/**
+	 * Returns which type this meter has.
+	 * This only works AFTER the interview process
+	 */
+	public static getMeterTypeCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<number> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(MeterCCValues.type.endpoint(endpoint.index));
+	}
+
+	/**
+	 * Returns which scales are supported by this meter.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedScalesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<number[]> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(MeterCCValues.supportedScales.endpoint(endpoint.index));
+	}
+
+	/**
+	 * Returns whether reset is supported by this meter.
+	 * This only works AFTER the interview process
+	 */
+	public static supportsResetCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<boolean> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(MeterCCValues.supportsReset.endpoint(endpoint.index));
+	}
+
+	/**
+	 * Returns which rate types are supported by this meter.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedRateTypesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): MaybeNotKnown<RateType[]> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				MeterCCValues.supportedRateTypes.endpoint(endpoint.index),
+			);
 	}
 
 	public translatePropertyKey(
@@ -514,8 +582,9 @@ supports reset:       ${suppResp.supportsReset}`;
 		propertyKey: string | number,
 	): string | undefined {
 		if (property === "value" && typeof propertyKey === "number") {
-			const { meterType, rateType, scale } =
-				splitPropertyKey(propertyKey);
+			const { meterType, rateType, scale } = splitPropertyKey(
+				propertyKey,
+			);
 			let ret: string;
 			if (meterType !== 0) {
 				ret = `${applHost.configManager.getMeterName(meterType)}_${
@@ -536,73 +605,91 @@ supports reset:       ${suppResp.supportsReset}`;
 	}
 }
 
+export interface MeterCCReportOptions extends CCCommandOptions {
+	type: number;
+	scale: number;
+	value: number;
+	previousValue?: MaybeNotKnown<number>;
+	rateType?: RateType;
+	deltaTime?: MaybeUnknown<number>;
+}
+
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: CommandClassDeserializationOptions | MeterCCReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 2);
-		this._type = this.payload[0] & 0b0_00_11111;
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.type = this.payload[0] & 0b0_00_11111;
 
-		this._rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
-		const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
+			this.rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
+			const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
 
-		const {
-			scale: scale1Bits10,
-			value,
-			bytesRead,
-		} = parseFloatWithScale(this.payload.slice(1));
-		let offset = 2 + (bytesRead - 1);
-		// The scale is composed of two fields (see SDS13781)
-		const scale1 = (scale1Bit2 << 2) | scale1Bits10;
-		let scale2 = 0;
-		this._value = value;
+			const {
+				scale: scale1Bits10,
+				value,
+				bytesRead,
+			} = parseFloatWithScale(this.payload.slice(1));
+			let offset = 2 + (bytesRead - 1);
+			// The scale is composed of two fields (see SDS13781)
+			const scale1 = (scale1Bit2 << 2) | scale1Bits10;
+			let scale2 = 0;
+			this.value = value;
 
-		if (this.version >= 2 && this.payload.length >= offset + 2) {
-			this._deltaTime = this.payload.readUInt16BE(offset);
-			offset += 2;
-			if (this._deltaTime === 0xffff) {
-				this._deltaTime = UNKNOWN_STATE;
-			}
+			if (this.version >= 2 && this.payload.length >= offset + 2) {
+				this.deltaTime = this.payload.readUInt16BE(offset);
+				offset += 2;
+				if (this.deltaTime === 0xffff) {
+					this.deltaTime = UNKNOWN_STATE;
+				}
 
-			if (
+				if (
+					// 0 means that no previous value is included
+					this.deltaTime !== 0
+					&& this.payload.length >= offset + (bytesRead - 1)
+				) {
+					const { value: prevValue } = parseFloatWithScale(
+						// This float is split in the payload
+						Buffer.concat([
+							Buffer.from([this.payload[1]]),
+							this.payload.slice(offset),
+						]),
+					);
+					offset += bytesRead - 1;
+					this.previousValue = prevValue;
+				}
+				if (
+					this.version >= 4
+					&& scale1 === 7
+					&& this.payload.length >= offset + 1
+				) {
+					scale2 = this.payload[offset];
+				}
+			} else {
 				// 0 means that no previous value is included
-				this.deltaTime !== 0 &&
-				this.payload.length >= offset + (bytesRead - 1)
-			) {
-				const { value: prevValue } = parseFloatWithScale(
-					// This float is split in the payload
-					Buffer.concat([
-						Buffer.from([this.payload[1]]),
-						this.payload.slice(offset),
-					]),
-				);
-				offset += bytesRead - 1;
-				this._previousValue = prevValue;
+				this.deltaTime = 0;
 			}
-			if (
-				this.version >= 4 &&
-				scale1 === 7 &&
-				this.payload.length >= offset + 1
-			) {
-				scale2 = this.payload[offset];
-			}
+			this.scale = scale1 === 7 ? scale1 + scale2 : scale1;
 		} else {
-			// 0 means that no previous value is included
-			this._deltaTime = 0;
+			this.type = options.type;
+			this.scale = options.scale;
+			this.value = options.value;
+			this.previousValue = options.previousValue;
+			this.rateType = options.rateType ?? RateType.Unspecified;
+			this.deltaTime = options.deltaTime ?? UNKNOWN_STATE;
 		}
-		this.scale = scale1 === 7 ? scale1 + scale2 : scale1;
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const meterType = applHost.configManager.lookupMeter(this._type);
+		const meterType = applHost.configManager.lookupMeter(this.type);
 		const scale = applHost.configManager.lookupMeterScale(
-			this._type,
+			this.type,
 			this.scale,
 		);
 
@@ -628,7 +715,7 @@ export class MeterCCReport extends MeterCC {
 				if (expectedType != undefined) {
 					validatePayload.withReason(
 						"Unexpected meter type or corrupted data",
-					)(this._type === expectedType);
+					)(this.type === expectedType);
 				}
 
 				const supportedScales = this.getValue<number[]>(
@@ -647,85 +734,106 @@ export class MeterCCReport extends MeterCC {
 				);
 				if (supportedRateTypes?.length) {
 					validatePayload.withReason(
-						`Unsupported rate type ${getEnumMemberName(
-							RateType,
-							this._rateType,
-						)} or corrupted data`,
-					)(supportedRateTypes.includes(this._rateType));
+						`Unsupported rate type ${
+							getEnumMemberName(
+								RateType,
+								this.rateType,
+							)
+						} or corrupted data`,
+					)(supportedRateTypes.includes(this.rateType));
 				}
 			}
 		}
 
 		const valueValue = MeterCCValues.value(
-			this._type,
-			this._rateType,
+			this.type,
+			this.rateType,
 			this.scale,
 		);
 		this.setMetadata(applHost, valueValue, {
 			...valueValue.meta,
 			label: getValueLabel(
 				applHost.configManager,
-				this._type,
+				this.type,
 				scale,
-				this._rateType,
+				this.rateType,
 			),
 			unit: scale.label,
 			ccSpecific: {
-				meterType: this._type,
+				meterType: this.type,
 				scale: this.scale,
-				rateType: this._rateType,
+				rateType: this.rateType,
 			},
 		});
-		this.setValue(applHost, valueValue, this._value);
+		this.setValue(applHost, valueValue, this.value);
 
 		return true;
 	}
 
-	private _type: number;
-	public get type(): number {
-		return this._type;
-	}
+	public type: number;
+	public scale: number;
+	public value: number;
+	public previousValue: MaybeNotKnown<number>;
+	public rateType: RateType;
+	public deltaTime: MaybeUnknown<number>;
 
-	public readonly scale: number;
+	public serialize(): Buffer {
+		const scale1 = this.scale >= 7 ? 7 : this.scale & 0b111;
+		const scale1Bits10 = scale1 & 0b11;
+		const scale1Bit2 = scale1 >>> 2;
+		const scale2 = this.scale >= 7 ? this.scale - 7 : 0;
 
-	private _value: number;
-	public get value(): number {
-		return this._value;
-	}
+		const typeByte = (this.type & 0b0_00_11111)
+			| ((this.rateType & 0b11) << 5)
+			| (scale1Bit2 << 7);
 
-	private _previousValue: MaybeNotKnown<number>;
-	public get previousValue(): MaybeNotKnown<number> {
-		return this._previousValue;
-	}
+		const floatParams = getFloatParameters(this.value);
+		const valueBytes = encodeFloatWithScale(
+			this.value,
+			scale1Bits10,
+			floatParams,
+		);
+		const prevValueBytes = this.previousValue != undefined
+			? encodeFloatWithScale(
+				this.previousValue,
+				scale1Bits10,
+				floatParams,
+			)
+			: Buffer.from([]);
 
-	private _rateType: RateType;
-	public get rateType(): RateType {
-		return this._rateType;
-	}
+		const deltaTime = this.deltaTime ?? 0xffff;
+		const deltaTimeBytes = Buffer.allocUnsafe(2);
+		deltaTimeBytes.writeUInt16BE(deltaTime, 0);
 
-	private _deltaTime: MaybeUnknown<number>;
-	public get deltaTime(): MaybeUnknown<number> {
-		return this._deltaTime;
+		this.payload = Buffer.concat([
+			Buffer.from([typeByte]),
+			valueBytes,
+			deltaTimeBytes,
+			prevValueBytes,
+			Buffer.from([scale2]),
+		]);
+
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const meterType = applHost.configManager.lookupMeter(this._type);
+		const meterType = applHost.configManager.lookupMeter(this.type);
 		const scale = applHost.configManager.lookupMeterScale(
-			this._type,
+			this.type,
 			this.scale,
 		);
 
 		const message: MessageRecord = {
-			type: meterType?.name ?? `Unknown (${num2hex(this._type)})`,
+			type: meterType?.name ?? `Unknown (${num2hex(this.type)})`,
 			scale: scale.label,
-			"rate type": getEnumMemberName(RateType, this._rateType),
+			"rate type": getEnumMemberName(RateType, this.rateType),
 			value: this.value,
 		};
-		if (this._deltaTime !== UNKNOWN_STATE) {
+		if (this.deltaTime !== UNKNOWN_STATE) {
 			message["time delta"] = `${this.deltaTime} seconds`;
 		}
-		if (this._previousValue != undefined) {
-			message["prev. value"] = this._previousValue;
+		if (this.previousValue != undefined) {
+			message["prev. value"] = this.previousValue;
 		}
 		return {
 			...super.toLogEntry(applHost),
@@ -738,8 +846,8 @@ function testResponseForMeterGet(sent: MeterCCGet, received: MeterCCReport) {
 	// We expect a Meter Report that matches the requested scale and rate type
 	// (if they were requested)
 	return (
-		(sent.scale == undefined || sent.scale === received.scale) &&
-		(sent.rateType == undefined || sent.rateType == received.rateType)
+		(sent.scale == undefined || sent.scale === received.scale)
+		&& (sent.rateType == undefined || sent.rateType == received.rateType)
 	);
 }
 
@@ -891,10 +999,12 @@ export class MeterCCSupportedReport extends MeterCC {
 			const resetSingleValue = MeterCCValues.resetSingle(this.type);
 			this.ensureMetadata(applHost, resetSingleValue, {
 				...resetSingleValue.meta,
-				label: `Reset (${getMeterTypeName(
-					applHost.configManager,
-					this.type,
-				)})`,
+				label: `Reset (${
+					getMeterTypeName(
+						applHost.configManager,
+						this.type,
+					)
+				})`,
 			});
 		}
 		return true;
@@ -903,16 +1013,18 @@ export class MeterCCSupportedReport extends MeterCC {
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			type: `${
-				applHost.configManager.lookupMeter(this.type)?.name ??
-				`Unknown (${num2hex(this.type)})`
+				applHost.configManager.lookupMeter(this.type)?.name
+					?? `Unknown (${num2hex(this.type)})`
 			}`,
 			"supports reset": this.supportsReset,
-			"supported scales": `${this.supportedScales
-				.map(
-					(scale) => `
+			"supported scales": `${
+				this.supportedScales
+					.map(
+						(scale) => `
 · ${applHost.configManager.lookupMeterScale(this.type, scale).label}`,
-				)
-				.join("")}`,
+					)
+					.join("")
+			}`,
 			"supported rate types": this.supportedRateTypes
 				.map((rt) => getEnumMemberName(RateType, rt))
 				.join(", "),
@@ -930,13 +1042,13 @@ export class MeterCCSupportedGet extends MeterCC {}
 
 type MeterCCResetOptions =
 	| {
-			type?: undefined;
-			targetValue?: undefined;
-	  }
+		type?: undefined;
+		targetValue?: undefined;
+	}
 	| {
-			type: number;
-			targetValue: number;
-	  };
+		type: number;
+		targetValue: number;
+	};
 
 @CCCommand(MeterCommand.Reset)
 @useSupervision()
@@ -959,8 +1071,8 @@ export class MeterCCReset extends MeterCC {
 			this.targetValue = options.targetValue;
 			// Test if this is a valid target value
 			if (
-				this.targetValue != undefined &&
-				!getMinIntegerSize(this.targetValue, true)
+				this.targetValue != undefined
+				&& !getMinIntegerSize(this.targetValue, true)
 			) {
 				throw new ZWaveError(
 					`${this.targetValue} is not a valid target value!`,
@@ -975,10 +1087,9 @@ export class MeterCCReset extends MeterCC {
 
 	public serialize(): Buffer {
 		if (this.version >= 6 && this.targetValue != undefined && this.type) {
-			const size =
-				(this.targetValue &&
-					getMinIntegerSize(this.targetValue, true)) ||
-				0;
+			const size = (this.targetValue
+				&& getMinIntegerSize(this.targetValue, true))
+				|| 0;
 			if (size > 0) {
 				this.payload = Buffer.allocUnsafe(1 + size);
 				this.payload[0] = (size << 5) | (this.type & 0b11111);
@@ -992,8 +1103,8 @@ export class MeterCCReset extends MeterCC {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
 			message.type = `${
-				applHost.configManager.lookupMeter(this.type)?.name ??
-				`Unknown (${num2hex(this.type)})`
+				applHost.configManager.lookupMeter(this.type)?.name
+					?? `Unknown (${num2hex(this.type)})`
 			}`;
 		}
 		if (this.targetValue != undefined) {

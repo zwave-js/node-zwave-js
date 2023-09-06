@@ -144,7 +144,7 @@
 		// Hide CCs from root endpoint that are duplicated on the manually preserved endpoint 1
 		"commandClasses": {
 			"remove": {
-				"0x80": {
+				"Battery": {
 					"endpoints": [0]
 				}
 			}

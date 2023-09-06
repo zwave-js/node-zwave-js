@@ -152,7 +152,7 @@ async function hashFile(filename: string): Promise<Buffer> {
 		await stream.pipeline(reader, hasher);
 		return hasher.digest();
 	});
-	
+
 	return result!;
 }
 

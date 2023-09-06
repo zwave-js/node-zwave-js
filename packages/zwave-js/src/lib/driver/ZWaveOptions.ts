@@ -1,4 +1,4 @@
-import type { LogConfig } from "@zwave-js/core";
+import type { LogConfig, RFRegion } from "@zwave-js/core";
 import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import type { SerialPort } from "serialport";
@@ -88,7 +88,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 * Disable the automatic node interview after successful inclusion.
 		 * Note: When this is `true`, the interview must be started manually using
 		 * ```ts
-		 * driver.interviewNode(node: ZWaveNode)
+		 * node.interview()
 		 * ```
 		 *
 		 * Default: `false` (automatic interviews enabled)
@@ -166,6 +166,8 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
 	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
 	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
+	 *
+	 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
 	 */
 	enableSoftReset?: boolean;
 
@@ -197,6 +199,23 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 * ```
 		 */
 		scales: Partial<Record<string | number, string | number>>;
+	};
+
+	/**
+	 * RF-related settings that should automatically be configured on startup. If Z-Wave JS detects
+	 * a discrepancy between these settings and the actual configuration, it will automatically try to
+	 * re-configure the controller to match.
+	 */
+	rf?: {
+		/** The RF region the radio should be tuned to. */
+		region?: RFRegion;
+
+		txPower?: {
+			/** The desired TX power in dBm. */
+			powerlevel: number;
+			/** A hardware-specific calibration value. */
+			measured0dBm: number;
+		};
 	};
 
 	apiKeys?: {
@@ -253,14 +272,16 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	};
 }
 
-export type EditableZWaveOptions = Pick<
-	ZWaveOptions,
-	| "disableOptimisticValueUpdate"
-	| "emitValueUpdateAfterSetValue"
-	| "inclusionUserCallbacks"
-	| "interview"
-	| "logConfig"
-	| "preferences"
-> & {
-	userAgent?: Record<string, string | null | undefined>;
-};
+export type EditableZWaveOptions =
+	& Pick<
+		ZWaveOptions,
+		| "disableOptimisticValueUpdate"
+		| "emitValueUpdateAfterSetValue"
+		| "inclusionUserCallbacks"
+		| "interview"
+		| "logConfig"
+		| "preferences"
+	>
+	& {
+		userAgent?: Record<string, string | null | undefined>;
+	};

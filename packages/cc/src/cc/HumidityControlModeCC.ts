@@ -1,6 +1,9 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -8,9 +11,6 @@ import {
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
@@ -18,17 +18,17 @@ import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -45,11 +45,14 @@ import { HumidityControlMode, HumidityControlModeCommand } from "../lib/_Types";
 
 export const HumidityControlModeCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Humidity Control Mode"], {
-		...V.staticProperty("mode", {
-			...ValueMetadata.UInt8,
-			states: enumValuesToMetadataStates(HumidityControlMode),
-			label: "Humidity control mode",
-		} as const),
+		...V.staticProperty(
+			"mode",
+			{
+				...ValueMetadata.UInt8,
+				states: enumValuesToMetadataStates(HumidityControlMode),
+				label: "Humidity control mode",
+			} as const,
+		),
 
 		...V.staticProperty("supportedModes", undefined, { internal: true }),
 	}),
@@ -71,7 +74,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: HumidityControlModeCCAPI,
 			{ property },
 			value,
@@ -101,7 +104,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: HumidityControlModeCCAPI, { property }) {
+		return async function(this: HumidityControlModeCCAPI, { property }) {
 			switch (property) {
 				case "mode":
 					return this.get();
@@ -122,11 +125,12 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<HumidityControlModeCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			HumidityControlModeCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return response?.mode;
 		}
@@ -161,11 +165,12 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<HumidityControlModeCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			HumidityControlModeCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.supportedModes;
 	}
 }
@@ -202,12 +207,16 @@ export class HumidityControlModeCC extends CommandClass {
 
 		const supportedModes = await api.getSupportedModes();
 		if (supportedModes) {
-			const logMessage = `received supported humidity control modes:${supportedModes
-				.map(
-					(mode) =>
-						`\n· ${getEnumMemberName(HumidityControlMode, mode)}`,
-				)
-				.join("")}`;
+			const logMessage = `received supported humidity control modes:${
+				supportedModes
+					.map(
+						(mode) =>
+							`\n· ${
+								getEnumMemberName(HumidityControlMode, mode)
+							}`,
+					)
+					.join("")
+			}`;
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -250,9 +259,8 @@ export class HumidityControlModeCC extends CommandClass {
 		if (currentMode) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message:
-					"received current humidity control mode: " +
-					getEnumMemberName(HumidityControlMode, currentMode),
+				message: "received current humidity control mode: "
+					+ getEnumMemberName(HumidityControlMode, currentMode),
 				direction: "inbound",
 			});
 		}
@@ -331,7 +339,9 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 export class HumidityControlModeCCGet extends HumidityControlModeCC {}
 
 @CCCommand(HumidityControlModeCommand.SupportedReport)
-export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC {
+export class HumidityControlModeCCSupportedReport
+	extends HumidityControlModeCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -378,10 +388,12 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 				"supported modes": this.supportedModes
 					.map(
 						(mode) =>
-							`\n· ${getEnumMemberName(
-								HumidityControlMode,
-								mode,
-							)}`,
+							`\n· ${
+								getEnumMemberName(
+									HumidityControlMode,
+									mode,
+								)
+							}`,
 					)
 					.join(""),
 			},

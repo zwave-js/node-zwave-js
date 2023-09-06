@@ -290,7 +290,7 @@
 			"remove": {
 				// https://github.com/zwave-js/node-zwave-js/issues/5260#issuecomment-1399682117
 				// The device does not accept all commands using Supervision
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

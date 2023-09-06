@@ -37,21 +37,21 @@
 function shouldAutomerge(update) {
 	return (
 		// devDependencies: patch and minor
-		(update.dependencyType === "direct:development" &&
-			(update.updateType === "version-update:semver-patch" ||
-				update.updateType === "version-update:semver-minor")) ||
+		(update.dependencyType === "direct:development"
+			&& (update.updateType === "version-update:semver-patch"
+				|| update.updateType === "version-update:semver-minor"))
 		// production dependencies: patch
-		(update.dependencyType === "direct:production" &&
-			update.updateType === "version-update:semver-patch") ||
+		|| (update.dependencyType === "direct:production"
+			&& update.updateType === "version-update:semver-patch")
 		// production dependencies: minor if security alert
-		(update.dependencyType === "direct:production" &&
-			update.updateType === "version-update:semver-minor" &&
-			update.alertState === "OPEN") ||
+		|| (update.dependencyType === "direct:production"
+			&& update.updateType === "version-update:semver-minor"
+			&& update.alertState === "OPEN")
 		// indirect dependencies: minor if security alert
-		(update.dependencyType === "indirect" &&
-			(update.updateType === "version-update:semver-patch" ||
-				update.updateType === "version-update:semver-minor") &&
-			update.alertState === "OPEN")
+		|| (update.dependencyType === "indirect"
+			&& (update.updateType === "version-update:semver-patch"
+				|| update.updateType === "version-update:semver-minor")
+			&& update.alertState === "OPEN")
 	);
 }
 

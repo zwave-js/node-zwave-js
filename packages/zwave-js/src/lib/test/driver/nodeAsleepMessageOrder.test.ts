@@ -3,7 +3,7 @@ import { CommandClasses } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
 import { MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuiteMulti";
 
 // Repro from #1107
@@ -55,8 +55,8 @@ integrationTest(
 			await wait(50);
 			mockNode10.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof NoOperationCC,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof NoOperationCC,
 				{
 					errorMessage: "Node 10 did not receive the ping",
 				},
@@ -83,8 +83,8 @@ integrationTest(
 			await wait(500);
 			mockNode17.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof NoOperationCC,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof NoOperationCC,
 				{
 					errorMessage: "Node 17 did not receive the ping",
 				},

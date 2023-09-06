@@ -1,23 +1,25 @@
 import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
 import {
-	MessagePriority,
-	ZWaveError,
-	ZWaveErrorCodes,
 	type FrameType,
 	type MessageOrCCLogEntry,
+	MessagePriority,
 	type MessageRecord,
 	type SinglecastCC,
+	ZWaveError,
+	ZWaveErrorCodes,
+	encodeNodeID,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 export enum ApplicationCommandStatusFlags {
@@ -44,8 +46,7 @@ interface ApplicationCommandRequestOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Request, FunctionType.ApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
-export class ApplicationCommandRequest
-	extends Message
+export class ApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
@@ -71,9 +72,8 @@ export class ApplicationCommandRequest
 				default:
 					this.frameType = "singlecast";
 			}
-			this.isExploreFrame =
-				this.frameType === "broadcast" &&
-				!!(status & ApplicationCommandStatusFlags.Explore);
+			this.isExploreFrame = this.frameType === "broadcast"
+				&& !!(status & ApplicationCommandStatusFlags.Explore);
 			this.isForeignFrame = !!(
 				status & ApplicationCommandStatusFlags.ForeignFrame
 			);
@@ -82,11 +82,17 @@ export class ApplicationCommandRequest
 			);
 
 			// followed by a node ID
-			const nodeId = this.payload[1];
+			let offset = 1;
+			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+				this.payload,
+				host.nodeIdType,
+				offset,
+			);
+			offset += nodeIdBytes;
 			// and a command class
-			const commandLength = this.payload[2];
+			const commandLength = this.payload[offset++];
 			this.command = CommandClass.from(this.host, {
-				data: this.payload.slice(3, 3 + commandLength),
+				data: this.payload.slice(offset, offset + commandLength),
 				nodeId,
 				origin: options.origin,
 				frameType: this.frameType,
@@ -126,21 +132,22 @@ export class ApplicationCommandRequest
 	}
 
 	public serialize(): Buffer {
-		const statusByte =
-			(this.frameType === "broadcast"
-				? ApplicationCommandStatusFlags.TypeBroad
-				: this.frameType === "multicast"
-				? ApplicationCommandStatusFlags.TypeMulti
-				: 0) |
-			(this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
+		const statusByte = (this.frameType === "broadcast"
+			? ApplicationCommandStatusFlags.TypeBroad
+			: this.frameType === "multicast"
+			? ApplicationCommandStatusFlags.TypeMulti
+			: 0)
+			| (this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
 
 		const serializedCC = this.command.serialize();
+		const nodeId = encodeNodeID(
+			this.getNodeId() ?? this.host.ownNodeId,
+			this.host.nodeIdType,
+		);
 		this.payload = Buffer.concat([
-			Buffer.from([
-				statusByte,
-				this.getNodeId() ?? this.host.ownNodeId,
-				serializedCC.length,
-			]),
+			Buffer.from([statusByte]),
+			nodeId,
+			Buffer.from([serializedCC.length]),
 			serializedCC,
 		]);
 

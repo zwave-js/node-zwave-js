@@ -17,9 +17,6 @@ jobs:
       github.event.comment.user.login == 'AlCalzone'
 
     runs-on: [ubuntu-latest]
-    strategy:
-      matrix:
-        node-version: [16.x] # This should be LTS
 
     steps:
       - uses: actions/github-script@v6
@@ -53,9 +50,6 @@ jobs:
       github.event.pull_request.draft == false
 
     runs-on: [ubuntu-latest]
-    strategy:
-      matrix:
-        node-version: [16.x] # This should be LTS
 
     steps:
       - name: Check if auto-merging should be enabled

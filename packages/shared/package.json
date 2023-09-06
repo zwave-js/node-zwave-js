@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/shared",
-  "version": "11.2.0",
+  "version": "11.13.1",
   "description": "zwave-js: shared utilities",
   "keywords": [],
   "publishConfig": {
@@ -39,7 +39,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
+    "node": ">= 18"
   },
   "dependencies": {
     "alcalzone-shared": "^4.0.8",
@@ -49,10 +49,8 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
@@ -65,8 +63,7 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.8",
     "sinon": "^14.0.2",
-    "typescript": "5.1.3"
+    "typescript": "5.1.6"
   }
 }

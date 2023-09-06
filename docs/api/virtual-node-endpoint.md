@@ -31,16 +31,16 @@ interface VirtualValueID extends TranslatedValueID {
 
 This method and its return values need to be re-evaluated whenever the underlying physical nodes change. This is the case when:
 
--   **Broadcast node**:
-    -   All nodes are ready for the first time
-    -   A new node is added to the network and becomes ready
-    -   An existing node is re-interviewed and becomes ready again
-    -   A node is removed from the network
--   **Multicast groups**:
-    -   All members of the multicast group are ready for the first time
-    -   A (ready) node is added to a multicast group
-    -   A member of a multicast group is re-interviewed and becomes ready again
-    -   A node is removed from a multicast group
+- **Broadcast node**:
+  - All nodes are ready for the first time
+  - A new node is added to the network and becomes ready
+  - An existing node is re-interviewed and becomes ready again
+  - A node is removed from the network
+- **Multicast groups**:
+  - All members of the multicast group are ready for the first time
+  - A (ready) node is added to a multicast group
+  - A member of a multicast group is re-interviewed and becomes ready again
+  - A node is removed from a multicast group
 
 > [!NOTE] Values of virtual nodes/endpoints are only writable. They don't store a value in the value DB and their value is never updated.
 
@@ -134,8 +134,8 @@ Allows checking whether a CC API is supported before calling it with [`invokeCCA
 readonly nodeId: number | MulticastDestination
 ```
 
-If the virtual node this virtual endpoint belongs to has a node ID, that node ID is returned. This is should only be the case for the broadcast node 255.  
-If the virtual node targets a single physical node, that node's ID is returned. In this case, the virtual node is not really doing anything - except limit what you can do.  
+If the virtual node this virtual endpoint belongs to has a node ID, that node ID is returned. This is should only be the case for the broadcast node 255.\
+If the virtual node targets a single physical node, that node's ID is returned. In this case, the virtual node is not really doing anything - except limit what you can do.\
 Otherwise, an array of the physical nodes' IDs is returned.
 
 ### `index`

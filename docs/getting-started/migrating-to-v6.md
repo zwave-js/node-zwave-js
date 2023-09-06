@@ -24,7 +24,7 @@ The options `fs` and `cacheDir` have been renamed to `storage.driver` and `stora
 
 ## Revised retry strategy
 
-The retry strategy for sending commands to nodes has been revised. By default, a message is no longer re-transmitted when the node has acknowledged its receipt, since it is unlikely that the retransmission will change anything.  
+The retry strategy for sending commands to nodes has been revised. By default, a message is no longer re-transmitted when the node has acknowledged its receipt, since it is unlikely that the retransmission will change anything.\
 If you need to restore the old behavior, you can set the [`attempts.retryAfterTransmitReport` driver option](api/driver?id=zwaveoptions) to `true`.
 
 ## `ValueMetadataBase` and `ValueMetadataAny` types

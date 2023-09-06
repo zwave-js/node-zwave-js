@@ -1,6 +1,10 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -8,10 +12,6 @@ import {
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -19,17 +19,17 @@ import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -56,11 +56,15 @@ export const ThermostatFanModeCCValues = Object.freeze({
 			{ minVersion: 3 } as const,
 		),
 
-		...V.staticPropertyWithName("fanMode", "mode", {
-			...ValueMetadata.UInt8,
-			states: enumValuesToMetadataStates(ThermostatFanMode),
-			label: "Thermostat fan mode",
-		} as const),
+		...V.staticPropertyWithName(
+			"fanMode",
+			"mode",
+			{
+				...ValueMetadata.UInt8,
+				states: enumValuesToMetadataStates(ThermostatFanMode),
+				label: "Thermostat fan mode",
+			} as const,
+		),
 
 		...V.staticPropertyWithName(
 			"supportedFanModes",
@@ -87,7 +91,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: ThermostatFanModeCCAPI,
 			{ property },
 			value,
@@ -148,7 +152,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: ThermostatFanModeCCAPI, { property }) {
+		return async function(this: ThermostatFanModeCCAPI, { property }) {
 			switch (property) {
 				case "mode":
 				case "off":
@@ -171,11 +175,12 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ThermostatFanModeCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ThermostatFanModeCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["mode", "off"]);
 		}
@@ -212,11 +217,12 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ThermostatFanModeCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ThermostatFanModeCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.supportedModes;
 	}
 }
@@ -253,12 +259,14 @@ export class ThermostatFanModeCC extends CommandClass {
 
 		const supportedModes = await api.getSupportedModes();
 		if (supportedModes) {
-			const logMessage = `received supported thermostat fan modes:${supportedModes
-				.map(
-					(mode) =>
-						`\n· ${getEnumMemberName(ThermostatFanMode, mode)}`,
-				)
-				.join("")}`;
+			const logMessage = `received supported thermostat fan modes:${
+				supportedModes
+					.map(
+						(mode) =>
+							`\n· ${getEnumMemberName(ThermostatFanMode, mode)}`,
+					)
+					.join("")
+			}`;
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -298,10 +306,12 @@ export class ThermostatFanModeCC extends CommandClass {
 		});
 		const currentStatus = await api.get();
 		if (currentStatus) {
-			let logMessage = `received current thermostat fan mode: ${getEnumMemberName(
-				ThermostatFanMode,
-				currentStatus.mode,
-			)}`;
+			let logMessage = `received current thermostat fan mode: ${
+				getEnumMemberName(
+					ThermostatFanMode,
+					currentStatus.mode,
+				)
+			}`;
 			if (currentStatus.off != undefined) {
 				logMessage += ` (turned off)`;
 			}
@@ -346,8 +356,8 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			(this.version >= 2 && this.off ? 0b1000_0000 : 0) |
-				(this.mode & 0b1111),
+			(this.version >= 2 && this.off ? 0b1000_0000 : 0)
+			| (this.mode & 0b1111),
 		]);
 		return super.serialize();
 	}

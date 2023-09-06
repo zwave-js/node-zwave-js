@@ -1,23 +1,24 @@
 import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
 import {
-	MessagePriority,
-	NODE_ID_BROADCAST,
-	RssiError,
-	parseNodeBitMask,
 	type FrameType,
 	type MessageOrCCLogEntry,
+	MessagePriority,
 	type MessageRecord,
+	NODE_ID_BROADCAST,
 	type RSSI,
+	RssiError,
 	type SinglecastCC,
+	parseNodeBitMask,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageDeserializationOptions,
 	MessageType,
 	messageTypes,
 	priority,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { tryParseRSSI } from "../transport/SendDataShared";
@@ -26,8 +27,7 @@ import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
 @messageTypes(MessageType.Request, FunctionType.BridgeApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
-export class BridgeApplicationCommandRequest
-	extends Message
+export class BridgeApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
@@ -49,9 +49,8 @@ export class BridgeApplicationCommandRequest
 			default:
 				this.frameType = "singlecast";
 		}
-		this.isExploreFrame =
-			this.frameType === "broadcast" &&
-			!!(status & ApplicationCommandStatusFlags.Explore);
+		this.isExploreFrame = this.frameType === "broadcast"
+			&& !!(status & ApplicationCommandStatusFlags.Explore);
 		this.isForeignFrame = !!(
 			status & ApplicationCommandStatusFlags.ForeignFrame
 		);
@@ -59,10 +58,18 @@ export class BridgeApplicationCommandRequest
 			status & ApplicationCommandStatusFlags.ForeignHomeId
 		);
 
-		const sourceNodeId = this.payload[2];
+		let offset = 1;
+		const { nodeId: destinationNodeId, bytesRead: dstNodeIdBytes } =
+			parseNodeID(this.payload, host.nodeIdType, offset);
+		offset += dstNodeIdBytes;
+		const { nodeId: sourceNodeId, bytesRead: srcNodeIdBytes } = parseNodeID(
+			this.payload,
+			host.nodeIdType,
+			offset,
+		);
+		offset += srcNodeIdBytes;
 		// Parse the CC
-		const commandLength = this.payload[3];
-		let offset = 4;
+		const commandLength = this.payload[offset++];
 		this.command = CommandClass.from(this.host, {
 			data: this.payload.slice(offset, offset + commandLength),
 			nodeId: sourceNodeId,
@@ -79,7 +86,7 @@ export class BridgeApplicationCommandRequest
 				this.payload.slice(offset, offset + multicastNodesLength),
 			);
 		} else if (this.frameType === "singlecast") {
-			this.targetNodeId = this.payload[1];
+			this.targetNodeId = destinationNodeId;
 		} else {
 			this.targetNodeId = NODE_ID_BROADCAST;
 		}

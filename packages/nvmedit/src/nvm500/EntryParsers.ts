@@ -1,7 +1,7 @@
 import {
+	type NodeProtocolInfo,
 	encodeNodeProtocolInfo,
 	parseNodeProtocolInfo,
-	type NodeProtocolInfo,
 } from "@zwave-js/core/safe";
 import { padStart } from "alcalzone-shared/strings";
 import type { NVMModuleType } from "./shared";
@@ -26,11 +26,13 @@ export function parseNVMDescriptor(
 		productID: buffer.readUInt16BE(offset + 6),
 		firmwareVersion: `${buffer[offset + 8]}.${buffer[offset + 9]}`,
 		// Z-Wave protocol versions are formatted as "6.07" and similar
-		protocolVersion: `${buffer[offset + 10]}.${padStart(
-			buffer[offset + 11].toString(),
-			2,
-			"0",
-		)}`,
+		protocolVersion: `${buffer[offset + 10]}.${
+			padStart(
+				buffer[offset + 11].toString(),
+				2,
+				"0",
+			)
+		}`,
 	};
 }
 
@@ -83,7 +85,8 @@ export function encodeNVMModuleDescriptor(
 }
 
 export interface NVM500NodeInfo
-	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass">
+{
 	genericDeviceClass: number;
 	specificDeviceClass: number | null;
 }

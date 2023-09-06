@@ -17,7 +17,7 @@ Open an issue with the **feature request template** and fill it out. For complic
 
 Thanks, just go ahead and open a PR! Please make sure to follow our [standards and contribution guidelines for configuration files](https://zwave-js.github.io/node-zwave-js/#/config-files/contributing-files).
 
-**Did you know?** 🥳  
+**Did you know?** 🥳\
 We now have preconfigured [online instances of VSCode](https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js) that help you through the contributing process without having to download and install a bunch of stuff on your system. These have auto-formatting and let you run checks, so prefer using them over editing on Github.
 
 ## Do you want to help out with a PR?

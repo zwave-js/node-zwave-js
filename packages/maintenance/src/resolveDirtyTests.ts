@@ -3,10 +3,10 @@
  * anything they are not supposed to.
  */
 
-import crypto from "crypto";
 import execa from "execa";
-import fs from "fs";
-import path from "path";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import ts from "typescript";
 import { loadTSConfig, projectRoot, repoRoot } from "./tsAPITools";
 
@@ -14,8 +14,8 @@ const reportFile = path.join(repoRoot, ".tmp", "dirty-tests.json");
 
 function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	if (
-		ts.isImportEqualsDeclaration(node) &&
-		ts.isExternalModuleReference(node.moduleReference)
+		ts.isImportEqualsDeclaration(node)
+		&& ts.isExternalModuleReference(node.moduleReference)
 	) {
 		return node.moduleReference.expression;
 	} else if (ts.isImportDeclaration(node)) {
@@ -24,14 +24,14 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 			// import "bar"
 			return node.moduleSpecifier;
 		} else if (
-			!node.importClause.isTypeOnly &&
+			!node.importClause.isTypeOnly
 			// import foo from "bar"
-			(!node.importClause.namedBindings ||
+			&& (!node.importClause.namedBindings
 				// import * as foo from "bar"
-				ts.isNamespaceImport(node.importClause.namedBindings) ||
+				|| ts.isNamespaceImport(node.importClause.namedBindings)
 				// import {foo, type baz} from "bar"
-				(ts.isNamedImports(node.importClause.namedBindings) &&
-					node.importClause.namedBindings.elements.some(
+				|| (ts.isNamedImports(node.importClause.namedBindings)
+					&& node.importClause.namedBindings.elements.some(
 						(e) => !e.isTypeOnly,
 					)))
 		) {
@@ -40,14 +40,14 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	} else if (ts.isExportDeclaration(node)) {
 		// Only return export declarations where there is at least one non-typeonly export specifier
 		if (
-			!node.isTypeOnly &&
+			!node.isTypeOnly
 			// export * from "bar"
-			(!node.exportClause ||
+			&& (!node.exportClause
 				// export * as foo from "bar"
-				ts.isNamespaceExport(node.exportClause) ||
+				|| ts.isNamespaceExport(node.exportClause)
 				// export {foo, type baz} from "bar"
-				(ts.isNamedExports(node.exportClause) &&
-					node.exportClause.elements.some((e) => !e.isTypeOnly)))
+				|| (ts.isNamedExports(node.exportClause)
+					&& node.exportClause.elements.some((e) => !e.isTypeOnly)))
 		) {
 			return node.moduleSpecifier;
 		}
@@ -70,8 +70,8 @@ function getImports(
 		const moduleNameExpr = getExternalModuleName(node);
 		// if they have a name, that is a string, i.e. not alias definition `import x = y`
 		if (
-			moduleNameExpr &&
-			moduleNameExpr.kind === ts.SyntaxKind.StringLiteral
+			moduleNameExpr
+			&& moduleNameExpr.kind === ts.SyntaxKind.StringLiteral
 		) {
 			// Ask the checker about the "symbol: for this module name
 			// it would be undefined if the module was not found (i.e. error)
@@ -80,11 +80,10 @@ function getImports(
 			if (file) {
 				output.push({
 					name: moduleNameExpr.getText(sourceFile),
-					line:
-						ts.getLineAndCharacterOfPosition(
-							sourceFile,
-							moduleNameExpr.getStart(),
-						).line + 1,
+					line: ts.getLineAndCharacterOfPosition(
+						sourceFile,
+						moduleNameExpr.getStart(),
+					).line + 1,
 					sourceFile: file,
 				});
 			}
@@ -148,7 +147,7 @@ function resolveSourceFileFromDefinition(
 }
 
 function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+	return path.relative(projectRoot, filename).replaceAll("\\", "/");
 }
 
 function isExternalModule(imp: ResolvedImport): boolean {
@@ -264,7 +263,7 @@ export async function resolveDirtyTests(): Promise<void> {
 	}
 
 	const dirtyTests = [...dirtySourceFiles].filter((file) =>
-		file.endsWith(".test.ts"),
+		file.endsWith(".test.ts")
 	);
 
 	const testsByPackage: Record<string, string[]> = {};

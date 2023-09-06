@@ -7,6 +7,25 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Debug current test",
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": [
+				"test",
+				"--async-stack-traces",
+				"${file}"
+			],
+			"env": {
+				"NODE_ENV": "development"
+				// "NO_CACHE": "true"
+				// "LOGLEVEL": "info"
+			},
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Debug locally",
 			"port": 9229,
 			"runtimeExecutable": "yarn",

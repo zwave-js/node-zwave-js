@@ -2,7 +2,7 @@ import { BasicCCGet, BasicCCSet } from "@zwave-js/cc";
 import { MessagePriority, NodeStatus } from "@zwave-js/core";
 import { MOCK_FRAME_ACK_TIMEOUT, MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { type SendDataRequest } from "../../serialapi/transport/SendDataMessages";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -42,9 +42,9 @@ integrationTest(
 			await wait(50);
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof BasicCCSet &&
-					frame.payload.targetValue === 99,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof BasicCCSet
+					&& frame.payload.targetValue === 99,
 				{
 					errorMessage: "The first command was not received",
 				},
@@ -63,20 +63,26 @@ integrationTest(
 			const sendQueue = driver["queue"];
 			driver.driverLog.sendQueue(sendQueue);
 			t.is(sendQueue.length, 2);
-			t.is(sendQueue.get(0)?.priority, MessagePriority.WakeUp);
-			t.is(sendQueue.get(1)?.priority, MessagePriority.WakeUp);
+			t.is(
+				sendQueue.transactions.get(0)?.priority,
+				MessagePriority.WakeUp,
+			);
+			t.is(
+				sendQueue.transactions.get(1)?.priority,
+				MessagePriority.WakeUp,
+			);
 			t.is(node2.status, NodeStatus.Asleep);
 
 			// And the order should be correct
 			t.is(
 				(
-					(sendQueue.get(0)?.message as SendDataRequest)
+					(sendQueue.transactions.get(0)?.message as SendDataRequest)
 						.command as BasicCCSet
 				).targetValue,
 				99,
 			);
 			t.true(
-				(sendQueue.get(1)?.message as SendDataRequest)
+				(sendQueue.transactions.get(1)?.message as SendDataRequest)
 					.command instanceof BasicCCGet,
 			);
 		},

@@ -1,5 +1,5 @@
 import { getImplementedVersion } from "@zwave-js/cc";
-import { allCCs, CommandClasses, encapsulationCCs } from "@zwave-js/core/safe";
+import { CommandClasses, allCCs, encapsulationCCs } from "@zwave-js/core/safe";
 
 export function determineNIF(): {
 	basicDeviceClass: number;
@@ -17,12 +17,12 @@ export function determineNIF(): {
 	// Encapsulation CCs are always supported
 	const implementedEncapsulationCCs = encapsulationCCs.filter(
 		(cc) =>
-			implementedCCs.includes(cc) &&
+			implementedCCs.includes(cc)
 			// A node MUST advertise support for Multi Channel Command Class only if it implements End Points.
 			// A node able to communicate using the Multi Channel encapsulation but implementing no End Point
 			// MUST NOT advertise support for the Multi Channel Command Class.
 			// --> We do not implement end points
-			cc !== CommandClasses["Multi Channel"],
+			&& cc !== CommandClasses["Multi Channel"],
 	);
 
 	const supportedCCs = new Set([

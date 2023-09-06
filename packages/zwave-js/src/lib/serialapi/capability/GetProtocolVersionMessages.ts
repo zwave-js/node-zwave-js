@@ -4,11 +4,11 @@ import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 @messageTypes(MessageType.Request, FunctionType.GetProtocolVersion)

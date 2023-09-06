@@ -1,31 +1,34 @@
 import {
+	type MessagePriority,
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 	isZWaveError,
-	type MessagePriority,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
-	Interpreter,
 	type AnyStateMachine,
+	Interpreter,
 	type InterpreterFrom,
 	type InterpreterOptions,
 } from "xstate";
 import {
 	SendDataBridgeRequest,
-	SendDataMulticastBridgeRequest,
 	type SendDataBridgeRequestTransmitReport,
+	SendDataMulticastBridgeRequest,
 	type SendDataMulticastBridgeRequestTransmitReport,
 } from "../serialapi/transport/SendDataBridgeMessages";
 import {
 	SendDataMulticastRequest,
-	SendDataRequest,
 	type SendDataMulticastRequestTransmitReport,
+	SendDataRequest,
 	type SendDataRequestTransmitReport,
 } from "../serialapi/transport/SendDataMessages";
-import { isSendData } from "../serialapi/transport/SendDataShared";
+import {
+	isSendData,
+	isSendDataTransmitReport,
+} from "../serialapi/transport/SendDataShared";
 import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine";
 import type { Transaction } from "./Transaction";
 
@@ -85,8 +88,21 @@ export function serialAPICommandErrorToZWaveError(
 		}
 		case "callback NOK": {
 			if (
-				sentMessage instanceof SendDataRequest ||
-				sentMessage instanceof SendDataBridgeRequest
+				isSendData(sentMessage)
+				&& isSendDataTransmitReport(receivedMessage)
+				&& receivedMessage.transmitStatus === TransmitStatus.Fail
+			) {
+				return new ZWaveError(
+					`Failed to send the command, the controller is jammed`,
+					ZWaveErrorCodes.Controller_Jammed,
+					receivedMessage,
+					transactionSource,
+				);
+			}
+
+			if (
+				sentMessage instanceof SendDataRequest
+				|| sentMessage instanceof SendDataBridgeRequest
 			) {
 				const status = (
 					receivedMessage as
@@ -94,12 +110,12 @@ export function serialAPICommandErrorToZWaveError(
 						| SendDataBridgeRequestTransmitReport
 				).transmitStatus;
 				return new ZWaveError(
-					`Failed to send the command after ${
-						sentMessage.maxSendAttempts
-					} attempts (Status ${getEnumMemberName(
-						TransmitStatus,
-						status,
-					)})`,
+					`Failed to send the command after ${sentMessage.maxSendAttempts} attempts (Status ${
+						getEnumMemberName(
+							TransmitStatus,
+							status,
+						)
+					})`,
 					status === TransmitStatus.NoAck
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
@@ -107,8 +123,8 @@ export function serialAPICommandErrorToZWaveError(
 					transactionSource,
 				);
 			} else if (
-				sentMessage instanceof SendDataMulticastRequest ||
-				sentMessage instanceof SendDataMulticastBridgeRequest
+				sentMessage instanceof SendDataMulticastRequest
+				|| sentMessage instanceof SendDataMulticastBridgeRequest
 			) {
 				const status = (
 					receivedMessage as
@@ -116,10 +132,12 @@ export function serialAPICommandErrorToZWaveError(
 						| SendDataMulticastBridgeRequestTransmitReport
 				).transmitStatus;
 				return new ZWaveError(
-					`One or more nodes did not respond to the multicast request (Status ${getEnumMemberName(
-						TransmitStatus,
-						status,
-					)})`,
+					`One or more nodes did not respond to the multicast request (Status ${
+						getEnumMemberName(
+							TransmitStatus,
+							status,
+						)
+					})`,
 					status === TransmitStatus.NoAck
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
@@ -211,18 +229,24 @@ export function interpretEx<TMachine extends AnyStateMachine>(
 						...(target["sendListeners"] as Set<any>),
 					];
 					target.stop();
-					for (const listener of listeners)
+					for (const listener of listeners) {
 						target.onTransition(listener);
-					for (const listener of contextListeners)
+					}
+					for (const listener of contextListeners) {
 						target.onChange(listener);
-					for (const listener of stopListeners)
+					}
+					for (const listener of stopListeners) {
 						target.onStop(listener);
-					for (const listener of doneListeners)
+					}
+					for (const listener of doneListeners) {
 						target.onDone(listener);
-					for (const listener of eventListeners)
+					}
+					for (const listener of eventListeners) {
 						target.onEvent(listener);
-					for (const listener of sendListeners)
+					}
+					for (const listener of sendListeners) {
 						target.onSend(listener);
+					}
 					return target.start();
 				};
 			} else {
@@ -234,31 +258,31 @@ export function interpretEx<TMachine extends AnyStateMachine>(
 
 export type TransactionReducerResult =
 	| {
-			// Silently drop the transaction
-			type: "drop";
-	  }
+		// Silently drop the transaction
+		type: "drop";
+	}
 	| {
-			// Do nothing (useful especially for the current transaction)
-			type: "keep";
-	  }
+		// Do nothing (useful especially for the current transaction)
+		type: "keep";
+	}
 	| {
-			// Reject the transaction with the given error
-			type: "reject";
-			message: string;
-			code: ZWaveErrorCodes;
-	  }
+		// Reject the transaction with the given error
+		type: "reject";
+		message: string;
+		code: ZWaveErrorCodes;
+	}
 	| {
-			// Resolve the transaction with the given message
-			type: "resolve";
-			message?: Message;
-	  }
+		// Resolve the transaction with the given message
+		type: "resolve";
+		message?: Message;
+	}
 	| {
-			// Changes the priority (and tag) of the transaction if a new one is given,
-			// and moves the current transaction back to the queue
-			type: "requeue";
-			priority?: MessagePriority;
-			tag?: any;
-	  };
+		// Changes the priority (and tag) of the transaction if a new one is given,
+		// and moves the current transaction back to the queue
+		type: "requeue";
+		priority?: MessagePriority;
+		tag?: any;
+	};
 
 export type TransactionReducer = (
 	transaction: Transaction,

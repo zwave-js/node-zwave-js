@@ -1,11 +1,11 @@
 import {
 	BasicCCReport,
 	BasicCCValues,
+	type CommandClass,
 	InvalidCC,
 	Security2CC,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
-	type CommandClass,
 } from "@zwave-js/cc";
 import {
 	SecurityClass,
@@ -13,12 +13,12 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
@@ -72,8 +72,8 @@ integrationTest(
 			const respondToNonceGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof Security2CCNonceGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof Security2CCNonceGet
 					) {
 						const nonce = smNode.generateNonce(
 							controller.host.ownNodeId,
@@ -100,14 +100,14 @@ integrationTest(
 			const handleInvalidCC: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof InvalidCC
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof InvalidCC
 					) {
 						if (
-							frame.payload.reason ===
-								ZWaveErrorCodes.Security2CC_CannotDecode ||
-							frame.payload.reason ===
-								ZWaveErrorCodes.Security2CC_NoSPAN
+							frame.payload.reason
+								=== ZWaveErrorCodes.Security2CC_CannotDecode
+							|| frame.payload.reason
+								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
 								controller.host.ownNodeId,

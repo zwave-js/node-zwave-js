@@ -33,8 +33,8 @@ export function checkCCToLogEntry(): void {
 		}
 		// Ignore test files and the index
 		if (
-			relativePath.endsWith(".test.ts") ||
-			relativePath.endsWith("index.ts")
+			relativePath.endsWith(".test.ts")
+			|| relativePath.endsWith("index.ts")
 		) {
 			continue;
 		}
@@ -43,20 +43,20 @@ export function checkCCToLogEntry(): void {
 		ts.forEachChild(sourceFile, (node) => {
 			// Only look at class declarations that have "CC" in the name, don't end with "CC" or "API"
 			if (
-				ts.isClassDeclaration(node) &&
-				node.name &&
-				node.name.text.includes("CC") &&
-				!node.name.text.endsWith("CC") &&
-				!node.name.text.startsWith("ZWaveProtocol") &&
-				!node.name.text.endsWith("API")
+				ts.isClassDeclaration(node)
+				&& node.name
+				&& node.name.text.includes("CC")
+				&& !node.name.text.endsWith("CC")
+				&& !node.name.text.startsWith("ZWaveProtocol")
+				&& !node.name.text.endsWith("API")
 			) {
 				// Only look at implementations of toLogEntry
 				if (node.members.length === 0) {
 					// ignore empty classes
 					results.set(node.name.text, "empty");
 				} else if (
-					node.members.length === 1 &&
-					node.members[0].kind === ts.SyntaxKind.Constructor
+					node.members.length === 1
+					&& node.members[0].kind === ts.SyntaxKind.Constructor
 				) {
 					// TODO: move this check into lintCCConstructor
 					// highlight constructor only
@@ -69,8 +69,8 @@ export function checkCCToLogEntry(): void {
 				} else {
 					const hasToLogEntry = node.members.some(
 						(member) =>
-							ts.isMethodDeclaration(member) &&
-							member.name.getText(sourceFile) === "toLogEntry",
+							ts.isMethodDeclaration(member)
+							&& member.name.getText(sourceFile) === "toLogEntry",
 					);
 					results.set(node.name.text, hasToLogEntry);
 				}

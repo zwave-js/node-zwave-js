@@ -1,13 +1,13 @@
 // repro from https://github.com/zwave-js/zwave-js-ui/issues/101#issuecomment-749007701
 
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
 	"When receiving a MeterCC::Report, the value event should contain the meter name in propertyKeyName",
 	{
 		// debug: true,
-		provisioningDirectory: path.join(__dirname, "fixtures/configurationCC"),
+		provisioningDirectory: path.join(__dirname, "fixtures/meterCC"),
 
 		testBody: async (t, driver, node, mockController, _mockNode) => {
 			const valueAddedPromise = new Promise<void>((resolve) => {

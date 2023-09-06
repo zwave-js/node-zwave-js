@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/testing",
-  "version": "11.2.0",
+  "version": "11.14.0",
   "description": "zwave-js: testing utilities",
   "keywords": [],
   "publishConfig": {
@@ -28,22 +28,21 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
+    "node": ">= 18"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
-    "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
     "@zwave-js/serial": "workspace:*",
     "@zwave-js/shared": "workspace:*",
+    "alcalzone-shared": "^4.0.8",
     "ansi-colors": "^4.1.3"
   },
   "devDependencies": {
@@ -53,9 +52,8 @@
     "del-cli": "^5.0.0",
     "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.8",
     "triple-beam": "*",
-    "typescript": "5.1.3",
+    "typescript": "5.1.6",
     "winston-transport": "^4.5.0"
   }
 }

@@ -116,9 +116,9 @@ export function dumpObject(obj: NVM3Object, json: boolean = false): void {
 	console.log(`${prefix}  fragment type: ${FragmentType[obj.fragmentType]}`);
 	if (obj.data) {
 		console.log(
-			`${prefix}  data: ${obj.data.toString("hex")} (${
-				obj.data.length
-			} bytes)`,
+			`${prefix}  data: ${
+				obj.data.toString("hex")
+			} (${obj.data.length} bytes)`,
 		);
 	}
 	console.log();

@@ -1,7 +1,7 @@
 import {
+	type ZWaveLogContainer,
 	ZWaveLoggerBase,
 	getDirectionPrefix,
-	type ZWaveLogContainer,
 } from "@zwave-js/core";
 import {
 	CONFIG_LABEL,

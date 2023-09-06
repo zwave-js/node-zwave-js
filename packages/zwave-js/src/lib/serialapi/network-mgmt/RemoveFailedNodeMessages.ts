@@ -1,18 +1,18 @@
-import { MessagePriority } from "@zwave-js/core";
+import { MessagePriority, encodeNodeID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 
 export enum RemoveFailedNodeStartFlags {
@@ -46,8 +46,8 @@ export enum RemoveFailedNodeStatus {
 export class RemoveFailedNodeRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== RemoveFailedNodeRequestStatusReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== RemoveFailedNodeRequestStatusReport
 		) {
 			return new RemoveFailedNodeRequestStatusReport(host, options);
 		}
@@ -76,7 +76,8 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	public failedNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.failedNodeId, this.callbackId]);
+		const nodeId = encodeNodeID(this.failedNodeId, this.host.nodeIdType);
+		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 		return super.serialize();
 	}
 }
@@ -106,8 +107,7 @@ export class RemoveFailedNodeRequestStatusReport
 }
 
 @messageTypes(MessageType.Response, FunctionType.RemoveFailedNode)
-export class RemoveFailedNodeResponse
-	extends Message
+export class RemoveFailedNodeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(

@@ -65,11 +65,13 @@ export class CtrDRBG {
 		if (this.derivation) {
 			seed = this.derive(entropy, nonce, pers);
 		} else {
-			if (entropy.length + nonce.length > this.entSize)
+			if (entropy.length + nonce.length > this.entSize) {
 				throw new Error("Entropy is too long.");
+			}
 
-			if (pers.length > this.entSize)
+			if (pers.length > this.entSize) {
 				throw new Error("Personalization string is too long.");
+			}
 
 			seed = Buffer.alloc(this.entSize, 0);
 
@@ -97,8 +99,9 @@ export class CtrDRBG {
 		if (this.derivation) {
 			seed = this.derive(entropy, add);
 		} else {
-			if (add.length > this.entSize)
+			if (add.length > this.entSize) {
 				throw new Error("Additional data is too long.");
+			}
 
 			seed = Buffer.alloc(this.entSize, 0x00);
 			entropy.copy(seed, 0);
@@ -123,8 +126,9 @@ export class CtrDRBG {
 		// if (this.rounds > RESEED_INTERVAL)
 		// 	throw new Error("Reseed is required.");
 
-		if (len > MAX_GENERATE_LENGTH)
+		if (len > MAX_GENERATE_LENGTH) {
 			throw new Error("Requested length is too long.");
+		}
 
 		if (add && add.length > 0) {
 			if (this.derivation) add = this.derive(add);
@@ -216,8 +220,9 @@ export class CtrDRBG {
 
 			// chain = BCC(K, IV || S)
 			for (let j = 0; j < N; j++) {
-				for (let k = 0; k < chain.length; k++)
+				for (let k = 0; k < chain.length; k++) {
 					chain[k] ^= S[j * this.blkSize + k];
+				}
 
 				// encrypt in-place
 				encryptAES128ECB(chain, K).copy(chain, 0);

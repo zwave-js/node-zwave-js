@@ -1,21 +1,21 @@
 import {
+	type CommandClasses,
 	MessagePriority,
 	parseNodeUpdatePayload,
-	type CommandClasses,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 
 export enum RemoveNodeType {
@@ -30,6 +30,8 @@ export enum RemoveNodeStatus {
 	NodeFound = 2,
 	RemovingSlave = 3,
 	RemovingController = 4,
+	// Some controllers send this value when stopping a failed exclusion
+	Reserved_0x05 = 5,
 	Done = 6,
 	Failed = 7,
 }
@@ -51,8 +53,8 @@ interface RemoveNodeFromNetworkRequestOptions extends MessageBaseOptions {
 export class RemoveNodeFromNetworkRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== RemoveNodeFromNetworkRequestStatusReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== RemoveNodeFromNetworkRequestStatusReport
 		) {
 			return new RemoveNodeFromNetworkRequestStatusReport(host, options);
 		}
@@ -72,13 +74,15 @@ function testCallbackForRemoveNodeRequest(
 		case RemoveNodeType.Controller:
 		case RemoveNodeType.Slave:
 			return (
-				received.status === RemoveNodeStatus.Ready ||
-				received.status === RemoveNodeStatus.Failed
+				received.status === RemoveNodeStatus.Ready
+				|| received.status === RemoveNodeStatus.Failed
 			);
 		case RemoveNodeType.Stop:
 			return (
-				received.status === RemoveNodeStatus.Done ||
-				received.status === RemoveNodeStatus.Failed
+				received.status === RemoveNodeStatus.Done
+				// This status is sent by some controllers when stopping a failed exclusion
+				|| received.status === RemoveNodeStatus.Reserved_0x05
+				|| received.status === RemoveNodeStatus.Failed
 			);
 		default:
 			return false;
@@ -86,7 +90,9 @@ function testCallbackForRemoveNodeRequest(
 }
 
 @expectedCallback(testCallbackForRemoveNodeRequest)
-export class RemoveNodeFromNetworkRequest extends RemoveNodeFromNetworkRequestBase {
+export class RemoveNodeFromNetworkRequest
+	extends RemoveNodeFromNetworkRequestBase
+{
 	public constructor(
 		host: ZWaveHost,
 		options: RemoveNodeFromNetworkRequestOptions = {},
@@ -144,6 +150,7 @@ export class RemoveNodeFromNetworkRequestStatusReport
 				// the payload contains a node information frame
 				this.statusContext = parseNodeUpdatePayload(
 					this.payload.slice(2),
+					this.host.nodeIdType,
 				);
 				break;
 		}

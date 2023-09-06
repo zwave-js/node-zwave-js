@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "8",
-			"$import": "templates/yale_template.json#operating_mode_3"
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy_passage"
 		},
 		{
 			"#": "1",

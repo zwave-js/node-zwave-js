@@ -2,7 +2,13 @@
 import { getImplementedVersion } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
+	type CommandClassInfo,
+	type CommandClasses,
+	type FLiRS,
+	type IZWaveEndpoint,
+	type IZWaveNode,
 	InterviewStage,
+	type MaybeNotKnown,
 	MessagePriority,
 	NOT_KNOWN,
 	NodeStatus,
@@ -10,20 +16,15 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	securityClassOrder,
-	type CommandClassInfo,
-	type CommandClasses,
-	type FLiRS,
-	type IZWaveEndpoint,
-	type IZWaveNode,
 } from "@zwave-js/core";
 import type { TestingHost } from "@zwave-js/host";
 import {
+	type FunctionType,
 	Message,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
-	type FunctionType,
 } from "@zwave-js/serial";
 import sinon from "sinon";
 import type { Driver } from "../driver/Driver";
@@ -93,8 +94,8 @@ export function createEmptyMockDriver() {
 			): T | undefined => {
 				let _ret = ret.networkCache.get(cacheKey);
 				if (
-					_ret !== undefined &&
-					typeof options?.reviver === "function"
+					_ret !== undefined
+					&& typeof options?.reviver === "function"
 				) {
 					try {
 						_ret = options.reviver(_ret);
@@ -114,8 +115,8 @@ export function createEmptyMockDriver() {
 				},
 			): void => {
 				if (
-					value !== undefined &&
-					typeof options?.serializer === "function"
+					value !== undefined
+					&& typeof options?.serializer === "function"
 				) {
 					value = options.serializer(value);
 				}
@@ -179,8 +180,8 @@ export function createEmptyMockDriver() {
 	ret.getSupportedCCVersion.callsFake(
 		(ccId: CommandClasses, nodeId: number, endpointIndex: number = 0) => {
 			if (
-				ret.controller?.nodes instanceof Map &&
-				ret.controller.nodes.has(nodeId)
+				ret.controller?.nodes instanceof Map
+				&& ret.controller.nodes.has(nodeId)
 			) {
 				const node: ZWaveNode = ret.controller.nodes.get(nodeId);
 				const ccVersion = node
@@ -194,8 +195,8 @@ export function createEmptyMockDriver() {
 	ret.getSafeCCVersion.callsFake(
 		(ccId: CommandClasses, nodeId: number, endpointIndex: number = 0) => {
 			return (
-				ret.getSupportedCCVersion(ccId, nodeId, endpointIndex) ||
-				getImplementedVersion(ccId)
+				ret.getSupportedCCVersion(ccId, nodeId, endpointIndex)
+				|| getImplementedVersion(ccId)
 			);
 		},
 	);
@@ -248,9 +249,8 @@ export function createTestNode(
 			return !ret.isListening && !ret.isFrequentListening;
 		},
 
-		status:
-			options.status ??
-			(options.isListening ? NodeStatus.Alive : NodeStatus.Asleep),
+		status: options.status
+			?? (options.isListening ? NodeStatus.Alive : NodeStatus.Asleep),
 		interviewStage: options.interviewStage ?? InterviewStage.Complete,
 
 		setEndpoint: (endpoint) => {
@@ -270,8 +270,8 @@ export function createTestNode(
 		getEndpoint: ((index: number) => {
 			// When the endpoint count is known, return undefined for non-existent endpoints
 			if (
-				options.numEndpoints != undefined &&
-				index > options.numEndpoints
+				options.numEndpoints != undefined
+				&& index > options.numEndpoints
 			) {
 				return undefined;
 			}
@@ -370,26 +370,26 @@ export function createTestEndpoint(
 		supportsCC: options.supportsCC ?? (() => true),
 		controlsCC: options.controlsCC ?? (() => false),
 		isCCSecure: options.isCCSecure ?? (() => false),
-		getCCVersion:
-			options.getCCVersion ??
-			((cc) => host.getSafeCCVersion(cc, options.nodeId, options.index)),
+		getCCVersion: options.getCCVersion
+			?? ((cc) =>
+				host.getSafeCCVersion(cc, options.nodeId, options.index)),
 		virtual: false,
-		addCC: function (
+		addCC: function(
 			cc: CommandClasses,
 			info: Partial<CommandClassInfo>,
 		): void {
 			throw new Error("Function not implemented.");
 		},
-		removeCC: function (cc: CommandClasses): void {
+		removeCC: function(cc: CommandClasses): void {
 			throw new Error("Function not implemented.");
 		},
-		getCCs: function (): Iterable<
+		getCCs: function(): Iterable<
 			[ccId: CommandClasses, info: CommandClassInfo]
 		> {
 			throw new Error("Function not implemented.");
 		},
-		getNodeUnsafe: function (): IZWaveNode | undefined {
-			throw new Error("Function not implemented.");
+		getNodeUnsafe: function(): IZWaveNode | undefined {
+			return host.nodes.get(options.nodeId);
 		},
 	};
 

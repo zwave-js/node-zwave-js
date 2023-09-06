@@ -1,4 +1,4 @@
-import { num2hex, type JSONObject } from "@zwave-js/shared/safe";
+import { type JSONObject, num2hex } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
@@ -13,15 +13,17 @@ interface NotificationEventDefinition {
 	type: "event";
 }
 
-export type NotificationValueDefinition = (
-	| NotificationStateDefinition
-	| NotificationEventDefinition
-) & {
-	description?: string;
-	label: string;
-	parameter?: NotificationParameter;
-	idleVariables?: number[];
-};
+export type NotificationValueDefinition =
+	& (
+		| NotificationStateDefinition
+		| NotificationEventDefinition
+	)
+	& {
+		description?: string;
+		label: string;
+		parameter?: NotificationParameter;
+		idleVariables?: number[];
+	};
 
 export type NotificationMap = ReadonlyMap<number, Notification>;
 
@@ -34,15 +36,19 @@ export class Notification {
 			: [];
 		const events = new Map<number, NotificationEvent>();
 		if (isObject(definition.events)) {
-			for (const [eventId, eventDefinition] of Object.entries(
-				definition.events,
-			)) {
+			for (
+				const [eventId, eventDefinition] of Object.entries(
+					definition.events,
+				)
+			) {
 				if (!hexKeyRegexNDigits.test(eventId)) {
 					throwInvalidConfig(
 						"notifications",
-						`found invalid key "${eventId}" in notification ${num2hex(
-							id,
-						)}. Notification events must have lowercase hexadecimal IDs.`,
+						`found invalid key "${eventId}" in notification ${
+							num2hex(
+								id,
+							)
+						}. Notification events must have lowercase hexadecimal IDs.`,
 					);
 				}
 				const eventIdNum = parseInt(eventId.slice(2), 16);
@@ -100,9 +106,11 @@ export class NotificationVariable {
 			);
 		}
 		const states = new Map<number, NotificationState>();
-		for (const [stateId, stateDefinition] of Object.entries(
-			definition.states,
-		)) {
+		for (
+			const [stateId, stateDefinition] of Object.entries(
+				definition.states,
+			)
+		) {
 			if (!hexKeyRegexNDigits.test(stateId)) {
 				throwInvalidConfig(
 					"notifications",
@@ -130,21 +138,25 @@ export class NotificationState {
 		if (typeof definition.label !== "string") {
 			throwInvalidConfig(
 				"notifications",
-				`The label of notification state ${num2hex(
-					id,
-				)} has a non-string label`,
+				`The label of notification state ${
+					num2hex(
+						id,
+					)
+				} has a non-string label`,
 			);
 		}
 		this.label = definition.label;
 		if (
-			definition.description != undefined &&
-			typeof definition.description !== "string"
+			definition.description != undefined
+			&& typeof definition.description !== "string"
 		) {
 			throwInvalidConfig(
 				"notifications",
-				`The label of notification state ${num2hex(
-					id,
-				)} has a non-string description`,
+				`The label of notification state ${
+					num2hex(
+						id,
+					)
+				} has a non-string description`,
 			);
 		}
 		this.description = definition.description;
@@ -153,16 +165,20 @@ export class NotificationState {
 			if (!isObject(definition.params)) {
 				throwInvalidConfig(
 					"notifications",
-					`The parameter definition of notification state ${num2hex(
-						id,
-					)} must be an object`,
+					`The parameter definition of notification state ${
+						num2hex(
+							id,
+						)
+					} must be an object`,
 				);
 			} else if (typeof definition.params.type !== "string") {
 				throwInvalidConfig(
 					"notifications",
-					`The parameter type of notification state ${num2hex(
-						id,
-					)} must be a string`,
+					`The parameter type of notification state ${
+						num2hex(
+							id,
+						)
+					} must be a string`,
 				);
 			}
 			this.parameter = new NotificationParameter(definition.params);
@@ -185,16 +201,20 @@ export class NotificationEvent {
 			if (!isObject(definition.params)) {
 				throwInvalidConfig(
 					"notifications",
-					`The parameter definition of notification event ${num2hex(
-						id,
-					)} must be an object`,
+					`The parameter definition of notification event ${
+						num2hex(
+							id,
+						)
+					} must be an object`,
 				);
 			} else if (typeof definition.params.type !== "string") {
 				throwInvalidConfig(
 					"notifications",
-					`The parameter type of notification event ${num2hex(
-						id,
-					)} must be a string`,
+					`The parameter type of notification event ${
+						num2hex(
+							id,
+						)
+					} must be a string`,
 				);
 			}
 			this.parameter = new NotificationParameter(definition.params);
@@ -202,18 +222,21 @@ export class NotificationEvent {
 
 		if (definition.idleVariables != undefined) {
 			if (
-				!isArray(definition.idleVariables) ||
-				!definition.idleVariables.every(
+				!isArray(definition.idleVariables)
+				|| !definition.idleVariables.every(
 					(n: any) =>
-						typeof n === "number" ||
-						(typeof n === "string" && hexKeyRegexNDigits.test(n)),
+						typeof n === "number"
+						|| (typeof n === "string"
+							&& hexKeyRegexNDigits.test(n)),
 				)
 			) {
 				throwInvalidConfig(
 					"notifications",
-					`The idleVariables definition of notification event ${num2hex(
-						id,
-					)} must be an array of numbers (may be hexadecimal)`,
+					`The idleVariables definition of notification event ${
+						num2hex(
+							id,
+						)
+					} must be an array of numbers (may be hexadecimal)`,
 				);
 			}
 			this.idleVariables = definition.idleVariables.map(
@@ -287,9 +310,11 @@ export class NotificationParameterWithEnum {
 		}
 
 		const values = new Map<number, string>();
-		for (const [enumValue, enumLabel] of Object.entries(
-			definition.values,
-		)) {
+		for (
+			const [enumValue, enumLabel] of Object.entries(
+				definition.values,
+			)
+		) {
 			if (!hexKeyRegexNDigits.test(enumValue)) {
 				throwInvalidConfig(
 					"notifications",

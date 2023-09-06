@@ -1,8 +1,8 @@
 import {
-	Machine,
-	assign,
 	type InterpreterFrom,
+	Machine,
 	type StateMachine,
+	assign,
 } from "xstate";
 
 /* eslint-disable @typescript-eslint/ban-types */

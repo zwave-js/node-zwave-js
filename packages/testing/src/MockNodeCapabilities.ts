@@ -1,15 +1,18 @@
 import {
-	NodeType,
 	type CommandClassInfo,
 	type CommandClasses,
 	type NodeProtocolInfoAndDeviceClass,
+	NodeType,
 } from "@zwave-js/core";
 import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 
 export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> =
 	| T
-	| ({ ccId: T } & Partial<CommandClassInfo> &
-			Partial<CCIdToCapabilities<T>>);
+	| (
+		& { ccId: T }
+		& Partial<CommandClassInfo>
+		& Partial<CCIdToCapabilities<T>>
+	);
 
 /** Helper function to infer the correct properties for mock CC capabilities */
 export function ccCaps<T extends CommandClasses>(

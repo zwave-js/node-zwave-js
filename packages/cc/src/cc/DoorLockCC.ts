@@ -1,7 +1,12 @@
 import {
 	CommandClasses,
 	Duration,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -9,11 +14,6 @@ import {
 	parseBitMask,
 	supervisedCommandSucceeded,
 	validatePayload,
-	type IZWaveEndpoint,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -23,17 +23,17 @@ import {
 	CCAPI,
 	POLL_VALUE,
 	PhysicalCCAPI,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -47,25 +47,31 @@ import {
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
+	type DoorHandleStatus,
 	DoorLockCommand,
 	DoorLockMode,
 	DoorLockOperationType,
-	type DoorHandleStatus,
 } from "../lib/_Types";
 
 export const DoorLockCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Door Lock"], {
-		...V.staticProperty("targetMode", {
-			...ValueMetadata.UInt8,
-			label: "Target lock mode",
-			states: enumValuesToMetadataStates(DoorLockMode),
-		} as const),
+		...V.staticProperty(
+			"targetMode",
+			{
+				...ValueMetadata.UInt8,
+				label: "Target lock mode",
+				states: enumValuesToMetadataStates(DoorLockMode),
+			} as const,
+		),
 
-		...V.staticProperty("currentMode", {
-			...ValueMetadata.ReadOnlyUInt8,
-			label: "Current lock mode",
-			states: enumValuesToMetadataStates(DoorLockMode),
-		} as const),
+		...V.staticProperty(
+			"currentMode",
+			{
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Current lock mode",
+				states: enumValuesToMetadataStates(DoorLockMode),
+			} as const,
+		),
 
 		...V.staticProperty(
 			"duration",
@@ -80,42 +86,65 @@ export const DoorLockCCValues = Object.freeze({
 			internal: true,
 			minVersion: 4,
 		}),
-		...V.staticProperty("outsideHandlesCanOpenDoorConfiguration", {
-			...ValueMetadata.Any,
-			label: "Which outside handles can open the door (configuration)",
-		} as const),
-		...V.staticProperty("outsideHandlesCanOpenDoor", {
-			...ValueMetadata.ReadOnly,
-			label: "Which outside handles can open the door (actual status)",
-		} as const),
+		...V.staticProperty(
+			"outsideHandlesCanOpenDoorConfiguration",
+			{
+				...ValueMetadata.Any,
+				label:
+					"Which outside handles can open the door (configuration)",
+			} as const,
+		),
+		...V.staticProperty(
+			"outsideHandlesCanOpenDoor",
+			{
+				...ValueMetadata.ReadOnly,
+				label:
+					"Which outside handles can open the door (actual status)",
+			} as const,
+		),
 
 		...V.staticProperty("supportedInsideHandles", undefined, {
 			internal: true,
 			minVersion: 4,
 		}),
-		...V.staticProperty("insideHandlesCanOpenDoorConfiguration", {
-			...ValueMetadata.Any,
-			label: "Which inside handles can open the door (configuration)",
-		} as const),
-		...V.staticProperty("insideHandlesCanOpenDoor", {
-			...ValueMetadata.ReadOnly,
-			label: "Which inside handles can open the door (actual status)",
-		} as const),
+		...V.staticProperty(
+			"insideHandlesCanOpenDoorConfiguration",
+			{
+				...ValueMetadata.Any,
+				label: "Which inside handles can open the door (configuration)",
+			} as const,
+		),
+		...V.staticProperty(
+			"insideHandlesCanOpenDoor",
+			{
+				...ValueMetadata.ReadOnly,
+				label: "Which inside handles can open the door (actual status)",
+			} as const,
+		),
 
-		...V.staticProperty("operationType", {
-			...ValueMetadata.UInt8,
-			label: "Lock operation type",
-			states: enumValuesToMetadataStates(DoorLockOperationType),
-		} as const),
+		...V.staticProperty(
+			"operationType",
+			{
+				...ValueMetadata.UInt8,
+				label: "Lock operation type",
+				states: enumValuesToMetadataStates(DoorLockOperationType),
+			} as const,
+		),
 
-		...V.staticProperty("lockTimeoutConfiguration", {
-			...ValueMetadata.UInt16,
-			label: "Duration of timed mode in seconds",
-		} as const),
-		...V.staticProperty("lockTimeout", {
-			...ValueMetadata.ReadOnlyUInt16,
-			label: "Seconds until lock mode times out",
-		} as const),
+		...V.staticProperty(
+			"lockTimeoutConfiguration",
+			{
+				...ValueMetadata.UInt16,
+				label: "Duration of timed mode in seconds",
+			} as const,
+		),
+		...V.staticProperty(
+			"lockTimeout",
+			{
+				...ValueMetadata.ReadOnlyUInt16,
+				label: "Seconds until lock mode times out",
+			} as const,
+		),
 
 		...V.staticProperty("autoRelockSupported", undefined, {
 			internal: true,
@@ -127,7 +156,10 @@ export const DoorLockCCValues = Object.freeze({
 				...ValueMetadata.UInt16,
 				label: "Duration in seconds until lock returns to secure state",
 			} as const,
-			{ minVersion: 4 } as const,
+			{
+				minVersion: 4,
+				autoCreate: shouldAutoCreateAutoRelockConfigValue,
+			} as const,
 		),
 
 		...V.staticProperty("holdAndReleaseSupported", undefined, {
@@ -140,7 +172,10 @@ export const DoorLockCCValues = Object.freeze({
 				...ValueMetadata.UInt16,
 				label: "Duration in seconds the latch stays retracted",
 			} as const,
-			{ minVersion: 4 } as const,
+			{
+				minVersion: 4,
+				autoCreate: shouldAutoCreateHoldAndReleaseConfigValue,
+			} as const,
 		),
 
 		...V.staticProperty("twistAssistSupported", undefined, {
@@ -153,7 +188,10 @@ export const DoorLockCCValues = Object.freeze({
 				...ValueMetadata.Boolean,
 				label: "Twist Assist enabled",
 			} as const,
-			{ minVersion: 4 } as const,
+			{
+				minVersion: 4,
+				autoCreate: shouldAutoCreateTwistAssistConfigValue,
+			} as const,
 		),
 
 		...V.staticProperty("blockToBlockSupported", undefined, {
@@ -166,7 +204,10 @@ export const DoorLockCCValues = Object.freeze({
 				...ValueMetadata.Boolean,
 				label: "Block-to-block functionality enabled",
 			} as const,
-			{ minVersion: 4 } as const,
+			{
+				minVersion: 4,
+				autoCreate: shouldAutoCreateBlockToBlockConfigValue,
+			} as const,
 		),
 
 		...V.staticProperty("latchSupported", undefined, { internal: true }),
@@ -240,6 +281,50 @@ function shouldAutoCreateDoorStatusValue(
 	);
 }
 
+function shouldAutoCreateTwistAssistConfigValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.twistAssistSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateBlockToBlockConfigValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.blockToBlockSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateAutoRelockConfigValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.autoRelockSupported.endpoint(endpoint.index),
+	);
+}
+
+function shouldAutoCreateHoldAndReleaseConfigValue(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	return !!valueDB.getValue(
+		DoorLockCCValues.holdAndReleaseSupported.endpoint(endpoint.index),
+	);
+}
+
 const configurationSetParameters = [
 	"operationType",
 	"outsideHandlesCanOpenDoorConfiguration",
@@ -267,7 +352,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (this: DoorLockCCAPI, { property }, value) {
+		return async function(this: DoorLockCCAPI, { property }, value) {
 			if (property === "targetMode") {
 				if (typeof value !== "number") {
 					throwWrongValueType(
@@ -293,8 +378,8 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 				return result;
 			} else if (
-				typeof property === "string" &&
-				configurationSetParameters.includes(property as any)
+				typeof property === "string"
+				&& configurationSetParameters.includes(property as any)
 			) {
 				// checking every type here would create a LOT of duplicate code, so we don't
 
@@ -338,7 +423,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: DoorLockCCAPI, { property }) {
+		return async function(this: DoorLockCCAPI, { property }) {
 			switch (property) {
 				case "currentMode":
 				case "targetMode":
@@ -378,11 +463,12 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<DoorLockCCCapabilitiesReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			DoorLockCCCapabilitiesReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"autoRelockSupported",
@@ -411,11 +497,12 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<DoorLockCCOperationReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			DoorLockCCOperationReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"currentMode",
@@ -476,11 +563,12 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<DoorLockCCConfigurationReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			DoorLockCCConfigurationReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"operationType",
@@ -537,16 +625,22 @@ export class DoorLockCC extends CommandClass {
 			const resp = await api.getCapabilities();
 			if (resp) {
 				const logMessage = `received lock capabilities:
-supported operation types: ${resp.supportedOperationTypes
-					.map((t) => getEnumMemberName(DoorLockOperationType, t))
-					.join(", ")}
-supported door lock modes: ${resp.supportedDoorLockModes
-					.map((t) => getEnumMemberName(DoorLockMode, t))
-					.map((str) => `\n· ${str}`)
-					.join("")}
-supported outside handles: ${resp.supportedOutsideHandles
-					.map(String)
-					.join(", ")}
+supported operation types: ${
+					resp.supportedOperationTypes
+						.map((t) => getEnumMemberName(DoorLockOperationType, t))
+						.join(", ")
+				}
+supported door lock modes: ${
+					resp.supportedDoorLockModes
+						.map((t) => getEnumMemberName(DoorLockMode, t))
+						.map((str) => `\n· ${str}`)
+						.join("")
+				}
+supported outside handles: ${
+					resp.supportedOutsideHandles
+						.map(String)
+						.join(", ")
+				}
 supported inside handles:  ${resp.supportedInsideHandles.map(String).join(", ")}
 supports door status:      ${resp.doorSupported}
 supports bolt status:      ${resp.boltSupported}
@@ -640,22 +734,28 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 		const config = await api.getConfiguration();
 		if (config) {
 			let logMessage = `received lock configuration:
-operation type:                ${getEnumMemberName(
-				DoorLockOperationType,
-				config.operationType,
-			)}`;
+operation type:                ${
+				getEnumMemberName(
+					DoorLockOperationType,
+					config.operationType,
+				)
+			}`;
 			if (config.operationType === DoorLockOperationType.Timed) {
 				logMessage += `
 lock timeout:                  ${config.lockTimeoutConfiguration} seconds
 `;
 			}
 			logMessage += `
-outside handles can open door: ${config.outsideHandlesCanOpenDoorConfiguration
-				.map(String)
-				.join(", ")}
-inside handles can open door:  ${config.insideHandlesCanOpenDoorConfiguration
-				.map(String)
-				.join(", ")}`;
+outside handles can open door: ${
+				config.outsideHandlesCanOpenDoorConfiguration
+					.map(String)
+					.join(", ")
+			}
+inside handles can open door:  ${
+				config.insideHandlesCanOpenDoorConfiguration
+					.map(String)
+					.join(", ")
+			}`;
 			if (this.version >= 4) {
 				logMessage += `
 auto-relock time               ${config.autoRelockTime ?? "-"} seconds
@@ -927,8 +1027,8 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			const lockTimeoutMinutes = this.payload[2];
 			const lockTimeoutSeconds = this.payload[3];
 			if (lockTimeoutMinutes <= 0xfd && lockTimeoutSeconds <= 59) {
-				this.lockTimeoutConfiguration =
-					lockTimeoutSeconds + lockTimeoutMinutes * 60;
+				this.lockTimeoutConfiguration = lockTimeoutSeconds
+					+ lockTimeoutMinutes * 60;
 			}
 		}
 		if (this.version >= 4 && this.payload.length >= 5) {
@@ -953,17 +1053,64 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.lockTimeoutConfiguration)
 	public readonly lockTimeoutConfiguration?: number;
 
-	@ccValue(DoorLockCCValues.autoRelockTime)
+	// These are not always supported and have to be persisted manually
+	// to avoid unsupported values being exposed to the user
 	public readonly autoRelockTime?: number;
-
-	@ccValue(DoorLockCCValues.holdAndReleaseTime)
 	public readonly holdAndReleaseTime?: number;
-
-	@ccValue(DoorLockCCValues.twistAssist)
 	public readonly twistAssist?: boolean;
-
-	@ccValue(DoorLockCCValues.blockToBlock)
 	public readonly blockToBlock?: boolean;
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		// Only store the autoRelockTime etc. params if the lock supports it
+		const supportsAutoRelock = !!this.getValue(
+			applHost,
+			DoorLockCCValues.autoRelockSupported,
+		);
+		if (supportsAutoRelock) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.autoRelockTime,
+				this.autoRelockTime,
+			);
+		}
+		const supportsHoldAndRelease = !!this.getValue(
+			applHost,
+			DoorLockCCValues.holdAndReleaseSupported,
+		);
+		if (supportsHoldAndRelease) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.holdAndReleaseTime,
+				this.holdAndReleaseTime,
+			);
+		}
+		const supportsTwistAssist = !!this.getValue(
+			applHost,
+			DoorLockCCValues.twistAssistSupported,
+		);
+		if (supportsTwistAssist) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.twistAssist,
+				this.twistAssist,
+			);
+		}
+		const supportsBlockToBlock = !!this.getValue(
+			applHost,
+			DoorLockCCValues.blockToBlockSupported,
+		);
+		if (supportsBlockToBlock) {
+			this.setValue(
+				applHost,
+				DoorLockCCValues.blockToBlock,
+				this.blockToBlock,
+			);
+		}
+
+		return true;
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -971,10 +1118,10 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 				DoorLockOperationType,
 				this.operationType,
 			),
-			"outside handle configuration":
-				this.outsideHandlesCanOpenDoorConfiguration.join(", "),
-			"inside handle configuration":
-				this.insideHandlesCanOpenDoorConfiguration.join(", "),
+			"outside handle configuration": this
+				.outsideHandlesCanOpenDoorConfiguration.join(", "),
+			"inside handle configuration": this
+				.insideHandlesCanOpenDoorConfiguration.join(", "),
 		};
 		if (this.lockTimeoutConfiguration != undefined) {
 			message[
@@ -1006,24 +1153,26 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 @expectedCCResponse(DoorLockCCConfigurationReport)
 export class DoorLockCCConfigurationGet extends DoorLockCC {}
 
-type DoorLockCCConfigurationSetOptions = (
-	| {
+type DoorLockCCConfigurationSetOptions =
+	& (
+		| {
 			operationType: DoorLockOperationType.Timed;
 			lockTimeoutConfiguration: number;
-	  }
-	| {
+		}
+		| {
 			operationType: DoorLockOperationType.Constant;
 			lockTimeoutConfiguration?: undefined;
-	  }
-) & {
-	outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
-	insideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
-	// V4+
-	autoRelockTime?: number;
-	holdAndReleaseTime?: number;
-	twistAssist?: boolean;
-	blockToBlock?: boolean;
-};
+		}
+	)
+	& {
+		outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
+		insideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
+		// V4+
+		autoRelockTime?: number;
+		holdAndReleaseTime?: number;
+		twistAssist?: boolean;
+		blockToBlock?: boolean;
+	};
 
 @CCCommand(DoorLockCommand.ConfigurationSet)
 @useSupervision()
@@ -1066,13 +1215,13 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 
 	public serialize(): Buffer {
 		const insideHandles = isArray(
-			this.insideHandlesCanOpenDoorConfiguration,
-		)
+				this.insideHandlesCanOpenDoorConfiguration,
+			)
 			? this.insideHandlesCanOpenDoorConfiguration
 			: [];
 		const outsideHandles = isArray(
-			this.outsideHandlesCanOpenDoorConfiguration,
-		)
+				this.outsideHandlesCanOpenDoorConfiguration,
+			)
 			? this.outsideHandlesCanOpenDoorConfiguration
 			: [];
 
@@ -1098,14 +1247,14 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 			lockTimeoutSeconds,
 		]);
 		if (
-			this.version >= 4 &&
-			(this.twistAssist != undefined ||
-				this.blockToBlock != undefined ||
-				this.autoRelockTime != undefined ||
-				this.holdAndReleaseTime != undefined)
+			this.version >= 4
+			&& (this.twistAssist != undefined
+				|| this.blockToBlock != undefined
+				|| this.autoRelockTime != undefined
+				|| this.holdAndReleaseTime != undefined)
 		) {
-			const flags =
-				(this.twistAssist ? 0b1 : 0) | (this.blockToBlock ? 0b10 : 0);
+			const flags = (this.twistAssist ? 0b1 : 0)
+				| (this.blockToBlock ? 0b10 : 0);
 			this.payload = Buffer.concat([
 				this.payload,
 				Buffer.from([
@@ -1129,13 +1278,13 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const insideHandles = isArray(
-			this.insideHandlesCanOpenDoorConfiguration,
-		)
+				this.insideHandlesCanOpenDoorConfiguration,
+			)
 			? this.insideHandlesCanOpenDoorConfiguration
 			: [];
 		const outsideHandles = isArray(
-			this.outsideHandlesCanOpenDoorConfiguration,
-		)
+				this.outsideHandlesCanOpenDoorConfiguration,
+			)
 			? this.outsideHandlesCanOpenDoorConfiguration
 			: [];
 		const message: MessageRecord = {
@@ -1233,6 +1382,8 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.supportedInsideHandles)
 	public readonly supportedInsideHandles: DoorHandleStatus;
 
+	// These 3 are not automatically persisted because in CC version 3
+	// we have to assume them to be supported. In v4 we can query this.
 	public readonly latchSupported: boolean;
 	public readonly boltSupported: boolean;
 	public readonly doorSupported: boolean;
@@ -1263,10 +1414,12 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 				"operation types": this.supportedOperationTypes
 					.map(
 						(t) =>
-							`\n· ${getEnumMemberName(
-								DoorLockOperationType,
-								t,
-							)}`,
+							`\n· ${
+								getEnumMemberName(
+									DoorLockOperationType,
+									t,
+								)
+							}`,
 					)
 					.join(""),
 				"door lock modes": this.supportedDoorLockModes

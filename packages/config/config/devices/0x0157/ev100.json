@@ -18,7 +18,7 @@
 		// The device supports Battery CC, despite the Version query telling otherwise
 		"commandClasses": {
 			"add": {
-				"0x80": {
+				"Battery": {
 					"isSupported": true,
 					"version": 1
 				}

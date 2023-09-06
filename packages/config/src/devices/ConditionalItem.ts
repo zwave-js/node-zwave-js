@@ -16,8 +16,8 @@ export function isConditionalItem<T>(val: any): val is ConditionalItem<T> {
 	if (typeof val !== "object" || val == undefined) return false;
 	// Conditional items may have a string-valued condition
 	if (
-		typeof val.condition !== "string" &&
-		typeof val.condition !== "undefined"
+		typeof val.condition !== "string"
+		&& typeof val.condition !== "undefined"
 	) {
 		return false;
 	}
@@ -65,34 +65,28 @@ export type EvaluateDeepReturnType<
 		| ConditionalItem<unknown>
 		| ConditionalItem<unknown>[]
 		| ObjectKeyMap<
-				any,
-				ConditionalItem<unknown> | ConditionalItem<unknown>[]
-		  >
+			any,
+			ConditionalItem<unknown> | ConditionalItem<unknown>[]
+		>
 		| ReadonlyMap<
-				any,
-				ConditionalItem<unknown> | ConditionalItem<unknown>[]
-		  >
+			any,
+			ConditionalItem<unknown> | ConditionalItem<unknown>[]
+		>
 		| Map<any, ConditionalItem<unknown> | ConditionalItem<unknown>[]>
 		| unknown[]
 		| unknown,
 	PreserveArray extends boolean = false,
-> = T extends undefined
-	? undefined
+> = T extends undefined ? undefined
 	: T extends ConditionalItem<infer R>[]
-	? [PreserveArray] extends [true]
-		? R[]
+		? [PreserveArray] extends [true] ? R[]
 		: R
-	: T extends ConditionalItem<infer R>
-	? R
+	: T extends ConditionalItem<infer R> ? R
 	: T extends ObjectKeyMap<infer K, infer V>
-	? ObjectKeyMap<K, EvaluateDeepReturnType<V, false>>
+		? ObjectKeyMap<K, EvaluateDeepReturnType<V, false>>
 	: T extends ReadonlyMap<infer K, infer V>
-	? Map<K, EvaluateDeepReturnType<V, false>>
-	: T extends Map<infer K, infer V>
-	? Map<K, EvaluateDeepReturnType<V, false>>
-	: T extends unknown[]
-	? [PreserveArray] extends [true]
-		? T
+		? Map<K, EvaluateDeepReturnType<V, false>>
+	: T extends Map<infer K, infer V> ? Map<K, EvaluateDeepReturnType<V, false>>
+	: T extends unknown[] ? [PreserveArray] extends [true] ? T
 		: T[number]
 	: T;
 

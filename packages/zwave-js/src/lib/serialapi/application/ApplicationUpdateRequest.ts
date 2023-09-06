@@ -1,26 +1,27 @@
 import {
-	createSimpleReflectionDecorator,
-	encodeNodeUpdatePayload,
-	getCCName,
-	parseCCList,
-	parseNodeUpdatePayload,
 	type CommandClasses,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type NodeUpdatePayload,
+	createSimpleReflectionDecorator,
+	encodeNodeUpdatePayload,
+	getCCName,
+	parseCCList,
+	parseNodeID,
+	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
+	type DeserializingMessageConstructor,
 	FunctionType,
 	Message,
-	MessageType,
-	gotDeserializationOptions,
-	messageTypes,
-	type DeserializingMessageConstructor,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
 	type MessageOptions,
+	MessageType,
 	type SuccessIndicator,
+	gotDeserializationOptions,
+	messageTypes,
 } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
@@ -61,8 +62,8 @@ export class ApplicationUpdateRequest extends Message {
 				this.updateType,
 			);
 			if (
-				CommandConstructor &&
-				(new.target as any) !== CommandConstructor
+				CommandConstructor
+				&& (new.target as any) !== CommandConstructor
 			) {
 				return new CommandConstructor(host, options);
 			}
@@ -85,11 +86,14 @@ export class ApplicationUpdateRequest extends Message {
 }
 
 interface ApplicationUpdateRequestWithNodeInfoOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	nodeInformation: NodeUpdatePayload;
 }
 
-export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateRequest {
+export class ApplicationUpdateRequestWithNodeInfo
+	extends ApplicationUpdateRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -99,7 +103,10 @@ export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateReque
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			this.nodeInformation = parseNodeUpdatePayload(this.payload);
+			this.nodeInformation = parseNodeUpdatePayload(
+				this.payload,
+				this.host.nodeIdType,
+			);
 			this.nodeId = this.nodeInformation.nodeId;
 		} else {
 			this.nodeId = options.nodeInformation.nodeId;
@@ -111,13 +118,18 @@ export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateReque
 	public nodeInformation: NodeUpdatePayload;
 
 	public serialize(): Buffer {
-		this.payload = encodeNodeUpdatePayload(this.nodeInformation);
+		this.payload = encodeNodeUpdatePayload(
+			this.nodeInformation,
+			this.host.nodeIdType,
+		);
 		return super.serialize();
 	}
 }
 
 @applicationUpdateType(ApplicationUpdateTypes.NodeInfo_Received)
-export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequestWithNodeInfo {}
+export class ApplicationUpdateRequestNodeInfoReceived
+	extends ApplicationUpdateRequestWithNodeInfo
+{}
 
 @applicationUpdateType(ApplicationUpdateTypes.NodeInfo_RequestFailed)
 export class ApplicationUpdateRequestNodeInfoRequestFailed
@@ -130,40 +142,58 @@ export class ApplicationUpdateRequestNodeInfoRequestFailed
 }
 
 @applicationUpdateType(ApplicationUpdateTypes.Node_Added)
-export class ApplicationUpdateRequestNodeAdded extends ApplicationUpdateRequestWithNodeInfo {}
+export class ApplicationUpdateRequestNodeAdded
+	extends ApplicationUpdateRequestWithNodeInfo
+{}
 
 @applicationUpdateType(ApplicationUpdateTypes.Node_Removed)
-export class ApplicationUpdateRequestNodeRemoved extends ApplicationUpdateRequest {
+export class ApplicationUpdateRequestNodeRemoved
+	extends ApplicationUpdateRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
 
-		this.nodeId = this.payload[0];
-		// byte 1 is 0, meaning unknown
+		const { nodeId } = parseNodeID(this.payload, host.nodeIdType, 0);
+		this.nodeId = nodeId;
+		// byte 1/2 is 0, meaning unknown
 	}
 
 	public nodeId: number;
 }
 
 @applicationUpdateType(ApplicationUpdateTypes.SmartStart_HomeId_Received)
-export class ApplicationUpdateRequestSmartStartHomeIDReceived extends ApplicationUpdateRequest {
+export class ApplicationUpdateRequestSmartStartHomeIDReceived
+	extends ApplicationUpdateRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
-		this.remoteNodeId = this.payload[0];
-		// payload[1] is rxStatus
-		this.nwiHomeId = this.payload.slice(2, 6);
+		let offset = 0;
+		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			this.payload,
+			host.nodeIdType,
+			offset,
+		);
+		offset += nodeIdBytes;
+		this.remoteNodeId = nodeId;
 
-		const ccLength = this.payload[6];
-		this.basicDeviceClass = this.payload[7];
-		this.genericDeviceClass = this.payload[8];
-		this.specificDeviceClass = this.payload[9];
+		// next byte is rxStatus
+		offset++;
+
+		this.nwiHomeId = this.payload.slice(offset, offset + 4);
+		offset += 4;
+
+		const ccLength = this.payload[offset++];
+		this.basicDeviceClass = this.payload[offset++];
+		this.genericDeviceClass = this.payload[offset++];
+		this.specificDeviceClass = this.payload[offset++];
 		this.supportedCCs = parseCCList(
-			this.payload.slice(10, 10 + ccLength),
+			this.payload.slice(offset, offset + ccLength),
 		).supportedCCs;
 	}
 

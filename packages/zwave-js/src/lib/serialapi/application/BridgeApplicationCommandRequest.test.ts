@@ -16,6 +16,6 @@ test("BridgeApplicationCommandRequest can be parsed without RSSI", async (t) => 
 				"011200a80001020a320221340000000000000069",
 				"hex",
 			),
-		}),
+		})
 	);
 });

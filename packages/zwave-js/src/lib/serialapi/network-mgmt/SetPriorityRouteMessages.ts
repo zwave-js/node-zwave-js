@@ -1,34 +1,38 @@
 import {
 	MAX_NODES,
 	MAX_REPEATERS,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
+	encodeNodeID,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	type SuccessIndicator,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type SuccessIndicator,
 } from "@zwave-js/serial";
-import { getEnumMemberName, type AllOrNone } from "@zwave-js/shared";
+import { type AllOrNone, getEnumMemberName } from "@zwave-js/shared";
 
-export type SetPriorityRouteRequestOptions = {
-	destinationNodeId: number;
-} & AllOrNone<{
-	repeaters: number[];
-	routeSpeed: ZWaveDataRate;
-}>;
+export type SetPriorityRouteRequestOptions =
+	& {
+		destinationNodeId: number;
+	}
+	& AllOrNone<{
+		repeaters: number[];
+		routeSpeed: ZWaveDataRate;
+	}>;
 
 @messageTypes(MessageType.Request, FunctionType.SetPriorityRoute)
 @priority(MessagePriority.Normal)
@@ -49,8 +53,8 @@ export class SetPriorityRouteRequest extends Message {
 		} else {
 			if (options.repeaters) {
 				if (
-					options.repeaters.length > MAX_REPEATERS ||
-					options.repeaters.some((id) => id < 1 || id > MAX_NODES)
+					options.repeaters.length > MAX_REPEATERS
+					|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
 				) {
 					throw new ZWaveError(
 						`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
@@ -76,18 +80,24 @@ export class SetPriorityRouteRequest extends Message {
 	public routeSpeed: ZWaveDataRate | undefined;
 
 	public serialize(): Buffer {
+		const nodeId = encodeNodeID(
+			this.destinationNodeId,
+			this.host.nodeIdType,
+		);
 		if (this.repeaters == undefined || this.routeSpeed == undefined) {
 			// Remove the priority route
-			this.payload = Buffer.from([this.destinationNodeId]);
+			this.payload = nodeId;
 		} else {
 			// Set the priority route
-			this.payload = Buffer.from([
-				this.destinationNodeId,
-				this.repeaters[0] ?? 0,
-				this.repeaters[1] ?? 0,
-				this.repeaters[2] ?? 0,
-				this.repeaters[3] ?? 0,
-				this.routeSpeed,
+			this.payload = Buffer.concat([
+				nodeId,
+				Buffer.from([
+					this.repeaters[0] ?? 0,
+					this.repeaters[1] ?? 0,
+					this.repeaters[2] ?? 0,
+					this.repeaters[3] ?? 0,
+					this.routeSpeed,
+				]),
 			]);
 		}
 
@@ -101,10 +111,9 @@ export class SetPriorityRouteRequest extends Message {
 		if (this.repeaters != undefined && this.routeSpeed != undefined) {
 			message = {
 				...message,
-				repeaters:
-					this.repeaters.length > 0
-						? this.repeaters.join(" -> ")
-						: "none",
+				repeaters: this.repeaters.length > 0
+					? this.repeaters.join(" -> ")
+					: "none",
 				"route speed": getEnumMemberName(
 					ZWaveDataRate,
 					this.routeSpeed,
@@ -119,8 +128,7 @@ export class SetPriorityRouteRequest extends Message {
 }
 
 @messageTypes(MessageType.Response, FunctionType.SetPriorityRoute)
-export class SetPriorityRouteResponse
-	extends Message
+export class SetPriorityRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
@@ -128,7 +136,14 @@ export class SetPriorityRouteResponse
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
-		this.success = this.payload[0] !== 0;
+		// Byte(s) 0/1 are the node ID - this is missing from the Host API specs
+		const { /* nodeId, */ bytesRead } = parseNodeID(
+			this.payload,
+			this.host.nodeIdType,
+			0,
+		);
+
+		this.success = this.payload[bytesRead] !== 0;
 	}
 
 	isOK(): boolean {

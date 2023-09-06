@@ -1,5 +1,5 @@
 import test from "ava";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
 import { SecurityManager2 } from "./Manager2";
@@ -150,7 +150,7 @@ test("initializeSPAN() -> should not throw otherwise", (t) => {
 			SecurityClass.S2_Authenticated,
 			Buffer.alloc(16),
 			Buffer.alloc(16),
-		),
+		)
 	);
 });
 

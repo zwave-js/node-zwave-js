@@ -568,6 +568,15 @@ export type ControllerSelfLogContext = LogContext<"controller"> & {
     type: "controller";
 };
 
+// Warning: (ae-missing-release-tag) "ControllerStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ControllerStatus {
+    Jammed = 2,
+    Ready = 0,
+    Unresponsive = 1
+}
+
 // Warning: (ae-missing-release-tag) "ControllerValueLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -870,6 +879,11 @@ export function encodeMaybeBoolean(val: MaybeUnknown<boolean>): number;
 // @public (undocumented)
 export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer;
 
+// Warning: (ae-missing-release-tag) "encodeNodeID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function encodeNodeID(nodeId: number, type?: NodeIDType): Buffer;
+
 // Warning: (ae-missing-release-tag) "encodeNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -888,7 +902,7 @@ export function encodeNodeProtocolInfoAndDeviceClass(info: NodeProtocolInfoAndDe
 // Warning: (ae-missing-release-tag) "encodeNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeUpdatePayload(nif: NodeUpdatePayload): Buffer;
+export function encodeNodeUpdatePayload(nif: NodeUpdatePayload, nodeIdType?: NodeIDType): Buffer;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -1005,6 +1019,15 @@ export function getDSTInfo(now?: Date): DSTInfo;
 //
 // @public (undocumented)
 export function getErrorSuffix(code: ZWaveErrorCodes): string;
+
+// Warning: (ae-missing-release-tag) "getFloatParameters" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getFloatParameters(value: number): {
+    precision: number;
+    size: number;
+    roundedValue: number;
+};
 
 // Warning: (ae-missing-release-tag) "getHighestSecurityClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1153,6 +1176,16 @@ export enum InterviewStage {
     ProtocolInfo = 1
 }
 
+// Warning: (ae-missing-release-tag) "isActuatorCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isActuatorCC(cc: CommandClasses): boolean;
+
+// Warning: (ae-missing-release-tag) "isApplicationCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isApplicationCC(cc: CommandClasses): boolean;
+
 // Warning: (ae-missing-release-tag) "isConsecutiveArray" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1163,10 +1196,20 @@ export function isConsecutiveArray(values: number[]): boolean;
 // @public (undocumented)
 export function isEmptyRoute(route: Route): boolean;
 
+// Warning: (ae-missing-release-tag) "isEncapsulationCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isEncapsulationCC(cc: CommandClasses): boolean;
+
 // Warning: (ae-missing-release-tag) "isExtendedCCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isExtendedCCId(ccId: CommandClasses): boolean;
+
+// Warning: (ae-missing-release-tag) "isManagementCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isManagementCC(cc: CommandClasses): boolean;
 
 // Warning: (ae-missing-release-tag) "isMessagePriority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1182,6 +1225,11 @@ export function isRecoverableZWaveError(e: unknown): e is ZWaveError;
 //
 // @public (undocumented)
 export function isRssiError(rssi: RSSI): rssi is RssiError;
+
+// Warning: (ae-missing-release-tag) "isSensorCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isSensorCC(cc: CommandClasses): boolean;
 
 // Warning: (ae-missing-release-tag) "isSupervisionResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1442,21 +1490,21 @@ export interface MessageOrCCLogEntry {
 // @public
 export enum MessagePriority {
     // (undocumented)
-    Controller = 1,
+    Controller = 2,
     // (undocumented)
-    MultistepController = 2,
+    Immediate = 0,
+    // (undocumented)
+    ImmediateLow = 1,
+    // (undocumented)
+    MultistepController = 3,
     // (undocumented)
     NodeQuery = 7,
-    // (undocumented)
-    Nonce = 0,
     // (undocumented)
     Normal = 6,
     // (undocumented)
     Ping = 4,
     // (undocumented)
     Poll = 8,
-    // (undocumented)
-    Supervision = 3,
     // (undocumented)
     WakeUp = 5
 }
@@ -1536,6 +1584,16 @@ export const NODE_ID_BROADCAST = 255;
 //
 // @public
 export const NODE_ID_MAX = 232;
+
+// Warning: (ae-missing-release-tag) "NodeIDType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum NodeIDType {
+    // (undocumented)
+    Long = 2,
+    // (undocumented)
+    Short = 1
+}
 
 // Warning: (ae-missing-release-tag) "NodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1718,6 +1776,14 @@ export function parseMaybeNumber(val: number): MaybeUnknown<number> | undefined;
 // @public (undocumented)
 export function parseNodeBitMask(mask: Buffer): number[];
 
+// Warning: (ae-missing-release-tag) "parseNodeID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function parseNodeID(buffer: Buffer, type?: NodeIDType, offset?: number): {
+    nodeId: number;
+    bytesRead: number;
+};
+
 // Warning: (ae-missing-release-tag) "parseNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1739,7 +1805,7 @@ export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
 // Warning: (ae-missing-release-tag) "parseNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload;
+export function parseNodeUpdatePayload(nif: Buffer, nodeIdType?: NodeIDType): NodeUpdatePayload;
 
 // Warning: (ae-missing-release-tag) "parseNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2236,6 +2302,11 @@ export interface SendMessageOptions {
 // @public
 export const sensorCCs: readonly CommandClasses[];
 
+// Warning: (ae-missing-release-tag) "SerializableTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type SerializableTXReport = Partial<Omit<TXReport, "numRepeaters">> & Pick<TXReport, "txTicks" | "routeSpeed">;
+
 // Warning: (ae-missing-release-tag) "serializeCacheValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -2496,7 +2567,7 @@ export function tryParseDSKFromQRCodeString(qr: string): string | undefined;
 
 // Warning: (ae-missing-release-tag) "TXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public
 export interface TXReport {
     ackChannelNo?: number;
     ackRepeaterRSSI?: [RSSI?, RSSI?, RSSI?, RSSI?];
@@ -3057,6 +3128,11 @@ export enum ZWaveDataRate {
     "9k6" = 1
 }
 
+// Warning: (ae-missing-release-tag) "zwaveDataRateToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function zwaveDataRateToString(rate: ZWaveDataRate): string;
+
 // Warning: (ae-missing-release-tag) "ZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -3106,23 +3182,25 @@ export enum ZWaveErrorCodes {
     // (undocumented)
     Controller_CallbackNOK = 204,
     // (undocumented)
-    Controller_CommandAborted = 205,
-    Controller_CommandError = 215,
-    Controller_EndpointNotFound = 211,
+    Controller_CommandAborted = 206,
+    Controller_CommandError = 216,
+    Controller_EndpointNotFound = 212,
     // (undocumented)
-    Controller_ExclusionFailed = 207,
+    Controller_ExclusionFailed = 208,
     // (undocumented)
-    Controller_InclusionFailed = 206,
-    Controller_InterviewRestarted = 209,
+    Controller_InclusionFailed = 207,
+    Controller_InterviewRestarted = 210,
+    // (undocumented)
+    Controller_Jammed = 205,
     // (undocumented)
     Controller_MessageDropped = 202,
-    Controller_MessageExpired = 214,
-    Controller_MessageTooLarge = 216,
-    Controller_NodeInsecureCommunication = 213,
-    Controller_NodeNotFound = 210,
-    Controller_NodeRemoved = 212,
+    Controller_MessageExpired = 215,
+    Controller_MessageTooLarge = 217,
+    Controller_NodeInsecureCommunication = 214,
+    Controller_NodeNotFound = 211,
+    Controller_NodeRemoved = 213,
     Controller_NodeTimeout = 201,
-    Controller_NotSupported = 208,
+    Controller_NotSupported = 209,
     // (undocumented)
     Controller_ResponseNOK = 203,
     Controller_Timeout = 200,
@@ -3160,6 +3238,7 @@ export enum ZWaveErrorCodes {
     FWUpdateService_IntegrityCheckFailed = 262,
     FWUpdateService_MissingInformation = 260,
     FWUpdateService_RequestError = 261,
+    HealthCheck_Busy = 400,
     Invalid_Firmware_File = 1506,
     ManufacturerProprietaryCC_NoManufacturerId = 1200,
     NVM_InvalidFormat = 283,
@@ -3285,7 +3364,7 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
-// src/security/QR.ts:98:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
+// src/security/QR.ts:99:3 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)
 

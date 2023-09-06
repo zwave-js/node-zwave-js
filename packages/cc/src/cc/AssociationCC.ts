@@ -1,7 +1,5 @@
-import type { AssociationConfig } from "@zwave-js/config";
 import type {
 	IZWaveEndpoint,
-	IZWaveNode,
 	MaybeNotKnown,
 	MessageRecord,
 	SupervisionResult,
@@ -9,21 +7,21 @@ import type {
 import {
 	CommandClasses,
 	MAX_NODES,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -36,7 +34,7 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { AssociationCommand, type AssociationAddress } from "../lib/_Types";
+import { type AssociationAddress, AssociationCommand } from "../lib/_Types";
 import * as ccUtils from "../lib/utils";
 
 export const AssociationCCValues = Object.freeze({
@@ -71,49 +69,6 @@ export const AssociationCCValues = Object.freeze({
 	}),
 });
 
-export function getLifelineGroupIds(
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
-): number[] {
-	// For now only support this for the root endpoint - i.e. node
-	if (endpoint.index > 0) return [];
-	const node = endpoint as IZWaveNode;
-
-	// Some nodes define multiple lifeline groups, so we need to assign us to
-	// all of them
-	const lifelineGroups: number[] = [];
-
-	// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
-	if (endpoint.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-		lifelineGroups.push(1);
-	}
-
-	// We have a device config file that tells us which (additional) association to assign
-	let associations: ReadonlyMap<number, AssociationConfig> | undefined;
-	const deviceConfig = applHost.getDeviceConfig?.(node.id);
-	if (endpoint.index === 0) {
-		// The root endpoint's associations may be configured separately or as part of "endpoints"
-		associations =
-			deviceConfig?.associations ??
-			deviceConfig?.endpoints?.get(0)?.associations;
-	} else {
-		// The other endpoints can only have a configuration as part of "endpoints"
-		associations = deviceConfig?.endpoints?.get(
-			endpoint.index,
-		)?.associations;
-	}
-
-	if (associations?.size) {
-		lifelineGroups.push(
-			...[...associations.values()]
-				.filter((a) => a.isLifeline)
-				.map((a) => a.groupId),
-		);
-	}
-
-	return distinct(lifelineGroups).sort();
-}
-
 // @noSetValueAPI
 
 @API(CommandClasses.Association)
@@ -126,10 +81,11 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			case AssociationCommand.Remove:
 			case AssociationCommand.SupportedGroupingsGet:
 			case AssociationCommand.SupportedGroupingsReport:
-				return true; // This is mandatory
-			// Not implemented:
-			// case AssociationCommand.SpecificGroupGet:
-			// return this.version >= 2;
+				return true;
+				// Not implemented:
+				// case AssociationCommand.SpecificGroupGet:
+				// return this.version >= 2;
+				// This is mandatory
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -148,11 +104,12 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<AssociationCCSupportedGroupingsReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			AssociationCCSupportedGroupingsReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) return response.groupCount;
 	}
 
@@ -267,12 +224,11 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			return this.removeNodeIds({ nodeIds, groupId: 0 });
 		} else {
 			// We have to remove the node manually from all groups
-			const groupCount =
-				this.tryGetValueDB()?.getValue<number>(
-					AssociationCCValues.groupCount.endpoint(
-						this.endpoint.index,
-					),
-				) ?? 0;
+			const groupCount = this.tryGetValueDB()?.getValue<number>(
+				AssociationCCValues.groupCount.endpoint(
+					this.endpoint.index,
+				),
+			) ?? 0;
 			for (let groupId = 1; groupId <= groupCount; groupId++) {
 				// TODO: evaluate intermediate supervision results
 				await this.removeNodeIds({ nodeIds, groupId });
@@ -330,14 +286,14 @@ export class AssociationCC extends CommandClass {
 					AssociationCCValues.maxNodes(groupId).endpoint(
 						endpoint.index,
 					),
-				) ??
-			// If the information is not available, fall back to the configuration file if possible
-			// This can happen on some legacy devices which have "hidden" association groups
-			applHost
-				.getDeviceConfig?.(endpoint.nodeId)
-				?.getAssociationConfigForEndpoint(endpoint.index, groupId)
-				?.maxNodes ??
-			0
+				)
+				// If the information is not available, fall back to the configuration file if possible
+				// This can happen on some legacy devices which have "hidden" association groups
+				?? applHost
+					.getDeviceConfig?.(endpoint.nodeId)
+					?.getAssociationConfigForEndpoint(endpoint.index, groupId)
+					?.maxNodes
+				?? 0
 		);
 	}
 
@@ -354,10 +310,9 @@ export class AssociationCC extends CommandClass {
 		const valueDB = applHost.getValueDB(endpoint.nodeId)!;
 		for (let i = 1; i <= groupCount; i++) {
 			// Add all root destinations
-			const nodes =
-				valueDB.getValue<number[]>(
-					AssociationCCValues.nodeIds(i).endpoint(endpoint.index),
-				) ?? [];
+			const nodes = valueDB.getValue<number[]>(
+				AssociationCCValues.nodeIds(i).endpoint(endpoint.index),
+			) ?? [];
 
 			ret.set(
 				i,
@@ -419,7 +374,8 @@ export class AssociationCC extends CommandClass {
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
+				message:
+					`${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
 				direction: "none",
 			});
 			this.setInterviewComplete(applHost, true);
@@ -458,7 +414,8 @@ export class AssociationCC extends CommandClass {
 			});
 			const group = await api.getGroup(groupId);
 			if (group != undefined) {
-				const logMessage = `received information for association group #${groupId}:
+				const logMessage =
+					`received information for association group #${groupId}:
 maximum # of nodes: ${group.maxNodes}
 currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				applHost.controllerLog.logNode(node.id, {
@@ -556,9 +513,8 @@ export class AssociationCCRemove extends AssociationCC {
 			if (!options.groupId) {
 				if (this.version === 1) {
 					throw new ZWaveError(
-						`Node ${
-							this.nodeId as number
-						} only supports AssociationCC V1 which requires the group Id to be set`,
+						`Node ${this
+							.nodeId as number} only supports AssociationCC V1 which requires the group Id to be set`,
 						ZWaveErrorCodes.Argument_Invalid,
 					);
 				}
@@ -590,10 +546,9 @@ export class AssociationCCRemove extends AssociationCC {
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
-			"node ids":
-				this.nodeIds && this.nodeIds.length
-					? this.nodeIds.join(", ")
-					: "all nodes",
+			"node ids": this.nodeIds && this.nodeIds.length
+				? this.nodeIds.join(", ")
+				: "all nodes",
 		};
 		return {
 			...super.toLogEntry(applHost),
@@ -733,7 +688,8 @@ export class AssociationCCGet extends AssociationCC {
 }
 
 export interface AssociationCCSupportedGroupingsReportOptions
-	extends CCCommandOptions {
+	extends CCCommandOptions
+{
 	groupCount: number;
 }
 

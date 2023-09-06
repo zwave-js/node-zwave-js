@@ -1,24 +1,24 @@
 import {
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 
@@ -244,8 +244,8 @@ export class NVMOperationsResponse extends Message implements SuccessIndicator {
 
 	isOK(): boolean {
 		return (
-			this.status === NVMOperationStatus.OK ||
-			this.status === NVMOperationStatus.EndOfFile
+			this.status === NVMOperationStatus.OK
+			|| this.status === NVMOperationStatus.EndOfFile
 		);
 	}
 

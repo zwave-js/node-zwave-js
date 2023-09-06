@@ -152,8 +152,8 @@ integrationTest("The 'simple' Door state value works correctly", {
 		const valueIDs = node.getDefinedValueIDs();
 		const simpleVID = valueIDs.find(
 			(vid) =>
-				vid.commandClass === CommandClasses.Notification &&
-				vid.propertyKey === "Door state (simple)",
+				vid.commandClass === CommandClasses.Notification
+				&& vid.propertyKey === "Door state (simple)",
 		);
 		t.truthy(simpleVID);
 

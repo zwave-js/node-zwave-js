@@ -77,5 +77,20 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		"overrideQueries": {
+			"Color Switch": [
+				// The device supports 5 color channels (Warm/Cold white, RGB)
+				// but does not advertise support for blue
+				{
+					"method": "getSupported",
+					"result": [0, 1, 2, 3, 4],
+					"persistValues": {
+						"supportedColorComponents": [0, 1, 2, 3, 4]
+					}
+				}
+			]
+		}
+	}
 }

@@ -5,20 +5,10 @@
 			"cache": false
 		},
 
-		"prebuild": {
-			// Prebuild tasks run before everything else
-			"dependsOn": ["^prebuild"]
-		},
-		"@zwave-js/maintenance#prebuild": {
-			// ... but the maintenance prebuild task has dependencies
-			"dependsOn": ["^build"]
-		},
-
 		"codegen": {
 			// Dummy task to enable running all codegen tasks
 		},
 		"@zwave-js/cc#codegen": {
-			"dependsOn": ["^build", "prebuild"],
 			"outputs": [
 				"src/cc/index.ts",
 				"src/lib/API.ts",
@@ -26,21 +16,31 @@
 			]
 		},
 		"@zwave-js/config#codegen": {
-			"dependsOn": ["^build", "prebuild"],
 			"outputs": ["src/LogicParser.ts"]
 		},
 
-		"build": {
-			"dependsOn": ["^build", "prebuild", "codegen"],
-			// TODO: Figure out how to exclude test files from inputs
-			// :!:**/*.test.ts doesn't work
-			"inputs": [":!:**/*.test.ts", "src/**"],
-			"outputs": ["build/**", "*.tsbuildinfo"]
+		// We just define a single build script, as it turns out that
+		// TypeScript is just better at caching TS builds than Turbo
+		"//#build:turbo": {
+			"inputs": [
+				// Pick up changes to the build script
+				"maintenance/build.ts",
+				// ...and configuration
+				"packages/*/package.json",
+				"packages/*/tsconfig.json",
+				"packages/*/tsconfig.build.json",
+				// All source files are input
+				"packages/*/src/**",
+				// TODO: Figure out how to exclude test files from inputs
+				// :!:**/*.test.ts doesn't work
+				":!:**/*.test.ts"
+			],
+			"outputs": ["packages/*/build/**", "packages/*/*.tsbuildinfo"]
 		},
 
 		// Specific linting tasks: ESLint
 		"lint:ts": {
-			"dependsOn": ["build"],
+			"dependsOn": ["//#build:turbo"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
@@ -48,13 +48,11 @@
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 				"../../.eslintrc.js",
 				"../../.eslintignore",
-				"../../.prettierrc.js",
-				"../../.prettierignore",
 				"../../tsconfig.eslint.json"
 			]
 		},
 		"lint:ts:fix": {
-			"dependsOn": ["build"],
+			"dependsOn": ["//#build:turbo"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
@@ -62,38 +60,6 @@
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 				"../../.eslintrc.js",
 				"../../.eslintignore",
-				"../../.prettierrc.js",
-				"../../.prettierignore",
-				"../../tsconfig.eslint.json"
-			],
-			"outputs": ["**/*.{ts,json}"]
-		},
-		// Specific linting tasks: Prettier
-		"lint:prettier": {
-			"dependsOn": [],
-			"inputs": [
-				// https://github.com/vercel/turborepo/issues/1407
-				":!:build/",
-				"**/*.{ts,json}",
-				// The style based linting tasks depend on the corresponding configuration in the repo root
-				"../../.eslintrc.js",
-				"../../.eslintignore",
-				"../../.prettierrc.js",
-				"../../.prettierignore",
-				"../../tsconfig.eslint.json"
-			]
-		},
-		"lint:prettier:fix": {
-			"dependsOn": [],
-			"inputs": [
-				// https://github.com/vercel/turborepo/issues/1407
-				":!:build/",
-				"**/*.{ts,json}",
-				// The style based linting tasks depend on the corresponding configuration in the repo root
-				"../../.eslintrc.js",
-				"../../.eslintignore",
-				"../../.prettierrc.js",
-				"../../.prettierignore",
 				"../../tsconfig.eslint.json"
 			],
 			"outputs": ["**/*.{ts,json}"]
@@ -101,25 +67,24 @@
 
 		"lint:zwave": {
 			// Dummy task to enable running all lint:zwave tasks
+			"dependsOn": ["//#build:turbo"]
 		},
 		"@zwave-js/cc#lint:zwave": {
-			"dependsOn": ["^build"],
 			"inputs": ["**/*.ts"]
 		},
 		"@zwave-js/config#lint:zwave": {
-			"dependsOn": ["^build", "prebuild"],
 			"inputs": ["**/*.ts", "config/**/*.json"]
 		},
 
 		"extract-api": {
-			"dependsOn": ["build"],
+			"dependsOn": ["//#build:turbo"],
 			"inputs": ["src/**/*.ts", "build/**"],
 			"cache": false
 			// "outputs": [".tmp/api.md", "api.md"]
 		},
 
 		"test:ts": {
-			"dependsOn": ["^build"],
+			"dependsOn": ["//#build:turbo"],
 			"inputs": ["src/**/*.ts", "ava.config.cjs", "../../ava.config.cjs"]
 			// TODO: consider snapshot files
 		},

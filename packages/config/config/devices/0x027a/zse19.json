@@ -45,7 +45,7 @@
 		"commandClasses": {
 			"remove": {
 				// Supervised commands always result in a status of "Fail"
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

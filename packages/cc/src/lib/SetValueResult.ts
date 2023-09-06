@@ -27,32 +27,32 @@ export enum SetValueStatus {
 export type SetValueResult =
 	// Derived from SupervisionResult
 	| {
-			status:
-				| SetValueStatus.NoDeviceSupport
-				| SetValueStatus.Fail
-				| SetValueStatus.Success;
-			remainingDuration?: undefined;
-			message?: undefined;
-	  }
+		status:
+			| SetValueStatus.NoDeviceSupport
+			| SetValueStatus.Fail
+			| SetValueStatus.Success;
+		remainingDuration?: undefined;
+		message?: undefined;
+	}
 	| {
-			status: SetValueStatus.Working;
-			remainingDuration: Duration;
-			message?: undefined;
-	  }
+		status: SetValueStatus.Working;
+		remainingDuration: Duration;
+		message?: undefined;
+	}
 	// Added by setValue
 	| {
-			status: SetValueStatus.SuccessUnsupervised;
-			remainingDuration?: undefined;
-			message?: undefined;
-	  }
+		status: SetValueStatus.SuccessUnsupervised;
+		remainingDuration?: undefined;
+		message?: undefined;
+	}
 	| {
-			status:
-				| SetValueStatus.EndpointNotFound
-				| SetValueStatus.NotImplemented
-				| SetValueStatus.InvalidValue;
-			remainingDuration?: undefined;
-			message: string;
-	  };
+		status:
+			| SetValueStatus.EndpointNotFound
+			| SetValueStatus.NotImplemented
+			| SetValueStatus.InvalidValue;
+		remainingDuration?: undefined;
+		message: string;
+	};
 
 export function supervisionResultToSetValueResult(
 	result: SupervisionResult | undefined,
@@ -74,8 +74,8 @@ export function setValueSucceeded(
 	status: SetValueStatus.Success | SetValueStatus.Working;
 } {
 	return (
-		result.status === SetValueStatus.Success ||
-		result.status === SetValueStatus.Working
+		result.status === SetValueStatus.Success
+		|| result.status === SetValueStatus.Working
 	);
 }
 
@@ -91,11 +91,11 @@ export function setValueFailed(
 		| SetValueStatus.InvalidValue;
 } {
 	return (
-		result.status === SetValueStatus.NoDeviceSupport ||
-		result.status === SetValueStatus.Fail ||
-		result.status === SetValueStatus.EndpointNotFound ||
-		result.status === SetValueStatus.NotImplemented ||
-		result.status === SetValueStatus.InvalidValue
+		result.status === SetValueStatus.NoDeviceSupport
+		|| result.status === SetValueStatus.Fail
+		|| result.status === SetValueStatus.EndpointNotFound
+		|| result.status === SetValueStatus.NotImplemented
+		|| result.status === SetValueStatus.InvalidValue
 	);
 }
 
@@ -109,7 +109,7 @@ export function setValueWasUnsupervisedOrSucceeded(
 		| SetValueStatus.Working;
 } {
 	return (
-		result.status === SetValueStatus.SuccessUnsupervised ||
-		setValueSucceeded(result)
+		result.status === SetValueStatus.SuccessUnsupervised
+		|| setValueSucceeded(result)
 	);
 }

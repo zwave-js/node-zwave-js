@@ -102,7 +102,7 @@
 				// The device uses Basic Set commands to report rain.
 				// We don't set up an association in group 2 or 3 by default, but if a user does,
 				// this is needed or the Basic CC will be hidden
-				"0x20": {
+				"Basic": {
 					"isSupported": true
 				}
 			}

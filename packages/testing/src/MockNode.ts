@@ -1,30 +1,31 @@
 import {
-	NOT_KNOWN,
-	SecurityClass,
-	securityClassOrder,
 	type CommandClassInfo,
 	type CommandClasses,
 	type MaybeNotKnown,
+	NOT_KNOWN,
+	SecurityClass,
+	securityClassOrder,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
-import { isDeepStrictEqual } from "util";
+import { isDeepStrictEqual } from "node:util";
 import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 import type { MockController } from "./MockController";
 import {
-	getDefaultMockEndpointCapabilities,
-	getDefaultMockNodeCapabilities,
 	type MockEndpointCapabilities,
 	type MockNodeCapabilities,
 	type PartialCCCapabilities,
+	getDefaultMockEndpointCapabilities,
+	getDefaultMockNodeCapabilities,
 } from "./MockNodeCapabilities";
 import {
+	type LazyMockZWaveFrame,
 	MOCK_FRAME_ACK_TIMEOUT,
-	MockZWaveFrameType,
-	createMockZWaveAckFrame,
 	type MockZWaveAckFrame,
 	type MockZWaveFrame,
+	MockZWaveFrameType,
 	type MockZWaveRequestFrame,
+	createMockZWaveAckFrame,
 } from "./MockZWaveFrame";
 
 const defaultCCInfo: CommandClassInfo = {
@@ -61,8 +62,8 @@ export class MockEndpoint {
 		this.index = options.index;
 		this.node = options.node;
 
-		const { commandClasses = [], ...capabilities } =
-			options.capabilities ?? {};
+		const { commandClasses = [], ...capabilities } = options.capabilities
+			?? {};
 		this.capabilities = {
 			...getDefaultMockEndpointCapabilities(this.node.capabilities),
 			...capabilities,
@@ -259,17 +260,17 @@ export class MockNode {
 	 * Sends a {@link MockZWaveFrame} to the {@link MockController}
 	 */
 	public async sendToController(
-		frame: MockZWaveFrame,
+		frame: LazyMockZWaveFrame,
 	): Promise<MockZWaveAckFrame | undefined> {
-		let ret: Promise<MockZWaveAckFrame> | undefined;
-		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
-			ret = this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
-		}
-		this.sentControllerFrames.push(frame);
-		process.nextTick(() => {
-			void this.controller.onNodeFrame(this, frame);
+		this.controller["air"].add({
+			source: this.id,
+			onTransmit: (frame) => this.sentControllerFrames.push(frame),
+			...frame,
 		});
-		if (ret) return await ret;
+
+		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
+			return await this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
+		}
 	}
 
 	/** Gets called when a {@link MockZWaveFrame} is received from the {@link MockController} */
@@ -278,10 +279,10 @@ export class MockNode {
 
 		// Ack the frame if desired
 		if (
-			this.autoAckControllerFrames &&
-			frame.type === MockZWaveFrameType.Request
+			this.autoAckControllerFrames
+			&& frame.type === MockZWaveFrameType.Request
 		) {
-			await this.ackControllerRequestFrame(frame);
+			void this.ackControllerRequestFrame(frame);
 		}
 
 		// Handle message buffer. Check for pending expectations first.
@@ -349,17 +350,13 @@ export class MockNode {
 		const index = this.receivedControllerFrames.findIndex(predicate);
 		if (index === -1 && !noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} did not receive a Z-Wave frame matching the predicate!${
+				`Node ${this.id} did not receive a Z-Wave frame matching the predicate!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
 		} else if (index > -1 && noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} received a Z-Wave frame matching the predicate, but this was not expected!${
+				`Node ${this.id} received a Z-Wave frame matching the predicate, but this was not expected!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
@@ -383,17 +380,13 @@ export class MockNode {
 		const index = this.sentControllerFrames.findIndex(predicate);
 		if (index === -1 && !noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} did not send a Z-Wave frame matching the predicate!${
+				`Node ${this.id} did not send a Z-Wave frame matching the predicate!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
 		} else if (index > -1 && noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} sent a Z-Wave frame matching the predicate, but this was not expected!${
+				`Node ${this.id} sent a Z-Wave frame matching the predicate, but this was not expected!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);

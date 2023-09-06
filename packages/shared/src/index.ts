@@ -1,3 +1,4 @@
+export * from "./AsyncQueue";
 export * from "./EventEmitter";
 export { ObjectKeyMap } from "./ObjectKeyMap";
 export type { ReadonlyObjectKeyMap } from "./ObjectKeyMap";

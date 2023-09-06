@@ -1,24 +1,25 @@
 import {
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
-	type MessageOrCCLogEntry,
+	encodeNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
+	type INodeQuery,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageOrigin,
 	MessageType,
+	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type INodeQuery,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
-	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
@@ -28,14 +29,14 @@ export class AssignSUCReturnRouteRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
-				options.origin === MessageOrigin.Host &&
-				(new.target as any) !== AssignSUCReturnRouteRequest
+				options.origin === MessageOrigin.Host
+				&& (new.target as any) !== AssignSUCReturnRouteRequest
 			) {
 				return new AssignSUCReturnRouteRequest(host, options);
 			} else if (
-				options.origin !== MessageOrigin.Host &&
-				(new.target as any) !==
-					AssignSUCReturnRouteRequestTransmitReport
+				options.origin !== MessageOrigin.Host
+				&& (new.target as any)
+					!== AssignSUCReturnRouteRequestTransmitReport
 			) {
 				return new AssignSUCReturnRouteRequestTransmitReport(
 					host,
@@ -54,8 +55,7 @@ export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
 
 @expectedResponse(FunctionType.AssignSUCReturnRoute)
 @expectedCallback(FunctionType.AssignSUCReturnRoute)
-export class AssignSUCReturnRouteRequest
-	extends AssignSUCReturnRouteRequestBase
+export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
@@ -76,7 +76,8 @@ export class AssignSUCReturnRouteRequest
 	public nodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.nodeId, this.callbackId]);
+		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 
 		return super.serialize();
 	}
@@ -87,8 +88,7 @@ interface AssignSUCReturnRouteResponseOptions extends MessageBaseOptions {
 }
 
 @messageTypes(MessageType.Response, FunctionType.AssignSUCReturnRoute)
-export class AssignSUCReturnRouteResponse
-	extends Message
+export class AssignSUCReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
@@ -125,7 +125,8 @@ export class AssignSUCReturnRouteResponse
 }
 
 interface AssignSUCReturnRouteRequestTransmitReportOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	transmitStatus: TransmitStatus;
 	callbackId: number;
 }

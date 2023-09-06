@@ -4,10 +4,10 @@ import {
 } from "@zwave-js/cc/WindowCoveringCC";
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
+	MockZWaveFrameType,
 	type WindowCoveringCCCapabilities,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: WindowCoveringCCCapabilities = {
@@ -17,8 +17,8 @@ const defaultCapabilities: WindowCoveringCCCapabilities = {
 const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof WindowCoveringCCSupportedGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof WindowCoveringCCSupportedGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -42,4 +42,4 @@ const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [respondToWindowCoveringSupportedGet];
+export const WindowCoveringCCBehaviors = [respondToWindowCoveringSupportedGet];

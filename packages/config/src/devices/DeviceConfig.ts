@@ -1,28 +1,33 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
+	type JSONObject,
 	enumFilesRecursive,
 	formatId,
+	num2hex,
+	padVersion,
+	pick,
 	stringify,
-	type JSONObject,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
-import path from "path";
+import { createHash } from "node:crypto";
+import path from "node:path";
+import semver from "semver";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
 import type { ConfigLogger } from "../Logger";
 import { configDir, externalConfigDir } from "../utils";
 import { hexKeyRegex4Digits, throwInvalidConfig } from "../utils_safe";
 import {
-	ConditionalAssociationConfig,
 	type AssociationConfig,
+	ConditionalAssociationConfig,
 } from "./AssociationConfig";
-import { ConditionalCompatConfig, type CompatConfig } from "./CompatConfig";
+import { type CompatConfig, ConditionalCompatConfig } from "./CompatConfig";
 import { evaluateDeep, validateCondition } from "./ConditionalItem";
 import {
-	parseConditionalPrimitive,
 	type ConditionalPrimitive,
+	parseConditionalPrimitive,
 } from "./ConditionalPrimitive";
 import {
 	ConditionalDeviceMetadata,
@@ -33,9 +38,10 @@ import {
 	type EndpointConfig,
 } from "./EndpointConfig";
 import {
-	parseConditionalParamInformationMap,
 	type ConditionalParamInfoMap,
 	type ParamInfoMap,
+	type ParamInformation,
+	parseConditionalParamInformationMap,
 } from "./ParamInformation";
 import type { DeviceID, FirmwareVersionRange } from "./shared";
 
@@ -90,15 +96,18 @@ async function hasChangedDeviceFiles(
 
 		const stat = await fs.stat(fullPath);
 		if (
-			(dir !== devicesRoot || f !== "index.json") &&
-			(stat.isFile() || stat.isDirectory()) &&
-			stat.mtime > lastChange
+			(dir !== devicesRoot || f !== "index.json")
+			&& (stat.isFile() || stat.isDirectory())
+			&& stat.mtime > lastChange
 		) {
 			return true;
 		} else if (stat.isDirectory()) {
 			// we need to go deeper!
-			if (await hasChangedDeviceFiles(devicesRoot, fullPath, lastChange))
+			if (
+				await hasChangedDeviceFiles(devicesRoot, fullPath, lastChange)
+			) {
 				return true;
+			}
 		}
 	}
 	return false;
@@ -120,20 +129,26 @@ async function generateIndex<T extends Record<string, unknown>>(
 	const configFiles = await enumFilesRecursive(
 		devicesDir,
 		(file) =>
-			file.endsWith(".json") &&
-			!file.endsWith("index.json") &&
-			!file.includes("/templates/") &&
-			!file.includes("\\templates\\"),
+			file.endsWith(".json")
+			&& !file.endsWith("index.json")
+			&& !file.includes("/templates/")
+			&& !file.includes("\\templates\\"),
 	);
+
+	// Add the embedded devices dir as a fallback if necessary
+	const fallbackDirs = devicesDir !== embeddedDevicesDir
+		? [embeddedDevicesDir]
+		: undefined;
 
 	for (const file of configFiles) {
 		const relativePath = path
 			.relative(devicesDir, file)
-			.replace(/\\/g, "/");
+			.replaceAll("\\", "/");
 		// Try parsing the file
 		try {
 			const config = await DeviceConfig.from(file, isEmbedded, {
 				rootDir: devicesDir,
+				fallbackDirs,
 				relative: true,
 			});
 			// Add the file to the index
@@ -347,9 +362,9 @@ function isHexKeyWith4Digits(val: any): val is string {
 const firmwareVersionRegex = /^\d{1,3}\.\d{1,3}(\.\d{1,3})?$/;
 function isFirmwareVersion(val: any): val is string {
 	return (
-		typeof val === "string" &&
-		firmwareVersionRegex.test(val) &&
-		val
+		typeof val === "string"
+		&& firmwareVersionRegex.test(val)
+		&& val
 			.split(".")
 			.map((str) => parseInt(str, 10))
 			.every((num) => num >= 0 && num <= 255)
@@ -363,15 +378,19 @@ export class ConditionalDeviceConfig {
 		isEmbedded: boolean,
 		options: {
 			rootDir: string;
+			fallbackDirs?: string[];
 			relative?: boolean;
 		},
 	): Promise<ConditionalDeviceConfig> {
 		const { relative, rootDir } = options;
 
 		const relativePath = relative
-			? path.relative(rootDir, filename).replace(/\\/g, "/")
+			? path.relative(rootDir, filename).replaceAll("\\", "/")
 			: filename;
-		const json = await readJsonWithTemplate(filename, options.rootDir);
+		const json = await readJsonWithTemplate(filename, [
+			options.rootDir,
+			...(options.fallbackDirs ?? []),
+		]);
 		return new ConditionalDeviceConfig(relativePath, isEmbedded, json);
 	}
 
@@ -402,12 +421,12 @@ manufacturer id must be a lowercase hexadecimal number with 4 digits`,
 		}
 
 		if (
-			!isArray(definition.devices) ||
-			!(definition.devices as any[]).every(
+			!isArray(definition.devices)
+			|| !(definition.devices as any[]).every(
 				(dev: unknown) =>
-					isObject(dev) &&
-					isHexKeyWith4Digits(dev.productType) &&
-					isHexKeyWith4Digits(dev.productId),
+					isObject(dev)
+					&& isHexKeyWith4Digits(dev.productType)
+					&& isHexKeyWith4Digits(dev.productId),
 			)
 		) {
 			throwInvalidConfig(
@@ -424,9 +443,9 @@ devices is malformed (not an object or type/id that is not a lowercase 4-digit h
 		);
 
 		if (
-			!isObject(definition.firmwareVersion) ||
-			!isFirmwareVersion(definition.firmwareVersion.min) ||
-			!isFirmwareVersion(definition.firmwareVersion.max)
+			!isObject(definition.firmwareVersion)
+			|| !isFirmwareVersion(definition.firmwareVersion.min)
+			|| !isFirmwareVersion(definition.firmwareVersion.max)
 		) {
 			throwInvalidConfig(
 				`device`,
@@ -435,12 +454,19 @@ firmwareVersion is malformed or invalid. Must be x.y or x.y.z where x, y, and z 
 			);
 		} else {
 			const { min, max } = definition.firmwareVersion;
+			if (semver.gt(padVersion(min), padVersion(max))) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+firmwareVersion.min ${min} must not be greater than firmwareVersion.max ${max}`,
+				);
+			}
 			this.firmwareVersion = { min, max };
 		}
 
 		if (
-			definition.preferred != undefined &&
-			definition.preferred !== true
+			definition.preferred != undefined
+			&& definition.preferred !== true
 		) {
 			throwInvalidConfig(
 				`device`,
@@ -489,9 +515,11 @@ found non-numeric endpoint index "${key}" in endpoints`,
 associations is not an object`,
 				);
 			}
-			for (const [key, assocDefinition] of Object.entries(
-				definition.associations,
-			)) {
+			for (
+				const [key, assocDefinition] of Object.entries(
+					definition.associations,
+				)
+			) {
 				if (!/^[1-9][0-9]*$/.test(key)) {
 					throwInvalidConfig(
 						`device`,
@@ -533,8 +561,8 @@ proprietary is not an object`,
 
 		if (definition.compat != undefined) {
 			if (
-				isArray(definition.compat) &&
-				definition.compat.every((item: any) => isObject(item))
+				isArray(definition.compat)
+				&& definition.compat.every((item: any) => isObject(item))
 			) {
 				// Make sure all conditions are valid
 				for (const entry of definition.compat) {
@@ -638,6 +666,7 @@ export class DeviceConfig {
 		isEmbedded: boolean,
 		options: {
 			rootDir: string;
+			fallbackDirs?: string[];
 			relative?: boolean;
 			deviceId?: DeviceID;
 		},
@@ -654,7 +683,6 @@ export class DeviceConfig {
 		public readonly filename: string,
 		/** Whether this is an embedded configuration or not */
 		public readonly isEmbedded: boolean,
-
 		public readonly manufacturer: string,
 		public readonly manufacturerId: number,
 		public readonly label: string,
@@ -688,12 +716,157 @@ export class DeviceConfig {
 		if (endpointIndex === 0) {
 			// The root endpoint's associations may be configured separately or as part of "endpoints"
 			return (
-				this.associations?.get(group) ??
-				this.endpoints?.get(0)?.associations?.get(group)
+				this.associations?.get(group)
+					?? this.endpoints?.get(0)?.associations?.get(group)
 			);
 		} else {
 			// The other endpoints can only have a configuration as part of "endpoints"
 			return this.endpoints?.get(endpointIndex)?.associations?.get(group);
 		}
+	}
+
+	/**
+	 * Returns a hash code that can be used to check whether a device config has changed enough to require a re-interview.
+	 */
+	public getHash(): Buffer {
+		// We only need to compare the information that is persisted elsewhere:
+		// - config parameters
+		// - functional association settings
+		// - CC-related compat flags
+
+		let hashable: Record<string, any> = {
+			// endpoints: {
+			// 	associations: {},
+			// 	paramInformation: []
+			// },
+			// proprietary: {},
+			// compat: {},
+		};
+
+		const sortObject = (obj: Record<string, any>) => {
+			const ret: Record<string, any> = {};
+			for (const key of Object.keys(obj).sort()) {
+				ret[key] = obj[key];
+			}
+			return ret;
+		};
+
+		const cloneAssociationConfig = (a: AssociationConfig) => {
+			return sortObject(
+				pick(a, ["maxNodes", "multiChannel", "isLifeline"]),
+			);
+		};
+		const cloneAssociationMap = (
+			target: Record<string, any>,
+			map: ReadonlyMap<number, AssociationConfig> | undefined,
+		) => {
+			if (!map || !map.size) return;
+			target.associations = {};
+			for (const [key, value] of map) {
+				target.associations[key] = cloneAssociationConfig(value);
+			}
+			target.associations = sortObject(target.associations);
+		};
+
+		const cloneParamInformationMap = (
+			target: Record<string, any>,
+			map: ParamInfoMap | undefined,
+		) => {
+			if (!map || !map.size) return;
+			const getParamKey = (param: ParamInformation) =>
+				`${param.parameterNumber}${
+					param.valueBitMask ? `[${num2hex(param.valueBitMask)}]` : ""
+				}`;
+			target.paramInformation = [...map.values()].sort((a, b) =>
+				getParamKey(a).localeCompare(getParamKey(b))
+			);
+		};
+
+		// Clone associations and param information on the root (ep 0) and endpoints
+		{
+			let ep0: Record<string, any> = {};
+			cloneAssociationMap(ep0, this.associations);
+			cloneParamInformationMap(ep0, this.paramInformation);
+			ep0 = sortObject(ep0);
+
+			if (Object.keys(ep0).length > 0) {
+				hashable.endpoints ??= {};
+				hashable.endpoints[0] = ep0;
+			}
+		}
+
+		if (this.endpoints) {
+			for (const [index, endpoint] of this.endpoints) {
+				let ep: Record<string, any> = {};
+
+				cloneAssociationMap(ep, endpoint.associations);
+				cloneParamInformationMap(ep, endpoint.paramInformation);
+
+				ep = sortObject(ep);
+
+				if (Object.keys(ep).length > 0) {
+					hashable.endpoints ??= {};
+					hashable.endpoints[index] = ep;
+				}
+			}
+		}
+
+		// Clone proprietary config
+		if (this.proprietary && Object.keys(this.proprietary).length > 0) {
+			hashable.proprietary = sortObject({ ...this.proprietary });
+		}
+
+		// Clone relevant compat flags
+		if (this.compat) {
+			let c: Record<string, any> = {};
+
+			// Copy some simple flags over
+			for (
+				const prop of [
+					"enableBasicSetMapping",
+					"forceSceneControllerGroupCount",
+					"mapRootReportsToEndpoint",
+					"preserveRootApplicationCCValueIDs",
+					"preserveEndpoints",
+					"removeEndpoints",
+					"treatBasicSetAsEvent",
+					"treatMultilevelSwitchSetAsEvent",
+				] as const
+			) {
+				if (this.compat[prop] != undefined) {
+					c[prop] = this.compat[prop];
+				}
+			}
+
+			// Copy other, more complex flags
+			if (this.compat.overrideQueries) {
+				c.overrideQueries = Object.fromEntries(
+					this.compat.overrideQueries["overrides"],
+				);
+			}
+			if (this.compat.addCCs) {
+				c.addCCs = Object.fromEntries(
+					[...this.compat.addCCs].map(([ccId, def]) => [
+						ccId,
+						Object.fromEntries(def.endpoints),
+					]),
+				);
+			}
+			if (this.compat.removeCCs) {
+				c.removeCCs = Object.fromEntries(this.compat.removeCCs);
+			}
+
+			c = sortObject(c);
+			if (Object.keys(c).length > 0) {
+				hashable.compat = c;
+			}
+		}
+
+		hashable = sortObject(hashable);
+
+		// And create a hash from it. This does not need to be cryptographically secure, just good enough to detect changes.
+		const buffer = Buffer.from(JSON.stringify(hashable), "utf8");
+		const md5 = createHash("md5");
+		return md5.update(buffer).digest();
 	}
 }

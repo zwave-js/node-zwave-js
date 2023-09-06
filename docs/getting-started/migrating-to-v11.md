@@ -16,14 +16,14 @@ These methods previously only returned a `boolean` indicating success or failure
 
 To make this easier:
 
--   `firmwareUpdateOTA` now returns a `Promise<FirmwareUpdateResult>`
--   `firmwareUpdateOTW` now returns a `Promise<ControllerFirmwareUpdateResult>`
+- `firmwareUpdateOTA` now returns a `Promise<FirmwareUpdateResult>`
+- `firmwareUpdateOTW` now returns a `Promise<ControllerFirmwareUpdateResult>`
 
 both of which contain the same information as the corresponding `firmware update finished` events.
 
 ## Renamed methods on the `ZWaveHost` interface
 
-The `getSafeCCVersionForEndpoint` method has been renamed to `getSafeCCVersion`.  
+The `getSafeCCVersionForEndpoint` method has been renamed to `getSafeCCVersion`.\
 The `getSupportedCCVersionForNode` method has been renamed to `getSupportedCCVersion`.
 
 These methods were inconsistently named and none of the other methods that accept a node ID and endpoint index specify that in their name.
@@ -45,27 +45,27 @@ Several CCs use the value 254 to indicate that a state is unknown. However this 
 
 Previously, Z-Wave JS used `"unknown"` or `undefined` (based on the driver option `preserveUnknownValues`), which both have downsides aswell:
 
--   The string `"unknown"` is obviously not a number or boolean, which could cause errors
--   `undefined` gets "filtered" out by the value DB, because it also means **no value**. As a result changes **to** `unknown` would cause no events
--   `undefined` could also mean the data hasn't been queried yet, but it is impossible to distinguish from the `unknown` case
+- The string `"unknown"` is obviously not a number or boolean, which could cause errors
+- `undefined` gets "filtered" out by the value DB, because it also means **no value**. As a result changes **to** `unknown` would cause no events
+- `undefined` could also mean the data hasn't been queried yet, but it is impossible to distinguish from the `unknown` case
 
 To solve this dilemma, Z-Wave JS now uses two distinct values (and types using the same name):
 
--   `NOT_KNOWN` is an alias for `undefined` and indicates that a value is **not known (yet)**, either for a value that has not been queried yet, or where no response was received
--   `UNKNOWN_STATE` is an alias for `null` and indicates that some information has been queried, but the corresponding state is **(known to be) unknown**. For example a multilevel device without intermediate position support - it knows that it is neither fully open, nor fully closed, but not the exact position.
+- `NOT_KNOWN` is an alias for `undefined` and indicates that a value is **not known (yet)**, either for a value that has not been queried yet, or where no response was received
+- `UNKNOWN_STATE` is an alias for `null` and indicates that some information has been queried, but the corresponding state is **(known to be) unknown**. For example a multilevel device without intermediate position support - it knows that it is neither fully open, nor fully closed, but not the exact position.
 
 Two related utility types have been introduced to preserve this distinction through the type system and replace the former `Maybe<T>` type:
 
--   `MaybeNotKnown<T>` is `T | NOT_KNOWN` and indicates that something is either of the type `T`, or `NOT_KNOWN = undefined`
--   `MaybeUnknown<T>` is `T | UNKNOWN_STATE` and indicates that something is either of the type `T`, or `UNKNOWN_STATE = null`
+- `MaybeNotKnown<T>` is `T | NOT_KNOWN` and indicates that something is either of the type `T`, or `NOT_KNOWN = undefined`
+- `MaybeUnknown<T>` is `T | UNKNOWN_STATE` and indicates that something is either of the type `T`, or `UNKNOWN_STATE = null`
 
 Many method signatures and properties which previously used `undefined` to indicate an uncertainty have been updated to use either of the previous types to make it clear what an absence of a value means. Likewise, several CC values can now be `null / UNKNOWN_STATE`. The `preserveUnknownValues` driver option has been removed.
 
 Application developers should double-check their code for a common class of errors/bugs that could be introduced by this change, e.g.:
 
--   The comparisons `== null`, `== undefined`, `!= null` and `!= undefined` fail to distinguish between `NOT_KNOWN` and `UNKNOWN_STATE`. While it is generally recommended to use triple-equals comparison in JavaScript, in these cases, double-equals is a convenient way to compare against both `null` and `undefined` at the same time.
--   Likewise for nullish coalescing and optional chaining operators (`?.`, `??`, `??=`)
--   Expecting a `number` or `boolean` when a CC value is not `undefined` is no longer safe, because it could be `null`.
+- The comparisons `== null`, `== undefined`, `!= null` and `!= undefined` fail to distinguish between `NOT_KNOWN` and `UNKNOWN_STATE`. While it is generally recommended to use triple-equals comparison in JavaScript, in these cases, double-equals is a convenient way to compare against both `null` and `undefined` at the same time.
+- Likewise for nullish coalescing and optional chaining operators (`?.`, `??`, `??=`)
+- Expecting a `number` or `boolean` when a CC value is not `undefined` is no longer safe, because it could be `null`.
 
 ## Reworked `BitField` config parameters to behave like partial parameters
 
@@ -82,14 +82,14 @@ Historically, these methods returned a `boolean` indicating whether the value wa
 For example, it is not possible to know from a simple `true` whether the command was actually executed by the device or whether it just acknowledged an unsupervised command but didn't actually do anything.
 Likewise, returning `false` seems too generic when there are a multitude of possible reasons for this:
 
--   A value was set on a non-existing endpoint
--   The endpoint does not support the CC
--   The CC is not implemented in Z-Wave JS
--   There is no `setValue` implementation for the CC in Z-Wave JS
--   The command could not be sent
--   The command was sent and received, but the device could not execute it
--   An invalid value was provided
--   ...
+- A value was set on a non-existing endpoint
+- The endpoint does not support the CC
+- The CC is not implemented in Z-Wave JS
+- There is no `setValue` implementation for the CC in Z-Wave JS
+- The command could not be sent
+- The command was sent and received, but the device could not execute it
+- An invalid value was provided
+- ...
 
 To solve this and help applications give better feedback to the user, `Node.setValue` and `VirtualNode.setValue` now return a `SetValueResult` object with the following properties:
 
@@ -101,7 +101,7 @@ type SetValueResult = {
 };
 ```
 
-See the [updated documentation](../api/node.md#setValue) for a more detailed explanation on working with `SetValueResult`s.
+See the [updated documentation](api/node.md#setValue) for a more detailed explanation on working with `SetValueResult`s.
 
 Since the result now contains error information, calling `setValue` will no longer emit an `"error"` event in case of a usage error (unimplemented CC, invalid value).
 It will however still throw an error if the communication fails.
@@ -147,12 +147,12 @@ enum RemoveNodeReason {
 
 ## Removed several deprecated method signatures, enums and properties
 
--   The enum member `NodeType["Routing End Node"]` has been removed. This has been called `"End Node"` since `v9.3.0`
--   `ConfigurationMetadata.name` was removed in favor of `label`
--   `ConfigurationMetadata.info` was removed in favor of `description`
--   `Controller.getBroadcastNodeInsecure` and `Controller.getBroadcastNodes` were removed in favor of `Controller.getBroadcastNode`
--   `Controller.getMulticastGroupInsecure`, `Controller.getMulticastGroupS2` and `Controller.getMulticastGroups` were removed in favor of `Controller.getMulticastGroup`
--   `Controller.beginOTAFirmwareUpdate` was removed in favor of `Controller.firmwareUpdateOTA`
--   The `Controller.beginExclusion` overloads accepting a `boolean` or the string `"inactive"` have been removed. Use the overload with `ExclusionOptions` instead.
--   `ZWaveNode.beginFirmwareUpdate` was removed in favor of `ZWaveNode.updateFirmware`
--   The deprecated arguments of the `"firmware update progress"` and `"firmware update finished"` event callbacks of the `ZWaveNode` class were removed. The `progress` and `result` arguments are now in the 2nd place instead of in the 4th one.
+- The enum member `NodeType["Routing End Node"]` has been removed. This has been called `"End Node"` since `v9.3.0`
+- `ConfigurationMetadata.name` was removed in favor of `label`
+- `ConfigurationMetadata.info` was removed in favor of `description`
+- `Controller.getBroadcastNodeInsecure` and `Controller.getBroadcastNodes` were removed in favor of `Controller.getBroadcastNode`
+- `Controller.getMulticastGroupInsecure`, `Controller.getMulticastGroupS2` and `Controller.getMulticastGroups` were removed in favor of `Controller.getMulticastGroup`
+- `Controller.beginOTAFirmwareUpdate` was removed in favor of `Controller.firmwareUpdateOTA`
+- The `Controller.beginExclusion` overloads accepting a `boolean` or the string `"inactive"` have been removed. Use the overload with `ExclusionOptions` instead.
+- `ZWaveNode.beginFirmwareUpdate` was removed in favor of `ZWaveNode.updateFirmware`
+- The deprecated arguments of the `"firmware update progress"` and `"firmware update finished"` event callbacks of the `ZWaveNode` class were removed. The `progress` and `result` arguments are now in the 2nd place instead of in the 4th one.

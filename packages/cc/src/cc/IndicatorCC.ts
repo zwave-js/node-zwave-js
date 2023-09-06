@@ -1,18 +1,18 @@
 import type { ConfigManager } from "@zwave-js/config";
 import {
 	CommandClasses,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
-	type IZWaveEndpoint,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
@@ -22,17 +22,17 @@ import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -81,28 +81,27 @@ function indicatorObjectsToTimeout(
 	values: IndicatorObject[],
 ): IndicatorTimeout | undefined {
 	const timeoutValues = values.filter((v) =>
-		[0x0a, 0x06, 0x07, 0x08].includes(v.propertyId),
+		[0x0a, 0x06, 0x07, 0x08].includes(v.propertyId)
 	);
 	if (!timeoutValues.length) return undefined;
 
-	const hours = (timeoutValues.find((v) => v.propertyId === 0x0a)?.value ??
-		0) as number;
-	const minutes = (timeoutValues.find((v) => v.propertyId === 0x06)?.value ??
-		0) as number;
-	const seconds =
-		clamp(
-			(timeoutValues.find((v) => v.propertyId === 0x07)
-				?.value as number) ?? 0,
-			0,
-			59,
-		) +
-		clamp(
-			(timeoutValues.find((v) => v.propertyId === 0x08)
-				?.value as number) ?? 0,
-			0,
-			99,
-		) /
-			100;
+	const hours = (timeoutValues.find((v) => v.propertyId === 0x0a)?.value
+		?? 0) as number;
+	const minutes = (timeoutValues.find((v) => v.propertyId === 0x06)?.value
+		?? 0) as number;
+	const seconds = clamp(
+		(timeoutValues.find((v) => v.propertyId === 0x07)
+			?.value as number) ?? 0,
+		0,
+		59,
+	)
+		+ clamp(
+				(timeoutValues.find((v) => v.propertyId === 0x08)
+					?.value as number) ?? 0,
+				0,
+				99,
+			)
+			/ 100;
 
 	return {
 		hours,
@@ -117,13 +116,17 @@ export const IndicatorCCValues = Object.freeze({
 			internal: true,
 		}),
 
-		...V.staticPropertyWithName("valueV1", "value", {
-			...ValueMetadata.UInt8,
-			label: "Indicator value",
-			ccSpecific: {
-				indicatorId: 0,
-			},
-		} as const),
+		...V.staticPropertyWithName(
+			"valueV1",
+			"value",
+			{
+				...ValueMetadata.UInt8,
+				label: "Indicator value",
+				ccSpecific: {
+					indicatorId: 0,
+				},
+			} as const,
+		),
 
 		// Convenience values for indicators that are split across multiple properties
 		...V.staticProperty(
@@ -154,8 +157,8 @@ export const IndicatorCCValues = Object.freeze({
 			"supportedPropertyIDs",
 			(indicatorId: number) => indicatorId,
 			({ property, propertyKey }) =>
-				property === "supportedPropertyIDs" &&
-				typeof propertyKey === "number",
+				property === "supportedPropertyIDs"
+				&& typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -198,8 +201,8 @@ function getIndicatorMetadata(
 	propertyId: number,
 	overrideIndicatorLabel?: string,
 ): ValueMetadata {
-	const label =
-		overrideIndicatorLabel || configManager.lookupIndicator(indicatorId);
+	const label = overrideIndicatorLabel
+		|| configManager.lookupIndicator(indicatorId);
 	const prop = configManager.lookupProperty(propertyId);
 	const baseMetadata = IndicatorCCValues.valueV2(
 		indicatorId,
@@ -274,7 +277,7 @@ export class IndicatorCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: IndicatorCCAPI,
 			{ property, propertyKey },
 			value,
@@ -291,8 +294,8 @@ export class IndicatorCCAPI extends CCAPI {
 				}
 				return this.set(value);
 			} else if (
-				typeof property === "number" &&
-				typeof propertyKey === "number"
+				typeof property === "number"
+				&& typeof propertyKey === "number"
 			) {
 				const indicatorId = property;
 				const propertyId = propertyKey;
@@ -335,7 +338,7 @@ export class IndicatorCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: IndicatorCCAPI, { property }) {
+		return async function(this: IndicatorCCAPI, { property }) {
 			if (property === "value") return this.get();
 			if (typeof property === "number") {
 				return this.get(property);
@@ -382,10 +385,10 @@ export class IndicatorCCAPI extends CCAPI {
 	@validateArgs()
 	public async getSupported(indicatorId: number): Promise<
 		| {
-				indicatorId?: number;
-				supportedProperties: readonly number[];
-				nextIndicatorId: number;
-		  }
+			indicatorId?: number;
+			supportedProperties: readonly number[];
+			nextIndicatorId: number;
+		}
 		| undefined
 	> {
 		this.assertSupportsCommand(
@@ -398,11 +401,12 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response =
-			await this.applHost.sendCommand<IndicatorCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			IndicatorCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return {
 				// Include the actual indicator ID if 0x00 was requested
@@ -610,11 +614,12 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response =
-			await this.applHost.sendCommand<IndicatorCCDescriptionReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			IndicatorCCDescriptionReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.description;
 	}
 }
@@ -675,9 +680,11 @@ export class IndicatorCC extends CommandClass {
 				IndicatorCCValues.supportedIndicatorIds,
 				supportedIndicatorIds,
 			);
-			const logMessage = `supported indicator IDs: ${supportedIndicatorIds.join(
-				", ",
-			)}`;
+			const logMessage = `supported indicator IDs: ${
+				supportedIndicatorIds.join(
+					", ",
+				)
+			}`;
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -685,10 +692,8 @@ export class IndicatorCC extends CommandClass {
 			});
 
 			if (this.version >= 4) {
-				const manufacturerDefinedIndicatorIds =
-					supportedIndicatorIds.filter((id) =>
-						isManufacturerDefinedIndicator(id),
-					);
+				const manufacturerDefinedIndicatorIds = supportedIndicatorIds
+					.filter((id) => isManufacturerDefinedIndicator(id));
 				if (manufacturerDefinedIndicatorIds.length > 0) {
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
@@ -730,17 +735,18 @@ export class IndicatorCC extends CommandClass {
 			});
 			await api.get();
 		} else {
-			const supportedIndicatorIds: number[] =
-				this.getValue(
-					applHost,
-					IndicatorCCValues.supportedIndicatorIds,
-				) ?? [];
+			const supportedIndicatorIds: number[] = this.getValue(
+				applHost,
+				IndicatorCCValues.supportedIndicatorIds,
+			) ?? [];
 			for (const indicatorId of supportedIndicatorIds) {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `requesting current indicator value (id = ${num2hex(
-						indicatorId,
-					)})...`,
+					message: `requesting current indicator value (id = ${
+						num2hex(
+							indicatorId,
+						)
+					})...`,
 					direction: "outbound",
 				});
 				await api.get(indicatorId);
@@ -757,8 +763,8 @@ export class IndicatorCC extends CommandClass {
 			// CC version 1 only has a single value that doesn't need to be translated
 			return undefined;
 		} else if (
-			typeof property === "number" &&
-			typeof propertyKey === "number"
+			typeof property === "number"
+			&& typeof propertyKey === "number"
 		) {
 			// The indicator property is our property key
 			const prop = applHost.configManager.lookupProperty(propertyKey);
@@ -820,11 +826,11 @@ export interface IndicatorObject {
 
 export type IndicatorCCSetOptions =
 	| {
-			value: number;
-	  }
+		value: number;
+	}
 	| {
-			values: IndicatorObject[];
-	  };
+		values: IndicatorObject[];
+	};
 
 @CCCommand(IndicatorCommand.Set)
 @useSupervision()
@@ -839,8 +845,9 @@ export class IndicatorCCSet extends IndicatorCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 
-			const objCount =
-				this.payload.length >= 2 ? this.payload[1] & 0b11111 : 0;
+			const objCount = this.payload.length >= 2
+				? this.payload[1] & 0b11111
+				: 0;
 			if (objCount === 0) {
 				this.indicator0Value = this.payload[0];
 			} else {
@@ -860,9 +867,8 @@ export class IndicatorCCSet extends IndicatorCC {
 			if (this.version === 1) {
 				if (!("value" in options)) {
 					throw new ZWaveError(
-						`Node ${
-							this.nodeId as number
-						} only supports IndicatorCC V1 which requires a single value to be set`,
+						`Node ${this
+							.nodeId as number} only supports IndicatorCC V1 which requires a single value to be set`,
 						ZWaveErrorCodes.Argument_Invalid,
 					);
 				}
@@ -898,8 +904,11 @@ export class IndicatorCCSet extends IndicatorCC {
 				this.payload[offset] = this.values[i].indicatorId;
 				this.payload[offset + 1] = this.values[i].propertyId;
 				const value = this.values[i].value;
-				this.payload[offset + 2] =
-					value === true ? 0xff : value === false ? 0x00 : value;
+				this.payload[offset + 2] = value === true
+					? 0xff
+					: value === false
+					? 0x00
+					: value;
 			}
 		} else {
 			// V1
@@ -914,14 +923,16 @@ export class IndicatorCCSet extends IndicatorCC {
 			message["indicator 0 value"] = this.indicator0Value;
 		}
 		if (this.values != undefined) {
-			message.values = `${this.values
-				.map(
-					(v) => `
+			message.values = `${
+				this.values
+					.map(
+						(v) => `
 · indicatorId: ${v.indicatorId}
   propertyId:  ${v.propertyId}
   value:       ${v.value}`,
-				)
-				.join("")}`;
+					)
+					.join("")
+			}`;
 		}
 		return {
 			...super.toLogEntry(applHost),
@@ -932,11 +943,11 @@ export class IndicatorCCSet extends IndicatorCC {
 
 export type IndicatorCCReportSpecificOptions =
 	| {
-			value: number;
-	  }
+		value: number;
+	}
 	| {
-			values: IndicatorObject[];
-	  };
+		values: IndicatorObject[];
+	};
 
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
@@ -951,8 +962,9 @@ export class IndicatorCCReport extends IndicatorCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 
-			const objCount =
-				this.payload.length >= 2 ? this.payload[1] & 0b11111 : 0;
+			const objCount = this.payload.length >= 2
+				? this.payload[1] & 0b11111
+				: 0;
 			if (objCount === 0) {
 				this.indicator0Value = this.payload[0];
 			} else {
@@ -1022,7 +1034,8 @@ export class IndicatorCCReport extends IndicatorCC {
 				if (this.isSinglecast()) {
 					// Don't!
 					applHost.controllerLog.logNode(this.nodeId, {
-						message: `ignoring V1 indicator report because the node supports V2 indicators`,
+						message:
+							`ignoring V1 indicator report because the node supports V2 indicators`,
 						direction: "none",
 						endpoint: this.endpointIndex,
 					});
@@ -1064,12 +1077,12 @@ export class IndicatorCCReport extends IndicatorCC {
 	): void {
 		// Manufacturer-defined indicators may need a custom label
 		const overrideIndicatorLabel = isManufacturerDefinedIndicator(
-			value.indicatorId,
-		)
+				value.indicatorId,
+			)
 			? this.getValue<string>(
-					applHost,
-					IndicatorCCValues.indicatorDescription(value.indicatorId),
-			  )
+				applHost,
+				IndicatorCCValues.indicatorDescription(value.indicatorId),
+			)
 			: undefined;
 
 		const metadata = getIndicatorMetadata(
@@ -1104,8 +1117,11 @@ export class IndicatorCCReport extends IndicatorCC {
 				this.payload[offset] = this.values[i].indicatorId;
 				this.payload[offset + 1] = this.values[i].propertyId;
 				const value = this.values[i].value;
-				this.payload[offset + 2] =
-					value === true ? 0xff : value === false ? 0x00 : value;
+				this.payload[offset + 2] = value === true
+					? 0xff
+					: value === false
+					? 0x00
+					: value;
 			}
 		} else {
 			// V1
@@ -1120,14 +1136,16 @@ export class IndicatorCCReport extends IndicatorCC {
 			message["indicator 0 value"] = this.indicator0Value;
 		}
 		if (this.values != undefined) {
-			message.values = `${this.values
-				.map(
-					(v) => `
+			message.values = `${
+				this.values
+					.map(
+						(v) => `
 · indicatorId: ${v.indicatorId}
   propertyId:  ${v.propertyId}
   value:       ${v.value}`,
-				)
-				.join("")}`;
+					)
+					.join("")
+			}`;
 		}
 		return {
 			...super.toLogEntry(applHost),
@@ -1236,10 +1254,9 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly supportedProperties: readonly number[];
 
 	public serialize(): Buffer {
-		const bitmask =
-			this.supportedProperties.length > 0
-				? encodeBitMask(this.supportedProperties, undefined, 0)
-				: Buffer.from([]);
+		const bitmask = this.supportedProperties.length > 0
+			? encodeBitMask(this.supportedProperties, undefined, 0)
+			: Buffer.from([]);
 		this.payload = Buffer.concat([
 			Buffer.from([
 				this.indicatorId,
@@ -1260,13 +1277,15 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 					applHost.configManager,
 					this.indicatorId,
 				),
-				"supported properties": `${this.supportedProperties
-					.map(
-						(id) =>
-							applHost.configManager.lookupProperty(id)?.label ??
-							`Unknown (${num2hex(id)})`,
-					)
-					.join(", ")}`,
+				"supported properties": `${
+					this.supportedProperties
+						.map(
+							(id) =>
+								applHost.configManager.lookupProperty(id)?.label
+									?? `Unknown (${num2hex(id)})`,
+						)
+						.join(", ")
+				}`,
 				"next indicator": getIndicatorName(
 					applHost.configManager,
 					this.nextIndicatorId,

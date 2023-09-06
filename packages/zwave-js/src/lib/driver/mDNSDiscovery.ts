@@ -23,9 +23,9 @@ export function discoverRemoteSerialPorts(
 			const matches = resp.answers
 				.filter(
 					(n) =>
-						n.type === "PTR" &&
-						n.name === domain &&
-						typeof n.data === "string",
+						n.type === "PTR"
+						&& n.name === domain
+						&& typeof n.data === "string",
 				)
 				.map(({ data }) => {
 					return {
@@ -39,10 +39,10 @@ export function discoverRemoteSerialPorts(
 				})
 				.filter(
 					({ srv }) =>
-						!!srv &&
-						isObject(srv.data) &&
-						typeof srv.data.target === "string" &&
-						typeof srv.data.port === "number",
+						!!srv
+						&& isObject(srv.data)
+						&& typeof srv.data.target === "string"
+						&& typeof srv.data.port === "number",
 				)
 				.map(({ txt, srv }) => {
 					const info: Record<string, string> = {};

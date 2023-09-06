@@ -37,11 +37,11 @@ function visitUnionOrIntersectionType(
 	visitorContext: VisitorContext,
 ) {
 	const stringTypes = type.types.map((type) =>
-		visitType(type, visitorContext),
+		visitType(type, visitorContext)
 	);
 
 	if (tsutils.isUnionType(type)) {
-		if (stringTypes.some((stringType) => stringType === true)) {
+		if (stringTypes.includes(true)) {
 			// If T or U is the string type, then T | U is assignable to the string type.
 			return true;
 		}
@@ -60,7 +60,7 @@ function visitUnionOrIntersectionType(
 			return false;
 		}
 	} else {
-		if (stringTypes.some((stringType) => stringType === false)) {
+		if (stringTypes.includes(false)) {
 			// If T or U is not assignable to string, then T & U is not assignable to string.
 			return false;
 		}
@@ -206,8 +206,8 @@ export function visitType(
 		// Boolean literal (true/false)
 		return visitBooleanLiteral();
 	} else if (
-		tsutils.isTypeReference(type) &&
-		visitorContext.previousTypeReference !== type
+		tsutils.isTypeReference(type)
+		&& visitorContext.previousTypeReference !== type
 	) {
 		// Type references.
 		return visitTypeReference(type, visitorContext);

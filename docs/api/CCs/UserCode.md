@@ -63,7 +63,7 @@ Clears one or all user code.
 
 **Parameters:**
 
--   `userId`: The user code to clear. If none or 0 is given, all codes are cleared
+- `userId`: The user code to clear. If none or 0 is given, all codes are cleared
 
 ### `getCapabilities`
 
@@ -117,13 +117,13 @@ async getUserCodeChecksum(): Promise<MaybeNotKnown<number>>;
 }
 ```
 
--   **label:** Keypad Mode
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** Keypad Mode
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `masterCode`
 
@@ -135,15 +135,15 @@ async getUserCodeChecksum(): Promise<MaybeNotKnown<number>>;
 }
 ```
 
--   **label:** Master Code
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** true
--   **value type:** `"string"`
--   **min. length:** 4
--   **max. length:** 10
+- **label:** Master Code
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** true
+- **value type:** `"string"`
+- **min. length:** 4
+- **max. length:** 10
 
 ### `userCode(userId: number)`
 
@@ -156,12 +156,12 @@ async getUserCodeChecksum(): Promise<MaybeNotKnown<number>>;
 }
 ```
 
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** true
--   **value type:** `"any"`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** true
+- **value type:** `"any"`
 
 ### `userIdStatus(userId: number)`
 
@@ -174,10 +174,10 @@ async getUserCodeChecksum(): Promise<MaybeNotKnown<number>>;
 }
 ```
 
--   **label:** `User ID status (${number})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** `User ID status (${number})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`

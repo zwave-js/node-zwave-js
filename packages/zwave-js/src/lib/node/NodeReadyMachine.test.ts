@@ -1,12 +1,12 @@
-import { interpret, type Interpreter } from "xstate";
+import { type Interpreter, interpret } from "xstate";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import test, { type ExecutionContext } from "ava";
 import {
-	createNodeReadyMachine,
 	type NodeReadyContext,
 	type NodeReadyEvent,
 	type NodeReadyMachine,
 	type NodeReadyStateSchema,
+	createNodeReadyMachine,
 } from "./NodeReadyMachine";
 
 function startMachine(

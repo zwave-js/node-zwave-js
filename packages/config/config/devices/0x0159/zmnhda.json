@@ -174,8 +174,8 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
-				// The device lists Binary Switch CC as supported, but then responds with a version of 0
-				"0x85": {
+				// The device lists Association CC as supported, but then responds with a version of 0
+				"Association": {
 					"isSupported": true
 				}
 			}

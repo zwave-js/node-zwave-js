@@ -271,5 +271,16 @@
 		"exclusion": "01. Set the Z-Wave gateway into remove mode (see the Z-Wave gateway’s manual)\n02. On the IBT4ZWAVE press and release the S1 button 3 times x3 S1\n03. LEDs on the IBT4ZW AVE will start slow flashing alternately\n04. Wait for the removing process to end",
 		"reset": "01. Press and hold the S1 button\n03. Wait 3 seconds\n04. LEDs will show adding and antenna status (Table 1 in manual) for 3 seconds\n05. LEDs will turn off for 3 seconds\n06. LEDs will show selected antenna (Table 2 in manual) for 3 seconds\n07. When both LEDs light up simultaneously, release the button\n08. Press and release the S1 button\n09. Both LEDs will flash once at the end of the procedure",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3837/IBT4ZWAVE-T-v0.7.pdf"
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device does not support Supervision correctly. Starting a level change always fails
+				// https://github.com/zwave-js/node-zwave-js/issues/6049
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
 	}
 }

@@ -1,20 +1,20 @@
 import {
 	MAX_NODES,
 	NUM_NODEMASK_BYTES,
+	type NodeProtocolInfo,
 	encodeBitMask,
 	encodeNodeProtocolInfo,
 	parseBitMask,
 	parseNodeProtocolInfo,
-	type NodeProtocolInfo,
 } from "@zwave-js/core/safe";
 import { pick } from "@zwave-js/shared/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	NVMFile,
-	gotDeserializationOptions,
-	nvmFileID,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
+	gotDeserializationOptions,
+	nvmFileID,
 } from "./NVMFile";
 
 export const NODEINFOS_PER_FILE_V1 = 4;
@@ -23,7 +23,8 @@ const EMPTY_NODEINFO_FILL = 0xff;
 const emptyNodeInfo = Buffer.alloc(NODEINFO_SIZE, EMPTY_NODEINFO_FILL);
 
 export interface NodeInfo
-	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass">
+{
 	nodeId: number;
 	genericDeviceClass: number;
 	specificDeviceClass?: number | null;
@@ -144,8 +145,8 @@ export function nodeIdToNodeInfoFileIDV1(nodeId: number): number {
 
 @nvmFileID(
 	(id) =>
-		id >= NodeInfoFileV1IDBase &&
-		id < NodeInfoFileV1IDBase + MAX_NODES / NODEINFOS_PER_FILE_V1,
+		id >= NodeInfoFileV1IDBase
+		&& id < NodeInfoFileV1IDBase + MAX_NODES / NODEINFOS_PER_FILE_V1,
 )
 export class NodeInfoFileV1 extends NVMFile {
 	public constructor(
@@ -155,11 +156,10 @@ export class NodeInfoFileV1 extends NVMFile {
 		if (gotDeserializationOptions(options)) {
 			this.nodeInfos = [];
 			for (let i = 0; i < NODEINFOS_PER_FILE_V1; i++) {
-				const nodeId =
-					(this.fileId - NodeInfoFileV1IDBase) *
-						NODEINFOS_PER_FILE_V1 +
-					1 +
-					i;
+				const nodeId = (this.fileId - NodeInfoFileV1IDBase)
+						* NODEINFOS_PER_FILE_V1
+					+ 1
+					+ i;
 				const offset = i * 35;
 				const entry = this.payload.slice(offset, offset + 35);
 				if (entry.equals(emptyNodeInfo)) continue;
@@ -186,9 +186,9 @@ export class NodeInfoFileV1 extends NVMFile {
 		);
 
 		const minFileNodeId =
-			Math.floor((minNodeId - 1) / NODEINFOS_PER_FILE_V1) *
-				NODEINFOS_PER_FILE_V1 +
-			1;
+			Math.floor((minNodeId - 1) / NODEINFOS_PER_FILE_V1)
+				* NODEINFOS_PER_FILE_V1
+			+ 1;
 
 		for (const nodeInfo of this.nodeInfos) {
 			const offset = (nodeInfo.nodeId - minFileNodeId) * NODEINFO_SIZE;

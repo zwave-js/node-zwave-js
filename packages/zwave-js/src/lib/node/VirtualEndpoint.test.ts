@@ -1,9 +1,9 @@
 import type { BinarySensorCCAPI } from "@zwave-js/cc/BinarySensorCC";
 import { BinarySwitchCCAPI } from "@zwave-js/cc/BinarySwitchCC";
 import {
-	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
@@ -197,7 +197,7 @@ test.serial(
 
 			const broadcast = driver.controller.getBroadcastNode();
 			t.notThrows(() =>
-				broadcast.commandClasses["Binary Switch"].withOptions({}),
+				broadcast.commandClasses["Binary Switch"].withOptions({})
 			);
 		},
 	);

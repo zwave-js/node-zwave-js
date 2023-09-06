@@ -6,8 +6,8 @@ export interface FileSystem {
 		data: string | Buffer,
 		options?:
 			| {
-					encoding: string;
-			  }
+				encoding: string;
+			}
 			| string,
 	): Promise<void>;
 	readFile(file: string, encoding: string): Promise<string>;

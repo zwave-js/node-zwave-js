@@ -1,8 +1,8 @@
 import {
-	createDefaultTransportFormat,
 	ZWaveLogContainer,
+	createDefaultTransportFormat,
 } from "@zwave-js/core";
-import { assertMessage, SpyTransport } from "@zwave-js/core/test";
+import { SpyTransport, assertMessage } from "@zwave-js/core/test";
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import type { ThrowingMap } from "@zwave-js/shared";

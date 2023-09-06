@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
 import {
+	type IZWaveNode,
 	MAX_SUPERVISION_SESSION_ID,
+	NodeIDType,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type IZWaveNode,
 } from "@zwave-js/core";
 import {
+	type ThrowingMap,
 	createThrowingMap,
 	createWrappingCounter,
-	type ThrowingMap,
 } from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
@@ -34,10 +35,12 @@ export function createTestingHost(
 	const valuesStorage = new Map();
 	const metadataStorage = new Map();
 	const valueDBCache = new Map<number, ValueDB>();
+	const supervisionSessionIDs = new Map<number, () => number>();
 
 	const ret: TestingHost = {
 		homeId: options.homeId ?? 0x7e570001,
 		ownNodeId: options.ownNodeId ?? 1,
+		nodeIdType: NodeIDType.Short,
 		isControllerNode: (nodeId) => nodeId === ret.ownNodeId,
 		securityManager: undefined,
 		securityManager2: undefined,
@@ -69,14 +72,19 @@ export function createTestingHost(
 			);
 		}),
 		getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
-		getSupportedCCVersion:
-			options.getSupportedCCVersion ??
-			options.getSafeCCVersion ??
-			(() => 100),
+		getSupportedCCVersion: options.getSupportedCCVersion
+			?? options.getSafeCCVersion
+			?? (() => 100),
 		getNextCallbackId: createWrappingCounter(0xff),
-		getNextSupervisionSessionId: createWrappingCounter(
-			MAX_SUPERVISION_SESSION_ID,
-		),
+		getNextSupervisionSessionId: (nodeId) => {
+			if (!supervisionSessionIDs.has(nodeId)) {
+				supervisionSessionIDs.set(
+					nodeId,
+					createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
+				);
+			}
+			return supervisionSessionIDs.get(nodeId)!();
+		},
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
 				valueDBCache.set(
@@ -97,9 +105,9 @@ export function createTestingHost(
 			const node = ret.nodes.get(nodeId);
 			const endpoint = node?.getEndpoint(endpointIndex);
 			return (
-				node?.isSecure !== false &&
-				!!(endpoint ?? node)?.isCCSecure(ccId) &&
-				!!(ret.securityManager || ret.securityManager2)
+				node?.isSecure !== false
+				&& !!(endpoint ?? node)?.isCCSecure(ccId)
+				&& !!(ret.securityManager || ret.securityManager2)
 			);
 		},
 		getHighestSecurityClass: (nodeId) => {

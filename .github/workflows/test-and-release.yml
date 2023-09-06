@@ -17,8 +17,8 @@ on:
     types: [checks_requested]
 
 # Cancel previous PR/branch runs when a new commit is pushed
-concurrency: 
-  group: ${{ github.ref }}
+concurrency:
+  group: 'test-and-release-${{ github.ref }}'
   cancel-in-progress: true
 
 env:
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -123,7 +123,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -149,8 +149,7 @@ jobs:
       run: |
         # Run all lint commands and abort if one has unfixable errors
         yarn run lint:ts:fix $TURBO_FLAGS
-        yarn run lint:prettier:fix $TURBO_FLAGS
-        yarn run lint:configjson:fix $TURBO_FLAGS
+        yarn fmt $TURBO_FLAGS
 
         git diff --name-only || true
         if ! git diff --quiet ; then
@@ -180,7 +179,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -206,7 +205,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18, 20]
         os: [ubuntu-latest]
 
     steps:
@@ -239,7 +238,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   strategy:
   #     matrix:
-  #       node-version: [16.x] # This should be LTS
+  #       node-version: [18] # This should be LTS
 
   #   steps:
   #   - name: Checkout code
@@ -277,8 +276,8 @@ jobs:
 
   gh-cc-table:
     name: Update CC implementation status
-    # Only run for master branch
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # Only run for master branch and don't run in forks
+    if: github.repository == 'zwave-js/node-zwave-js' && github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     needs: [build]
 
@@ -286,7 +285,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -307,7 +306,7 @@ jobs:
     - name: Update CC table # (maybe)
       uses: ./.github/actions/gh-cc-table
       with:
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        githubToken: ${{ secrets.BOT_TOKEN }}
       env:
         CI: true
 
@@ -315,8 +314,8 @@ jobs:
 
   generate-overview:
     name: Update toLogEntry overview
-    # Only run for master branch
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # Only run for master branch and don't run in forks
+    if: github.repository == 'zwave-js/node-zwave-js' && github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     needs: [build]
 
@@ -324,7 +323,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -345,7 +344,7 @@ jobs:
     - name: Update overview
       uses: ./.github/actions/toLogEntry
       with:
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        githubToken: ${{ secrets.BOT_TOKEN }}
       env:
         CI: true
 
@@ -361,7 +360,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   strategy:
   #     matrix:
-  #       node-version: [16.x] # This should be LTS
+  #       node-version: [18] # This should be LTS
 
   #   steps:
   #   - name: Checkout code
@@ -404,7 +403,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -459,16 +458,16 @@ jobs:
         prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
         body: ${{ steps.extract_release.outputs.BODY }}
 
-    - name: Notify Sentry.io about the release
-      run: |
-        npm i -g @sentry/cli
-        export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-        export SENTRY_URL=https://sentry.iobroker.net
-        export SENTRY_ORG=iobroker
-        export SENTRY_PROJECT=zwave-js
-        export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
-        sentry-cli releases new $SENTRY_VERSION
-        # Commits disabled until the Github integration can be enabled
-        sentry-cli releases set-commits $SENTRY_VERSION --auto
-        sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
-        sentry-cli releases finalize $SENTRY_VERSION
+    # - name: Notify Sentry.io about the release
+    #   run: |
+    #     npm i -g @sentry/cli
+    #     export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+    #     export SENTRY_URL=https://sentry.iobroker.net
+    #     export SENTRY_ORG=iobroker
+    #     export SENTRY_PROJECT=zwave-js
+    #     export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
+    #     sentry-cli releases new $SENTRY_VERSION
+    #     # Commits disabled until the Github integration can be enabled
+    #     sentry-cli releases set-commits $SENTRY_VERSION --auto
+    #     sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
+    #     sentry-cli releases finalize $SENTRY_VERSION

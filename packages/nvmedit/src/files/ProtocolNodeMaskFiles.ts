@@ -1,12 +1,12 @@
-import { encodeBitMask, NODE_ID_MAX, parseBitMask } from "@zwave-js/core/safe";
+import { NODE_ID_MAX, encodeBitMask, parseBitMask } from "@zwave-js/core/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
-	getNVMFileIDStatic,
-	gotDeserializationOptions,
 	NVMFile,
-	nvmFileID,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
+	getNVMFileIDStatic,
+	gotDeserializationOptions,
+	nvmFileID,
 } from "./NVMFile";
 
 export interface ProtocolNodeMaskFileOptions extends NVMFileCreationOptions {
@@ -64,7 +64,9 @@ export const ProtocolRouteSlaveSUCNodeMaskFileID = getNVMFileIDStatic(
 );
 
 @nvmFileID(0x50008)
-export class ProtocolSUCPendingUpdateNodeMaskFile extends ProtocolNodeMaskFile {}
+export class ProtocolSUCPendingUpdateNodeMaskFile
+	extends ProtocolNodeMaskFile
+{}
 export const ProtocolSUCPendingUpdateNodeMaskFileID = getNVMFileIDStatic(
 	ProtocolSUCPendingUpdateNodeMaskFile,
 );
@@ -76,13 +78,17 @@ export const ProtocolVirtualNodeMaskFileID = getNVMFileIDStatic(
 );
 
 @nvmFileID(0x5000a)
-export class ProtocolPendingDiscoveryNodeMaskFile extends ProtocolNodeMaskFile {}
+export class ProtocolPendingDiscoveryNodeMaskFile
+	extends ProtocolNodeMaskFile
+{}
 export const ProtocolPendingDiscoveryNodeMaskFileID = getNVMFileIDStatic(
 	ProtocolPendingDiscoveryNodeMaskFile,
 );
 
 @nvmFileID(0x5000b)
-export class ProtocolRouteCacheExistsNodeMaskFile extends ProtocolNodeMaskFile {}
+export class ProtocolRouteCacheExistsNodeMaskFile
+	extends ProtocolNodeMaskFile
+{}
 export const ProtocolRouteCacheExistsNodeMaskFileID = getNVMFileIDStatic(
 	ProtocolRouteCacheExistsNodeMaskFile,
 );

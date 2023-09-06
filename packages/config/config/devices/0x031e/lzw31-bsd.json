@@ -321,7 +321,29 @@
 		},
 		{
 			"#": "52",
-			"$if": "firmwareVersion >= 1.47",
+			"$if": "firmwareVersion >= 1.54",
+			"label": "Operation Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "On/Off Only",
+					"value": 1
+				},
+				{
+					"label": "Smart Bulb",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "52",
+			"$if": "firmwareVersion >= 1.47 && firmwareVersion < 1.54",
 			"label": "Smart Bulb Mode",
 			"description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim & makes it act like an ON / OFF switch.",
 			"valueSize": 1,

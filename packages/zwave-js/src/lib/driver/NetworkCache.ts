@@ -1,5 +1,6 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import {
+	type CommandClasses,
 	NodeType,
 	SecurityClass,
 	ZWaveError,
@@ -7,12 +8,11 @@ import {
 	dskFromString,
 	dskToString,
 	securityClassOrder,
-	type CommandClasses,
 } from "@zwave-js/core";
 import type { FileSystem } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import path from "path";
+import path from "node:path";
 import {
 	ProvisioningEntryStatus,
 	type SmartStartProvisioningEntry,
@@ -46,10 +46,12 @@ export const cacheKeys = {
 			supportsSecurity: `${nodeBaseKey}supportsSecurity`,
 			supportsBeaming: `${nodeBaseKey}supportsBeaming`,
 			securityClass: (secClass: SecurityClass) =>
-				`${nodeBaseKey}securityClasses.${getEnumMemberName(
-					SecurityClass,
-					secClass,
-				)}`,
+				`${nodeBaseKey}securityClasses.${
+					getEnumMemberName(
+						SecurityClass,
+						secClass,
+					)
+				}`,
 			dsk: `${nodeBaseKey}dsk`,
 			endpoint: (index: number) => {
 				const endpointBaseKey = `${nodeBaseKey}endpoint.${index}.`;
@@ -72,6 +74,11 @@ export const cacheKeys = {
 			customReturnRoutes: (destinationNodeId: number) =>
 				`${nodeBaseKey}customReturnRoutes.${destinationNodeId}`,
 			customSUCReturnRoutes: `${nodeBaseKey}customReturnRoutes.SUC`,
+			defaultTransitionDuration:
+				`${nodeBaseKey}defaultTransitionDuration`,
+			defaultVolume: `${nodeBaseKey}defaultVolume`,
+			lastSeen: `${nodeBaseKey}lastSeen`,
+			deviceConfigHash: `${nodeBaseKey}deviceConfigHash`,
 		};
 	},
 } as const;
@@ -100,8 +107,8 @@ export const cacheKeyUtils = {
 
 function tryParseInterviewStage(value: unknown): InterviewStage | undefined {
 	if (
-		(typeof value === "string" || typeof value === "number") &&
-		value in InterviewStage
+		(typeof value === "string" || typeof value === "number")
+		&& value in InterviewStage
 	) {
 		return typeof value === "number"
 			? value
@@ -116,9 +123,9 @@ function tryParseDeviceClass(
 	if (isObject(value)) {
 		const { basic, generic, specific } = value;
 		if (
-			typeof basic === "number" &&
-			typeof generic === "number" &&
-			typeof specific === "number"
+			typeof basic === "number"
+			&& typeof generic === "number"
+			&& typeof specific === "number"
 		) {
 			return new DeviceClass(
 				driver.configManager,
@@ -137,9 +144,9 @@ function tryParseSecurityClasses(
 		const ret = new Map<SecurityClass, boolean>();
 		for (const [key, val] of Object.entries(value)) {
 			if (
-				key in SecurityClass &&
-				typeof (SecurityClass as any)[key] === "number" &&
-				typeof val === "boolean"
+				key in SecurityClass
+				&& typeof (SecurityClass as any)[key] === "number"
+				&& typeof val === "boolean"
 			) {
 				ret.set((SecurityClass as any)[key] as SecurityClass, val);
 			}
@@ -161,18 +168,18 @@ function tryParseProvisioningList(
 	if (!isArray(value)) return;
 	for (const entry of value) {
 		if (
-			isObject(entry) &&
-			typeof entry.dsk === "string" &&
-			isArray(entry.securityClasses) &&
+			isObject(entry)
+			&& typeof entry.dsk === "string"
+			&& isArray(entry.securityClasses)
 			// securityClasses are stored as strings, not the enum values
-			entry.securityClasses.every((s) => isSerializedSecurityClass(s)) &&
-			(entry.requestedSecurityClasses == undefined ||
-				(isArray(entry.requestedSecurityClasses) &&
-					entry.requestedSecurityClasses.every((s) =>
-						isSerializedSecurityClass(s),
-					))) &&
-			(entry.status == undefined ||
-				isSerializedProvisioningEntryStatus(entry.status))
+			&& entry.securityClasses.every((s) => isSerializedSecurityClass(s))
+			&& (entry.requestedSecurityClasses == undefined
+				|| (isArray(entry.requestedSecurityClasses)
+					&& entry.requestedSecurityClasses.every((s) =>
+						isSerializedSecurityClass(s)
+					)))
+			&& (entry.status == undefined
+				|| isSerializedProvisioningEntryStatus(entry.status))
 		) {
 			// This is at least a PlannedProvisioningEntry, maybe it is an IncludedProvisioningEntry
 			if ("nodeId" in entry && typeof entry.nodeId !== "number") {
@@ -217,8 +224,8 @@ function isSerializedSecurityClass(value: unknown): boolean {
 			value = value.slice(11, -1);
 		}
 		if (
-			(value as any) in SecurityClass &&
-			typeof SecurityClass[value as any] === "number"
+			(value as any) in SecurityClass
+			&& typeof SecurityClass[value as any] === "number"
 		) {
 			return true;
 		}
@@ -241,8 +248,8 @@ function tryParseSerializedSecurityClass(
 			value = value.slice(11, -1);
 		}
 		if (
-			(value as any) in SecurityClass &&
-			typeof SecurityClass[value as any] === "number"
+			(value as any) in SecurityClass
+			&& typeof SecurityClass[value as any] === "number"
 		) {
 			return (SecurityClass as any)[value as any];
 		}
@@ -253,10 +260,18 @@ function isSerializedProvisioningEntryStatus(
 	s: unknown,
 ): s is keyof typeof ProvisioningEntryStatus {
 	return (
-		typeof s === "string" &&
-		s in ProvisioningEntryStatus &&
-		typeof ProvisioningEntryStatus[s as any] === "number"
+		typeof s === "string"
+		&& s in ProvisioningEntryStatus
+		&& typeof ProvisioningEntryStatus[s as any] === "number"
 	);
+}
+
+function tryParseDate(value: unknown): Date | undefined {
+	// Dates are stored as timestamps
+	if (typeof value === "number") {
+		const ret = new Date(value);
+		if (!isNaN(ret.getTime())) return ret;
+	}
 }
 
 export function deserializeNetworkCacheValue(
@@ -337,12 +352,27 @@ export function deserializeNetworkCacheValue(
 
 		case "supportedDataRates": {
 			if (
-				isArray(value) &&
-				value.every((r: unknown) => typeof r === "number")
+				isArray(value)
+				&& value.every((r: unknown) => typeof r === "number")
 			) {
 				return value;
 			}
 			throw fail();
+		}
+
+		case "lastSeen": {
+			value = tryParseDate(value);
+			if (value) return value;
+			throw fail();
+		}
+
+		case "deviceConfigHash": {
+			if (typeof value !== "string") throw fail();
+			try {
+				return Buffer.from(value, "hex");
+			} catch {
+				throw fail();
+			}
 		}
 	}
 
@@ -392,6 +422,14 @@ export function serializeNetworkCacheValue(
 		case "dsk": {
 			return dskToString(value as Buffer);
 		}
+		case "lastSeen": {
+			// Dates are stored as timestamps
+			return (value as Date).getTime();
+		}
+
+		case "deviceConfigHash": {
+			return (value as Buffer).toString("hex");
+		}
 	}
 
 	// Other properties
@@ -401,12 +439,12 @@ export function serializeNetworkCacheValue(
 			for (const entry of value as SmartStartProvisioningEntry[]) {
 				const serialized: Record<string, any> = { ...entry };
 				serialized.securityClasses = entry.securityClasses.map((c) =>
-					getEnumMemberName(SecurityClass, c),
+					getEnumMemberName(SecurityClass, c)
 				);
 				if (entry.requestedSecurityClasses) {
-					serialized.requestedSecurityClasses =
-						entry.requestedSecurityClasses.map((c) =>
-							getEnumMemberName(SecurityClass, c),
+					serialized.requestedSecurityClasses = entry
+						.requestedSecurityClasses.map((c) =>
+							getEnumMemberName(SecurityClass, c)
 						);
 				}
 				if (entry.status != undefined) {
@@ -573,9 +611,11 @@ export async function migrateLegacyNetworkCache(
 			// The nesting was inverted from the legacy cache: node -> EP -> CCs
 			// as opposed to node -> CC -> EPs
 			if (isObject(node.commandClasses)) {
-				for (const [ccIdHex, cc] of Object.entries<any>(
-					node.commandClasses,
-				)) {
+				for (
+					const [ccIdHex, cc] of Object.entries<any>(
+						node.commandClasses,
+					)
+				) {
 					const ccId = parseInt(ccIdHex, 16);
 					if (isObject(cc.endpoints)) {
 						for (const endpointId of Object.keys(cc.endpoints)) {

@@ -1,0 +1,19 @@
+{
+	"manufacturer": "Z-Wave JS",
+	"manufacturerId": "0xffff",
+	"label": "700 Series",
+	"description": "USB Controller",
+	"devices": [
+		{
+			"productType": "0xdead",
+			"productId": "0xbeef"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"proprietary": {
+		"fibaroCCs": [38 /* 0x26 (Venetian Blinds) */]
+	}
+}

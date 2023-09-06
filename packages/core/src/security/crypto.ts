@@ -1,4 +1,4 @@
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 import { leftShift1, xor, zeroPad } from "./bufferUtils";
 
 function encrypt(
@@ -124,8 +124,8 @@ export function computeCMAC(message: Buffer, key: Buffer): Buffer {
 	const blockSize = 16;
 	const numBlocks = Math.ceil(message.length / blockSize);
 	let lastBlock = message.slice((numBlocks - 1) * blockSize);
-	const lastBlockIsComplete =
-		message.length > 0 && message.length % blockSize === 0;
+	const lastBlockIsComplete = message.length > 0
+		&& message.length % blockSize === 0;
 	if (!lastBlockIsComplete) {
 		lastBlock = zeroPad(
 			Buffer.concat([lastBlock, Buffer.from([0x80])]),

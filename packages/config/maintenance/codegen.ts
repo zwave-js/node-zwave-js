@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="ts-pegjs.d.ts" />
 
-import { formatWithPrettier } from "@zwave-js/maintenance";
+import { formatWithDprint } from "@zwave-js/maintenance";
 import * as fs from "fs";
 import * as path from "path";
 import pegjs from "pegjs";
@@ -22,7 +22,7 @@ let code = `// THIS FILE WAS AUTO GENERATED
 
 ${parserCode}`;
 
-code = formatWithPrettier("parser.ts", code);
-
 const logicParserFilename = path.join(sourceDir, "LogicParser.ts");
+code = formatWithDprint(logicParserFilename, code);
+
 fs.writeFileSync(logicParserFilename, code, "utf8");

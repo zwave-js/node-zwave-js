@@ -1,15 +1,25 @@
-import type { DeviceID } from "@zwave-js/config";
 import {
+	type Firmware,
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
 	extractFirmware,
 	guessFirmwareFileFormat,
-	type Firmware,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
-import crypto from "crypto";
-import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
+import crypto from "node:crypto";
+import type {
+	FirmwareUpdateDeviceID,
+	FirmwareUpdateFileInfo,
+	FirmwareUpdateInfo,
+	FirmwareUpdateServiceResponse,
+} from "./_Types";
+
+// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
+import type { Headers, OptionsOfTextResponseBody } from "got";
+
+// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
+import type PQueue from "p-queue";
 
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
 import type { Headers, OptionsOfTextResponseBody } from "got";
@@ -94,8 +104,8 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 			if (response.headers.age) {
 				currentAge = parseInt(response.headers.age, 10);
 			} else if (response.headers.date) {
-				currentAge =
-					(Date.now() - Date.parse(response.headers.date)) / 1000;
+				currentAge = (Date.now() - Date.parse(response.headers.date))
+					/ 1000;
 			} else {
 				currentAge = 0;
 			}
@@ -104,9 +114,9 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 			if (maxAge > currentAge) {
 				requestCache.set(cacheKey, {
 					response: responseJson,
-					staleDate:
-						Date.now() +
-						Math.min(MAX_CACHE_SECONDS, maxAge - currentAge) * 1000,
+					staleDate: Date.now()
+						+ Math.min(MAX_CACHE_SECONDS, maxAge - currentAge)
+							* 1000,
 				});
 			}
 		}
@@ -121,6 +131,10 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 	}
 
 	return responseJson;
+}
+
+function hasExtension(pathname: string): boolean {
+	return /\.[a-z0-9_]+$/i.test(pathname);
 }
 
 export interface GetAvailableFirmwareUpdateOptions {
@@ -164,7 +178,7 @@ function rfRegionToUpdateServiceRegion(
  * Returns the service response or `undefined` in case of an error.
  */
 export async function getAvailableFirmwareUpdates(
-	deviceId: DeviceID & { firmwareVersion: string; rfRegion?: RFRegion },
+	deviceId: FirmwareUpdateDeviceID,
 	options: GetAvailableFirmwareUpdateOptions,
 ): Promise<FirmwareUpdateInfo[]> {
 	const headers: Headers = {
@@ -186,11 +200,12 @@ export async function getAvailableFirmwareUpdates(
 		body.region = rfRegion;
 	}
 
+	// Prereleases and/or RF region-specific updates are only available in v3
+	const apiVersion = options.includePrereleases || !!rfRegion ? "v3" : "v1";
+
 	const config: OptionsOfTextResponseBody = {
 		method: "POST",
-		url: `${serviceURL()}/api/${
-			options.includePrereleases ? "v3" : "v1"
-		}/updates`,
+		url: `${serviceURL()}/api/${apiVersion}/updates`,
 		json: body,
 		// Consider re-enabling this instead of using cachedGot()
 		// At the moment, the built-in caching has some issues though, so we stick
@@ -208,12 +223,16 @@ export async function getAvailableFirmwareUpdates(
 		requestQueue = new PQueue({ concurrency: 2 });
 	}
 	// Weird types...
-	const result = await requestQueue.add<FirmwareUpdateInfo[]>(() =>
-		cachedGot(config),
-	)!;
+	const result = (
+		await requestQueue.add(() => cachedGot(config))
+	) as FirmwareUpdateServiceResponse[];
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-	return result!;
+	// Remember the device ID in the response, so we can use it later
+	// to ensure the update is for the correct device
+	return result.map((update) => ({
+		device: deviceId,
+		...update,
+	}));
 }
 
 export async function downloadFirmwareUpdate(
@@ -239,6 +258,16 @@ export async function downloadFirmwareUpdate(
 
 	const rawData = downloadResponse.body;
 
+	const requestedPathname = new URL(file.url).pathname;
+	// The response may be redirected, so the filename information may be different
+	// from the requested URL
+	let actualPathname: string | undefined;
+	try {
+		actualPathname = new URL(downloadResponse.url).pathname;
+	} catch {
+		// ignore
+	}
+
 	// Infer the file type from the content-disposition header or the filename
 	let filename: string;
 	if (
@@ -250,9 +279,12 @@ export async function downloadFirmwareUpdate(
 			.split("filename=")[1]
 			.replace(/^"/, "")
 			.replace(/[";]$/, "");
+	} else if (actualPathname && hasExtension(actualPathname)) {
+		filename = actualPathname;
 	} else {
-		filename = new URL(file.url).pathname;
+		filename = requestedPathname;
 	}
+
 	// Extract the raw data
 	const format = guessFirmwareFileFormat(filename, rawData);
 	const firmware = extractFirmware(rawData, format);

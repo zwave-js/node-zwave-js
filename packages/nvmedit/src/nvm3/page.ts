@@ -9,7 +9,7 @@ import {
 	type PageStatus,
 	type PageWriteSize,
 } from "./consts";
-import { readObjects, type NVM3Object } from "./object";
+import { type NVM3Object, readObjects } from "./object";
 import { computeBergerCode, validateBergerCode } from "./utils";
 
 export interface NVM3PageHeader {
@@ -150,11 +150,10 @@ export function writePageHeader(
 
 	ret.writeUInt32LE(header.status, 12);
 
-	const devInfo =
-		(header.deviceFamily & 0x7ff) |
-		((header.writeSize & 0b1) << 11) |
-		((header.memoryMapped ? 1 : 0) << 12) |
-		(pageSizeToBits(header.pageSize) << 13);
+	const devInfo = (header.deviceFamily & 0x7ff)
+		| ((header.writeSize & 0b1) << 11)
+		| ((header.memoryMapped ? 1 : 0) << 12)
+		| (pageSizeToBits(header.pageSize) << 13);
 	ret.writeUInt16LE(devInfo, 16);
 
 	const formatInfo = header.encrypted ? 0xfffe : 0xffff;

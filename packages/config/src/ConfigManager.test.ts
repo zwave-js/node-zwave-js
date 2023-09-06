@@ -1,8 +1,8 @@
 import { ZWaveLogContainer } from "@zwave-js/core";
 import ava, { type ExecutionContext, type TestFn } from "ava";
 import * as fs from "fs-extra";
-import { tmpdir } from "os";
-import * as path from "path";
+import { tmpdir } from "node:os";
+import * as path from "node:path";
 import semver from "semver";
 import { ConfigManager } from "./ConfigManager";
 import { ConfigLogger } from "./Logger";

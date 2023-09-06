@@ -3,13 +3,13 @@
 A Z-Wave node is a single device in a Z-Wave network. In the scope of this library, the `ZWaveNode` class provides means to control nodes and retrieve their information.
 
 **Note:**
-All methods except `interview` (which you should not use yourself) are only safe to use **after** the node has been interviewed.  
+All methods except `interview` (which you should not use yourself) are only safe to use **after** the node has been interviewed.\
 Most properties are only defined **after** the node has been interviewed. The exceptions are:
 
--   `id`
--   `status`
--   `interviewStage`
--   `keepAwake`
+- `id`
+- `status`
+- `interviewStage`
+- `keepAwake`
 
 Since a node also represents the root endpoint of a device (see [`getEndpoint`](#getEndpoint) for a detailed explanation), the `ZWaveNode` class inherits from the [`Endpoint` class](api/endpoint.md). As a result, it also supports all methods and properties of that class.
 
@@ -65,6 +65,18 @@ getDefinedValueIDs(): TranslatedValueID[]
 
 When building a user interface for a Z-Wave application, you might need to know all possible values in advance. This method returns an array of all ValueIDs that are available for this node.
 
+### `interview`
+
+```ts
+interview(): Promise<void>
+```
+
+Starts or resumes the interview of a Z-Wave node.
+
+> [!WARNING] This is only allowed when the initial interview was bypassed using the `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
+
+> [!NOTE] It is advised to NOT await this method as it can take a very long time (minutes to hours)!
+
 ### `setValue`
 
 ```ts
@@ -75,16 +87,24 @@ Updates a value on the node. This method automatically figures out which command
 
 It method takes the following arguments:
 
--   `valueId: ValueID` - specifies which value to update
--   `value: unknown` - The new value to set
--   `options?: SetValueAPIOptions` - Optional options for the resulting commands
+- `valueId: ValueID` - specifies which value to update
+- `value: unknown` - The new value to set
+- `options?: SetValueAPIOptions` - Optional options for the resulting commands
 
 The `options` bag contains options that influence the resulting commands, for example a transition duration. Each implementation will choose the options that are relevant for it, so you can use the same options everywhere.
+In addition, the `onProgress` property can be used to get notified when the transaction for this command progresses. For details see [Transaction progress](api/driver.md#transaction-progress).
 
-<!-- #import SetValueAPIOptions from "zwave-js" -->
+<!-- TODO: Auto-Expand this type: #import SetValueAPIOptions from "zwave-js" -->
 
 ```ts
-type SetValueAPIOptions = Partial<ValueChangeOptions>;
+type SetValueAPIOptions = {
+	/** A duration to be used for transitions like dimming lights or activating scenes. */
+	transitionDuration?: Duration | string;
+	/** A volume level to be used for activating a Sound Switch CC. */
+	volume?: number;
+	/** Will be called when the transaction for this message progresses. */
+	onProgress?: TransactionProgressListener;
+};
 ```
 
 > [!ATTENTION] By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call is enough for the application to know that the value was changed and update its own cache or UI. Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
@@ -103,8 +123,8 @@ type SetValueResult = {
 
 with a `status` property to indicate
 
--   whether the command was sent, and if not why it wasn't
--   whether it was acknowledged and/or executed by the device.
+- whether the command was sent, and if not why it wasn't
+- whether it was acknowledged and/or executed by the device.
 
 <!-- #import SetValueStatus from "@zwave-js/cc" -->
 
@@ -131,18 +151,18 @@ enum SetValueStatus {
 
 Depending on the status, the additional properties give some more context:
 
--   If the status is `Working`, the `remainingDuration` property indicates how long the device will take to finish the transition.
--   If the status is `EndpointNotFound`, `NotImplemented` or `InvalidValue`,the `message` property contains a human-readable error message.
+- If the status is `Working`, the `remainingDuration` property indicates how long the device will take to finish the transition.
+- If the status is `EndpointNotFound`, `NotImplemented` or `InvalidValue`,the `message` property contains a human-readable error message.
 
 To make it easier for applications to test the status, a few helper methods are available:
 
--   `setValueSucceeded(result: SetValueResult)` returns whether the command was sent using supervision and the device either executed it or started working on it
--   `setValueWasUnsupervisedOrSucceeded(result: SetValueResult)` returns whether:
-    -   the above applies
-    -   or the command was sent without supervision and was acknowledged (but not necessarily executed) by the device
--   `setValueFailed(result: SetValueResult)` returns whether:
-    -   the command was either not sent due to an error
-    -   or the command was sent using supervision and the device indicated an error
+- `setValueSucceeded(result: SetValueResult)` returns whether the command was sent using supervision and the device either executed it or started working on it
+- `setValueWasUnsupervisedOrSucceeded(result: SetValueResult)` returns whether:
+  - the above applies
+  - or the command was sent without supervision and was acknowledged (but not necessarily executed) by the device
+- `setValueFailed(result: SetValueResult)` returns whether:
+  - the command was either not sent due to an error
+  - or the command was sent using supervision and the device indicated an error
 
 ### `pollValue`
 
@@ -154,9 +174,9 @@ Polls a value from the node. The `valueId` parameter specifies which value to po
 
 This method automatically figures out which commands to send to the node, so you don't have to use the specific commands yourself. The returned promise resolves to the current value reported by the node or `undefined` if there was no response. It will be **rejected** if any of the following conditions are met:
 
--   The `pollValue` API is not implemented in the required Command Class
--   The required Command Class is not implemented in this library yet
--   The API for the required Command Class is not implemented in this library yet
+- The `pollValue` API is not implemented in the required Command Class
+- The required Command Class is not implemented in this library yet
+- The API for the required Command Class is not implemented in this library yet
 
 > [!WARNING]
 > Polling can impose a heavy load on the network and should not be done too frequently.
@@ -172,7 +192,7 @@ refreshValues(): Promise<void>
 
 Refreshes all non-static sensor and actuator values from this node. Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
 
-> [!WARNING]  
+> [!WARNING]\
 > **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
 
 ### `refreshCCValues`
@@ -183,7 +203,7 @@ refreshCCValues(cc: CommandClasses): Promise<void>
 
 Refreshes all non-static values from the given CC (all endpoints). Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
 
-> [!WARNING]  
+> [!WARNING]\
 > **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
 
 ### `getEndpoint`
@@ -298,21 +318,19 @@ Retrieves the firmware update capabilities of a node to decide which options (e.
 <!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
 
 ```ts
-type FirmwareUpdateCapabilities =
-	| {
-			/** Indicates whether the node's firmware can be upgraded */
-			readonly firmwareUpgradable: false;
-	  }
-	| {
-			/** Indicates whether the node's firmware can be upgraded */
-			readonly firmwareUpgradable: true;
-			/** An array of firmware targets that can be upgraded */
-			readonly firmwareTargets: readonly number[];
-			/** Indicates whether the node continues to function normally during an upgrade */
-			readonly continuesToFunction: MaybeNotKnown<boolean>;
-			/** Indicates whether the node supports delayed activation of the new firmware */
-			readonly supportsActivation: MaybeNotKnown<boolean>;
-	  };
+type FirmwareUpdateCapabilities = {
+	/** Indicates whether the node's firmware can be upgraded */
+	readonly firmwareUpgradable: false;
+} | {
+	/** Indicates whether the node's firmware can be upgraded */
+	readonly firmwareUpgradable: true;
+	/** An array of firmware targets that can be upgraded */
+	readonly firmwareTargets: readonly number[];
+	/** Indicates whether the node continues to function normally during an upgrade */
+	readonly continuesToFunction: MaybeNotKnown<boolean>;
+	/** Indicates whether the node supports delayed activation of the new firmware */
+	readonly supportsActivation: MaybeNotKnown<boolean>;
+};
 ```
 
 ### `updateFirmware`
@@ -327,8 +345,8 @@ Performs an OTA firmware update process for this node, applying the provided fir
 
 This method an array of firmware updates, each of which contains the following properties:
 
--   `data` - A buffer containing the firmware image in a format supported by the device
--   `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. `0` updates the Z-Wave chip, `>=1` updates others if they exist
+- `data` - A buffer containing the firmware image in a format supported by the device
+- `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. `0` updates the Z-Wave chip, `>=1` updates others if they exist
 
 <!-- #import Firmware from "zwave-js" -->
 
@@ -364,11 +382,11 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 
 `rawData` is a buffer containing the original firmware update file, `format` describes which kind of file that is. The following formats are available:
 
--   `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
--   `"otz"` - A compressed firmware file in Intel HEX format
--   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
--   `"hec"` - An encrypted Intel HEX firmware file
--   `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
+- `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
+- `"otz"` - A compressed firmware file in Intel HEX format
+- `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+- `"hec"` - An encrypted Intel HEX firmware file
+- `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
 > [!ATTENTION] At the moment, only some `.exe` files contain `firmwareTarget` information. **All** other formats only contain the firmware `data`.
 > This means that the `firmwareTarget` property usually needs to be provided, unless it is `0`.
@@ -379,8 +397,8 @@ You can use the helper method `guessFirmwareFileFormat` to guess which firmware 
 guessFirmwareFileFormat(filename: string, rawData: Buffer): FirmwareFileFormat
 ```
 
--   `filename`: The name of the firmware file (including the extension)
--   `rawData`: A buffer containing the original firmware update file
+- `filename`: The name of the firmware file (including the extension)
+- `rawData`: A buffer containing the original firmware update file
 
 If successful, `extractFirmware` returns an `Firmware` object which can be passed to the `updateFirmware` method.
 
@@ -446,18 +464,43 @@ Depending on the number of test frames and involved hops, this may take a while.
 
 > [!ATTENTION] This will throw when the target node is a FLiRS node or a sleeping node that is not awake.
 
+### `isHealthCheckInProgress`
+
+```ts
+isHealthCheckInProgress(): boolean
+```
+
+Returns whether a health check is currently in progress for this node.
+
+### `abortHealthCheck`
+
+```ts
+abortHealthCheck(): void
+```
+
+Aborts an ongoing health check if one is currently in progress.
+
+Depending on the stage it is in, the health check may take a few seconds to actually be aborted. When it is, the promise returned by `checkLifelineHealth` or `checkRouteHealth` will be resolved with the results obtained so far.
+
 ### `checkLifelineHealth`
 
 ```ts
 checkLifelineHealth(
 	rounds?: number,
-	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
+	onProgress?: (
+		round: number,
+		totalRounds: number,
+		lastRating: number,
+		lastResult: LifelineHealthCheckResult
+	) => void,
 ): Promise<HealthCheckSummary>
 ```
 
-Checks the health of the connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+Checks the health of the connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress and intermediate results, the optional `onProgress` callback can be used.
 
 > [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
+
+> [!NOTE] This call will throw when there is another health check for this node already in progress. Before starting a health check, you should first check this using `node.isHealthCheckInProgress()`.
 
 The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
 
@@ -545,15 +588,22 @@ The health rating is computed similar to Silabs' PC Controller IMA tool where 10
 checkRouteHealth(
 	targetNodeId: number,
 	rounds?: number,
-	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
-): Promise<HealthCheckSummary>
+	onProgress?: (
+		round: number,
+		totalRounds: number,
+		lastRating: number,
+		lastResult: RouteHealthCheckResult
+	) => void,
+): Promise<RouteHealthCheckSummary>
 ```
 
 Checks the health of connection between this node and the target node and returns the results. At least one of the nodes **must** support `Powerlevel CC`.
 
-The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress and intermediate results, the optional `onProgress` callback can be used.
 
 > [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
+
+> [!NOTE] This call will throw when there is another health check for this node already in progress. Before starting a health check, you should first check this using `node.isHealthCheckInProgress()`.
 
 The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
 
@@ -642,10 +692,52 @@ It optionally takes the date to set (default: now) and returns whether the opera
 
 The following CCs will be used (when supported or necessary) in this process:
 
--   Time Parameters CC
--   Clock CC
--   Time CC
--   Schedule Entry Lock CC (for setting the timezone)
+- Time Parameters CC
+- Clock CC
+- Time CC
+- Schedule Entry Lock CC (for setting the timezone)
+
+### `getDateAndTime`
+
+```ts
+getDateAndTime(): Promise<DateAndTime>
+```
+
+This method gathers and returns as much information as possible about the state of the clock and calendar on the node. Depending on the CCs supported by the node, it may return none or more of the following:
+
+- `hour`
+- `minute`
+- `second`
+- `standardOffset` (the number of minutes the local timezone differs from UTC)
+- `dstOffset` (the number of minutes the local timezone differs from UTC while observing Daylight Saving Time)
+- `weekday`
+- `day` (of the month)
+- `month` (numerical, 1-based)
+- `year`
+
+The weekday is a value from the following enum:
+
+<!-- #import Weekday from "@zwave-js/cc" -->
+
+```ts
+enum Weekday {
+	Unknown = 0x00,
+	Monday = 0x01,
+	Tuesday = 0x02,
+	Wednesday = 0x03,
+	Thursday = 0x04,
+	Friday = 0x05,
+	Saturday = 0x06,
+	Sunday = 0x07,
+}
+```
+
+The following CCs will be used (when supported or necessary) in this process:
+
+- Time Parameters CC
+- Clock CC
+- Time CC
+- Schedule Entry Lock CC (for getting the timezone)
 
 ### `manuallyIdleNotificationValue`
 
@@ -656,11 +748,21 @@ manuallyIdleNotificationValue(notificationType: number, prevValue: number, endpo
 
 Many devices using `Notification CC` do not idle their notification values, since this requirement was only introduced in v8 of the Command Class. To alleviate the problem, this method can be used to manually idle the value. The method has two signatures; it takes either the `valueId` of the value to idle or the following arguments:
 
--   `notificationType`: The standardized notification type the value belongs to. If unknown, this can be read from the `ccSpecific.notificationType` property of the corresponding value metadata.
--   `prevValue`: The value of the notification variable in its non-idle state. This is used to determine which notification variable should be reset to idle. It **must** match the current value, otherwise the value will not be reset.
--   `endpointIndex`: The (optional) index of the endpoint the notification value belongs to. If omitted, the root endpoint is assumed.
+- `notificationType`: The standardized notification type the value belongs to. If unknown, this can be read from the `ccSpecific.notificationType` property of the corresponding value metadata.
+- `prevValue`: The value of the notification variable in its non-idle state. This is used to determine which notification variable should be reset to idle. It **must** match the current value, otherwise the value will not be reset.
+- `endpointIndex`: The (optional) index of the endpoint the notification value belongs to. If omitted, the root endpoint is assumed.
 
 > [!NOTE] This method will only do something if the node supports `Notification CC`, and the selected notification variable has an idle state.
+
+### `hasDeviceConfigChanged`
+
+```ts
+hasDeviceConfigChanged(): MaybeNotKnown<boolean>
+```
+
+Z-Wave JS discovers a lot of device metadata by interviewing the device. However, some of the information has to be loaded from a configuration file. Some of this information is only evaluated once, during the device interview.
+
+When a device config file is updated, this information may be stale and and the device must be re-interviewed using `refreshInfo()` to pick up the changes. This method can be used to determine whether a re-interview is necessary.
 
 ## ZWaveNode properties
 
@@ -675,7 +777,8 @@ Returns the ID this node has been assigned by the controller. This is a number b
 ### `name`
 
 ```ts
-name: string | undefined;
+name:
+string | undefined;
 ```
 
 The user-defined name of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
@@ -686,7 +789,8 @@ The user-defined name of this node. Uses the value reported by `Node Naming and 
 ### `location`
 
 ```ts
-location: string | undefined;
+location:
+string | undefined;
 ```
 
 The user-defined location of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
@@ -700,15 +804,23 @@ The user-defined location of this node. Uses the value reported by `Node Naming 
 readonly status: NodeStatus;
 ```
 
-This property tracks the status a node in the network currently has (or is believed to have). Consumers of this library should treat the status as readonly. Valid values are defined in the `NodeStatus` enumeration:
+This property tracks the status a node in the network currently has (or is believed to have). Valid values are defined in the `NodeStatus` enumeration:
 
--   `NodeStatus.Unknown (0)` - this is the default status of a node. A node is assigned this status before it is being interviewed (including manual re-interviews when calling `refreshInfo`).
--   `NodeStatus.Asleep (1)` - Nodes that support the `WakeUp` CC and failed to respond to a message are assumed asleep.
--   `NodeStatus.Awake (2)` - Sleeping nodes that recently sent a wake up notification are marked awake until they are sent back to sleep or fail to respond to a message.
--   `NodeStatus.Dead (3)` - Nodes that **don't** support the `WakeUp` CC are marked dead when they fail to respond. Examples are plugs that have been pulled out of their socket. Whenever a message is received from a presumably dead node, they are marked as unknown.
--   `NodeStatus.Alive (4)` - Nodes that **don't** support the `WakeUp` CC are considered alive while they do respond. Note that the status may switch from alive to awake/asleep once it is discovered that a node does support the `WakeUp` CC.
+- `NodeStatus.Unknown (0)` - this is the default status of a node. A node is assigned this status before it is being interviewed (including manual re-interviews when calling `refreshInfo`).
+- `NodeStatus.Asleep (1)` - Nodes that support the `WakeUp` CC and failed to respond to a message are assumed asleep.
+- `NodeStatus.Awake (2)` - Sleeping nodes that recently sent a wake up notification are marked awake until they are sent back to sleep or fail to respond to a message.
+- `NodeStatus.Dead (3)` - Nodes that **don't** support the `WakeUp` CC are marked dead when they fail to respond. Examples are plugs that have been pulled out of their socket. Whenever a message is received from a presumably dead node, they are marked as unknown.
+- `NodeStatus.Alive (4)` - Nodes that **don't** support the `WakeUp` CC are considered alive while they do respond. Note that the status may switch from alive to awake/asleep once it is discovered that a node does support the `WakeUp` CC.
 
 Changes of a node's status are broadcasted using the corresponding events - see below.
+
+### `lastSeen`
+
+```ts
+readonly lastSeen: MaybeNotKnown<Date>
+```
+
+This property tracks when the node was last seen, meaning a command was either received from the node or successfully sent to it.
 
 ### `isControllerNode`
 
@@ -792,7 +904,7 @@ interface BasicDeviceClass {
 interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly requiresSecurity?: boolean | undefined;
+	readonly requiresSecurity?: boolean;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
@@ -805,8 +917,8 @@ interface GenericDeviceClass {
 interface SpecificDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly zwavePlusDeviceType?: string | undefined;
-	readonly requiresSecurity?: boolean | undefined;
+	readonly zwavePlusDeviceType?: string;
+	readonly requiresSecurity?: boolean;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 }
@@ -996,6 +1108,8 @@ readonly deviceConfig: DeviceConfig | undefined
 
 Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
 
+This information may change after an update of the config files. To check whether a change occured that requires a re-interview, use the [`hasDeviceConfigChanged`](#hasdeviceconfigchanged) method.
+
 ### `deviceDatabaseUrl`
 
 ```ts
@@ -1007,15 +1121,43 @@ The URL to the device in the device database.
 ### `keepAwake`
 
 ```ts
-keepAwake: boolean;
+keepAwake:
+boolean;
 ```
 
 In order to save energy, battery powered devices should go back to sleep after they no longer need to communicate with the controller. This library honors this requirement by sending nodes back to sleep as soon as there are no more pending messages.
 When configuring devices or during longer message exchanges, this behavior may be annoying. You can set the `keepAwake` property of a node to `true` to avoid sending the node back to sleep immediately.
 
+### `defaultTransitionDuration`
+
+```ts
+get defaultTransitionDuration(): string | undefined;
+set defaultTransitionDuration(value: string | Duration | undefined);
+```
+
+While the duration of transitions, e.g. dimming lights or activating scenes, can be provided on a per-command basis as part of the [`setValue`](#setvalue) method, it may be desirable to configure a persistent default for all transitions of a node.
+
+This can be done using the `defaultTransitionDuration` property. It accepts a duration string in the format "Xs", "Xm", "XhYm" or "XmYs" (e.g. 17m8s) and will be used for all transitions that do not specify a duration. Setting a `Duration` instance is also possible.
+
+### `defaultVolume`
+
+```ts
+defaultVolume:
+number | undefined;
+```
+
+While the volume for sound switch commands can be provided on a per-command basis as part of the [`setValue`](#setvalue) method, it may be desirable to configure a persistent default for a node.
+
+This can be done using the `defaultVolume` property. It accepts a volume between 0 and 100 (in `%`) and will be used for all sound switch commands that do not specify a volume.
+
 ## ZWaveNode events
 
-The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are available:
+The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc.
+
+> [!NOTE] All events of the `ZWaveNode` class are also available via the `Driver` class, so they don't have to be registered for each node individually.
+> These events are all prefixed with `node`, e.g. `"node ready"` instead of `"ready"`, `"node sleep"` instead of `"sleep"`, etc. Their callback signatures are the same as for the node events.
+
+The following events are defined:
 
 ### `"wake up"` / `"sleep"`
 
@@ -1168,8 +1310,8 @@ A value belonging to this node was added, updated or removed. The callback takes
 
 The event arguments have the shape of [`TranslatedValueID`](api/valueid.md) with two additional properties:
 
--   `prevValue` - The previous value (before the change). Only present in the `"updated"` and `"removed"` events.
--   `newValue` - The new value (after the change). Only present in the `"added"` and `"updated"` events.
+- `prevValue` - The previous value (before the change). Only present in the `"updated"` and `"removed"` events.
+- `newValue` - The new value (after the change). Only present in the `"added"` and `"updated"` events.
 
 ### `"value notification"`
 
@@ -1197,7 +1339,7 @@ The callback takes the node itself and an argument detailing the change:
 
 The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with one additional property:
 
--   `metadata` - The new metadata or undefined (in case it was removed). See ValueMetadata for a detailed description of the argument.
+- `metadata` - The new metadata or undefined (in case it was removed). See ValueMetadata for a detailed description of the argument.
 
 ### `"notification"`
 
@@ -1206,7 +1348,7 @@ The base callback signature has the following shape:
 
 ```ts
 type ZWaveNotificationCallback = (
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: CommandClasses,
 	args: Record<string, unknown>,
 ): void;
@@ -1214,9 +1356,9 @@ type ZWaveNotificationCallback = (
 
 where
 
--   `node` is the current node instance
--   `ccId` is the identifier for the CC which raised this event
--   `args` is a CC-specific argument object
+- `node` is the current node instance
+- `ccId` is the identifier for the CC which raised this event
+- `args` is a CC-specific argument object
 
 The CCs that use this event bring specialized versions of the callback and arguments.
 
@@ -1228,7 +1370,7 @@ uses the following signature
 
 ```ts
 type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: (typeof CommandClasses)["Entry Control"],
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
@@ -1258,7 +1400,7 @@ uses the following signature
 
 ```ts
 type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: (typeof CommandClasses)["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
@@ -1289,7 +1431,7 @@ uses the following signature
 
 ```ts
 type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: CommandClasses.Notification,
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
@@ -1323,7 +1465,7 @@ It uses the following signature
 
 ```ts
 type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: CommandClasses.Powerlevel,
 	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
 ];
@@ -1352,6 +1494,8 @@ enum PowerlevelTestStatus {
 	"In Progress" = 2,
 }
 ```
+
+> [!NOTE] Here the endpoint is always the root endpoint (the node itself). The argument type is `Endpoint` though to be compatible with the other notification events.
 
 ### `"statistics updated"`
 
@@ -1394,6 +1538,9 @@ interface NodeStatistics {
 	lwr?: RouteStatistics;
 	/** The next to last working route from the controller to this node. */
 	nlwr?: RouteStatistics;
+
+	/** The last time a command was received from or successfully sent to the node. */
+	lastSeen?: Date;
 }
 ```
 

@@ -4,14 +4,14 @@ import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 
 @messageTypes(MessageType.Request, FunctionType.HardReset)
@@ -20,13 +20,13 @@ export class HardResetRequestBase extends Message {
 	public constructor(host: ZWaveHost, options?: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
-				options.origin === MessageOrigin.Host &&
-				(new.target as any) !== HardResetRequest
+				options.origin === MessageOrigin.Host
+				&& (new.target as any) !== HardResetRequest
 			) {
 				return new HardResetRequest(host, options);
 			} else if (
-				options.origin !== MessageOrigin.Host &&
-				(new.target as any) !== HardResetCallback
+				options.origin !== MessageOrigin.Host
+				&& (new.target as any) !== HardResetCallback
 			) {
 				return new HardResetCallback(host, options);
 			}

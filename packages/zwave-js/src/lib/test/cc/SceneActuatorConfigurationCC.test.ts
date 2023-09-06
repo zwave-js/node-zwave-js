@@ -57,7 +57,7 @@ test("the Set command should serialize correctly with undefined level", (t) => {
 	const cc = new SceneActuatorConfigurationCCSet(host, {
 		nodeId: 2,
 		sceneId: 2,
-		//level: undefined,
+		// level: undefined,
 		dimmingDuration: Duration.parseSet(0x05)!,
 	});
 	const expected = buildCCBuffer(

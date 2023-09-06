@@ -5,9 +5,9 @@
 
 import { enumFilesRecursive } from "@zwave-js/shared";
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import { Project, ts } from "ts-morph";
-import { formatWithPrettier } from "./prettier";
+import { formatWithDprint } from "./dprint";
 
 async function main() {
 	const project = new Project();
@@ -17,10 +17,10 @@ async function main() {
 	const configFiles = await enumFilesRecursive(
 		devicesDir,
 		(file) =>
-			file.endsWith(".json") &&
-			!file.endsWith("index.json") &&
-			!file.includes("/templates/") &&
-			!file.includes("\\templates\\"),
+			file.endsWith(".json")
+			&& !file.endsWith("index.json")
+			&& !file.includes("/templates/")
+			&& !file.includes("\\templates\\"),
 	);
 
 	for (const filename of configFiles) {
@@ -49,8 +49,9 @@ async function main() {
 			if (!ts.isObjectLiteralExpression(node.initializer)) return node;
 
 			const children = node.initializer.properties.flatMap((prop) => {
-				if (!ts.isPropertyAssignment(prop))
+				if (!ts.isPropertyAssignment(prop)) {
 					throw new Error("Can't touch this!");
+				}
 				// We can have arrays or objects as params
 				if (ts.isObjectLiteralExpression(prop.initializer)) {
 					// Objects are simple, we just add the param no. there
@@ -68,8 +69,9 @@ async function main() {
 				} else if (ts.isArrayLiteralExpression(prop.initializer)) {
 					// Arrays need to be unwrapped
 					return prop.initializer.elements.map((item) => {
-						if (!ts.isObjectLiteralExpression(item))
+						if (!ts.isObjectLiteralExpression(item)) {
 							throw new Error("Can't touch this!");
+						}
 
 						return f.createObjectLiteralExpression([
 							f.createPropertyAssignment(
@@ -95,7 +97,7 @@ async function main() {
 
 		if (didChange) {
 			let output = sourceFile.getFullText();
-			output = formatWithPrettier(filename, output);
+			output = formatWithDprint(filename, output);
 			await fs.writeFile(filename, output, "utf8");
 		}
 	}

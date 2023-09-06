@@ -1,4 +1,4 @@
-import { Transform, type TransformCallback } from "stream";
+import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../Logger";
 import { MessageHeaders } from "../MessageHeaders";
 
@@ -62,10 +62,10 @@ export class SerialAPIParser extends Transform {
 						while (skip < this.receiveBuffer.length) {
 							const byte = this.receiveBuffer[skip];
 							if (
-								byte === MessageHeaders.SOF ||
-								byte === MessageHeaders.ACK ||
-								byte === MessageHeaders.NAK ||
-								byte === MessageHeaders.CAN
+								byte === MessageHeaders.SOF
+								|| byte === MessageHeaders.ACK
+								|| byte === MessageHeaders.NAK
+								|| byte === MessageHeaders.CAN
 							) {
 								// Next byte is valid, keep it
 								break;

@@ -9,10 +9,10 @@ import {
 import { CommandClasses } from "@zwave-js/core/safe";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type EnergyProductionCCCapabilities,
 	type MockNodeBehavior,
+	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: EnergyProductionCCCapabilities = {
@@ -39,8 +39,8 @@ const defaultCapabilities: EnergyProductionCCCapabilities = {
 const respondToEnergyProductionGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof EnergyProductionCCGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof EnergyProductionCCGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -50,13 +50,12 @@ const respondToEnergyProductionGet: MockNodeBehavior = {
 				),
 			};
 
-			const result =
-				capabilities.values[
-					getEnumMemberName(
-						EnergyProductionParameter,
-						frame.payload.parameter,
-					) as unknown as keyof typeof capabilities.values
-				];
+			const result = capabilities.values[
+				getEnumMemberName(
+					EnergyProductionParameter,
+					frame.payload.parameter,
+				) as unknown as keyof typeof capabilities.values
+			];
 
 			const cc = new EnergyProductionCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
@@ -78,4 +77,4 @@ const respondToEnergyProductionGet: MockNodeBehavior = {
 	},
 };
 
-export const behaviors = [respondToEnergyProductionGet];
+export const EnergyProductionCCBehaviors = [respondToEnergyProductionGet];
