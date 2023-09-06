@@ -242,7 +242,7 @@ Unregisters a message handler that has been added with `registerRequestHandler`
 ### `updateLogConfig`
 
 ```ts
-updateLogConfig(config: DeepPartial<LogConfig>): void
+updateLogConfig(config: Partial<LogConfig>): void
 ```
 
 Updates the logging configuration without having to restart the driver.

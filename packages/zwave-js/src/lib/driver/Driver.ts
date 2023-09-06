@@ -221,7 +221,7 @@ import {
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
 import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
-import type { EditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
+import type { PartialEditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
 import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
@@ -827,7 +827,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	/** Updates the logging configuration without having to restart the driver. */
-	public updateLogConfig(config: DeepPartial<LogConfig>): void {
+	public updateLogConfig(config: Partial<LogConfig>): void {
 		this._logContainer.updateConfiguration(config);
 	}
 
@@ -898,7 +898,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	/** Updates a subset of the driver options on the fly */
-	public updateOptions(options: DeepPartial<EditableZWaveOptions>): void {
+	public updateOptions(options: PartialEditableZWaveOptions): void {
 		// This code is called from user code, so we need to make sure no options were passed
 		// which we are not able to update on the fly
 		const safeOptions = pick(options, [
