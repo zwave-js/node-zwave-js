@@ -1,4 +1,3 @@
-import type { DeviceID } from "@zwave-js/config";
 import {
 	type Firmware,
 	RFRegion,
@@ -9,7 +8,12 @@ import {
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
 import crypto from "node:crypto";
-import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
+import type {
+	FirmwareUpdateDeviceID,
+	FirmwareUpdateFileInfo,
+	FirmwareUpdateInfo,
+	FirmwareUpdateServiceResponse,
+} from "./_Types";
 
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
 import type { Headers, OptionsOfTextResponseBody } from "got";
@@ -168,7 +172,7 @@ function rfRegionToUpdateServiceRegion(
  * Returns the service response or `undefined` in case of an error.
  */
 export async function getAvailableFirmwareUpdates(
-	deviceId: DeviceID & { firmwareVersion: string; rfRegion?: RFRegion },
+	deviceId: FirmwareUpdateDeviceID,
 	options: GetAvailableFirmwareUpdateOptions,
 ): Promise<FirmwareUpdateInfo[]> {
 	const headers: Headers = {
@@ -213,12 +217,16 @@ export async function getAvailableFirmwareUpdates(
 		requestQueue = new PQueue({ concurrency: 2 });
 	}
 	// Weird types...
-	const result = await requestQueue.add<FirmwareUpdateInfo[]>(() =>
-		cachedGot(config)
-	)!;
+	const result = (
+		await requestQueue.add(() => cachedGot(config))
+	) as FirmwareUpdateServiceResponse[];
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-	return result!;
+	// Remember the device ID in the response, so we can use it later
+	// to ensure the update is for the correct device
+	return result.map((update) => ({
+		device: deviceId,
+		...update,
+	}));
 }
 
 export async function downloadFirmwareUpdate(

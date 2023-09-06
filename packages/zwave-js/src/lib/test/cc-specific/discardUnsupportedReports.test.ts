@@ -15,7 +15,8 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"Discard Multilevel Sensor and Meter CC Reports on nodes and/or endpoints that do not support them",
 	{
-		debug: true,
+		// debug: true,
+
 		provisioningDirectory: path.join(
 			__dirname,
 			"fixtures/discardUnsupportedReports",

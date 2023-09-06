@@ -1348,7 +1348,7 @@ The base callback signature has the following shape:
 
 ```ts
 type ZWaveNotificationCallback = (
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: CommandClasses,
 	args: Record<string, unknown>,
 ): void;
@@ -1370,7 +1370,7 @@ uses the following signature
 
 ```ts
 type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: (typeof CommandClasses)["Entry Control"],
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
@@ -1400,7 +1400,7 @@ uses the following signature
 
 ```ts
 type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: (typeof CommandClasses)["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
@@ -1431,7 +1431,7 @@ uses the following signature
 
 ```ts
 type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: CommandClasses.Notification,
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
@@ -1465,7 +1465,7 @@ It uses the following signature
 
 ```ts
 type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: ZWaveNode,
+	endpoint: Endpoint,
 	ccId: CommandClasses.Powerlevel,
 	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
 ];
@@ -1494,6 +1494,8 @@ enum PowerlevelTestStatus {
 	"In Progress" = 2,
 }
 ```
+
+> [!NOTE] Here the endpoint is always the root endpoint (the node itself). The argument type is `Endpoint` though to be compatible with the other notification events.
 
 ### `"statistics updated"`
 

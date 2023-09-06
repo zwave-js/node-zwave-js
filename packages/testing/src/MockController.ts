@@ -48,6 +48,7 @@ export class MockController {
 		// const valuesStorage = new Map();
 		// const metadataStorage = new Map();
 		// const valueDBCache = new Map<number, ValueDB>();
+		const supervisionSessionIDs = new Map<number, () => number>();
 
 		this.host = {
 			ownNodeId: options.ownNodeId ?? 1,
@@ -56,9 +57,15 @@ export class MockController {
 			securityManager2: undefined,
 			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
-			getNextSupervisionSessionId: createWrappingCounter(
-				MAX_SUPERVISION_SESSION_ID,
-			),
+			getNextSupervisionSessionId: (nodeId) => {
+				if (!supervisionSessionIDs.has(nodeId)) {
+					supervisionSessionIDs.set(
+						nodeId,
+						createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
+					);
+				}
+				return supervisionSessionIDs.get(nodeId)!();
+			},
 			getSafeCCVersion: () => 100,
 			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
@@ -100,6 +107,7 @@ export class MockController {
 
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
+
 	private expectedHostACKs: TimedExpectation[] = [];
 	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
 	private expectedNodeFrames: Map<
@@ -140,6 +148,8 @@ export class MockController {
 	/** Can be used by behaviors to store controller related state */
 	public readonly state = new Map<string, unknown>();
 
+	/** Controls whether the controller automatically ACKs messages from the host before handling them */
+	public autoAckHostMessages: boolean = true;
 	/** Controls whether the controller automatically ACKs node frames before handling them */
 	public autoAckNodeFrames: boolean = true;
 
@@ -179,8 +189,10 @@ export class MockController {
 				parseCCs: false,
 			});
 			this.receivedHostMessages.push(msg);
-			// all good, respond with ACK
-			this.sendHeaderToHost(MessageHeaders.ACK);
+			if (this.autoAckHostMessages) {
+				// all good, respond with ACK
+				this.ackHostMessage();
+			}
 		} catch (e: any) {
 			throw new Error(
 				`Mock controller received an invalid message from the host: ${e.stack}`,
@@ -325,6 +337,13 @@ export class MockController {
 		this.serial.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
 		await this.expectHostACK(1000);
+	}
+
+	/**
+	 * Sends an ACK frame to the host
+	 */
+	public ackHostMessage(): void {
+		this.sendHeaderToHost(MessageHeaders.ACK);
 	}
 
 	/** Gets called when a {@link MockZWaveFrame} is received from a {@link MockNode} */
