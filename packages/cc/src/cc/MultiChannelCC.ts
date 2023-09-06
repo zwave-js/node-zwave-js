@@ -17,7 +17,6 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
@@ -660,8 +659,7 @@ specific device class: ${caps.specific.label}
 is dynamic end point:  ${caps.isDynamic}
 supported CCs:`;
 				for (const cc of caps.supportedCCs) {
-					const ccName = CommandClasses[cc];
-					logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
+					logMessage += `\n  · ${getCCName(cc)}`;
 				}
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
