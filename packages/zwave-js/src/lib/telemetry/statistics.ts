@@ -1,7 +1,6 @@
-import got from "@esm2cjs/got";
 import { formatId } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 import type { Driver } from "../driver/Driver";
 
 const apiToken = "ef58278d935ccb26307800279458484d";
@@ -54,6 +53,8 @@ export async function compileStatistics(
 export async function sendStatistics(
 	statistics: Record<string, any>,
 ): Promise<boolean | number> {
+	const { got } = await import("got");
+
 	try {
 		const data = await got
 			.post(statisticsUrl, {

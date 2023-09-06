@@ -2,9 +2,9 @@
 
 import { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
+import { PassThrough } from "node:stream";
 import sinon from "sinon";
-import { PassThrough } from "stream";
 import {
 	MockBinding as SerialPortMockBinding,
 	type MockPortBinding as SerialPortMockPortBinding,

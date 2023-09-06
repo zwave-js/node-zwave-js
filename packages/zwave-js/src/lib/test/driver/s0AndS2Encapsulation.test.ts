@@ -25,7 +25,7 @@ import {
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {

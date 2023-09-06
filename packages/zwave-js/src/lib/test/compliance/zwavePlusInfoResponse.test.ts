@@ -9,7 +9,7 @@ import {
 	type MockZWaveRequestFrame,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("Response to Z-Wave Plus Info Get", {

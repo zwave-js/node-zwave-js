@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "node:fs";
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
 import type { Reason } from "./reason";

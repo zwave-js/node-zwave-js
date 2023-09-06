@@ -2,6 +2,15 @@
 
 A bit earlier than expected, but there were some necessary breaking changes queueing up. And with the upcoming end-of-life of Node.js 16, it's now time to get them out of the way.
 
+## Require Node.js 18+, switch to TypeScript's module resolution strategy `node16`
+
+Node.js 16 will reach its end-of-life on [September 11th, 2023](https://nodejs.org/en/blog/announcements/nodejs16-eol) due to OpenSSL 1.1.1's end-of-life. Due to the security implications, we've decided to drop support and require Node.js 18 from now on.
+
+Aside from the runtime changes, this has implications for applications using TypeScript or it's type-checking capabilities. The new module resolution strategy `node16` is now used, which better mimicks what Node.js actually does, including evaluating the `exports` field in `package.json`, which Z-Wave JS now also uses.
+
+This means applications have to switch to `moduleResolution: "node16"` too, which can cause issues with other dependencies if their `exports` aren't set up correctly, e.g. hybrid CJS/ESM packages with a single `.d.ts` file for both. As described in [the TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/esm-node.html#packagejson-exports-imports-and-self-referencing), hybrid packages need a separate `.d.ts` file for the `ESM` and `CommonJS` entry points, even if their content is identical.\
+Unfortunately, affected dependencies have to be fixed, like [in this example](https://github.com/express-rate-limit/express-rate-limit/issues/355). Short-term workarounds can be enabled by `yarn`'s [patch feature](https://yarnpkg.com/cli/patch).
+
 ## Reference the endpoint in `"notification"` events
 
 Endpoints can send notifications, but when those were translated to `"notification"` events, the endpoint was not included in the event, only the node. To solve this, the first parameter of the event callback is now the endpoint that sent the notification. This can still be the node itself (which inherits from `Endpoint`), but this is no longer guaranteed.

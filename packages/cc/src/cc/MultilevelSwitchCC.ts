@@ -62,7 +62,7 @@ function switchTypeToActions(switchType: string): [down: string, up: string] {
  * The property names are organized so that positive motions are at odd indices and negative motions at even indices
  */
 const switchTypeProperties = Object.keys(SwitchType)
-	.filter((key) => key.indexOf("/") > -1)
+	.filter((key) => key.includes("/"))
 	.map((key) => switchTypeToActions(key))
 	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 

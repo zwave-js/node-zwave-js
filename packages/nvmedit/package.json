@@ -42,7 +42,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0"
+    "node": ">= 18"
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
@@ -57,7 +57,7 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"

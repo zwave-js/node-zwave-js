@@ -22,7 +22,7 @@ import {
 	getCCName,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
-import { isDeepStrictEqual } from "util";
+import { isDeepStrictEqual } from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";

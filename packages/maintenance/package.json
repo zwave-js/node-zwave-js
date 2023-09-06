@@ -26,13 +26,13 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
+    "node": ">= 18"
   },
   "scripts": {
     "ts": "node -r esbuild-register",
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
-    "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "lint:zwave": "yarn ts src/lintForbiddenImports.ts"
   },

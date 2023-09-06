@@ -24,7 +24,7 @@ import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
@@ -548,7 +548,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			);
 			const iv = this.payload.slice(0, HALF_NONCE_SIZE);
 			const encryptedPayload = this.payload.slice(HALF_NONCE_SIZE, -9);
-			const nonceId = this.payload[this.payload.length - 9];
+			const nonceId = this.payload.at(-9)!;
 			const authCode = this.payload.slice(-8);
 
 			// Retrieve the used nonce from the nonce store

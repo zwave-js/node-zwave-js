@@ -1,4 +1,4 @@
-import { Transform, type TransformCallback } from "stream";
+import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../Logger";
 import { XModemMessageHeaders } from "../MessageHeaders";
 
@@ -68,7 +68,7 @@ export class BootloaderScreenParser extends Transform {
 
 		// Correct buggy ordering of NUL char in error codes.
 		// The bootloader may send errors as "some error 0x\012" instead of "some error 0x12\0"
-		this.receiveBuffer = this.receiveBuffer.replace(
+		this.receiveBuffer = this.receiveBuffer.replaceAll(
 			/(error 0x)\0([0-9a-f]+)/gi,
 			"$1$2\0",
 		);

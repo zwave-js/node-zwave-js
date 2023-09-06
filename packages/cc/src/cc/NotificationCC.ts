@@ -140,7 +140,8 @@ export const NotificationCCValues = Object.freeze({
 			(notificationType: number) =>
 				`UNKNOWN_${num2hex(notificationType)}`,
 			({ property }) =>
-				typeof property === "string" && /^UNKNOWN_0x/.test(property),
+				typeof property === "string"
+				&& property.startsWith("UNKNOWN_0x"),
 			(notificationType: number) => ({
 				...ValueMetadata.ReadOnlyUInt8,
 				label: `Unknown notification (${

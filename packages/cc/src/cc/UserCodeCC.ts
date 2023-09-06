@@ -1285,7 +1285,7 @@ export class UserCodeCCReport extends UserCodeCC
 
 				let userCodeBuffer = this.payload.slice(2);
 				// Specs say infer user code from payload length, manufacturers send zero-padded strings
-				while (userCodeBuffer[userCodeBuffer.length - 1] === 0) {
+				while (userCodeBuffer.at(-1) === 0) {
 					userCodeBuffer = userCodeBuffer.slice(0, -1);
 				}
 				// Specs say ASCII 0-9, manufacturers don't care :)

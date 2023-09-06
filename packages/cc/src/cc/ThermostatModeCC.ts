@@ -167,7 +167,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 			// We accept the manufacturer data as a hex string. Make sure it's valid
 			if (
 				manufacturerData.length % 2 !== 0
-				|| !manufacturerData.match(/^[0-9a-f]+$/i)
+				|| !/^[0-9a-f]+$/i.test(manufacturerData)
 			) {
 				throw new ZWaveError(
 					`Manufacturer data must be represented as hexadecimal when passed as a string!`,

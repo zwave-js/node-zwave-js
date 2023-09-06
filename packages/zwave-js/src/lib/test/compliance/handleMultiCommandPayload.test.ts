@@ -9,7 +9,7 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("All CCs contained in a Multi Command CC are handled", {

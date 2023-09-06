@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import sinon from "sinon";
 import { integrationTest } from "../integrationTestSuite";
 

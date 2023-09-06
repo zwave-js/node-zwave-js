@@ -16,8 +16,8 @@ import {
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import { randomBytes } from "crypto";
-import path from "path";
+import { randomBytes } from "node:crypto";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

@@ -45,7 +45,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
+    "node": ">= 18"
   },
   "scripts": {
     "task": "yarn ts maintenance/_tasks.ts",
@@ -55,7 +55,7 @@
     "extract-api": "yarn api-extractor run",
     "lint:zwave": "yarn task lint",
     "ts": "node -r esbuild-register",
-    "lint:ts": "eslint --ext .ts \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"

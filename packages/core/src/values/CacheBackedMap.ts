@@ -18,7 +18,7 @@ export class CacheBackedMap<K extends string | number, V> implements Map<K, V> {
 		this.map = new Map();
 		for (const [key, value] of this.cache.entries()) {
 			if (key.startsWith(this.cacheKeys.prefix)) {
-				const suffix = key.substring(this.cacheKeys.prefix.length);
+				const suffix = key.slice(this.cacheKeys.prefix.length);
 				const suffixKey = this.cacheKeys.suffixDeserializer(suffix);
 				if (suffixKey !== undefined) {
 					this.map.set(suffixKey, value);

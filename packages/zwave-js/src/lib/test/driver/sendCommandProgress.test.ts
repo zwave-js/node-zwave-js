@@ -4,7 +4,7 @@ import sinon from "sinon";
 
 import { getEnumMemberName } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

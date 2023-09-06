@@ -1,8 +1,13 @@
 import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
-import { EventEmitter } from "events";
-import { type Duplex, PassThrough, type Readable, type Writable } from "stream";
+import { EventEmitter } from "node:events";
+import {
+	type Duplex,
+	PassThrough,
+	type Readable,
+	type Writable,
+} from "node:stream";
 import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import {

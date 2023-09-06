@@ -12,7 +12,7 @@ import {
 import type { FileSystem } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import path from "path";
+import path from "node:path";
 import {
 	ProvisioningEntryStatus,
 	type SmartStartProvisioningEntry,

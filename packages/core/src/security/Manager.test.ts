@@ -1,5 +1,5 @@
 import test from "ava";
-import crypto, { randomBytes } from "crypto";
+import crypto, { randomBytes } from "node:crypto";
 import sinon from "sinon";
 import { SecurityManager } from "./Manager";
 

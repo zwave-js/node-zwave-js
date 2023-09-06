@@ -13,13 +13,13 @@ import {
 } from "ansi-colors";
 import highlight, { fromJson as themeFromJson } from "cli-highlight";
 import globrex from "globrex";
-import path from "path";
+import path from "node:path";
 import ts from "typescript";
 import yargs from "yargs";
 import { loadTSConfig, projectRoot } from "./tsAPITools";
 
 function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+	return path.relative(projectRoot, filename).replaceAll("\\", "/");
 }
 
 export interface CodeFindQuery {

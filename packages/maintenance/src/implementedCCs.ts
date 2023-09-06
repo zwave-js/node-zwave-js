@@ -5,7 +5,7 @@ import { num2hex } from "@zwave-js/shared";
 import * as c from "ansi-colors";
 import * as clipboard from "clipboardy";
 import * as fs from "fs-extra";
-import * as path from "path";
+import * as path from "node:path";
 import * as yargs from "yargs";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;

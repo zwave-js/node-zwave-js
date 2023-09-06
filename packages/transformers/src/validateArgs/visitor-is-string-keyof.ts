@@ -55,7 +55,7 @@ function visitUnionOrIntersectionType(
 
 	if (tsutils.isUnionType(type)) {
 		// keyof (T | U) = (keyof T) & (keyof U)
-		if (stringTypes.some((stringType) => stringType === false)) {
+		if (stringTypes.includes(false)) {
 			// If keyof T or keyof U is not assignable to string then keyof T & keyof U is not assignable to string.
 			return false;
 		}
@@ -75,7 +75,7 @@ function visitUnionOrIntersectionType(
 		}
 	} else {
 		// keyof (T & U) = (keyof T) | (keyof U)
-		if (stringTypes.some((stringType) => stringType === true)) {
+		if (stringTypes.includes(true)) {
 			// If keyof T or keyof U is the string type then keyof T | keyof U is assignable to the string type.
 			return true;
 		}

@@ -8,7 +8,7 @@ import { type JSONObject, getErrorMessage, num2hex } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
-import path from "path";
+import path from "node:path";
 import {
 	type BasicDeviceClass,
 	type BasicDeviceClassMap,

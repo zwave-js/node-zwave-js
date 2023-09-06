@@ -39,6 +39,7 @@ export type MethodsNamesOf<T> = OnlyMethods<T>[keyof T];
 export type IsAny<T> = 0 extends 1 & T ? true : false;
 
 // expands object types recursively
+// dprint-ignore
 export type Expand<T> =
 	// Expand object types
 	T extends object

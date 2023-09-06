@@ -1,7 +1,7 @@
 import { cloneDeep } from "@zwave-js/shared/safe";
 import test from "ava";
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import { jsonToNVM, migrateNVM } from ".";
 import {
 	type NVMJSON,
