@@ -14657,7 +14657,7 @@ export enum SetbackType {
 // Warning: (ae-missing-release-tag) "SetValueAPIOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export type SetValueAPIOptions = Partial<ValueChangeOptions>;
+export type SetValueAPIOptions = Partial<ValueChangeOptions> & Pick<SendCommandOptions, "onProgress">;
 
 // Warning: (ae-missing-release-tag) "setValueFailed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

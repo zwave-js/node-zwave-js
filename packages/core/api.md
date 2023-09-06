@@ -1216,6 +1216,11 @@ export function isManagementCC(cc: CommandClasses): boolean;
 // @public (undocumented)
 export function isMessagePriority(val: unknown): val is MessagePriority;
 
+// Warning: (ae-missing-release-tag) "isMissingControllerACK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isMissingControllerACK(e: unknown): e is ZWaveError;
+
 // Warning: (ae-missing-release-tag) "isRecoverableZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1490,13 +1495,13 @@ export interface MessageOrCCLogEntry {
 // @public
 export enum MessagePriority {
     // (undocumented)
-    Controller = 2,
+    Controller = 1,
     // (undocumented)
-    Immediate = 0,
+    ControllerImmediate = 0,
     // (undocumented)
-    ImmediateLow = 1,
+    Immediate = 2,
     // (undocumented)
-    MultistepController = 3,
+    ImmediateLow = 3,
     // (undocumented)
     NodeQuery = 7,
     // (undocumented)
@@ -2082,6 +2087,33 @@ export enum RouteProtocolDataRate {
     ZWave_9k6 = 1
 }
 
+// Warning: (ae-missing-release-tag) "RoutingScheme" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export enum RoutingScheme {
+    // (undocumented)
+    Auto = 5,
+    // (undocumented)
+    Direct = 1,
+    // (undocumented)
+    Explore = 7,
+    // (undocumented)
+    Idle = 0,
+    // (undocumented)
+    LWR = 3,
+    // (undocumented)
+    NLWR = 4,
+    // (undocumented)
+    Priority = 2,
+    // (undocumented)
+    ResortDirect = 6
+}
+
+// Warning: (ae-missing-release-tag) "routingSchemeToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function routingSchemeToString(scheme: RoutingScheme): string;
+
 // Warning: (ae-missing-release-tag) "RSSI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -2287,6 +2319,7 @@ export type SendCommandSecurityS2Options = {
 export interface SendMessageOptions {
     changeNodeStatusOnMissingACK?: boolean;
     expire?: number;
+    onProgress?: TransactionProgressListener;
     onTXReport?: (report: TXReport) => void;
     // @internal
     pauseSendThread?: boolean;
@@ -2510,6 +2543,31 @@ export const timestampPaddingShort: string;
 // @public
 export function topologicalSort<T>(graph: GraphNode<T>[]): T[];
 
+// Warning: (ae-missing-release-tag) "TransactionProgress" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type TransactionProgress = {
+    state: TransactionState.Queued | TransactionState.Active | TransactionState.Completed;
+} | {
+    state: TransactionState.Failed;
+    reason?: string;
+};
+
+// Warning: (ae-missing-release-tag) "TransactionProgressListener" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type TransactionProgressListener = (progress: TransactionProgress) => void;
+
+// Warning: (ae-missing-release-tag) "TransactionState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export enum TransactionState {
+    Active = 1,
+    Completed = 2,
+    Failed = 3,
+    Queued = 0
+}
+
 // Warning: (ae-missing-release-tag) "TranslatedValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -2582,7 +2640,7 @@ export interface TXReport {
     measuredNoiseFloor?: RSSI;
     numRepeaters: number;
     repeaterNodeIds: [number?, number?, number?, number?];
-    routeSchemeState: number;
+    routeSchemeState: RoutingScheme;
     routeSpeed: ProtocolDataRate;
     routingAttempts: number;
     txChannelNo: number;
