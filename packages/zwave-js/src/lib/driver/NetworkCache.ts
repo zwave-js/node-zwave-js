@@ -27,7 +27,6 @@ import type { Driver } from "./Driver";
 export const cacheKeys = {
 	controller: {
 		provisioningList: "controller.provisioningList",
-		supportsSoftReset: "controller.supportsSoftReset",
 	},
 	// TODO: somehow these functions should be combined with the pattern matching below
 	node: (nodeId: number) => {
@@ -468,7 +467,6 @@ const legacyPaths = {
 	// something in the future without breaking migration
 	controller: {
 		provisioningList: "controller.provisioningList",
-		supportsSoftReset: "controller.supportsSoftReset",
 	},
 	node: {
 		// These are relative to the node object
@@ -518,17 +516,12 @@ export async function migrateLegacyNetworkCache(
 
 	// Translate all possible entries
 
-	// Controller provisioning list and supportsSoftReset info
+	// Controller provisioning list
 	tryMigrate(
 		cacheKeys.controller.provisioningList,
 		legacy,
 		legacyPaths.controller.provisioningList,
 		tryParseProvisioningList,
-	);
-	tryMigrate(
-		cacheKeys.controller.supportsSoftReset,
-		legacy,
-		legacyPaths.controller.supportsSoftReset,
 	);
 
 	// All nodes, ...

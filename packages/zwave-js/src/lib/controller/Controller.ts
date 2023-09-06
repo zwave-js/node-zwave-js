@@ -658,15 +658,6 @@ export class ZWaveController
 		return this._supportsTimers;
 	}
 
-	/** Whether the controller is known to support soft reset */
-	public get supportsSoftReset(): MaybeNotKnown<boolean> {
-		return this.driver.cacheGet(cacheKeys.controller.supportsSoftReset);
-	}
-	/** @internal */
-	public set supportsSoftReset(value: MaybeNotKnown<boolean>) {
-		this.driver.cacheSet(cacheKeys.controller.supportsSoftReset, value);
-	}
-
 	private _rfRegion: MaybeNotKnown<RFRegion>;
 	/** Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet). This value is cached and can be changed through {@link setRFRegion}. */
 	public get rfRegion(): MaybeNotKnown<RFRegion> {
@@ -6341,8 +6332,6 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		// After restoring an NVM backup, the controller's capabilities may have changed.
-		// At the very least reset the information about the soft reset capability.
-		this.supportsSoftReset = undefined;
 		// Also, we could be talking to different nodes than the cache file contains.
 		// Reset all info about all nodes, so they get re-interviewed.
 		this._nodes.clear();
@@ -6395,10 +6384,7 @@ ${associatedNodes.join(", ")}`,
 		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
 		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
 
-		// After a restored NVM backup, the controller's capabilities may have changed. At the very least reset the information
-		// about soft reset capability
-		this.supportsSoftReset = undefined;
-
+		// After a restored NVM backup, the controller's capabilities may have changed.
 		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
 		// Just forcing a restart of the driver seems easier.
 

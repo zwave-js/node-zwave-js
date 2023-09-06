@@ -1379,24 +1379,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			}
 
 			if (maySoftReset) {
-				try {
-					await this.softResetInternal(false);
-				} catch (e) {
-					if (
-						isZWaveError(e)
-						&& e.code === ZWaveErrorCodes.Driver_Failed
-					) {
-						// Remember that soft reset is not supported by this stick
-						this.driverLog.print(
-							"Soft reset seems not to be supported by this stick, disabling it.",
-							"warn",
-						);
-						this.controller.supportsSoftReset = false;
-						// Then fail the driver
-						await this.destroy();
-						return;
-					}
-				}
+				await this.softResetInternal(false);
 			}
 
 			// There are situations where a controller claims it has the ID 0,
@@ -2427,12 +2410,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	private maySoftReset(): boolean {
 		// 700+ series controllers have no problems with soft reset and MUST even be soft reset in some cases
 		if (this._controller?.sdkVersionGt("7.0")) return true;
-
-		// If we've previously determined a stick not to support soft reset, don't bother trying again
-		const supportsSoftReset = this._networkCache!.get(
-			cacheKeys.controller.supportsSoftReset,
-		) as boolean | undefined;
-		if (supportsSoftReset === false) return false;
 
 		// Blacklist some sticks that are known to not support soft reset
 		const { manufacturerId, productType, productId } = this.controller;
