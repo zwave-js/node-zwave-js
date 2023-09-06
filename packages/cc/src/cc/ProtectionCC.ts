@@ -508,7 +508,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			);
 		} else {
 			this.local = options.local;
-			this.rf = options.rf;
+			this.rf = options.rf ?? RFProtectionState.Unprotected;
 		}
 	}
 
