@@ -73,14 +73,14 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.36.4",
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.1",
     "@types/node": "^14.18.52",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/testing": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",
-    "fs-extra": "^10.1.0",
+    "fs-extra": "^11.1.1",
     "typescript": "5.1.6"
   }
 }
