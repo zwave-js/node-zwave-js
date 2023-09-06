@@ -49,7 +49,7 @@
     "alcalzone-shared": "^4.0.8",
     "fs-extra": "^10.1.0",
     "reflect-metadata": "^0.1.13",
-    "semver": "^7.5.2",
+    "semver": "^7.5.4",
     "yargs": "^17.7.2"
   },
   "scripts": {
@@ -62,10 +62,10 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.36.0",
+    "@microsoft/api-extractor": "^7.36.4",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^14.18.52",
-    "@types/semver": "^7.3.13",
+    "@types/semver": "^7.5.1",
     "@types/yargs": "^17.0.24",
     "ava": "^4.3.3",
     "del-cli": "^5.0.0",

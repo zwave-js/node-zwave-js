@@ -55,7 +55,7 @@
     "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.36.0",
+    "@microsoft/api-extractor": "^7.36.4",
     "@types/node": "^14.18.52",
     "del-cli": "^5.0.0",
     "typescript": "5.1.6"
