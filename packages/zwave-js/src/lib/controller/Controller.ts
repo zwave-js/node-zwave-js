@@ -4536,7 +4536,10 @@ ${associatedNodes.join(", ")}`,
 	): Promise<boolean> {
 		// Make sure this is not misused by passing the controller's node ID
 		if (destinationNodeId === this.ownNodeId) {
-			return this.assignSUCReturnRoutes(nodeId);
+			throw new ZWaveError(
+				`To assign a return route to the SUC (node ID ${destinationNodeId}), assignSUCReturnRoutes() must be used!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
 
 		this.driver.controllerLog.logNode(nodeId, {
@@ -4605,10 +4608,9 @@ ${associatedNodes.join(", ")}`,
 	): Promise<boolean> {
 		// Make sure this is not misused by passing the controller's node ID
 		if (destinationNodeId === this.ownNodeId) {
-			return this.assignCustomSUCReturnRoutes(
-				nodeId,
-				routes,
-				priorityRoute,
+			throw new ZWaveError(
+				`To assign custom return routes to the SUC (node ID ${destinationNodeId}), assignCustomSUCReturnRoutes() must be used!`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 
@@ -4777,10 +4779,9 @@ ${associatedNodes.join(", ")}`,
 	): Promise<boolean> {
 		// Make sure this is not misused by passing the controller's node ID
 		if (destinationNodeId === this.ownNodeId) {
-			return this.assignPrioritySUCReturnRoute(
-				nodeId,
-				repeaters,
-				routeSpeed,
+			throw new ZWaveError(
+				`To assign a priority return route to the SUC (node ID ${destinationNodeId}), assignPrioritySUCReturnRoute() must be used!`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 
