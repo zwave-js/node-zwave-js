@@ -138,6 +138,7 @@ module.exports = {
 		"unicorn/prefer-modern-math-apis": "error",
 		"unicorn/prefer-negative-index": "error",
 		"unicorn/prefer-node-protocol": "error",
+		"unicorn/prefer-regexp-test": "error",
 		"unicorn/prefer-string-slice": "error",
 		"unicorn/prefer-string-starts-ends-with": "error",
 		"unicorn/prefer-string-replace-all": "error",
