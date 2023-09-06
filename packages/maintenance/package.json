@@ -56,7 +56,7 @@
     "dprint": "^0.40.2",
     "esbuild": "0.15.18",
     "esbuild-register": "^3.4.2",
-    "execa": "^5.1.1",
+    "execa": "^8.0.1",
     "fs-extra": "^10.1.0",
     "globrex": "^0.1.2",
     "json5": "^2.2.3",
