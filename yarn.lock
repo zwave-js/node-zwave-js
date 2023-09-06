@@ -565,17 +565,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/markdown@npm:^0.15.3":
-  version: 0.15.3
-  resolution: "@dprint/markdown@npm:0.15.3"
-  checksum: fed5c87f02d3ef5a7a82de27d2446dc0ec30fbda08650091df9819fad0eacce66492ed20dbeb34ab5a40d10b667fcaf425d20dc666a9ee8c8809a2e5cd0fda58
+"@dprint/markdown@npm:^0.16.0":
+  version: 0.16.0
+  resolution: "@dprint/markdown@npm:0.16.0"
+  checksum: 7ef3b0a18d80fd9ab072d18b3c5e77e17ddf7ef10fb2f9518d05428b8a5a0409ef4975ac3c69037a8e160bfb4d38c076d37575520134eddcab685d3be591293a
   languageName: node
   linkType: hard
 
-"@dprint/typescript@npm:^0.86.2":
-  version: 0.86.2
-  resolution: "@dprint/typescript@npm:0.86.2"
-  checksum: f20e60db4bc6a1534c9f2b1e46f46334cda8489168a2e0036e8105ba0bf51ae359f63637c29fdca7aaae040ec3f426c6cb3cf62c2b3685fafb8b08d8da700b34
+"@dprint/typescript@npm:^0.87.1":
+  version: 0.87.1
+  resolution: "@dprint/typescript@npm:0.87.1"
+  checksum: 089977c7c49d4699aa471872c37fdb29ee1e1512ba50c4d0593c963e2f0c01dccf489014e955407fcfc7affec5eb5e985f067ca500df23026d7366498c70d295
   languageName: node
   linkType: hard
 
@@ -1867,8 +1867,8 @@ __metadata:
   dependencies:
     "@dprint/formatter": ^0.2.0
     "@dprint/json": ^0.17.4
-    "@dprint/markdown": ^0.15.3
-    "@dprint/typescript": ^0.86.2
+    "@dprint/markdown": ^0.16.0
+    "@dprint/typescript": ^0.87.1
     "@types/clipboardy": ^2.0.1
     "@types/fs-extra": ^9.0.13
     "@types/globrex": ^0.1.2
@@ -1936,8 +1936,8 @@ __metadata:
     "@commitlint/config-conventional": ^17.7.0
     "@dprint/formatter": ^0.2.0
     "@dprint/json": ^0.17.4
-    "@dprint/markdown": ^0.15.3
-    "@dprint/typescript": ^0.86.2
+    "@dprint/markdown": ^0.16.0
+    "@dprint/typescript": ^0.87.1
     "@microsoft/api-extractor": ^7.36.4
     "@monorepo-utils/workspaces-to-typescript-project-references": ^2.9.0
     "@tsconfig/node18": ^18.2.1

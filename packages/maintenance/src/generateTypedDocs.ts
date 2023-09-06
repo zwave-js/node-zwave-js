@@ -118,14 +118,16 @@ interface ${struct.name}${
 			? `<${struct.typeParameters.map((t) => t.toString()).join(", ")}>`
 			: ""
 	} {
-	${struct.properties
-		?.filter((p) => !shouldStripPropertySignature(p))
-		.map((p) => {
-			return `${p.isReadonly ? "readonly " : ""}${p.name}${
-				p.hasQuestionToken ? "?:" : ":"
-			} ${p.type as string};`;
-		})
-		.join("\n")}
+	${
+		struct.properties
+			?.filter((p) => !shouldStripPropertySignature(p))
+			.map((p) => {
+				return `${p.isReadonly ? "readonly " : ""}${p.name}${
+					p.hasQuestionToken ? "?:" : ":"
+				} ${p.type as string};`;
+			})
+			.join("\n")
+	}
 }`;
 }
 
