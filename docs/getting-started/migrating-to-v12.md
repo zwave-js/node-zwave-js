@@ -14,3 +14,15 @@ type ZWaveNotificationCallback = (
 	args: Record<string, unknown>,
 ): void;
 ```
+
+## `ZWaveHost.getNextSupervisionSessionId` requires a node ID now
+
+This change only concerns custom implementations of the `ZWaveHost` interface and should not affect most users/codebases. The `Supervision` session IDs must be tracked per node now and not globally:
+
+```diff
+interface ZWaveHost {
+	// ...
+-	getNextSupervisionSessionId(): number;
++	getNextSupervisionSessionId(nodeId: number): number;
+}
+```
