@@ -7,22 +7,24 @@
     "access": "public"
   },
   "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js",
-    "./*": "./build/cc/*.js"
-  },
   "types": "build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "safe": [
-        "build/index_safe.d.ts"
-      ],
-      "*": [
-        "build/cc/*.d.ts",
-        "build/index.d.ts"
-      ]
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./safe": {
+      "types": "./build/index_safe.d.ts",
+      "default": "./build/index_safe.js"
+    },
+    "./cc": {
+      "types": "./build/cc/index.d.ts",
+      "default": "./build/cc/index.js"
+    },
+    "./package.json": "./package.json",
+    "./*": {
+      "types": "./build/cc/*.d.ts",
+      "default": "./build/cc/*.js"
     }
   },
   "files": [
