@@ -21,12 +21,6 @@ import type { Headers, OptionsOfTextResponseBody } from "got";
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
 import type PQueue from "p-queue";
 
-// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-import type { Headers, OptionsOfTextResponseBody } from "got";
-
-// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-import type PQueue from "p-queue";
-
 function serviceURL(): string {
 	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
 }
