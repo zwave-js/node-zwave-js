@@ -1,4 +1,4 @@
-import { type DeepPartial, flatMap } from "@zwave-js/shared";
+import { flatMap } from "@zwave-js/shared";
 import type { Format, TransformFunction } from "logform";
 import * as path from "node:path";
 import { MESSAGE, configs } from "triple-beam";
@@ -61,7 +61,7 @@ export class ZWaveLogContainer extends winston.Container {
 		forceConsole: false,
 	};
 
-	constructor(config: DeepPartial<LogConfig> = {}) {
+	constructor(config: Partial<LogConfig> = {}) {
 		super();
 		this.updateConfiguration(config);
 	}
@@ -80,7 +80,7 @@ export class ZWaveLogContainer extends winston.Container {
 		return this.get(label) as unknown as ZWaveLogger;
 	}
 
-	public updateConfiguration(config: DeepPartial<LogConfig>): void {
+	public updateConfiguration(config: Partial<LogConfig>): void {
 		// Avoid overwriting configuration settings with undefined if they shouldn't be
 		for (const key of nonUndefinedLogConfigKeys) {
 			if (key in config && config[key] === undefined) {

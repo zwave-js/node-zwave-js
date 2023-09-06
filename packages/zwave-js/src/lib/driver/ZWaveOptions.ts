@@ -1,6 +1,7 @@
 import type { LogConfig, RFRegion } from "@zwave-js/core";
 import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
+import { type DeepPartial, type Expand } from "@zwave-js/shared";
 import type { SerialPort } from "serialport";
 import type { InclusionUserCallbacks } from "../controller/Inclusion";
 
@@ -285,3 +286,12 @@ export type EditableZWaveOptions =
 	& {
 		userAgent?: Record<string, string | null | undefined>;
 	};
+
+export type PartialEditableZWaveOptions = Expand<
+	& DeepPartial<
+		Omit<EditableZWaveOptions, "inclusionUserCallbacks" | "logConfig">
+	>
+	& Partial<
+		Pick<EditableZWaveOptions, "inclusionUserCallbacks" | "logConfig">
+	>
+>;

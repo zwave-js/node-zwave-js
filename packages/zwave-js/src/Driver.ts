@@ -10,6 +10,7 @@ export type {
 export { Driver, libName, libVersion } from "./lib/driver/Driver";
 export type {
 	EditableZWaveOptions,
+	PartialEditableZWaveOptions,
 	ZWaveOptions,
 } from "./lib/driver/ZWaveOptions";
 export type { DriverLogContext } from "./lib/log/Driver";
