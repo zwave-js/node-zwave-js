@@ -20,6 +20,7 @@ export { ControllerFirmwareUpdateStatus } from "./lib/controller/_Types";
 export type {
 	ControllerFirmwareUpdateProgress,
 	ControllerFirmwareUpdateResult,
+	FirmwareUpdateDeviceID,
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
 	GetFirmwareUpdatesOptions,
