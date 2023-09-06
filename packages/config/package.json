@@ -85,7 +85,7 @@
     "got": "^12.6.1",
     "js-levenshtein": "^1.1.6",
     "pegjs": "^0.10.0",
-    "sinon": "^14.0.2",
+    "sinon": "^15.2.0",
     "ts-pegjs": "^0.3.1",
     "typescript": "5.1.6",
     "xml2js": "^0.5.0",
