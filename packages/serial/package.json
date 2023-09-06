@@ -55,7 +55,7 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "dependencies": {
-    "@serialport/stream": "^10.3.0",
+    "@serialport/stream": "^12.0.0",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
     "@zwave-js/shared": "workspace:*",
