@@ -24,8 +24,8 @@ export type {
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
 	GetFirmwareUpdatesOptions,
-	HealNetworkOptions,
-	HealNodeStatus,
+	RebuildRoutesOptions,
+	RebuildRoutesStatus,
 	SDKVersion,
 } from "./lib/controller/_Types";
 export type {
