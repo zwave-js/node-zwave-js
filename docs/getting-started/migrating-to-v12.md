@@ -87,6 +87,12 @@ The following methods were deprecated/renamed and have now been removed:
 - `Controller.deleteReturnRoute`: Use `Controller.deleteReturnRoutes` instead
 - `Driver.enableErrorReporting`: Error reporting has been fully removed
 
+## Removed the controller's `supportsSoftReset` property
+
+This was meant to increase reliability of the automatic soft-reset in certain setups, however we've learned a few things since then. First of all, there don't seem to be any issues with 700+ series sticks, so soft-reset is always enabled for those since `v11.10.1`. Most importantly though, if the automatic soft-reset failed once but usually works, it is near impossible for some users to clear this flag, so their stick never gets soft-reset even if it would be needed.
+
+Therefore, this property and the checks around it are now removed. When soft-reset is not disabled through the config, 500 series sticks and older will now always be soft-reset, unless they are on the list of known problematic sticks.
+
 ## `ZWaveHost.getNextSupervisionSessionId` requires a node ID now
 
 This change only concerns custom implementations of the `ZWaveHost` interface and should not affect most users/codebases. The `Supervision` session IDs must be tracked per node now and not globally:
