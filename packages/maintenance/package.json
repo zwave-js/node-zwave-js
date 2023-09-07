@@ -54,7 +54,7 @@
     "clipboardy": "^2.3.0",
     "del-cli": "^5.0.0",
     "dprint": "^0.40.2",
-    "esbuild": "0.15.18",
+    "esbuild": "0.19.2",
     "esbuild-register": "^3.4.2",
     "execa": "^5.1.1",
     "fs-extra": "^11.1.1",
@@ -63,7 +63,7 @@
     "piscina": "^3.2.0",
     "reflect-metadata": "^0.1.13",
     "ts-morph": "^19.0.0",
-    "typescript": "5.1.6",
+    "typescript": "5.2.2",
     "yargs": "^17.7.2"
   }
 }

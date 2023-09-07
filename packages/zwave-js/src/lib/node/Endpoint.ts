@@ -47,6 +47,20 @@ export class Endpoint implements IZWaveEndpoint {
 	) {
 		this.applyDeviceClass(deviceClass);
 
+		// Initialize class fields
+		this._implementedCommandClasses = new CacheBackedMap(
+			this.driver.networkCache,
+			{
+				prefix:
+					cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
+				suffixSerializer: (cc: CommandClasses) => num2hex(cc),
+				suffixDeserializer: (key: string) => {
+					const ccId = parseInt(key, 16);
+					if (ccId in CommandClasses) return ccId;
+				},
+			},
+		);
+
 		// Add optional CCs
 		if (supportedCCs != undefined) {
 			for (const cc of supportedCCs) {
@@ -98,14 +112,7 @@ export class Endpoint implements IZWaveEndpoint {
 	private _implementedCommandClasses: Map<
 		CommandClasses,
 		Readonly<CommandClassInfo>
-	> = new CacheBackedMap(this.driver.networkCache, {
-		prefix: cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
-		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
-		suffixDeserializer: (key: string) => {
-			const ccId = parseInt(key, 16);
-			if (ccId in CommandClasses) return ccId;
-		},
-	});
+	>;
 
 	/**
 	 * @internal

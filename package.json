@@ -41,7 +41,7 @@
     "@dprint/markdown": "^0.16.0",
     "@dprint/typescript": "^0.87.1",
     "@microsoft/api-extractor": "^7.36.4",
-    "@monorepo-utils/workspaces-to-typescript-project-references": "^2.9.0",
+    "@monorepo-utils/workspaces-to-typescript-project-references": "^2.10.2",
     "@tsconfig/node18": "^18.2.1",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^14.18.52",
@@ -69,7 +69,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^5.0.0",
     "dprint": "^0.40.2",
-    "esbuild": "0.15.18",
+    "esbuild": "0.19.2",
     "esbuild-register": "^3.4.2",
     "eslint": "^8.48.0",
     "eslint-plugin-deprecation": "^1.5.0",
@@ -87,13 +87,12 @@
     "ts-nameof": "^5.0.0",
     "ts-patch": "3.0.2",
     "turbo": "1.7.4",
-    "typescript": "5.1.6",
+    "typescript": "5.2.2",
     "zwave-js": "workspace:*"
   },
   "resolutions": {
     "minimist": "^1.2.6",
-    "colors": "1.4.0",
-    "ts-patch@3.0.0-rc2": "patch:ts-patch@npm%3A3.0.0-rc2#./.yarn/patches/ts-patch-npm-3.0.0-rc2-74c7730519.patch"
+    "colors": "1.4.0"
   },
   "scripts": {
     "ts": "node -r source-map-support/register -r ./maintenance/esbuild-register.js",

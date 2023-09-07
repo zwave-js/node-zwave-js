@@ -56,6 +56,14 @@ export class Transaction implements Comparable<Transaction> {
 	) {
 		// Give the message generator a reference to this transaction
 		options.parts.parent = this;
+
+		// Initialize class fields
+		this.promise = options.promise;
+		this.message = options.message;
+		this.priority = options.priority;
+		this.parts = options.parts;
+		this.listener = options.listener;
+
 		// We need create the stack on a temporary object or the Error
 		// class will try to print the message
 		const tmp = { message: "" };
@@ -85,17 +93,16 @@ export class Transaction implements Comparable<Transaction> {
 	}
 
 	/** Will be resolved/rejected by the Send Thread Machine when the entire transaction is handled */
-	public readonly promise: DeferredPromise<Message | void> =
-		this.options.promise;
+	public readonly promise: DeferredPromise<Message | void>;
 
 	/** The "primary" message this transaction contains, e.g. the un-encapsulated version of a SendData request */
-	public readonly message: Message = this.options.message;
+	public readonly message: Message;
 
 	/** The message generator to create the actual messages for this transaction */
-	public readonly parts: MessageGenerator = this.options.parts;
+	public readonly parts: MessageGenerator;
 
 	/** A callback which gets called with state updates of this transaction */
-	private listener?: TransactionProgressListener = this.options.listener;
+	private listener?: TransactionProgressListener;
 
 	private _progress: TransactionProgress | undefined;
 	public setProgress(progress: TransactionProgress): void {
@@ -156,7 +163,7 @@ export class Transaction implements Comparable<Transaction> {
 	}
 
 	/** The priority of this transaction */
-	public priority: MessagePriority = this.options.priority;
+	public priority: MessagePriority;
 
 	/** The timestamp at which the transaction was created */
 	public creationTimestamp: number = highResTimestamp();
