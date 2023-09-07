@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import type { MockPortBinding } from "@zwave-js/serial/mock";
+import { noop } from "@zwave-js/shared";
 import {
 	type MockController,
 	type MockNode,
@@ -82,7 +82,7 @@ function suite(
 		}
 
 		// Make sure every test is starting fresh
-		await fs.emptyDir(cacheDir).catch(() => {});
+		await fs.emptyDir(cacheDir).catch(noop);
 
 		// And potentially provision the cache
 		if (provisioningDirectory) {
@@ -162,7 +162,7 @@ function suite(
 			await wait(100);
 
 			await driver.destroy();
-			if (!debug) await fs.emptyDir(cacheDir).catch(() => {});
+			if (!debug) await fs.emptyDir(cacheDir).catch(noop);
 		});
 
 		await prepareTest();

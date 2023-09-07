@@ -1660,10 +1660,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				// The interview succeeded, but we don't have a device config for this node.
 				// Report it, so we can add a config file
 
-				void reportMissingDeviceConfig(this, node as any).catch(
-					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					() => {},
-				);
+				void reportMissingDeviceConfig(this, node as any).catch(noop);
 			}
 		} catch (e) {
 			if (isZWaveError(e)) {

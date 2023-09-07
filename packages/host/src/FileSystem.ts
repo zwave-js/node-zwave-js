@@ -6,10 +6,10 @@ export interface FileSystem {
 		data: string | Buffer,
 		options?:
 			| {
-				encoding: string;
+				encoding: BufferEncoding;
 			}
-			| string,
+			| BufferEncoding,
 	): Promise<void>;
-	readFile(file: string, encoding: string): Promise<string>;
+	readFile(file: string, encoding: BufferEncoding): Promise<string>;
 	pathExists(path: string): Promise<boolean>;
 }

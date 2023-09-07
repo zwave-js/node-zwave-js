@@ -17,7 +17,6 @@ interface TestEvents {
 		baseProp2 = "base";
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-interface
 	interface Test extends TypedEventEmitter<TestEvents> {}
 
 	@Mixin([EventEmitter])

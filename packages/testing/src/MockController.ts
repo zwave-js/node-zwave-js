@@ -80,7 +80,6 @@ export class MockController {
 			// This is handled by the nodes hosts
 			getHighestSecurityClass: () => undefined,
 			hasSecurityClass: () => false,
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			setSecurityClass: () => {},
 			// getValueDB: (nodeId) => {
 			// 	if (!valueDBCache.has(nodeId)) {

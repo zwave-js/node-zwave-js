@@ -115,6 +115,7 @@ function printInterfaceDeclarationStructure(
 	return `
 interface ${struct.name}${
 		struct.typeParameters?.length
+			// eslint-disable-next-line @typescript-eslint/no-base-to-string
 			? `<${struct.typeParameters.map((t) => t.toString()).join(", ")}>`
 			: ""
 	} {

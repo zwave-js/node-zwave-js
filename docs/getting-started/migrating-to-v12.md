@@ -104,3 +104,19 @@ interface ZWaveHost {
 +	getNextSupervisionSessionId(nodeId: number): number;
 }
 ```
+
+## Changed type of `encoding` parameters in `FileSystem` interface
+
+While upgrading dependencies, the interface for the replacement `FileSystem` implementations had to be changed. The `encoding` parameter of `readFile` and `writeFile` is now a `BufferEncoding` instead of a `string`, which limits the possible values to
+
+- `ascii`
+- `utf8`
+- `utf-8`
+- `utf16le`
+- `ucs2`
+- `ucs-2`
+- `base64`
+- `base64url`
+- `latin1`
+- `binary`
+- `hex`
