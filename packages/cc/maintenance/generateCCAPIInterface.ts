@@ -6,7 +6,7 @@
 
 import { formatWithDprint } from "@zwave-js/maintenance";
 import * as fs from "fs-extra";
-import * as path from "path";
+import * as path from "node:path";
 
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const classNameRegex = /class ([^\s]+) extends (\w+)?CCAPI/;
@@ -66,7 +66,7 @@ export async function generateCCAPIInterface(): Promise<void> {
 				`\t${name}: import("${
 					path
 						.relative(libDir, ccDir)
-						.replace(/\\/g, "/")
+						.replaceAll("\\", "/")
 				}/${file}").${className};`,
 		).join("\n")
 		+ "\n"

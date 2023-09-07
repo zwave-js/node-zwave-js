@@ -2908,7 +2908,7 @@ supported CCs: ${
 			) {
 				// For authenticated encryption, the DSK (first 16 bytes of the public key) is obfuscated (missing the first 2 bytes)
 				// Request the user to enter the missing part as a 5-digit PIN
-				const dsk = dskToString(nodePublicKey.slice(0, 16)).slice(5);
+				const dsk = dskToString(nodePublicKey.subarray(0, 16)).slice(5);
 
 				// The time the user has to enter the PIN is limited by the timeout TAI2
 				const tai2RemainingMs = inclusionTimeouts.TAI2
@@ -3181,7 +3181,7 @@ supported CCs: ${
 				);
 			}
 			// Remember the DSK (first 16 bytes of the public key)
-			node.dsk = nodePublicKey.slice(0, 16);
+			node.dsk = nodePublicKey.subarray(0, 16);
 
 			this.driver.controllerLog.logNode(node.id, {
 				message:
@@ -6449,7 +6449,7 @@ ${associatedNodes.join(", ")}`,
 		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
 			await this.externalNVMWriteBuffer(
 				offset,
-				nvmData.slice(offset, offset + chunkSize),
+				nvmData.subarray(offset, offset + chunkSize),
 			);
 			// Report progress for listeners
 			if (onProgress) {
@@ -6486,7 +6486,7 @@ ${associatedNodes.join(", ")}`,
 		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
 			const { endOfFile } = await this.externalNVMWriteBuffer700(
 				offset,
-				nvmData.slice(offset, offset + chunkSize),
+				nvmData.subarray(offset, offset + chunkSize),
 			);
 
 			// Report progress for listeners
@@ -6924,7 +6924,7 @@ ${associatedNodes.join(", ")}`,
 			const BLOCK_SIZE = 64;
 			const numFragments = Math.ceil(data.length / BLOCK_SIZE);
 			for (let fragment = 0; fragment < numFragments; fragment++) {
-				const fragmentData = data.slice(
+				const fragmentData = data.subarray(
 					fragment * BLOCK_SIZE,
 					(fragment + 1) * BLOCK_SIZE,
 				);
@@ -7040,7 +7040,7 @@ ${associatedNodes.join(", ")}`,
 				fragment <= numFragments;
 				fragment++
 			) {
-				const fragmentData = data.slice(
+				const fragmentData = data.subarray(
 					(fragment - 1) * BLOCK_SIZE,
 					fragment * BLOCK_SIZE,
 				);
