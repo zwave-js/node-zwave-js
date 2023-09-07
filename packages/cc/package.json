@@ -79,7 +79,7 @@
     "@zwave-js/testing": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
     "ava": "^4.3.3",
-    "del-cli": "^5.0.0",
+    "del-cli": "^5.1.0",
     "fs-extra": "^11.1.1",
     "typescript": "5.2.2"
   }

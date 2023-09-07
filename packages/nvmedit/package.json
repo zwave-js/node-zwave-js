@@ -68,7 +68,7 @@
     "@types/semver": "^7.5.1",
     "@types/yargs": "^17.0.24",
     "ava": "^4.3.3",
-    "del-cli": "^5.0.0",
+    "del-cli": "^5.1.0",
     "esbuild": "0.19.2",
     "esbuild-register": "^3.4.2",
     "typescript": "5.2.2"

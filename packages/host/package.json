@@ -57,7 +57,7 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.36.4",
     "@types/node": "^18.17.14",
-    "del-cli": "^5.0.0",
+    "del-cli": "^5.1.0",
     "typescript": "5.2.2"
   }
 }
