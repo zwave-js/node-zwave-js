@@ -118,7 +118,7 @@
     "@xstate/test": "^0.5.1",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
-    "ava": "^4.3.3",
+    "ava": "^5.3.1",
     "del-cli": "^5.1.0",
     "esbuild": "0.19.2",
     "esbuild-register": "^3.4.2",

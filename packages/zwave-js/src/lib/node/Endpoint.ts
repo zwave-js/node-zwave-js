@@ -45,8 +45,6 @@ export class Endpoint implements IZWaveEndpoint {
 		deviceClass?: DeviceClass,
 		supportedCCs?: CommandClasses[],
 	) {
-		this.applyDeviceClass(deviceClass);
-
 		// Initialize class fields
 		this._implementedCommandClasses = new CacheBackedMap(
 			this.driver.networkCache,
@@ -60,6 +58,8 @@ export class Endpoint implements IZWaveEndpoint {
 				},
 			},
 		);
+
+		this.applyDeviceClass(deviceClass);
 
 		// Add optional CCs
 		if (supportedCCs != undefined) {

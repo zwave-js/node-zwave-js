@@ -273,9 +273,28 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	};
 }
 
-export type EditableZWaveOptions =
+export type PartialZWaveOptions = Expand<
+	& DeepPartial<
+		Omit<
+			ZWaveOptions,
+			"inclusionUserCallbacks" | "logConfig" | "testingHooks"
+		>
+	>
+	& Partial<
+		Pick<
+			ZWaveOptions,
+			"inclusionUserCallbacks" | "testingHooks"
+		>
+	>
+	& {
+		inclusionUserCallbacks?: ZWaveOptions["inclusionUserCallbacks"];
+		logConfig?: Partial<LogConfig>;
+	}
+>;
+
+export type EditableZWaveOptions = Expand<
 	& Pick<
-		ZWaveOptions,
+		PartialZWaveOptions,
 		| "disableOptimisticValueUpdate"
 		| "emitValueUpdateAfterSetValue"
 		| "inclusionUserCallbacks"
@@ -285,13 +304,5 @@ export type EditableZWaveOptions =
 	>
 	& {
 		userAgent?: Record<string, string | null | undefined>;
-	};
-
-export type PartialEditableZWaveOptions = Expand<
-	& DeepPartial<
-		Omit<EditableZWaveOptions, "inclusionUserCallbacks" | "logConfig">
-	>
-	& Partial<
-		Pick<EditableZWaveOptions, "inclusionUserCallbacks" | "logConfig">
-	>
+	}
 >;

@@ -3,6 +3,7 @@ import {
 	type CommandClasses,
 	type ValueID,
 	getCCName,
+	stripUndefined,
 } from "@zwave-js/core/safe";
 import { type JSONObject, pick } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
@@ -601,7 +602,7 @@ compat option overrideQueries must be an object!`,
 
 	public evaluateCondition(deviceId?: DeviceID): CompatConfig | undefined {
 		if (!conditionApplies(this, deviceId)) return;
-		return pick(this, [
+		const ret = pick(this, [
 			"alarmMapping",
 			"addCCs",
 			"removeCCs",
@@ -627,6 +628,7 @@ compat option overrideQueries must be an object!`,
 			"treatDestinationEndpointAsSource",
 			"queryOnWakeup",
 		]);
+		return stripUndefined(ret) as CompatConfig;
 	}
 }
 
