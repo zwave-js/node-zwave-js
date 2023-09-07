@@ -296,7 +296,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 		const allSwitchpoints: Switchpoint[] = [];
 		for (let i = 0; i <= 8; i++) {
 			allSwitchpoints.push(
-				decodeSwitchpoint(this.payload.slice(1 + 3 * i)),
+				decodeSwitchpoint(this.payload.subarray(1 + 3 * i)),
 			);
 		}
 		this.schedule = allSwitchpoints.filter((sp) => sp.state !== "Unused");

@@ -92,7 +92,7 @@ export class ApplicationCommandRequest extends Message
 			// and a command class
 			const commandLength = this.payload[offset++];
 			this.command = CommandClass.from(this.host, {
-				data: this.payload.slice(offset, offset + commandLength),
+				data: this.payload.subarray(offset, offset + commandLength),
 				nodeId,
 				origin: options.origin,
 				frameType: this.frameType,

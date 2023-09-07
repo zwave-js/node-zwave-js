@@ -114,7 +114,7 @@ export function readPage(
 		deviceFamily,
 	};
 	const bytesRead = actualPageSize;
-	const data = buffer.slice(offset + 20, offset + bytesRead);
+	const data = buffer.subarray(offset + 20, offset + bytesRead);
 
 	const { objects } = readObjects(data);
 

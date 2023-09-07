@@ -305,7 +305,7 @@ export class CommandClass implements ICommandClass {
 		if (data.length > ccIdLength) {
 			// This is not a NoOp CC (contains command and payload)
 			const ccCommand = data[ccIdLength];
-			const payload = data.slice(ccIdLength + 1);
+			const payload = data.subarray(ccIdLength + 1);
 			return {
 				ccId,
 				ccCommand,

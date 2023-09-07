@@ -1397,7 +1397,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		let offset = 2;
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			validatePayload(scale === 0);
 			if (this.flowSensorActive) this.flow = value;
@@ -1405,7 +1405,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		}
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			validatePayload(scale === 0);
 			if (this.pressureSensorActive) this.pressure = value;
@@ -1618,7 +1618,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 		let offset = 1;
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			validatePayload(scale === 0 /* kPa */);
 			this.highPressureThreshold = value;
@@ -1626,7 +1626,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 		}
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			validatePayload(scale === 0 /* kPa */);
 			this.lowPressureThreshold = value;
@@ -1982,7 +1982,7 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		let offset = 4;
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			validatePayload(scale === 0 /* l/h */);
 			this.maximumFlow = value;
@@ -1990,7 +1990,7 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		}
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			validatePayload(scale === 0 /* l/h */);
 			this.highFlowThreshold = value;
@@ -1998,7 +1998,7 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		}
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			validatePayload(scale === 0 /* l/h */);
 			this.lowFlowThreshold = value;

@@ -497,7 +497,9 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 			this.duration = this.payload.readUInt16BE(1);
 			const nameLength = this.payload[3];
 			validatePayload(this.payload.length >= 4 + nameLength);
-			this.name = this.payload.slice(4, 4 + nameLength).toString("utf8");
+			this.name = this.payload.subarray(4, 4 + nameLength).toString(
+				"utf8",
+			);
 		} else {
 			this.toneId = options.toneId;
 			this.duration = options.duration;

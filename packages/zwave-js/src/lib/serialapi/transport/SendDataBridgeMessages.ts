@@ -207,7 +207,7 @@ export class SendDataBridgeRequestTransmitReport
 			// TODO: Consider NOT parsing this for transmit status other than OK or NoACK
 			this.txReport = parseTXReport(
 				this.transmitStatus !== TransmitStatus.NoAck,
-				this.payload.slice(2),
+				this.payload.subarray(2),
 			);
 		} else {
 			this.callbackId = options.callbackId;

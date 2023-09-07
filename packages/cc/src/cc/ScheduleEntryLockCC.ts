@@ -1842,7 +1842,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 			if (this.action === ScheduleEntryLockSetAction.Set) {
 				validatePayload(this.payload.length >= 8);
 				this.weekdays = parseBitMask(
-					this.payload.slice(3, 4),
+					this.payload.subarray(3, 4),
 					ScheduleEntryLockWeekday.Sunday,
 				);
 				this.startHour = this.payload[4];
@@ -1958,7 +1958,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 			// Only parse the schedule if it is present and some weekday is selected
 			if (this.payload.length >= 7 && this.payload[2] !== 0) {
 				this.weekdays = parseBitMask(
-					this.payload.slice(2, 3),
+					this.payload.subarray(2, 3),
 					ScheduleEntryLockWeekday.Sunday,
 				);
 				this.startHour = this.payload[3];

@@ -263,7 +263,7 @@ export function encodeBitMask(
 }
 
 export function parseNodeBitMask(mask: Buffer): number[] {
-	return parseBitMask(mask.slice(0, NUM_NODEMASK_BYTES));
+	return parseBitMask(mask.subarray(0, NUM_NODEMASK_BYTES));
 }
 
 export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer {

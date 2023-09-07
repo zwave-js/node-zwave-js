@@ -324,7 +324,7 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 					}
 					const segment = unsentSegments.shift()!;
 
-					const chunk = payload.slice(
+					const chunk = payload.subarray(
 						segment * MAX_SEGMENT_SIZE,
 						(segment + 1) * MAX_SEGMENT_SIZE,
 					);

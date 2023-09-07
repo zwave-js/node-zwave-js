@@ -919,7 +919,9 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 			this.endpointIndex = this.payload[0] & 0b01111111;
 			this.isDynamic = !!(this.payload[0] & 0b10000000);
 
-			const NIF = parseApplicationNodeInformation(this.payload.slice(1));
+			const NIF = parseApplicationNodeInformation(
+				this.payload.subarray(1),
+			);
 			this.genericDeviceClass = NIF.genericDeviceClass;
 			this.specificDeviceClass = NIF.specificDeviceClass;
 			this.supportedCCs = NIF.supportedCCs;
@@ -1072,7 +1074,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 
 			// Some devices omit the endpoint list although that is not allowed in the specs
 			// therefore don't validatePayload here.
-			this.foundEndpoints = [...this.payload.slice(3)]
+			this.foundEndpoints = [...this.payload.subarray(3)]
 				.map((e) => e & 0b01111111)
 				.filter((e) => e !== 0);
 		} else {
@@ -1205,7 +1207,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		this.aggregatedEndpointIndex = this.payload[0] & 0b0111_1111;
 		const bitMaskLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + bitMaskLength);
-		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
+		const bitMask = this.payload.subarray(2, 2 + bitMaskLength);
 		this.members = parseBitMask(bitMask);
 	}
 
@@ -1350,7 +1352,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			}
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.host, {
-				data: this.payload.slice(2),
+				data: this.payload.subarray(2),
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
@@ -1528,7 +1530,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.host, {
-				data: this.payload.slice(isV2withV1Header ? 2 : 1),
+				data: this.payload.subarray(isV2withV1Header ? 2 : 1),
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,

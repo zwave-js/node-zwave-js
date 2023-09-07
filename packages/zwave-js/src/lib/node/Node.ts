@@ -5171,7 +5171,7 @@ protocol version:      ${this.protocolVersion}`;
 				if (num > numFragments) {
 					break;
 				}
-				const fragment = data.slice(
+				const fragment = data.subarray(
 					(num - 1) * fragmentSize,
 					num * fragmentSize,
 				);

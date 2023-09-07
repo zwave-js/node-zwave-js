@@ -76,7 +76,7 @@ export class SerialAPIStartedRequest extends Message {
 
 			// Parse list of CCs
 			const numCCBytes = this.payload[5];
-			const ccBytes = this.payload.slice(6, 6 + numCCBytes);
+			const ccBytes = this.payload.subarray(6, 6 + numCCBytes);
 			const ccList = parseCCList(ccBytes);
 			this.supportedCCs = ccList.supportedCCs;
 			this.controlledCCs = ccList.controlledCCs;

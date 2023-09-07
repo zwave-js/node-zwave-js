@@ -71,7 +71,7 @@ export class BridgeApplicationCommandRequest extends Message
 		// Parse the CC
 		const commandLength = this.payload[offset++];
 		this.command = CommandClass.from(this.host, {
-			data: this.payload.slice(offset, offset + commandLength),
+			data: this.payload.subarray(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 			origin: options.origin,
 			frameType: this.frameType,
@@ -83,7 +83,7 @@ export class BridgeApplicationCommandRequest extends Message
 		offset++;
 		if (this.frameType === "multicast") {
 			this.targetNodeId = parseNodeBitMask(
-				this.payload.slice(offset, offset + multicastNodesLength),
+				this.payload.subarray(offset, offset + multicastNodesLength),
 			);
 		} else if (this.frameType === "singlecast") {
 			this.targetNodeId = destinationNodeId;

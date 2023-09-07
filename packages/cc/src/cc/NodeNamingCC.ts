@@ -321,7 +321,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	) {
 		super(host, options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
-		let nameBuffer = this.payload.slice(1);
+		let nameBuffer = this.payload.subarray(1);
 		if (encoding === "utf16le") {
 			validatePayload(nameBuffer.length % 2 === 0);
 			// Z-Wave expects UTF16 BE
@@ -413,7 +413,7 @@ export class NodeNamingAndLocationCCLocationReport
 	) {
 		super(host, options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
-		let locationBuffer = this.payload.slice(1);
+		let locationBuffer = this.payload.subarray(1);
 		if (encoding === "utf16le") {
 			validatePayload(locationBuffer.length % 2 === 0);
 			// Z-Wave expects UTF16 BE

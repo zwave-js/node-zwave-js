@@ -1335,7 +1335,7 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		let offset = 1;
 		validatePayload(this.payload.length >= offset + bitMaskLength + 1);
 		this.supportedOperationTypes = parseBitMask(
-			this.payload.slice(offset, offset + bitMaskLength),
+			this.payload.subarray(offset, offset + bitMaskLength),
 			// bit 0 is reserved, bitmask starts at 1
 			0,
 		);
@@ -1346,7 +1346,7 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		offset += 1;
 		validatePayload(this.payload.length >= offset + listLength + 3);
 		this.supportedDoorLockModes = [
-			...this.payload.slice(offset, offset + listLength),
+			...this.payload.subarray(offset, offset + listLength),
 		];
 		offset += listLength;
 

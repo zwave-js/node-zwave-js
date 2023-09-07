@@ -152,7 +152,7 @@ export class NVMParser {
 			const data: Buffer[] = [];
 			for (let i = 0; i < entry.count; i++) {
 				data.push(
-					nvm.slice(offset + i * size, offset + (i + 1) * size),
+					nvm.subarray(offset + i * size, offset + (i + 1) * size),
 				);
 			}
 			const converted = data.map((buffer) => {

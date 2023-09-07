@@ -86,7 +86,7 @@ export class GetPriorityRouteResponse extends Message {
 		this.routeKind = this.payload[offset++];
 		if (this.routeKind) {
 			this.repeaters = [
-				...this.payload.slice(offset, offset + MAX_REPEATERS),
+				...this.payload.subarray(offset, offset + MAX_REPEATERS),
 			].filter((id) => id > 0);
 			this.routeSpeed = this.payload[offset + MAX_REPEATERS];
 		}

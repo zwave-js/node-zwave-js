@@ -16,7 +16,7 @@ export function parseApplicationNodeInformation(
 	return {
 		genericDeviceClass: nif[0],
 		specificDeviceClass: nif[1],
-		supportedCCs: parseCCList(nif.slice(2)).supportedCCs,
+		supportedCCs: parseCCList(nif.subarray(2)).supportedCCs,
 	};
 }
 
@@ -52,7 +52,7 @@ export function parseNodeUpdatePayload(
 		nodeId,
 		basicDeviceClass: nif[offset],
 		...parseApplicationNodeInformation(
-			nif.slice(offset + 1, offset + remainingLength),
+			nif.subarray(offset + 1, offset + remainingLength),
 		),
 	};
 }
@@ -351,7 +351,7 @@ export function parseNodeInformationFrame(
 	const { info, bytesRead: offset } = parseNodeProtocolInfoAndDeviceClass(
 		buffer,
 	);
-	const supportedCCs = parseCCList(buffer.slice(offset)).supportedCCs;
+	const supportedCCs = parseCCList(buffer.subarray(offset)).supportedCCs;
 
 	return {
 		...info,

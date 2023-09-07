@@ -123,7 +123,7 @@ export class FirmwareUpdateNVMResponse extends Message {
 			return new CommandConstructor(host, options);
 		}
 
-		this.payload = this.payload.slice(1);
+		this.payload = this.payload.subarray(1);
 	}
 
 	public command: FirmwareUpdateNVMCommand;

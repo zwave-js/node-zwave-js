@@ -1224,7 +1224,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 				validatePayload(this.payload.length >= 3 + bitMaskLength);
 				// The bit mask starts at 0, but bit 0 is not used
 				this.supportedProperties = parseBitMask(
-					this.payload.slice(3, 3 + bitMaskLength),
+					this.payload.subarray(3, 3 + bitMaskLength),
 					0,
 				).filter((v) => v !== 0);
 			}
@@ -1360,7 +1360,7 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		const descrptionLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + descrptionLength);
 		this.description = this.payload
-			.slice(2, 2 + descrptionLength)
+			.subarray(2, 2 + descrptionLength)
 			.toString("utf8");
 	}
 

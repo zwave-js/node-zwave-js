@@ -476,7 +476,7 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 			// The specs don't allow 0-terminated string, but some devices use them
 			// So we need to cut them off
 			this.name = cpp2js(
-				this.payload.slice(2, 2 + nameLength).toString("utf8"),
+				this.payload.subarray(2, 2 + nameLength).toString("utf8"),
 			);
 		} else {
 			this.groupId = options.groupId;
@@ -595,7 +595,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			for (let i = 0; i < groupCount; i++) {
 				const offset = 1 + i * 7;
 				// Parse the payload
-				const groupBytes = this.payload.slice(offset, offset + 7);
+				const groupBytes = this.payload.subarray(offset, offset + 7);
 				const groupId = groupBytes[0];
 				const mode = 0; // groupBytes[1];
 				const profile = groupBytes.readUInt16BE(2);
@@ -768,7 +768,7 @@ export class AssociationGroupInfoCCCommandListReport
 			this.groupId = this.payload[0];
 			const listLength = this.payload[1];
 			validatePayload(this.payload.length >= 2 + listLength);
-			const listBytes = this.payload.slice(2, 2 + listLength);
+			const listBytes = this.payload.subarray(2, 2 + listLength);
 			// Parse all CC ids and commands
 			let offset = 0;
 			const commands = new Map<CommandClasses, number[]>();

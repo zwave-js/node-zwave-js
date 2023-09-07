@@ -623,7 +623,9 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 			validatePayload(this.payload.length >= 1);
 			this.setpointType = this.payload[0] & 0b1111;
 			// parseFloatWithScale does its own validation
-			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			const { value, scale } = parseFloatWithScale(
+				this.payload.subarray(1),
+			);
 			this.value = value;
 			this.scale = scale;
 		} else {
@@ -690,7 +692,9 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 			}
 
 			// parseFloatWithScale does its own validation
-			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			const { value, scale } = parseFloatWithScale(
+				this.payload.subarray(1),
+			);
 			this.value = value;
 			this.scale = scale;
 		} else {
@@ -840,9 +844,9 @@ export class ThermostatSetpointCCCapabilitiesReport
 				value: this.minValue,
 				scale: this.minValueScale,
 				bytesRead,
-			} = parseFloatWithScale(this.payload.slice(1)));
+			} = parseFloatWithScale(this.payload.subarray(1)));
 			({ value: this.maxValue, scale: this.maxValueScale } =
-				parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+				parseFloatWithScale(this.payload.subarray(1 + bytesRead)));
 		} else {
 			this.type = options.type;
 			this.minValue = options.minValue;

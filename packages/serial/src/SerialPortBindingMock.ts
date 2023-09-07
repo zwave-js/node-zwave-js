@@ -278,9 +278,9 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 			? length
 			: this.port.maxReadSize;
 
-		const data = this.port.data.slice(0, lengthToRead);
+		const data = this.port.data.subarray(0, lengthToRead);
 		const bytesRead = data.copy(buffer, offset);
-		this.port.data = this.port.data.slice(lengthToRead);
+		this.port.data = this.port.data.subarray(lengthToRead);
 		return { bytesRead, buffer };
 	}
 

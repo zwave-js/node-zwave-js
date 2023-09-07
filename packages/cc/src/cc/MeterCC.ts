@@ -633,7 +633,7 @@ export class MeterCCReport extends MeterCC {
 				scale: scale1Bits10,
 				value,
 				bytesRead,
-			} = parseFloatWithScale(this.payload.slice(1));
+			} = parseFloatWithScale(this.payload.subarray(1));
 			let offset = 2 + (bytesRead - 1);
 			// The scale is composed of two fields (see SDS13781)
 			const scale1 = (scale1Bit2 << 2) | scale1Bits10;
@@ -656,7 +656,7 @@ export class MeterCCReport extends MeterCC {
 						// This float is split in the payload
 						Buffer.concat([
 							Buffer.from([this.payload[1]]),
-							this.payload.slice(offset),
+							this.payload.subarray(offset),
 						]),
 					);
 					offset += bytesRead - 1;
@@ -958,7 +958,7 @@ export class MeterCCSupportedReport extends MeterCC {
 			this.supportedScales = parseBitMask(
 				Buffer.concat([
 					Buffer.from([this.payload[1] & 0b0_1111111]),
-					this.payload.slice(3, 3 + extraBytes),
+					this.payload.subarray(3, 3 + extraBytes),
 				]),
 				0,
 			).map((scale) => (scale >= 8 ? scale - 1 : scale));

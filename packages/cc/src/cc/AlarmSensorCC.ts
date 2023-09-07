@@ -440,7 +440,7 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		const bitMaskLength = this.payload[0];
 		validatePayload(this.payload.length >= 1 + bitMaskLength);
 		this._supportedSensorTypes = parseBitMask(
-			this.payload.slice(1, 1 + bitMaskLength),
+			this.payload.subarray(1, 1 + bitMaskLength),
 			AlarmSensorType["General Purpose"],
 		);
 	}

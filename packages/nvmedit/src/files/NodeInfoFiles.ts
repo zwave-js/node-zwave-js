@@ -46,7 +46,7 @@ function parseNodeInfo(
 		? buffer[offset + 4]
 		: null;
 	const neighbors = parseBitMask(
-		buffer.slice(offset + 5, offset + 5 + NUM_NODEMASK_BYTES),
+		buffer.subarray(offset + 5, offset + 5 + NUM_NODEMASK_BYTES),
 	);
 	const sucUpdateIndex = buffer[offset + 5 + NUM_NODEMASK_BYTES];
 	return {
@@ -161,7 +161,7 @@ export class NodeInfoFileV1 extends NVMFile {
 					+ 1
 					+ i;
 				const offset = i * 35;
-				const entry = this.payload.slice(offset, offset + 35);
+				const entry = this.payload.subarray(offset, offset + 35);
 				if (entry.equals(emptyNodeInfo)) continue;
 
 				const nodeInfo = parseNodeInfo(nodeId, this.payload, i * 35);

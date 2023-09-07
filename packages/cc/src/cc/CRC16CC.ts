@@ -113,7 +113,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 
-			const ccBuffer = this.payload.slice(0, -2);
+			const ccBuffer = this.payload.subarray(0, -2);
 
 			// Verify the CRC
 			let expectedCRC = CRC16_CCITT(this.headerBuffer);

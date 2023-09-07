@@ -217,7 +217,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 				return new FibaroConstructor(host, options);
 			}
 
-			this.payload = this.payload.slice(2);
+			this.payload = this.payload.subarray(2);
 		} else {
 			this.fibaroCCId = getFibaroCCId(this);
 			this.fibaroCCCommand = getFibaroCCCommand(this);

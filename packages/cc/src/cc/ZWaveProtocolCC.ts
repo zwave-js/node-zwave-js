@@ -188,10 +188,10 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 
 			validatePayload(this.payload.length >= 1 + bitmaskLength);
 			this.candidateNodeIds = parseBitMask(
-				this.payload.slice(1, 1 + bitmaskLength),
+				this.payload.subarray(1, 1 + bitmaskLength),
 			);
 
-			const rest = this.payload.slice(1 + bitmaskLength);
+			const rest = this.payload.subarray(1 + bitmaskLength);
 			if (speedPresent) {
 				validatePayload(rest.length >= 1);
 				if (rest.length === 1) {
@@ -253,7 +253,7 @@ export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
 
 			validatePayload(this.payload.length >= 1 + bitmaskLength);
 			this.neighborNodeIds = parseBitMask(
-				this.payload.slice(1, 1 + bitmaskLength),
+				this.payload.subarray(1, 1 + bitmaskLength),
 			);
 			if (this.payload.length >= 2 + bitmaskLength) {
 				this.wakeUpTime = parseWakeUpTime(
@@ -388,7 +388,7 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC
 			this.sequenceNumber = this.payload[0];
 			this.sourceNodeId = this.payload[1];
 			info = parseNodeProtocolInfoAndDeviceClass(
-				this.payload.slice(2),
+				this.payload.subarray(2),
 			).info;
 		} else {
 			this.sequenceNumber = options.sequenceNumber;
@@ -458,7 +458,7 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
 			const bitmaskLength = this.payload[2];
 			validatePayload(this.payload.length >= 3 + bitmaskLength);
 			this.neighborNodeIds = parseBitMask(
-				this.payload.slice(3, 3 + bitmaskLength),
+				this.payload.subarray(3, 3 + bitmaskLength),
 			);
 		} else {
 			this.sequenceNumber = options.sequenceNumber;
@@ -536,7 +536,7 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 			this.destinationNodeId = this.payload[0];
 			this.routeIndex = this.payload[1] >>> 4;
 			const numRepeaters = this.payload[1] & 0b1111;
-			this.repeaters = [...this.payload.slice(2, 2 + numRepeaters)];
+			this.repeaters = [...this.payload.subarray(2, 2 + numRepeaters)];
 			const speedAndWakeup = this.payload[2 + numRepeaters];
 			this.destinationSpeed = bitmask2DataRate(
 				(speedAndWakeup >>> 3) & 0b111,
@@ -600,7 +600,7 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.newNodeId = this.payload[0];
-			nif = parseNodeInformationFrame(this.payload.slice(1));
+			nif = parseNodeInformationFrame(this.payload.subarray(1));
 		} else {
 			this.newNodeId = options.newNodeId;
 			nif = options;
@@ -663,7 +663,9 @@ export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
 			validatePayload(this.payload.length >= 2);
 			this.testedNodeId = this.payload[0];
 			const numNeighbors = this.payload[1];
-			this.neighborNodeIds = [...this.payload.slice(2, 2 + numNeighbors)];
+			this.neighborNodeIds = [
+				...this.payload.subarray(2, 2 + numNeighbors),
+			];
 		} else {
 			this.testedNodeId = options.testedNodeId;
 			this.neighborNodeIds = options.neighborNodeIds;
@@ -843,7 +845,7 @@ export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 5);
-			this.nodeIds = [...this.payload.slice(0, 5)].filter(
+			this.nodeIds = [...this.payload.subarray(0, 5)].filter(
 				(id) => id > 0 && id <= MAX_NODES,
 			);
 		} else {
@@ -1005,7 +1007,9 @@ export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
 			validatePayload(this.payload.length >= 1);
 			const numNodeIDs = this.payload[0];
 			validatePayload(this.payload.length >= 1 + numNodeIDs);
-			this.reservedNodeIDs = [...this.payload.slice(1, 1 + numNodeIDs)];
+			this.reservedNodeIDs = [
+				...this.payload.subarray(1, 1 + numNodeIDs),
+			];
 		} else {
 			this.reservedNodeIDs = options.reservedNodeIDs;
 		}
@@ -1118,7 +1122,7 @@ export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
 			this.nodeMaskType = this.payload[0];
 			const numNodeIDs = this.payload[1];
 			validatePayload(this.payload.length >= 2 + numNodeIDs);
-			this.nodeIDs = [...this.payload.slice(2, 2 + numNodeIDs)];
+			this.nodeIDs = [...this.payload.subarray(2, 2 + numNodeIDs)];
 		} else {
 			this.nodeMaskType = options.nodeMaskType;
 			this.nodeIDs = options.nodeIDs;
@@ -1238,7 +1242,7 @@ export class ZWaveProtocolCCSmartStartIncludedNodeInformation
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
-			this.nwiHomeId = this.payload.slice(0, 4);
+			this.nwiHomeId = this.payload.subarray(0, 4);
 		} else {
 			if (options.nwiHomeId.length !== 4) {
 				throw new ZWaveError(

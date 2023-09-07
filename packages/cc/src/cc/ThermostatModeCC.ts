@@ -330,7 +330,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 				validatePayload(
 					this.payload.length >= 1 + manufacturerDataLength,
 				);
-				this.manufacturerData = this.payload.slice(
+				this.manufacturerData = this.payload.subarray(
 					1,
 					1 + manufacturerDataLength,
 				);
@@ -413,7 +413,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 					this.payload.length >= 1 + manufacturerDataLength,
 				);
 				if (manufacturerDataLength) {
-					this.manufacturerData = this.payload.slice(
+					this.manufacturerData = this.payload.subarray(
 						1,
 						1 + manufacturerDataLength,
 					);

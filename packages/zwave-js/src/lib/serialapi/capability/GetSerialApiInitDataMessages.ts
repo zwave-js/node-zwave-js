@@ -87,7 +87,7 @@ export class GetSerialApiInitDataResponse extends Message {
 					nodeListLength === NUM_NODEMASK_BYTES
 					&& this.payload.length >= offset + 1 + nodeListLength
 				) {
-					const nodeBitMask = this.payload.slice(
+					const nodeBitMask = this.payload.subarray(
 						offset + 1,
 						offset + 1 + nodeListLength,
 					);

@@ -478,7 +478,7 @@ export function messageRecordToLines(message: MessageRecord): string[] {
 			)
 		}${value}`
 			.split("\n")
-			.map((line) => line.trimRight()));
+			.map((line) => line.trimEnd()));
 }
 
 /** Wraps an array of strings in square brackets and joins them with spaces */

@@ -197,7 +197,9 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.parameter = this.payload[0];
-			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			const { value, scale } = parseFloatWithScale(
+				this.payload.subarray(1),
+			);
 			this.value = value;
 			this.scale = getEnergyProductionScale(this.parameter, scale);
 		} else {

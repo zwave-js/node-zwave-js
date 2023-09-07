@@ -130,7 +130,7 @@ export class Security2Extension {
 			this.moreToFollow = !!(controlByte & 0b1000_0000);
 			this.critical = !!(controlByte & 0b0100_0000);
 			this.type = controlByte & 0b11_1111;
-			this.payload = options.data.slice(2, totalLength);
+			this.payload = options.data.subarray(2, totalLength);
 		} else {
 			this.type = getExtensionType(this);
 			this.critical = options.critical;
@@ -255,7 +255,7 @@ export class MPANExtension extends Security2Extension {
 			super(options);
 			validatePayload(this.payload.length === 17);
 			this.groupId = this.payload[0];
-			this.innerMPANState = this.payload.slice(1);
+			this.innerMPANState = this.payload.subarray(1);
 		} else {
 			if (options.innerMPANState.length !== 16) {
 				throw new ZWaveError(

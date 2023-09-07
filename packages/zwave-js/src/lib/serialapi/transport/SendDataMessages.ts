@@ -97,7 +97,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			const serializedCCLength = this.payload[offset++];
 			this.transmitOptions = this.payload[offset + serializedCCLength];
 			this.callbackId = this.payload[offset + 1 + serializedCCLength];
-			this.payload = this.payload.slice(
+			this.payload = this.payload.subarray(
 				offset,
 				offset + serializedCCLength,
 			);
@@ -240,7 +240,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 			// TODO: Consider NOT parsing this for transmit status other than OK or NoACK
 			this.txReport = parseTXReport(
 				this.transmitStatus !== TransmitStatus.NoAck,
-				this.payload.slice(2),
+				this.payload.subarray(2),
 			);
 		} else {
 			this.callbackId = options.callbackId;
@@ -391,7 +391,7 @@ export class SendDataMulticastRequest<
 
 			const serializedCCLength = this.payload[offset];
 			offset++;
-			const serializedCC = this.payload.slice(
+			const serializedCC = this.payload.subarray(
 				offset,
 				offset + serializedCCLength,
 			);

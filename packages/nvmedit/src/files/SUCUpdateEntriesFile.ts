@@ -37,14 +37,14 @@ export function parseSUCUpdateEntry(
 	buffer: Buffer,
 	offset: number,
 ): SUCUpdateEntry | undefined {
-	const slice = buffer.slice(offset, offset + SUC_UPDATE_ENTRY_SIZE);
+	const slice = buffer.subarray(offset, offset + SUC_UPDATE_ENTRY_SIZE);
 	if (slice.every((b) => b === 0x00 || b === 0xff)) {
 		return;
 	}
 	const nodeId = slice[0];
 	const changeType = slice[1];
 	const { supportedCCs, controlledCCs } = parseCCList(
-		slice.slice(2, SUC_UPDATE_ENTRY_SIZE),
+		slice.subarray(2, SUC_UPDATE_ENTRY_SIZE),
 	);
 	return {
 		nodeId,

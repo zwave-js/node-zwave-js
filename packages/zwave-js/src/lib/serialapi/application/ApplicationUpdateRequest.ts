@@ -68,7 +68,7 @@ export class ApplicationUpdateRequest extends Message {
 				return new CommandConstructor(host, options);
 			}
 
-			this.payload = this.payload.slice(1);
+			this.payload = this.payload.subarray(1);
 		} else {
 			this.updateType = getApplicationUpdateType(this)!;
 		}
@@ -185,7 +185,7 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived
 		// next byte is rxStatus
 		offset++;
 
-		this.nwiHomeId = this.payload.slice(offset, offset + 4);
+		this.nwiHomeId = this.payload.subarray(offset, offset + 4);
 		offset += 4;
 
 		const ccLength = this.payload[offset++];
@@ -193,7 +193,7 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived
 		this.genericDeviceClass = this.payload[offset++];
 		this.specificDeviceClass = this.payload[offset++];
 		this.supportedCCs = parseCCList(
-			this.payload.slice(offset, offset + ccLength),
+			this.payload.subarray(offset, offset + ccLength),
 		).supportedCCs;
 	}
 

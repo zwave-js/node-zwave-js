@@ -287,7 +287,10 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				this.payload.length >= 11 + userCodeLength,
 			);
 
-			const userCodeBuffer = this.payload.slice(11, 11 + userCodeLength);
+			const userCodeBuffer = this.payload.subarray(
+				11,
+				11 + userCodeLength,
+			);
 			// See User Code CC for a detailed description. We try to parse the code as ASCII if possible
 			// and fall back to a buffer otherwise.
 			const userCodeString = userCodeBuffer.toString("utf8");

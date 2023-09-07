@@ -695,7 +695,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 
 			const numBitmaskBytes = this.payload[0] & 0b1111;
 			validatePayload(this.payload.length >= 1 + numBitmaskBytes);
-			const bitmask = this.payload.slice(1, 1 + numBitmaskBytes);
+			const bitmask = this.payload.subarray(1, 1 + numBitmaskBytes);
 
 			this.supportedParameters = parseBitMask(
 				bitmask,
@@ -714,12 +714,12 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 			this.supportedParameters,
 			undefined,
 			WindowCoveringParameter["Outbound Left (no position)"],
-		).slice(0, 15);
+		).subarray(0, 15);
 		const numBitmaskBytes = bitmask.length & 0b1111;
 
 		this.payload = Buffer.concat([
 			Buffer.from([numBitmaskBytes]),
-			bitmask.slice(0, numBitmaskBytes),
+			bitmask.subarray(0, numBitmaskBytes),
 		]);
 
 		return super.serialize();

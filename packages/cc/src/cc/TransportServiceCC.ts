@@ -126,7 +126,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 				this.ccId,
 				this.ccCommand | this.payload[0],
 			]);
-			const ccBuffer = this.payload.slice(1, -2);
+			const ccBuffer = this.payload.subarray(1, -2);
 			let expectedCRC = CRC16_CCITT(headerBuffer);
 			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
 			const actualCRC = this.payload.readUInt16BE(
@@ -142,11 +142,11 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 			const hasHeaderExtension = !!(this.payload[2] & 0b1000);
 			if (hasHeaderExtension) {
 				const extLength = this.payload[3];
-				this.headerExtension = this.payload.slice(4, 4 + extLength);
+				this.headerExtension = this.payload.subarray(4, 4 + extLength);
 				payloadOffset += 1 + extLength;
 			}
 
-			this.partialDatagram = this.payload.slice(payloadOffset, -2);
+			this.partialDatagram = this.payload.subarray(payloadOffset, -2);
 			// A node supporting the Transport Service Command Class, version 2
 			// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
 			validatePayload(this.partialDatagram.length <= MAX_SEGMENT_SIZE);
@@ -191,7 +191,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		// The CC header is included in the CRC computation
 		const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 		let crc = CRC16_CCITT(headerBuffer);
-		crc = CRC16_CCITT(this.payload.slice(0, -2), crc);
+		crc = CRC16_CCITT(this.payload.subarray(0, -2), crc);
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
@@ -258,7 +258,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 				this.ccId,
 				this.ccCommand | this.payload[0],
 			]);
-			const ccBuffer = this.payload.slice(1, -2);
+			const ccBuffer = this.payload.subarray(1, -2);
 			let expectedCRC = CRC16_CCITT(headerBuffer);
 			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
 			const actualCRC = this.payload.readUInt16BE(
@@ -276,11 +276,11 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			const hasHeaderExtension = !!(this.payload[2] & 0b1000);
 			if (hasHeaderExtension) {
 				const extLength = this.payload[4];
-				this.headerExtension = this.payload.slice(5, 5 + extLength);
+				this.headerExtension = this.payload.subarray(5, 5 + extLength);
 				payloadOffset += 1 + extLength;
 			}
 
-			this.partialDatagram = this.payload.slice(payloadOffset, -2);
+			this.partialDatagram = this.payload.subarray(payloadOffset, -2);
 			// A node supporting the Transport Service Command Class, version 2
 			// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
 			validatePayload(this.partialDatagram.length <= MAX_SEGMENT_SIZE);
@@ -399,7 +399,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		// The CC header is included in the CRC computation
 		const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 		let crc = CRC16_CCITT(headerBuffer);
-		crc = CRC16_CCITT(this.payload.slice(0, -2), crc);
+		crc = CRC16_CCITT(this.payload.subarray(0, -2), crc);
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 

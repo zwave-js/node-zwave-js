@@ -119,7 +119,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 				validatePayload(this.payload.length >= offset + 1 + cmdLength);
 				this.encapsulated.push(
 					CommandClass.from(this.host, {
-						data: this.payload.slice(
+						data: this.payload.subarray(
 							offset + 1,
 							offset + 1 + cmdLength,
 						),

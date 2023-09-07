@@ -113,7 +113,7 @@ function createLazySendDataPayload(
 							nodeId: controller.host.ownNodeId,
 							ccId: msg.payload[0],
 							ccCommand: msg.payload[1],
-							payload: msg.payload.slice(2),
+							payload: msg.payload.subarray(2),
 						});
 						// Store the command because assertReceivedHostMessage needs it
 						// @ts-expect-error
