@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.14.1 (2023-09-07)
 ### Changes under the hood
 * The `mock-server` now supports loading mocks from outside the `node-zwave-js` repository (#6261)
 
