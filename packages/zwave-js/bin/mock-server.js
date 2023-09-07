@@ -3,6 +3,10 @@ const { MockServer } = require("../build/mockServer");
 const { readFileSync, statSync, readdirSync } = require("fs");
 const path = require("path");
 
+// Allow putting .js mock configs outside the repo
+const { createRequire } = require("module");
+const childRequire = createRequire(module.filename);
+
 const args = process.argv.slice(2);
 
 /** @returns {never} */
@@ -78,7 +82,7 @@ Each node ID may only be used once in mock configs. Node ID ${nodeConfig.id} is 
  */
 function getConfig(filename) {
 	if (filename.endsWith(".js")) {
-		return require(filename).default;
+		return require(filename).default(childRequire);
 	} else if (filename.endsWith(".json")) {
 		// TODO: JSON5 support
 		return JSON.parse(readFileSync(filename, "utf8"));
