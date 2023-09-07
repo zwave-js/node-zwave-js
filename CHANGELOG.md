@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Changes under the hood
+* The `mock-server` now supports loading mocks from outside the `node-zwave-js` repository (#6261)
+
 ## 11.14.0 (2023-09-04)
 ### Features
 * `Driver.sendCommand`, `Driver.sendMessage` and `Node.setValue` now accept an optional callback as part of the options that will be called with the transaction progress (queued, active, failed, complete) (#6212)
