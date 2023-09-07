@@ -411,7 +411,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 			)?.compat?.disableStrictEntryControlDataValidation;
 
 			const eventData = Buffer.from(
-				this.payload.slice(offset, offset + eventDataLength),
+				this.payload.subarray(offset, offset + eventDataLength),
 			);
 			switch (this.dataType) {
 				case EntryControlDataTypes.Raw:
@@ -497,7 +497,10 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		validatePayload(this.payload.length >= 1);
 		const length = this.payload[0];
 		validatePayload(this.payload.length >= 1 + length);
-		this.supportedKeys = parseBitMask(this.payload.slice(1, 1 + length), 0);
+		this.supportedKeys = parseBitMask(
+			this.payload.subarray(1, 1 + length),
+			0,
+		);
 	}
 
 	@ccValue(EntryControlCCValues.supportedKeys)
@@ -529,7 +532,7 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 
 		validatePayload(this.payload.length >= offset + dataTypeLength);
 		this.supportedDataTypes = parseBitMask(
-			this.payload.slice(offset, offset + dataTypeLength),
+			this.payload.subarray(offset, offset + dataTypeLength),
 			EntryControlDataTypes.None,
 		);
 		offset += dataTypeLength;
@@ -540,7 +543,7 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 
 		validatePayload(this.payload.length >= offset + eventTypeLength);
 		this.supportedEventTypes = parseBitMask(
-			this.payload.slice(offset, offset + eventTypeLength),
+			this.payload.subarray(offset, offset + eventTypeLength),
 			EntryControlEventTypes.Caching,
 		);
 		offset += eventTypeLength;

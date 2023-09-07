@@ -403,7 +403,7 @@ export class SecurityManager2 {
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
-		const nonce = spanState.rng.generate(16).slice(0, 13);
+		const nonce = spanState.rng.generate(16).subarray(0, 13);
 		spanState.currentSPAN = store
 			? {
 				nonce,
@@ -468,7 +468,7 @@ export class SecurityManager2 {
 		// Compute the next MPAN
 		const stateN = this.mpanStates.get(groupId)!;
 		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
-		const ret = encryptAES128ECB(stateN, keys.keyMPAN).slice(0, 13);
+		const ret = encryptAES128ECB(stateN, keys.keyMPAN).subarray(0, 13);
 		// Increment the inner state
 		increment(stateN);
 
@@ -506,7 +506,7 @@ export class SecurityManager2 {
 		// Compute the next MPAN
 		const stateN = mpanState.currentMPAN;
 		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
-		const ret = encryptAES128ECB(stateN, keys.keyMPAN).slice(0, 13);
+		const ret = encryptAES128ECB(stateN, keys.keyMPAN).subarray(0, 13);
 		// Increment the inner state
 		increment(stateN);
 		return ret;

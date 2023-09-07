@@ -34,8 +34,8 @@ export class CtrDRBG {
 		this.blkSize = 16;
 		this.entSize = this.keySize + this.blkSize;
 		this.slab = Buffer.alloc(this.entSize);
-		this.K = this.slab.slice(0, this.keySize);
-		this.V = this.slab.slice(this.keySize);
+		this.K = this.slab.subarray(0, this.keySize);
+		this.V = this.slab.subarray(this.keySize);
 		this.derivation = derivation;
 		// this.rounds = 0;
 		this.initialized = false;
@@ -148,7 +148,7 @@ export class CtrDRBG {
 		// this.rounds += 1;
 		this.initialized = true;
 
-		return out.slice(0, len);
+		return out.subarray(0, len);
 	}
 
 	/*
@@ -232,8 +232,8 @@ export class CtrDRBG {
 			chain.copy(slab, i * this.blkSize);
 		}
 
-		const k = slab.slice(0, this.keySize);
-		const x = slab.slice(this.keySize, this.entSize);
+		const k = slab.subarray(0, this.keySize);
+		const x = slab.subarray(this.keySize, this.entSize);
 
 		for (let i = 0; i < blocks; i++) {
 			// encrypt in-place
@@ -242,6 +242,6 @@ export class CtrDRBG {
 			x.copy(out, i * this.blkSize);
 		}
 
-		return out.slice(0, this.entSize);
+		return out.subarray(0, this.entSize);
 	}
 }

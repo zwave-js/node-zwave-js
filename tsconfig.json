@@ -15,7 +15,7 @@
 		"stripInternal": true,
 
 		"pretty": true,
-		"types": ["node", "ts-nameof"],
+		"types": ["node"],
 		"noErrorTruncation": true
 	},
 	"include": [

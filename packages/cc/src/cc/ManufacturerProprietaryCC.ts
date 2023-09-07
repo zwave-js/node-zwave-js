@@ -159,7 +159,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			}
 
 			// If the constructor is correct, update the payload for subclass deserialization
-			this.payload = this.payload.slice(1);
+			this.payload = this.payload.subarray(1);
 		} else {
 			this.manufacturerId = options.manufacturerId
 				?? getManufacturerId(this);

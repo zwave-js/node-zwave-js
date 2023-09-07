@@ -632,7 +632,9 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			validatePayload(this.payload.length >= 1);
 			this.type = this.payload[0];
 			// parseFloatWithScale does its own validation
-			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			const { value, scale } = parseFloatWithScale(
+				this.payload.subarray(1),
+			);
 			this.value = value;
 			this.scale = scale;
 		} else {

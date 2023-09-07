@@ -44,7 +44,7 @@ export function guessFirmwareFileFormat(
 	} else if (
 		filename.endsWith(".hec")
 		&& rawData
-			.slice(0, firmwareIndicators.hec.length)
+			.subarray(0, firmwareIndicators.hec.length)
 			.equals(firmwareIndicators.hec)
 	) {
 		return "hec";
@@ -146,14 +146,14 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 			);
 	}
 
-	const firmwareData = data.slice(
+	const firmwareData = data.subarray(
 		firmwareStart,
 		firmwareStart + firmwareLength,
 	);
 
 	const firmwareNameBytes = data
-		.slice(data.length - 256 - numControlBytes)
-		.slice(0, 256);
+		.subarray(data.length - 256 - numControlBytes)
+		.subarray(0, 256);
 
 	// Some exe files contain a CRC-16 checksum, extract that too and check it
 	if (numControlBytes === 10) {
@@ -178,7 +178,7 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	const firmwareNameOffset = firmwareTarget == undefined ? 0 : 1;
 
 	const firmwareName = firmwareNameBytes
-		.slice(
+		.subarray(
 			firmwareNameOffset,
 			firmwareNameBytes.indexOf(0, firmwareNameOffset),
 		)
@@ -244,7 +244,10 @@ function extractFirmwareHEC(data: Buffer): Firmware {
 		Buffer.from(iv, "hex"),
 	);
 
-	const ciphertext = Buffer.from(data.slice(6).toString("ascii"), "base64");
+	const ciphertext = Buffer.from(
+		data.subarray(6).toString("ascii"),
+		"base64",
+	);
 	const plaintext = Buffer.concat([
 		decipher.update(ciphertext),
 		decipher.final(),

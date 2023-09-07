@@ -72,15 +72,15 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.36.0",
-    "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.52",
+    "@microsoft/api-extractor": "^7.36.4",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.17.14",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/testing": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
-    "ava": "^4.3.3",
-    "del-cli": "^5.0.0",
-    "fs-extra": "^10.1.0",
-    "typescript": "5.1.6"
+    "ava": "^5.3.1",
+    "del-cli": "^5.1.0",
+    "fs-extra": "^11.1.1",
+    "typescript": "5.2.2"
   }
 }

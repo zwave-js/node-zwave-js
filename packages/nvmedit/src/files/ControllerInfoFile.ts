@@ -47,7 +47,7 @@ export class ControllerInfoFile extends NVMFile {
 	) {
 		super(options);
 		if (gotDeserializationOptions(options)) {
-			this.homeId = this.payload.slice(0, 4);
+			this.homeId = this.payload.subarray(0, 4);
 			if (this.payload.length === 13) {
 				this.nodeId = this.payload[4];
 				this.lastNodeId = this.payload[5];

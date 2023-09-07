@@ -5,10 +5,6 @@
 		"plugins": [
 			{
 				"transform": "@zwave-js/transformers"
-			},
-			{
-				"transform": "ts-nameof",
-				"type": "raw"
 			}
 		],
 		"typeRoots": [

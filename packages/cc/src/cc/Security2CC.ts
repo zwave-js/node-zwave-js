@@ -80,7 +80,7 @@ function securityClassToBitMask(key: SecurityClass): Buffer {
 
 function bitMaskToSecurityClass(buffer: Buffer, offset: number): SecurityClass {
 	const keys = parseBitMask(
-		buffer.slice(offset, offset + 1),
+		buffer.subarray(offset, offset + 1),
 		SecurityClass.S2_Unauthenticated,
 	);
 	validatePayload(keys.length === 1);
@@ -906,11 +906,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					validatePayload(buffer.length >= offset + 1);
 					const extensionLength = Security2Extension
 						.getExtensionLength(
-							buffer.slice(offset),
+							buffer.subarray(offset),
 						);
 					// Parse the extension
 					const ext = Security2Extension.from(
-						buffer.slice(offset, offset + extensionLength),
+						buffer.subarray(offset, offset + extensionLength),
 					);
 					if (!isValidExtension(ext)) {
 						validatePayload.fail(
@@ -974,12 +974,12 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				}
 			}
 
-			const unencryptedPayload = this.payload.slice(0, offset);
-			const ciphertext = this.payload.slice(
+			const unencryptedPayload = this.payload.subarray(0, offset);
+			const ciphertext = this.payload.subarray(
 				offset,
 				-SECURITY_S2_AUTH_TAG_LENGTH,
 			);
-			const authTag = this.payload.slice(-SECURITY_S2_AUTH_TAG_LENGTH);
+			const authTag = this.payload.subarray(-SECURITY_S2_AUTH_TAG_LENGTH);
 			this.authTag = authTag;
 
 			const messageLength = super.computeEncapsulationOverhead()
@@ -1110,7 +1110,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			}
 
 			// Not every S2 message includes an encapsulated CC
-			const decryptedCCBytes = plaintext.slice(offset);
+			const decryptedCCBytes = plaintext.subarray(offset);
 			if (decryptedCCBytes.length > 0) {
 				// make sure this contains a complete CC command that's worth splitting
 				validatePayload(decryptedCCBytes.length >= 2);
@@ -1714,7 +1714,7 @@ export class Security2CCNonceReport extends Security2CC {
 			if (this.SOS) {
 				// If the SOS flag is set, the REI field MUST be included in the command
 				validatePayload(this.payload.length >= 18);
-				this.receiverEI = this.payload.slice(2, 18);
+				this.receiverEI = this.payload.subarray(2, 18);
 
 				// In that case we also need to store it, so the next sent command
 				// can use it for encryption
@@ -1862,15 +1862,15 @@ export class Security2CCKEXReport extends Security2CC {
 			this._reserved = this.payload[0] & 0b1111_1100;
 			// The bit mask starts at 0, but bit 0 is not used
 			this.supportedKEXSchemes = parseBitMask(
-				this.payload.slice(1, 2),
+				this.payload.subarray(1, 2),
 				0,
 			).filter((s) => s !== 0);
 			this.supportedECDHProfiles = parseBitMask(
-				this.payload.slice(2, 3),
+				this.payload.subarray(2, 3),
 				ECDHProfiles.Curve25519,
 			);
 			this.requestedKeys = parseBitMask(
-				this.payload.slice(3, 4),
+				this.payload.subarray(3, 4),
 				SecurityClass.S2_Unauthenticated,
 			);
 		} else {
@@ -1960,21 +1960,21 @@ export class Security2CCKEXSet extends Security2CC {
 			this.echo = !!(this.payload[0] & 0b1);
 			// The bit mask starts at 0, but bit 0 is not used
 			const selectedKEXSchemes = parseBitMask(
-				this.payload.slice(1, 2),
+				this.payload.subarray(1, 2),
 				0,
 			).filter((s) => s !== 0);
 			validatePayload(selectedKEXSchemes.length === 1);
 			this.selectedKEXScheme = selectedKEXSchemes[0];
 
 			const selectedECDHProfiles = parseBitMask(
-				this.payload.slice(2, 3),
+				this.payload.subarray(2, 3),
 				ECDHProfiles.Curve25519,
 			);
 			validatePayload(selectedECDHProfiles.length === 1);
 			this.selectedECDHProfile = selectedECDHProfiles[0];
 
 			this.grantedKeys = parseBitMask(
-				this.payload.slice(3, 4),
+				this.payload.subarray(3, 4),
 				SecurityClass.S2_Unauthenticated,
 			);
 		} else {
@@ -2084,7 +2084,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 17);
 			this.includingNode = !!(this.payload[0] & 0b1);
-			this.publicKey = this.payload.slice(1);
+			this.publicKey = this.payload.subarray(1);
 		} else {
 			this.includingNode = options.includingNode;
 			this.publicKey = options.publicKey;

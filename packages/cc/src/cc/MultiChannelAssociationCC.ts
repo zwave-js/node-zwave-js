@@ -735,7 +735,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		this.reportsToFollow = this.payload[2];
 		({ nodeIds: this._nodeIds, endpoints: this._endpoints } =
 			deserializeMultiChannelAssociationDestination(
-				this.payload.slice(3),
+				this.payload.subarray(3),
 			));
 	}
 

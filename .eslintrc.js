@@ -104,6 +104,8 @@ module.exports = {
 		"@typescript-eslint/no-unsafe-member-access": "off",
 		"@typescript-eslint/no-unsafe-return": "off",
 		"@typescript-eslint/no-unsafe-call": "off",
+		"@typescript-eslint/no-unsafe-enum-comparison": "off",
+		"@typescript-eslint/no-unsafe-declaration-merging": "off",
 
 		// Although this rule makes sense, it takes about a second to execute (and we don't need it)
 		"@typescript-eslint/no-implied-eval": "off",

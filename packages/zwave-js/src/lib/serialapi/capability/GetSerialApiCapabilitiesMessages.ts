@@ -47,7 +47,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 			this.productType = this.payload.readUInt16BE(4);
 			this.productId = this.payload.readUInt16BE(6);
 			// then a 256bit bitmask for the supported command classes follows
-			const functionBitMask = this.payload.slice(
+			const functionBitMask = this.payload.subarray(
 				8,
 				8 + NUM_FUNCTION_BYTES,
 			);

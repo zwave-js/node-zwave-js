@@ -603,7 +603,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 		if (this.maximumCapacity === 0xff) this.maximumCapacity = undefined;
 
 		const { value: temperature, scale } = parseFloatWithScale(
-			this.payload.slice(1),
+			this.payload.subarray(1),
 			true, // The temperature field may be omitted
 		);
 		this.temperature = temperature;

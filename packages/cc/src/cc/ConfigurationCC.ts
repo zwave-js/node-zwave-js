@@ -1611,7 +1611,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			// Default to parsing the value as SignedInteger, like the specs say.
 			// We try to re-interpret the value in persistValues()
 			this.value = parseValue(
-				this.payload.slice(2),
+				this.payload.subarray(2),
 				this.valueSize,
 				ConfigValueFormat.SignedInteger,
 			);
@@ -1842,7 +1842,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			);
 			// Parse the value as signed integer. We don't know the format here.
 			this.value = parseValue(
-				this.payload.slice(2),
+				this.payload.subarray(2),
 				this.valueSize,
 				ConfigValueFormat.SignedInteger,
 			);
@@ -2132,7 +2132,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				// Default to parsing the value as SignedInteger, like the specs say.
 				// We try to re-interpret the value in persistValues()
 				parseValue(
-					this.payload.slice(5 + i * this.valueSize),
+					this.payload.subarray(5 + i * this.valueSize),
 					this.valueSize,
 					ConfigValueFormat.SignedInteger,
 				),
@@ -2307,7 +2307,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 				// If more reports follow, the info must at least be one byte
 				validatePayload(this.payload.length >= 4);
 			}
-			this.name = this.payload.slice(3).toString("utf8");
+			this.name = this.payload.subarray(3).toString("utf8");
 		} else {
 			this.parameter = options.parameter;
 			this.name = options.name;
@@ -2453,7 +2453,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 				// If more reports follow, the info must at least be one byte
 				validatePayload(this.payload.length >= 4);
 			}
-			this.info = this.payload.slice(3).toString("utf8");
+			this.info = this.payload.subarray(3).toString("utf8");
 		} else {
 			this.parameter = options.parameter;
 			this.info = options.info;
@@ -2635,18 +2635,18 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 					this.minValue = 0;
 				} else {
 					this.minValue = parseValue(
-						this.payload.slice(3),
+						this.payload.subarray(3),
 						this.valueSize,
 						this.valueFormat,
 					);
 				}
 				this.maxValue = parseValue(
-					this.payload.slice(3 + this.valueSize),
+					this.payload.subarray(3 + this.valueSize),
 					this.valueSize,
 					this.valueFormat,
 				);
 				this.defaultValue = parseValue(
-					this.payload.slice(3 + 2 * this.valueSize),
+					this.payload.subarray(3 + 2 * this.valueSize),
 					this.valueSize,
 					this.valueFormat,
 				);

@@ -370,7 +370,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 2 + bitMaskBytes * numEntries);
 		for (let i = 0; i < numEntries; i++) {
-			const mask = this.payload.slice(
+			const mask = this.payload.subarray(
 				2 + i * bitMaskBytes,
 				2 + (i + 1) * bitMaskBytes,
 			);

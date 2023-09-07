@@ -16,7 +16,7 @@ function encrypt(
 	const ret = Buffer.concat([cipher.update(plaintext), cipher.final()]);
 
 	if (trimToInputLength && paddingLength > 0) {
-		return ret.slice(0, -paddingLength);
+		return ret.subarray(0, -paddingLength);
 	} else {
 		return ret;
 	}
@@ -37,7 +37,7 @@ function decrypt(
 	const ret = Buffer.concat([cipher.update(ciphertext), cipher.final()]);
 
 	if (trimToInputLength && paddingLength > 0) {
-		return ret.slice(0, -paddingLength);
+		return ret.subarray(0, -paddingLength);
 	} else {
 		return ret;
 	}
@@ -72,13 +72,13 @@ export function computeMAC(
 ): Buffer {
 	const ciphertext = encrypt("aes-128-cbc", 16, false, authData, key, iv);
 	// The MAC is the first 8 bytes of the last 16 byte block
-	return ciphertext.slice(-16, -8);
+	return ciphertext.subarray(-16, -8);
 }
 
 /** Decodes a DER-encoded x25519 key (PKCS#8 or SPKI) */
 export function decodeX25519KeyDER(key: Buffer): Buffer {
 	// We could parse this with asn1js but that doesn't seem necessary for now
-	return key.slice(-32);
+	return key.subarray(-32);
 }
 
 /** Encodes an x25519 key from a raw buffer with DER/PKCS#8 */
@@ -123,7 +123,7 @@ function generateAES128CMACSubkeys(key: Buffer): [k1: Buffer, k2: Buffer] {
 export function computeCMAC(message: Buffer, key: Buffer): Buffer {
 	const blockSize = 16;
 	const numBlocks = Math.ceil(message.length / blockSize);
-	let lastBlock = message.slice((numBlocks - 1) * blockSize);
+	let lastBlock = message.subarray((numBlocks - 1) * blockSize);
 	const lastBlockIsComplete = message.length > 0
 		&& message.length % blockSize === 0;
 	if (!lastBlockIsComplete) {
@@ -136,7 +136,7 @@ export function computeCMAC(message: Buffer, key: Buffer): Buffer {
 	// Compute all steps but the last one
 	let ret = Z128;
 	for (let i = 0; i < numBlocks - 1; i++) {
-		ret = xor(ret, message.slice(i * blockSize, (i + 1) * blockSize));
+		ret = xor(ret, message.subarray(i * blockSize, (i + 1) * blockSize));
 		ret = encryptAES128ECB(ret, key);
 	}
 	// Compute the last step
@@ -144,7 +144,7 @@ export function computeCMAC(message: Buffer, key: Buffer): Buffer {
 	ret = xor(ret, xor(lastBlockIsComplete ? k1 : k2, lastBlock));
 	ret = encryptAES128ECB(ret, key);
 
-	return ret.slice(0, blockSize);
+	return ret.subarray(0, blockSize);
 }
 
 const constantPRK = Buffer.alloc(16, 0x33);

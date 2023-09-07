@@ -1148,7 +1148,7 @@ export function json500To700(
 		while (end > start && raw[end] === 0) {
 			end--;
 		}
-		raw = raw.slice(start, end + 1);
+		raw = raw.subarray(start, end + 1);
 		if (raw.length > 512) {
 			if (!truncateApplicationData) {
 				throw new ZWaveError(
@@ -1156,7 +1156,7 @@ export function json500To700(
 					ZWaveErrorCodes.NVM_InvalidJSON,
 				);
 			}
-			raw = raw.slice(0, 512);
+			raw = raw.subarray(0, 512);
 		}
 		applicationData = raw.toString("hex");
 	}

@@ -117,7 +117,6 @@ import {
 } from "@zwave-js/serial";
 import {
 	AsyncQueue,
-	type DeepPartial,
 	type ReadonlyThrowingMap,
 	type ThrowingMap,
 	TypedEventEmitter,
@@ -221,7 +220,11 @@ import {
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
 import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
-import type { PartialEditableZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
+import type {
+	EditableZWaveOptions,
+	PartialZWaveOptions,
+	ZWaveOptions,
+} from "./ZWaveOptions";
 import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
@@ -484,7 +487,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
-		options?: DeepPartial<ZWaveOptions>,
+		options?: PartialZWaveOptions,
 	) {
 		super();
 
@@ -898,7 +901,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	/** Updates a subset of the driver options on the fly */
-	public updateOptions(options: PartialEditableZWaveOptions): void {
+	public updateOptions(options: EditableZWaveOptions): void {
 		// This code is called from user code, so we need to make sure no options were passed
 		// which we are not able to update on the fly
 		const safeOptions = pick(options, [
@@ -1660,10 +1663,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				// The interview succeeded, but we don't have a device config for this node.
 				// Report it, so we can add a config file
 
-				void reportMissingDeviceConfig(this, node as any).catch(
-					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					() => {},
-				);
+				void reportMissingDeviceConfig(this, node as any).catch(noop);
 			}
 		} catch (e) {
 			if (isZWaveError(e)) {

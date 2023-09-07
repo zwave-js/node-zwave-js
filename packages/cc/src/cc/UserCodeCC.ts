@@ -144,7 +144,7 @@ function parseExtendedUserCode(payload: Buffer): {
 	const status: UserIDStatus = payload[2];
 	const codeLength = payload[3] & 0b1111;
 	validatePayload(payload.length >= 4 + codeLength);
-	const code = payload.slice(4, 4 + codeLength).toString("ascii");
+	const code = payload.subarray(4, 4 + codeLength).toString("ascii");
 	return {
 		code: {
 			userId,
@@ -1184,7 +1184,7 @@ export class UserCodeCCSet extends UserCodeCC {
 				this.userIdStatus !== UserIDStatus.Available
 				&& this.userIdStatus !== UserIDStatus.StatusNotAvailable
 			) {
-				this.userCode = this.payload.slice(2);
+				this.userCode = this.payload.subarray(2);
 			} else {
 				this.userCode = Buffer.alloc(4, 0x00);
 			}
@@ -1283,10 +1283,10 @@ export class UserCodeCCReport extends UserCodeCC
 				// The specs require the user code to be at least 4 digits
 				validatePayload(this.payload.length >= 6);
 
-				let userCodeBuffer = this.payload.slice(2);
+				let userCodeBuffer = this.payload.subarray(2);
 				// Specs say infer user code from payload length, manufacturers send zero-padded strings
 				while (userCodeBuffer.at(-1) === 0) {
-					userCodeBuffer = userCodeBuffer.slice(0, -1);
+					userCodeBuffer = userCodeBuffer.subarray(0, -1);
 				}
 				// Specs say ASCII 0-9, manufacturers don't care :)
 				// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
@@ -1481,7 +1481,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 				this.payload.length >= offset + statusBitMaskLength + 1,
 			);
 			this.supportedUserIDStatuses = parseBitMask(
-				this.payload.slice(offset, offset + statusBitMaskLength),
+				this.payload.subarray(offset, offset + statusBitMaskLength),
 				UserIDStatus.Available,
 			);
 			offset += statusBitMaskLength;
@@ -1502,7 +1502,10 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 				this.payload.length >= offset + keypadModesBitMaskLength + 1,
 			);
 			this.supportedKeypadModes = parseBitMask(
-				this.payload.slice(offset, offset + keypadModesBitMaskLength),
+				this.payload.subarray(
+					offset,
+					offset + keypadModesBitMaskLength,
+				),
 				KeypadMode.Normal,
 			);
 			offset += keypadModesBitMaskLength;
@@ -1513,7 +1516,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 			validatePayload(this.payload.length >= offset + keysBitMaskLength);
 			this.supportedASCIIChars = Buffer.from(
 				parseBitMask(
-					this.payload.slice(offset, offset + keysBitMaskLength),
+					this.payload.subarray(offset, offset + keysBitMaskLength),
 					0,
 				),
 			).toString("ascii");
@@ -1744,7 +1747,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 			const codeLength = this.payload[0] & 0b1111;
 			validatePayload(this.payload.length >= 1 + codeLength);
 			this.masterCode = this.payload
-				.slice(1, 1 + codeLength)
+				.subarray(1, 1 + codeLength)
 				.toString("ascii");
 		} else {
 			this.masterCode = options.masterCode;
@@ -1787,7 +1790,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 			const codeLength = this.payload[0] & 0b1111;
 			validatePayload(this.payload.length >= 1 + codeLength);
 			this.masterCode = this.payload
-				.slice(1, 1 + codeLength)
+				.subarray(1, 1 + codeLength)
 				.toString("ascii");
 		} else {
 			this.masterCode = options.masterCode;
@@ -1947,7 +1950,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		// parse each user code
 		for (let i = 0; i < numCodes; i++) {
 			const { code, bytesRead } = parseExtendedUserCode(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			userCodes.push(code);
 			offset += bytesRead;

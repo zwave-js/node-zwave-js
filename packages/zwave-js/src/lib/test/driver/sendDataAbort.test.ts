@@ -92,9 +92,10 @@ integrationTest("abort if SendData is missing the callback", {
 														.ownNodeId,
 													ccId: msg.payload[0],
 													ccCommand: msg.payload[1],
-													payload: msg.payload.slice(
-														2,
-													),
+													payload: msg.payload
+														.subarray(
+															2,
+														),
 												},
 											);
 											handled = true;

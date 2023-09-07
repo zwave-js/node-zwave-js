@@ -102,7 +102,7 @@ export class Message {
 			}
 			// check the checksum
 			const expectedChecksum = computeChecksum(
-				payload.slice(0, messageLength),
+				payload.subarray(0, messageLength),
 			);
 			if (payload[messageLength - 1] !== expectedChecksum) {
 				throw new ZWaveError(
@@ -114,7 +114,7 @@ export class Message {
 			this.type = payload[2];
 			this.functionType = payload[3];
 			const payloadLength = messageLength - 5;
-			this.payload = payload.slice(4, 4 + payloadLength);
+			this.payload = payload.subarray(4, 4 + payloadLength);
 		} else {
 			// Try to determine the message type
 			if (options.type == undefined) options.type = getMessageType(this);
@@ -261,7 +261,7 @@ export class Message {
 	public static extractPayload(data: Buffer): Buffer {
 		const messageLength = Message.getMessageLength(data);
 		const payloadLength = messageLength - 5;
-		return data.slice(4, 4 + payloadLength);
+		return data.subarray(4, 4 + payloadLength);
 	}
 
 	/** Generates a representation of this Message for the log */

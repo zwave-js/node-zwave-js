@@ -955,7 +955,7 @@ export class NotificationCCReport extends NotificationCC {
 				if (numEventParams > 0) {
 					validatePayload(this.payload.length >= 7 + numEventParams);
 					this.eventParameters = Buffer.from(
-						this.payload.slice(7, 7 + numEventParams),
+						this.payload.subarray(7, 7 + numEventParams),
 					);
 				}
 				if (containsSeqNum) {
@@ -1477,7 +1477,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 				numBitMaskBytes > 0,
 				this.payload.length >= 1 + numBitMaskBytes,
 			);
-			const notificationBitMask = this.payload.slice(
+			const notificationBitMask = this.payload.subarray(
 				1,
 				1 + numBitMaskBytes,
 			);
@@ -1566,7 +1566,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			}
 
 			validatePayload(this.payload.length >= 2 + numBitMaskBytes);
-			const eventBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
+			const eventBitMask = this.payload.subarray(2, 2 + numBitMaskBytes);
 			this.supportedEvents = parseBitMask(
 				eventBitMask,
 				// In this mask, bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0

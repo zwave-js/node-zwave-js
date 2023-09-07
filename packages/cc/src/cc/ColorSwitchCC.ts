@@ -679,7 +679,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 		validatePayload(this.payload.length >= 2);
 
 		this.supportedColorComponents = parseBitMask(
-			this.payload.slice(0, 2),
+			this.payload.subarray(0, 2),
 			ColorComponent["Warm White"],
 		);
 	}

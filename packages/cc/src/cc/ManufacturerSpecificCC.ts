@@ -278,7 +278,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 		const dataLength = this.payload[1] & 0b11111;
 
 		validatePayload(dataLength > 0, this.payload.length >= 2 + dataLength);
-		const deviceIdData = this.payload.slice(2, 2 + dataLength);
+		const deviceIdData = this.payload.subarray(2, 2 + dataLength);
 		this.deviceId = dataFormat === 0
 			? deviceIdData.toString("utf8")
 			: "0x" + deviceIdData.toString("hex");

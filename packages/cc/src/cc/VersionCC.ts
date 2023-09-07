@@ -838,26 +838,26 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		validatePayload(this.payload.length >= 23);
 		this.sdkVersion = parseVersion(this.payload);
 		this.applicationFrameworkAPIVersion = parseVersion(
-			this.payload.slice(3),
+			this.payload.subarray(3),
 		);
 		if (this.applicationFrameworkAPIVersion !== "unused") {
 			this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(6);
 		} else {
 			this.applicationFrameworkBuildNumber = 0;
 		}
-		this.hostInterfaceVersion = parseVersion(this.payload.slice(8));
+		this.hostInterfaceVersion = parseVersion(this.payload.subarray(8));
 		if (this.hostInterfaceVersion !== "unused") {
 			this.hostInterfaceBuildNumber = this.payload.readUInt16BE(11);
 		} else {
 			this.hostInterfaceBuildNumber = 0;
 		}
-		this.zWaveProtocolVersion = parseVersion(this.payload.slice(13));
+		this.zWaveProtocolVersion = parseVersion(this.payload.subarray(13));
 		if (this.zWaveProtocolVersion !== "unused") {
 			this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(16);
 		} else {
 			this.zWaveProtocolBuildNumber = 0;
 		}
-		this.applicationVersion = parseVersion(this.payload.slice(18));
+		this.applicationVersion = parseVersion(this.payload.subarray(18));
 		if (this.applicationVersion !== "unused") {
 			this.applicationBuildNumber = this.payload.readUInt16BE(21);
 		} else {

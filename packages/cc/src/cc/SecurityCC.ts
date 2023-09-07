@@ -546,10 +546,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			validatePayload(
 				this.payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
 			);
-			const iv = this.payload.slice(0, HALF_NONCE_SIZE);
-			const encryptedPayload = this.payload.slice(HALF_NONCE_SIZE, -9);
+			const iv = this.payload.subarray(0, HALF_NONCE_SIZE);
+			const encryptedPayload = this.payload.subarray(HALF_NONCE_SIZE, -9);
 			const nonceId = this.payload.at(-9)!;
-			const authCode = this.payload.slice(-8);
+			const authCode = this.payload.subarray(-8);
 
 			// Retrieve the used nonce from the nonce store
 			const nonce = this.host.securityManager.getNonce(nonceId);
@@ -593,7 +593,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.sequenced = !!(frameControl & 0b1_0000);
 			this.secondFrame = !!(frameControl & 0b10_0000);
 
-			this.decryptedCCBytes = frameControlAndDecryptedCC.slice(1);
+			this.decryptedCCBytes = frameControlAndDecryptedCC.subarray(1);
 		} else {
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
@@ -857,7 +857,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.reportsToFollow = this.payload[0];
-			const list = parseCCList(this.payload.slice(1));
+			const list = parseCCList(this.payload.subarray(1));
 			this.supportedCCs = list.supportedCCs;
 			this.controlledCCs = list.controlledCCs;
 		} else {

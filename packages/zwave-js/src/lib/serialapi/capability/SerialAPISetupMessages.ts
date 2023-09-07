@@ -138,7 +138,7 @@ export class SerialAPISetupResponse extends Message {
 			return new CommandConstructor(host, options);
 		}
 
-		this.payload = this.payload.slice(1);
+		this.payload = this.payload.subarray(1);
 	}
 
 	public command: SerialAPISetupCommand;
@@ -210,7 +210,7 @@ export class SerialAPISetup_GetSupportedCommandsResponse
 			// This module supports the extended bitmask to report the supported serial API setup commands
 			// Parse it as a bitmask
 			this.supportedCommands = parseBitMask(
-				this.payload.slice(1),
+				this.payload.subarray(1),
 				// According to the Host API specification, the first bit (bit 0) should be GetSupportedCommands
 				// However, in Z-Wave SDK < 7.19.1, the entire bitmask is shifted by 1 bit and
 				// GetSupportedCommands is encoded in the second bit (bit 1)

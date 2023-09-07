@@ -3,7 +3,6 @@ require("reflect-metadata");
 import { CommandClasses } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import * as c from "ansi-colors";
-import * as clipboard from "clipboardy";
 import * as fs from "fs-extra";
 import * as path from "node:path";
 import * as yargs from "yargs";
@@ -196,10 +195,6 @@ function writeTable(rows: string[][], flavor: "console" | "github"): void {
 		}
 
 		console.log(output);
-		if (!process.env.CI) {
-			clipboard.write(c.stripColor(output));
-			console.log(c.green("The table was copied to the clipboard!"));
-		}
 	}
 }
 

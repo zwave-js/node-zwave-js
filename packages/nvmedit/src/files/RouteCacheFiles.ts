@@ -43,7 +43,7 @@ export function parseRoute(buffer: Buffer, offset: number): Route {
 		beaming: (Beaming[routeConf & 0x60] ?? false) as FLiRS,
 		protocolRate: routeConf & protocolDataRateMask,
 		repeaterNodeIDs: [
-			...buffer.slice(offset, offset + MAX_REPEATERS),
+			...buffer.subarray(offset, offset + MAX_REPEATERS),
 		].filter((id) => id !== 0),
 	};
 	if (ret.repeaterNodeIDs![0] === 0xfe) delete ret.repeaterNodeIDs;
@@ -155,7 +155,7 @@ export class RouteCacheFileV1 extends NVMFile {
 			this.routeCaches = [];
 			for (let i = 0; i < ROUTECACHES_PER_FILE_V1; i++) {
 				const offset = i * 2 * (MAX_REPEATERS + 1);
-				const entry = this.payload.slice(
+				const entry = this.payload.subarray(
 					offset,
 					offset + 2 * (MAX_REPEATERS + 1),
 				);

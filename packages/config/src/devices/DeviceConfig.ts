@@ -680,33 +680,68 @@ export class DeviceConfig {
 	}
 
 	public constructor(
-		public readonly filename: string,
-		/** Whether this is an embedded configuration or not */
-		public readonly isEmbedded: boolean,
-		public readonly manufacturer: string,
-		public readonly manufacturerId: number,
-		public readonly label: string,
-		public readonly description: string,
-		public readonly devices: readonly {
+		filename: string,
+		isEmbedded: boolean,
+		manufacturer: string,
+		manufacturerId: number,
+		label: string,
+		description: string,
+		devices: readonly {
 			productType: number;
 			productId: number;
 		}[],
-		public readonly firmwareVersion: FirmwareVersionRange,
-		/** Mark this configuration as preferred over other config files with an overlapping firmware range */
-		public readonly preferred: boolean,
-		public readonly endpoints?: ReadonlyMap<number, EndpointConfig>,
-		public readonly associations?: ReadonlyMap<number, AssociationConfig>,
-		public readonly paramInformation?: ParamInfoMap,
-		/**
-		 * Contains manufacturer-specific support information for the
-		 * ManufacturerProprietary CC
-		 */
-		public readonly proprietary?: Record<string, unknown>,
-		/** Contains compatibility options */
-		public readonly compat?: CompatConfig,
-		/** Contains instructions and other metadata for the device */
-		public readonly metadata?: DeviceMetadata,
-	) {}
+		firmwareVersion: FirmwareVersionRange,
+		preferred: boolean,
+		endpoints?: ReadonlyMap<number, EndpointConfig>,
+		associations?: ReadonlyMap<number, AssociationConfig>,
+		paramInformation?: ParamInfoMap,
+		proprietary?: Record<string, unknown>,
+		compat?: CompatConfig,
+		metadata?: DeviceMetadata,
+	) {
+		this.filename = filename;
+		this.isEmbedded = isEmbedded;
+		this.manufacturer = manufacturer;
+		this.manufacturerId = manufacturerId;
+		this.label = label;
+		this.description = description;
+		this.devices = devices;
+		this.firmwareVersion = firmwareVersion;
+		this.preferred = preferred;
+		this.endpoints = endpoints;
+		this.associations = associations;
+		this.paramInformation = paramInformation;
+		this.proprietary = proprietary;
+		this.compat = compat;
+		this.metadata = metadata;
+	}
+
+	public readonly filename: string;
+	/** Whether this is an embedded configuration or not */
+	public readonly isEmbedded: boolean;
+	public readonly manufacturer: string;
+	public readonly manufacturerId: number;
+	public readonly label: string;
+	public readonly description: string;
+	public readonly devices: readonly {
+		productType: number;
+		productId: number;
+	}[];
+	public readonly firmwareVersion: FirmwareVersionRange;
+	/** Mark this configuration as preferred over other config files with an overlapping firmware range */
+	public readonly preferred: boolean;
+	public readonly endpoints?: ReadonlyMap<number, EndpointConfig>;
+	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
+	public readonly paramInformation?: ParamInfoMap;
+	/**
+	 * Contains manufacturer-specific support information for the
+	 * ManufacturerProprietary CC
+	 */
+	public readonly proprietary?: Record<string, unknown>;
+	/** Contains compatibility options */
+	public readonly compat?: CompatConfig;
+	/** Contains instructions and other metadata for the device */
+	public readonly metadata?: DeviceMetadata;
 
 	/** Returns the association config for a given endpoint */
 	public getAssociationConfigForEndpoint(

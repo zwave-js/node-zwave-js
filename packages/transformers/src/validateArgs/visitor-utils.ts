@@ -75,10 +75,12 @@ export function checkIsNodeBuffer(type: ts.ObjectType): boolean {
 		type.symbol !== undefined
 		&& type.symbol.valueDeclaration !== undefined
 		&& type.symbol.escapedName === "Buffer"
-		&& !!(
-			ts.getCombinedModifierFlags(type.symbol.valueDeclaration)
-			& ts.ModifierFlags.Ambient
-		)
+		// @ts-expect-error No clue why the approach below doesn't work for Buffer anymore
+		&& type.symbol.parent?.escapedName === "__global"
+		// && !!(
+		// 	ts.getCombinedModifierFlags(type.symbol.valueDeclaration)
+		// 	& ts.ModifierFlags.Ambient
+		// )
 	);
 }
 

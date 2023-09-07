@@ -444,7 +444,7 @@ export class AssociationCCSet extends AssociationCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.groupId = this.payload[0];
-			this.nodeIds = [...this.payload.slice(1)];
+			this.nodeIds = [...this.payload.subarray(1)];
 		} else {
 			if (options.groupId < 1) {
 				throw new ZWaveError(
@@ -507,7 +507,7 @@ export class AssociationCCRemove extends AssociationCC {
 			if (this.payload[0] !== 0) {
 				this.groupId = this.payload[0];
 			}
-			this.nodeIds = [...this.payload.slice(1)];
+			this.nodeIds = [...this.payload.subarray(1)];
 		} else {
 			// Validate options
 			if (!options.groupId) {
@@ -579,7 +579,7 @@ export class AssociationCCReport extends AssociationCC {
 			this.groupId = this.payload[0];
 			this.maxNodes = this.payload[1];
 			this.reportsToFollow = this.payload[2];
-			this.nodeIds = [...this.payload.slice(3)];
+			this.nodeIds = [...this.payload.subarray(3)];
 		} else {
 			this.groupId = options.groupId;
 			this.maxNodes = options.maxNodes;

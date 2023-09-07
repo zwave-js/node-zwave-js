@@ -118,8 +118,11 @@ integrationTest(
 							},
 						);
 						const serialized = configCC.serialize();
-						const segment1 = serialized.slice(0, MAX_SEGMENT_SIZE);
-						const segment2 = serialized.slice(MAX_SEGMENT_SIZE);
+						const segment1 = serialized.subarray(
+							0,
+							MAX_SEGMENT_SIZE,
+						);
+						const segment2 = serialized.subarray(MAX_SEGMENT_SIZE);
 
 						const sessionId = 7;
 

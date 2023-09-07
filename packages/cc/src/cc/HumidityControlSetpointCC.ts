@@ -588,7 +588,7 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		}
 
 		// parseFloatWithScale does its own validation
-		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+		const { value, scale } = parseFloatWithScale(this.payload.subarray(1));
 		this._value = value;
 		this.scale = scale;
 	}
@@ -856,9 +856,9 @@ export class HumidityControlSetpointCCCapabilitiesReport
 			value: this._minValue,
 			scale: this._minValueScale,
 			bytesRead,
-		} = parseFloatWithScale(this.payload.slice(1)));
+		} = parseFloatWithScale(this.payload.subarray(1)));
 		({ value: this._maxValue, scale: this._maxValueScale } =
-			parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+			parseFloatWithScale(this.payload.subarray(1 + bytesRead)));
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {

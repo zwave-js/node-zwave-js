@@ -55,7 +55,7 @@ export class SetApplicationNodeInformationRequest extends Message {
 			this.genericDeviceClass,
 			this.specificDeviceClass,
 			ccListLength,
-			...ccList.slice(0, ccListLength),
+			...ccList.subarray(0, ccListLength),
 		]);
 
 		return super.serialize();

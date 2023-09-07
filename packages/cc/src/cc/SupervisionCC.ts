@@ -383,7 +383,7 @@ export class SupervisionCCGet extends SupervisionCC {
 			this.sessionId = this.payload[0] & 0b111111;
 
 			this.encapsulated = CommandClass.from(this.host, {
-				data: this.payload.slice(2),
+				data: this.payload.subarray(2),
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,

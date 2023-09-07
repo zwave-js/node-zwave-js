@@ -81,7 +81,7 @@ export function readObject(
 
 	let data: Buffer | undefined;
 	if (fragmentLength > 0) {
-		data = buffer.slice(
+		data = buffer.subarray(
 			offset + headerSize,
 			offset + headerSize + fragmentLength,
 		);
@@ -190,7 +190,7 @@ export function fragmentLargeObject(
 		const fragmentSize = offset === 0
 			? maxFirstFragmentSizeWithHeader - NVM3_OBJ_HEADER_SIZE_LARGE
 			: maxFragmentSizeWithHeader - NVM3_OBJ_HEADER_SIZE_LARGE;
-		const data = obj.data!.slice(offset, offset + fragmentSize);
+		const data = obj.data!.subarray(offset, offset + fragmentSize);
 
 		ret.push({
 			type: obj.type,

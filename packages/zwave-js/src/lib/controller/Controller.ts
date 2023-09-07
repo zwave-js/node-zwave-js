@@ -90,6 +90,7 @@ import {
 	flatMap,
 	getEnumMemberName,
 	getErrorMessage,
+	noop,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
@@ -387,7 +388,6 @@ interface ControllerEventCallbacks
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ZWaveController extends ControllerStatisticsHost {}
 
 @Mixin([ControllerStatisticsHost])
@@ -872,12 +872,10 @@ export class ZWaveController
 
 		if (this.hasPlannedProvisioningEntries()) {
 			// SmartStart should be enabled
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			void this.enableSmartStart().catch(() => {});
+			void this.enableSmartStart().catch(noop);
 		} else {
 			// SmartStart should be disabled
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			void this.disableSmartStart().catch(() => {});
+			void this.disableSmartStart().catch(noop);
 		}
 	}
 
@@ -1522,9 +1520,7 @@ export class ZWaveController
 		) {
 			// If Smart Start was enabled before the inclusion/exclusion,
 			// enable it again and ignore errors
-
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			this.enableSmartStart().catch(() => {});
+			this.enableSmartStart().catch(noop);
 		}
 	}
 
@@ -2330,8 +2326,7 @@ supported CCs: ${
 						);
 						void api
 							.completeStep(step, InclusionControllerStatus.OK)
-							// eslint-disable-next-line @typescript-eslint/no-empty-function
-							.catch(() => {});
+							.catch(noop);
 					});
 				}
 			});
@@ -2435,8 +2430,7 @@ supported CCs: ${
 				);
 				void api
 					.completeStep(initiate.step, InclusionControllerStatus.OK)
-					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					.catch(() => {});
+					.catch(noop);
 			});
 		});
 	}
@@ -2679,7 +2673,6 @@ supported CCs: ${
 			const fullDSK = inclusionOptions.provisioning.dsk;
 			// SmartStart and S2 with QR code are pre-provisioned, so we don't need to ask the user for anything
 			userCallbacks = {
-				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				abort() {},
 				grantSecurityClasses: (requested) => {
 					return Promise.resolve({
@@ -2915,7 +2908,7 @@ supported CCs: ${
 			) {
 				// For authenticated encryption, the DSK (first 16 bytes of the public key) is obfuscated (missing the first 2 bytes)
 				// Request the user to enter the missing part as a 5-digit PIN
-				const dsk = dskToString(nodePublicKey.slice(0, 16)).slice(5);
+				const dsk = dskToString(nodePublicKey.subarray(0, 16)).slice(5);
 
 				// The time the user has to enter the PIN is limited by the timeout TAI2
 				const tai2RemainingMs = inclusionTimeouts.TAI2
@@ -3188,7 +3181,7 @@ supported CCs: ${
 				);
 			}
 			// Remember the DSK (first 16 bytes of the public key)
-			node.dsk = nodePublicKey.slice(0, 16);
+			node.dsk = nodePublicKey.subarray(0, 16);
 
 			this.driver.controllerLog.logNode(node.id, {
 				message:
@@ -6456,7 +6449,7 @@ ${associatedNodes.join(", ")}`,
 		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
 			await this.externalNVMWriteBuffer(
 				offset,
-				nvmData.slice(offset, offset + chunkSize),
+				nvmData.subarray(offset, offset + chunkSize),
 			);
 			// Report progress for listeners
 			if (onProgress) {
@@ -6493,7 +6486,7 @@ ${associatedNodes.join(", ")}`,
 		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
 			const { endOfFile } = await this.externalNVMWriteBuffer700(
 				offset,
-				nvmData.slice(offset, offset + chunkSize),
+				nvmData.subarray(offset, offset + chunkSize),
 			);
 
 			// Report progress for listeners
@@ -6931,7 +6924,7 @@ ${associatedNodes.join(", ")}`,
 			const BLOCK_SIZE = 64;
 			const numFragments = Math.ceil(data.length / BLOCK_SIZE);
 			for (let fragment = 0; fragment < numFragments; fragment++) {
-				const fragmentData = data.slice(
+				const fragmentData = data.subarray(
 					fragment * BLOCK_SIZE,
 					(fragment + 1) * BLOCK_SIZE,
 				);
@@ -7047,7 +7040,7 @@ ${associatedNodes.join(", ")}`,
 				fragment <= numFragments;
 				fragment++
 			) {
-				const fragmentData = data.slice(
+				const fragmentData = data.subarray(
 					(fragment - 1) * BLOCK_SIZE,
 					fragment * BLOCK_SIZE,
 				);
