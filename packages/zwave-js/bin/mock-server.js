@@ -82,7 +82,12 @@ Each node ID may only be used once in mock configs. Node ID ${nodeConfig.id} is 
  */
 function getConfig(filename) {
 	if (filename.endsWith(".js")) {
-		return require(filename).default(childRequire);
+		// The export can either be a static config object or a function that accepts a require
+		let config = require(filename).default;
+		if (typeof config === "function") {
+			config = config({ require: childRequire });
+		}
+		return config;
 	} else if (filename.endsWith(".json")) {
 		// TODO: JSON5 support
 		return JSON.parse(readFileSync(filename, "utf8"));
