@@ -42,7 +42,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Enable",
 					"value": 0
@@ -70,7 +70,7 @@
 					"label": "Internal",
 					"value": 1
 				},
-                {
+				{
 					"label": "Internal with floor limit",
 					"value": 2
 				},
@@ -78,7 +78,7 @@
 					"label": "External",
 					"value": 3
 				},
-                {
+				{
 					"label": "External with floor limit",
 					"value": 4
 				},
@@ -106,7 +106,7 @@
 					"label": "12",
 					"value": 1
 				},
-                {
+				{
 					"label": "15",
 					"value": 2
 				},
@@ -114,7 +114,7 @@
 					"label": "22",
 					"value": 3
 				},
-                {
+				{
 					"label": "33",
 					"value": 4
 				},
@@ -122,7 +122,7 @@
 					"label": "47",
 					"value": 5
 				},
-                {
+				{
 					"label": "68",
 					"value": 6
 				},
@@ -209,7 +209,7 @@
 			"minValue": -60,
 			"maxValue": 60,
 			"defaultValue": 0,
-            "unit": "0.1 °C",
+			"unit": "0.1 °C",
 			"unsigned": false
 		},
 		{
