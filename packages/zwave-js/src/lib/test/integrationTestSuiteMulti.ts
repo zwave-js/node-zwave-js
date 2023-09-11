@@ -23,7 +23,7 @@ interface IntegrationTestOptions {
 	provisioningDirectory?: string;
 	/** Whether the recorded messages and frames should be cleared before executing the test body. Default: true. */
 	clearMessageStatsBeforeTest?: boolean;
-	nodeCapabilities: Pick<MockNodeOptions, "id" | "capabilities">[];
+	nodeCapabilities?: Pick<MockNodeOptions, "id" | "capabilities">[];
 	customSetup?: (
 		driver: Driver,
 		mockController: MockController,
@@ -97,6 +97,8 @@ function suite(
 		({ mockController, mockNodes } = prepareMocks(
 			mockPort,
 			undefined,
+			// TODO: This isn't ideal as it requires us to provide the
+			// node capabilities in addition to the provisioning directory
 			nodeCapabilities,
 		));
 
