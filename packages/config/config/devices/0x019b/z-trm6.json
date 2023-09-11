@@ -96,7 +96,7 @@
 			"maxValue": 7,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "KΩ",
+			"unit": "kΩ",
 			"options": [
 				{
 					"label": "10",
