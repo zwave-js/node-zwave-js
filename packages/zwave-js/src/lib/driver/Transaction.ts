@@ -21,6 +21,8 @@ export interface MessageGenerator {
 	parent: Transaction;
 	/** Start a new copy of this message generator */
 	start: () => AsyncGenerator<Message, void, Message>;
+	/** Resets this message generator so it can be started anew */
+	reset: () => void;
 	/** A reference to the currently running message generator if it was already started */
 	self?: ReturnType<MessageGenerator["start"]>;
 	/** A reference to the last generated message, or undefined if the generator wasn't started or has finished */
@@ -121,6 +123,13 @@ export class Transaction implements Comparable<Transaction> {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Resets this transaction's message generator
+	 */
+	public reset(): void {
+		this.parts.reset();
 	}
 
 	public async generateNextMessage(
