@@ -124,6 +124,10 @@ import {
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
 import {
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+} from "../serialapi/application/SerialAPIStartedRequest";
+import {
 	ShutdownRequest,
 	type ShutdownResponse,
 } from "../serialapi/application/ShutdownMessages";
@@ -424,6 +428,10 @@ export class ZWaveController
 		driver.registerRequestHandler(
 			FunctionType.ReplaceFailedNode,
 			this.handleReplaceNodeStatusReport.bind(this),
+		);
+		driver.registerRequestHandler(
+			FunctionType.SerialAPIStarted,
+			this.handleSerialAPIStartedUnexpectedly.bind(this),
 		);
 	}
 
@@ -3831,6 +3839,34 @@ supported CCs: ${
 		}
 		// not sure what to do with this message
 		return false;
+	}
+
+	/**
+	 * Is called when the Serial API restart unexpectedly.
+	 */
+	private async handleSerialAPIStartedUnexpectedly(
+		msg: SerialAPIStartedRequest,
+	): Promise<boolean> {
+		// Normally, the soft reset command includes waiting for this message. If we end up here, it is unexpected.
+
+		if (msg.wakeUpReason === SerialAPIWakeUpReason.SoftwareReset) {
+			// The Serial API restarted
+			if (this._nodeIdType === NodeIDType.Long) {
+				this.driver.controllerLog.print(
+					`Serial API restarted unexpectedly.`,
+					"warn",
+				);
+
+				// We previously used 16 bit node IDs, but the controller was reset.
+				// Remember this and try to go back to 16 bit.
+				this._nodeIdType = NodeIDType.Short;
+				await this.trySetNodeIDType(NodeIDType.Long);
+			}
+
+			return true; // Don't invoke any more handlers
+		}
+
+		return false; // Not handled
 	}
 
 	private _rebuildRoutesProgress = new Map<number, RebuildRoutesStatus>();
