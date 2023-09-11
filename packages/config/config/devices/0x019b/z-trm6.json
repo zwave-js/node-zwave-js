@@ -387,7 +387,7 @@
 			"unit": "seconds",
 			"options": [
 				{
-					"label": "On change",
+					"label": "Changes only",
 					"value": 0
 				}
 			]
