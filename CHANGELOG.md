@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Ported changes from `v11.14.1` and `v11.14.2`
+* Fixed the argument type for `updateLogConfig` and `updateOptions` (#6254)
+* Removed auto-disabling of soft-reset capability (#6256)
+* Default to RF protection state `Unprotected` if not given for `Protection CC` V2+ (#6257)
+
+### Changes under the hood
+* Upgraded lots of dependencies (#6258)
+
 ## 12.0.0-beta.0 (2023-09-06)
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v12)
 * Remove support for Node.js 14 and 16 (#6245)
@@ -17,6 +27,14 @@
 
 ### Features
 * Detect an unresponsive stick and reset it (#6244)
+
+## 11.14.2 (2023-09-11)
+### Bugfixes
+* Fixed an issue causing commands that have previously been moved to the wakeup queue for sleeping nodes would no longer be handled correctly on wakeup and block the send queue for an extended amount of time (#6266)
+
+## 11.14.1 (2023-09-07)
+### Changes under the hood
+* The `mock-server` now supports loading mocks from outside the `node-zwave-js` repository (#6261)
 
 ## 11.14.0 (2023-09-04)
 ### Features
