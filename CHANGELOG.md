@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.0.0-beta.1 (2023-09-11)
 ### Bugfixes
 * Ported changes from `v11.14.1` and `v11.14.2`
 * Fixed the argument type for `updateLogConfig` and `updateOptions` (#6254)
