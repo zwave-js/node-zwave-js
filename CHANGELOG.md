@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue causing commands that have previously been moved to the wakeup queue for sleeping nodes would no longer be handled correctly on wakeup and block the send queue for an extended amount of time (#6266)
+
 ## 11.14.1 (2023-09-07)
 ### Changes under the hood
 * The `mock-server` now supports loading mocks from outside the `node-zwave-js` repository (#6261)
