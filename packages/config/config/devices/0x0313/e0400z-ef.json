@@ -2,7 +2,7 @@
 	"manufacturer": "Hoppe",
 	"manufacturerId": "0x0313",
 	"label": "E0400Z-EF",
-	"description": "HOPPE eHandle ConnectSense",
+	"description": "eHandle ConnectSense",
 	"devices": [
 		{
 			"productType": "0x0701",
@@ -21,23 +21,23 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "WINDOW_TILTING",
+			"label": "Basic Set (Open/Close)",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "CONTROL_ALARM",
+			"label": "Basic Set (Tilt/Close)",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "SECURITY_ALARM",
+			"label": "Basic Set (Intrusion)",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Basic Command Value Sent to Association Groups O",
-			"description": "Defines the basic command value sent in case of on event",
+			"label": "Basic Set Value (Open)",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -57,8 +57,8 @@
 		},
 		{
 			"#": "2",
-			"label": "Basic Command Value Sent to Association Groups O",
-			"description": "Defines the basic command value sent in case of off event",
+			"label": "Basic Set Value (Close)",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -78,24 +78,9 @@
 		},
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Report Last State On Wakeup",
-			"description": "Activate/deactivate handle/window reporting on wakeup",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 255
-				}
-			]
+			"defaultValue": 255
 		}
 	],
 	"metadata": {
