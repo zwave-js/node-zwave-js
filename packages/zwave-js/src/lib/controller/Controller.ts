@@ -124,7 +124,7 @@ import {
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
 import {
-	SerialAPIStartedRequest,
+	type SerialAPIStartedRequest,
 	SerialAPIWakeUpReason,
 } from "../serialapi/application/SerialAPIStartedRequest";
 import {
