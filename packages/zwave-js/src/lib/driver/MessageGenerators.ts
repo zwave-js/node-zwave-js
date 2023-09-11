@@ -896,12 +896,11 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 		parent: undefined as any, // The transaction will set this field on creation
 		current: undefined,
 		self: undefined,
+		reset: () => {
+			generator.current = undefined;
+			generator.self = undefined;
+		},
 		start: () => {
-			const resetGenerator = () => {
-				generator.current = undefined;
-				generator.self = undefined;
-			};
-
 			async function* gen() {
 				// Determine which message generator implementation should be used
 				let implementation: MessageGeneratorImplementation =
@@ -947,7 +946,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 						} else if (isTransmitReport(e) && !e.isOK()) {
 							// The generator was prematurely ended by throwing a NOK transmit report.
 							// The driver may want to retry it, so reset the generator
-							resetGenerator();
+							generator.reset();
 							return;
 						} else {
 							// The generator was prematurely ended by throwing a Message
@@ -958,9 +957,10 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 				}
 
 				resultPromise.resolve(result as TResponse);
-				resetGenerator();
+				generator.reset();
 				return;
 			}
+
 			generator.self = gen();
 			return generator.self;
 		},

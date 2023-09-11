@@ -277,9 +277,11 @@ export type TransactionReducerResult =
 		message?: Message;
 	}
 	| {
-		// Changes the priority (and tag) of the transaction if a new one is given,
-		// and moves the current transaction back to the queue
+		// Moves the transaction back to the queue, resetting it if desired.
+		// Optionally change the priority and/or tag.
 		type: "requeue";
+		// TODO: Figure out if there's any situation where we don't want to reset the transaction
+		reset?: boolean;
 		priority?: MessagePriority;
 		tag?: any;
 	};

@@ -196,7 +196,7 @@ integrationTest.only(
 				&& f.payload instanceof BasicCCGet
 			);
 			// and return a number
-			t.is(typeof result, "number");
+			t.is(typeof result?.currentValue, "number");
 
 			// Query the node's BASIC state again. This should be handled relatively quickly
 			mockNode10.clearReceivedControllerFrames();
@@ -218,7 +218,7 @@ integrationTest.only(
 				&& f.payload instanceof BasicCCGet
 			);
 			// and return a number
-			t.is(typeof result, "number");
+			t.is(typeof result?.currentValue, "number");
 		},
 	},
 );

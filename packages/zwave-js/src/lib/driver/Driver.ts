@@ -5469,6 +5469,8 @@ ${handlers.length} left`,
 		const requeue: TransactionReducerResult = {
 			type: "requeue",
 			priority: MessagePriority.WakeUp,
+			// Reset the transaction so it doesn't simply resolve to `undefined` when we attempt to continue it
+			reset: true,
 		};
 		const requeueAndTagAsInterview: TransactionReducerResult = {
 			...requeue,
@@ -5580,6 +5582,9 @@ ${handlers.length} left`,
 					}
 					if (reducerResult.tag != undefined) {
 						transaction.tag = reducerResult.tag;
+					}
+					if (reducerResult.reset) {
+						transaction.reset();
 					}
 					if (source === "active") stopActive = transaction;
 					requeue.push(transaction);
