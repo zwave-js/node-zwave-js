@@ -36,7 +36,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Disable Buttons",
+			"label": "Local Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -449,7 +449,7 @@
 			"unit": "100 W",
 			"options": [
 				{
-					"label": "Uses power metering value",
+					"label": "Use measured value",
 					"value": 0
 				}
 			]
