@@ -440,7 +440,7 @@
 		},
 		{
 			"#": "29",
-			"label": "Size of Load",
+			"label": "Load Power",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
