@@ -331,7 +331,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Turn off (Display error)",
+					"label": "Stay off (Display error)",
 					"value": 0
 				}
 			]
