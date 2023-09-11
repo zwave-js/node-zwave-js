@@ -378,7 +378,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Thermostat State Update Interval",
+			"label": "Thermostat State Report Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
