@@ -63,6 +63,6 @@
 	],
 	"compat": {
 		// The device expects to be queried after status changes, but ramps up too slow to be queried immediately.
-		"manualValueRefreshDelayMs": 1000
+		"manualValueRefreshDelayMs": 3000
 	}
 }
