@@ -456,6 +456,7 @@
 		}
 	],
 	"compat": {
+		// The device doesn't accept setpoints with automatic precision
 		"overrideFloatEncoding": {
 			"size": 2
 		}
