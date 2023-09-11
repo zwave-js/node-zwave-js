@@ -322,8 +322,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Action After Error",
-			"description": "Device will attempt to turn on again after timeout period",
+			"label": "Turn On Delay After Error",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
