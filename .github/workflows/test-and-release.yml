@@ -231,7 +231,7 @@ jobs:
       if: github.event_name == 'pull_request'
       run: |
         git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
-        yarn run test:dirty --base origin/${{ github.event.pull_request.base.ref }}
+        yarn run test:dirty --resolve --base origin/${{ github.event.pull_request.base.ref }}
 
     # For all other events, especially on master and releases, run the full test suite
     # Run the full test suite on master, release branches and tags
