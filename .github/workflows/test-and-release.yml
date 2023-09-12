@@ -39,9 +39,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      with:
-        # This is required to get the latest commit from the master branch too
-        fetch-depth: 2
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -55,7 +52,9 @@ jobs:
         yarn build $TURBO_FLAGS
 
     - name: Resolve dirty tests
-      run: yarn test:dirty:resolve --base origin/${{ github.event.pull_request.base.ref }}
+      run: |
+        git fetch origin ${{ github.event.pull_request.base.ref }}
+        yarn test:dirty:resolve --base origin/${{ github.event.pull_request.base.ref }}
 
     - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload
