@@ -174,6 +174,10 @@ function hash(input: string): string {
 async function getDiffOutput(): Promise<string> {
 	const gitDiffOutput = (await execa("git", ["status", "--porcelain"]))
 		.stdout;
+
+	console.log("Result from git status --porcelain:");
+	console.log(gitDiffOutput);
+
 	return gitDiffOutput
 		.split("\n")
 		.map((line) => line.trim().split(" ", 2))

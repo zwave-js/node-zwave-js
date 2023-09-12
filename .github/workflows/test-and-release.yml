@@ -51,6 +51,9 @@ jobs:
         # yarn clean $TURBO_FLAGS
         yarn build $TURBO_FLAGS
 
+    - name: Resolve dirty tests
+      run: yarn test:dirty:resolve
+
     - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload
 
