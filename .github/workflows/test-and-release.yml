@@ -221,12 +221,17 @@ jobs:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
+    # For the partial tests to succeed, we need to build the packages first.
+    # Thanks to caching from the previous job, this should be almost a no-op
+    - name: Compile TypeScript code
+      run: yarn build $TURBO_FLAGS
+
     # For pull requests, only run tests for changed files
     - name: Run component tests (changes)
       if: github.event_name == 'pull_request'
       run: |
         git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
-        yarn test:dirty:resolve --base origin/${{ github.event.pull_request.base.ref }}
+        yarn run test:dirty --base origin/${{ github.event.pull_request.base.ref }}
 
     # For all other events, especially on master and releases, run the full test suite
     # Run the full test suite on master, release branches and tags
