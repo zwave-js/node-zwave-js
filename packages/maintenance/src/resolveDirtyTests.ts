@@ -358,7 +358,8 @@ if (require.main === module) {
 	(async () => {
 		if (resolve) await resolveDirtyTests(!run, diffBase);
 		if (run) await runDirtyTests(diffBase);
-	})().catch(() => {
+	})().catch((e) => {
+		console.error(e);
 		process.exit(1);
 	});
 }
