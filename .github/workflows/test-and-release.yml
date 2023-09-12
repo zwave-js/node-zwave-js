@@ -39,6 +39,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        # This is required to get the latest commit from the master branch too
+        fetch-depth: 2
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
