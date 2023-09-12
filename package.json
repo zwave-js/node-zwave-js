@@ -104,7 +104,7 @@
     "test": "yarn ts maintenance/test.ts",
     "test:ci": "yarn test:ts --runInBand --forceExit",
     "test:dirty:resolve": "yarn ts packages/maintenance/src/resolveDirtyTests.ts",
-    "test:dirty": "FORCE_COLOR=1 yarn turbo run test:dirty ${TURBO_FLAGS:-''} --",
+    "test:dirty": "yarn ts packages/maintenance/src/resolveDirtyTests.ts --run",
     "test:watch": "yarn w test:dirty",
     "coverage": "yarn run test:ts --collect-coverage",
     "coverage:ci": "yarn run test:ci --collect-coverage",

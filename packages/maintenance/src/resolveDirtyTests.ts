@@ -182,7 +182,9 @@ async function getDiffOutput(): Promise<string> {
 		.join("\n");
 }
 
-export async function resolveDirtyTests(): Promise<void> {
+export async function resolveDirtyTests(
+	printResult: boolean = true,
+): Promise<void> {
 	// Use git to figure out which files have changed
 	const gitDiffOutput = await getDiffOutput();
 	const gitDiffHash = hash(gitDiffOutput);
@@ -278,6 +280,7 @@ export async function resolveDirtyTests(): Promise<void> {
 		testsByPackage[prefix].push(relativeToPackage);
 	}
 
+	if (printResult) console.log(`Found ${dirtyTests.length} dirty tests`);
 	report(gitDiffHash, testsByPackage);
 }
 
@@ -289,40 +292,59 @@ async function runDirtyTests(): Promise<void> {
 	try {
 		report = JSON.parse(fs.readFileSync(reportFile, "utf8"));
 	} catch {
-		console.error("Dirty tests not resolved yet");
+		console.error("Dirty tests not resolved yet. Resolve them first with");
+		console.error("\nyarn run test:dirty:resolve\n");
+		console.error("or pass the --resolve flag.");
 		process.exit(1);
 	}
 
 	if (report.diffHash !== gitDiffHash) {
-		console.error("Dirty tests are out of date");
+		console.error("Dirty tests are out of date. Resolve them first with");
+		console.error("\nyarn run test:dirty:resolve\n");
+		console.error("or pass the --resolve flag.");
 		process.exit(1);
 	}
 
 	const projectFolder = path.relative(repoRoot, projectRoot);
-	const dirtyTests = report.changes[projectFolder];
+	let dirtyTests: string[];
+	if (projectFolder) {
+		dirtyTests = report.changes[projectFolder];
+	} else {
+		// When executed in the root dir, run all dirty tests
+		dirtyTests = Object.entries(report.changes).flatMap(
+			([folder, tests]) => tests.map((test) => path.join(folder, test)),
+		);
+	}
+
 	if (!dirtyTests || !dirtyTests.length) {
-		console.log(`No dirty tests in ${projectFolder || "root dir"}`);
+		console.log(
+			`No dirty tests ${projectFolder ? `in ${projectFolder}` : "found"}`,
+		);
 		return;
 	}
 
 	// Run the dirty tests
 	console.log(
-		`Executing ${dirtyTests.length} dirty tests in ${projectFolder}...`,
+		`Executing ${dirtyTests.length} dirty tests ${
+			projectFolder ? `in ${projectFolder}` : ""
+		}...`,
 	);
-	await execa("yarn", ["run", "test:ts", ...dirtyTests], {
+	await execa("yarn", ["test", ...dirtyTests], {
 		stdio: "inherit",
 	});
 }
 
 if (require.main === module) {
 	const args = process.argv.slice(2);
-	if (args.includes("--run")) {
-		runDirtyTests()
-			.then(() => process.exit(0))
-			.catch(() => process.exit(1));
-	} else {
-		resolveDirtyTests()
-			.then(() => process.exit(0))
-			.catch(() => process.exit(1));
-	}
+	const run = args.includes("--run");
+	// Resolve dirty tests by default, unless --run is specified
+	// In that case, require --resolve to be passed aswell.
+	const resolve = !run || args.includes("--resolve");
+
+	(async () => {
+		if (resolve) await resolveDirtyTests(!run);
+		if (run) await runDirtyTests();
+	})().catch(() => {
+		process.exit(1);
+	});
 }
