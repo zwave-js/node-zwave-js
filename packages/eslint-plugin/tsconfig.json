@@ -1,0 +1,8 @@
+{
+	"extends": "@tsconfig/node18/tsconfig.json",
+	"compilerOptions": {
+		"checkJs": true,
+		"noEmit": true
+	},
+	"include": ["lib/*.js"]
+}
