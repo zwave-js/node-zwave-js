@@ -171,16 +171,18 @@ function hash(input: string): string {
 	return hasher.digest("hex");
 }
 
-async function getDiffOutput(): Promise<string> {
-	const gitDiffOutput = (await execa("git", ["status", "--porcelain"]))
-		.stdout;
+async function getDiffOutput(diffBase?: string): Promise<string> {
+	const command = diffBase
+		? ["diff", diffBase, "--name-status"]
+		: ["status", "--porcelain"];
+	const gitDiffOutput = (await execa("git", command)).stdout;
 
-	console.log("Result from git status --porcelain:");
+	console.log(`Result from git ${command.join(" ")}:`);
 	console.log(gitDiffOutput);
 
 	return gitDiffOutput
 		.split("\n")
-		.map((line) => line.trim().split(" ", 2))
+		.map((line) => line.trim().split(/\s+/, 2))
 		.filter(([mod]) => mod !== "D" /* deleted */)
 		.map(([, file]) => file)
 		.join("\n");
@@ -188,14 +190,17 @@ async function getDiffOutput(): Promise<string> {
 
 export async function resolveDirtyTests(
 	printResult: boolean = true,
+	diffBase?: string,
 ): Promise<void> {
 	// Use git to figure out which files have changed
-	const gitDiffOutput = await getDiffOutput();
+	const gitDiffOutput = await getDiffOutput(diffBase);
 	const gitDiffHash = hash(gitDiffOutput);
 	const changedFiles = gitDiffOutput
 		.split("\n")
 		.map((file) => file.trim())
 		.filter(Boolean);
+	console.log("changed files");
+	console.log(changedFiles.join("\n"));
 
 	if (!changedFiles) {
 		// console.log("No changed files");
@@ -288,8 +293,8 @@ export async function resolveDirtyTests(
 	report(gitDiffHash, testsByPackage);
 }
 
-async function runDirtyTests(): Promise<void> {
-	const gitDiffOutput = await getDiffOutput();
+async function runDirtyTests(diffBase?: string): Promise<void> {
+	const gitDiffOutput = await getDiffOutput(diffBase);
 	const gitDiffHash = hash(gitDiffOutput);
 
 	let report: { diffHash: string; changes: Record<string, string[]> };
@@ -344,10 +349,15 @@ if (require.main === module) {
 	// Resolve dirty tests by default, unless --run is specified
 	// In that case, require --resolve to be passed aswell.
 	const resolve = !run || args.includes("--resolve");
+	const diffBaseArgIndex = args.indexOf("--base");
+	let diffBase: string | undefined;
+	if (diffBaseArgIndex >= 0 && diffBaseArgIndex < args.length - 1) {
+		diffBase = args[diffBaseArgIndex + 1];
+	}
 
 	(async () => {
-		if (resolve) await resolveDirtyTests(!run);
-		if (run) await runDirtyTests();
+		if (resolve) await resolveDirtyTests(!run, diffBase);
+		if (run) await runDirtyTests(diffBase);
 	})().catch(() => {
 		process.exit(1);
 	});
