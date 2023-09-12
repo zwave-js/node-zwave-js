@@ -46,15 +46,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Resolve dirty tests
-      run: |
-        git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
-        yarn test:dirty:resolve --base origin/${{ github.event.pull_request.base.ref }}
-
     - name: Compile TypeScript code
       run: |
         # yarn clean $TURBO_FLAGS
         yarn build $TURBO_FLAGS
+
+    - name: Resolve dirty tests
+      run: |
+        git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+        yarn test:dirty:resolve --base origin/${{ github.event.pull_request.base.ref }}
 
     - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload
