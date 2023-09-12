@@ -177,9 +177,6 @@ async function getDiffOutput(diffBase?: string): Promise<string> {
 		: ["status", "--porcelain"];
 	const gitDiffOutput = (await execa("git", command)).stdout;
 
-	console.log(`Result from git ${command.join(" ")}:`);
-	console.log(gitDiffOutput);
-
 	return gitDiffOutput
 		.split("\n")
 		.map((line) => line.trim().split(/\s+/, 2))
@@ -199,8 +196,6 @@ export async function resolveDirtyTests(
 		.split("\n")
 		.map((file) => file.trim())
 		.filter(Boolean);
-	console.log("changed files");
-	console.log(changedFiles.join("\n"));
 
 	if (!changedFiles) {
 		// console.log("No changed files");

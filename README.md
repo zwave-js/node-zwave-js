@@ -7,8 +7,6 @@
 
 [![node](https://img.shields.io/node/v/zwave-js.svg) ![npm](https://img.shields.io/npm/v/zwave-js.svg)](https://www.npmjs.com/package/zwave-js)
 
-<!-- [![Coverage Status](https://img.shields.io/coveralls/github/AlCalzone/node-zwave-js.svg)](https://coveralls.io/github/AlCalzone/node-zwave-js) -->
-
 <p align="center">
   📡 Control your <b>Z-Wave</b> network from Node.js<br />
   👶 Easy <b>high-level</b> API<br />

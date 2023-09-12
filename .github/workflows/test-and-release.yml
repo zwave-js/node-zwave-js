@@ -51,11 +51,6 @@ jobs:
         # yarn clean $TURBO_FLAGS
         yarn build $TURBO_FLAGS
 
-    - name: Resolve dirty tests
-      run: |
-        git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
-        yarn test:dirty:resolve --base origin/${{ github.event.pull_request.base.ref }}
-
     - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload
 
@@ -226,10 +221,18 @@ jobs:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Run component tests
-      run: yarn run test:ci $TURBO_FLAGS
-      env:
-        CI: true
+    # For pull requests, only run tests for changed files
+    - name: Run component tests (changes)
+      if: github.event_name == 'pull_request'
+      run: |
+        git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+        yarn test:dirty:resolve --base origin/${{ github.event.pull_request.base.ref }}
+
+    # For all other events, especially on master and releases, run the full test suite
+    # Run the full test suite on master, release branches and tags
+    - name: Run component tests (full)
+      if: github.event_name != 'pull_request'
+      run: yarn run test:ts $TURBO_FLAGS
 
   # # ===================
   # # This job checks if a PR changes the public API surface
@@ -352,46 +355,6 @@ jobs:
         githubToken: ${{ secrets.BOT_TOKEN }}
       env:
         CI: true
-
-  # # Generate coverage reports when the unit tests have succeeded
-  # coverage:
-  #   # Trigger this step only on pushes, because the job often fails for pull requests
-  #   if: |
-  #     contains(github.event.head_commit.message, '[skip ci]') == false &&
-  #     github.event_name == 'push'
-
-  #   needs: [unit-tests]
-
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [18] # This should be LTS
-
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v3
-
-  #   - name: Use Node.js ${{ matrix.node-version }}
-  #     uses: actions/setup-node@v3
-  #     with:
-  #       node-version: ${{ matrix.node-version }}
-  #       cache: 'yarn'
-
-  #   - name: Install dependencies
-  #     run: yarn install --immutable
-
-  #   # Compilation is necessary, or the tests won't run
-  #   - name: Compile TypeScript code
-  #     run: yarn run build
-
-  #   - name: Generate coverage
-  #     run: yarn run coverage:ci
-  #     env:
-  #       CI: true
-  #   - name: Upload to Coveralls
-  #     uses: coverallsapp/github-action@master
-  #     with:
-  #       github-token: ${{ secrets.GITHUB_TOKEN }}
 
   # ===================
 
