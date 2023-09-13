@@ -71,6 +71,7 @@ export class TimeCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async reportTime(
 		hour: number,
 		minute: number,
@@ -105,6 +106,7 @@ export class TimeCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async reportDate(
 		year: number,
 		month: number,

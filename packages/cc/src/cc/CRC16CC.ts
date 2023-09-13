@@ -26,8 +26,10 @@ import { CRC16Command } from "../lib/_Types";
 // @noSetValueAPI
 // @noInterview This CC only has a single encapsulation command
 
-// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
+/* eslint-disable @zwave-js/ccapi-validate-args */
+
 @API(CommandClasses["CRC-16 Encapsulation"])
 export class CRC16CCAPI extends CCAPI {
 	public supportsCommand(_cmd: CRC16Command): MaybeNotKnown<boolean> {

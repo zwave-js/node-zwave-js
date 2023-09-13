@@ -176,5 +176,11 @@ module.exports = {
 				"@typescript-eslint/*": "off",
 			},
 		},
+		{
+			files: ["packages/cc/src/**/*CC.ts"],
+			rules: {
+				"@zwave-js/ccapi-validate-args": "error",
+			},
+		},
 	],
 };

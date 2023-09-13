@@ -7,7 +7,8 @@
 		"source.formatDocument"
 	],
 	"eslint.codeActionsOnSave.rules": [
-		"!@zwave-js/no-debug-in-tests" // Don't auto-fix this rule on save, or we cannot use debug mode in tests
+		"!@zwave-js/no-debug-in-tests", // Don't auto-fix this rule on save, or we cannot use debug mode in tests
+		"*"
 	],
 	"eslint.rules.customizations": [
 		{

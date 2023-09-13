@@ -149,8 +149,10 @@ interface DecryptionResult {
 	securityClass: SecurityClass | undefined;
 }
 
-// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
+/* eslint-disable @zwave-js/ccapi-validate-args */
+
 @API(CommandClasses["Security 2"])
 export class Security2CCAPI extends CCAPI {
 	public supportsCommand(_cmd: Security2Command): MaybeNotKnown<boolean> {

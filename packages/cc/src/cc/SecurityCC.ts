@@ -77,8 +77,10 @@ const HALF_NONCE_SIZE = 8;
 
 // TODO: Ignore commands if received via multicast
 
-// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
+/* eslint-disable @zwave-js/ccapi-validate-args */
+
 @API(CommandClasses.Security)
 export class SecurityCCAPI extends PhysicalCCAPI {
 	public supportsCommand(_cmd: SecurityCommand): MaybeNotKnown<boolean> {

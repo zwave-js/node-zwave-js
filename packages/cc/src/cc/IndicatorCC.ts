@@ -477,6 +477,7 @@ export class IndicatorCCAPI extends CCAPI {
 	 * 	- an object specifying the timeout parts. An empty object will be treated like `undefined`.
 	 * 	- `undefined` to disable the timeout.
 	 */
+	@validateArgs()
 	public async setTimeout(
 		indicatorId: number,
 		timeout: IndicatorTimeout | string | undefined,
@@ -591,6 +592,7 @@ export class IndicatorCCAPI extends CCAPI {
 	/**
 	 * Returns the timeout after which the given indicator will be turned off.
 	 */
+	@validateArgs()
 	public async getTimeout(
 		indicatorId: number,
 	): Promise<MaybeNotKnown<IndicatorTimeout>> {

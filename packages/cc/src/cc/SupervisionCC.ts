@@ -55,8 +55,10 @@ export const SupervisionCCValues = Object.freeze({
 // @noSetValueAPI - This CC has no values to set
 // @noInterview - This CC is only used for encapsulation
 
-// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
+/* eslint-disable @zwave-js/ccapi-validate-args */
+
 @API(CommandClasses.Supervision)
 export class SupervisionCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: SupervisionCommand): MaybeNotKnown<boolean> {
