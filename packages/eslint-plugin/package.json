@@ -1,0 +1,34 @@
+{
+  "name": "@zwave-js/eslint-plugin",
+  "version": "12.0.0-beta.1",
+  "description": "zwave-js: custom ESLint rules",
+  "private": true,
+  "keywords": [],
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "author": {
+    "name": "AlCalzone",
+    "email": "d.griesel@gmx.net"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/AlCalzone/"
+  },
+  "engines": {
+    "node": ">= 18"
+  },
+  "devDependencies": {
+    "@typescript-eslint/utils": "^6.7.0",
+    "typescript": "5.2.2"
+  }
+}

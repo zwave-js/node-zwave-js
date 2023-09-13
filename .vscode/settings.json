@@ -6,6 +6,16 @@
 		"source.fixAll.eslint",
 		"source.formatDocument"
 	],
+	"eslint.codeActionsOnSave.rules": [
+		"!@zwave-js/no-debug-in-tests" // Don't auto-fix this rule on save, or we cannot use debug mode in tests
+	],
+	"eslint.rules.customizations": [
+		{
+			// Just hint that debug:true should not be checked in
+			"rule": "@zwave-js/no-debug-in-tests",
+			"severity": "info"
+		}
+	],
 	"editor.defaultFormatter": "dprint.dprint",
 	"[jsonc]": {
 		"editor.formatOnSave": true,

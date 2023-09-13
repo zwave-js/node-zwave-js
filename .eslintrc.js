@@ -13,6 +13,7 @@
 */
 
 module.exports = {
+	root: true,
 	parser: "@typescript-eslint/parser", // Specifies the ESLint parser
 	parserOptions: {
 		ecmaVersion: 2023, // Allows for the parsing of modern ECMAScript features
@@ -29,6 +30,7 @@ module.exports = {
 		"deprecation",
 		"unused-imports",
 		"unicorn",
+		"@zwave-js",
 	],
 	reportUnusedDisableDirectives: true,
 	rules: {
@@ -164,6 +166,8 @@ module.exports = {
 				"@typescript-eslint/unbound-method": "off",
 				"@typescript-eslint/no-unused-vars": "warn",
 				"@typescript-eslint/dot-notation": "off",
+
+				"@zwave-js/no-debug-in-tests": "error",
 			},
 		},
 		{
