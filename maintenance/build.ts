@@ -11,9 +11,10 @@ const buildArgs = process.argv
 // Only cc, config and projects that depend on them need codegen and partial builds
 const needsNoCodegen = [
 	"@zwave-js/maintenance",
-	"@zwave-js/core",
-	"@zwave-js/shared",
 	"@zwave-js/nvmedit",
+	"@zwave-js/core",
+	"@zwave-js/eslint-plugin",
+	"@zwave-js/shared",
 	"@zwave-js/transformers",
 ];
 
@@ -22,6 +23,8 @@ const hasCodegen = ["@zwave-js/cc", "@zwave-js/config"];
 // zwave-js is the main entry point, but there are projects that depend on it
 const dependsOnZwaveJs = [
 	"@zwave-js/flash",
+	// The eslint plugin doesn't actually depend on zwave-js, but it needs to be built too
+	"@zwave-js/eslint-plugin",
 	// And CLI in the future
 ];
 

@@ -4,9 +4,9 @@
   "description": "zwave-js: custom ESLint rules",
   "private": true,
   "keywords": [],
-  "main": "lib/index.js",
+  "main": "build/index.js",
   "files": [
-    "lib"
+    "build/**/*.js"
   ],
   "author": {
     "name": "AlCalzone",
@@ -26,6 +26,12 @@
   },
   "engines": {
     "node": ">= 18"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.json --pretty",
+    "clean": "del-cli build/ \"*.tsbuildinfo\"",
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^6.7.0",

@@ -113,6 +113,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 		if (response) return response.groupCount;
 	}
 
+	@validateArgs()
 	public async reportGroupCount(groupCount: number): Promise<void> {
 		this.assertSupportsCommand(
 			AssociationCommand,
@@ -152,6 +153,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async sendReport(
 		options: AssociationCCReportSpecificOptions,
 	): Promise<void> {

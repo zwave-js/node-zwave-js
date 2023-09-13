@@ -168,6 +168,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async reportGroupInfo(
 		options: AssociationGroupInfoCCInfoReportSpecificOptions,
 	): Promise<void> {

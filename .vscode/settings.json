@@ -6,8 +6,12 @@
 		"source.fixAll.eslint",
 		"source.formatDocument"
 	],
+	"eslint.codeActionsOnSave.mode": "problems",
 	"eslint.codeActionsOnSave.rules": [
-		"!@zwave-js/no-debug-in-tests" // Don't auto-fix this rule on save, or we cannot use debug mode in tests
+		"!@zwave-js/no-debug-in-tests", // Don't auto-fix this rule on save, or we cannot use debug mode in tests
+		"!@zwave-js/ccapi-validate-args", // We may want to decide whether to fix this or not on a case-by-case basis
+		"!report-unused-eslint-disable-comments", // Without this, disables for the above rules would be removed
+		"*"
 	],
 	"eslint.rules.customizations": [
 		{

@@ -25,6 +25,9 @@ import {
 	InclusionControllerStep,
 } from "../lib/_Types";
 
+// This CC should not be used directly from user code
+/* eslint-disable @zwave-js/ccapi-validate-args */
+
 @commandClass(CommandClasses["Inclusion Controller"])
 @implementedVersion(1)
 export class InclusionControllerCC extends CommandClass {

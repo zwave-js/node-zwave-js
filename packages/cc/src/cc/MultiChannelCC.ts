@@ -329,8 +329,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.members;
 	}
 
-	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// Encapsulation is used internally and too frequently that we
 	// want to pay the cost of validating each call
+	// eslint-disable-next-line @zwave-js/ccapi-validate-args
 	public async sendEncapsulated(
 		options: Omit<
 			MultiChannelCCCommandEncapsulationOptions,
@@ -371,8 +372,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.endpointCount;
 	}
 
-	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// Encapsulation is used internally and too frequently that we
 	// want to pay the cost of validating each call
+	// eslint-disable-next-line @zwave-js/ccapi-validate-args
 	public async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,

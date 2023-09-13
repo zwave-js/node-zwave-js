@@ -1,7 +1,6 @@
-// @ts-check
-const { AST_NODE_TYPES, ESLintUtils } = require("@typescript-eslint/utils");
-const path = require("node:path");
-const { repoRoot } = require("./utils.js");
+import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
+import path from "node:path";
+import { repoRoot } from "../utils.js";
 
 const integrationTestDefinitionFiles = new Set(
 	[
@@ -19,9 +18,9 @@ const integrationTestExportNames = new Set([
 	"integrationTest",
 ]);
 
-module.exports = ESLintUtils.RuleCreator.withoutDocs({
+export const noDebugInTests = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
-		const integrationTestMethodNames = new Set();
+		const integrationTestMethodNames = new Set<string>();
 
 		return {
 			ImportSpecifier(node) {
