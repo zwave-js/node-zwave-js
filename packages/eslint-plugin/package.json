@@ -30,7 +30,6 @@
   "scripts": {
     "build": "tsc -b tsconfig.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
-    "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
