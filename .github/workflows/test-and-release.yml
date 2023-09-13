@@ -141,7 +141,7 @@ jobs:
     # For linting to succeed, we need to build the eslint plugin first.
     # Thanks to caching from the previous job, this should be almost a no-op
     - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS --filter=@zwave-js/eslint-plugin
+      run: yarn build $TURBO_FLAGS
 
     - name: Run linters
       run: yarn run lint $TURBO_FLAGS
