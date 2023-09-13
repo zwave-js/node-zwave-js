@@ -5,6 +5,8 @@ import {
 	type TSESTree,
 } from "@typescript-eslint/utils";
 
+const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
+
 export const ccAPIValidateArgs = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		let currentAPIClassCCName: string | undefined;
@@ -115,7 +117,7 @@ export const ccAPIValidateArgs = ESLintUtils.RuleCreator.withoutDocs({
 					node,
 					loc: node.key.loc,
 					messageId: "add-decorator",
-					fix: function*(fixer) {
+					fix: isFixMode ? undefined : function*(fixer) {
 						if (!validateArgsImport) {
 							validateArgsImport = "validateArgs";
 							yield fixer.insertTextBeforeRange(
@@ -141,7 +143,8 @@ export const ccAPIValidateArgs = ESLintUtils.RuleCreator.withoutDocs({
 				"Public CC API methods should have argument validation to catch user errors.",
 		},
 		type: "problem",
-		fixable: "code",
+		// Do not auto-fix these on the CLI
+		fixable: isFixMode ? undefined : "code",
 		schema: [],
 		messages: {
 			"add-decorator":
