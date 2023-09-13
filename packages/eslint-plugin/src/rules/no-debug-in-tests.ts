@@ -37,10 +37,6 @@ export const noDebugInTests = ESLintUtils.RuleCreator.withoutDocs({
 					))
 				) {
 					integrationTestMethodNames.add(node.local.name);
-					console.log(
-						"Found integration test method",
-						node.local.name,
-					);
 				}
 			},
 			Property(node) {
