@@ -23,6 +23,8 @@ const hasCodegen = ["@zwave-js/cc", "@zwave-js/config"];
 // zwave-js is the main entry point, but there are projects that depend on it
 const dependsOnZwaveJs = [
 	"@zwave-js/flash",
+	// The eslint plugin doesn't actually depend on zwave-js, but it needs to be built too
+	"@zwave-js/eslint-plugin",
 	// And CLI in the future
 ];
 
