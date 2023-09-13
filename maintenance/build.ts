@@ -11,9 +11,10 @@ const buildArgs = process.argv
 // Only cc, config and projects that depend on them need codegen and partial builds
 const needsNoCodegen = [
 	"@zwave-js/maintenance",
-	"@zwave-js/core",
-	"@zwave-js/shared",
 	"@zwave-js/nvmedit",
+	"@zwave-js/core",
+	"@zwave-js/eslint-plugin",
+	"@zwave-js/shared",
 	"@zwave-js/transformers",
 ];
 
