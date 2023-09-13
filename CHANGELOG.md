@@ -4,6 +4,89 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.0.0-beta.1 (2023-09-11)
+### Bugfixes
+* Ported changes from `v11.14.1` and `v11.14.2`
+* Fixed the argument type for `updateLogConfig` and `updateOptions` (#6254)
+* Removed auto-disabling of soft-reset capability (#6256)
+* Default to RF protection state `Unprotected` if not given for `Protection CC` V2+ (#6257)
+
+### Changes under the hood
+* Upgraded lots of dependencies (#6258)
+
+## 12.0.0-beta.0 (2023-09-06)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v12)
+* Remove support for Node.js 14 and 16 (#6245)
+* Subpath exports are now exposed using the `exports` field in `package.json` instead of `typesVersions` (#5839)
+* The `"notification"` event now includes a reference to the endpoint that sent the notification (#6083)
+* Keep separate Supervision session ID counters for each node (#6175)
+* Validate the device fingerprint before installing firmware update instead of when checking for updates (#6192)
+* Removed some deprecated methods (#6250)
+* Managing SUC routes with the non-SUC method variants is no longer allowed (#6251)
+* "Heal (network)" was renamed to "rebuild routes" to better reflect what it does (#6252)
+
+### Features
+* Detect an unresponsive stick and reset it (#6244)
+
+## 11.14.2 (2023-09-11)
+### Bugfixes
+* Fixed an issue causing commands that have previously been moved to the wakeup queue for sleeping nodes would no longer be handled correctly on wakeup and block the send queue for an extended amount of time (#6266)
+
+## 11.14.1 (2023-09-07)
+### Changes under the hood
+* The `mock-server` now supports loading mocks from outside the `node-zwave-js` repository (#6261)
+
+## 11.14.0 (2023-09-04)
+### Features
+* `Driver.sendCommand`, `Driver.sendMessage` and `Node.setValue` now accept an optional callback as part of the options that will be called with the transaction progress (queued, active, failed, complete) (#6212)
+* Optimized the order of node communication during startup to ensure responsive nodes are ready first (#6233)
+* Transmit reports now include the routing scheme (direct, LWR, ...) used for the transmission (#6232)
+
+### Bugfixes
+* The start/stop time and date values in `Schedule Entry Lock CC` commands are now validated (#6231)
+* Fixed an issue where `hasDeviceConfigChanged` would return the opposite of what it should (#6240)
+
+### Config file changes
+* Delay value refresh for `ZW500D` (#6230)
+* Update several Zooz devices to their 800 series revisions (#6218)
+* Extend version range for `Vesternet VES-ZW-DIM-001` (#6216)
+
+### Changes under the hood
+* No longer report errors to Sentry (#6225)
+* `silly` level logging for `setValue` calls now includes the endpoint index (#6223)
+* Added a regression test for `setValue` with a temporary communication failure (#6224)
+
+## 11.13.1 (2023-08-28)
+### Bugfixes
+* Fixed a regression from `v11.13.0` where `Meter CC` and `Multilevel Sensor CC` reports from an endpoint were discarded, although the endpoint did support them, but the root endpoint didn't (#6222)
+* Fixed a startup crash that happens when the controller returns an empty list of nodes (#6220)
+* Fixed an issue where API calls would be rejected early or incorrectly resolved while the driver was still retrying a command to an unresponsive node (#6219)
+* Fixed an issue where the controller would be considered jammed if it responds with a `Fail` status, even after transmitting (#6211)
+
+### Changes under the hood
+* Switched formatting from `Prettier` to the much faster `Dprint` (#6198)
+* Added a precommit hook to format files (#6205)
+* Fix type definitions in the documentation for the `"firmware update finished"` controller event (#6206)
+* Fixed an issue during documentation generation where referencing the same type definition multiple times would not work (#6207)
+* Moved the documentation for `Driver.interviewNode` to `Node.interview` (#6209)
+
+## 11.13.0 (2023-08-22)
+### Features
+* Auto-detected serialports now prominently include `/dev/serial/by-id/*` paths (#6182)
+
+### Bugfixes
+* Discard `Meter CC` and `Multilevel Sensor CC` reports when the node they supposedly come from does not support them (#6178)
+* Abort inclusion when a node with the same ID is already part of the network (#6180)
+* Fixed an issue where a node that does not support S0 and/or S2 was shown with an unknown security class (#6187)
+* Fixed a regression from `v11.12.0` where devices with a `proprietary` field in the device config would not finish the interview (#6202)
+
+### Config file changes
+* Remove unnecessary endpoint functionality for CT100 (#6185)
+
+### Changes under the hood
+* Extended documentation for parsing QR codes (#6181)
+* Fixed an issue where directly editing `driver.options` in tests would modify the `defaultOptions` and influence future driver instances (#6188)
+
 ## 11.12.0 (2023-08-16)
 ### Features
 * When the controller cannot transmit due to being jammed, this is now detected and exposed to applications. In this situation, nodes are no longer being marked as dead. (#6174)

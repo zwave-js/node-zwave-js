@@ -1,40 +1,45 @@
 import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
 import {
 	MAX_NODES,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MulticastCC,
+	type MulticastDestination,
+	type SerializableTXReport,
+	type SinglecastCC,
+	type TXReport,
 	TransmitOptions,
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeNodeID,
 	parseNodeID,
-	type MessageOrCCLogEntry,
-	type MulticastCC,
-	type MulticastDestination,
-	type SinglecastCC,
-	type TXReport,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageOrigin,
 	MessageType,
+	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
-	type SuccessIndicator,
 } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
-import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
+import {
+	encodeTXReport,
+	parseTXReport,
+	txReportToMessageRecord,
+} from "./SendDataShared";
 
 export const MAX_SEND_ATTEMPTS = 5;
 
@@ -44,13 +49,13 @@ export class SendDataRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
-				options.origin === MessageOrigin.Host &&
-				(new.target as any) !== SendDataRequest
+				options.origin === MessageOrigin.Host
+				&& (new.target as any) !== SendDataRequest
 			) {
 				return new SendDataRequest(host, options);
 			} else if (
-				options.origin !== MessageOrigin.Host &&
-				(new.target as any) !== SendDataRequestTransmitReport
+				options.origin !== MessageOrigin.Host
+				&& (new.target as any) !== SendDataRequestTransmitReport
 			) {
 				return new SendDataRequestTransmitReport(host, options);
 			}
@@ -60,7 +65,8 @@ export class SendDataRequestBase extends Message {
 }
 
 interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
@@ -91,7 +97,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			const serializedCCLength = this.payload[offset++];
 			this.transmitOptions = this.payload[offset + serializedCCLength];
 			this.callbackId = this.payload[offset + 1 + serializedCCLength];
-			this.payload = this.payload.slice(
+			this.payload = this.payload.subarray(
 				offset,
 				offset + serializedCCLength,
 			);
@@ -108,8 +114,8 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			}
 		} else {
 			if (
-				!options.command.isSinglecast() &&
-				!options.command.isBroadcast()
+				!options.command.isSinglecast()
+				&& !options.command.isBroadcast()
 			) {
 				throw new ZWaveError(
 					`SendDataRequest can only be used for singlecast and broadcast CCs`,
@@ -119,8 +125,8 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 
 			this.command = options.command;
 			this._nodeId = this.command.nodeId;
-			this.transmitOptions =
-				options.transmitOptions ?? TransmitOptions.DEFAULT;
+			this.transmitOptions = options.transmitOptions
+				?? TransmitOptions.DEFAULT;
 			if (options.maxSendAttempts != undefined) {
 				this.maxSendAttempts = options.maxSendAttempts;
 			}
@@ -196,17 +202,17 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	public expectsNodeUpdate(): boolean {
 		return (
 			// Only true singlecast commands may expect a response
-			this.command.isSinglecast() &&
+			this.command.isSinglecast()
 			// ... and only if the command expects a response
-			this.command.expectsCCResponse()
+			&& this.command.expectsCCResponse()
 		);
 	}
 
 	public isExpectedNodeUpdate(msg: Message): boolean {
 		return (
-			(msg instanceof ApplicationCommandRequest ||
-				msg instanceof BridgeApplicationCommandRequest) &&
-			this.command.isExpectedCCResponse(msg.command)
+			(msg instanceof ApplicationCommandRequest
+				|| msg instanceof BridgeApplicationCommandRequest)
+			&& this.command.isExpectedCCResponse(msg.command)
 		);
 	}
 }
@@ -214,11 +220,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 	transmitStatus: TransmitStatus;
 	callbackId: number;
-	txReport?: TXReport;
+	txReport?: SerializableTXReport;
 }
 
-export class SendDataRequestTransmitReport
-	extends SendDataRequestBase
+export class SendDataRequestTransmitReport extends SendDataRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
@@ -235,23 +240,30 @@ export class SendDataRequestTransmitReport
 			// TODO: Consider NOT parsing this for transmit status other than OK or NoACK
 			this.txReport = parseTXReport(
 				this.transmitStatus !== TransmitStatus.NoAck,
-				this.payload.slice(2),
+				this.payload.subarray(2),
 			);
 		} else {
 			this.callbackId = options.callbackId;
 			this.transmitStatus = options.transmitStatus;
+			this._txReport = options.txReport;
 		}
 	}
 
 	public transmitStatus: TransmitStatus;
+	private _txReport: SerializableTXReport | undefined;
 	public txReport: TXReport | undefined;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
 			this.callbackId,
 			this.transmitStatus,
-			// TODO: Serialize TXReport
 		]);
+		if (this._txReport) {
+			this.payload = Buffer.concat([
+				this.payload,
+				encodeTXReport(this._txReport),
+			]);
+		}
 
 		return super.serialize();
 	}
@@ -266,8 +278,8 @@ export class SendDataRequestTransmitReport
 			message: {
 				"callback id": this.callbackId,
 				"transmit status":
-					getEnumMemberName(TransmitStatus, this.transmitStatus) +
-					(this.txReport
+					getEnumMemberName(TransmitStatus, this.transmitStatus)
+					+ (this.txReport
 						? `, took ${this.txReport.txTicks * 10} ms`
 						: ""),
 				...(this.txReport
@@ -321,13 +333,14 @@ export class SendDataMulticastRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
-				options.origin === MessageOrigin.Host &&
-				(new.target as any) !== SendDataMulticastRequest
+				options.origin === MessageOrigin.Host
+				&& (new.target as any) !== SendDataMulticastRequest
 			) {
 				return new SendDataMulticastRequest(host, options);
 			} else if (
-				options.origin !== MessageOrigin.Host &&
-				(new.target as any) !== SendDataMulticastRequestTransmitReport
+				options.origin !== MessageOrigin.Host
+				&& (new.target as any)
+					!== SendDataMulticastRequestTransmitReport
 			) {
 				return new SendDataMulticastRequestTransmitReport(
 					host,
@@ -341,7 +354,8 @@ export class SendDataMulticastRequestBase extends Message {
 }
 
 interface SendDataMulticastRequestOptions<CCType extends CommandClass>
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
@@ -350,11 +364,8 @@ interface SendDataMulticastRequestOptions<CCType extends CommandClass>
 @expectedResponse(FunctionType.SendDataMulticast)
 @expectedCallback(FunctionType.SendDataMulticast)
 export class SendDataMulticastRequest<
-		CCType extends CommandClass = CommandClass,
-	>
-	extends SendDataMulticastRequestBase
-	implements ICommandClassContainer
-{
+	CCType extends CommandClass = CommandClass,
+> extends SendDataMulticastRequestBase implements ICommandClassContainer {
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -380,7 +391,7 @@ export class SendDataMulticastRequest<
 
 			const serializedCCLength = this.payload[offset];
 			offset++;
-			const serializedCC = this.payload.slice(
+			const serializedCC = this.payload.subarray(
 				offset,
 				offset + serializedCCLength,
 			);
@@ -423,8 +434,8 @@ export class SendDataMulticastRequest<
 			}
 
 			this.command = options.command;
-			this.transmitOptions =
-				options.transmitOptions ?? TransmitOptions.DEFAULT;
+			this.transmitOptions = options.transmitOptions
+				?? TransmitOptions.DEFAULT;
 			if (options.maxSendAttempts != undefined) {
 				this.maxSendAttempts = options.maxSendAttempts;
 			}
@@ -470,7 +481,7 @@ export class SendDataMulticastRequest<
 	public serialize(): Buffer {
 		const serializedCC = this.serializeCC();
 		const destinationNodeIDs = this.command.nodeId.map((id) =>
-			encodeNodeID(id, this.host.nodeIdType),
+			encodeNodeID(id, this.host.nodeIdType)
 		);
 		this.payload = Buffer.concat([
 			// # of target nodes, not # of bytes
@@ -508,7 +519,8 @@ export class SendDataMulticastRequest<
 }
 
 interface SendDataMulticastRequestTransmitReportOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	transmitStatus: TransmitStatus;
 	callbackId: number;
 }
@@ -568,8 +580,7 @@ export interface SendDataMulticastResponseOptions extends MessageBaseOptions {
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
-export class SendDataMulticastResponse
-	extends Message
+export class SendDataMulticastResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(

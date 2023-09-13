@@ -1,24 +1,24 @@
 import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
 import {
-	MessagePriority,
-	NODE_ID_BROADCAST,
-	RssiError,
-	parseNodeBitMask,
-	parseNodeID,
 	type FrameType,
 	type MessageOrCCLogEntry,
+	MessagePriority,
 	type MessageRecord,
+	NODE_ID_BROADCAST,
 	type RSSI,
+	RssiError,
 	type SinglecastCC,
+	parseNodeBitMask,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageDeserializationOptions,
 	MessageType,
 	messageTypes,
 	priority,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { tryParseRSSI } from "../transport/SendDataShared";
@@ -27,8 +27,7 @@ import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
 @messageTypes(MessageType.Request, FunctionType.BridgeApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
-export class BridgeApplicationCommandRequest
-	extends Message
+export class BridgeApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
@@ -50,9 +49,8 @@ export class BridgeApplicationCommandRequest
 			default:
 				this.frameType = "singlecast";
 		}
-		this.isExploreFrame =
-			this.frameType === "broadcast" &&
-			!!(status & ApplicationCommandStatusFlags.Explore);
+		this.isExploreFrame = this.frameType === "broadcast"
+			&& !!(status & ApplicationCommandStatusFlags.Explore);
 		this.isForeignFrame = !!(
 			status & ApplicationCommandStatusFlags.ForeignFrame
 		);
@@ -73,7 +71,7 @@ export class BridgeApplicationCommandRequest
 		// Parse the CC
 		const commandLength = this.payload[offset++];
 		this.command = CommandClass.from(this.host, {
-			data: this.payload.slice(offset, offset + commandLength),
+			data: this.payload.subarray(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 			origin: options.origin,
 			frameType: this.frameType,
@@ -85,7 +83,7 @@ export class BridgeApplicationCommandRequest
 		offset++;
 		if (this.frameType === "multicast") {
 			this.targetNodeId = parseNodeBitMask(
-				this.payload.slice(offset, offset + multicastNodesLength),
+				this.payload.subarray(offset, offset + multicastNodesLength),
 			);
 		} else if (this.frameType === "singlecast") {
 			this.targetNodeId = destinationNodeId;

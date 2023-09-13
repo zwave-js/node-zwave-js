@@ -69,6 +69,8 @@ export enum ZWaveErrorCodes {
 	FWUpdateService_RequestError,
 	/** The integrity check of the downloaded firmware update failed */
 	FWUpdateService_IntegrityCheckFailed,
+	/** The firmware update is for a different device */
+	FWUpdateService_DeviceMismatch,
 
 	/** The given NVM version/format is unsupported */
 	NVM_NotSupported = 280,
@@ -250,13 +252,13 @@ export function isTransmissionError(e: unknown): e is ZWaveError & {
 		| ZWaveErrorCodes.Security2CC_CannotDecode;
 } {
 	return (
-		isZWaveError(e) &&
-		(e.code === ZWaveErrorCodes.Controller_Timeout ||
-			e.code === ZWaveErrorCodes.Controller_MessageDropped ||
-			e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
-			e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-			e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
-			e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
+		isZWaveError(e)
+		&& (e.code === ZWaveErrorCodes.Controller_Timeout
+			|| e.code === ZWaveErrorCodes.Controller_MessageDropped
+			|| e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			|| e.code === ZWaveErrorCodes.Controller_ResponseNOK
+			|| e.code === ZWaveErrorCodes.Controller_NodeTimeout
+			|| e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
 	);
 }
 
@@ -274,4 +276,12 @@ export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
 			return true;
 	}
 	return false;
+}
+
+export function isMissingControllerACK(
+	e: unknown,
+): e is ZWaveError {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Timeout
+		&& e.context === "ACK";
 }

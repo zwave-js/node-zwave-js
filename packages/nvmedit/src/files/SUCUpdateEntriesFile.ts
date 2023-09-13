@@ -1,9 +1,9 @@
 import {
+	type CommandClasses,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeCCList,
 	parseCCList,
-	type CommandClasses,
 } from "@zwave-js/core/safe";
 import {
 	SUC_MAX_UPDATES,
@@ -13,11 +13,11 @@ import {
 import type { NVM3Object } from "../nvm3/object";
 import {
 	NVMFile,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
-	type NVMFileCreationOptions,
-	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export const SUC_UPDATES_PER_FILE_V5 = 8;
@@ -37,14 +37,14 @@ export function parseSUCUpdateEntry(
 	buffer: Buffer,
 	offset: number,
 ): SUCUpdateEntry | undefined {
-	const slice = buffer.slice(offset, offset + SUC_UPDATE_ENTRY_SIZE);
+	const slice = buffer.subarray(offset, offset + SUC_UPDATE_ENTRY_SIZE);
 	if (slice.every((b) => b === 0x00 || b === 0xff)) {
 		return;
 	}
 	const nodeId = slice[0];
 	const changeType = slice[1];
 	const { supportedCCs, controlledCCs } = parseCCList(
-		slice.slice(2, SUC_UPDATE_ENTRY_SIZE),
+		slice.subarray(2, SUC_UPDATE_ENTRY_SIZE),
 	);
 	return {
 		nodeId,
@@ -121,17 +121,17 @@ export function sucUpdateIndexToSUCUpdateEntriesFileIDV5(
 	index: number,
 ): number {
 	return (
-		SUCUpdateEntriesFileV5IDBase +
-		Math.floor(index / SUC_UPDATES_PER_FILE_V5)
+		SUCUpdateEntriesFileV5IDBase
+		+ Math.floor(index / SUC_UPDATES_PER_FILE_V5)
 	);
 }
 
 @nvmFileID(
 	(id) =>
-		id >= SUCUpdateEntriesFileV5IDBase &&
-		id <
-			SUCUpdateEntriesFileV5IDBase +
-				SUC_MAX_UPDATES / SUC_UPDATES_PER_FILE_V5,
+		id >= SUCUpdateEntriesFileV5IDBase
+		&& id
+			< SUCUpdateEntriesFileV5IDBase
+				+ SUC_MAX_UPDATES / SUC_UPDATES_PER_FILE_V5,
 )
 export class SUCUpdateEntriesFileV5 extends NVMFile {
 	public constructor(

@@ -5,14 +5,14 @@ import type { MultiStageCallback, SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
@@ -23,7 +23,8 @@ export enum NodeNeighborUpdateStatus {
 }
 
 export interface RequestNodeNeighborUpdateRequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	nodeId: number;
 	/** This must be determined with {@link computeNeighborDiscoveryTimeout} */
 	discoveryTimeout: number;
@@ -34,8 +35,8 @@ export interface RequestNodeNeighborUpdateRequestOptions
 export class RequestNodeNeighborUpdateRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== RequestNodeNeighborUpdateReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== RequestNodeNeighborUpdateReport
 		) {
 			return new RequestNodeNeighborUpdateReport(host, options);
 		}
@@ -44,7 +45,9 @@ export class RequestNodeNeighborUpdateRequestBase extends Message {
 }
 
 @expectedCallback(FunctionType.RequestNodeNeighborUpdate)
-export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateRequestBase {
+export class RequestNodeNeighborUpdateRequest
+	extends RequestNodeNeighborUpdateRequestBase
+{
 	public constructor(
 		host: ZWaveHost,
 		options: RequestNodeNeighborUpdateRequestOptions,

@@ -1,8 +1,11 @@
 import {
 	CommandClasses,
 	EncapsulationFlags,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	SecurityClass,
+	type SecurityManager,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -16,21 +19,18 @@ import {
 	isTransmissionError,
 	parseCCList,
 	validatePayload,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SecurityManager,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -179,8 +179,8 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			await this.applHost.sendCommand(cc, {
 				...this.commandOptions,
 				// Seems we need these options or some nodes won't accept the nonce
-				transmitOptions:
-					TransmitOptions.ACK | TransmitOptions.AutoRoute,
+				transmitOptions: TransmitOptions.ACK
+					| TransmitOptions.AutoRoute,
 				// Only try sending a nonce once
 				maxSendAttempts: 1,
 				// Nonce requests must be handled immediately
@@ -258,11 +258,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<SecurityCCCommandsSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			SecurityCCCommandsSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["supportedCCs", "controlledCCs"]);
 		}
@@ -328,7 +329,8 @@ export class SecurityCC extends CommandClass {
 			} else if (attempts < MAX_ATTEMPTS) {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `Querying securely supported commands (S0), attempt ${attempts}/${MAX_ATTEMPTS} failed. Retrying in 500ms...`,
+					message:
+						`Querying securely supported commands (S0), attempt ${attempts}/${MAX_ATTEMPTS} failed. Retrying in 500ms...`,
 					level: "warn",
 				});
 				await wait(500);
@@ -401,9 +403,9 @@ export class SecurityCC extends CommandClass {
 
 		// S2, CRC16, Transport Service -> no S2 encapsulation
 		if (
-			cc instanceof Security2CC ||
-			cc instanceof CRC16CC ||
-			cc instanceof TransportServiceCC
+			cc instanceof Security2CC
+			|| cc instanceof CRC16CC
+			|| cc instanceof TransportServiceCC
 		) {
 			return false;
 		}
@@ -444,8 +446,8 @@ export class SecurityCC extends CommandClass {
 
 		// Copy the encapsulation flags from the encapsulated command
 		// but omit Security, since we're doing that right now
-		ret.encapsulationFlags =
-			cc.encapsulationFlags & ~EncapsulationFlags.Security;
+		ret.encapsulationFlags = cc.encapsulationFlags
+			& ~EncapsulationFlags.Security;
 
 		return ret;
 	}
@@ -544,18 +546,20 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			validatePayload(
 				this.payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
 			);
-			const iv = this.payload.slice(0, HALF_NONCE_SIZE);
-			const encryptedPayload = this.payload.slice(HALF_NONCE_SIZE, -9);
-			const nonceId = this.payload[this.payload.length - 9];
-			const authCode = this.payload.slice(-8);
+			const iv = this.payload.subarray(0, HALF_NONCE_SIZE);
+			const encryptedPayload = this.payload.subarray(HALF_NONCE_SIZE, -9);
+			const nonceId = this.payload.at(-9)!;
+			const authCode = this.payload.subarray(-8);
 
 			// Retrieve the used nonce from the nonce store
 			const nonce = this.host.securityManager.getNonce(nonceId);
 			// Only accept the message if the nonce hasn't expired
 			validatePayload.withReason(
-				`Nonce ${num2hex(
-					nonceId,
-				)} expired, cannot decode security encapsulated command.`,
+				`Nonce ${
+					num2hex(
+						nonceId,
+					)
+				} expired, cannot decode security encapsulated command.`,
 			)(!!nonce);
 			// and mark the nonce as used
 			this.host.securityManager.deleteNonce(nonceId);
@@ -589,7 +593,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.sequenced = !!(frameControl & 0b1_0000);
 			this.secondFrame = !!(frameControl & 0b10_0000);
 
-			this.decryptedCCBytes = frameControlAndDecryptedCC.slice(1);
+			this.decryptedCCBytes = frameControlAndDecryptedCC.subarray(1);
 		} else {
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
@@ -660,8 +664,9 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 
 	public serialize(): Buffer {
 		if (!this.nonce) throwNoNonce();
-		if (this.nonce.length !== HALF_NONCE_SIZE)
+		if (this.nonce.length !== HALF_NONCE_SIZE) {
 			throwNoNonce("Invalid nonce size");
+		}
 
 		const serializedCC = this.encapsulated.serialize();
 		const plaintext = Buffer.concat([
@@ -722,7 +727,9 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 
 // This is the same message, but with another CC command
 @CCCommand(SecurityCommand.CommandEncapsulationNonceGet)
-export class SecurityCCCommandEncapsulationNonceGet extends SecurityCCCommandEncapsulation {}
+export class SecurityCCCommandEncapsulationNonceGet
+	extends SecurityCCCommandEncapsulation
+{}
 
 @CCCommand(SecurityCommand.SchemeReport)
 export class SecurityCCSchemeReport extends SecurityCC {
@@ -850,7 +857,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.reportsToFollow = this.payload[0];
-			const list = parseCCList(this.payload.slice(1));
+			const list = parseCCList(this.payload.subarray(1));
 			this.supportedCCs = list.supportedCCs;
 			this.controlledCCs = list.controlledCCs;
 		} else {

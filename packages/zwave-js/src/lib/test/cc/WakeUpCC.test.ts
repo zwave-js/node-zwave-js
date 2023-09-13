@@ -6,7 +6,7 @@ import {
 import { generateAuthKey, generateEncryptionKey } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 
 const host = createTestingHost();
 

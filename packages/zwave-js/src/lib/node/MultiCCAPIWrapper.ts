@@ -1,15 +1,15 @@
 import {
-	SupervisionCCReport,
 	type CCAPI,
 	type SetValueImplementation,
+	SupervisionCCReport,
 } from "@zwave-js/cc";
 import {
-	ZWaveError,
-	ZWaveErrorCodes,
-	mergeSupervisionResults,
 	type CommandClasses,
 	type SendCommandOptions,
 	type ValueID,
+	ZWaveError,
+	ZWaveErrorCodes,
+	mergeSupervisionResults,
 } from "@zwave-js/core/safe";
 
 /** Creates a wrapper that looks like an instance of a specific CC API, but can handle multiple instances of that API */
@@ -47,14 +47,12 @@ export function createMultiCCAPIWrapper<T extends CCAPI>(apiInstances: T[]): T {
 
 	// Since all instances are the same, either all of them or none have a set value implementation
 	const setValue: SetValueImplementation | undefined = apiInstances[0]
-		.setValue
+			.setValue
 		? async (...args) => {
-				const tasks = apiInstances.map((a) =>
-					a.setValue!.call(a, ...args),
-				);
-				const results = await Promise.all(tasks);
-				return mergeSupervisionResults(results);
-		  }
+			const tasks = apiInstances.map((a) => a.setValue!.call(a, ...args));
+			const results = await Promise.all(tasks);
+			return mergeSupervisionResults(results);
+		}
 		: undefined;
 
 	// This wrapper is by definition for multiple nodes, so we cannot return one
@@ -65,11 +63,11 @@ export function createMultiCCAPIWrapper<T extends CCAPI>(apiInstances: T[]): T {
 		get(target, prop) {
 			// Avoid ultra-weird error messages during testing
 			if (
-				process.env.NODE_ENV === "test" &&
-				typeof prop === "string" &&
-				(prop === "$$typeof" ||
-					prop === "constructor" ||
-					prop.includes("@@__IMMUTABLE"))
+				process.env.NODE_ENV === "test"
+				&& typeof prop === "string"
+				&& (prop === "$$typeof"
+					|| prop === "constructor"
+					|| prop.includes("@@__IMMUTABLE"))
 			) {
 				return undefined;
 			}
@@ -106,7 +104,7 @@ export function createMultiCCAPIWrapper<T extends CCAPI>(apiInstances: T[]): T {
 					return async (...args: any) => {
 						const tasks = apiInstances.map((a) =>
 							// This may throw when a non-existing method is accessed, but that is desired here
-							(a as any)[prop].call(a, ...args),
+							(a as any)[prop].call(a, ...args)
 						);
 						// This call won't go through the sendSupervisedCommand method, so supervision results are not automatically unwrapped
 						const responses = await Promise.all(tasks);

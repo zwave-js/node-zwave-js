@@ -1,28 +1,28 @@
 import {
-	CCAPI,
-	CommandClass,
-	getCommandClassStatic,
-	normalizeCCNameOrId,
 	type APIMethodsOf,
+	CCAPI,
 	type CCAPIs,
 	type CCConstructor,
 	type CCNameOrId,
 	type CCToAPI,
+	CommandClass,
+	getCommandClassStatic,
+	normalizeCCNameOrId,
 } from "@zwave-js/cc";
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import type { IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
 import {
 	CacheBackedMap,
+	type CommandClassInfo,
 	CommandClasses,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
 	actuatorCCs,
 	getCCName,
-	type CommandClassInfo,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
-import { isDeepStrictEqual } from "util";
+import { isDeepStrictEqual } from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";
@@ -45,6 +45,20 @@ export class Endpoint implements IZWaveEndpoint {
 		deviceClass?: DeviceClass,
 		supportedCCs?: CommandClasses[],
 	) {
+		// Initialize class fields
+		this._implementedCommandClasses = new CacheBackedMap(
+			this.driver.networkCache,
+			{
+				prefix:
+					cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
+				suffixSerializer: (cc: CommandClasses) => num2hex(cc),
+				suffixDeserializer: (key: string) => {
+					const ccId = parseInt(key, 16);
+					if (ccId in CommandClasses) return ccId;
+				},
+			},
+		);
+
 		this.applyDeviceClass(deviceClass);
 
 		// Add optional CCs
@@ -98,14 +112,7 @@ export class Endpoint implements IZWaveEndpoint {
 	private _implementedCommandClasses: Map<
 		CommandClasses,
 		Readonly<CommandClassInfo>
-	> = new CacheBackedMap(this.driver.networkCache, {
-		prefix: cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
-		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
-		suffixDeserializer: (key: string) => {
-			const ccId = parseInt(key, 16);
-			if (ccId in CommandClasses) return ccId;
-		},
-	});
+	>;
 
 	/**
 	 * @internal
@@ -175,14 +182,15 @@ export class Endpoint implements IZWaveEndpoint {
 		info: Partial<CommandClassInfo>,
 	): void {
 		if (
-			this.getNodeUnsafe()?.isListening &&
-			(cc === CommandClasses.Battery || cc === CommandClasses["Wake Up"])
+			this.getNodeUnsafe()?.isListening
+			&& (cc === CommandClasses.Battery
+				|| cc === CommandClasses["Wake Up"])
 		) {
 			// Avoid adding Battery and Wake Up CC to always listening nodes or their endpoints
 			return;
 		} else if (
-			this.index > 0 &&
-			[
+			this.index > 0
+			&& [
 				CommandClasses["CRC-16 Encapsulation"],
 				CommandClasses["Device Reset Locally"],
 				CommandClasses["Manufacturer Specific"],
@@ -221,8 +229,8 @@ export class Endpoint implements IZWaveEndpoint {
 	/** Adds Basic CC to the supported CCs if no other actuator CCs are supported */
 	public maybeAddBasicCCAsFallback(): void {
 		if (
-			!this.supportsCC(CommandClasses.Basic) &&
-			!actuatorCCs.some((cc) => this.supportsCC(cc))
+			!this.supportsCC(CommandClasses.Basic)
+			&& !actuatorCCs.some((cc) => this.supportsCC(cc))
 		) {
 			this.addCC(CommandClasses.Basic, { isSupported: true });
 		}
@@ -232,15 +240,15 @@ export class Endpoint implements IZWaveEndpoint {
 	public hideBasicCCInFavorOfActuatorCCs(): void {
 		// This behavior is defined in SDS14223
 		if (
-			this.supportsCC(CommandClasses.Basic) &&
-			actuatorCCs.some((cc) => this.supportsCC(cc))
+			this.supportsCC(CommandClasses.Basic)
+			&& actuatorCCs.some((cc) => this.supportsCC(cc))
 		) {
 			// We still want to know if BasicCC is controlled, so only mark it as not supported
 			this.addCC(CommandClasses.Basic, { isSupported: false });
 			// If the record is now only a dummy, remove the CC
 			if (
-				!this.supportsCC(CommandClasses.Basic) &&
-				!this.controlsCC(CommandClasses.Basic)
+				!this.supportsCC(CommandClasses.Basic)
+				&& !this.controlsCC(CommandClasses.Basic)
 			) {
 				this.removeCC(CommandClasses.Basic);
 			}
@@ -339,7 +347,9 @@ export class Endpoint implements IZWaveEndpoint {
 		// Create the dependencies
 		for (const node of ret) {
 			const instance = this.createCCInstance(node.value)!;
-			for (const requiredCCId of instance.determineRequiredCCInterviews()) {
+			for (
+				const requiredCCId of instance.determineRequiredCCInterviews()
+			) {
 				const requiredCC = ret.find(
 					(instance) => instance.value === requiredCCId,
 				);
@@ -368,11 +378,11 @@ export class Endpoint implements IZWaveEndpoint {
 		get: (target, ccNameOrId: string | symbol) => {
 			// Avoid ultra-weird error messages during testing
 			if (
-				process.env.NODE_ENV === "test" &&
-				typeof ccNameOrId === "string" &&
-				(ccNameOrId === "$$typeof" ||
-					ccNameOrId === "constructor" ||
-					ccNameOrId.includes("@@__IMMUTABLE"))
+				process.env.NODE_ENV === "test"
+				&& typeof ccNameOrId === "string"
+				&& (ccNameOrId === "$$typeof"
+					|| ccNameOrId === "constructor"
+					|| ccNameOrId.includes("@@__IMMUTABLE"))
 			) {
 				return undefined;
 			}
@@ -409,7 +419,7 @@ export class Endpoint implements IZWaveEndpoint {
 	/**
 	 * Used to iterate over the commandClasses API without throwing errors by accessing unsupported CCs
 	 */
-	private readonly commandClassesIterator: () => Iterator<CCAPI> = function* (
+	private readonly commandClassesIterator: () => Iterator<CCAPI> = function*(
 		this: Endpoint,
 	) {
 		for (const cc of this.implementedCommandClasses.keys()) {
@@ -442,10 +452,8 @@ export class Endpoint implements IZWaveEndpoint {
 		TAPI extends Record<
 			string,
 			(...args: any[]) => any
-		> = CommandClasses extends CC
-			? any
-			: Omit<CCNameOrId, CommandClasses> extends CC
-			? any
+		> = CommandClasses extends CC ? any
+			: Omit<CCNameOrId, CommandClasses> extends CC ? any
 			: APIMethodsOf<CC>,
 	>(
 		cc: CC,
@@ -466,9 +474,7 @@ export class Endpoint implements IZWaveEndpoint {
 		const apiMethod = CCAPI[method];
 		if (typeof apiMethod !== "function") {
 			throw new ZWaveError(
-				`Method "${
-					method as string
-				}" does not exist on the API for the ${ccName} CC!`,
+				`Method "${method as string}" does not exist on the API for the ${ccName} CC!`,
 				ZWaveErrorCodes.CC_NotImplemented,
 			);
 		}

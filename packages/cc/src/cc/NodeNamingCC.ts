@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -15,17 +15,17 @@ import {
 	CCAPI,
 	POLL_VALUE,
 	PhysicalCCAPI,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -82,7 +82,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: NodeNamingAndLocationCCAPI,
 			{ property },
 			value,
@@ -111,7 +111,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 	}
 
 	protected override get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: NodeNamingAndLocationCCAPI, { property }) {
+		return async function(this: NodeNamingAndLocationCCAPI, { property }) {
 			switch (property) {
 				case "name":
 					return this.getName();
@@ -133,11 +133,12 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<NodeNamingAndLocationCCNameReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			NodeNamingAndLocationCCNameReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.name;
 	}
 
@@ -166,11 +167,12 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<NodeNamingAndLocationCCLocationReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			NodeNamingAndLocationCCLocationReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.location;
 	}
 
@@ -319,7 +321,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	) {
 		super(host, options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
-		let nameBuffer = this.payload.slice(1);
+		let nameBuffer = this.payload.subarray(1);
 		if (encoding === "utf16le") {
 			validatePayload(nameBuffer.length % 2 === 0);
 			// Z-Wave expects UTF16 BE
@@ -349,7 +351,9 @@ interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
 
 @CCCommand(NodeNamingAndLocationCommand.LocationSet)
 @useSupervision()
-export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC {
+export class NodeNamingAndLocationCCLocationSet
+	extends NodeNamingAndLocationCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -400,14 +404,16 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 }
 
 @CCCommand(NodeNamingAndLocationCommand.LocationReport)
-export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocationCC {
+export class NodeNamingAndLocationCCLocationReport
+	extends NodeNamingAndLocationCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
-		let locationBuffer = this.payload.slice(1);
+		let locationBuffer = this.payload.subarray(1);
 		if (encoding === "utf16le") {
 			validatePayload(locationBuffer.length % 2 === 0);
 			// Z-Wave expects UTF16 BE
@@ -429,4 +435,6 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 
 @CCCommand(NodeNamingAndLocationCommand.LocationGet)
 @expectedCCResponse(NodeNamingAndLocationCCLocationReport)
-export class NodeNamingAndLocationCCLocationGet extends NodeNamingAndLocationCC {}
+export class NodeNamingAndLocationCCLocationGet
+	extends NodeNamingAndLocationCC
+{}

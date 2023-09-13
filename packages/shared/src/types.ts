@@ -28,8 +28,7 @@ export type TypedPropertyDecorator<TTarget extends Object> = <
 
 export type UnionToIntersection<T> = (
 	T extends any ? (x: T) => any : never
-) extends (x: infer R) => any
-	? R
+) extends (x: infer R) => any ? R
 	: never;
 
 export type OnlyMethods<T> = {
@@ -38,3 +37,14 @@ export type OnlyMethods<T> = {
 export type MethodsNamesOf<T> = OnlyMethods<T>[keyof T];
 
 export type IsAny<T> = 0 extends 1 & T ? true : false;
+
+// expands object types recursively
+// dprint-ignore
+export type Expand<T> =
+	// Expand object types
+	T extends object
+		? T extends infer O
+			? { [K in keyof O]: O[K] }
+			: never
+		: // Fallback to the type itself if no match
+		  T;

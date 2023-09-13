@@ -1,20 +1,20 @@
 import {
+	type CommandClasses,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	encodeCCList,
 	parseCCList,
-	type CommandClasses,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 
@@ -76,7 +76,7 @@ export class SerialAPIStartedRequest extends Message {
 
 			// Parse list of CCs
 			const numCCBytes = this.payload[5];
-			const ccBytes = this.payload.slice(6, 6 + numCCBytes);
+			const ccBytes = this.payload.subarray(6, 6 + numCCBytes);
 			const ccList = parseCCList(ccBytes);
 			this.supportedCCs = ccList.supportedCCs;
 			this.controlledCCs = ccList.controlledCCs;

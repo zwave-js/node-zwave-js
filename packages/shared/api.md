@@ -105,6 +105,13 @@ export function enumFilesRecursive(rootDir: string, predicate?: (filename: strin
 // @public (undocumented)
 export type EventHandler = ((arg1: any, arg2: any, arg3: any, arg4: any) => void) | ((arg1: any, arg2: any, arg3: any) => void) | ((arg1: any, arg2: any) => void) | ((arg1: any) => void) | ((...args: any[]) => void);
 
+// Warning: (ae-missing-release-tag) "Expand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type Expand<T> = T extends object ? T extends infer O ? {
+    [K in keyof O]: O[K];
+} : never : T;
+
 // Warning: (ae-missing-release-tag) "flatMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public

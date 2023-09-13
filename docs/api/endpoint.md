@@ -188,7 +188,11 @@ The `setValue` method is internally called by `Endpoint.setValue`. You shouldn't
 withOptions(options: SendCommandOptions): this
 ```
 
-Returns an instance of this API which will use the given options for each sent command. Use cases are changing the priority or transmit options of the sent commands or expiring them after a given amount of time.
+Returns an instance of this API which will use the given options for each sent command. Use cases are:
+
+- changing the priority or transmit options of the sent commands
+- expiring commands after a given amount of time in the queue
+- getting notified of the command progress
 
 #### Example
 

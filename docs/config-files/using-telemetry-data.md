@@ -1,3 +1,5 @@
+<!-- TODO: This is no longer true -->
+
 # Using telemetry data to create config files
 
 We use [Sentry](https://sentry.io) to capture basic information about devices that were successfully interviewed but have no config file. These often have suboptimal labels that we can improve on (or no information at all). The reports include the following fields.
@@ -12,10 +14,10 @@ Whether the device supports `Association Group Information CC`. If `true`, the t
 
 As a rule of thumb:
 
--   If the device supports `Z-Wave Plus` and the **only** association group is the `"Lifeline"`, then the association groups **SHOULD NOT** be defined.
--   If there are other association groups, it depends on the quality of the labels:
-    -   If they match our [style guide](config-files/style-guide.md#association-groups), it is **NOT** necessary to define them by hand.
-    -   If some of them are bad like `"Sensor notifi rep"`, **ALL** association groups **MUST** be defined.
+- If the device supports `Z-Wave Plus` and the **only** association group is the `"Lifeline"`, then the association groups **SHOULD NOT** be defined.
+- If there are other association groups, it depends on the quality of the labels:
+  - If they match our [style guide](config-files/style-guide.md#association-groups), it is **NOT** necessary to define them by hand.
+  - If some of them are bad like `"Sensor notifi rep"`, **ALL** association groups **MUST** be defined.
 
 ## `supportsConfigCCV3` / `parameters`
 

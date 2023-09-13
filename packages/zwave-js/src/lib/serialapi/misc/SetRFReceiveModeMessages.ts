@@ -1,21 +1,21 @@
 import {
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
@@ -61,8 +61,7 @@ export class SetRFReceiveModeRequest extends Message {
 }
 
 @messageTypes(MessageType.Response, FunctionType.SetRFReceiveMode)
-export class SetRFReceiveModeResponse
-	extends Message
+export class SetRFReceiveModeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(

@@ -2,7 +2,6 @@ import type { ICommandClass } from "@zwave-js/core";
 
 /**
  * Is used to simulate communication between a {@link MockController} and a {@link MockNode}.
- *
  */
 export type MockZWaveFrame = MockZWaveRequestFrame | MockZWaveAckFrame;
 

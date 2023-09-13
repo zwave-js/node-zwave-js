@@ -3,10 +3,10 @@
  * anything they are not supposed to.
  */
 
-import crypto from "crypto";
 import execa from "execa";
-import fs from "fs";
-import path from "path";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import ts from "typescript";
 import { loadTSConfig, projectRoot, repoRoot } from "./tsAPITools";
 
@@ -14,8 +14,8 @@ const reportFile = path.join(repoRoot, ".tmp", "dirty-tests.json");
 
 function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	if (
-		ts.isImportEqualsDeclaration(node) &&
-		ts.isExternalModuleReference(node.moduleReference)
+		ts.isImportEqualsDeclaration(node)
+		&& ts.isExternalModuleReference(node.moduleReference)
 	) {
 		return node.moduleReference.expression;
 	} else if (ts.isImportDeclaration(node)) {
@@ -24,14 +24,14 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 			// import "bar"
 			return node.moduleSpecifier;
 		} else if (
-			!node.importClause.isTypeOnly &&
+			!node.importClause.isTypeOnly
 			// import foo from "bar"
-			(!node.importClause.namedBindings ||
+			&& (!node.importClause.namedBindings
 				// import * as foo from "bar"
-				ts.isNamespaceImport(node.importClause.namedBindings) ||
+				|| ts.isNamespaceImport(node.importClause.namedBindings)
 				// import {foo, type baz} from "bar"
-				(ts.isNamedImports(node.importClause.namedBindings) &&
-					node.importClause.namedBindings.elements.some(
+				|| (ts.isNamedImports(node.importClause.namedBindings)
+					&& node.importClause.namedBindings.elements.some(
 						(e) => !e.isTypeOnly,
 					)))
 		) {
@@ -40,14 +40,14 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	} else if (ts.isExportDeclaration(node)) {
 		// Only return export declarations where there is at least one non-typeonly export specifier
 		if (
-			!node.isTypeOnly &&
+			!node.isTypeOnly
 			// export * from "bar"
-			(!node.exportClause ||
+			&& (!node.exportClause
 				// export * as foo from "bar"
-				ts.isNamespaceExport(node.exportClause) ||
+				|| ts.isNamespaceExport(node.exportClause)
 				// export {foo, type baz} from "bar"
-				(ts.isNamedExports(node.exportClause) &&
-					node.exportClause.elements.some((e) => !e.isTypeOnly)))
+				|| (ts.isNamedExports(node.exportClause)
+					&& node.exportClause.elements.some((e) => !e.isTypeOnly)))
 		) {
 			return node.moduleSpecifier;
 		}
@@ -70,8 +70,8 @@ function getImports(
 		const moduleNameExpr = getExternalModuleName(node);
 		// if they have a name, that is a string, i.e. not alias definition `import x = y`
 		if (
-			moduleNameExpr &&
-			moduleNameExpr.kind === ts.SyntaxKind.StringLiteral
+			moduleNameExpr
+			&& moduleNameExpr.kind === ts.SyntaxKind.StringLiteral
 		) {
 			// Ask the checker about the "symbol: for this module name
 			// it would be undefined if the module was not found (i.e. error)
@@ -80,11 +80,10 @@ function getImports(
 			if (file) {
 				output.push({
 					name: moduleNameExpr.getText(sourceFile),
-					line:
-						ts.getLineAndCharacterOfPosition(
-							sourceFile,
-							moduleNameExpr.getStart(),
-						).line + 1,
+					line: ts.getLineAndCharacterOfPosition(
+						sourceFile,
+						moduleNameExpr.getStart(),
+					).line + 1,
 					sourceFile: file,
 				});
 			}
@@ -148,7 +147,7 @@ function resolveSourceFileFromDefinition(
 }
 
 function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+	return path.relative(projectRoot, filename).replaceAll("\\", "/");
 }
 
 function isExternalModule(imp: ResolvedImport): boolean {
@@ -172,20 +171,26 @@ function hash(input: string): string {
 	return hasher.digest("hex");
 }
 
-async function getDiffOutput(): Promise<string> {
-	const gitDiffOutput = (await execa("git", ["status", "--porcelain"]))
-		.stdout;
+async function getDiffOutput(diffBase?: string): Promise<string> {
+	const command = diffBase
+		? ["diff", diffBase, "--name-status"]
+		: ["status", "--porcelain"];
+	const gitDiffOutput = (await execa("git", command)).stdout;
+
 	return gitDiffOutput
 		.split("\n")
-		.map((line) => line.trim().split(" ", 2))
+		.map((line) => line.trim().split(/\s+/, 2))
 		.filter(([mod]) => mod !== "D" /* deleted */)
 		.map(([, file]) => file)
 		.join("\n");
 }
 
-export async function resolveDirtyTests(): Promise<void> {
+export async function resolveDirtyTests(
+	printResult: boolean = true,
+	diffBase?: string,
+): Promise<void> {
 	// Use git to figure out which files have changed
-	const gitDiffOutput = await getDiffOutput();
+	const gitDiffOutput = await getDiffOutput(diffBase);
 	const gitDiffHash = hash(gitDiffOutput);
 	const changedFiles = gitDiffOutput
 		.split("\n")
@@ -264,7 +269,7 @@ export async function resolveDirtyTests(): Promise<void> {
 	}
 
 	const dirtyTests = [...dirtySourceFiles].filter((file) =>
-		file.endsWith(".test.ts"),
+		file.endsWith(".test.ts")
 	);
 
 	const testsByPackage: Record<string, string[]> = {};
@@ -279,51 +284,77 @@ export async function resolveDirtyTests(): Promise<void> {
 		testsByPackage[prefix].push(relativeToPackage);
 	}
 
+	if (printResult) console.log(`Found ${dirtyTests.length} dirty tests`);
 	report(gitDiffHash, testsByPackage);
 }
 
-async function runDirtyTests(): Promise<void> {
-	const gitDiffOutput = await getDiffOutput();
+async function runDirtyTests(diffBase?: string): Promise<void> {
+	const gitDiffOutput = await getDiffOutput(diffBase);
 	const gitDiffHash = hash(gitDiffOutput);
 
 	let report: { diffHash: string; changes: Record<string, string[]> };
 	try {
 		report = JSON.parse(fs.readFileSync(reportFile, "utf8"));
 	} catch {
-		console.error("Dirty tests not resolved yet");
+		console.error("Dirty tests not resolved yet. Resolve them first with");
+		console.error("\nyarn run test:dirty:resolve\n");
+		console.error("or pass the --resolve flag.");
 		process.exit(1);
 	}
 
 	if (report.diffHash !== gitDiffHash) {
-		console.error("Dirty tests are out of date");
+		console.error("Dirty tests are out of date. Resolve them first with");
+		console.error("\nyarn run test:dirty:resolve\n");
+		console.error("or pass the --resolve flag.");
 		process.exit(1);
 	}
 
 	const projectFolder = path.relative(repoRoot, projectRoot);
-	const dirtyTests = report.changes[projectFolder];
+	let dirtyTests: string[];
+	if (projectFolder) {
+		dirtyTests = report.changes[projectFolder];
+	} else {
+		// When executed in the root dir, run all dirty tests
+		dirtyTests = Object.entries(report.changes).flatMap(
+			([folder, tests]) => tests.map((test) => path.join(folder, test)),
+		);
+	}
+
 	if (!dirtyTests || !dirtyTests.length) {
-		console.log(`No dirty tests in ${projectFolder || "root dir"}`);
+		console.log(
+			`No dirty tests ${projectFolder ? `in ${projectFolder}` : "found"}`,
+		);
 		return;
 	}
 
 	// Run the dirty tests
 	console.log(
-		`Executing ${dirtyTests.length} dirty tests in ${projectFolder}...`,
+		`Executing ${dirtyTests.length} dirty tests ${
+			projectFolder ? `in ${projectFolder}` : ""
+		}...`,
 	);
-	await execa("yarn", ["run", "test:ts", ...dirtyTests], {
+	await execa("yarn", ["test", ...dirtyTests], {
 		stdio: "inherit",
 	});
 }
 
 if (require.main === module) {
 	const args = process.argv.slice(2);
-	if (args.includes("--run")) {
-		runDirtyTests()
-			.then(() => process.exit(0))
-			.catch(() => process.exit(1));
-	} else {
-		resolveDirtyTests()
-			.then(() => process.exit(0))
-			.catch(() => process.exit(1));
+	const run = args.includes("--run");
+	// Resolve dirty tests by default, unless --run is specified
+	// In that case, require --resolve to be passed aswell.
+	const resolve = !run || args.includes("--resolve");
+	const diffBaseArgIndex = args.indexOf("--base");
+	let diffBase: string | undefined;
+	if (diffBaseArgIndex >= 0 && diffBaseArgIndex < args.length - 1) {
+		diffBase = args[diffBaseArgIndex + 1];
 	}
+
+	(async () => {
+		if (resolve) await resolveDirtyTests(!run, diffBase);
+		if (run) await runDirtyTests(diffBase);
+	})().catch((e) => {
+		console.error(e);
+		process.exit(1);
+	});
 }

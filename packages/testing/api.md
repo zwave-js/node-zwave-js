@@ -128,12 +128,14 @@ export const MOCK_FRAME_ACK_TIMEOUT = 1000;
 // @public
 export class MockController {
     constructor(options: MockControllerOptions);
+    ackHostMessage(): void;
     ackNodeRequestFrame(node: MockNode, frame?: MockZWaveRequestFrame): Promise<void>;
     // (undocumented)
     addNode(node: MockNode): void;
     assertReceivedHostMessage(predicate: (msg: Message) => boolean, options?: {
         errorMessage?: string;
     }): void;
+    autoAckHostMessages: boolean;
     autoAckNodeFrames: boolean;
     // Warning: (ae-forgotten-export) The symbol "MockControllerCapabilities" needs to be exported by the entry point index.d.ts
     //

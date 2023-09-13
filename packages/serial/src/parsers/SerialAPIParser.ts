@@ -1,4 +1,4 @@
-import { Transform, type TransformCallback } from "stream";
+import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../Logger";
 import { MessageHeaders } from "../MessageHeaders";
 
@@ -62,17 +62,17 @@ export class SerialAPIParser extends Transform {
 						while (skip < this.receiveBuffer.length) {
 							const byte = this.receiveBuffer[skip];
 							if (
-								byte === MessageHeaders.SOF ||
-								byte === MessageHeaders.ACK ||
-								byte === MessageHeaders.NAK ||
-								byte === MessageHeaders.CAN
+								byte === MessageHeaders.SOF
+								|| byte === MessageHeaders.ACK
+								|| byte === MessageHeaders.NAK
+								|| byte === MessageHeaders.CAN
 							) {
 								// Next byte is valid, keep it
 								break;
 							}
 							skip++;
 						}
-						const discarded = this.receiveBuffer.slice(0, skip);
+						const discarded = this.receiveBuffer.subarray(0, skip);
 						this.logger?.discarded(discarded);
 						this.onDiscarded?.(discarded);
 					}
@@ -89,7 +89,7 @@ export class SerialAPIParser extends Transform {
 				// We have at least one complete message
 				const msgLength = getMessageLength(this.receiveBuffer);
 				// emit it and slice the read bytes from the buffer
-				const msg = this.receiveBuffer.slice(0, msgLength);
+				const msg = this.receiveBuffer.subarray(0, msgLength);
 				this.receiveBuffer = skipBytes(this.receiveBuffer, msgLength);
 
 				this.logger?.data("inbound", msg);
@@ -102,5 +102,5 @@ export class SerialAPIParser extends Transform {
 
 /** Skips the first n bytes of a buffer and returns the rest */
 export function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.slice(n));
+	return Buffer.from(buf.subarray(n));
 }

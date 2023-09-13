@@ -40,7 +40,7 @@
 		"defaultValue": 0
 	},
 	"primary_power_high_delay": {
-		//param 5
+		// param 5
 		"label": "Primary Power High Delay",
 		"unit": "seconds",
 		"valueSize": 2,
@@ -50,7 +50,7 @@
 		"defaultValue": 0
 	},
 	"primary_power_low_delay": {
-		//param 6
+		// param 6
 		"label": "Primary Power Low Delay",
 		"unit": "seconds",
 		"valueSize": 2,
@@ -844,7 +844,7 @@
 		"defaultValue": 1
 	},
 	"temperature_low_actions_control_associations_on_exit": {
-		//param 94b1
+		// param 94b1
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Temperature Low Actions: Control Associations on Exit",
 		"valueSize": 2,

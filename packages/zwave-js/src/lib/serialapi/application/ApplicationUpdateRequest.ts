@@ -1,27 +1,27 @@
 import {
+	type CommandClasses,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type NodeUpdatePayload,
 	createSimpleReflectionDecorator,
 	encodeNodeUpdatePayload,
 	getCCName,
 	parseCCList,
 	parseNodeID,
 	parseNodeUpdatePayload,
-	type CommandClasses,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type NodeUpdatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
+	type DeserializingMessageConstructor,
 	FunctionType,
 	Message,
-	MessageType,
-	gotDeserializationOptions,
-	messageTypes,
-	type DeserializingMessageConstructor,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
 	type MessageOptions,
+	MessageType,
 	type SuccessIndicator,
+	gotDeserializationOptions,
+	messageTypes,
 } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
@@ -62,13 +62,13 @@ export class ApplicationUpdateRequest extends Message {
 				this.updateType,
 			);
 			if (
-				CommandConstructor &&
-				(new.target as any) !== CommandConstructor
+				CommandConstructor
+				&& (new.target as any) !== CommandConstructor
 			) {
 				return new CommandConstructor(host, options);
 			}
 
-			this.payload = this.payload.slice(1);
+			this.payload = this.payload.subarray(1);
 		} else {
 			this.updateType = getApplicationUpdateType(this)!;
 		}
@@ -86,11 +86,14 @@ export class ApplicationUpdateRequest extends Message {
 }
 
 interface ApplicationUpdateRequestWithNodeInfoOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	nodeInformation: NodeUpdatePayload;
 }
 
-export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateRequest {
+export class ApplicationUpdateRequestWithNodeInfo
+	extends ApplicationUpdateRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -124,7 +127,9 @@ export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateReque
 }
 
 @applicationUpdateType(ApplicationUpdateTypes.NodeInfo_Received)
-export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequestWithNodeInfo {}
+export class ApplicationUpdateRequestNodeInfoReceived
+	extends ApplicationUpdateRequestWithNodeInfo
+{}
 
 @applicationUpdateType(ApplicationUpdateTypes.NodeInfo_RequestFailed)
 export class ApplicationUpdateRequestNodeInfoRequestFailed
@@ -137,10 +142,14 @@ export class ApplicationUpdateRequestNodeInfoRequestFailed
 }
 
 @applicationUpdateType(ApplicationUpdateTypes.Node_Added)
-export class ApplicationUpdateRequestNodeAdded extends ApplicationUpdateRequestWithNodeInfo {}
+export class ApplicationUpdateRequestNodeAdded
+	extends ApplicationUpdateRequestWithNodeInfo
+{}
 
 @applicationUpdateType(ApplicationUpdateTypes.Node_Removed)
-export class ApplicationUpdateRequestNodeRemoved extends ApplicationUpdateRequest {
+export class ApplicationUpdateRequestNodeRemoved
+	extends ApplicationUpdateRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
@@ -156,7 +165,9 @@ export class ApplicationUpdateRequestNodeRemoved extends ApplicationUpdateReques
 }
 
 @applicationUpdateType(ApplicationUpdateTypes.SmartStart_HomeId_Received)
-export class ApplicationUpdateRequestSmartStartHomeIDReceived extends ApplicationUpdateRequest {
+export class ApplicationUpdateRequestSmartStartHomeIDReceived
+	extends ApplicationUpdateRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
@@ -174,7 +185,7 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived extends Applicatio
 		// next byte is rxStatus
 		offset++;
 
-		this.nwiHomeId = this.payload.slice(offset, offset + 4);
+		this.nwiHomeId = this.payload.subarray(offset, offset + 4);
 		offset += 4;
 
 		const ccLength = this.payload[offset++];
@@ -182,7 +193,7 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived extends Applicatio
 		this.genericDeviceClass = this.payload[offset++];
 		this.specificDeviceClass = this.payload[offset++];
 		this.supportedCCs = parseCCList(
-			this.payload.slice(offset, offset + ccLength),
+			this.payload.subarray(offset, offset + ccLength),
 		).supportedCCs;
 	}
 

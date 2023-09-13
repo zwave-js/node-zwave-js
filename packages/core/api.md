@@ -1020,6 +1020,15 @@ export function getDSTInfo(now?: Date): DSTInfo;
 // @public (undocumented)
 export function getErrorSuffix(code: ZWaveErrorCodes): string;
 
+// Warning: (ae-missing-release-tag) "getFloatParameters" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getFloatParameters(value: number): {
+    precision: number;
+    size: number;
+    roundedValue: number;
+};
+
 // Warning: (ae-missing-release-tag) "getHighestSecurityClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1206,6 +1215,11 @@ export function isManagementCC(cc: CommandClasses): boolean;
 //
 // @public (undocumented)
 export function isMessagePriority(val: unknown): val is MessagePriority;
+
+// Warning: (ae-missing-release-tag) "isMissingControllerACK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isMissingControllerACK(e: unknown): e is ZWaveError;
 
 // Warning: (ae-missing-release-tag) "isRecoverableZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1481,13 +1495,13 @@ export interface MessageOrCCLogEntry {
 // @public
 export enum MessagePriority {
     // (undocumented)
-    Controller = 2,
+    Controller = 1,
     // (undocumented)
-    Immediate = 0,
+    ControllerImmediate = 0,
     // (undocumented)
-    ImmediateLow = 1,
+    Immediate = 2,
     // (undocumented)
-    MultistepController = 3,
+    ImmediateLow = 3,
     // (undocumented)
     NodeQuery = 7,
     // (undocumented)
@@ -2073,6 +2087,33 @@ export enum RouteProtocolDataRate {
     ZWave_9k6 = 1
 }
 
+// Warning: (ae-missing-release-tag) "RoutingScheme" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export enum RoutingScheme {
+    // (undocumented)
+    Auto = 5,
+    // (undocumented)
+    Direct = 1,
+    // (undocumented)
+    Explore = 7,
+    // (undocumented)
+    Idle = 0,
+    // (undocumented)
+    LWR = 3,
+    // (undocumented)
+    NLWR = 4,
+    // (undocumented)
+    Priority = 2,
+    // (undocumented)
+    ResortDirect = 6
+}
+
+// Warning: (ae-missing-release-tag) "routingSchemeToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function routingSchemeToString(scheme: RoutingScheme): string;
+
 // Warning: (ae-missing-release-tag) "RSSI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -2278,6 +2319,7 @@ export type SendCommandSecurityS2Options = {
 export interface SendMessageOptions {
     changeNodeStatusOnMissingACK?: boolean;
     expire?: number;
+    onProgress?: TransactionProgressListener;
     onTXReport?: (report: TXReport) => void;
     // @internal
     pauseSendThread?: boolean;
@@ -2292,6 +2334,11 @@ export interface SendMessageOptions {
 //
 // @public
 export const sensorCCs: readonly CommandClasses[];
+
+// Warning: (ae-missing-release-tag) "SerializableTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type SerializableTXReport = Partial<Omit<TXReport, "numRepeaters">> & Pick<TXReport, "txTicks" | "routeSpeed">;
 
 // Warning: (ae-missing-release-tag) "serializeCacheValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2496,6 +2543,31 @@ export const timestampPaddingShort: string;
 // @public
 export function topologicalSort<T>(graph: GraphNode<T>[]): T[];
 
+// Warning: (ae-missing-release-tag) "TransactionProgress" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type TransactionProgress = {
+    state: TransactionState.Queued | TransactionState.Active | TransactionState.Completed;
+} | {
+    state: TransactionState.Failed;
+    reason?: string;
+};
+
+// Warning: (ae-missing-release-tag) "TransactionProgressListener" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type TransactionProgressListener = (progress: TransactionProgress) => void;
+
+// Warning: (ae-missing-release-tag) "TransactionState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export enum TransactionState {
+    Active = 1,
+    Completed = 2,
+    Failed = 3,
+    Queued = 0
+}
+
 // Warning: (ae-missing-release-tag) "TranslatedValueID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -2553,7 +2625,7 @@ export function tryParseDSKFromQRCodeString(qr: string): string | undefined;
 
 // Warning: (ae-missing-release-tag) "TXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public
 export interface TXReport {
     ackChannelNo?: number;
     ackRepeaterRSSI?: [RSSI?, RSSI?, RSSI?, RSSI?];
@@ -2568,7 +2640,7 @@ export interface TXReport {
     measuredNoiseFloor?: RSSI;
     numRepeaters: number;
     repeaterNodeIds: [number?, number?, number?, number?];
-    routeSchemeState: number;
+    routeSchemeState: RoutingScheme;
     routeSpeed: ProtocolDataRate;
     routingAttempts: number;
     txChannelNo: number;
@@ -3221,6 +3293,7 @@ export enum ZWaveErrorCodes {
     FirmwareUpdateCC_NotUpgradable = 1501,
     FirmwareUpdateCC_TargetNotFound = 1502,
     FirmwareUpdateCC_Timeout = 1505,
+    FWUpdateService_DeviceMismatch = 263,
     FWUpdateService_IntegrityCheckFailed = 262,
     FWUpdateService_MissingInformation = 260,
     FWUpdateService_RequestError = 261,
@@ -3350,7 +3423,7 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
-// src/security/QR.ts:98:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
+// src/security/QR.ts:99:3 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)
 

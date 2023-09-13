@@ -1,6 +1,10 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -9,10 +13,6 @@ import {
 	maybeUnknownToString,
 	parseBitMask,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -21,17 +21,17 @@ import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -59,12 +59,15 @@ export const CentralSceneCCValues = Object.freeze({
 			internal: true,
 		}),
 
-		...V.staticProperty("slowRefresh", {
-			...ValueMetadata.Boolean,
-			label: "Send held down notifications at a slow rate",
-			description:
-				"When this is true, KeyHeldDown notifications are sent every 55s. When this is false, the notifications are sent every 200ms.",
-		} as const),
+		...V.staticProperty(
+			"slowRefresh",
+			{
+				...ValueMetadata.Boolean,
+				label: "Send held down notifications at a slow rate",
+				description:
+					"When this is true, KeyHeldDown notifications are sent every 55s. When this is false, the notifications are sent every 200ms.",
+			} as const,
+		),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses["Central Scene"], {
@@ -73,14 +76,13 @@ export const CentralSceneCCValues = Object.freeze({
 			"scene",
 			(sceneNumber: number) => padStart(sceneNumber.toString(), 3, "0"),
 			({ property, propertyKey }) =>
-				property === "scene" &&
-				typeof propertyKey === "string" &&
-				/^\d{3}$/.test(propertyKey),
-			(sceneNumber: number) =>
-				({
-					...ValueMetadata.ReadOnlyUInt8,
-					label: `Scene ${padStart(sceneNumber.toString(), 3, "0")}`,
-				} as const),
+				property === "scene"
+				&& typeof propertyKey === "string"
+				&& /^\d{3}$/.test(propertyKey),
+			(sceneNumber: number) => ({
+				...ValueMetadata.ReadOnlyUInt8,
+				label: `Scene ${padStart(sceneNumber.toString(), 3, "0")}`,
+			} as const),
 		),
 	}),
 });
@@ -110,11 +112,12 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<CentralSceneCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			CentralSceneCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"sceneCount",
@@ -135,11 +138,12 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<CentralSceneCCConfigurationReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			CentralSceneCCConfigurationReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["slowRefresh"]);
 		}
@@ -163,7 +167,7 @@ export class CentralSceneCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (this: CentralSceneCCAPI, { property }, value) {
+		return async function(this: CentralSceneCCAPI, { property }, value) {
 			if (property !== "slowRefresh") {
 				throwUnsupportedProperty(this.ccId, property);
 			}
@@ -180,7 +184,7 @@ export class CentralSceneCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: CentralSceneCCAPI, { property }) {
+		return async function(this: CentralSceneCCAPI, { property }) {
 			if (property === "slowRefresh") {
 				return (await this.getConfiguration())?.[property];
 			}
@@ -238,9 +242,11 @@ export class CentralSceneCC extends CommandClass {
 		} catch {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: endpoint.index,
-				message: `Configuring associations to receive ${getCCName(
-					this.ccId,
-				)} commands failed!`,
+				message: `Configuring associations to receive ${
+					getCCName(
+						this.ccId,
+					)
+				} commands failed!`,
 				level: "warn",
 			});
 		}
@@ -298,8 +304,8 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		this.keyAttribute = this.payload[1] & 0b111;
 		this.sceneNumber = this.payload[2];
 		if (
-			this.keyAttribute === CentralSceneKeys.KeyHeldDown &&
-			this.version >= 3
+			this.keyAttribute === CentralSceneKeys.KeyHeldDown
+			&& this.version >= 3
 		) {
 			// A receiving node MUST ignore this field if the command is not
 			// carrying the Key Held Down key attribute.
@@ -364,7 +370,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 2 + bitMaskBytes * numEntries);
 		for (let i = 0; i < numEntries; i++) {
-			const mask = this.payload.slice(
+			const mask = this.payload.subarray(
 				2 + i * bitMaskBytes,
 				2 + (i + 1) * bitMaskBytes,
 			);

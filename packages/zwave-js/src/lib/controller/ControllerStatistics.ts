@@ -1,6 +1,8 @@
 import { StatisticsHost } from "../driver/Statistics";
 
-export class ControllerStatisticsHost extends StatisticsHost<ControllerStatistics> {
+export class ControllerStatisticsHost
+	extends StatisticsHost<ControllerStatistics>
+{
 	createEmpty(): ControllerStatistics {
 		return {
 			messagesTX: 0,

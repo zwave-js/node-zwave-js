@@ -1,5 +1,5 @@
 import { validateArgs } from "@zwave-js/transformers";
-import assert from "assert";
+import assert from "node:assert";
 
 enum My {
 	Foot,

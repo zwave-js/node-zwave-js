@@ -57,11 +57,12 @@ export function decodeSwitchpoint(data: Buffer): Switchpoint {
  * Encodes a switch point to use in a ClimateControlScheduleCC
  */
 export function encodeSwitchpoint(point: Switchpoint): Buffer {
-	if (point.state == undefined)
+	if (point.state == undefined) {
 		throw new ZWaveError(
 			"The given Switchpoint is not valid!",
 			ZWaveErrorCodes.CC_Invalid,
 		);
+	}
 	return Buffer.from([
 		point.hour & 0b000_11111,
 		point.minute & 0b00_111111,
@@ -94,8 +95,8 @@ export function parseTimezone(data: Buffer): Timezone {
  */
 export function encodeTimezone(tz: Timezone): Buffer {
 	if (
-		Math.abs(tz.standardOffset) >= 24 * 60 ||
-		Math.abs(tz.dstOffset) >= 24 * 60
+		Math.abs(tz.standardOffset) >= 24 * 60
+		|| Math.abs(tz.dstOffset) >= 24 * 60
 	) {
 		throw new ZWaveError(
 			"The given timezone is not valid!",

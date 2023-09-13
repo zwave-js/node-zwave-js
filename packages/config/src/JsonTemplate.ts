@@ -3,7 +3,7 @@ import { getErrorMessage } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
 import JSON5 from "json5";
-import * as path from "path";
+import * as path from "node:path";
 
 const IMPORT_KEY = "$import";
 const importSpecifierRegex =
@@ -143,9 +143,11 @@ async function readJsonWithTemplateInternal(
 
 		if (outsideAllRootDirs) {
 			throw new ZWaveError(
-				`Tried to import config file "${filename}" from outside all root directories: ${rootDirs
-					.map((d) => `\n· ${d}`)
-					.join("")}
+				`Tried to import config file "${filename}" from outside all root directories: ${
+					rootDirs
+						.map((d) => `\n· ${d}`)
+						.join("")
+				}
 ${getImportStack(visited, selector)}`,
 				ZWaveErrorCodes.Config_Invalid,
 			);
@@ -154,10 +156,12 @@ ${getImportStack(visited, selector)}`,
 
 	const specifier = getImportSpecifier(filename, selector);
 	if (visited.includes(specifier)) {
-		const msg = `Circular $import in config files: ${[
-			...visited,
-			specifier,
-		].join(" -> ")}\n`;
+		const msg = `Circular $import in config files: ${
+			[
+				...visited,
+				specifier,
+			].join(" -> ")
+		}\n`;
 		// process.stderr.write(msg + "\n");
 		throw new ZWaveError(msg, ZWaveErrorCodes.Config_CircularImport);
 	}
@@ -172,9 +176,11 @@ ${getImportStack(visited, selector)}`,
 			fileCache.set(filename, json);
 		} catch (e) {
 			throw new ZWaveError(
-				`Could not parse config file ${filename}: ${getErrorMessage(
-					e,
-				)}${getImportStack(visited, selector)}`,
+				`Could not parse config file ${filename}: ${
+					getErrorMessage(
+						e,
+					)
+				}${getImportStack(visited, selector)}`,
 				ZWaveErrorCodes.Config_Invalid,
 			);
 		}
@@ -203,8 +209,8 @@ async function resolveJsonImports(
 		if (prop === IMPORT_KEY) {
 			// This is an import statement. Make sure we're working with a string
 			assertImportSpecifier(val, visited.join(" -> "));
-			const { filename: importFilename, selector } =
-				importSpecifierRegex.exec(val)!.groups!;
+			const { filename: importFilename, selector } = importSpecifierRegex
+				.exec(val)!.groups!;
 
 			// Resolve the correct import path
 			let newFilename: string | undefined;
@@ -228,23 +234,31 @@ async function resolveJsonImports(
 
 						if (!newFilename) {
 							throw new ZWaveError(
-								`Could not find the referenced file ${importFilename.slice(
-									2,
-								)} in any of the root directories: ${rootDirs
-									.map((d) => `\n· ${d}`)
-									.join("")}\n${getImportStack(
-									visited,
-									selector,
-								)}`,
+								`Could not find the referenced file ${
+									importFilename.slice(
+										2,
+									)
+								} in any of the root directories: ${
+									rootDirs
+										.map((d) => `\n· ${d}`)
+										.join("")
+								}\n${
+									getImportStack(
+										visited,
+										selector,
+									)
+								}`,
 								ZWaveErrorCodes.Config_Invalid,
 							);
 						}
 					} else {
 						throw new ZWaveError(
-							`An $import specifier cannot start with ~/ when no root directory is defined!${getImportStack(
-								visited,
-								selector,
-							)}`,
+							`An $import specifier cannot start with ~/ when no root directory is defined!${
+								getImportStack(
+									visited,
+									selector,
+								)
+							}`,
 							ZWaveErrorCodes.Config_Invalid,
 						);
 					}

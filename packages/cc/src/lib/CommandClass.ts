@@ -1,14 +1,7 @@
 import {
+	type BroadcastCC,
 	CommandClasses,
 	EncapsulationFlags,
-	NODE_ID_BROADCAST,
-	ZWaveError,
-	ZWaveErrorCodes,
-	getCCName,
-	isZWaveError,
-	parseCCId,
-	valueIdToString,
-	type BroadcastCC,
 	type FrameType,
 	type ICommandClass,
 	type IZWaveEndpoint,
@@ -17,19 +10,26 @@ import {
 	type MessageRecord,
 	type MulticastCC,
 	type MulticastDestination,
+	NODE_ID_BROADCAST,
 	type SinglecastCC,
 	type ValueDB,
 	type ValueID,
 	type ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
+	getCCName,
+	isZWaveError,
+	parseCCId,
+	valueIdToString,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
+	type JSONObject,
 	buffer2hex,
 	getEnumMemberName,
 	num2hex,
 	staticExtends,
-	type JSONObject,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { ValueIDProperties } from "./API";
@@ -45,36 +45,38 @@ import {
 	getImplementedVersion,
 } from "./CommandClassDecorators";
 import {
+	type EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
-	type EncapsulatingCommandClass,
 } from "./EncapsulatingCommandClass";
 import {
-	isCommandClassContainer,
 	type ICommandClassContainer,
+	isCommandClassContainer,
 } from "./ICommandClassContainer";
 import {
-	defaultCCValueOptions,
 	type CCValue,
 	type DynamicCCValue,
 	type StaticCCValue,
+	defaultCCValueOptions,
 } from "./Values";
 
-export type CommandClassDeserializationOptions = {
-	data: Buffer;
-	origin?: MessageOrigin;
-	/** If known, the frame type of the containing message */
-	frameType?: FrameType;
-} & (
-	| {
+export type CommandClassDeserializationOptions =
+	& {
+		data: Buffer;
+		origin?: MessageOrigin;
+		/** If known, the frame type of the containing message */
+		frameType?: FrameType;
+	}
+	& (
+		| {
 			fromEncapsulation?: false;
 			nodeId: number;
-	  }
-	| {
+		}
+		| {
 			fromEncapsulation: true;
 			encapCC: CommandClass;
-	  }
-);
+		}
+	);
 
 export function gotDeserializationOptions(
 	options: CommandClassOptions,
@@ -108,10 +110,9 @@ export class CommandClass implements ICommandClass {
 	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		this.host = host;
 		// Extract the cc from declared metadata if not provided by the CC constructor
-		this.ccId =
-			"ccId" in options && options.ccId != undefined
-				? options.ccId
-				: getCommandClass(this);
+		this.ccId = "ccId" in options && options.ccId != undefined
+			? options.ccId
+			: getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;
@@ -122,8 +123,8 @@ export class CommandClass implements ICommandClass {
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
 			const CCConstructor =
-				getCCConstructor(CommandClass.getCommandClass(options.data)) ??
-				CommandClass;
+				getCCConstructor(CommandClass.getCommandClass(options.data))
+					?? CommandClass;
 			const ccCommand = CCConstructor.getCCCommand(options.data);
 			if (ccCommand != undefined) {
 				const CommandConstructor = getCCCommandConstructor(
@@ -131,8 +132,8 @@ export class CommandClass implements ICommandClass {
 					ccCommand,
 				);
 				if (
-					CommandConstructor &&
-					(new.target as any) !== CommandConstructor
+					CommandConstructor
+					&& (new.target as any) !== CommandConstructor
 				) {
 					return new CommandConstructor(host, options);
 				}
@@ -187,8 +188,8 @@ export class CommandClass implements ICommandClass {
 				);
 			} catch (e) {
 				if (
-					isZWaveError(e) &&
-					e.code === ZWaveErrorCodes.CC_NotImplemented
+					isZWaveError(e)
+					&& e.code === ZWaveErrorCodes.CC_NotImplemented
 				) {
 					// Someone tried to create a CC that is not implemented. Just set all versions to 0.
 					this.version = 0;
@@ -304,7 +305,7 @@ export class CommandClass implements ICommandClass {
 		if (data.length > ccIdLength) {
 			// This is not a NoOp CC (contains command and payload)
 			const ccCommand = data[ccIdLength];
-			const payload = data.slice(ccIdLength + 1);
+			const payload = data.subarray(ccIdLength + 1);
 			return {
 				ccId,
 				ccCommand,
@@ -322,9 +323,9 @@ export class CommandClass implements ICommandClass {
 	 */
 	public serialize(): Buffer {
 		// NoOp CCs have no command and no payload
-		if (this.ccId === CommandClasses["No Operation"])
+		if (this.ccId === CommandClasses["No Operation"]) {
 			return Buffer.from([this.ccId]);
-		else if (this.ccCommand == undefined) {
+		} else if (this.ccCommand == undefined) {
 			throw new ZWaveError(
 				"Cannot serialize a Command Class without a command",
 				ZWaveErrorCodes.CC_Invalid,
@@ -391,8 +392,8 @@ export class CommandClass implements ICommandClass {
 		} catch (e) {
 			// Indicate invalid payloads with a special CC type
 			if (
-				isZWaveError(e) &&
-				e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
 			) {
 				const nodeId = options.fromEncapsulation
 					? options.encapCC.nodeId
@@ -410,9 +411,9 @@ export class CommandClass implements ICommandClass {
 				// Preserve why the command was invalid
 				let reason: string | ZWaveErrorCodes | undefined;
 				if (
-					typeof e.context === "string" ||
-					(typeof e.context === "number" &&
-						ZWaveErrorCodes[e.context] != undefined)
+					typeof e.context === "string"
+					|| (typeof e.context === "number"
+						&& ZWaveErrorCodes[e.context] != undefined)
 				) {
 					reason = e.context;
 				}
@@ -459,10 +460,12 @@ export class CommandClass implements ICommandClass {
 		let tag = this.constructor.name;
 		const message: MessageRecord = {};
 		if (this.constructor === CommandClass) {
-			tag = `${getEnumMemberName(
-				CommandClasses,
-				this.ccId,
-			)} CC (not implemented)`;
+			tag = `${
+				getEnumMemberName(
+					CommandClasses,
+					this.ccId,
+				)
+			} CC (not implemented)`;
 			if (this.ccCommand != undefined) {
 				message.command = num2hex(this.ccCommand);
 			}
@@ -766,7 +769,7 @@ export class CommandClass implements ICommandClass {
 			value.is({
 				commandClass: this.ccId,
 				...properties,
-			}),
+			})
 		);
 	}
 
@@ -775,9 +778,12 @@ export class CommandClass implements ICommandClass {
 		value: StaticCCValue,
 	): boolean {
 		return (
-			value.options.autoCreate === true ||
-			(typeof value.options.autoCreate === "function" &&
-				value.options.autoCreate(applHost, this.getEndpoint(applHost)!))
+			value.options.autoCreate === true
+			|| (typeof value.options.autoCreate === "function"
+				&& value.options.autoCreate(
+					applHost,
+					this.getEndpoint(applHost)!,
+				))
 		);
 	}
 
@@ -815,8 +821,8 @@ export class CommandClass implements ICommandClass {
 
 			// Skip those values that are only supported in higher versions of the CC
 			if (
-				value.options.minVersion != undefined &&
-				value.options.minVersion > this._knownVersion
+				value.options.minVersion != undefined
+				&& value.options.minVersion > this._knownVersion
 			) {
 				continue;
 			}
@@ -890,8 +896,8 @@ export class CommandClass implements ICommandClass {
 
 			// Skip those values that are only supported in higher versions of the CC
 			if (
-				value.options.minVersion != undefined &&
-				value.options.minVersion > this.version
+				value.options.minVersion != undefined
+				&& value.options.minVersion > this.version
 			) {
 				continue;
 			}
@@ -900,14 +906,13 @@ export class CommandClass implements ICommandClass {
 			const sourceValue = this[prop as keyof this];
 
 			// Metadata gets created for non-internal values...
-			const createMetadata =
-				!value.options.internal &&
+			const createMetadata = !value.options.internal
 				// ... but only if the value is included in the report we are persisting
-				(sourceValue != undefined ||
+				&& (sourceValue != undefined
 					// ... or if we know which CC version the node supports
 					// and the value may be automatically created
-					(this._knownVersion >= value.options.minVersion &&
-						this.shouldAutoCreateValue(applHost, value)));
+					|| (this._knownVersion >= value.options.minVersion
+						&& this.shouldAutoCreateValue(applHost, value)));
 
 			if (createMetadata && !valueDB.hasMetadata(valueId)) {
 				valueDB.setMetadata(valueId, value.meta);
@@ -959,8 +964,8 @@ export class CommandClass implements ICommandClass {
 
 		// Evaluate dynamic CC responses
 		if (
-			typeof expected === "function" &&
-			!staticExtends(expected, CommandClass)
+			typeof expected === "function"
+			&& !staticExtends(expected, CommandClass)
 		) {
 			expected = expected(this);
 		}
@@ -981,8 +986,8 @@ export class CommandClass implements ICommandClass {
 
 		// Evaluate dynamic CC responses
 		if (
-			typeof expected === "function" &&
-			!staticExtends(expected, CommandClass)
+			typeof expected === "function"
+			&& !staticExtends(expected, CommandClass)
 		) {
 			expected = expected(this);
 		}
@@ -991,8 +996,8 @@ export class CommandClass implements ICommandClass {
 			// Fallback, should not happen if the expected response is defined correctly
 			return false;
 		} else if (
-			isArray(expected) &&
-			expected.every((cc) => staticExtends(cc, CommandClass))
+			isArray(expected)
+			&& expected.every((cc) => staticExtends(cc, CommandClass))
 		) {
 			// The CC always expects a response from the given list, check if the received
 			// message is in that list
@@ -1010,8 +1015,8 @@ export class CommandClass implements ICommandClass {
 
 		if (ret === "checkEncapsulated") {
 			if (
-				isEncapsulatingCommandClass(this) &&
-				isEncapsulatingCommandClass(received)
+				isEncapsulatingCommandClass(this)
+				&& isEncapsulatingCommandClass(received)
 			) {
 				return this.encapsulated.isExpectedCCResponse(
 					received.encapsulated,
@@ -1082,8 +1087,8 @@ export class CommandClass implements ICommandClass {
 		while (cc.encapsulatingCC) {
 			cc = cc.encapsulatingCC;
 			if (
-				cc.ccId === ccId &&
-				(ccCommand === undefined || cc.ccCommand === ccCommand)
+				cc.ccId === ccId
+				&& (ccCommand === undefined || cc.ccCommand === ccCommand)
 			) {
 				return true;
 			}
@@ -1100,8 +1105,8 @@ export class CommandClass implements ICommandClass {
 		while (cc.encapsulatingCC) {
 			cc = cc.encapsulatingCC;
 			if (
-				cc.ccId === ccId &&
-				(ccCommand === undefined || cc.ccCommand === ccCommand)
+				cc.ccId === ccId
+				&& (ccCommand === undefined || cc.ccCommand === ccCommand)
 			) {
 				return cc;
 			}
@@ -1114,8 +1119,8 @@ export class CommandClass implements ICommandClass {
 		ccCommand?: number,
 	): CommandClass | undefined {
 		const predicate = (cc: CommandClass): boolean =>
-			cc.ccId === ccId &&
-			(ccCommand === undefined || cc.ccCommand === ccCommand);
+			cc.ccId === ccId
+			&& (ccCommand === undefined || cc.ccCommand === ccCommand);
 
 		if (isEncapsulatingCommandClass(this)) {
 			if (predicate(this.encapsulated)) return this.encapsulated;
@@ -1153,18 +1158,16 @@ export class InvalidCC extends CommandClass {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			tags: [this.ccName, "INVALID"],
-			message:
-				this.reason != undefined
-					? {
-							error:
-								typeof this.reason === "string"
-									? this.reason
-									: getEnumMemberName(
-											ZWaveErrorCodes,
-											this.reason,
-									  ),
-					  }
-					: undefined,
+			message: this.reason != undefined
+				? {
+					error: typeof this.reason === "string"
+						? this.reason
+						: getEnumMemberName(
+							ZWaveErrorCodes,
+							this.reason,
+						),
+				}
+				: undefined,
 		};
 	}
 }

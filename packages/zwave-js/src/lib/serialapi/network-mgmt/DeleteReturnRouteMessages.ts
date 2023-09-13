@@ -1,25 +1,25 @@
 import {
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeNodeID,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
@@ -28,8 +28,8 @@ import { getEnumMemberName } from "@zwave-js/shared";
 export class DeleteReturnRouteRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== DeleteReturnRouteRequestTransmitReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== DeleteReturnRouteRequestTransmitReport
 		) {
 			return new DeleteReturnRouteRequestTransmitReport(host, options);
 		}
@@ -43,8 +43,7 @@ export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
 
 @expectedResponse(FunctionType.DeleteReturnRoute)
 @expectedCallback(FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteRequest
-	extends DeleteReturnRouteRequestBase
+export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
@@ -75,8 +74,7 @@ export class DeleteReturnRouteRequest
 }
 
 @messageTypes(MessageType.Response, FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteResponse
-	extends Message
+export class DeleteReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(

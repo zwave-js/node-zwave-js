@@ -1,5 +1,5 @@
 {
-	"extends": "@tsconfig/node14/tsconfig.json",
+	"extends": "@tsconfig/node18/tsconfig.json",
 	"compilerOptions": {
 		"composite": true,
 		"incremental": true,
@@ -15,7 +15,7 @@
 		"stripInternal": true,
 
 		"pretty": true,
-		"types": ["node", "ts-nameof"],
+		"types": ["node"],
 		"noErrorTruncation": true
 	},
 	"include": [

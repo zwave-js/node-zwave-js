@@ -18,8 +18,10 @@ function hasNoValidateArgsComment(
 	node: ts.Node,
 	sourceFile: ts.SourceFile,
 ): boolean {
-	return hasComment(sourceFile, node, (text) =>
-		text.includes("@noValidateArgs"),
+	return hasComment(
+		sourceFile,
+		node,
+		(text) => text.includes("@noValidateArgs"),
 	);
 }
 
@@ -28,8 +30,8 @@ function hasInternalJsDoc(node: ts.Node, sourceFile: ts.SourceFile): boolean {
 		sourceFile,
 		node,
 		(text, kind) =>
-			text.includes("@internal") &&
-			kind === ts.SyntaxKind.MultiLineCommentTrivia,
+			text.includes("@internal")
+			&& kind === ts.SyntaxKind.MultiLineCommentTrivia,
 	);
 }
 
@@ -53,8 +55,8 @@ export function lintCCValidateArgs(): Promise<void> {
 
 		// Only look at *CC.ts files in the lib dir
 		if (
-			!relativePath.includes("/src/lib/") ||
-			!relativePath.endsWith("CC.ts")
+			!relativePath.includes("/src/lib/")
+			|| !relativePath.endsWith("CC.ts")
 		) {
 			continue;
 		}
@@ -68,9 +70,9 @@ export function lintCCValidateArgs(): Promise<void> {
 			const cc = node.decorators
 				.filter(
 					(d) =>
-						ts.isCallExpression(d.expression) &&
-						ts.isIdentifier(d.expression.expression) &&
-						d.expression.expression.text === "API",
+						ts.isCallExpression(d.expression)
+						&& ts.isIdentifier(d.expression.expression)
+						&& d.expression.expression.text === "API",
 				)
 				.map((d) => getCommandClassFromDecorator(sourceFile, d))
 				.find((cc) => cc != undefined);
@@ -80,21 +82,21 @@ export function lintCCValidateArgs(): Promise<void> {
 			const methods = node.members
 				.filter(
 					(m): m is ts.MethodDeclaration =>
-						ts.isMethodDeclaration(m) &&
+						ts.isMethodDeclaration(m)
 						// Ignore overload declarations
-						!!m.body &&
-						m.parameters.length > 0,
+						&& !!m.body
+						&& m.parameters.length > 0,
 				)
 				.filter(
 					(m) =>
-						ts.isIdentifier(m.name) &&
-						m.name.text !== "supportsCommand" &&
-						m.name.text !== "isSetValueOptimistic",
+						ts.isIdentifier(m.name)
+						&& m.name.text !== "supportsCommand"
+						&& m.name.text !== "isSetValueOptimistic",
 				)
 				.filter((m) =>
 					m.modifiers?.some(
 						(mod) => mod.kind === ts.SyntaxKind.PublicKeyword,
-					),
+					)
 				)
 				// Ignore methods marked with @internal
 				.filter((m) => !hasInternalJsDoc(m, sourceFile));
@@ -125,27 +127,35 @@ export function lintCCValidateArgs(): Promise<void> {
 						// ignored
 						return;
 					} else {
-						const hasValidateArgsDecorator =
-							!!method.decorators?.some(
+						const hasValidateArgsDecorator = !!method.decorators
+							?.some(
 								(d) =>
-									ts.isCallExpression(d.expression) &&
-									ts.isIdentifier(d.expression.expression) &&
-									d.expression.expression.text ===
-										"validateArgs",
+									ts.isCallExpression(d.expression)
+									&& ts.isIdentifier(d.expression.expression)
+									&& d.expression.expression.text
+										=== "validateArgs",
 							);
 						if (!hasValidateArgsDecorator) {
 							fail(
-								`The API class for the ${blue(
-									getCCName(cc),
-								)} CC is missing the ${blue(
-									"@validateArgs()",
-								)} decorator on the ${blue(
-									(method.name as ts.Identifier).text,
-								)} method.
+								`The API class for the ${
+									blue(
+										getCCName(cc),
+									)
+								} CC is missing the ${
+									blue(
+										"@validateArgs()",
+									)
+								} decorator on the ${
+									blue(
+										(method.name as ts.Identifier).text,
+									)
+								} method.
 Public CC API methods should have argument validation to catch user errors.
-If this is a false-positive, consider suppressing this error with a ${green(
-									"// @noValidateArgs",
-								)} comment before the method implementation.`,
+If this is a false-positive, consider suppressing this error with a ${
+									green(
+										"// @noValidateArgs",
+									)
+								} comment before the method implementation.`,
 								"error",
 							);
 						}

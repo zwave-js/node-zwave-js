@@ -10,10 +10,10 @@ import {
 } from "@zwave-js/cc/ThermostatSetpointCC";
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 	type MockNodeBehavior,
+	MockZWaveFrameType,
 	type ThermostatSetpointCCCapabilities,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: ThermostatSetpointCCCapabilities = {
@@ -36,8 +36,8 @@ const StateKeys = {
 const respondToThermostatSetpointSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ThermostatSetpointCCSet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ThermostatSetpointCCSet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -52,8 +52,8 @@ const respondToThermostatSetpointSet: MockNodeBehavior = {
 
 			const value = frame.payload.value;
 			if (
-				value > setpointCaps.minValue ||
-				value > setpointCaps.maxValue
+				value > setpointCaps.minValue
+				|| value > setpointCaps.maxValue
 			) {
 				return true;
 			}
@@ -75,8 +75,8 @@ const respondToThermostatSetpointSet: MockNodeBehavior = {
 const respondToThermostatSetpointGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ThermostatSetpointCCGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ThermostatSetpointCCGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -136,8 +136,8 @@ const respondToThermostatSetpointGet: MockNodeBehavior = {
 const respondToThermostatSetpointSupportedGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ThermostatSetpointCCSupportedGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ThermostatSetpointCCSupportedGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -167,8 +167,8 @@ const respondToThermostatSetpointSupportedGet: MockNodeBehavior = {
 const respondToThermostatSetpointCapabilitiesGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ThermostatSetpointCCCapabilitiesGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ThermostatSetpointCCCapabilitiesGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,

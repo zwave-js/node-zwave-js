@@ -2,7 +2,7 @@ import { BasicCCGet, BasicCCSet } from "@zwave-js/cc";
 import { MessagePriority, NodeStatus } from "@zwave-js/core";
 import { MOCK_FRAME_ACK_TIMEOUT, MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { type SendDataRequest } from "../../serialapi/transport/SendDataMessages";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -42,9 +42,9 @@ integrationTest(
 			await wait(50);
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof BasicCCSet &&
-					frame.payload.targetValue === 99,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof BasicCCSet
+					&& frame.payload.targetValue === 99,
 				{
 					errorMessage: "The first command was not received",
 				},

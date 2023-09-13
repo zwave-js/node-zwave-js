@@ -5,10 +5,10 @@ Removing the requirement to have a Z-Wave controller physically connected to the
 
 Examples include:
 
-1. Being able to place the Z-Wave controller in another location, away from the Z-Wave JS host. \
+1. Being able to place the Z-Wave controller in another location, away from the Z-Wave JS host.\
    Ethernet is much more flexible when it comes to bridging distances than USB or serial interfaces.
 
-2. Allowing for live migration of Z-Wave JS running in a virtual machine to another host in a cluster. \
+2. Allowing for live migration of Z-Wave JS running in a virtual machine to another host in a cluster.\
    Passing through a physical USB or serial device ties a virtual machine to the host that has the hardware connected to it. This is especially true for Z-Wave controllers, as parts of the configuration reside in the hardware.
 
 > [!NOTE] Proxying serial connections over TCP/IP networks introduces an additional point of failure. Latency, jitter and packet loss can all negatively affect the performance and functioning of a Z-Wave network. As such it is recommended to limit the use of this feature to local and preferably wired networks.\
@@ -20,16 +20,16 @@ Examples include:
 
 To use a remote serial port, enter `tcp://<hostname-or-ip>:<port>` as the connection string in the "Serial Port" field of the Z-Wave JS configuration, where
 
--   `<hostname-or-ip>` is the hostname or IP address of the remote server
--   and `<port>` is the port number under which the serial port is accessible.
+- `<hostname-or-ip>` is the hostname or IP address of the remote server
+- and `<port>` is the port number under which the serial port is accessible.
 
 The serial port must be configured with the following settings:
 
--   raw, no timeout
--   baudrate: 115200
--   data bits: 8
--   parity: none
--   stop bits: 1
+- raw, no timeout
+- baudrate: 115200
+- data bits: 8
+- parity: none
+- stop bits: 1
 
 ## Configuring `ser2net`
 

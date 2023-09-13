@@ -80,7 +80,8 @@ export function routeStatisticsEquals(
 	r2: RouteStatistics,
 ): boolean {
 	if (r1.repeaters.length !== r2.repeaters.length) return false;
-	if (!r1.repeaters.every((node) => r2.repeaters.includes(node)))
+	if (!r1.repeaters.every((node) => r2.repeaters.includes(node))) {
 		return false;
+	}
 	return true;
 }

@@ -1,9 +1,18 @@
-import { NoOperationCC } from "@zwave-js/cc";
+import {
+	BasicCCGet,
+	type CommandClass,
+	NoOperationCC,
+	WakeUpCCWakeUpNotification,
+} from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
-import { MockZWaveFrameType } from "@zwave-js/testing";
+import {
+	type MockNodeBehavior,
+	MockZWaveFrameType,
+	createMockZWaveRequestFrame,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import path from "path";
+import path from "node:path";
 import { integrationTest } from "../integrationTestSuiteMulti";
 
 // Repro from #1107
@@ -55,8 +64,8 @@ integrationTest(
 			await wait(50);
 			mockNode10.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof NoOperationCC,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof NoOperationCC,
 				{
 					errorMessage: "Node 10 did not receive the ping",
 				},
@@ -83,8 +92,8 @@ integrationTest(
 			await wait(500);
 			mockNode17.assertReceivedControllerFrame(
 				(frame) =>
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof NoOperationCC,
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof NoOperationCC,
 				{
 					errorMessage: "Node 17 did not receive the ping",
 				},
@@ -95,6 +104,121 @@ integrationTest(
 
 			// And it should fail since we don't ack:
 			t.false(await pingPromise17);
+		},
+	},
+);
+
+integrationTest.only(
+	"When a sleeping node with pending commands wakes up, the queue continues executing",
+	{
+		debug: true,
+
+		provisioningDirectory: path.join(
+			__dirname,
+			"fixtures/nodeAsleepMessageOrder",
+		),
+
+		nodeCapabilities: [
+			{
+				id: 10,
+				capabilities: {
+					commandClasses: [
+						CommandClasses.Basic,
+						CommandClasses["Wake Up"],
+					],
+					isListening: false,
+					isFrequentListening: false,
+				},
+			},
+			{
+				id: 17,
+				capabilities: {
+					commandClasses: [CommandClasses.Basic],
+				},
+			},
+		],
+
+		customSetup: async (driver, mockController, mockNodes) => {
+			const [mockNode10] = mockNodes;
+
+			const doNotAnswerWhenAsleep: MockNodeBehavior = {
+				onControllerFrame(controller, self, frame) {
+					if (!mockNode10.autoAckControllerFrames) return true;
+				},
+			};
+			mockNode10.defineBehavior(doNotAnswerWhenAsleep);
+		},
+
+		testBody: async (t, driver, nodes, mockController, mockNodes) => {
+			const [node10, node17] = nodes;
+			const [mockNode10, mockNode17] = mockNodes;
+
+			// Node 10 is assumed to be awake, but actually asleep
+			node10.markAsAwake();
+			mockNode10.autoAckControllerFrames = false;
+
+			// Query the node's BASIC state. This will fail and move the commands to the wakeup queue.
+			const queryBasicPromise1 = node10.commandClasses.Basic.get();
+
+			// Wait for the node to get marked as asleep
+			await new Promise((resolve) => node10.once("sleep", resolve));
+
+			driver.driverLog.sendQueue(driver["queue"]);
+
+			await wait(200);
+
+			// Node 10 wakes up
+			mockNode10.autoAckControllerFrames = true;
+			const cc: CommandClass = new WakeUpCCWakeUpNotification(
+				mockNode10.host,
+				{
+					nodeId: mockController.host.ownNodeId,
+				},
+			);
+			mockNode10.sendToController(createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}));
+
+			// Wait for the node to wake up
+			mockNode10.clearReceivedControllerFrames();
+			await new Promise((resolve) => node10.once("wake up", resolve));
+
+			driver.driverLog.print("AFTER WAKEUP:");
+			driver.driverLog.sendQueue(driver["queue"]);
+
+			let result: any = await Promise.race([
+				wait(5000).then(() => "timeout"),
+				queryBasicPromise1.catch(() => "error"),
+			]);
+			// The first command should have been sent
+			mockNode10.assertReceivedControllerFrame((f) =>
+				f.type === MockZWaveFrameType.Request
+				&& f.payload instanceof BasicCCGet
+			);
+			// and return a number
+			t.is(typeof result?.currentValue, "number");
+
+			// Query the node's BASIC state again. This should be handled relatively quickly
+			mockNode10.clearReceivedControllerFrames();
+			const queryBasicPromise2 = node10.commandClasses.Basic.get();
+
+			await wait(500);
+
+			driver.driverLog.print("AFTER Basic Get:");
+			driver.driverLog.sendQueue(driver["queue"]);
+
+			result = await Promise.race([
+				wait(5000).then(() => "timeout"),
+				queryBasicPromise2.catch(() => "error"),
+			]);
+
+			// The second command should also have been sent
+			mockNode10.assertReceivedControllerFrame((f) =>
+				f.type === MockZWaveFrameType.Request
+				&& f.payload instanceof BasicCCGet
+			);
+			// and return a number
+			t.is(typeof result?.currentValue, "number");
 		},
 	},
 );

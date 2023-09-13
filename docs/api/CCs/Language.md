@@ -31,13 +31,13 @@ async set(
 }
 ```
 
--   **label:** Country code
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Country code
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `language`
 
@@ -49,10 +49,10 @@ async set(
 }
 ```
 
--   **label:** Language code
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Language code
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`

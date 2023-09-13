@@ -3,6 +3,10 @@ const { MockServer } = require("../build/mockServer");
 const { readFileSync, statSync, readdirSync } = require("fs");
 const path = require("path");
 
+// Allow putting .js mock configs outside the repo
+const { createRequire } = require("module");
+const childRequire = createRequire(module.filename);
+
 const args = process.argv.slice(2);
 
 /** @returns {never} */
@@ -49,9 +53,7 @@ ${filesWithControllerMock.map((f) => `- ${f.filename}\n`).join()}
 				nodeConfigFiles.set(nodeConfig.id, file);
 			} else {
 				console.error(`
-Each node ID may only be used once in mock configs. Node ID ${
-					nodeConfig.id
-				} is duplicated in the following files:
+Each node ID may only be used once in mock configs. Node ID ${nodeConfig.id} is duplicated in the following files:
 - ${nodeConfigFiles.get(nodeConfig.id).filename}
 - ${file.filename}
 `);
@@ -80,7 +82,12 @@ Each node ID may only be used once in mock configs. Node ID ${
  */
 function getConfig(filename) {
 	if (filename.endsWith(".js")) {
-		return require(filename).default;
+		// The export can either be a static config object or a function that accepts a require
+		let config = require(filename).default;
+		if (typeof config === "function") {
+			config = config({ require: childRequire });
+		}
+		return config;
 	} else if (filename.endsWith(".json")) {
 		// TODO: JSON5 support
 		return JSON.parse(readFileSync(filename, "utf8"));

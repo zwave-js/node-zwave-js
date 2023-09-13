@@ -1,28 +1,30 @@
 {
   "name": "@zwave-js/cc",
-  "version": "11.12.0",
+  "version": "12.0.0-beta.1",
   "description": "zwave-js: Command Classes",
   "keywords": [],
   "publishConfig": {
     "access": "public"
   },
   "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js",
-    "./*": "./build/cc/*.js"
-  },
   "types": "build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "safe": [
-        "build/index_safe.d.ts"
-      ],
-      "*": [
-        "build/cc/*.d.ts",
-        "build/index.d.ts"
-      ]
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./safe": {
+      "types": "./build/index_safe.d.ts",
+      "default": "./build/index_safe.js"
+    },
+    "./cc": {
+      "types": "./build/cc/index.d.ts",
+      "default": "./build/cc/index.js"
+    },
+    "./package.json": "./package.json",
+    "./*": {
+      "types": "./build/cc/*.d.ts",
+      "default": "./build/cc/*.js"
     }
   },
   "files": [
@@ -45,7 +47,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
+    "node": ">= 18"
   },
   "scripts": {
     "task": "yarn ts maintenance/_tasks.ts",
@@ -55,10 +57,8 @@
     "extract-api": "yarn api-extractor run",
     "lint:zwave": "yarn task lint",
     "ts": "node -r esbuild-register",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
@@ -72,16 +72,15 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.36.0",
-    "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.52",
+    "@microsoft/api-extractor": "^7.36.4",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.17.14",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/testing": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
-    "ava": "^4.3.3",
-    "del-cli": "^5.0.0",
-    "fs-extra": "^10.1.0",
-    "prettier": "^2.8.8",
-    "typescript": "5.1.6"
+    "ava": "^5.3.1",
+    "del-cli": "^5.1.0",
+    "fs-extra": "^11.1.1",
+    "typescript": "5.2.2"
   }
 }

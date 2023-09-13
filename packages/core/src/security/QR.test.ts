@@ -1,6 +1,6 @@
 import test from "ava";
-import { assertZWaveError, SecurityClass, ZWaveErrorCodes } from "..";
-import { parseQRCodeString, QRCodeVersion } from "./QR";
+import { SecurityClass, ZWaveErrorCodes, assertZWaveError } from "..";
+import { QRCodeVersion, parseQRCodeString } from "./QR";
 
 function createDummyQR(firstDigits: string): string {
 	return firstDigits + "0".repeat(52 - firstDigits.length);
@@ -20,7 +20,8 @@ const cases = [
 		reason: "is too short",
 	},
 	{
-		code: "900199999003090360850151462432730701509765221393752300100179303072022000881000020000900257",
+		code:
+			"900199999003090360850151462432730701509765221393752300100179303072022000881000020000900257",
 		reason: "has an incorrect checksum",
 	},
 ];

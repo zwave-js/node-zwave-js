@@ -1,4 +1,4 @@
-import { ZWaveLibraryTypes, type ZWaveApiVersion } from "@zwave-js/core/safe";
+import { type ZWaveApiVersion, ZWaveLibraryTypes } from "@zwave-js/core/safe";
 import { FunctionType } from "@zwave-js/serial/safe";
 
 export interface MockControllerCapabilities {
@@ -23,9 +23,9 @@ export interface MockControllerCapabilities {
 	zwaveChipType?:
 		| string
 		| {
-				type: number;
-				version: number;
-		  };
+			type: number;
+			version: number;
+		};
 
 	supportsLongRange: boolean;
 	watchdogEnabled: boolean;

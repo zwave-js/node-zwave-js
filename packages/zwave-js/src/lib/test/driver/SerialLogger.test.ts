@@ -1,12 +1,12 @@
 import {
-	createDefaultTransportFormat,
 	ZWaveLogContainer,
+	createDefaultTransportFormat,
 } from "@zwave-js/core";
-import { assertMessage, SpyTransport } from "@zwave-js/core/test";
+import { SpyTransport, assertMessage } from "@zwave-js/core/test";
 import { SerialLogger } from "@zwave-js/serial";
 import colors from "ansi-colors";
 import ava, { type TestFn } from "ava";
-import { pseudoRandomBytes } from "crypto";
+import { pseudoRandomBytes } from "node:crypto";
 
 interface TestContext {
 	serialLogger: SerialLogger;
@@ -165,7 +165,8 @@ test.serial("logs discarded data correctly", (t) => {
 	serialLogger.discarded(Buffer.from("02020202020202", "hex"));
 	const alignRight = " ".repeat(80 - 53);
 	assertMessage(t, spyTransport, {
-		message: `« [DISCARDED] invalid data 0x02020202020202 ${alignRight}(7 bytes)`,
+		message:
+			`« [DISCARDED] invalid data 0x02020202020202 ${alignRight}(7 bytes)`,
 	});
 });
 
@@ -183,7 +184,8 @@ test.serial("logs long messages correctly", (t) => {
 		"This is a very long message that should be broken into multiple lines maybe sometimes...",
 	);
 	assertMessage(t, spyTransport, {
-		message: `  This is a very long message that should be broken into multiple lines maybe so
+		message:
+			`  This is a very long message that should be broken into multiple lines maybe so
   metimes...`,
 	});
 });

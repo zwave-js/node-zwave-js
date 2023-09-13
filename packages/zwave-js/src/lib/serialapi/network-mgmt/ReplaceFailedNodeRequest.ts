@@ -4,14 +4,14 @@ import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 
 export enum ReplaceFailedNodeStartFlags {
@@ -30,7 +30,8 @@ export enum ReplaceFailedNodeStartFlags {
 
 export enum ReplaceFailedNodeStatus {
 	/* ZW_ReplaceFailedNode callback status definitions */
-	NodeOK = 0 /* The node cannot be replaced because it is working properly (removed from the failed nodes list ) */,
+	NodeOK =
+		0, /* The node cannot be replaced because it is working properly (removed from the failed nodes list ) */
 
 	/** The failed node is ready to be replaced and controller is ready to add new node with the nodeID of the failed node. */
 	FailedNodeReplace = 3,
@@ -45,8 +46,8 @@ export enum ReplaceFailedNodeStatus {
 export class ReplaceFailedNodeRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== ReplaceFailedNodeRequestStatusReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== ReplaceFailedNodeRequestStatusReport
 		) {
 			return new ReplaceFailedNodeRequestStatusReport(host, options);
 		}
@@ -81,8 +82,7 @@ export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 }
 
 @messageTypes(MessageType.Response, FunctionType.ReplaceFailedNode)
-export class ReplaceFailedNodeResponse
-	extends Message
+export class ReplaceFailedNodeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
@@ -124,8 +124,8 @@ export class ReplaceFailedNodeRequestStatusReport
 
 	public isOK(): boolean {
 		return (
-			this._replaceStatus ===
-			ReplaceFailedNodeStatus.FailedNodeReplaceDone
+			this._replaceStatus
+				=== ReplaceFailedNodeStatus.FailedNodeReplaceDone
 		);
 	}
 }

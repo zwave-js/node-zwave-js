@@ -1,5 +1,5 @@
 import test from "ava";
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 import { TypedEventEmitter } from "./EventEmitter";
 import { AllOf, Mixin } from "./inheritance";
 import type { Constructor } from "./types";
@@ -17,7 +17,6 @@ interface TestEvents {
 		baseProp2 = "base";
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-interface
 	interface Test extends TypedEventEmitter<TestEvents> {}
 
 	@Mixin([EventEmitter])

@@ -42,28 +42,6 @@ If supported by the controller, this instructs it to shut down the Z-Wave API, s
 
 > [!WARNING] The controller will have to be restarted manually (e.g. by unplugging and plugging it back in) before it can be used again!
 
-### `interviewNode`
-
-```ts
-interviewNode(node: ZWaveNode): Promise<void>
-```
-
-Starts or resumes the interview of a Z-Wave node.
-
-> [!WARNING] This is only allowed when the initial interview was bypassed using the `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
-
-> [!NOTE] It is advised to NOT await this method as it can take a very long time (minutes to hours)!
-
-### `enableErrorReporting`
-
-```ts
-enableErrorReporting(): void
-```
-
-Enable sending crash reports using [Sentry](https://sentry.io). These reports are important for quickly discovering unhandled errors in the library, so we **we kindly ask you** to enable them. Please do **not** enable them in dev environments where frequent errors are to be expected.
-
-> [!NOTE] Sentry registers a global `unhandledRejection` event handler, which has an influence how the application will behave in case of an unhandled rejection. This can affect applications on Node.js before `v15`, which are going to crash instead of logging a warning.
-
 ### `enableStatistics`
 
 ```ts
@@ -94,18 +72,18 @@ Disable sending usage statistics.
 getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
 ```
 
-Nodes in a Z-Wave network are very likely support different versions of a Command Class (CC) and frequently support older versions than the driver software.  
+Nodes in a Z-Wave network are very likely support different versions of a Command Class (CC) and frequently support older versions than the driver software.\
 This method helps determine which version of a CC can be used to control a node. It takes three arguments:
 
--   `cc: CommandClasses` - The command class whose version should be retrieved
--   `nodeId: number` - The ID that identifies a node in the network
--   `endpointIndex: number` - **(optional)** The node's endpoint that should be queried. Falls back to the root endpoint if no index was given or the endpoint does not exist.
+- `cc: CommandClasses` - The command class whose version should be retrieved
+- `nodeId: number` - The ID that identifies a node in the network
+- `endpointIndex: number` - **(optional)** The node's endpoint that should be queried. Falls back to the root endpoint if no index was given or the endpoint does not exist.
 
 This method
 
--   returns `0` if the node/endpoint does not support the given CC
--   also returns `0` if the node/endpoint interview was not completed yet
--   otherwise returns the version the node/endpoint claims to support
+- returns `0` if the node/endpoint does not support the given CC
+- also returns `0` if the node/endpoint interview was not completed yet
+- otherwise returns the version the node/endpoint claims to support
 
 > [!WARNING]
 > This only provides reliable information **after** the node/endpoint interview was completed.
@@ -118,9 +96,9 @@ getSafeCCVersion(nodeId: number, cc: CommandClasses): number
 
 Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersion`, but behaves differently. It
 
--   returns `1` if the node claims not to support the CC or no information is known
--   **throws (!)** if the requested CC is not implemented in this library
--   returns the version the node claims to support otherwise
+- returns `1` if the node claims not to support the CC or no information is known
+- **throws (!)** if the requested CC is not implemented in this library
+- returns the version the node claims to support otherwise
 
 ### `softReset`
 
@@ -166,17 +144,17 @@ sendMessage<TResponse?>(msg: Message, options?: SendMessageOptions): Promise<TRe
 
 This method sends a message to the Z-Wave controller. It takes two arguments:
 
--   `message` - An instance of the message class that should be sent
--   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendMessageOptions`](#SendMessageOptions) for a detailed description.
+- `message` - An instance of the message class that should be sent
+- `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendMessageOptions`](#SendMessageOptions) for a detailed description.
 
 If it is known in advance which type the response will have, you can optionally pass the desired return type.
 
 The behavior of this method strongly depends on the message that should be sent:
 
--   If the sent message expects a response (this is defined in each message class), the method will wait until that response has been received. In this case, the returned Promise will resolve to that response.
--   If no response is expected, the Promise will resolve after the transmission has been acknowledged by the controller (or the node in case of a `SendDataRequest`).
--   When the message can't be transmitted because the node is asleep, the Promise will only resolve after the node wakes up again and receives the message. Depending on the configuration, this may take a very long time.
--   When the message can't be transmitted due to a timeout, the method will throw.
+- If the sent message expects a response (this is defined in each message class), the method will wait until that response has been received. In this case, the returned Promise will resolve to that response.
+- If no response is expected, the Promise will resolve after the transmission has been acknowledged by the controller (or the node in case of a `SendDataRequest`).
+- When the message can't be transmitted because the node is asleep, the Promise will only resolve after the node wakes up again and receives the message. Depending on the configuration, this may take a very long time.
+- When the message can't be transmitted due to a timeout, the method will throw.
 
 ### `sendCommand`
 
@@ -186,14 +164,14 @@ async sendCommand<TResponse?>(command: CommandClass, options?: SendMessageOption
 
 This method sends a command to a Z-Wave node. It takes two arguments:
 
--   `command` - An instance of the command class that should be sent
--   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendCommandOptions`](#SendCommandOptions) for a detailed description.
+- `command` - An instance of the command class that should be sent
+- `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendCommandOptions`](#SendCommandOptions) for a detailed description.
 
 The return value depends on several factors:
 
--   If the node returns a command in response, that command will be the return value.
--   If the command is a SET-type command and `Supervision CC` can and should be used, the command will be sent using supervision and a [`SupervisionResult`](#SupervisionResult) will be returned.
--   If the command expects no response **or** the response times out, `undefined` will be returned.
+- If the node returns a command in response, that command will be the return value.
+- If the command is a SET-type command and `Supervision CC` can and should be used, the command will be sent using supervision and a [`SupervisionResult`](#SupervisionResult) will be returned.
+- If the command expects no response **or** the response times out, `undefined` will be returned.
 
 If it is known in advance which type the response will have, you can optionally pass the desired response type to help TypeScript infer the return type of the method.
 
@@ -207,8 +185,8 @@ waitForMessage<T extends Message>(predicate: (msg: Message) => boolean, timeout:
 
 Waits until an unsolicited serial message is received which matches the given predicate or a timeout has elapsed. Resolves the received message. This method takes two arguments:
 
--   `predicate` - A predicate function that will be called for every received unsolicited message. If the function returns `true`, the returned promise will be resolved with the message.
--   `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching message has been received.
+- `predicate` - A predicate function that will be called for every received unsolicited message. If the function returns `true`, the returned promise will be resolved with the message.
+- `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching message has been received.
 
 > [!NOTE] This does not trigger for (Bridge)ApplicationCommandRequests, which are handled differently. To wait for a certain CommandClass, use [`waitForCommand`](#waitForCommand).
 
@@ -220,8 +198,8 @@ waitForCommand<T extends CommandClass>(predicate: (cc: CommandClass) => boolean,
 
 Waits until an unsolicited command is received which matches the given predicate or a timeout has elapsed. Resolves the received command. This method takes two arguments:
 
--   `predicate` - A predicate function that will be called for every received command. If the function returns `true`, the returned promise will be resolved with the command.
--   `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching command has been received.
+- `predicate` - A predicate function that will be called for every received command. If the function returns `true`, the returned promise will be resolved with the command.
+- `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching command has been received.
 
 ### `saveNetworkToCache`
 
@@ -229,7 +207,7 @@ Waits until an unsolicited command is received which matches the given predicate
 async saveNetworkToCache(): Promise<void>
 ```
 
-This method saves the current state of the Z-Wave network to a cache file. This allows the driver to remember information about the network without having to rely on a time-consuming interview process the next time it is started.  
+This method saves the current state of the Z-Wave network to a cache file. This allows the driver to remember information about the network without having to rely on a time-consuming interview process the next time it is started.\
 It is internally used during the interview and by the `destroy` method, so you shouldn't have to call it yourself.
 
 Calls to the method are debounced. This means that the cache file is not guaranteed to be written immediately. However it is guaranteed that the data is persisted soon after the call.
@@ -264,7 +242,7 @@ Unregisters a message handler that has been added with `registerRequestHandler`
 ### `updateLogConfig`
 
 ```ts
-updateLogConfig(config: DeepPartial<LogConfig>): void
+updateLogConfig(config: Partial<LogConfig>): void
 ```
 
 Updates the logging configuration without having to restart the driver.
@@ -301,13 +279,13 @@ updateOptions(options: DeepPartial<EditableZWaveOptions>): void
 
 Updates a subset of the driver options without having to restart the driver. The following properties from [`ZWaveOptions`](#ZWaveOptions) are supported:
 
--   `disableOptimisticValueUpdate`
--   `emitValueUpdateAfterSetValue`
--   `inclusionUserCallbacks`
--   `interview`
--   `logConfig`
--   `preferences`
--   `userAgent` (behaves like `updateUserAgent`)
+- `disableOptimisticValueUpdate`
+- `emitValueUpdateAfterSetValue`
+- `inclusionUserCallbacks`
+- `interview`
+- `logConfig`
+- `preferences`
+- `userAgent` (behaves like `updateUserAgent`)
 
 ### `checkForConfigUpdates`
 
@@ -415,11 +393,9 @@ interface FileSystem {
 	writeFile(
 		file: string,
 		data: string | Buffer,
-		options?:
-			| {
-					encoding: string;
-			  }
-			| string,
+		options?: {
+			encoding: string;
+		} | string,
 	): Promise<void>;
 	readFile(file: string, encoding: string): Promise<string>;
 	pathExists(path: string): Promise<boolean>;
@@ -447,22 +423,23 @@ interface LogConfig {
 
 By default, Z-Wave JS has two internal transports, a file transport and a console transport. Both share the following options:
 
--   `enable`: If `false`, the internal transports will be disabled. Default: `true`.
--   `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.  
-    For convenience, the numeric loglevels `0` (`"error"`) to `6` (`"silly"`) can be used instead, but will be converted to their string counterpart internally.
--   `nodeFilter`: If set, only messages regarding the given node IDs are logged
+- `enable`: If `false`, the internal transports will be disabled. Default: `true`.
+- `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.
+  \
+  For convenience, the numeric loglevels `0` (`"error"`) to `6` (`"silly"`) can be used instead, but will be converted to their string counterpart internally.
+- `nodeFilter`: If set, only messages regarding the given node IDs are logged
 
 > [!NOTE]
 > The `level` property is a numeric value (0-6), but the `LOGLEVEL` environment variable uses the string representation (`error`, ..., `silly`)!
 
 The **file transport** can be configured with the following properties:
 
--   `logToFile`: Enables the file transport and disables the console transport. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
--   `filename`: The path to the logfile. The default file is called `zwave_%DATE%.log` (where `%DATE%` is replaced with the current date) and located in the same directory as the main executable.
+- `logToFile`: Enables the file transport and disables the console transport. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
+- `filename`: The path to the logfile. The default file is called `zwave_%DATE%.log` (where `%DATE%` is replaced with the current date) and located in the same directory as the main executable.
 
 The **console transport** has the following options:
 
--   `forceConsole`: In order to reduce the CPU load, `zwave-js` does not log to the console if it is not connected to a TTY or if logging to file is enabled. By setting this option to `true`, these checks will be skipped and all logs will be printed to the console, Default: `false`.
+- `forceConsole`: In order to reduce the CPU load, `zwave-js` does not log to the console if it is not connected to a TTY or if logging to file is enabled. By setting this option to `true`, these checks will be skipped and all logs will be printed to the console, Default: `false`.
 
 Using the `transports` option, providing custom [`winston`](https://github.com/winstonjs/winston) log transports is also possible. See [Custom log transports](usage/log-transports.md) for details. These will be used **in addition** to the internal transports. If that is not desired, disable them by setting `enabled` to `false`.
 
@@ -493,8 +470,12 @@ interface SendMessageOptions {
 	 * For multi-stage messages, the callback may be called multiple times.
 	 */
 	onTXReport?: (report: TXReport) => void;
+	/** Will be called when the transaction for this message progresses. */
+	onProgress?: TransactionProgressListener;
 }
 ```
+
+#### Priority
 
 The message priority must one of the following enum values, which are sorted from high (0) to low (> 0). Consuming applications typically don't need to overwrite the priority.
 
@@ -502,18 +483,18 @@ The message priority must one of the following enum values, which are sorted fro
 
 ```ts
 enum MessagePriority {
-	// Some messages like nonces, responses to Supervision and Transport Service
-	// need to be handled before all others. We use this priority to decide which
-	// message goes onto the immediate queue.
-	Immediate = 0,
+	// High-priority controller commands that must be handled before all other commands.
+	// We use this priority to decide which messages go onto the immediate queue.
+	ControllerImmediate = 0,
+	// Controller commands finish quickly and should be preferred over node queries
+	Controller,
+	// Some node commands like nonces, responses to Supervision and Transport Service
+	// need to be handled before all node commands.
+	// We use this priority to decide which messages go onto the immediate queue.
+	Immediate,
 	// To avoid S2 collisions, some commands that normally have Immediate priority
 	// have to go onto the normal queue, but still before all other messages
 	ImmediateLow,
-	// Controller commands usually finish quickly and should be preferred over node queries
-	Controller,
-	// Multistep controller commands typically require user interaction but still
-	// should happen at a higher priority than any node data exchange
-	MultistepController,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
@@ -534,6 +515,46 @@ enum MessagePriority {
 > DO NOT rely on the numeric values of the enum if you're using it in your application.
 > The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
 
+#### Transaction progress
+
+The `onProgress` callback can be used to track the progress of a command/transaction and has the following shape:
+
+```ts
+type TransactionProgressListener = (progress: TransactionProgress) => void;
+```
+
+Whenever the transaction's progresses, it will be called with the current state:
+
+```ts
+type TransactionProgress = {
+	state: TransactionState;
+	/**
+	 * Why the transaction failed.
+	 * Only present when `state` is `TransactionState.Failed`, but optional.
+	 */
+	reason?: string;
+};
+```
+
+The following states are possible:
+
+<!-- #import TransactionState from "@zwave-js/core" -->
+
+```ts
+enum TransactionState {
+	/** The transaction is currently queued */
+	Queued,
+	/** The transaction is currently being handled */
+	Active,
+	/** The transaction was completed */
+	Completed,
+	/** The transaction failed */
+	Failed,
+}
+```
+
+#### Transmit status reports
+
 TX status reports are supported by the more modern controllers and contain details about the message transmission to other nodes, e.g. routing attempts, RSSI, speed, etc.:
 
 <!-- #import TXReport from "zwave-js" -->
@@ -552,8 +573,8 @@ interface TXReport {
 	ackChannelNo?: number;
 	/** Channel number used to transmit the data */
 	txChannelNo: number;
-	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. */
-	routeSchemeState: number;
+	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. Z-Wave JS uses the Silicon Labs interpretation. */
+	routeSchemeState: RoutingScheme;
 	/** Node IDs of the repeater 0..3 used in the route. */
 	repeaterNodeIds: [number?, number?, number?, number?];
 	/** Whether the destination requires a 1000ms beam to be reached */
@@ -614,18 +635,18 @@ enum ProtocolDataRate {
 
 Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) and [`SupervisionOptions`](#SupervisionOptions) plus the following:
 
--   `maxSendAttempts: number` - _(optional)_ How many times the driver should try to send the message. Defaults to 3.
--   `autoEncapsulate: boolean` - _(optional)_ Whether the driver should automatically handle the encapsulation. Defaults to `true` and should be kept that way unless there is a good reason not to.
--   `transmitOptions: TransmitOptions` - _(optional)_ Override the default transmit options, e.g. turning off routing. Should be kept on default unless there is a good reason not to.
+- `maxSendAttempts: number` - _(optional)_ How many times the driver should try to send the message. Defaults to 3.
+- `autoEncapsulate: boolean` - _(optional)_ Whether the driver should automatically handle the encapsulation. Defaults to `true` and should be kept that way unless there is a good reason not to.
+- `transmitOptions: TransmitOptions` - _(optional)_ Override the default transmit options, e.g. turning off routing. Should be kept on default unless there is a good reason not to.
 
 ### `SupervisionOptions`
 
 Configures how `driver.sendCommand` deals with supervised commands. It is an object with the following properties:
 
--   `useSupervision: "auto" | false` - _(optional)_ Whether supervision may be used. `false` disables supervision. The default `"auto"` lets the driver decide.
+- `useSupervision: "auto" | false` - _(optional)_ Whether supervision may be used. `false` disables supervision. The default `"auto"` lets the driver decide.
 
--   `requestStatusUpdates: boolean` - _(optional, only if `useSupervision` is not `false`)_ Whether status updates for long-running commands should be requested.
--   `onUpdate: (update: SupervisionResult) => void` - _(required when `requestStatusUpdates` is `true`)_ The handler to call when an update is received.
+- `requestStatusUpdates: boolean` - _(optional, only if `useSupervision` is not `false`)_ Whether status updates for long-running commands should be requested.
+- `onUpdate: (update: SupervisionResult) => void` - _(required when `requestStatusUpdates` is `true`)_ The handler to call when an update is received.
 
 ### `SupervisionResult`
 
@@ -634,16 +655,16 @@ Configures how `driver.sendCommand` deals with supervised commands. It is an obj
 ```ts
 type SupervisionResult =
 	| {
-			status:
-				| SupervisionStatus.NoSupport
-				| SupervisionStatus.Fail
-				| SupervisionStatus.Success;
-			remainingDuration?: undefined;
-	  }
+		status:
+			| SupervisionStatus.NoSupport
+			| SupervisionStatus.Fail
+			| SupervisionStatus.Success;
+		remainingDuration?: undefined;
+	}
 	| {
-			status: SupervisionStatus.Working;
-			remainingDuration: Duration;
-	  };
+		status: SupervisionStatus.Working;
+		remainingDuration: Duration;
+	};
 ```
 
 ### `ZWaveOptions`
@@ -731,7 +752,7 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		 * Disable the automatic node interview after successful inclusion.
 		 * Note: When this is `true`, the interview must be started manually using
 		 * ```ts
-		 * driver.interviewNode(node: ZWaveNode)
+		 * node.interview()
 		 * ```
 		 *
 		 * Default: `false` (automatic interviews enabled)

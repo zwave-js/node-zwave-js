@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 import { Protocols } from "../capabilities/Protocols";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask } from "../values/Primitive";
@@ -85,23 +85,25 @@ export interface ProvisioningInformation_SupportedProtocols {
 	supportedProtocols: Protocols[];
 }
 
-export type QRProvisioningInformation = {
-	version: QRCodeVersion;
-	/**
-	 * The security classes that were **requested** by the device.
-	 */
-	readonly requestedSecurityClasses: SecurityClass[];
-	/**
-	 * The security classes that will be **granted** to this device.
-	 * Until this has been changed by a user, this will be identical to {@link requestedSecurityClasses}.
-	 */
-	securityClasses: SecurityClass[];
-	dsk: string;
-} & ProvisioningInformation_ProductType &
-	ProvisioningInformation_ProductId &
-	Partial<ProvisioningInformation_MaxInclusionRequestInterval> &
-	Partial<ProvisioningInformation_UUID16> &
-	Partial<ProvisioningInformation_SupportedProtocols>;
+export type QRProvisioningInformation =
+	& {
+		version: QRCodeVersion;
+		/**
+		 * The security classes that were **requested** by the device.
+		 */
+		readonly requestedSecurityClasses: SecurityClass[];
+		/**
+		 * The security classes that will be **granted** to this device.
+		 * Until this has been changed by a user, this will be identical to {@link requestedSecurityClasses}.
+		 */
+		securityClasses: SecurityClass[];
+		dsk: string;
+	}
+	& ProvisioningInformation_ProductType
+	& ProvisioningInformation_ProductId
+	& Partial<ProvisioningInformation_MaxInclusionRequestInterval>
+	& Partial<ProvisioningInformation_UUID16>
+	& Partial<ProvisioningInformation_SupportedProtocols>;
 
 function parseTLVData(type: ProvisioningInformationType, data: string) {
 	switch (type) {

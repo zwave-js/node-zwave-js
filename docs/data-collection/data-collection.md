@@ -8,28 +8,28 @@ We are collecting some data to ensure an optimal experience going forward. The f
 
 We use [Sentry](https://sentry.io) for automatic crash reporting. We self-host our sentry instance in Germany to ensure that we have control over the data. The transmitted reports include the following data:
 
--   `zwave-js` version
--   A fingerprint which is **randomly generated** during the installation. This is used to gauge how many users an issue affects (and to quickly ignore crashes caused by devs who are just messing around).
--   A Node.js stacktrace including an error message and the function calls which lead to the error.
+- `zwave-js` version
+- A fingerprint which is **randomly generated** during the installation. This is used to gauge how many users an issue affects (and to quickly ignore crashes caused by devs who are just messing around).
+- A Node.js stacktrace including an error message and the function calls which lead to the error.
 
-## Device telemetry
+<!-- ## Device telemetry
 
 We also use [Sentry](https://sentry.io) to capture basic information about devices that were successfully interviewed but have no config file. These often have suboptimal labels that we can improve on (or no information at all). The reports include the following data:
 
--   Whether the device supports `Configuration CC V3+` - if yes, the discovered metadata for the config parameters is recorded
--   Whether the device supports `Association Group Information CC` - if yes, the discovered association group labels are recorded
--   Whether the device supports `Z-Wave Plus` and if yes, which version of the standard it implements
--   A fingerprint which is **randomly generated** during the installation. This is used to gauge how many users have this device.
+- Whether the device supports `Configuration CC V3+` - if yes, the discovered metadata for the config parameters is recorded
+- Whether the device supports `Association Group Information CC` - if yes, the discovered association group labels are recorded
+- Whether the device supports `Z-Wave Plus` and if yes, which version of the standard it implements
+- A fingerprint which is **randomly generated** during the installation. This is used to gauge how many users have this device. -->
 
 ## Usage statistics
 
 In order to gain insight into how `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most, we collect statistics about the devices used in our ecosystem. This information is only collected **if the application developer has opted in** into this functionality. Since some users may have concerns about this data being collected, even though the data cannot be tied to a specific user, we have built our own [statistics stack](https://github.com/zwave-js/statistics-server) which is self-hosted next to the Sentry instances. The reports include the following data:
 
--   A **hash** of your network's home ID salted with a 32 byte randomly generated number. This is used to distinguish the individual records to ensure that duplicate entries aren't made. The hash cannot be reversed to reconstruct the home ID without knowing the salt which is not collected.
--   The application that uses `zwave-js` and its version.
--   The version of `zwave-js`.
--   The version of `Node.js` and your operating system **platform** and **architecture**.
--   The **manufacturer ID**, **product type**, **product ID** and **firmware version** that are reported by each device - in other words which devices you have.
+- A **hash** of your network's home ID salted with a 32 byte randomly generated number. This is used to distinguish the individual records to ensure that duplicate entries aren't made. The hash cannot be reversed to reconstruct the home ID without knowing the salt which is not collected.
+- The application that uses `zwave-js` and its version.
+- The version of `zwave-js`.
+- The version of `Node.js` and your operating system **platform** and **architecture**.
+- The **manufacturer ID**, **product type**, **product ID** and **firmware version** that are reported by each device - in other words which devices you have.
 
 > [!NOTE] We do not collect your IP address, nor is the IP address or any other identifying information stored and tied to a record.
 

@@ -1,7 +1,11 @@
 import {
 	CommandClasses,
 	MAX_NODES,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	Timeout,
 	ValueMetadata,
 	ZWaveError,
@@ -9,10 +13,6 @@ import {
 	enumValuesToMetadataStates,
 	parseBitMask,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -21,17 +21,17 @@ import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -63,11 +63,15 @@ export const ProtectionCCValues = Object.freeze({
 			{ minVersion: 2 } as const,
 		),
 
-		...V.staticPropertyWithName("localProtectionState", "local", {
-			...ValueMetadata.Number,
-			label: "Local protection state",
-			states: enumValuesToMetadataStates(LocalProtectionState),
-		} as const),
+		...V.staticPropertyWithName(
+			"localProtectionState",
+			"local",
+			{
+				...ValueMetadata.Number,
+				label: "Local protection state",
+				states: enumValuesToMetadataStates(LocalProtectionState),
+			} as const,
+		),
 
 		...V.staticPropertyWithName(
 			"rfProtectionState",
@@ -117,8 +121,8 @@ export class ProtectionCCAPI extends CCAPI {
 			case ProtectionCommand.TimeoutGet:
 			case ProtectionCommand.TimeoutSet: {
 				return (
-					this.isSinglecast() &&
-					this.tryGetValueDB()?.getValue<boolean>(
+					this.isSinglecast()
+					&& this.tryGetValueDB()?.getValue<boolean>(
 						ProtectionCCValues.supportsTimeout.endpoint(
 							this.endpoint.index,
 						),
@@ -128,8 +132,8 @@ export class ProtectionCCAPI extends CCAPI {
 			case ProtectionCommand.ExclusiveControlGet:
 			case ProtectionCommand.ExclusiveControlSet: {
 				return (
-					this.isSinglecast() &&
-					this.tryGetValueDB()?.getValue<boolean>(
+					this.isSinglecast()
+					&& this.tryGetValueDB()?.getValue<boolean>(
 						ProtectionCCValues.supportsExclusiveControl.endpoint(
 							this.endpoint.index,
 						),
@@ -141,7 +145,7 @@ export class ProtectionCCAPI extends CCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (this: ProtectionCCAPI, { property }, value) {
+		return async function(this: ProtectionCCAPI, { property }, value) {
 			const valueDB = this.tryGetValueDB();
 			if (property === "local") {
 				if (typeof value !== "number") {
@@ -195,7 +199,7 @@ export class ProtectionCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: ProtectionCCAPI, { property }) {
+		return async function(this: ProtectionCCAPI, { property }) {
 			switch (property) {
 				case "local":
 				case "rf":
@@ -252,11 +256,12 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ProtectionCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ProtectionCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"supportsExclusiveControl",
@@ -277,11 +282,12 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ProtectionCCExclusiveControlReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ProtectionCCExclusiveControlReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.exclusiveControlNodeId;
 	}
 
@@ -312,11 +318,12 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ProtectionCCTimeoutReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ProtectionCCTimeoutReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.timeout;
 	}
 
@@ -376,16 +383,22 @@ export class ProtectionCC extends CommandClass {
 				const logMessage = `received protection capabilities:
 exclusive control:       ${resp.supportsExclusiveControl}
 timeout:                 ${resp.supportsTimeout}
-local protection states: ${resp.supportedLocalStates
-					.map((local) =>
-						getEnumMemberName(LocalProtectionState, local),
-					)
-					.map((str) => `\n· ${str}`)
-					.join("")}
-RF protection states:    ${resp.supportedRFStates
-					.map((local) => getEnumMemberName(RFProtectionState, local))
-					.map((str) => `\n· ${str}`)
-					.join("")}`;
+local protection states: ${
+					resp.supportedLocalStates
+						.map((local) =>
+							getEnumMemberName(LocalProtectionState, local)
+						)
+						.map((str) => `\n· ${str}`)
+						.join("")
+				}
+RF protection states:    ${
+					resp.supportedRFStates
+						.map((local) =>
+							getEnumMemberName(RFProtectionState, local)
+						)
+						.map((str) => `\n· ${str}`)
+						.join("")
+				}`;
 				applHost.controllerLog.logNode(node.id, {
 					message: logMessage,
 					direction: "inbound",
@@ -464,10 +477,9 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 			const nodeId = await api.getExclusiveControl();
 			if (nodeId != undefined) {
 				applHost.controllerLog.logNode(node.id, {
-					message:
-						(nodeId !== 0
-							? `Node ${padStart(nodeId.toString(), 3, "0")}`
-							: `no node`) + ` has exclusive control`,
+					message: (nodeId !== 0
+						? `Node ${padStart(nodeId.toString(), 3, "0")}`
+						: `no node`) + ` has exclusive control`,
 					direction: "inbound",
 				});
 			}
@@ -496,7 +508,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			);
 		} else {
 			this.local = options.local;
-			this.rf = options.rf;
+			this.rf = options.rf ?? RFProtectionState.Unprotected;
 		}
 	}
 
@@ -575,11 +587,11 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		this.supportsTimeout = !!(this.payload[0] & 0b1);
 		this.supportsExclusiveControl = !!(this.payload[0] & 0b10);
 		this.supportedLocalStates = parseBitMask(
-			this.payload.slice(1, 3),
+			this.payload.subarray(1, 3),
 			LocalProtectionState.Unprotected,
 		);
 		this.supportedRFStates = parseBitMask(
-			this.payload.slice(3, 5),
+			this.payload.subarray(3, 5),
 			RFProtectionState.Unprotected,
 		);
 	}
@@ -629,7 +641,7 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 				"supports timeout": this.supportsTimeout,
 				"local protection states": this.supportedLocalStates
 					.map((local) =>
-						getEnumMemberName(LocalProtectionState, local),
+						getEnumMemberName(LocalProtectionState, local)
 					)
 					.map((str) => `\n· ${str}`)
 					.join(""),

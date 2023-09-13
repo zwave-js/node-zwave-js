@@ -6,9 +6,9 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
@@ -33,8 +33,8 @@ integrationTest("setValue without supervision: expect validation GET", {
 		const respondToBinarySwitchGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof BinarySwitchCCGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof BinarySwitchCCGet
 				) {
 					const cc = new BinarySwitchCCReport(self.host, {
 						nodeId: controller.host.ownNodeId,
@@ -57,8 +57,8 @@ integrationTest("setValue without supervision: expect validation GET", {
 
 		mockNode.assertReceivedControllerFrame(
 			(frame) =>
-				frame.type === MockZWaveFrameType.Request &&
-				frame.payload instanceof BinarySwitchCCSet,
+				frame.type === MockZWaveFrameType.Request
+				&& frame.payload instanceof BinarySwitchCCSet,
 			{
 				errorMessage:
 					"Node should have received a non-supervised BinarySwitchCCSet",
@@ -69,8 +69,8 @@ integrationTest("setValue without supervision: expect validation GET", {
 
 		mockNode.assertReceivedControllerFrame(
 			(frame) =>
-				frame.type === MockZWaveFrameType.Request &&
-				frame.payload instanceof BinarySwitchCCGet,
+				frame.type === MockZWaveFrameType.Request
+				&& frame.payload instanceof BinarySwitchCCGet,
 			{
 				errorMessage: "Node should have received a BinarySwitchCCGet",
 			},
@@ -78,9 +78,9 @@ integrationTest("setValue without supervision: expect validation GET", {
 
 		mockNode.assertSentControllerFrame(
 			(frame) =>
-				frame.type === MockZWaveFrameType.Request &&
-				frame.payload instanceof BinarySwitchCCReport &&
-				frame.payload.currentValue === false,
+				frame.type === MockZWaveFrameType.Request
+				&& frame.payload instanceof BinarySwitchCCReport
+				&& frame.payload.currentValue === false,
 			{
 				errorMessage:
 					"Node should have sent a BinarySwitchCCReport with currentValue false",

@@ -5,13 +5,18 @@ import {
 	type ValueIDProperties,
 } from "@zwave-js/cc";
 import {
+	type SetValueResult,
 	SetValueStatus,
 	supervisionResultToSetValueResult,
-	type SetValueResult,
 } from "@zwave-js/cc/safe";
 import {
+	type IVirtualNode,
 	SecurityClass,
 	SupervisionStatus,
+	type TranslatedValueID,
+	type ValueID,
+	type ValueMetadata,
+	type ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
 	actuatorCCs,
@@ -21,11 +26,6 @@ import {
 	normalizeValueID,
 	supervisedCommandSucceeded,
 	valueIdToString,
-	type IVirtualNode,
-	type TranslatedValueID,
-	type ValueID,
-	type ValueMetadata,
-	type ValueMetadataNumeric,
 } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
@@ -73,9 +73,9 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		this.physicalNodes = [...physicalNodes].filter(
 			(n) =>
 				// And avoid including the controller node in the support checks
-				n.id !== driver.controller.ownNodeId &&
+				n.id !== driver.controller.ownNodeId
 				// And omit nodes using Security S0 which does not support broadcast / multicast
-				n.getHighestSecurityClass() !== SecurityClass.S0_Legacy,
+				&& n.getHighestSecurityClass() !== SecurityClass.S0_Legacy,
 		);
 		this.nodesBySecurityClass = groupNodesBySecurityClass(
 			this.physicalNodes,
@@ -114,9 +114,10 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 			if (!endpointInstance) {
 				return {
 					status: SetValueStatus.EndpointNotFound,
-					message: `Endpoint ${
-						valueId.endpoint
-					} does not exist on virtual node ${this.id ?? "??"}`,
+					message:
+						`Endpoint ${valueId.endpoint} does not exist on virtual node ${
+							this.id ?? "??"
+						}`,
 				};
 			}
 			let api = (endpointInstance.commandClasses as any)[
@@ -126,9 +127,11 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 			if (!api.setValue) {
 				return {
 					status: SetValueStatus.NotImplemented,
-					message: `The ${getCCName(
-						valueId.commandClass,
-					)} CC does not support setting values`,
+					message: `The ${
+						getCCName(
+							valueId.commandClass,
+						)
+					} CC does not support setting values`,
 				};
 			}
 
@@ -158,6 +161,13 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 				});
 			}
 
+			// If the caller wants progress updates, they shall have them
+			if (typeof options?.onProgress === "function") {
+				api = api.withOptions({
+					onProgress: options.onProgress,
+				});
+			}
+
 			// And call it
 			const result = await api.setValue!.call(
 				api,
@@ -174,11 +184,11 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value
 				// for each node that was affected by this command
-				const affectedNodes =
-					endpointInstance.node.physicalNodes.filter((node) =>
+				const affectedNodes = endpointInstance.node.physicalNodes
+					.filter((node) =>
 						node
 							.getEndpoint(endpointInstance.index)
-							?.supportsCC(valueId.commandClass),
+							?.supportsCC(valueId.commandClass)
 					);
 				for (const node of affectedNodes) {
 					node.valueDB.setValue(valueId, value);
@@ -188,18 +198,17 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 			// Depending on the settings of the SET_VALUE implementation, we may have to
 			// optimistically update a different value and/or verify the changes
 			if (hooks) {
-				const supervisedAndSuccessful =
-					isSupervisionResult(result) &&
-					result.status === SupervisionStatus.Success;
+				const supervisedAndSuccessful = isSupervisionResult(result)
+					&& result.status === SupervisionStatus.Success;
 
 				const shouldUpdateOptimistically =
-					api.isSetValueOptimistic(valueId) &&
+					api.isSetValueOptimistic(valueId)
 					// For successful supervised commands, we know that an optimistic update is ok
-					(supervisedAndSuccessful ||
+					&& (supervisedAndSuccessful
 						// For unsupervised commands that did not fail, we let the applciation decide whether
 						// to update related value optimistically
-						(!this.driver.options.disableOptimisticValueUpdate &&
-							result == undefined));
+						|| (!this.driver.options.disableOptimisticValueUpdate
+							&& result == undefined));
 
 				// The actual API implementation handles additional optimistic updates
 				if (shouldUpdateOptimistically) {
@@ -212,8 +221,8 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 				// ...the command was supervised and successful
 				// ...and the CC API decides not to verify anyways
 				if (
-					!supervisedCommandSucceeded(result) ||
-					hooks.forceVerifyChanges?.()
+					!supervisedCommandSucceeded(result)
+					|| hooks.forceVerifyChanges?.()
 				) {
 					// Let the CC API implementation handle the verification.
 					// It may still decide not to do it.
@@ -277,8 +286,8 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 				// Don't expose read-only values for virtual nodes, they won't ever have any value
 				if (!metadata.writeable) continue;
 
-				const needsUpdate =
-					!ret.has(mapKey) || ret.get(mapKey)!.ccVersion < ccVersion;
+				const needsUpdate = !ret.has(mapKey)
+					|| ret.get(mapKey)!.ccVersion < ccVersion;
 				if (needsUpdate) {
 					ret.set(mapKey, {
 						...valueId,
@@ -329,11 +338,12 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 	public getEndpoint(index: 0): VirtualEndpoint;
 	public getEndpoint(index: number): VirtualEndpoint | undefined;
 	public getEndpoint(index: number): VirtualEndpoint | undefined {
-		if (index < 0)
+		if (index < 0) {
 			throw new ZWaveError(
 				"The endpoint index must be positive!",
 				ZWaveErrorCodes.Argument_Invalid,
 			);
+		}
 		// Zero is the root endpoint - i.e. this node
 		if (index === 0) return this;
 		// Check if the Multi Channel CC interviews for all nodes are completed,

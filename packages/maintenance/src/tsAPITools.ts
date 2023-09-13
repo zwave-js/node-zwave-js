@@ -1,5 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import * as path from "path";
+import * as path from "node:path";
 import ts from "typescript";
 
 // Find this project's root dir
@@ -47,11 +47,12 @@ export function expressionToCommandClass(
 	enumExpr: ts.Node,
 ): CommandClasses | undefined {
 	if (
-		(!ts.isPropertyAccessExpression(enumExpr) &&
-			!ts.isElementAccessExpression(enumExpr)) ||
-		enumExpr.expression.getText(sourceFile) !== "CommandClasses"
-	)
+		(!ts.isPropertyAccessExpression(enumExpr)
+			&& !ts.isElementAccessExpression(enumExpr))
+		|| enumExpr.expression.getText(sourceFile) !== "CommandClasses"
+	) {
 		return;
+	}
 	if (ts.isPropertyAccessExpression(enumExpr)) {
 		return CommandClasses[
 			enumExpr.name.getText(
@@ -59,8 +60,8 @@ export function expressionToCommandClass(
 			) as unknown as keyof typeof CommandClasses
 		];
 	} else if (
-		ts.isElementAccessExpression(enumExpr) &&
-		ts.isStringLiteral(enumExpr.argumentExpression)
+		ts.isElementAccessExpression(enumExpr)
+		&& ts.isStringLiteral(enumExpr.argumentExpression)
 	) {
 		return CommandClasses[
 			enumExpr.argumentExpression
@@ -76,10 +77,11 @@ export function getCommandClassFromDecorator(
 	if (!ts.isCallExpression(decorator.expression)) return;
 	const decoratorName = decorator.expression.expression.getText(sourceFile);
 	if (
-		(decoratorName !== "commandClass" && decoratorName !== "API") ||
-		decorator.expression.arguments.length !== 1
-	)
+		(decoratorName !== "commandClass" && decoratorName !== "API")
+		|| decorator.expression.arguments.length !== 1
+	) {
 		return;
+	}
 	return expressionToCommandClass(
 		sourceFile,
 		decorator.expression.arguments[0],

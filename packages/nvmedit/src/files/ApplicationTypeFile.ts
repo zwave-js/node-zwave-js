@@ -1,11 +1,11 @@
 import type { NVM3Object } from "../nvm3/object";
 import {
 	NVMFile,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
-	type NVMFileCreationOptions,
-	type NVMFileDeserializationOptions,
 } from "./NVMFile";
 
 export interface ApplicationTypeFileOptions extends NVMFileCreationOptions {
@@ -41,8 +41,8 @@ export class ApplicationTypeFile extends NVMFile {
 
 	public serialize(): NVM3Object {
 		this.payload = Buffer.from([
-			(this.isListening ? 0b1 : 0) |
-				(this.optionalFunctionality ? 0b10 : 0),
+			(this.isListening ? 0b1 : 0)
+			| (this.optionalFunctionality ? 0b10 : 0),
 			this.genericDeviceClass,
 			this.specificDeviceClass,
 		]);

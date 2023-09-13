@@ -7,16 +7,10 @@ export function createWrappingCounter(
 	maxValue: number,
 	randomSeed: boolean = false,
 ): () => number {
-	const ret = (() => {
-		ret.value = (ret.value + 1) & maxValue;
-		if (ret.value === 0) ret.value = 1;
-		return ret.value;
-	}) as {
-		(): number;
-		// Little hack for testing purposes.
-		// TODO: Remove when packages/zwave-js/src/lib/test/driver/nodeAsleepBlockNonceReport.test.ts no longer needs this
-		value: number;
+	let value = randomSeed ? Math.round(Math.random() * maxValue) : 0;
+	return () => {
+		value = (value + 1) & maxValue;
+		if (value === 0) value = 1;
+		return value;
 	};
-	ret.value = randomSeed ? Math.round(Math.random() * maxValue) : 0;
-	return ret;
 }

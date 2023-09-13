@@ -1,5 +1,5 @@
 import test from "ava";
-import { isMessagePriority, MessagePriority } from "./Transmission";
+import { MessagePriority, isMessagePriority } from "./Transmission";
 
 test("isMessagePriority() should detect numbers in the enum range as a message priority", (t) => {
 	const numericKeys = Object.keys(MessagePriority)

@@ -1,4 +1,4 @@
-import { num2hex, type JSONObject } from "@zwave-js/shared/safe";
+import { type JSONObject, num2hex } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
@@ -11,23 +11,29 @@ export class Meter {
 
 		const scales = new Map<number, MeterScale>();
 		if (isObject(definition.scales)) {
-			for (const [scaleId, scaleDefinition] of Object.entries(
-				definition.scales,
-			)) {
+			for (
+				const [scaleId, scaleDefinition] of Object.entries(
+					definition.scales,
+				)
+			) {
 				if (!hexKeyRegexNDigits.test(scaleId)) {
 					throwInvalidConfig(
 						"meters",
-						`found invalid key "${scaleId}" in meter ${num2hex(
-							id,
-						)}. Meter scales must have lowercase hexadecimal IDs.`,
+						`found invalid key "${scaleId}" in meter ${
+							num2hex(
+								id,
+							)
+						}. Meter scales must have lowercase hexadecimal IDs.`,
 					);
 				}
 				if (typeof scaleDefinition !== "string") {
 					throwInvalidConfig(
 						"meters",
-						`The scale definition for "${scaleId}" in meter ${num2hex(
-							id,
-						)} is not a string!`,
+						`The scale definition for "${scaleId}" in meter ${
+							num2hex(
+								id,
+							)
+						} is not a string!`,
 					);
 				}
 				const scaleIdNum = parseInt(scaleId.slice(2), 16);

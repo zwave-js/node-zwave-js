@@ -1,13 +1,13 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type SupervisionResult,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
@@ -15,10 +15,10 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -34,9 +34,9 @@ import { V } from "../lib/Values";
 import {
 	ClimateControlScheduleCommand,
 	ScheduleOverrideType,
-	Weekday,
 	type SetbackState,
 	type Switchpoint,
+	Weekday,
 } from "../lib/_Types";
 import {
 	decodeSetbackState,
@@ -47,16 +47,22 @@ import {
 
 export const ClimateControlScheduleCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Climate Control Schedule"], {
-		...V.staticProperty("overrideType", {
-			...ValueMetadata.Number,
-			label: "Override type",
-			states: enumValuesToMetadataStates(ScheduleOverrideType),
-		} as const),
-		...V.staticProperty("overrideState", {
-			...ValueMetadata.Number,
-			label: "Override state",
-			min: -12.8,
-		} as const),
+		...V.staticProperty(
+			"overrideType",
+			{
+				...ValueMetadata.Number,
+				label: "Override type",
+				states: enumValuesToMetadataStates(ScheduleOverrideType),
+			} as const,
+		),
+		...V.staticProperty(
+			"overrideState",
+			{
+				...ValueMetadata.Number,
+				label: "Override state",
+				min: -12.8,
+			} as const,
+		),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses["Climate Control Schedule"], {
@@ -65,15 +71,14 @@ export const ClimateControlScheduleCCValues = Object.freeze({
 			"schedule",
 			(weekday: Weekday) => weekday,
 			({ property, propertyKey }) =>
-				property === "switchPoints" &&
-				typeof propertyKey === "number" &&
-				propertyKey >= Weekday.Monday &&
-				propertyKey <= Weekday.Sunday,
-			(weekday: Weekday) =>
-				({
-					...ValueMetadata.Any,
-					label: `Schedule (${getEnumMemberName(Weekday, weekday)})`,
-				} as const),
+				property === "switchPoints"
+				&& typeof propertyKey === "number"
+				&& propertyKey >= Weekday.Monday
+				&& propertyKey <= Weekday.Sunday,
+			(weekday: Weekday) => ({
+				...ValueMetadata.Any,
+				label: `Schedule (${getEnumMemberName(Weekday, weekday)})`,
+			} as const),
 		),
 	}),
 });
@@ -128,11 +133,12 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			weekday,
 		});
-		const response =
-			await this.applHost.sendCommand<ClimateControlScheduleCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ClimateControlScheduleCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.schedule;
 	}
 
@@ -146,11 +152,12 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ClimateControlScheduleCCChangedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ClimateControlScheduleCCChangedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.changeCounter;
 	}
 
@@ -165,11 +172,12 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ClimateControlScheduleCCOverrideReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ClimateControlScheduleCCOverrideReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return {
 				type: response.overrideType,
@@ -256,16 +264,20 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 			...super.toLogEntry(applHost),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
-				switchpoints: `${this.switchPoints
-					.map(
-						(sp) => `
-· ${padStart(sp.hour.toString(), 2, "0")}:${padStart(
-							sp.minute.toString(),
-							2,
-							"0",
-						)} --> ${sp.state}`,
-					)
-					.join("")}`,
+				switchpoints: `${
+					this.switchPoints
+						.map(
+							(sp) => `
+· ${padStart(sp.hour.toString(), 2, "0")}:${
+								padStart(
+									sp.minute.toString(),
+									2,
+									"0",
+								)
+							} --> ${sp.state}`,
+						)
+						.join("")
+				}`,
 			},
 		};
 	}
@@ -284,7 +296,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 		const allSwitchpoints: Switchpoint[] = [];
 		for (let i = 0; i <= 8; i++) {
 			allSwitchpoints.push(
-				decodeSwitchpoint(this.payload.slice(1 + 3 * i)),
+				decodeSwitchpoint(this.payload.subarray(1 + 3 * i)),
 			);
 		}
 		this.schedule = allSwitchpoints.filter((sp) => sp.state !== "Unused");
@@ -303,16 +315,20 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 			...super.toLogEntry(applHost),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
-				schedule: `${this.schedule
-					.map(
-						(sp) => `
-· ${padStart(sp.hour.toString(), 2, "0")}:${padStart(
-							sp.minute.toString(),
-							2,
-							"0",
-						)} --> ${sp.state}`,
-					)
-					.join("")}`,
+				schedule: `${
+					this.schedule
+						.map(
+							(sp) => `
+· ${padStart(sp.hour.toString(), 2, "0")}:${
+								padStart(
+									sp.minute.toString(),
+									2,
+									"0",
+								)
+							} --> ${sp.state}`,
+						)
+						.join("")
+				}`,
 			},
 		};
 	}
@@ -358,7 +374,9 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 }
 
 @CCCommand(ClimateControlScheduleCommand.ChangedReport)
-export class ClimateControlScheduleCCChangedReport extends ClimateControlScheduleCC {
+export class ClimateControlScheduleCCChangedReport
+	extends ClimateControlScheduleCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -381,10 +399,14 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 
 @CCCommand(ClimateControlScheduleCommand.ChangedGet)
 @expectedCCResponse(ClimateControlScheduleCCChangedReport)
-export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC {}
+export class ClimateControlScheduleCCChangedGet
+	extends ClimateControlScheduleCC
+{}
 
 @CCCommand(ClimateControlScheduleCommand.OverrideReport)
-export class ClimateControlScheduleCCOverrideReport extends ClimateControlScheduleCC {
+export class ClimateControlScheduleCCOverrideReport
+	extends ClimateControlScheduleCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -393,8 +415,8 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 
 		validatePayload(this.payload.length >= 2);
 		this.overrideType = this.payload[0] & 0b11;
-		this.overrideState =
-			decodeSetbackState(this.payload[1]) || this.payload[1];
+		this.overrideState = decodeSetbackState(this.payload[1])
+			|| this.payload[1];
 	}
 
 	@ccValue(ClimateControlScheduleCCValues.overrideType)
@@ -419,7 +441,9 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 
 @CCCommand(ClimateControlScheduleCommand.OverrideGet)
 @expectedCCResponse(ClimateControlScheduleCCOverrideReport)
-export class ClimateControlScheduleCCOverrideGet extends ClimateControlScheduleCC {}
+export class ClimateControlScheduleCCOverrideGet
+	extends ClimateControlScheduleCC
+{}
 
 interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
 	overrideType: ScheduleOverrideType;
@@ -428,7 +452,9 @@ interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
 
 @CCCommand(ClimateControlScheduleCommand.OverrideSet)
 @useSupervision()
-export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleCC {
+export class ClimateControlScheduleCCOverrideSet
+	extends ClimateControlScheduleCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:

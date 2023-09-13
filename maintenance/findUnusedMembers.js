@@ -74,11 +74,11 @@ tsConfig.fileNames
 				node.members.forEach((member) => {
 					// If member is marked as public or protected and not a constructor
 					if (
-						(ts.getCombinedModifierFlags(member) &
-							ts.ModifierFlags.Public ||
-							ts.getCombinedModifierFlags(member) &
-								ts.ModifierFlags.Protected) &&
-						member.kind !== ts.SyntaxKind.Constructor
+						(ts.getCombinedModifierFlags(member)
+								& ts.ModifierFlags.Public
+							|| ts.getCombinedModifierFlags(member)
+								& ts.ModifierFlags.Protected)
+						&& member.kind !== ts.SyntaxKind.Constructor
 					) {
 						const references = services.findReferences(
 							file,
@@ -88,9 +88,9 @@ tsConfig.fileNames
 						if (
 							references?.every(
 								(reference) =>
-									reference.references.length === 1 &&
-									reference.references[0].isDefinition &&
-									!reference.definition.fileName.endsWith(
+									reference.references.length === 1
+									&& reference.references[0].isDefinition
+									&& !reference.definition.fileName.endsWith(
 										".d.ts",
 									),
 							)

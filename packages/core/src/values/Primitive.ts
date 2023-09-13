@@ -148,18 +148,21 @@ export function getMinIntegerSize(
 	signed: boolean,
 ): 1 | 2 | 4 | undefined {
 	if (signed) {
-		if (value >= IntegerLimits.Int8.min && value <= IntegerLimits.Int8.max)
+		if (
+			value >= IntegerLimits.Int8.min && value <= IntegerLimits.Int8.max
+		) {
 			return 1;
-		else if (
-			value >= IntegerLimits.Int16.min &&
-			value <= IntegerLimits.Int16.max
-		)
+		} else if (
+			value >= IntegerLimits.Int16.min
+			&& value <= IntegerLimits.Int16.max
+		) {
 			return 2;
-		else if (
-			value >= IntegerLimits.Int32.min &&
-			value <= IntegerLimits.Int32.max
-		)
+		} else if (
+			value >= IntegerLimits.Int32.min
+			&& value <= IntegerLimits.Int32.max
+		) {
 			return 4;
+		}
 	} else if (value >= 0) {
 		if (value <= IntegerLimits.UInt8.max) return 1;
 		if (value <= IntegerLimits.UInt16.max) return 2;
@@ -173,6 +176,27 @@ export function getIntegerLimits(
 	signed: boolean,
 ): { min: number; max: number } {
 	return (IntegerLimits as any)[`${signed ? "" : "U"}Int${size * 8}`];
+}
+
+export function getFloatParameters(value: number): {
+	precision: number;
+	size: number;
+	roundedValue: number;
+} {
+	const precision = Math.min(getPrecision(value), 7);
+	value = Math.round(value * Math.pow(10, precision));
+	const size: number | undefined = getMinIntegerSize(value, true);
+	if (size == undefined) {
+		throw new ZWaveError(
+			`Cannot encode the value ${value} because its too large or too small to fit into 4 bytes`,
+			ZWaveErrorCodes.Arithmetic,
+		);
+	}
+	return {
+		precision,
+		size,
+		roundedValue: value,
+	};
 }
 
 /**
@@ -199,8 +223,9 @@ export function encodeFloatWithScale(
 		size = override.size;
 	}
 	const ret = Buffer.allocUnsafe(1 + size);
-	ret[0] =
-		((precision & 0b111) << 5) | ((scale & 0b11) << 3) | (size & 0b111);
+	ret[0] = ((precision & 0b111) << 5)
+		| ((scale & 0b11) << 3)
+		| (size & 0b111);
 	ret.writeIntBE(value, 1, size);
 	return ret;
 }
@@ -213,8 +238,9 @@ export function parseBitMask(mask: Buffer, startValue: number = 1): number[] {
 	for (let index = 1; index <= numBits; index++) {
 		const byteNum = (index - 1) >>> 3; // id / 8
 		const bitNum = (index - 1) % 8;
-		if ((mask[byteNum] & (2 ** bitNum)) !== 0)
+		if ((mask[byteNum] & (2 ** bitNum)) !== 0) {
 			ret.push(index + startValue - 1);
+		}
 	}
 	return ret;
 }
@@ -228,7 +254,7 @@ export function encodeBitMask(
 	const numBytes = Math.ceil((maxValue - startValue + 1) / 8);
 	const ret = Buffer.alloc(numBytes, 0);
 	for (let val = startValue; val <= maxValue; val++) {
-		if (values.indexOf(val) === -1) continue;
+		if (!values.includes(val)) continue;
 		const byteNum = (val - startValue) >>> 3; // id / 8
 		const bitNum = (val - startValue) % 8;
 		ret[byteNum] |= 2 ** bitNum;
@@ -237,7 +263,7 @@ export function encodeBitMask(
 }
 
 export function parseNodeBitMask(mask: Buffer): number[] {
-	return parseBitMask(mask.slice(0, NUM_NODEMASK_BYTES));
+	return parseBitMask(mask.subarray(0, NUM_NODEMASK_BYTES));
 }
 
 export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer {
@@ -292,8 +318,7 @@ export function encodePartial(
 	partialValue: number,
 	bitMask: number,
 ): number {
-	const ret =
-		(fullValue & ~bitMask) |
-		((partialValue << getMinimumShiftForBitMask(bitMask)) & bitMask);
+	const ret = (fullValue & ~bitMask)
+		| ((partialValue << getMinimumShiftForBitMask(bitMask)) & bitMask);
 	return ret >>> 0; // convert to unsigned if necessary
 }

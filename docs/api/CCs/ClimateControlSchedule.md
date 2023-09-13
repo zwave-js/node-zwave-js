@@ -54,14 +54,14 @@ async setOverride(
 }
 ```
 
--   **label:** Override state
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** -12.8
+- **label:** Override state
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** -12.8
 
 ### `overrideType`
 
@@ -73,13 +73,13 @@ async setOverride(
 }
 ```
 
--   **label:** Override type
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** Override type
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `schedule(weekday: Weekday)`
 
@@ -92,10 +92,10 @@ async setOverride(
 }
 ```
 
--   **label:** `Schedule (${string})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** `Schedule (${string})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`

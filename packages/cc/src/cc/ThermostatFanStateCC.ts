@@ -1,20 +1,20 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	ValueMetadata,
 	enumValuesToMetadataStates,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
 	POLL_VALUE,
-	throwUnsupportedProperty,
 	type PollValueImplementation,
+	throwUnsupportedProperty,
 } from "../lib/API";
 import {
 	CommandClass,
@@ -34,11 +34,15 @@ import { ThermostatFanState, ThermostatFanStateCommand } from "../lib/_Types";
 
 export const ThermostatFanStateCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Thermostat Fan State"], {
-		...V.staticPropertyWithName("fanState", "state", {
-			...ValueMetadata.ReadOnlyUInt8,
-			states: enumValuesToMetadataStates(ThermostatFanState),
-			label: "Thermostat fan state",
-		} as const),
+		...V.staticPropertyWithName(
+			"fanState",
+			"state",
+			{
+				...ValueMetadata.ReadOnlyUInt8,
+				states: enumValuesToMetadataStates(ThermostatFanState),
+				label: "Thermostat fan state",
+			} as const,
+		),
 	}),
 });
 
@@ -55,7 +59,7 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: ThermostatFanStateCCAPI, { property }) {
+		return async function(this: ThermostatFanStateCCAPI, { property }) {
 			switch (property) {
 				case "state":
 					return this.get();
@@ -77,11 +81,12 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ThermostatFanStateCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ThermostatFanStateCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return response?.state;
 		}
@@ -130,9 +135,8 @@ export class ThermostatFanStateCC extends CommandClass {
 		if (currentStatus) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message:
-					"received current thermostat fan state: " +
-					getEnumMemberName(ThermostatFanState, currentStatus),
+				message: "received current thermostat fan state: "
+					+ getEnumMemberName(ThermostatFanState, currentStatus),
 				direction: "inbound",
 			});
 		}

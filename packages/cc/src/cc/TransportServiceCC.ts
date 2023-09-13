@@ -1,20 +1,20 @@
 import {
 	CRC16_CCITT,
 	CommandClasses,
+	type MessageOrCCLogEntry,
+	type SinglecastCC,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type MessageOrCCLogEntry,
-	type SinglecastCC,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CCResponseRole,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	CCCommand,
@@ -47,8 +47,7 @@ export const TransportServiceTimeouts = {
 
 @commandClass(CommandClasses["Transport Service"])
 @implementedVersion(2)
-export class TransportServiceCC
-	extends CommandClass
+export class TransportServiceCC extends CommandClass
 	implements SinglecastCC<TransportServiceCC>
 {
 	declare ccCommand: TransportServiceCommand;
@@ -97,11 +96,12 @@ export function isTransportServiceEncapsulation(
 	command: CommandClass,
 ): command is
 	| TransportServiceCCFirstSegment
-	| TransportServiceCCSubsequentSegment {
+	| TransportServiceCCSubsequentSegment
+{
 	return (
-		command.ccId === CommandClasses["Transport Service"] &&
-		(command.ccCommand === TransportServiceCommand.FirstSegment ||
-			command.ccCommand === TransportServiceCommand.SubsequentSegment)
+		command.ccId === CommandClasses["Transport Service"]
+		&& (command.ccCommand === TransportServiceCommand.FirstSegment
+			|| command.ccCommand === TransportServiceCommand.SubsequentSegment)
 	);
 }
 
@@ -126,7 +126,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 				this.ccId,
 				this.ccCommand | this.payload[0],
 			]);
-			const ccBuffer = this.payload.slice(1, -2);
+			const ccBuffer = this.payload.subarray(1, -2);
 			let expectedCRC = CRC16_CCITT(headerBuffer);
 			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
 			const actualCRC = this.payload.readUInt16BE(
@@ -142,11 +142,11 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 			const hasHeaderExtension = !!(this.payload[2] & 0b1000);
 			if (hasHeaderExtension) {
 				const extLength = this.payload[3];
-				this.headerExtension = this.payload.slice(4, 4 + extLength);
+				this.headerExtension = this.payload.subarray(4, 4 + extLength);
 				payloadOffset += 1 + extLength;
 			}
 
-			this.partialDatagram = this.payload.slice(payloadOffset, -2);
+			this.partialDatagram = this.payload.subarray(payloadOffset, -2);
 			// A node supporting the Transport Service Command Class, version 2
 			// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
 			validatePayload(this.partialDatagram.length <= MAX_SEGMENT_SIZE);
@@ -166,9 +166,8 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 
 	public serialize(): Buffer {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
-		this.ccCommand =
-			(this.ccCommand & 0b11111_000) |
-			((this.datagramSize >>> 8) & 0b111);
+		this.ccCommand = (this.ccCommand & 0b11111_000)
+			| ((this.datagramSize >>> 8) & 0b111);
 
 		const ext = !!this.headerExtension && this.headerExtension.length >= 1;
 		this.payload = Buffer.from([
@@ -192,7 +191,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		// The CC header is included in the CRC computation
 		const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 		let crc = CRC16_CCITT(headerBuffer);
-		crc = CRC16_CCITT(this.payload.slice(0, -2), crc);
+		crc = CRC16_CCITT(this.payload.subarray(0, -2), crc);
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
@@ -211,9 +210,11 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	protected computeEncapsulationOverhead(): number {
 		// Transport Service CC (first segment) adds 1 byte datagram size, 1 byte Session ID/..., 2 bytes checksum and (0 OR n+1) bytes header extension
 		return (
-			super.computeEncapsulationOverhead() +
-			4 +
-			(this.headerExtension?.length ? 1 + this.headerExtension.length : 0)
+			super.computeEncapsulationOverhead()
+			+ 4
+			+ (this.headerExtension?.length
+				? 1 + this.headerExtension.length
+				: 0)
 		);
 	}
 
@@ -231,7 +232,8 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 }
 
 interface TransportServiceCCSubsequentSegmentOptions
-	extends TransportServiceCCFirstSegmentOptions {
+	extends TransportServiceCCFirstSegmentOptions
+{
 	datagramOffset: number;
 }
 
@@ -256,7 +258,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 				this.ccId,
 				this.ccCommand | this.payload[0],
 			]);
-			const ccBuffer = this.payload.slice(1, -2);
+			const ccBuffer = this.payload.subarray(1, -2);
 			let expectedCRC = CRC16_CCITT(headerBuffer);
 			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
 			const actualCRC = this.payload.readUInt16BE(
@@ -266,19 +268,19 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 
 			this.datagramSize = this.payload.readUInt16BE(0);
 			this.sessionId = this.payload[2] >>> 4;
-			this.datagramOffset =
-				((this.payload[2] & 0b111) << 8) + this.payload[3];
+			this.datagramOffset = ((this.payload[2] & 0b111) << 8)
+				+ this.payload[3];
 			let payloadOffset = 4;
 
 			// If there is a header extension, read it
 			const hasHeaderExtension = !!(this.payload[2] & 0b1000);
 			if (hasHeaderExtension) {
 				const extLength = this.payload[4];
-				this.headerExtension = this.payload.slice(5, 5 + extLength);
+				this.headerExtension = this.payload.subarray(5, 5 + extLength);
 				payloadOffset += 1 + extLength;
 			}
 
-			this.partialDatagram = this.payload.slice(payloadOffset, -2);
+			this.partialDatagram = this.payload.subarray(payloadOffset, -2);
 			// A node supporting the Transport Service Command Class, version 2
 			// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
 			validatePayload(this.partialDatagram.length <= MAX_SEGMENT_SIZE);
@@ -316,10 +318,9 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		const datagramSize = session[0].datagramSize;
 		const receivedBytes = new Array<boolean>(datagramSize).fill(false);
 		for (const segment of [...session, this]) {
-			const offset =
-				segment instanceof TransportServiceCCFirstSegment
-					? 0
-					: segment.datagramOffset;
+			const offset = segment instanceof TransportServiceCCFirstSegment
+				? 0
+				: segment.datagramOffset;
 			for (
 				let i = offset;
 				i <= offset + segment.partialDatagram.length;
@@ -329,7 +330,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			}
 		}
 		// Expect more messages as long as we haven't received everything
-		return receivedBytes.some((b) => b === false);
+		return receivedBytes.includes(false);
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
@@ -348,10 +349,9 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		const datagram = Buffer.allocUnsafe(this.datagramSize);
 		for (const partial of [...partials, this]) {
 			// Ensure that we don't try to write out-of-bounds
-			const offset =
-				partial instanceof TransportServiceCCFirstSegment
-					? 0
-					: partial.datagramOffset;
+			const offset = partial instanceof TransportServiceCCFirstSegment
+				? 0
+				: partial.datagramOffset;
 			if (offset + partial.partialDatagram.length > datagram.length) {
 				throw new ZWaveError(
 					`The partial datagram offset and length in a segment are not compatible to the communicated datagram length`,
@@ -371,16 +371,15 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 
 	public serialize(): Buffer {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
-		this.ccCommand =
-			(this.ccCommand & 0b11111_000) |
-			((this.datagramSize >>> 8) & 0b111);
+		this.ccCommand = (this.ccCommand & 0b11111_000)
+			| ((this.datagramSize >>> 8) & 0b111);
 
 		const ext = !!this.headerExtension && this.headerExtension.length >= 1;
 		this.payload = Buffer.from([
 			this.datagramSize & 0xff,
-			((this.sessionId & 0b1111) << 4) |
-				(ext ? 0b1000 : 0) |
-				((this.datagramOffset >>> 8) & 0b111),
+			((this.sessionId & 0b1111) << 4)
+			| (ext ? 0b1000 : 0)
+			| ((this.datagramOffset >>> 8) & 0b111),
 			this.datagramOffset & 0xff,
 		]);
 		if (ext) {
@@ -400,7 +399,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		// The CC header is included in the CRC computation
 		const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 		let crc = CRC16_CCITT(headerBuffer);
-		crc = CRC16_CCITT(this.payload.slice(0, -2), crc);
+		crc = CRC16_CCITT(this.payload.subarray(0, -2), crc);
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
@@ -410,9 +409,11 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	protected computeEncapsulationOverhead(): number {
 		// Transport Service CC (first segment) adds 1 byte datagram size, 1 byte Session ID/..., 1 byte offset, 2 bytes checksum and (0 OR n+1) bytes header extension
 		return (
-			super.computeEncapsulationOverhead() +
-			5 +
-			(this.headerExtension?.length ? 1 + this.headerExtension.length : 0)
+			super.computeEncapsulationOverhead()
+			+ 5
+			+ (this.headerExtension?.length
+				? 1 + this.headerExtension.length
+				: 0)
 		);
 	}
 
@@ -441,13 +442,13 @@ function testResponseForSegmentRequest(
 	received: TransportServiceCC,
 ): CCResponseRole {
 	return (
-		(sent.datagramOffset === 0 &&
-			received instanceof TransportServiceCCFirstSegment &&
-			received.sessionId === sent.sessionId) ||
-		(sent.datagramOffset > 0 &&
-			received instanceof TransportServiceCCSubsequentSegment &&
-			sent.datagramOffset === received.datagramOffset &&
-			received.sessionId === sent.sessionId)
+		(sent.datagramOffset === 0
+			&& received instanceof TransportServiceCCFirstSegment
+			&& received.sessionId === sent.sessionId)
+		|| (sent.datagramOffset > 0
+			&& received instanceof TransportServiceCCSubsequentSegment
+			&& sent.datagramOffset === received.datagramOffset
+			&& received.sessionId === sent.sessionId)
 	);
 }
 
@@ -464,8 +465,8 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.sessionId = this.payload[1] >>> 4;
-			this.datagramOffset =
-				((this.payload[1] & 0b111) << 8) + this.payload[2];
+			this.datagramOffset = ((this.payload[1] & 0b111) << 8)
+				+ this.payload[2];
 		} else {
 			this.sessionId = options.sessionId;
 			this.datagramOffset = options.datagramOffset;
@@ -477,8 +478,8 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			((this.sessionId & 0b1111) << 4) |
-				((this.datagramOffset >>> 8) & 0b111),
+			((this.sessionId & 0b1111) << 4)
+			| ((this.datagramOffset >>> 8) & 0b111),
 			this.datagramOffset & 0xff,
 		]);
 		return super.serialize();

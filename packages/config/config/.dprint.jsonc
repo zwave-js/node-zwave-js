@@ -1,0 +1,13 @@
+{
+	// TODO: Inherit from the root config once supported by dprint
+	"lineWidth": 120,
+	"useTabs": true,
+	"indentWidth": 4,
+	"newLineKind": "lf",
+
+	"json": {},
+
+	"includes": ["*.json", "devices/**/*.json"],
+
+	"plugins": ["https://plugins.dprint.dev/json-0.17.4.wasm"]
+}

@@ -338,8 +338,8 @@ test("supports x.y.z firmware versions", (t) => {
 		firmwareVersion: "7.17",
 	});
 	t.is(
-		isArray(evaluatedXY_warning.metadata?.comments) &&
-			evaluatedXY_warning.metadata?.comments.length,
+		isArray(evaluatedXY_warning.metadata?.comments)
+			&& evaluatedXY_warning.metadata?.comments.length,
 		1,
 	);
 
@@ -348,8 +348,8 @@ test("supports x.y.z firmware versions", (t) => {
 		firmwareVersion: "7.18",
 	});
 	t.is(
-		isArray(evaluatedXY_ok.metadata?.comments) &&
-			evaluatedXY_ok.metadata?.comments.length,
+		isArray(evaluatedXY_ok.metadata?.comments)
+			&& evaluatedXY_ok.metadata?.comments.length,
 		0,
 	);
 
@@ -358,8 +358,8 @@ test("supports x.y.z firmware versions", (t) => {
 		firmwareVersion: "7.17.1",
 	});
 	t.is(
-		isArray(evaluatedXYZ_warning.metadata?.comments) &&
-			evaluatedXYZ_warning.metadata?.comments.length,
+		isArray(evaluatedXYZ_warning.metadata?.comments)
+			&& evaluatedXYZ_warning.metadata?.comments.length,
 		1,
 	);
 
@@ -368,8 +368,8 @@ test("supports x.y.z firmware versions", (t) => {
 		firmwareVersion: "7.17.2",
 	});
 	t.is(
-		isArray(evaluatedXYZ_ok.metadata?.comments) &&
-			evaluatedXYZ_ok.metadata?.comments.length,
+		isArray(evaluatedXYZ_ok.metadata?.comments)
+			&& evaluatedXYZ_ok.metadata?.comments.length,
 		0,
 	);
 });

@@ -1,24 +1,23 @@
 {
   "name": "@zwave-js/nvmedit",
-  "version": "11.12.0",
+  "version": "12.0.0-beta.1",
   "description": "zwave-js: library to edit NVM backups",
   "keywords": [],
   "publishConfig": {
     "access": "public"
   },
   "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js"
-  },
   "types": "build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "safe": [
-        "build/index_safe.d.ts"
-      ]
-    }
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./safe": {
+      "types": "./build/index_safe.d.ts",
+      "default": "./build/index_safe.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "bin/",
@@ -42,39 +41,36 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0"
+    "node": ">= 18"
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.8",
-    "fs-extra": "^10.1.0",
+    "fs-extra": "^11.1.1",
     "reflect-metadata": "^0.1.13",
-    "semver": "^7.5.2",
+    "semver": "^7.5.4",
     "yargs": "^17.7.2"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.36.0",
-    "@types/fs-extra": "^9.0.13",
-    "@types/node": "^14.18.52",
-    "@types/semver": "^7.3.13",
+    "@microsoft/api-extractor": "^7.36.4",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.17.14",
+    "@types/semver": "^7.5.1",
     "@types/yargs": "^17.0.24",
-    "ava": "^4.3.3",
-    "del-cli": "^5.0.0",
-    "esbuild": "0.15.18",
+    "ava": "^5.3.1",
+    "del-cli": "^5.1.0",
+    "esbuild": "0.19.2",
     "esbuild-register": "^3.4.2",
-    "prettier": "^2.8.8",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   }
 }

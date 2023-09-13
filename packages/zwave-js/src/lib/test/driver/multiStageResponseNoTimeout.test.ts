@@ -10,9 +10,9 @@ import {
 } from "@zwave-js/cc/TransportServiceCC";
 import { CommandClasses } from "@zwave-js/core";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
@@ -37,8 +37,8 @@ integrationTest(
 			const respondToConfigurationNameGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof ConfigurationCCNameGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof ConfigurationCCNameGet
 					) {
 						await wait(700);
 						let cc = new ConfigurationCCNameReport(self.host, {
@@ -104,21 +104,25 @@ integrationTest(
 			const respondToConfigurationNameGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
-						frame.type === MockZWaveFrameType.Request &&
-						frame.payload instanceof ConfigurationCCNameGet
+						frame.type === MockZWaveFrameType.Request
+						&& frame.payload instanceof ConfigurationCCNameGet
 					) {
 						const configCC = new ConfigurationCCNameReport(
 							self.host,
 							{
 								nodeId: controller.host.ownNodeId,
 								parameter: frame.payload.parameter,
-								name: "Veeeeeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooong parameter name",
+								name:
+									"Veeeeeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooong parameter name",
 								reportsToFollow: 0,
 							},
 						);
 						const serialized = configCC.serialize();
-						const segment1 = serialized.slice(0, MAX_SEGMENT_SIZE);
-						const segment2 = serialized.slice(MAX_SEGMENT_SIZE);
+						const segment1 = serialized.subarray(
+							0,
+							MAX_SEGMENT_SIZE,
+						);
+						const segment2 = serialized.subarray(MAX_SEGMENT_SIZE);
 
 						const sessionId = 7;
 
@@ -188,8 +192,8 @@ integrationTest("GET requests DO time out if there's no matching response", {
 		const respondToConfigurationNameGet: MockNodeBehavior = {
 			async onControllerFrame(controller, self, frame) {
 				if (
-					frame.type === MockZWaveFrameType.Request &&
-					frame.payload instanceof ConfigurationCCNameGet
+					frame.type === MockZWaveFrameType.Request
+					&& frame.payload instanceof ConfigurationCCNameGet
 				) {
 					// This is not the response you're looking for
 					const cc = new BasicCCReport(self.host, {

@@ -1,25 +1,25 @@
 import {
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeNodeID,
-	type MessageOrCCLogEntry,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 } from "@zwave-js/serial";
 
 export enum SetSUCNodeIdStatus {
@@ -39,8 +39,8 @@ export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
 export class SetSUCNodeIdRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== SetSUCNodeIdRequestStatusReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== SetSUCNodeIdRequestStatusReport
 		) {
 			return new SetSUCNodeIdRequestStatusReport(host, options);
 		}
@@ -65,8 +65,8 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 			this.sucNodeId = options.sucNodeId ?? host.ownNodeId;
 			this.enableSUC = options.enableSUC;
 			this.enableSIS = options.enableSIS;
-			this.transmitOptions =
-				options.transmitOptions ?? TransmitOptions.DEFAULT;
+			this.transmitOptions = options.transmitOptions
+				?? TransmitOptions.DEFAULT;
 		}
 	}
 
@@ -123,8 +123,7 @@ export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 	}
 }
 
-export class SetSUCNodeIdRequestStatusReport
-	extends SetSUCNodeIdRequestBase
+export class SetSUCNodeIdRequestStatusReport extends SetSUCNodeIdRequestBase
 	implements SuccessIndicator
 {
 	public constructor(

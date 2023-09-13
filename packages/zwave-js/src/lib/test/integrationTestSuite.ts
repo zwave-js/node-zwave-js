@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { type DeepPartial } from "@zwave-js/shared";
+import { type DeepPartial, noop } from "@zwave-js/shared";
 import {
 	type MockController,
 	type MockNode,
@@ -8,10 +7,10 @@ import {
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import test, { type ExecutionContext } from "ava";
-import crypto from "crypto";
 import fs from "fs-extra";
-import os from "os";
-import path from "path";
+import crypto from "node:crypto";
+import os from "node:os";
+import path from "node:path";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";
@@ -83,7 +82,7 @@ function suite(
 		}
 
 		// Make sure every test is starting fresh
-		await fs.emptyDir(cacheDir).catch(() => {});
+		await fs.emptyDir(cacheDir).catch(noop);
 
 		// And potentially provision the cache
 		if (provisioningDirectory) {
@@ -141,12 +140,11 @@ function suite(
 	}
 
 	// Integration tests need to run in serial, or they might block the serial port on CI
-	const fn =
-		modifier === "only"
-			? test.serial.only
-			: modifier === "skip"
-			? test.serial.skip
-			: test.serial;
+	const fn = modifier === "only"
+		? test.serial.only
+		: modifier === "skip"
+		? test.serial.skip
+		: test.serial;
 	fn(name, async (t) => {
 		t.timeout(30000);
 		t.teardown(async () => {
@@ -154,7 +152,7 @@ function suite(
 			await wait(100);
 
 			await driver.destroy();
-			if (!debug) await fs.emptyDir(cacheDir).catch(() => {});
+			if (!debug) await fs.emptyDir(cacheDir).catch(noop);
 		});
 
 		await prepareTest();

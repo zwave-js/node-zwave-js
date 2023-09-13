@@ -2,9 +2,9 @@
 // with support for emitting events on the written side
 
 import {
-	SerialPortStream,
 	type ErrorCallback,
 	type OpenOptions,
+	SerialPortStream,
 } from "@serialport/stream";
 import {
 	MockBinding,

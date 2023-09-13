@@ -1,14 +1,14 @@
 import {
 	CommandClasses,
+	type MaybeUnknown,
+	type MessageOrCCLogEntry,
+	type MessageRecord,
+	type ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseMaybeNumber,
 	validatePayload,
-	type MaybeUnknown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type ValueID,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared";
@@ -16,18 +16,18 @@ import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
 	POLL_VALUE,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-	type PollValueImplementation,
-	type SetValueImplementation,
 } from "../../lib/API";
 import {
-	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../../lib/CommandClass";
 import { expectedCCResponse } from "../../lib/CommandClassDecorators";
 import {
@@ -97,11 +97,12 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<FibaroVenetianBlindCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			FibaroVenetianBlindCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["position", "tilt"]);
 		}
@@ -128,7 +129,7 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
-		return async function (
+		return async function(
 			this: FibaroCCAPI,
 			{ property, propertyKey },
 			value,
@@ -170,7 +171,7 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 	}
 
 	protected get [POLL_VALUE](): PollValueImplementation {
-		return async function (this: FibaroCCAPI, { property, propertyKey }) {
+		return async function(this: FibaroCCAPI, { property, propertyKey }) {
 			if (property !== "fibaro") {
 				throwUnsupportedProperty(this.ccId, property);
 			} else if (propertyKey == undefined) {
@@ -210,13 +211,13 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 				this.fibaroCCCommand,
 			);
 			if (
-				FibaroConstructor &&
-				(new.target as any) !== FibaroConstructor
+				FibaroConstructor
+				&& (new.target as any) !== FibaroConstructor
 			) {
 				return new FibaroConstructor(host, options);
 			}
 
-			this.payload = this.payload.slice(2);
+			this.payload = this.payload.subarray(2);
 		} else {
 			this.fibaroCCId = getFibaroCCId(this);
 			this.fibaroCCCommand = getFibaroCCCommand(this);
@@ -313,8 +314,8 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 
 		if (gotDeserializationOptions(options)) {
 			if (
-				this.fibaroCCCommand === FibaroVenetianBlindCCCommand.Report &&
-				(new.target as any) !== FibaroVenetianBlindCCReport
+				this.fibaroCCCommand === FibaroVenetianBlindCCCommand.Report
+				&& (new.target as any) !== FibaroVenetianBlindCCReport
 			) {
 				return new FibaroVenetianBlindCCReport(host, options);
 			}
@@ -359,18 +360,19 @@ tilt:     ${resp.tilt}`;
 	}
 }
 
-export type FibaroVenetianBlindCCSetOptions = CCCommandOptions &
-	(
+export type FibaroVenetianBlindCCSetOptions =
+	& CCCommandOptions
+	& (
 		| {
-				position: number;
-		  }
+			position: number;
+		}
 		| {
-				tilt: number;
-		  }
+			tilt: number;
+		}
 		| {
-				position: number;
-				tilt: number;
-		  }
+			position: number;
+			tilt: number;
+		}
 	);
 
 @fibaroCCCommand(FibaroVenetianBlindCCCommand.Set)
@@ -400,9 +402,8 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public tilt: number | undefined;
 
 	public serialize(): Buffer {
-		const controlByte =
-			(this.position != undefined ? 0b10 : 0) |
-			(this.tilt != undefined ? 0b01 : 0);
+		const controlByte = (this.position != undefined ? 0b10 : 0)
+			| (this.tilt != undefined ? 0b01 : 0);
 		this.payload = Buffer.from([
 			controlByte,
 			this.position ?? 0,

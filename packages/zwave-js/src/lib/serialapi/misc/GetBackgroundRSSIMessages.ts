@@ -1,19 +1,19 @@
 import {
-	MessagePriority,
-	rssiToString,
 	type MessageOrCCLogEntry,
+	MessagePriority,
 	type MessageRecord,
 	type RSSI,
+	rssiToString,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 import { parseRSSI, tryParseRSSI } from "../transport/SendDataShared";
 

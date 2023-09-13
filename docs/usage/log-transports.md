@@ -22,8 +22,8 @@ This transport must be a [`winston`](https://github.com/winstonjs/winston) trans
 
 ```ts
 import { createDefaultTransportFormat } from "@zwave-js/core";
-import winston from "winston";
 import { Writable } from "stream";
+import winston from "winston";
 
 const stream: Writable = TODO_getStreamSomehow();
 
@@ -38,8 +38,8 @@ const myTransport = new winston.transports.Stream({
 
 The transport format is responsible for formatting the log output and **MUST** be specified on each transport. To reuse the formatting that Z-Wave JS has, use the `createDefaultTransportFormat` function from `@zwave-js/core`. It accepts two parameters:
 
--   `colorize`: Whether log outputs should be colorized using ANSI escape codes. This can be useful if you log to a terminal.
--   `shortTimestamps`: Whether the timestamps should include only the time (`true`) or also the date (`false`).
+- `colorize`: Whether log outputs should be colorized using ANSI escape codes. This can be useful if you log to a terminal.
+- `shortTimestamps`: Whether the timestamps should include only the time (`true`) or also the date (`false`).
 
 The [`log-transports` repository](https://github.com/zwave-js/log-transports) cotnains a few predefined transports that you can use.
 

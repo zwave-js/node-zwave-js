@@ -1,3 +1,4 @@
+import { num2hex } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
@@ -6,18 +7,18 @@ import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
-	// Some messages like nonces, responses to Supervision and Transport Service
-	// need to be handled before all others. We use this priority to decide which
-	// message goes onto the immediate queue.
-	Immediate = 0,
+	// High-priority controller commands that must be handled before all other commands.
+	// We use this priority to decide which messages go onto the immediate queue.
+	ControllerImmediate = 0,
+	// Controller commands finish quickly and should be preferred over node queries
+	Controller,
+	// Some node commands like nonces, responses to Supervision and Transport Service
+	// need to be handled before all node commands.
+	// We use this priority to decide which messages go onto the immediate queue.
+	Immediate,
 	// To avoid S2 collisions, some commands that normally have Immediate priority
 	// have to go onto the normal queue, but still before all other messages
 	ImmediateLow,
-	// Controller commands usually finish quickly and should be preferred over node queries
-	Controller,
-	// Multistep controller commands typically require user interaction but still
-	// should happen at a higher priority than any node data exchange
-	MultistepController,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
@@ -118,6 +119,47 @@ export function rssiToString(rssi: RSSI): string {
 	}
 }
 
+/**
+ * How the controller transmitted a frame to a node.
+ */
+export enum RoutingScheme {
+	Idle,
+	Direct,
+	Priority,
+	LWR,
+	NLWR,
+	Auto,
+	ResortDirect,
+	Explore,
+}
+
+/**
+ * Converts a routing scheme value to a human readable format.
+ */
+export function routingSchemeToString(scheme: RoutingScheme): string {
+	switch (scheme) {
+		case RoutingScheme.Idle:
+			return "Idle";
+		case RoutingScheme.Direct:
+			return "Direct";
+		case RoutingScheme.Priority:
+			return "Priority Route";
+		case RoutingScheme.LWR:
+			return "LWR";
+		case RoutingScheme.NLWR:
+			return "NLWR";
+		case RoutingScheme.Auto:
+			return "Auto Route";
+		case RoutingScheme.ResortDirect:
+			return "Resort to Direct";
+		case RoutingScheme.Explore:
+			return "Explorer Frame";
+		default:
+			return `Unknown (${num2hex(scheme)})`;
+	}
+}
+
+/** Information about the transmission as received by the controller */
 export interface TXReport {
 	/** Transmission time in ticks (multiples of 10ms) */
 	txTicks: number;
@@ -131,8 +173,8 @@ export interface TXReport {
 	ackChannelNo?: number;
 	/** Channel number used to transmit the data */
 	txChannelNo: number;
-	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. */
-	routeSchemeState: number;
+	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. Z-Wave JS uses the Silicon Labs interpretation. */
+	routeSchemeState: RoutingScheme;
 	/** Node IDs of the repeater 0..3 used in the route. */
 	repeaterNodeIds: [number?, number?, number?, number?];
 	/** Whether the destination requires a 1000ms beam to be reached */
@@ -158,6 +200,11 @@ export interface TXReport {
 	/** Noise floor measured by the destination during the ACK transmission */
 	destinationAckMeasuredNoiseFloor?: RSSI;
 }
+
+/** Information about the transmission, but for serialization in mocks */
+export type SerializableTXReport =
+	& Partial<Omit<TXReport, "numRepeaters">>
+	& Pick<TXReport, "txTicks" | "routeSpeed">;
 
 export interface SendMessageOptions {
 	/** The priority of the message to send. If none is given, the defined default priority of the message class will be used. */
@@ -189,6 +236,9 @@ export interface SendMessageOptions {
 	 * For multi-stage messages, the callback may be called multiple times.
 	 */
 	onTXReport?: (report: TXReport) => void;
+
+	/** Will be called when the transaction for this message progresses. */
+	onProgress?: TransactionProgressListener;
 }
 
 export enum EncapsulationFlags {
@@ -200,21 +250,24 @@ export enum EncapsulationFlags {
 }
 
 export type SupervisionOptions =
-	| ({
+	| (
+		& {
 			/** Whether supervision may be used. `false` disables supervision. Default: `"auto"`. */
 			useSupervision?: "auto";
-	  } & (
+		}
+		& (
 			| {
-					requestStatusUpdates?: false;
-			  }
+				requestStatusUpdates?: false;
+			}
 			| {
-					requestStatusUpdates: true;
-					onUpdate: SupervisionUpdateHandler;
-			  }
-	  ))
+				requestStatusUpdates: true;
+				onUpdate: SupervisionUpdateHandler;
+			}
+		)
+	)
 	| {
-			useSupervision: false;
-	  };
+		useSupervision: false;
+	};
 
 export type SendCommandSecurityS2Options = {
 	/** Send the command using a different (lower) security class */
@@ -227,9 +280,11 @@ export type SendCommandSecurityS2Options = {
 	s2MulticastGroupId?: number;
 };
 
-export type SendCommandOptions = SendMessageOptions &
-	SupervisionOptions &
-	SendCommandSecurityS2Options & {
+export type SendCommandOptions =
+	& SendMessageOptions
+	& SupervisionOptions
+	& SendCommandSecurityS2Options
+	& {
 		/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 		maxSendAttempts?: number;
 		/** Whether the driver should automatically handle the encapsulation. Default: true */
@@ -243,8 +298,7 @@ export type SendCommandOptions = SendMessageOptions &
 	};
 
 export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
-	undefined extends TResponse
-		? SupervisionResult | undefined
+	undefined extends TResponse ? SupervisionResult | undefined
 		: TResponse | undefined;
 
 export enum SupervisionStatus {
@@ -256,24 +310,24 @@ export enum SupervisionStatus {
 
 export type SupervisionResult =
 	| {
-			status:
-				| SupervisionStatus.NoSupport
-				| SupervisionStatus.Fail
-				| SupervisionStatus.Success;
-			remainingDuration?: undefined;
-	  }
+		status:
+			| SupervisionStatus.NoSupport
+			| SupervisionStatus.Fail
+			| SupervisionStatus.Success;
+		remainingDuration?: undefined;
+	}
 	| {
-			status: SupervisionStatus.Working;
-			remainingDuration: Duration;
-	  };
+		status: SupervisionStatus.Working;
+		remainingDuration: Duration;
+	};
 
 export type SupervisionUpdateHandler = (update: SupervisionResult) => void;
 
 export function isSupervisionResult(obj: unknown): obj is SupervisionResult {
 	return (
-		isObject(obj) &&
-		"status" in obj &&
-		typeof SupervisionStatus[obj.status as any] === "string"
+		isObject(obj)
+		&& "status" in obj
+		&& typeof SupervisionStatus[obj.status as any] === "string"
 	);
 }
 
@@ -283,9 +337,9 @@ export function supervisedCommandSucceeded(
 	status: SupervisionStatus.Success | SupervisionStatus.Working;
 } {
 	return (
-		isSupervisionResult(result) &&
-		(result.status === SupervisionStatus.Success ||
-			result.status === SupervisionStatus.Working)
+		isSupervisionResult(result)
+		&& (result.status === SupervisionStatus.Success
+			|| result.status === SupervisionStatus.Working)
 	);
 }
 
@@ -295,9 +349,9 @@ export function supervisedCommandFailed(
 	status: SupervisionStatus.Fail | SupervisionStatus.NoSupport;
 } {
 	return (
-		isSupervisionResult(result) &&
-		(result.status === SupervisionStatus.Fail ||
-			result.status === SupervisionStatus.NoSupport)
+		isSupervisionResult(result)
+		&& (result.status === SupervisionStatus.Fail
+			|| result.status === SupervisionStatus.NoSupport)
 	);
 }
 
@@ -306,8 +360,9 @@ export function isUnsupervisedOrSucceeded(
 ): result is
 	| undefined
 	| (SupervisionResult & {
-			status: SupervisionStatus.Success | SupervisionStatus.Working;
-	  }) {
+		status: SupervisionStatus.Success | SupervisionStatus.Working;
+	})
+{
 	return !result || supervisedCommandSucceeded(result);
 }
 
@@ -335,12 +390,11 @@ export function mergeSupervisionResults(
 	);
 	if (working.length > 0) {
 		const durations = working.map((r) =>
-			r.remainingDuration.serializeSet(),
+			r.remainingDuration.serializeSet()
 		);
-		const maxDuration =
-			(durations.length > 0 &&
-				Duration.parseReport(Math.max(...durations))) ||
-			Duration.unknown();
+		const maxDuration = (durations.length > 0
+			&& Duration.parseReport(Math.max(...durations)))
+			|| Duration.unknown();
 		return {
 			status: SupervisionStatus.Working,
 			remainingDuration: maxDuration,
@@ -350,3 +404,32 @@ export function mergeSupervisionResults(
 		status: SupervisionStatus.Success,
 	};
 }
+
+/**
+ * The state a transaction is in.
+ */
+export enum TransactionState {
+	/** The transaction is currently queued */
+	Queued,
+	/** The transaction is currently being handled */
+	Active,
+	/** The transaction was completed */
+	Completed,
+	/** The transaction failed */
+	Failed,
+}
+
+export type TransactionProgress = {
+	state:
+		| TransactionState.Queued
+		| TransactionState.Active
+		| TransactionState.Completed;
+} | {
+	state: TransactionState.Failed;
+	/** Why the transaction failed */
+	reason?: string;
+};
+
+export type TransactionProgressListener = (
+	progress: TransactionProgress,
+) => void;

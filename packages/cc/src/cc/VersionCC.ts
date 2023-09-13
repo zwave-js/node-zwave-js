@@ -1,6 +1,9 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -8,19 +11,16 @@ import {
 	enumValuesToMetadataStates,
 	getCCName,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -78,10 +78,14 @@ export const VersionCCValues = Object.freeze({
 			} as const,
 		),
 
-		...V.staticProperty("supportsZWaveSoftwareGet", undefined, {
-			minVersion: 3,
-			internal: true,
-		} as const),
+		...V.staticProperty(
+			"supportsZWaveSoftwareGet",
+			undefined,
+			{
+				minVersion: 3,
+				internal: true,
+			} as const,
+		),
 
 		...V.staticProperty(
 			"sdkVersion",
@@ -280,11 +284,12 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			requestedCC,
 		});
-		const response =
-			await this.applHost.sendCommand<VersionCCCommandClassReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			VersionCCCommandClassReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.ccVersion;
 	}
 
@@ -315,11 +320,12 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<VersionCCCapabilitiesReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			VersionCCCapabilitiesReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["supportsZWaveSoftwareGet"]);
 		}
@@ -336,11 +342,12 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<VersionCCZWaveSoftwareReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			VersionCCZWaveSoftwareReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"sdkVersion",
@@ -403,9 +410,11 @@ export class VersionCC extends CommandClass {
 			if (maxImplemented === 0) {
 				applHost.controllerLog.logNode(
 					node.id,
-					`  skipping query for ${CommandClasses[cc]} (${num2hex(
-						cc,
-					)}) because max implemented version is ${maxImplemented}`,
+					`  skipping query for ${CommandClasses[cc]} (${
+						num2hex(
+							cc,
+						)
+					}) because max implemented version is ${maxImplemented}`,
 				);
 				return;
 			}
@@ -424,9 +433,9 @@ export class VersionCC extends CommandClass {
 					endpoint.addCC(cc, {
 						version: supportedVersion,
 					});
-					logMessage = `  supports CC ${
-						CommandClasses[cc]
-					} (${num2hex(cc)}) in version ${supportedVersion}`;
+					logMessage = `  supports CC ${CommandClasses[cc]} (${
+						num2hex(cc)
+					}) in version ${supportedVersion}`;
 				} else {
 					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
 					// Make sure this is not a critical CC, which must be supported though
@@ -455,9 +464,11 @@ export class VersionCC extends CommandClass {
 			} else {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `CC version query for ${getCCName(
-						cc,
-					)} timed out - assuming the ${
+					message: `CC version query for ${
+						getCCName(
+							cc,
+						)
+					} timed out - assuming the ${
 						this.endpointIndex === 0 ? "node" : "endpoint"
 					} supports version 1...`,
 					level: "warn",
@@ -486,13 +497,15 @@ export class VersionCC extends CommandClass {
 			});
 			const versionGetResponse = await api.get();
 			if (versionGetResponse) {
-				// prettier-ignore
 				let logMessage = `received response for node versions:
-  library type:      ${ZWaveLibraryTypes[versionGetResponse.libraryType]} (${num2hex(versionGetResponse.libraryType)})
+  library type:      ${ZWaveLibraryTypes[versionGetResponse.libraryType]} (${
+					num2hex(versionGetResponse.libraryType)
+				})
   protocol version:  ${versionGetResponse.protocolVersion}
   firmware versions: ${versionGetResponse.firmwareVersions.join(", ")}`;
 				if (versionGetResponse.hardwareVersion != undefined) {
-					logMessage += `\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
+					logMessage +=
+						`\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
 				}
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -601,13 +614,15 @@ export class VersionCCReport extends VersionCC {
 				);
 			} else if (
 				!options.firmwareVersions.every((fw) =>
-					/^\d+\.\d+(\.\d+)?$/.test(fw),
+					/^\d+\.\d+(\.\d+)?$/.test(fw)
 				)
 			) {
 				throw new ZWaveError(
-					`firmwareVersions must be an array of strings in the format "major.minor", received "${JSON.stringify(
-						options.firmwareVersions,
-					)}"`,
+					`firmwareVersions must be an array of strings in the format "major.minor", received "${
+						JSON.stringify(
+							options.firmwareVersions,
+						)
+					}"`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -823,26 +838,26 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		validatePayload(this.payload.length >= 23);
 		this.sdkVersion = parseVersion(this.payload);
 		this.applicationFrameworkAPIVersion = parseVersion(
-			this.payload.slice(3),
+			this.payload.subarray(3),
 		);
 		if (this.applicationFrameworkAPIVersion !== "unused") {
 			this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(6);
 		} else {
 			this.applicationFrameworkBuildNumber = 0;
 		}
-		this.hostInterfaceVersion = parseVersion(this.payload.slice(8));
+		this.hostInterfaceVersion = parseVersion(this.payload.subarray(8));
 		if (this.hostInterfaceVersion !== "unused") {
 			this.hostInterfaceBuildNumber = this.payload.readUInt16BE(11);
 		} else {
 			this.hostInterfaceBuildNumber = 0;
 		}
-		this.zWaveProtocolVersion = parseVersion(this.payload.slice(13));
+		this.zWaveProtocolVersion = parseVersion(this.payload.subarray(13));
 		if (this.zWaveProtocolVersion !== "unused") {
 			this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(16);
 		} else {
 			this.zWaveProtocolBuildNumber = 0;
 		}
-		this.applicationVersion = parseVersion(this.payload.slice(18));
+		this.applicationVersion = parseVersion(this.payload.subarray(18));
 		if (this.applicationVersion !== "unused") {
 			this.applicationBuildNumber = this.payload.readUInt16BE(21);
 		} else {

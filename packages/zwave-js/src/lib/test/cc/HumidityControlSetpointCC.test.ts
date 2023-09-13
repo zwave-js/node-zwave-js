@@ -167,8 +167,8 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
 		Buffer.from([
 			HumidityControlSetpointCommand.SupportedReport, // CC Command
-			(1 << HumidityControlSetpointType.Humidifier) |
-				(1 << HumidityControlSetpointType.Auto),
+			(1 << HumidityControlSetpointType.Humidifier)
+			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
 	const cc = new HumidityControlSetpointCCSupportedReport(host, {
@@ -186,8 +186,8 @@ test("the SupportedReport command should set the correct value", (t) => {
 	const ccData = buildCCBuffer(
 		Buffer.from([
 			HumidityControlSetpointCommand.SupportedReport, // CC Command
-			(1 << HumidityControlSetpointType.Humidifier) |
-				(1 << HumidityControlSetpointType.Auto),
+			(1 << HumidityControlSetpointType.Humidifier)
+			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
 	const report = new HumidityControlSetpointCCSupportedReport(host, {

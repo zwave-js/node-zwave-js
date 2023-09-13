@@ -1,15 +1,15 @@
 import { cloneDeep } from "@zwave-js/shared/safe";
 import test from "ava";
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import { jsonToNVM, migrateNVM } from ".";
 import {
+	type NVMJSON,
 	json500To700,
 	json700To500,
 	jsonToNVM500,
 	nvm500ToJSON,
 	nvmToJSON,
-	type NVMJSON,
 } from "./convert";
 import type { NVM500JSON } from "./nvm500/NVMParser";
 
@@ -162,16 +162,16 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 			delete expected.meta;
 			if (expected.controller.applicationData) {
 				while (expected.controller.applicationData.startsWith("00")) {
-					expected.controller.applicationData =
-						expected.controller.applicationData.slice(2);
+					expected.controller.applicationData = expected.controller
+						.applicationData.slice(2);
 				}
 				while (expected.controller.applicationData.endsWith("00")) {
-					expected.controller.applicationData =
-						expected.controller.applicationData.slice(0, -2);
+					expected.controller.applicationData = expected.controller
+						.applicationData.slice(0, -2);
 				}
 				if (expected.controller.applicationData.length > 1024) {
-					expected.controller.applicationData =
-						expected.controller.applicationData.slice(0, 1024);
+					expected.controller.applicationData = expected.controller
+						.applicationData.slice(0, 1024);
 				}
 			}
 			t.deepEqual(output, expected);

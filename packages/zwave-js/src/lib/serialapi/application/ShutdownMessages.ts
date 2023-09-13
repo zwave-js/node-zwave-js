@@ -1,14 +1,14 @@
-import { MessagePriority, type MessageOrCCLogEntry } from "@zwave-js/core";
+import { type MessageOrCCLogEntry, MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
-	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 } from "@zwave-js/serial";
 
 export interface ShutdownRequestOptions extends MessageBaseOptions {

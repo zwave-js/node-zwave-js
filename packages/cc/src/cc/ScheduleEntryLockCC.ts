@@ -1,6 +1,10 @@
 import {
 	CommandClasses,
+	type IZWaveEndpoint,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	type SupervisionResult,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
@@ -8,27 +12,23 @@ import {
 	isUnsupervisedOrSucceeded,
 	parseBitMask,
 	validatePayload,
-	type IZWaveEndpoint,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
-	type SupervisionResult,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import {
+	type AllOrNone,
 	formatDate,
 	formatTime,
 	getEnumMemberName,
 	pick,
-	type AllOrNone,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -43,12 +43,12 @@ import {
 import { V } from "../lib/Values";
 import {
 	ScheduleEntryLockCommand,
+	type ScheduleEntryLockDailyRepeatingSchedule,
 	ScheduleEntryLockScheduleKind,
 	ScheduleEntryLockSetAction,
-	ScheduleEntryLockWeekday,
-	type ScheduleEntryLockDailyRepeatingSchedule,
 	type ScheduleEntryLockSlotId,
 	type ScheduleEntryLockWeekDaySchedule,
+	ScheduleEntryLockWeekday,
 	type ScheduleEntryLockYearDaySchedule,
 	type Timezone,
 } from "../lib/_Types";
@@ -173,8 +173,8 @@ function setUserCodeScheduleEnabledCached(
 
 	if (userId == undefined) {
 		// Enable/disable all users
-		const numUsers =
-			UserCodeCC.getSupportedUsersCached(applHost, endpoint) ?? 0;
+		const numUsers = UserCodeCC.getSupportedUsersCached(applHost, endpoint)
+			?? 0;
 
 		for (let userId = 1; userId <= numUsers; userId++) {
 			setEnabled(userId);
@@ -275,11 +275,12 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 
-		const result =
-			await this.applHost.sendCommand<ScheduleEntryLockCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const result = await this.applHost.sendCommand<
+			ScheduleEntryLockCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 
 		if (result) {
 			return pick(result, [
@@ -314,18 +315,31 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			}
 		}
 
+		if (schedule) {
+			if (
+				schedule.stopHour < schedule.startHour
+				|| schedule.stopHour === schedule.startHour
+					&& schedule.stopMinute <= schedule.startMinute
+			) {
+				throw new ZWaveError(
+					`The stop time must be after the start time.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+
 		const cc = new ScheduleEntryLockCCWeekDayScheduleSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...slot,
 			...(schedule
 				? {
-						action: ScheduleEntryLockSetAction.Set,
-						...schedule,
-				  }
+					action: ScheduleEntryLockSetAction.Set,
+					...schedule,
+				}
 				: {
-						action: ScheduleEntryLockSetAction.Erase,
-				  }),
+					action: ScheduleEntryLockSetAction.Erase,
+				}),
 		});
 
 		const result = await this.applHost.sendCommand(cc, this.commandOptions);
@@ -376,11 +390,12 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...slot,
 		});
-		const result =
-			await this.applHost.sendCommand<ScheduleEntryLockCCWeekDayScheduleReport>(
-				cc,
-				this.commandOptions,
-			);
+		const result = await this.applHost.sendCommand<
+			ScheduleEntryLockCCWeekDayScheduleReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 
 		if (result?.weekday != undefined) {
 			return {
@@ -417,18 +432,41 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			}
 		}
 
+		if (schedule) {
+			const startDate = new Date(
+				schedule.startYear,
+				schedule.startMonth - 1,
+				schedule.startDay,
+				schedule.startHour,
+				schedule.startMinute,
+			);
+			const stopDate = new Date(
+				schedule.stopYear,
+				schedule.stopMonth - 1,
+				schedule.stopDay,
+				schedule.stopHour,
+				schedule.stopMinute,
+			);
+			if (stopDate <= startDate) {
+				throw new ZWaveError(
+					`The stop date must be after the start date.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+
 		const cc = new ScheduleEntryLockCCYearDayScheduleSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...slot,
 			...(schedule
 				? {
-						action: ScheduleEntryLockSetAction.Set,
-						...schedule,
-				  }
+					action: ScheduleEntryLockSetAction.Set,
+					...schedule,
+				}
 				: {
-						action: ScheduleEntryLockSetAction.Erase,
-				  }),
+					action: ScheduleEntryLockSetAction.Erase,
+				}),
 		});
 
 		const result = await this.applHost.sendCommand(cc, this.commandOptions);
@@ -479,11 +517,12 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...slot,
 		});
-		const result =
-			await this.applHost.sendCommand<ScheduleEntryLockCCYearDayScheduleReport>(
-				cc,
-				this.commandOptions,
-			);
+		const result = await this.applHost.sendCommand<
+			ScheduleEntryLockCCYearDayScheduleReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 
 		if (result?.startYear != undefined) {
 			return {
@@ -512,8 +551,8 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		);
 
 		if (this.isSinglecast()) {
-			const numSlots =
-				ScheduleEntryLockCC.getNumDailyRepeatingSlotsCached(
+			const numSlots = ScheduleEntryLockCC
+				.getNumDailyRepeatingSlotsCached(
 					this.applHost,
 					this.endpoint,
 				);
@@ -534,12 +573,12 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				...slot,
 				...(schedule
 					? {
-							action: ScheduleEntryLockSetAction.Set,
-							...schedule,
-					  }
+						action: ScheduleEntryLockSetAction.Set,
+						...schedule,
+					}
 					: {
-							action: ScheduleEntryLockSetAction.Erase,
-					  }),
+						action: ScheduleEntryLockSetAction.Erase,
+					}),
 			},
 		);
 
@@ -594,11 +633,12 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				...slot,
 			},
 		);
-		const result =
-			await this.applHost.sendCommand<ScheduleEntryLockCCDailyRepeatingScheduleReport>(
-				cc,
-				this.commandOptions,
-			);
+		const result = await this.applHost.sendCommand<
+			ScheduleEntryLockCCDailyRepeatingScheduleReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 
 		if (result?.weekdays != undefined) {
 			return {
@@ -621,11 +661,12 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const result =
-			await this.applHost.sendCommand<ScheduleEntryLockCCTimeOffsetReport>(
-				cc,
-				this.commandOptions,
-			);
+		const result = await this.applHost.sendCommand<
+			ScheduleEntryLockCCTimeOffsetReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 
 		if (result) {
 			return pick(result, ["standardOffset", "dstOffset"]);
@@ -697,9 +738,9 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 
 		// If the timezone is not configured with the Time CC, do it here
 		if (
-			api.supportsCommand(ScheduleEntryLockCommand.TimeOffsetSet) &&
-			(!endpoint.supportsCC(CommandClasses.Time) ||
-				endpoint.getCCVersion(CommandClasses.Time) < 2)
+			api.supportsCommand(ScheduleEntryLockCommand.TimeOffsetSet)
+			&& (!endpoint.supportsCC(CommandClasses.Time)
+				|| endpoint.getCCVersion(CommandClasses.Time) < 2)
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -1040,15 +1081,16 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 export class ScheduleEntryLockCCSupportedGet extends ScheduleEntryLockCC {}
 
 /** @publicAPI */
-export type ScheduleEntryLockCCWeekDayScheduleSetOptions = CCCommandOptions &
-	ScheduleEntryLockSlotId &
-	(
+export type ScheduleEntryLockCCWeekDayScheduleSetOptions =
+	& CCCommandOptions
+	& ScheduleEntryLockSlotId
+	& (
 		| {
-				action: ScheduleEntryLockSetAction.Erase;
-		  }
+			action: ScheduleEntryLockSetAction.Erase;
+		}
 		| ({
-				action: ScheduleEntryLockSetAction.Set;
-		  } & ScheduleEntryLockWeekDaySchedule)
+			action: ScheduleEntryLockSetAction.Set;
+		} & ScheduleEntryLockWeekDaySchedule)
 	);
 
 @CCCommand(ScheduleEntryLockCommand.WeekDayScheduleSet)
@@ -1065,8 +1107,8 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 			validatePayload(this.payload.length >= 3);
 			this.action = this.payload[0];
 			validatePayload(
-				this.action === ScheduleEntryLockSetAction.Set ||
-					this.action === ScheduleEntryLockSetAction.Erase,
+				this.action === ScheduleEntryLockSetAction.Set
+					|| this.action === ScheduleEntryLockSetAction.Erase,
 			);
 			this.userId = this.payload[1];
 			this.slotId = this.payload[2];
@@ -1154,12 +1196,15 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 	}
 }
 
-type ScheduleEntryLockCCWeekDayScheduleReportOptions = CCCommandOptions &
-	ScheduleEntryLockSlotId &
-	AllOrNone<ScheduleEntryLockWeekDaySchedule>;
+type ScheduleEntryLockCCWeekDayScheduleReportOptions =
+	& CCCommandOptions
+	& ScheduleEntryLockSlotId
+	& AllOrNone<ScheduleEntryLockWeekDaySchedule>;
 
 @CCCommand(ScheduleEntryLockCommand.WeekDayScheduleReport)
-export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockCC {
+export class ScheduleEntryLockCCWeekDayScheduleReport
+	extends ScheduleEntryLockCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -1218,12 +1263,12 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
 			this.slotId,
 			this.weekday != undefined
 				? {
-						weekday: this.weekday,
-						startHour: this.startHour!,
-						startMinute: this.startMinute!,
-						stopHour: this.stopHour!,
-						stopMinute: this.stopMinute!,
-				  }
+					weekday: this.weekday,
+					startHour: this.startHour!,
+					startMinute: this.startMinute!,
+					stopHour: this.stopHour!,
+					stopMinute: this.stopMinute!,
+				}
 				: false,
 		);
 
@@ -1276,8 +1321,9 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
 	}
 }
 
-type ScheduleEntryLockCCWeekDayScheduleGetOptions = CCCommandOptions &
-	ScheduleEntryLockSlotId;
+type ScheduleEntryLockCCWeekDayScheduleGetOptions =
+	& CCCommandOptions
+	& ScheduleEntryLockSlotId;
 
 @CCCommand(ScheduleEntryLockCommand.WeekDayScheduleGet)
 @expectedCCResponse(ScheduleEntryLockCCWeekDayScheduleReport)
@@ -1319,15 +1365,16 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 }
 
 /** @publicAPI */
-export type ScheduleEntryLockCCYearDayScheduleSetOptions = CCCommandOptions &
-	ScheduleEntryLockSlotId &
-	(
+export type ScheduleEntryLockCCYearDayScheduleSetOptions =
+	& CCCommandOptions
+	& ScheduleEntryLockSlotId
+	& (
 		| {
-				action: ScheduleEntryLockSetAction.Erase;
-		  }
+			action: ScheduleEntryLockSetAction.Erase;
+		}
 		| ({
-				action: ScheduleEntryLockSetAction.Set;
-		  } & ScheduleEntryLockYearDaySchedule)
+			action: ScheduleEntryLockSetAction.Set;
+		} & ScheduleEntryLockYearDaySchedule)
 	);
 
 @CCCommand(ScheduleEntryLockCommand.YearDayScheduleSet)
@@ -1344,8 +1391,8 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 			validatePayload(this.payload.length >= 3);
 			this.action = this.payload[0];
 			validatePayload(
-				this.action === ScheduleEntryLockSetAction.Set ||
-					this.action === ScheduleEntryLockSetAction.Erase,
+				this.action === ScheduleEntryLockSetAction.Set
+					|| this.action === ScheduleEntryLockSetAction.Erase,
 			);
 			this.userId = this.payload[1];
 			this.slotId = this.payload[2];
@@ -1432,16 +1479,20 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 				"user ID": this.userId,
 				"slot #": this.slotId,
 				action: "set",
-				"start date": `${formatDate(
-					this.startYear ?? 0,
-					this.startMonth ?? 0,
-					this.startDay ?? 0,
-				)} ${formatTime(this.startHour ?? 0, this.startMinute ?? 0)}`,
-				"end date": `${formatDate(
-					this.stopYear ?? 0,
-					this.stopMonth ?? 0,
-					this.stopDay ?? 0,
-				)} ${formatTime(this.stopHour ?? 0, this.stopMinute ?? 0)}`,
+				"start date": `${
+					formatDate(
+						this.startYear ?? 0,
+						this.startMonth ?? 0,
+						this.startDay ?? 0,
+					)
+				} ${formatTime(this.startHour ?? 0, this.startMinute ?? 0)}`,
+				"end date": `${
+					formatDate(
+						this.stopYear ?? 0,
+						this.stopMonth ?? 0,
+						this.stopDay ?? 0,
+					)
+				} ${formatTime(this.stopHour ?? 0, this.stopMinute ?? 0)}`,
 			};
 		}
 		return {
@@ -1451,12 +1502,15 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 	}
 }
 
-type ScheduleEntryLockCCYearDayScheduleReportOptions = CCCommandOptions &
-	ScheduleEntryLockSlotId &
-	AllOrNone<ScheduleEntryLockYearDaySchedule>;
+type ScheduleEntryLockCCYearDayScheduleReportOptions =
+	& CCCommandOptions
+	& ScheduleEntryLockSlotId
+	& AllOrNone<ScheduleEntryLockYearDaySchedule>;
 
 @CCCommand(ScheduleEntryLockCommand.YearDayScheduleReport)
-export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockCC {
+export class ScheduleEntryLockCCYearDayScheduleReport
+	extends ScheduleEntryLockCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -1540,17 +1594,17 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
 			this.slotId,
 			this.startYear != undefined
 				? {
-						startYear: this.startYear,
-						startMonth: this.startMonth!,
-						startDay: this.startDay!,
-						startHour: this.startHour!,
-						startMinute: this.startMinute!,
-						stopYear: this.stopYear!,
-						stopMonth: this.stopMonth!,
-						stopDay: this.stopDay!,
-						stopHour: this.stopHour!,
-						stopMinute: this.stopMinute!,
-				  }
+					startYear: this.startYear,
+					startMonth: this.startMonth!,
+					startDay: this.startDay!,
+					startHour: this.startHour!,
+					startMinute: this.startMinute!,
+					stopYear: this.stopYear!,
+					stopMonth: this.stopMonth!,
+					stopDay: this.stopDay!,
+					stopHour: this.stopHour!,
+					stopMinute: this.stopMinute!,
+				}
 				: false,
 		);
 
@@ -1588,16 +1642,20 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
 				"user ID": this.userId,
 				"slot #": this.slotId,
 				action: "set",
-				"start date": `${formatDate(
-					this.startYear ?? 0,
-					this.startMonth ?? 0,
-					this.startDay ?? 0,
-				)} ${formatTime(this.startHour ?? 0, this.startMinute ?? 0)}`,
-				"end date": `${formatDate(
-					this.stopYear ?? 0,
-					this.stopMonth ?? 0,
-					this.stopDay ?? 0,
-				)} ${formatTime(this.stopHour ?? 0, this.stopMinute ?? 0)}`,
+				"start date": `${
+					formatDate(
+						this.startYear ?? 0,
+						this.startMonth ?? 0,
+						this.startDay ?? 0,
+					)
+				} ${formatTime(this.startHour ?? 0, this.startMinute ?? 0)}`,
+				"end date": `${
+					formatDate(
+						this.stopYear ?? 0,
+						this.stopMonth ?? 0,
+						this.stopDay ?? 0,
+					)
+				} ${formatTime(this.stopHour ?? 0, this.stopMinute ?? 0)}`,
 			};
 		}
 		return {
@@ -1607,8 +1665,9 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
 	}
 }
 
-type ScheduleEntryLockCCYearDayScheduleGetOptions = CCCommandOptions &
-	ScheduleEntryLockSlotId;
+type ScheduleEntryLockCCYearDayScheduleGetOptions =
+	& CCCommandOptions
+	& ScheduleEntryLockSlotId;
 
 @CCCommand(ScheduleEntryLockCommand.YearDayScheduleGet)
 @expectedCCResponse(ScheduleEntryLockCCYearDayScheduleReport)
@@ -1748,20 +1807,22 @@ export class ScheduleEntryLockCCTimeOffsetGet extends ScheduleEntryLockCC {}
 
 /** @publicAPI */
 export type ScheduleEntryLockCCDailyRepeatingScheduleSetOptions =
-	CCCommandOptions &
-		ScheduleEntryLockSlotId &
-		(
-			| {
-					action: ScheduleEntryLockSetAction.Erase;
-			  }
-			| ({
-					action: ScheduleEntryLockSetAction.Set;
-			  } & ScheduleEntryLockDailyRepeatingSchedule)
-		);
+	& CCCommandOptions
+	& ScheduleEntryLockSlotId
+	& (
+		| {
+			action: ScheduleEntryLockSetAction.Erase;
+		}
+		| ({
+			action: ScheduleEntryLockSetAction.Set;
+		} & ScheduleEntryLockDailyRepeatingSchedule)
+	);
 
 @CCCommand(ScheduleEntryLockCommand.DailyRepeatingScheduleSet)
 @useSupervision()
-export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryLockCC {
+export class ScheduleEntryLockCCDailyRepeatingScheduleSet
+	extends ScheduleEntryLockCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -1773,15 +1834,15 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryL
 			validatePayload(this.payload.length >= 3);
 			this.action = this.payload[0];
 			validatePayload(
-				this.action === ScheduleEntryLockSetAction.Set ||
-					this.action === ScheduleEntryLockSetAction.Erase,
+				this.action === ScheduleEntryLockSetAction.Set
+					|| this.action === ScheduleEntryLockSetAction.Erase,
 			);
 			this.userId = this.payload[1];
 			this.slotId = this.payload[2];
 			if (this.action === ScheduleEntryLockSetAction.Set) {
 				validatePayload(this.payload.length >= 8);
 				this.weekdays = parseBitMask(
-					this.payload.slice(3, 4),
+					this.payload.subarray(3, 4),
 					ScheduleEntryLockWeekday.Sunday,
 				);
 				this.startHour = this.payload[4];
@@ -1853,7 +1914,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryL
 				"slot #": this.slotId,
 				action: "set",
 				weekdays: this.weekdays!.map((w) =>
-					getEnumMemberName(ScheduleEntryLockWeekday, w),
+					getEnumMemberName(ScheduleEntryLockWeekday, w)
 				).join(", "),
 				"start time": formatTime(
 					this.startHour ?? 0,
@@ -1873,17 +1934,21 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryL
 }
 
 type ScheduleEntryLockCCDailyRepeatingScheduleReportOptions =
-	ScheduleEntryLockSlotId &
-		AllOrNone<ScheduleEntryLockDailyRepeatingSchedule>;
+	& ScheduleEntryLockSlotId
+	& AllOrNone<ScheduleEntryLockDailyRepeatingSchedule>;
 
 @CCCommand(ScheduleEntryLockCommand.DailyRepeatingScheduleReport)
-export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEntryLockCC {
+export class ScheduleEntryLockCCDailyRepeatingScheduleReport
+	extends ScheduleEntryLockCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
-			| (CCCommandOptions &
-					ScheduleEntryLockCCDailyRepeatingScheduleReportOptions),
+			| (
+				& CCCommandOptions
+				& ScheduleEntryLockCCDailyRepeatingScheduleReportOptions
+			),
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
@@ -1893,7 +1958,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 			// Only parse the schedule if it is present and some weekday is selected
 			if (this.payload.length >= 7 && this.payload[2] !== 0) {
 				this.weekdays = parseBitMask(
-					this.payload.slice(2, 3),
+					this.payload.subarray(2, 3),
 					ScheduleEntryLockWeekday.Sunday,
 				);
 				this.startHour = this.payload[3];
@@ -1932,12 +1997,12 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 			this.slotId,
 			this.weekdays?.length
 				? {
-						weekdays: this.weekdays,
-						startHour: this.startHour!,
-						startMinute: this.startMinute!,
-						durationHour: this.durationHour!,
-						durationMinute: this.durationMinute!,
-				  }
+					weekdays: this.weekdays,
+					startHour: this.startHour!,
+					startMinute: this.startMinute!,
+					durationHour: this.durationHour!,
+					durationMinute: this.durationMinute!,
+				}
 				: false,
 		);
 
@@ -2002,12 +2067,15 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
 	}
 }
 
-type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions = CCCommandOptions &
-	ScheduleEntryLockSlotId;
+type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions =
+	& CCCommandOptions
+	& ScheduleEntryLockSlotId;
 
 @CCCommand(ScheduleEntryLockCommand.DailyRepeatingScheduleGet)
 @expectedCCResponse(ScheduleEntryLockCCDailyRepeatingScheduleReport)
-export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryLockCC {
+export class ScheduleEntryLockCCDailyRepeatingScheduleGet
+	extends ScheduleEntryLockCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:

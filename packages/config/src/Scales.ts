@@ -1,4 +1,4 @@
-import { num2hex, type JSONObject } from "@zwave-js/shared/safe";
+import { type JSONObject, num2hex } from "@zwave-js/shared/safe";
 import { throwInvalidConfig } from "./utils_safe";
 
 export type ScaleGroup = ReadonlyMap<number, Scale> & {
@@ -26,8 +26,8 @@ export class Scale {
 		}
 		this.label = definition.label;
 		if (
-			definition.unit != undefined &&
-			typeof definition.unit !== "string"
+			definition.unit != undefined
+			&& typeof definition.unit !== "string"
 		) {
 			throwInvalidConfig(
 				"named scales",
@@ -36,8 +36,8 @@ export class Scale {
 		}
 		this.unit = definition.unit;
 		if (
-			definition.description != undefined &&
-			typeof definition.description !== "string"
+			definition.description != undefined
+			&& typeof definition.description !== "string"
 		) {
 			throwInvalidConfig(
 				"named scales",

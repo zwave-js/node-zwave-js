@@ -16,18 +16,19 @@ async get(): Promise<HumidityControlOperatingState | undefined>;
 
 ```ts
 {
-	commandClass: CommandClasses["Humidity Control Operating State"],
+	commandClass:
+		CommandClasses["Humidity Control Operating State"],
 	endpoint: number,
 	property: "state",
 }
 ```
 
--   **label:** Humidity control operating state
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Humidity control operating state
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

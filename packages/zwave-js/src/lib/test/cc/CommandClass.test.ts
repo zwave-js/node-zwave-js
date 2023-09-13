@@ -1,8 +1,8 @@
 import {
 	BasicCC,
 	BasicCCGet,
-	commandClass,
 	CommandClass,
+	commandClass,
 	expectedCCResponse,
 	getExpectedCCResponse,
 	getImplementedVersion,
@@ -10,9 +10,9 @@ import {
 	implementedVersion,
 } from "@zwave-js/cc";
 import {
-	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
@@ -70,7 +70,7 @@ test("from() does not throw when the CC is implemented", (t) => {
 			// CRC-16 with BasicCC
 			data: Buffer.from("560120024d26", "hex"),
 			nodeId: 5,
-		}),
+		})
 	);
 });
 

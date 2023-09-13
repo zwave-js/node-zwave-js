@@ -2,12 +2,12 @@ import ava, { type TestFn } from "ava";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { InterviewStage } from "../consts/InterviewStage";
 import {
+	SpyTransport,
 	assertLogInfo,
 	assertMessage,
-	SpyTransport,
 } from "../test/SpyTransport";
 import { ControllerLogger } from "./Controller";
-import { createDefaultTransportFormat, ZWaveLogContainer } from "./shared";
+import { ZWaveLogContainer, createDefaultTransportFormat } from "./shared";
 
 interface TestContext {
 	controllerLogger: ControllerLogger;
@@ -550,7 +550,8 @@ test.serial(
 			"This is a very long message that should be broken into multiple lines maybe sometimes...",
 		);
 		assertMessage(t, spyTransport, {
-			message: `  [Node 003] This is a very long message that should be broken into multiple lin
+			message:
+				`  [Node 003] This is a very long message that should be broken into multiple lin
   es maybe sometimes...`,
 		});
 
@@ -559,7 +560,8 @@ test.serial(
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 		});
 		assertMessage(t, spyTransport, {
-			message: `  [Node 005] This is a very long message that should be broken into multiple lin
+			message:
+				`  [Node 005] This is a very long message that should be broken into multiple lin
   es maybe sometimes...`,
 			callNumber: 1,
 		});
@@ -640,7 +642,8 @@ test.serial("ControllerLogger.print() -> logs long messages correctly", (t) => {
 		"This is a very long message that should be broken into multiple lines maybe sometimes...",
 	);
 	assertMessage(t, spyTransport, {
-		message: `  This is a very long message that should be broken into multiple lines maybe so
+		message:
+			`  This is a very long message that should be broken into multiple lines maybe so
   metimes...`,
 	});
 

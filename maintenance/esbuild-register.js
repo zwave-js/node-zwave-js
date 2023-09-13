@@ -10,4 +10,10 @@ register({
 	keepNames: true,
 	// Target the correct node version in transpilation
 	target: `node${process.versions.node}`,
+	// Stick to legacy decorators for now
+	tsconfigRaw: {
+		compilerOptions: {
+			experimentalDecorators: true,
+		},
+	},
 });

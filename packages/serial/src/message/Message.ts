@@ -1,12 +1,12 @@
 import {
+	type IZWaveNode,
+	type MessageOrCCLogEntry,
+	type MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
 	createReflectionDecorator,
 	getNodeTag,
 	highResTimestamp,
-	type IZWaveNode,
-	type MessageOrCCLogEntry,
-	type MessagePriority,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
@@ -102,7 +102,7 @@ export class Message {
 			}
 			// check the checksum
 			const expectedChecksum = computeChecksum(
-				payload.slice(0, messageLength),
+				payload.subarray(0, messageLength),
 			);
 			if (payload[messageLength - 1] !== expectedChecksum) {
 				throw new ZWaveError(
@@ -114,7 +114,7 @@ export class Message {
 			this.type = payload[2];
 			this.functionType = payload[3];
 			const payloadLength = messageLength - 5;
-			this.payload = payload.slice(4, 4 + payloadLength);
+			this.payload = payload.subarray(4, 4 + payloadLength);
 		} else {
 			// Try to determine the message type
 			if (options.type == undefined) options.type = getMessageType(this);
@@ -126,8 +126,9 @@ export class Message {
 			}
 			this.type = options.type;
 
-			if (options.functionType == undefined)
+			if (options.functionType == undefined) {
 				options.functionType = getFunctionType(this);
+			}
 			if (options.functionType == undefined) {
 				throw new ZWaveError(
 					"A message must have a given or predefined function type",
@@ -137,10 +138,10 @@ export class Message {
 			this.functionType = options.functionType;
 
 			// Fall back to decorated response/callback types if none is given
-			this.expectedResponse =
-				options.expectedResponse ?? getExpectedResponse(this);
-			this.expectedCallback =
-				options.expectedCallback ?? getExpectedCallback(this);
+			this.expectedResponse = options.expectedResponse
+				?? getExpectedResponse(this);
+			this.expectedCallback = options.expectedCallback
+				?? getExpectedCallback(this);
 
 			this._callbackId = options.callbackId;
 
@@ -260,7 +261,7 @@ export class Message {
 	public static extractPayload(data: Buffer): Buffer {
 		const messageLength = Message.getMessageLength(data);
 		const payloadLength = messageLength - 5;
-		return data.slice(4, 4 + payloadLength);
+		return data.subarray(4, 4 + payloadLength);
 	}
 
 	/** Generates a representation of this Message for the log */
@@ -274,10 +275,9 @@ export class Message {
 
 		return {
 			tags,
-			message:
-				this.payload.length > 0
-					? { payload: `0x${this.payload.toString("hex")}` }
-					: undefined,
+			message: this.payload.length > 0
+				? { payload: `0x${this.payload.toString("hex")}` }
+				: undefined,
 		};
 	}
 
@@ -290,11 +290,12 @@ export class Message {
 		const ret: JSONObject = {
 			name: this.constructor.name,
 			type: MessageType[this.type],
-			functionType:
-				FunctionType[this.functionType] || num2hex(this.functionType),
+			functionType: FunctionType[this.functionType]
+				|| num2hex(this.functionType),
 		};
-		if (this.expectedResponse != null)
+		if (this.expectedResponse != null) {
 			ret.expectedResponse = FunctionType[this.functionType];
+		}
 		ret.payload = this.payload.toString("hex");
 		return ret;
 	}
@@ -326,11 +327,11 @@ export class Message {
 		// A message expects a callback...
 		return (
 			// ...when it has a callback id that is not 0 (no callback)
-			((this.hasCallbackId() && this.callbackId !== 0) ||
+			((this.hasCallbackId() && this.callbackId !== 0)
 				// or the message type does not need a callback id to match the response
-				!this.needsCallbackId()) &&
+				|| !this.needsCallbackId())
 			// and the expected callback is defined
-			!!this.expectedCallback
+			&& !!this.expectedCallback
 		);
 	}
 
@@ -346,8 +347,8 @@ export class Message {
 	/** Checks if a message is an expected response for this message */
 	public isExpectedResponse(msg: Message): boolean {
 		return (
-			msg.type === MessageType.Response &&
-			this.testMessage(msg, this.expectedResponse)
+			msg.type === MessageType.Response
+			&& this.testMessage(msg, this.expectedResponse)
 		);
 	}
 
@@ -356,8 +357,8 @@ export class Message {
 		if (msg.type !== MessageType.Request) return false;
 		// If a received request included a callback id, enforce that the response contains the same
 		if (
-			this.hasCallbackId() &&
-			(!msg.hasCallbackId() || this._callbackId !== msg._callbackId)
+			this.hasCallbackId()
+			&& (!msg.hasCallbackId() || this._callbackId !== msg._callbackId)
 		) {
 			return false;
 		}

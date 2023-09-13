@@ -4,9 +4,9 @@
  * `ZWaveNode.commandClasses.xyz`
  */
 
-import { formatWithPrettier } from "@zwave-js/maintenance";
+import { formatWithDprint } from "@zwave-js/maintenance";
 import * as fs from "fs-extra";
-import * as path from "path";
+import * as path from "node:path";
 
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const classNameRegex = /class ([^\s]+) extends (\w+)?CCAPI/;
@@ -53,38 +53,37 @@ export async function generateCCAPIInterface(): Promise<void> {
 	let apiFileContent = originalApiFileContent;
 
 	// Generate interface
-	let startTokenEnd =
-		apiFileContent.indexOf(startTokenInterface) +
-		startTokenInterface.length;
+	let startTokenEnd = apiFileContent.indexOf(startTokenInterface)
+		+ startTokenInterface.length;
 	let endTokenStart = apiFileContent.indexOf(
 		endTokenInterface,
 		startTokenEnd,
 	);
-	apiFileContent =
-		apiFileContent.slice(0, startTokenEnd) +
-		"\n" +
-		CCsWithAPI.map(
+	apiFileContent = apiFileContent.slice(0, startTokenEnd)
+		+ "\n"
+		+ CCsWithAPI.map(
 			({ name, className, file }) =>
-				`\t${name}: import("${path
-					.relative(libDir, ccDir)
-					.replace(/\\/g, "/")}/${file}").${className};`,
-		).join("\n") +
-		"\n" +
-		apiFileContent.slice(endTokenStart);
+				`\t${name}: import("${
+					path
+						.relative(libDir, ccDir)
+						.replaceAll("\\", "/")
+				}/${file}").${className};`,
+		).join("\n")
+		+ "\n"
+		+ apiFileContent.slice(endTokenStart);
 
 	// Generate lookup types (part 1: CCToName)
-	startTokenEnd =
-		apiFileContent.indexOf(startTokenType1) + startTokenType1.length;
+	startTokenEnd = apiFileContent.indexOf(startTokenType1)
+		+ startTokenType1.length;
 	endTokenStart = apiFileContent.indexOf(endTokenType, startTokenEnd);
-	apiFileContent =
-		apiFileContent.slice(0, startTokenEnd) +
-		"\n" +
-		CCsWithAPI.map(({ name }) => {
+	apiFileContent = apiFileContent.slice(0, startTokenEnd)
+		+ "\n"
+		+ CCsWithAPI.map(({ name }) => {
 			if (!name.startsWith(`"`)) name = `"${name}"`;
 			return `\t${name}: typeof CommandClasses[${name}]`;
-		}).join("\n") +
-		"\n" +
-		apiFileContent.slice(endTokenStart);
+		}).join("\n")
+		+ "\n"
+		+ apiFileContent.slice(endTokenStart);
 
 	// // Generate lookup types (part 2: CCInstanceToName)
 	// startTokenEnd =
@@ -103,7 +102,7 @@ export async function generateCCAPIInterface(): Promise<void> {
 	// 	"\n" +
 	// 	apiFileContent.slice(endTokenStart);
 
-	apiFileContent = formatWithPrettier(apiFile, apiFileContent);
+	apiFileContent = formatWithDprint(apiFile, apiFileContent);
 	// Only update file if necessary - this reduces build time
 	if (apiFileContent !== originalApiFileContent) {
 		console.log("API interface changed");

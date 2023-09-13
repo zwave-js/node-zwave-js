@@ -28,13 +28,13 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Used as backup
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Used as backup
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `chargingStatus`
 
@@ -46,15 +46,15 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Charging status
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Charging status
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `disconnected`
 
@@ -66,13 +66,13 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Battery is disconnected
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Battery is disconnected
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `isLow`
 
@@ -84,13 +84,13 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Low battery level
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Low battery level
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `level`
 
@@ -102,15 +102,15 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Battery level
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 100
+- **label:** Battery level
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 100
 
 ### `lowFluid`
 
@@ -122,13 +122,13 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Fluid is low
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Fluid is low
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `lowTemperatureStatus`
 
@@ -140,13 +140,13 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Battery temperature is low
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Battery temperature is low
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `maximumCapacity`
 
@@ -158,15 +158,15 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Maximum capacity
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 100
+- **label:** Maximum capacity
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 100
 
 ### `overheating`
 
@@ -178,13 +178,13 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Overheating
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Overheating
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `rechargeable`
 
@@ -196,13 +196,13 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Rechargeable
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Rechargeable
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `rechargeOrReplace`
 
@@ -214,15 +214,15 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Recharge or replace
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Recharge or replace
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `temperature`
 
@@ -234,12 +234,12 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 }
 ```
 
--   **label:** Temperature
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** -128
--   **max. value:** 127
+- **label:** Temperature
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** -128
+- **max. value:** 127

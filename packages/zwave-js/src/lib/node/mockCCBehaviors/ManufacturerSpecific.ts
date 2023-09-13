@@ -3,16 +3,16 @@ import {
 	ManufacturerSpecificCCReport,
 } from "@zwave-js/cc/ManufacturerSpecificCC";
 import {
+	type MockNodeBehavior,
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
-	type MockNodeBehavior,
 } from "@zwave-js/testing";
 
 const respondToManufacturerSpecificGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
-			frame.type === MockZWaveFrameType.Request &&
-			frame.payload instanceof ManufacturerSpecificCCGet
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ManufacturerSpecificCCGet
 		) {
 			const cc = new ManufacturerSpecificCCReport(self.host, {
 				nodeId: self.id,

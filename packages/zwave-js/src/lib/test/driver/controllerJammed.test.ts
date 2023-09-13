@@ -44,8 +44,8 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 						MockControllerStateKeys.CommunicationState,
 					) as MockControllerCommunicationState | undefined;
 					if (
-						state != undefined &&
-						state !== MockControllerCommunicationState.Idle
+						state != undefined
+						&& state !== MockControllerCommunicationState.Idle
 					) {
 						throw new Error(
 							"Received SendDataRequest while not idle",
@@ -74,6 +74,12 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 					const cb = new SendDataRequestTransmitReport(host, {
 						callbackId: msg.callbackId,
 						transmitStatus: TransmitStatus.Fail,
+						txReport: {
+							txTicks: 0,
+							routeSpeed: 0 as any,
+							routingAttempts: 0,
+							ackRSSI: 0,
+						},
 					});
 					await controller.sendToHost(cb.serialize());
 

@@ -1,6 +1,7 @@
 import type { LogConfig, RFRegion } from "@zwave-js/core";
 import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
+import { type DeepPartial, type Expand } from "@zwave-js/shared";
 import type { SerialPort } from "serialport";
 import type { InclusionUserCallbacks } from "../controller/Inclusion";
 
@@ -88,7 +89,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 * Disable the automatic node interview after successful inclusion.
 		 * Note: When this is `true`, the interview must be started manually using
 		 * ```ts
-		 * driver.interviewNode(node: ZWaveNode)
+		 * node.interview()
 		 * ```
 		 *
 		 * Default: `false` (automatic interviews enabled)
@@ -272,14 +273,36 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	};
 }
 
-export type EditableZWaveOptions = Pick<
-	ZWaveOptions,
-	| "disableOptimisticValueUpdate"
-	| "emitValueUpdateAfterSetValue"
-	| "inclusionUserCallbacks"
-	| "interview"
-	| "logConfig"
-	| "preferences"
-> & {
-	userAgent?: Record<string, string | null | undefined>;
-};
+export type PartialZWaveOptions = Expand<
+	& DeepPartial<
+		Omit<
+			ZWaveOptions,
+			"inclusionUserCallbacks" | "logConfig" | "testingHooks"
+		>
+	>
+	& Partial<
+		Pick<
+			ZWaveOptions,
+			"inclusionUserCallbacks" | "testingHooks"
+		>
+	>
+	& {
+		inclusionUserCallbacks?: ZWaveOptions["inclusionUserCallbacks"];
+		logConfig?: Partial<LogConfig>;
+	}
+>;
+
+export type EditableZWaveOptions = Expand<
+	& Pick<
+		PartialZWaveOptions,
+		| "disableOptimisticValueUpdate"
+		| "emitValueUpdateAfterSetValue"
+		| "inclusionUserCallbacks"
+		| "interview"
+		| "logConfig"
+		| "preferences"
+	>
+	& {
+		userAgent?: Record<string, string | null | undefined>;
+	}
+>;

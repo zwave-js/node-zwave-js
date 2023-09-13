@@ -1,5 +1,5 @@
 import { throttle } from "@zwave-js/shared";
-import type EventEmitter from "events";
+import type EventEmitter from "node:events";
 
 /** Mixin to provide statistics functionality. Requires the base class to extend EventEmitter. */
 export abstract class StatisticsHost<T> {

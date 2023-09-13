@@ -79,7 +79,7 @@ export function isEnumMember(enumeration: unknown, value: number): boolean {
 
 /** Skips the first n bytes of a buffer and returns the rest */
 export function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.slice(n));
+	return Buffer.from(buf.subarray(n));
 }
 
 /**

@@ -1,5 +1,5 @@
 import { getErrorMessage } from "@zwave-js/shared";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 // @ts-expect-error There are no type definitions for nrf-intel-hex
 import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -30,21 +30,21 @@ export function guessFirmwareFileFormat(
 	if (filename.endsWith(".bin")) {
 		return "bin";
 	} else if (
-		(filename.endsWith(".exe") || filename.endsWith(".ex_")) &&
-		rawData.includes(firmwareIndicators.aeotec)
+		(filename.endsWith(".exe") || filename.endsWith(".ex_"))
+		&& rawData.includes(firmwareIndicators.aeotec)
 	) {
 		return "aeotec";
 	} else if (/\.(hex|ota|otz)$/.test(filename)) {
 		return filename.slice(-3) as FirmwareFileFormat;
 	} else if (
-		filename.endsWith(".gbl") &&
-		rawData.readUInt32BE(0) === firmwareIndicators.gecko
+		filename.endsWith(".gbl")
+		&& rawData.readUInt32BE(0) === firmwareIndicators.gecko
 	) {
 		return "gecko";
 	} else if (
-		filename.endsWith(".hec") &&
-		rawData
-			.slice(0, firmwareIndicators.hec.length)
+		filename.endsWith(".hec")
+		&& rawData
+			.subarray(0, firmwareIndicators.hec.length)
 			.equals(firmwareIndicators.hec)
 	) {
 		return "hec";
@@ -83,8 +83,8 @@ export function extractFirmware(
 					return extractFirmwareHEX(rawData);
 				} catch (e) {
 					if (
-						e instanceof ZWaveError &&
-						e.code === ZWaveErrorCodes.Argument_Invalid
+						e instanceof ZWaveError
+						&& e.code === ZWaveErrorCodes.Argument_Invalid
 					) {
 						// Fall back to binary data
 					} else {
@@ -132,8 +132,8 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 
 	// Some files don't have such a strict alignment - in that case fall back to ignoring the non-aligned control bytes
 	switch (true) {
-		case firmwareStart + firmwareLength ===
-			data.length - 256 - numControlBytes:
+		case firmwareStart + firmwareLength
+			=== data.length - 256 - numControlBytes:
 			// all good
 			break;
 		case firmwareStart + firmwareLength === data.length - 256 - 8:
@@ -146,14 +146,14 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 			);
 	}
 
-	const firmwareData = data.slice(
+	const firmwareData = data.subarray(
 		firmwareStart,
 		firmwareStart + firmwareLength,
 	);
 
 	const firmwareNameBytes = data
-		.slice(data.length - 256 - numControlBytes)
-		.slice(0, 256);
+		.subarray(data.length - 256 - numControlBytes)
+		.subarray(0, 256);
 
 	// Some exe files contain a CRC-16 checksum, extract that too and check it
 	if (numControlBytes === 10) {
@@ -172,12 +172,13 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 
 	// Some updaters contain the firmware target in the first byte of the name
 	// We can't test this, so we have to assume the value translates to a non-printable ASCII char (less than " ")
-	const firmwareTarget =
-		firmwareNameBytes[0] < 0x20 ? firmwareNameBytes[0] : undefined;
+	const firmwareTarget = firmwareNameBytes[0] < 0x20
+		? firmwareNameBytes[0]
+		: undefined;
 	const firmwareNameOffset = firmwareTarget == undefined ? 0 : 1;
 
 	const firmwareName = firmwareNameBytes
-		.slice(
+		.subarray(
 			firmwareNameOffset,
 			firmwareNameBytes.indexOf(0, firmwareNameOffset),
 		)
@@ -243,13 +244,16 @@ function extractFirmwareHEC(data: Buffer): Firmware {
 		Buffer.from(iv, "hex"),
 	);
 
-	const ciphertext = Buffer.from(data.slice(6).toString("ascii"), "base64");
+	const ciphertext = Buffer.from(
+		data.subarray(6).toString("ascii"),
+		"base64",
+	);
 	const plaintext = Buffer.concat([
 		decipher.update(ciphertext),
 		decipher.final(),
 	])
 		.toString("ascii")
-		.replace(/ /g, "\n");
+		.replaceAll(" ", "\n");
 
 	return extractFirmwareHEX(plaintext);
 }

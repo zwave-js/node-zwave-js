@@ -48,38 +48,40 @@ async get(
 
 ```ts
 {
-	commandClass: CommandClasses["Scene Actuator Configuration"],
+	commandClass:
+		CommandClasses["Scene Actuator Configuration"],
 	endpoint: number,
 	property: "dimmingDuration",
 	propertyKey: number,
 }
 ```
 
--   **label:** `Dimming duration (${number})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** `Dimming duration (${number})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `level(sceneId: number)`
 
 ```ts
 {
-	commandClass: CommandClasses["Scene Actuator Configuration"],
+	commandClass:
+		CommandClasses["Scene Actuator Configuration"],
 	endpoint: number,
 	property: "level",
 	propertyKey: number,
 }
 ```
 
--   **label:** `Level (${number})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Level (${number})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

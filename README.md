@@ -7,8 +7,6 @@
 
 [![node](https://img.shields.io/node/v/zwave-js.svg) ![npm](https://img.shields.io/npm/v/zwave-js.svg)](https://www.npmjs.com/package/zwave-js)
 
-<!-- [![Coverage Status](https://img.shields.io/coveralls/github/AlCalzone/node-zwave-js.svg)](https://coveralls.io/github/AlCalzone/node-zwave-js) -->
-
 <p align="center">
   📡 Control your <b>Z-Wave</b> network from Node.js<br />
   👶 Easy <b>high-level</b> API<br />
@@ -18,7 +16,7 @@
 
 ## Intro
 
-Z-Wave is an amazing piece of technology, but it is difficult to get started with and develop for.  
+Z-Wave is an amazing piece of technology, but it is difficult to get started with and develop for.\
 **It shouldn't be!** We've got you covered.
 
 Built on Node.js and compatible with all known 500 and 700 series Z-Wave controller hardware adapters, **Z-Wave JS** runs on almost anything with a little bit of computing power and a serial port. Check out the [documentation](https://zwave-js.github.io/node-zwave-js) to get started!
@@ -43,9 +41,9 @@ Started in 2018, **Z-Wave JS** has breathed new life into the Z-Wave ecosystem a
 
 If you'd like to help support the future of the project and make the Z-Wave world a better place, please consider:
 
--   Contributing [configuration files](https://zwave-js.github.io/node-zwave-js/#/config-files/overview) for new devices, so we have our hands free for the actual development.
--   Sending us devices to test. Working with an actual device is much more efficient than trying to debug with logfiles.
--   Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps. [Read more](https://zwave-js.github.io/node-zwave-js/#/getting-started/integrators.md?id=how-to-support-the-development)...
+- Contributing [configuration files](https://zwave-js.github.io/node-zwave-js/#/config-files/overview) for new devices, so we have our hands free for the actual development.
+- Sending us devices to test. Working with an actual device is much more efficient than trying to debug with logfiles.
+- Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps. [Read more](https://zwave-js.github.io/node-zwave-js/#/getting-started/integrators.md?id=how-to-support-the-development)...
 
 **Top Sponsors:**
 

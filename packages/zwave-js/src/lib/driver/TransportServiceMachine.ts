@@ -1,9 +1,9 @@
 import {
-	Machine,
-	assign,
 	type AssignAction,
 	type Interpreter,
+	Machine,
 	type StateMachine,
+	assign,
 } from "xstate";
 
 /*
@@ -179,8 +179,8 @@ export function createTransportServiceRXMachine(
 					return ctx.receivedBytes.every(Boolean);
 				},
 				hasHole: (ctx) =>
-					ctx.receivedBytes.lastIndexOf(true) >
-					ctx.receivedBytes.indexOf(false),
+					ctx.receivedBytes.lastIndexOf(true)
+						> ctx.receivedBytes.indexOf(false),
 			},
 			delays: {
 				missingSegment: params.missingSegmentTimeout,

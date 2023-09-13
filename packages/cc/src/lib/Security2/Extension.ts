@@ -1,12 +1,12 @@
 import {
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
 } from "@zwave-js/core/safe";
 import {
+	type TypedClassDecorator,
 	buffer2hex,
 	getEnumMemberName,
-	type TypedClassDecorator,
 } from "@zwave-js/shared/safe";
 import "reflect-metadata";
 
@@ -26,7 +26,8 @@ type S2ExtensionMap = Map<
 >;
 
 export type Security2ExtensionConstructor<T extends Security2Extension> =
-	typeof Security2Extension & {
+	& typeof Security2Extension
+	& {
 		new (options: Security2ExtensionOptions): T;
 	};
 
@@ -54,11 +55,13 @@ export function extensionType(
 		Reflect.defineMetadata(METADATA_S2Extension, type, extensionClass);
 
 		const map: S2ExtensionMap =
-			Reflect.getMetadata(METADATA_S2ExtensionMap, Security2Extension) ||
-			new Map();
+			Reflect.getMetadata(METADATA_S2ExtensionMap, Security2Extension)
+			|| new Map();
 		map.set(
 			type,
-			extensionClass as unknown as Security2ExtensionConstructor<Security2Extension>,
+			extensionClass as unknown as Security2ExtensionConstructor<
+				Security2Extension
+			>,
 		);
 		Reflect.defineMetadata(
 			METADATA_S2ExtensionMap,
@@ -127,7 +130,7 @@ export class Security2Extension {
 			this.moreToFollow = !!(controlByte & 0b1000_0000);
 			this.critical = !!(controlByte & 0b0100_0000);
 			this.type = controlByte & 0b11_1111;
-			this.payload = options.data.slice(2, totalLength);
+			this.payload = options.data.subarray(2, totalLength);
 		} else {
 			this.type = getExtensionType(this);
 			this.critical = options.critical;
@@ -148,9 +151,9 @@ export class Security2Extension {
 		return Buffer.concat([
 			Buffer.from([
 				2 + this.payload.length,
-				(moreToFollow ? 0b1000_0000 : 0) |
-					(this.critical ? 0b0100_0000 : 0) |
-					(this.type & 0b11_1111),
+				(moreToFollow ? 0b1000_0000 : 0)
+				| (this.critical ? 0b0100_0000 : 0)
+				| (this.type & 0b11_1111),
 			]),
 			this.payload,
 		]);
@@ -252,7 +255,7 @@ export class MPANExtension extends Security2Extension {
 			super(options);
 			validatePayload(this.payload.length === 17);
 			this.groupId = this.payload[0];
-			this.innerMPANState = this.payload.slice(1);
+			this.innerMPANState = this.payload.subarray(1);
 		} else {
 			if (options.innerMPANState.length !== 16) {
 				throw new ZWaveError(
@@ -282,11 +285,10 @@ export class MPANExtension extends Security2Extension {
 	}
 
 	public toLogEntry(): string {
-		const mpanState =
-			process.env.NODE_ENV === "test" ||
-			process.env.NODE_ENV === "development"
-				? buffer2hex(this.innerMPANState)
-				: "(hidden)";
+		const mpanState = process.env.NODE_ENV === "test"
+				|| process.env.NODE_ENV === "development"
+			? buffer2hex(this.innerMPANState)
+			: "(hidden)";
 		let ret = super.toLogEntry().replace(/^  payload:.+$/m, "");
 		ret += `  group ID: ${this.groupId}
   MPAN state: ${mpanState}`;

@@ -1,24 +1,23 @@
 {
   "name": "@zwave-js/host",
-  "version": "11.12.0",
+  "version": "12.0.0-beta.1",
   "description": "zwave-js: Host abstractions",
   "keywords": [],
   "publishConfig": {
     "access": "public"
   },
   "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js"
-  },
   "types": "build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "safe": [
-        "build/index_safe.d.ts"
-      ]
-    }
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./safe": {
+      "types": "./build/index_safe.d.ts",
+      "default": "./build/index_safe.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "build/**/*.{js,d.ts,map}"
@@ -40,16 +39,14 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
+    "node": ">= 18"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
-    "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "dependencies": {
     "@zwave-js/config": "workspace:*",
@@ -58,10 +55,9 @@
     "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.36.0",
-    "@types/node": "^14.18.52",
-    "del-cli": "^5.0.0",
-    "prettier": "^2.8.8",
-    "typescript": "5.1.6"
+    "@microsoft/api-extractor": "^7.36.4",
+    "@types/node": "^18.17.14",
+    "del-cli": "^5.1.0",
+    "typescript": "5.2.2"
   }
 }

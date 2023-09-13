@@ -1,22 +1,22 @@
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
-	type MaybeNotKnown,
-	type MessageOrCCLogEntry,
-	type MessageRecord,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -31,8 +31,8 @@ import { V } from "../lib/Values";
 import {
 	DoorLockLoggingCommand,
 	DoorLockLoggingEventType,
-	DoorLockLoggingRecordStatus,
 	type DoorLockLoggingRecord,
+	DoorLockLoggingRecordStatus,
 } from "../lib/_Types";
 import { userCodeToLogString } from "./UserCodeCC";
 
@@ -126,11 +126,12 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<DoorLockLoggingCCRecordsSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			DoorLockLoggingCCRecordsSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.recordsCount;
 	}
 
@@ -149,11 +150,12 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			recordNumber,
 		});
-		const response =
-			await this.applHost.sendCommand<DoorLockLoggingCCRecordReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			DoorLockLoggingCCRecordReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.record;
 	}
 }
@@ -245,8 +247,8 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 
 function eventTypeToLabel(eventType: DoorLockLoggingEventType): string {
 	return (
-		(eventTypeLabel as any)[DoorLockLoggingEventType[eventType]] ??
-		`Unknown ${num2hex(eventType)}`
+		(eventTypeLabel as any)[DoorLockLoggingEventType[eventType]]
+			?? `Unknown ${num2hex(eventType)}`
 	);
 }
 
@@ -285,7 +287,10 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				this.payload.length >= 11 + userCodeLength,
 			);
 
-			const userCodeBuffer = this.payload.slice(11, 11 + userCodeLength);
+			const userCodeBuffer = this.payload.subarray(
+				11,
+				11 + userCodeLength,
+			);
 			// See User Code CC for a detailed description. We try to parse the code as ASCII if possible
 			// and fall back to a buffer otherwise.
 			const userCodeString = userCodeBuffer.toString("utf8");
@@ -344,8 +349,8 @@ function testResponseForDoorLockLoggingRecordGet(
 	received: DoorLockLoggingCCRecordReport,
 ) {
 	return (
-		sent.recordNumber === LATEST_RECORD_NUMBER_KEY ||
-		sent.recordNumber === received.recordNumber
+		sent.recordNumber === LATEST_RECORD_NUMBER_KEY
+		|| sent.recordNumber === received.recordNumber
 	);
 }
 

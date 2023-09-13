@@ -1,17 +1,16 @@
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import {
 	MockBinding,
-	SerialPortMock,
 	type MockPortBinding,
+	SerialPortMock,
 } from "@zwave-js/serial/mock";
-import type { DeepPartial } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import fs from "fs-extra";
-import { tmpdir } from "os";
-import path from "path";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import type { SerialPort } from "serialport";
 import { Driver } from "./Driver";
-import type { ZWaveOptions } from "./ZWaveOptions";
+import type { PartialZWaveOptions, ZWaveOptions } from "./ZWaveOptions";
 
 export interface CreateAndStartDriverWithMockPortResult {
 	driver: Driver;
@@ -25,9 +24,9 @@ export interface CreateAndStartDriverWithMockPortOptions {
 
 /** Creates a real driver instance with a mocked serial port to enable end to end tests */
 export function createAndStartDriverWithMockPort(
-	options: DeepPartial<
-		CreateAndStartDriverWithMockPortOptions & ZWaveOptions
-	> = {},
+	options:
+		& Partial<CreateAndStartDriverWithMockPortOptions>
+		& PartialZWaveOptions = {},
 ): Promise<CreateAndStartDriverWithMockPortResult> {
 	const { portAddress = "/tty/FAKE", ...driverOptions } = options;
 	return new Promise(async (resolve, reject) => {
@@ -115,8 +114,9 @@ export interface CreateAndStartTestingDriverOptions {
 }
 
 export async function createAndStartTestingDriver(
-	options: Partial<CreateAndStartTestingDriverOptions> &
-		DeepPartial<ZWaveOptions> = {},
+	options:
+		& Partial<CreateAndStartTestingDriverOptions>
+		& PartialZWaveOptions = {},
 ): Promise<CreateAndStartTestingDriverResult> {
 	const {
 		beforeStartup,
