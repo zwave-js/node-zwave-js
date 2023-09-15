@@ -89,6 +89,7 @@ import { NodeNamingAndLocationCCValues } from "@zwave-js/cc/NodeNamingCC";
 import {
 	NotificationCCReport,
 	NotificationCCValues,
+	getNotificationEnumBehavior,
 	getNotificationStateValueWithEnum,
 	getNotificationValueMetadata,
 } from "@zwave-js/cc/NotificationCC";
@@ -4361,12 +4362,22 @@ protocol version:      ${this.protocolVersion}`;
 				}
 			}
 			if (typeof command.eventParameters === "number") {
-				// This notification contains an enum value. We set "fake" values for these to distinguish them
+				// This notification contains an enum value. Depending on how the enum behaves,
+				// we may need to set "fake" values for these to distinguish them
 				// from states without enum values
-				const valueWithEnum = getNotificationStateValueWithEnum(
-					value,
-					command.eventParameters,
-				);
+				const enumBehavior = valueConfig
+					? getNotificationEnumBehavior(
+						notificationConfig,
+						valueConfig,
+					)
+					: "extend";
+
+				const valueWithEnum = enumBehavior === "replace"
+					? command.eventParameters
+					: getNotificationStateValueWithEnum(
+						value,
+						command.eventParameters,
+					);
 				this.valueDB.setValue(valueId, valueWithEnum);
 			} else {
 				this.valueDB.setValue(valueId, value);
