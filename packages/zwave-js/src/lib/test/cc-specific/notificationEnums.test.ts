@@ -7,10 +7,10 @@ import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
-integrationTest(
+integrationTest.only(
 	"Notifications with enum event parameters are evaluated correctly",
 	{
-		// debug: true,
+		debug: true,
 
 		nodeCapabilities: {
 			commandClasses: [
@@ -44,8 +44,8 @@ integrationTest(
 				// For the valve operation status variable, the embedded enum replaces its possible states
 				// since there is only one meaningless state, so it doesn't make sense to preserve it
 				// This is different from the "Door state" value which has multiple states AND enums
-				[0x0100]: "Off / Closed",
-				[0x0101]: "On / Open",
+				[0x00]: "Off / Closed",
+				[0x01]: "On / Open",
 			});
 
 			// Send notifications to the node
@@ -64,7 +64,7 @@ integrationTest(
 			await wait(100);
 
 			let value = node.getValue(valveOperationStatusId);
-			t.is(value, 0x0100);
+			t.is(value, 0x00);
 
 			cc = new NotificationCCReport(mockNode.host, {
 				nodeId: mockController.host.ownNodeId,
@@ -80,13 +80,13 @@ integrationTest(
 			await wait(100);
 
 			value = node.getValue(valveOperationStatusId);
-			t.is(value, 0x0101);
+			t.is(value, 0x01);
 		},
 	},
 );
 
 integrationTest(
-	"Notification types multiple states and optional enums merge/extend states for all of them",
+	"Notification types with multiple states and optional enums merge/extend states for all of them",
 	{
 		// debug: true,
 
@@ -104,16 +104,15 @@ integrationTest(
 			],
 		},
 
-		testBody: async (t, driver, node, _mockController, _mockNode) => {
+		testBody: async (t, driver, node, mockController, mockNode) => {
 			await node.commandClasses.Notification.getSupportedEvents(0x06);
 
+			const doorStateValueId = NotificationCCValues.notificationVariable(
+				"Access Control",
+				"Door state",
+			).id;
 			const states = (
-				node.getValueMetadata(
-					NotificationCCValues.notificationVariable(
-						"Access Control",
-						"Door state",
-					).id,
-				) as ValueMetadataNumeric
+				node.getValueMetadata(doorStateValueId) as ValueMetadataNumeric
 			).states;
 			t.deepEqual(states, {
 				[0x16]: "Window/door is open",
@@ -123,6 +122,70 @@ integrationTest(
 				[0x1600]: "Window/door is open in regular position",
 				[0x1601]: "Window/door is open in tilt position",
 			});
+
+			// Send notifications to the node
+			let cc = new NotificationCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				notificationType: 0x06,
+				notificationEvent: 0x16,
+				eventParameters: Buffer.from([0x00]), // open in regular position
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			// wait a bit for the value to be updated
+			await wait(100);
+
+			let value = node.getValue(doorStateValueId);
+			t.is(value, 0x1600);
+
+			cc = new NotificationCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				notificationType: 0x06,
+				notificationEvent: 0x16,
+				eventParameters: Buffer.from([0x01]), // open in tilt position
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			await wait(100);
+
+			value = node.getValue(doorStateValueId);
+			t.is(value, 0x1601);
+
+			cc = new NotificationCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				notificationType: 0x06,
+				notificationEvent: 0x16, // open
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			await wait(100);
+
+			value = node.getValue(doorStateValueId);
+			t.is(value, 0x16);
+
+			cc = new NotificationCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				notificationType: 0x06,
+				notificationEvent: 0x17, // closed
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			await wait(100);
+
+			value = node.getValue(doorStateValueId);
+			t.is(value, 0x17);
 		},
 	},
 );

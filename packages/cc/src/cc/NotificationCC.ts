@@ -387,7 +387,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	}
 }
 
-function getNotificationEnumBehavior(
+export function getNotificationEnumBehavior(
 	notificationConfig: Notification,
 	valueConfig: NotificationValueDefinition & { type: "state" },
 ): "none" | "extend" | "replace" {
@@ -444,9 +444,10 @@ export function getNotificationValueMetadata(
 	}
 	if (valueConfig.parameter instanceof NotificationParameterWithEnum) {
 		for (const [value, label] of valueConfig.parameter.values) {
-			metadata.states![
-				getNotificationStateValueWithEnum(valueConfig.value, value)
-			] = label;
+			const stateKey = enumBehavior === "replace"
+				? value
+				: getNotificationStateValueWithEnum(valueConfig.value, value);
+			metadata.states![stateKey] = label;
 		}
 	}
 
