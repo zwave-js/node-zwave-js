@@ -93,8 +93,22 @@
 		},
 		{
 			"#": "6",
+			"$if": "firmwareVersion >= 10.40",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Relay)",
+			"defaultValue": 0
+		},
+		{
+			"#": "6",
 			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Relay)",
+			"defaultValue": 0
+		},
+		{
+			"#": "7",
+			"$if": "firmwareVersion >= 10.40",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Button 1)",
 			"defaultValue": 0
 		},
 		{
@@ -105,14 +119,35 @@
 		},
 		{
 			"#": "8",
+			"$if": "firmwareVersion >= 10.40",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Button 2)",
+			"defaultValue": 0
+		},
+		{
+			"#": "8",
 			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Button 2)",
 			"defaultValue": 0
 		},
 		{
 			"#": "9",
+			"$if": "firmwareVersion >= 10.40",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Button 3)",
+			"defaultValue": 0
+		},
+		{
+			"#": "9",
 			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Button 3)",
+			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion >= 10.40",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Button 4)",
 			"defaultValue": 0
 		},
 		{
