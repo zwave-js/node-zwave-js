@@ -193,7 +193,7 @@
 		"label": "LED Indicator Color",
 		"valueSize": 1,
 		"minValue": 0,
-		"maxValue": 3,
+		"maxValue": 6,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
