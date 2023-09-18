@@ -6,7 +6,7 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0084",
+			"productId": "0x0084"
 		}
 	],
 	"firmwareVersion": {
