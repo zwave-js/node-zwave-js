@@ -1,12 +1,12 @@
 // TODO: This file contains a placeholder for a productType, productID, or manufacturerId (0x9999) that must be corrected.
 {
 	"manufacturerId": "0x0460",
-	"label": "QNSW-001X16",
-	"description": "Wave 1",
+	"label": "QNSW-001P16",
+	"description": "Wave 1PM",
 	"devices": [
 		{
-			"productType": "0x9999",
-			"productId": "0x0002",
+			"productType": "0x0002",
+			"productId": "0x0084",
 			"zwaveAllianceId": 4922
 		}
 	],
@@ -33,7 +33,7 @@
 		{
 			"#": "1",
 			"label": "Sw1 Switch Type",
-			"description": "0",
+			"description": "This parameter defines how the Device should treat the switch (which type) connected to the SW (SW1) terminal.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -43,7 +43,7 @@
 		{
 			"#": "17",
 			"label": "Restore State of O1 After Power Failure",
-			"description": "0",
+			"description": "This parameter determines if the on/off status is saved and restored for the load connected to O (O1) after a power failure.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -53,7 +53,7 @@
 		{
 			"#": "19",
 			"label": "Turn O1 Off Automatically With Timer",
-			"description": "0",
+			"description": "If the load O (O1) is ON, you can schedule it to turn OFF automatically after the period of time defined in this parameter. The timer resets to zero each time the Device receives an ON command",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -63,7 +63,7 @@
 		{
 			"#": "20",
 			"label": "Turn O1 On Automatically With Timer",
-			"description": "0",
+			"description": "If the load O (O1) is OFF, you can schedule it to turn ON automatically after the period of time defined in this parameter. The timer resets to zero each time the Device receives an OFF command",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -73,7 +73,7 @@
 		{
 			"#": "23",
 			"label": "O1 No/Nc",
-			"description": "0",
+			"description": "The set value determines the relay contact type for output O (O1). The relay contact type can be normally open (NO) or normally closed (NC).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -83,17 +83,37 @@
 		{
 			"#": "25",
 			"label": "Set Timer Units to Seconds Or Milliseconds For O1",
-			"description": "0",
+			"description": "Set the timer units to seconds or milliseconds. Choose if you want to set the timer in seconds or milliseconds in Parameters No. 19, 20.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true
 		},
+        {
+			"#": "36",
+			"label": "O (O1) Power report on change - percentage",
+			"description": "This parameter determines the minimum change in consumed power that will result in sending a new report to the gateway.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+        {
+			"#": "39",
+			"label": "Minimum time between reports (O) O1",
+			"description": "This parameter determines the minimum time that must elapse before a new power report on O (O1) is sent to the gateway.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 30,
+			"unsigned": true
+		},
 		{
 			"#": "91",
 			"label": "Alarm Conf. - Water",
-			"description": "0",
+			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -103,7 +123,7 @@
 		{
 			"#": "92",
 			"label": "Alarm Conf. - Smoke",
-			"description": "0",
+			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -113,7 +133,7 @@
 		{
 			"#": "93",
 			"label": "Alarm Conf. - Co",
-			"description": "0",
+			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -123,7 +143,7 @@
 		{
 			"#": "94",
 			"label": "Alarm Conf. - Heat",
-			"description": "0",
+			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -133,7 +153,7 @@
 		{
 			"#": "120",
 			"label": "Factory Reset",
-			"description": "0",
+			"description": "Reset to factory default settings and removed from the Z-Wave network.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -143,7 +163,7 @@
 		{
 			"#": "201",
 			"label": "Serial Number 1",
-			"description": "0",
+			"description": "This parameter contains a part of device’s serial number.\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -153,7 +173,7 @@
 		{
 			"#": "202",
 			"label": "Serial Number 2",
-			"description": "0",
+			"description": "This parameter contains a part of device’s serial number.\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -163,7 +183,7 @@
 		{
 			"#": "203",
 			"label": "Serial Number 3",
-			"description": "0",
+			"description": "This parameter contains a part of device’s serial number\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
