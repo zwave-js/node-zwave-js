@@ -290,6 +290,7 @@
 			"maxValue": 2147483647,
 			"unsigned": true,
             "allowManualEntry": false,
+			"readOnly": true
 		},
 		{
 			"#": "202",
@@ -300,6 +301,7 @@
 			"maxValue": 2147483647,
 			"unsigned": true,
             "allowManualEntry": false,
+			"readOnly": true
 		},
 		{
 			"#": "203",
@@ -310,6 +312,7 @@
 			"maxValue": 2147483647,
 			"unsigned": true,
             "allowManualEntry": false,
+			"readOnly": true
 		}
 	],
 	"metadata": {
