@@ -186,7 +186,21 @@
 			{
 				"label": "Red",
 				"value": 3
-			}
+			},
+			{
+				"label": "Magenta",
+				"value": 4
+			},
+			{
+				"label": "Yellow",
+				"value": 5
+			},
+			{
+				"label": "Cyan",
+				"value": 6
+			}			
+
+
 		]
 	},
 	"led_indicator_brightness": {
