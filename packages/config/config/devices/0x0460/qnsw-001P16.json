@@ -270,7 +270,7 @@
             "allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don’t do Factory reset",
+					"label": "Idle",
 					"value": 0
 				},
 				{
