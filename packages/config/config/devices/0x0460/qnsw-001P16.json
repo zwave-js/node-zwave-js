@@ -150,8 +150,7 @@
 		},
         {
 			"#": "39",
-			"label": "Minimum time between reports (O) O1",
-			"description": "This parameter determines the minimum time that must elapse before a new power report on O (O1) is sent to the gateway.",
+			"label": "O1: Minimum Time Between Power Reports",
 			"unit": "seconds",
             "valueSize": 1,
 			"minValue": 0,
