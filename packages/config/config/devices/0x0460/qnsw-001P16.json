@@ -129,7 +129,7 @@
             "allowManualEntry": false,
 			"options": [
 				{
-					"label": "timer set in seconds",
+					"label": "Seconds",
 					"value": 0
 				},
 				{
