@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Turn O1 Off Automatically With Timer",
+			"label": "O1: Auto-Off Timer",
 			"description": "If the load O (O1) is ON, you can schedule it to turn OFF automatically after the period of time defined in this parameter. The timer resets to zero each time the Device receives an ON command",
 			"valueSize": 2,
 			"minValue": 0,
