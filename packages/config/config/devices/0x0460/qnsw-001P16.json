@@ -281,7 +281,7 @@
 		},
 		{
 			"#": "201",
-			"label": "Serial Number 1",
+			"label": "Serial Number: Part 1",
 			"description": "This parameter contains a part of device’s serial number.\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
