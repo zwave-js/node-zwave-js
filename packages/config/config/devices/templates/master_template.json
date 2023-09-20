@@ -656,5 +656,24 @@
 				"value": 1
 			}
 		]
+	},
+	"7xx_firmware_bugs": {
+		"comments": [
+			{
+				"$if": "firmwareVersion < 7.17.2",
+				"level": "warning",
+				"text": "Early firmware revisions had a bug that could cause the mesh to be flooded on some networks and the controller to become unresponsive. It appears that this bug is largely, if not completely, resolved as of firmware version 7.17.2.\nDirections for upgrading the firmware can be found at https://zwave-js.github.io/node-zwave-js/#/troubleshooting/otw-upgrade"
+			},
+			{
+				"$if": "firmwareVersion == 7.19.1",
+				"level": "warning",
+				"text": "Firmware version 7.19.1 has a bug that causes the controller to randomly restart. It is strongly recommended to update to firmware 7.19.2, but not later since those firmwares have another bug causing the controller to become unresponsive."
+			},
+			{
+				"$if": "firmwareVersion == 7.19.3",
+				"level": "warning",
+				"text": "Firmware version 7.19.3 has a bug that causes the controller to randomly hang during transmission until it is restarted. It is currently unclear if this bug is fixed in a later firmware version."
+			}
+		]
 	}
 }
