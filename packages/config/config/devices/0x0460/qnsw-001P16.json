@@ -42,7 +42,7 @@
             "allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-stable (push button)",
 					"value": 0
 				},
 				{
