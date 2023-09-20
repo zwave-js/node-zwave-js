@@ -119,7 +119,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Set Timer Units to Seconds Or Milliseconds For O1",
+			"label": "O1: Auto-On/Off Timer Unit",
 			"description": "Set the timer units to seconds or milliseconds. Choose if you want to set the timer in seconds or milliseconds in Parameters No. 19, 20.",
 			"valueSize": 1,
 			"minValue": 0,
