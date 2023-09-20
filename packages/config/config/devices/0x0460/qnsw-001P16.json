@@ -98,7 +98,7 @@
 		},
 		{
 			"#": "23",
-			"label": "O1 No/Nc",
+			"label": "O1: Relay Type",
 			"description": "The set value determines the relay contact type for output O (O1). The relay contact type can be normally open (NO) or normally closed (NC).",
 			"valueSize": 1,
 			"minValue": 0,
