@@ -261,7 +261,7 @@
 		{
 			"#": "120",
 			"label": "Factory Reset",
-			"description": "Reset to factory default settings and removed from the Z-Wave network.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
+			"description": "Reset to factory default settings and remove from the Z-Wave network.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
