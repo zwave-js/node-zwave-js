@@ -185,7 +185,7 @@
 		},
 		{
 			"#": "92",
-			"label": "Alarm Conf. - Smoke",
+			"label": "Alarm Configuration: Smoke",
 			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.0",
 			"valueSize": 4,
 			"minValue": 0,
