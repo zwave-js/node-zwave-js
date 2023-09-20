@@ -133,7 +133,7 @@
 					"value": 0
 				},
 				{
-					"label": "timer set in milliseconds (scale 10ms)",
+					"label": "10 Milliseconds",
 					"value": 1
 				}
 			]
