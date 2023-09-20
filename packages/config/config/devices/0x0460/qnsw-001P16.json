@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Restore State of O1 After Power Failure",
+			"label": "O1: State After Power Failure",
 			"description": "This parameter determines if the on/off status is saved and restored for the load connected to O (O1) after a power failure.",
 			"valueSize": 1,
 			"minValue": 0,
