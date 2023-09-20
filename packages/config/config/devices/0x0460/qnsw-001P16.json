@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Sw1 Switch Type",
+			"label": "SW1 Switch Type",
 			"description": "This parameter defines how the Device should treat the switch (which type) connected to the SW (SW1) terminal.",
 			"valueSize": 1,
 			"minValue": 0,
