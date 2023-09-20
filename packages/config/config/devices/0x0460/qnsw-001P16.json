@@ -140,8 +140,7 @@
 		},
         {
 			"#": "36",
-			"label": "O (O1) Power report on change - percentage",
-			"description": "This parameter determines the minimum change in consumed power that will result in sending a new report to the gateway.",
+			"label": "O1: Power Change Report Threshold",
 			"unit": "%",
             "valueSize": 1,
 			"minValue": 0,
