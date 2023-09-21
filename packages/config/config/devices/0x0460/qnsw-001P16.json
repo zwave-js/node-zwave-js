@@ -32,7 +32,6 @@
 		{
 			"#": "1",
 			"label": "SW1 Switch Type",
-			"description": "This parameter defines how the Device should treat the switch (which type) connected to the SW (SW1) terminal.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
