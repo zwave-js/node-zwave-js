@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where some `Notification CC Reports` including an enumeration value would cause the corresponding value ID to be set to the wrong value (#6282)
+* When the Serial API on a controller restarts unexpectedly, the node ID length is now synchronized again (#6271)
+
+### Config file changes
+* Add warnings about broken controller firmware versions (#6293)
+
 ## 11.14.2 (2023-09-11)
 ### Bugfixes
 * Fixed an issue causing commands that have previously been moved to the wakeup queue for sleeping nodes would no longer be handled correctly on wakeup and block the send queue for an extended amount of time (#6266)
