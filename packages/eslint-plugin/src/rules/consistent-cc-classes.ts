@@ -1,15 +1,47 @@
-import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
+import {
+	AST_NODE_TYPES,
+	ESLintUtils,
+	type TSESTree,
+} from "@typescript-eslint/utils";
+import { type CommandClasses, applicationCCs, getCCName } from "@zwave-js/core";
 import path from "node:path";
 import {
 	findDecorator,
 	findDecoratorContainingCCId,
-	getCCNameFromDecorator,
+	getCCIdFromDecorator,
+	getCCIdFromExpression,
 } from "../utils";
+
+function getRequiredInterviewCCsFromMethod(
+	method: TSESTree.MethodDefinition,
+): { node: TSESTree.MemberExpression; ccId: CommandClasses }[] | undefined {
+	const returnExpression = method.value.body?.body.find(
+		(
+			s,
+		): s is TSESTree.ReturnStatement & {
+			argument: TSESTree.ArrayExpression;
+		} => s.type === AST_NODE_TYPES.ReturnStatement
+			&& s.argument?.type === AST_NODE_TYPES.ArrayExpression,
+	);
+	if (!returnExpression) return;
+
+	const memberExpressionsInArray = returnExpression.argument.elements.filter(
+		(e): e is TSESTree.MemberExpression =>
+			e?.type === AST_NODE_TYPES.MemberExpression,
+	);
+
+	// @ts-expect-error
+	return memberExpressionsInArray
+		.map((e) => ({
+			node: e,
+			ccId: getCCIdFromExpression(e),
+		}))
+		.filter(({ ccId }) => ccId != undefined);
+}
 
 export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		let currentCCName: string | undefined;
+		let currentCCId: CommandClasses | undefined;
 
 		return {
 			ClassDeclaration(node) {
@@ -47,7 +79,7 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 						messageId: "missing-cc-decorator",
 					});
 				} else {
-					currentCCName = getCCNameFromDecorator(ccDecorator);
+					currentCCId = getCCIdFromDecorator(ccDecorator);
 				}
 
 				// ...have a @implementedVersion decorator
@@ -99,8 +131,53 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 					});
 				}
 			},
+			MethodDefinition(node) {
+				// Only care about methods inside non-application CC classes,
+				// since only application CCs may depend on other application CCs
+				if (!currentCCId || applicationCCs.includes(currentCCId)) {
+					return;
+				}
+
+				// ...that are called determineRequiredCCInterviews
+				if (
+					node.key.type !== AST_NODE_TYPES.Identifier
+					|| node.key.name !== "determineRequiredCCInterviews"
+				) {
+					return;
+				}
+
+				const requiredCCs = getRequiredInterviewCCsFromMethod(node);
+				if (!requiredCCs) {
+					context.report({
+						node,
+						loc: node.loc,
+						messageId: "required-ccs-failed",
+						data: {
+							ccName: getCCName(currentCCId),
+						},
+					});
+					return;
+				}
+
+				const requiredApplicationCCs = requiredCCs
+					.filter((cc) => applicationCCs.includes(cc.ccId));
+				if (requiredApplicationCCs.length === 0) return;
+
+				// This is a non-application CC that depends on at least one application CC
+				for (const { node, ccId } of requiredApplicationCCs) {
+					context.report({
+						node,
+						loc: node.loc,
+						messageId: "must-not-depend-on-appl-cc",
+						data: {
+							ccName: getCCName(currentCCId),
+							applCCName: getCCName(ccId),
+						},
+					});
+				}
+			},
 			"ClassDeclaration:exit"(_node) {
-				currentCCName = undefined;
+				currentCCId = undefined;
 			},
 		};
 	},
@@ -122,6 +199,10 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 			"must-export": "Classes implementing a CC must be exported",
 			"must-inherit-commandclass":
 				"Classes implementing a CC MUST inherit from `CommandClass`",
+			"required-ccs-failed":
+				"Could not determine required CC interviews for `{{ccName}}`!",
+			"must-not-depend-on-appl-cc":
+				"Interview procedure of the non-application CC `{{ccName}}` must not depend on application CCs, but depends on `{{applCCName}}`!",
 		},
 	},
 	defaultOptions: [],

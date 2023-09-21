@@ -69,9 +69,6 @@
 			// Dummy task to enable running all lint:zwave tasks
 			"dependsOn": ["//#build:turbo"]
 		},
-		"@zwave-js/cc#lint:zwave": {
-			"inputs": ["**/*.ts"]
-		},
 		"@zwave-js/config#lint:zwave": {
 			"inputs": ["**/*.ts", "config/**/*.json"]
 		},

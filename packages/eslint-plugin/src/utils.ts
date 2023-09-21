@@ -1,4 +1,5 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { CommandClasses } from "@zwave-js/core";
 import path from "node:path";
 
 export const repoRoot = path.normalize(
@@ -42,14 +43,48 @@ export function findDecoratorContainingCCId(
 	);
 }
 
+/** Takes a member expression (should be CommandClasses["..."]) and returns the name of the CC accessed by it */
+export function getCCNameFromExpression(
+	expression: TSESTree.MemberExpression,
+): string | undefined {
+	if (
+		expression.object.type
+			!== AST_NODE_TYPES.Identifier
+		|| expression.object.name
+			!== "CommandClasses"
+	) {
+		return;
+	}
+
+	if (expression.property.type === AST_NODE_TYPES.Identifier) {
+		return expression.property.name;
+	} else if (
+		expression.property.type === AST_NODE_TYPES.Literal
+		&& typeof expression.property.value === "string"
+	) {
+		return expression.property.value;
+	}
+}
+
+/** Takes a member expression (should be CommandClasses["..."]) and returns the CC ID accessed by it */
+export function getCCIdFromExpression(
+	expression: TSESTree.MemberExpression,
+): CommandClasses | undefined {
+	const name = getCCNameFromExpression(expression);
+	if (!name) return;
+	return (CommandClasses as any)[name];
+}
+
 /** Takes a decorator found using {@link findDecoratorContainingCCId} and returns the CC name */
 export function getCCNameFromDecorator(
 	decorator: TSESTree.Decorator,
 ): string {
-	const prop: TSESTree.Literal | TSESTree.Identifier =
-		(decorator.expression as any).arguments[0].property;
+	return getCCNameFromExpression((decorator.expression as any).arguments[0])!;
+}
 
-	return prop.type === AST_NODE_TYPES.Literal
-		? prop.value as string
-		: prop.name;
+/** Takes a decorator found using {@link findDecoratorContainingCCId} and returns the CC ID */
+export function getCCIdFromDecorator(
+	decorator: TSESTree.Decorator,
+): CommandClasses {
+	return (CommandClasses as any)[getCCNameFromDecorator(decorator)];
 }
