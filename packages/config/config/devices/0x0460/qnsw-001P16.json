@@ -41,44 +41,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable (push button)",
+					"label": "Momentary switch",
 					"value": 0
 				},
 				{
-					"label": "toggle switch (contact closed - ON / contact opened - OFF)",
+					"label": "Toggle switch (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "toggle switch (Device changes status when switch changes status)",
+					"label": "Toggle switch (change on toggle)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "17",
-			"label": "O1: State After Power Failure",
-			"description": "This parameter determines if the on/off status is saved and restored for the load connected to O (O1) after a power failure.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Device saves last on/off status and restores it after a power failure",
-					"value": 0
-				},
-				{
-					"label": "Device does not save on/off status and does not restore it after a power failure, it remains off",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O1: State After Power Failure"
 		},
 		{
 			"#": "19",
 			"label": "O1: Auto-Off Timer",
-			"description": "If the load O (O1) is ON, you can schedule it to turn OFF automatically after the period of time defined in this parameter. The timer resets to zero each time the Device receives an ON command",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -88,7 +71,6 @@
 		{
 			"#": "20",
 			"label": "O1: Auto-On Timer",
-			"description": "If the load O (O1) is OFF, you can schedule it to turn ON automatically after the period of time defined in this parameter. The timer resets to zero each time the Device receives an OFF command",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -98,7 +80,6 @@
 		{
 			"#": "25",
 			"label": "O1: Auto-On/Off Timer Unit",
-			"description": "Set the timer units to seconds or milliseconds. Choose if you want to set the timer in seconds or milliseconds in Parameters No. 19, 20.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -119,7 +100,6 @@
 		{
 			"#": "23",
 			"label": "O1: Relay Type",
-			"description": "The set value determines the relay contact type for output O (O1). The relay contact type can be normally open (NO) or normally closed (NC).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -128,11 +108,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO",
+					"label": "Normally open (NO)",
 					"value": 0
 				},
 				{
-					"label": "NC",
+					"label": "Normally closed (NC)",
 					"value": 1
 				}
 			]
@@ -140,8 +120,8 @@
 		{
 			"#": "36",
 			"label": "O1: Power Change Report Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
@@ -150,8 +130,8 @@
 		{
 			"#": "39",
 			"label": "O1: Minimum Time Between Power Reports",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 30,
@@ -162,8 +142,6 @@
 			"label": "Alarm Configuration: Water",
 			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -187,8 +165,6 @@
 			"label": "Alarm Configuration: Smoke",
 			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.0",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -212,8 +188,6 @@
 			"label": "Alarm Configuration: CO",
 			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -237,8 +211,6 @@
 			"label": "Alarm Configuration: Heat",
 			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -279,7 +251,6 @@
 		{
 			"#": "201",
 			"label": "Serial Number: Part 1",
-			"description": "This parameter contains a part of device’s serial number.\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -289,7 +260,6 @@
 		{
 			"#": "202",
 			"label": "Serial Number: Part 2",
-			"description": "This parameter contains a part of device’s serial number.\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -299,7 +269,6 @@
 		{
 			"#": "203",
 			"label": "Serial Number: Part 3",
-			"description": "This parameter contains a part of device’s serial number\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
