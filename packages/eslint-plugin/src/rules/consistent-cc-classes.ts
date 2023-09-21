@@ -1,4 +1,5 @@
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
+import path from "node:path";
 import {
 	findDecorator,
 	findDecoratorContainingCCId,
@@ -26,6 +27,13 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 						loc: node.id.loc,
 						messageId: "wrong-filename",
 					});
+				} else if (
+					context.getFilename().split(path.sep).includes(
+						"manufacturerProprietary",
+					)
+				) {
+					// The rules for manufacturer proprietary CCs are different
+					return;
 				}
 
 				// ...have an @commandClass decorator
