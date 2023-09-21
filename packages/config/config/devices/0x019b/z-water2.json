@@ -81,7 +81,7 @@
 				{
 					"label": "Inverted",
 					"value": 1
-				},
+				}
 			]
 		},
 		{
@@ -97,7 +97,7 @@
 				{
 					"label": "Disabled",
 					"value": 0
-				},
+				}
 			]
 		},
 		{
@@ -116,7 +116,7 @@
 				{
 					"label": "External",
 					"value": 1
-				},
+				}
 			]
 		}
 	],
