@@ -42,7 +42,7 @@
 		{
 			"#": "11",
 			"label": "Auto-Off Timer",
-			"description": "When the relay is turned ON, it automatically turns OFF after the defined time",
+			"description": "Turn OFF automatically after a period defined in this parameter.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -58,6 +58,7 @@
 		{
 			"#": "12",
 			"label": "Auto-On Timer",
+			"description": "Turn ON automatically after a period of time defined in this parameter.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -90,25 +91,198 @@
 		},
 		{
 			"#": "30",
-			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
+			"label": "Restore on/off status",
+			"description": "After power failure",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restores last on/off status",
+					"value": 0
+				},
+				{
+					"label": "Does not restore last on/off status",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "40",
-			"label": "Power Consumption (Watt) Reporting Threshold",
+			"label": "Power Consumption Reporting Threshold",
+			"description": "Percentage of increase or decrease to be reported.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20
+			"defaultValue": 20,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "42",
-			"label": "Power Consumption (Watt) Reporting Interval",
+			"label": "Power Consumption Reporting Interval",
+			"description": "Time interval for power consumption reports (30 – 32535 seconds).",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "50",
+			"label": "Lower power threshold",
+			"description": "Used in parameter no. 52.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 30
+		},
+		{
+			"#": "51",
+			"label": "Upper power threshold",
+			"description": "Used in parameter no. 52.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 50
+		},
+		{
+			"#": "52",
+			"label": "Associated Devices Action",
+			"description": "In case of exceeding defined power values",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"options": [
+				{
+					"label": "function inactive",
+					"value": 0
+				},
+				{
+					"label": "turn on, once the power drops below lower power threshold",
+					"value": 1
+				},
+				{
+					"label": "turn off, once the power drops below lower power threshold",
+					"value": 2
+				},
+				{
+					"label": "turn on, once the power rises above upper power threshold",
+					"value": 3
+				},
+				{
+					"label": "turn off, once the power rises above upper power threshold",
+					"value": 4
+				},
+				{
+					"label": "Turn on, once the power drops below lower power threshold. Turn off, once the power rises above upper power threshold",
+					"value": 5
+				},
+				{
+					"label": "Turn off, once the power drops below lower power threshold. Turn on, once the power rises above upper power threshold.",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "70",
+			"label": "Overload safety switch",
+			"description": "Turn off the controlled device in case of exceeding the defined power for more than 3 seconds.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "71",
+			"label": "Power threshold",
+			"description": "Sets the power threshold for triggering the program started notification.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "72",
+			"label": "Time interval",
+			"description": "Sets the time interval for triggering the Program completed notification.",
+			"unit": "mn",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 125,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Immediate sending",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "73",
+			"label": "Turn Smart Plug OFF",
+			"description": "Turns OFF once the time interval is expired and the Program completed notification is sent to the controller.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "74",
+			"label": "Enable/disable LED",
+			"description": "This function allows enabling or disabling the Smart Plug LED.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		}
 	]
 }
