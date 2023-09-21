@@ -85,7 +85,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 
 					return true;
 				} else if (msg instanceof SendDataAbort) {
-					// Put the controller into sending state
+					// Put the controller into idle state
 					controller.state.set(
 						MockControllerStateKeys.CommunicationState,
 						MockControllerCommunicationState.Idle,

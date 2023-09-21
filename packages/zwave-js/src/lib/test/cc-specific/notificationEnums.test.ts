@@ -7,10 +7,10 @@ import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
-integrationTest.only(
+integrationTest(
 	"Notifications with enum event parameters are evaluated correctly",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			commandClasses: [

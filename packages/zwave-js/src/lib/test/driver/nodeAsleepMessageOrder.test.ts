@@ -108,10 +108,10 @@ integrationTest(
 	},
 );
 
-integrationTest.only(
+integrationTest(
 	"When a sleeping node with pending commands wakes up, the queue continues executing",
 	{
-		debug: true,
+		// debug: true,
 
 		provisioningDirectory: path.join(
 			__dirname,

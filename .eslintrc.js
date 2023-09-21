@@ -164,7 +164,7 @@ module.exports = {
 				"@typescript-eslint/no-floating-promises": "off",
 				"@typescript-eslint/require-await": "off",
 				"@typescript-eslint/unbound-method": "off",
-				"@typescript-eslint/no-unused-vars": "warn",
+				"@typescript-eslint/no-unused-vars": "off",
 				"@typescript-eslint/dot-notation": "off",
 
 				"@zwave-js/no-debug-in-tests": "error",
