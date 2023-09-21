@@ -2,6 +2,8 @@ import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
 import path from "node:path";
 import { repoRoot } from "../utils.js";
 
+const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
+
 const integrationTestDefinitionFiles = new Set(
 	[
 		"packages/zwave-js/src/lib/test/integrationTestSuite",
@@ -57,7 +59,10 @@ export const noDebugInTests = ESLintUtils.RuleCreator.withoutDocs({
 					context.report({
 						node,
 						messageId: "no-debug",
-						fix: (fixer) => fixer.insertTextBefore(node, "// "),
+						// Do not auto-fix in the editor
+						fix: isFixMode
+							? (fixer) => fixer.insertTextBefore(node, "// ")
+							: undefined,
 					});
 				}
 			},
@@ -69,7 +74,8 @@ export const noDebugInTests = ESLintUtils.RuleCreator.withoutDocs({
 				"Integration tests should have the `debug` flag set to `false` when not actively debugging.",
 		},
 		type: "problem",
-		fixable: "code",
+		// Do not auto-fix in the editor
+		fixable: isFixMode ? "code" : undefined,
 		schema: [],
 		messages: {
 			"no-debug":

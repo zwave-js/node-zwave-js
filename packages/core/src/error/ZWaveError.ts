@@ -285,3 +285,11 @@ export function isMissingControllerACK(
 		&& e.code === ZWaveErrorCodes.Controller_Timeout
 		&& e.context === "ACK";
 }
+
+export function isMissingControllerCallback(
+	e: unknown,
+): e is ZWaveError {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Timeout
+		&& e.context === "callback";
+}

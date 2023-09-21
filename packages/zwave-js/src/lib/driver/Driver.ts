@@ -85,6 +85,7 @@ import {
 	getCCName,
 	highResTimestamp,
 	isMissingControllerACK,
+	isMissingControllerCallback,
 	isZWaveError,
 	messageRecordToLines,
 	securityClassIsS2,
@@ -466,6 +467,13 @@ type PrefixedNodeEvents = {
 	]: ZWaveNodeEventCallbacks[K];
 };
 
+const enum ControllerRecoveryPhase {
+	None,
+	NoACK,
+	CallbackTimeout,
+	CallbackTimeoutAfterReset,
+}
+
 // Strongly type the event emitter events
 export interface DriverEventCallbacks extends PrefixedNodeEvents {
 	"driver ready": () => void;
@@ -538,9 +546,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		this.immediateQueue = new TransactionQueue({
 			name: "immediate",
 			mayStartNextTransaction: (t) => {
-				// While the controller is unresponsive, only soft resetting is allowed
+				// While the controller is unresponsive, only soft resetting is allowed.
+				// Since we use GetControllerVersionRequest to check if the controller responds after soft-reset,
+				// allow that too.
 				if (this.controller.status === ControllerStatus.Unresponsive) {
-					return t.message instanceof SoftResetRequest;
+					return t.message instanceof SoftResetRequest
+						|| t.message instanceof GetControllerVersionRequest;
 				}
 
 				// All other messages on the immediate queue may always be sent as long as the controller is ready to send
@@ -692,6 +703,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	public isInBootloader(): boolean {
 		return this._bootloader != undefined;
 	}
+
+	private _recoveryPhase: ControllerRecoveryPhase =
+		ControllerRecoveryPhase.None;
 
 	private _securityManager: SecurityManager | undefined;
 	/**
@@ -1021,16 +1035,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					return;
 				}
 
-				const message = `Serial port errored: ${err.message}`;
-				this.driverLog.print(message, "error");
-
-				const error = new ZWaveError(
-					message,
-					ZWaveErrorCodes.Driver_Failed,
+				void this.destroyWithMessage(
+					`Serial port errored: ${err.message}`,
 				);
-				this.emit("error", error);
-
-				void this.destroy();
 			});
 		// If the port is already open, close it first
 		if (this.serial.isOpen) await this.serial.close();
@@ -1097,17 +1104,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 							this._controller = new ZWaveController(this, true);
 							this.emit("bootloader ready");
 						} else {
-							const message =
-								"Failed to recover from bootloader. Please flash a new firmware to continue...";
-							this.driverLog.print(message, "error");
-							this.emit(
-								"error",
-								new ZWaveError(
-									message,
-									ZWaveErrorCodes.Driver_Failed,
-								),
+							void this.destroyWithMessage(
+								"Failed to recover from bootloader. Please flash a new firmware to continue...",
 							);
-							void this.destroy();
 						}
 
 						return;
@@ -1131,12 +1130,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					message =
 						`Failed to create the cache directory. Please make sure that it is writable or change the location with the "storage.cacheDir" driver option.`;
 				}
-				this.driverLog.print(message, "error");
-				this.emit(
-					"error",
-					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
-				);
-				void this.destroy();
+
+				void this.destroyWithMessage(message);
 				return;
 			}
 
@@ -1151,12 +1146,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 							e,
 						)
 					}`;
-					this.driverLog.print(message, "error");
-					this.emit(
-						"error",
-						new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
-					);
-					void this.destroy();
+					void this.destroyWithMessage(message);
 					return;
 				}
 			}
@@ -2764,6 +2754,18 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		);
 	}
 
+	private async destroyWithMessage(message: string): Promise<void> {
+		this.driverLog.print(message, "error");
+
+		const error = new ZWaveError(
+			message,
+			ZWaveErrorCodes.Driver_Failed,
+		);
+		this.emit("error", error);
+
+		await this.destroy();
+	}
+
 	/**
 	 * Terminates the driver instance and closes the underlying serial connection.
 	 * Must be called under any circumstances.
@@ -3461,26 +3463,37 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 	}
 
-	private handleMissingControllerACK(
+	private handleUnresponsiveController(
 		transaction: Transaction,
 		error: ZWaveError,
 	): boolean {
 		if (!this._controller) return false;
 
-		const fail = () => {
-			this.driverLog.print(
-				"Recovering unresponsive controller failed. Restarting the driver...",
-				"error",
-			);
-			void this.destroy();
+		const fail = (message: string) => {
+			this.rejectTransaction(transaction, error);
+
+			void this.destroyWithMessage(message);
 		};
 
-		if (this._controller.status !== ControllerStatus.Unresponsive) {
+		if (
+			this._recoveryPhase
+				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
+		) {
+			// The controller is still timing out transmitting after a soft reset, don't try again.
+			// Reject the transaction and destroy the driver.
+			fail("Controller is still timing out. Restarting the driver...");
+
+			return true;
+		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
 			// The controller was responsive before this transaction failed.
 			// Mark it as unresponsive and try to soft-reset it.
 			this.controller.setStatus(
 				ControllerStatus.Unresponsive,
 			);
+
+			this._recoveryPhase = isMissingControllerACK(error)
+				? ControllerRecoveryPhase.NoACK
+				: ControllerRecoveryPhase.CallbackTimeout;
 
 			this.driverLog.print(
 				"Attempting to recover unresponsive controller...",
@@ -3496,11 +3509,21 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			void this.softReset().then(() => {
 				// The controller responded. It is no longer unresponsive
 				this._controller?.setStatus(ControllerStatus.Ready);
+
+				if (this._recoveryPhase === ControllerRecoveryPhase.NoACK) {
+					this._recoveryPhase = ControllerRecoveryPhase.None;
+				} else if (
+					this._recoveryPhase
+						=== ControllerRecoveryPhase.CallbackTimeout
+				) {
+					this._recoveryPhase =
+						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
+				}
 			}).catch(() => {
-				// Soft-reset failed.
-				// Reject the original transaction and try restarting the driver.
-				this.rejectTransaction(transaction, error);
-				fail();
+				// Soft-reset failed. Reject the original transaction and try restarting the driver.
+				fail(
+					"Recovering unresponsive controller failed. Restarting the driver...",
+				);
 			});
 
 			return true;
@@ -5487,9 +5510,10 @@ ${handlers.length} left`,
 		// If a node failed to respond in time, it might be sleeping
 		if (this.isMissingNodeACK(transaction, error)) {
 			if (this.handleMissingNodeACK(transaction as any, error)) return;
-		} else if (isMissingControllerACK(error)) {
-			// If the controller failed to respond in time, we attempt to recover from this
-			if (this.handleMissingControllerACK(transaction, error)) return;
+		} else if (
+			isMissingControllerACK(error) || isMissingControllerCallback(error)
+		) {
+			if (this.handleUnresponsiveController(transaction, error)) return;
 		}
 
 		this.rejectTransaction(transaction, error);

@@ -1,5 +1,7 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { type MockControllerBehavior } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
+import Sinon from "sinon";
 import {
 	GetControllerIdRequest,
 	type GetControllerIdResponse,
@@ -72,6 +74,9 @@ integrationTest(
 			shouldRespond = false;
 			mockController.autoAckHostMessages = false;
 
+			const errorSpy = Sinon.spy();
+			driver.on("error", errorSpy);
+
 			await assertZWaveError(
 				t,
 				() =>
@@ -84,6 +89,12 @@ integrationTest(
 					context: "ACK",
 				},
 			);
+
+			// The driver should have been destroyed
+			await wait(100);
+			assertZWaveError(t, errorSpy.getCall(0).args[0], {
+				errorCode: ZWaveErrorCodes.Driver_Failed,
+			});
 		},
 	},
 );
