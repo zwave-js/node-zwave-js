@@ -1,6 +1,7 @@
 import {
 	AST_NODE_TYPES,
 	ESLintUtils,
+	type TSESLint,
 	type TSESTree,
 } from "@typescript-eslint/utils";
 import { type CommandClasses, applicationCCs, getCCName } from "@zwave-js/core";
@@ -44,9 +45,13 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 		let currentCCId: CommandClasses | undefined;
 
 		return {
-			ClassDeclaration(node) {
-				// Only look at class declarations ending with "CC"
-				if (!node.id?.name.endsWith("CC")) return;
+			// Look at class declarations ending with "CC"
+			"ClassDeclaration[id.name=/CC$/]"(
+				node: TSESTree.ClassDeclaration & {
+					id: TSESTree.Identifier;
+				},
+			) {
+				// if (!node.id?.name.endsWith("CC")) return;
 				// Except InvalidCC, which is a special case
 				if (node.id?.name === "InvalidCC") return;
 
@@ -104,7 +109,22 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 						node,
 						loc: node.id.loc,
 						messageId: "must-export",
-						fix: (fixer) => fixer.insertTextBefore(node, "export "),
+						fix: (fixer) => {
+							const classKeyword = context.sourceCode
+								.getTokensBefore(
+									node.id,
+									{
+										filter: (t) =>
+											t.type === "Keyword"
+											&& t.value === "class",
+									},
+								).at(-1);
+
+							return fixer.insertTextBefore(
+								classKeyword!,
+								"export ",
+							);
+						},
 					});
 				}
 
@@ -124,7 +144,7 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 									"CommandClass",
 								)
 								: fixer.insertTextAfter(
-									node.id!,
+									node.id,
 									" extends CommandClass",
 								),
 						messageId: "must-inherit-commandclass",
@@ -179,6 +199,103 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 			"ClassDeclaration:exit"(_node) {
 				currentCCId = undefined;
 			},
+
+			// =================================================================
+
+			// To ensure correct CC API implementation, look at class declarations ending with "CCAPI"
+			"ClassDeclaration[id.name=/CCAPI$/]"(
+				node: TSESTree.ClassDeclaration & {
+					id: TSESTree.Identifier;
+				},
+			) {
+				// These must...
+
+				// ...be in a file that ends with "CC.ts"
+				if (!context.getFilename().endsWith("CC.ts")) {
+					context.report({
+						node,
+						loc: node.id.loc,
+						messageId: "api-wrong-filename",
+					});
+				}
+
+				// ...have an @API decorator
+				const apiDecorator = findDecoratorContainingCCId(node, [
+					"API",
+				]);
+				if (!apiDecorator) {
+					context.report({
+						node,
+						loc: node.id.loc,
+						messageId: "missing-api-decorator",
+					});
+				}
+
+				// ...be exported
+				if (
+					node.parent.type !== AST_NODE_TYPES.ExportNamedDeclaration
+					|| node.parent.exportKind !== "value"
+				) {
+					context.report({
+						node,
+						loc: node.id.loc,
+						messageId: "must-export",
+						fix: (fixer) => {
+							const classKeyword = context.sourceCode
+								.getTokensBefore(
+									node.id,
+									{
+										filter: (t) =>
+											t.type === "Keyword"
+											&& t.value === "class",
+									},
+								).at(-1);
+
+							return fixer.insertTextBefore(
+								classKeyword!,
+								"export ",
+							);
+						},
+					});
+				}
+
+				// ...inherit from CCAPI or PhysicalCCAPI
+				if (
+					!node.superClass
+					|| node.superClass.type !== AST_NODE_TYPES.Identifier
+					|| !["CCAPI", "PhysicalCCAPI"].includes(
+						node.superClass.name,
+					)
+				) {
+					const createFixer = (baseClass: string) => {
+						return (fixer: TSESLint.RuleFixer) =>
+							node.superClass
+								? fixer.replaceText(
+									node.superClass,
+									baseClass,
+								)
+								: fixer.insertTextAfter(
+									node.id,
+									` extends ${baseClass}`,
+								);
+					};
+					context.report({
+						node,
+						loc: node.id.loc,
+						messageId: "must-inherit-ccapi",
+						suggest: [
+							{
+								messageId: "suggest-extend-ccapi",
+								fix: createFixer("CCAPI"),
+							},
+							{
+								messageId: "suggest-extend-physicalccapi",
+								fix: createFixer("PhysicalCCAPI"),
+							},
+						],
+					});
+				}
+			},
 		};
 	},
 	meta: {
@@ -189,14 +306,24 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 		type: "problem",
 		schema: [],
 		fixable: "code",
+		hasSuggestions: true,
 		messages: {
 			"wrong-filename":
 				"Classes that end with `CC` are considered CC implementations and MUST be in a file whose name ends with `CC.ts`",
+			"api-wrong-filename":
+				"Classes that end with `CCAPI` are considered CC API implementations and MUST be in a file whose name ends with `CC.ts`",
 			"missing-cc-decorator":
 				"Classes implementing a CC must have a CC assigned using the `@commandClass(...)` decorator",
+			"missing-api-decorator":
+				"Classes implementing a CC API must have a CC assigned using the `@API(...)` decorator",
 			"missing-version-decorator":
 				"Classes implementing a CC must be decorated with `@implementedVersion(...)`",
 			"must-export": "Classes implementing a CC must be exported",
+			"must-export-api": "Classes implementing a CC API must be exported",
+			"must-inherit-ccapi":
+				"Classes implementing a CC API MUST inherit from `CCAPI` or `PhysicalCCAPI`",
+			"suggest-extend-ccapi": "Inherit from `CCAPI`",
+			"suggest-extend-physicalccapi": "Inherit from `PhysicalCCAPI`",
 			"must-inherit-commandclass":
 				"Classes implementing a CC MUST inherit from `CommandClass`",
 			"required-ccs-failed":
