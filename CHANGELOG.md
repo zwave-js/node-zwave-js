@@ -4,6 +4,24 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where some `Notification CC Reports` including an enumeration value would cause the corresponding value ID to be set to the wrong value (#6282)
+* When the Serial API on a controller restarts unexpectedly, the node ID length is now synchronized again (#6271)
+
+### Config file changes
+* Add Heatit Z-TRM6 (#6263)
+* Increase poll delay for ZW500D (#6270)
+* Add fingerprint for Simon IO Master Roller Blind (#6262)
+* Add HOPPE eHandle ConnectSense (#6269)
+* Add parameters to Zooz ZEN17 from firmware 1.30 (#6189)
+* Update Zooz ZEN32 config to the latest firmware, include 800 series (#6283)
+* Add warnings about broken controller firmware versions (#6293)
+
+### Changes under the hood
+* Some Z-Wave JS specific checks are now done using a custom ESLint plugin (#6276, #6279)
+* `yarn test` now only runs tests affected by changed files by default. This is also done on CI in PRs to speed up check times (#6274)
+
 ## 12.0.0-beta.1 (2023-09-11)
 ### Bugfixes
 * Ported changes from `v11.14.1` and `v11.14.2`
