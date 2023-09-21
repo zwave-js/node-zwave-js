@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/host",
-  "version": "11.14.0",
+  "version": "11.14.3",
   "description": "zwave-js: Host abstractions",
   "keywords": [],
   "publishConfig": {

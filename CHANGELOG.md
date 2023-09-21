@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 11.14.3 (2023-09-21)
 ### Bugfixes
 * Fixed an issue where some `Notification CC Reports` including an enumeration value would cause the corresponding value ID to be set to the wrong value (#6282)
 * When the Serial API on a controller restarts unexpectedly, the node ID length is now synchronized again (#6271)
