@@ -28,7 +28,6 @@
 			"maxNodes": 9
 		}
 	},
-
 	"paramInformation": [
 		{
 			"#": "1",
@@ -39,7 +38,7 @@
 			"maxValue": 2,
 			"defaultValue": 2,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Mono-stable (push button)",
@@ -64,7 +63,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Device saves last on/off status and restores it after a power failure",
@@ -105,7 +104,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "NO",
@@ -126,7 +125,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Seconds",
@@ -138,21 +137,21 @@
 				}
 			]
 		},
-        {
+		{
 			"#": "36",
 			"label": "O1: Power Change Report Threshold",
 			"unit": "%",
-            "valueSize": 1,
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
 			"unsigned": true
 		},
-        {
+		{
 			"#": "39",
 			"label": "O1: Minimum Time Between Power Reports",
 			"unit": "seconds",
-            "valueSize": 1,
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 30,
@@ -167,7 +166,7 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "no action",
@@ -192,7 +191,7 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "no action",
@@ -217,7 +216,7 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "no action",
@@ -242,7 +241,7 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "no action",
@@ -267,7 +266,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Idle",
@@ -297,7 +296,7 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"readOnly": true
 		},
 		{
@@ -308,7 +307,7 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"unsigned": true,
-            "allowManualEntry": false,
+			"allowManualEntry": false,
 			"readOnly": true
 		}
 	],
