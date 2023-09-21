@@ -47,7 +47,7 @@
 			"minValue": 30,
 			"maxValue": 65535,
 			"defaultValue": 870,
-            "unit": "seconds",
+			"unit": "seconds",
 			"unsigned": true
 		},
 		{
@@ -57,7 +57,7 @@
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10,
-            "unit": "0.1 °C",
+			"unit": "0.1 °C",
 			"unsigned": true
 		},
 		{
@@ -73,7 +73,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Normal",
 					"value": 0
@@ -91,9 +91,9 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
-            "unit": "minutes",
+			"unit": "minutes",
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Disabled",
 					"value": 0
@@ -108,7 +108,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-            "options": [
+			"options": [
 				{
 					"label": "Internal",
 					"value": 0
