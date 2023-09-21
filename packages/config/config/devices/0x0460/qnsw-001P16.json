@@ -20,11 +20,11 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "On/off [I1]",
+			"label": "I1: On/Off",
 			"maxNodes": 9
 		},
 		"3": {
-			"label": "Start/stop set level [I1]",
+			"label": "I1: Start/Stop Level Change",
 			"maxNodes": 9
 		}
 	},
@@ -96,6 +96,27 @@
 			"unsigned": true
 		},
 		{
+			"#": "25",
+			"label": "O1: Auto-On/Off Timer Unit",
+			"description": "Set the timer units to seconds or milliseconds. Choose if you want to set the timer in seconds or milliseconds in Parameters No. 19, 20.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Seconds",
+					"value": 0
+				},
+				{
+					"label": "10 ms",
+					"value": 1
+				}
+			]
+		},
+		{
 			"#": "23",
 			"label": "O1: Relay Type",
 			"description": "The set value determines the relay contact type for output O (O1). The relay contact type can be normally open (NO) or normally closed (NC).",
@@ -112,27 +133,6 @@
 				},
 				{
 					"label": "NC",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "25",
-			"label": "O1: Auto-On/Off Timer Unit",
-			"description": "Set the timer units to seconds or milliseconds. Choose if you want to set the timer in seconds or milliseconds in Parameters No. 19, 20.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Seconds",
-					"value": 0
-				},
-				{
-					"label": "10 Milliseconds",
 					"value": 1
 				}
 			]
@@ -159,7 +159,7 @@
 		},
 		{
 			"#": "91",
-			"label": "Alarm Conf. - Water",
+			"label": "Alarm Configuration: Water",
 			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -169,15 +169,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no action",
+					"label": "No action",
 					"value": 0
 				},
 				{
-					"label": "open relay",
+					"label": "Open relay",
 					"value": 1
 				},
 				{
-					"label": "close relay",
+					"label": "Close relay",
 					"value": 2
 				}
 			]
@@ -194,22 +194,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no action",
+					"label": "No action",
 					"value": 0
 				},
 				{
-					"label": "open relay",
+					"label": "Open relay",
 					"value": 1
 				},
 				{
-					"label": "close relay",
+					"label": "Close relay",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "93",
-			"label": "Alarm Conf. - Co",
+			"label": "Alarm Configuration: CO",
 			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -219,22 +219,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no action",
+					"label": "No action",
 					"value": 0
 				},
 				{
-					"label": "open relay",
+					"label": "Open relay",
 					"value": 1
 				},
 				{
-					"label": "close relay",
+					"label": "Close relay",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "94",
-			"label": "Alarm Conf. - Heat",
+			"label": "Alarm Configuration: Heat",
 			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -244,15 +244,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no action",
+					"label": "No action",
 					"value": 0
 				},
 				{
-					"label": "open relay",
+					"label": "Open relay",
 					"value": 1
 				},
 				{
-					"label": "close relay",
+					"label": "Close relay",
 					"value": 2
 				}
 			]
@@ -261,9 +261,7 @@
 			"#": "120",
 			"label": "Factory Reset",
 			"description": "Reset to factory default settings and remove from the Z-Wave network.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"valueSize": 4,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -273,8 +271,8 @@
 					"value": 0
 				},
 				{
-					"label": "Do the Factory reset",
-					"value": 1
+					"label": "Factory reset",
+					"value": 1431655765
 				}
 			]
 		},
@@ -290,24 +288,22 @@
 		},
 		{
 			"#": "202",
-			"label": "Serial Number 2",
+			"label": "Serial Number: Part 2",
 			"description": "This parameter contains a part of device’s serial number.\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"unsigned": true,
-			"allowManualEntry": false,
 			"readOnly": true
 		},
 		{
 			"#": "203",
-			"label": "Serial Number 3",
+			"label": "Serial Number: Part 3",
 			"description": "This parameter contains a part of device’s serial number\nThe parameter is Read-Only and cannot be changed.\nThe parameter is Advanced and may be hidden under the Advanced tag.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"unsigned": true,
-			"allowManualEntry": false,
 			"readOnly": true
 		}
 	],
