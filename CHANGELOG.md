@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* A bug in the `7.19.x` SDK has surfaced where the controller gets stuck in the middle of a transmission. Previously this would go unnoticed because the failed commands would cause the nodes to be marked dead until the controller finally recovered. Since `v11.12.0` however, Z-Wave JS would consider the controller jammed and retry the last command indefinitely. This situation is now detected and Z-Wave JS attempts to recover by soft-resetting the controller when this happens. (#6296)
+
+### Config file changes
+* Add Shelly Wave 1PM (#6280)
+
+### Changes under the hood
+* Migrated more Z-Wave JS specific checks to the custom ESLint plugin (#6297, #6302)
+
 ## 12.0.0-beta.2 (2023-09-21)
 ### Bugfixes
 * Fixed an issue where some `Notification CC Reports` including an enumeration value would cause the corresponding value ID to be set to the wrong value (#6282)
