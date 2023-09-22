@@ -1,6 +1,5 @@
 /*!
- * This scripts ensures that files annotated with @noExternalImports don't import
- * anything from outside the monorepo.
+ * This scripts helps find certain code patterns via the CLI
  */
 
 import {

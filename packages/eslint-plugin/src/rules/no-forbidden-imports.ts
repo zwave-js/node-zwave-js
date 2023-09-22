@@ -1,14 +1,7 @@
-/*!
- * This scripts ensures that files annotated with @forbiddenImports don't import
- * anything they are not supposed to.
- */
-
-import { bold, red } from "ansi-colors";
+import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { reportProblem } from "./reportProblem";
-import { loadTSConfig, projectRoot } from "./tsAPITools";
 
 // Whitelist some imports that are known not to import forbidden modules
 const whitelistedImports = [
@@ -107,14 +100,43 @@ function getImports(
 	return output;
 }
 
-interface LinterContext {
+function resolveImport(
+	node: ts.Node,
+	checker: ts.TypeChecker,
+): ResolvedImport | undefined {
+	const sourceFile = node.getSourceFile();
+
+	const moduleNameExpr = getExternalModuleName(node);
+	// if they have a name, that is a string, i.e. not alias definition `import x = y`
+	if (
+		moduleNameExpr
+		&& moduleNameExpr.kind === ts.SyntaxKind.StringLiteral
+	) {
+		// Ask the checker about the "symbol: for this module name
+		// it would be undefined if the module was not found (i.e. error)
+		const moduleSymbol = checker.getSymbolAtLocation(moduleNameExpr);
+		const file = moduleSymbol?.getDeclarations()?.[0]?.getSourceFile();
+		if (file) {
+			return {
+				name: moduleNameExpr.getText(sourceFile),
+				line: ts.getLineAndCharacterOfPosition(
+					sourceFile,
+					moduleNameExpr.getStart(),
+				).line + 1,
+				sourceFile: file,
+			};
+		}
+	}
+}
+
+interface ResolverContext {
 	program: ts.Program;
 	resolvedSourceFiles: Map<string, string>;
 }
 
 /** Given a definition file, this tries to resolve the original source file */
 function resolveSourceFileFromDefinition(
-	context: LinterContext,
+	context: ResolverContext,
 	file: ts.SourceFile,
 ): ts.SourceFile {
 	if (context.resolvedSourceFiles.has(file.fileName)) {
@@ -161,44 +183,94 @@ function resolveSourceFileFromDefinition(
 	return bail();
 }
 
-function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replaceAll("\\", "/");
-}
+const forbiddenImportsRegex = /^@forbiddenImports (?<forbidden>.*?)$/;
 
-const forbiddenImportsRegex =
-	/^\/\* @forbiddenImports (?<forbidden>.*?) \*\/$/gm;
-
-export function lintForbiddenImports(): Promise<void> {
-	// Create a Program to represent the project, then pull out the
-	// source file to parse its AST.
-
-	const tsConfig = loadTSConfig(undefined, false);
-	const program = ts.createProgram(tsConfig.fileNames, {
-		...tsConfig.options,
-		preserveSymlinks: false,
-	});
-	const checker = program.getTypeChecker();
-
-	const context: LinterContext = {
-		program,
-		resolvedSourceFiles: new Map(),
-	};
-
-	let numErrors = 0;
-
-	// Scan all source files
-	for (const sourceFile of program.getSourceFiles()) {
-		const relativePath = relativeToProject(sourceFile.fileName);
-
-		// Only look at files inside the packages directory
-		if (!relativePath.startsWith("packages/")) continue;
-
-		// And only those with at least one @forbiddenImports comment
-		const forbidden = [...sourceFile.text.matchAll(forbiddenImportsRegex)]
+export const noForbiddenImports = ESLintUtils.RuleCreator.withoutDocs({
+	create(context) {
+		// And only those with at least one /* @forbiddenImports ... */ comment
+		const comments = context.sourceCode.getAllComments()
+			.filter((c) => c.type === "Block")
+			.map((c) => c.value.trim());
+		const forbidden = comments.map((c) => c.match(forbiddenImportsRegex))
+			.filter((match): match is RegExpMatchArray => !!match)
 			.map((match) => match.groups?.forbidden?.trim())
 			.filter((forbidden): forbidden is string => !!forbidden)
 			.flatMap((forbidden) => forbidden.split(" "));
-		if (!forbidden.length) continue;
+
+		// No comments, nothing to do
+		if (!forbidden.length) return {};
+
+		const services = ESLintUtils.getParserServices(context);
+		const checker = services.program.getTypeChecker();
+		const projectRoot = services.program.getCurrentDirectory();
+
+		function relativeToProject(filename: string): string {
+			return path.relative(projectRoot, filename).replaceAll(
+				/[\\\/]/g,
+				path.sep,
+			);
+		}
+
+		// Remember which source files we have already visited
+		const visitedSourceFiles = new Set<string>(context.getFilename());
+		let todo: { file: ts.SourceFile; importStack: string[] }[] = [];
+		const resolverContext: ResolverContext = {
+			program: services.program,
+			resolvedSourceFiles: new Map(),
+		};
+
+		function addTodo(imp: ResolvedImport, importStack: string[]) {
+			// try to resolve the original source file for declaration files
+			const next: ts.SourceFile = imp.sourceFile
+					.isDeclarationFile
+				? resolveSourceFileFromDefinition(
+					resolverContext,
+					imp.sourceFile,
+				)
+				: imp.sourceFile;
+
+			if (!visitedSourceFiles.has(next.fileName)) {
+				todo.push({
+					file: next,
+					importStack,
+				});
+			}
+		}
+
+		function reportForbiddenImport(
+			node: TSESTree.Node,
+			imp: ResolvedImport,
+			importStack: string[],
+		) {
+			if (importStack.length === 0) {
+				context.report({
+					loc: node.loc,
+					messageId: "forbidden-import",
+					data: {
+						name: imp.name,
+					},
+				});
+			} else {
+				context.report({
+					loc: node.loc,
+					messageId: "forbidden-import-transitive",
+					data: {
+						name: imp.name,
+						stack: [
+							...importStack,
+							`❌ ${imp.name}`,
+						]
+							.map((file, indent) =>
+								indent === 0
+									? file
+									: `${"   ".repeat(indent - 1)}└─ ${file}`
+							)
+							.map((line) => `\n${line}`)
+							.join(""),
+					},
+				});
+			}
+		}
 
 		function checkImport(
 			imp: ResolvedImport,
@@ -221,96 +293,73 @@ export function lintForbiddenImports(): Promise<void> {
 			return forbidden.includes(trimmedImport) ? "forbidden" : "ok";
 		}
 
-		// Resolve the import tree
-		const visitedSourceFiles = new Set<string>();
-		const todo: { file: ts.SourceFile; importStack: string[] }[] = [
-			{ file: sourceFile, importStack: [] },
-		];
-		while (todo.length > 0) {
-			const current = todo.shift()!;
-			visitedSourceFiles.add(current.file.fileName);
-			const importStack = [
-				...current.importStack,
-				relativeToProject(current.file.fileName),
-			];
+		return {
+			"ImportDeclaration,ExportNamedDeclaration,ExportAllDeclaration"(
+				node:
+					| TSESTree.ImportDeclaration
+					| TSESTree.ExportAllDeclaration
+					| TSESTree.ExportNamedDeclaration,
+			) {
+				const tsNode = services.esTreeNodeToTSNodeMap.get(node);
+				const resolvedImport = resolveImport(tsNode, checker);
+				if (!resolvedImport) return;
 
-			const imports = getImports(current.file, checker);
-			for (const imp of imports) {
-				switch (checkImport(imp)) {
-					case "ignored":
-						continue;
-
+				// First test the import itself
+				switch (checkImport(resolvedImport)) {
 					case "forbidden": {
-						numErrors++;
-
-						const message =
-							`Found forbidden import of module ${imp.name}:
-${
-								[...importStack, `❌ ${imp.name}`]
-									.map((file, indent) =>
-										indent === 0
-											? file
-											: `${
-												"   ".repeat(indent - 1)
-											}└─ ${file}`
-									)
-									.join("\n")
-							}`;
-
-						reportProblem({
-							severity: "error",
-							// The line number is relative to the declaration file, so we cannot resolve it to the .ts file here
-							filename: path
-								.relative(projectRoot, current.file.fileName)
-								.replaceAll("\\", "/"),
-							line: imp.line,
-							message: message,
-						});
-						break;
+						reportForbiddenImport(node, resolvedImport, []);
+						// No need to report 200 errors on a single import
+						return;
 					}
 					case "ok": {
-						// try to resolve the original source file for declaration files
-						const next: ts.SourceFile = imp.sourceFile
-								.isDeclarationFile
-							? resolveSourceFileFromDefinition(
-								context,
-								imp.sourceFile,
-							)
-							: imp.sourceFile;
+						// Import is okay, add it to the TODO list
+						addTodo(resolvedImport, []);
+					}
+				}
 
-						if (!visitedSourceFiles.has(next.fileName)) {
-							todo.push({
-								file: next,
-								importStack,
-							});
+				// Continue resolving the import tree until it is empty
+				todo: while (todo.length > 0) {
+					const current = todo.shift()!;
+					visitedSourceFiles.add(current.file.fileName);
+					const importStack = [
+						...current.importStack,
+						relativeToProject(current.file.fileName),
+					];
+
+					const imports = getImports(current.file, checker);
+					for (const imp of imports) {
+						switch (checkImport(imp)) {
+							case "ignored":
+								continue;
+
+							case "forbidden": {
+								reportForbiddenImport(node, imp, importStack);
+								// No need to report 200 errors on a single import
+								break todo;
+							}
+							case "ok": {
+								addTodo(imp, importStack);
+							}
 						}
 					}
 				}
-			}
-		}
-	}
 
-	if (numErrors) {
-		console.error();
-		console.error(
-			red(
-				`Found ${bold(numErrors.toString())} error${
-					numErrors !== 1 ? "s" : ""
-				}!`,
-			),
-		);
-		return Promise.reject(
-			new Error(
-				"The forbiddenImports rule had an error! See log output for details.",
-			),
-		);
-	} else {
-		return Promise.resolve();
-	}
-}
-
-if (require.main === module) {
-	lintForbiddenImports()
-		.then(() => process.exit(0))
-		.catch(() => process.exit(1));
-}
+				todo = [];
+			},
+		};
+	},
+	meta: {
+		docs: {
+			description:
+				"Ensures that certain files or modules are not transitively imported",
+		},
+		type: "problem",
+		schema: [],
+		messages: {
+			"forbidden-import-transitive":
+				"This import transitively imports forbidden import {{name}}:\nImport stack:{{stack}}",
+			"forbidden-import": "Found forbidden import of module {{name}}",
+		},
+	},
+	defaultOptions: [],
+});

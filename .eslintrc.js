@@ -188,5 +188,11 @@ module.exports = {
 				"@zwave-js/consistent-cc-classes": "error",
 			},
 		},
+		{
+			files: ["packages/**/*.ts"],
+			rules: {
+				"@zwave-js/no-forbidden-imports": "error",
+			},
+		},
 	],
 };
