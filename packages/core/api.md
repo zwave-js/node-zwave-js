@@ -6,7 +6,6 @@
 
 /// <reference types="node" />
 
-import { DeepPartial } from '@zwave-js/shared';
 import type { ExecutionContext } from 'ava';
 import type { Format } from 'logform';
 import type { JsonlDB } from '@alcalzone/jsonl-db';
@@ -1220,6 +1219,11 @@ export function isMessagePriority(val: unknown): val is MessagePriority;
 //
 // @public (undocumented)
 export function isMissingControllerACK(e: unknown): e is ZWaveError;
+
+// Warning: (ae-missing-release-tag) "isMissingControllerCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isMissingControllerCallback(e: unknown): e is ZWaveError;
 
 // Warning: (ae-missing-release-tag) "isRecoverableZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3368,7 +3372,7 @@ export enum ZWaveLibraryTypes {
 //
 // @public (undocumented)
 export class ZWaveLogContainer extends winston.Container {
-    constructor(config?: DeepPartial<LogConfig>);
+    constructor(config?: Partial<LogConfig>);
     // (undocumented)
     destroy(): void;
     // (undocumented)
@@ -3378,7 +3382,7 @@ export class ZWaveLogContainer extends winston.Container {
     isLoglevelVisible(loglevel: string): boolean;
     shouldLogNode(nodeId: number): boolean;
     // (undocumented)
-    updateConfiguration(config: DeepPartial<LogConfig>): void;
+    updateConfiguration(config: Partial<LogConfig>): void;
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveLogger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

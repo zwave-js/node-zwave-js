@@ -42,7 +42,8 @@ import { Duration as Duration_2 } from '@zwave-js/core';
 import { DurationUnit } from '@zwave-js/core/safe';
 import { EntryControlDataTypes } from '@zwave-js/cc/safe';
 import { EntryControlEventTypes } from '@zwave-js/cc/safe';
-import { Expand } from '@zwave-js/shared/safe';
+import { Expand } from '@zwave-js/shared';
+import { Expand as Expand_2 } from '@zwave-js/shared/safe';
 import { extractFirmware } from '@zwave-js/core';
 import { FileSystem } from '@zwave-js/host/safe';
 import type { FileSystem as FileSystem_2 } from '@zwave-js/host';
@@ -318,7 +319,8 @@ export class DeviceClass {
 export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements ZWaveApplicationHost {
     // (undocumented)
     [util.inspect.custom](): string;
-    constructor(port: string | ZWaveSerialPortImplementation, options?: DeepPartial<ZWaveOptions>);
+    // Warning: (ae-forgotten-export) The symbol "PartialZWaveOptions" needs to be exported by the entry point index.d.ts
+    constructor(port: string | ZWaveSerialPortImplementation, options?: PartialZWaveOptions);
     get allNodesReady(): boolean;
     // (undocumented)
     readonly cacheDir: string;
@@ -427,8 +429,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     unregisterRequestHandler(fnType: FunctionType, handler: RequestHandler): void;
     // (undocumented)
     unwrapCommands(msg: Message & ICommandClassContainer): void;
-    updateLogConfig(config: DeepPartial<LogConfig>): void;
-    updateOptions(options: DeepPartial<EditableZWaveOptions>): void;
+    updateLogConfig(config: Partial<LogConfig>): void;
+    updateOptions(options: EditableZWaveOptions): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     updateUserAgent(components: Record<string, string | null | undefined>): void;
     get userAgent(): string;
@@ -463,9 +465,9 @@ export { DurationUnit }
 // Warning: (ae-missing-release-tag) "EditableZWaveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type EditableZWaveOptions = Pick<ZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences"> & {
+export type EditableZWaveOptions = Expand<Pick<PartialZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences"> & {
     userAgent?: Record<string, string | null | undefined>;
-};
+}>;
 
 // Warning: (ae-missing-release-tag) "Endpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -541,7 +543,7 @@ export { FirmwareFileFormat }
 // Warning: (ae-missing-release-tag) "FirmwareUpdateDeviceID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export type FirmwareUpdateDeviceID = Expand<DeviceID & {
+export type FirmwareUpdateDeviceID = Expand_2<DeviceID & {
     firmwareVersion: string;
     rfRegion?: RFRegion_2;
 }>;
@@ -562,7 +564,7 @@ export interface FirmwareUpdateFileInfo {
 // Warning: (ae-missing-release-tag) "FirmwareUpdateInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type FirmwareUpdateInfo = Expand<FirmwareUpdateServiceResponse & {
+export type FirmwareUpdateInfo = Expand_2<FirmwareUpdateServiceResponse & {
     device: FirmwareUpdateDeviceID;
 }>;
 
@@ -1255,7 +1257,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // (undocumented)
     get supportedSerialAPISetupCommands(): readonly SerialAPISetupCommand[] | undefined;
     supportsFeature(feature: ZWaveFeature): MaybeNotKnown<boolean>;
-    get supportsSoftReset(): MaybeNotKnown<boolean>;
     // (undocumented)
     get supportsTimers(): MaybeNotKnown<boolean>;
     toggleRF(enabled: boolean): Promise<boolean>;
