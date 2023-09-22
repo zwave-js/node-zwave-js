@@ -1,0 +1,217 @@
+{
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV2833PAC",
+	"description": "Push-Button Coupler",
+	"devices": [
+		{
+			"productType": "0x0400",
+			"productId": "0xd105"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Launch 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Launch 2",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Launch 3",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Launch 4",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "External Switch Type",
+			"description": "External Switch Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Push button",
+					"value": 0
+				},
+				{
+					"label": "Normal On/Off switch",
+					"value": 1
+				},
+				{
+					"label": "3-Way switch",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Duration of the Multilevel Start Level Change Up/Down",
+			"description": "Set the duration of the Multilevel Start Level Change Up/Down",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 8,
+			"allowManualEntry": false
+		},
+		{
+			"#": "4",
+			"label": "Associations in Z-Wave network Security Mode",
+			"description": "Associations in Z-Wave network Security Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"allowManualEntry": false
+		},
+		{
+			"#": "5",
+			"label": "Scenes sent to the controller for button 1",
+			"description": "Scenes sent to the controller for button 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "button short pressed once",
+					"value": 1
+				},
+				{
+					"label": "buton short pressed twice",
+					"value": 2
+				},
+				{
+					"label": "button pressed and held",
+					"value": 4
+				},
+				{
+					"label": "button released",
+					"value": 8
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Scenes sent to the controller for button 2",
+			"description": "Scenes sent to the controller for button 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "button short pressed once",
+					"value": 1
+				},
+				{
+					"label": "button short pressed twice",
+					"value": 2
+				},
+				{
+					"label": "button pressed and held",
+					"value": 4
+				},
+				{
+					"label": "button released",
+					"value": 8
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Scenes sent to the controller for button 3",
+			"description": "Scenes sent to the controller for button 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "button short pressed once",
+					"value": 1
+				},
+				{
+					"label": "button short pressed twice",
+					"value": 2
+				},
+				{
+					"label": "button pressed and held",
+					"value": 4
+				},
+				{
+					"label": "button released",
+					"value": 8
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Scenes sent to the controller for button 4",
+			"description": "Scenes sent to the controller for button 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "button short pressed once",
+					"value": 1
+				},
+				{
+					"label": "button short pressed twice",
+					"value": 2
+				},
+				{
+					"label": "button pressed and held",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Function of the connected switches",
+			"description": "Function of the connected switches",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "function 1",
+					"value": 0
+				},
+				{
+					"label": "function 2",
+					"value": 1
+				},
+				{
+					"label": "function 3",
+					"value": 2
+				}
+			]
+		}
+	]
+}
