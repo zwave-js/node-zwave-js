@@ -122,26 +122,6 @@
 			]
 		},
 		{
-			"#": "23",
-			"label": "O1: Relay Type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally open (NO)",
-					"value": 0
-				},
-				{
-					"label": "Normally closed (NC)",
-					"value": 1
-				}
-			]
-		},
-		{
 			"#": "36",
 			"label": "O1: Power Change Report Threshold",
 			"valueSize": 1,
