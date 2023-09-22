@@ -60,7 +60,7 @@
     "json5": "^2.2.3",
     "piscina": "^4.1.0",
     "reflect-metadata": "^0.1.13",
-    "ts-morph": "^19.0.0",
+    "ts-morph": "^20.0.0",
     "typescript": "5.2.2",
     "yargs": "^17.7.2"
   }
