@@ -1997,6 +1997,7 @@ __metadata:
   resolution: "@zwave-js/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
     "@typescript-eslint/utils": ^6.7.0
+    "@zwave-js/core": "workspace:*"
     typescript: 5.2.2
   languageName: unknown
   linkType: soft

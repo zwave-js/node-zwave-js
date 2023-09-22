@@ -182,5 +182,11 @@ module.exports = {
 				"@zwave-js/ccapi-validate-args": "error",
 			},
 		},
+		{
+			files: ["packages/cc/src/**"],
+			rules: {
+				"@zwave-js/consistent-cc-classes": "error",
+			},
+		},
 	],
 };

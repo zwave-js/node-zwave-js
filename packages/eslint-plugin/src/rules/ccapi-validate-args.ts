@@ -2,8 +2,8 @@ import {
 	AST_NODE_TYPES,
 	AST_TOKEN_TYPES,
 	ESLintUtils,
-	type TSESTree,
 } from "@typescript-eslint/utils";
+import { findDecoratorContainingCCId, getCCNameFromDecorator } from "../utils";
 
 const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
 
@@ -29,32 +29,10 @@ export const ccAPIValidateArgs = ESLintUtils.RuleCreator.withoutDocs({
 				}
 			},
 			ClassDeclaration(node) {
-				const APIDecorator = node.decorators.find((d) =>
-					d.expression.type === AST_NODE_TYPES.CallExpression
-					&& d.expression.callee.type === AST_NODE_TYPES.Identifier
-					&& d.expression.callee.name === "API"
-					&& d.expression.arguments.length === 1
-					&& d.expression.arguments[0].type
-						=== AST_NODE_TYPES.MemberExpression
-					&& d.expression.arguments[0].object.type
-						=== AST_NODE_TYPES.Identifier
-					&& d.expression.arguments[0].object.name
-						=== "CommandClasses"
-					&& (d.expression.arguments[0].property.type
-							=== AST_NODE_TYPES.Identifier
-						|| (d.expression.arguments[0].property.type
-								=== AST_NODE_TYPES.Literal
-							&& typeof d.expression.arguments[0].property.value
-								=== "string"))
-				);
+				const APIDecorator = findDecoratorContainingCCId(node, ["API"]);
 				if (!APIDecorator) return;
 
-				const prop: TSESTree.Literal | TSESTree.Identifier =
-					(APIDecorator.expression as any).arguments[0].property;
-
-				currentAPIClassCCName = prop.type === AST_NODE_TYPES.Literal
-					? prop.value as string
-					: prop.name;
+				currentAPIClassCCName = getCCNameFromDecorator(APIDecorator);
 			},
 			MethodDefinition(node) {
 				// Only check methods inside a class decorated with @API
