@@ -492,18 +492,13 @@ export interface DeviceComment {
 //
 // @public (undocumented)
 export class DeviceConfig {
-    constructor(filename: string,
-    isEmbedded: boolean, manufacturer: string, manufacturerId: number, label: string, description: string, devices: readonly {
+    constructor(filename: string, isEmbedded: boolean, manufacturer: string, manufacturerId: number, label: string, description: string, devices: readonly {
         productType: number;
         productId: number;
-    }[], firmwareVersion: FirmwareVersionRange,
-    preferred: boolean, endpoints?: ReadonlyMap<number, EndpointConfig> | undefined, associations?: ReadonlyMap<number, AssociationConfig> | undefined, paramInformation?: ParamInfoMap | undefined,
-    proprietary?: Record<string, unknown> | undefined,
-    compat?: CompatConfig | undefined,
-    metadata?: DeviceMetadata | undefined);
+    }[], firmwareVersion: FirmwareVersionRange, preferred: boolean, endpoints?: ReadonlyMap<number, EndpointConfig>, associations?: ReadonlyMap<number, AssociationConfig>, paramInformation?: ParamInfoMap, proprietary?: Record<string, unknown>, compat?: CompatConfig, metadata?: DeviceMetadata);
     // (undocumented)
-    readonly associations?: ReadonlyMap<number, AssociationConfig> | undefined;
-    readonly compat?: CompatConfig | undefined;
+    readonly associations?: ReadonlyMap<number, AssociationConfig>;
+    readonly compat?: CompatConfig;
     // (undocumented)
     readonly description: string;
     // (undocumented)
@@ -512,7 +507,7 @@ export class DeviceConfig {
         productId: number;
     }[];
     // (undocumented)
-    readonly endpoints?: ReadonlyMap<number, EndpointConfig> | undefined;
+    readonly endpoints?: ReadonlyMap<number, EndpointConfig>;
     // (undocumented)
     readonly filename: string;
     // (undocumented)
@@ -533,11 +528,11 @@ export class DeviceConfig {
     readonly manufacturer: string;
     // (undocumented)
     readonly manufacturerId: number;
-    readonly metadata?: DeviceMetadata | undefined;
+    readonly metadata?: DeviceMetadata;
     // (undocumented)
-    readonly paramInformation?: ParamInfoMap | undefined;
+    readonly paramInformation?: ParamInfoMap;
     readonly preferred: boolean;
-    readonly proprietary?: Record<string, unknown> | undefined;
+    readonly proprietary?: Record<string, unknown>;
 }
 
 // Warning: (ae-missing-release-tag) "DeviceConfigIndex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -53,11 +53,11 @@ export interface FileSystem {
     // (undocumented)
     pathExists(path: string): Promise<boolean>;
     // (undocumented)
-    readFile(file: string, encoding: string): Promise<string>;
+    readFile(file: string, encoding: BufferEncoding): Promise<string>;
     // (undocumented)
     writeFile(file: string, data: string | Buffer, options?: {
-        encoding: string;
-    } | string): Promise<void>;
+        encoding: BufferEncoding;
+    } | BufferEncoding): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "NodeSchedulePollOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
