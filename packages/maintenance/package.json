@@ -33,8 +33,7 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
-    "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:zwave": "yarn ts src/lintForbiddenImports.ts"
+    "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
     "@dprint/formatter": "^0.2.0",
