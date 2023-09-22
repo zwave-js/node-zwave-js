@@ -13,6 +13,8 @@ import {
 	getCCIdFromExpression,
 } from "../utils";
 
+const apiBaseClasses = new Set(["CCAPI", "PhysicalCCAPI"]);
+
 function getRequiredInterviewCCsFromMethod(
 	method: TSESTree.MethodDefinition,
 ): { node: TSESTree.MemberExpression; ccId: CommandClasses }[] | undefined {
@@ -208,6 +210,9 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 					id: TSESTree.Identifier;
 				},
 			) {
+				// This matches the base implementations too, ignore them
+				if (apiBaseClasses.has(node.id.name)) return;
+
 				// These must...
 
 				// ...be in a file that ends with "CC.ts"
@@ -217,6 +222,13 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 						loc: node.id.loc,
 						messageId: "api-wrong-filename",
 					});
+				} else if (
+					context.getFilename().split(path.sep).includes(
+						"manufacturerProprietary",
+					)
+				) {
+					// The rules for manufacturer proprietary CCs are different
+					return;
 				}
 
 				// ...have an @API decorator
@@ -263,7 +275,7 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 				if (
 					!node.superClass
 					|| node.superClass.type !== AST_NODE_TYPES.Identifier
-					|| !["CCAPI", "PhysicalCCAPI"].includes(
+					|| !apiBaseClasses.has(
 						node.superClass.name,
 					)
 				) {
