@@ -2,7 +2,7 @@
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-WATER2",
-	"description": "Relay controller",
+	"description": "Relay Controller",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -29,6 +29,7 @@
 			"minValue": -60,
 			"maxValue": 60,
 			"defaultValue": 0,
+			"unit": "0.1 °C",
 			"unsigned": false
 		},
 		{
@@ -38,6 +39,7 @@
 			"minValue": -60,
 			"maxValue": 60,
 			"defaultValue": 0,
+			"unit": "0.1 °C",
 			"unsigned": false
 		},
 		{
@@ -62,12 +64,11 @@
 		},
 		{
 			"#": "5",
-			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
-			"label": "Power Restore State"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "6",
-			"label": "Output functions",
+			"label": "Output Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -87,6 +88,7 @@
 		{
 			"#": "7",
 			"label": "Valve Inactivity Exercise",
+			"description": "How long the relays should be turned on for after 30 days of relay inactivity.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
