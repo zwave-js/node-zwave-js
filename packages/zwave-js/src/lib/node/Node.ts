@@ -3440,7 +3440,7 @@ protocol version:      ${this.protocolVersion}`;
 			// A wakeup interval of 0 means manual wakeup, so the interval shouldn't be verified
 			if (
 				wakeUpInterval > 0
-				&& (now - this.lastWakeUp) / 1000 > (wakeUpInterval * 1.1 + 5 * 60)
+				&& (now - this.lastWakeUp) / 1000 > ((wakeUpInterval * 1.1) + (5 * 60))
 			) {
 				this.commandClasses["Wake Up"].getInterval().catch(() => {
 					// Don't throw if there's an error
