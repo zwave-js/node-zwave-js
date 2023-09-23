@@ -5882,7 +5882,7 @@ ${handlers.length} left`,
 			if (wakeUpInterval !== 0) {
 				this.sendNodeToSleepTimers.set(
 					node.id,
-					setTimeout(() => sendNodeToSleep(node), 1000).unref(),
+					setTimeout(() => sendNodeToSleep(node), 500).unref(),
 				);
 			}
 		}
