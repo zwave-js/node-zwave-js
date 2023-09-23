@@ -139,7 +139,7 @@
 			"description": "Scenes sent to the controller for button 3",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 15,
 			"defaultValue": 15,
 			"options": [
 				{
@@ -166,7 +166,7 @@
 			"description": "Scenes sent to the controller for button 4",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 15,
 			"defaultValue": 15,
 			"options": [
 				{
