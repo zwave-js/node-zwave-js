@@ -45,7 +45,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Push button",
@@ -68,8 +68,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 8,
-			"allowManualEntry": false
+			"defaultValue": 8
 		},
 		{
 			"#": "4",
@@ -78,8 +77,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"allowManualEntry": false
+			"defaultValue": 15
 		},
 		{
 			"#": "5",
@@ -89,7 +87,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 15,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "button short pressed once",
@@ -117,7 +114,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 15,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "button short pressed once",
@@ -145,7 +141,6 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 15,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "button short pressed once",
@@ -173,7 +168,6 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 15,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "button short pressed once",
@@ -197,7 +191,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "function 1",
