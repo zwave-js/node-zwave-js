@@ -3435,12 +3435,12 @@ protocol version:      ${this.protocolVersion}`;
 			// we've already measured the wake up interval, so we can check whether a refresh is necessary
 			const wakeUpInterval =
 				this.getValue<number>(WakeUpCCValues.wakeUpInterval.id) ?? 1;
-			// The wakeup interval is specified in seconds. Allow for 10% over the wakeup interval plus
-			// add 5 minutes tolerance to avoid unnecessary queries to reduce battery drain. 
-			// A wakeup interval of 0 means manual wakeup, so the interval shouldn't be verified
+			// The wakeup interval is specified in seconds. Also add 5 minutes tolerance to avoid
+			// unnecessary queries since there might be some delay. A wakeup interval of 0 means manual wakeup,
+			// so the interval shouldn't be verified
 			if (
 				wakeUpInterval > 0
-				&& (now - this.lastWakeUp) / 1000 > ((wakeUpInterval * 1.1) + (5 * 60))
+				&& (now - this.lastWakeUp) / 1000 > wakeUpInterval + 5 * 60
 			) {
 				this.commandClasses["Wake Up"].getInterval().catch(() => {
 					// Don't throw if there's an error
