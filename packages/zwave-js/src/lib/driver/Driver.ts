@@ -253,6 +253,7 @@ const defaultOptions: ZWaveOptions = {
 		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
+		sendToSleep: 250, // The default should be enough time for applications to react to devices waking up
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
 		refreshValueAfterTransition: 1000, // To account for delays in the device
 		serialAPIStarted: 5000,
@@ -309,6 +310,14 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.nonce < 3000 || options.timeouts.nonce > 20000) {
 		throw new ZWaveError(
 			`The Nonce timeout must be between 3000 and 20000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.sendToSleep < 10 || options.timeouts.sendToSleep > 5000
+	) {
+		throw new ZWaveError(
+			`The Send To Sleep timeout must be between 10 and 5000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -5882,7 +5891,10 @@ ${handlers.length} left`,
 			if (wakeUpInterval !== 0) {
 				this.sendNodeToSleepTimers.set(
 					node.id,
-					setTimeout(() => sendNodeToSleep(node), 500).unref(),
+					setTimeout(
+						() => sendNodeToSleep(node),
+						this.options.timeouts.sendToSleep,
+					).unref(),
 				);
 			}
 		}
