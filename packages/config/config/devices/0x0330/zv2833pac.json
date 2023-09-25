@@ -103,82 +103,82 @@
 		},
 		{
 			"#": "5[0x01]",
-			"$import": "#4[0x01]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button one short pressed once, scene active"
 		},
 		{
 			"#": "5[0x02]",
-			"$import": "#4[0x02]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button one short pressed twice, scene active"
 		},
 		{
 			"#": "5[0x04]",
-			"$import": "#4[0x04]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button one pressed and held, scene active"
 		},
 		{
 			"#": "5[0x08]",
-			"$import": "#4[0x08]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button one released, scene active"
 		},
 		{
 			"#": "6[0x01]",
-			"$import": "#4[0x01]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button two short pressed once, scene active"
 		},
 		{
 			"#": "6[0x02]",
-			"$import": "#4[0x02]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button two short pressed twice, scene active "
 		},
 		{
 			"#": "6[0x04]",
-			"$import": "#4[0x04]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button two pressed and held, scene active"
 		},
 		{
 			"#": "6[0x08]",
-			"$import": "#4[0x08]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button two released, scene active"
 		},
 		{
 			"#": "7[0x01]",
-			"$import": "#4[0x01]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button three short pressed once, scene active"
 		},
 		{
 			"#": "7[0x02]",
-			"$import": "#4[0x02]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button three short pressed twice, scene active"
 		},
 		{
 			"#": "7[0x04]",
-			"$import": "#4[0x04]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button three pressed and held, scene active"
 		},
 		{
 			"#": "7[0x08]",
-			"$import": "#4[0x08]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button three released, scene active"
 		},
 		{
 			"#": "8[0x01]",
-			"$import": "#4[0x01]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button four short pressed once, scene active"
 		},
 		{
 			"#": "8[0x02]",
-			"$import": "#4[0x02]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button four short pressed twice, scene active"
 		},
 		{
 			"#": "8[0x04]",
-			"$import": "#4[0x04]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button four pressed and held, scene active"
 		},
 		{
 			"#": "8[0x08]",
-			"$import": "#4[0x08]",
+			"$import": "#paramInformation/4[0x01]",
 			"label": "button four released, scene active"
 		},
 		{
