@@ -28,7 +28,7 @@
     "node": ">= 18"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.json --pretty",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"

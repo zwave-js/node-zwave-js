@@ -3,11 +3,15 @@ import {
 	AST_TOKEN_TYPES,
 	ESLintUtils,
 } from "@typescript-eslint/utils";
-import { findDecoratorContainingCCId, getCCNameFromDecorator } from "../utils";
+import {
+	type Rule,
+	findDecoratorContainingCCId,
+	getCCNameFromDecorator,
+} from "../utils";
 
 const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
 
-export const ccAPIValidateArgs = ESLintUtils.RuleCreator.withoutDocs({
+export const ccAPIValidateArgs: Rule = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		let currentAPIClassCCName: string | undefined;
 		let validateArgsImport: string | undefined;
