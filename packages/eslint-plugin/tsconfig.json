@@ -1,17 +1,19 @@
+// tsconfig for IntelliSense - active in all files in the current package
 {
-	"extends": "@tsconfig/node18/tsconfig.json",
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"rootDir": "src",
-		"outDir": "build",
-		"incremental": true,
-		"sourceMap": true
+		"types": ["node", "@typescript-eslint/utils"]
 	},
-	"include": [
-		"src/**/*.ts"
-	],
 	"references": [
 		{
 			"path": "../core"
 		}
+	],
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"build/**",
+		"node_modules/**"
 	]
 }

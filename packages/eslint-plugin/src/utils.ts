@@ -1,4 +1,8 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import {
+	AST_NODE_TYPES,
+	type TSESLint,
+	type TSESTree,
+} from "@typescript-eslint/utils";
 import { CommandClasses } from "@zwave-js/core";
 import path from "node:path";
 
@@ -88,3 +92,5 @@ export function getCCIdFromDecorator(
 ): CommandClasses {
 	return (CommandClasses as any)[getCCNameFromDecorator(decorator)];
 }
+
+export type Rule = TSESLint.RuleModule<any, never[], TSESLint.RuleListener>;
