@@ -29,10 +29,10 @@
 			"#": "1",
 			"label": "Temperature Change Reporting Threshold",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"unit": "0.1 °C",
 			"unsigned": true,
 			"options": [
 				{
@@ -45,10 +45,10 @@
 			"#": "2",
 			"label": "Humidity Change Reporting Threshold",
 			"valueSize": 1,
+			"unit": "%rH",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"unit": "%rH",
 			"unsigned": true,
 			"options": [
 				{
@@ -123,10 +123,10 @@
 			"#": "6",
 			"label": "VOC Change Reporting Threshold",
 			"valueSize": 1,
+			"unit": "x100 ppb",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"unit": "x100 ppb",
 			"unsigned": true,
 			"options": [
 				{
@@ -139,10 +139,10 @@
 			"#": "7",
 			"label": "CO2eq Change Reporting Threshold",
 			"valueSize": 1,
+			"unit": "x100 ppb",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"unit": "x100 ppb",
 			"unsigned": true,
 			"options": [
 				{

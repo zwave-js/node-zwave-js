@@ -778,10 +778,10 @@
 			"label": "LED Brightness",
 			"description": "Brightness of the LED when it's on.",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"unit": "%"
+			"defaultValue": 50
 		},
 		{
 			"#": "82",
@@ -845,10 +845,10 @@
 			"label": "Low Temperature Threshold For Blue",
 			"description": "When the temperature is below this, the light is blue.",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 18,
-			"unit": "°C"
+			"defaultValue": 18
 		},
 		{
 			"#": "87",
@@ -866,10 +866,10 @@
 			"label": "High Temperature Threshold For Red",
 			"description": "When the temperature is above this, the light is red.",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 28,
-			"unit": "°C"
+			"defaultValue": 28
 		},
 		{
 			"#": "89",

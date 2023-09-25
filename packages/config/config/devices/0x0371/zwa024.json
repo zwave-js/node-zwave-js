@@ -171,11 +171,11 @@
 		{
 			"#": "10",
 			"label": "Power Status",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{

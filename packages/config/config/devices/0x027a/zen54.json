@@ -51,8 +51,8 @@
 			]
 		},
 		{
-			"$if": "firmwareVersion >= 1.10",
 			"#": "4",
+			"$if": "firmwareVersion >= 1.10",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -60,8 +60,8 @@
 			"defaultValue": 1
 		},
 		{
-			"$if": "firmwareVersion >= 1.10",
 			"#": "5",
+			"$if": "firmwareVersion >= 1.10",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 55,

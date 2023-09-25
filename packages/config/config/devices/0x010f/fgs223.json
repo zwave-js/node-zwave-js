@@ -432,15 +432,15 @@
 		{
 			"#": "53",
 			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"label": "First Channel - Energy Reports: Threshold",
 			"maxValue": 32000,
-			"defaultValue": 100,
-			"label": "First Channel - Energy Reports: Threshold"
+			"defaultValue": 100
 		},
 		{
 			"#": "54",
 			"$import": "templates/fibaro_template.json#power_report_threshold_relative",
-			"defaultValue": 20,
-			"label": "Second Channel - Power Reports: Threshold"
+			"label": "Second Channel - Power Reports: Threshold",
+			"defaultValue": 20
 		},
 		{
 			"#": "55",
@@ -461,9 +461,9 @@
 		{
 			"#": "57",
 			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"label": "Second Channel - Energy Reports: Threshold",
 			"maxValue": 32000,
-			"defaultValue": 100,
-			"label": "Second Channel - Energy Reports: Threshold"
+			"defaultValue": 100
 		},
 		{
 			"#": "58",

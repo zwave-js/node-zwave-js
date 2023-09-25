@@ -36,11 +36,11 @@
 			"#": "4",
 			"label": "Default fade time",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"unit": "seconds"
+			"unsigned": true
 		},
 		{
 			"#": "5",

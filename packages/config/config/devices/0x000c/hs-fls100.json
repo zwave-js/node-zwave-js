@@ -24,11 +24,11 @@
 			"label": "Light Level Threshold",
 			"description": "Activate floodlight and send Basic Set Command when PIR is triggered while light level is below this threshold.",
 			"valueSize": 2,
+			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
 			"unsigned": true,
-			"unit": "lux",
 			"options": [
 				{
 					"label": "Never turn on floodlight",

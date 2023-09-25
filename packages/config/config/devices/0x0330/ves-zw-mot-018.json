@@ -18,12 +18,12 @@
 		{
 			"#": "2",
 			"label": "Send Multi Level Report On State Change",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 10,
-			"unsigned": true,
 			"defaultValue": 5,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -37,8 +37,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"unsigned": true,
 			"defaultValue": 2,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Light",
@@ -74,8 +74,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"unsigned": true,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Not calibrated",
@@ -93,8 +93,8 @@
 			"description": "Only valid in Light Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "All the same, toggle the respective output",
@@ -129,8 +129,8 @@
 			"label": "Send Central Scene Commands In Response To Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled for both inputs",
@@ -153,12 +153,12 @@
 		{
 			"#": "10",
 			"label": "Power Change Report Threshold",
-			"unit": "W",
 			"valueSize": 1,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 100,
-			"unsigned": true,
 			"defaultValue": 10,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -169,12 +169,12 @@
 		{
 			"#": "11",
 			"label": "Current Change Report Threshold",
-			"unit": "0.1 A",
 			"valueSize": 1,
+			"unit": "0.1 A",
 			"minValue": 0,
 			"maxValue": 10,
-			"unsigned": true,
 			"defaultValue": 1,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -185,12 +185,12 @@
 		{
 			"#": "12",
 			"label": "Voltage Change Report Threshold",
-			"unit": "V",
 			"valueSize": 1,
+			"unit": "V",
 			"minValue": 0,
 			"maxValue": 10,
-			"unsigned": true,
 			"defaultValue": 2,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -202,12 +202,12 @@
 			"#": "13",
 			"label": "Slats Rotation Time",
 			"description": "Only valid in Shutter Mode with positioning. Time taken to rotate slats before blind starts to move.",
-			"unit": "0.1 seconds",
 			"valueSize": 1,
+			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 250,
-			"unsigned": true,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -218,12 +218,12 @@
 		{
 			"#": "14",
 			"label": "Energy/Power/Voltage/Current Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
-			"unsigned": true,
 			"defaultValue": 3600,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

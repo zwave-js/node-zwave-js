@@ -18,8 +18,8 @@
 			"#": "1",
 			"label": "Latch Hold Time",
 			"description": "Defines how long the latch is kept open.",
-			"unit": "s",
 			"valueSize": 1,
+			"unit": "s",
 			"minValue": 1,
 			"maxValue": 20,
 			"defaultValue": 3
@@ -146,8 +146,8 @@
 			"#": "250",
 			"label": "Lock status",
 			"valueSize": 1,
-			"unsigned": true,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -221,8 +221,8 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
-			"unsigned": true,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false
 		}

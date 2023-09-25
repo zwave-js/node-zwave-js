@@ -128,8 +128,8 @@
 		{
 			"#": "8",
 			"label": "Temperature Delta Report Threshold (Group 1)",
-			"unit": "0.1°",
 			"valueSize": 1,
+			"unit": "0.1°",
 			"minValue": 1,
 			"maxValue": 200,
 			"defaultValue": 10,
@@ -138,8 +138,8 @@
 		{
 			"#": "9",
 			"label": "Periodic Temperature Report Interval (Group 1)",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
@@ -164,8 +164,8 @@
 		{
 			"#": "11",
 			"label": "Periodic Temperature Report Interval (Group 2)",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,

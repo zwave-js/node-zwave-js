@@ -18,32 +18,32 @@
 			"#": "1",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Maximum Boiler Setpoint",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"readOnly": true
 		},
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Minimum Boiler Setpoint",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"readOnly": true
 		},
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Maximum DHW Setpoint",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"readOnly": true
 		},
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Minimum DHW Setpoint",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"readOnly": true
 		},
 		{

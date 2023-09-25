@@ -41,8 +41,8 @@
 		{
 			"#": "2",
 			"label": "Temperature threshold",
-			"unit": "Δ°С",
 			"valueSize": 1,
+			"unit": "Δ°С",
 			"minValue": 1,
 			"maxValue": 7,
 			"defaultValue": 1
@@ -90,8 +90,8 @@
 			"#": "5",
 			"label": "Max waiting time from temp sensor",
 			"description": "Max time of data expectation from room temperature sensor",
-			"unit": "sec",
 			"valueSize": 2,
+			"unit": "sec",
 			"minValue": 100,
 			"maxValue": 30000,
 			"defaultValue": 30000
@@ -99,8 +99,8 @@
 		{
 			"#": "6",
 			"label": "Minimum allowable temperature",
-			"unit": "°С",
 			"valueSize": 2,
+			"unit": "°С",
 			"minValue": -127,
 			"maxValue": 127,
 			"defaultValue": 4
@@ -108,8 +108,8 @@
 		{
 			"#": "7",
 			"label": "Maximum alowable temperature",
-			"unit": "°С",
 			"valueSize": 2,
+			"unit": "°С",
 			"minValue": -127,
 			"maxValue": 127,
 			"defaultValue": 30
@@ -117,8 +117,8 @@
 		{
 			"#": "8",
 			"label": "Time turbo mode",
-			"unit": "sec",
 			"valueSize": 2,
+			"unit": "sec",
 			"minValue": 100,
 			"maxValue": 1200,
 			"defaultValue": 120
@@ -126,8 +126,8 @@
 		{
 			"#": "9",
 			"label": "Power on turbo mode",
-			"unit": "sec",
 			"valueSize": 1,
+			"unit": "sec",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
@@ -156,8 +156,8 @@
 		{
 			"#": "11",
 			"label": "Polling period of the room sensor",
-			"unit": "sec",
 			"valueSize": 2,
+			"unit": "sec",
 			"minValue": 15,
 			"maxValue": 600,
 			"defaultValue": 300
@@ -166,8 +166,8 @@
 			"#": "12",
 			"label": "Temperature threshold to send data",
 			"description": "The value that temperature should be changed to send data",
-			"unit": "Δ°С",
 			"valueSize": 1,
+			"unit": "Δ°С",
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 1

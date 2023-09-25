@@ -57,8 +57,8 @@
 		{
 			"#": "6",
 			"label": "Auto Scene Mode Duration",
-			"unit": "2",
 			"valueSize": 2,
+			"unit": "2",
 			"minValue": 1,
 			"maxValue": 1127,
 			"defaultValue": 3

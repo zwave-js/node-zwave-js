@@ -89,55 +89,55 @@
 		},
 		{
 			"#": "31",
-			"label": "Basic Set On From Group 2",
-			"$import": "templates/vitrum_template.json#basic_set_type"
+			"$import": "templates/vitrum_template.json#basic_set_type",
+			"label": "Basic Set On From Group 2"
 		},
 		{
 			"#": "32",
-			"label": "Basic Set On From Group 3",
-			"$import": "templates/vitrum_template.json#basic_set_type"
+			"$import": "templates/vitrum_template.json#basic_set_type",
+			"label": "Basic Set On From Group 3"
 		},
 		{
 			"#": "33",
-			"label": "Basic Set On From Group 4",
-			"$import": "templates/vitrum_template.json#basic_set_type"
+			"$import": "templates/vitrum_template.json#basic_set_type",
+			"label": "Basic Set On From Group 4"
 		},
 		{
 			"#": "34",
-			"label": "Basic Set On From Group 5",
-			"$import": "templates/vitrum_template.json#basic_set_type"
+			"$import": "templates/vitrum_template.json#basic_set_type",
+			"label": "Basic Set On From Group 5"
 		},
 		{
 			"#": "35",
-			"label": "Basic Set On From Group 6",
-			"$import": "templates/vitrum_template.json#basic_set_type"
+			"$import": "templates/vitrum_template.json#basic_set_type",
+			"label": "Basic Set On From Group 6"
 		},
 		{
 			"#": "36",
-			"label": "Basic Set On From Group 7",
-			"$import": "templates/vitrum_template.json#basic_set_type"
+			"$import": "templates/vitrum_template.json#basic_set_type",
+			"label": "Basic Set On From Group 7"
 		},
 		{
 			"#": "206",
-			"label": "Buttons Maximum Brightness",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Buttons Maximum Brightness",
 			"defaultValue": 100
 		},
 		{
 			"#": "207",
-			"label": "Buttons Minimum Brightness",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Buttons Minimum Brightness",
 			"defaultValue": 5
 		},
 		{
 			"#": "209",
-			"label": "Buzzer",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Buzzer"
 		},
 		{
 			"#": "218",
-			"label": "Front-end Buttons Lock",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Front-end Buttons Lock"
 		}
 	],
 	"metadata": {

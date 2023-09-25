@@ -38,8 +38,8 @@
 			"#": "1",
 			"label": "Meter register offset",
 			"description": "current meter reading",
-			"unit": "Litre",
 			"valueSize": 4,
+			"unit": "Litre",
 			"minValue": 0,
 			"maxValue": 99999999,
 			"defaultValue": 0
@@ -48,8 +48,8 @@
 			"#": "2",
 			"label": "Meter reading reporting intervals",
 			"description": "how often meter reading is sent",
-			"unit": "minute",
 			"valueSize": 2,
+			"unit": "minute",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 1440
@@ -58,8 +58,8 @@
 			"#": "3",
 			"label": "Delta config for meter reading",
 			"description": "min. delta for automatic report",
-			"unit": "Litre",
 			"valueSize": 2,
+			"unit": "Litre",
 			"minValue": 0,
 			"maxValue": 10000,
 			"defaultValue": 0
@@ -76,8 +76,8 @@
 			"#": "5",
 			"label": "Temperature monitor on / off",
 			"description": "enable temperature monitor",
-			"unit": "Boolean",
 			"valueSize": 1,
+			"unit": "Boolean",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
@@ -86,8 +86,8 @@
 			"#": "6",
 			"label": "Temperature delta",
 			"description": "change in temperature for report",
-			"unit": "deg. Celsius",
 			"valueSize": 1,
+			"unit": "deg. Celsius",
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0
@@ -96,8 +96,8 @@
 			"#": "7",
 			"label": "Temperature Alarm Threshold",
 			"description": "temperature triggering alarm",
-			"unit": "deg. Celsius",
 			"valueSize": 1,
+			"unit": "deg. Celsius",
 			"minValue": 0,
 			"maxValue": 40,
 			"defaultValue": 0

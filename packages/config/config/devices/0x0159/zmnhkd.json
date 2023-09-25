@@ -148,8 +148,8 @@
 		{
 			"#": "40",
 			"label": "Watt Power Consumption Threshold for Q⬆",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
@@ -163,8 +163,8 @@
 		{
 			"#": "42",
 			"label": "Watt Power Time Threshold for Q⬆",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -172,8 +172,8 @@
 		{
 			"#": "43",
 			"label": "Hysteresis heating On",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"defaultValue": 1010,
 			"allowManualEntry": false,
 			"options": [
@@ -190,8 +190,8 @@
 		{
 			"#": "44",
 			"label": "Hysteresis Heating Off",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -216,8 +216,8 @@
 		{
 			"#": "46",
 			"label": "Hysteresis Cooling Off",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 1255,
 			"defaultValue": 1002
@@ -225,8 +225,8 @@
 		{
 			"#": "47",
 			"label": "Antifreeze",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 1127,
 			"defaultValue": 50
@@ -234,8 +234,8 @@
 		{
 			"#": "60",
 			"label": "Too low temperature limit",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 1150,
 			"defaultValue": 50
@@ -243,8 +243,8 @@
 		{
 			"#": "61",
 			"label": "Too high temperature limit",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 1000,
 			"defaultValue": 700
@@ -286,8 +286,8 @@
 		{
 			"#": "70",
 			"label": "Input I1 status on delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -295,8 +295,8 @@
 		{
 			"#": "71",
 			"label": "Input I1 status off delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -304,8 +304,8 @@
 		{
 			"#": "72",
 			"label": "Input I2 status on delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -313,8 +313,8 @@
 		{
 			"#": "73",
 			"label": "Input I2 status off delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -322,8 +322,8 @@
 		{
 			"#": "76",
 			"label": "group 2, 10 - reporting on time interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 30
@@ -331,8 +331,8 @@
 		{
 			"#": "77",
 			"label": "group 10 delay before sending Basic Set ON",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3
@@ -439,8 +439,8 @@
 		{
 			"#": "110",
 			"label": "Temperature sensor offset settings",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 32536

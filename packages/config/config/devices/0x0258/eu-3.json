@@ -74,8 +74,8 @@
 		{
 			"#": "7",
 			"label": "Auto-Off Delay (Channel 1)",
-			"unit": "minutes",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -83,8 +83,8 @@
 		{
 			"#": "8",
 			"label": "Auto-Off Delay (Channel 2)",
-			"unit": "minutes",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -92,8 +92,8 @@
 		{
 			"#": "9",
 			"label": "Auto-Off Delay (Channel 3)",
-			"unit": "minutes",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0

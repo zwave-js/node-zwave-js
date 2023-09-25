@@ -157,8 +157,8 @@
 		{
 			"#": "11",
 			"label": "Dimming Amount Per Tap",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,

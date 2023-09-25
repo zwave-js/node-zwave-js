@@ -49,8 +49,8 @@
 		{
 			"#": "4",
 			"label": "Threshold of KWH for Load caution",
-			"unit": "KWh",
 			"valueSize": 2,
+			"unit": "KWh",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000
@@ -117,8 +117,8 @@
 		{
 			"#": "8",
 			"label": "Auto off timer",
-			"unit": "s",
 			"valueSize": 2,
+			"unit": "s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,

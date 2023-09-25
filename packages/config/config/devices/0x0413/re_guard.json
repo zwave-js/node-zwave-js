@@ -60,8 +60,8 @@
 		{
 			"#": "4",
 			"label": "Microleakage Test (Hour)",
-			"unit": "h",
 			"valueSize": 1,
+			"unit": "h",
 			"minValue": 0,
 			"maxValue": 23,
 			"defaultValue": 3
@@ -69,8 +69,8 @@
 		{
 			"#": "5",
 			"label": "Microleakage Test (Minute)",
-			"unit": "min",
 			"valueSize": 1,
+			"unit": "min",
 			"minValue": 0,
 			"maxValue": 59,
 			"defaultValue": 0
@@ -205,8 +205,8 @@
 			"#": "7",
 			"label": "Automatic Schedule Time Interval",
 			"description": "Interval between microleakage tests, if not fixed.",
-			"unit": "h",
 			"valueSize": 2,
+			"unit": "h",
 			"minValue": 0,
 			"maxValue": 168,
 			"defaultValue": 24
@@ -214,8 +214,8 @@
 		{
 			"#": "8",
 			"label": "Micro Leakage Measuring Time",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 100
@@ -223,8 +223,8 @@
 		{
 			"#": "9",
 			"label": "Micro Leakage Pressure Drop",
-			"unit": "kPa",
 			"valueSize": 2,
+			"unit": "kPa",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 5
@@ -232,8 +232,8 @@
 		{
 			"#": "10",
 			"label": "Micro Leakage Pressure Drop Abort",
-			"unit": "kPa",
 			"valueSize": 2,
+			"unit": "kPa",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 100
@@ -249,8 +249,8 @@
 		{
 			"#": "12",
 			"label": "Measurement Waiting Time",
-			"unit": "min",
 			"valueSize": 1,
+			"unit": "min",
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 10
@@ -298,8 +298,8 @@
 		{
 			"#": "15",
 			"label": "Max Flow Rate (Present Mode)",
-			"unit": "l/h",
 			"valueSize": 2,
+			"unit": "l/h",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 3600
@@ -307,8 +307,8 @@
 		{
 			"#": "16",
 			"label": "Max Pressure Drop (Present Mode)",
-			"unit": "kPa",
 			"valueSize": 2,
+			"unit": "kPa",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 1000
@@ -316,8 +316,8 @@
 		{
 			"#": "17",
 			"label": "Max Single Water Withdrawal (Present Mode)",
-			"unit": "l",
 			"valueSize": 2,
+			"unit": "l",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 400
@@ -325,8 +325,8 @@
 		{
 			"#": "18",
 			"label": "Max Continuous Water Withdrawal (Present Mode)",
-			"unit": "l",
 			"valueSize": 2,
+			"unit": "l",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 400
@@ -334,8 +334,8 @@
 		{
 			"#": "19",
 			"label": "Max Single Water Withdrawal Duration (Present Mode)",
-			"unit": "min",
 			"valueSize": 2,
+			"unit": "min",
 			"minValue": 0,
 			"maxValue": 1440,
 			"defaultValue": 30
@@ -343,8 +343,8 @@
 		{
 			"#": "20",
 			"label": "Max Continuous Water Withdrawal Duration (Present Mode)",
-			"unit": "min",
 			"valueSize": 2,
+			"unit": "min",
 			"minValue": 0,
 			"maxValue": 1440,
 			"defaultValue": 60
@@ -352,8 +352,8 @@
 		{
 			"#": "21",
 			"label": "Max Flow Rate (Absent Mode)",
-			"unit": "l/h",
 			"valueSize": 2,
+			"unit": "l/h",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 3680
@@ -361,8 +361,8 @@
 		{
 			"#": "22",
 			"label": "Max Pressure Drop (Absent Mode)",
-			"unit": "kPa",
 			"valueSize": 2,
+			"unit": "kPa",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 1000
@@ -370,8 +370,8 @@
 		{
 			"#": "23",
 			"label": "Max Single Water Withdrawal (Absent Mode)",
-			"unit": "l",
 			"valueSize": 2,
+			"unit": "l",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 20
@@ -379,8 +379,8 @@
 		{
 			"#": "24",
 			"label": "Max Continuous Water Withdrawal (Absent Mode)",
-			"unit": "l",
 			"valueSize": 2,
+			"unit": "l",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 20
@@ -388,8 +388,8 @@
 		{
 			"#": "25",
 			"label": "Max Single Water Withdrawal Duration (Absent Mode)",
-			"unit": "min",
 			"valueSize": 2,
+			"unit": "min",
 			"minValue": 0,
 			"maxValue": 1440,
 			"defaultValue": 30
@@ -397,8 +397,8 @@
 		{
 			"#": "26",
 			"label": "Max Continuous Water Withdrawal Duration (Absent Mode)",
-			"unit": "min",
 			"valueSize": 2,
+			"unit": "min",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 30
@@ -407,8 +407,8 @@
 			"#": "27",
 			"label": "Temporary Macro Leakage Deactivation Time",
 			"description": "For example for filling a pool",
-			"unit": "h",
 			"valueSize": 2,
+			"unit": "h",
 			"minValue": 1,
 			"maxValue": 168,
 			"defaultValue": 2
@@ -476,8 +476,8 @@
 		{
 			"#": "31",
 			"label": "Backup Battery Nominal Voltage",
-			"unit": "mV",
 			"valueSize": 2,
+			"unit": "mV",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 6000
@@ -485,8 +485,8 @@
 		{
 			"#": "32",
 			"label": "Backup Battery Nominal Capacity",
-			"unit": "mAh",
 			"valueSize": 2,
+			"unit": "mAh",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 3000
@@ -521,8 +521,8 @@
 		{
 			"#": "39",
 			"label": "Operating Time Since Last Power On",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 0,
@@ -532,8 +532,8 @@
 			"#": "49",
 			"label": "Auto Absent Timer",
 			"description": "After no usage for this long, the operation mode is changed to 1 (absent)",
-			"unit": "h",
 			"valueSize": 2,
+			"unit": "h",
 			"minValue": 0,
 			"maxValue": 168,
 			"defaultValue": 0
@@ -542,8 +542,8 @@
 			"#": "50",
 			"label": "Water Temperature High Threshold",
 			"description": "for warning of sanitary problems",
-			"unit": "1/10 °C",
 			"valueSize": 2,
+			"unit": "1/10 °C",
 			"minValue": -1000,
 			"maxValue": 1000,
 			"defaultValue": 250
@@ -552,8 +552,8 @@
 			"#": "51",
 			"label": "Water Temperature Low Threshold",
 			"description": "warning of risk of frost",
-			"unit": "1/10 °C",
 			"valueSize": 2,
+			"unit": "1/10 °C",
 			"minValue": -1000,
 			"maxValue": 1000,
 			"defaultValue": 20
@@ -562,8 +562,8 @@
 			"#": "52",
 			"label": "Water Pressure High Threshold",
 			"description": "warning of values above valid operating cond.",
-			"unit": "kPa",
 			"valueSize": 2,
+			"unit": "kPa",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 1000
@@ -572,8 +572,8 @@
 			"#": "53",
 			"label": "Water Pressure Low Threshold",
 			"description": "water pressure low threshold for warning of values below valid operating cond.",
-			"unit": "kPa",
 			"valueSize": 2,
+			"unit": "kPa",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 100

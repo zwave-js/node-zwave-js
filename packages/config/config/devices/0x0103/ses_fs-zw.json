@@ -48,8 +48,8 @@
 			"#": "2",
 			"label": "Energy minimum report time",
 			"description": "Minimum time between two (non-requested) energy values",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 10
@@ -58,8 +58,8 @@
 			"#": "3",
 			"label": "Energy maximum report time",
 			"description": "Maximum time between two energy values, independently of changes in the value",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120
@@ -68,8 +68,8 @@
 			"#": "4",
 			"label": "Power minimum report time",
 			"description": "Minimum time between two (non-requested) power values",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 10
@@ -78,8 +78,8 @@
 			"#": "5",
 			"label": "Power maximum report time",
 			"description": "Maximum time between two power values, independently of changes in the value",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120
@@ -88,8 +88,8 @@
 			"#": "6",
 			"label": "Energy delta value",
 			"description": "Minimum change required for a new energy value to be transmitted.",
-			"unit": "0.1 Wh",
 			"valueSize": 2,
+			"unit": "0.1 Wh",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 10
@@ -98,8 +98,8 @@
 			"#": "7",
 			"label": "Power delta value",
 			"description": "Minimum change required for a new power value to be transmitted.",
-			"unit": "0.1 Wh",
 			"valueSize": 2,
+			"unit": "0.1 Wh",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 150

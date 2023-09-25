@@ -105,8 +105,8 @@
 		{
 			"#": "7",
 			"label": "Input 1 Report Interval",
-			"unit": "10 seconds",
 			"valueSize": 2,
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 6
@@ -114,8 +114,8 @@
 		{
 			"#": "8",
 			"label": "Input 2 Report Interval",
-			"unit": "10 seconds",
 			"valueSize": 2,
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 6
@@ -205,8 +205,8 @@
 			"#": "15",
 			"label": "Voltage",
 			"description": "Voltage value used for power calculation.",
-			"unit": "V",
 			"valueSize": 1,
+			"unit": "V",
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 220,
@@ -226,8 +226,8 @@
 			"#": "18",
 			"label": "Load Size Connect to Relay Output",
 			"description": "Actual load in Watt.",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 6000,
 			"defaultValue": 0

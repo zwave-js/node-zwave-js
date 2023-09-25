@@ -289,8 +289,8 @@
 			"#": "22",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Diming Rate (Z-Wave On)",
-			"defaultValue": 255,
 			"unit": "seconds",
+			"defaultValue": 255,
 			"options": [
 				{
 					"label": "Instant",
@@ -306,8 +306,8 @@
 			"#": "23",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Diming Rate (Z-Wave Off)",
-			"defaultValue": 255,
 			"unit": "seconds",
+			"defaultValue": 255,
 			"options": [
 				{
 					"label": "Instant",

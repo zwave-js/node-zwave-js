@@ -44,9 +44,9 @@
 			"label": "Temperature Reporting Threshold",
 			"description": "Valid range: 3-255; Variation in temperature to induce automatic report",
 			"valueSize": 2,
+			"unit": "0.1 °F/C",
 			"minValue": 0,
 			"maxValue": 255,
-			"unit": "0.1 °F/C",
 			"defaultValue": 5,
 			"unsigned": true,
 			"options": [

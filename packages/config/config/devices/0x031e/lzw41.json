@@ -56,20 +56,20 @@
 			"#": "81",
 			"label": "Color Temperature (Warm White)",
 			"valueSize": 2,
+			"unit": "K",
 			"minValue": 2700,
 			"maxValue": 4999,
 			"defaultValue": 2700,
-			"unit": "K",
 			"unsigned": true
 		},
 		{
 			"#": "82",
 			"label": "Color Temperature (Cool White)",
 			"valueSize": 2,
+			"unit": "K",
 			"minValue": 5000,
 			"maxValue": 6500,
 			"defaultValue": 6500,
-			"unit": "K",
 			"unsigned": true
 		}
 	],

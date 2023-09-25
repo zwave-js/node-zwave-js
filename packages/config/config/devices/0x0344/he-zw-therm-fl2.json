@@ -113,8 +113,8 @@
 			"#": "5",
 			"label": "Power reg on",
 			"description": "Power Regulation ON time, min",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 90,
 			"defaultValue": 15
@@ -123,8 +123,8 @@
 			"#": "6",
 			"label": "Power reg off",
 			"description": "Power Regulation OFF time, min",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 90,
 			"defaultValue": 15
@@ -132,8 +132,8 @@
 		{
 			"#": "7",
 			"label": "Dry time",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 90,
 			"defaultValue": 30
@@ -176,8 +176,8 @@
 			"#": "11",
 			"label": "Hour",
 			"description": "Manually set time hour",
-			"unit": "hours",
 			"valueSize": 1,
+			"unit": "hours",
 			"minValue": 0,
 			"maxValue": 23,
 			"defaultValue": 0
@@ -186,8 +186,8 @@
 			"#": "12",
 			"label": "Mins",
 			"description": "Manually set time minute",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 59,
 			"defaultValue": 0
@@ -231,8 +231,8 @@
 		{
 			"#": "17",
 			"label": "Floor sensor resistance",
-			"unit": "kohm",
 			"valueSize": 1,
+			"unit": "kohm",
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10
@@ -300,8 +300,8 @@
 		{
 			"#": "25",
 			"label": "Auto bright level 1",
-			"unit": "lumens",
 			"valueSize": 2,
+			"unit": "lumens",
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 30
@@ -309,8 +309,8 @@
 		{
 			"#": "26",
 			"label": "Auto bright level 2",
-			"unit": "lumens",
 			"valueSize": 2,
+			"unit": "lumens",
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 200
@@ -318,8 +318,8 @@
 		{
 			"#": "27",
 			"label": "Auto bright level 3",
-			"unit": "lumens",
 			"valueSize": 2,
+			"unit": "lumens",
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 3000
@@ -368,8 +368,8 @@
 		{
 			"#": "52",
 			"label": "Morning start time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 600
@@ -377,8 +377,8 @@
 		{
 			"#": "53",
 			"label": "Day start time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 900
@@ -386,8 +386,8 @@
 		{
 			"#": "54",
 			"label": "Evening start time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 1800
@@ -395,8 +395,8 @@
 		{
 			"#": "55",
 			"label": "Night Start time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 2300

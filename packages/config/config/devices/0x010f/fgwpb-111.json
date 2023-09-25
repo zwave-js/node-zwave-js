@@ -36,8 +36,8 @@
 			"#": "3",
 			"label": "Overload safety switch",
 			"description": "turn off the controlled device in case of exceeding the defined power.",
-			"unit": "0.1 Watts",
 			"valueSize": 2,
+			"unit": "0.1 Watts",
 			"minValue": 0,
 			"maxValue": 18000,
 			"defaultValue": 0
@@ -46,8 +46,8 @@
 			"#": "11",
 			"label": "Power Reporting",
 			"description": "Minimum change in active power consumption to trigger",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 15
@@ -55,8 +55,8 @@
 		{
 			"#": "12",
 			"label": "Energy Reporting Threshold",
-			"unit": "0.01 kWh",
 			"valueSize": 2,
+			"unit": "0.01 kWh",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10
@@ -64,8 +64,8 @@
 		{
 			"#": "13",
 			"label": "Periodic Power Report",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
@@ -73,8 +73,8 @@
 		{
 			"#": "14",
 			"label": "Periodic Energy Report",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
@@ -101,8 +101,8 @@
 			"#": "21",
 			"label": "UPValue",
 			"description": "UP value -On/Off (Power) association group (3)",
-			"unit": "0.1W",
 			"valueSize": 2,
+			"unit": "0.1W",
 			"minValue": 100,
 			"maxValue": 18000,
 			"defaultValue": 500
@@ -111,8 +111,8 @@
 			"#": "22",
 			"label": "DOWNvalue",
 			"description": "lower power threshold",
-			"unit": "0.1w",
 			"valueSize": 2,
+			"unit": "0.1w",
 			"minValue": 0,
 			"maxValue": 17900,
 			"defaultValue": 300
@@ -241,8 +241,8 @@
 			"#": "32",
 			"label": "AlarmDuration",
 			"description": "duration of alarm state",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 32400,
 			"defaultValue": 600
@@ -251,8 +251,8 @@
 			"#": "40",
 			"label": "PwrLoadViolet",
 			"description": "maximum active power value causes the LED frame to flash violet",
-			"unit": "0.1w",
 			"valueSize": 2,
+			"unit": "0.1w",
 			"minValue": 1000,
 			"maxValue": 18000,
 			"defaultValue": 18000

@@ -17,8 +17,8 @@
 		{
 			"#": "2",
 			"label": "MEAS_PERIOD",
-			"unit": "s",
 			"valueSize": 1,
+			"unit": "s",
 			"minValue": 30,
 			"maxValue": 120,
 			"defaultValue": 30
@@ -34,8 +34,8 @@
 		{
 			"#": "4",
 			"label": "RES_ACTIVE_POWER",
-			"unit": "W",
 			"valueSize": 1,
+			"unit": "W",
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 4

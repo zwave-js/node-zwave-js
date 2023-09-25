@@ -52,8 +52,8 @@
 			"#": "3",
 			"label": "Watt Meter Report Period",
 			"description": "5s x 720 (default) = 3600s = 1 hour",
-			"unit": "5s",
 			"valueSize": 2,
+			"unit": "5s",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
@@ -62,8 +62,8 @@
 			"#": "4",
 			"label": "kWH Meter Report Period",
 			"description": "6x10min = 1 hour",
-			"unit": "10min",
 			"valueSize": 2,
+			"unit": "10min",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6
@@ -71,8 +71,8 @@
 		{
 			"#": "5",
 			"label": "Threshold of Watt for load caution",
-			"unit": "1Watt",
 			"valueSize": 2,
+			"unit": "1Watt",
 			"minValue": 10,
 			"maxValue": 3000,
 			"defaultValue": 3000
@@ -80,8 +80,8 @@
 		{
 			"#": "6",
 			"label": "Threshold of kWH for load caution",
-			"unit": "Kwh",
 			"valueSize": 2,
+			"unit": "Kwh",
 			"minValue": 0,
 			"maxValue": 10000,
 			"defaultValue": 0

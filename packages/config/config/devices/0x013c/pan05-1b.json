@@ -97,8 +97,8 @@
 		{
 			"#": "5",
 			"label": "Auto off timer",
-			"unit": "second",
 			"valueSize": 2,
+			"unit": "second",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0

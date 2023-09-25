@@ -18,8 +18,8 @@
 			"#": "1",
 			"label": "Automatic Secure Timeout",
 			"description": "After this time a CLOSE is sent to the door lock.",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
@@ -28,8 +28,8 @@
 			"#": "2",
 			"label": "Ring Button OFF Timeout",
 			"description": "After this time the Door Bell will receive an OFF.",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 127,
 			"defaultValue": 3

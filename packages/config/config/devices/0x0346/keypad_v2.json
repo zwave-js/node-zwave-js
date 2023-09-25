@@ -300,12 +300,12 @@
 			"#": "26",
 			"$if": "firmwareVersion >= 1.18",
 			"label": "Motion Sensor Timeout",
-			"unit": "seconds",
 			"valueSize": 1,
-			"defaultValue": 3,
-			"unsigned": true,
+			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 60
+			"maxValue": 60,
+			"defaultValue": 3,
+			"unsigned": true
 		}
 	],
 	"compat": {

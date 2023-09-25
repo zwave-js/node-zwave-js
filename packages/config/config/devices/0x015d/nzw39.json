@@ -80,8 +80,8 @@
 			"#": "5",
 			"label": "Auto OFF",
 			"description": "Automatically turn switch off after this number of seconds",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0

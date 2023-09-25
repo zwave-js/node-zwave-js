@@ -55,8 +55,8 @@
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Chime Sound Duration",
-			"defaultValue": 2,
-			"unit": "cycles"
+			"unit": "cycles",
+			"defaultValue": 2
 		},
 		{
 			"#": "4",
