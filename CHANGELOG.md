@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* The default time after which battery-powered devices with no pending commands are sent back to sleep is now `250 ms` (down from `1000ms`). This timeout is now configurable using the driver option `timeouts.sendToSleep`. This should result in significant battery savings for devices that frequently wake up. (#6312)
+
+### Bugfixes
+* Add missing export for `PartialZWaveOptions` (#6319)
+
+### Config file changes
+* Add Heatit Z-Water 2 (#6299)
+
+### Changes under the hood
+* Correct build configuration for ESLint plugin (#6315)
+* Fixed the interpretation of `limit_options` in OpenSmartHouse import script (#6313)
+
 ## 12.0.0-beta.3 (2023-09-22)
 ### Bugfixes
 * A bug in the `7.19.x` SDK has surfaced where the controller gets stuck in the middle of a transmission. Previously this would go unnoticed because the failed commands would cause the nodes to be marked dead until the controller finally recovered. Since `v11.12.0` however, Z-Wave JS would consider the controller jammed and retry the last command indefinitely. This situation is now detected and Z-Wave JS attempts to recover by soft-resetting the controller when this happens. (#6296)
