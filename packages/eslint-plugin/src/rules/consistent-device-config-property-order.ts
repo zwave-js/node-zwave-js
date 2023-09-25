@@ -172,7 +172,8 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 	},
 	meta: {
 		docs: {
-			description: "foo",
+			description:
+				"Ensures consistent ordering of properties in configuration parameter definitions",
 		},
 		fixable: "code",
 		schema: [],

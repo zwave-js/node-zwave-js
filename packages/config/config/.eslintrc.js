@@ -10,5 +10,6 @@ module.exports = {
 	],
 	rules: {
 		"@zwave-js/consistent-device-config-property-order": "error",
+		"@zwave-js/no-unnecessary-min-max-value": "error"
 	}
 };

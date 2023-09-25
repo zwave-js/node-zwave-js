@@ -5,6 +5,7 @@ import {
 } from "@typescript-eslint/utils";
 import { CommandClasses } from "@zwave-js/core";
 import { type Rule as ESLintRule } from "eslint";
+import { type AST as JSONC_AST } from "jsonc-eslint-parser";
 import path from "node:path";
 
 export const repoRoot = path.normalize(
@@ -109,4 +110,57 @@ export namespace JSONCRule {
 		meta?: ESLintRule.RuleMetaData | undefined;
 		schema?: ESLintRule.RuleMetaData["schema"];
 	}
+}
+
+export function removeJSONProperty(
+	context: ESLintRule.RuleContext,
+	property: JSONC_AST.JSONProperty,
+): (fixer: ESLintRule.RuleFixer) => ESLintRule.Fix {
+	const propIndex = property.parent.properties.indexOf(property);
+	const prevProp = property.parent.properties[propIndex - 1];
+	const nextProp = property.parent.properties[propIndex + 1];
+
+	let leadingComments = context.sourceCode.getCommentsBefore(property as any);
+	if (prevProp) {
+		// Omit leading comments that are actually trailing comments of the previous property
+		leadingComments = leadingComments.filter((c) =>
+			c.loc?.start.line !== prevProp.loc.end.line
+		);
+	}
+
+	// Remove from the beginning of the first actual leading comment...
+	const actualStart = Math.min(
+		property.range[0],
+		...leadingComments.map((c) => c.range![0]),
+	);
+
+	let actualEnd = property.range[1];
+	if (nextProp) {
+		// ...to either the first actual leading comment of the next property...
+		const nextPropLeadingComments = context.sourceCode.getCommentsBefore(
+			nextProp as any,
+		).filter((c) => c.loc?.start.line !== property.loc.end.line);
+		actualEnd = Math.max(
+			actualEnd,
+			Math.min(
+				nextProp.range[0],
+				...nextPropLeadingComments.map((c) => c.range![0]),
+			),
+		);
+	} else {
+		// ...or the end of the last trailing comment of this property
+		const trailingComments = context.sourceCode.getCommentsAfter(
+			property as any,
+		);
+		actualEnd = Math.max(
+			actualEnd,
+			...trailingComments.map((c) => c.range![1]),
+		);
+	}
+
+	return (fixer) =>
+		fixer.removeRange([
+			actualStart,
+			actualEnd,
+		]);
 }
