@@ -4,6 +4,7 @@ import {
 	type TSESTree,
 } from "@typescript-eslint/utils";
 import { CommandClasses } from "@zwave-js/core";
+import { type Rule as ESLintRule } from "eslint";
 import path from "node:path";
 
 export const repoRoot = path.normalize(
@@ -94,3 +95,18 @@ export function getCCIdFromDecorator(
 }
 
 export type Rule = TSESLint.RuleModule<any, never[], TSESLint.RuleListener>;
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace JSONCRule {
+	// Special ESLint rule type for JSONC files
+	// AST viewer at https://ota-meshi.github.io/jsonc-eslint-parser/
+
+	export interface RuleListener {
+		[key: string]: ((node: never) => void) | undefined;
+	}
+	export interface RuleModule {
+		create(context: ESLintRule.RuleContext): RuleListener;
+		meta?: ESLintRule.RuleMetaData | undefined;
+		schema?: ESLintRule.RuleMetaData["schema"];
+	}
+}
