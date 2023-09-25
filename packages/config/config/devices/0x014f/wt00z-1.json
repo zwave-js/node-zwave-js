@@ -35,8 +35,8 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Group 4: Send Reports",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Group 4: Send Reports",
 			"defaultValue": 0
 		},
 		{
@@ -78,27 +78,27 @@
 		},
 		{
 			"#": "13",
-			"label": "Group 4: Send Dimming Commands",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Group 4: Send Dimming Commands",
 			"defaultValue": 0
 		},
 		{
 			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Shade Control Group 2",
-			"description": "Allow the switch to control shade devices",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Allow the switch to control shade devices"
 		},
 		{
 			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Shade Control Group 3",
-			"description": "Allow the switch to control shade devices",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Allow the switch to control shade devices"
 		},
 		{
 			"#": "16",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Shade Control Group 1",
-			"description": "Allow the switch to control shade devices",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Allow the switch to control shade devices"
 		},
 		{
 			"#": "19",

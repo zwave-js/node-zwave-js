@@ -91,16 +91,16 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
-			"readOnly": true,
 			"unsigned": true,
+			"readOnly": true,
 			"allowManualEntry": false
 		},
 		{
 			"#": "2[0xf00000]",
 			"label": "Auxiliary Heat Type",
 			"valueSize": 4,
-			"readOnly": true,
 			"unsigned": true,
+			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -119,8 +119,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"readOnly": true,
 			"unsigned": true,
+			"readOnly": true,
 			"allowManualEntry": false
 		},
 		{
@@ -129,8 +129,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"readOnly": true,
 			"unsigned": true,
+			"readOnly": true,
 			"allowManualEntry": false
 		},
 		{

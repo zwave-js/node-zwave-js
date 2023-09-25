@@ -71,20 +71,20 @@
 			"#": "12",
 			"label": "Meter Report Threshold",
 			"valueSize": 1,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 10,
-			"unit": "W",
 			"unsigned": true
 		},
 		{
 			"#": "13",
 			"label": "Meter Report Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 30,
 			"maxValue": 65535,
 			"defaultValue": 780,
-			"unit": "seconds",
 			"unsigned": true
 		},
 		{
@@ -107,11 +107,11 @@
 			"#": "3",
 			"label": "Auto-Off Timer",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "seconds",
 			"options": [
 				{
 					"label": "Disable",
@@ -123,11 +123,11 @@
 			"#": "4",
 			"label": "Auto-On Timer",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "seconds",
 			"options": [
 				{
 					"label": "Disable",
@@ -139,11 +139,11 @@
 			"#": "5",
 			"label": "Turn Off Delay",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "seconds",
 			"options": [
 				{
 					"label": "Instant",
@@ -153,8 +153,8 @@
 		},
 		{
 			"#": "6",
-			"label": "Rotary Wheel Press Functionality",
 			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Rotary Wheel Press Functionality",
 			"unsigned": true,
 			"options": [
 				{
@@ -173,8 +173,8 @@
 		},
 		{
 			"#": "7",
-			"label": "External Switch Functionality",
 			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "External Switch Functionality",
 			"unsigned": true,
 			"options": [
 				{
@@ -203,8 +203,8 @@
 		},
 		{
 			"#": "9",
-			"label": "Dimmer Curve",
 			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Dimmer Curve",
 			"unsigned": true,
 			"options": [
 				{

@@ -41,8 +41,8 @@
 			"#": "2",
 			"label": "Basic set OFF delay time for nodes of group2",
 			"description": "0: Disable, 0-127 Second",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "Seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
@@ -51,8 +51,8 @@
 			"#": "3",
 			"label": "Delay time to enter standby mode",
 			"description": "After force to wake up, delay time to enter standby mode again",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "Seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 10,
@@ -61,8 +61,8 @@
 		{
 			"#": "4",
 			"label": "Delay time to enter standby after wake up",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "Seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 5,
@@ -71,8 +71,8 @@
 		{
 			"#": "5",
 			"label": "Set waiting exclusion time",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "Seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
@@ -118,8 +118,8 @@
 			"#": "8",
 			"label": "Tamper alarm continuously send",
 			"description": "In tamper alarm mode, delay time for continuously send Sensor_Binary_report",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "Seconds",
 			"minValue": 3,
 			"maxValue": 30,
 			"defaultValue": 5
@@ -127,8 +127,8 @@
 		{
 			"#": "9",
 			"label": "Interval time for sending battery report",
-			"unit": "Minutes",
 			"valueSize": 1,
+			"unit": "Minutes",
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [

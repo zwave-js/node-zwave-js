@@ -28,8 +28,8 @@
 		{
 			"#": "2",
 			"label": "Battery Change Report Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 10

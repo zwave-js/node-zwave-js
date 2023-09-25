@@ -56,19 +56,19 @@
 			"#": "3",
 			"label": "Set Filter Counter",
 			"valueSize": 2,
+			"unit": "hours",
 			"minValue": 500,
 			"maxValue": 4000,
-			"defaultValue": 500,
-			"unit": "hours"
+			"defaultValue": 500
 		},
 		{
 			"#": "4",
 			"label": "Report Filter Counter",
 			"valueSize": 2,
+			"unit": "hours",
 			"minValue": 0,
 			"maxValue": 9999,
 			"defaultValue": 0,
-			"unit": "hours",
 			"readOnly": true
 		},
 		{

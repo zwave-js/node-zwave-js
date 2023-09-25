@@ -258,8 +258,8 @@
 		{
 			"#": "152",
 			"label": "Venetian blind - time of full turn of the slats",
-			"unit": "1/100 sec",
 			"valueSize": 4,
+			"unit": "1/100 sec",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 150
@@ -289,8 +289,8 @@
 			"#": "154",
 			"label": "Delay motor stop",
 			"description": "Delay motor stop after reaching end switch",
-			"unit": "1/10 sec",
 			"valueSize": 2,
+			"unit": "1/10 sec",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10
@@ -299,8 +299,8 @@
 			"#": "155",
 			"label": "Motor operation detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10
@@ -308,8 +308,8 @@
 		{
 			"#": "156",
 			"label": "Time of up movement",
-			"unit": "1/100 sec",
 			"valueSize": 4,
+			"unit": "1/100 sec",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 6000
@@ -317,8 +317,8 @@
 		{
 			"#": "157",
 			"label": "Time of down movement",
-			"unit": "1/100 sec",
 			"valueSize": 4,
+			"unit": "1/100 sec",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 6000

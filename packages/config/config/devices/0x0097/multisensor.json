@@ -34,8 +34,8 @@
 			"#": "2",
 			"label": "Mode Timeout",
 			"description": "The time used in mode 2 to turn the sensor off .",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 3600,
 			"defaultValue": 900
@@ -44,8 +44,8 @@
 			"#": "3",
 			"label": "Switch off time",
 			"description": "Switch off time starts after timeout.",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 7200,
 			"defaultValue": 2700

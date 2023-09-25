@@ -28,13 +28,13 @@
 		},
 		{
 			"#": "3[0x01]",
-			"label": "Group 2",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Group 2"
 		},
 		{
 			"#": "3[0x02]",
-			"label": "Group 3",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Group 3"
 		},
 		{
 			"#": "5",

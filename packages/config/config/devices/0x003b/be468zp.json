@@ -77,8 +77,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"readOnly": true,
-			"unsigned": true
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
 			"#": "12",
@@ -86,8 +86,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"readOnly": true,
-			"unsigned": true
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
 			"#": "13",
@@ -95,8 +95,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"readOnly": true,
-			"unsigned": true
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
 			"#": "14",
@@ -104,8 +104,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"readOnly": true,
-			"unsigned": true
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
 			"#": "15",
@@ -142,8 +142,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"readOnly": true,
-			"unsigned": true
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
 			"#": "18",
@@ -151,8 +151,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"readOnly": true,
-			"unsigned": true
+			"unsigned": true,
+			"readOnly": true
 		}
 	],
 	"metadata": {

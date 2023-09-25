@@ -94,15 +94,15 @@
 		},
 		{
 			"#": "5",
-			"label": "Switch 1: Off Timer",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 1: Off Timer",
 			"defaultValue": 1
 		},
 		{
 			"#": "6",
 			"label": "Switch 1: Off Timer Interval",
-			"unit": "100ms",
 			"valueSize": 2,
+			"unit": "100ms",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,

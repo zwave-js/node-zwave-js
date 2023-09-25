@@ -73,10 +73,10 @@
 			"#": "48",
 			"label": "Total Water Consumption",
 			"valueSize": 4,
+			"unit": "l",
 			"minValue": -2147483648,
 			"maxValue": 2147483647,
-			"defaultValue": 0,
-			"unit": "l"
+			"defaultValue": 0
 		},
 		{
 			"#": "50",
@@ -91,19 +91,19 @@
 			"label": "Slow Leak: Threshold",
 			"description": "How much water must be consumed in the timespan defined by parameter 52 to trigger slow leak alarm",
 			"valueSize": 2,
+			"unit": "l",
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 1,
-			"unit": "l"
+			"defaultValue": 1
 		},
 		{
 			"#": "52",
 			"label": "Slow Leak: Time Interval",
 			"valueSize": 1,
+			"unit": "hours",
 			"minValue": 1,
 			"maxValue": 24,
-			"defaultValue": 24,
-			"unit": "hours"
+			"defaultValue": 24
 		},
 		{
 			"#": "60",
@@ -135,10 +135,10 @@
 			"#": "54",
 			"label": "Medium Leak: Time Interval",
 			"valueSize": 1,
+			"unit": "hours",
 			"minValue": 1,
 			"maxValue": 24,
-			"defaultValue": 6,
-			"unit": "hours"
+			"defaultValue": 6
 		},
 		{
 			"#": "61",
@@ -170,10 +170,10 @@
 			"#": "56",
 			"label": "Fast Leak: Time Interval",
 			"valueSize": 1,
+			"unit": "hours",
 			"minValue": 1,
 			"maxValue": 24,
-			"defaultValue": 3,
-			"unit": "hours"
+			"defaultValue": 3
 		},
 		{
 			"#": "62",

@@ -57,8 +57,8 @@
 		{
 			"#": "13",
 			"label": "LED frame – brightness",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 102,
 			"defaultValue": 100
@@ -106,8 +106,8 @@
 		{
 			"#": "35",
 			"label": "Alarm configuration – duration",
-			"unit": "s",
 			"valueSize": 2,
+			"unit": "s",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600
@@ -155,8 +155,8 @@
 		{
 			"#": "61",
 			"label": "Power reports – on change",
-			"unit": "%",
 			"valueSize": 2,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 0

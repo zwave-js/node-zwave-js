@@ -36,8 +36,8 @@
 		{
 			"#": "2",
 			"label": "Delay Between Retry Attempts",
-			"unit": "ms",
 			"valueSize": 2,
+			"unit": "ms",
 			"minValue": 10,
 			"maxValue": 5000,
 			"defaultValue": 500

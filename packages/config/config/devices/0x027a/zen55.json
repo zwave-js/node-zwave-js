@@ -142,8 +142,8 @@
 			]
 		},
 		{
-			"$if": "firmwareVersion >= 1.10",
 			"#": "9[0x01]",
+			"$if": "firmwareVersion >= 1.10",
 			"label": "Report Type: Signal Sensor",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -160,8 +160,8 @@
 			]
 		},
 		{
-			"$if": "firmwareVersion >= 1.10",
 			"#": "9[0x02]",
+			"$if": "firmwareVersion >= 1.10",
 			"label": "Report Type: Z-Wave",
 			"valueSize": 1,
 			"defaultValue": 0,

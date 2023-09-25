@@ -35,8 +35,8 @@
 		{
 			"#": "1",
 			"label": "Wind Gauge - Gust Top Value",
-			"unit": "m/s",
 			"valueSize": 2,
+			"unit": "m/s",
 			"minValue": 0,
 			"maxValue": 8800,
 			"defaultValue": 1000

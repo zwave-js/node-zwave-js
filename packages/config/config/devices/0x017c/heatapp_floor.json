@@ -17,8 +17,8 @@
 		{
 			"#": "1",
 			"label": "Missing Radio Link Time",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 240,
 			"defaultValue": 30,

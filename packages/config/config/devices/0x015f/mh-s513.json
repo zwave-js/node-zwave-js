@@ -357,8 +357,8 @@
 		{
 			"#": "19",
 			"label": "Key 1 Activate Scene Duration",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -413,8 +413,8 @@
 		{
 			"#": "22",
 			"label": "Key 2 Activate Scene Duration",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,

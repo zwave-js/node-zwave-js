@@ -17,8 +17,8 @@
 		{
 			"#": "4",
 			"label": "Safety Activate Delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -26,8 +26,8 @@
 		{
 			"#": "5",
 			"label": "Safety OFF Period",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 600
@@ -35,8 +35,8 @@
 		{
 			"#": "6",
 			"label": "Safety ON Period",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 300
@@ -44,8 +44,8 @@
 		{
 			"#": "10",
 			"label": "Dimming speed",
-			"unit": "0.01s",
 			"valueSize": 2,
+			"unit": "0.01s",
 			"minValue": 30,
 			"maxValue": 32767,
 			"defaultValue": 300
@@ -308,8 +308,8 @@
 		{
 			"#": "32",
 			"label": "Thermostat Set Point Max",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 270
@@ -317,8 +317,8 @@
 		{
 			"#": "34",
 			"label": "Thermostat Set Point Min",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 50
@@ -326,8 +326,8 @@
 		{
 			"#": "36",
 			"label": "Thermostat Control Resend Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600
@@ -335,8 +335,8 @@
 		{
 			"#": "37",
 			"label": "Thermostat Minimum On/Off Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 60,
 			"maxValue": 32767,
 			"defaultValue": 300
@@ -344,8 +344,8 @@
 		{
 			"#": "38",
 			"label": "Thermostat Floor Temp Max",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 270
@@ -383,8 +383,8 @@
 		{
 			"#": "64",
 			"label": "Temperature Report Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 600
@@ -392,8 +392,8 @@
 		{
 			"#": "66",
 			"label": "Temperature Report Threshold",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 10
@@ -409,8 +409,8 @@
 		{
 			"#": "240",
 			"label": "Floor Sensor Temperature Offset",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0
@@ -418,8 +418,8 @@
 		{
 			"#": "241",
 			"label": "Room Sensor Temperature Offset",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0

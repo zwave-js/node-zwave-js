@@ -86,8 +86,8 @@
 			"#": "1[0x1f]",
 			"label": "Relay 1 Trigger Interval",
 			"description": "Momentary trigger time in 100ms intervals, 10=1s, 0=disable",
-			"unit": "100 ms",
 			"valueSize": 1,
+			"unit": "100 ms",
 			"minValue": 0,
 			"maxValue": 31,
 			"defaultValue": 0,
@@ -98,8 +98,8 @@
 			"label": "Relay 1 Trigger Configuration on Sensor Input",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled",
@@ -142,8 +142,8 @@
 			"label": "Relay 2 Trigger on Sensor Input",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled",

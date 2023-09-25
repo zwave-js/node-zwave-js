@@ -271,8 +271,8 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion < 1.2",
-			"label": "Switch 1: Manual Control",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 1: Manual Control",
 			"defaultValue": 1
 		},
 		{
@@ -301,8 +301,8 @@
 		{
 			"#": "13",
 			"$if": "firmwareVersion < 1.2",
-			"label": "Switch 2: Manual Control",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 2: Manual Control",
 			"defaultValue": 1
 		},
 		{
@@ -314,8 +314,8 @@
 		{
 			"#": "14",
 			"$if": "firmwareVersion < 1.2",
-			"label": "Switch 3: Manual Control",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 3: Manual Control",
 			"defaultValue": 1
 		},
 		{
@@ -362,9 +362,9 @@
 		{
 			"#": "24",
 			"$if": "firmwareVersion >= 1.3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "DC Motor Mode",
-			"description": "When enabled only one relay may be on at a time, the other relay is automatically turned off.",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "When enabled only one relay may be on at a time, the other relay is automatically turned off."
 		}
 	],
 	"compat": {

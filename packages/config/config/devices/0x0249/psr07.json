@@ -36,8 +36,8 @@
 		{
 			"#": "10",
 			"label": "Auto Report Battery Time",
-			"unit": "0.5 hours",
 			"valueSize": 1,
+			"unit": "0.5 hours",
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12,

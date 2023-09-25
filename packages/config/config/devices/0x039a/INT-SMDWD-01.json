@@ -17,8 +17,8 @@
 		{
 			"#": "1",
 			"label": "Basic Set: Off Delay Time",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -78,8 +78,8 @@
 		{
 			"#": "5",
 			"label": "Battery Report Interval",
-			"unit": "minutes",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 1080,
 			"defaultValue": 480

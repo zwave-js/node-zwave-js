@@ -17,8 +17,8 @@
 		{
 			"#": "1",
 			"label": "Temperature Low Threshold",
-			"unit": "Degrees Celsius",
 			"valueSize": 1,
+			"unit": "Degrees Celsius",
 			"minValue": -10,
 			"maxValue": 69,
 			"defaultValue": 4
@@ -26,8 +26,8 @@
 		{
 			"#": "2",
 			"label": "Temperature High Threshold",
-			"unit": "Degrees Celsius",
 			"valueSize": 1,
+			"unit": "Degrees Celsius",
 			"minValue": -9,
 			"maxValue": 70,
 			"defaultValue": 70
@@ -35,8 +35,8 @@
 		{
 			"#": "3",
 			"label": "Meter Count",
-			"unit": "Tenths of Gallons",
 			"valueSize": 4,
+			"unit": "Tenths of Gallons",
 			"minValue": 0,
 			"maxValue": 99999999,
 			"defaultValue": 0
@@ -44,8 +44,8 @@
 		{
 			"#": "4",
 			"label": "Meter Report Interval",
-			"unit": "10s of Seconds",
 			"valueSize": 1,
+			"unit": "10s of Seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 6,
@@ -54,8 +54,8 @@
 		{
 			"#": "5",
 			"label": "Meter Leak Threshold",
-			"unit": "Tenths of Gallons",
 			"valueSize": 2,
+			"unit": "Tenths of Gallons",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,

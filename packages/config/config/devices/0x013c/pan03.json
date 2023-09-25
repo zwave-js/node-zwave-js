@@ -17,8 +17,8 @@
 		{
 			"#": "1",
 			"label": "Watt Meter Report Period",
-			"unit": "5",
 			"valueSize": 2,
+			"unit": "5",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
@@ -26,8 +26,8 @@
 		{
 			"#": "2",
 			"label": "kWh Meter Report Period",
-			"unit": "10 minutes",
 			"valueSize": 2,
+			"unit": "10 minutes",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6
@@ -35,8 +35,8 @@
 		{
 			"#": "3",
 			"label": "Threshold of current for Load caution",
-			"unit": "0.01 A",
 			"valueSize": 2,
+			"unit": "0.01 A",
 			"minValue": 10,
 			"maxValue": 1100,
 			"defaultValue": 1100

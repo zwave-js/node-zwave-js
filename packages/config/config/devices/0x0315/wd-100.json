@@ -46,8 +46,8 @@
 			"#": "8",
 			"label": "Remote Dim Step Duration",
 			"description": "Interval between dimming steps when remotely commanded",
-			"unit": "10 ms",
 			"valueSize": 2,
+			"unit": "10 ms",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3
@@ -67,10 +67,10 @@
 			"label": "Step Duration",
 			"description": "Interval between dimming steps",
 			"valueSize": 2,
+			"unit": "10 ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unit": "10 ms"
+			"defaultValue": 3
 		}
 	],
 	"compat": {

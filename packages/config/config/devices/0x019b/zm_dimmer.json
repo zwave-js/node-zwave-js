@@ -100,11 +100,11 @@
 			"#": "5",
 			"label": "Turn Off Delay",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "seconds",
 			"options": [
 				{
 					"label": "Instant",
@@ -184,8 +184,8 @@
 		},
 		{
 			"#": "9",
-			"label": "Dimmer Curve",
 			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Dimmer Curve",
 			"unsigned": true,
 			"options": [
 				{

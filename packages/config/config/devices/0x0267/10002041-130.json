@@ -18,8 +18,8 @@
 			"#": "1",
 			"label": "Association LED",
 			"description": "Turns ON/OFF the Association LED",
-			"unit": "HEXADECIMAL",
 			"valueSize": 1,
+			"unit": "HEXADECIMAL",
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,
@@ -38,8 +38,8 @@
 		{
 			"#": "2",
 			"label": "Custom consumption limit",
-			"unit": "HEXADECIMAL",
 			"valueSize": 2,
+			"unit": "HEXADECIMAL",
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

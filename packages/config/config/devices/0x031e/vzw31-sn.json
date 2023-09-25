@@ -149,8 +149,8 @@
 		{
 			"#": "12",
 			"label": "Auto Off Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
@@ -182,8 +182,8 @@
 			"#": "17",
 			"label": "Load Level Indicator Timeout",
 			"valueSize": 1,
-			"minValue": 0,
 			"unit": "seconds",
+			"minValue": 0,
 			"maxValue": 11,
 			"defaultValue": 11,
 			"options": [
@@ -236,8 +236,8 @@
 			"unit": "0.01 kWh",
 			"minValue": 0,
 			"maxValue": 32767,
-			"unsigned": true,
 			"defaultValue": 10,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",

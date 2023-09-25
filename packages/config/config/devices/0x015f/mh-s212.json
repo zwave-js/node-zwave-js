@@ -104,8 +104,8 @@
 		{
 			"#": "6",
 			"label": "Switch 1 - Off Timer Interval",
-			"unit": "100ms",
 			"valueSize": 2,
+			"unit": "100ms",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0

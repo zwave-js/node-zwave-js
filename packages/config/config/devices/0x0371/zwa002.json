@@ -59,8 +59,8 @@
 		{
 			"#": "3",
 			"label": "Rate of change to next color in Custom Mode",
-			"unit": "MS",
 			"valueSize": 4,
+			"unit": "MS",
 			"minValue": 5,
 			"maxValue": 8640000,
 			"defaultValue": 50
@@ -78,8 +78,8 @@
 		{
 			"#": "16",
 			"label": "Ramp rate when dimming using Multilevel Switch",
-			"unit": "100ms",
 			"valueSize": 1,
+			"unit": "100ms",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20
@@ -105,8 +105,8 @@
 		{
 			"#": "81",
 			"label": "Adjust color component of Warm White",
-			"unit": "k",
 			"valueSize": 2,
+			"unit": "k",
 			"minValue": 2700,
 			"maxValue": 4999,
 			"defaultValue": 2700
@@ -114,8 +114,8 @@
 		{
 			"#": "82",
 			"label": "Adjust color component of Cold White",
-			"unit": "k",
 			"valueSize": 2,
+			"unit": "k",
 			"minValue": 5000,
 			"maxValue": 6500,
 			"defaultValue": 6500

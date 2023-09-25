@@ -217,8 +217,8 @@
 		{
 			"#": "143",
 			"label": "Minimum sensor range value",
-			"unit": "2",
 			"valueSize": 2,
+			"unit": "2",
 			"minValue": 0,
 			"maxValue": 20000,
 			"defaultValue": 0
@@ -226,8 +226,8 @@
 		{
 			"#": "144",
 			"label": "Maximum sensor range value",
-			"unit": "2",
 			"valueSize": 2,
+			"unit": "2",
 			"minValue": 0,
 			"maxValue": 20000,
 			"defaultValue": 1000

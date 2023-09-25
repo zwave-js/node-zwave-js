@@ -45,8 +45,8 @@
 		{
 			"#": "2",
 			"label": "Hysteresis",
-			"unit": "°C",
 			"valueSize": 1,
+			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 7,
 			"defaultValue": 1
@@ -93,8 +93,8 @@
 		{
 			"#": "6",
 			"label": "Minimum Temperature",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": -127,
 			"maxValue": 127,
 			"defaultValue": 4
@@ -102,8 +102,8 @@
 		{
 			"#": "7",
 			"label": "Maximum Temperature",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": -127,
 			"maxValue": 127,
 			"defaultValue": 30
@@ -111,8 +111,8 @@
 		{
 			"#": "8",
 			"label": "Turbo Mode: Duration",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 100,
 			"maxValue": 1200,
 			"defaultValue": 120
@@ -160,8 +160,8 @@
 		{
 			"#": "11",
 			"label": "External Temperature Sensor: Poll Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 600,
 			"defaultValue": 300
@@ -170,8 +170,8 @@
 			"#": "5",
 			"label": "External Temperature Sensor: Report Timeout",
 			"description": "After the specified timeout, lack of temperature reports from the external sensor will be considered a failure.",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 100,
 			"maxValue": 30000,
 			"defaultValue": 30000
@@ -179,8 +179,8 @@
 		{
 			"#": "12",
 			"label": "Automatic Reports: Temperature Change Threshold",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 1
@@ -188,8 +188,8 @@
 		{
 			"#": "13",
 			"label": "Automatic Reports: Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 600,
 			"defaultValue": 300
@@ -264,8 +264,8 @@
 		{
 			"#": "40",
 			"label": "Temperature Sensor 1: Calibration",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -318,8 +318,8 @@
 		{
 			"#": "41",
 			"label": "Temperature Sensor 2: Calibration",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

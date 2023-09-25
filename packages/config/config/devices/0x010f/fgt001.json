@@ -26,8 +26,8 @@
 			"#": "1",
 			"label": "Override Schedule Duration",
 			"description": "Duration of Override Schedule after turning knob",
-			"unit": "minutes",
 			"valueSize": 4,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 10000,
 			"defaultValue": 240
@@ -36,8 +36,8 @@
 			"#": "2[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Open Window Detector (Normal)",
-			"defaultValue": 1,
-			"valueSize": 4
+			"valueSize": 4,
+			"defaultValue": 1
 		},
 		{
 			"#": "2[0x02]",

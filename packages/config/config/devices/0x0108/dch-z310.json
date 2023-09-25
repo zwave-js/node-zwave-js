@@ -37,8 +37,8 @@
 			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto report the battery level",
-			"unit": "30 minutes",
 			"valueSize": 1,
+			"unit": "30 minutes",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12

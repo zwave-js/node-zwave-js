@@ -38,7 +38,8 @@
 		"javascript",
 		"javascriptreact",
 		"typescript",
-		"typescriptreact"
+		"typescriptreact",
+		"jsonc"
 	],
 	"files.exclude": {
 		"node_modules/": true,

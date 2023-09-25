@@ -166,11 +166,11 @@
 			"#": "20",
 			"label": "Poll Group 2 Interval",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true,
-			"unit": "minutes"
+			"unsigned": true
 		},
 		{
 			"#": "22",

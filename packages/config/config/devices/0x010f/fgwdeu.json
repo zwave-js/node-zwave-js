@@ -27,10 +27,10 @@
 			"label": "Overload Threshold",
 			"description": "Turn off the controlled device in case of exceeding threshold.",
 			"valueSize": 4,
+			"unit": "0.1 W",
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 3500,
-			"unit": "0.1 W",
 			"options": [
 				{
 					"label": "Disable",
@@ -43,10 +43,10 @@
 			"label": "LED Indicator: Overload Threshold",
 			"description": "Indicator flashes violet in case of exceeding threshold.",
 			"valueSize": 4,
+			"unit": "0.1 W",
 			"minValue": 100,
 			"maxValue": 5000,
-			"defaultValue": 3500,
-			"unit": "0.1 W"
+			"defaultValue": 3500
 		},
 		{
 			"#": "11",
@@ -303,8 +303,8 @@
 		{
 			"#": "35",
 			"label": "Alarm Duration",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600,
@@ -398,10 +398,10 @@
 			"#": "153",
 			"label": "Fluorescent Lamp: Startup Time",
 			"valueSize": 2,
+			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unit": "0.1 seconds"
+			"defaultValue": 0
 		},
 		{
 			"#": "154",
@@ -412,10 +412,10 @@
 			"#": "155",
 			"label": "Automatic Control: Dimming Step Duration",
 			"valueSize": 2,
+			"unit": "0.01 seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"unit": "0.01 seconds"
+			"defaultValue": 1
 		},
 		{
 			"#": "156",
@@ -426,19 +426,19 @@
 			"#": "157",
 			"label": "Manual Control: Dimming Step Duration",
 			"valueSize": 2,
+			"unit": "0.01 seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"unit": "0.01 seconds"
+			"defaultValue": 1
 		},
 		{
 			"#": "158",
 			"label": "Auto-off Timer",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unit": "seconds",
 			"options": [
 				{
 					"label": "Disable",
@@ -500,10 +500,10 @@
 			"#": "162",
 			"label": "Burnt Out Bulb and Overload Detection: Time Delay",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 5,
-			"unit": "seconds"
+			"defaultValue": 5
 		},
 		{
 			"#": "163",
@@ -673,10 +673,10 @@
 			"#": "177",
 			"label": "Brightness Level Correction Duration for Flickering Loads",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unit": "seconds",
 			"options": [
 				{
 					"label": "Disable",
@@ -713,10 +713,10 @@
 			"#": "179",
 			"label": "Approximated Power at Maximum Brightness",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 0,
-			"unit": "W"
+			"defaultValue": 0
 		}
 	]
 }

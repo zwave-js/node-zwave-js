@@ -331,9 +331,9 @@
 			"description": "Allowable range: 5-100 (increment by 5)",
 			"valueSize": 4,
 			"unit": "°C",
-			"defaultValue": 0,
 			"minValue": 5,
 			"maxValue": 100,
+			"defaultValue": 0,
 			"unsigned": true
 		},
 		{
@@ -342,9 +342,9 @@
 			"description": "Allowable range: 10-180 (increment by 10)",
 			"valueSize": 4,
 			"unit": "°C",
-			"defaultValue": 20,
 			"minValue": 10,
 			"maxValue": 180,
+			"defaultValue": 20,
 			"unsigned": true
 		},
 		{
@@ -352,10 +352,10 @@
 			"label": "Frost (Celsius)",
 			"description": "Allowable range: 50-100 (increment by 10)",
 			"valueSize": 4,
-			"defaultValue": 50,
 			"unit": "0.1 °C",
 			"minValue": 50,
 			"maxValue": 100,
+			"defaultValue": 50,
 			"unsigned": true
 		},
 		{
@@ -363,10 +363,10 @@
 			"label": "Frost (Fahrenheit)",
 			"description": "Allowable range: 410-500 (increment by 20)",
 			"valueSize": 4,
-			"defaultValue": 410,
 			"unit": "0.1 °C",
 			"minValue": 410,
 			"maxValue": 500,
+			"defaultValue": 410,
 			"unsigned": true
 		},
 		{
@@ -374,10 +374,10 @@
 			"label": "Dry",
 			"description": "Allowable range: 0-120 (increment by 5)",
 			"valueSize": 4,
-			"defaultValue": 30,
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
+			"defaultValue": 30,
 			"unsigned": true
 		},
 		{
@@ -385,10 +385,10 @@
 			"label": "Floor Limit Temp (Celsius)",
 			"description": "Allowable range: 50-600 (increment by 5)",
 			"valueSize": 4,
-			"defaultValue": 270,
 			"unit": "0.1 °C",
 			"minValue": 50,
 			"maxValue": 600,
+			"defaultValue": 270,
 			"unsigned": true
 		},
 		{
@@ -396,10 +396,10 @@
 			"label": "Floor Limit Temp (Fahrenheit)",
 			"description": "Allowable range: 410-1400 (increment by 10)",
 			"valueSize": 4,
-			"defaultValue": 810,
 			"unit": "0.1 °C",
 			"minValue": 410,
 			"maxValue": 1400,
+			"defaultValue": 810,
 			"unsigned": true
 		},
 		{

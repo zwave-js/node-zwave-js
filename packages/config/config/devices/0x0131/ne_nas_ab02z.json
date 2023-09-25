@@ -115,8 +115,8 @@
 		{
 			"#": "3",
 			"label": "Doorbell Duration",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,

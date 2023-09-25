@@ -29,8 +29,8 @@
 		{
 			"#": "1",
 			"label": "Watt Meter Report Period",
-			"unit": "5 seconds",
 			"valueSize": 2,
+			"unit": "5 seconds",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720,

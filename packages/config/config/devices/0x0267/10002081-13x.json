@@ -57,8 +57,8 @@
 			"minValue": 17170,
 			"maxValue": 39015,
 			"defaultValue": 39015,
-			"writeOnly": true,
 			"unsigned": true,
+			"writeOnly": true,
 			"options": [
 				{
 					"label": "Parameters, Groups, and Z-Wave status are restored to default.",

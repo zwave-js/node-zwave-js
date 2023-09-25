@@ -51,8 +51,8 @@
 		{
 			"#": "9",
 			"label": "Instant Energy Autosend Interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,

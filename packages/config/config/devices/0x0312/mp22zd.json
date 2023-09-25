@@ -43,10 +43,10 @@
 			"label": "Night Mode Brightness Level",
 			"description": "Hold button for two seconds to enter night mode.",
 			"valueSize": 1,
+			"unit": "10%",
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 2,
-			"unit": "10%",
 			"unsigned": true
 		},
 		{

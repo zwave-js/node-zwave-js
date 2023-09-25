@@ -17,8 +17,8 @@
 		{
 			"#": "1",
 			"label": "Watt Meter Report Period",
-			"unit": "5 seconds",
 			"valueSize": 2,
+			"unit": "5 seconds",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720,
@@ -27,8 +27,8 @@
 		{
 			"#": "2",
 			"label": "kWh Meter Report Period",
-			"unit": "10 minutes",
 			"valueSize": 2,
+			"unit": "10 minutes",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6,

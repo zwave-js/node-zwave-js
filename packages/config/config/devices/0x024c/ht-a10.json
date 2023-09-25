@@ -18,8 +18,8 @@
 		{
 			"#": "1",
 			"label": "Timer Setting",
-			"unit": "10 minutes",
 			"valueSize": 1,
+			"unit": "10 minutes",
 			"minValue": 0,
 			"maxValue": 54,
 			"defaultValue": 1,
@@ -28,8 +28,8 @@
 		{
 			"#": "2",
 			"label": "Remained Time",
-			"unit": "minutes",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 540,
 			"defaultValue": 0,

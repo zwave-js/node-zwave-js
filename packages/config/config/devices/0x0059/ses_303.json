@@ -17,8 +17,8 @@
 		{
 			"#": "1",
 			"label": "Temperature Reporting Threshold",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -27,8 +27,8 @@
 		{
 			"#": "2",
 			"label": "Temperature Reporting Interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
@@ -37,8 +37,8 @@
 		{
 			"#": "3",
 			"label": "Humidity Reporting Threshold",
-			"unit": "0.1 %rH",
 			"valueSize": 1,
+			"unit": "0.1 %rH",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
@@ -47,8 +47,8 @@
 		{
 			"#": "4",
 			"label": "Humidity Reporting Interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
