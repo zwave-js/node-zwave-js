@@ -40,7 +40,6 @@
 		{
 			"#": "2",
 			"label": "External Switch Type",
-			"description": "External Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -64,129 +63,127 @@
 		{
 			"#": "3",
 			"label": "Duration of the Multilevel Start Level Change Up/Down",
-			"description": "Set the duration of the Multilevel Start Level Change Up/Down",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
+			"unit": "seconds",
 			"defaultValue": 8
 		},
 		{
-			"#": "4",
-			"label": "Associations in Z-Wave network Security Mode",
-			"description": "Associations in Z-Wave network Security Mode",
+			"#": "4[0x01]",
+			"label": "Security On (1)- Off (0) for Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15
+			"maxValue": 1,
+			"defaultValue": 1
 		},
 		{
-			"#": "5",
-			"label": "Scenes sent to the controller for button 1",
-			"description": "Scenes sent to the controller for button 1",
+			"#": "4[0x02]",
+			"label": "Security On (1)- Off (0) for Association Group 3",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15,
-			"options": [
-				{
-					"label": "button short pressed once",
-					"value": 1
-				},
-				{
-					"label": "buton short pressed twice",
-					"value": 2
-				},
-				{
-					"label": "button pressed and held",
-					"value": 4
-				},
-				{
-					"label": "button released",
-					"value": 8
-				}
-			]
+			"maxValue": 1,
+			"defaultValue": 1
 		},
 		{
-			"#": "6",
-			"label": "Scenes sent to the controller for button 2",
-			"description": "Scenes sent to the controller for button 2",
+			"#": "4[0x04]",
+			"label": "Security On (1)- Off (0) for Association Group 4",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15,
-			"options": [
-				{
-					"label": "button short pressed once",
-					"value": 1
-				},
-				{
-					"label": "button short pressed twice",
-					"value": 2
-				},
-				{
-					"label": "button pressed and held",
-					"value": 4
-				},
-				{
-					"label": "button released",
-					"value": 8
-				}
-			]
+			"maxValue": 1,
+			"defaultValue": 1
 		},
 		{
-			"#": "7",
-			"label": "Scenes sent to the controller for button 3",
-			"description": "Scenes sent to the controller for button 3",
+			"#": "4[0x08]",
+			"label": "Security On (1)- Off (0) for Association Group 5",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15,
-			"options": [
-				{
-					"label": "button short pressed once",
-					"value": 1
-				},
-				{
-					"label": "button short pressed twice",
-					"value": 2
-				},
-				{
-					"label": "button pressed and held",
-					"value": 4
-				},
-				{
-					"label": "button released",
-					"value": 8
-				}
-			]
+			"maxValue": 1,
+			"defaultValue": 1
 		},
 		{
-			"#": "8",
-			"label": "Scenes sent to the controller for button 4",
-			"description": "Scenes sent to the controller for button 4",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15,
-			"options": [
-				{
-					"label": "button short pressed once",
-					"value": 1
-				},
-				{
-					"label": "button short pressed twice",
-					"value": 2
-				},
-				{
-					"label": "button pressed and held",
-					"value": 4
-				}
-			]
+			"#": "5[0x01]",
+			"$import": "#4[0x01]",
+			"label": "button one short pressed once, scene active"
+		},
+		{
+			"#": "5[0x02]",
+			"$import": "#4[0x02]",
+			"label": "button one short pressed twice, scene active"
+		},
+		{
+			"#": "5[0x04]",
+			"$import": "#4[0x04]",
+			"label": "button one pressed and held, scene active"
+		},
+		{
+			"#": "5[0x08]",
+			"$import": "#4[0x08]",
+			"label": "button one released, scene active"
+		},
+		{
+			"#": "6[0x01]",
+			"$import": "#4[0x01]",
+			"label": "button two short pressed once, scene active"
+		},
+		{
+			"#": "6[0x02]",
+			"$import": "#4[0x02]",
+			"label": "button two short pressed twice, scene active "
+		},
+		{
+			"#": "6[0x04]",
+			"$import": "#4[0x04]",
+			"label": "button two pressed and held, scene active"
+		},
+		{
+			"#": "6[0x08]",
+			"$import": "#4[0x08]",
+			"label": "button two released, scene active"
+		},
+		{
+			"#": "7[0x01]",
+			"$import": "#4[0x01]",
+			"label": "button three short pressed once, scene active"
+		},
+		{
+			"#": "7[0x02]",
+			"$import": "#4[0x02]",
+			"label": "button three short pressed twice, scene active"
+		},
+		{
+			"#": "7[0x04]",
+			"$import": "#4[0x04]",
+			"label": "button three pressed and held, scene active"
+		},
+		{
+			"#": "7[0x08]",
+			"$import": "#4[0x08]",
+			"label": "button three released, scene active"
+		},
+		{
+			"#": "8[0x01]",
+			"$import": "#4[0x01]",
+			"label": "button four short pressed once, scene active"
+		},
+		{
+			"#": "8[0x02]",
+			"$import": "#4[0x02]",
+			"label": "button four short pressed twice, scene active"
+		},
+		{
+			"#": "8[0x04]",
+			"$import": "#4[0x04]",
+			"label": "button four pressed and held, scene active"
+		},
+		{
+			"#": "8[0x08]",
+			"$import": "#4[0x08]",
+			"label": "button four released, scene active"
 		},
 		{
 			"#": "9",
 			"label": "Function of the connected switches",
-			"description": "Function of the connected switches",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
