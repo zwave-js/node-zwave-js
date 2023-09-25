@@ -20,7 +20,7 @@ const paramInfoPropertyOrder: any[] = [
 	"options",
 ];
 
-export const consistentDeviceConfigs: JSONCRule.RuleModule = {
+export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 	create(context) {
 		if (!context.parserServices.isJSON) {
 			return {};

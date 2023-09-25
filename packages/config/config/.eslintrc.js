@@ -9,6 +9,6 @@ module.exports = {
 		"@zwave-js",
 	],
 	rules: {
-		"@zwave-js/consistent-device-configs": "error",
+		"@zwave-js/consistent-device-config-property-order": "error",
 	}
 };
