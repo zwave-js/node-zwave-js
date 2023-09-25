@@ -1962,7 +1962,9 @@ async function parseOHConfigFile(
 				defaultValue: parseInt(param.default, 10),
 				readOnly: param.read_only === "1" ? true : undefined,
 				writeOnly: param.write_only === "1" ? true : undefined,
-				allowManualEntry: param.limit_options === "1",
+				allowManualEntry: param.limit_options === "1"
+					? false
+					: undefined,
 			};
 			if (param.options?.length) {
 				paramInfo.options = param.options.map((opt: any) => ({
