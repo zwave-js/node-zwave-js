@@ -57,9 +57,6 @@
 			"#": "17",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
 			"label": "O1: State After Power Failure",
-			"minValue": 0,
-			"maxValue": 1,
-			"unsigned": true
 		},
 		{
 			"#": "19",
