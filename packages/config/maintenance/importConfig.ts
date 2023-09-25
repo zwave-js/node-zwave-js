@@ -19,18 +19,18 @@ import {
 } from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { AssertionError, ok } from "assert";
-import * as child from "child_process";
 import * as JSONC from "comment-json";
 import * as fs from "fs-extra";
 import * as JSON5 from "json5";
-import * as path from "path";
+import { AssertionError, ok } from "node:assert";
+import * as child from "node:child_process";
+import * as path from "node:path";
+import { promisify } from "node:util";
 import { compare } from "semver";
-import { promisify } from "util";
 import xml2js from "xml2js";
 import xml2js_parsers from "xml2js/lib/processors.js";
 import yargs from "yargs";
-import { ConfigManager, DeviceConfigIndexEntry } from "../src";
+import { ConfigManager, type DeviceConfigIndexEntry } from "../src";
 
 const execPromise = promisify(child.exec);
 
@@ -1163,13 +1163,13 @@ function sanitizeFields(json: Record<string, any>[]) {
 			for (const param of file.ConfigurationParameters) {
 				param.Name = param.Name ? sanitizeString(param.Name) : "";
 				param.Name = param.Name
-					? param.Name.replace(/\.\"/g, "\"")
+					? param.Name.replaceAll(".\"", "\"")
 					: "";
 				param.Name = param.Name
 					? param.Name.replace(/[\,\.\:]$/, "\"")
 					: "";
 				param.Name = param.Name
-					? param.Name.replace(/\:\"/g, "\"")
+					? param.Name.replaceAll(":\"", "\"")
 					: "";
 				param.Description = param.Description
 					? sanitizeString(param.Description)
@@ -1320,7 +1320,7 @@ async function parseZWAProduct(
 	const website_root =
 		"https://products.z-wavealliance.org/ProductManual/File?folder=&filename=";
 	if (manual) {
-		manual = manual.replace(/ /g, "%20");
+		manual = manual.replaceAll(" ", "%20");
 		manual = website_root.concat(manual);
 	}
 
@@ -1573,9 +1573,9 @@ async function parseZWAProduct(
 
 	// Insert a TODO comment if necessary
 	if (
-		newConfig.devices.filter(
-				(d) => d.productType === "0x9999" || d.productId === "0x9999",
-			).length > 0
+		newConfig.devices.some(
+			(d) => d.productType === "0x9999" || d.productId === "0x9999",
+		)
 		|| newConfig.manufacturerIdHex === "0x9999"
 	) {
 		output =
@@ -1655,7 +1655,7 @@ async function maintenanceParse(): Promise<void> {
 						"https://products.z-wavealliance.org/ProductManual/File?folder=&filename=";
 
 					if (manual) {
-						manual = manual.replace(/ /g, "%20");
+						manual = manual.replaceAll(" ", "%20");
 						manual = website_root.concat(manual);
 
 						if (jsonData.metadata) {
@@ -1703,7 +1703,7 @@ async function retrieveZWADeviceIds(
 		for (const i of firstPage.match(/(?<=productId=).*?(?=[\&\"])/g)!) {
 			deviceIdsSet.add(i);
 		}
-		const pageNumbers = firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)
+		const pageNumbers = /(?<=page=\d+">).*?(?=\<)/g.test(firstPage)
 			? firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)!
 			: [1];
 		const lastPage = Math.max(...pageNumbers);
@@ -1815,8 +1815,8 @@ async function downloadManufacturersOH(): Promise<void> {
 		data.manufacturers.data.map(({ id, label }) => [
 			label
 				.replace("</a>", "")
-				.replace(/&quot;/g, `"`)
-				.replace(/&amp;/g, "&")
+				.replaceAll("&quot;", `"`)
+				.replaceAll("&amp;", "&")
 				.trim(),
 			formatId(id),
 		]),
@@ -1848,7 +1848,7 @@ function assertValid(json: any) {
 
 /** Removes unnecessary whitespace from imported text */
 function sanitizeText(text: string): string | undefined {
-	return text ? text.trim().replace(/[\t\r\n]+/g, " ") : undefined;
+	return text ? text.trim().replaceAll(/[\t\r\n]+/g, " ") : undefined;
 }
 
 /** Tries to coerce the input value into an integer */
@@ -1860,7 +1860,7 @@ function sanitizeNumber(
 
 	let ret = Number(value);
 	if (Number.isNaN(ret)) {
-		value = value.replace(/[^0-9-\.\,]/g, "");
+		value = value.replaceAll(/[^0-9-\.\,]/g, "");
 		ret = Number(value);
 	}
 	return ret;
@@ -1870,7 +1870,7 @@ function sanitizeNumber(
 function labelToFilename(label: string): string {
 	return label
 		.trim()
-		.replace(/[^a-zA-Z0-9\-_]+/g, "_")
+		.replaceAll(/[^a-zA-Z0-9\-_]+/g, "_")
 		.replace(/^_/, "")
 		.replace(/_$/, "")
 		.toLowerCase();
@@ -1900,7 +1900,7 @@ async function parseOHConfigFile(
 				return { productType, productId };
 			}),
 		firmwareVersion: {
-			min: json.version_min.replace(/000/g, "0"),
+			min: json.version_min.replaceAll("000", "0"),
 			max: json.version_max,
 		},
 	};
@@ -2108,38 +2108,38 @@ function normalizeIdentifier(originalIdentifier: string) {
  ****************************************************************************/
 function normalizeLabel(originalString: string) {
 	originalString = sanitizeString(originalString);
-	originalString = originalString.replace(/\n/g, " ");
-	originalString = originalString.replace(/\\"/g, "");
+	originalString = originalString.replaceAll("\n", " ");
+	originalString = originalString.replaceAll("\\\"", "");
 	let splitStr = originalString.toLowerCase().split(" ");
 	for (let i = 0; i < splitStr.length; i++) {
 		splitStr[i] = splitStr[i].charAt(0).toUpperCase()
-			+ splitStr[i].substring(1);
+			+ splitStr[i].slice(1);
 	}
 	originalString = splitStr.join(" ");
 
 	splitStr = originalString.split("/");
 	for (let i = 0; i < splitStr.length; i++) {
 		splitStr[i] = splitStr[i].charAt(0).toUpperCase()
-			+ splitStr[i].substring(1);
+			+ splitStr[i].slice(1);
 	}
 	originalString = splitStr.join("/");
 
-	originalString = originalString.replace(/ Led /g, " LED ");
-	originalString = originalString.replace(/ Rgb /g, " RGB ");
-	originalString = originalString.replace(/ Pir /g, " PIR ");
-	originalString = originalString.replace(/Z-wave/g, "Z-Wave");
-	originalString = originalString.replace(/basic set/g, "Basic Set");
-	originalString = originalString.replace(
-		/multi-level switch/g,
+	originalString = originalString.replaceAll(" Led ", " LED ");
+	originalString = originalString.replaceAll(" Rgb ", " RGB ");
+	originalString = originalString.replaceAll(" Pir ", " PIR ");
+	originalString = originalString.replaceAll("Z-wave", "Z-Wave");
+	originalString = originalString.replaceAll("basic set", "Basic Set");
+	originalString = originalString.replaceAll(
+		"multi-level switch",
 		"Multi-Level Switch",
 	);
-	originalString = originalString.replace(/Multi-level/g, "Multi-Level");
-	originalString = originalString.replace(/ Of /g, " of ");
-	originalString = originalString.replace(/ To /g, " to ");
-	originalString = originalString.replace(/ A /g, " a ");
-	originalString = originalString.replace(/ An /g, " an ");
-	originalString = originalString.replace(/ Is /g, " is ");
-	originalString = originalString.replace(/ In /g, " in ");
+	originalString = originalString.replaceAll("Multi-level", "Multi-Level");
+	originalString = originalString.replaceAll(" Of ", " of ");
+	originalString = originalString.replaceAll(" To ", " to ");
+	originalString = originalString.replaceAll(" A ", " a ");
+	originalString = originalString.replaceAll(" An ", " an ");
+	originalString = originalString.replaceAll(" Is ", " is ");
+	originalString = originalString.replaceAll(" In ", " in ");
 
 	const prohibitedEndChars = ["-", ".", "_", ",", " "];
 	// Clean-up the end of labels
@@ -2171,21 +2171,21 @@ function normalizeLabel(originalString: string) {
 function normalizeDescription(originalString: string) {
 	originalString = sanitizeString(originalString)
 		.toLocaleLowerCase()
-		.replace(/\n/g, " ")
-		.replace(/\\"/g, "")
-		.replace(/ led /g, " LED ")
-		.replace(/ rgb /g, " RGB ")
-		.replace(/ pir /g, " PIR ")
-		.replace(/basic set/g, "Basic Set")
-		.replace(/multi-level/g, "Multi-Level")
-		.replace(/z-?wave/g, "Z-Wave");
+		.replaceAll("\n", " ")
+		.replaceAll("\\\"", "")
+		.replaceAll(" led ", " LED ")
+		.replaceAll(" rgb ", " RGB ")
+		.replaceAll(" pir ", " PIR ")
+		.replaceAll("basic set", "Basic Set")
+		.replaceAll("multi-level", "Multi-Level")
+		.replaceAll(/z-?wave/g, "Z-Wave");
 	originalString = originalString.charAt(0).toUpperCase()
 		+ originalString.slice(1);
-	originalString = originalString.replace(
-		/multi-level switch/g,
+	originalString = originalString.replaceAll(
+		"multi-level switch",
 		"Multi-Level Switch",
 	);
-	originalString = originalString.replace(/multi-level/g, "Multi-Level");
+	originalString = originalString.replaceAll("multi-level", "Multi-Level");
 
 	// Clean-up the end of labels
 	originalString = originalString.replace(/[._, -]+$/, "");
@@ -2201,16 +2201,16 @@ function normalizeDescription(originalString: string) {
  ****************************************************************************/
 function sanitizeString(originalString: string) {
 	return originalString
-		.replace(/\r\n/g, "\n")
-		.replace(/\r/g, "\n")
-		.replace(/\n\n\n\n/g, "\n\n")
-		.replace(/\t/g, " ")
-		.replace(/\"\"/g, "\"")
-		.replace(/ {2,}/g, " ")
-		.replace(/\,s*$/g, "")
-		.replace(/\„s*$/g, "")
-		.replace(/\.s*$/g, "")
-		.replace(/\:s*$/g, "")
+		.replaceAll("\r\n", "\n")
+		.replaceAll("\r", "\n")
+		.replaceAll("\n\n\n\n", "\n\n")
+		.replaceAll("\t", " ")
+		.replaceAll("\"\"", "\"")
+		.replaceAll(/ {2,}/g, " ")
+		.replaceAll(/\,s*$/g, "")
+		.replaceAll(/\„s*$/g, "")
+		.replaceAll(/\.s*$/g, "")
+		.replaceAll(/\:s*$/g, "")
 		.trim();
 }
 /****************************************************************************
@@ -2289,7 +2289,7 @@ function getLatestConfigVersion(
 		return compare(vA, vB);
 	});
 
-	return configs[configs.length - 1];
+	return configs.at(-1);
 }
 
 /** Changes the manufacturer names in all device config files to match manufacturers.json */
