@@ -56,7 +56,7 @@
 		{
 			"#": "17",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
-			"label": "O1: State After Power Failure",
+			"label": "O1: State After Power Failure"
 		},
 		{
 			"#": "19",
