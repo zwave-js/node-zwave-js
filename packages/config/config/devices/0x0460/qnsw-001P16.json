@@ -20,11 +20,11 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "I1: On/Off",
+			"label": "SW1: On/Off",
 			"maxNodes": 9
 		},
 		"3": {
-			"label": "I1: Start/Stop Level Change",
+			"label": "SW1: Start/Stop Level Change",
 			"maxNodes": 9
 		}
 	},
