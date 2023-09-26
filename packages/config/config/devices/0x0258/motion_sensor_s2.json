@@ -1,0 +1,147 @@
+{
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd",
+	"manufacturerId": "0x0258",
+	"label": "Motion Sensor S2",
+	"description": "Motion, Temperature & Light Sensor NAS_PD02Z",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x1036"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "BASIC_SET with motion",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/shenzhen_neo_template.json#motion_sensitivity",
+			"description": "0 = highest; 99 = lowest",
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 3
+		},
+		{
+			"#": "2",
+			"label": "Motion Window",
+			"description": "Seconds for pulses to occur = [Value]*4 + 4",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2
+		},
+		{
+			"#": "3",
+			"label": "Pulse Count",
+			"description": "Amount of pulses needed in Window= [Value] + 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"$import": "templates/shenzhen_neo_template.json#motion_retrigger_interval",
+			"label": "Motion Blind Time",
+			"description": "Seconds = ([Value] + 1) * 0.5",
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Motion Enable",
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"$import": "templates/shenzhen_neo_template.json#motion_on_off_duration",
+			"minValue": 10,
+			"maxValue": 3600
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"label": "LED Blink with Motion",
+			"defaultValue": 1
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Binary Sensor Report Enable"
+		},
+		{
+			"#": "9",
+			"label": "Basic Set Level",
+			"description": "100 = ON, 0 = OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		{
+			"#": "10",
+			"$import": "templates/shenzhen_neo_template.json#light_sensor_update_interval",
+			"minValue": 30,
+			"maxValue": 3600
+		},
+		{
+			"#": "11",
+			"label": "Light Intensity Differential Report",
+			"description": "Automatic Light report for large Intensity changes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 50
+		},
+		{
+			"#": "12",
+			"label": "Light Intensity Threshold",
+			"description": "Light level that equals Dark",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 50
+		},
+		{
+			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Light Intensity Associated Enable",
+			"description": "'1'- Basic Set to Assoc group 2 if motion and Dark"
+		},
+		{
+			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Motion Event Report Once Enable",
+			"description": "'1' - One report until cleared '0' - reports every motion"
+		},
+		{
+			"#": "15",
+			"$import": "templates/shenzhen_neo_template.json#temperature_report_threshold",
+			"label": "Temperature Differential Report",
+			"description": "Value * 0.1 degrees C",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "99",
+			"$import": "templates/shenzhen_neo_template.json#light_calibration",
+			"label": "Light Intensity Offset Calibration"
+		}
+	]
+}
