@@ -1,24 +1,6 @@
 import { type AST as ESLintAST } from "eslint";
 import type { AST } from "jsonc-eslint-parser";
-import { type JSONCRule } from "../utils";
-
-const paramInfoPropertyOrder: any[] = [
-	"#",
-	"$if",
-	"$import",
-	"label",
-	"description",
-	"valueSize",
-	"unit",
-	"minValue",
-	"maxValue",
-	"defaultValue",
-	"unsigned",
-	"readOnly",
-	"writeOnly",
-	"allowManualEntry",
-	"options",
-];
+import { type JSONCRule, paramInfoPropertyOrder } from "../utils";
 
 export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 	create(context) {
@@ -35,7 +17,7 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 						return undefined;
 					} else {
 						return [
-							paramInfoPropertyOrder.indexOf(p.key.value),
+							paramInfoPropertyOrder.indexOf(p.key.value as any),
 							p,
 						] as const;
 					}
