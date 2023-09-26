@@ -1,3 +1,4 @@
+import { tryParseParamNumber } from "@zwave-js/core";
 import {
 	type JSONObject,
 	ObjectKeyMap,
@@ -328,8 +329,8 @@ ${errorPrefix}required property "#" missing in at least one entry of paramInform
 
 		for (const paramDefinition of definition.paramInformation) {
 			const { ["#"]: paramNo, ...defn } = paramDefinition;
-			const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(paramNo);
-			if (!match) {
+			const key = tryParseParamNumber(paramNo);
+			if (!key) {
 				throwInvalidConfig(
 					`device`,
 					`packages/config/config/devices/${filename}: 
@@ -337,20 +338,14 @@ ${errorPrefix}found invalid param number "${paramNo}" in paramInformation`,
 				);
 			}
 
-			const keyNum = parseInt(match[1], 10);
-			const bitMask = match[2] != undefined
-				? parseInt(match[2], 16)
-				: undefined;
-			const key = { parameter: keyNum, valueBitMask: bitMask };
-
 			if (!paramInformation.has(key)) paramInformation.set(key, []);
 			paramInformation
 				.get(key)!
 				.push(
 					new ConditionalParamInformation(
 						parent,
-						keyNum,
-						bitMask,
+						key.parameter,
+						key.valueBitMask,
 						defn,
 					),
 				);

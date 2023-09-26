@@ -1,9 +1,10 @@
-import { getIntegerLimits } from "@zwave-js/core";
+import { getIntegerLimits, tryParseParamNumber } from "@zwave-js/core";
 import type { AST } from "jsonc-eslint-parser";
 import {
 	type JSONCRule,
 	getJSONBoolean,
 	getJSONNumber,
+	getJSONString,
 	insertAfterJSONProperty,
 	insertBeforeJSONProperty,
 	paramInfoPropertyOrder,
@@ -16,7 +17,7 @@ export const autoUnsigned: JSONCRule.RuleModule = {
 			return {};
 		}
 		return {
-			// Avoid unnecessary min/max value in parameters with predefined options
+			// Ensure `unsigned` is only used when necessary and not used when not
 			"JSONProperty[key.value='paramInformation'] > JSONArrayExpression > JSONObjectExpression"(
 				node: AST.JSONObjectExpression,
 			) {
@@ -26,6 +27,29 @@ export const autoUnsigned: JSONCRule.RuleModule = {
 					&& p.key.value === "$import"
 				);
 				if (hasImport) return;
+
+				// We cannot handle partial parameters yet
+				const paramStr = getJSONString(node, "#")?.value;
+				if (!paramStr) return;
+				const parsedParameter = tryParseParamNumber(paramStr);
+				if (!parsedParameter) return;
+				const { valueBitMask } = parsedParameter;
+
+				// TODO: Properly support partial parameters
+				if (valueBitMask) return;
+
+				// We're also not looking at options with allowManualEntry = false yet
+				const allowManualEntry =
+					getJSONBoolean(node, "allowManualEntry")?.value !== false;
+				const hasOptions = node.properties.some((p) =>
+					p.key.type === "JSONLiteral"
+					&& p.key.value === "options"
+					&& p.value.type === "JSONArrayExpression"
+					&& p.value.elements.length > 0
+				);
+
+				// TODO: Look at options
+				if (!allowManualEntry && hasOptions) return;
 
 				const valueSizeProperty = getJSONNumber(node, "valueSize");
 				if (!valueSizeProperty) return;
