@@ -69,8 +69,8 @@
 			"#": "3",
 			"label": "Watt Meter Report Period",
 			"description": "5s x 720 (default) = 3600s = 1 hour",
-			"unit": "5 seconds",
 			"valueSize": 2,
+			"unit": "5 seconds",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
@@ -79,8 +79,8 @@
 			"#": "4",
 			"label": "kWH Meter Report Period",
 			"description": "10m * 6 (default) = 60m = 1 hour",
-			"unit": "10 minutes",
 			"valueSize": 2,
+			"unit": "10 minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 6
@@ -89,8 +89,8 @@
 			"#": "5",
 			"label": "Threshold of Watt for Load Caution",
 			"description": "Above this level, switch enters overload mode",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 10,
 			"maxValue": 3000,
 			"defaultValue": 3000
@@ -99,8 +99,8 @@
 			"#": "6",
 			"label": "Threshold of kWH for Load Caution",
 			"description": "Over this level, unit with go into overload mode",
-			"unit": "kWH",
 			"valueSize": 2,
+			"unit": "kWH",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000

@@ -51,8 +51,8 @@
 		{
 			"#": "2",
 			"label": "Temperature Reporting Threshold",
-			"unit": "0.1 °",
 			"valueSize": 1,
+			"unit": "0.1 °",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 10
@@ -60,8 +60,8 @@
 		{
 			"#": "3",
 			"label": "Humidity Reporting Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 10
@@ -69,8 +69,8 @@
 		{
 			"#": "4",
 			"label": "Brightness Reporting Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 10
@@ -89,8 +89,8 @@
 			// Update 17.9 changed the unit to seconds
 			"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.16",
 			"label": "Re-trigger Interval",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 15,
 			"maxValue": 60,
 			"defaultValue": 15,
@@ -100,8 +100,8 @@
 			"#": "5",
 			// Update 24.16 changed the range to 15-255, this also applies to HW version 1.0
 			"label": "Re-trigger Interval",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 15,
 			"maxValue": 255,
 			"defaultValue": 15,

@@ -115,8 +115,8 @@
 			"description": "The central LED blinks for 5 seconds.",
 			"valueSize": 1,
 			"defaultValue": 255,
-			"writeOnly": true,
 			"unsigned": true,
+			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -132,8 +132,8 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"readOnly": true,
-			"unsigned": true
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
 			"#": "23",

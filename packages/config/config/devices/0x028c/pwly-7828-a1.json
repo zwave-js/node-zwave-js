@@ -111,10 +111,10 @@
 			"#": "5",
 			"label": "Temperature Calibration",
 			"valueSize": 1,
+			"unit": "°F",
 			"minValue": -5,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"unit": "°F",
 			"options": [
 				{
 					"label": "No change",
@@ -171,10 +171,10 @@
 			"label": "Swing Setting",
 			"description": "Number of degrees from the set point at which the HVAC will turn on",
 			"valueSize": 1,
+			"unit": "°F",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"unit": "°F",
 			"options": [
 				{
 					"label": "No swing",
@@ -187,10 +187,10 @@
 			"label": "Differential Setting",
 			"description": "Number of degrees from the set point at which the 2nd stage will engage",
 			"valueSize": 1,
+			"unit": "°F",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
-			"unit": "°F",
 			"options": [
 				{
 					"label": "No differential",

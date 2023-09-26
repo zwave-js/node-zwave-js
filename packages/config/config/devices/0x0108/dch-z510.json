@@ -18,8 +18,8 @@
 		{
 			"#": "29",
 			"label": "Disable Alarm",
-			"unit": "disable_alarm",
 			"valueSize": 1,
+			"unit": "disable_alarm",
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

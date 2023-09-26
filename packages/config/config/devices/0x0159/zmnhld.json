@@ -203,8 +203,8 @@
 		{
 			"#": "40",
 			"label": "Power reporting in Watts on power change",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
@@ -234,8 +234,8 @@
 		{
 			"#": "50",
 			"label": "PWM maximum value",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 2,
 			"maxValue": 100,
 			"defaultValue": 100
@@ -251,8 +251,8 @@
 		{
 			"#": "52",
 			"label": "PWM cycle duration",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 127,
 			"defaultValue": 10
@@ -268,8 +268,8 @@
 		{
 			"#": "54",
 			"label": "PID deadband",
-			"unit": "°C",
 			"valueSize": 1,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 5
@@ -277,8 +277,8 @@
 		{
 			"#": "55",
 			"label": "Integral sampling time",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 5
@@ -327,8 +327,8 @@
 		{
 			"#": "60",
 			"label": "Too low temperature limit",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 1150,
 			"defaultValue": 50
@@ -336,8 +336,8 @@
 		{
 			"#": "61",
 			"label": "Too high temperature limit",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 1000,
 			"defaultValue": 700
@@ -362,8 +362,8 @@
 		{
 			"#": "70",
 			"label": "Input I1 status on delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -371,8 +371,8 @@
 		{
 			"#": "71",
 			"label": "Input I1 status off delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -380,8 +380,8 @@
 		{
 			"#": "72",
 			"label": "Input I2 status on delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -389,8 +389,8 @@
 		{
 			"#": "73",
 			"label": "Input I2 status off delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -406,8 +406,8 @@
 		{
 			"#": "75",
 			"label": "Input I3 status off delay",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -415,8 +415,8 @@
 		{
 			"#": "76",
 			"label": "Reporting on time interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 30
@@ -424,8 +424,8 @@
 		{
 			"#": "77",
 			"label": "Group 10 - delay before sending Basic Set ON",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 180
@@ -573,8 +573,8 @@
 		{
 			"#": "110",
 			"label": "Temperature sensor offset settings",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 32536

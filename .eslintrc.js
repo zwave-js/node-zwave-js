@@ -194,5 +194,12 @@ module.exports = {
 				"@zwave-js/no-forbidden-imports": "error",
 			},
 		},
+		{
+			files: ["packages/config/config/devices/**/*.json"],
+			parser: "jsonc-eslint-parser",
+			rules: {
+				"@zwave-js/consistent-device-configs": "error",
+			},
+		},
 	],
 };

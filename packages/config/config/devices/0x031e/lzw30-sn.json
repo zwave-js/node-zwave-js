@@ -56,8 +56,8 @@
 		{
 			"#": "3",
 			"label": "Auto Off Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -227,8 +227,8 @@
 		{
 			"#": "9",
 			"label": "LED Strip Timeout",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -281,8 +281,8 @@
 		{
 			"#": "10",
 			"label": "Active Power Reports",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
@@ -290,8 +290,8 @@
 		{
 			"#": "11",
 			"label": "Periodic Power & Energy Reports",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600
@@ -299,8 +299,8 @@
 		{
 			"#": "12",
 			"label": "Energy Reports",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10

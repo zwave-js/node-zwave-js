@@ -23,8 +23,6 @@
 			"#": "2",
 			"label": "External Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -42,8 +40,6 @@
 			"#": "3",
 			"label": "External Switch Behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -59,15 +55,15 @@
 		},
 		{
 			"#": "4",
-			"label": "Manual Operation During Auto Turn-Off",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Manual Operation During Auto Turn-Off",
 			"defaultValue": 1
 		},
 		{
 			"#": "5",
 			"label": "Auto Turn-Off Timer",
-			"unit": "100ms",
 			"valueSize": 2,
+			"unit": "100ms",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
@@ -82,8 +78,6 @@
 			"#": "8",
 			"label": "Reports To Group 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -241,15 +241,15 @@
 		},
 		{
 			"#": "24",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"$if": "firmwareVersion >= 10.30 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Scene Control (Relay)",
 			"defaultValue": 0
 		},
 		{
 			"#": "26",
-			"$import": "templates/zooz_template.json#enable_scene_control_3way",
 			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#enable_scene_control_3way",
 			"label": "Scene Control (Relay)"
 		},
 		{

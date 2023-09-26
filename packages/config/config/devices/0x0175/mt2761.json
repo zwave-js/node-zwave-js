@@ -97,8 +97,8 @@
 		{
 			"#": "42",
 			"label": "Power reporting in Watts by time interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 300
@@ -126,8 +126,8 @@
 			"#": "72",
 			"label": "Slats tilting full turn time",
 			"description": "Slat full turn time in tenths of a second.",
-			"unit": "tenths of a second",
 			"valueSize": 2,
+			"unit": "tenths of a second",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 150
@@ -227,8 +227,8 @@
 			"#": "90",
 			"label": "Relay delay time",
 			"description": "Defines the minimum time delay between next motor movement",
-			"unit": "milliseconds",
 			"valueSize": 1,
+			"unit": "milliseconds",
 			"minValue": 1,
 			"maxValue": 30,
 			"defaultValue": 5

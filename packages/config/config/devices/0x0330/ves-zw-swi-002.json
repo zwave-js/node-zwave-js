@@ -36,8 +36,8 @@
 			"label": "Switch Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Momentary",

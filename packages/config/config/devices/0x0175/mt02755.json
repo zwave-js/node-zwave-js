@@ -55,8 +55,8 @@
 			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto report the battery level.",
-			"unit": "Ticks",
 			"valueSize": 1,
+			"unit": "Ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
@@ -65,8 +65,8 @@
 			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"description": "The interval time for auto report the temperature.",
-			"unit": "Ticks",
 			"valueSize": 1,
+			"unit": "Ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
@@ -75,8 +75,8 @@
 			"#": "14",
 			"label": "Auto Report Humidity Time",
 			"description": "The interval time for auto report the humidity",
-			"unit": "Ticks",
 			"valueSize": 1,
+			"unit": "Ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
@@ -85,8 +85,8 @@
 			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"description": "The interval time for auto report each tick",
-			"unit": "Minutes",
 			"valueSize": 1,
+			"unit": "Minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
@@ -95,8 +95,8 @@
 		{
 			"#": "21",
 			"label": "Temperature Differential Report",
-			"unit": "Fahrenheit",
 			"valueSize": 1,
+			"unit": "Fahrenheit",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
@@ -104,8 +104,8 @@
 		{
 			"#": "23",
 			"label": "Humidity Differential Report",
-			"unit": "Percent",
 			"valueSize": 1,
+			"unit": "Percent",
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0

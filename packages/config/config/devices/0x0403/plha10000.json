@@ -37,6 +37,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Momentary switch",
@@ -46,8 +47,7 @@
 					"label": "Toggle switch",
 					"value": 1
 				}
-			],
-			"unsigned": true
+			]
 		},
 		{
 			"#": "3",
@@ -56,13 +56,13 @@
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
 				}
-			],
-			"unsigned": true
+			]
 		},
 		{
 			"#": "5",
@@ -76,6 +76,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Momentary switch",
@@ -85,8 +86,7 @@
 					"label": "Toggle switch",
 					"value": 1
 				}
-			],
-			"unsigned": true
+			]
 		},
 		{
 			"#": "4",
@@ -95,13 +95,13 @@
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
 				}
-			],
-			"unsigned": true
+			]
 		},
 		{
 			"#": "6",

@@ -181,8 +181,8 @@
 		{
 			"#": "62",
 			"label": "Power reports - periodic",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
@@ -198,8 +198,8 @@
 		{
 			"#": "64",
 			"label": "Analog inputs reports - periodic",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 0
@@ -215,8 +215,8 @@
 		{
 			"#": "66",
 			"label": "Energy reports - periodic",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
@@ -241,8 +241,8 @@
 		{
 			"#": "151",
 			"label": "Local control - transition time",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 3
@@ -250,8 +250,8 @@
 		{
 			"#": "152",
 			"label": "Remote control - transition time",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 3
@@ -352,8 +352,8 @@
 		{
 			"#": "35",
 			"label": "Duration of alarm signalization",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600,

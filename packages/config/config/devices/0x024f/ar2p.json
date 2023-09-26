@@ -46,9 +46,9 @@
 			"#": "4",
 			"label": "Safety Activate Delay",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"unit": "seconds",
 			"defaultValue": 0,
 			"unsigned": true
 		},
@@ -56,9 +56,9 @@
 			"#": "5",
 			"label": "Safety Off Period",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"unit": "seconds",
 			"defaultValue": 600,
 			"unsigned": true
 		},
@@ -66,9 +66,9 @@
 			"#": "6",
 			"label": "Safety On Period",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"unit": "seconds",
 			"defaultValue": 300,
 			"unsigned": true
 		},

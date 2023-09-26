@@ -27,50 +27,50 @@
 			"description": "For motor protection",
 			"valueSize": 1,
 			"unit": "0.1 seconds",
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"unsigned": true
 		},
 		{
 			"#": "177",
 			"label": "Travel Time Up, Byte 1",
 			"valueSize": 1,
 			"unit": "25.6 seconds",
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 4
+			"defaultValue": 4,
+			"unsigned": true
 		},
 		{
 			"#": "178",
 			"label": "Travel Time Up, Byte 2",
 			"valueSize": 1,
-			"unsigned": true,
 			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 176
+			"defaultValue": 176,
+			"unsigned": true
 		},
 		{
 			"#": "179",
 			"label": "Travel Time Down, Byte 1",
 			"valueSize": 1,
-			"unsigned": true,
 			"unit": "25.6 seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 4
+			"defaultValue": 4,
+			"unsigned": true
 		},
 		{
 			"#": "180",
 			"label": "Travel Time Down, Byte 2",
 			"valueSize": 1,
-			"unsigned": true,
 			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 176
+			"defaultValue": 176,
+			"unsigned": true
 		}
 	],
 	"metadata": {

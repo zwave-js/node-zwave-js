@@ -46,9 +46,9 @@
 	},
 	"paramInformation": [
 		{
+			"units": "seconds",
 			"#": "1",
 			"label": "Light Dimming Speed (Z-Wave)",
-			"units": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -62,9 +62,9 @@
 			]
 		},
 		{
+			"units": "seconds",
 			"#": "2",
 			"label": "Light Dimming Speed",
-			"units": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -82,9 +82,9 @@
 			]
 		},
 		{
+			"units": "seconds",
 			"#": "3",
 			"label": "Light Ramp Rate (Z-Wave)",
-			"units": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -102,9 +102,9 @@
 			]
 		},
 		{
+			"units": "seconds",
 			"#": "4",
 			"label": "Light Ramp Rate",
-			"units": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -160,17 +160,17 @@
 		{
 			"#": "10",
 			"label": "Auto Off Light Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
 			"unsigned": true
 		},
 		{
+			"units": "seconds",
 			"#": "11",
 			"label": "Auto Off Fan Timer",
-			"units": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -904,8 +904,8 @@
 			"#": "26",
 			"label": "Light LED Strip Timeout",
 			"description": "When light LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
@@ -921,8 +921,8 @@
 			"#": "27",
 			"label": "Fan LED Strip Timeout",
 			"description": "When the fan LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted.",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
@@ -938,8 +938,8 @@
 			"#": "28",
 			"label": "Active Power Reports",
 			"description": "The power level change that will result in a new power report being sent.",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
@@ -952,10 +952,10 @@
 			]
 		},
 		{
+			"units": "seconds",
 			"#": "29",
 			"label": "Periodic Power & Energy Reports",
 			"description": "Time period between consecutive power & energy reports being sent.",
-			"units": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -963,10 +963,10 @@
 			"unsigned": true
 		},
 		{
+			"units": "%",
 			"#": "30",
 			"label": "Energy Reports",
 			"description": "The energy level change that will result in a new energy report being sent.",
-			"units": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -1001,8 +1001,8 @@
 		},
 		{
 			"#": "51",
-			"label": "Instant On",
 			"$if": "firmwareVersion >= 1.36",
+			"label": "Instant On",
 			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
 			"valueSize": 1,
 			"defaultValue": 1,

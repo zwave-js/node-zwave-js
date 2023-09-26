@@ -29,10 +29,10 @@
 			"#": "1",
 			"label": "Temperature Change Reporting Threshold",
 			"valueSize": 1,
+			"unit": "0.1 K",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"unit": "0.1 K",
 			"unsigned": true,
 			"options": [
 				{
@@ -45,10 +45,10 @@
 			"#": "2",
 			"label": "Humidity Change Reporting Threshold",
 			"valueSize": 1,
+			"unit": "%rH",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"unit": "%rH",
 			"unsigned": true,
 			"options": [
 				{

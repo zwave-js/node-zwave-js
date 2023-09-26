@@ -18,8 +18,8 @@
 			"#": "0",
 			"label": "Watt Meter Report Period",
 			"description": "720*5s=3600s=1hour",
-			"unit": "5s",
 			"valueSize": 2,
+			"unit": "5s",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
@@ -28,8 +28,8 @@
 			"#": "2",
 			"label": "KWH Meter Report Period",
 			"description": "6*10 min = 1 hour",
-			"unit": "10 minutes",
 			"valueSize": 2,
+			"unit": "10 minutes",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6
@@ -80,8 +80,8 @@
 			"#": "5",
 			"label": "Threshold of current for load caution",
 			"description": "750*0.01A=7.5A",
-			"unit": "0.01A",
 			"valueSize": 2,
+			"unit": "0.01A",
 			"minValue": 10,
 			"maxValue": 750,
 			"defaultValue": 750
@@ -89,8 +89,8 @@
 		{
 			"#": "6",
 			"label": "Threshold of KWH for load caution",
-			"unit": "1KWh",
 			"valueSize": 2,
+			"unit": "1KWh",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000
@@ -108,8 +108,8 @@
 			"#": "8",
 			"label": "Auto off timer",
 			"description": "0: Disable auto off function, 1: 0x0-0x7FFF 1s-32767s",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0

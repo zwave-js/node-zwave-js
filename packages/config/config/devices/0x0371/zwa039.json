@@ -52,12 +52,12 @@
 		{
 			"#": "1",
 			"label": "Temperature Change Report Threshold",
-			"unit": "0.1 °(C/F)",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "0.1 °(C/F)",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -68,12 +68,12 @@
 		{
 			"#": "2",
 			"label": "Humidity Change Report Threshold",
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 5,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -84,23 +84,23 @@
 		{
 			"#": "3",
 			"label": "Threshold Check Interval",
-			"unit": "minutes",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 15
+			"defaultValue": 15,
+			"unsigned": true
 		},
 		{
 			"#": "4",
 			"label": "Automatic Reporting Interval",
 			"description": "Allowable Range: 30-65535",
-			"unit": "seconds",
-			"unsigned": true,
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 43200,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -111,12 +111,12 @@
 		{
 			"#": "5",
 			"label": "High Temperature Basic Set Threshold",
-			"unit": "0.1 °(C/F)",
-			"unsigned": true,
 			"valueSize": 2,
+			"unit": "0.1 °(C/F)",
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -128,17 +128,17 @@
 			"#": "10",
 			"label": "High Temperature Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "6",
 			"label": "Low Temperature Basic Set Threshold",
-			"unit": "0.1 °(C/F)",
 			"valueSize": 2,
+			"unit": "0.1 °(C/F)",
 			"minValue": -200,
 			"maxValue": 1000,
 			"defaultValue": 0,
@@ -153,21 +153,21 @@
 			"#": "9",
 			"label": "Low Temperature Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "7",
 			"label": "High Humidity Basic Set Threshold",
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -178,32 +178,32 @@
 		{
 			"#": "16",
 			"label": "Check Interval for Parameter 5, 6, 7, 8",
-			"unit": "minutes",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 15
+			"defaultValue": 15,
+			"unsigned": true
 		},
 		{
 			"#": "12",
 			"label": "High Humidity Trigger Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "8",
 			"label": "Low Humidity Basic Set Threshold",
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -215,27 +215,27 @@
 			"#": "11",
 			"label": "Low Humidity Trigger Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "13",
 			"label": "Humidity Offset for Mold Danger Notification",
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "14",
 			"label": "Temperature Calibration",
-			"unit": "0.1 °(C/F)",
 			"valueSize": 2,
+			"unit": "0.1 °(C/F)",
 			"minValue": -200,
 			"maxValue": 200,
 			"defaultValue": 0
@@ -243,8 +243,8 @@
 		{
 			"#": "15",
 			"label": "Humidity Calibration",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": -50,
 			"maxValue": 50,
 			"defaultValue": 0
@@ -252,38 +252,38 @@
 		{
 			"#": "65[0x01]",
 			"label": "Sensor Report after Inclusion: Battery",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true
 		},
 		{
 			"#": "65[0x02]",
 			"label": "Sensor Report after Inclusion: Temperature",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true
 		},
 		{
 			"#": "65[0x04]",
 			"label": "Sensor Report after Inclusion: Humidity",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true
 		},
 		{
 			"#": "65[0x08]",
 			"label": "Sensor Report after Inclusion: Dew Point",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true
 		},
 		{
 			"#": "64",
@@ -295,9 +295,9 @@
 			"$if": "firmwareVersion >= 2.1",
 			"label": "Battery Calibration Check",
 			"description": "To determine the battery calibration value, set each step in order and wait for the value to update. If the returned values are NOT 0, the battery is still calibrated.",
-			"unsigned": true,
 			"valueSize": 4,
 			"defaultValue": 83951616,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -17,8 +17,8 @@
 		{
 			"#": "1",
 			"label": "Up output time",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
@@ -27,8 +27,8 @@
 		{
 			"#": "2",
 			"label": "Stop output time",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
@@ -37,8 +37,8 @@
 		{
 			"#": "3",
 			"label": "Down output time",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,

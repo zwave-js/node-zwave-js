@@ -18,10 +18,10 @@
 			"#": "11",
 			"label": "Reporting Time",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unit": "seconds",
 			"unsigned": true
 		},
 		{

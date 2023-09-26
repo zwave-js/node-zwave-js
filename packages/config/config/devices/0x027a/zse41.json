@@ -41,11 +41,11 @@
 		},
 		{
 			"#": "5",
+			"label": "Sensor Behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
-			"label": "Sensor Behavior",
 			"options": [
 				{
 					"label": "Normally Closed (Report open when magnet is away)",

@@ -32,8 +32,8 @@
 		{
 			"#": "2",
 			"label": "Delaying time Group 1",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 25,
 			"defaultValue": 3

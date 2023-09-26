@@ -110,11 +110,11 @@
 			]
 		},
 		{
+			"units": "10 ms",
 			"#": "5",
 			"label": "Dimming speed",
 			"description": "Time to dim on button presses",
 			"valueSize": 1,
-			"units": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,

@@ -35,8 +35,6 @@
 			"#": "2",
 			"label": "LED Indicator Color",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -188,8 +186,6 @@
 			"#": "24",
 			"label": "Center Press: Brightness",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -245,8 +241,6 @@
 			"#": "19",
 			"label": "External Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -289,8 +283,8 @@
 			"#": "22",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Diming Rate (Z-Wave On)",
-			"defaultValue": 255,
 			"unit": "seconds",
+			"defaultValue": 255,
 			"options": [
 				{
 					"label": "Instant",
@@ -306,8 +300,8 @@
 			"#": "23",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Diming Rate (Z-Wave Off)",
-			"defaultValue": 255,
 			"unit": "seconds",
+			"defaultValue": 255,
 			"options": [
 				{
 					"label": "Instant",

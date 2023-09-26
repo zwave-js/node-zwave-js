@@ -69,10 +69,10 @@
 			"#": "5",
 			"label": "Power Reporting On Power Change",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unit": "%",
 			"unsigned": true,
 			"options": [
 				{

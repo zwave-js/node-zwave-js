@@ -74,10 +74,10 @@
 			"#": "2[0xff00]",
 			"label": "Heater Cooldown Period",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": -1,
 			"maxValue": 15,
 			"defaultValue": -1,
-			"unit": "minutes",
 			"options": [
 				{
 					"label": "No heater installed",
@@ -100,9 +100,9 @@
 			"#": "3[0xff000000]",
 			"label": "Water Temperature Offset",
 			"valueSize": 4,
+			"unit": "°F",
 			"minValue": -5,
 			"maxValue": 5,
-			"unit": "°F",
 			"defaultValue": 0
 		},
 		{
@@ -266,8 +266,6 @@
 			"label": "Freeze Protection: Turn On VSP Speed",
 			"description": "Requires variable speed pump and connected air/freeze sensor.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

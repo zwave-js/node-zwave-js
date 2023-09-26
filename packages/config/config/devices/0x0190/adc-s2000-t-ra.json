@@ -18,8 +18,8 @@
 			"#": "1",
 			"label": "Wake Up Period",
 			"description": "Seconds to stay awake following button press",
-			"unit": "Seconds",
 			"valueSize": 2,
+			"unit": "Seconds",
 			"minValue": 10,
 			"maxValue": 32767,
 			"defaultValue": 32768
@@ -85,8 +85,8 @@
 		{
 			"#": "9",
 			"label": "Mandatory Temperature Reporting Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 60,
 			"maxValue": 64800,
 			"defaultValue": 64800,

@@ -30,10 +30,10 @@
 			"#": "2",
 			"label": "Basic Set Level",
 			"valueSize": 1,
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "3",

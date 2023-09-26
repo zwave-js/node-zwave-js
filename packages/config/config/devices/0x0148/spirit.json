@@ -42,8 +42,8 @@
 		{
 			"#": "2",
 			"label": "LCD Timeout",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
@@ -91,8 +91,8 @@
 		{
 			"#": "5",
 			"label": "Temperature Report Threshold",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5
@@ -100,8 +100,8 @@
 		{
 			"#": "6",
 			"label": "Valve opening percentage report",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0
@@ -134,8 +134,8 @@
 		{
 			"#": "8",
 			"label": "Temperature Offset",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": -128,
 			"maxValue": 50,
 			"defaultValue": 0,

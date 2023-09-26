@@ -33,8 +33,6 @@
 			"#": "1",
 			"label": "SW1 Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -61,6 +59,7 @@
 		{
 			"#": "19",
 			"label": "O1: Auto-Off Timer",
+			"description": "The timer resets to zero each time the Device receives an ON command",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -70,6 +69,7 @@
 		{
 			"#": "20",
 			"label": "O1: Auto-On Timer",
+			"description": "The timer resets to zero each time the Device receives an OFF command",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -77,11 +77,27 @@
 			"unsigned": true
 		},
 		{
+			"#": "23",
+			"label": "O1: Relay Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO: normally open",
+					"value": 0
+				},
+				{
+					"label": "NC: normally closed",
+					"value": 1
+				}
+			]
+		},
+		{
 			"#": "25",
 			"label": "O1: Auto-On/Off Timer Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -92,26 +108,6 @@
 				},
 				{
 					"label": "10 ms",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "23",
-			"label": "O1: Relay Type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally open (NO)",
-					"value": 0
-				},
-				{
-					"label": "Normally closed (NC)",
 					"value": 1
 				}
 			]
@@ -139,7 +135,7 @@
 		{
 			"#": "91",
 			"label": "Alarm Configuration: Water",
-			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
+			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -162,7 +158,7 @@
 		{
 			"#": "92",
 			"label": "Alarm Configuration: Smoke",
-			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.0",
+			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -185,7 +181,7 @@
 		{
 			"#": "93",
 			"label": "Alarm Configuration: CO",
-			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
+			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -208,7 +204,7 @@
 		{
 			"#": "94",
 			"label": "Alarm Configuration: Heat",
-			"description": "This parameter determines which alarm frames the Device should respond to and how. The parameters consist of 4 bytes, the three most significant bytes are set according to the official Z-Wave protocol specification.",
+			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -250,6 +246,7 @@
 		{
 			"#": "201",
 			"label": "Serial Number: Part 1",
+			"description": "This parameter contains a part of devices serial number.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -259,6 +256,7 @@
 		{
 			"#": "202",
 			"label": "Serial Number: Part 2",
+			"description": "This parameter contains a part of devices serial number.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -268,6 +266,7 @@
 		{
 			"#": "203",
 			"label": "Serial Number: Part 3",
+			"description": "This parameter contains a part of devices serial number.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,

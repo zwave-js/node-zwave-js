@@ -40,8 +40,8 @@
 			"#": "3",
 			"label": "Door Sensor Status Report",
 			"description": "Auto report Door/Window status time",
-			"unit": "hours",
 			"valueSize": 1,
+			"unit": "hours",
 			"minValue": 0,
 			"maxValue": 24,
 			"defaultValue": 12

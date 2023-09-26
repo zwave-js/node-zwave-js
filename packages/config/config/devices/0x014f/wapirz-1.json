@@ -24,8 +24,8 @@
 		{
 			"#": "1",
 			"label": "Re-trigger Wait Time",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,

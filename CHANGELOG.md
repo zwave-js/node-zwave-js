@@ -4,45 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 12.0.0-beta.3 (2023-09-22)
-### Bugfixes
-* A bug in the `7.19.x` SDK has surfaced where the controller gets stuck in the middle of a transmission. Previously this would go unnoticed because the failed commands would cause the nodes to be marked dead until the controller finally recovered. Since `v11.12.0` however, Z-Wave JS would consider the controller jammed and retry the last command indefinitely. This situation is now detected and Z-Wave JS attempts to recover by soft-resetting the controller when this happens. (#6296)
-
-### Config file changes
-* Add Shelly Wave 1PM (#6280)
-
-### Changes under the hood
-* Migrated more Z-Wave JS specific checks to the custom ESLint plugin (#6297, #6302)
-
-## 12.0.0-beta.2 (2023-09-21)
-### Bugfixes
-* Fixed an issue where some `Notification CC Reports` including an enumeration value would cause the corresponding value ID to be set to the wrong value (#6282)
-* When the Serial API on a controller restarts unexpectedly, the node ID length is now synchronized again (#6271)
-
-### Config file changes
-* Add Heatit Z-TRM6 (#6263)
-* Increase poll delay for ZW500D (#6270)
-* Add fingerprint for Simon IO Master Roller Blind (#6262)
-* Add HOPPE eHandle ConnectSense (#6269)
-* Add parameters to Zooz ZEN17 from firmware 1.30 (#6189)
-* Update Zooz ZEN32 config to the latest firmware, include 800 series (#6283)
-* Add warnings about broken controller firmware versions (#6293)
-
-### Changes under the hood
-* Some Z-Wave JS specific checks are now done using a custom ESLint plugin (#6276, #6279)
-* `yarn test` now only runs tests affected by changed files by default. This is also done on CI in PRs to speed up check times (#6274)
-
-## 12.0.0-beta.1 (2023-09-11)
-### Bugfixes
-* Ported changes from `v11.14.1` and `v11.14.2`
-* Fixed the argument type for `updateLogConfig` and `updateOptions` (#6254)
-* Removed auto-disabling of soft-reset capability (#6256)
-* Default to RF protection state `Unprotected` if not given for `Protection CC` V2+ (#6257)
-
-### Changes under the hood
-* Upgraded lots of dependencies (#6258)
-
-## 12.0.0-beta.0 (2023-09-06)
+## 12.0.0 (2023-09-26)
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v12)
 * Remove support for Node.js 14 and 16 (#6245)
 * Subpath exports are now exposed using the `exports` field in `package.json` instead of `typesVersions` (#5839)
@@ -52,9 +14,42 @@
 * Removed some deprecated methods (#6250)
 * Managing SUC routes with the non-SUC method variants is no longer allowed (#6251)
 * "Heal (network)" was renamed to "rebuild routes" to better reflect what it does (#6252)
+* Corrected the argument type for `Driver.constructor`, `updateLogConfig` and `updateOptions` (#6254, #6319)
 
 ### Features
 * Detect an unresponsive stick and reset it (#6244)
+* The default time after which battery-powered devices with no pending commands are sent back to sleep is now `250 ms` (down from `1000ms`). This timeout is now configurable using the driver option `timeouts.sendToSleep`. This should result in significant battery savings for devices that frequently wake up. (#6312)
+
+### Bugfixes
+* A bug in the `7.19.x` SDK has surfaced where the controller gets stuck in the middle of a transmission. Previously this would go unnoticed because the failed commands would cause the nodes to be marked dead until the controller finally recovered. Since `v11.12.0` however, Z-Wave JS would consider the controller jammed and retry the last command indefinitely. This situation is now detected and Z-Wave JS attempts to recover by soft-resetting the controller when this happens. (#6296)
+* Removed auto-disabling of soft-reset capability (#6256)
+* Default to RF protection state `Unprotected` if not given for `Protection CC` V2+ (#6257)
+
+### Config file changes
+* Add Heatit Z-Water 2 (#6299)
+* Add Shelly Wave 1PM (#6280, #6317)
+* Add Heatit Z-TRM6 (#6263)
+* Increase poll delay for ZW500D (#6270)
+* Add fingerprint for Simon IO Master Roller Blind (#6262)
+* Add HOPPE eHandle ConnectSense (#6269)
+* Add parameters to Zooz ZEN17 from firmware 1.30 (#6189)
+* Update Zooz ZEN32 config to the latest firmware, include 800 series (#6283)
+
+### Changes under the hood
+* Fixed the interpretation of `limit_options` in OpenSmartHouse import script (#6313)
+* Some Z-Wave JS specific implementation checks are now done using a custom ESLint plugin (#6276, #6279, #6315)
+* Migrated more Z-Wave JS specific checks to the custom ESLint plugin (#6297, #6302)
+* Use ESLint to enforce consistent property ordering in config parameters and avoid unnecessary `minValue/maxValue` (#6321, #6322)
+* `yarn test` now only runs tests affected by changed files by default. This is also done on CI in PRs to speed up check times (#6274)
+* Upgraded lots of dependencies (#6258)
+
+## 11.14.3 (2023-09-21)
+### Bugfixes
+* Fixed an issue where some `Notification CC Reports` including an enumeration value would cause the corresponding value ID to be set to the wrong value (#6282)
+* When the Serial API on a controller restarts unexpectedly, the node ID length is now synchronized again (#6271)
+
+### Config file changes
+* Add warnings about broken controller firmware versions (#6293)
 
 ## 11.14.2 (2023-09-11)
 ### Bugfixes

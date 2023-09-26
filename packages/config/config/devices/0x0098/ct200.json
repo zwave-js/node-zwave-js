@@ -107,8 +107,8 @@
 			"#": "7",
 			"label": "Thermostat Swing Temp",
 			"description": "Temperature spread between the on and off temperatures",
-			"unit": "degrees Fahrenheit",
 			"valueSize": 1,
+			"unit": "degrees Fahrenheit",
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

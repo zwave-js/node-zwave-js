@@ -52,12 +52,12 @@
 		{
 			"#": "1",
 			"label": "Temperature Change Report Threshold",
-			"unit": "0.1 °(C/F)",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "0.1 °(C/F)",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -68,12 +68,12 @@
 		{
 			"#": "2",
 			"label": "Humidity Change Report Threshold",
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 5,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -85,12 +85,12 @@
 			"#": "4",
 			"label": "Automatic Reporting Interval",
 			"description": "Allowable Range: 30-65535",
-			"unit": "seconds",
-			"unsigned": true,
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 43200,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -101,12 +101,12 @@
 		{
 			"#": "5",
 			"label": "High Temperature Basic Set Threshold",
-			"unit": "0.1 °(C/F)",
-			"unsigned": true,
 			"valueSize": 2,
+			"unit": "0.1 °(C/F)",
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -118,22 +118,22 @@
 			"#": "10",
 			"label": "High Temperature Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "6",
 			"label": "Low Temperature Basic Set Threshold",
 			"description": "Allowable Range: 200-1000.",
-			"unit": "0.1 °(C/F)",
-			"unsigned": true,
 			"valueSize": 2,
+			"unit": "0.1 °(C/F)",
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -145,21 +145,21 @@
 			"#": "9",
 			"label": "Low Temperature Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "7",
 			"label": "High Humidity Basic Set Threshold",
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -171,21 +171,21 @@
 			"#": "12",
 			"label": "High Humidity Trigger Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "8",
 			"label": "Low Humidity Basic Set Threshold",
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -197,21 +197,21 @@
 			"#": "11",
 			"label": "Low Humidity Trigger Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "13",
 			"label": "Humidity Offset for Mold Danger Notification",
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "64",

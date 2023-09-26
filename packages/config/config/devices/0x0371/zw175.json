@@ -141,8 +141,8 @@
 		{
 			"#": "18",
 			"label": "LED Blinking Frequency",
-			"unit": "Hz",
 			"valueSize": 1,
+			"unit": "Hz",
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 2,

@@ -39,10 +39,8 @@
 			"label": "Motion Sensor: Window Time",
 			"description": "Period during which motion is measured.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 2,
 			"unit": "seconds",
+			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -68,8 +66,6 @@
 			"label": "Motion Sensor: Pulse Count",
 			"description": "Number of times motion must be detected within set window time before a detection message is sent.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -96,8 +92,6 @@
 			"label": "Motion Sensor: Blind Time",
 			"description": "Time the sensor waits before sending a next motion detected message.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
 			"unit": "seconds",
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -170,16 +164,16 @@
 		},
 		{
 			"#": "5",
-			"label": "Motion Sensor",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Motion Sensor",
 			"defaultValue": 1
 		},
 		{
 			"#": "6",
 			"label": "Motion Sensor: Clear Time",
 			"description": "Time in seconds to wait before sending 'Clear motion detected' since the last detection.",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 3600,
 			"defaultValue": 30
@@ -190,15 +184,13 @@
 		},
 		{
 			"#": "8",
-			"label": "Binary Sensor Report",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Binary Sensor Report"
 		},
 		{
 			"#": "9",
 			"label": "Motion Control: Basic Set Level",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
 			"defaultValue": 100,
 			"allowManualEntry": false,
 			"options": [
@@ -215,8 +207,8 @@
 		{
 			"#": "10",
 			"label": "Light Sensor: Measuring Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 30,
 			"maxValue": 3600,
 			"defaultValue": 180
@@ -254,8 +246,8 @@
 			"#": "15",
 			"label": "Temperature Change Report Threshold",
 			"valueSize": 1,
-			"minValue": 1,
 			"unit": "0.1 °C",
+			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10
 		},

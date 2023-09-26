@@ -28,8 +28,8 @@
 		{
 			"#": "1",
 			"label": "Off Delay After Motion",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 10,
@@ -53,8 +53,8 @@
 		{
 			"#": "3",
 			"label": "Light Level Report Interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 60,
@@ -69,8 +69,8 @@
 		{
 			"#": "4",
 			"label": "Temperature Report Interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 60,

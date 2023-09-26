@@ -156,8 +156,8 @@
 			"$import": "templates/fibaro_template.json#alarm_configuration_action",
 			"label": "Alarm Configuration – 1st Slot Action",
 			"maxValue": 3,
-			"allowManualEntry": false,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "No action",
@@ -416,9 +416,9 @@
 			"#": "154",
 			"label": "Q1 Output – Time Parameter for Timed Modes",
 			"valueSize": 2,
+			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 32000,
-			"unit": "0.1 seconds",
 			"defaultValue": 5,
 			"unsigned": true,
 			"options": [
@@ -432,9 +432,9 @@
 			"#": "155",
 			"label": "Q2 Output – Time Parameter for Timed Modes",
 			"valueSize": 2,
+			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 32000,
-			"unit": "0.1 seconds",
 			"defaultValue": 5,
 			"unsigned": true,
 			"options": [

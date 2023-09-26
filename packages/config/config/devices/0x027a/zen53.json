@@ -155,8 +155,8 @@
 			"#": "14",
 			"label": "External Switch Type (S1)",
 			"valueSize": 1,
-			"unsigned": true,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -173,8 +173,8 @@
 			"#": "15",
 			"label": "External Switch Type (S2)",
 			"valueSize": 1,
-			"unsigned": true,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

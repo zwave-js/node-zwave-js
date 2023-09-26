@@ -24,9 +24,9 @@
 	"paramInformation": [
 		{
 			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Overload Protection",
 			"description": "Triggered when the current exceeds 16.5A for more than 5 seconds",
-			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
 		{

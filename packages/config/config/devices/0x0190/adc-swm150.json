@@ -124,9 +124,9 @@
 			"#": "19",
 			"label": "Calibration",
 			"valueSize": 4,
+			"defaultValue": 1379350, // Not sure
 			"unsigned": true,
 			"allowManualEntry": false,
-			"defaultValue": 1379350, // Not sure
 			"options": [
 				{
 					"label": "Uncalibrated / Calibrate Meter",

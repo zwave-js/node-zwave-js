@@ -32,8 +32,8 @@
 	},
 	"paramInformation": [
 		{
-			"$if": "firmwareVersion >= 5.24",
 			"#": "3",
+			"$if": "firmwareVersion >= 5.24",
 			"$import": "~/templates/master_template.json#led_indicator_three_options_inverted"
 		},
 		{

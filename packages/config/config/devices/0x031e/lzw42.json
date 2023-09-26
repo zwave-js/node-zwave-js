@@ -46,10 +46,10 @@
 			"label": "Color Adjustment (Warm White)",
 			"description": "Changes the color temperature for warm white",
 			"valueSize": 2,
+			"unit": "K",
 			"minValue": 2700,
 			"maxValue": 4999,
 			"defaultValue": 2700,
-			"unit": "K",
 			"unsigned": true
 		},
 		{
@@ -57,10 +57,10 @@
 			"label": "Color Adjustment (Cold White)",
 			"description": "Changes the color temperature for cold white",
 			"valueSize": 2,
+			"unit": "K",
 			"minValue": 5000,
 			"maxValue": 6500,
 			"defaultValue": 6500,
-			"unit": "K",
 			"unsigned": true
 		}
 	],

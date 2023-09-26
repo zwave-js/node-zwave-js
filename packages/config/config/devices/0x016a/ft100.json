@@ -113,8 +113,8 @@
 			"#": "41[0xffff00]",
 			"$if": "firmwareVersion > 1.6 && firmwareVersion <= 1.9",
 			"label": "Temperature Change Threshold",
-			"unit": "0.1 °C/°F",
 			"valueSize": 3,
+			"unit": "0.1 °C/°F",
 			"minValue": 10,
 			"maxValue": 2120,
 			"defaultValue": 20
@@ -123,8 +123,8 @@
 			"#": "41[0xffff00]",
 			"$if": "firmwareVersion >= 1.10",
 			"label": "Temperature Change Threshold",
-			"unit": "0.1 °C/°F",
 			"valueSize": 4,
+			"unit": "0.1 °C/°F",
 			"minValue": 10,
 			"maxValue": 2120,
 			"defaultValue": 20

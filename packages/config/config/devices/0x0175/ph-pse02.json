@@ -64,8 +64,8 @@
 		{
 			"#": "31",
 			"label": "Alarm Duration",
-			"unit": "30 seconds",
 			"valueSize": 1,
+			"unit": "30 seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 6,
