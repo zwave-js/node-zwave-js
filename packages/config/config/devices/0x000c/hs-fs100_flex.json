@@ -39,8 +39,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 20,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

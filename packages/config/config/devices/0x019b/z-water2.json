@@ -52,8 +52,7 @@
 			"unit": "0.1 °C",
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "5",
@@ -86,7 +85,6 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",

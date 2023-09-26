@@ -29,8 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "26",
@@ -39,8 +38,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "27",
@@ -48,8 +46,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2389,
-			"defaultValue": 18,
-			"unsigned": true
+			"defaultValue": 18
 		},
 		{
 			"#": "28",
@@ -77,8 +74,7 @@
 			"unit": "°F",
 			"minValue": 0,
 			"maxValue": 8,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "32",
@@ -175,7 +171,6 @@
 			"minValue": 2,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Endpoint 2 (AV 1)",

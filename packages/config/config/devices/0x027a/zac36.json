@@ -272,8 +272,7 @@
 			"unit": "days",
 			"minValue": 1,
 			"maxValue": 30,
-			"defaultValue": 14,
-			"unsigned": true
+			"defaultValue": 14
 		},
 		{
 			"#": "65",

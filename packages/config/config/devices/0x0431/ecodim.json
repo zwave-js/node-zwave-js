@@ -73,8 +73,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "5",
@@ -120,8 +119,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "8",
@@ -131,8 +129,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	]
 }

@@ -137,8 +137,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "31",
@@ -147,8 +146,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "32",
@@ -157,8 +155,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"compat": {

@@ -53,7 +53,6 @@
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 4,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -69,7 +68,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -89,7 +87,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -109,7 +106,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -127,8 +123,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
@@ -136,8 +131,7 @@
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "7",
@@ -145,8 +139,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
@@ -154,8 +147,7 @@
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "10",
@@ -164,8 +156,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"units": "seconds",
@@ -174,8 +165,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "12",
@@ -184,7 +174,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Last state",
@@ -199,7 +188,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Last state",
@@ -266,7 +254,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -285,7 +272,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -317,7 +303,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Red",
@@ -415,7 +400,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Red",
@@ -512,7 +496,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -568,7 +551,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -909,7 +891,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -926,7 +907,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -943,7 +923,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -959,8 +938,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"unsigned": true
+			"defaultValue": 3600
 		},
 		{
 			"units": "%",
@@ -970,8 +948,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "31",

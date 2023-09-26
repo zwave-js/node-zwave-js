@@ -32,8 +32,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "5",
@@ -65,7 +64,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Infinite",

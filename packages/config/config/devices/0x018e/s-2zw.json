@@ -22,8 +22,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 240,
-			"unsigned": true
+			"defaultValue": 240
 		},
 		{
 			"#": "2",
@@ -32,8 +31,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 240,
-			"unsigned": true
+			"defaultValue": 240
 		},
 		{
 			"#": "3",
@@ -42,8 +40,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		}
 	],
 	"metadata": {

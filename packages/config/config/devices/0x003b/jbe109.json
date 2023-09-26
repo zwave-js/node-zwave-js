@@ -93,8 +93,7 @@
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 8,
-			"defaultValue": 4,
-			"unsigned": true
+			"defaultValue": 4
 		},
 		{
 			"#": "6",
@@ -104,7 +103,6 @@
 			"minValue": 0,
 			"maxValue": 1073741823,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		}
 	],

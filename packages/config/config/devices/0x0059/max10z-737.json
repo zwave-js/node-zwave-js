@@ -55,8 +55,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "5",
@@ -65,8 +64,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "6",
@@ -86,8 +84,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"unsigned": true
+			"defaultValue": 2
 		}
 	],
 	"metadata": {

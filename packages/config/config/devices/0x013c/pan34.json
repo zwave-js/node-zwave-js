@@ -30,7 +30,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 720,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -64,7 +63,6 @@
 			"minValue": 0,
 			"maxValue": 6000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Per calibration",
@@ -79,8 +77,7 @@
 			"unit": "W",
 			"minValue": 1,
 			"maxValue": 5,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
@@ -90,7 +87,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -109,8 +105,7 @@
 			"unit": ".01 seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		}
 	],
 	"metadata": {

@@ -48,7 +48,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -64,7 +63,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -144,7 +142,6 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 98,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Default (Celsius)",
@@ -163,7 +160,6 @@
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Default (Celsius)",
@@ -326,8 +322,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "29",
@@ -337,7 +332,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 30,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Default (Celsius)",

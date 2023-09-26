@@ -21,8 +21,7 @@
 			"unit": "5 seconds",
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"unsigned": true
+			"defaultValue": 720
 		},
 		{
 			"#": "2",
@@ -31,8 +30,7 @@
 			"unit": "10 minutes",
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 6,
-			"unsigned": true
+			"defaultValue": 6
 		},
 		{
 			"#": "5",
@@ -77,8 +75,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "9",
@@ -122,8 +119,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "12",
@@ -131,8 +127,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "13",

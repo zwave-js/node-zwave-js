@@ -95,8 +95,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "5",
@@ -104,8 +103,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
@@ -113,8 +111,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "7",
@@ -123,8 +120,7 @@
 			"unit": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "8",
@@ -132,8 +128,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "9",
@@ -142,8 +137,7 @@
 			"unit": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "10",
@@ -151,8 +145,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "11",
@@ -162,7 +155,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Repeat last button held amount",
@@ -341,8 +333,7 @@
 			"unit": "0.01 A",
 			"minValue": 1,
 			"maxValue": 5000,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "33",
@@ -351,8 +342,7 @@
 			"unit": "0.1 V",
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "34",
@@ -361,8 +351,7 @@
 			"unit": "0.1 W",
 			"minValue": 1,
 			"maxValue": 3000,
-			"defaultValue": 2000,
-			"unsigned": true
+			"defaultValue": 2000
 		},
 		{
 			"#": "36",
@@ -400,7 +389,6 @@
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false
 		},
@@ -412,7 +400,6 @@
 			"minValue": 0,
 			"maxValue": 10000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false
 		},
@@ -424,7 +411,6 @@
 			"minValue": 0,
 			"maxValue": 3000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false
 		},

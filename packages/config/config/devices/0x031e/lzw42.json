@@ -49,8 +49,7 @@
 			"unit": "K",
 			"minValue": 2700,
 			"maxValue": 4999,
-			"defaultValue": 2700,
-			"unsigned": true
+			"defaultValue": 2700
 		},
 		{
 			"#": "82",
@@ -60,8 +59,7 @@
 			"unit": "K",
 			"minValue": 5000,
 			"maxValue": 6500,
-			"defaultValue": 6500,
-			"unsigned": true
+			"defaultValue": 6500
 		}
 	],
 	"metadata": {

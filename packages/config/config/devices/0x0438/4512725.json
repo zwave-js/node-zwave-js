@@ -63,7 +63,6 @@
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 36,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -80,7 +79,6 @@
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -162,7 +160,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 600,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -191,7 +188,6 @@
 			"minValue": 0,
 			"maxValue": 16,
 			"defaultValue": 16,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

@@ -57,8 +57,7 @@
 			"unit": "0.1 °F/C",
 			"minValue": 10,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "4",
@@ -67,8 +66,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "5",
@@ -78,8 +76,7 @@
 			"unit": "°F/C",
 			"minValue": 50,
 			"maxValue": 120,
-			"defaultValue": 120,
-			"unsigned": true
+			"defaultValue": 120
 		},
 		{
 			"#": "5",
@@ -89,8 +86,7 @@
 			"unit": "°F/C",
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 120,
-			"unsigned": true
+			"defaultValue": 120
 		},
 		{
 			"#": "6",
@@ -142,8 +138,7 @@
 			"unit": "°F/C",
 			"minValue": 10,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "7",
@@ -153,8 +148,7 @@
 			"unit": "°F/C",
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "8",
@@ -331,7 +325,6 @@
 			"minValue": 0,
 			"maxValue": 480,
 			"defaultValue": 240,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -347,7 +340,6 @@
 			"minValue": 0,
 			"maxValue": 480,
 			"defaultValue": 240,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

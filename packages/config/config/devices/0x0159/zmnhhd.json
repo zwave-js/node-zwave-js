@@ -95,7 +95,6 @@
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -111,7 +110,6 @@
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -136,7 +134,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -152,7 +149,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -166,8 +162,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "61",
@@ -175,8 +170,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "65",
@@ -185,8 +179,7 @@
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "66",
@@ -195,8 +188,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 253,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "67",
@@ -213,7 +205,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Dimming duration according to Dimming Duration (Key Held)",
@@ -229,7 +220,6 @@
 			"minValue": 0,
 			"maxValue": 200,
 			"defaultValue": 200,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -266,7 +256,6 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{
@@ -308,8 +297,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 125,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		}
 	],
 	"metadata": {

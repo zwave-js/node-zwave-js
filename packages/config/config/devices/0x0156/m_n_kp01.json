@@ -29,7 +29,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable ",
@@ -48,7 +47,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -67,7 +65,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -85,8 +82,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "5",
@@ -95,8 +91,7 @@
 			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 1440,
-			"defaultValue": 70,
-			"unsigned": true
+			"defaultValue": 70
 		}
 	],
 	"compat": {
