@@ -266,8 +266,6 @@
 			"label": "Freeze Protection: Turn On VSP Speed",
 			"description": "Requires variable speed pump and connected air/freeze sensor.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

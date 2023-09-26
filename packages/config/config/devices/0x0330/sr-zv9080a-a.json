@@ -49,8 +49,6 @@
 			"#": "3",
 			"label": "Working mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -107,8 +105,6 @@
 			"label": "Switch Configuration",
 			"description": "Light mode only",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -143,8 +139,6 @@
 			"#": "9",
 			"label": "Send Central Scene Notifications",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
