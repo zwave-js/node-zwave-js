@@ -699,6 +699,12 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		nonce: number; // [3000...20000], default: 5000 ms
 
 		/**
+		 * How long to wait without pending commands before sending a node back to sleep.
+		 * Should be as short as possible to save battery, but long enough to give applications time to react.
+		 */
+		sendToSleep: number; // [10...5000], default: 250 ms
+
+		/**
 		 * **!!! INTERNAL !!!**
 		 *
 		 * Not intended to be used by applications
