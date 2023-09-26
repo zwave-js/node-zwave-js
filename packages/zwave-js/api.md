@@ -319,7 +319,6 @@ export class DeviceClass {
 export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements ZWaveApplicationHost {
     // (undocumented)
     [util.inspect.custom](): string;
-    // Warning: (ae-forgotten-export) The symbol "PartialZWaveOptions" needs to be exported by the entry point index.d.ts
     constructor(port: string | ZWaveSerialPortImplementation, options?: PartialZWaveOptions);
     get allNodesReady(): boolean;
     // (undocumented)
@@ -801,6 +800,14 @@ export { NodeType }
 export { num2hex }
 
 export { parseQRCodeString }
+
+// Warning: (ae-missing-release-tag) "PartialZWaveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type PartialZWaveOptions = Expand<DeepPartial<Omit<ZWaveOptions, "inclusionUserCallbacks" | "logConfig" | "testingHooks">> & Partial<Pick<ZWaveOptions, "inclusionUserCallbacks" | "testingHooks">> & {
+    inclusionUserCallbacks?: ZWaveOptions["inclusionUserCallbacks"];
+    logConfig?: Partial<LogConfig>;
+}>;
 
 // Warning: (ae-missing-release-tag) "PlannedProvisioningEntry" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1703,6 +1710,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         sendDataCallback: number;
         report: number;
         nonce: number;
+        sendToSleep: number;
         refreshValue: number;
         refreshValueAfterTransition: number;
         serialAPIStarted: number;
