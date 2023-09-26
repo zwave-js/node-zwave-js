@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
-	"label": "ZV2833PAC",
+	"label": "SR-ZV2833PAC",
 	"description": "Push-Button Coupler",
 	"devices": [
 		{
