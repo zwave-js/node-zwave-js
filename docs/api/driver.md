@@ -5,12 +5,12 @@ The driver is the core of this library. It controls the serial interface, handle
 ## Constructor
 
 ```ts
-new (port: string, options?: ZWaveOptions) => Driver
+new (port: string, options?: PartialZWaveOptions) => Driver
 ```
 
 The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Remote serial port over TCP](usage/tcp-connection.md).
 
-For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed description.
+For more control, the constructor accepts an optional options object as the second argument. `PartialZWaveOptions` are a subset of [`ZWaveOptions`](#ZWaveOptions), allowing you to specify just what's necessary.
 
 ## Driver methods
 
@@ -274,7 +274,7 @@ Configures a new set of preferred sensor scales without having to restart the dr
 ### `updateOptions`
 
 ```ts
-updateOptions(options: DeepPartial<EditableZWaveOptions>): void
+updateOptions(options: EditableZWaveOptions): void
 ```
 
 Updates a subset of the driver options without having to restart the driver. The following properties from [`ZWaveOptions`](#ZWaveOptions) are supported:

@@ -120,3 +120,11 @@ While upgrading dependencies, the interface for the replacement `FileSystem` imp
 - `latin1`
 - `binary`
 - `hex`
+
+## Corrected the argument type for `Driver.constructor`, `Driver.updateLogConfig` and `Driver.updateOptions`
+
+As part of updating dependencies, `TypeScript` now checks some types differently. This surfaced an issue with the existing type definitions and required a few option-related types to be updated. The `DeepPartial` variants we used before drill a bit too deep into some options, like `winston` transports, which must always be specified in full. For most applications this should be equivalent aside from the name/type change.
+
+- The `options` parameter of the `Driver` constructor now expects a `PartialZWaveOptions` instead of a `DeepPartial<ZWaveOptions>`.
+- `Driver.updateLogConfig` now expects a `Partial<LogConfig>` instead of a `DeepPartial<LogConfig>` for the same reasons
+- `Driver.updateOptions` now expects `EditableZWaveOptions` instead of a `DeepPartial<EditableZWaveOptions>` for the same reasons
