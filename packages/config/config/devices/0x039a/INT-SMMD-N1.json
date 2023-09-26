@@ -28,8 +28,6 @@
 			"label": "Motion Window Time",
 			"description": "The amount of time the moves specified in parameter #3 need to take place in for the sensor to report motion. Higher values = more sensitive.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -56,8 +54,6 @@
 			"label": "Pulse Count",
 			"description": "Number of moves required for the sensor to report motion. Higher values = less sensitive.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -84,8 +80,6 @@
 			"label": "Motion Blind Time",
 			"description": "The amount of time the sensor will not report motion after it has reported motion.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
 			"defaultValue": 15,
 			"allowManualEntry": false,
 			"options": [
@@ -186,8 +180,6 @@
 			"#": "9",
 			"label": "Group 2: Basic Set Level",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
 			"defaultValue": 100,
 			"allowManualEntry": false,
 			"options": [

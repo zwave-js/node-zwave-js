@@ -40,8 +40,6 @@
 			"description": "Period during which motion is measured.",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -68,8 +66,6 @@
 			"label": "Motion Sensor: Pulse Count",
 			"description": "Number of times motion must be detected within set window time before a detection message is sent.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -97,8 +93,6 @@
 			"description": "Time the sensor waits before sending a next motion detected message.",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 15,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -197,8 +191,6 @@
 			"#": "9",
 			"label": "Motion Control: Basic Set Level",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
 			"defaultValue": 100,
 			"allowManualEntry": false,
 			"options": [
