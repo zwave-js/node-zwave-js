@@ -26,7 +26,6 @@
 			"label": "Temperature Unit",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,7 +79,6 @@
 			"label": "Display Brightness",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -110,7 +108,6 @@
 			"label": "Beep Volume",
 			"valueSize": 1,
 			"defaultValue": 5,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -203,7 +200,6 @@
 			"label": "Outdoor Temperature Sensor Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -222,7 +218,6 @@
 			"description": "Automatic heating at 41°F/5°C",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -240,7 +235,6 @@
 			"label": "Fan Mode Above Set Temperature",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -258,7 +252,6 @@
 			"label": "Fan Working Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -284,7 +277,6 @@
 			"label": "Key Lock Function",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -302,7 +294,6 @@
 			"label": "Ventilation Function",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -348,7 +339,6 @@
 			"label": "Factory Reset",
 			"valueSize": 1,
 			"defaultValue": 53,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -36,7 +36,6 @@
 			"label": "Load Control Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -55,7 +54,6 @@
 			"description": "Select which sensors control the load when parameter 5 is set to 1",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -82,7 +80,6 @@
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

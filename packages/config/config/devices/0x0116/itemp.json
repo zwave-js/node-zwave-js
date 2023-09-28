@@ -34,7 +34,6 @@
 			"description": "Delete configuration but keeps inclusion",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -53,7 +52,6 @@
 			"description": "Configure what the external contact sends when triggered",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -71,7 +69,6 @@
 			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

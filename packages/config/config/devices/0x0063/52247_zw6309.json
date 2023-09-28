@@ -25,7 +25,6 @@
 			"description": "Detection mode(1:wet 2:dry)",
 			"valueSize": 2,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -119,7 +118,6 @@
 			"label": "Temperature Report Interval (on USB)",
 			"valueSize": 2,
 			"defaultValue": 60,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -137,7 +135,6 @@
 			"label": "Led/Buzzer Action During Tamper Event",
 			"valueSize": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

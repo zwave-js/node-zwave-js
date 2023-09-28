@@ -48,7 +48,6 @@
 			"description": "The Dimmer will send notification to associated device (Group Lifeline) when the status of Dimmer load is changed.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,7 +79,6 @@
 			"label": "Enable or Disable external switch to pair network",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -99,7 +97,6 @@
 			"description": "Setting dimming way.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -28,7 +28,6 @@
 			"description": "Dimmers controlled by this switch will start dimming from their current level.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -47,7 +46,6 @@
 			"description": "In night-light mode the LED on the switch will turn ON when the switch is turned OFF.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,7 +64,6 @@
 			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -85,7 +82,6 @@
 			"description": "The dimmer will start dimming from its current level.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -104,7 +100,6 @@
 			"description": "Flicker LED while transmitting.",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -137,7 +132,6 @@
 			"description": "Poll only the first node in Group 1.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

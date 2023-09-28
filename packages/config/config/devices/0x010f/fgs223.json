@@ -49,7 +49,6 @@
 			"label": "First Channel - Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -83,7 +82,6 @@
 			"label": "First Channel - Reaction to Key S1 for Delay/Auto ON/OFF Modes",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -129,7 +127,6 @@
 			"label": "Second Channel - Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -164,7 +161,6 @@
 			"valueSize": 1,
 			"unit": "seconds",
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -210,7 +206,6 @@
 			"label": "Input Button/Switch Configuration",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

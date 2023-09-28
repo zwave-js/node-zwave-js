@@ -27,7 +27,6 @@
 			"description": "In Switch Mode, the device operates as a regular switch. In Thermostat Mode, the binary set command class will be invalid and the action button is disabled.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

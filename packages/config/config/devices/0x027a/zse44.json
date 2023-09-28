@@ -93,7 +93,6 @@
 			"label": "High Temperature Alert Reporting",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -155,7 +154,6 @@
 			"label": "Low Temperature Alert Reporting",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -204,7 +202,6 @@
 			"label": "High Humidity Alert Reporting",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -253,7 +250,6 @@
 			"label": "Low Humidity Alert Reporting",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

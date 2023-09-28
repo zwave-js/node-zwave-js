@@ -327,7 +327,6 @@
 			"label": "Button 1 attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -501,7 +500,6 @@
 			"label": "Button 2 attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -671,7 +669,6 @@
 			"label": "Button 3 attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -841,7 +838,6 @@
 			"label": "Button 4 attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -1011,7 +1007,6 @@
 			"label": "Button 5 attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -1181,7 +1176,6 @@
 			"label": "Button 6 attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -1351,7 +1345,6 @@
 			"label": "Button 7 attribute",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -1521,7 +1514,6 @@
 			"label": "Button 8 attribute",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -1691,7 +1683,6 @@
 			"label": "Button 9 attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

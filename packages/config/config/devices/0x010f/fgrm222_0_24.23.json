@@ -47,7 +47,6 @@
 			"description": "Enable Venetian Blind mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -65,7 +64,6 @@
 			"label": "Roller Shutter operating modes",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -105,7 +103,6 @@
 			"label": "Lamellas positioning mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -128,7 +125,6 @@
 			"description": "Parameter settings for Roller and Venetian Blind Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -181,7 +177,6 @@
 			"description": "Roller Shutter enters the calibration mode.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -199,7 +194,6 @@
 			"label": "Response to General Alarm",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -221,7 +215,6 @@
 			"label": "Response to Water Flood Alarm",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -243,7 +236,6 @@
 			"label": "Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -265,7 +257,6 @@
 			"label": "Response to Temperature Alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -288,7 +279,6 @@
 			"description": "Lamellas reaction upon alarm detection.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -334,7 +324,6 @@
 			"description": "Enables/disables power and energy report used by itself",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -353,7 +342,6 @@
 			"description": "Determine whether scenes or associations are activated",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

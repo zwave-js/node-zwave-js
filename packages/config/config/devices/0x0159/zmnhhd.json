@@ -39,7 +39,6 @@
 			"label": "In-wall Switch Type for Load to Control I1",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -74,7 +73,6 @@
 			"label": "Load Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -232,7 +230,6 @@
 			"label": "Calibration Trigger",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -273,7 +270,6 @@
 			"label": "Action on Alarm/Notification Events",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

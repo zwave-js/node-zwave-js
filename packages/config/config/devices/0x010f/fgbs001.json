@@ -74,7 +74,6 @@
 			"description": "Type of input no. 1, what the input 1 will report if no contact is made",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -101,7 +100,6 @@
 			"description": "Type of input no. 2, what the input 2 will report if no contact is made",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -223,7 +221,6 @@
 			"label": "Deactivate transmission of frame canceling alarm",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -274,7 +271,6 @@
 			"label": "Transmitting alarm/control frame broadcast mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -301,7 +297,6 @@
 			"description": "Enable/Disable scene functionality.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

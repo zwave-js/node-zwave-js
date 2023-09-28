@@ -58,7 +58,6 @@
 			"label": "External Switch Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -77,7 +76,6 @@
 			"description": "When enabled, triple pressing will put the device into inclusion/exclusion mode and not send status reports.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

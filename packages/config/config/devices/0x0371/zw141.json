@@ -46,7 +46,6 @@
 			"label": "Motor Run Direction",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -108,7 +107,6 @@
 			"label": "Enter/Exit Calibration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -130,7 +128,6 @@
 			"label": "User Confirmation For Calibration",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -144,7 +141,6 @@
 			"label": "Calibration Status",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -179,7 +175,6 @@
 			"label": "Curtain Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -197,7 +192,6 @@
 			"label": "Inititiate Repositioning",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -212,7 +206,6 @@
 			"label": "Repositioning Status",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -231,7 +224,6 @@
 			"label": "Calibration Lock",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -258,7 +250,6 @@
 			"label": "External Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -280,7 +271,6 @@
 			"label": "Switch S1 Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -310,7 +300,6 @@
 			"label": "Switch S2 Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -349,7 +338,6 @@
 			"label": "External Switch: Network/Reset Functions",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

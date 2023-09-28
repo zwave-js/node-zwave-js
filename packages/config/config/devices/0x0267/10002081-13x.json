@@ -75,7 +75,6 @@
 			"label": "Short Press Action",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

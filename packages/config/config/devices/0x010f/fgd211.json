@@ -89,7 +89,6 @@
 			"label": "Send Commands to Association Group 1",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -112,7 +111,6 @@
 			"description": "Key no. 2 is not represented by any physical device",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -210,7 +208,6 @@
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -230,7 +227,6 @@
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -254,7 +250,6 @@
 			"description": "Double-click set lighting at 100%",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -274,7 +269,6 @@
 			"description": "Double-click set lighting at 100%",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -297,7 +291,6 @@
 			"description": "Function of 3-way switch",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -316,7 +309,6 @@
 			"description": "The dimmer communicate the level to the associated devices. (default value 0)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -334,7 +326,6 @@
 			"label": "Change [On-Off] bi-stable keys",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -361,7 +352,6 @@
 			"label": "Relay 1: Response to General Alarm",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -420,7 +410,6 @@
 			"description": "Command class scene activation for group no. 3",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -34,7 +34,6 @@
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -69,7 +68,6 @@
 			"valueSize": 1,
 			"unit": "%",
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -103,7 +101,6 @@
 			"label": "Enable Sensors",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -125,7 +122,6 @@
 			"label": "Group 2: Tilt Sensor Basic Reports",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -151,7 +147,6 @@
 			"label": "Group 3: Shock Sensor Basic Reports",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

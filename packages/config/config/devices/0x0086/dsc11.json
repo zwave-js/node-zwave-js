@@ -358,7 +358,6 @@
 			"label": "Meter Calibration Mode",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [

@@ -85,7 +85,6 @@
 			"label": "Send Basic Set to Associated Nodes",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -111,7 +110,6 @@
 			"label": "Basic Set Value For Group 2",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

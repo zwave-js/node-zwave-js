@@ -50,7 +50,6 @@
 			"label": "Input 1 - Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -145,7 +144,6 @@
 			"description": "This parameter allows to choose mode of 2nd input (in2). change it depending on connected device",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -334,7 +332,6 @@
 			"label": "Output 1: Default State ",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -367,7 +364,6 @@
 			"label": "Output 2: Default State",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

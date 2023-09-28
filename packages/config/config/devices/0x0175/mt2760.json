@@ -78,7 +78,6 @@
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -96,7 +95,6 @@
 			"label": "Input 2 switch type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -114,7 +112,6 @@
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -132,7 +129,6 @@
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -151,7 +147,6 @@
 			"description": "Dimmer module responds to commands ALL ON / ALL OFF",
 			"valueSize": 2,
 			"defaultValue": 255,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -196,7 +191,6 @@
 			"description": "Dimming is done by push button or switch connected to I1.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -219,7 +213,6 @@
 			"description": "A fast double click on the push button will set dimming power at maximum.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -296,7 +289,6 @@
 			"description": "This parameter is used with association group 3",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -324,7 +316,6 @@
 			"description": "Enabling I2 means that Endpoint (I2) will be present on UI.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -367,7 +358,6 @@
 			"description": "Enabling I3 means that Endpoint (I3) will be present on UI.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

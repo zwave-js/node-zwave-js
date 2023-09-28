@@ -51,7 +51,6 @@
 			"description": "To set-up the profile of buttons 1 and 3",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -74,7 +73,6 @@
 			"description": "To set-up the profile of buttons 2 and 4",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -97,7 +95,6 @@
 			"description": "To choose the way of sending Scene to the gateway",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -116,7 +113,6 @@
 			"description": "To set-up the how button 1 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -139,7 +135,6 @@
 			"description": "To set-up the how button 2 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -162,7 +157,6 @@
 			"description": "To set-up the how button 3 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -185,7 +179,6 @@
 			"description": "To set-up the how button 4 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -208,7 +201,6 @@
 			"description": "How to set up LED behaviour",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

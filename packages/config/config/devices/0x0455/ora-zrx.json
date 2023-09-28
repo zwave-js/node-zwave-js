@@ -200,7 +200,6 @@
 			"label": "Sun Activation",
 			"valueSize": 1,
 			"defaultValue": 5,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -256,7 +255,6 @@
 			"label": "Send Multilevel Report",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

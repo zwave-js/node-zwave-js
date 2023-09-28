@@ -120,7 +120,6 @@
 			"description": "Activate/Deactivate polling of first node in Group 1",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

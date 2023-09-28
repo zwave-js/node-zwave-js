@@ -46,7 +46,6 @@
 			"label": "Button Vibrations & Sounds",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -102,7 +101,6 @@
 			"label": "Temperature Sensor Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -128,7 +126,6 @@
 			"label": "Temperature Control Reference",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -177,7 +174,6 @@
 			"label": "Mode to Set After Drying Mode",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -289,7 +285,6 @@
 			"label": "Display Brightness",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -311,7 +306,6 @@
 			"label": "Home Page Sensor Display",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -339,7 +333,6 @@
 			"description": "Specifies the temperature change within three minutes to trigger window open detection",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

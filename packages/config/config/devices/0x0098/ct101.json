@@ -138,7 +138,6 @@
 			"label": "Lock Setpoint Changes",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -174,7 +173,6 @@
 			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -200,7 +198,6 @@
 			"label": "Auxiliary/Emergency Heating",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

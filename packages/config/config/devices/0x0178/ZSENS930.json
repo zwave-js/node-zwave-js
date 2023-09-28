@@ -133,7 +133,6 @@
 			"description": "Determines which combination of Basic Set commands will be sent",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

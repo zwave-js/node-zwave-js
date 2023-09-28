@@ -28,7 +28,6 @@
 			"description": "There are 3 levels of sensitivity to smoke presence.",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -61,7 +60,6 @@
 			"description": "This parameter allows to activate visual indications",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -104,7 +102,6 @@
 			"description": "This parameter allows to activate sound signals...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -147,7 +144,6 @@
 			"description": "This parameter defines which frames will be sent ...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -188,7 +184,6 @@
 			"description": "A value other than 0 means that alarms are being ...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

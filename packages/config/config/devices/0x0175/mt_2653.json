@@ -43,7 +43,6 @@
 			"label": "Button 1 And 3 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,7 +65,6 @@
 			"description": " works with group b, double click with group d",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -88,7 +86,6 @@
 			"label": "Command to Send Control Group A",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -134,7 +131,6 @@
 			"label": "Command to Send Control Group B",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -180,7 +176,6 @@
 			"label": "Command to Send Control Group C",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -226,7 +221,6 @@
 			"label": "Command to to Send Control Group D",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -294,7 +288,6 @@
 			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -312,7 +305,6 @@
 			"label": "Block Wakeup",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -330,7 +322,6 @@
 			"label": "Send Battery Report On Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

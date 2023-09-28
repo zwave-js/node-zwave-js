@@ -88,7 +88,6 @@
 			"label": "Single Click - Association Group 2: Command Type",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -129,7 +128,6 @@
 			"label": "Single Click - Association Group 3: Command Type",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -176,7 +174,6 @@
 			"label": "Double Click - Association Group 2: Command Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -217,7 +214,6 @@
 			"label": "Double Click - Association Group 3: Command Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -264,7 +260,6 @@
 			"label": "Triple Click - Association Group 2: Command Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -305,7 +300,6 @@
 			"label": "Triple Click - Association Group 3: Command Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -376,7 +370,6 @@
 			"label": "Key Held - Association Group 3: Command Type",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -21,7 +21,6 @@
 			"description": "This parameter sets the mode for the wall switch inputs",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

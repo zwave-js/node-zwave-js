@@ -109,7 +109,6 @@
 			"label": "Status Change (Temperature/Humidity/Luminance/Battery) Reporting",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -188,7 +187,6 @@
 			"label": "Send Basic Set On Motion",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -206,7 +204,6 @@
 			"label": "Motion: Basic Set Value",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

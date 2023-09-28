@@ -99,7 +99,6 @@
 			"label": "Air Conditioner Swing Function",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -117,7 +116,6 @@
 			"label": "Temperature & Humidity Reporting Interval",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -207,7 +205,6 @@
 			"label": "BLE Advertising Timeout",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

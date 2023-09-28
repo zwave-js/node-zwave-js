@@ -43,7 +43,6 @@
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -90,7 +89,6 @@
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -138,7 +136,6 @@
 			"label": "Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

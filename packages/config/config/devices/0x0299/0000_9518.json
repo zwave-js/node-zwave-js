@@ -20,7 +20,6 @@
 			"label": "Enable/Disable Basic Set Command",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -39,7 +38,6 @@
 			"description": "Door/window sensor can reverse its value of Basic Set when the magnet is triggered",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

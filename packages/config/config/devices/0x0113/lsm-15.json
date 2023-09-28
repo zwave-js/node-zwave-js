@@ -20,7 +20,6 @@
 			"description": "By default, the LED will turn OFF when the lead attached is turned ON.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -39,7 +38,6 @@
 			"description": "To change the top of the switch to OFF and the bottom of the switch ON.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

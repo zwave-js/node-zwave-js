@@ -20,7 +20,6 @@
 			"label": "Hardware Combination Identifier",
 			"valueSize": 1,
 			"defaultValue": 19,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -74,7 +73,6 @@
 			"label": "Back Unit Type",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [

@@ -93,7 +93,6 @@
 			"description": "Sending commands to control devices assigned ...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -116,7 +115,6 @@
 			"description": "Assigns bistable key status to the device status.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -135,7 +133,6 @@
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -154,7 +151,6 @@
 			"description": "Enable/Disable operation of dimmer or roller shutter devices ...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -176,7 +172,6 @@
 			"label": "Relay 1: Response to General Alarm",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -202,7 +197,6 @@
 			"label": "Relay 1: Response to Water Flood Alarm",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -228,7 +222,6 @@
 			"label": "Relay 1: Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -254,7 +247,6 @@
 			"label": "Relay 1: Response to Temperature Alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

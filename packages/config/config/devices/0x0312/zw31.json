@@ -44,7 +44,6 @@
 			"label": "Button Orientation",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -138,7 +137,6 @@
 			"label": "Dim Level on Double Tap",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -156,7 +154,6 @@
 			"label": "Double Tap Behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
