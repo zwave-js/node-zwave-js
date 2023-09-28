@@ -34,10 +34,7 @@
 			"#": "1",
 			"label": "SW1 Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -69,8 +66,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "20",
@@ -79,17 +75,13 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "25",
 			"label": "O1: Auto-On/Off Timer Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -106,10 +98,7 @@
 			"#": "23",
 			"label": "O1: Relay Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -128,7 +117,6 @@
 			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -151,7 +139,6 @@
 			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,7 +161,6 @@
 			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -197,7 +183,6 @@
 			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -220,7 +205,6 @@
 			"description": "Reset to factory default settings and remove from the Z-Wave network.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -239,7 +223,6 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -248,7 +231,6 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -257,7 +239,6 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"unsigned": true,
 			"readOnly": true
 		}
 	],
