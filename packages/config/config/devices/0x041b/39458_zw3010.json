@@ -120,8 +120,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "31",
@@ -130,8 +129,7 @@
 			"unit": "%",
 			"minValue": 99,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "32",
@@ -141,8 +139,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"compat": {

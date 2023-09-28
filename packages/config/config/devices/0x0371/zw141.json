@@ -74,8 +74,7 @@
 			"unit": "0.01 seconds",
 			"minValue": 10,
 			"maxValue": 32767,
-			"defaultValue": 150,
-			"unsigned": true
+			"defaultValue": 150
 		},
 		{
 			"#": "52",
@@ -92,8 +91,7 @@
 			"unit": "0.01 seconds",
 			"minValue": 500,
 			"maxValue": 32767,
-			"defaultValue": 15000,
-			"unsigned": true
+			"defaultValue": 15000
 		},
 		{
 			"#": "51",
@@ -103,8 +101,7 @@
 			"unit": "0.01 seconds",
 			"minValue": 500,
 			"maxValue": 32767,
-			"defaultValue": 15000,
-			"unsigned": true
+			"defaultValue": 15000
 		},
 		{
 			"#": "36",
@@ -345,7 +342,6 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{

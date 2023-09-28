@@ -280,8 +280,7 @@
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 8,
-			"defaultValue": 4,
-			"unsigned": true
+			"defaultValue": 4
 		},
 		{
 			"#": "18",

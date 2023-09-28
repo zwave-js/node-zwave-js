@@ -112,55 +112,292 @@ export namespace JSONCRule {
 	}
 }
 
-export function removeJSONProperty(
+function getPropertyStartIncludingComments(
 	context: ESLintRule.RuleContext,
 	property: JSONC_AST.JSONProperty,
-): (fixer: ESLintRule.RuleFixer) => ESLintRule.Fix {
+): number {
 	const propIndex = property.parent.properties.indexOf(property);
 	const prevProp = property.parent.properties[propIndex - 1];
-	const nextProp = property.parent.properties[propIndex + 1];
 
+	// Trailing comments of the previous property may get attributed to this one
 	let leadingComments = context.sourceCode.getCommentsBefore(property as any);
 	if (prevProp) {
-		// Omit leading comments that are actually trailing comments of the previous property
 		leadingComments = leadingComments.filter((c) =>
 			c.loc?.start.line !== prevProp.loc.end.line
 		);
 	}
 
-	// Remove from the beginning of the first actual leading comment...
-	const actualStart = Math.min(
+	return Math.min(
 		property.range[0],
 		...leadingComments.map((c) => c.range![0]),
 	);
+}
 
-	let actualEnd = property.range[1];
-	if (nextProp) {
-		// ...to either the first actual leading comment of the next property...
-		const nextPropLeadingComments = context.sourceCode.getCommentsBefore(
-			nextProp as any,
-		).filter((c) => c.loc?.start.line !== property.loc.end.line);
-		actualEnd = Math.max(
-			actualEnd,
-			Math.min(
-				nextProp.range[0],
-				...nextPropLeadingComments.map((c) => c.range![0]),
-			),
-		);
-	} else {
-		// ...or the end of the last trailing comment of this property
-		const trailingComments = context.sourceCode.getCommentsAfter(
+function getPropertyEndIncludingComments(
+	context: ESLintRule.RuleContext,
+	property: JSONC_AST.JSONProperty,
+): number {
+	const propIndex = property.parent.properties.indexOf(property);
+	const nextProp = property.parent.properties[propIndex + 1];
+
+	// Trailing comments may get attributed to the next property
+	const trailingComments = [
+		...context.sourceCode.getCommentsAfter(
 			property as any,
-		);
-		actualEnd = Math.max(
-			actualEnd,
-			...trailingComments.map((c) => c.range![1]),
+		),
+	];
+	if (nextProp) {
+		trailingComments.push(
+			...context.sourceCode.getCommentsBefore(
+				nextProp as any,
+			).filter((c) => c.loc?.start.line === property.loc.end.line),
 		);
 	}
 
-	return (fixer) =>
-		fixer.removeRange([
-			actualStart,
-			actualEnd,
-		]);
+	return Math.max(
+		property.range[1],
+		...trailingComments.map((c) => c.range![1]),
+	);
 }
+
+function getFullPropertyRangeIncludingComments(
+	context: ESLintRule.RuleContext,
+	property: JSONC_AST.JSONProperty,
+): [number, number] {
+	const propIndex = property.parent.properties.indexOf(property);
+	const prevProp = property.parent.properties[propIndex - 1];
+	const nextProp = property.parent.properties[propIndex + 1];
+
+	// The full range of a property including comments depends on the surrounding properties
+	// If there is a next property, it goes from
+	// ...either the start of the property or its first leading comment
+	// ...to the start of the next property or its first leading comment
+	// If not and there is a previous property, it goes from
+	// ...either the end of the previous property or its last trailing comment
+	// ...to the end of the last trailing comment of the current property
+
+	if (nextProp) {
+		return [
+			getPropertyStartIncludingComments(context, property),
+			getPropertyStartIncludingComments(context, nextProp),
+		];
+	} else if (prevProp) {
+		return [
+			getPropertyEndIncludingComments(context, prevProp),
+			getPropertyEndIncludingComments(context, property),
+		];
+	} else {
+		return [
+			getPropertyStartIncludingComments(context, property),
+			getPropertyEndIncludingComments(context, property),
+		];
+	}
+}
+
+export function removeJSONProperty(
+	context: ESLintRule.RuleContext,
+	property: JSONC_AST.JSONProperty,
+): ESLintRule.ReportFixer {
+	return (fixer) =>
+		fixer.removeRange(
+			getFullPropertyRangeIncludingComments(context, property),
+		);
+}
+
+export function insertBeforeJSONProperty(
+	context: ESLintRule.RuleContext,
+	property: JSONC_AST.JSONProperty,
+	text: string,
+	options: {
+		indent?: boolean;
+		ownLine?: boolean;
+	} = {},
+): ESLintRule.ReportFixer {
+	const { indent = true, ownLine = true } = options;
+	const [actualStart] = getFullPropertyRangeIncludingComments(
+		context,
+		property,
+	);
+	let suffix = "";
+
+	// If desired, try to fix the indentation before/after the inserted text
+	if (indent) {
+		suffix = getJSONIndentationAtNode(context, property);
+	}
+
+	// If desired, put the inserted text on its own line
+	if (ownLine) {
+		suffix = "\n" + suffix;
+	}
+
+	return (fixer) =>
+		fixer.insertTextBeforeRange([
+			actualStart,
+			actualStart,
+		], text + suffix);
+}
+
+export function insertAfterJSONProperty(
+	context: ESLintRule.RuleContext,
+	property: JSONC_AST.JSONProperty,
+	text: string,
+	options: {
+		insertComma?: boolean;
+		indent?: boolean;
+		ownLine?: boolean;
+	} = {},
+): ESLintRule.ReportFixer {
+	const { indent = true, ownLine = true, insertComma = false } = options;
+	const [, actualEnd] = getFullPropertyRangeIncludingComments(
+		context,
+		property,
+	);
+	const nextProp = property.parent.properties[
+		property.parent.properties.indexOf(property) + 1
+	];
+	let prefix = "";
+	let suffix = "";
+
+	// If desired, try to fix the indentation before/after the inserted text
+	if (indent) {
+		if (nextProp) {
+			suffix = getJSONIndentationAtNode(context, nextProp);
+		} else {
+			prefix = getJSONIndentationAtNode(context, property);
+		}
+	}
+
+	// If desired, put the inserted text on its own line
+	if (ownLine) {
+		if (nextProp) {
+			suffix = "\n" + suffix;
+		} else {
+			prefix = "\n" + prefix;
+		}
+	}
+
+	return function*(fixer) {
+		if (insertComma && !nextProp) {
+			yield fixer.insertTextAfter(property as any, ",");
+		}
+		yield fixer.insertTextAfterRange([
+			actualEnd,
+			actualEnd,
+		], prefix + text + suffix);
+	};
+}
+
+export function getJSONNumber(
+	obj: JSONC_AST.JSONObjectExpression,
+	key: string,
+):
+	| {
+		node: JSONC_AST.JSONProperty & { value: JSONC_AST.JSONNumberLiteral };
+		value: number;
+	}
+	| undefined
+{
+	const prop = obj.properties.find((p) =>
+		p.key.type === "JSONLiteral"
+		&& p.key.value === key
+	);
+	if (!prop) return;
+	if (
+		prop.value.type === "JSONLiteral"
+		&& typeof prop.value.value === "number"
+	) {
+		return {
+			// @ts-expect-error The JSONNumberLiteral has non-optional properties that we don't care for
+			node: prop,
+			value: prop.value.value,
+		};
+	}
+}
+
+export function getJSONBoolean(
+	obj: JSONC_AST.JSONObjectExpression,
+	key: string,
+):
+	| {
+		node: JSONC_AST.JSONProperty & {
+			value: JSONC_AST.JSONKeywordLiteral & {
+				value: boolean;
+			};
+		};
+		value: boolean;
+	}
+	| undefined
+{
+	const prop = obj.properties.find((p) =>
+		p.key.type === "JSONLiteral"
+		&& p.key.value === key
+	);
+	if (!prop) return;
+	if (
+		prop.value.type === "JSONLiteral"
+		&& typeof prop.value.value === "boolean"
+	) {
+		return {
+			// @ts-expect-error The JSONKeywordLiteral has non-optional properties that we don't care for
+			node: prop,
+			value: prop.value.value,
+		};
+	}
+}
+
+export function getJSONString(
+	obj: JSONC_AST.JSONObjectExpression,
+	key: string,
+):
+	| {
+		node: JSONC_AST.JSONProperty & { value: JSONC_AST.JSONStringLiteral };
+		value: string;
+	}
+	| undefined
+{
+	const prop = obj.properties.find((p) =>
+		p.key.type === "JSONLiteral"
+		&& p.key.value === key
+	);
+	if (!prop) return;
+	if (
+		prop.value.type === "JSONLiteral"
+		&& typeof prop.value.value === "string"
+	) {
+		return {
+			// @ts-expect-error The JSONStringLiteral has non-optional properties that we don't care for
+			node: prop,
+			value: prop.value.value,
+		};
+	}
+}
+
+export function getJSONIndentationAtNode(
+	context: ESLintRule.RuleContext,
+	node: JSONC_AST.JSONNode,
+): string {
+	return context.sourceCode
+		.getLines()[node.loc.start.line - 1]!
+		.slice(
+			0,
+			node.loc.start.column,
+		);
+}
+
+export const paramInfoPropertyOrder: string[] = [
+	"#",
+	"$if",
+	"$import",
+	"label",
+	"description",
+	"valueSize",
+	"unit",
+	"minValue",
+	"maxValue",
+	"defaultValue",
+	"unsigned",
+	"readOnly",
+	"writeOnly",
+	"allowManualEntry",
+	"options",
+];

@@ -24,7 +24,6 @@
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 127,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Always on",
@@ -40,7 +39,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 127,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Buzzer disable",

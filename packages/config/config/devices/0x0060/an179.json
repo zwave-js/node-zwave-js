@@ -33,7 +33,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "On",
@@ -49,8 +48,7 @@
 			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 25,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "3",
@@ -59,7 +57,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

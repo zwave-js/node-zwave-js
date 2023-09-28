@@ -234,7 +234,6 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 256,
-			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{

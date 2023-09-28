@@ -54,8 +54,7 @@
 			"unit": "0.1 °C",
 			"minValue": 3,
 			"maxValue": 995,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "3",
@@ -65,8 +64,7 @@
 			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"unsigned": true
+			"defaultValue": 60
 		},
 		{
 			"#": "5",
@@ -76,7 +74,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 3,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -91,8 +88,7 @@
 			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 120,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "8",
@@ -102,8 +98,7 @@
 			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 120,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "255",

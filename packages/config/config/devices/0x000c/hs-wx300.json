@@ -150,7 +150,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "3 wire mode (Neutral, Line & Load)",

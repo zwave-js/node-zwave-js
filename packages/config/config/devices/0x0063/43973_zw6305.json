@@ -84,7 +84,6 @@
 			"minValue": 5,
 			"maxValue": 1440,
 			"defaultValue": 1440,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "5-60 minutes",

@@ -84,7 +84,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "0 : disable auto off function",

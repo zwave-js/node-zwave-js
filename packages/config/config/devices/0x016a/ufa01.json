@@ -76,8 +76,7 @@
 			"unit": "%",
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "111",
@@ -87,7 +86,6 @@
 			"minValue": 0,
 			"maxValue": 606480,
 			"defaultValue": 86640,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",

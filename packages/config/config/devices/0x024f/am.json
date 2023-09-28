@@ -50,8 +50,7 @@
 			"unit": "0.01 seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"unsigned": true
+			"defaultValue": 300
 		},
 		{
 			"#": "11",
@@ -77,8 +76,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 90,
-			"unsigned": true
+			"defaultValue": 90
 		},
 		{
 			"#": "13",
@@ -86,8 +84,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "16",
@@ -122,8 +119,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		}
 	],
 	"metadata": {

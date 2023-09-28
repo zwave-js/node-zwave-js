@@ -181,7 +181,6 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 50332416,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Set the pause time of on",

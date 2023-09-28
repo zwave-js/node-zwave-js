@@ -41,8 +41,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "5",
@@ -50,8 +49,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "8",
@@ -172,7 +170,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 20,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",

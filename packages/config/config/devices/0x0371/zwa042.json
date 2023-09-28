@@ -80,7 +80,6 @@
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -96,7 +95,6 @@
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -127,8 +125,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 24,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "7",

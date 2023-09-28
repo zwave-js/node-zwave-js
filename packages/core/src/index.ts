@@ -23,6 +23,7 @@ export * from "./security/ctr_drbg";
 export * from "./security/shared_safe";
 export * from "./test/assertZWaveError";
 export * from "./util/_Types";
+export * from "./util/config";
 export * from "./util/crc";
 export * from "./util/date";
 export * from "./util/decorators";

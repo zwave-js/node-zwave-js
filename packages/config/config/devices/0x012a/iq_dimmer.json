@@ -33,8 +33,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "12",
@@ -43,8 +42,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "3",

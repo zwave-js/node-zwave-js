@@ -23,8 +23,7 @@
 			"unit": "hours",
 			"minValue": 0,
 			"maxValue": 720,
-			"defaultValue": 720,
-			"unsigned": true
+			"defaultValue": 720
 		},
 		{
 			"#": "2",
@@ -34,8 +33,7 @@
 			"unit": "hours",
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 6,
-			"unsigned": true
+			"defaultValue": 6
 		},
 		{
 			"#": "3",
@@ -44,8 +42,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 500,
-			"unsigned": true
+			"defaultValue": 500
 		},
 		{
 			"#": "4",
@@ -54,8 +51,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"unsigned": true
+			"defaultValue": 10000
 		},
 		{
 			"#": "5",

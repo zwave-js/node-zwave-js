@@ -46,8 +46,7 @@
 			"unit": "10%",
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 2,
-			"unsigned": true
+			"defaultValue": 2
 		},
 		{
 			"#": "8",

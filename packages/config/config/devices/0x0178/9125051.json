@@ -21,8 +21,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "2",

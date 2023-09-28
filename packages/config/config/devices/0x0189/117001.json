@@ -35,7 +35,6 @@
 			"minValue": 10,
 			"maxValue": 3600,
 			"defaultValue": 240,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -50,7 +49,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Restart timeout with each motion event",
@@ -70,7 +68,6 @@
 			"minValue": 0,
 			"maxValue": 3600,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable motion clear report",
@@ -85,8 +82,7 @@
 			"unit": "%",
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "5",
@@ -96,7 +92,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 12,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -112,7 +107,6 @@
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 50,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -127,8 +121,7 @@
 			"unit": "0.1 °C/°F",
 			"minValue": 0,
 			"maxValue": 80,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "8",
@@ -138,7 +131,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 6,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

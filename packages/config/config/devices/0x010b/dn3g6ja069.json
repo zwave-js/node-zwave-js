@@ -113,7 +113,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Synchronizing with wake up interval",

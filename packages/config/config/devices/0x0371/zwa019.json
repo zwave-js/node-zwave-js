@@ -91,7 +91,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -107,7 +106,6 @@
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

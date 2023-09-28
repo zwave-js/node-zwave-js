@@ -79,8 +79,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "44",

@@ -103,8 +103,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 9,
-			"unsigned": true
+			"defaultValue": 9
 		},
 		{
 			"#": "8",
@@ -156,8 +155,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "9",

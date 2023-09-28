@@ -81,8 +81,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 2,
-			"unsigned": true
+			"defaultValue": 2
 		},
 		{
 			"#": "10",
@@ -234,8 +233,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 80,
-			"unsigned": true
+			"defaultValue": 80
 		},
 		{
 			"#": "19",

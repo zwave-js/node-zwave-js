@@ -112,7 +112,6 @@
 			"minValue": 0,
 			"maxValue": 2120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Cut off temperature feature is disable",

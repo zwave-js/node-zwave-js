@@ -80,8 +80,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "8",
@@ -91,8 +90,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "9",
@@ -101,8 +99,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "10",
@@ -112,8 +109,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "11",
@@ -122,8 +118,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "12",
@@ -133,8 +128,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		}
 	],
 	"compat": {

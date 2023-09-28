@@ -68,8 +68,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "5",
@@ -296,8 +295,7 @@
 			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 30000,
-			"defaultValue": 1000,
-			"unsigned": true
+			"defaultValue": 1000
 		},
 		{
 			"#": "54",
@@ -306,8 +304,7 @@
 			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 30000,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "55",
@@ -315,8 +312,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
-			"defaultValue": 8,
-			"unsigned": true
+			"defaultValue": 8
 		},
 		{
 			"#": "56",
@@ -324,8 +320,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
-			"defaultValue": 4,
-			"unsigned": true
+			"defaultValue": 4
 		},
 		{
 			"#": "57[0xff00]",
