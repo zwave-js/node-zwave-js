@@ -60,7 +60,6 @@
 			"description": "Prevents setpoint changes at thermostat",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -90,7 +89,6 @@
 			"description": "Reporting threshold for changes in the relative humidity",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -117,7 +115,6 @@
 			"description": "Enables or disables auxiliary / emergency heating",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

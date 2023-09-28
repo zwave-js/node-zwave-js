@@ -19,7 +19,6 @@
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -37,7 +36,6 @@
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -111,7 +109,6 @@
 			"label": "Auto turn off / on seconds or milliseconds",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -133,7 +130,6 @@
 			"label": "Output Switch selection",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -151,7 +147,6 @@
 			"label": "Endpoint I2 Notification and Event",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -50,7 +50,6 @@
 			"label": "Association Group 2: Basic Set Value",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -109,8 +108,7 @@
 			"unit": "100 ms",
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "81",
@@ -118,7 +116,6 @@
 			"description": "Configure whether the LED will flash or not when sending Basic Set, Sensor Binary Report, Notification Report (Access Control) or Wake Up Notification.",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

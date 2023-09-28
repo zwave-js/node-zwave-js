@@ -28,7 +28,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Never turn on floodlight",

@@ -22,8 +22,7 @@
 			"unit": "15 minutes",
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 24,
-			"unsigned": true
+			"defaultValue": 24
 		}
 	],
 	"metadata": {

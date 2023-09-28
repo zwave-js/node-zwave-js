@@ -37,7 +37,6 @@
 			"minValue": 0,
 			"maxValue": 21930,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Normal Operation",

@@ -39,7 +39,6 @@
 			"label": "Download Status Register",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -80,7 +79,6 @@
 			"label": "Learning Status Register",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -120,7 +118,6 @@
 			"label": "IR Port Mapping",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -172,7 +169,6 @@
 			"label": "Endpoint Selection Control",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

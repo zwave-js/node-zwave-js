@@ -157,7 +157,6 @@
 			"label": "Tilt Sensor State",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -213,7 +212,6 @@
 			"description": "Report is sent to Association Group 3",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -236,7 +234,6 @@
 			"description": "Report is sent to Association Group 4",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -280,7 +277,6 @@
 			"description": "For non-multichannel devices - Configuration CC will report to the Water Leak Status parameters",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -344,7 +340,6 @@
 			"label": "Automatic Secondary Report Type",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

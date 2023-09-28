@@ -59,8 +59,7 @@
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 240,
-			"unsigned": true
+			"defaultValue": 240
 		},
 		{
 			"#": "3",
@@ -70,7 +69,6 @@
 			"minValue": 0,
 			"maxValue": 11,
 			"defaultValue": 11,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Motion sensor disabled",
@@ -87,7 +85,6 @@
 			"label": "Send Basic Set to Associated Nodes",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -113,7 +110,6 @@
 			"label": "Basic Set Value For Group 2",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -197,8 +193,7 @@
 			"unit": "0.1 °(C/F)",
 			"minValue": 0,
 			"maxValue": 250,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "22",
@@ -207,8 +202,7 @@
 			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 10000,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "23",
@@ -217,8 +211,7 @@
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"unsigned": true
+			"defaultValue": 3600
 		},
 		{
 			"#": "24",
@@ -248,8 +241,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 1024,
-			"unsigned": true
+			"defaultValue": 1024
 		}
 	],
 	"metadata": {

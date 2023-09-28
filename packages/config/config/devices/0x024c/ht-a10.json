@@ -22,8 +22,7 @@
 			"unit": "10 minutes",
 			"minValue": 0,
 			"maxValue": 54,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
@@ -32,8 +31,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 540,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

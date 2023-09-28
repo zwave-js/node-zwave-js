@@ -154,7 +154,6 @@
 			"label": "ALL ON/ALL OFF Function",
 			"valueSize": 2,
 			"defaultValue": 255,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -180,7 +179,6 @@
 			"label": "Force Auto-Calibration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -265,7 +263,6 @@
 			"label": "Input Button/Switch Configuration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -287,7 +284,6 @@
 			"label": "Value Sent to Associated Devices on Single Click",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -305,7 +301,6 @@
 			"label": "Change Toggle Switch Behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -423,7 +418,6 @@
 			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -465,7 +459,6 @@
 			"description": "Useful when connecting non-dimmable loads",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -507,7 +500,6 @@
 			"description": "Time required to warm up the filament of halogen bulb",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -529,7 +521,6 @@
 			"label": "Perform Auto-Calibration",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -559,7 +550,6 @@
 			"label": "Behavior After Overcurrent or Surge",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -638,7 +628,6 @@
 			"description": "Load power consumption too high",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -657,7 +646,6 @@
 			"description": "No load, load failure, burnt out bulb",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -676,7 +664,6 @@
 			"description": "Short circuit, burnt out bulb causing overcurrent",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -695,7 +682,6 @@
 			"description": "Dimmer output overvoltage",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -714,7 +700,6 @@
 			"description": "Critical temperature and low voltage",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -753,7 +738,6 @@
 			"label": "Active Power Calculation Method",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

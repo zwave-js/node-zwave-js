@@ -79,7 +79,6 @@
 			"description": "Power Up State of the switch",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -102,7 +101,6 @@
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -132,7 +130,6 @@
 			"description": "Turn on or off rapid start feature",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -151,7 +148,6 @@
 			"description": "Keep associated accessory switches in sync",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

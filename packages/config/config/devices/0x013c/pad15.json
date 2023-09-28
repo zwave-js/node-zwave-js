@@ -20,7 +20,6 @@
 			"label": "Switch Set",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -46,7 +45,6 @@
 			"label": "Send Multilevel Switch Reports",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -65,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "5",
@@ -74,8 +71,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "6",
@@ -84,8 +80,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 2,
-			"unsigned": true
+			"defaultValue": 2
 		}
 	],
 	"metadata": {

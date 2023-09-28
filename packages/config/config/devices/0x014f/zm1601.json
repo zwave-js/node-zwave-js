@@ -20,7 +20,6 @@
 			"description": "Defines the reaction of the siren",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -43,7 +42,6 @@
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

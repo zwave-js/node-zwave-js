@@ -1,3 +1,4 @@
+import { autoUnsigned } from "./rules/auto-unsigned.js";
 import { ccAPIValidateArgs } from "./rules/ccapi-validate-args.js";
 import { consistentCCClasses } from "./rules/consistent-cc-classes.js";
 import { consistentDeviceConfigPropertyOrder } from "./rules/consistent-device-config-property-order.js";
@@ -14,5 +15,6 @@ module.exports = {
 		"consistent-device-config-property-order":
 			consistentDeviceConfigPropertyOrder,
 		"no-unnecessary-min-max-value": noUnnecessaryMinMaxValue,
+		"auto-unsigned": autoUnsigned,
 	},
 };

@@ -20,7 +20,6 @@
 			"label": "Hardware Combination Identifier",
 			"valueSize": 1,
 			"defaultValue": 19,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -49,8 +48,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "5",
@@ -59,8 +57,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 600,
-			"unsigned": true
+			"defaultValue": 600
 		},
 		{
 			"#": "6",
@@ -69,15 +66,13 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"unsigned": true
+			"defaultValue": 300
 		},
 		{
 			"#": "16",
 			"label": "Back Unit Type",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [

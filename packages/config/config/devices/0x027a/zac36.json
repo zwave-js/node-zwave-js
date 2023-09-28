@@ -72,7 +72,6 @@
 			"label": "Temperature Report Unit",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -248,7 +247,6 @@
 			"description": "Causes the valve to periodically make a 1/8 turn to ensure it is operational",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -272,8 +270,7 @@
 			"unit": "days",
 			"minValue": 1,
 			"maxValue": 30,
-			"defaultValue": 14,
-			"unsigned": true
+			"defaultValue": 14
 		},
 		{
 			"#": "65",

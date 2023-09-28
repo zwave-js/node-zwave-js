@@ -46,7 +46,6 @@
 			"valueSize": 4,
 			"unit": "°C",
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -73,7 +72,6 @@
 			"label": "Work Days Set",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -105,7 +103,6 @@
 			"label": "Sensor Mode",
 			"valueSize": 4,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -139,7 +136,6 @@
 			"label": "Run Mode",
 			"valueSize": 4,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -165,8 +161,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 30,
-			"unsigned": true
+			"defaultValue": 30
 		},
 		{
 			"#": "123",
@@ -174,7 +169,6 @@
 			"description": "Allowable range: 10-100 (increment by 10)",
 			"valueSize": 4,
 			"defaultValue": 10,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -225,7 +219,6 @@
 			"description": "Allowable range: 10-100 (increment by 10)",
 			"valueSize": 4,
 			"defaultValue": 100,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -276,7 +269,6 @@
 			"description": "Allowable range: 0-100 (increment by 10)",
 			"valueSize": 4,
 			"defaultValue": 20,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -333,8 +325,7 @@
 			"unit": "°C",
 			"minValue": 5,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "135",
@@ -344,8 +335,7 @@
 			"unit": "°C",
 			"minValue": 10,
 			"maxValue": 180,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "136",
@@ -355,8 +345,7 @@
 			"unit": "0.1 °C",
 			"minValue": 50,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		},
 		{
 			"#": "137",
@@ -366,8 +355,7 @@
 			"unit": "0.1 °C",
 			"minValue": 410,
 			"maxValue": 500,
-			"defaultValue": 410,
-			"unsigned": true
+			"defaultValue": 410
 		},
 		{
 			"#": "183",
@@ -377,8 +365,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 30,
-			"unsigned": true
+			"defaultValue": 30
 		},
 		{
 			"#": "185",
@@ -388,8 +375,7 @@
 			"unit": "0.1 °C",
 			"minValue": 50,
 			"maxValue": 600,
-			"defaultValue": 270,
-			"unsigned": true
+			"defaultValue": 270
 		},
 		{
 			"#": "186",
@@ -399,8 +385,7 @@
 			"unit": "0.1 °C",
 			"minValue": 410,
 			"maxValue": 1400,
-			"defaultValue": 810,
-			"unsigned": true
+			"defaultValue": 810
 		},
 		{
 			"#": "188",

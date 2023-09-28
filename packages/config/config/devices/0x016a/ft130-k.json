@@ -20,7 +20,6 @@
 			"label": "Enable/Disable Touch Sound",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -38,7 +37,6 @@
 			"label": "Enable/Disable Touch Vibration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -56,7 +54,6 @@
 			"label": "Enable/Disable Button Slide",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -74,7 +71,6 @@
 			"label": "Type of Report When Button Pressed",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -92,7 +88,6 @@
 			"label": "Type of Command to Send to Association Groups 2, 4, 6, 8",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -112,15 +107,13 @@
 			"unit": "%",
 			"minValue": 5,
 			"maxValue": 50,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "81",
 			"label": "Enable/Disable LED on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -138,7 +131,6 @@
 			"label": "Enable/Disable Blinking LED on Command Failure",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -156,7 +148,6 @@
 			"label": "Enable/Disable LED When Charging",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,7 +165,6 @@
 			"label": "Enable/Disable LED on Button Press",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -192,7 +182,6 @@
 			"label": "Lock Configuration Parameters",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -210,7 +199,6 @@
 			"label": "Reset Device",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

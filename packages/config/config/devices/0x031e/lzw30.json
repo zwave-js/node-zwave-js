@@ -248,7 +248,6 @@
 			"label": "Instant On",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

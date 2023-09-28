@@ -264,7 +264,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -281,7 +280,6 @@
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",

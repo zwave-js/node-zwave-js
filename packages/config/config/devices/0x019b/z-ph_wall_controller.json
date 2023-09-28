@@ -39,7 +39,6 @@
 			"label": "Button Reports",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -62,7 +61,6 @@
 			"description": "Disabling this does not turn of factory reset/inclusion indication.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,7 +78,6 @@
 			"label": "Installed Rocker",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

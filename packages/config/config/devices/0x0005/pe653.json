@@ -175,8 +175,7 @@
 			"unit": "RPM",
 			"minValue": 400,
 			"maxValue": 3450,
-			"defaultValue": 750,
-			"unsigned": true
+			"defaultValue": 750
 		},
 		{
 			"#": "33",

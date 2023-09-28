@@ -23,7 +23,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -49,7 +48,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -64,8 +62,7 @@
 			"unit": "0.1°",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "11",
@@ -75,7 +72,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -90,8 +86,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "17",
@@ -101,7 +96,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -116,8 +110,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "19",
@@ -127,7 +120,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -141,7 +133,6 @@
 			"description": "Determines which combination of Basic Set commands will be sent",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -170,7 +161,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -246,7 +236,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -262,7 +251,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -278,7 +266,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -294,7 +281,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -336,8 +322,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 30,
-			"unsigned": true
+			"defaultValue": 30
 		}
 	],
 	"metadata": {

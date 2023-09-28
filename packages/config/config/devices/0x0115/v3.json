@@ -21,7 +21,6 @@
 			"description": "Debug mode to apply channels, associations and power mode changes on the fly without exclusion-inclusion sequence. Use for debugging only!",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -40,7 +39,6 @@
 			"description": "Blink with service LED during operation",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -59,7 +57,6 @@
 			"description": "Enable or disable Security S0 during inclusion (requires re-inclusion). Same as changing Tools → Security in the Arduino IDE",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -78,7 +75,6 @@
 			"description": "Enable or disable logging via Z-Wave. Same as changing Tools → Logging in the Arduino IDE",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -97,7 +93,6 @@
 			"description": "Set Z-Wave frequency and reboot. Same as changing Tools → Frequency in the Arduino IDE. Note that after issuing this command the device will stop change frequency and your controller will loose communications with it!",
 			"valueSize": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -163,7 +158,6 @@
 			"description": "Change channel type from Notification to legacy Sensor Binary to help Fibaro Home Center, Vera and some other controllers having problems with the latest Z-Wave Plus to understand the channel type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -182,7 +176,6 @@
 			"description": "Confirmation of OTA operations (for bootloader and sketch upgrades). Do it right before or right after initiating the firmware upgrade process",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

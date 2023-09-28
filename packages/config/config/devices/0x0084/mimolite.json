@@ -65,7 +65,6 @@
 			"label": "Clear_Pulse_Meter_Counts",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,7 +79,6 @@
 			"description": "Input-to-relay Mapping",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -158,7 +156,6 @@
 			"label": "Trigger_Level_And_Input_Threshold",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -184,7 +181,6 @@
 			"label": "Multilevel_AutoReport_Interval",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

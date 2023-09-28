@@ -83,7 +83,6 @@
 			"label": "Associations command class choice",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -114,7 +113,6 @@
 			"description": "MODE1, Example: change saturation level from 0% to 99%",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -19,7 +19,6 @@
 			"label": "Activate/deactivate functions ALL ON / ALL OFF",
 			"valueSize": 2,
 			"defaultValue": 255,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -61,7 +60,6 @@
 			"label": "Operating modes",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,7 +85,6 @@
 			"label": "Slats position",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -121,7 +118,6 @@
 			"label": "Forced Shutter DC calibration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

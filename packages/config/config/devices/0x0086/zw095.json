@@ -38,7 +38,6 @@
 			"label": "Energy Detection Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

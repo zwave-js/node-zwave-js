@@ -109,7 +109,6 @@
 			"description": "Operation Mode (Shutter or Venetian)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -192,7 +191,6 @@
 			"description": "Defines if reporting regarding power level, etc is reported to controller.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

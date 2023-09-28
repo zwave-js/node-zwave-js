@@ -20,7 +20,6 @@
 			"label": "Hardware Combination Identifier",
 			"valueSize": 1,
 			"defaultValue": 18,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -50,15 +49,13 @@
 			"unit": "0.01 seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"unsigned": true
+			"defaultValue": 300
 		},
 		{
 			"#": "11",
 			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -77,8 +74,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 90,
-			"unsigned": true
+			"defaultValue": 90
 		},
 		{
 			"#": "13",
@@ -86,15 +82,13 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "16",
 			"label": "Back Unit Type",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -122,8 +116,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		}
 	],
 	"metadata": {

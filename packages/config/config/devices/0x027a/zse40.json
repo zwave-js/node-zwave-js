@@ -93,8 +93,7 @@
 			"unit": "seconds",
 			"minValue": 15,
 			"maxValue": 60,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "5",

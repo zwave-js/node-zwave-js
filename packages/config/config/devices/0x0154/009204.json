@@ -20,7 +20,6 @@
 			"description": "In separate mode button 1 works with Group A, button 3 with Group C.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -43,7 +42,6 @@
 			"description": "In separate mode button 2 works with group B, button 4 with group D.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,7 +64,6 @@
 			"description": "This parameter defines the command to be sent to devices of control group A",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -113,7 +110,6 @@
 			"description": "This parameter defines the command to be sent to devices of control group B",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -160,7 +156,6 @@
 			"description": "This parameter defines the command to be sent to devices of control group C",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -207,7 +202,6 @@
 			"description": "This parameter defines the command to be sent to devices of control group D",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -275,7 +269,6 @@
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -310,7 +303,6 @@
 			"label": "Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

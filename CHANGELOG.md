@@ -5,6 +5,11 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## 12.0.0 (2023-09-26)
+### Application compatibility
+Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
+* Home Assistant **2023.10.0** or higher
+* `zwave-js-server` **1.32.0**
+
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v12)
 * Remove support for Node.js 14 and 16 (#6245)
 * Subpath exports are now exposed using the `exports` field in `package.json` instead of `typesVersions` (#5839)

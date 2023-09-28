@@ -77,7 +77,6 @@
 			"description": "85 (0x55) to restore factory setting",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [

@@ -36,7 +36,6 @@
 			"label": "LED Indicator Color",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -81,8 +80,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 2,
-			"unsigned": true
+			"defaultValue": 2
 		},
 		{
 			"#": "10",
@@ -90,7 +88,6 @@
 			"description": "Adjust brightness value with parameter 5",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -187,7 +184,6 @@
 			"label": "Center Press: Brightness",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -234,15 +230,13 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 80,
-			"unsigned": true
+			"defaultValue": 80
 		},
 		{
 			"#": "19",
 			"label": "External Switch Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -21,7 +21,6 @@
 			"description": "Whenever dimmer on/off state changes, it will send multilevel_switch_report to the nodes of group1. the default setting is enable the function",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -41,7 +40,6 @@
 			"valueSize": 1,
 			"unit": "seconds",
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -64,7 +62,6 @@
 			"description": "1. one switch mode：only s1 can dim up the light bulb to brightest level, then dim down to darkest level, and so on…  2. two switch mode：s1 and s2 can dim up the light bulb to brightest level, then dim down to darkest level, and so on…  3. up/down switch mode：s1 can only dim up the light bulb to brightest level, and s2 can only dim down to off",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,7 +84,6 @@
 			"description": "Whenever the ac power return from lost, pad02 will restore the switch state which could be dimmer off、last dimmer state、dimmer on. the default setting is last dimmer state",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -139,8 +139,7 @@
 			"unit": "30 minutes",
 			"minValue": 1,
 			"maxValue": 48,
-			"defaultValue": 8,
-			"unsigned": true
+			"defaultValue": 8
 		}
 	],
 	"metadata": {

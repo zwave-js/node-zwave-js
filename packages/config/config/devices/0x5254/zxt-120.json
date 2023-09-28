@@ -89,7 +89,6 @@
 			"label": "AC function Swing control",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

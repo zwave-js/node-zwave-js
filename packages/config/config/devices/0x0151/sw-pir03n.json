@@ -22,8 +22,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 180,
-			"defaultValue": 180,
-			"unsigned": true
+			"defaultValue": 180
 		}
 	],
 	"metadata": {

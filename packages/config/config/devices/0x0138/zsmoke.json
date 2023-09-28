@@ -28,7 +28,6 @@
 			"description": "Causes the device to send double alarm messages",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

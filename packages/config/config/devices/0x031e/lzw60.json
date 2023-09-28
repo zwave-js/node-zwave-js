@@ -23,8 +23,7 @@
 			"unit": "%",
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "12",
@@ -33,7 +32,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 8,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -49,15 +47,13 @@
 			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 15300,
-			"defaultValue": 30,
-			"unsigned": true
+			"defaultValue": 30
 		},
 		{
 			"#": "14",
 			"label": "Send Basic Set After PIR Trigger",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -75,7 +71,6 @@
 			"label": "Reverse Basic Set Behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -97,7 +92,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -114,7 +108,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -130,8 +123,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 7200,
-			"unsigned": true
+			"defaultValue": 7200
 		},
 		{
 			"#": "104",
@@ -141,8 +133,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 7200,
-			"unsigned": true
+			"defaultValue": 7200
 		},
 		{
 			"#": "110",
@@ -168,8 +159,7 @@
 			"unit": "0.1°C",
 			"minValue": 1,
 			"maxValue": 500,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "112",
@@ -178,8 +168,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 32,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "113",
@@ -198,8 +187,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		}
 	],
 	"metadata": {

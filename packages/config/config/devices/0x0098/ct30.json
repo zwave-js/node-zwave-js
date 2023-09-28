@@ -56,7 +56,6 @@
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -86,7 +85,6 @@
 			"label": "Utility Lock Enable/Disable",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -104,7 +102,6 @@
 			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -130,7 +127,6 @@
 			"label": "Auxiliary/Emergency",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -148,7 +144,6 @@
 			"label": "Thermostat Swing Temperature",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -170,7 +165,6 @@
 			"label": "Thermostat Diff Temperature",
 			"valueSize": 1,
 			"defaultValue": 4,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

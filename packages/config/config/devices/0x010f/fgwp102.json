@@ -317,7 +317,6 @@
 			"description": "Defines responds to alarms (device's status change).",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -564,7 +563,6 @@
 			"label": "Metering energy consumed by the Wall Plug itself.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -633,7 +631,6 @@
 			"description": "Defines the way 2nd association group devices are controlled",
 			"valueSize": 1,
 			"defaultValue": 6,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -683,7 +680,6 @@
 			"label": "LED color when device is on",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -734,7 +730,6 @@
 			"label": "LED color when device is off",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -781,7 +776,6 @@
 			"label": "LED color when Z Wave alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -46,7 +46,6 @@
 			"label": "Motor Run Direction",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -74,8 +73,7 @@
 			"unit": "0.01 seconds",
 			"minValue": 10,
 			"maxValue": 32767,
-			"defaultValue": 150,
-			"unsigned": true
+			"defaultValue": 150
 		},
 		{
 			"#": "52",
@@ -92,8 +90,7 @@
 			"unit": "0.01 seconds",
 			"minValue": 500,
 			"maxValue": 32767,
-			"defaultValue": 15000,
-			"unsigned": true
+			"defaultValue": 15000
 		},
 		{
 			"#": "51",
@@ -103,15 +100,13 @@
 			"unit": "0.01 seconds",
 			"minValue": 500,
 			"maxValue": 32767,
-			"defaultValue": 15000,
-			"unsigned": true
+			"defaultValue": 15000
 		},
 		{
 			"#": "36",
 			"label": "Enter/Exit Calibration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -133,7 +128,6 @@
 			"label": "User Confirmation For Calibration",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -147,7 +141,6 @@
 			"label": "Calibration Status",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -182,7 +175,6 @@
 			"label": "Curtain Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -200,7 +192,6 @@
 			"label": "Inititiate Repositioning",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -215,7 +206,6 @@
 			"label": "Repositioning Status",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -234,7 +224,6 @@
 			"label": "Calibration Lock",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -261,7 +250,6 @@
 			"label": "External Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -283,7 +271,6 @@
 			"label": "Switch S1 Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -313,7 +300,6 @@
 			"label": "Switch S2 Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -345,7 +331,6 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -353,7 +338,6 @@
 			"label": "External Switch: Network/Reset Functions",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

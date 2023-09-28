@@ -76,7 +76,6 @@
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -111,7 +110,6 @@
 			"description": "Set Easy Mode 0:DISABLE 1:ENABLED DEFAULT:ENABLED",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -129,7 +127,6 @@
 			"label": "Time Format",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
