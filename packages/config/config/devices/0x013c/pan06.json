@@ -161,7 +161,6 @@
 			"description": "Enable this to distinguish between the relays.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

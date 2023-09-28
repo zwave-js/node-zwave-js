@@ -19,7 +19,6 @@
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -37,7 +36,6 @@
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -55,7 +53,6 @@
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -119,7 +116,6 @@
 			"description": "NOTE: Parameter is the same for turning OFF or ON.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -177,7 +173,6 @@
 			"description": "After changing this parameter, the device MUST be excluded and then re-included after waiting 30 seconds.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -220,7 +215,6 @@
 			"description": "After changing this parameter, the device MUST be excluded and then re-included after waiting 30 seconds.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

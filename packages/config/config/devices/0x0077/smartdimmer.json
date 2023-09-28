@@ -49,7 +49,6 @@
 			"description": "B&O IR support is disabled if 0 otherwise enabled.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -68,7 +67,6 @@
 			"description": "Dimming Type, trailing edge enabled if 0 otherwise leading edge enabled.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

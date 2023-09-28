@@ -20,7 +20,6 @@
 			"label": "Button 1 and 3 pair mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -42,7 +41,6 @@
 			"label": "Button 2 and 4 pair mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -64,7 +62,6 @@
 			"label": "Command to control Group A",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -110,7 +107,6 @@
 			"label": "Command to control Group B",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -156,7 +152,6 @@
 			"label": "Command to control Group C",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -202,7 +197,6 @@
 			"label": "Command to control Group D",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -270,7 +264,6 @@
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -288,7 +281,6 @@
 			"label": "Block wake up even when Wake Up Interval is set",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -306,7 +298,6 @@
 			"label": "Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

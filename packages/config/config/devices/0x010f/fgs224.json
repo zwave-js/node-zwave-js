@@ -495,7 +495,6 @@
 			"label": "Q1 Output Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -513,7 +512,6 @@
 			"label": "Q2 Output Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -531,7 +529,6 @@
 			"label": "Prevent Simultaneous Switching of Outputs",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

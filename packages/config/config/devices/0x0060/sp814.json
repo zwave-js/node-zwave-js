@@ -40,7 +40,6 @@
 			"description": "The Detecting function can be Disabled or Enabled.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

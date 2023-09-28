@@ -20,7 +20,6 @@
 			"label": "Value to Send When Triggered",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -38,7 +37,6 @@
 			"label": "Enable/Disable Wake-up When Re-powered",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -56,7 +54,6 @@
 			"label": "Normal Operation State",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -98,7 +95,6 @@
 			"label": "Type of Command to Send to Nodes When Triggered",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -120,7 +116,6 @@
 			"label": "Notification Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,7 +169,6 @@
 			"label": "Reset The Device",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

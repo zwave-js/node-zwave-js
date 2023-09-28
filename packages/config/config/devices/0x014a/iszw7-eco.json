@@ -37,7 +37,6 @@
 			"label": "Supervision Encapsulation for Get Requests",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -75,7 +74,6 @@
 			"label": "Allow Volume Adjustments for Intrusion/Smoke/CO Alarms",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

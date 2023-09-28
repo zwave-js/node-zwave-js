@@ -27,7 +27,6 @@
 			"valueSize": 1,
 			"unit": "seconds",
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,7 +44,6 @@
 			"label": "Set Meter Report Intervals to Default",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -159,7 +157,6 @@
 			"label": "Load Status: Change Reports",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -181,7 +178,6 @@
 			"label": "Load Status: LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -199,7 +195,6 @@
 			"label": "Lock Configuration Parameters",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

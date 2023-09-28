@@ -60,7 +60,6 @@
 			"valueSize": 1,
 			"unit": "seconds",
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,7 +79,6 @@
 			"valueSize": 1,
 			"unit": "seconds",
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

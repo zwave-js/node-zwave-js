@@ -288,7 +288,6 @@
 			"description": "0 no change, 1 extreme position",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

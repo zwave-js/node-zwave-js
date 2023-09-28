@@ -35,7 +35,6 @@
 			"description": "Set LED indication mode",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -82,7 +81,6 @@
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -159,7 +157,6 @@
 			"description": "Which command from the blocking Node should be interpreted as 'unprotected'",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -178,7 +175,6 @@
 			"description": "Defines behaviour on open press while closing and vice versa.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -200,7 +196,6 @@
 			"label": "Invert open and close relays",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -228,7 +223,6 @@
 			"description": "Allows exchanging the functionality of the buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -247,7 +241,6 @@
 			"description": "Local operations by buttons will/will not/ switch the load",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -270,7 +263,6 @@
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
 			"defaultValue": 4,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -305,7 +297,6 @@
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -361,7 +352,6 @@
 			"label": "What to do on button Down press",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -384,7 +374,6 @@
 			"description": "Defines the action to perform upon auto open or auto close.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

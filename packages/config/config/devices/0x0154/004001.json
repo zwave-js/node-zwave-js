@@ -73,7 +73,6 @@
 			"description": "Inform other smoke detectors of same type about smoke alarms",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -92,7 +91,6 @@
 			"description": "Inform other smoke detectors of same type about battery alarms",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -26,7 +26,6 @@
 			"label": "Notification type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,7 +48,6 @@
 			"description": "Specify if LED should indicate special event.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

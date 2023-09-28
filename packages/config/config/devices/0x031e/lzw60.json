@@ -54,7 +54,6 @@
 			"label": "Send Basic Set After PIR Trigger",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -72,7 +71,6 @@
 			"label": "Reverse Basic Set Behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

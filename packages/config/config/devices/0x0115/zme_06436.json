@@ -20,7 +20,6 @@
 			"description": "Set LED indication mode",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -67,7 +66,6 @@
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -144,7 +142,6 @@
 			"description": "Which command from the blocking Node should be interpreted as 'unprotected'",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -162,7 +159,6 @@
 			"label": "Opposite button reaction",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -180,7 +176,6 @@
 			"label": "Invert open and close relays",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -208,7 +203,6 @@
 			"description": "Allows exchanging the functionality of the buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -226,7 +220,6 @@
 			"label": "Switch by buttons",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -249,7 +242,6 @@
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -272,7 +264,6 @@
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

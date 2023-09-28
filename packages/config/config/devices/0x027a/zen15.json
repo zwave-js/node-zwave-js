@@ -30,7 +30,6 @@
 			"label": "On/Off Status Change Notifications",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -92,7 +91,6 @@
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -112,7 +110,6 @@
 			"description": "Pink = Power Switch is off; Blue = 0–300 W; Cyan = 300–600 W; Green = 600–900 W; Yellow = 900–1200 W; Red = 1200–1500 W; Purple = 1500–1800 W; Purple blink = over 1800 W",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

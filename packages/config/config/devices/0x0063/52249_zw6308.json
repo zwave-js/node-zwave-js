@@ -21,7 +21,6 @@
 			"description": "Invert open close door",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -44,7 +43,6 @@
 			"description": "Change cmd send of open/close door/window",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -94,7 +92,6 @@
 			"description": "Tamper remove LED continuous blink you can set",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

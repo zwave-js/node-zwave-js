@@ -34,7 +34,6 @@
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,7 +65,6 @@
 			"label": "Function of RF off command on first channel",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -92,7 +90,6 @@
 			"label": "Switch on/off by holding buttons",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -118,7 +115,6 @@
 			"label": "Restore switch state after power cycle",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -145,7 +141,6 @@
 			"description": "Allows for exchanging ON and OFF.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -163,7 +158,6 @@
 			"label": "Switch by buttons (first channel)",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -185,7 +179,6 @@
 			"label": "Action on button single press or hold",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -211,7 +204,6 @@
 			"label": "Action on button double press or hold",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -237,7 +229,6 @@
 			"label": "What to do on button Down press (both)",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -283,7 +274,6 @@
 			"label": "Function of RF off command on second channel",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -309,7 +299,6 @@
 			"label": "Switch by buttons (second channel)",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

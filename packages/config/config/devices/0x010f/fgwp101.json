@@ -40,7 +40,6 @@
 			"description": "Once activated, Wall Plug will keep a connected device ...",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -72,7 +71,6 @@
 			"description": "Parameter defines how the Wall Plug will respond to alarms ...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -155,7 +153,6 @@
 			"description": "This parameter determines whether energy metering ...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -194,7 +191,6 @@
 			"description": "Parameter defines the way 2nd association group devices ...",
 			"valueSize": 1,
 			"defaultValue": 6,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -242,7 +238,6 @@
 			"label": "LED color when device is on",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -292,7 +287,6 @@
 			"label": "LED color when device is off",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -338,7 +332,6 @@
 			"label": "LED color when Z Wave alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

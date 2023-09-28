@@ -406,7 +406,6 @@
 			"description": "The parameter determines the behaviour of tamper and how it reports.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -480,7 +479,6 @@
 			"description": "Alarm frame will or will not be sent in broadcast mode.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -660,7 +658,6 @@
 			"description": "How the light behaves after motion has been detected.",
 			"valueSize": 1,
 			"defaultValue": 10,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -878,7 +875,6 @@
 			"description": "Indicating mode resembles a police car (white, red and blue).",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

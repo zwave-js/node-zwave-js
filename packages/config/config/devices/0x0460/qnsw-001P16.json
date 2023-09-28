@@ -34,7 +34,6 @@
 			"label": "SW1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -79,7 +78,6 @@
 			"label": "O1: Relay Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -97,7 +95,6 @@
 			"label": "O1: Auto-On/Off Timer Unit",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -134,7 +131,6 @@
 			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -157,7 +153,6 @@
 			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -180,7 +175,6 @@
 			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -203,7 +197,6 @@
 			"description": "This parameter determines which alarm frames the Device should respond to and how.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -226,7 +219,6 @@
 			"description": "Reset to factory default settings and remove from the Z-Wave network.",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

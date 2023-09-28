@@ -46,7 +46,6 @@
 			"label": "Alarm acoustic and visual signals",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -115,7 +114,6 @@
 			"label": "Frame broadcast mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -187,7 +185,6 @@
 			"label": "Black Box sensitivity level",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -241,7 +238,6 @@
 			"label": "Temperature measurement compensation for report",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -260,7 +256,6 @@
 			"description": "Activates/inactivates temper switch alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -96,7 +96,6 @@
 			"label": "Switch Action on Alarm",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

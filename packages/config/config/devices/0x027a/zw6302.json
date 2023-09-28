@@ -64,7 +64,6 @@
 			"label": "Basic Set, Notification and Basic Report",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

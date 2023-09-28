@@ -207,7 +207,6 @@
 			"label": "Button 1 Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -370,7 +369,6 @@
 			"label": "Screen Timeout: Primary Page",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -148,7 +148,6 @@
 			"label": "Proximity Detection",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -263,7 +262,6 @@
 			"label": "Calibrate Speaker",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

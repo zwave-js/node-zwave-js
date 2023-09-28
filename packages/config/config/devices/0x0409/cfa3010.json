@@ -147,7 +147,6 @@
 			"label": "Lock status",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [

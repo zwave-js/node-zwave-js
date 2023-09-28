@@ -31,7 +31,6 @@
 			"valueSize": 2,
 			"unit": "hours",
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

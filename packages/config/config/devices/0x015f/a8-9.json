@@ -140,7 +140,6 @@
 			"label": "PIR Sensor: Report Changes",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -320,7 +319,6 @@
 			"label": "Temperature Unit",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -114,7 +114,6 @@
 			"label": "Reset to Factory Settings",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [

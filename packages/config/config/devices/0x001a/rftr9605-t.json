@@ -47,7 +47,6 @@
 			"description": "1 = off 2 = on 3 = last state",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -69,7 +68,6 @@
 			"label": "Panic Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -88,7 +86,6 @@
 			"description": "Light intensity of indicator led",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -107,7 +104,6 @@
 			"description": "Light intensity of indicator led",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

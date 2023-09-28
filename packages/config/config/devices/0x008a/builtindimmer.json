@@ -45,7 +45,6 @@
 			"label": "The way how the button reacts when press/released",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -68,7 +67,6 @@
 			"description": "The way the Built-in Dimmer reacts when light is turned on/off with button",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -86,7 +84,6 @@
 			"label": "Enable dimming",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

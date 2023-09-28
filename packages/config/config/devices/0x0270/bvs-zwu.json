@@ -44,7 +44,6 @@
 			"description": "When enabled, the device will report off (0x00) when the valve is open, and on (0xff) when the valve is closed; ",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -63,7 +62,6 @@
 			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is off",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -86,7 +84,6 @@
 			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is on",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -108,7 +105,6 @@
 			"label": "Association Group 3: Water Leak Basic Set Value (Trigger)",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -130,7 +126,6 @@
 			"label": "Association Group 3: Water Leak Basic Set Value (Cancel)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -152,7 +147,6 @@
 			"label": "Temperature Report Unit",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -292,7 +286,6 @@
 			"label": "Association Group 4: Overheat Basic Set Value (Trigger)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -314,7 +307,6 @@
 			"label": "Association Group 4: Overheat Basic Set Value (Cancel)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -390,7 +382,6 @@
 			"label": "Association Group 5: Freeze Basic Set Value (Trigger)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -412,7 +403,6 @@
 			"label": "Association Group 5: Freeze Basic Set Value (Cancel)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -434,7 +424,6 @@
 			"label": "Allow Valve Control - Water Leak Detected",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -452,7 +441,6 @@
 			"label": "Allow Valve Control - Water Leak Detected During Freeze Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -470,7 +458,6 @@
 			"label": "Buzzer",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -496,7 +483,6 @@
 			"label": "Touch Keylock Protection",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

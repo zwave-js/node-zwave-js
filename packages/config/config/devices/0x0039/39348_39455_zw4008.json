@@ -37,7 +37,6 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -64,7 +63,6 @@
 			"description": "Change the default exclusion behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
