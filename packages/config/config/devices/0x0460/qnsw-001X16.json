@@ -1,12 +1,13 @@
 {
 	"manufacturer": "Shelly",
 	"manufacturerId": "0x0460",
-	"label": "QNSW-001P16",
-	"description": "Wave 1PM",
+	"label": "QNSW-001X16",
+	"description": "Wave 1",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0084"
+			"productId": "0x0083",
+			"zwaveAllianceId": 4922
 		}
 	],
 	"firmwareVersion": {
@@ -53,7 +54,10 @@
 		{
 			"#": "17",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
-			"label": "O1: State After Power Failure"
+			"label": "O1: State After Power Failure",
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true
 		},
 		{
 			"#": "19",
@@ -74,23 +78,6 @@
 			"defaultValue": 0
 		},
 		{
-			"#": "23",
-			"label": "O1: Relay Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "NO: normally open",
-					"value": 0
-				},
-				{
-					"label": "NC: normally closed",
-					"value": 1
-				}
-			]
-		},
-		{
 			"#": "25",
 			"label": "O1: Auto-On/Off Timer Unit",
 			"valueSize": 1,
@@ -108,22 +95,21 @@
 			]
 		},
 		{
-			"#": "36",
-			"label": "O1: Power Change Report Threshold",
+			"#": "23",
+			"label": "O1: Relay Type",
 			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50
-		},
-		{
-			"#": "39",
-			"label": "O1: Minimum Time Between Power Reports",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 120,
-			"defaultValue": 30
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO: normally open",
+					"value": 0
+				},
+				{
+					"label": "NC: normally closed",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "91",
@@ -234,7 +220,6 @@
 		{
 			"#": "201",
 			"label": "Serial Number: Part 1",
-			"description": "This parameter contains a part of devices serial number.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -243,7 +228,6 @@
 		{
 			"#": "202",
 			"label": "Serial Number: Part 2",
-			"description": "This parameter contains a part of devices serial number.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -252,7 +236,6 @@
 		{
 			"#": "203",
 			"label": "Serial Number: Part 3",
-			"description": "This parameter contains a part of devices serial number.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
