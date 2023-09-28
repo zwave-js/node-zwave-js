@@ -107,36 +107,34 @@
 		},
 		{
 			"#": "6",
-			"label": "SW1 & SW2: Swap",
-			"description": "swaped state SW1 control O2, SW2 control O1)",
+			"label": "Swap Inputs",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "default",
+					"label": "Normal (SW1 - O1, SW2 - O2)",
 					"value": 0
 				},
 				{
-					"label": "swapped",
+					"label": "Swapped (SW1 - O2, SW2 - O1)",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "16",
-			"label": "O1 & O2: Swap",
-			"description": "swaped state O1 - close, O2 - open",
+			"label": "Swap Outputs",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "default",
+					"label": "Normal",
 					"value": 0
 				},
 				{
-					"label": "swapped",
+					"label": "Swapped",
 					"value": 1
 				}
 			]
