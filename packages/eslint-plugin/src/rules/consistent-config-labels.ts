@@ -12,6 +12,8 @@ const titleCaseExceptions = [
 	"in",
 	"of",
 	"by",
+	"to",
+	"or",
 	"for",
 	"the",
 	"and",
@@ -22,7 +24,7 @@ const titleCaseExceptions = [
 
 const titleCaseIgnored: RegExp[] = [
 	/^v\d+$/i, // Versions
-	/^x$/i, // x
+	/^\d*x$/i, // 2x, 3x, x, ...
 	/^[a-z]+[A-Z]/, // fancY mArketing nAmEs
 	/[®™]$/i, // Trademarks etc.
 ];
@@ -32,8 +34,9 @@ const alwaysUppercase: RegExp[] = [
 ];
 
 // TODO: Additional fixes:
-// Plug-In, In-Wall
+// Plug-In, In-Wall, 3-Way, 6-Channel
 // remove Z-Wave and all its variants
+// Title-Case hyphenated words
 
 function isTitleCase(str: string) {
 	const words = str.split(" ");

@@ -2,7 +2,8 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA039",
-	"description": "AërQ Temperature and Humidity Sensor V2.0",
+	// eslint-disable-next-line @zwave-js/consistent-config-labels
+	"description": "aërQ Temperature and Humidity Sensor V2.0",
 	"devices": [
 		{
 			"productType": "0x0002",

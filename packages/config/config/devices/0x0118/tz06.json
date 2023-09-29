@@ -2,7 +2,7 @@
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ06",
-	"description": "In Wall Dual Relay(1 Way) Switch Module 2X 1.5kW",
+	"description": "In Wall Dual Relay(1 Way) Switch Module 2x 1.5kW",
 	"devices": [
 		{
 			"productType": "0x0001",

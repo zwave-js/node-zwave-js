@@ -2,7 +2,8 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA022",
-	"description": "Illumino WallMote 7",
+	// eslint-disable-next-line @zwave-js/consistent-config-labels
+	"description": "illumino WallMote 7",
 	"devices": [
 		{
 			"productType": "0x0102",

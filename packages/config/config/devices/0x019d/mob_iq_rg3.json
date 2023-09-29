@@ -2,7 +2,8 @@
 	"manufacturer": "MOBILUS MOTOR Spółka z o.o.",
 	"manufacturerId": "0x019d",
 	"label": "MOB.IQ [RG3+]",
-	"description": "Mob.iq [rg3+]",
+	// eslint-disable-next-line @zwave-js/consistent-config-labels
+	"description": "mob.iq [rg3+]",
 	"devices": [
 		{
 			"productType": "0x0003",
