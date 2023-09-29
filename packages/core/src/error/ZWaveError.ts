@@ -268,7 +268,11 @@ export function isTransmissionError(e: unknown): e is ZWaveError & {
  *
  * This explicitly does not include transmission errors.
  */
-export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
+export function isRecoverableZWaveError(e: unknown): e is ZWaveError & {
+	code:
+		| ZWaveErrorCodes.Controller_InterviewRestarted
+		| ZWaveErrorCodes.Controller_NodeRemoved;
+} {
 	if (!isZWaveError(e)) return false;
 	switch (e.code) {
 		case ZWaveErrorCodes.Controller_InterviewRestarted:
@@ -280,7 +284,10 @@ export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
 
 export function isMissingControllerACK(
 	e: unknown,
-): e is ZWaveError {
+): e is ZWaveError & {
+	code: ZWaveErrorCodes.Controller_Timeout;
+	context: "ACK";
+} {
 	return isZWaveError(e)
 		&& e.code === ZWaveErrorCodes.Controller_Timeout
 		&& e.context === "ACK";
@@ -288,7 +295,10 @@ export function isMissingControllerACK(
 
 export function isMissingControllerCallback(
 	e: unknown,
-): e is ZWaveError {
+): e is ZWaveError & {
+	code: ZWaveErrorCodes.Controller_Timeout;
+	context: "callback";
+} {
 	return isZWaveError(e)
 		&& e.code === ZWaveErrorCodes.Controller_Timeout
 		&& e.context === "callback";

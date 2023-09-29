@@ -4673,7 +4673,6 @@ ${handlers.length} left`,
 					// We got a result - it will be passed to the next iteration
 					break attemptMessage;
 				} catch (e: any) {
-					let delay = 0;
 					let zwError: ZWaveError;
 
 					if (!isZWaveError(e)) {
@@ -4691,14 +4690,12 @@ ${handlers.length} left`,
 							});
 							return;
 						} else if (
-							isSendData(msg)
-							&& e.code === ZWaveErrorCodes.Controller_Timeout
-							&& e.context === "callback"
+							isSendData(msg) && isMissingControllerCallback(e)
 						) {
 							// If the callback to SendData times out, we need to issue a SendDataAbort
 							await this.abortSendData();
-							// Wait a short amount of time so everything can settle
-							delay = 50;
+							// Reject the transaction - this will trigger the recovery mechanism and retry the command afterwards
+							throw e;
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
 							throw e;
@@ -4712,7 +4709,6 @@ ${handlers.length} left`,
 							)
 						) {
 							// Retry the command
-							if (delay) await wait(delay, true);
 							continue attemptMessage;
 						}
 
