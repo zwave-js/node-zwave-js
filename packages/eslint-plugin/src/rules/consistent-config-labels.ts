@@ -113,17 +113,25 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 				const value = node.value;
 				if (isTitleCase(value.value)) return;
 
+				const fixed = toTitleCase(value.raw.slice(1, -1));
+
 				context.report({
 					loc: node.loc,
 					messageId: "must-be-title-case",
 					data: {
 						what: "Device descriptions",
 					},
-					fix: (fixer) =>
-						fixer.replaceTextRange(
-							value.range,
-							`"${toTitleCase(value.raw.slice(1, -1))}"`,
-						),
+					suggest: [
+						{
+							messageId: "change-to-fixed",
+							data: { fixed },
+							fix: (fixer) =>
+								fixer.replaceTextRange(
+									value.range,
+									`"${fixed}"`,
+								),
+						},
+					],
 				});
 			},
 			// "JSONProperty[key.value='paramInformation'] > JSONArrayExpression > JSONObjectExpression"(
@@ -144,6 +152,7 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 			"no-surrounding-whitespace":
 				"Leading and trailing whitespace is not allowed",
 			"must-be-title-case": "{{what}} must be in Title Case",
+			"change-to-fixed": `Change to "{{fixed}}"`,
 		},
 		type: "problem",
 	},
