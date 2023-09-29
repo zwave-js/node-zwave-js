@@ -2,7 +2,7 @@
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "MINI KEYPAD RFID",
-	"description": "Keypad with alarm activation rfid tag",
+	"description": "Keypad with Alarm Activation Rfid Tag",
 	"devices": [
 		{
 			"productType": "0x6131",

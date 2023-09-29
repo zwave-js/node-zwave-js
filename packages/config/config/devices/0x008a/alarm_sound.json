@@ -2,7 +2,7 @@
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "Alarm Sound",
-	"description": "Alarm sound",
+	"description": "Alarm Sound",
 	"devices": [
 		{
 			"productType": "0x0005",

@@ -2,7 +2,7 @@
 	"manufacturer": "EcoNet Controls",
 	"manufacturerId": "0x0157",
 	"label": "EVC200",
-	"description": "Z-Wave Motor for water/gas ball valves",
+	"description": "Z-Wave Motor for Water/gas Ball Valves",
 	"devices": [
 		{
 			"productType": "0x0003",

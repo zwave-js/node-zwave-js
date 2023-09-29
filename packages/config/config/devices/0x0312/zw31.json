@@ -2,7 +2,7 @@
 	"manufacturer": "EVA Logik",
 	"manufacturerId": "0x0312",
 	"label": "ZW31",
-	"description": "S2 In-wall Smart Dimmer switch",
+	"description": "S2 In-wall Smart Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0xa000",

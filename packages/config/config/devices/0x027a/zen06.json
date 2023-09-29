@@ -2,7 +2,7 @@
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN06",
-	"description": "Smart Plug with 2 USB ports",
+	"description": "Smart Plug with 2 USB Ports",
 	"devices": [
 		{
 			"productType": "0x0101",

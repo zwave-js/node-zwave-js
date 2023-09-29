@@ -2,7 +2,7 @@
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
 	"label": "POPE701202",
-	"description": "Popp Mold detector",
+	"description": "Popp Mold Detector",
 	"devices": [
 		{
 			"productType": "0x0004",

@@ -2,7 +2,7 @@
 	"manufacturer": "Telldus Technologies AB",
 	"manufacturerId": "0x0176",
 	"label": "TZDW-100",
-	"description": "Door/window sensor",
+	"description": "Door/window Sensor",
 	"devices": [
 		{
 			"productType": "0x0005",

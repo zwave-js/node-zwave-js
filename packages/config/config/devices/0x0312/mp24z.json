@@ -2,7 +2,7 @@
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MP24Z",
-	"description": "Outdoor Smart Plug - 2 channel",
+	"description": "Outdoor Smart Plug - 2 Channel",
 	"devices": [
 		{
 			"productType": "0xff00",

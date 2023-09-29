@@ -2,7 +2,7 @@
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "Heatit Z-Scene Controller",
-	"description": "Push button 6-gang",
+	"description": "Push Button 6-gang",
 	"devices": [
 		{
 			"productType": "0x0003",

@@ -2,7 +2,7 @@
 	"manufacturer": "Connected Object",
 	"manufacturerId": "0x011b",
 	"label": "EEDOMUS+",
-	"description": "eedomus",
+	"description": "Eedomus",
 	"devices": [
 		{
 			"productType": "0x0001",

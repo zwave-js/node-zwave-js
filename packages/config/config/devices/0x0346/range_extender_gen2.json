@@ -2,7 +2,7 @@
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
 	"label": "4AR1SZ-0EN0",
-	"description": "Range Extender (2nd generation)",
+	"description": "Range Extender (2nd Generation)",
 	"devices": [
 		{
 			"productType": "0x0401",

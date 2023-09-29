@@ -2,7 +2,7 @@
 	"manufacturer": "Poly-control",
 	"manufacturerId": "0x010e",
 	"label": "BTZW125",
-	"description": "Danalock v2 circle",
+	"description": "Danalock v2 Circle",
 	"devices": [
 		{
 			"productType": "0x0003",

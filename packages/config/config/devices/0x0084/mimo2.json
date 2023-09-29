@@ -2,7 +2,7 @@
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "MIMO2+",
-	"description": "Dual Digital or Analog Voltage input and Dual Contact Relay",
+	"description": "Dual Digital Or Analog Voltage Input and Dual Contact Relay",
 	"devices": [
 		{
 			"productType": "0x0463",

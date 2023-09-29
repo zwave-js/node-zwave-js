@@ -2,7 +2,7 @@
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ74",
-	"description": "Insert two channel switch module",
+	"description": "Insert Two Channel Switch Module",
 	"devices": [
 		{
 			"productType": "0x0311",

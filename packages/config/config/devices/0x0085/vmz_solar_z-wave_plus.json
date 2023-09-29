@@ -2,7 +2,7 @@
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "VMZ Solar z-wave plus",
-	"description": "Awning Blind z-wave plus version",
+	"description": "Awning Blind Z-wave Plus Version",
 	"devices": [
 		{
 			"productType": "0x0006",

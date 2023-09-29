@@ -2,7 +2,7 @@
 	"manufacturer": "EVA Logik",
 	"manufacturerId": "0x0312",
 	"label": "ZW37",
-	"description": "Show Home, 2 channel smart plug, ZWave Plus",
+	"description": "Show Home, 2 Channel Smart Plug, ZWave Plus",
 	"devices": [
 		{
 			"productType": "0x0221",

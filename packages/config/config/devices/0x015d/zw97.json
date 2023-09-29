@@ -2,7 +2,7 @@
 	"manufacturer": "show home",
 	"manufacturerId": "0x015d",
 	"label": "ZW97",
-	"description": "Outdoor Smart Plug - 2 channel",
+	"description": "Outdoor Smart Plug - 2 Channel",
 	"devices": [
 		{
 			"productType": "0x0221",

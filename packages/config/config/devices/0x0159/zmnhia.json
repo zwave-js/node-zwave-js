@@ -2,7 +2,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHIA",
-	"description": "Flush on/off thermostat",
+	"description": "Flush On/off Thermostat",
 	"devices": [
 		{
 			"productType": "0x0005",

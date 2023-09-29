@@ -2,7 +2,7 @@
 	"manufacturer": "Radio Thermostat Company of America (RTC)",
 	"manufacturerId": "0x0098",
 	"label": "CT200X",
-	"description": "Vivint Element Thermostat w/ other sensors",
+	"description": "Vivint Element Thermostat W/ Other Sensors",
 	"devices": [
 		{
 			"productType": "0xc801",

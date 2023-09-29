@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "HM-HS1CA",
-	"description": "CO Sensor with acoustic alarm",
+	"description": "CO Sensor with Acoustic Alarm",
 	"devices": [
 		{
 			"productType": "0x8005",

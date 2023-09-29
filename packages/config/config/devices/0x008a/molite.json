@@ -2,7 +2,7 @@
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "Molite",
-	"description": "Movement sensor with temperature and light sensor",
+	"description": "Movement Sensor with Temperature and Light Sensor",
 	"devices": [
 		{
 			"productType": "0x0003",

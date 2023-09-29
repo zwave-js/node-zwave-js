@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "PSP02",
-	"description": "Door/temp/illumination/motion sensor",
+	"description": "Door/temp/illumination/motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0002",

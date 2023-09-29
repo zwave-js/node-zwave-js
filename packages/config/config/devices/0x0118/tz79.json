@@ -2,7 +2,7 @@
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ79",
-	"description": "Insert switch module",
+	"description": "Insert Switch Module",
 	"devices": [
 		{
 			"productType": "0x0311",

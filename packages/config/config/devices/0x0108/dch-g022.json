@@ -2,7 +2,7 @@
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
 	"label": "DCH-G022",
-	"description": "D-Link mydlink Connected Home Hub",
+	"description": "D-Link Mydlink Connected Home Hub",
 	"devices": [
 		{
 			"productType": "0x0022",

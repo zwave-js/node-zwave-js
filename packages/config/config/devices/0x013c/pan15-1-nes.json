@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN15-1-NES",
-	"description": "Smart Energy plug In switch",
+	"description": "Smart Energy Plug in Switch",
 	"devices": [
 		{
 			"productType": "0x0001",

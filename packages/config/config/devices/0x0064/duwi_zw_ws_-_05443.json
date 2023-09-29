@@ -2,7 +2,7 @@
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "ZWWS",
-	"description": "Battery powered One paddle wall controller",
+	"description": "Battery Powered One Paddle Wall Controller",
 	"devices": [
 		{
 			"productType": "0x5002",

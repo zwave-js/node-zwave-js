@@ -2,7 +2,7 @@
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
 	"label": "4AK1S7-0EN0 / 4AK1E9-0EU0",
-	"description": "Alarm Keypad (1st generation)",
+	"description": "Alarm Keypad (1st Generation)",
 	"devices": [
 		{
 			"productType": "0x0101",

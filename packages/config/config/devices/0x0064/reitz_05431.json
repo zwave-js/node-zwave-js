@@ -2,7 +2,7 @@
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "ZW-ES-1000 / Reitz 05431",
-	"description": "Duewi ZW BJ ES 1000 / Reitz 05431 / ZWave.me 05457 Single button wall switch",
+	"description": "Duewi ZW BJ ES 1000 / Reitz 05431 / ZWave.me 05457 Single Button Wall Switch",
 	"devices": [
 		{
 			"productType": "0x2001",

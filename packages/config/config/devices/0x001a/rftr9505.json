@@ -2,7 +2,7 @@
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RFTR9505-T / RFTR9605",
-	"description": "Duplex receptacle",
+	"description": "Duplex Receptacle",
 	"devices": [
 		{
 			"productType": "0x5244",

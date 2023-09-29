@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "PAN08",
-	"description": "roller shutter",
+	"description": "Roller Shutter",
 	"devices": [
 		{
 			"productType": "0x0001",

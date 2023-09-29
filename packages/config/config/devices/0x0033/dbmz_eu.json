@@ -2,7 +2,7 @@
 	"manufacturer": "Electronic Solutions",
 	"manufacturerId": "0x0033",
 	"label": "DBMZ",
-	"description": "DC Motor Controller - Window coverings",
+	"description": "DC Motor Controller - Window Coverings",
 	"devices": [
 		{
 			"productType": "0x5250",

@@ -2,7 +2,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHBA",
-	"description": "Flush 2 relays",
+	"description": "Flush 2 Relays",
 	"devices": [
 		{
 			"productType": "0x0002",

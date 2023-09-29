@@ -2,7 +2,7 @@
 	"manufacturer": "ZyXEL",
 	"manufacturerId": "0x0135",
 	"label": "ST812",
-	"description": "Flood sensor",
+	"description": "Flood Sensor",
 	"devices": [
 		{
 			"productType": "0x000b",

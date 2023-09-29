@@ -2,7 +2,7 @@
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
 	"label": "DRY",
-	"description": "Widom Smart Dry contact",
+	"description": "Widom Smart Dry Contact",
 	"devices": [
 		{
 			"productType": "0x1214",

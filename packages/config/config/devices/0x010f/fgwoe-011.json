@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWOE-011",
-	"description": "Fibaro Walli Outlet type E/F",
+	"description": "Fibaro Walli Outlet Type E/F",
 	"devices": [
 		{
 			"productType": "0x1f01",

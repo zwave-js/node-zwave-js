@@ -2,7 +2,7 @@
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ77",
-	"description": "RGB dimmer switch",
+	"description": "RGB Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0x0311",

@@ -2,7 +2,7 @@
 	"manufacturer": "Somfy",
 	"manufacturerId": "0x0047",
 	"label": "1870203",
-	"description": "Z-Wave to RTS Interface II - ZRTSII",
+	"description": "Z-Wave To RTS Interface II - ZRTSII",
 	"devices": [
 		{
 			"productType": "0x0005",

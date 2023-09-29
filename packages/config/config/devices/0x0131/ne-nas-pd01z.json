@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "NE-NAS-PD01Z",
-	"description": "PIR motion sensor and light measurement",
+	"description": "PIR Motion Sensor and Light Measurement",
 	"devices": [
 		{
 			"productType": "0x0003",

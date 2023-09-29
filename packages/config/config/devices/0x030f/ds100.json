@@ -2,7 +2,7 @@
 	"manufacturer": "Vemmio",
 	"manufacturerId": "0x030f",
 	"label": "DS100",
-	"description": "Double Switch in a dual relay in-wall module.",
+	"description": "Double Switch in A Dual Relay In-wall Module.",
 	"devices": [
 		{
 			"productType": "0x0001",

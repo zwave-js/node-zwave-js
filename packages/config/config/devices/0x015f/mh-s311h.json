@@ -2,7 +2,7 @@
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
 	"label": "MH-S311H",
-	"description": "Touch Panel Switch (Single) High inrush current",
+	"description": "Touch Panel Switch (Single) High Inrush Current",
 	"devices": [
 		{
 			"productType": "0x3111",

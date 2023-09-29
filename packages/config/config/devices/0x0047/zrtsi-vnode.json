@@ -2,7 +2,7 @@
 	"manufacturer": "Somfy",
 	"manufacturerId": "0x0047",
 	"label": "ZRTSI-VNODE",
-	"description": "Z-Wave to RTS Interface Virtual Node",
+	"description": "Z-Wave To RTS Interface Virtual Node",
 	"devices": [
 		{
 			"productType": "0x5a52",

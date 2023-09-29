@@ -2,7 +2,7 @@
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
 	"label": "PID15654",
-	"description": "Smart Plug with two USB ports",
+	"description": "Smart Plug with Two USB Ports",
 	"devices": [
 		{
 			"productType": "0x0208",

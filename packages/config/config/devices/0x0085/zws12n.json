@@ -2,7 +2,7 @@
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "ZWS12",
-	"description": "Chain actuator - window opener",
+	"description": "Chain Actuator - Window Opener",
 	"devices": [
 		{
 			"productType": "0x0002",

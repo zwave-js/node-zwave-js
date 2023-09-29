@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN04",
-	"description": "In Wall Dual Relay Switch Module 2x1.5kW with power meter",
+	"description": "In Wall Dual Relay Switch Module 2x1.5kW with Power Meter",
 	"devices": [
 		{
 			"productType": "0x0001",

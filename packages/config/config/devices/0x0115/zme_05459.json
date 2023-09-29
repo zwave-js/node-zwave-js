@@ -2,7 +2,7 @@
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "ZME_05459",
-	"description": "Blinds controller",
+	"description": "Blinds Controller",
 	"devices": [
 		{
 			"productType": "0xffff",

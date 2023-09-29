@@ -2,7 +2,7 @@
 	"manufacturer": "Siterwell Technology HK Co., Ltd.",
 	"manufacturerId": "0x0266",
 	"label": "GS816",
-	"description": "carbon monoxide alarm",
+	"description": "Carbon Monoxide Alarm",
 	"devices": [
 		{
 			"productType": "0x0006",

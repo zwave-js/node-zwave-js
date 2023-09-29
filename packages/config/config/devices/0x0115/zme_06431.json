@@ -2,7 +2,7 @@
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "ZME_06431",
-	"description": "Flush mountable switch",
+	"description": "Flush Mountable Switch",
 	"devices": [
 		{
 			"productType": "0x1000",

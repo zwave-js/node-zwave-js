@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "ZP3102",
-	"description": "Multi Sensor Dual: motion and temperature sensor",
+	"description": "Multi Sensor Dual: Motion and Temperature Sensor",
 	"devices": [
 		{
 			"productType": "0x2002",

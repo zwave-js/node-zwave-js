@@ -2,7 +2,7 @@
 	"manufacturer": "Qolsys",
 	"manufacturerId": "0x012a",
 	"label": "IQ Dimmer",
-	"description": "Smart Plug In Dimmer",
+	"description": "Smart Plug in Dimmer",
 	"devices": [
 		{
 			"productType": "0x4744",

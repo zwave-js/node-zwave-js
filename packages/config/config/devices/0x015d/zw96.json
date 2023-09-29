@@ -2,7 +2,7 @@
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "ZW96",
-	"description": "Outdoor Smart Plug - 1 channel",
+	"description": "Outdoor Smart Plug - 1 Channel",
 	"devices": [
 		{
 			"productType": "0x0211",

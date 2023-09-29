@@ -2,7 +2,7 @@
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "ZWS230",
-	"description": "Chain actuator 230VAC",
+	"description": "Chain Actuator 230VAC",
 	"devices": [
 		{
 			"productType": "0x0002",

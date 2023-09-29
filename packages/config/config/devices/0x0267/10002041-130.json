@@ -2,7 +2,7 @@
 	"manufacturer": "SimonTech S.L.U",
 	"manufacturerId": "0x0267",
 	"label": "10002041-130",
-	"description": "iO Cover for the Simon 100 schuko plug socket",
+	"description": "iO Cover for the Simon 100 Schuko Plug Socket",
 	"devices": [
 		{
 			"productType": "0x0009",

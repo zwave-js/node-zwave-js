@@ -2,7 +2,7 @@
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9601",
-	"description": "Z-Wave Plus wireless switch",
+	"description": "Z-Wave Plus Wireless Switch",
 	"devices": [
 		{
 			"productType": "0x534c",

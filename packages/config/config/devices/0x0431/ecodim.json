@@ -2,7 +2,7 @@
 	"manufacturer": "EcoDim",
 	"manufacturerId": "0x0431",
 	"label": "ECO-DIM",
-	"description": "ECO-DIM Z-Wave Led dimmer",
+	"description": "ECO-DIM Z-Wave Led Dimmer",
 	"devices": [
 		{
 			"productType": "0x0202",

@@ -2,7 +2,7 @@
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
 	"label": "700045",
-	"description": "Battery driven IP44 keypad for access control.",
+	"description": "Battery Driven IP44 Keypad for Access Control.",
 	"devices": [
 		{
 			"productType": "0x0005",

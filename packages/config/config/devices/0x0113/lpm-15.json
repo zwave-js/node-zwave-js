@@ -2,7 +2,7 @@
 	"manufacturer": "Evolve",
 	"manufacturerId": "0x0113",
 	"label": "LPM-15",
-	"description": "Appliance module",
+	"description": "Appliance Module",
 	"devices": [
 		{
 			"productType": "0x5250",

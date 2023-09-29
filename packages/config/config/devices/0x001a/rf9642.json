@@ -2,7 +2,7 @@
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9642",
-	"description": "Z-Wave Plus smart accessory dimmer",
+	"description": "Z-Wave Plus Smart Accessory Dimmer",
 	"devices": [
 		{
 			"productType": "0x4441",

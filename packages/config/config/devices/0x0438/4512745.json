@@ -2,7 +2,7 @@
 	"manufacturer": "Namron",
 	"manufacturerId": "0x0438",
 	"label": "4512745",
-	"description": "16A Touch thermostat - Black",
+	"description": "16A Touch Thermostat - Black",
 	"devices": [
 		{
 			"productType": "0x0200",

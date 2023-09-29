@@ -2,7 +2,7 @@
 	"manufacturer": "Chromagic Technologies Corporation",
 	"manufacturerId": "0x0116",
 	"label": "ITEMP",
-	"description": "Contact and temperature sensor",
+	"description": "Contact and Temperature Sensor",
 	"devices": [
 		{
 			"productType": "0x1182",

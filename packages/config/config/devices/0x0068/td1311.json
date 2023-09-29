@@ -2,7 +2,7 @@
 	"manufacturer": "Good Way Technology Co., Ltd.",
 	"manufacturerId": "0x0068",
 	"label": "TD1311",
-	"description": "In wall Power Monitor Switch",
+	"description": "In Wall Power Monitor Switch",
 	"devices": [
 		{
 			"productType": "0x0000",

@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "RGBWE27ZW",
-	"description": "RGBW bulb",
+	"description": "RGBW Bulb",
 	"devices": [
 		{
 			"productType": "0x0002",

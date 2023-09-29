@@ -2,7 +2,7 @@
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
 	"label": "DTHERMZ5",
-	"description": "Z-Wave room sensor",
+	"description": "Z-Wave Room Sensor",
 	"devices": [
 		{
 			"productType": "0x0248",

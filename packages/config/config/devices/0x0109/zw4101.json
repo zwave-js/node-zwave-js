@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZW4101",
-	"description": "Drapery controller (up/stop/down)",
+	"description": "Drapery Controller (up/stop/down)",
 	"devices": [
 		{
 			"productType": "0x200d",

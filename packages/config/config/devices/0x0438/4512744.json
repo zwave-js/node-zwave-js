@@ -2,7 +2,7 @@
 	"manufacturer": "Namron",
 	"manufacturerId": "0x0438",
 	"label": "4512744",
-	"description": "16A Touch thermostat - White",
+	"description": "16A Touch Thermostat - White",
 	"devices": [
 		{
 			"productType": "0x0200",

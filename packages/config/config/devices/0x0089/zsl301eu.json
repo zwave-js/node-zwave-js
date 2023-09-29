@@ -2,7 +2,7 @@
 	"manufacturer": "Team Precision PCL",
 	"manufacturerId": "0x0089",
 	"label": "ZSL301EU",
-	"description": "Single relay switch",
+	"description": "Single Relay Switch",
 	"devices": [
 		{
 			"productType": "0x0001",

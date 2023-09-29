@@ -2,7 +2,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHND",
-	"description": "Flush 1D relay",
+	"description": "Flush 1D Relay",
 	"devices": [
 		{
 			"productType": "0x0002",

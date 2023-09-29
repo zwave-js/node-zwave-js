@@ -2,7 +2,7 @@
 	"manufacturer": "ConnectHome",
 	"manufacturerId": "0x0179",
 	"label": "CH-601",
-	"description": "CH-601 THE ELECTRIC CRANE",
+	"description": "CH-601 the ELECTRIC CRANE",
 	"devices": [
 		{
 			"productType": "0x0021",

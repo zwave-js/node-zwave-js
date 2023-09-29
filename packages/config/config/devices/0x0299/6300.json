@@ -2,7 +2,7 @@
 	"manufacturer": "TechniSat Digital GmbH",
 	"manufacturerId": "0x0299",
 	"label": "6300",
-	"description": "TECHNIVISTA TV line software",
+	"description": "TECHNIVISTA TV Line Software",
 	"devices": [
 		{
 			"productType": "0x0001",

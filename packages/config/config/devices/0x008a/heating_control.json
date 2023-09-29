@@ -2,7 +2,7 @@
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "Heating Control",
-	"description": "Thermostat for controlling the opentherm protocol",
+	"description": "Thermostat for Controlling the Opentherm Protocol",
 	"devices": [
 		{
 			"productType": "0x0021",

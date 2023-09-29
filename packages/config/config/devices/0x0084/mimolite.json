@@ -2,7 +2,7 @@
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "MIMOlite",
-	"description": "Digital or Analog Voltage input and/or Dry Contact Relay",
+	"description": "Digital Or Analog Voltage Input And/or Dry Contact Relay",
 	"devices": [
 		{
 			"productType": "0x0451",

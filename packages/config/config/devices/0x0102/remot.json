@@ -2,7 +2,7 @@
 	"manufacturer": "SMK Manufacturing Inc.",
 	"manufacturerId": "0x0102",
 	"label": "REMOT",
-	"description": "Teleprtall Remote (SMK remote)",
+	"description": "Teleprtall Remote (SMK Remote)",
 	"devices": [
 		{
 			"productType": "0x0001",

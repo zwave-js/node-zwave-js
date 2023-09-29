@@ -2,7 +2,7 @@
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
 	"label": "507501 / 507502",
-	"description": "Flush-mounted switch",
+	"description": "Flush-mounted Switch",
 	"devices": [
 		{
 			"productType": "0x8001",

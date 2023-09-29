@@ -2,7 +2,7 @@
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
 	"label": "AN180",
-	"description": "Switch without metering",
+	"description": "Switch Without Metering",
 	"devices": [
 		{
 			"productType": "0x0004",

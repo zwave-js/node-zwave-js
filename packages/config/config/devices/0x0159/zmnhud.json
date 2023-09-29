@@ -2,7 +2,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHUD",
-	"description": "Flush pilot (DIN version)",
+	"description": "Flush Pilot (DIN Version)",
 	"devices": [
 		{
 			"productType": "0x0004",

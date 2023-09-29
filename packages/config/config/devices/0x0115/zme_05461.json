@@ -2,7 +2,7 @@
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "ZME_05461",
-	"description": "Double switch",
+	"description": "Double Switch",
 	"devices": [
 		{
 			"productType": "0x1000",

@@ -2,7 +2,7 @@
 	"manufacturer": "Elexa Consumer Products Inc.",
 	"manufacturerId": "0x021f",
 	"label": "DMOF1",
-	"description": "Dome On/Off zwave wall plug for controlling small appliances and lights.",
+	"description": "Dome On/Off Zwave Wall Plug for Controlling Small Appliances and Lights.",
 	"devices": [
 		{
 			"productType": "0x0003",

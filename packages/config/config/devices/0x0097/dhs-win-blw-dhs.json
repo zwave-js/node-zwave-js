@@ -2,7 +2,7 @@
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "DHS-WIN-BLW-DHS",
-	"description": "Blind controller",
+	"description": "Blind Controller",
 	"devices": [
 		{
 			"productType": "0x0024",

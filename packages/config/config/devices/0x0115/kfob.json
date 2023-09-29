@@ -2,7 +2,7 @@
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "KFOB",
-	"description": "4 button keyfob",
+	"description": "4 Button Keyfob",
 	"devices": [
 		{
 			"productType": "0x0100",

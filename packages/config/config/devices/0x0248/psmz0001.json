@@ -2,7 +2,7 @@
 	"manufacturer": "neusta next GmbH & Co. KG",
 	"manufacturerId": "0x0248",
 	"label": "PSMZ0001",
-	"description": "Plug module",
+	"description": "Plug Module",
 	"devices": [
 		{
 			"productType": "0x0003",

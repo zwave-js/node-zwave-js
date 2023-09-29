@@ -2,7 +2,7 @@
 	"manufacturer": "Shenzhen Saykey Technology Co., Ltd.",
 	"manufacturerId": "0x032c",
 	"label": "SK-3007-05",
-	"description": "Curtain Motor Control external module",
+	"description": "Curtain Motor Control External Module",
 	"devices": [
 		{
 			"productType": "0x3007",

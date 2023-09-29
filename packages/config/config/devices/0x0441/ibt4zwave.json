@@ -2,7 +2,7 @@
 	"manufacturer": "NICE Spa",
 	"manufacturerId": "0x0441",
 	"label": "IBT4ZWAVE",
-	"description": "BusT4-Z-Wave interface",
+	"description": "BusT4-Z-Wave Interface",
 	"devices": [
 		{
 			"productType": "0x2400",

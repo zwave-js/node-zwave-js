@@ -2,7 +2,7 @@
 	"manufacturer": "MSK - Miyakawa Seisakusho",
 	"manufacturerId": "0x0122",
 	"label": "ME-D101",
-	"description": "MSK CT type electric power measuring instrument",
+	"description": "MSK CT Type Electric Power Measuring Instrument",
 	"devices": [
 		{
 			"productType": "0x0001",

@@ -2,7 +2,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHDA",
-	"description": "Flush dimmer",
+	"description": "Flush Dimmer",
 	"devices": [
 		{
 			"productType": "0x0001",

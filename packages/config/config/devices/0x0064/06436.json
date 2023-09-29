@@ -2,7 +2,7 @@
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "06436",
-	"description": "Insert blind control",
+	"description": "Insert Blind Control",
 	"devices": [
 		{
 			"productType": "0x1000",

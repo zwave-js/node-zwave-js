@@ -2,7 +2,7 @@
 	"manufacturer": "permundo GmbH",
 	"manufacturerId": "0x0245",
 	"label": "PSC234ZW",
-	"description": "Metering Plug switching 16A",
+	"description": "Metering Plug Switching 16A",
 	"devices": [
 		{
 			"productType": "0x0003",

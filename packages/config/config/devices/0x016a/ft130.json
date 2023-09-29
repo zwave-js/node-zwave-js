@@ -2,7 +2,7 @@
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
 	"label": "FT130",
-	"description": "Wall-mount four Button",
+	"description": "Wall-mount Four Button",
 	"devices": [
 		{
 			"productType": "0x0002",

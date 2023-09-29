@@ -2,7 +2,7 @@
 	"manufacturer": "Telldus Technologies AB",
 	"manufacturerId": "0x0176",
 	"label": "TZWP-102",
-	"description": "Telldus socket and energy meter",
+	"description": "Telldus Socket and Energy Meter",
 	"devices": [
 		{
 			"productType": "0x0003",

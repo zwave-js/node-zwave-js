@@ -2,7 +2,7 @@
 	"manufacturer": "SIEGENIA-AUBI KG",
 	"manufacturerId": "0x0081",
 	"label": "SENSOAIR",
-	"description": "Air quality sensor for indoor use",
+	"description": "Air Quality Sensor for Indoor Use",
 	"devices": [
 		{
 			"productType": "0x00a0",

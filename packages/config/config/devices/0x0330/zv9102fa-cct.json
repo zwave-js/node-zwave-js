@@ -2,7 +2,7 @@
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
 	"label": "ZV9102FA-CCT",
-	"description": "Z-wave CCT LED controller",
+	"description": "Z-wave CCT LED Controller",
 	"devices": [
 		{
 			"productType": "0x0200",

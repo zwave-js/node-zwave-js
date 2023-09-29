@@ -2,7 +2,7 @@
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
 	"label": "ZDM-80",
-	"description": "Wall plug dimmer switch",
+	"description": "Wall Plug Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0x8201",

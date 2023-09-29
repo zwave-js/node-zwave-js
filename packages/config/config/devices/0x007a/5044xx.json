@@ -2,7 +2,7 @@
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
 	"label": "5044XX",
-	"description": "5044xx - Radio sensor cover for in-wall switch",
+	"description": "5044xx - Radio Sensor Cover for In-wall Switch",
 	"devices": [
 		{
 			"productType": "0x4002",

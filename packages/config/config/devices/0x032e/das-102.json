@@ -2,7 +2,7 @@
 	"manufacturer": "DEFARO",
 	"manufacturerId": "0x032e",
 	"label": "DAS-102",
-	"description": "Double relay Switch 2x1.7kW",
+	"description": "Double Relay Switch 2x1.7kW",
 	"devices": [
 		{
 			"productType": "0x0021",

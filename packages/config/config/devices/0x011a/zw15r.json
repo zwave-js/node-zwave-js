@@ -2,7 +2,7 @@
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
 	"label": "ZW15R",
-	"description": "Duplex receptacle",
+	"description": "Duplex Receptacle",
 	"devices": [
 		{
 			"productType": "0x0101",

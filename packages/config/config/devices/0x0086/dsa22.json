@@ -2,7 +2,7 @@
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSA22",
-	"description": "4 button keyfob",
+	"description": "4 Button Keyfob",
 	"devices": [
 		{
 			"productType": "0x0001",

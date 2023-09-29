@@ -2,7 +2,7 @@
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-TRM3",
-	"description": "Floor thermostat",
+	"description": "Floor Thermostat",
 	"devices": [
 		{
 			"productType": "0x0003",

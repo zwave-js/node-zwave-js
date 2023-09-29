@@ -2,7 +2,7 @@
 	"manufacturer": "Jin Tao Bao",
 	"manufacturerId": "0x015a",
 	"label": "Curtain Motor",
-	"description": "Curtain motor",
+	"description": "Curtain Motor",
 	"devices": [
 		{
 			"productType": "0x1007",

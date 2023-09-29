@@ -2,7 +2,7 @@
 	"manufacturer": "Dooya",
 	"manufacturerId": "0x030a",
 	"label": "DT82TV/F-1.2/14",
-	"description": "Curtain motor",
+	"description": "Curtain Motor",
 	"devices": [
 		{
 			"productType": "0x0103",

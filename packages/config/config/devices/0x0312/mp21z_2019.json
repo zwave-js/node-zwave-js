@@ -3,7 +3,7 @@
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MP21Z",
-	"description": "Smart Plug - 1 channel",
+	"description": "Smart Plug - 1 Channel",
 	"devices": [
 		{
 			"productType": "0xff00",

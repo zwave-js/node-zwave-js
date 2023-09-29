@@ -2,7 +2,7 @@
 	"manufacturer": "EbV",
 	"manufacturerId": "0x017c",
 	"label": "9601921000",
-	"description": "heatapp! repeater S2",
+	"description": "Heatapp! Repeater S2",
 	"devices": [
 		{
 			"productType": "0x0001",

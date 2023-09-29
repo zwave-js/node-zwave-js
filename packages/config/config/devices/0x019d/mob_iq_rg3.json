@@ -2,7 +2,7 @@
 	"manufacturer": "MOBILUS MOTOR Spółka z o.o.",
 	"manufacturerId": "0x019d",
 	"label": "MOB.IQ [RG3+]",
-	"description": "mob.iq [rg3+]",
+	"description": "Mob.iq [rg3+]",
 	"devices": [
 		{
 			"productType": "0x0003",
