@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Ignore when a node reports `Security S0/S2 CC` to have version 0 (unsupported) although it is using that CC (#6333)
+
+### Config file changes
+* Add Shelly to manufacturers (#6339)
+* Add Shelly Wave 1, Wave 2PM, update Wave 1PM association labels (#6326)
+* Add Sunricher SR-ZV2833PAC (#6310)
+
+### Changes under the hood
+* Added an ESLint rule to help with deciding whether a config parameter needs to be `unsigned` or not (#6325, #6338)
+
 ## 12.0.0 (2023-09-26)
 ### Application compatibility
 Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
