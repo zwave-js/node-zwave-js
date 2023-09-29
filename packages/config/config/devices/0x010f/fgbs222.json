@@ -329,7 +329,7 @@
 		},
 		{
 			"#": "154",
-			"label": "Output 1: Default State ",
+			"label": "Output 1: Default State",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

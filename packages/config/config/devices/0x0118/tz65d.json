@@ -162,7 +162,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Poll Group 2 Interval ",
+			"label": "Poll Group 2 Interval",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,

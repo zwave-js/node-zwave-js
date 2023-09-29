@@ -62,7 +62,7 @@
 		{
 			"#": "2",
 			"label": "Button 2 And 4 Pair Mode",
-			"description": " works with group b, double click with group d",
+			"description": "works with group b, double click with group d",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

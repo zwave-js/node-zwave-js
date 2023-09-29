@@ -1,7 +1,7 @@
 {
 	"manufacturer": "TechniSat",
 	"manufacturerId": "0x0299",
-	"label": "Single-Switch ",
+	"label": "Single-Switch",
 	"description": "Flush On/Off switch",
 	"devices": [
 		{
