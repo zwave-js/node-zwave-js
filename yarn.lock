@@ -1177,14 +1177,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/bindings-interface@npm:*, @serialport/bindings-interface@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@serialport/bindings-interface@npm:1.2.1"
-  checksum: 9d3b8231ecbcf67cc85eb0d4f1db617de3353d71f6ab8124c68ec7009a18ef47bdf9c226e8174e393120def37941a7f61a997bd806370a737c63c5e6ec13a0de
-  languageName: node
-  linkType: hard
-
-"@serialport/bindings-interface@npm:1.2.2":
+"@serialport/bindings-interface@npm:*, @serialport/bindings-interface@npm:1.2.2, @serialport/bindings-interface@npm:^1.2.1":
   version: 1.2.2
   resolution: "@serialport/bindings-interface@npm:1.2.2"
   checksum: 66154b9abe8b3cfc466431f2197ca1d6ed832e121bab15aed9ffcbda5c1d3bc0d11be3cb5c343d3cfc2b0ea69a393900c5be6a77fe9ec646e3004bf6d6a3756d
