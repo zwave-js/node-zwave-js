@@ -30,7 +30,9 @@ export type FirmwareUpdateDeviceID = Expand<
 export interface FirmwareUpdateServiceResponse {
 	version: string;
 	changelog: string;
-	channel: "stable" | "beta";
+	/** When using the V1 API, channel is not returned and should be assumed to be
+	 * stable */
+	channel?: "stable" | "beta";
 	files: FirmwareUpdateFileInfo[];
 	downgrade: boolean;
 	normalizedVersion: string;
