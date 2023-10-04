@@ -22,9 +22,10 @@ const titleCaseExceptions = [
 	"kW",
 	"kWh",
 	"RFID",
+	"Z-Wave",
 ];
 
-const sentenceCaseIgnored: RegExp[] = [
+const sentenceCaseIgnored: (RegExp)[] = [
 	// emphasis:
 	/^NOT$/,
 ];
@@ -192,17 +193,17 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					data: {
 						what: "Device descriptions",
 					},
-					suggest: [
-						{
-							messageId: "change-to-fixed",
-							data: { fixed },
-							fix: (fixer) =>
-								fixer.replaceTextRange(
-									value.range,
-									`"${fixed}"`,
-								),
-						},
-					],
+					// suggest: [
+					// 	{
+					// 		messageId: "change-to-fixed",
+					// 		data: { fixed },
+					fix: (fixer) =>
+						fixer.replaceTextRange(
+							value.range,
+							`"${fixed}"`,
+						),
+					// 	},
+					// ],
 				});
 			},
 
@@ -225,17 +226,17 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					data: {
 						what: "Parameter descriptions",
 					},
-					suggest: [
-						{
-							messageId: "change-to-fixed",
-							data: { fixed },
-							fix: (fixer) =>
-								fixer.replaceTextRange(
-									value.range,
-									`"${fixed}"`,
-								),
-						},
-					],
+					// suggest: [
+					// 	{
+					// 		messageId: "change-to-fixed",
+					// 		data: { fixed },
+					fix: (fixer) =>
+						fixer.replaceTextRange(
+							value.range,
+							`"${fixed}"`,
+						),
+					// 	},
+					// ],
 				});
 			},
 		};
