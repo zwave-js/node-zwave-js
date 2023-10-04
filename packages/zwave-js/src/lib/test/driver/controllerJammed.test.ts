@@ -138,10 +138,10 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 	},
 });
 
-integrationTestMulti.only(
+integrationTestMulti(
 	"Prevent an infinite loop when the controller is unable to transmit a command to a specific node",
 	{
-		debug: true,
+		// debug: true,
 		// provisioningDirectory: path.join(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
