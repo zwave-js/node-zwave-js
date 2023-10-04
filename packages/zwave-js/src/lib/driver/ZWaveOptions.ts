@@ -29,6 +29,9 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
 
+		/** How long to wait before retrying a command when the controller is jammed */
+		retryJammed: number; // [10...5000], default: 1000 ms
+
 		/**
 		 * How long to wait without pending commands before sending a node back to sleep.
 		 * Should be as short as possible to save battery, but long enough to give applications time to react.
@@ -72,6 +75,9 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
+
+		/** How often the driver should retry SendData commands while the controller is jammed */
+		sendDataJammed: number; // [1...10], default: 5
 
 		/**
 		 * How many attempts should be made for each node interview before giving up
