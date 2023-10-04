@@ -29,7 +29,7 @@
 		{
 			"#": "1",
 			"label": "True Period",
-			"description": "Time of switching status to send status message",
+			"description": "Time of switching status to send status message in 100ms, so default of 10 = 1000ms = 1 sec",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,
@@ -57,7 +57,7 @@
 		{
 			"#": "3",
 			"label": "Meter Report Period",
-			"description": "Autoreporting meter value interval",
+			"description": "Autoreporting meter value interval in 10 secs, so default of 3 = 30 secs",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3240,
