@@ -70,7 +70,7 @@ export type MessageOptions =
  */
 export class Message {
 	public constructor(
-		protected host: ZWaveHost,
+		public readonly host: ZWaveHost,
 		options: MessageOptions = {},
 	) {
 		// decide which implementation we follow
@@ -355,12 +355,18 @@ export class Message {
 	/** Checks if a message is an expected callback for this message */
 	public isExpectedCallback(msg: Message): boolean {
 		if (msg.type !== MessageType.Request) return false;
-		// If a received request included a callback id, enforce that the response contains the same
-		if (
-			this.hasCallbackId()
-			&& (!msg.hasCallbackId() || this._callbackId !== msg._callbackId)
-		) {
-			return false;
+
+		// Some controllers have a bug causing them to send a callback with a function type of 0 and no callback ID
+		// To prevent this from triggering the unresponsive controller detection we need to forward these messages as if they were correct
+		if (msg.functionType !== 0 as any) {
+			// If a received request included a callback id, enforce that the response contains the same
+			if (
+				this.hasCallbackId()
+				&& (!msg.hasCallbackId()
+					|| this._callbackId !== msg._callbackId)
+			) {
+				return false;
+			}
 		}
 
 		return this.testMessage(msg, this.expectedCallback);
