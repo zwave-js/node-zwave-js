@@ -12,5 +12,13 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"compat": {
+		// In some situations, AssignSUCReturnRoute and DeleteSUCReturnRoute get answered with a wrong callback function type,
+		// triggering Z-Wave JS's unresponsive controller check.
+		"disableCallbackFunctionTypeCheck": [
+			81, // AssignSUCReturnRoute
+			85 // DeleteSUCReturnRoute
+		]
 	}
 }

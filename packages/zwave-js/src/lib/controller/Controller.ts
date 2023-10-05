@@ -215,7 +215,7 @@ import {
 } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
 import {
 	AssignSUCReturnRouteRequest,
-	type AssignSUCReturnRouteRequestTransmitReport,
+	AssignSUCReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
 import {
 	DeleteReturnRouteRequest,
@@ -223,7 +223,7 @@ import {
 } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
 import {
 	DeleteSUCReturnRouteRequest,
-	type DeleteSUCReturnRouteRequestTransmitReport,
+	DeleteSUCReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
 import {
 	GetPriorityRouteRequest,
@@ -4319,13 +4319,22 @@ ${associatedNodes.join(", ")}`,
 		await this.deleteSUCReturnRoutes(nodeId);
 
 		try {
-			const result = await this.driver.sendMessage<
-				AssignSUCReturnRouteRequestTransmitReport
-			>(
+			const result = await this.driver.sendMessage(
 				new AssignSUCReturnRouteRequest(this.driver, {
 					nodeId,
 				}),
 			);
+
+			if (
+				!(result instanceof AssignSUCReturnRouteRequestTransmitReport)
+			) {
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`Assigning SUC return route failed: Invalid callback received`,
+					"error",
+				);
+				return false;
+			}
 
 			const success = this.handleRouteAssignmentTransmitReport(
 				result,
@@ -4492,13 +4501,22 @@ ${associatedNodes.join(", ")}`,
 		});
 
 		try {
-			const result = await this.driver.sendMessage<
-				DeleteSUCReturnRouteRequestTransmitReport
-			>(
+			const result = await this.driver.sendMessage(
 				new DeleteSUCReturnRouteRequest(this.driver, {
 					nodeId,
 				}),
 			);
+
+			if (
+				!(result instanceof DeleteSUCReturnRouteRequestTransmitReport)
+			) {
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`Deleting SUC return route failed: Invalid callback received`,
+					"error",
+				);
+				return false;
+			}
 
 			const success = this.handleRouteAssignmentTransmitReport(
 				result,

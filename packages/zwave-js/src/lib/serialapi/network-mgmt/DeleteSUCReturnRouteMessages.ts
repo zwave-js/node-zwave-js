@@ -2,8 +2,6 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
-	ZWaveError,
-	ZWaveErrorCodes,
 	encodeNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
@@ -14,6 +12,7 @@ import {
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
 	type MessageOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -27,12 +26,24 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @priority(MessagePriority.Normal)
 export class DeleteSUCReturnRouteRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== DeleteSUCReturnRouteRequestTransmitReport
-		) {
-			return new DeleteSUCReturnRouteRequestTransmitReport(host, options);
+		if (gotDeserializationOptions(options)) {
+			if (
+				options.origin === MessageOrigin.Host
+				&& (new.target as any) !== DeleteSUCReturnRouteRequest
+			) {
+				return new DeleteSUCReturnRouteRequest(host, options);
+			} else if (
+				options.origin !== MessageOrigin.Host
+				&& (new.target as any)
+					!== DeleteSUCReturnRouteRequestTransmitReport
+			) {
+				return new DeleteSUCReturnRouteRequestTransmitReport(
+					host,
+					options,
+				);
+			}
 		}
+
 		super(host, options);
 	}
 }
@@ -41,8 +52,25 @@ export interface DeleteSUCReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 
+function testDeleteSUCReturnRouteCallback(
+	sent: DeleteSUCReturnRouteRequest,
+	callback: Message,
+): boolean {
+	// Some controllers have a bug where they incorrectly respond with DeleteSUCReturnRoute
+	if (
+		callback.host
+			.getDeviceConfig?.(callback.host.ownNodeId)
+			?.compat
+			?.disableCallbackFunctionTypeCheck
+			?.includes(FunctionType.DeleteSUCReturnRoute)
+	) {
+		return true;
+	}
+	return callback.functionType === FunctionType.DeleteSUCReturnRoute;
+}
+
 @expectedResponse(FunctionType.DeleteSUCReturnRoute)
-@expectedCallback(FunctionType.DeleteSUCReturnRoute)
+@expectedCallback(testDeleteSUCReturnRouteCallback)
 export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 	implements INodeQuery
 {
@@ -54,10 +82,8 @@ export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			this.nodeId = this.payload[0];
+			this.callbackId = this.payload[1];
 		} else {
 			this.nodeId = options.nodeId;
 		}
@@ -73,16 +99,26 @@ export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 	}
 }
 
+interface DeleteSUCReturnRouteResponseOptions extends MessageBaseOptions {
+	wasExecuted: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.DeleteSUCReturnRoute)
 export class DeleteSUCReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| DeleteSUCReturnRouteResponseOptions,
 	) {
 		super(host, options);
-		this.wasExecuted = this.payload[0] !== 0;
+		if (gotDeserializationOptions(options)) {
+			this.wasExecuted = this.payload[0] !== 0;
+		} else {
+			this.wasExecuted = options.wasExecuted;
+		}
 	}
 
 	public isOK(): boolean {
@@ -90,6 +126,11 @@ export class DeleteSUCReturnRouteResponse extends Message
 	}
 
 	public readonly wasExecuted: boolean;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.wasExecuted ? 0x01 : 0]);
+		return super.serialize();
+	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
@@ -99,18 +140,32 @@ export class DeleteSUCReturnRouteResponse extends Message
 	}
 }
 
+interface DeleteSUCReturnRouteRequestTransmitReportOptions
+	extends MessageBaseOptions
+{
+	transmitStatus: TransmitStatus;
+	callbackId: number;
+}
+
 export class DeleteSUCReturnRouteRequestTransmitReport
 	extends DeleteSUCReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| DeleteSUCReturnRouteRequestTransmitReportOptions,
 	) {
 		super(host, options);
 
-		this.callbackId = this.payload[0];
-		this.transmitStatus = this.payload[1];
+		if (gotDeserializationOptions(options)) {
+			this.callbackId = this.payload[0];
+			this.transmitStatus = this.payload[1];
+		} else {
+			this.callbackId = options.callbackId;
+			this.transmitStatus = options.transmitStatus;
+		}
 	}
 
 	public isOK(): boolean {
@@ -121,6 +176,11 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 	}
 
 	public readonly transmitStatus: TransmitStatus;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.callbackId, this.transmitStatus]);
+		return super.serialize();
+	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
