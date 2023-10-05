@@ -5565,7 +5565,9 @@ ${handlers.length} left`,
 		if (this.isMissingNodeACK(transaction, error)) {
 			if (this.handleMissingNodeACK(transaction as any, error)) return;
 		} else if (
-			isMissingControllerACK(error) || isMissingControllerCallback(error)
+			isMissingControllerACK(error)
+			|| (isSendData(transaction.message)
+				&& isMissingControllerCallback(error))
 		) {
 			if (this.handleUnresponsiveController(transaction, error)) return;
 		}
