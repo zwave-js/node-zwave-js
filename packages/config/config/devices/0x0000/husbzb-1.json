@@ -14,11 +14,7 @@
 		"max": "255.255"
 	},
 	"compat": {
-		// In some situations, AssignSUCReturnRoute and DeleteSUCReturnRoute get answered with a wrong callback function type,
-		// triggering Z-Wave JS's unresponsive controller check.
-		"disableCallbackFunctionTypeCheck": [
-			81, // AssignSUCReturnRoute
-			85 // DeleteSUCReturnRoute
-		]
+		// Workaround for a firmware bug in 500 series controllers
+		"$import": "~/templates/master_template.json#500_series_controller_compat_flags"
 	}
 }

@@ -60,11 +60,7 @@
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1345/Z%20Stick%20Gen5%20manual%201.pdf"
 	},
 	"compat": {
-		// In some situations, AssignSUCReturnRoute and DeleteSUCReturnRoute get answered with a wrong callback function type,
-		// triggering Z-Wave JS's unresponsive controller check.
-		"disableCallbackFunctionTypeCheck": [
-			81, // AssignSUCReturnRoute
-			85 // DeleteSUCReturnRoute
-		]
+		// Workaround for a firmware bug in 500 series controllers
+		"$import": "~/templates/master_template.json#500_series_controller_compat_flags"
 	}
 }
