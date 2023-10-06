@@ -467,7 +467,7 @@ export class Message {
     getResponseTimeout(): number | undefined;
     hasCallbackId(): boolean;
     // (undocumented)
-    protected host: ZWaveHost;
+    readonly host: ZWaveHost;
     static isComplete(data?: Buffer): boolean;
     isExpectedCallback(msg: Message): boolean;
     isExpectedNodeUpdate(msg: Message): boolean;
