@@ -32,7 +32,8 @@
 		},
 		{
 			"#": "4",
-			"label": "Battery Report Interval Below Threshold",
+			"label": "Battery Check Interval",
+			"description": "How often the device checks the battery level.",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 1,
