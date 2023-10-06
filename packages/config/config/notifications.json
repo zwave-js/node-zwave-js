@@ -928,7 +928,7 @@
 		}
 	},
 	"0x0a": {
-		"name": "System",
+		"name": "Emergency Alarm",
 		"events": {
 			"0x01": {
 				"label": "Contact police"
