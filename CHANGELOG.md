@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.0.4 (2023-10-09)
 ### Bugfixes
 * Normalize result of `Controller.getAvailableFirmwareUpdates` to always include `channel` field (#6359)
 * Fixed a crash that could happen while logging dropped sensor readings (#6379)
