@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "45652WB / ZW3102",
-	"description": "Plug-in 1-Outlet Dimmer with Energy, 300S",
+	"description": "Plug-In 1-Outlet Dimmer with Energy, 300S",
 	"devices": [
 		{
 			"productType": "0x4450",

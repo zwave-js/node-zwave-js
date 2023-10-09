@@ -2,7 +2,7 @@
 	"manufacturer": "Good Way Technology Co., Ltd.",
 	"manufacturerId": "0x0068",
 	"label": "TD13010",
-	"description": "In-wall Switch",
+	"description": "In-Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0003",

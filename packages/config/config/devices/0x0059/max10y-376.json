@@ -74,7 +74,7 @@
 					"value": 32767
 				},
 				{
-					"label": "Not used (ignore)",
+					"label": "Not used (Ignore)",
 					"value": 29
 				},
 				{
@@ -96,7 +96,7 @@
 					"value": 0
 				},
 				{
-					"label": "Delta temperature value in °c (in 0.1 °c resolution)",
+					"label": "Delta temperature value in °c (In 0.1 °c resolution)",
 					"value": 100
 				}
 			]

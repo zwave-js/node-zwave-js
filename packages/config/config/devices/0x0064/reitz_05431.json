@@ -2,7 +2,7 @@
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "ZW-ES-1000 / Reitz 05431",
-	"description": "Duewi ZW BJ ES 1000 / Reitz 05431 / ZWave.me 05457 Single Button Wall Switch",
+	"description": "Duewi ZW BJ ES 1000 / Reitz 05431 / ZWave.Me 05457 Single Button Wall Switch",
 	"devices": [
 		{
 			"productType": "0x2001",
@@ -73,7 +73,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -81,7 +81,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{
@@ -182,23 +182,23 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim using Basic Set",
+					"label": "Switch on, off and dim using Basic Set",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 3
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
@@ -215,23 +215,23 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim using Basic Set",
+					"label": "Switch on, off and dim using Basic Set",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 3
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
@@ -270,7 +270,7 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On if load is Off, else switch Off",
+					"label": "Switch on if load is off, else switch off",
 					"value": 1
 				},
 				{

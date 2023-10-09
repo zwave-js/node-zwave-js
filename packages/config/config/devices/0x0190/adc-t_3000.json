@@ -2,6 +2,7 @@
 	"manufacturer": "Building 36 Technologies",
 	"manufacturerId": "0x0190",
 	"label": "ADC-T 3000",
+	// eslint-disable-next-line @zwave-js/consistent-config-labels
 	"description": "Alarm.com Smart Thermostat",
 	"devices": [
 		{
@@ -27,7 +28,7 @@
 					"value": 0
 				},
 				{
-					"label": "Heat Pump",
+					"label": "Heat pump",
 					"value": 1
 				}
 			]
@@ -56,7 +57,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Fossil Fuel",
+					"label": "Fossil fuel",
 					"value": 0
 				},
 				{
@@ -499,11 +500,11 @@
 					"value": 0
 				},
 				{
-					"label": "Full Lock",
+					"label": "Full lock",
 					"value": 1
 				},
 				{
-					"label": "Partial Lock",
+					"label": "Partial lock",
 					"value": 2
 				}
 			]
@@ -529,6 +530,7 @@
 			"valueSize": 1,
 			"defaultValue": 15,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "Off, Heat",
@@ -559,6 +561,7 @@
 					"value": 31
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "25[0x00ff]",
@@ -572,19 +575,19 @@
 					"value": 0
 				},
 				{
-					"label": "W3, 3rd Stage Auxiliary Heat",
+					"label": "W3, 3rd stage auxiliary heat",
 					"value": 1
 				},
 				{
-					"label": "H, Humidifier",
+					"label": "H, humidifier",
 					"value": 2
 				},
 				{
-					"label": "DH, Dehumidifier",
+					"label": "Dh, dehumidifier",
 					"value": 3
 				},
 				{
-					"label": "External Air Baffle or Vent",
+					"label": "External air baffle or vent",
 					"value": 4
 				}
 			]
@@ -595,6 +598,7 @@
 			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "None",
@@ -617,6 +621,7 @@
 					"value": 4
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "26",
@@ -664,7 +669,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -683,7 +688,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -702,7 +707,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -721,7 +726,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -740,7 +745,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -759,7 +764,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -778,7 +783,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -797,7 +802,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -816,7 +821,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -835,7 +840,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -854,7 +859,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -873,7 +878,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -892,7 +897,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -1135,11 +1140,11 @@
 					"value": 1
 				},
 				{
-					"label": "Inactive, timeout reached (see parameter 39)",
+					"label": "Inactive, timeout reached (See parameter 39)",
 					"value": 2
 				},
 				{
-					"label": "Inactive, temperature differential reached (see parameter 40)",
+					"label": "Inactive, temperature differential reached (See parameter 40)",
 					"value": 3
 				},
 				{
@@ -1754,7 +1759,7 @@
 					"value": 0
 				},
 				{
-					"label": "Heat Pump",
+					"label": "Heat pump",
 					"value": 1
 				}
 			]
@@ -1767,6 +1772,7 @@
 			"maxValue": 15,
 			"unsigned": true,
 			"readOnly": true,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "None",
@@ -1789,6 +1795,7 @@
 					"value": 4
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "50[0x000f0000]",
@@ -1804,19 +1811,19 @@
 					"value": 0
 				},
 				{
-					"label": "W3, 3rd Stage Auxiliary Heat",
+					"label": "W3, 3rd stage auxiliary heat",
 					"value": 1
 				},
 				{
-					"label": "H, Humidifier",
+					"label": "H, humidifier",
 					"value": 2
 				},
 				{
-					"label": "DH, Dehumidifier",
+					"label": "Dh, dehumidifier",
 					"value": 3
 				},
 				{
-					"label": "External Air Baffle or Vent",
+					"label": "External air baffle or vent",
 					"value": 4
 				}
 			]
@@ -2022,19 +2029,19 @@
 					"value": 0
 				},
 				{
-					"label": "4 Milliseconds",
+					"label": "4 milliseconds",
 					"value": 2
 				},
 				{
-					"label": "8 Milliseconds",
+					"label": "8 milliseconds",
 					"value": 3
 				},
 				{
-					"label": "16 Milliseconds",
+					"label": "16 milliseconds",
 					"value": 4
 				},
 				{
-					"label": "32 Milliseconds",
+					"label": "32 milliseconds",
 					"value": 5
 				}
 			]
@@ -2100,7 +2107,7 @@
 					"value": 0
 				},
 				{
-					"label": "Only humidify when the thermostat operating state is heating, when in heat mode or when heating in auto mode. When in any other thermostat mode, the thermostat will humidify whenever it is necessary.",
+					"label": "Only humidify when the thermostat operating state is heating, when in heat mode or when heating in auto mode. When in any other Thermostat Mode, the thermostat will humidify whenever it is necessary.",
 					"value": 1
 				}
 			]

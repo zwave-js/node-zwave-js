@@ -60,11 +60,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Double-button reboundable switch",
+					"label": "Double-Button reboundable switch",
 					"value": 1
 				},
 				{
-					"label": "Double-button not reboundable switch",
+					"label": "Double-Button not reboundable switch",
 					"value": 2
 				},
 				{
@@ -72,7 +72,7 @@
 					"value": 3
 				},
 				{
-					"label": "Single-button cyclic switch mode",
+					"label": "Single-Button cyclic switch mode",
 					"value": 4
 				}
 			]
@@ -86,7 +86,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Double-button not reboundable",
+					"label": "Double-Button not reboundable",
 					"value": 0
 				},
 				{
@@ -94,7 +94,7 @@
 					"value": 1
 				},
 				{
-					"label": "Double-button reboundable mode",
+					"label": "Double-Button reboundable mode",
 					"value": 2
 				}
 			]

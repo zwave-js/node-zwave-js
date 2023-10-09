@@ -2,7 +2,7 @@
 	"manufacturer": "Alarm.com",
 	"manufacturerId": "0x0094",
 	"label": "ADC-ZW-EV",
-	"description": "Alarm.com Z-Wave Snap Device D v1",
+	"description": "Z-Wave Snap Device D v1",
 	"devices": [
 		{
 			"productType": "0x0001",

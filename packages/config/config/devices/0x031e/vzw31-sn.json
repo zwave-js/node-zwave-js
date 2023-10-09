@@ -248,7 +248,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Non-neutral",
+					"label": "Non-Neutral",
 					"value": 0
 				},
 				{
@@ -269,15 +269,15 @@
 					"value": 0
 				},
 				{
-					"label": "Multi-way with dumb/toggle switch",
+					"label": "Multi-Way with dumb/toggle switch",
 					"value": 1
 				},
 				{
-					"label": "Multi-way with aux switch",
+					"label": "Multi-Way with aux switch",
 					"value": 2
 				},
 				{
-					"label": "Single pole full sine wave (on/off mode only)",
+					"label": "Single pole full sine wave (On/Off mode only)",
 					"value": 3
 				}
 			]
@@ -296,7 +296,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No delay (config button still has 500 ms delay)",
+					"label": "No delay (Config button still has 500 ms delay)",
 					"value": 0
 				},
 				{
@@ -386,7 +386,7 @@
 					"value": 1
 				},
 				{
-					"label": "Exclusion disabled (must factory reset to exclude, or change this parameter)",
+					"label": "Exclusion disabled (Must factory reset to exclude, or change this parameter)",
 					"value": 2
 				}
 			]
@@ -595,11 +595,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Match VZM31 (Blue Series)",
+					"label": "Match VZM31 (Blue series)",
 					"value": 0
 				},
 				{
-					"label": "Match LZW31 (Red Series)",
+					"label": "Match LZW31 (Red series)",
 					"value": 1
 				}
 			]
@@ -622,7 +622,7 @@
 					"value": 0
 				},
 				{
-					"label": "On/off mode",
+					"label": "On/Off mode",
 					"value": 1
 				}
 			]
@@ -659,11 +659,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Soft off disabled (audible click)",
+					"label": "Soft off disabled (Audible click)",
 					"value": 0
 				},
 				{
-					"label": "Soft off enabled (no audible click)",
+					"label": "Soft off enabled (No audible click)",
 					"value": 1
 				}
 			]

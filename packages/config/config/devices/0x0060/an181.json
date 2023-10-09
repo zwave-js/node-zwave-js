@@ -24,11 +24,11 @@
 			"defaultValue": 255,
 			"options": [
 				{
-					"label": "No Basic Set Command will be sent",
+					"label": "No Basic Set command will be sent",
 					"value": 0
 				},
 				{
-					"label": "Basic Set Command ON will be sent",
+					"label": "Basic Set command on will be sent",
 					"value": 255
 				}
 			]

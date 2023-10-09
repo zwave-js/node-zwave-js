@@ -43,11 +43,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "magnetic contact",
+					"label": "Magnetic contact",
 					"value": 1
 				},
 				{
-					"label": "silver spot meter",
+					"label": "Silver spot meter",
 					"value": 2
 				}
 			]
@@ -62,11 +62,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "magnetic contact",
+					"label": "Magnetic contact",
 					"value": 1
 				},
 				{
-					"label": "silver spot meter",
+					"label": "Silver spot meter",
 					"value": 2
 				}
 			]

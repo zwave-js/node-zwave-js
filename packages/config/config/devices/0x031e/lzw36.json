@@ -927,21 +927,21 @@
 			]
 		},
 		{
-			"units": "seconds",
 			"#": "29",
 			"label": "Periodic Power & Energy Reports",
 			"description": "Time period between consecutive power & energy reports being sent.",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600
 		},
 		{
-			"units": "%",
 			"#": "30",
 			"label": "Energy Reports",
 			"description": "The energy level change that will result in a new energy report being sent.",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
@@ -958,11 +958,11 @@
 					"value": 0
 				},
 				{
-					"label": "light",
+					"label": "Light",
 					"value": 1
 				},
 				{
-					"label": "fan",
+					"label": "Fan",
 					"value": 2
 				},
 				{

@@ -77,11 +77,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Edge Mode",
+					"label": "Edge mode",
 					"value": 0
 				},
 				{
-					"label": "Toggle Mode",
+					"label": "Toggle mode",
 					"value": 1
 				}
 			]

@@ -57,7 +57,7 @@
 					"value": 3
 				},
 				{
-					"label": "Relays 1/2 - Previous state, Relay 3 - On",
+					"label": "Relays 1/2 - Previous state, relay 3 - On",
 					"value": 4
 				}
 			]
@@ -289,7 +289,7 @@
 					"value": 1
 				},
 				{
-					"label": "Disable (with switch reports)",
+					"label": "Disable (With switch reports)",
 					"value": 2
 				}
 			]
@@ -329,15 +329,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally open (reports off when relay is open / on when relay is closed)",
+					"label": "Normally open (Reports off when relay is open / On when relay is closed)",
 					"value": 0
 				},
 				{
-					"label": "Normally closed (reports off when relay is open / on when relay is closed)",
+					"label": "Normally closed (Reports off when relay is open / On when relay is closed)",
 					"value": 1
 				},
 				{
-					"label": "Normally closed (reports off when relay is closed / on when relay is open)",
+					"label": "Normally closed (Reports off when relay is closed / On when relay is open)",
 					"value": 2
 				}
 			]

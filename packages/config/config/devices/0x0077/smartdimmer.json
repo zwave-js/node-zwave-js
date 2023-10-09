@@ -45,21 +45,9 @@
 		},
 		{
 			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "B&O IR support",
-			"description": "B&O IR support is disabled if 0 otherwise enabled.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "3",

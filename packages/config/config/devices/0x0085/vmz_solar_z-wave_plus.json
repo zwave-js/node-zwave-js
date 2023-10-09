@@ -2,7 +2,7 @@
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "VMZ Solar z-wave plus",
-	"description": "Awning Blind Z-wave Plus Version",
+	"description": "Awning Blind Z-Wave Plus Version",
 	"devices": [
 		{
 			"productType": "0x0006",
@@ -22,15 +22,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "manual",
+					"label": "Manual",
 					"value": 0
 				},
 				{
-					"label": "semiauto",
+					"label": "Semiauto",
 					"value": 1
 				},
 				{
-					"label": "auto",
+					"label": "Auto",
 					"value": 2
 				}
 			]
@@ -43,11 +43,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "summer mode only",
+					"label": "Summer mode only",
 					"value": 1
 				},
 				{
-					"label": "winter mode",
+					"label": "Winter mode",
 					"value": 2
 				}
 			]
@@ -91,11 +91,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no",
+					"label": "No",
 					"value": 0
 				},
 				{
-					"label": "yes",
+					"label": "Yes",
 					"value": 1
 				}
 			]

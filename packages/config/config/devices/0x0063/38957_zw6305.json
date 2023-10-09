@@ -24,11 +24,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Reverse event (open 16, close 17)",
+					"label": "Reverse event (Open 16, close 17)",
 					"value": 1
 				}
 			]
@@ -46,32 +46,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) - notification only",
+					"label": "Notification only",
 					"value": 1
 				},
 				{
-					"label": "Notification and basic report",
+					"label": "Notification and Basic Report",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "21",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Led Control (magnet Triggers Only)",
 			"description": "This parameter gives you the option to turn the LED off on magnetic triggers",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "(default) - enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "23",
@@ -95,7 +84,7 @@
 					"value": 720
 				},
 				{
-					"label": "(default) daily",
+					"label": "Daily",
 					"value": 1440
 				}
 			]
@@ -109,7 +98,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) continuous flash",
+					"label": "Continuous flash",
 					"value": 1
 				},
 				{

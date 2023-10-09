@@ -2,7 +2,7 @@
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "WV-01_1002",
-	"description": "Wireless, Z-Wave Emergency Water Shut-off Valve",
+	"description": "Wireless, Z-Wave Emergency Water Shut-Off Valve",
 	"devices": [
 		{
 			"productType": "0x0213",

@@ -76,7 +76,7 @@
 					"value": 3
 				},
 				{
-					"label": "Single click (On/Off); held 3 seconds -> on; Release -> off",
+					"label": "Single click (On/Off); Held 3 seconds -> on; Release -> off",
 					"value": 4
 				},
 				{
@@ -107,19 +107,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Key1 (Basic CC Set/Get); reporting disabled",
+					"label": "Key1 (Basic CC Set/Get); Reporting disabled",
 					"value": 0
 				},
 				{
-					"label": "Key1 (Basic CC Set/Get); reporting enabled",
+					"label": "Key1 (Basic CC Set/Get); Reporting enabled",
 					"value": 1
 				},
 				{
-					"label": "All keys (Basic CC Set only); reporting disabled",
+					"label": "All keys (Basic CC Set only); Reporting disabled",
 					"value": 2
 				},
 				{
-					"label": "All keys (Basic CC Set only); reporting enabled",
+					"label": "All keys (Basic CC Set only); Reporting enabled",
 					"value": 3
 				}
 			]
@@ -148,7 +148,7 @@
 					"value": 3
 				},
 				{
-					"label": "Single click (On/Off); held 3 seconds -> on; Release -> off",
+					"label": "Single click (On/Off); Held 3 seconds -> on; Release -> off",
 					"value": 4
 				},
 				{

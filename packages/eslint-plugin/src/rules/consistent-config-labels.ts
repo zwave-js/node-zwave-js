@@ -8,6 +8,7 @@ import {
 // TODO: Title Case param labels, forbid . at the end of label and options, forbid The at the beginning of label, Avoid Enable/Disable in param labels
 // Avoid default in option labels, forbid numbers at the start of option labels (except units)
 // Sensor Binary -> Binary Sensor
+// Remove separators before the first actual word
 
 const ROOT = "Program > JSONExpressionStatement > JSONObjectExpression";
 const CONFIG_PARAM =
@@ -47,11 +48,12 @@ function isEndOfSentence(suffix: string, strict: boolean): boolean {
 	}
 	if (suffix === " - " || suffix === " / ") return true;
 	suffix = suffix.trim();
-	return suffix === "."
-		|| suffix === ":"
-		|| suffix === ";"
-		// Treat everything inside (...) as a sentence
-		|| suffix.endsWith("(");
+	return [
+		".",
+		":",
+		";",
+		"(",
+	].some((c) => suffix.endsWith(c));
 }
 
 function isHyphenatedWord(str: string): boolean {
@@ -64,6 +66,7 @@ function isCombinedWord(str: string): boolean {
 
 const titleCaseExceptions = [
 	"with",
+	"without",
 	"in",
 	"of",
 	"by",
@@ -103,6 +106,7 @@ const fixedMultiWordNames = combinations(
 		"Multilevel Switch",
 		"Notification",
 		"Binary Sensor",
+		"Binary Switch",
 		"Hail",
 		"Configuration",
 		"Barrier",
@@ -111,6 +115,7 @@ const fixedMultiWordNames = combinations(
 		"Central Scene",
 		"Scene Activation",
 		"Meter",
+		"Indicator",
 	],
 	["", "CC"],
 	["", "Set", "Report", "Set/Get", "Get/Set", "Get"],
@@ -134,6 +139,7 @@ const fixedNames = [
 	"Sunday",
 	"Z-Wave",
 	"Fibaro",
+	"Lifeline",
 	...fixedMultiWordNames,
 ];
 
@@ -142,6 +148,7 @@ const sentenceCaseIgnored: (RegExp)[] = [
 	/^NOT$/,
 	// Units:
 	/^\d+(\.\d+)?°?[smCF]$/,
+	/^[VWA]$/,
 	/^°[CF]$/,
 	// Common abbreviations:
 	/^N[CO]$/,
@@ -173,6 +180,9 @@ const alwaysUppercase: RegExp[] = [
 	/^VSP$/i,
 	/^PIR$/i,
 	/^OK$/i,
+	/^HSB$/i,
+	/^OTA$/i,
+	/^CRC$/i,
 ];
 
 const alwaysLowercase: RegExp[] = [

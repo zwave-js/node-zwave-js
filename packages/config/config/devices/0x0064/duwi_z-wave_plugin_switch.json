@@ -37,11 +37,11 @@
 					"value": 0
 				},
 				{
-					"label": "Show switch state (default)",
+					"label": "Show switch state (Default)",
 					"value": 1
 				},
 				{
-					"label": "Operated by Indicator Command Class",
+					"label": "Operated by indicator command class",
 					"value": 2
 				}
 			]
@@ -65,7 +65,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (default)",
+					"label": "Switch off (Default)",
 					"value": 0
 				},
 				{

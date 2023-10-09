@@ -117,31 +117,31 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "highest",
+					"label": "Highest",
 					"value": 1
 				},
 				{
-					"label": "higher",
+					"label": "Higher",
 					"value": 2
 				},
 				{
-					"label": "high",
+					"label": "High",
 					"value": 3
 				},
 				{
-					"label": "normal",
+					"label": "Normal",
 					"value": 4
 				},
 				{
-					"label": "low",
+					"label": "Low",
 					"value": 5
 				},
 				{
-					"label": "lower",
+					"label": "Lower",
 					"value": 6
 				},
 				{
-					"label": "lowest",
+					"label": "Lowest",
 					"value": 7
 				}
 			]
@@ -157,31 +157,31 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "highest",
+					"label": "Highest",
 					"value": 1
 				},
 				{
-					"label": "higher",
+					"label": "Higher",
 					"value": 2
 				},
 				{
-					"label": "high",
+					"label": "High",
 					"value": 3
 				},
 				{
-					"label": "normal",
+					"label": "Normal",
 					"value": 4
 				},
 				{
-					"label": "low",
+					"label": "Low",
 					"value": 5
 				},
 				{
-					"label": "lower",
+					"label": "Lower",
 					"value": 6
 				},
 				{
-					"label": "lowest",
+					"label": "Lowest",
 					"value": 7
 				}
 			]
@@ -200,11 +200,11 @@
 					"value": 1
 				},
 				{
-					"label": "Flashing with Temperature and Motion",
+					"label": "Flashing with temperature and motion",
 					"value": 2
 				},
 				{
-					"label": "Flashing with Motion",
+					"label": "Flashing with motion",
 					"value": 3
 				}
 			]
@@ -222,15 +222,15 @@
 					"value": 1
 				},
 				{
-					"label": "Pulsing Temperature, Flashing Motion",
+					"label": "Pulsing temperature, flashing motion",
 					"value": 2
 				},
 				{
-					"label": "Flashing Temperature and Motion",
+					"label": "Flashing temperature and motion",
 					"value": 3
 				},
 				{
-					"label": "No Temperature, Flashing Motion",
+					"label": "No temperature, flashing motion",
 					"value": 4
 				}
 			]

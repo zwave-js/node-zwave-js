@@ -53,7 +53,7 @@
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (Synchronize output): current switch state / Other switch types: Previous state",
+					"label": "Toggle switch (Synchronize output): Current switch state / Other switch types: Previous state",
 					"value": 2
 				}
 			]

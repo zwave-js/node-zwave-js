@@ -2,7 +2,7 @@
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW139",
-	"description": "Nano Switch Gen5 (without Meter)",
+	"description": "Nano Switch Gen5 (Without Meter)",
 	"devices": [
 		{
 			"productType": "0x0003",

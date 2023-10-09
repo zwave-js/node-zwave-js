@@ -86,11 +86,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Dry",
+					"label": "Normally dry",
 					"value": 0
 				},
 				{
-					"label": "Normally Wet",
+					"label": "Normally wet",
 					"value": 240
 				}
 			]
@@ -105,11 +105,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Basic Set Off",
+					"label": "Send Basic Set off",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set On",
+					"label": "Send Basic Set on",
 					"value": 240
 				}
 			]

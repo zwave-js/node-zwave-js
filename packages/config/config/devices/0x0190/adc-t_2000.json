@@ -2,6 +2,7 @@
 	"manufacturer": "Building 36 Technologies",
 	"manufacturerId": "0x0190",
 	"label": "ADC-T 2000",
+	// eslint-disable-next-line @zwave-js/consistent-config-labels
 	"description": "Alarm.com Smart Thermostat",
 	"devices": [
 		{
@@ -27,7 +28,7 @@
 					"value": 0
 				},
 				{
-					"label": "Heat Pump",
+					"label": "Heat pump",
 					"value": 1
 				}
 			]
@@ -56,7 +57,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Fossil Fuel",
+					"label": "Fossil fuel",
 					"value": 0
 				},
 				{
@@ -564,6 +565,7 @@
 			"valueSize": 1,
 			"defaultValue": 15,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "Off, Heat",
@@ -594,6 +596,7 @@
 					"value": 31
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "25",
@@ -602,6 +605,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "Disabled",
@@ -620,6 +624,7 @@
 					"value": 3
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "26",
@@ -810,6 +815,7 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "O/B as B",
@@ -820,6 +826,7 @@
 					"value": 1
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "35",

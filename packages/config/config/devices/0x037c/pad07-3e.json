@@ -64,15 +64,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1 : one switch mode",
+					"label": "One switch mode",
 					"value": 1
 				},
 				{
-					"label": "2 : two switch mode",
+					"label": "Two switch mode",
 					"value": 2
 				},
 				{
-					"label": "3: up/down switch mode",
+					"label": "Up/Down switch mode",
 					"value": 3
 				}
 			]

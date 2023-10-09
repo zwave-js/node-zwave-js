@@ -79,39 +79,17 @@
 		},
 		{
 			"#": "5",
-			"label": "Enable/Disable Audible Alarm",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Audible Alarm",
 			"description": "Enables or disables the audible alarm (“beeping”)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Audible Alarm Disabled",
-					"value": 0
-				},
-				{
-					"label": "Audible Alarm Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "Enable/Disable Water Detection",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Water Detection",
 			"description": "If disabled, the device will not respond in any way to detected leaks.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Water Detection Disabled",
-					"value": 0
-				},
-				{
-					"label": "Water Detection Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7",

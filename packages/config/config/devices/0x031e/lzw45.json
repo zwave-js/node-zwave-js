@@ -151,7 +151,7 @@
 					"value": 0
 				},
 				{
-					"label": "Default Color/Level",
+					"label": "Default color/level",
 					"value": 1
 				},
 				{
@@ -268,19 +268,19 @@
 					"value": 2
 				},
 				{
-					"label": "Fast Blink",
+					"label": "Fast blink",
 					"value": 3
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Slow blink",
 					"value": 4
 				},
 				{
-					"label": "Fast Fade",
+					"label": "Fast fade",
 					"value": 5
 				},
 				{
-					"label": "Slow Fade",
+					"label": "Slow fade",
 					"value": 6
 				}
 			]
@@ -295,11 +295,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hue Color Wheel",
+					"label": "Hue color wheel",
 					"value": 0
 				},
 				{
-					"label": "Color Temp",
+					"label": "Color temp",
 					"value": 1
 				}
 			]
@@ -319,7 +319,7 @@
 					"value": 0
 				},
 				{
-					"label": "Fade Blend",
+					"label": "Fade blend",
 					"value": 1
 				},
 				{
@@ -331,7 +331,7 @@
 					"value": 3
 				},
 				{
-					"label": "Chase Blend",
+					"label": "Chase blend",
 					"value": 4
 				}
 			]
@@ -375,7 +375,7 @@
 					"value": 6
 				},
 				{
-					"label": "Yellow Green",
+					"label": "Yellow green",
 					"value": 7
 				},
 				{
@@ -383,7 +383,7 @@
 					"value": 8
 				},
 				{
-					"label": "Spring Green",
+					"label": "Spring green",
 					"value": 9
 				},
 				{
@@ -427,7 +427,7 @@
 					"value": 0
 				},
 				{
-					"label": "Fade Blend",
+					"label": "Fade blend",
 					"value": 1
 				},
 				{
@@ -439,7 +439,7 @@
 					"value": 3
 				},
 				{
-					"label": "Chase Blend",
+					"label": "Chase blend",
 					"value": 4
 				}
 			]
@@ -483,7 +483,7 @@
 					"value": 6
 				},
 				{
-					"label": "Yellow Green",
+					"label": "Yellow green",
 					"value": 7
 				},
 				{
@@ -491,7 +491,7 @@
 					"value": 8
 				},
 				{
-					"label": "Spring Green",
+					"label": "Spring green",
 					"value": 9
 				},
 				{
@@ -535,7 +535,7 @@
 					"value": 0
 				},
 				{
-					"label": "Fade Blend",
+					"label": "Fade blend",
 					"value": 1
 				},
 				{
@@ -547,7 +547,7 @@
 					"value": 3
 				},
 				{
-					"label": "Chase Blend",
+					"label": "Chase blend",
 					"value": 4
 				}
 			]
@@ -591,7 +591,7 @@
 					"value": 6
 				},
 				{
-					"label": "Yellow Green",
+					"label": "Yellow green",
 					"value": 7
 				},
 				{
@@ -599,7 +599,7 @@
 					"value": 8
 				},
 				{
-					"label": "Spring Green",
+					"label": "Spring green",
 					"value": 9
 				},
 				{
@@ -643,7 +643,7 @@
 					"value": 0
 				},
 				{
-					"label": "Fade Blend",
+					"label": "Fade blend",
 					"value": 1
 				},
 				{
@@ -655,7 +655,7 @@
 					"value": 3
 				},
 				{
-					"label": "Chase Blend",
+					"label": "Chase blend",
 					"value": 4
 				}
 			]
@@ -699,7 +699,7 @@
 					"value": 6
 				},
 				{
-					"label": "Yellow Green",
+					"label": "Yellow green",
 					"value": 7
 				},
 				{
@@ -707,7 +707,7 @@
 					"value": 8
 				},
 				{
-					"label": "Spring Green",
+					"label": "Spring green",
 					"value": 9
 				},
 				{
@@ -841,11 +841,11 @@
 					"value": 0
 				},
 				{
-					"label": "Previous Color",
+					"label": "Previous color",
 					"value": 1
 				},
 				{
-					"label": "Last Color in Program",
+					"label": "Last color in program",
 					"value": 2
 				}
 			]
@@ -901,27 +901,27 @@
 					"value": 3
 				},
 				{
-					"label": "Color Wipe",
+					"label": "Color wipe",
 					"value": 4
 				},
 				{
-					"label": "Color Wipe Reverse Inverse",
+					"label": "Color wipe reverse inverse",
 					"value": 5
 				},
 				{
-					"label": "Color Wipe Random",
+					"label": "Color wipe random",
 					"value": 6
 				},
 				{
-					"label": "Random Color",
+					"label": "Random color",
 					"value": 7
 				},
 				{
-					"label": "Single Dynamic",
+					"label": "Single dynamic",
 					"value": 8
 				},
 				{
-					"label": "Multi Dynamic",
+					"label": "Multi dynamic",
 					"value": 9
 				},
 				{
@@ -929,7 +929,7 @@
 					"value": 10
 				},
 				{
-					"label": "Rainbow Cycle",
+					"label": "Rainbow cycle",
 					"value": 11
 				},
 				{
@@ -937,7 +937,7 @@
 					"value": 12
 				},
 				{
-					"label": "Dual Scan",
+					"label": "Dual scan",
 					"value": 13
 				},
 				{
@@ -945,7 +945,7 @@
 					"value": 14
 				},
 				{
-					"label": "Running Lights",
+					"label": "Running lights",
 					"value": 15
 				},
 				{
@@ -953,15 +953,15 @@
 					"value": 16
 				},
 				{
-					"label": "Twinkle Random",
+					"label": "Twinkle random",
 					"value": 17
 				},
 				{
-					"label": "Twinkle Fade",
+					"label": "Twinkle fade",
 					"value": 18
 				},
 				{
-					"label": "Twinkle Fade Random",
+					"label": "Twinkle fade random",
 					"value": 19
 				},
 				{
@@ -969,11 +969,11 @@
 					"value": 20
 				},
 				{
-					"label": "Flash Sparkle",
+					"label": "Flash sparkle",
 					"value": 21
 				},
 				{
-					"label": "Hyper Sparkle",
+					"label": "Hyper sparkle",
 					"value": 22
 				},
 				{
@@ -981,63 +981,63 @@
 					"value": 23
 				},
 				{
-					"label": "Blink Rainbow",
+					"label": "Blink rainbow",
 					"value": 24
 				},
 				{
-					"label": "Chase White",
+					"label": "Chase white",
 					"value": 25
 				},
 				{
-					"label": "Chase Color",
+					"label": "Chase color",
 					"value": 26
 				},
 				{
-					"label": "Chase Random",
+					"label": "Chase random",
 					"value": 27
 				},
 				{
-					"label": "Chase Rainbow",
+					"label": "Chase rainbow",
 					"value": 28
 				},
 				{
-					"label": "Chase Flash",
+					"label": "Chase flash",
 					"value": 29
 				},
 				{
-					"label": "Chase Flash Random",
+					"label": "Chase flash random",
 					"value": 30
 				},
 				{
-					"label": "Chase Rainbow White",
+					"label": "Chase rainbow white",
 					"value": 31
 				},
 				{
-					"label": "Chase Blackout",
+					"label": "Chase blackout",
 					"value": 32
 				},
 				{
-					"label": "Chase Blackout Rainbow",
+					"label": "Chase blackout rainbow",
 					"value": 33
 				},
 				{
-					"label": "Color Sweep Random",
+					"label": "Color sweep random",
 					"value": 34
 				},
 				{
-					"label": "Running Color",
+					"label": "Running color",
 					"value": 35
 				},
 				{
-					"label": "Running Red Blue",
+					"label": "Running red blue",
 					"value": 36
 				},
 				{
-					"label": "Running Random",
+					"label": "Running random",
 					"value": 37
 				},
 				{
-					"label": "Larson Scanner",
+					"label": "Larson scanner",
 					"value": 38
 				},
 				{
@@ -1049,15 +1049,15 @@
 					"value": 40
 				},
 				{
-					"label": "Fireworks Random",
+					"label": "Fireworks random",
 					"value": 41
 				},
 				{
-					"label": "Merry Christmas",
+					"label": "Merry christmas",
 					"value": 42
 				},
 				{
-					"label": "Circus Combustus",
+					"label": "Circus combustus",
 					"value": 43
 				},
 				{

@@ -30,11 +30,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Factory Default",
+					"label": "Factory default",
 					"value": 0
 				},
 				{
-					"label": "Scene Mode",
+					"label": "Scene mode",
 					"value": 1
 				}
 			]

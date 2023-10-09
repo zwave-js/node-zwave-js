@@ -23,15 +23,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "manual",
+					"label": "Manual",
 					"value": 0
 				},
 				{
-					"label": "semiauto",
+					"label": "Semiauto",
 					"value": 1
 				},
 				{
-					"label": "auto",
+					"label": "Auto",
 					"value": 2
 				}
 			]
@@ -44,11 +44,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "summer mode only",
+					"label": "Summer mode only",
 					"value": 0
 				},
 				{
-					"label": "Auto (summer / winter mode)",
+					"label": "Auto (Summer / Winter mode)",
 					"value": 50
 				}
 			]

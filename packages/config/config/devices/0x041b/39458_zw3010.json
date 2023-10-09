@@ -52,7 +52,7 @@
 					"value": 2
 				},
 				{
-					"label": "LED Always on",
+					"label": "LED always on",
 					"value": 3
 				}
 			]
@@ -100,7 +100,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Press any button on the Dimmer",
+					"label": "Press any button on the dimmer",
 					"value": 0
 				},
 				{

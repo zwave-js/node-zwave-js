@@ -54,7 +54,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (default)",
+					"label": "Switch off (Default)",
 					"value": 0
 				},
 				{
@@ -84,7 +84,7 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (default)",
+					"label": "Yes (Default)",
 					"value": 1
 				}
 			]
@@ -102,7 +102,7 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (default)",
+					"label": "Yes (Default)",
 					"value": 1
 				}
 			]
@@ -115,7 +115,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (default)",
+					"label": "No (Default)",
 					"value": 0
 				},
 				{
@@ -137,7 +137,7 @@
 					"value": 0
 				},
 				{
-					"label": "By single press and hold (default)",
+					"label": "By single press and hold (Default)",
 					"value": 1
 				},
 				{
@@ -158,15 +158,15 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim",
+					"label": "Switch on, off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On, Off only (send Basic Set) (default)",
+					"label": "Switch on, off only (Send Basic Set) (Default)",
 					"value": 2
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 3
 				},
 				{
@@ -204,15 +204,15 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim",
+					"label": "Switch on, off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On, Off only (send Basic Set) (default)",
+					"label": "Switch on, off only (Send Basic Set) (Default)",
 					"value": 2
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 3
 				},
 				{
@@ -246,15 +246,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch Off only (default)",
+					"label": "Switch off only (Default)",
 					"value": 1
 				},
 				{
-					"label": "Switch On only",
+					"label": "Switch on only",
 					"value": 2
 				},
 				{
-					"label": "Switch All on and off",
+					"label": "Switch all on and off",
 					"value": 255
 				}
 			]
@@ -267,7 +267,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (default)",
+					"label": "Switch off (Default)",
 					"value": 0
 				},
 				{
@@ -291,7 +291,7 @@
 			"writeOnly": true,
 			"options": [
 				{
-					"label": "Disabled (default)",
+					"label": "Disabled (Default)",
 					"value": 0
 				}
 			]

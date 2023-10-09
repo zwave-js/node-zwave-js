@@ -46,7 +46,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "On",
 					"value": 255
 				}
 			]

@@ -28,11 +28,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal detection(water detected)",
+					"label": "Normal detection(Water detected)",
 					"value": 1
 				},
 				{
-					"label": "Reverse detection(dry detected)",
+					"label": "Reverse detection(Dry detected)",
 					"value": 2
 				}
 			]
@@ -46,7 +46,7 @@
 			"defaultValue": 60,
 			"options": [
 				{
-					"label": "hourly",
+					"label": "Hourly",
 					"value": 60
 				},
 				{
@@ -84,7 +84,7 @@
 					"value": 720
 				},
 				{
-					"label": "(default) - daily",
+					"label": "Daily",
 					"value": 1440
 				}
 			]
@@ -116,7 +116,7 @@
 			"defaultValue": 60,
 			"options": [
 				{
-					"label": "5…360 minutes - sent every 5 minutes, up to 6 hours",
+					"label": "5…360 minutes - Sent every 5 minutes, up to 6 hours",
 					"value": 360
 				},
 				{
@@ -133,7 +133,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) - red LED continuous flash and beeps",
+					"label": "Red LED continuous flash and beeps",
 					"value": 1
 				},
 				{
@@ -149,7 +149,7 @@
 					"value": 4
 				},
 				{
-					"label": "No led, no beeps",
+					"label": "No LED, no beeps",
 					"value": 5
 				}
 			]

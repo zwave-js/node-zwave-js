@@ -16,24 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Power On State",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Prior State",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "2",
@@ -233,7 +216,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Detect Load Type",
+					"label": "Detect load type",
 					"value": 0
 				},
 				{
@@ -251,7 +234,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enabled (no delay)",
+					"label": "Enabled (No delay)",
 					"value": 0
 				},
 				{

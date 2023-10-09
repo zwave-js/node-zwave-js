@@ -33,19 +33,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "lowest speed",
+					"label": "Lowest speed",
 					"value": 1
 				},
 				{
-					"label": "default speed",
+					"label": "Default speed",
 					"value": 2
 				},
 				{
-					"label": "higher speed",
+					"label": "Higher speed",
 					"value": 3
 				},
 				{
-					"label": "highest speed",
+					"label": "Highest speed",
 					"value": 4
 				}
 			]

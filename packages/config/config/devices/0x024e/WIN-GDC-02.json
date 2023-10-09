@@ -115,19 +115,19 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Accept broadcast On and Off",
+					"label": "Accept broadcast on and off",
 					"value": 0
 				},
 				{
-					"label": "Ignore broadcast On and Off",
+					"label": "Ignore broadcast on and off",
 					"value": 1
 				},
 				{
-					"label": "Ignore broadcast On, accept Off",
+					"label": "Ignore broadcast on, accept off",
 					"value": 2
 				},
 				{
-					"label": "Accept broadcast On, ignore Off",
+					"label": "Accept broadcast on, ignore off",
 					"value": 3
 				}
 			]

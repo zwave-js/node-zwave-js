@@ -2,7 +2,7 @@
 	"manufacturer": "Somfy",
 	"manufacturerId": "0x0047",
 	"label": "1870228",
-	"description": "Somfy Z-Wave To Glydea",
+	"description": "Somfy Z-Wave to Glydea",
 	"devices": [
 		{
 			"productType": "0x474c",

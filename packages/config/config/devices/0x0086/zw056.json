@@ -120,11 +120,11 @@
 			"label": "Define The Function of Button- and Button+",
 			"options": [
 				{
-					"label": "Button- --> Previous; Button+ --> Next",
+					"label": "Button- --> previous; Button+ --> next",
 					"value": 0
 				},
 				{
-					"label": "Button- --> Next; Button+ --> Pause",
+					"label": "Button- --> next; Button+ --> pause",
 					"value": 1
 				}
 			]
@@ -135,11 +135,11 @@
 			"label": "Short/Long Press Function of Button- And Button+",
 			"options": [
 				{
-					"label": "Short --> Volume; Long --> Ringtone",
+					"label": "Short --> volume; Long --> ringtone",
 					"value": 0
 				},
 				{
-					"label": "Short --> Ringtone; Long --> Volume",
+					"label": "Short --> ringtone; Long --> volume",
 					"value": 1
 				}
 			]

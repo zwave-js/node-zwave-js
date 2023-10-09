@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39342 / 39449 / ZW4106",
-	"description": "Plug-in 2-Outlet Switch, Simultaneous, 500S",
+	"description": "Plug-In 2-Outlet Switch, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",
@@ -40,15 +40,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED on when light is turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always Off",
+					"label": "LED always off",
 					"value": 2
 				}
 			]

@@ -36,6 +36,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "Aeon Labs",
@@ -58,6 +59,7 @@
 					"value": 4
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "254",

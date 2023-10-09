@@ -58,7 +58,7 @@
 					"value": 3
 				},
 				{
-					"label": "Relay 2 - Previous state, Relay 1 - On",
+					"label": "Relay 2 - Previous state, relay 1 - On",
 					"value": 4
 				}
 			]
@@ -77,15 +77,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mode)",
+					"label": "Garage door (Momentary mode)",
 					"value": 3
 				},
 				{
@@ -101,7 +101,7 @@
 					"value": 6
 				},
 				{
-					"label": "Door sensor (open/close)",
+					"label": "Door sensor (Open/Close)",
 					"value": 7
 				},
 				{
@@ -113,7 +113,7 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				}
 			]
@@ -132,15 +132,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mode)",
+					"label": "Garage door (Momentary mode)",
 					"value": 3
 				},
 				{
@@ -156,7 +156,7 @@
 					"value": 6
 				},
 				{
-					"label": "Door sensor (open/close)",
+					"label": "Door sensor (Open/Close)",
 					"value": 7
 				},
 				{
@@ -168,11 +168,11 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				},
 				{
-					"label": "Garage door mode (momentary mode) for relay and door sensor (open/close) for input",
+					"label": "Garage door mode (Momentary mode) for relay and door sensor (Open/Close) for input",
 					"value": 11
 				}
 			]
@@ -191,7 +191,7 @@
 					"value": 0
 				},
 				{
-					"label": "Leak alarm (water sensor)",
+					"label": "Leak alarm (Water sensor)",
 					"value": 4
 				},
 				{
@@ -203,7 +203,7 @@
 					"value": 6
 				},
 				{
-					"label": "Open/close alert (door sensor)",
+					"label": "Open/Close alert (Door sensor)",
 					"value": 7
 				},
 				{
@@ -215,7 +215,7 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				}
 			]
@@ -234,15 +234,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mode)",
+					"label": "Garage door (Momentary mode)",
 					"value": 3
 				},
 				{
@@ -258,7 +258,7 @@
 					"value": 6
 				},
 				{
-					"label": "Door sensor (open/close)",
+					"label": "Door sensor (Open/Close)",
 					"value": 7
 				},
 				{
@@ -270,7 +270,7 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				}
 			]
@@ -289,15 +289,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mode)",
+					"label": "Garage door (Momentary mode)",
 					"value": 3
 				},
 				{
@@ -313,7 +313,7 @@
 					"value": 6
 				},
 				{
-					"label": "Door sensor (open/close)",
+					"label": "Door sensor (Open/Close)",
 					"value": 7
 				},
 				{
@@ -325,11 +325,11 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				},
 				{
-					"label": "Garage door mode (momentary mode) for relay and door sensor (open/close) for input",
+					"label": "Garage door mode (Momentary mode) for relay and door sensor (Open/Close) for input",
 					"value": 11
 				}
 			]
@@ -572,15 +572,15 @@
 					"value": 0
 				},
 				{
-					"label": "IN1: turn R1 on, IN2: turn R1 off",
+					"label": "IN1: Turn R1 on, IN2: Turn R1 off",
 					"value": 1
 				},
 				{
-					"label": "IN1: turn R2 on, IN2: turn R2 off",
+					"label": "IN1: Turn R2 on, IN2: Turn R2 off",
 					"value": 2
 				},
 				{
-					"label": "IN1: turn R1 and R2 on, IN2: turn R1 and R2 off",
+					"label": "IN1: Turn R1 and R2 on, IN2: Turn R1 and R2 off",
 					"value": 3
 				}
 			]

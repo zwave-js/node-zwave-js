@@ -2,7 +2,7 @@
 	"manufacturer": "Vemmio",
 	"manufacturerId": "0x030f",
 	"label": "DS100",
-	"description": "Double Switch in A Dual Relay In-wall Module.",
+	"description": "Double Switch in A Dual Relay In-Wall Module.",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -63,15 +63,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Edge Mode",
+					"label": "Edge mode",
 					"value": 1
 				},
 				{
-					"label": "Pulse Mode",
+					"label": "Pulse mode",
 					"value": 2
 				},
 				{
-					"label": "Edge-Toggle Mode",
+					"label": "Edge-Toggle mode",
 					"value": 3
 				}
 			]
