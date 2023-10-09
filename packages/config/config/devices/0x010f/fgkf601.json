@@ -117,15 +117,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "single click switches state to opposite",
+					"label": "Single click switches state to opposite",
 					"value": 0
 				},
 				{
-					"label": "single click => opposite, double click => max",
+					"label": "Single click => opposite, double click => max",
 					"value": 1
 				},
 				{
-					"label": "single click turns on, double click turns off",
+					"label": "Single click turns on, double click turns off",
 					"value": 2
 				}
 			]
@@ -192,11 +192,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "paired buttons association inactive",
+					"label": "Paired buttons association inactive",
 					"value": 0
 				},
 				{
-					"label": "paired buttons association active",
+					"label": "Paired buttons association active",
 					"value": 1
 				}
 			]
@@ -209,11 +209,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "paired buttons association inactive",
+					"label": "Paired buttons association inactive",
 					"value": 0
 				},
 				{
-					"label": "paired buttons association active",
+					"label": "Paired buttons association active",
 					"value": 1
 				}
 			]
@@ -226,11 +226,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "paired buttons association inactive",
+					"label": "Paired buttons association inactive",
 					"value": 0
 				},
 				{
-					"label": "paired buttons association active",
+					"label": "Paired buttons association active",
 					"value": 1
 				}
 			]

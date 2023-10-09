@@ -86,7 +86,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
@@ -94,11 +94,11 @@
 					"value": 1
 				},
 				{
-					"label": "Send Basic CC report",
+					"label": "Send Basic Report",
 					"value": 2
 				},
 				{
-					"label": "Send Multilevel Switch report",
+					"label": "Send Multilevel Switch Report",
 					"value": 3
 				},
 				{
@@ -116,11 +116,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Send Basic Set",
 					"value": 1
 				}
 			]
@@ -134,11 +134,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Send Basic Set",
 					"value": 1
 				}
 			]
@@ -294,7 +294,7 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch mode",
+					"label": "2-State switch mode",
 					"value": 1
 				},
 				{
@@ -323,7 +323,7 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch mode",
+					"label": "2-State switch mode",
 					"value": 1
 				},
 				{
@@ -348,11 +348,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "the touch panel is not connected.",
+					"label": "The touch panel is not connected.",
 					"value": 0
 				},
 				{
-					"label": "the touch panel is connected",
+					"label": "The touch panel is connected",
 					"value": 5
 				}
 			]
@@ -366,11 +366,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control the output loads of itself",
+					"label": "Control the output loads of itself",
 					"value": 1
 				},
 				{
-					"label": "control the other nodes",
+					"label": "Control the other nodes",
 					"value": 2
 				},
 				{
@@ -387,11 +387,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control the output loads of itself",
+					"label": "Control the output loads of itself",
 					"value": 1
 				},
 				{
-					"label": "control the other nodes",
+					"label": "Control the other nodes",
 					"value": 2
 				},
 				{
@@ -422,11 +422,11 @@
 					"value": 0
 				},
 				{
-					"label": "2-wire mode",
+					"label": "2-Wire mode",
 					"value": 1
 				},
 				{
-					"label": "3-wire mode",
+					"label": "3-Wire mode",
 					"value": 2
 				}
 			]
@@ -538,11 +538,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "factory default",
+					"label": "Factory default",
 					"value": 0
 				},
 				{
-					"label": "factory default and remove",
+					"label": "Factory default and remove",
 					"value": 1431655765
 				}
 			]

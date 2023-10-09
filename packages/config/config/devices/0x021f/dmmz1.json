@@ -52,11 +52,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Continuous Fire",
+					"label": "Continuous fire",
 					"value": 1
 				},
 				{
-					"label": "Burst Fire",
+					"label": "Burst fire",
 					"value": 2
 				}
 			]
@@ -72,21 +72,10 @@
 		},
 		{
 			"#": "4",
-			"label": "Enable/Disable LED Alarm",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Alarm",
 			"description": "Enables or disables the indicator LED alarm when the trap is tripped",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED Alarm Disabled",
-					"value": 0
-				},
-				{
-					"label": "LED Alarm Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "5",

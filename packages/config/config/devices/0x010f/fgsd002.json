@@ -25,21 +25,20 @@
 		{
 			"#": "1",
 			"label": "Smoke Sensor sensitivity",
-			"description": "There are 3 levels of sensitivity to smoke presence.",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "HIGH Sensitivity",
+					"label": "High",
 					"value": 1
 				},
 				{
-					"label": "MEDIUM Sensitivity",
+					"label": "Medium",
 					"value": 2
 				},
 				{
-					"label": "LOW Sensitivity",
+					"label": "Low",
 					"value": 3
 				}
 			]
@@ -147,15 +146,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "BASIC ON and BASIC OFF enabled",
+					"label": "Basic on and basic off enabled",
 					"value": 0
 				},
 				{
-					"label": "BASIC ON enabled",
+					"label": "Basic on enabled",
 					"value": 1
 				},
 				{
-					"label": "BASIC OFF enabled",
+					"label": "Basic off enabled",
 					"value": 2
 				}
 			]
@@ -187,19 +186,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "broadcast inactive",
+					"label": "Broadcast inactive",
 					"value": 0
 				},
 				{
-					"label": "FIRE ALARM broadcast 2nd/4th Association Group...",
+					"label": "Fire alarm broadcast 2nd/4th association group...",
 					"value": 1
 				},
 				{
-					"label": "FIRE ALARM broadcast 2nd/4th Association Group ...",
+					"label": "Fire alarm broadcast 2nd/4th association group ...",
 					"value": 2
 				},
 				{
-					"label": "FIRE ALARM broadcast 2nd/4th Association Group...",
+					"label": "Fire alarm broadcast 2nd/4th association group...",
 					"value": 3
 				}
 			]

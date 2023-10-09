@@ -61,7 +61,6 @@
 		{
 			"#": "5",
 			"label": "Operating mode.",
-			"description": "The main operating mode for the device.",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -75,7 +74,7 @@
 					"value": 2
 				},
 				{
-					"label": "Always-on",
+					"label": "Always on",
 					"value": 3
 				}
 			]

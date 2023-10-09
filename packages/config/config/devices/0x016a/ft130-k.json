@@ -74,11 +74,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Central scene command",
+					"label": "Central Scene command",
 					"value": 1
 				},
 				{
-					"label": "Central scene command and configuration report",
+					"label": "Central Scene command and Configuration Report",
 					"value": 3
 				}
 			]
@@ -91,7 +91,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Basic set",
+					"label": "Basic Set",
 					"value": 0
 				},
 				{

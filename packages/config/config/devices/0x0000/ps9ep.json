@@ -2,7 +2,7 @@
 	"manufacturer": "Sigma Designs (Former Zensys)",
 	"manufacturerId": "0x0000",
 	"label": "PS9EP",
-	"description": "Z-wave 9 Channel_module",
+	"description": "Z-Wave 9 Channel_module",
 	"devices": [
 		{
 			"productType": "0x0003",

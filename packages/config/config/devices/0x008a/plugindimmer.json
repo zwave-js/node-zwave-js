@@ -2,7 +2,7 @@
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "plugInDimmer",
-	"description": "Plug-in Dimmer",
+	"description": "Plug-In Dimmer",
 	"devices": [
 		{
 			"productType": "0x0018",

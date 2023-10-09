@@ -39,11 +39,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "closed when magnet near",
+					"label": "Closed when magnet near",
 					"value": 0
 				},
 				{
-					"label": "opened when magnet near",
+					"label": "Opened when magnet near",
 					"value": 1
 				}
 			]
@@ -56,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "none of the groups sent as secure",
+					"label": "None of the groups sent as secure",
 					"value": 0
 				},
 				{
-					"label": "2nd group \"On/Off\" sent as secure",
+					"label": "2nd group \"On/off\" sent as secure",
 					"value": 1
 				},
 				{
@@ -81,15 +81,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "switch after opening and closing",
+					"label": "Switch after opening and closing",
 					"value": 0
 				},
 				{
-					"label": "switch after opening (parameter 12)",
+					"label": "Switch after opening (Parameter 12)",
 					"value": 1
 				},
 				{
-					"label": "switch after closing (parameter 13)",
+					"label": "Switch after closing (Parameter 13)",
 					"value": 2
 				}
 			]
@@ -142,11 +142,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "do not send tamper cancellation report",
+					"label": "Do not send tamper cancellation report",
 					"value": 0
 				},
 				{
-					"label": "send tamper cancellation report",
+					"label": "Send tamper cancellation report",
 					"value": 1
 				}
 			]
@@ -191,19 +191,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "temperature alarms disabled",
+					"label": "Temperature alarms disabled",
 					"value": 0
 				},
 				{
-					"label": "high temperature alarm",
+					"label": "High temperature alarm",
 					"value": 1
 				},
 				{
-					"label": "low temperature alarm",
+					"label": "Low temperature alarm",
 					"value": 2
 				},
 				{
-					"label": "high and low temperature alarms enabled",
+					"label": "High and low temperature alarms enabled",
 					"value": 3
 				}
 			]
@@ -232,11 +232,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no indication",
+					"label": "No indication",
 					"value": 0
 				},
 				{
-					"label": "open/close indication",
+					"label": "Open/Close indication",
 					"value": 1
 				}
 			]
@@ -249,7 +249,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no indication",
+					"label": "No indication",
 					"value": 0
 				},
 				{
@@ -266,7 +266,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no indication",
+					"label": "No indication",
 					"value": 0
 				},
 				{

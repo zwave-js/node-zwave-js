@@ -53,7 +53,7 @@
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (synchronize output): current switch state / Other switch types: previous state",
+					"label": "Toggle switch (Synchronize output): current switch state / Other switch types: Previous state",
 					"value": 2
 				}
 			]
@@ -70,11 +70,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (synchronize output)",
+					"label": "Toggle switch (Synchronize output)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (toggle output)",
+					"label": "Toggle switch (Toggle output)",
 					"value": 2
 				}
 			]
@@ -91,11 +91,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (synchronize output)",
+					"label": "Toggle switch (Synchronize output)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (toggle output)",
+					"label": "Toggle switch (Toggle output)",
 					"value": 2
 				}
 			]

@@ -102,11 +102,12 @@
 					"value": 0
 				},
 				{
+					// eslint-disable-next-line @zwave-js/consistent-config-labels
 					"label": "Remeha Celcia 20",
 					"value": 1
 				},
 				{
-					"label": "Honeywell (rounded temperatures)",
+					"label": "Honeywell (Rounded temperatures)",
 					"value": 2
 				}
 			]
@@ -157,11 +158,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Readout OFF",
+					"label": "Readout off",
 					"value": 0
 				},
 				{
-					"label": "Readout ON",
+					"label": "Readout on",
 					"value": 255
 				}
 			]

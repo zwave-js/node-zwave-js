@@ -111,11 +111,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALARM WATER",
+					"label": "Alarm water",
 					"value": 0
 				},
 				{
-					"label": "BASIC_SET",
+					"label": "Basic Set",
 					"value": 255
 				}
 			]
@@ -139,11 +139,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alarm (flooding) cancellation inactive",
+					"label": "Alarm (Flooding) cancellation inactive",
 					"value": 0
 				},
 				{
-					"label": "Alarm (flooding) cancellation active",
+					"label": "Alarm (Flooding) cancellation active",
 					"value": 1
 				}
 			]
@@ -200,15 +200,15 @@
 					"value": 0
 				},
 				{
-					"label": "Flood broadcast active, Tamper broadcast inactive",
+					"label": "Flood broadcast active, tamper broadcast inactive",
 					"value": 1
 				},
 				{
-					"label": "Flood broadcast inactive, Tamper broadcast active",
+					"label": "Flood broadcast inactive, tamper broadcast active",
 					"value": 2
 				},
 				{
-					"label": "Flood and Tamper broadcast mode active",
+					"label": "Flood and tamper broadcast mode active",
 					"value": 3
 				}
 			]
@@ -356,11 +356,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Flood sensor On (default)",
+					"label": "Flood sensor on",
 					"value": 0
 				},
 				{
-					"label": "Built-in flood sensor TURNED OFF",
+					"label": "Built-In flood sensor turned off",
 					"value": 1
 				}
 			]

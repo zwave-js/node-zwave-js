@@ -338,7 +338,7 @@
 					"value": 5
 				},
 				{
-					"label": "Roller blind with built-in driver (impulse)",
+					"label": "Roller blind with built-in driver (Impulse)",
 					"value": 6
 				}
 			]
@@ -368,7 +368,7 @@
 					"value": 1
 				},
 				{
-					"label": "Controlled, momentary or limit switch operation, or Multilevel Switch Stop command",
+					"label": "Controlled, momentary or limit switch operation, or Multilevel Switch stop command",
 					"value": 2
 				}
 			]

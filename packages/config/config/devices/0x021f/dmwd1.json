@@ -50,14 +50,13 @@
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0/Turn Off Device",
+					"label": "Turn off",
 					"value": 0
 				},
 				{
-					"label": "Turn On Device",
+					"label": "Turn on",
 					"value": 255
 				}
 			]

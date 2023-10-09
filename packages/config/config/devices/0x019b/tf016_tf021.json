@@ -39,7 +39,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				},
 				{
@@ -51,7 +51,7 @@
 					"value": 2
 				},
 				{
-					"label": "Energy Save Heat",
+					"label": "Energy save heat",
 					"value": 11
 				}
 			]
@@ -63,17 +63,18 @@
 			"valueSize": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
-					"label": "F-mode",
+					"label": "F",
 					"value": 0
 				},
 				{
-					"label": "A-mode",
+					"label": "A",
 					"value": 1
 				},
 				{
-					"label": "AF-mode",
+					"label": "AF",
 					"value": 2
 				},
 				{
@@ -81,14 +82,15 @@
 					"value": 3
 				},
 				{
-					"label": "P-mode",
+					"label": "P",
 					"value": 4
 				},
 				{
-					"label": "FP-mode",
+					"label": "FP",
 					"value": 5
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "3",

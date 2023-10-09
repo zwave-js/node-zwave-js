@@ -48,7 +48,7 @@
 					"value": 0
 				},
 				{
-					"label": "Hail cc",
+					"label": "Hail CC",
 					"value": 1
 				}
 			]
@@ -113,7 +113,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Un-reboot colorful mode",
+					"label": "Un-Reboot colorful mode",
 					"value": 0
 				},
 				{
@@ -242,11 +242,11 @@
 					"value": 0
 				},
 				{
-					"label": "Hail cc",
+					"label": "Hail CC",
 					"value": 1
 				},
 				{
-					"label": "Basic cc report",
+					"label": "Basic CC Report",
 					"value": 2
 				}
 			]
@@ -267,7 +267,7 @@
 					"value": 1
 				},
 				{
-					"label": "(parabolic + index)/2 mode",
+					"label": "(Parabolic + index)/2 mode",
 					"value": 2
 				},
 				{

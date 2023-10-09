@@ -2,7 +2,7 @@
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
 	"label": "ZWN-333",
-	"description": "Plug-in Appliance Module",
+	"description": "Plug-In Appliance Module",
 	"devices": [
 		{
 			"productType": "0x0101",

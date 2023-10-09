@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN05-1B",
-	"description": "Single Relay In-wall Switch Module",
+	"description": "Single Relay In-Wall Switch Module",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -43,35 +43,24 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch Off",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
-					"label": "Last Switch State",
+					"label": "Last switch state",
 					"value": 1
 				},
 				{
-					"label": "Switch On",
+					"label": "Switch on",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Manual On/Off mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable manual On/Off",
-					"value": 0
-				},
-				{
-					"label": "Enable manual On/Off",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "4",

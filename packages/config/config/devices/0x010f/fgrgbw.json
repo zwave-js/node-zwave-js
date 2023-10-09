@@ -61,19 +61,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON active ALL OFF active",
+					"label": "All on active all off active",
 					"value": 255
 				},
 				{
-					"label": "ALL ON inactive ALL OFF inactive",
+					"label": "All on inactive all off inactive",
 					"value": 0
 				},
 				{
-					"label": "ALL ON inactive ALL OFF active",
+					"label": "All on inactive all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF inactive",
+					"label": "All on active all off inactive",
 					"value": 2
 				}
 			]
@@ -193,19 +193,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "INACTIVE",
+					"label": "Inactive",
 					"value": 0
 				},
 				{
-					"label": "ALARM ON",
+					"label": "Alarm on",
 					"value": 1
 				},
 				{
-					"label": "ALARM OFF",
+					"label": "Alarm off",
 					"value": 2
 				},
 				{
-					"label": "ALARM PROGRAM",
+					"label": "Alarm program",
 					"value": 3
 				}
 			]
@@ -235,15 +235,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inputs and controllers actions (SWITCH MULTILEVEL)",
+					"label": "Inputs and controllers actions (Switch multilevel)",
 					"value": 0
 				},
 				{
-					"label": "Inputs actions (SWITCH MULTILEVEL)",
+					"label": "Inputs actions (Switch multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Inputs actions (COLOR CONTROL)",
+					"label": "Inputs actions (Color control)",
 					"value": 2
 				}
 			]
@@ -284,11 +284,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Set to white (all channels controlled together)",
+					"label": "Set to white (All channels controlled together)",
 					"value": 0
 				},
 				{
-					"label": "last set colour is memorized",
+					"label": "Last set colour is memorized",
 					"value": 1
 				}
 			]
@@ -311,11 +311,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NODE INFO control frame is sent",
+					"label": "Node info control frame is sent",
 					"value": 0
 				},
 				{
-					"label": "starting favourite program",
+					"label": "Starting favourite program",
 					"value": 1
 				}
 			]

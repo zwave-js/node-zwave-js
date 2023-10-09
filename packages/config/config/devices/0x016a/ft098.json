@@ -117,7 +117,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Un-reboot colorful mode",
+					"label": "Un-Reboot colorful mode",
 					"value": 0
 				},
 				{
@@ -198,7 +198,7 @@
 					"value": 1
 				},
 				{
-					"label": "(Parabolic + Index) / 2",
+					"label": "(Parabolic + index) / 2",
 					"value": 2
 				},
 				{
@@ -216,6 +216,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
+					// eslint-disable-next-line @zwave-js/consistent-config-labels
 					"label": "Aeon Labs Standard Product",
 					"value": 0
 				}

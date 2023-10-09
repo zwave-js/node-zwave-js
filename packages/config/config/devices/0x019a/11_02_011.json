@@ -23,11 +23,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "LED On",
+					"label": "LED on",
 					"value": 1
 				}
 			]
@@ -49,7 +49,7 @@
 					"value": 1
 				},
 				{
-					"label": "High Accuracy",
+					"label": "High accuracy",
 					"value": 2
 				}
 			]

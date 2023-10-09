@@ -22,15 +22,16 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "F-mode, floor sensor mode",
+					"label": "F-Mode, floor sensor mode",
 					"value": 0
 				},
 				{
-					"label": "A-mode, internal room sensor mode",
+					"label": "A-Mode, internal room sensor mode",
 					"value": 1
 				},
 				{
-					"label": "AF-mode, internal sensor and floor sensor mode",
+					// eslint-disable-next-line @zwave-js/consistent-config-labels
+					"label": "AF-Mode, internal sensor and floor sensor mode",
 					"value": 2
 				},
 				{

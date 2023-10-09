@@ -27,7 +27,7 @@
 					"value": 0
 				},
 				{
-					"label": "Heat Pump",
+					"label": "Heat pump",
 					"value": 1
 				}
 			]
@@ -40,11 +40,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Gas (No fan w/Heat)",
+					"label": "Gas (No fan w/heat)",
 					"value": 0
 				},
 				{
-					"label": "Electric (Fan w/Heat)",
+					"label": "Electric (Fan w/heat)",
 					"value": 1
 				}
 			]
@@ -58,11 +58,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Changeover with Cooling systems (Orange wire)",
+					"label": "Changeover with cooling systems (Orange wire)",
 					"value": 0
 				},
 				{
-					"label": "Changeover with Heating systems (Brown wire)",
+					"label": "Changeover with heating systems (Brown wire)",
 					"value": 1
 				}
 			]
@@ -461,11 +461,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Setback",
+					"label": "No setback",
 					"value": 0
 				},
 				{
-					"label": "Unoccupied Mode",
+					"label": "Unoccupied mode",
 					"value": 2
 				}
 			]
@@ -679,7 +679,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Relative Humidity",
+					"label": "Relative humidity",
 					"value": 0
 				},
 				{

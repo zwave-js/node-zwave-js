@@ -2,7 +2,7 @@
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "builtInDimmer",
-	"description": "Built-in Dimmer",
+	"description": "Built-In Dimmer",
 	"devices": [
 		{
 			"productType": "0x000d",
@@ -52,11 +52,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle light on release, dimming on press",
+					"label": "Toggle light on release; Dim on press",
 					"value": 1
 				},
 				{
-					"label": "Toggle on press & Dim with quick press & release",
+					"label": "Toggle on press; Dim with quick press & release",
 					"value": 2
 				}
 			]
@@ -74,7 +74,7 @@
 					"value": 0
 				},
 				{
-					"label": "Don't switch own light. only send to extern node",
+					"label": "Don't switch own light. Only send to extern node",
 					"value": 1
 				}
 			]

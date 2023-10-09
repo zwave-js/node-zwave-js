@@ -2,7 +2,7 @@
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
 	"label": "ZW20RM",
-	"description": "In-wall Smart Meter Duplex Receptacle",
+	"description": "In-Wall Smart Meter Duplex Receptacle",
 	"devices": [
 		{
 			"productType": "0x0111",

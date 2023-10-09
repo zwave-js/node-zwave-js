@@ -104,20 +104,9 @@
 		},
 		{
 			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Sound",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable sound",
-					"value": 0
-				},
-				{
-					"label": "Enable Sound",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7",

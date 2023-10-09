@@ -49,19 +49,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "acoustic and visual alarms inactive",
+					"label": "Acoustic and visual alarms inactive",
 					"value": 0
 				},
 				{
-					"label": "acoustic alarm inactive, visual alarm active",
+					"label": "Acoustic alarm inactive, visual alarm active",
 					"value": 1
 				},
 				{
-					"label": "acoustic alarm active, visual alarm inactive",
+					"label": "Acoustic alarm active, visual alarm inactive",
 					"value": 2
 				},
 				{
-					"label": "acoustic and visual alarms active",
+					"label": "Acoustic and visual alarms active",
 					"value": 3
 				}
 			]
@@ -75,11 +75,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALARM SENSOR (SMOKE)",
+					"label": "Alarm sensor (Smoke)",
 					"value": 0
 				},
 				{
-					"label": "BASIC_SET",
+					"label": "Basic Set",
 					"value": 255
 				}
 			]
@@ -121,15 +121,15 @@
 					"value": 0
 				},
 				{
-					"label": "Smoke mode active, Tamper mode inactive",
+					"label": "Smoke mode active, tamper mode inactive",
 					"value": 1
 				},
 				{
-					"label": "Smoke mode inactive, Tamper mode active",
+					"label": "Smoke mode inactive, tamper mode active",
 					"value": 2
 				},
 				{
-					"label": "Smoke and Tamper broadcast mode active",
+					"label": "Smoke and tamper broadcast mode active",
 					"value": 3
 				}
 			]

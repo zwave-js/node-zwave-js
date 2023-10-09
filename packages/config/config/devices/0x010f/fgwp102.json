@@ -39,11 +39,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "function inactive",
+					"label": "Function inactive",
 					"value": 0
 				},
 				{
-					"label": "function activated",
+					"label": "Function activated",
 					"value": 1
 				}
 			]
@@ -64,7 +64,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "function inactive",
+					"label": "Function inactive",
 					"value": 0
 				}
 			]
@@ -110,7 +110,7 @@
 			"defaultValue": 10,
 			"options": [
 				{
-					"label": "energy reports inactive",
+					"label": "Energy reports inactive",
 					"value": 0
 				}
 			]
@@ -126,7 +126,7 @@
 			"defaultValue": 3600,
 			"options": [
 				{
-					"label": "periodic reports inactive",
+					"label": "Periodic reports inactive",
 					"value": 0
 				}
 			]
@@ -141,11 +141,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "function inactive",
+					"label": "Function inactive",
 					"value": 0
 				},
 				{
-					"label": "function activated",
+					"label": "Function activated",
 					"value": 1
 				}
 			]
@@ -164,11 +164,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control as the Wall Plug",
+					"label": "Control as the wall plug",
 					"value": 0
 				},
 				{
-					"label": "control opposite to the Wall Plug",
+					"label": "Control opposite to the wall plug",
 					"value": 1
 				}
 			]
@@ -201,27 +201,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "turn the associated devices ON (DOWN)",
+					"label": "Turn the associated devices on (Down)",
 					"value": 1
 				},
 				{
-					"label": "turn the associated devices OFF (DOWN)",
+					"label": "Turn the associated devices off (Down)",
 					"value": 2
 				},
 				{
-					"label": "turn the associated devices ON (UP)",
+					"label": "Turn the associated devices on (Up)",
 					"value": 3
 				},
 				{
-					"label": "turn the associated devices OFF (UP)",
+					"label": "Turn the associated devices off (Up)",
 					"value": 4
 				},
 				{
-					"label": "combination of 1 and 4",
+					"label": "Combination of 1 and 4",
 					"value": 5
 				},
 				{
-					"label": "combination of 2 and 3",
+					"label": "Combination of 2 and 3",
 					"value": 6
 				}
 			]
@@ -251,11 +251,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "general alarm",
+					"label": "General alarm",
 					"value": 1
 				},
 				{
-					"label": "smoke alarm",
+					"label": "Smoke alarm",
 					"value": 2
 				},
 				{
@@ -267,11 +267,11 @@
 					"value": 8
 				},
 				{
-					"label": "high temperature alarm",
+					"label": "High temperature alarm",
 					"value": 16
 				},
 				{
-					"label": "flood alarm",
+					"label": "Flood alarm",
 					"value": 32
 				},
 				{
@@ -324,15 +324,15 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
-					"label": "Cycle ON/OFF",
+					"label": "Cycle on/off",
 					"value": 3
 				}
 			]
@@ -377,43 +377,43 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
-					"label": "colour changes depending on active power",
+					"label": "Colour changes depending on active power",
 					"value": 1
 				},
 				{
-					"label": "colour changes in steps depending on active power",
+					"label": "Colour changes in steps depending on active power",
 					"value": 2
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -437,7 +437,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
@@ -445,31 +445,31 @@
 					"value": 1
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -494,11 +494,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
-					"label": "no change in colour",
+					"label": "No change in colour",
 					"value": 1
 				},
 				{
@@ -506,31 +506,31 @@
 					"value": 2
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -596,7 +596,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "none of the groups sent as secure",
+					"label": "None of the groups sent as secure",
 					"value": 0
 				},
 				{
@@ -638,27 +638,27 @@
 					"value": 0
 				},
 				{
-					"label": "Turn devices ON when power below DOWN",
+					"label": "Turn devices on when power below down",
 					"value": 1
 				},
 				{
-					"label": "Turn devices OFF when power below DOWN",
+					"label": "Turn devices off when power below down",
 					"value": 2
 				},
 				{
-					"label": "Turn devices ON when power above UP",
+					"label": "Turn devices on when power above up",
 					"value": 3
 				},
 				{
-					"label": "Turn devices OFF when power above UP",
+					"label": "Turn devices off when power above up",
 					"value": 4
 				},
 				{
-					"label": "Turn ON power below DOWN, OFF power above UP",
+					"label": "Turn on power below down, off power above up",
 					"value": 5
 				},
 				{
-					"label": "Turn OFF power below DOWN, ON when power above UP",
+					"label": "Turn off power below down, on when power above up",
 					"value": 6
 				}
 			]
@@ -783,7 +783,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED flashes RED BLUE WHITE",
+					"label": "LED flashes red blue white",
 					"value": 1
 				},
 				{

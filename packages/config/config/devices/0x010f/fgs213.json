@@ -38,27 +38,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "standard operation",
+					"label": "Standard operation",
 					"value": 0
 				},
 				{
-					"label": "delay ON",
+					"label": "Delay on",
 					"value": 1
 				},
 				{
-					"label": "delay OFF",
+					"label": "Delay off",
 					"value": 2
 				},
 				{
-					"label": "auto ON",
+					"label": "Auto on",
 					"value": 3
 				},
 				{
-					"label": "auto OFF",
+					"label": "Auto off",
 					"value": 4
 				},
 				{
-					"label": "flashing mode",
+					"label": "Flashing mode",
 					"value": 5
 				}
 			]
@@ -72,15 +72,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "cancel mode and set target state",
+					"label": "Cancel mode and set target state",
 					"value": 0
 				},
 				{
-					"label": "no reaction to switch - mode runs until it ends",
+					"label": "No reaction to switch - Mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "reset timer - start counting from the beginning",
+					"label": "Reset timer - Start counting from the beginning",
 					"value": 2
 				}
 			]
@@ -109,15 +109,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "momentary switch",
+					"label": "Momentary switch",
 					"value": 0
 				},
 				{
-					"label": "toggle switch stable",
+					"label": "Toggle switch stable",
 					"value": 1
 				},
 				{
-					"label": "toggle switch",
+					"label": "Toggle switch",
 					"value": 2
 				}
 			]
@@ -130,11 +130,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "the device does not send reports",
+					"label": "The device does not send reports",
 					"value": 0
 				},
 				{
-					"label": "the device sends reports",
+					"label": "The device sends reports",
 					"value": 1
 				}
 			]
@@ -147,7 +147,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no group sent as secure",
+					"label": "No group sent as secure",
 					"value": 0
 				},
 				{
@@ -167,7 +167,7 @@
 					"value": 8
 				},
 				{
-					"label": "all groups sent as secure",
+					"label": "All groups sent as secure",
 					"value": 15
 				}
 			]
@@ -181,7 +181,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "no scenes sent",
+					"label": "No scenes sent",
 					"value": 0
 				},
 				{
@@ -197,7 +197,7 @@
 					"value": 4
 				},
 				{
-					"label": "Key Hold Down and Key Released",
+					"label": "Key hold down and key released",
 					"value": 8
 				}
 			]
@@ -211,7 +211,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "no scenes sent",
+					"label": "No scenes sent",
 					"value": 0
 				},
 				{
@@ -227,7 +227,7 @@
 					"value": 4
 				},
 				{
-					"label": "Key Hold Down and Key Released",
+					"label": "Key hold down and key released",
 					"value": 8
 				}
 			]
@@ -245,19 +245,19 @@
 					"value": 0
 				},
 				{
-					"label": "ignore turning ON with 1 click of the switch",
+					"label": "Ignore turning on with 1 click of the switch",
 					"value": 1
 				},
 				{
-					"label": "ignore turning OFF with 1 click of the switch",
+					"label": "Ignore turning off with 1 click of the switch",
 					"value": 2
 				},
 				{
-					"label": "ignore holding and releasing the switch",
+					"label": "Ignore holding and releasing the switch",
 					"value": 4
 				},
 				{
-					"label": "ignore double click of the switch",
+					"label": "Ignore double click of the switch",
 					"value": 8
 				}
 			]
@@ -299,19 +299,19 @@
 					"value": 0
 				},
 				{
-					"label": "ignore turning on with 1 click of the switch",
+					"label": "Ignore turning on with 1 click of the switch",
 					"value": 1
 				},
 				{
-					"label": "ignore turning off with 1 click of the switch",
+					"label": "Ignore turning off with 1 click of the switch",
 					"value": 2
 				},
 				{
-					"label": "ignore holding and releasing the switch",
+					"label": "Ignore holding and releasing the switch",
 					"value": 4
 				},
 				{
-					"label": "ignore double click of the switch",
+					"label": "Ignore double click of the switch",
 					"value": 8
 				}
 			]
@@ -353,11 +353,11 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
@@ -378,11 +378,11 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
@@ -403,11 +403,11 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
@@ -428,11 +428,11 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
@@ -502,11 +502,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Self-measurement inactive",
+					"label": "Self-Measurement inactive",
 					"value": 0
 				},
 				{
-					"label": "Self-measurement active",
+					"label": "Self-Measurement active",
 					"value": 1
 				}
 			]

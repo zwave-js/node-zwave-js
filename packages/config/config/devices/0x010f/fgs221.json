@@ -79,19 +79,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON disabled/ ALL OFF disabled",
+					"label": "All on disabled/ all off disabled",
 					"value": 0
 				},
 				{
-					"label": "ALL ON disabled/ ALL OFF active",
+					"label": "All on disabled/ all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active / ALL OFF disabled",
+					"label": "All on active / All off disabled",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active / ALL OFF active",
+					"label": "All on active / All off active",
 					"value": 255
 				}
 			]
@@ -106,19 +106,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Auto OFF disabled for both relays",
+					"label": "Auto off disabled for both relays",
 					"value": 0
 				},
 				{
-					"label": "Auto OFF active only for relay 1",
+					"label": "Auto off active only for relay 1",
 					"value": 1
 				},
 				{
-					"label": "Auto OFF active only for relay 2",
+					"label": "Auto off active only for relay 2",
 					"value": 2
 				},
 				{
-					"label": "Auto OFF active for both relays",
+					"label": "Auto off active for both relays",
 					"value": 3
 				}
 			]
@@ -221,11 +221,11 @@
 					"value": 0
 				},
 				{
-					"label": "Map OFF status to devices in group 2-last state",
+					"label": "Map off status to devices in group 2-last state",
 					"value": 1
 				},
 				{
-					"label": "Map OFF status to devices in grp 2-full brightness",
+					"label": "Map off status to devices in grp 2-full brightness",
 					"value": 2
 				}
 			]
@@ -284,7 +284,7 @@
 					"value": 0
 				},
 				{
-					"label": "Follow switch contact (closed=ON, open=OFF)",
+					"label": "Follow switch contact (Closed=ON, open=OFF)",
 					"value": 1
 				}
 			]
@@ -316,11 +316,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Dimmer/Roller shutter control",
+					"label": "Disable dimmer/roller shutter control",
 					"value": 0
 				},
 				{
-					"label": "Enable Dimmer/Roller shutter control",
+					"label": "Enable dimmer/roller shutter control",
 					"value": 1
 				}
 			]
@@ -345,7 +345,7 @@
 					"value": 1
 				},
 				{
-					"label": "Alarm Relay 1 off",
+					"label": "Alarm relay 1 off",
 					"value": 2
 				},
 				{

@@ -2,7 +2,7 @@
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
 	"label": "FT096",
-	"description": "Plug-in Switch",
+	"description": "Plug-In Switch",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -24,41 +24,12 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Current overload protection enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Current overload protection"
 		},
 		{
 			"#": "20",
-			"label": "Output load after re-power",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "last status",
-					"value": 0
-				},
-				{
-					"label": "always on",
-					"value": 1
-				},
-				{
-					"label": "always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "33",
@@ -78,15 +49,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "nothing",
+					"label": "Nothing",
 					"value": 0
 				},
 				{
-					"label": "hail CC",
+					"label": "Hail CC",
 					"value": 1
 				},
 				{
-					"label": "basic CC report",
+					"label": "Basic CC Report",
 					"value": 2
 				}
 			]
@@ -114,20 +85,9 @@
 		},
 		{
 			"#": "90",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable Parameters 91 and 92",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "91",
@@ -197,7 +157,7 @@
 					"value": 8
 				},
 				{
-					"label": "All Values",
+					"label": "All values",
 					"value": 15
 				}
 			]
@@ -231,7 +191,7 @@
 					"value": 8
 				},
 				{
-					"label": "All Values",
+					"label": "All values",
 					"value": 15
 				}
 			]
@@ -265,7 +225,7 @@
 					"value": 8
 				},
 				{
-					"label": "All Values",
+					"label": "All values",
 					"value": 15
 				}
 			]
@@ -319,21 +279,8 @@
 		},
 		{
 			"#": "252",
-			"label": "Configuration Locked",
-			"description": "Enable/disable Configuration Locked (0 =disable, 1 = enable).",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Lock Configuration"
 		},
 		{
 			"#": "255",

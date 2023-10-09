@@ -86,7 +86,7 @@
 					"value": 127
 				},
 				{
-					"label": "Bit0: reserve",
+					"label": "Bit0: Reserve",
 					"value": 1
 				},
 				{
@@ -94,27 +94,27 @@
 					"value": 2
 				},
 				{
-					"label": "Bit2: disable the door/window function.(1:disable, 0:enable)",
+					"label": "Bit2: Disable the door/window function.(1:Disable, 0:Enable)",
 					"value": 4
 				},
 				{
-					"label": "Bit3: setting the temperature scale. 0: fahrenheit, 1:celsius",
+					"label": "Bit3: Setting the temperature scale. 0: Fahrenheit, 1:Celsius",
 					"value": 8
 				},
 				{
-					"label": "Bit4: disable the illumination report after event triggered. (1:disable, 0:enable)",
+					"label": "Bit4: Disable the illumination report after event triggered. (1:Disable, 0:Enable)",
 					"value": 10
 				},
 				{
-					"label": "Bit5: disable the temperature report after event triggered. (1:disable, 0:enable)",
+					"label": "Bit5: Disable the temperature report after event triggered. (1:Disable, 0:Enable)",
 					"value": 20
 				},
 				{
-					"label": "Bit6: reserve",
+					"label": "Bit6: Reserve",
 					"value": 40
 				},
 				{
-					"label": "Bit7: disable the back key release into test mode. (1:disable, 0:enable)",
+					"label": "Bit7: Disable the back key release into test mode. (1:Disable, 0:Enable)",
 					"value": 80
 				}
 			]
@@ -132,35 +132,35 @@
 					"value": 127
 				},
 				{
-					"label": "Bit0: disable magnetic integrate illumination to turn on the lighting nodes in the association group 2. (1:disable, 0:enable)",
+					"label": "Bit0: Disable magnetic integrate illumination to turn on the lighting nodes in the association group 2. (1:Disable, 0:Enable)",
 					"value": 1
 				},
 				{
-					"label": "Bit1: disable PIR integrate illumination to turn on the lighting nodes in the association group 2. (1:disable, 0:enable)",
+					"label": "Bit1: Disable PIR integrate illumination to turn on the lighting nodes in the association group 2. (1:Disable, 0:Enable)",
 					"value": 2
 				},
 				{
-					"label": "Bit2: disable magnetic integrate pir",
+					"label": "Bit2: Disable magnetic integrate PIR",
 					"value": 4
 				},
 				{
-					"label": "Bit3: when bit2 is 0 (enable), are the device and the lighting in the same room? 0: in the same room(default),1: in the different room",
+					"label": "Bit3: When bit2 is 0 (Enable), are the device and the lighting in the same room? 0: In the same room(Default),1: In the different room",
 					"value": 8
 				},
 				{
-					"label": "Bit4: disable delay 5 seconds to turn off the light, when door/window closed.(1:disable, 0:enable)",
+					"label": "Bit4: Disable delay 5 seconds to turn off the light, when door/window closed.(1:Disable, 0:Enable)",
 					"value": 10
 				},
 				{
-					"label": "Bit5: disable auto turn off the light, after door/window opened to turn on the light.(1:disable, 0:enable)",
+					"label": "Bit5: Disable auto turn off the light, after door/window opened to turn on the light.(1:Disable, 0:Enable)",
 					"value": 20
 				},
 				{
-					"label": "Bit6: reserve",
+					"label": "Bit6: Reserve",
 					"value": 40
 				},
 				{
-					"label": "Bit7: reserve",
+					"label": "Bit7: Reserve",
 					"value": 80
 				}
 			]
@@ -178,35 +178,35 @@
 					"value": 127
 				},
 				{
-					"label": "Bit0: reserve",
+					"label": "Bit0: Reserve",
 					"value": 1
 				},
 				{
-					"label": "Bit1: enable sending motion off report. (0:disable, 1:enable)",
+					"label": "Bit1: Enable sending motion off report. (0:Disable, 1:Enable)",
 					"value": 2
 				},
 				{
-					"label": "Bit2: enable PIR super sensitivity mode. (0:disable, 1:enable)",
+					"label": "Bit2: Enable PIR super sensitivity mode. (0:Disable, 1:Enable)",
 					"value": 4
 				},
 				{
-					"label": "Bit3: disable send out basic off after door closed. (1:disable,0:enable)",
+					"label": "Bit3: Disable send out basic off after door closed. (1:Disable,0:Enable)",
 					"value": 8
 				},
 				{
-					"label": "Bit4: notification type, 0: using notification report. 1: using sensor binary report",
+					"label": "Bit4: Notification type, 0: Using Notification Report. 1: Using sensor binary report",
 					"value": 10
 				},
 				{
-					"label": "Bit5: disable multi cc in auto report. (1:disable, 0:enable)",
+					"label": "Bit5: Disable multi cc in auto report. (1:Disable, 0:Enable)",
 					"value": 20
 				},
 				{
-					"label": "Bit6: disable to report battery state when the device triggered.(1:disable, 0:enable)",
+					"label": "Bit6: Disable to report battery state when the device triggered.(1:Disable, 0:Enable)",
 					"value": 40
 				},
 				{
-					"label": "Bit7: reserve",
+					"label": "Bit7: Reserve",
 					"value": 80
 				}
 			]

@@ -2,7 +2,7 @@
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
 	"label": "5071xx",
-	"description": "Radio Push-button CONNECT, 1 Button",
+	"description": "Radio Push-Button CONNECT, 1 Button",
 	"devices": [
 		{
 			"productType": "0x0001",

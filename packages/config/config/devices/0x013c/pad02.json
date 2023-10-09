@@ -45,7 +45,7 @@
 					"value": 1
 				},
 				{
-					"label": "Night mode (opposite)",
+					"label": "Night mode (Opposite)",
 					"value": 2
 				}
 			]
@@ -77,11 +77,11 @@
 					"value": 1
 				},
 				{
-					"label": "Toggle Switch",
+					"label": "Toggle switch",
 					"value": 2
 				},
 				{
-					"label": "Switch On",
+					"label": "Switch on",
 					"value": 3
 				}
 			]

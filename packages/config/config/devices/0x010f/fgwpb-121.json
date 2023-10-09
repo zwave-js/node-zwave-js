@@ -28,7 +28,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Overload Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -42,7 +42,7 @@
 			"defaultValue": 15,
 			"options": [
 				{
-					"label": "Disables power reporting",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -56,7 +56,7 @@
 			"defaultValue": 10,
 			"options": [
 				{
-					"label": "Disables energy reporting",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -134,15 +134,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Power Exceeded",
+					"label": "Power exceeded",
 					"value": 1
 				},
 				{
-					"label": "Power Dropped",
+					"label": "Power dropped",
 					"value": 2
 				},
 				{
-					"label": "Power Dropped or Exceeded",
+					"label": "Power dropped or exceeded",
 					"value": 3
 				}
 			]
@@ -161,7 +161,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -180,7 +180,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -199,7 +199,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -218,7 +218,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -240,15 +240,15 @@
 					"value": 2
 				},
 				{
-					"label": "Carbon Monoxide",
+					"label": "Carbon monoxide",
 					"value": 4
 				},
 				{
-					"label": "Carbon Dioxide",
+					"label": "Carbon dioxide",
 					"value": 8
 				},
 				{
-					"label": "High Temperature",
+					"label": "High temperature",
 					"value": 16
 				},
 				{
@@ -256,7 +256,7 @@
 					"value": 32
 				},
 				{
-					"label": "All Alarms (default)",
+					"label": "All alarms (Default)",
 					"value": 63
 				}
 			]
@@ -271,7 +271,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
@@ -311,15 +311,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination",
+					"label": "Disable illumination",
 					"value": 0
 				},
 				{
-					"label": "Active Power (Smooth)",
+					"label": "Active power (Smooth)",
 					"value": 1
 				},
 				{
-					"label": "Active Power (Steps)",
+					"label": "Active power (Steps)",
 					"value": 2
 				},
 				{
@@ -361,11 +361,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination",
+					"label": "Disable illumination",
 					"value": 0
 				},
 				{
-					"label": "Last Measured Load",
+					"label": "Last measured load",
 					"value": 1
 				},
 				{
@@ -407,7 +407,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination",
+					"label": "Disable illumination",
 					"value": 0
 				},
 				{

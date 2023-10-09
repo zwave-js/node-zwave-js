@@ -2,7 +2,7 @@
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
 	"label": "50x5xx",
-	"description": "Roller Shutter Push-button",
+	"description": "Roller Shutter Push-Button",
 	"devices": [
 		{
 			"productType": "0x4004",

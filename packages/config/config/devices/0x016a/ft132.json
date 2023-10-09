@@ -82,7 +82,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
@@ -90,7 +90,7 @@
 					"value": 1
 				},
 				{
-					"label": "Send Basic CC report",
+					"label": "Send Basic CC Report",
 					"value": 2
 				},
 				{
@@ -108,11 +108,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Send Basic Set cc",
 					"value": 1
 				}
 			]
@@ -126,11 +126,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Send Basic CC Set",
 					"value": 1
 				}
 			]
@@ -204,35 +204,35 @@
 					"value": 8
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 1",
+					"label": "Meter Report of wattage (W) on channel 1",
 					"value": 256
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 2",
+					"label": "Meter Report of wattage (W) on channel 2",
 					"value": 512
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 1",
+					"label": "Meter Report of energy (kWh) on channel 1",
 					"value": 2048
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 2",
+					"label": "Meter Report of energy (kWh) on channel 2",
 					"value": 4096
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 1",
+					"label": "Meter Report of voltage (V) on channel 1",
 					"value": 65536
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 2",
+					"label": "Meter Report of voltage (V) on channel 2",
 					"value": 131072
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 1",
+					"label": "Meter Report of current (A) on channel 1",
 					"value": 524288
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 2",
+					"label": "Meter Report of current (A) on channel 2",
 					"value": 1048576
 				}
 			]
@@ -261,35 +261,35 @@
 					"value": 8
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 1",
+					"label": "Meter Report of wattage (W) on channel 1",
 					"value": 256
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 2",
+					"label": "Meter Report of wattage (W) on channel 2",
 					"value": 512
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 1",
+					"label": "Meter Report of energy (kWh) on channel 1",
 					"value": 2048
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 2",
+					"label": "Meter Report of energy (kWh) on channel 2",
 					"value": 4096
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 1",
+					"label": "Meter Report of voltage (V) on channel 1",
 					"value": 65536
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 2",
+					"label": "Meter Report of voltage (V) on channel 2",
 					"value": 131072
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 1",
+					"label": "Meter Report of current (A) on channel 1",
 					"value": 524288
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 2",
+					"label": "Meter Report of current (A) on channel 2",
 					"value": 1048576
 				}
 			]
@@ -318,35 +318,35 @@
 					"value": 8
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 1",
+					"label": "Meter Report of wattage (W) on channel 1",
 					"value": 256
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 2",
+					"label": "Meter Report of wattage (W) on channel 2",
 					"value": 512
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 1",
+					"label": "Meter Report of energy (kWh) on channel 1",
 					"value": 2048
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 2",
+					"label": "Meter Report of energy (kWh) on channel 2",
 					"value": 4096
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 1",
+					"label": "Meter Report of voltage (V) on channel 1",
 					"value": 65536
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 2",
+					"label": "Meter Report of voltage (V) on channel 2",
 					"value": 131072
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 1",
+					"label": "Meter Report of current (A) on channel 1",
 					"value": 524288
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 2",
+					"label": "Meter Report of current (A) on channel 2",
 					"value": 1048576
 				}
 			]
@@ -396,7 +396,7 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch mode",
+					"label": "2-State switch mode",
 					"value": 1
 				},
 				{
@@ -421,7 +421,7 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch mode",
+					"label": "2-State switch mode",
 					"value": 1
 				},
 				{
@@ -442,15 +442,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control the output loads of itself.",
+					"label": "Control the output loads of itself.",
 					"value": 1
 				},
 				{
-					"label": "control the other nodes",
+					"label": "Control the other nodes",
 					"value": 2
 				},
 				{
-					"label": "control the output of itself and others",
+					"label": "Control the output of itself and others",
 					"value": 3
 				}
 			]
@@ -484,7 +484,7 @@
 					"value": 0
 				},
 				{
-					"label": "Reset & Remove from Network",
+					"label": "Reset & remove from network",
 					"value": 1431655765
 				}
 			]

@@ -27,15 +27,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All Enabled",
+					"label": "All enabled",
 					"value": 0
 				},
 				{
-					"label": "Siren Only",
+					"label": "Siren only",
 					"value": 1
 				},
 				{
-					"label": "Strobe Only",
+					"label": "Strobe only",
 					"value": 2
 				}
 			]

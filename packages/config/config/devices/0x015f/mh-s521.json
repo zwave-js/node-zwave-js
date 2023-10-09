@@ -31,19 +31,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "forbid ALL ON, forbid ALL OFF",
+					"label": "Forbid all on, forbid all off",
 					"value": 0
 				},
 				{
-					"label": "forbid ALL ON, allow ALL OFF",
+					"label": "Forbid all on, allow all off",
 					"value": 1
 				},
 				{
-					"label": "allow ALL ON, forbid ALL OFF",
+					"label": "Allow all on, forbid all off",
 					"value": 2
 				},
 				{
-					"label": "allow ALL ON, allow ALL OFF",
+					"label": "Allow all on, allow all off",
 					"value": 255
 				}
 			]
@@ -64,7 +64,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "single click to switch on/off status",
+					"label": "Single click to switch on/off status",
 					"value": 0
 				},
 				{
@@ -76,11 +76,11 @@
 					"value": 2
 				},
 				{
-					"label": "hold >3s then key is on, and off once released",
+					"label": "Hold >3s then key is on, and off once released",
 					"value": 3
 				},
 				{
-					"label": "single click + hold >3s then key is on",
+					"label": "Single click + hold >3s then key is on",
 					"value": 4
 				}
 			]
@@ -127,11 +127,11 @@
 					"value": 1
 				},
 				{
-					"label": "only activate scene ID1 when key1's relay open",
+					"label": "Only activate scene ID1 when key1's relay open",
 					"value": 2
 				},
 				{
-					"label": "only activate scene ID1 when key1's relay closed",
+					"label": "Only activate scene ID1 when key1's relay closed",
 					"value": 3
 				}
 			]
@@ -166,15 +166,15 @@
 					"value": 0
 				},
 				{
-					"label": "always activate scene ID1",
+					"label": "Always activate scene ID1",
 					"value": 1
 				},
 				{
-					"label": "only activate scene ID1 when key2's relay open",
+					"label": "Only activate scene ID1 when key2's relay open",
 					"value": 2
 				},
 				{
-					"label": "nly activate scene ID1 when key2's relay closed",
+					"label": "Nly activate scene ID1 when key2's relay closed",
 					"value": 3
 				}
 			]
@@ -209,15 +209,15 @@
 					"value": 0
 				},
 				{
-					"label": "always activate scene ID1",
+					"label": "Always activate scene ID1",
 					"value": 1
 				},
 				{
-					"label": "only activate scene ID1 when key3's relay open",
+					"label": "Only activate scene ID1 when key3's relay open",
 					"value": 2
 				},
 				{
-					"label": "only activate scene ID1 when key3's relay closed",
+					"label": "Only activate scene ID1 when key3's relay closed",
 					"value": 3
 				}
 			]
@@ -296,7 +296,7 @@
 			"writeOnly": true,
 			"options": [
 				{
-					"label": "restore factory setting",
+					"label": "Restore factory setting",
 					"value": 85
 				}
 			]

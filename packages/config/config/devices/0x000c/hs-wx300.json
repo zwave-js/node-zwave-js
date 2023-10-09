@@ -152,11 +152,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "3 wire mode (Neutral, Line & Load)",
+					"label": "3 wire mode (Neutral, line & load)",
 					"value": 0
 				},
 				{
-					"label": "2 wire mode (Line & Load)",
+					"label": "2 wire mode (Line & load)",
 					"value": 1
 				}
 			]
@@ -185,7 +185,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top paddle turns on, Bottom paddle turns off",
+					"label": "Top paddle turns on; Bottom paddle turns off",
 					"value": 0
 				},
 				{

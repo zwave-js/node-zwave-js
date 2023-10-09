@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWPG-111",
-	"description": "FIBARO Wall Plug UK",
+	"description": "Fibaro Wall Plug UK",
 	"devices": [
 		{
 			"productType": "0x1801",
@@ -125,7 +125,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -143,7 +143,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -200,7 +200,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -219,7 +219,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -270,7 +270,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
@@ -309,15 +309,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "Active Power (Smooth)",
+					"label": "Active power (Smooth)",
 					"value": 1
 				},
 				{
-					"label": "Active Power (Steps)",
+					"label": "Active power (Steps)",
 					"value": 2
 				},
 				{
@@ -358,11 +358,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "Last Measured Load",
+					"label": "Last measured load",
 					"value": 1
 				},
 				{
@@ -403,7 +403,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "LED off",
 					"value": 0
 				},
 				{

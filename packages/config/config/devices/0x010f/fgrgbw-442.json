@@ -50,11 +50,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change",
+					"label": "Toggle switch: Switch state on every input change",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: closed – ON, opened – OFF",
+					"label": "Toggle switch: Closed – on, opened – off",
 					"value": 4
 				}
 			]
@@ -79,11 +79,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change",
+					"label": "Toggle switch: Switch state on every input change",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: closed – ON, opened – OFF",
+					"label": "Toggle switch: Closed – on, opened – off",
 					"value": 4
 				}
 			]
@@ -108,11 +108,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change",
+					"label": "Toggle switch: Switch state on every input change",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: closed – ON, opened – OFF",
+					"label": "Toggle switch: Closed – on, opened – off",
 					"value": 4
 				}
 			]
@@ -137,11 +137,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change",
+					"label": "Toggle switch: Switch state on every input change",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch:closed – ON, opened – OF",
+					"label": "Toggle switch:Closed – on, opened – of",
 					"value": 4
 				}
 			]
@@ -229,11 +229,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "RGBW mode: IN1‑OUT1, IN2‑OUT2, IN3‑OUT3, IN4‑OUT4",
+					"label": "RGBW mode: IN1-OUT1, IN2-OUT2, IN3-OUT3, IN4-OUT4",
 					"value": 0
 				},
 				{
-					"label": "HSB and White mode: IN1‑H, IN2‑S, IN3‑B, IN4‑White (OUT4)",
+					"label": "Hsb and white mode: IN1-H, IN2-S, IN3-B, IN4-White (OUT4)",
 					"value": 1
 				}
 			]
@@ -264,27 +264,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "sequence inactive",
+					"label": "Sequence inactive",
 					"value": 0
 				},
 				{
-					"label": "user-defined sequence 1",
+					"label": "User-Defined sequence 1",
 					"value": 1
 				},
 				{
-					"label": "user-defined sequence 2",
+					"label": "User-Defined sequence 2",
 					"value": 2
 				},
 				{
-					"label": "user-defined sequence 3",
+					"label": "User-Defined sequence 3",
 					"value": 3
 				},
 				{
-					"label": "user-defined sequence 4",
+					"label": "User-Defined sequence 4",
 					"value": 4
 				},
 				{
-					"label": "user-defined sequence 5",
+					"label": "User-Defined sequence 5",
 					"value": 5
 				},
 				{
@@ -304,7 +304,7 @@
 					"value": 9
 				},
 				{
-					"label": "Police (red-white-blue) sequence",
+					"label": "Police (Red-White-Blue) sequence",
 					"value": 10
 				}
 			]
@@ -359,7 +359,7 @@
 			"defaultValue": 600,
 			"options": [
 				{
-					"label": "infinite signalization",
+					"label": "Infinite signalization",
 					"value": 0
 				}
 			]

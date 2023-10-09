@@ -22,7 +22,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off. (default)",
+					"label": "Off.",
 					"value": 0
 				},
 				{
@@ -30,7 +30,7 @@
 					"value": 1
 				},
 				{
-					"label": "Cooling mode (not implemented)",
+					"label": "Cooling mode (Not implemented)",
 					"value": 2
 				},
 				{
@@ -47,7 +47,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "F-mode, floor sensor mode",
+					"label": "F-Mode, floor sensor mode",
 					"value": 0
 				},
 				{
@@ -68,7 +68,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "10K-NTC (default)",
+					"label": "10K-NTC",
 					"value": 0
 				},
 				{
@@ -190,7 +190,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Display setpoint temperature (default)",
+					"label": "Display setpoint temperature",
 					"value": 0
 				},
 				{

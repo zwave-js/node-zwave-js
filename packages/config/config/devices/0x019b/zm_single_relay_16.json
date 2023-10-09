@@ -105,11 +105,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "S2 Only",
+					"label": "S2 only",
 					"value": 0
 				},
 				{
-					"label": "S1 Only",
+					"label": "S1 only",
 					"value": 1
 				},
 				{

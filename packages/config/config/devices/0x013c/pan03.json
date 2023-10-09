@@ -72,20 +72,8 @@
 		},
 		{
 			"#": "6",
-			"label": "Manual On/Off mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable manual On/Off",
-					"value": 0
-				},
-				{
-					"label": "Enable manual On/Off",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Manual On/Off mode"
 		},
 		{
 			"#": "7",

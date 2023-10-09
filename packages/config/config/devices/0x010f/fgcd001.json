@@ -35,7 +35,7 @@
 					"value": 0
 				},
 				{
-					"label": "Tampering (opened casing)",
+					"label": "Tampering (Opened casing)",
 					"value": 1
 				},
 				{
@@ -61,7 +61,7 @@
 					"value": 0
 				},
 				{
-					"label": "Tampering (opened casing)",
+					"label": "Tampering (Opened casing)",
 					"value": 1
 				},
 				{
@@ -69,7 +69,7 @@
 					"value": 2
 				},
 				{
-					"label": "Tampering AND Exceeding the temperature",
+					"label": "Tampering and exceeding the temperature",
 					"value": 3
 				},
 				{
@@ -77,15 +77,15 @@
 					"value": 4
 				},
 				{
-					"label": "Tampering (opened casing) AND Lack of Z-Wave range",
+					"label": "Tampering (Opened casing) and lack of Z-Wave range",
 					"value": 5
 				},
 				{
-					"label": "Exceeding the temperature AND Lack of Z-Wave range",
+					"label": "Exceeding the temperature and lack of Z-Wave range",
 					"value": 6
 				},
 				{
-					"label": "Tampering AND Exceeding the temp AND Lack of range",
+					"label": "Tampering and exceeding the temp and lack of range",
 					"value": 7
 				}
 			]
@@ -103,7 +103,7 @@
 					"value": 0
 				},
 				{
-					"label": "Tampering (opened casing)",
+					"label": "Tampering (Opened casing)",
 					"value": 1
 				},
 				{
@@ -111,7 +111,7 @@
 					"value": 2
 				},
 				{
-					"label": "Tampering AND Exceeding the temperature",
+					"label": "Tampering and exceeding the temperature",
 					"value": 3
 				},
 				{
@@ -119,15 +119,15 @@
 					"value": 4
 				},
 				{
-					"label": "Tampering AND Lack of Z-Wave range",
+					"label": "Tampering and lack of Z-Wave range",
 					"value": 5
 				},
 				{
-					"label": "Exceeding the temperature AND Lack of Z-Wave range",
+					"label": "Exceeding the temperature and lack of Z-Wave range",
 					"value": 6
 				},
 				{
-					"label": "Tampering AND Exceeding temp AND Lack of range",
+					"label": "Tampering and exceeding temp and lack of range",
 					"value": 7
 				}
 			]
@@ -149,15 +149,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "BASIC ON",
+					"label": "Basic Set (On)",
 					"value": 1
 				},
 				{
-					"label": "BASIC OFF",
+					"label": "Basic Set (Off)",
 					"value": 2
 				},
 				{
-					"label": "BASIC ON & BASIC OFF",
+					"label": "Basic Set (On & off)",
 					"value": 3
 				}
 			]
@@ -178,7 +178,7 @@
 					"value": 1
 				},
 				{
-					"label": "Setting assoc device to last value or ON",
+					"label": "Setting assoc device to last value or on",
 					"value": 255
 				}
 			]

@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWPB-111",
-	"description": "FIBARO Wall Plug",
+	"description": "Fibaro Wall Plug",
 	"devices": [
 		{
 			"productType": "0x1701",
@@ -88,11 +88,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "function inactive",
+					"label": "Function inactive",
 					"value": 0
 				},
 				{
-					"label": "function active",
+					"label": "Function active",
 					"value": 1
 				}
 			]
@@ -126,15 +126,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Going Up",
+					"label": "Going up",
 					"value": 1
 				},
 				{
-					"label": "Going Down",
+					"label": "Going down",
 					"value": 2
 				},
 				{
-					"label": "Both Ways",
+					"label": "Both ways",
 					"value": 3
 				}
 			]
@@ -185,31 +185,31 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "general alarm",
+					"label": "General alarm",
 					"value": 1
 				},
 				{
-					"label": "smoke alarm",
+					"label": "Smoke alarm",
 					"value": 2
 				},
 				{
-					"label": "CO Alarm",
+					"label": "CO alarm",
 					"value": 4
 				},
 				{
-					"label": "CO2 Alarm",
+					"label": "CO2 alarm",
 					"value": 8
 				},
 				{
-					"label": "High Temp Alarm",
+					"label": "High temp alarm",
 					"value": 16
 				},
 				{
-					"label": "flood alarm",
+					"label": "Flood alarm",
 					"value": 32
 				},
 				{
-					"label": "all",
+					"label": "All",
 					"value": 63
 				}
 			]
@@ -224,15 +224,15 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "no reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "turn connected device on",
+					"label": "Turn connected device on",
 					"value": 1
 				},
 				{
-					"label": "turn connected device off",
+					"label": "Turn connected device off",
 					"value": 2
 				}
 			]
@@ -266,43 +266,43 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
-					"label": "color changes smoothly depending on active power",
+					"label": "Color changes smoothly depending on active power",
 					"value": 1
 				},
 				{
-					"label": "color changes in steps depending on active power",
+					"label": "Color changes in steps depending on active power",
 					"value": 2
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -316,7 +316,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
@@ -324,31 +324,31 @@
 					"value": 1
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -362,11 +362,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
-					"label": "no change in color",
+					"label": "No change in color",
 					"value": 1
 				},
 				{
@@ -374,31 +374,31 @@
 					"value": 2
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]

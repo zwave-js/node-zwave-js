@@ -61,7 +61,7 @@
 					"value": 1
 				},
 				{
-					"label": "On/off only",
+					"label": "On/Off only",
 					"value": 2
 				}
 			]
@@ -213,7 +213,7 @@
 					"value": 2
 				},
 				{
-					"label": "Switches S1/S2 - each control both dimming directions",
+					"label": "Switches S1/S2 - Each control both dimming directions",
 					"value": 3
 				},
 				{

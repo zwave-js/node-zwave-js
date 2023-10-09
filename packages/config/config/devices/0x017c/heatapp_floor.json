@@ -2,7 +2,7 @@
 	"manufacturer": "EbV",
 	"manufacturerId": "0x017c",
 	"label": "heatapp! floor",
-	"description": "8-channel Underfloor Heating Controller",
+	"description": "8-Channel Underfloor Heating Controller",
 	"devices": [
 		{
 			"productType": "0x0006",

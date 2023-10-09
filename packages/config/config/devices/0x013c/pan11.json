@@ -65,15 +65,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch Off",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 1
 				},
 				{
-					"label": "Switch On",
+					"label": "Switch on",
 					"value": 2
 				}
 			]
@@ -86,11 +86,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "SWITCH OFF commands received are ignored.",
+					"label": "Switch off commands received are ignored.",
 					"value": 0
 				},
 				{
-					"label": "SWITCH OFF commands received are honored.",
+					"label": "Switch off commands received are honored.",
 					"value": 1
 				}
 			]
@@ -107,7 +107,7 @@
 					"value": 1
 				},
 				{
-					"label": "LED off with load ON",
+					"label": "LED off with load on",
 					"value": 2
 				},
 				{
@@ -133,7 +133,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch Off",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -141,11 +141,11 @@
 					"value": 1
 				},
 				{
-					"label": "Switch Toggle",
+					"label": "Switch toggle",
 					"value": 2
 				},
 				{
-					"label": "Switch On",
+					"label": "Switch on",
 					"value": 3
 				}
 			]

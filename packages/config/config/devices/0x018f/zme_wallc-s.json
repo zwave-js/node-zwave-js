@@ -95,11 +95,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and dim (send Basic Set and switch multilevel)",
+					"label": "Switch on/off and dim (Send Basic Set and switch multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -119,7 +119,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -137,11 +137,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and dim (send Basic Set and switch multilevel)",
+					"label": "Switch on/off and dim (Send Basic Set and switch multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -161,7 +161,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -179,11 +179,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and dim (send Basic Set and switch multilevel)",
+					"label": "Switch on/off and dim (Send Basic Set and switch multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -203,7 +203,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -221,11 +221,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and dim (send Basic Set and switch multilevel)",
+					"label": "Switch on/off and dim (Send Basic Set and switch multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -245,7 +245,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]

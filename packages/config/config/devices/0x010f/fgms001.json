@@ -254,15 +254,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "BASIC ON and BASIC OFF",
+					"label": "On and off",
 					"value": 0
 				},
 				{
-					"label": "Only the BASIC ON",
+					"label": "Only on",
 					"value": 1
 				},
 				{
-					"label": "Only the BASIC OFF",
+					"label": "Only off",
 					"value": 2
 				}
 			]
@@ -277,15 +277,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "BASIC ON and BASIC OFF",
+					"label": "Basic on and basic off",
 					"value": 0
 				},
 				{
-					"label": "Only the BASIC ON",
+					"label": "Only the basic on",
 					"value": 1
 				},
 				{
-					"label": "Only the BASIC OFF",
+					"label": "Only the basic off",
 					"value": 2
 				}
 			]
@@ -409,19 +409,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Tamper Report/No Cancellation Report",
+					"label": "Tamper report/no cancellation report",
 					"value": 0
 				},
 				{
-					"label": "Tamper and Cancellation Report",
+					"label": "Tamper and cancellation report",
 					"value": 1
 				},
 				{
-					"label": "Tamper/No cancellation plus Orientation in space",
+					"label": "Tamper/No cancellation plus orientation in space",
 					"value": 2
 				},
 				{
-					"label": "Tamper/Cancellation plus Orientation in space",
+					"label": "Tamper/Cancellation plus orientation in space",
 					"value": 3
 				},
 				{
@@ -440,7 +440,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Only tamper (default)",
+					"label": "Only tamper (Default)",
 					"value": 0
 				},
 				{
@@ -701,71 +701,71 @@
 					"value": 9
 				},
 				{
-					"label": "Depends on the temperature (blink again when motion is detected)",
+					"label": "Depends on the temperature (Blink again when motion is detected)",
 					"value": 10
 				},
 				{
-					"label": "Flashlight mode (motion extends the flashlight)",
+					"label": "Flashlight mode (Motion extends the flashlight)",
 					"value": 11
 				},
 				{
-					"label": "White (blink again when motion is detected)",
+					"label": "White (Blink again when motion is detected)",
 					"value": 12
 				},
 				{
-					"label": "Red (blink again when motion is detected)",
+					"label": "Red (Blink again when motion is detected)",
 					"value": 13
 				},
 				{
-					"label": "Green (blink again when motion is detected)",
+					"label": "Green (Blink again when motion is detected)",
 					"value": 14
 				},
 				{
-					"label": "Blue (blink again when motion is detected)",
+					"label": "Blue (Blink again when motion is detected)",
 					"value": 15
 				},
 				{
-					"label": "Yellow (blink again when motion is detected)",
+					"label": "Yellow (Blink again when motion is detected)",
 					"value": 16
 				},
 				{
-					"label": "Cyan (blink again when motion is detected)",
+					"label": "Cyan (Blink again when motion is detected)",
 					"value": 17
 				},
 				{
-					"label": "Magenta (blink again when motion is detected)",
+					"label": "Magenta (Blink again when motion is detected)",
 					"value": 18
 				},
 				{
-					"label": "LED colour depends on the temperature (blink twice again when motion is detected)",
+					"label": "LED colour depends on the temperature (Blink twice again when motion is detected)",
 					"value": 19
 				},
 				{
-					"label": "White (blink twice again when motion is detected)",
+					"label": "White (Blink twice again when motion is detected)",
 					"value": 20
 				},
 				{
-					"label": "Red (blink twice again when motion is detected)",
+					"label": "Red (Blink twice again when motion is detected)",
 					"value": 21
 				},
 				{
-					"label": "Green (blink twice again when motion is detected)",
+					"label": "Green (Blink twice again when motion is detected)",
 					"value": 22
 				},
 				{
-					"label": "Blue (blink twice again when motion is detected)",
+					"label": "Blue (Blink twice again when motion is detected)",
 					"value": 23
 				},
 				{
-					"label": "Yellow (blink twice again when motion is detected)",
+					"label": "Yellow (Blink twice again when motion is detected)",
 					"value": 24
 				},
 				{
-					"label": "Cyan (blink twice again when motion is detected)",
+					"label": "Cyan (Blink twice again when motion is detected)",
 					"value": 25
 				},
 				{
-					"label": "Magenta (blink twice again when motion is detected)",
+					"label": "Magenta (Blink twice again when motion is detected)",
 					"value": 26
 				}
 			]

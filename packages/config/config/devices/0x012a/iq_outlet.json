@@ -2,7 +2,7 @@
 	"manufacturer": "Qolsys",
 	"manufacturerId": "0x012a",
 	"label": "IQ Outlet",
-	"description": "Smart Plug-in Switch",
+	"description": "Smart Plug-In Switch",
 	"devices": [
 		{
 			"productType": "0x4744",
@@ -42,7 +42,7 @@
 					"value": 1
 				},
 				{
-					"label": "Always Off",
+					"label": "Always off",
 					"value": 2
 				}
 			]

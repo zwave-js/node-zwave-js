@@ -51,11 +51,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normal install - up is on",
+					"label": "Normal install - Up is on",
 					"value": 0
 				},
 				{
-					"label": "invert switch",
+					"label": "Invert switch",
 					"value": 1
 				}
 			]

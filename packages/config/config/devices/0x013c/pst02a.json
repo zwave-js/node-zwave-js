@@ -25,11 +25,11 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Turn light OFF",
+					"label": "Turn light off",
 					"value": 0
 				},
 				{
-					"label": "Turn light ON",
+					"label": "Turn light on",
 					"value": 255
 				}
 			]
@@ -43,7 +43,7 @@
 			"defaultValue": 70,
 			"options": [
 				{
-					"label": "Disable Motion Detection",
+					"label": "Disable motion detection",
 					"value": 0
 				}
 			]
@@ -58,7 +58,7 @@
 			"defaultValue": 100,
 			"options": [
 				{
-					"label": "Disable Illumination Detection",
+					"label": "Disable illumination detection",
 					"value": 0
 				}
 			]
@@ -207,11 +207,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Same Room",
+					"label": "Same room",
 					"value": 0
 				},
 				{
-					"label": "Different Room",
+					"label": "Different room",
 					"value": 1
 				}
 			]

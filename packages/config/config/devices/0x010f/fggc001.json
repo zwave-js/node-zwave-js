@@ -31,7 +31,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default Orientation",
+					"label": "Default orientation",
 					"value": 0
 				},
 				{
@@ -111,17 +111,14 @@
 			"label": "Powering mode update interval",
 			"description": "Check if the USB pwr supply is connected, update pwr mode",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 1080,
 			"defaultValue": 4,
 			"options": [
 				{
-					"label": "Powering mode is not updated",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Time interval (in minutes)",
-					"value": 1
 				}
 			]
 		},
@@ -176,19 +173,19 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Scenes for flick UP gesture enabled",
+					"label": "Scenes for flick up gesture enabled",
 					"value": 1
 				},
 				{
-					"label": "Scenes for flick DOWN gesture enabled",
+					"label": "Scenes for flick down gesture enabled",
 					"value": 2
 				},
 				{
-					"label": "Scenes for flick LEFT gesture enabled",
+					"label": "Scenes for flick left gesture enabled",
 					"value": 4
 				},
 				{
-					"label": "Scenes for flick RIGHT gesture enabled",
+					"label": "Scenes for flick right gesture enabled",
 					"value": 8
 				},
 				{
@@ -215,23 +212,23 @@
 			"defaultValue": 31,
 			"options": [
 				{
-					"label": "2nd group ”Flick UP” sent as secure",
+					"label": "2nd group ”Flick up” sent as secure",
 					"value": 1
 				},
 				{
-					"label": "3rd group ”Flick DOWN” sent as secure",
+					"label": "3rd group ”Flick down” sent as secure",
 					"value": 2
 				},
 				{
-					"label": "4th group \"Flick LEFT” sent as secure",
+					"label": "4th group \"Flick left” sent as secure",
 					"value": 4
 				},
 				{
-					"label": "5th group \"Flick RIGHT” sent as secure",
+					"label": "5th group \"Flick right” sent as secure",
 					"value": 8
 				},
 				{
-					"label": "6th group \"Circular AirWheel” sent as secure",
+					"label": "6th group \"Circular airWheel” sent as secure",
 					"value": 16
 				}
 			]
@@ -246,19 +243,19 @@
 			"defaultValue": 15,
 			"options": [
 				{
-					"label": "Toggle Mode enabled for 2nd association group",
+					"label": "Toggle mode enabled for 2nd association group",
 					"value": 1
 				},
 				{
-					"label": "Toggle Mode enabled for 3rd association group",
+					"label": "Toggle mode enabled for 3rd association group",
 					"value": 2
 				},
 				{
-					"label": "Toggle Mode enabled for 4th association group",
+					"label": "Toggle mode enabled for 4th association group",
 					"value": 4
 				},
 				{
-					"label": "Toggle Mode enabled for 5th association group",
+					"label": "Toggle mode enabled for 5th association group",
 					"value": 8
 				}
 			]

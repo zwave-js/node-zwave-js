@@ -98,7 +98,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Binary report",
+					"label": "Send Binary Sensor Report",
 					"value": 16
 				},
 				{
@@ -106,7 +106,7 @@
 					"value": 256
 				},
 				{
-					"label": "Send Binary report and Basic Set",
+					"label": "Send Binary Sensor Report and Basic Set",
 					"value": 272
 				}
 			]

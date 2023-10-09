@@ -54,11 +54,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "default",
+					"label": "Default",
 					"value": 0
 				},
 				{
-					"label": "reversed",
+					"label": "Reversed",
 					"value": 1
 				}
 			]
@@ -71,11 +71,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "default",
+					"label": "Default",
 					"value": 0
 				},
 				{
-					"label": "reversed",
+					"label": "Reversed",
 					"value": 1
 				}
 			]
@@ -209,15 +209,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "device is not calibrated",
+					"label": "Device is not calibrated",
 					"value": 0
 				},
 				{
-					"label": "device is calibrated",
+					"label": "Device is calibrated",
 					"value": 1
 				},
 				{
-					"label": "force device calibration",
+					"label": "Force device calibration",
 					"value": 2
 				}
 			]
@@ -230,7 +230,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "roller blind",
+					"label": "Roller blind",
 					"value": 1
 				},
 				{
@@ -238,19 +238,19 @@
 					"value": 2
 				},
 				{
-					"label": "gate w/o positioning",
+					"label": "Gate w/o positioning",
 					"value": 3
 				},
 				{
-					"label": "gate with positioning",
+					"label": "Gate with positioning",
 					"value": 4
 				},
 				{
-					"label": "roller blind with built-in driver",
+					"label": "Roller blind with built-in driver",
 					"value": 5
 				},
 				{
-					"label": "roller blind with built-in driver (impulse)",
+					"label": "Roller blind with built-in driver (Impulse)",
 					"value": 6
 				}
 			]
@@ -276,11 +276,11 @@
 					"value": 0
 				},
 				{
-					"label": "Controller, Momentary Switch, Limit Switch",
+					"label": "Controller, momentary switch, limit switch",
 					"value": 1
 				},
 				{
-					"label": "Controller, both Switches, Multilevel Stop",
+					"label": "Controller, both switches, multilevel stop",
 					"value": 2
 				}
 			]

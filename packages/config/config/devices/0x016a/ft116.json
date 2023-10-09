@@ -88,7 +88,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
@@ -100,7 +100,7 @@
 					"value": 2
 				},
 				{
-					"label": "Send Hail CC (External Switch)",
+					"label": "Send Hail CC (External switch)",
 					"value": 3
 				}
 			]
@@ -114,11 +114,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Send Basic CC Set",
 					"value": 1
 				}
 			]
@@ -132,11 +132,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Send Basic CC Set",
 					"value": 1
 				}
 			]
@@ -149,7 +149,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Follows Switch Status",
+					"label": "LED follows switch status",
 					"value": 0
 				},
 				{
@@ -157,7 +157,7 @@
 					"value": 1
 				},
 				{
-					"label": "Night light mode. The LED will remain ON state",
+					"label": "Night light mode. The LED will remain on state",
 					"value": 2
 				}
 			]
@@ -359,7 +359,7 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch mode",
+					"label": "2-State switch mode",
 					"value": 1
 				},
 				{
@@ -384,7 +384,7 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch mode",
+					"label": "2-State switch mode",
 					"value": 1
 				},
 				{
@@ -405,15 +405,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control the output loads of itself",
+					"label": "Control the output loads of itself",
 					"value": 1
 				},
 				{
-					"label": "control the other nodes",
+					"label": "Control the other nodes",
 					"value": 2
 				},
 				{
-					"label": "control the output loads of itself and other nodes",
+					"label": "Control the output loads of itself and other nodes",
 					"value": 3
 				}
 			]

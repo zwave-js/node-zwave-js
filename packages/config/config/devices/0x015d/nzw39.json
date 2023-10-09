@@ -41,11 +41,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
@@ -53,7 +53,7 @@
 					"value": 2
 				},
 				{
-					"label": "Always ON",
+					"label": "Always on",
 					"value": 3
 				}
 			]

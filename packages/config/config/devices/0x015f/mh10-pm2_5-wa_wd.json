@@ -30,11 +30,11 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Report Disabled",
+					"label": "Report disabled",
 					"value": 0
 				},
 				{
-					"label": "Report every whole 1μg/m³ change (default)",
+					"label": "Report every whole 1μg/m³ change",
 					"value": 10
 				}
 			]
@@ -51,7 +51,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Report Disabled",
+					"label": "Report disabled",
 					"value": 0
 				},
 				{
@@ -81,7 +81,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{

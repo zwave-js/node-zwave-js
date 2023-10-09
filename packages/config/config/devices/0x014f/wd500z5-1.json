@@ -2,7 +2,7 @@
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "WD500Z5-1",
-	"description": "An In-wall Lighting Dimmer",
+	"description": "An In-Wall Lighting Dimmer",
 	"devices": [
 		{
 			"productType": "0x5744",

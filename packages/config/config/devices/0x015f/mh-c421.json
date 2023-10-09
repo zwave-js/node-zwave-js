@@ -137,7 +137,7 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle (2-state switches)",
+					"label": "Toggle (2-State switches)",
 					"value": 1
 				}
 			]
@@ -179,7 +179,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{

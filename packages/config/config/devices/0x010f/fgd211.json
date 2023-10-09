@@ -67,19 +67,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON active / ALL OFF active",
+					"label": "All on active / All off active",
 					"value": 255
 				},
 				{
-					"label": "ALL ON disabled / ALL OFF disabled",
+					"label": "All on disabled / All off disabled",
 					"value": 0
 				},
 				{
-					"label": "ALL ON disabled / ALL OFF active",
+					"label": "All on disabled / All off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active / ALL OFF disabled",
+					"label": "All on active / All off disabled",
 					"value": 2
 				}
 			]
@@ -92,7 +92,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send On/Off commands",
+					"label": "Send on/off commands",
 					"value": 0
 				},
 				{
@@ -211,11 +211,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable input (button)",
+					"label": "Monostable input (Button)",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable input (switch)",
+					"label": "Bistable input (Switch)",
 					"value": 1
 				}
 			]
@@ -230,11 +230,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable input (button)",
+					"label": "Monostable input (Button)",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable input (switch)",
+					"label": "Bistable input (Switch)",
 					"value": 1
 				},
 				{
@@ -323,7 +323,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Change [On-Off] bi-stable keys",
+			"label": "Change [On-Off] bistable keys",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -355,19 +355,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DEACTIVATION - no response to alarm frames",
+					"label": "Deactivation - No response to alarm frames",
 					"value": 0
 				},
 				{
-					"label": "Alarm relay ON",
+					"label": "Alarm relay on",
 					"value": 1
 				},
 				{
-					"label": "Alarm relay OFF",
+					"label": "Alarm relay off",
 					"value": 2
 				},
 				{
-					"label": "ALARM FLASHING",
+					"label": "Alarm flashing",
 					"value": 3
 				}
 			]

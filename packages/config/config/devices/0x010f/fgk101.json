@@ -94,11 +94,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED turned Off",
+					"label": "LED turned off",
 					"value": 0
 				},
 				{
-					"label": "LED turned On",
+					"label": "LED turned on",
 					"value": 1
 				},
 				{
@@ -192,7 +192,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "General purpose alarm (door/window)",
+					"label": "General purpose alarm (Door/Window)",
 					"value": 0
 				},
 				{
@@ -409,7 +409,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "General purpose alarm (door/window)",
+					"label": "General purpose alarm (Door/Window)",
 					"value": 0
 				},
 				{

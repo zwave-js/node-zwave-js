@@ -70,21 +70,9 @@
 		},
 		{
 			"#": "7",
-			"label": "Disable battery alarm",
-			"description": "Disable battery alarm0 = Battery Alarm enable,1 = Battery Alarm disable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Battery Alarm enable",
-					"value": 0
-				},
-				{
-					"label": "Battery Alarm disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Battery Alarm",
+			"defaultValue": 0
 		},
 		{
 			"#": "8",

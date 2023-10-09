@@ -129,11 +129,11 @@
 					"value": 0
 				},
 				{
-					"label": "Vacation Mode",
+					"label": "Vacation mode",
 					"value": 1
 				},
 				{
-					"label": "Privacy Mode",
+					"label": "Privacy mode",
 					"value": 2
 				}
 			]

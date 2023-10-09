@@ -146,11 +146,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Multilevel report; basic report for long press with relay enabled",
+					"label": "Multilevel report; Basic Report for long press with relay enabled",
 					"value": 0
 				},
 				{
-					"label": "Multilevel report; basic report for long press with relay disabled",
+					"label": "Multilevel report; Basic Report for long press with relay disabled",
 					"value": 1
 				},
 				{

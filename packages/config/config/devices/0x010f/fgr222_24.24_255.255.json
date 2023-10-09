@@ -58,11 +58,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Blind position using Z-Wave Command",
+					"label": "Blind position using Z-Wave command",
 					"value": 0
 				},
 				{
-					"label": "Blind position via Fibar Command",
+					"label": "Blind position via Fibaro command",
 					"value": 1
 				}
 			]
@@ -75,23 +75,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Roller Blind Mode, without positioning",
+					"label": "Roller blind mode, without positioning",
 					"value": 0
 				},
 				{
-					"label": "Roller Blind Mode, with positioning",
+					"label": "Roller blind mode, with positioning",
 					"value": 1
 				},
 				{
-					"label": "Venetian Blind Mode, with positioning",
+					"label": "Venetian blind mode, with positioning",
 					"value": 2
 				},
 				{
-					"label": "Gate Mode, without positioning",
+					"label": "Gate mode, without positioning",
 					"value": 3
 				},
 				{
-					"label": "Gate Mode, with positioning",
+					"label": "Gate mode, with positioning",
 					"value": 4
 				}
 			]
@@ -115,15 +115,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "only in case of the main controller operation",
+					"label": "Only in case of the main controller operation",
 					"value": 0
 				},
 				{
-					"label": "default - controller+switchlimit",
+					"label": "Default - Controller+switchlimit",
 					"value": 1
 				},
 				{
-					"label": "like 1 + STOP control frame",
+					"label": "Like 1 + stop control frame",
 					"value": 2
 				}
 			]
@@ -210,11 +210,11 @@
 					"value": 0
 				},
 				{
-					"label": "Open Blind",
+					"label": "Open blind",
 					"value": 1
 				},
 				{
-					"label": "Close Blind",
+					"label": "Close blind",
 					"value": 2
 				}
 			]
@@ -231,11 +231,11 @@
 					"value": 0
 				},
 				{
-					"label": "Open Blind",
+					"label": "Open blind",
 					"value": 1
 				},
 				{
-					"label": "Close Blind",
+					"label": "Close blind",
 					"value": 2
 				}
 			]
@@ -252,11 +252,11 @@
 					"value": 0
 				},
 				{
-					"label": "Open Blind",
+					"label": "Open blind",
 					"value": 1
 				},
 				{
-					"label": "Close Blind",
+					"label": "Close blind",
 					"value": 2
 				}
 			]
@@ -273,11 +273,11 @@
 					"value": 0
 				},
 				{
-					"label": "Open Blind",
+					"label": "Open blind",
 					"value": 1
 				},
 				{
-					"label": "Close Blind",
+					"label": "Close blind",
 					"value": 2
 				}
 			]
@@ -356,11 +356,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Associations Active",
+					"label": "Associations active",
 					"value": 0
 				},
 				{
-					"label": "Scenes Active",
+					"label": "Scenes active",
 					"value": 1
 				}
 			]

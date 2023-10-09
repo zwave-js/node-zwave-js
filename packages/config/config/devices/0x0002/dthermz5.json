@@ -65,46 +65,19 @@
 		},
 		{
 			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Set-point control function",
-			"description": "0=Disabled 1=Enabled",
-			"valueSize": 1,
-			"unit": "int",
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Temporarily override scheduler",
-			"description": "0=Disabled 1=Enabled",
-			"valueSize": 1,
-			"unit": "int",
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
 			"label": "Set-point type in Thermostat_Setpoint_Reports",
-			"description": "1=Heating 2=Cooling 10=Auto Changeover",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

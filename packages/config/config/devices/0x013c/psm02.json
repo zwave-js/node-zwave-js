@@ -222,11 +222,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Same Room",
+					"label": "Same room",
 					"value": 0
 				},
 				{
-					"label": "Different Room",
+					"label": "Different room",
 					"value": 1
 				}
 			]

@@ -78,15 +78,15 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
-					"label": "Cycle ON/OFF",
+					"label": "Cycle on/off",
 					"value": 3
 				}
 			]
@@ -198,27 +198,27 @@
 					"value": 0
 				},
 				{
-					"label": "Turn devices ON when power below DOWN",
+					"label": "Turn devices on when power below down",
 					"value": 1
 				},
 				{
-					"label": "Turn devices OFF when power below DOWN",
+					"label": "Turn devices off when power below down",
 					"value": 2
 				},
 				{
-					"label": "Turn devices ON when power above UP",
+					"label": "Turn devices on when power above up",
 					"value": 3
 				},
 				{
-					"label": "Turn devices OFF when power above UP",
+					"label": "Turn devices off when power above up",
 					"value": 4
 				},
 				{
-					"label": "Turn devices ON when power below DOWN and off ...",
+					"label": "Turn devices on when power below down and off ...",
 					"value": 5
 				},
 				{
-					"label": "Turn devices OFF when power below DOWN ...",
+					"label": "Turn devices off when power below down ...",
 					"value": 6
 				}
 			]
@@ -339,7 +339,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED flashes RED BLUE WHITE",
+					"label": "LED flashes red blue white",
 					"value": 1
 				},
 				{

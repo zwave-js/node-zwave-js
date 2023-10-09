@@ -88,11 +88,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don't Send Report",
+					"label": "Don't send report",
 					"value": 0
 				},
 				{
-					"label": "Send Report",
+					"label": "Send report",
 					"value": 1
 				}
 			]
@@ -123,7 +123,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Report Notification",
+					"label": "Notification Report",
 					"value": 0
 				},
 				{

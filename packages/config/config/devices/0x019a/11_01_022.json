@@ -30,15 +30,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary sensor report & Notification report (Access Control)",
+					"label": "Binary Sensor Report & Notification Report (Access control)",
 					"value": 0
 				},
 				{
-					"label": "Notification report (Access Control)",
+					"label": "Notification Report (Access control)",
 					"value": 1
 				},
 				{
-					"label": "Notification report (Home Security)",
+					"label": "Notification Report (Home security)",
 					"value": 2
 				}
 			]
@@ -68,7 +68,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Events with S2 Encapsulation only",
+					"label": "Events with S2 encapsulation only",
 					"value": 0
 				},
 				{
@@ -130,11 +130,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Standard Security",
+					"label": "Standard",
 					"value": 0
 				},
 				{
-					"label": "High Security",
+					"label": "High",
 					"value": 1
 				}
 			]

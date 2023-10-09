@@ -29,15 +29,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary Sensor report",
+					"label": "Binary Sensor Report",
 					"value": 0
 				},
 				{
-					"label": "Notification report",
+					"label": "Notification Report",
 					"value": 1
 				},
 				{
-					"label": "Basic report",
+					"label": "Basic Report",
 					"value": 2
 				}
 			]
