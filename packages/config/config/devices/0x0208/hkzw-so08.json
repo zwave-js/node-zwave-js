@@ -100,9 +100,10 @@
 		{
 			"#": "171",
 			"label": "Power (Watts) Report Frequency",
+			"description": "Minimum value 3600, if not disabled",
 			"valueSize": 4,
 			"unit": "Seconds",
-			"minValue": 3600,
+			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 3600,
 			"options": [
@@ -115,9 +116,10 @@
 		{
 			"#": "172",
 			"label": "Energy (KWH) Report Frequency",
+			"description": "Minimum value 3600, if not disabled",
 			"valueSize": 4,
 			"unit": "Seconds",
-			"minValue": 3600,
+			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
 			"options": [
@@ -130,9 +132,10 @@
 		{
 			"#": "173",
 			"label": "Voltage Report Frequency",
+			"description": "Minimum value 3600, if not disabled",
 			"valueSize": 4,
 			"unit": "Seconds",
-			"minValue": 3600,
+			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
 			"options": [
@@ -145,9 +148,10 @@
 		{
 			"#": "174",
 			"label": "Electric Current Report Frequency",
+			"description": "Minimum value 3600, if not disabled",
 			"valueSize": 4,
 			"unit": "Seconds",
-			"minValue": 3600,
+			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
 			"options": [
