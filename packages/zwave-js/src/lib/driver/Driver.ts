@@ -249,7 +249,9 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		response: 10000,
+		// Ideally we'd want to have this as low as possible, but some
+		// 500 series controllers can take upwards of 10 seconds to respond sometimes.
+		response: 30000,
 		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
@@ -297,9 +299,9 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.response < 500 || options.timeouts.response > 20000) {
+	if (options.timeouts.response < 500 || options.timeouts.response > 60000) {
 		throw new ZWaveError(
-			`The Response timeout must be between 500 and 20000 milliseconds!`,
+			`The Response timeout must be between 500 and 60000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
