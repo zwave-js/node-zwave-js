@@ -1,0 +1,176 @@
+{
+	"manufacturer": "Hank",
+	"manufacturerId": "0x0208",
+	"label": "HKZW-SO08",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0019"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Overload Protection",
+			"description": "If current exceeds 11.5A over 5 seconds, relay will turn off.",
+			"defaultValue": 1
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
+		},
+		{
+			"#": "24",
+			"label": "Notification on State Change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Report",
+					"value": 1
+				},
+				{
+					"label": "Send Basic report only if not changed by Z-WAVE Command",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "27",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Indicator Mode",
+			"options": [
+				{
+					"label": "LED on for 5 seconds, then off",
+					"value": 0
+				},
+				{
+					"label": "LED same as Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "151",
+			"label": "Threshold of Power Report",
+			"valueSize": 2,
+			"unit": "Watts",
+			"minValue": 0,
+			"maxValue": 200,
+			"defaultValue": 50,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "152",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Percentage Threshold of Power Report",
+			"unit": "%",
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "171",
+			"label": "Power (Watts) Report Frequency",
+			"valueSize": 4,
+			"unit": "Seconds",
+			"minValue": 3600,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "172",
+			"label": "Energy (KWH) Report Frequency",
+			"valueSize": 4,
+			"unit": "Seconds",
+			"minValue": 3600,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "173",
+			"label": "Voltage Report Frequency",
+			"valueSize": 4,
+			"unit": "Seconds",
+			"minValue": 3600,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "174",
+			"label": "Electric Current Report Frequency",
+			"valueSize": 4,
+			"unit": "Seconds",
+			"minValue": 3600,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "254",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/disable the configuration command",
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		}
+	]
+}
