@@ -1,12 +1,65 @@
 import { type AST } from "jsonc-eslint-parser";
-import { type JSONCRule } from "../utils";
+import {
+	type JSONCRule,
+	insertAfterJSONProperty,
+	insertBeforeJSONProperty,
+} from "../utils";
+
+// TODO: Title Case param labels, forbid . at the end of label and options, forbid The at the beginning of label, Avoid Enable/Disable in param labels
+// Avoid default in option labels, forbid numbers at the start of option labels (except units)
+// Sensor Binary -> Binary Sensor
 
 const ROOT = "Program > JSONExpressionStatement > JSONObjectExpression";
 const CONFIG_PARAM =
 	"JSONProperty[key.value='paramInformation'] > JSONArrayExpression > JSONObjectExpression";
+const CONFIG_OPTIONS = `${CONFIG_PARAM} > JSONProperty[key.value='options']`;
+const CONFIG_OPTION =
+	`${CONFIG_OPTIONS} > JSONArrayExpression > JSONObjectExpression`;
 
 function isSurroundedByWhitespace(str: string) {
 	return /^\s/.test(str) || /\s$/.test(str);
+}
+
+const wordSeparators = new Set([
+	"-",
+	"/",
+	".",
+	",",
+	";",
+	":",
+	"(",
+	")",
+	" ",
+]);
+
+interface Word {
+	word: string;
+	suffix: string;
+}
+
+function joinWords(words: Word[]): string {
+	return words.map((w) => w.word + w.suffix).join("");
+}
+
+function isEndOfSentence(suffix: string, strict: boolean): boolean {
+	if (strict) {
+		return suffix.trim() === ".";
+	}
+	if (suffix === " - " || suffix === " / ") return true;
+	suffix = suffix.trim();
+	return suffix === "."
+		|| suffix === ":"
+		|| suffix === ";"
+		// Treat everything inside (...) as a sentence
+		|| suffix.endsWith("(");
+}
+
+function isHyphenatedWord(str: string): boolean {
+	return str.includes("-");
+}
+
+function isCombinedWord(str: string): boolean {
+	return str.includes("/");
 }
 
 const titleCaseExceptions = [
@@ -22,12 +75,79 @@ const titleCaseExceptions = [
 	"kW",
 	"kWh",
 	"RFID",
+	"LEDs",
+];
+
+function combinations(...fragments: string[][]): string[] {
+	// Generate all combinations of all fragments
+	const ret: string[] = [];
+	const recurse = (i: number, current: string) => {
+		if (i === fragments.length) {
+			ret.push(current);
+			return;
+		}
+		for (const fragment of fragments[i]) {
+			recurse(
+				i + 1,
+				current + ((current && fragment) ? " " : "") + fragment,
+			);
+		}
+	};
+	recurse(0, "");
+	return ret;
+}
+
+const fixedMultiWordNames = combinations(
+	[
+		"Basic",
+		"Multilevel Switch",
+		"Notification",
+		"Binary Sensor",
+		"Hail",
+		"Configuration",
+		"Barrier",
+		"Thermostat Setpoint",
+		"Thermostat Mode",
+		"Central Scene",
+		"Scene Activation",
+		"Meter",
+	],
+	["", "CC"],
+	["", "Set", "Report", "Set/Get", "Get/Set", "Get"],
+)
+	.filter((w) => w.includes(" "))
+	.sort((a, b) => {
+		// These need to be ordered from maximum number of words to minimum number of words so the most specific ones match first
+		const numWordsA = a.split(" ").length;
+		const numWordsB = b.split(" ").length;
+		return numWordsB - numWordsA;
+	});
+
+// Names are always written the same way, whether they appear at the beginning of a sentence or not
+const fixedNames = [
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+	"Sunday",
 	"Z-Wave",
+	"Fibaro",
+	...fixedMultiWordNames,
 ];
 
 const sentenceCaseIgnored: (RegExp)[] = [
 	// emphasis:
 	/^NOT$/,
+	// Units:
+	/^\d+(\.\d+)?°?[smCF]$/,
+	/^°[CF]$/,
+	// Common abbreviations:
+	/^N[CO]$/,
+	/^CCW$/,
+	// Device labels
+	/^[\w\/-]+\d+/,
 ];
 
 const titleCaseIgnored: RegExp[] = [
@@ -39,116 +159,245 @@ const titleCaseIgnored: RegExp[] = [
 
 const alwaysUppercase: RegExp[] = [
 	/^\d+\w$/i,
+	/^LED$/i,
+	/^CFL$/i,
+	/^RFID$/i,
+	/^RGBW?$/i,
+	/^NTC?$/i,
+	/^CO2?$/i,
+	/^A[CV]$/i,
+	/^IR$/i,
+	/^USB$/i,
+	/^MOSFET$/i,
+	/^PWM$/i,
+	/^VSP$/i,
+	/^PIR$/i,
+	/^OK$/i,
+];
+
+const alwaysLowercase: RegExp[] = [
+	/^\d+-in-\d+$/i,
 ];
 
 // TODO: Additional fixes:
 // Plug-In, In-Wall, 3-Way, 6-Channel
 // remove Z-Wave and all its variants
-// Title-Case hyphenated words
 
-function isTitleCase(str: string) {
-	const words = str.split(" ");
-	return words.every((word, i) => {
-		if (word.length === 0) return true;
-		if (i > 0) {
-			// Exceptions don't apply for the first word
-			const exception = titleCaseExceptions.find(
-				(ex) => ex.toLowerCase() === word.toLowerCase(),
-			);
-			if (exception) return word === exception;
-		}
-		if (titleCaseIgnored.some((re) => re.test(word))) return true;
-		if (alwaysUppercase.some((re) => re.test(word))) {
-			return word === word.toUpperCase();
-		}
+const splitIntoWordsCache = new Map<string, Word[]>();
 
-		return word[0] === word[0].toUpperCase();
-	});
+function splitIntoWords(str: string): Word[] {
+	if (splitIntoWordsCache.has(str)) return splitIntoWordsCache.get(str)!;
+
+	const ret: Word[] = [];
+	let currentWord = "";
+	let currentSuffix = "";
+	for (let i = 0; i < str.length; i++) {
+		const char = str[i];
+		if (wordSeparators.has(char)) {
+			currentSuffix += char;
+		} else {
+			// This is part of a word
+			if (currentSuffix.length > 0) {
+				// The previous word was still collecting the suffix. Finish it.
+				ret.push({
+					word: currentWord,
+					suffix: currentSuffix,
+				});
+				currentWord = "";
+				currentSuffix = "";
+			}
+			currentWord += char;
+		}
+	}
+	// Collect the remainder
+	if (currentWord.length > 0) {
+		ret.push({
+			word: currentWord,
+			suffix: currentSuffix,
+		});
+	}
+
+	// We might have split a bit too much, so merge some words back together:
+	// Hyphenated words: Foo-Bar
+	// Combined words: Foo/Bar
+
+	for (let i = ret.length - 2; i >= 0; i--) {
+		if (ret[i].suffix === "-" || ret[i].suffix === "/") {
+			ret.splice(i, 2, {
+				word: ret[i].word + ret[i].suffix + ret[i + 1].word,
+				suffix: ret[i + 1].suffix,
+			});
+		}
+	}
+
+	// Multi-word names: Basic CC Set, Multilevel Switch Report, ...
+	// TODO: If performance becomes an issue due to the number of combinations look at this nested loop again.
+	// For now, caching is good enough.
+	for (const multiWordName of fixedMultiWordNames) {
+		const wordParts = multiWordName.split(" ").map((w) => w.toLowerCase());
+		const numWords = wordParts.length;
+		outer: for (let i = 0; i <= ret.length - numWords; i++) {
+			for (let n = 0; n < numWords; n++) {
+				// Does the current word match?
+				if (ret[i + n].word.toLowerCase() !== wordParts[n]) {
+					continue outer;
+				}
+				// Is there a space between the words?
+				if (n < numWords - 1 && ret[i + n].suffix !== " ") {
+					continue outer;
+				}
+
+				if (n === numWords - 1) {
+					// All words match
+					ret.splice(i, numWords, {
+						word: multiWordName,
+						suffix: ret[i + numWords - 1].suffix,
+					});
+				}
+			}
+		}
+	}
+
+	splitIntoWordsCache.set(str, ret);
+	return ret;
 }
+
+function titleCaseWord(
+	word: string,
+	isFirstWord: boolean,
+	ignoreExceptions: boolean = false,
+): string {
+	if (word.length === 0) return word;
+	// Ignore COMMAND_CLASS_NAMES
+	if (word.includes("_")) return word;
+
+	const lowercase = word.toLowerCase();
+	const uppercase = word.toUpperCase();
+
+	// Names are always written the same
+	{
+		const fixed = fixedNames.find((n) => n.toLowerCase() === lowercase);
+		if (fixed) return fixed;
+	}
+	if (!isFirstWord && !ignoreExceptions) {
+		// Exceptions don't apply for the first word
+		const exception = titleCaseExceptions.find(
+			(ex) => ex.toLowerCase() === lowercase,
+		);
+		if (exception) return exception;
+	}
+	if (titleCaseIgnored.some((re) => re.test(word))) return word;
+	if (alwaysUppercase.some((re) => re.test(word))) {
+		return uppercase;
+	}
+	if (alwaysLowercase.some((re) => re.test(word))) {
+		return lowercase;
+	}
+	if (isHyphenatedWord(word)) {
+		return word
+			.split("-")
+			.map((w) => titleCaseWord(w, isFirstWord, true))
+			.join("-");
+	}
+	// Title Case the rest
+	return word[0].toUpperCase() + word.slice(1);
+}
+
+const titleCaseCache = new Map<string, string>();
 
 function toTitleCase(str: string) {
-	const words = str.split(" ");
-	return words.map((word, i) => {
-		if (word.length === 0) return word;
-		// Return some exceptions as they are defined
-		if (i > 0) {
-			// Exceptions don't apply for the first word
-			const exception = titleCaseExceptions.find(
-				(ex) => ex.toLowerCase() === word.toLowerCase(),
-			);
-			if (exception) return exception;
-		}
-		if (titleCaseIgnored.some((re) => re.test(word))) return word;
-		if (alwaysUppercase.some((re) => re.test(word))) {
-			return word.toUpperCase();
-		}
-		// Title Case the rest
-		return word[0].toUpperCase() + word.slice(1);
-	}).join(" ");
+	if (titleCaseCache.has(str)) return titleCaseCache.get(str)!;
+
+	const words = splitIntoWords(str)
+		.map(({ word, suffix }, i, words) => {
+			const isFirstWord = i === 0
+				|| isEndOfSentence(words[i - 1].suffix, false);
+			return {
+				word: titleCaseWord(word, isFirstWord),
+				suffix: suffix,
+			};
+		});
+	const ret = joinWords(words);
+	titleCaseCache.set(str, ret);
+	return ret;
 }
 
-function isSentenceCase(str: string) {
-	const words = str.split(" ");
-	return words.every((word, i) => {
-		if (word.length === 0) return true;
-		const isFirstWord = i === 0 || words[i - 1].endsWith(".");
+function sentenceCaseWord(word: string, isFirstWord: boolean): string {
+	if (word.length === 0) return word;
+	// Ignore COMMAND_CLASS_NAMES
+	if (word.includes("_")) return word;
 
-		if (!isFirstWord) {
-			// Exceptions don't apply for the first word
-			const exception = titleCaseExceptions.find(
-				(ex) => ex.toLowerCase() === word.toLowerCase(),
-			);
-			if (exception) return word === exception;
-		}
-		if (
-			titleCaseIgnored.some((re) => re.test(word))
-			|| sentenceCaseIgnored.some((re) => re.test(word))
-		) {
-			return true;
-		}
-		if (alwaysUppercase.some((re) => re.test(word))) {
-			return word === word.toUpperCase();
-		}
+	const uppercase = word.toUpperCase();
+	const lowercase = word.toLowerCase();
 
-		return isFirstWord
-			// First word Uppercase
-			? word[0] === word[0].toUpperCase()
-			// Other words lowercase
-			: word[0] === word[0].toLowerCase();
-	});
+	// Names are always written the same
+	{
+		const fixed = fixedNames.find((n) => n.toLowerCase() === lowercase);
+		if (fixed) return fixed;
+	}
+	// Return some exceptions as they are defined
+	if (!isFirstWord) {
+		// Exceptions don't apply for the first word in each sentence
+		const exception = titleCaseExceptions.find(
+			(ex) => ex.toLowerCase() === lowercase,
+		);
+		if (exception) exception;
+	}
+	if (
+		titleCaseIgnored.some((re) => re.test(word))
+		|| sentenceCaseIgnored.some((re) => re.test(word))
+	) {
+		return word;
+	}
+	if (alwaysUppercase.some((re) => re.test(word))) {
+		return uppercase;
+	}
+	if (alwaysLowercase.some((re) => re.test(word))) {
+		return lowercase;
+	}
+
+	// Lowercase fully uppercase words before normalizing
+	if (word === word.toUpperCase()) {
+		word = lowercase;
+	}
+
+	if (isHyphenatedWord(word)) {
+		return word
+			.split("-")
+			.map((w) => sentenceCaseWord(w, isFirstWord))
+			.join("-");
+	} else if (isCombinedWord(word)) {
+		return word
+			.split("/")
+			.map((w) => sentenceCaseWord(w, isFirstWord))
+			.join("/");
+	}
+
+	// Sentence case the rest
+	return (isFirstWord
+		// First word Uppercase
+		? word[0].toUpperCase()
+		// Other words lowercase
+		: word[0].toLowerCase()) + word.slice(1);
 }
+
+const sentenceCaseCache = new Map<string, string>();
 
 function toSentenceCase(str: string) {
-	const words = str.split(" ");
-	return words.map((word, i) => {
-		if (word.length === 0) return word;
+	if (sentenceCaseCache.has(str)) return sentenceCaseCache.get(str)!;
 
-		const isFirstWord = i === 0 || words[i - 1].endsWith(".");
-
-		// Return some exceptions as they are defined
-		if (!isFirstWord) {
-			// Exceptions don't apply for the first word in each sentence
-			const exception = titleCaseExceptions.find(
-				(ex) => ex.toLowerCase() === word.toLowerCase(),
-			);
-			if (exception) return exception;
-		}
-		if (
-			titleCaseIgnored.some((re) => re.test(word))
-			|| sentenceCaseIgnored.some((re) => re.test(word))
-		) {
-			return word;
-		}
-		if (alwaysUppercase.some((re) => re.test(word))) {
-			return word.toUpperCase();
-		}
-		// Sentence case the rest
-		return (isFirstWord
-			// First word Uppercase
-			? word[0].toUpperCase()
-			// Other words lowercase
-			: word[0].toLowerCase()) + word.slice(1);
-	}).join(" ");
+	const words = splitIntoWords(str)
+		.map(({ word, suffix }, i, words) => {
+			const isFirstWord = i === 0
+				|| isEndOfSentence(words[i - 1].suffix, false);
+			return {
+				word: sentenceCaseWord(word, isFirstWord),
+				suffix: suffix,
+			};
+		});
+	const ret = joinWords(words);
+	sentenceCaseCache.set(str, ret);
+	return ret;
 }
 
 export const consistentConfigLabels: JSONCRule.RuleModule = {
@@ -183,9 +432,10 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					|| typeof node.value.value !== "string"
 				) return;
 				const value = node.value;
-				if (isTitleCase(value.value)) return;
 
-				const fixed = toTitleCase(value.raw.slice(1, -1));
+				const rawValue = value.raw.slice(1, -1);
+				const titleCase = toTitleCase(rawValue);
+				if (rawValue === titleCase) return;
 
 				context.report({
 					loc: node.loc,
@@ -200,15 +450,17 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					fix: (fixer) =>
 						fixer.replaceTextRange(
 							value.range,
-							`"${fixed}"`,
+							`"${titleCase}"`,
 						),
 					// 	},
 					// ],
 				});
 			},
 
-			// Enforce sentence case for param descriptions
-			[`${CONFIG_PARAM} > JSONProperty[key.value='description']`](
+			// TODO: Enforce Sentence case for param descriptions - This is hard due to lots of false positives
+
+			// Enforce sentence case for option labels
+			[`${CONFIG_OPTION} > JSONProperty[key.value='label']`](
 				node: AST.JSONProperty,
 			) {
 				if (
@@ -216,9 +468,10 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					|| typeof node.value.value !== "string"
 				) return;
 				const value = node.value;
-				if (isSentenceCase(value.value)) return;
 
-				const fixed = toSentenceCase(value.raw.slice(1, -1));
+				const rawValue = value.raw.slice(1, -1);
+				const sentenceCase = toSentenceCase(rawValue);
+				if (rawValue === sentenceCase) return;
 
 				context.report({
 					loc: node.loc,
@@ -233,10 +486,31 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					fix: (fixer) =>
 						fixer.replaceTextRange(
 							value.range,
-							`"${fixed}"`,
+							`"${sentenceCase}"`,
 						),
 					// 	},
 					// ],
+					suggest: [
+						{
+							messageId: "disable-for-all-options",
+							fix: function*(fixer) {
+								const options = node.parent.parent
+									.parent as AST.JSONProperty;
+
+								yield* insertBeforeJSONProperty(
+									context,
+									options,
+									`/* eslint-disable ${context.id} */`,
+									{ isComment: true },
+								)(fixer);
+								yield* insertAfterJSONProperty(
+									context,
+									options,
+									`/* eslint-enable ${context.id} */`,
+								)(fixer);
+							},
+						},
+					],
 				});
 			},
 		};
@@ -255,6 +529,8 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 			"must-be-title-case": "{{what}} must be in Title Case",
 			"must-be-sentence-case": "{{what}} must be in Sentence case",
 			"change-to-fixed": `Change to "{{fixed}}"`,
+			"disable-for-all-options":
+				`Disable for all options of this parameter`,
 		},
 		type: "problem",
 	},
