@@ -55,7 +55,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alarm resport type 2 (Default)",
+					"label": "Alarm resport type 2",
 					"value": 0
 				},
 				{
@@ -72,7 +72,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal wakeup (Default)",
+					"label": "Normal wakeup",
 					"value": 1
 				},
 				{

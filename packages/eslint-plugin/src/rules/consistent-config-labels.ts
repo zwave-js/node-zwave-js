@@ -8,8 +8,9 @@ import {
 } from "../utils";
 
 // TODO: Avoid Enable/Disable in param labels
-// Avoid default in option labels, forbid numbers at the start of option labels (except units)
+// Forbid numbers at the start of option labels (except units)
 // Sensor Binary -> Binary Sensor
+// remove Z-Wave and all its variants
 
 function isSurroundedByWhitespace(str: string) {
 	return /^\s/.test(str) || /\s$/.test(str);
@@ -217,10 +218,6 @@ const alwaysUppercase: RegExp[] = [
 const alwaysLowercase: RegExp[] = [
 	/^\d+-in-\d+$/i,
 ];
-
-// TODO: Additional fixes:
-// Plug-In, In-Wall, 3-Way, 6-Channel
-// remove Z-Wave and all its variants
 
 const splitIntoWordsCache = new Map<string, Word[]>();
 
@@ -632,6 +629,37 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					],
 				});
 			},
+
+			// Disallow "(default)" in labels and descriptions
+			"JSONProperty[key.value='label'], JSONProperty[key.value='description']"(
+				node: AST.JSONProperty,
+			) {
+				if (
+					node.value.type !== "JSONLiteral"
+					|| typeof node.value.value !== "string"
+				) return;
+
+				if (!node.value.raw.toLowerCase().includes("(default)")) return;
+
+				const match = node.value.raw.match(/ *\(default\) */i);
+				if (!match) return;
+				const startsWithWhitespace = match[0].startsWith(" ");
+				const endsWithWhitespace = match[0].endsWith(" ");
+
+				const fixed = node.value.raw.slice(
+					0,
+					match.index,
+				)
+					+ (startsWithWhitespace && endsWithWhitespace ? " " : "")
+					+ node.value.raw.slice(match.index! + match[0].length);
+
+				context.report({
+					loc: node.value.loc,
+					messageId: "no-default",
+					fix: (fixer) =>
+						fixer.replaceTextRange(node.value.range, fixed),
+				});
+			},
 		};
 	},
 	meta: {
@@ -651,6 +679,8 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 			"change-to-fixed": `Change to "{{fixed}}"`,
 			"disable-for-all-options":
 				`Disable for all options of this parameter`,
+			"no-default":
+				"Do not use '(default)' in labels or descriptions. Use the 'default' property instead.",
 		},
 		type: "problem",
 	},

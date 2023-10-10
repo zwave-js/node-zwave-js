@@ -56,7 +56,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Turns the LED off (Default)",
+					"label": "Turns the LED off",
 					"value": 0
 				},
 				{

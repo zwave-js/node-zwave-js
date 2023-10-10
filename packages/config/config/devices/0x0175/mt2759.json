@@ -27,7 +27,7 @@
 					"value": 0
 				},
 				{
-					"label": "Bi-Stable switch type (Default)",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -40,7 +40,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normally open) input type (Default)",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
@@ -57,7 +57,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normally open) input type (Default)",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
@@ -181,7 +181,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Output is 0V (NC) (Default)",
+					"label": "Output is 0V (NC)",
 					"value": 0
 				},
 				{

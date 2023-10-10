@@ -51,7 +51,7 @@
 		{
 			"#": "3",
 			"label": "Watt Meter Report Period",
-			"description": "5s x 720 (default) = 3600s = 1 hour",
+			"description": "5s x 720 = 3600s = 1 hour",
 			"valueSize": 2,
 			"unit": "5s",
 			"minValue": 1,

@@ -28,7 +28,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED on when load is on, LED off when load is off (Default)",
+					"label": "LED on when load is on, LED off when load is off",
 					"value": 1
 				},
 				{

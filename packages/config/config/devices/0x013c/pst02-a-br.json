@@ -122,7 +122,7 @@
 		{
 			"#": "6",
 			"label": "Mult- Sensor Function Switch",
-			"description": "Multisensor function switch. using bit to control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: disable magnetic integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit1: disable PIR integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit2: disable magnetic integrate PIR  to turn on the lighting nodes in the  association group 2. (1:disable,  0:enable) (default is disable) bit3: when bit2 is 0 (enable), are the  device and the lighting in the same  room? 0: in the same room(default),1: in the different room. bit4: disable delay 5 seconds to turn off the light, when door/window closed. (1:disable, 0:enable) bit5: disable auto turn off the light, after door/window opened to turn on the light. (1:disable, 0:enable) bit6: reserve. bit7: reserve",
+			"description": "Multisensor function switch. using bit to control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: disable magnetic integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit1: disable PIR integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit2: disable magnetic integrate PIR  to turn on the lighting nodes in the  association group 2. (1:disable,  0:enable) (default is disable) bit3: when bit2 is 0 (enable), are the  device and the lighting in the same  room? 0: in the same room,1: in the different room. bit4: disable delay 5 seconds to turn off the light, when door/window closed. (1:disable, 0:enable) bit5: disable auto turn off the light, after door/window opened to turn on the light. (1:disable, 0:enable) bit6: reserve. bit7: reserve",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
@@ -144,7 +144,7 @@
 					"value": 4
 				},
 				{
-					"label": "Bit3: When bit2 is 0 (Enable), are the device and the lighting in the same room? 0: In the same room(Default),1: In the different room",
+					"label": "Bit3: When bit2 is 0 (Enable), are the device and the lighting in the same room? 0: In the same room,1: In the different room",
 					"value": 8
 				},
 				{

@@ -24,7 +24,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch mode (Default)",
+					"label": "Switch mode",
 					"value": 0
 				},
 				{

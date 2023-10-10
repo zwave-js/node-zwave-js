@@ -54,7 +54,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (Default)",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -84,7 +84,7 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (Default)",
+					"label": "Yes",
 					"value": 1
 				}
 			]
@@ -102,7 +102,7 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (Default)",
+					"label": "Yes",
 					"value": 1
 				}
 			]
@@ -115,7 +115,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (Default)",
+					"label": "No",
 					"value": 0
 				},
 				{
@@ -137,7 +137,7 @@
 					"value": 0
 				},
 				{
-					"label": "By single press and hold (Default)",
+					"label": "By single press and hold",
 					"value": 1
 				},
 				{
@@ -162,7 +162,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch on, off only (Send Basic Set) (Default)",
+					"label": "Switch on, off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -208,7 +208,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch on, off only (Send Basic Set) (Default)",
+					"label": "Switch on, off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -246,7 +246,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off only (Default)",
+					"label": "Switch off only",
 					"value": 1
 				},
 				{
@@ -267,7 +267,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (Default)",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -291,7 +291,7 @@
 			"writeOnly": true,
 			"options": [
 				{
-					"label": "Disabled (Default)",
+					"label": "Disabled",
 					"value": 0
 				}
 			]

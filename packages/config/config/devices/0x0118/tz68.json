@@ -40,7 +40,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Blue indicates off (Default)",
+					"label": "Blue indicates off",
 					"value": 0
 				},
 				{
@@ -62,7 +62,7 @@
 					"value": 0
 				},
 				{
-					"label": "Do remember state (Default)",
+					"label": "Do remember state",
 					"value": 1
 				}
 			]

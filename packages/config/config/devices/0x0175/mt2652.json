@@ -97,7 +97,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central Scene to gateway (Default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -142,7 +142,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central Scene to gateway (Default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -187,7 +187,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central Scene to gateway (Default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -232,7 +232,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central Scene to gateway (Default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -246,7 +246,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off only (Default)",
+					"label": "Switch off only",
 					"value": 1
 				},
 				{

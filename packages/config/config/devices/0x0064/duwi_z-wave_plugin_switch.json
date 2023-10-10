@@ -37,7 +37,7 @@
 					"value": 0
 				},
 				{
-					"label": "Show switch state (Default)",
+					"label": "Show switch state",
 					"value": 1
 				},
 				{
@@ -71,7 +71,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (Default)",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
