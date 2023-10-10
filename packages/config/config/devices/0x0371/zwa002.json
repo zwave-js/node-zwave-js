@@ -48,7 +48,7 @@
 			"#": "3",
 			"label": "Rate of Change to Next Color in Custom Mode",
 			"valueSize": 4,
-			"unit": "MS",
+			"unit": "ms",
 			"minValue": 5,
 			"maxValue": 8640000,
 			"defaultValue": 50

@@ -18,7 +18,7 @@
 			"#": "10",
 			"label": "Low Battery Alarm Level",
 			"valueSize": 1,
-			"unit": "percent",
+			"unit": "%",
 			"minValue": 10,
 			"maxValue": 50,
 			"defaultValue": 10
@@ -173,7 +173,7 @@
 			"#": "112",
 			"label": "Humidity Report Threshold",
 			"valueSize": 1,
-			"unit": "percent",
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 32,
 			"defaultValue": 5
@@ -192,7 +192,7 @@
 			"#": "114",
 			"label": "Battery Report Threshold",
 			"valueSize": 1,
-			"unit": "percent",
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10

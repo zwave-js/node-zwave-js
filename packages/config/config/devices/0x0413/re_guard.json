@@ -70,7 +70,7 @@
 			"#": "5",
 			"label": "Microleakage Test (Minute)",
 			"valueSize": 1,
-			"unit": "min",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 59,
 			"defaultValue": 0
@@ -250,7 +250,7 @@
 			"#": "12",
 			"label": "Measurement Waiting Time",
 			"valueSize": 1,
-			"unit": "min",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 10
@@ -335,7 +335,7 @@
 			"#": "19",
 			"label": "Max Single Water Withdrawal Duration (Present Mode)",
 			"valueSize": 2,
-			"unit": "min",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 1440,
 			"defaultValue": 30
@@ -344,7 +344,7 @@
 			"#": "20",
 			"label": "Max Continuous Water Withdrawal Duration (Present Mode)",
 			"valueSize": 2,
-			"unit": "min",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 1440,
 			"defaultValue": 60
@@ -389,7 +389,7 @@
 			"#": "25",
 			"label": "Max Single Water Withdrawal Duration (Absent Mode)",
 			"valueSize": 2,
-			"unit": "min",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 1440,
 			"defaultValue": 30
@@ -398,7 +398,7 @@
 			"#": "26",
 			"label": "Max Continuous Water Withdrawal Duration (Absent Mode)",
 			"valueSize": 2,
-			"unit": "min",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 30

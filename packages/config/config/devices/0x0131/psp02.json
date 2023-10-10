@@ -131,7 +131,7 @@
 			"#": "22",
 			"label": "Min Illumination Differential",
 			"valueSize": 1,
-			"unit": "percent",
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 0

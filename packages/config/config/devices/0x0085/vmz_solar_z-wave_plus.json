@@ -57,7 +57,7 @@
 			"label": "Delay Time",
 			"description": "delay to auto shade",
 			"valueSize": 1,
-			"unit": "min",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0

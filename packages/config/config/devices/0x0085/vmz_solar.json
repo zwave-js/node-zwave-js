@@ -57,7 +57,7 @@
 			"#": "3",
 			"label": "Measurement Frequency",
 			"valueSize": 1,
-			"unit": "min",
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 30,
 			"defaultValue": 3

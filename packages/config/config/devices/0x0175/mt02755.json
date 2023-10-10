@@ -86,7 +86,7 @@
 			"label": "Auto Report Tick Interval",
 			"description": "The interval time for auto report each tick",
 			"valueSize": 1,
-			"unit": "Minutes",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
@@ -105,7 +105,7 @@
 			"#": "23",
 			"label": "Humidity Differential Report",
 			"valueSize": 1,
-			"unit": "Percent",
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0

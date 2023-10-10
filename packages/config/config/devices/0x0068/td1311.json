@@ -18,7 +18,7 @@
 			"#": "1",
 			"label": "Meter Report Duration",
 			"valueSize": 2,
-			"unit": "Minutes",
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 1092,
 			"defaultValue": 30

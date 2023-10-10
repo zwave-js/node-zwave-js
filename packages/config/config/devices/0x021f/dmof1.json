@@ -51,7 +51,7 @@
 			"label": "Set \"Overload\" Current Level",
 			"description": "Maximum current the plug will pass",
 			"valueSize": 1,
-			"unit": "amps",
+			"unit": "A",
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 13
@@ -61,7 +61,7 @@
 			"label": "Set \"Alert\" Current Level",
 			"description": "Current level warning threshold",
 			"valueSize": 1,
-			"unit": "amps",
+			"unit": "A",
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 12

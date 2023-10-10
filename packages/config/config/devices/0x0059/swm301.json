@@ -49,7 +49,7 @@
 			"label": "Meter Reading Reporting Intervals",
 			"description": "how often meter reading is sent",
 			"valueSize": 2,
-			"unit": "minute",
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 1440

@@ -111,7 +111,7 @@
 			"label": "Auto Report Change Percentage",
 			"description": "Auto report when the change of wattage surpasses the set percentage",
 			"valueSize": 1,
-			"unit": "Percent",
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,

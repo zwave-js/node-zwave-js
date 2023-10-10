@@ -48,7 +48,7 @@
 			"#": "18",
 			"label": "Maximum Dimmer Level Control",
 			"valueSize": 1,
-			"unit": "percent",
+			"unit": "%",
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99
@@ -57,7 +57,7 @@
 			"#": "19",
 			"label": "Minimum Dimmer Level Control",
 			"valueSize": 1,
-			"unit": "percent",
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 13

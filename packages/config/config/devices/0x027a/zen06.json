@@ -76,7 +76,7 @@
 			"label": "Power Report Value Threshold",
 			"description": "Minimum change in Watt to report",
 			"valueSize": 2,
-			"unit": "Watt",
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,

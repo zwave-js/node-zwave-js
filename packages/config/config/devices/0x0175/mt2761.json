@@ -215,7 +215,7 @@
 			"label": "Relay Delay Time",
 			"description": "Defines the minimum time delay between next motor movement",
 			"valueSize": 1,
-			"unit": "milliseconds",
+			"unit": "ms",
 			"minValue": 1,
 			"maxValue": 30,
 			"defaultValue": 5

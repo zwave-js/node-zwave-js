@@ -7,7 +7,16 @@ interface FixableUnit {
 	correct: string;
 }
 const fixableUnits: FixableUnit[] = [
-	{ wrong: ["sec", "s", "secs"], correct: "seconds" },
+	{ wrong: ["hr", "hour"], correct: "hours" },
+	{ wrong: ["min", "minute", "m"], correct: "minutes" },
+	{ wrong: ["sec", "second", "s", "secs"], correct: "seconds" },
+	{ wrong: ["milliseconds", "millisecond", "msec", "msecs"], correct: "ms" },
+	{ wrong: ["watt", "watts"], correct: "W" },
+	{ wrong: ["kilowatt", "kilowatts"], correct: "kW" },
+	{ wrong: ["volt", "volts"], correct: "V" },
+	{ wrong: ["millivolt", "millivolts"], correct: "mV" },
+	{ wrong: ["ampere", "amperes", "amps"], correct: "A" },
+	{ wrong: ["percent", "percents", "percentage"], correct: "%" },
 ];
 
 const correctUnits = new Set(fixableUnits.map(({ correct }) => correct));

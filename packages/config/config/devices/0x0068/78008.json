@@ -115,7 +115,7 @@
 			"#": "9",
 			"label": "Interval Time for Sending Battery Report",
 			"valueSize": 1,
-			"unit": "Minutes",
+			"unit": "minutes",
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [

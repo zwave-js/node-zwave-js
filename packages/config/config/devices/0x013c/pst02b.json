@@ -214,7 +214,7 @@
 			"label": "Illumination Differential Report",
 			"description": "The illumination differential to report. Not applicable to TSP01.",
 			"valueSize": 1,
-			"unit": "percentage",
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
