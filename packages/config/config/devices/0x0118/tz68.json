@@ -40,11 +40,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "blue indicates off (default)",
+					"label": "Blue indicates off (Default)",
 					"value": 0
 				},
 				{
-					"label": "blue indicates on",
+					"label": "Blue indicates on",
 					"value": 1
 				}
 			]
@@ -58,11 +58,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "do not remember",
+					"label": "Do not remember",
 					"value": 0
 				},
 				{
-					"label": "do remember state (default)",
+					"label": "Do remember state (Default)",
 					"value": 1
 				}
 			]

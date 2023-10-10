@@ -249,11 +249,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim (using Basic Set)",
+					"label": "Switch on/off and dim (Using Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch All ON/OFF",
+					"label": "Switch all on/off",
 					"value": 2
 				}
 			]
@@ -271,11 +271,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim (using Basic Set)",
+					"label": "Switch on/off and dim (Using Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch All ON/OFF",
+					"label": "Switch all on/off",
 					"value": 2
 				}
 			]
@@ -289,15 +289,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF only",
+					"label": "Off only",
 					"value": 1
 				},
 				{
-					"label": "ON only",
+					"label": "On only",
 					"value": 2
 				},
 				{
-					"label": "ON and OFF",
+					"label": "On and off",
 					"value": 255
 				}
 			]

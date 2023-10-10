@@ -70,7 +70,7 @@
 			"#": "7",
 			"label": "Temperature Calibration",
 			"valueSize": 1,
-			"unit": "0.1°C",
+			"unit": "0.1 °C",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0

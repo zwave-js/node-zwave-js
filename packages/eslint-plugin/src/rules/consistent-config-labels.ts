@@ -100,7 +100,7 @@ function combinations(...fragments: string[][]): string[] {
 	return ret;
 }
 
-const fixedMultiWordNames = combinations(
+const ccAndCommandNames = combinations(
 	[
 		"Basic",
 		"Multilevel Switch",
@@ -117,16 +117,31 @@ const fixedMultiWordNames = combinations(
 		"Meter",
 		"Indicator",
 	],
-	["", "CC"],
-	["", "Set", "Report", "Set/Get", "Get/Set", "Get"],
+	[
+		"Command Class",
+		...combinations(
+			["", "CC"],
+			["", "Set", "Report", "Set/Get", "Get/Set", "Get"],
+		),
+	],
 )
-	.filter((w) => w.includes(" "))
-	.sort((a, b) => {
-		// These need to be ordered from maximum number of words to minimum number of words so the most specific ones match first
-		const numWordsA = a.split(" ").length;
-		const numWordsB = b.split(" ").length;
-		return numWordsB - numWordsA;
-	});
+	.filter((w) => w.includes(" "));
+// .sort((a, b) => {
+// 	// These need to be ordered from maximum number of words to minimum number of words so the most specific ones match first
+// 	const numWordsA = a.split(" ").length;
+// 	const numWordsB = b.split(" ").length;
+// 	return numWordsB - numWordsA;
+// });
+
+const fixedMultiWordNames = [
+	...ccAndCommandNames,
+	"Command Class",
+].sort((a, b) => {
+	// These need to be ordered from maximum number of words to minimum number of words so the most specific ones match first
+	const numWordsA = a.split(" ").length;
+	const numWordsB = b.split(" ").length;
+	return numWordsB - numWordsA;
+});
 
 // Names are always written the same way, whether they appear at the beginning of a sentence or not
 const fixedNames = [
@@ -183,6 +198,7 @@ const alwaysUppercase: RegExp[] = [
 	/^HSB$/i,
 	/^OTA$/i,
 	/^CRC$/i,
+	/^UI$/i,
 ];
 
 const alwaysLowercase: RegExp[] = [

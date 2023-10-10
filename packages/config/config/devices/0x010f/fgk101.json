@@ -295,7 +295,7 @@
 			"#": "12",
 			"$if": "firmwareVersion <= 3.1",
 			"label": "Temperature Change Threshold",
-			"description": "Parameter / 16 = Celcius value.  Parameter / 80/9 = Fahrenheit value.",
+			"description": "Parameter / 16 = Celsius value.  Parameter / 80/9 = Fahrenheit value.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -63,11 +63,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Notification command class is used",
+					"label": "Notification Command Class is used",
 					"value": 0
 				},
 				{
-					"label": "Binary Sensor command class is used",
+					"label": "Binary Sensor Command Class is used",
 					"value": 1
 				}
 			]

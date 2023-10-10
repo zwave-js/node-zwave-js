@@ -74,7 +74,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Preset: Celsius and LED on = Bits: 00001010 = 10",
+					"label": "Preset: Celsius and LED on = bits: 00001010 = 10",
 					"value": 10
 				}
 			]
@@ -189,7 +189,7 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor Binary Report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				}
 			]

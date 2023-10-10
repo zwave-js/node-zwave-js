@@ -2,7 +2,7 @@
 	"manufacturer": "GreenWave Reality Inc.",
 	"manufacturerId": "0x0099",
 	"label": "NP240 / NP242",
-	"description": "Multi-socket PowerNode (6-plug)",
+	"description": "Multi-Socket PowerNode (6-Plug)",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -76,7 +76,7 @@
 					"value": 129
 				},
 				{
-					"label": "Dark Blue",
+					"label": "Dark blue",
 					"value": 130
 				},
 				{
@@ -96,7 +96,7 @@
 					"value": 134
 				},
 				{
-					"label": "Light Blue",
+					"label": "Light blue",
 					"value": 135
 				},
 				{
@@ -118,7 +118,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All OFF",
+					"label": "All off",
 					"value": 0
 				},
 				{
@@ -126,7 +126,7 @@
 					"value": 1
 				},
 				{
-					"label": "All ON",
+					"label": "All on",
 					"value": 2
 				}
 			]

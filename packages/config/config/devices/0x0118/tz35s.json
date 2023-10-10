@@ -66,11 +66,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ON command on TOP",
+					"label": "On command on top",
 					"value": 0
 				},
 				{
-					"label": "OFF command on TOP",
+					"label": "Off command on top",
 					"value": 1
 				}
 			]

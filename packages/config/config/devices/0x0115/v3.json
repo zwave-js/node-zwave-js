@@ -94,6 +94,7 @@
 			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "Don't change, just reboot",
@@ -140,6 +141,7 @@
 					"value": 2550
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "11",
@@ -165,7 +167,7 @@
 					"value": 0
 				},
 				{
-					"label": "Switch Binary channel type",
+					"label": "Binary Sensor channel type",
 					"value": 1
 				}
 			]

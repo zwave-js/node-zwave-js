@@ -41,11 +41,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "socket status depends on switch",
+					"label": "Socket status depends on switch",
 					"value": 0
 				},
 				{
-					"label": "socket status is same as before power outage",
+					"label": "Socket status is same as before power outage",
 					"value": 1
 				}
 			]
@@ -77,15 +77,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Edge Mode",
+					"label": "Edge mode",
 					"value": 1
 				},
 				{
-					"label": "Pulse Mode",
+					"label": "Pulse mode",
 					"value": 2
 				},
 				{
-					"label": "Edge-toggle Mode",
+					"label": "Edge-Toggle mode",
 					"value": 3
 				}
 			]

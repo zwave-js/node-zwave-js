@@ -2,7 +2,7 @@
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "Multisensor",
-	"description": "Multi-sensor",
+	"description": "Multisensor",
 	"devices": [
 		{
 			"productType": "0x1180",

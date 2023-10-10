@@ -37,11 +37,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (default)",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Execute reset",
+					"label": "Factory reset",
 					"value": 1
 				}
 			]
@@ -55,11 +55,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alarm Resport Type 2 (default)",
+					"label": "Alarm resport type 2 (Default)",
 					"value": 0
 				},
 				{
-					"label": "Basic On or Basic Off",
+					"label": "Basic on or basic off",
 					"value": 1
 				}
 			]
@@ -72,7 +72,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Wakeup (default)",
+					"label": "Normal wakeup (Default)",
 					"value": 1
 				},
 				{

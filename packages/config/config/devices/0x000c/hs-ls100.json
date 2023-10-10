@@ -48,7 +48,7 @@
 			"#": "20",
 			"label": "Temperature (High) Alarm Trigger Threshold",
 			"valueSize": 2,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -670,
 			"maxValue": 2570,
 			"defaultValue": 1040
@@ -57,7 +57,7 @@
 			"#": "22",
 			"label": "Temperature (Low) Trigger Threshold",
 			"valueSize": 2,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -670,
 			"maxValue": 2570,
 			"defaultValue": 320

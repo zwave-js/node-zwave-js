@@ -178,7 +178,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Stop (by buttons and Binary)",
+					"label": "Stop (By buttons and binary)",
 					"value": 0
 				},
 				{
@@ -186,7 +186,7 @@
 					"value": 1
 				},
 				{
-					"label": "Stop (by buttons, Binary and Basic)",
+					"label": "Stop (By buttons, binary and basic)",
 					"value": 2
 				}
 			]
@@ -270,23 +270,23 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off (send Basic Set)",
+					"label": "Switch on/off (Send Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 3
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
@@ -304,23 +304,23 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off (send Basic Set)",
+					"label": "Switch on/off (Send Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 3
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]

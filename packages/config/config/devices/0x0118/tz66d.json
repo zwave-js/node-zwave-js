@@ -79,7 +79,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Led on when switch on",
+					"label": "LED on when switch on",
 					"value": 0
 				},
 				{
@@ -97,11 +97,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ON on top",
+					"label": "On on top",
 					"value": 0
 				},
 				{
-					"label": "OFF on top",
+					"label": "Off on top",
 					"value": 1
 				}
 			]
@@ -118,7 +118,7 @@
 					"value": 0
 				},
 				{
-					"label": "Shade Control",
+					"label": "Shade control",
 					"value": 1
 				}
 			]
@@ -135,7 +135,7 @@
 					"value": 0
 				},
 				{
-					"label": "Shade Control",
+					"label": "Shade control",
 					"value": 1
 				}
 			]
@@ -174,20 +174,9 @@
 		},
 		{
 			"#": "22",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Poll Group 2",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	],
 	"compat": {

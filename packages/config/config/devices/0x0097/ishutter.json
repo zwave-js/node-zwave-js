@@ -47,7 +47,7 @@
 					"value": 0
 				},
 				{
-					"label": "Two paddles with Power and Direction",
+					"label": "Two paddles with power and direction",
 					"value": 1
 				},
 				{
@@ -91,7 +91,7 @@
 					"value": 2
 				},
 				{
-					"label": "Open if closed, otherwise Close",
+					"label": "Open if closed, otherwise close",
 					"value": 3
 				}
 			]
@@ -131,11 +131,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On, Off and dim using Basic Set",
+					"label": "Switch on, off and dim using Basic Set",
 					"value": 1
 				},
 				{
-					"label": "Send Scene",
+					"label": "Send scene",
 					"value": 2
 				}
 			]
@@ -208,11 +208,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "on On",
+					"label": "On on",
 					"value": 0
 				},
 				{
-					"label": "on Off",
+					"label": "On off",
 					"value": 1
 				}
 			]

@@ -34,7 +34,7 @@
 		{
 			"#": "2",
 			"label": "Temperature offset for internal sensor",
-			"description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0°C~+8.0°C)",
+			"description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0 °C~+8.0 °C)",
 			"valueSize": 1,
 			"unit": "1/10 °C",
 			"minValue": -80,

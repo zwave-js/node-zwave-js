@@ -94,15 +94,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Edge Mode",
+					"label": "Edge mode",
 					"value": 1
 				},
 				{
-					"label": "Pulse Mode",
+					"label": "Pulse mode",
 					"value": 2
 				},
 				{
-					"label": "Edge Toggle Mode",
+					"label": "Edge toggle mode",
 					"value": 3
 				}
 			]

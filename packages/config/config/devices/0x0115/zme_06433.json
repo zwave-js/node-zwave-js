@@ -49,7 +49,7 @@
 					"value": 1
 				},
 				{
-					"label": "Night mode (inverted switch state)",
+					"label": "Night mode (Inverted switch state)",
 					"value": 2
 				},
 				{
@@ -144,7 +144,7 @@
 					"value": 0
 				},
 				{
-					"label": "If already On",
+					"label": "If already on",
 					"value": 1
 				},
 				{
@@ -183,11 +183,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim using Basic Set (default)",
+					"label": "Switch on, off and dim using Basic Set (Default)",
 					"value": 1
 				},
 				{
-					"label": "Switch All On/Off",
+					"label": "Switch all on/off",
 					"value": 2
 				}
 			]
@@ -201,15 +201,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled (don't wait for double click, default)",
+					"label": "Disabled (Don't wait for double click, default)",
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim using Basic Set",
+					"label": "Switch on, off and dim using Basic Set",
 					"value": 1
 				},
 				{
-					"label": "Switch All On/Off",
+					"label": "Switch all on/off",
 					"value": 2
 				}
 			]

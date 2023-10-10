@@ -39,7 +39,7 @@
 					"value": 0
 				},
 				{
-					"label": "Two paddles with Power and Direction",
+					"label": "Two paddles with power and direction",
 					"value": 1
 				},
 				{
@@ -82,7 +82,7 @@
 					"value": 2
 				},
 				{
-					"label": "Open if closed, otherwise Close",
+					"label": "Open if closed, otherwise close",
 					"value": 3
 				}
 			]
@@ -127,7 +127,7 @@
 					"value": 1
 				},
 				{
-					"label": "Send Scene",
+					"label": "Send scene",
 					"value": 2
 				}
 			]

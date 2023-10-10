@@ -112,9 +112,8 @@
 		{
 			"#": "32",
 			"label": "Thermostat Set Point Max",
-			"description": "Set Point Max in 1/10th of a degree Celcius",
 			"valueSize": 2,
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 270
@@ -122,8 +121,8 @@
 		{
 			"#": "34",
 			"label": "Thermostat Set Point Min",
-			"description": "Set Point Min in 1/10th of a degree Celcius",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 50
@@ -151,9 +150,8 @@
 		{
 			"#": "38",
 			"label": "Thermostat Floor Temp Max",
-			"description": "Floor Temp Max in 1/10th of a degree Celcius",
 			"valueSize": 2,
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 270
@@ -187,18 +185,17 @@
 		{
 			"#": "66",
 			"label": "Temperature Report Threshold",
-			"description": "Report Threshold in 1/10th of a degree Celcius",
 			"valueSize": 1,
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 10
 		},
 		{
 			"#": "67",
-			"label": "Thermostat On∕Off Interval Override Threshold",
-			"description": "Temperature Threshold in 1/10th of a degree Celcius",
+			"label": "Thermostat On/Off Interval Override Threshold",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
@@ -214,9 +211,8 @@
 		{
 			"#": "240",
 			"label": "Floor Sensor Temperature Offset",
-			"description": "Temperature Offset in 1/10th of a degree Celcius",
 			"valueSize": 1,
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0
@@ -224,9 +220,8 @@
 		{
 			"#": "241",
 			"label": "Room Sensor Temperature Offset",
-			"description": "Temperature Offset in 1/10th of a degree Celcius",
 			"valueSize": 1,
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0

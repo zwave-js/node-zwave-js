@@ -44,7 +44,7 @@
 			"label": "Temperature Report Interval",
 			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
 			"valueSize": 1,
-			"unit": "0.5°C",
+			"unit": "0.5 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,

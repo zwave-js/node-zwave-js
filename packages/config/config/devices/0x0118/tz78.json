@@ -27,11 +27,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is ON",
+					"label": "LED on when load is on",
 					"value": 0
 				},
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 1
 				}
 			]

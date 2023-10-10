@@ -83,7 +83,7 @@
 		{
 			"#": "3",
 			"label": "Upload temperature difference",
-			"description": "Base on 0.1°C unit, 5 by default, 5*0.1°C=0.5°C",
+			"description": "Base on 0.1 °C unit, 5 by default, 5*0.1 °C=0.5 °C",
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 1000,

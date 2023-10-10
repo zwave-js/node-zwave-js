@@ -257,21 +257,9 @@
 		},
 		{
 			"#": "11",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Display On in C-Wire Powered Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	],
 	"metadata": {

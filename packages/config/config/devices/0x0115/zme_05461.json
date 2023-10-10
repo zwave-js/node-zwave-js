@@ -45,7 +45,7 @@
 					"value": 1
 				},
 				{
-					"label": "night light (inverted state)",
+					"label": "Night light (Inverted state)",
 					"value": 2
 				}
 			]
@@ -68,7 +68,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -76,7 +76,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{
@@ -97,15 +97,15 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (only for the first channel)",
+					"label": "Yes (Only for the first channel)",
 					"value": 1
 				},
 				{
-					"label": "Yes (only for the second channel)",
+					"label": "Yes (Only for the second channel)",
 					"value": 2
 				},
 				{
-					"label": "Yes (for both channels)",
+					"label": "Yes (For both channels)",
 					"value": 3
 				}
 			]
@@ -122,15 +122,15 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (only for the first channel)",
+					"label": "Yes (Only for the first channel)",
 					"value": 1
 				},
 				{
-					"label": "Yes (only for the second channel)",
+					"label": "Yes (Only for the second channel)",
 					"value": 2
 				},
 				{
-					"label": "Yes (for both channels)",
+					"label": "Yes (For both channels)",
 					"value": 3
 				}
 			]
@@ -186,15 +186,15 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 2
 				},
 				{
-					"label": "Scene activation",
+					"label": "Scene Activation",
 					"value": 3
 				}
 			]
@@ -211,15 +211,15 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 2
 				},
 				{
-					"label": "Scene activation",
+					"label": "Scene Activation",
 					"value": 3
 				}
 			]
@@ -236,7 +236,7 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On if load is Off, else switch Off",
+					"label": "Switch on if load is off, else switch off",
 					"value": 1
 				},
 				{
@@ -277,7 +277,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -285,7 +285,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{

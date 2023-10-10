@@ -40,21 +40,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Utility Lock",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Utility Lock"
 		},
 		{
 			"#": "4",
@@ -85,35 +72,24 @@
 					"value": 0
 				},
 				{
-					"label": "3% RH",
+					"label": "3 %rH",
 					"value": 1
 				},
 				{
-					"label": "5% RH",
+					"label": "5 %rH",
 					"value": 2
 				},
 				{
-					"label": "10% RH",
+					"label": "10 %rH",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Auxiliary/Emergency Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auxiliary/Emergency Heating",
+			"defaultValue": 1
 		},
 		{
 			"#": "7",
@@ -123,35 +99,35 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0.5ºF",
+					"label": "0.5 °F",
 					"value": 1
 				},
 				{
-					"label": "1.0ºF",
+					"label": "1.0 °F",
 					"value": 2
 				},
 				{
-					"label": "1.5ºF",
+					"label": "1.5 °F",
 					"value": 3
 				},
 				{
-					"label": "2.0ºF",
+					"label": "2.0 °F",
 					"value": 4
 				},
 				{
-					"label": "2.5ºF",
+					"label": "2.5 °F",
 					"value": 5
 				},
 				{
-					"label": "3.0ºF",
+					"label": "3.0 °F",
 					"value": 6
 				},
 				{
-					"label": "3.5ºF",
+					"label": "3.5 °F",
 					"value": 7
 				},
 				{
-					"label": "4.0ºF",
+					"label": "4.0 °F",
 					"value": 8
 				}
 			]
@@ -175,37 +151,15 @@
 		},
 		{
 			"#": "11",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Simple UI Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Mode",
-					"value": 0
-				},
-				{
-					"label": "Simple Mode",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "12",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Multicast",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "13",
@@ -247,7 +201,7 @@
 					"value": 1
 				},
 				{
-					"label": "Heat Pump",
+					"label": "Heat pump",
 					"value": 2
 				}
 			]
