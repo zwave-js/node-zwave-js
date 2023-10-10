@@ -136,6 +136,7 @@
 			"valueSize": 1,
 			"defaultValue": 10,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "Doorbell",
@@ -178,6 +179,7 @@
 					"value": 10
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "6",
@@ -185,6 +187,7 @@
 			"valueSize": 1,
 			"defaultValue": 9,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "Doorbell",
@@ -227,6 +230,7 @@
 					"value": 10
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "7",
@@ -237,11 +241,11 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Alarm Sound",
+					"label": "Alarm sound",
 					"value": 1
 				},
 				{
-					"label": "Doorbell Sound",
+					"label": "Doorbell sound",
 					"value": 2
 				}
 			]

@@ -2,7 +2,7 @@
 	"manufacturer": "EcoDim",
 	"manufacturerId": "0x0431",
 	"label": "ECO-DIM",
-	"description": "ECO-DIM Z-Wave Led Dimmer",
+	"description": "ECO-DIM Z-Wave LED Dimmer",
 	"devices": [
 		{
 			"productType": "0x0202",
@@ -55,11 +55,11 @@
 					"value": 0
 				},
 				{
-					"label": "Send Switch Multilevel Report",
+					"label": "Send switch multilevel report",
 					"value": 1
 				},
 				{
-					"label": "Send Switch Multilevel Report only when Load status is not changed by Z-WAVE Command",
+					"label": "Send switch multilevel report only when load status is not changed by Z-Wave command",
 					"value": 2
 				}
 			]

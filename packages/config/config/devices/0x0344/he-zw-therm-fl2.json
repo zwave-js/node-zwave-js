@@ -45,6 +45,7 @@
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "COM",
@@ -71,6 +72,7 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "4",
@@ -84,7 +86,7 @@
 					"value": 1
 				},
 				{
-					"label": "Air and Floor sensors",
+					"label": "Air and floor sensors",
 					"value": 2
 				},
 				{
@@ -92,7 +94,7 @@
 					"value": 3
 				},
 				{
-					"label": "Floor and Air sensor",
+					"label": "Floor and air sensor",
 					"value": 4
 				},
 				{
@@ -100,11 +102,11 @@
 					"value": 5
 				},
 				{
-					"label": "Power regulator and Air sensor",
+					"label": "Power regulator and air sensor",
 					"value": 6
 				},
 				{
-					"label": "Power regulator and Floor sensor",
+					"label": "Power regulator and floor sensor",
 					"value": 7
 				}
 			]
@@ -330,6 +332,7 @@
 			"valueSize": 1,
 			"defaultValue": 6,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "COM",
@@ -356,6 +359,7 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "51",

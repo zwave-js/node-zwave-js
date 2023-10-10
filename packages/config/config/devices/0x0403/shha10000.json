@@ -115,11 +115,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reset",
+					"label": "No reset",
 					"value": 0
 				},
 				{
-					"label": "Reset to default Values",
+					"label": "Reset to default values",
 					"value": 85
 				}
 			]

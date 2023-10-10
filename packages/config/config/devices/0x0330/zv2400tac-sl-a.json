@@ -20,21 +20,10 @@
 		},
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Basic report",
 			"description": "send the basic report to the Lifeline when the load state changed",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable to send Basic report",
-					"value": 0
-				},
-				{
-					"label": "Enable to send Basic report",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
@@ -49,7 +38,7 @@
 					"value": 0
 				},
 				{
-					"label": "from 1 to 127 seconds",
+					"label": "1 to 127 seconds",
 					"value": 1
 				},
 				{
@@ -86,11 +75,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "trailing edge",
+					"label": "Trailing edge",
 					"value": 0
 				},
 				{
-					"label": "leading edge",
+					"label": "Leading edge",
 					"value": 1
 				}
 			]
@@ -103,11 +92,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -121,15 +110,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "enable",
+					"label": "Enable",
 					"value": 1
 				},
 				{
-					"label": "enable to detect only after first re-power",
+					"label": "Enable to detect only after first re-power",
 					"value": 2
 				}
 			]
@@ -154,20 +143,9 @@
 		},
 		{
 			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Over current protection",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "14",

@@ -2,7 +2,7 @@
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "Heatit Z-Scene Controller",
-	"description": "Push Button 6-gang",
+	"description": "Push Button 6-Gang",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode).",
+					"label": "Separate mode (Toggle mode).",
 					"value": 0
 				},
 				{
-					"label": "Left side ON/UP, right side OFF/DOWN",
+					"label": "Left side on/up, right side off/down",
 					"value": 1
 				}
 			]
@@ -39,11 +39,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode).",
+					"label": "Separate mode (Toggle mode).",
 					"value": 0
 				},
 				{
-					"label": "Left side ON/UP, right side OFF/DOWN",
+					"label": "Left side on/up, right side off/down",
 					"value": 1
 				}
 			]
@@ -56,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode).",
+					"label": "Separate mode (Toggle mode).",
 					"value": 0
 				},
 				{
-					"label": "Left side ON/UP, right side OFF/DOWN",
+					"label": "Left side on/up, right side off/down",
 					"value": 1
 				}
 			]
@@ -86,11 +86,11 @@
 					"value": 2
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode)",
+					"label": "Status of corresponding paddle (Pair mode)",
 					"value": 3
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode) inv",
+					"label": "Status of corresponding paddle (Pair mode) inv",
 					"value": 4
 				},
 				{
@@ -116,7 +116,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class Set commands)",
+					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class set commands)",
 					"value": 0
 				},
 				{
@@ -128,11 +128,11 @@
 					"value": 2
 				},
 				{
-					"label": "LED indicates the status of corresponding paddle (in pair mode)",
+					"label": "LED indicates the status of corresponding paddle (In pair mode)",
 					"value": 3
 				},
 				{
-					"label": "LED indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"label": "LED indicates the status of the corresponding paddle (In pair mode), with inverted indication",
 					"value": 4
 				},
 				{
@@ -174,11 +174,11 @@
 					"value": 2
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode)",
+					"label": "Status of corresponding paddle (Pair mode)",
 					"value": 3
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode) inv",
+					"label": "Status of corresponding paddle (Pair mode) inv",
 					"value": 4
 				},
 				{
@@ -204,7 +204,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class Set commands)",
+					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class set commands)",
 					"value": 0
 				},
 				{
@@ -216,11 +216,11 @@
 					"value": 2
 				},
 				{
-					"label": "LED indicates the status of corresponding paddle (in pair mode)",
+					"label": "LED indicates the status of corresponding paddle (In pair mode)",
 					"value": 3
 				},
 				{
-					"label": "LED indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"label": "LED indicates the status of the corresponding paddle (In pair mode), with inverted indication",
 					"value": 4
 				},
 				{
@@ -262,11 +262,11 @@
 					"value": 2
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode)",
+					"label": "Status of corresponding paddle (Pair mode)",
 					"value": 3
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode) inv",
+					"label": "Status of corresponding paddle (Pair mode) inv",
 					"value": 4
 				},
 				{
@@ -292,7 +292,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class Set commands)",
+					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class set commands)",
 					"value": 0
 				},
 				{
@@ -304,11 +304,11 @@
 					"value": 2
 				},
 				{
-					"label": "LED indicates the status of corresponding paddle (in pair mode)",
+					"label": "LED indicates the status of corresponding paddle (In pair mode)",
 					"value": 3
 				},
 				{
-					"label": "LED indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"label": "LED indicates the status of the corresponding paddle (In pair mode), with inverted indication",
 					"value": 4
 				},
 				{
@@ -350,11 +350,11 @@
 					"value": 2
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode)",
+					"label": "Status of corresponding paddle (Pair mode)",
 					"value": 3
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode) inv",
+					"label": "Status of corresponding paddle (Pair mode) inv",
 					"value": 4
 				},
 				{
@@ -380,7 +380,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class Set commands)",
+					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class set commands)",
 					"value": 0
 				},
 				{
@@ -392,11 +392,11 @@
 					"value": 2
 				},
 				{
-					"label": "LED indicates the status of corresponding paddle (in pair mode)",
+					"label": "LED indicates the status of corresponding paddle (In pair mode)",
 					"value": 3
 				},
 				{
-					"label": "LED indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"label": "LED indicates the status of the corresponding paddle (In pair mode), with inverted indication",
 					"value": 4
 				},
 				{
@@ -438,11 +438,11 @@
 					"value": 2
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode)",
+					"label": "Status of corresponding paddle (Pair mode)",
 					"value": 3
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode) inv",
+					"label": "Status of corresponding paddle (Pair mode) inv",
 					"value": 4
 				},
 				{
@@ -468,7 +468,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class Set commands)",
+					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class set commands)",
 					"value": 0
 				},
 				{
@@ -480,11 +480,11 @@
 					"value": 2
 				},
 				{
-					"label": "LED indicates the status of corresponding paddle (in pair mode)",
+					"label": "LED indicates the status of corresponding paddle (In pair mode)",
 					"value": 3
 				},
 				{
-					"label": "LED indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"label": "LED indicates the status of the corresponding paddle (In pair mode), with inverted indication",
 					"value": 4
 				},
 				{
@@ -526,11 +526,11 @@
 					"value": 2
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode)",
+					"label": "Status of corresponding paddle (Pair mode)",
 					"value": 3
 				},
 				{
-					"label": "Status of corresponding paddle (pair mode) inv",
+					"label": "Status of corresponding paddle (Pair mode) inv",
 					"value": 4
 				},
 				{
@@ -556,7 +556,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class Set commands)",
+					"label": "LED indication is disabled (LED can be controlled by Indicator Command Class set commands)",
 					"value": 0
 				},
 				{
@@ -568,11 +568,11 @@
 					"value": 2
 				},
 				{
-					"label": "LED indicates the status of corresponding paddle (in pair mode)",
+					"label": "LED indicates the status of corresponding paddle (In pair mode)",
 					"value": 3
 				},
 				{
-					"label": "LED indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"label": "LED indicates the status of the corresponding paddle (In pair mode), with inverted indication",
 					"value": 4
 				},
 				{
@@ -653,37 +653,16 @@
 		},
 		{
 			"#": "12",
-			"label": "Disable House Cleaning Mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "House Cleaning Mode is enabled",
-					"value": 0
-				},
-				{
-					"label": "House Cleaning Mode is disabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "House Cleaning Mode",
+			"defaultValue": 0
 		},
 		{
 			"#": "13[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button #1: Multilevel Switch",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "13[0xff00]",
@@ -695,7 +674,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 255
 				}
 			]
@@ -709,27 +688,17 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "14[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button #2: Multilevel Switch",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "14[0xff00]",
@@ -741,7 +710,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 255
 				}
 			]
@@ -755,27 +724,17 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "15[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button #3: Multilevel Switch",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "15[0xff00]",
@@ -787,7 +746,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 255
 				}
 			]
@@ -801,27 +760,17 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "16[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button #4: Multilevel Switch",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "16[0xff00]",
@@ -833,7 +782,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 255
 				}
 			]
@@ -847,27 +796,17 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "17[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button #5: Multilevel Switch",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "17[0xff00]",
@@ -879,7 +818,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 255
 				}
 			]
@@ -893,27 +832,17 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "18[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button #6: Multilevel Switch",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "18[0xff00]",
@@ -925,7 +854,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 255
 				}
 			]
@@ -939,7 +868,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				}
 			]
@@ -1055,7 +984,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "By indicator command class",
+					"label": "By Indicator Command Class",
 					"value": 0
 				},
 				{

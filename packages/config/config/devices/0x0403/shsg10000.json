@@ -2,7 +2,7 @@
 	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
 	"manufacturerId": "0x0403",
 	"label": "SHSG10000",
-	"description": "High-volume Siren (95 dB) and LED Strobe Light",
+	"description": "High-Volume Siren (95 dB) and LED Strobe Light",
 	"devices": [
 		{
 			"productType": "0x0003",

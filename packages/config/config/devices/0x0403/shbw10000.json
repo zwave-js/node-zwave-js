@@ -71,11 +71,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "PIR trip = BASIC SET 256",
+					"label": "PIR trip = Basic Set 256",
 					"value": 0
 				},
 				{
-					"label": "PIR trip = BASIC SET 0",
+					"label": "PIR trip = Basic Set 0",
 					"value": 1
 				}
 			]

@@ -137,6 +137,7 @@ const ccAndCommandNames = combinations(
 const fixedMultiWordNames = [
 	...ccAndCommandNames,
 	"Command Class",
+	"Central Scene Notification",
 ].sort((a, b) => {
 	// These need to be ordered from maximum number of words to minimum number of words so the most specific ones match first
 	const numWordsA = a.split(" ").length;
@@ -156,6 +157,18 @@ const fixedNames = [
 	"Z-Wave",
 	"Fibaro",
 	"Lifeline",
+	// Languages:
+	"English",
+	"French",
+	"German",
+	"Italian",
+	"Spanish",
+	"Dutch",
+	"Danish",
+	"Norwegian",
+	"Swedish",
+	"Finnish",
+	"Arabic",
 	...fixedMultiWordNames,
 ];
 
@@ -196,6 +209,7 @@ const alwaysUppercase: RegExp[] = [
 	/^PWM$/i,
 	/^VSP$/i,
 	/^PIR$/i,
+	/^PIN$/i,
 	/^PID$/i,
 	/^OK$/i,
 	/^HSB$/i,
@@ -203,6 +217,7 @@ const alwaysUppercase: RegExp[] = [
 	/^CRC$/i,
 	/^UI$/i,
 	/^U[KS]$/i,
+	/^[AP]M$/i,
 ];
 
 const alwaysLowercase: RegExp[] = [

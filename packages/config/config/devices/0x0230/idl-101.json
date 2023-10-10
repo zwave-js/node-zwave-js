@@ -23,19 +23,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Away Manual Lock",
+					"label": "Disable away manual lock",
 					"value": 0
 				},
 				{
-					"label": "Disable Away Auto Lock",
+					"label": "Disable away auto lock",
 					"value": 1
 				},
 				{
-					"label": "Enable Away Manual Lock",
+					"label": "Enable away manual lock",
 					"value": 2
 				},
 				{
-					"label": "Enable Away Auto Lock",
+					"label": "Enable away auto lock",
 					"value": 3
 				}
 			]

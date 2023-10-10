@@ -23,15 +23,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED opposite to Load",
+					"label": "LED opposite to load",
 					"value": 0
 				},
 				{
-					"label": "LED same as Load",
+					"label": "LED same as load",
 					"value": 1
 				},
 				{
-					"label": "LED always OFF",
+					"label": "LED always off",
 					"value": 2
 				}
 			]

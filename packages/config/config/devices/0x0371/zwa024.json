@@ -119,11 +119,11 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor Binary Report",
+					"label": "Sensor binary report",
 					"value": 1
 				},
 				{
-					"label": "Notification and Sensor Binary Report",
+					"label": "Notification and sensor binary report",
 					"value": 2
 				}
 			]
@@ -174,11 +174,11 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Battery Powered",
+					"label": "Battery powered",
 					"value": 0
 				},
 				{
-					"label": "USB Powered",
+					"label": "USB powered",
 					"value": 1
 				}
 			]

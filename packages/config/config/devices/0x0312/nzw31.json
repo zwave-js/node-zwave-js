@@ -2,7 +2,7 @@
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x0312",
 	"label": "NZW31",
-	"description": "In-wall Dimming Switch",
+	"description": "In-Wall Dimming Switch",
 	"devices": [
 		{
 			"productType": "0x1f01",

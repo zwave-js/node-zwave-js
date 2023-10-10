@@ -49,7 +49,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Shutter / Venetian Mode (Output 1 - Up; Output 2 - Down)",
+					"label": "Shutter / Venetian mode (Output 1 - Up; Output 2 - Down)",
 					"value": 0
 				},
 				{
@@ -61,7 +61,7 @@
 					"value": 2
 				},
 				{
-					"label": "Shutter / Venetian Mode (Output 1 - Down; Output 2 - Up)",
+					"label": "Shutter / Venetian mode (Output 1 - Down; Output 2 - Up)",
 					"value": 3
 				}
 			]
@@ -157,11 +157,11 @@
 					"value": 2
 				},
 				{
-					"label": "Calibrating - Waiting for blade turn calibraion (venetian mode)",
+					"label": "Calibrating - Waiting for blade turn calibraion (Venetian mode)",
 					"value": 3
 				},
 				{
-					"label": "Calibrating - Going to reference point c (venetian mode)",
+					"label": "Calibrating - Going to reference point c (Venetian mode)",
 					"value": 4
 				},
 				{
@@ -253,15 +253,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Map S1/S2 to Z-Wave Button",
+					"label": "Map S1/S2 to Z-Wave button",
 					"value": 0
 				},
 				{
-					"label": "S1 -> Open; S2 -> Close",
+					"label": "S1 -> open; S2 -> close",
 					"value": 1
 				},
 				{
-					"label": "(Push Button) - Blind actions; (Other types) S1 -> Open, S2 -> Close",
+					"label": "(Push button) - blind actions; (Other types) S1 -> open, S2 -> close",
 					"value": 2
 				}
 			]
@@ -278,11 +278,11 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch",
+					"label": "2-State switch",
 					"value": 1
 				},
 				{
-					"label": "3-way switch",
+					"label": "3-Way switch",
 					"value": 2
 				},
 				{
@@ -307,11 +307,11 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch",
+					"label": "2-State switch",
 					"value": 1
 				},
 				{
-					"label": "3-way switch",
+					"label": "3-Way switch",
 					"value": 2
 				},
 				{
@@ -341,7 +341,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable network function (inclusion/exclusion)",
+					"label": "Enable network function (Inclusion/Exclusion)",
 					"value": 1
 				},
 				{

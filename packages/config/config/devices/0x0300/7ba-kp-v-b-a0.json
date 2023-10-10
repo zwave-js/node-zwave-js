@@ -2,7 +2,7 @@
 	"manufacturer": "LEEDARSON LIGHTING CO., Ltd.",
 	"manufacturerId": "0x0300",
 	"label": "7BA-KP-V-B-A0",
-	"description": "Z-WAVE 700 Keypad",
+	"description": "Z-Wave 700 Keypad",
 	"devices": [
 		{
 			"productType": "0x0301",

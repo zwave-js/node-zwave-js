@@ -38,115 +38,115 @@
 					"value": 1
 				},
 				{
-					"label": "17 °C Cool",
+					"label": "17 °C cool",
 					"value": 2
 				},
 				{
-					"label": "18 °C Cool",
+					"label": "18 °C cool",
 					"value": 3
 				},
 				{
-					"label": "19 °C Cool",
+					"label": "19 °C cool",
 					"value": 4
 				},
 				{
-					"label": "20 °C Cool",
+					"label": "20 °C cool",
 					"value": 5
 				},
 				{
-					"label": "21 °C Cool",
+					"label": "21 °C cool",
 					"value": 6
 				},
 				{
-					"label": "22 °C Cool",
+					"label": "22 °C cool",
 					"value": 7
 				},
 				{
-					"label": "23 °C Cool",
+					"label": "23 °C cool",
 					"value": 8
 				},
 				{
-					"label": "24 °C Cool",
+					"label": "24 °C cool",
 					"value": 9
 				},
 				{
-					"label": "25 °C Cool",
+					"label": "25 °C cool",
 					"value": 10
 				},
 				{
-					"label": "26 °C Cool",
+					"label": "26 °C cool",
 					"value": 11
 				},
 				{
-					"label": "27 °C Cool",
+					"label": "27 °C cool",
 					"value": 12
 				},
 				{
-					"label": "28 °C Cool",
+					"label": "28 °C cool",
 					"value": 13
 				},
 				{
-					"label": "29 °C Cool",
+					"label": "29 °C cool",
 					"value": 14
 				},
 				{
-					"label": "30 °C Cool",
+					"label": "30 °C cool",
 					"value": 15
 				},
 				{
-					"label": "17 °C Heat",
+					"label": "17 °C heat",
 					"value": 16
 				},
 				{
-					"label": "18 °C Heat",
+					"label": "18 °C heat",
 					"value": 17
 				},
 				{
-					"label": "19 °C Heat",
+					"label": "19 °C heat",
 					"value": 18
 				},
 				{
-					"label": "20 °C Heat",
+					"label": "20 °C heat",
 					"value": 19
 				},
 				{
-					"label": "21 °C Heat",
+					"label": "21 °C heat",
 					"value": 20
 				},
 				{
-					"label": "22 °C Heat",
+					"label": "22 °C heat",
 					"value": 21
 				},
 				{
-					"label": "23 °C Heat",
+					"label": "23 °C heat",
 					"value": 22
 				},
 				{
-					"label": "24 °C Heat",
+					"label": "24 °C heat",
 					"value": 23
 				},
 				{
-					"label": "25 °C Heat",
+					"label": "25 °C heat",
 					"value": 24
 				},
 				{
-					"label": "26 °C Heat",
+					"label": "26 °C heat",
 					"value": 25
 				},
 				{
-					"label": "27 °C Heat",
+					"label": "27 °C heat",
 					"value": 26
 				},
 				{
-					"label": "28 °C Heat",
+					"label": "28 °C heat",
 					"value": 27
 				},
 				{
-					"label": "29 °C Heat",
+					"label": "29 °C heat",
 					"value": 28
 				},
 				{
-					"label": "30 °C Heat",
+					"label": "30 °C heat",
 					"value": 29
 				},
 				{
@@ -172,11 +172,11 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Idle - IR Channel idle",
+					"label": "Idle - IR channel idle",
 					"value": 0
 				},
 				{
-					"label": "OK - the last learning operation was completed successfully",
+					"label": "OK - The last learning operation was completed successfully",
 					"value": 1
 				},
 				{
@@ -184,7 +184,7 @@
 					"value": 2
 				},
 				{
-					"label": "Full – All locations are being used",
+					"label": "Full – all locations are being used",
 					"value": 3
 				},
 				{
@@ -269,11 +269,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Swing OFF",
+					"label": "Swing off",
 					"value": 0
 				},
 				{
-					"label": "Swing Auto",
+					"label": "Swing auto",
 					"value": 1
 				}
 			]

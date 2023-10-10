@@ -68,21 +68,9 @@
 		},
 		{
 			"#": "32",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Surround IR control",
-			"valueSize": 1,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable Surround IR Emitters",
-					"value": 255
-				},
-				{
-					"label": "Disable Surround IR Emitters",
-					"value": 0
-				}
-			]
+			"defaultValue": 255
 		},
 		{
 			"#": "33",
@@ -92,11 +80,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Swing Off",
+					"label": "Swing off",
 					"value": 0
 				},
 				{
-					"label": "Swing Auto",
+					"label": "Swing auto",
 					"value": 1
 				}
 			]

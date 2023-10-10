@@ -69,7 +69,7 @@
 		{
 			"#": "30",
 			"label": "Temperature Change Reporting Threshold",
-			"description": "1°F = 0.5°C",
+			"description": "1 °F = 0.5 °C",
 			"valueSize": 1,
 			"unit": "°F",
 			"minValue": 0,
@@ -78,21 +78,9 @@
 		},
 		{
 			"#": "32",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Built-in IR Emitter Control",
-			"valueSize": 1,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"defaultValue": 255
 		},
 		{
 			"#": "33",
@@ -155,7 +143,7 @@
 		{
 			"#": "37",
 			"label": "Temperature Calibration",
-			"description": "1°F = 0.5°C",
+			"description": "1 °F = 0.5 °C",
 			"valueSize": 1,
 			"unit": "°F",
 			"minValue": -10,

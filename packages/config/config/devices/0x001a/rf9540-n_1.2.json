@@ -82,15 +82,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 3
 				}
 			]
@@ -104,11 +104,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				}
 			]
@@ -133,11 +133,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				}
 			]

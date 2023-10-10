@@ -60,7 +60,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top: turn off, Bottom: turn on",
+					"label": "Top: Turn off, bottom: Turn on",
 					"value": 0
 				},
 				{
@@ -78,11 +78,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle Switch",
+					"label": "Toggle switch",
 					"value": 0
 				},
 				{
-					"label": "Momentary Switch",
+					"label": "Momentary switch",
 					"value": 1
 				}
 			]
@@ -104,7 +104,7 @@
 					"value": 2
 				},
 				{
-					"label": "Central Scene 3 (exclusive to Input S)",
+					"label": "Central Scene 3 (Exclusive to input s)",
 					"value": 3
 				}
 			]

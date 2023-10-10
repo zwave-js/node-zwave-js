@@ -16,20 +16,9 @@
 	"paramInformation": [
 		{
 			"#": "31",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Local Control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Local Control On",
-					"value": 0
-				},
-				{
-					"label": "Local Control Off",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		}
 	]
 }

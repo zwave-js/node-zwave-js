@@ -66,11 +66,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Clamp placed Correctly",
+					"label": "Clamp placed correctly",
 					"value": 0
 				},
 				{
-					"label": "Clamp is REVERSED",
+					"label": "Clamp is reversed",
 					"value": 1
 				},
 				{

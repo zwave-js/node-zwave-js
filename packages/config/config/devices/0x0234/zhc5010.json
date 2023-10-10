@@ -2,7 +2,7 @@
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "ZHC5010",
-	"description": "FUGA Wall 4-way Switch with LED + Relay",
+	"description": "FUGA Wall 4-Way Switch with LED + Relay",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -26,7 +26,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode).",
+					"label": "Separate mode (Toggle mode).",
 					"value": 0
 				},
 				{
@@ -43,7 +43,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode).",
+					"label": "Separate mode (Toggle mode).",
 					"value": 0
 				},
 				{
@@ -135,7 +135,7 @@
 					"value": 7
 				},
 				{
-					"label": "LED indication is disabled (BASIC SET)",
+					"label": "LED indication is disabled (Basic Set)",
 					"value": 8
 				}
 			]
@@ -223,7 +223,7 @@
 					"value": 7
 				},
 				{
-					"label": "LED indication is disabled (BASIC SET)",
+					"label": "LED indication is disabled (Basic Set)",
 					"value": 8
 				}
 			]
@@ -311,7 +311,7 @@
 					"value": 7
 				},
 				{
-					"label": "LED indication is disabled (BASIC SET)",
+					"label": "LED indication is disabled (Basic Set)",
 					"value": 8
 				}
 			]
@@ -399,7 +399,7 @@
 					"value": 7
 				},
 				{
-					"label": "LED indication is disabled (BASIC SET)",
+					"label": "LED indication is disabled (Basic Set)",
 					"value": 8
 				}
 			]
@@ -577,31 +577,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "House Cleaning Mode is enabled",
+					"label": "House cleaning mode is enabled",
 					"value": 0
 				},
 				{
-					"label": "1 House Cleaning Mode is disabled.",
+					"label": "1 house cleaning mode is disabled.",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "19[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Multilevel Switch (button #1)",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "19[0xff00]",
@@ -622,20 +612,10 @@
 		},
 		{
 			"#": "20[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Multilevel Switch (button #2)",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "20[0xff00]",
@@ -656,20 +636,10 @@
 		},
 		{
 			"#": "21[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Multilevel Switch (button #3)",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "21[0xff00]",
@@ -690,20 +660,10 @@
 		},
 		{
 			"#": "22[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Multilevel Switch (button #4)",
 			"valueSize": 4,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "22[0xff00]",

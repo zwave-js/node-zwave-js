@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normal operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "factory reset",
+					"label": "Factory reset",
 					"value": 21930
 				}
 			]

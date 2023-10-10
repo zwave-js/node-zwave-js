@@ -16,22 +16,10 @@
 	"paramInformation": [
 		{
 			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Overload Protection",
 			"description": "Turn off if the load power exceeds 0.5A for more than 5s.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Function Disabled",
-					"value": 0
-				},
-				{
-					"label": "Function enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "21",

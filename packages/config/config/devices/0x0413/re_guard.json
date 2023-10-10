@@ -40,19 +40,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Valve Always Off",
+					"label": "Valve always off",
 					"value": 0
 				},
 				{
-					"label": "User Absent/Holiday",
+					"label": "User absent/holiday",
 					"value": 1
 				},
 				{
-					"label": "User Present",
+					"label": "User present",
 					"value": 2
 				},
 				{
-					"label": "Valve Always On",
+					"label": "Valve always on",
 					"value": 3
 				}
 			]
@@ -263,7 +263,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Detection",
+					"label": "Disable detection",
 					"value": 0
 				},
 				{
@@ -271,7 +271,7 @@
 					"value": 1
 				},
 				{
-					"label": "Blink LED and Shut Off Valve",
+					"label": "Blink LED and shut off valve",
 					"value": 2
 				}
 			]
@@ -286,11 +286,11 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Leakage",
+					"label": "No leakage",
 					"value": 0
 				},
 				{
-					"label": "Leakage Detected",
+					"label": "Leakage detected",
 					"value": 1
 				}
 			]
@@ -421,7 +421,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Detection",
+					"label": "Disable detection",
 					"value": 0
 				},
 				{
@@ -429,7 +429,7 @@
 					"value": 1
 				},
 				{
-					"label": "Blink LED and Shut Off Valve",
+					"label": "Blink LED and shut off valve",
 					"value": 2
 				}
 			]
@@ -443,11 +443,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Leakage",
+					"label": "No leakage",
 					"value": 0
 				},
 				{
-					"label": "Leakage Detected",
+					"label": "Leakage detected",
 					"value": 1
 				}
 			]
@@ -460,7 +460,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Detection",
+					"label": "Disable detection",
 					"value": 0
 				},
 				{
@@ -468,7 +468,7 @@
 					"value": 1
 				},
 				{
-					"label": "Blink LED and Shut Off Valve",
+					"label": "Blink LED and shut off valve",
 					"value": 2
 				}
 			]

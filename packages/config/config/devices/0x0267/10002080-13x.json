@@ -56,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Turns the LED OFF (default)",
+					"label": "Turns the LED off (Default)",
 					"value": 0
 				},
 				{
-					"label": "Turns the LED ON",
+					"label": "Turns the LED on",
 					"value": 255
 				}
 			]
@@ -74,7 +74,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Sets the UP time in seconds",
+					"label": "Sets the up time in seconds",
 					"value": 1
 				},
 				{
@@ -91,7 +91,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Sets the DOWN time in seconds",
+					"label": "Sets the down time in seconds",
 					"value": 1
 				},
 				{
@@ -120,11 +120,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED OFF",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "LED ON at 20% of maximum level",
+					"label": "LED on at 20% of maximum level",
 					"value": 255
 				}
 			]

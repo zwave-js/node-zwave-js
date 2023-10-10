@@ -74,7 +74,7 @@
 		},
 		{
 			"#": "7",
-			"label": "ZWave Sleep Timeout",
+			"label": "Z-Wave Sleep Timeout",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,

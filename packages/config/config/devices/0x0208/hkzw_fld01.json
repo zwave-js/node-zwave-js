@@ -110,7 +110,7 @@
 		{
 			"#": "20",
 			"label": "Set the high temperature alarm trigger value",
-			"description": "Available setting(US):-67°c to -257°c",
+			"description": "Available setting(US):-67 °C to -257 °C",
 			"valueSize": 2,
 			"minValue": -670,
 			"maxValue": 2570,
@@ -137,7 +137,7 @@
 		{
 			"#": "22",
 			"label": "Set the low temperature alarm trigger value",
-			"description": "Available setting(US):-67°c to -257°c",
+			"description": "Available setting(US):-67 °C to -257 °C",
 			"valueSize": 2,
 			"minValue": -670,
 			"maxValue": 2570,

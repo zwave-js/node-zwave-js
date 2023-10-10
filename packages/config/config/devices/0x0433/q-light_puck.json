@@ -110,15 +110,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "momentary (Push) switch",
+					"label": "Momentary (Push) switch",
 					"value": 0
 				},
 				{
-					"label": "ON/OFF switch",
+					"label": "On/Off switch",
 					"value": 1
 				},
 				{
-					"label": "roller blind switch-two switches operate the device(S1 to brighter, S2 to dim)",
+					"label": "Roller blind switch-two switches operate the device(S1 to brighter, S2 to dim)",
 					"value": 2
 				}
 			]

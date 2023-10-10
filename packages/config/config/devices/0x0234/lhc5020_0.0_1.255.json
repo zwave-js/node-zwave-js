@@ -2,7 +2,7 @@
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "LHC5020",
-	"description": "DIN-rail Module with 10 Digital Outputs and 4 Digital Inputs",
+	"description": "DIN-Rail Module with 10 Digital Outputs and 4 Digital Inputs",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -30,11 +30,11 @@
 					"value": 1
 				},
 				{
-					"label": "Blinking 1 sec. interval",
+					"label": "Blinking 1 sec. Interval",
 					"value": 2
 				},
 				{
-					"label": "Blinking 0.5 sec. interval",
+					"label": "Blinking 0.5 sec. Interval",
 					"value": 3
 				}
 			]

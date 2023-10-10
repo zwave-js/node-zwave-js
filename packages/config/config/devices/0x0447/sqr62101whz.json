@@ -2,7 +2,7 @@
 	"manufacturer": "Schneider Electric",
 	"manufacturerId": "0x0447",
 	"label": "SQR62101WHZ",
-	"description": "Z-Wave Plug-in",
+	"description": "Z-Wave Plug-In",
 	"devices": [
 		{
 			"productType": "0x0111",

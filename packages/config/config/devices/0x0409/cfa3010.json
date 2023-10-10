@@ -67,7 +67,7 @@
 					"value": 3
 				},
 				{
-					"label": "When reaching the position LOCKED",
+					"label": "When reaching the position locked",
 					"value": 4
 				},
 				{
@@ -89,11 +89,11 @@
 					"value": 1
 				},
 				{
-					"label": "Multiple turns for one Open/Close action",
+					"label": "Multiple turns for one open/close action",
 					"value": 2
 				},
 				{
-					"label": "Travel from window-tilted position is turned on (ABUS FCA3000)",
+					"label": "Travel from window-tilted position is turned on (Abus FCA3000)",
 					"value": 3
 				}
 			]
@@ -107,19 +107,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Touch Panel is active",
+					"label": "Touch panel is active",
 					"value": 1
 				},
 				{
-					"label": "Only Touch Panel Control Buttons are active",
+					"label": "Only touch panel control buttons are active",
 					"value": 2
 				},
 				{
-					"label": "Touch Panel is inactive",
+					"label": "Touch panel is inactive",
 					"value": 3
 				},
 				{
-					"label": "Touch Panel Trap is inactive",
+					"label": "Touch panel trap is inactive",
 					"value": 4
 				}
 			]
@@ -151,15 +151,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "unknown",
+					"label": "Unknown",
 					"value": 0
 				},
 				{
-					"label": "open",
+					"label": "Open",
 					"value": 1
 				},
 				{
-					"label": "unlocked",
+					"label": "Unlocked",
 					"value": 2
 				},
 				{
@@ -171,11 +171,11 @@
 					"value": 4
 				},
 				{
-					"label": "locked (end stop)",
+					"label": "Locked (End stop)",
 					"value": 5
 				},
 				{
-					"label": "multiple interlocked",
+					"label": "Multiple interlocked",
 					"value": 6
 				}
 			]

@@ -106,21 +106,9 @@
 		},
 		{
 			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Easy Mode",
-			"description": "Set Easy Mode 0:DISABLE 1:ENABLED DEFAULT:ENABLED",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Easy Mode Disabled",
-					"value": 0
-				},
-				{
-					"label": "Easy Mode Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "9",
@@ -130,11 +118,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "24 Hour Format",
+					"label": "24 hour",
 					"value": 0
 				},
 				{
-					"label": "12 Hour Format",
+					"label": "12 hour",
 					"value": 1
 				}
 			]

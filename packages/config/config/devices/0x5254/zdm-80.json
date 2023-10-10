@@ -35,19 +35,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All On active, All Off active",
+					"label": "All on active, all off active",
 					"value": 255
 				},
 				{
-					"label": "All On is not active, All Off is not active",
+					"label": "All on is not active, all off is not active",
 					"value": 0
 				},
 				{
-					"label": "All On is not active, All Off active",
+					"label": "All on is not active, all off active",
 					"value": 1
 				},
 				{
-					"label": "All On active, All Off is not active",
+					"label": "All on active, all off is not active",
 					"value": 2
 				}
 			]
@@ -58,20 +58,9 @@
 		},
 		{
 			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Double click option",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "17",

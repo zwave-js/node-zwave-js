@@ -60,15 +60,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle Switch",
+					"label": "Toggle switch",
 					"value": 1
 				},
 				{
-					"label": "Toggle Switch Reverse",
+					"label": "Toggle switch reverse",
 					"value": 2
 				},
 				{
-					"label": "Push Button (Momentary Switch)",
+					"label": "Push button (Momentary switch)",
 					"value": 3
 				}
 			]
@@ -79,6 +79,7 @@
 			"valueSize": 1,
 			"defaultValue": 6,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "COM",
@@ -105,6 +106,7 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "10",
@@ -125,7 +127,7 @@
 					"value": 1
 				},
 				{
-					"label": "Air and Floor sensors",
+					"label": "Air and floor sensors",
 					"value": 2
 				},
 				{
@@ -133,7 +135,7 @@
 					"value": 3
 				},
 				{
-					"label": "Floor and Air sensor",
+					"label": "Floor and air sensor",
 					"value": 4
 				},
 				{
@@ -141,11 +143,11 @@
 					"value": 5
 				},
 				{
-					"label": "Time regulator and Air sensor",
+					"label": "Time regulator and air sensor",
 					"value": 6
 				},
 				{
-					"label": "Time regulator and Floor sensor",
+					"label": "Time regulator and floor sensor",
 					"value": 7
 				}
 			]
@@ -269,6 +271,7 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "COM",
@@ -291,6 +294,7 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "40",
@@ -301,15 +305,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All Locked",
+					"label": "All locked",
 					"value": 1
 				},
 				{
-					"label": "Set Point Unlocked",
+					"label": "Set point unlocked",
 					"value": 2
 				},
 				{
-					"label": "Set Point and Mode Unlocked",
+					"label": "Set point and mode unlocked",
 					"value": 3
 				}
 			]
@@ -676,9 +680,10 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
-					"label": "No Action",
+					"label": "No action",
 					"value": 0
 				},
 				{
@@ -706,6 +711,7 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		}
 	],
 	"compat": {
