@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Control key #2 behaviour",
+			"label": "Control Key #2 Behaviour",
 			"description": "Turning off the shutter positioning function",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Inputs Button/Switch configuration",
+			"label": "Inputs Button/Switch Configuration",
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -143,7 +143,7 @@
 		},
 		{
 			"#": "31",
-			"label": "Alarm of flooding with water",
+			"label": "Alarm of Flooding with Water",
 			"description": "set for relay the shutter",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -209,7 +209,7 @@
 		},
 		{
 			"#": "41",
-			"label": "Scene activation functionality",
+			"label": "Scene Activation Functionality",
 			"description": "Only valid for the 1.9 version of FGR221.",
 			"valueSize": 1,
 			"defaultValue": 0,

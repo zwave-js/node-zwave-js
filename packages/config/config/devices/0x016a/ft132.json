@@ -20,62 +20,22 @@
 	"paramInformation": [
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Current Overload Protection.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Overheat protection",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Overheat Protection"
 		},
 		{
 			"#": "20",
-			"label": "Configure the output status after re-power on it.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Last status",
-					"value": 0
-				},
-				{
-					"label": "Always on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "80",
-			"label": "Group 1 notifications",
+			"label": "Group 1 Notifications",
 			"description": "To set which notification would be sent to the associated devices (Group 1)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -101,7 +61,7 @@
 		},
 		{
 			"#": "81",
-			"label": "Group 3 notifications",
+			"label": "Group 3 Notifications",
 			"description": "To set which notification would be sent to association group 3",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -119,7 +79,7 @@
 		},
 		{
 			"#": "82",
-			"label": "Group 4 notifications",
+			"label": "Group 4 Notifications",
 			"description": "To set which notification would be sent to association group 4",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -137,24 +97,12 @@
 		},
 		{
 			"#": "90",
-			"label": "Enables/disables parameter 91 and 92 below",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/disable Parameters 91 and 92"
 		},
 		{
 			"#": "91",
-			"label": "Set the threshold value of wattage.",
+			"label": "Set the Threshold Value of Wattage.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -163,7 +111,7 @@
 		},
 		{
 			"#": "92",
-			"label": "Set the threshold value of percent power",
+			"label": "Set the Threshold Value of Percent Power",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -171,7 +119,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Set parameter 101-103 to default value",
+			"label": "Set Parameter 101-103 to Default Value",
 			"description": "Reset the parameter 101-103",
 			"valueSize": 1,
 			"minValue": 0,
@@ -181,7 +129,7 @@
 		},
 		{
 			"#": "101",
-			"label": "Set group 1 reports",
+			"label": "Set Group 1 Reports",
 			"description": "To set which reports need to be sent in Report group 1",
 			"valueSize": 4,
 			"defaultValue": 0,
@@ -239,7 +187,7 @@
 		},
 		{
 			"#": "102",
-			"label": "Reports sent to Report group 2.",
+			"label": "Reports Sent to Report Group 2.",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -296,7 +244,7 @@
 		},
 		{
 			"#": "103",
-			"label": "Reports sent to Report group 3",
+			"label": "Reports Sent to Report Group 3",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -353,7 +301,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Set parameter 111-113 to default value.",
+			"label": "Set Parameter 111-113 to Default Value.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -362,7 +310,7 @@
 		},
 		{
 			"#": "111",
-			"label": "Automatic report interval for Report group 1.",
+			"label": "Automatic Report Interval for Report Group 1.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -370,7 +318,7 @@
 		},
 		{
 			"#": "112",
-			"label": "Automatic report interval for Report group 2",
+			"label": "Automatic Report Interval for Report Group 2",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -378,7 +326,7 @@
 		},
 		{
 			"#": "113",
-			"label": "Automatic report interval for Report group 3",
+			"label": "Automatic Report Interval for Report Group 3",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -386,7 +334,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Configure the external switch mode for S1",
+			"label": "Configure the External Switch Mode for S1",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -411,7 +359,7 @@
 		},
 		{
 			"#": "121",
-			"label": "Configure the external switch mode for S2.",
+			"label": "Configure the External Switch Mode for S2.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -436,7 +384,7 @@
 		},
 		{
 			"#": "122",
-			"label": "Set the control destination for external switch",
+			"label": "Set the Control Destination for External Switch",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -457,7 +405,7 @@
 		},
 		{
 			"#": "252",
-			"label": "Lock/unlock configuration parameters",
+			"label": "Lock/unlock Configuration Parameters",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

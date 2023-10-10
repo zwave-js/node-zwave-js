@@ -35,7 +35,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Led Indication Mode",
+			"label": "LED Indication Mode",
 			"description": "1. show dimmer state：when dimmer is on, LED is on. when dimmer is off, LED is off. the default setting is show dimmer state.  2. show night mode：when dimmer is on, LED is off. when dimmer is off, LED is on.  3. one flash mode : when dimmer on/off state changes, LED will light on one second and then off",
 			"valueSize": 1,
 			"unit": "seconds",

@@ -247,7 +247,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "BASIC Command Class Configuration",
+			"label": "Basic Command Class Configuration",
 			"description": "Determines the command frames sent to 1st association group.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -270,7 +270,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "BASIC Command Class Configuration",
+			"label": "Basic Command Class Configuration",
 			"description": "Determines the command frames sent to 2nd association group.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -829,7 +829,7 @@
 		{
 			"#": "86",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Low Temperature Threshold For Blue",
+			"label": "Low Temperature Threshold for Blue",
 			"description": "This parameter is relevant only when parameter 80 has been properly configured.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -839,7 +839,7 @@
 		{
 			"#": "86",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Low Temperature Threshold For Blue",
+			"label": "Low Temperature Threshold for Blue",
 			"description": "When the temperature is below this, the light is blue.",
 			"valueSize": 2,
 			"unit": "°C",
@@ -850,7 +850,7 @@
 		{
 			"#": "87",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "High Temperature Threshold For Red",
+			"label": "High Temperature Threshold for Red",
 			"description": "This parameter is relevant only when parameter 80 has been properly configured.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -860,7 +860,7 @@
 		{
 			"#": "87",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "High Temperature Threshold For Red",
+			"label": "High Temperature Threshold for Red",
 			"description": "When the temperature is above this, the light is red.",
 			"valueSize": 2,
 			"unit": "°C",

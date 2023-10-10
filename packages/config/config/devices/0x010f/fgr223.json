@@ -27,7 +27,7 @@
 	"paramInformation": [
 		{
 			"#": "20",
-			"label": "Switch type",
+			"label": "Switch Type",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Inputs orientation",
+			"label": "Inputs Orientation",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -65,7 +65,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Outputs orientation",
+			"label": "Outputs Orientation",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -82,7 +82,7 @@
 		},
 		{
 			"#": "40[0x01]",
-			"label": "S1 scenes: Pressed 1 time",
+			"label": "S1 Scenes: Pressed 1 Time",
 			"description": "Send a Central Scene notification when S1 is pressed 1 time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "40[0x02]",
-			"label": "S1 scenes: Pressed 2 times",
+			"label": "S1 Scenes: Pressed 2 Times",
 			"description": "Send a Central Scene notification when S1 is pressed 2 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -100,7 +100,7 @@
 		},
 		{
 			"#": "40[0x04]",
-			"label": "S1 scenes: Pressed 3 time",
+			"label": "S1 Scenes: Pressed 3 Time",
 			"description": "Send a Central Scene notification when S1 is pressed 3 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "40[0x08]",
-			"label": "S1 scenes: Hold down / Release",
+			"label": "S1 Scenes: Hold Down / Release",
 			"description": "Send a Central Scene notification when S1 is held down or released",
 			"valueSize": 1,
 			"minValue": 0,
@@ -118,7 +118,7 @@
 		},
 		{
 			"#": "41[0x01]",
-			"label": "S2 scenes: Pressed 1 time",
+			"label": "S2 Scenes: Pressed 1 Time",
 			"description": "Send a Central Scene notification when S2 is pressed 1 time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -127,7 +127,7 @@
 		},
 		{
 			"#": "41[0x02]",
-			"label": "S2 scenes: Pressed 2 times",
+			"label": "S2 Scenes: Pressed 2 Times",
 			"description": "Send a Central Scene notification when S2 is pressed 2 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "41[0x04]",
-			"label": "S2 scenes: Pressed 3 time",
+			"label": "S2 Scenes: Pressed 3 Time",
 			"description": "Send a Central Scene notification when S2 is pressed 3 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -145,7 +145,7 @@
 		},
 		{
 			"#": "41[0x08]",
-			"label": "S2 scenes: Hold down / Release",
+			"label": "S2 Scenes: Hold Down / Release",
 			"description": "Send a Central Scene notification when S2 is held down or released",
 			"valueSize": 1,
 			"minValue": 0,
@@ -154,7 +154,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Measuring power consumed by the device itself",
+			"label": "Measuring Power Consumed by the Device Itself",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -171,7 +171,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Power reports - on change",
+			"label": "Power Reports - On Change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -179,7 +179,7 @@
 		},
 		{
 			"#": "62",
-			"label": "Power reports - periodic",
+			"label": "Power Reports - Periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -187,7 +187,7 @@
 		},
 		{
 			"#": "65",
-			"label": "Energy reports - on change",
+			"label": "Energy Reports - On Change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -195,7 +195,7 @@
 		},
 		{
 			"#": "66",
-			"label": "Energy reports - periodic",
+			"label": "Energy Reports - Periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -203,7 +203,7 @@
 		},
 		{
 			"#": "150",
-			"label": "Force calibration",
+			"label": "Force Calibration",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -224,7 +224,7 @@
 		},
 		{
 			"#": "151",
-			"label": "Operating mode",
+			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -257,7 +257,7 @@
 		},
 		{
 			"#": "152",
-			"label": "Venetian blind - time of full turn of the slats",
+			"label": "Venetian Blind - Time of Full Turn of the Slats",
 			"valueSize": 4,
 			"unit": "1/100 sec",
 			"minValue": 0,
@@ -266,7 +266,7 @@
 		},
 		{
 			"#": "153",
-			"label": "Set slats back to previous position",
+			"label": "Set Slats Back to Previous Position",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -287,7 +287,7 @@
 		},
 		{
 			"#": "154",
-			"label": "Delay motor stop",
+			"label": "Delay Motor Stop",
 			"description": "Delay motor stop after reaching end switch",
 			"valueSize": 2,
 			"unit": "1/10 sec",
@@ -297,7 +297,7 @@
 		},
 		{
 			"#": "155",
-			"label": "Motor operation detection",
+			"label": "Motor Operation Detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch",
 			"valueSize": 2,
 			"unit": "W",
@@ -307,7 +307,7 @@
 		},
 		{
 			"#": "156",
-			"label": "Time of up movement",
+			"label": "Time of Up Movement",
 			"valueSize": 4,
 			"unit": "1/100 sec",
 			"minValue": 0,
@@ -316,7 +316,7 @@
 		},
 		{
 			"#": "157",
-			"label": "Time of down movement",
+			"label": "Time of Down Movement",
 			"valueSize": 4,
 			"unit": "1/100 sec",
 			"minValue": 0,

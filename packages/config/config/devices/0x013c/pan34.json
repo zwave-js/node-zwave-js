@@ -80,26 +80,14 @@
 		},
 		{
 			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Meter Reports",
 			"description": "Triggered by a greater than 5% power variation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "Timer Offset For Motor Start",
+			"label": "Timer Offset for Motor Start",
 			"valueSize": 2,
 			"unit": ".01 seconds",
 			"minValue": 0,

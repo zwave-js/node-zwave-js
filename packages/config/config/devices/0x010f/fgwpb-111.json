@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Overload safety switch",
+			"label": "Overload Safety Switch",
 			"description": "turn off the controlled device in case of exceeding the defined power.",
 			"valueSize": 2,
 			"unit": "0.1 Watts",

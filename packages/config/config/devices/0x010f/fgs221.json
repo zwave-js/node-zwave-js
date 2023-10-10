@@ -99,7 +99,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion <= 2.0",
-			"label": "Enable/Disable OFF-delay",
+			"label": "Enable/Disable OFF-Delay",
 			"description": "Activate/Deactivate Automatic turning off relay after set time",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -126,7 +126,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 2.1",
-			"label": "Auto off relay after specified time",
+			"label": "Auto Off Relay After Specified Time",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -144,7 +144,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion <= 1.8",
-			"label": "Relay 1: OFF-delay time (10ms steps)",
+			"label": "Relay 1: OFF-Delay Time (10ms Steps)",
 			"description": "Automatic turning off relay 1 after set time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -155,7 +155,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 1.9",
-			"label": "Relay 1: OFF-delay time",
+			"label": "Relay 1: OFF-Delay Time",
 			"description": "Automatic turning off relay 1 after set time in milliseconds, 0 to disable",
 			"valueSize": 2,
 			"minValue": 0,
@@ -166,7 +166,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion <= 1.8",
-			"label": "Relay 2: OFF-delay time (10ms steps)",
+			"label": "Relay 2: OFF-Delay Time (10ms Steps)",
 			"description": "Automatic turning off relay 2 after set time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -177,7 +177,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 1.9",
-			"label": "Relay 2: OFF-delay time",
+			"label": "Relay 2: OFF-Delay Time",
 			"description": "Automatic turning off relay 2 after set time in milliseconds, 0 to disable",
 			"valueSize": 2,
 			"minValue": 0,
@@ -187,7 +187,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Sending commands to group 1 devices",
+			"label": "Sending Commands to Group 1 Devices",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -209,7 +209,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion <= 1.8",
-			"label": "Separation of association sending (key 2)",
+			"label": "Separation of Association Sending (Key 2)",
 			"description": "Activate/Deactivate association sending for group 2",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -233,7 +233,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion >= 1.9 && firmwareVersion <= 2.0",
-			"label": "Control key #2 behaviour",
+			"label": "Control Key #2 Behaviour",
 			"description": "Map status to devices in group 2.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -252,7 +252,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion >= 2.1",
-			"label": "Sending commands to group 2 devices",
+			"label": "Sending Commands to Group 2 Devices",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -273,7 +273,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Inputs behaviour",
+			"label": "Inputs Behaviour",
 			"description": "In case of bi-stable switches, define their behaviour (toggle or follow)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -291,7 +291,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Switch type connector",
+			"label": "Switch Type Connector",
 			"description": "Switch type connector, you may choose between momentary and toggle switches",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -309,7 +309,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Dimmer/Roller shutter control",
+			"label": "Dimmer/Roller Shutter Control",
 			"description": "Enable/Disable operation associated to group 1",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -431,7 +431,7 @@
 		},
 		{
 			"#": "39",
-			"label": "ALARM FLASHING alarm time",
+			"label": "ALARM FLASHING Alarm Time",
 			"description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
 			"valueSize": 2,
 			"minValue": 0,

@@ -27,7 +27,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "configure LED light state",
+			"label": "Configure LED Light State",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Reverse installed direction",
+			"label": "Reverse Installed Direction",
 			"description": "Control if switch up is on or off",
 			"valueSize": 1,
 			"defaultValue": 0,

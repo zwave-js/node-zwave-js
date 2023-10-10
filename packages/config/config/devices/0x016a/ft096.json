@@ -25,7 +25,7 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Current overload protection"
+			"label": "Current Overload Protection"
 		},
 		{
 			"#": "20",
@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "33",
-			"label": "RGB LED color testing",
+			"label": "RGB LED Color Testing",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "80",
-			"label": "Enable send to associated devices",
+			"label": "Enable Send to Associated Devices",
 			"description": "Enable to send notifications to Group 1",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -64,7 +64,7 @@
 		},
 		{
 			"#": "81",
-			"label": "Configure LED state",
+			"label": "Configure LED State",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Set 101‐103 to default.",
+			"label": "Set 101‐103 to Default.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,
@@ -130,7 +130,7 @@
 		},
 		{
 			"#": "101",
-			"label": "Values to send to group 1",
+			"label": "Values to Send to Group 1",
 			"description": "Which reports need to send in Report group 1",
 			"valueSize": 4,
 			"defaultValue": 4,
@@ -164,7 +164,7 @@
 		},
 		{
 			"#": "102",
-			"label": "Values to send to group 2",
+			"label": "Values to Send to Group 2",
 			"description": "Which reports need to send in Report group 2",
 			"valueSize": 4,
 			"defaultValue": 8,
@@ -198,7 +198,7 @@
 		},
 		{
 			"#": "103",
-			"label": "Values to send to group 3",
+			"label": "Values to Send to Group 3",
 			"description": "Which reports need to send in Report group 3",
 			"valueSize": 4,
 			"defaultValue": 0,
@@ -232,7 +232,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Set 111‐113 to default.",
+			"label": "Set 111‐113 to Default.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,
@@ -250,7 +250,7 @@
 		},
 		{
 			"#": "111",
-			"label": "Time interval for sending to group 1",
+			"label": "Time Interval for Sending to Group 1",
 			"description": "Group 1 automatic update interval",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -260,7 +260,7 @@
 		},
 		{
 			"#": "112",
-			"label": "Time interval for sending to group 2",
+			"label": "Time Interval for Sending to Group 2",
 			"description": "Group 2 automatic update interval",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -270,7 +270,7 @@
 		},
 		{
 			"#": "113",
-			"label": "Time interval for sending to group 3",
+			"label": "Time Interval for Sending to Group 3",
 			"description": "Group 3 automatic update interval",
 			"valueSize": 4,
 			"minValue": 1,
@@ -294,7 +294,7 @@
 		},
 		{
 			"#": "83[0xff]",
-			"label": "Blue night light color value",
+			"label": "Blue Night Light Color Value",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
@@ -303,7 +303,7 @@
 		},
 		{
 			"#": "83[0xff00]",
-			"label": "Green night light color value",
+			"label": "Green Night Light Color Value",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
@@ -312,7 +312,7 @@
 		},
 		{
 			"#": "83[0xff0000]",
-			"label": "Red night light color value",
+			"label": "Red Night Light Color Value",
 			"description": "Configure the RGB value when it is in Night light mode",
 			"valueSize": 3,
 			"minValue": 0,
@@ -322,7 +322,7 @@
 		},
 		{
 			"#": "84[0xff]",
-			"label": "Green brightness in energy mode (%)",
+			"label": "Green Brightness in Energy Mode (%)",
 			"valueSize": 3,
 			"unit": "percent",
 			"minValue": 0,
@@ -332,7 +332,7 @@
 		},
 		{
 			"#": "84[0xff00]",
-			"label": "Yellow brightness in energy mode (%)",
+			"label": "Yellow Brightness in Energy Mode (%)",
 			"valueSize": 3,
 			"unit": "percent",
 			"minValue": 0,
@@ -342,7 +342,7 @@
 		},
 		{
 			"#": "84[0xff0000]",
-			"label": "Red brightness in energy mode (%)",
+			"label": "Red Brightness in Energy Mode (%)",
 			"valueSize": 3,
 			"unit": "percent",
 			"minValue": 0,

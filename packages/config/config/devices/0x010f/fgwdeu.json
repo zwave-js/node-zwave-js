@@ -350,7 +350,7 @@
 		{
 			"#": "60",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Power Report: Include Self-consumption"
+			"label": "Power Report: Include Self-Consumption"
 		},
 		{
 			"#": "61",
@@ -433,7 +433,7 @@
 		},
 		{
 			"#": "158",
-			"label": "Auto-off Timer",
+			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -713,7 +713,7 @@
 		},
 		{
 			"#": "179",
-			"label": "Approximated Power at Maximum Brightness",
+			"label": "Approximated Power At Maximum Brightness",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,

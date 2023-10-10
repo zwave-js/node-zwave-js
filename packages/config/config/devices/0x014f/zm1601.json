@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Alarm auto stop",
+			"label": "Alarm Auto Stop",
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
 			"defaultValue": 0,

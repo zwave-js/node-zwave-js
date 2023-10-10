@@ -37,34 +37,17 @@
 		},
 		{
 			"#": "2",
-			"label": "Restore switch state mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch off",
-					"value": 0
-				},
-				{
-					"label": "Last switch state",
-					"value": 1
-				},
-				{
-					"label": "Switch on",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Manual On/Off mode",
+			"label": "Manual On/Off Mode",
 			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "LED indication mode",
+			"label": "LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -85,7 +68,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Auto off timer",
+			"label": "Auto Off Timer",
 			"valueSize": 2,
 			"unit": "second",
 			"minValue": 0,
@@ -94,7 +77,7 @@
 		},
 		{
 			"#": "6",
-			"label": "RF Off command mode",
+			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

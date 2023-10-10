@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Door/window state",
+			"label": "Door/window State",
 			"description": "What state is door/window when the magnet is close to the sensor",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -50,7 +50,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Associations in Z-Wave network Security Mode",
+			"label": "Associations in Z-Wave Network Security Mode",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -75,7 +75,7 @@
 		},
 		{
 			"#": "11",
-			"label": "2nd association group triggers",
+			"label": "2nd Association Group Triggers",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Value of ON command sent to 2nd association group",
+			"label": "Value of ON Command Sent to 2nd Association Group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -104,7 +104,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Value of OFF command sent to 2nd association group",
+			"label": "Value of OFF Command Sent to 2nd Association Group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Association for opening - time delay",
+			"label": "Association for Opening - Time Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -120,7 +120,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Association for closing - time delay",
+			"label": "Association for Closing - Time Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "30",
-			"label": "Tamper - alarm cancellation delay",
+			"label": "Tamper - Alarm Cancellation Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "31",
-			"label": "Tamper - reporting alarm cancellation",
+			"label": "Tamper - Reporting Alarm Cancellation",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -153,7 +153,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Interval of temperature measurements",
+			"label": "Interval of Temperature Measurements",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -161,7 +161,7 @@
 		},
 		{
 			"#": "51",
-			"label": "Temperature reports threshold",
+			"label": "Temperature Reports Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 300,
@@ -169,7 +169,7 @@
 		},
 		{
 			"#": "52",
-			"label": "Interval of temperature reports",
+			"label": "Interval of Temperature Reports",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -177,7 +177,7 @@
 		},
 		{
 			"#": "53",
-			"label": "Temperature offset",
+			"label": "Temperature Offset",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
@@ -185,7 +185,7 @@
 		},
 		{
 			"#": "54",
-			"label": "Temperature alarm reports",
+			"label": "Temperature Alarm Reports",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -210,7 +210,7 @@
 		},
 		{
 			"#": "55",
-			"label": "High temperature alarm threshold",
+			"label": "High Temperature Alarm Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 600,
@@ -218,7 +218,7 @@
 		},
 		{
 			"#": "56",
-			"label": "Low temperature alarm threshold",
+			"label": "Low Temperature Alarm Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 599,
@@ -226,7 +226,7 @@
 		},
 		{
 			"#": "2[0x01]",
-			"label": "Visual LED indications - Open/close",
+			"label": "Visual LED Indications - Open/close",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -243,7 +243,7 @@
 		},
 		{
 			"#": "2[0x02]",
-			"label": "Visual LED indications - wake up",
+			"label": "Visual LED Indications - Wake Up",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -260,7 +260,7 @@
 		},
 		{
 			"#": "2[0x04]",
-			"label": "Visual LED indications - tampering",
+			"label": "Visual LED Indications - Tampering",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

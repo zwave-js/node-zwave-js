@@ -270,7 +270,7 @@
 		{
 			"#": "60",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Power Report: Include Self-consumption"
+			"label": "Power Report: Include Self-Consumption"
 		},
 		{
 			"#": "61",

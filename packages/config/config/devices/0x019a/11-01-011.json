@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Notification type",
+			"label": "Notification Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "2",
-			"label": "LED indication",
+			"label": "LED Indication",
 			"description": "Specify if LED should indicate special event.",
 			"valueSize": 1,
 			"defaultValue": 1,

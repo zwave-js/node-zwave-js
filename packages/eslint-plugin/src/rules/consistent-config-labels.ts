@@ -179,6 +179,7 @@ const sentenceCaseIgnored: (RegExp)[] = [
 	/^\d+(\.\d+)?°?[smCF]$/,
 	/^[VWA]$/,
 	/^Wh$/,
+	/^ms$/,
 	/^°[CF]$/,
 	// Common abbreviations:
 	/^N[CO]$/,
@@ -192,6 +193,9 @@ const titleCaseIgnored: RegExp[] = [
 	/^\d*x$/i, // 2x, 3x, x, ...
 	/^[a-z]+[A-Z]/, // fancY mArketing nAmEs
 	/[®™]$/i, // Trademarks etc.
+	// Units:
+	/^\d+(\.\d+)?°?[smCF]$/,
+	/^ms$/,
 ];
 
 const alwaysUppercase: RegExp[] = [
@@ -487,6 +491,40 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					messageId: "must-be-title-case",
 					data: {
 						what: "Device descriptions",
+					},
+					// suggest: [
+					// 	{
+					// 		messageId: "change-to-fixed",
+					// 		data: { fixed },
+					fix: (fixer) =>
+						fixer.replaceTextRange(
+							value.range,
+							`"${titleCase}"`,
+						),
+					// 	},
+					// ],
+				});
+			},
+
+			// Enforce title case for param labels
+			[`${CONFIG_PARAM} > JSONProperty[key.value='label']`](
+				node: AST.JSONProperty,
+			) {
+				if (
+					node.value.type !== "JSONLiteral"
+					|| typeof node.value.value !== "string"
+				) return;
+				const value = node.value;
+
+				const rawValue = value.raw.slice(1, -1);
+				const titleCase = toTitleCase(rawValue);
+				if (rawValue === titleCase) return;
+
+				context.report({
+					loc: node.loc,
+					messageId: "must-be-title-case",
+					data: {
+						what: "Param labels",
 					},
 					// suggest: [
 					// 	{

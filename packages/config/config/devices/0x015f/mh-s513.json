@@ -480,7 +480,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Factory reset",
+			"label": "Factory Reset",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,

@@ -29,7 +29,7 @@
 	"paramInformation": [
 		{
 			"#": "20",
-			"label": "Power-on state",
+			"label": "Power-On State",
 			"description": "The bulb's state after power is applied",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Send report when color is changed",
+			"label": "Send Report When Color Is Changed",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -68,7 +68,7 @@
 		},
 		{
 			"#": "33",
-			"label": "Get the bulb's color value",
+			"label": "Get the Bulb's Color Value",
 			"description": "Byte 1: reserved, Bytes 2, 3, 4: Red, Green, Blue",
 			"valueSize": 4,
 			"minValue": 0,
@@ -77,41 +77,18 @@
 		},
 		{
 			"#": "34",
-			"label": "Allow external switch to turn the bulb on/off",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Allow External Switch to Turn the Bulb On/off"
 		},
 		{
 			"#": "35",
-			"label": "Allow external switch to change the color",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Allow External Switch to Change the Color",
+			"defaultValue": 1
 		},
 		{
 			"#": "36",
-			"label": "Reboot / Save / Exit colorful mode",
+			"label": "Reboot / Save / Exit Colorful Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -136,7 +113,7 @@
 		},
 		{
 			"#": "37",
-			"label": "Colorful mode configuration",
+			"label": "Colorful Mode Configuration",
 			"description": "Configure the colour cycling modes. See overview for details.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -145,7 +122,7 @@
 		},
 		{
 			"#": "38",
-			"label": "Change speed",
+			"label": "Change Speed",
 			"description": "Change the speed when going from OFF to ON, ON to OFF. See overview for details.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -154,7 +131,7 @@
 		},
 		{
 			"#": "39",
-			"label": "Multi-colour configuration",
+			"label": "Multi-Colour Configuration",
 			"description": "Set up to 8 colours to cycle between when the LED is in Multi Colour Mode",
 			"valueSize": 4,
 			"minValue": 0,
@@ -163,7 +140,7 @@
 		},
 		{
 			"#": "80",
-			"label": "Send notifications to associated devices (Group 1)",
+			"label": "Send Notifications to Associated Devices (Group 1)",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -184,7 +161,7 @@
 		},
 		{
 			"#": "112",
-			"label": "Dimer mode",
+			"label": "Dimer Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -224,24 +201,12 @@
 		},
 		{
 			"#": "252",
-			"label": "Enable/disable Lock Configuration",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Lock Configuration"
 		},
 		{
 			"#": "255",
-			"label": "Reset to factory defaults",
+			"label": "Reset to Factory Defaults",
 			"description": "Reset the bulb, optionally also removing it from the z-wave network",
 			"valueSize": 4,
 			"minValue": 0,

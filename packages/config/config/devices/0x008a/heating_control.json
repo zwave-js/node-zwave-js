@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set to default",
+			"label": "Set to Default",
 			"description": "Set all configuration values to default values (factory settings)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Data request interval",
+			"label": "Data Request Interval",
 			"description": "Interval of updating data from thermostat and boiler",
 			"valueSize": 1,
 			"unit": "Seconds",
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "3",
-			"label": "T room update difference",
+			"label": "T Room Update Difference",
 			"description": "Difference of temperature before new update",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "4",
-			"label": "T setpoint update difference",
+			"label": "T Setpoint Update Difference",
 			"description": "Difference in setpoint before new update",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -92,7 +92,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Type of 'special' thermostat",
+			"label": "Type of 'special' Thermostat",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -114,44 +114,18 @@
 		},
 		{
 			"#": "7",
-			"label": "Status auto report",
-			"description": "Status auto report boiler/thermostat report.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable messages auto report",
-					"value": 0
-				},
-				{
-					"label": "Enable status messages auto report",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Status Auto Report",
+			"description": "Status auto report boiler/thermostat report."
 		},
 		{
 			"#": "9",
-			"label": "Enable/Disable thermostat schedule",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable thermostat schedule",
-					"value": 0
-				},
-				{
-					"label": "Enable thermostat schedule",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Thermostat Schedule"
 		},
 		{
 			"#": "11",
-			"label": "Readout manual setpoint thermostat",
+			"label": "Readout Manual Setpoint Thermostat",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,

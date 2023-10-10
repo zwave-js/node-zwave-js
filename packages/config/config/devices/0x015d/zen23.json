@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Control mode",
+			"label": "Control Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

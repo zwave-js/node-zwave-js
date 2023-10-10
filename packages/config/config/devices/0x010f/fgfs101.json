@@ -77,7 +77,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 3.1",
-			"label": "Select alarm type (visual/acoustic)",
+			"label": "Select Alarm Type (Visual/acoustic)",
 			"description": "This parameter allows for deactivation visual and acoustic alarm.",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -103,7 +103,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Type alarm frame sent to 1st assoc group",
+			"label": "Type Alarm Frame Sent to 1st Assoc Group",
 			"description": "Type of cmd frame sent in case of flooding",
 			"valueSize": 1,
 			"defaultValue": 255,
@@ -122,7 +122,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Forced Level of Dimming group 1",
+			"label": "Forced Level of Dimming Group 1",
 			"description": "Parameter specifying forced level of dimming f. asoc grp 1",
 			"valueSize": 1,
 			"minValue": 1,
@@ -132,7 +132,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Device off and alarm cancellations",
+			"label": "Device Off and Alarm Cancellations",
 			"description": "Enable/disable device off/alarm cancellation updates to 2nd/3rd assoc groups",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -151,7 +151,7 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Interval betw. successive readings of temp sensors",
+			"label": "Interval Betw. Successive Readings of Temp Sensors",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -160,7 +160,7 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature measurement interval",
+			"label": "Temperature Measurement Interval",
 			"description": "Seconds between consecutive measurements of battery level/temperature",
 			"valueSize": 4,
 			"minValue": 1,
@@ -170,7 +170,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Insensitiveness to temperature changes.",
+			"label": "Insensitiveness to Temperature Changes.",
 			"description": "Minimum temperature change value",
 			"valueSize": 2,
 			"minValue": 0,
@@ -180,7 +180,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature measurement hysteresis",
+			"label": "Temperature Measurement Hysteresis",
 			"description": "Minimum change in temperature value for report to be sent to controller",
 			"valueSize": 2,
 			"minValue": 1,
@@ -215,7 +215,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Low temperature alarm threshold",
+			"label": "Low Temperature Alarm Threshold",
 			"description": "Temperature value below which LED indicator blinks",
 			"valueSize": 2,
 			"minValue": -10000,
@@ -224,7 +224,7 @@
 		},
 		{
 			"#": "51",
-			"label": "High temperature alarm threshold",
+			"label": "High Temperature Alarm Threshold",
 			"description": "Temperature value above which LED indicator blinks",
 			"valueSize": 2,
 			"minValue": -10000,
@@ -233,7 +233,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Low temperature alarm indicator colour",
+			"label": "Low Temperature Alarm Indicator Colour",
 			"description": "Default is blue (0x000000FF).",
 			"valueSize": 4,
 			"minValue": 0,
@@ -242,7 +242,7 @@
 		},
 		{
 			"#": "62",
-			"label": "High temperature alarm indicator colour",
+			"label": "High Temperature Alarm Indicator Colour",
 			"description": "Default is red (0x00FF0000). 65535 * Red + 256 * Green + Blue",
 			"valueSize": 4,
 			"minValue": 0,
@@ -251,7 +251,7 @@
 		},
 		{
 			"#": "63",
-			"label": "Visual temperature indicator",
+			"label": "Visual Temperature Indicator",
 			"description": "Enable or disable visual temperature indicator via device's LED",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -273,7 +273,7 @@
 		},
 		{
 			"#": "73",
-			"label": "Temperature measurement compensation",
+			"label": "Temperature Measurement Compensation",
 			"description": "Temperature value to compensate between air temp",
 			"valueSize": 2,
 			"minValue": -10000,
@@ -282,7 +282,7 @@
 		},
 		{
 			"#": "74",
-			"label": "Alarm frame for movement/tamper",
+			"label": "Alarm Frame for Movement/tamper",
 			"description": "Movement/tamper alarm sent to 1st & 4th assoc. group",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -309,7 +309,7 @@
 		{
 			"#": "75",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Visual and audible alarms duration",
+			"label": "Visual and Audible Alarms Duration",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -319,7 +319,7 @@
 		{
 			"#": "75",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Alarms signalization duration",
+			"label": "Alarms Signalization Duration",
 			"description": "Turn off alarm after given timeout",
 			"valueSize": 4,
 			"minValue": 0,
@@ -329,7 +329,7 @@
 		{
 			"#": "76",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Alarm/basic retransmission time when flooding",
+			"label": "Alarm/basic Retransmission Time When Flooding",
 			"description": "Time period after which alarm frames will be retransmitted",
 			"valueSize": 2,
 			"minValue": 0,
@@ -340,7 +340,7 @@
 		{
 			"#": "76",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Alarm signalization reactivation period",
+			"label": "Alarm Signalization Reactivation Period",
 			"description": "Time period after which an alarm will be turned back on",
 			"valueSize": 4,
 			"minValue": 0,
@@ -349,7 +349,7 @@
 		},
 		{
 			"#": "77",
-			"label": "Flood sensor functionality turned off",
+			"label": "Flood Sensor Functionality Turned Off",
 			"description": "Allows the internal flood sensor to be turned off.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -368,7 +368,7 @@
 		{
 			"#": "78",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Associations in Z-Wave network security mode",
+			"label": "Associations in Z-Wave Network Security Mode",
 			"description": "Defines whether commands are sent as secure or non-secure",
 			"valueSize": 1,
 			"defaultValue": 7,

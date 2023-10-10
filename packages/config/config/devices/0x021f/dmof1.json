@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Set \"Overload\" Current level",
+			"label": "Set \"Overload\" Current Level",
 			"description": "Maximum current the plug will pass",
 			"valueSize": 1,
 			"unit": "amps",
@@ -86,7 +86,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Current change METER_REPORT level",
+			"label": "Current Change METER_REPORT Level",
 			"description": "Report of relative change in current flow",
 			"valueSize": 1,
 			"unit": "%",

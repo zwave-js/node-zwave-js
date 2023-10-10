@@ -227,7 +227,7 @@
 		{
 			"#": "31",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Multi-command Encapsulation"
+			"label": "Multi-Command Encapsulation"
 		},
 		{
 			"#": "32",

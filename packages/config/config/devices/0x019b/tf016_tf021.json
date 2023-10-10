@@ -33,7 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Operation mode",
+			"label": "Operation Mode",
 			"valueSize": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -59,7 +59,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "Sensor mode",
+			"label": "Sensor Mode",
 			"valueSize": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -95,7 +95,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "Floor sensor type",
+			"label": "Floor Sensor Type",
 			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -129,7 +129,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "DIFF l. Temperature control Hysteresis",
+			"label": "DIFF L. Temperature Control Hysteresis",
 			"description": "Range 3-30 (0.3 °C 3.0 °C)",
 			"valueSize": 2,
 			"minValue": 3,
@@ -139,7 +139,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "FLo, Floor min limit",
+			"label": "FLo, Floor Min Limit",
 			"description": "Range 50-400 (5.0 °C 40.0 °C)",
 			"valueSize": 2,
 			"minValue": 50,
@@ -149,7 +149,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "FHi, Floor max limit",
+			"label": "FHi, Floor Max Limit",
 			"description": "Range 50-400 (5.0 °C 40.0 °C)",
 			"valueSize": 2,
 			"minValue": 50,
@@ -159,7 +159,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "ALo, Air min limit",
+			"label": "ALo, Air Min Limit",
 			"description": "Range 50-400 (5.0 °C 40.0 °C)",
 			"valueSize": 2,
 			"minValue": 50,
@@ -169,7 +169,7 @@
 		{
 			"#": "8",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "AHi, Air max limit",
+			"label": "AHi, Air Max Limit",
 			"description": "Range 50-400 (5.0 °C 40.0 °C)",
 			"valueSize": 2,
 			"minValue": 50,
@@ -179,7 +179,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "PLo, FP-mode P setting",
+			"label": "PLo, FP-Mode P Setting",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 9,
@@ -188,7 +188,7 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "CO mode setpoint",
+			"label": "CO Mode Setpoint",
 			"description": "Range 50-400 (5.0 °C 40.0 °C)",
 			"valueSize": 2,
 			"minValue": 50,
@@ -198,7 +198,7 @@
 		{
 			"#": "11",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "ECO mode setpoint",
+			"label": "ECO Mode Setpoint",
 			"description": "Range 50-400 (5.0 °C 40.0 °C)",
 			"valueSize": 2,
 			"minValue": 50,
@@ -208,7 +208,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "P setting",
+			"label": "P Setting",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10,
@@ -217,7 +217,7 @@
 		{
 			"#": "13",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "COOL setpoint",
+			"label": "COOL Setpoint",
 			"description": "Only if cooling enabled. Range 50-400 (5.0 °C - 40.0 °C)",
 			"valueSize": 2,
 			"minValue": 50,

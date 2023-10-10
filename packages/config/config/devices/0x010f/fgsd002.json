@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Smoke Sensor sensitivity",
+			"label": "Smoke Sensor Sensitivity",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -45,7 +45,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Z-Wave notifications status",
+			"label": "Z-Wave Notifications Status",
 			"description": "This parameter allows to activate excess temperature ...",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +55,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Visual indicator notifications status",
+			"label": "Visual Indicator Notifications Status",
 			"description": "This parameter allows to activate visual indications",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Sound notifications status",
+			"label": "Sound Notifications Status",
 			"description": "This parameter allows to activate sound signals...",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -139,7 +139,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Config of control frames in BASIC command class",
+			"label": "Config of Control Frames in Basic Command Class",
 			"description": "This parameter defines which frames will be sent ...",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -161,7 +161,7 @@
 		},
 		{
 			"#": "11",
-			"label": "BASIC ON frame value",
+			"label": "BASIC ON Frame Value",
 			"description": "BASIC ON frame is sent in case of smoke presence detection ...",
 			"valueSize": 2,
 			"minValue": 1,
@@ -170,7 +170,7 @@
 		},
 		{
 			"#": "12",
-			"label": "BASIC OFF frame value",
+			"label": "BASIC OFF Frame Value",
 			"description": "BASIC OFF frame is sent in case of FIRE ALARM cancellation.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -179,7 +179,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Alarm broadcast",
+			"label": "Alarm Broadcast",
 			"description": "A value other than 0 means that alarms are being ...",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -206,7 +206,7 @@
 		{
 			"#": "14",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Associations in Z-Wave network security mode",
+			"label": "Associations in Z-Wave Network Security Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -214,7 +214,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Temperature report interval",
+			"label": "Temperature Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -223,7 +223,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Temperature report hysteresis",
+			"label": "Temperature Report Hysteresis",
 			"description": "The temperature report will only be sent if there is a difference ...",
 			"valueSize": 1,
 			"minValue": 1,
@@ -232,7 +232,7 @@
 		},
 		{
 			"#": "30",
-			"label": "Temperature threshold",
+			"label": "Temperature Threshold",
 			"description": "Temperature threshold for activating alarms",
 			"valueSize": 1,
 			"minValue": 1,
@@ -241,7 +241,7 @@
 		},
 		{
 			"#": "31",
-			"label": "Excess temperature signaling interval",
+			"label": "Excess Temperature Signaling Interval",
 			"description": "Time interval of signaling (visual indication/sound) excess ...",
 			"valueSize": 2,
 			"minValue": 1,
@@ -250,7 +250,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Lack of Z-Wave range indication interval",
+			"label": "Lack of Z-Wave Range Indication Interval",
 			"description": "Time interval of signaling (visual indication/sound) lack of ...",
 			"valueSize": 2,
 			"minValue": 1,

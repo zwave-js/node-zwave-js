@@ -32,7 +32,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Feedback time",
+			"label": "Feedback Time",
 			"description": "the time the beep goes to off",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Feedback time-out",
+			"label": "Feedback Time-Out",
 			"description": "waiting for the wake-up-no-more command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "4",
-			"label": "feedback beeps per second",
+			"label": "Feedback Beeps Per Second",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Always awake mode",
+			"label": "Always Awake Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Operation mode",
+			"label": "Operation Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

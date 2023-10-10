@@ -118,7 +118,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Down value",
+			"label": "Down Value",
 			"description": "Lower power threshold",
 			"valueSize": 2,
 			"minValue": 0,
@@ -263,7 +263,7 @@
 		},
 		{
 			"#": "31",
-			"label": "Response to alarm frames",
+			"label": "Response to Alarm Frames",
 			"description": "Wall plug response to alarms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -286,7 +286,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Alarm state duration",
+			"label": "Alarm State Duration",
 			"description": "Specifies the duration of the alarm state",
 			"valueSize": 2,
 			"minValue": 1,
@@ -295,7 +295,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power load for violet color",
+			"label": "Power Load for Violet Color",
 			"description": "Maximum active power to flash the LED frame Violet",
 			"valueSize": 2,
 			"minValue": 1000,
@@ -304,7 +304,7 @@
 		},
 		{
 			"#": "41",
-			"label": "LED frame color On",
+			"label": "LED Frame Color On",
 			"description": "LED frame color when controlled device is on",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -354,7 +354,7 @@
 		},
 		{
 			"#": "42",
-			"label": "LED frame color Off",
+			"label": "LED Frame Color Off",
 			"description": "LED frame color when controlled device is off",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -400,7 +400,7 @@
 		},
 		{
 			"#": "43",
-			"label": "LED frame color Z-Wave",
+			"label": "LED Frame Color Z-Wave",
 			"description": "Z-Wave alarm illumination",
 			"valueSize": 1,
 			"defaultValue": 2,

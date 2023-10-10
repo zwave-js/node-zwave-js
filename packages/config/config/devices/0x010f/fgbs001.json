@@ -52,7 +52,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input I alarm cancellation delay",
+			"label": "Input I Alarm Cancellation Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input 2 alarm cancellation delay",
+			"label": "Input 2 Alarm Cancellation Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -70,7 +70,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Type of input no. 1",
+			"label": "Type of Input No. 1",
 			"description": "Type of input no. 1, what the input 1 will report if no contact is made",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Type of input no. 2",
+			"label": "Type of Input No. 2",
 			"description": "Type of input no. 2, what the input 2 will report if no contact is made",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -122,7 +122,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Type of control frame for association group 1",
+			"label": "Type of Control Frame for Association Group 1",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
@@ -160,7 +160,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Type of control frame for association group 2",
+			"label": "Type of Control Frame for Association Group 2",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
@@ -198,7 +198,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Forced Level of Dimming group 1",
+			"label": "Forced Level of Dimming Group 1",
 			"description": "Value of the parameter specifying the forced levels.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -208,7 +208,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Forced Level of Dimming group 2",
+			"label": "Forced Level of Dimming Group 2",
 			"description": "Value of the parameter specifying forced levels.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -218,7 +218,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Deactivate transmission of frame canceling alarm",
+			"label": "Deactivate Transmission of Frame Canceling Alarm",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -239,7 +239,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Interval between readings of temperature sensors",
+			"label": "Interval Between Readings of Temperature Sensors",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -248,7 +248,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Interval betw. forcing to send report for temp.",
+			"label": "Interval Betw. Forcing to Send Report for Temp.",
 			"description": "The forced report is sent immediately after ...",
 			"valueSize": 1,
 			"minValue": 1,
@@ -258,7 +258,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Insensitiveness to temperature changes.",
+			"label": "Insensitiveness to Temperature Changes.",
 			"description": "This is the maximum acceptable difference between",
 			"valueSize": 1,
 			"minValue": 0,
@@ -268,7 +268,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Transmitting alarm/control frame broadcast mode",
+			"label": "Transmitting Alarm/control Frame Broadcast Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -293,7 +293,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Scene activation",
+			"label": "Scene Activation",
 			"description": "Enable/Disable scene functionality.",
 			"valueSize": 1,
 			"defaultValue": 0,

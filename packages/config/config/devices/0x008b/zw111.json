@@ -41,45 +41,16 @@
 		},
 		{
 			"#": "4",
-			"label": "Overheat protection",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Overheat Protection"
 		},
 		{
 			"#": "20",
-			"label": "Configure the output status after re-power on it",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Last status",
-					"value": 0
-				},
-				{
-					"label": "Always on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "80",
-			"label": "Group 1 notification",
+			"label": "Group 1 Notification",
 			"description": "Set notification sent to associated nodes (group 1)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -109,7 +80,7 @@
 		},
 		{
 			"#": "81",
-			"label": "Group 3 notification",
+			"label": "Group 3 Notification",
 			"description": "Set notification sent to associated nodes (group 3)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -127,7 +98,7 @@
 		},
 		{
 			"#": "82",
-			"label": "Group 4 notification",
+			"label": "Group 4 Notification",
 			"description": "Set notification sent to associated nodes (group 4)",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -145,7 +116,7 @@
 		},
 		{
 			"#": "85",
-			"label": "Set appointment 1",
+			"label": "Set Appointment 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16843197,
@@ -153,7 +124,7 @@
 		},
 		{
 			"#": "86",
-			"label": "Set appointment 2",
+			"label": "Set Appointment 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16843197,
@@ -161,25 +132,12 @@
 		},
 		{
 			"#": "90",
-			"label": "(En/dis)able 91 and 92",
-			"description": "Enables/disables parameter 91 and 92",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/Disable Parameters 91 and 92"
 		},
 		{
 			"#": "91",
-			"label": "Set the threshold value of wattage",
+			"label": "Set the Threshold Value of Wattage",
 			"description": "Threshold change in wattage (in terms of wattage) to induce an automatic report",
 			"valueSize": 2,
 			"minValue": 0,
@@ -189,7 +147,7 @@
 		},
 		{
 			"#": "92",
-			"label": "Set the threshold value of percent power",
+			"label": "Set the Threshold Value of Percent Power",
 			"description": "Threshold change in wattage (in terms of percentage)",
 			"valueSize": 1,
 			"unit": "W",
@@ -199,7 +157,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Reset 101-103 to default",
+			"label": "Reset 101-103 to Default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -214,7 +172,7 @@
 		},
 		{
 			"#": "101",
-			"label": "Set group 1 reports",
+			"label": "Set Group 1 Reports",
 			"description": "To set which reports need to be sent in Report group 1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -223,7 +181,7 @@
 		},
 		{
 			"#": "102",
-			"label": "Set group 2 reports",
+			"label": "Set Group 2 Reports",
 			"description": "To set which reports need to be sent in Report group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -256,7 +214,7 @@
 		},
 		{
 			"#": "111",
-			"label": "Automatic report interval group 1",
+			"label": "Automatic Report Interval Group 1",
 			"description": "Set the interval of automatic report for Report group 1",
 			"valueSize": 4,
 			"minValue": 1,
@@ -265,7 +223,7 @@
 		},
 		{
 			"#": "112",
-			"label": "Automatic report interval group 2",
+			"label": "Automatic Report Interval Group 2",
 			"description": "Set the interval of automatic report for Report group 2",
 			"valueSize": 4,
 			"minValue": 1,
@@ -274,7 +232,7 @@
 		},
 		{
 			"#": "113",
-			"label": "Automatic report interval group 3",
+			"label": "Automatic Report Interval Group 3",
 			"description": "Set the interval of automatic report for Report group 3",
 			"valueSize": 4,
 			"minValue": 0,
@@ -283,7 +241,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Configure the external switch mode for S1",
+			"label": "Configure the External Switch Mode for S1",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,
@@ -313,7 +271,7 @@
 		},
 		{
 			"#": "121",
-			"label": "Configure the external switch mode for S2",
+			"label": "Configure the External Switch Mode for S2",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -342,7 +300,7 @@
 		},
 		{
 			"#": "122",
-			"label": "Get the state of touch panel port",
+			"label": "Get the State of Touch Panel Port",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -359,7 +317,7 @@
 		},
 		{
 			"#": "123",
-			"label": "Destination for switch S1",
+			"label": "Destination for Switch S1",
 			"description": "Set the control destination for external switch S1",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -381,7 +339,7 @@
 		},
 		{
 			"#": "124",
-			"label": "Set the control destination for external switch S2",
+			"label": "Set the Control Destination for External Switch S2",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -402,7 +360,7 @@
 		},
 		{
 			"#": "125",
-			"label": "Set the default dimming rate",
+			"label": "Set the Default Dimming Rate",
 			"description": "The value range is 1 to 255 seconds",
 			"valueSize": 1,
 			"minValue": 1,
@@ -412,7 +370,7 @@
 		},
 		{
 			"#": "128",
-			"label": "Get the current working mode",
+			"label": "Get the Current Working Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -433,7 +391,7 @@
 		},
 		{
 			"#": "129",
-			"label": "Set the dimming principle",
+			"label": "Set the Dimming Principle",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -450,7 +408,7 @@
 		},
 		{
 			"#": "130",
-			"label": "Type of load",
+			"label": "Type of Load",
 			"description": "To get what type of load the Dimmer is connected to.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -476,7 +434,7 @@
 		},
 		{
 			"#": "131",
-			"label": "Set the minimum brightness",
+			"label": "Set the Minimum Brightness",
 			"description": "Set the min brightness level that the load can reach to",
 			"valueSize": 1,
 			"minValue": 0,
@@ -485,7 +443,7 @@
 		},
 		{
 			"#": "132",
-			"label": "Set the maximum brightness level",
+			"label": "Set the Maximum Brightness Level",
 			"description": "Set the max brightness level that the load can reach to",
 			"valueSize": 1,
 			"minValue": 0,
@@ -494,7 +452,7 @@
 		},
 		{
 			"#": "249",
-			"label": "Set the recognition way of load",
+			"label": "Set the Recognition Way of Load",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -515,7 +473,7 @@
 		},
 		{
 			"#": "252",
-			"label": "Lock/unlock configuration parameters",
+			"label": "Lock/unlock Configuration Parameters",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

@@ -24,7 +24,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Enable/Disable Report on color change.",
+			"label": "Enable/Disable Report On Color Change.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Display mode of Cold/warm white",
+			"label": "Display Mode of Cold/warm White",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Colorful mode configuration",
+			"label": "Colorful Mode Configuration",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "80",
-			"label": "Notification (Group 1) when state changes",
+			"label": "Notification (Group 1) When State Changes",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -118,7 +118,7 @@
 		},
 		{
 			"#": "112",
-			"label": "Dimmer mode",
+			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -148,7 +148,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Reset to defaults",
+			"label": "Reset to Defaults",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

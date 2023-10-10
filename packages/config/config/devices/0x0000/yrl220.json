@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Auto Re-lock",
+			"label": "Auto Re-Lock",
 			"description": "When enabled, the unit will automatically re-lock",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -65,7 +65,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Re-lock Time",
+			"label": "Re-Lock Time",
 			"description": "Time after unlocking that the device will lock",
 			"valueSize": 1,
 			"unit": "Seconds",

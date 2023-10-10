@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Threshold of current for Load caution",
+			"label": "Threshold of Current for Load Caution",
 			"valueSize": 2,
 			"unit": "0.01 A",
 			"minValue": 10,
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Threshold of KWh for Load caution",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 10000,
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state mode",
+			"label": "Restore Switch State Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -73,11 +73,11 @@
 		{
 			"#": "6",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Manual On/Off mode"
+			"label": "Manual On/Off Mode"
 		},
 		{
 			"#": "7",
-			"label": "LED indication mode",
+			"label": "LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -98,7 +98,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto off timer",
+			"label": "Auto Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -106,7 +106,7 @@
 		},
 		{
 			"#": "9",
-			"label": "RF off command mode",
+			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -131,7 +131,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Switch mode",
+			"label": "Switch Mode",
 			"description": "Edge or Pulse mode or Edge-Toggle mode",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -153,7 +153,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Manual Switch Report mode",
+			"label": "Manual Switch Report Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

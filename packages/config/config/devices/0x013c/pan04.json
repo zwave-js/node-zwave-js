@@ -113,24 +113,7 @@
 		},
 		{
 			"#": "7",
-			"label": "State after Power Loss",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch off",
-					"value": 0
-				},
-				{
-					"label": "Last state",
-					"value": 1
-				},
-				{
-					"label": "Switch on",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "8",

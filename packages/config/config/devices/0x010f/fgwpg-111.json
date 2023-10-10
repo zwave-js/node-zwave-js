@@ -227,42 +227,42 @@
 		{
 			"#": "30[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: General",
+			"label": "Respond to Alarms: General",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: Smoke",
+			"label": "Respond to Alarms: Smoke",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: Carbon Monoxide",
+			"label": "Respond to Alarms: Carbon Monoxide",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: Carbon Dioxide",
+			"label": "Respond to Alarms: Carbon Dioxide",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x10]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: High Temperature",
+			"label": "Respond to Alarms: High Temperature",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x20]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: Flood",
+			"label": "Respond to Alarms: Flood",
 			"defaultValue": 1
 		},
 		{
 			"#": "31",
-			"label": "Response to alarm frames",
+			"label": "Response to Alarm Frames",
 			"description": "Wall plug response to alarms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -294,7 +294,7 @@
 		},
 		{
 			"#": "40",
-			"label": "LED Indicator: Power Threshold For Violet Color",
+			"label": "LED Indicator: Power Threshold for Violet Color",
 			"valueSize": 2,
 			"unit": "0.1 W",
 			"minValue": 1000,

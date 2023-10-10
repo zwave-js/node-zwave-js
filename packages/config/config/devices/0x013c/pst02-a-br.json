@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Pir Sensitivity",
+			"label": "PIR Sensitivity",
 			"description": "Pir sensitivity settings.0 means disable the PIR motion.1 means the lowest sensitivity,99 means the highest sensitivity.high sensitivity means can detected long distance, but if there is more noise signal in the environment, it will re-trigger too frequency",
 			"valueSize": 1,
 			"minValue": 0,
@@ -213,7 +213,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Pir Re- Detect Interval Time",
+			"label": "PIR Re- Detect Interval Time",
 			"description": "Default tick is 3 (24 seconds)",
 			"valueSize": 1,
 			"unit": "seconds",

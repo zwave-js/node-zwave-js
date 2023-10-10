@@ -51,7 +51,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Reports type",
+			"label": "Reports Type",
 			"description": "value should be set to 1 if the module operates in Venetian Blind mode.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -69,7 +69,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Roller Shutter operating modes",
+			"label": "Roller Shutter Operating Modes",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -98,7 +98,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Turning time/ delay time",
+			"label": "Turning Time/ Delay Time",
 			"description": "depending on mode, turning time or delay time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -108,7 +108,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Lamellas positioning mode",
+			"label": "Lamellas Positioning Mode",
 			"description": "Parameter influences the lamellas positioning in venetian blind mode",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -130,7 +130,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Switch type",
+			"label": "Switch Type",
 			"description": "either Toggle switches or a single, momentary switch.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -152,7 +152,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Delay time after S2",
+			"label": "Delay Time After S2",
 			"description": "delay till auto turned off or auto gate close",
 			"valueSize": 1,
 			"minValue": 0,
@@ -162,7 +162,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Motor operation detection",
+			"label": "Motor Operation Detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -172,7 +172,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Motor operation time",
+			"label": "Motor Operation Time",
 			"description": "Time period for the motor to continue operation.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -182,7 +182,7 @@
 		},
 		{
 			"#": "29",
-			"label": "Forced Roller Shutter calibration",
+			"label": "Forced Roller Shutter Calibration",
 			"description": "set to 1 will enter calibration mode",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -284,7 +284,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Managing lamellas in response to alarm",
+			"label": "Managing Lamellas in Response to Alarm",
 			"description": "0 no change, 1 extreme position",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -302,7 +302,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reports",
+			"label": "Power Reports",
 			"description": "change that needs to occur to trigger the power report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -311,7 +311,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Periodic power or energy reports",
+			"label": "Periodic Power or Energy Reports",
 			"description": "Time to the next report. Value of 0 means the reports are turned off.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -321,7 +321,7 @@
 		},
 		{
 			"#": "43",
-			"label": "Energy reports",
+			"label": "Energy Reports",
 			"description": "Energy threshold to trigger report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -331,7 +331,7 @@
 		},
 		{
 			"#": "44",
-			"label": "Self-measurement",
+			"label": "Self-Measurement",
 			"description": "if power and energy reports are to sent to the main controller",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -349,7 +349,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Scenes/ Associations activation",
+			"label": "Scenes/ Associations Activation",
 			"description": "whether scenes or associations are activated by the switch keys",
 			"valueSize": 1,
 			"defaultValue": 0,

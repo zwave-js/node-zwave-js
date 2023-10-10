@@ -85,7 +85,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Upload temperature difference",
+			"label": "Upload Temperature Difference",
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 1000,
@@ -94,7 +94,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Upload time interval",
+			"label": "Upload Time Interval",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 10,

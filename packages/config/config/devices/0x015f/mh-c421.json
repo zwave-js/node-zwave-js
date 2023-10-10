@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Read motor data on first use",
+			"label": "Read Motor Data On First Use",
 			"description": "Run the motor for 3 seconds to read motor data",
 			"valueSize": 1,
 			"defaultValue": 1,

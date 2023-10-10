@@ -155,7 +155,7 @@
 		},
 		{
 			"#": "13",
-			"label": "One click of S1",
+			"label": "One Click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -163,7 +163,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Double click of S1",
+			"label": "Double Click of S1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -289,7 +289,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Factory reset",
+			"label": "Factory Reset",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,

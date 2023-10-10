@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "4",
-			"label": "LED Backlit brightness level",
+			"label": "LED Backlit Brightness Level",
 			"description": "0=LED disabled 1-10=Min level-Max level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -75,7 +75,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Key On duration",
+			"label": "Key On Duration",
 			"description": "0=infinite 1~65535=unit \"sec\"",
 			"valueSize": 2,
 			"minValue": 0,
@@ -85,7 +85,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Factory setting",
+			"label": "Factory Setting",
 			"valueSize": 1,
 			"minValue": 85,
 			"maxValue": 85,

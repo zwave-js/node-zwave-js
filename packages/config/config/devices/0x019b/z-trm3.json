@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Sensor mode",
+			"label": "Sensor Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Floor sensor type",
+			"label": "Floor Sensor Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Temperature control hysteresis (DIFF I)",
+			"label": "Temperature Control Hysteresis (DIFF I)",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": 3,
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Floor minimum temperature limit (FLo)",
+			"label": "Floor Minimum Temperature Limit (FLo)",
 			"valueSize": 2,
 			"unit": "0.1 °C",
 			"minValue": 50,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Floor maximum temperature (FHi)",
+			"label": "Floor Maximum Temperature (FHi)",
 			"valueSize": 2,
 			"unit": "0.1 °C",
 			"minValue": 50,
@@ -106,7 +106,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Air minimum temperature limit (ALo)",
+			"label": "Air Minimum Temperature Limit (ALo)",
 			"valueSize": 2,
 			"unit": "0.1 °C",
 			"minValue": 50,
@@ -115,7 +115,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Air maximum temperature limit (AHi)",
+			"label": "Air Maximum Temperature Limit (AHi)",
 			"valueSize": 2,
 			"unit": "0.1 °C",
 			"minValue": 50,
@@ -124,7 +124,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Room sensor calibration",
+			"label": "Room Sensor Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": -60,
@@ -133,7 +133,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Floor sensor calibration",
+			"label": "Floor Sensor Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": -60,
@@ -142,7 +142,7 @@
 		},
 		{
 			"#": "12",
-			"label": "External sensor calibration",
+			"label": "External Sensor Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": -60,
@@ -151,7 +151,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Temperature display",
+			"label": "Temperature Display",
 			"description": "Selects which temperature is shown on the display.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -169,7 +169,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Button brightness - dimmed state",
+			"label": "Button Brightness - Dimmed State",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -178,7 +178,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Button brightness - active state",
+			"label": "Button Brightness - Active State",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -187,7 +187,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Display brightness - dimmed state",
+			"label": "Display Brightness - Dimmed State",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -196,7 +196,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Display brightness - active state",
+			"label": "Display Brightness - Active State",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -205,7 +205,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Temperature report interval",
+			"label": "Temperature Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -214,7 +214,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Temperature report hysteresis",
+			"label": "Temperature Report Hysteresis",
 			"valueSize": 1,
 			"unit": "°C/10",
 			"minValue": 1,
@@ -223,7 +223,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Meter report interval",
+			"label": "Meter Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -232,7 +232,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Meter report delta value",
+			"label": "Meter Report Delta Value",
 			"valueSize": 1,
 			"unit": "kWh/10",
 			"minValue": 0,

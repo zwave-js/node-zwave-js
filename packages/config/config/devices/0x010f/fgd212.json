@@ -283,7 +283,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Value Sent to Associated Devices on Single Click",
+			"label": "Value Sent to Associated Devices On Single Click",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -345,7 +345,7 @@
 			"#": "24[0x10]",
 			"$if": "firmwareVersion >= 3.5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value on Double Click"
+			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value On Double Click"
 		},
 		{
 			"#": "25[0x01]",
@@ -371,12 +371,12 @@
 			"#": "25[0x10]",
 			"$if": "firmwareVersion >= 3.5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value on Double Click"
+			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value On Double Click"
 		},
 		{
 			"#": "26",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "3-way Switch Function",
+			"label": "3-Way Switch Function",
 			"description": "Key S2 also controls the dimmer"
 		},
 		{
@@ -758,7 +758,7 @@
 		},
 		{
 			"#": "59",
-			"label": "Approximated Power at the Maximum Brightness Level",
+			"label": "Approximated Power At the Maximum Brightness Level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,

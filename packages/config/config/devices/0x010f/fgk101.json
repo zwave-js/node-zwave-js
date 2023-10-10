@@ -87,7 +87,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Status Change Signalled By LED",
+			"label": "Status Change Signalled by LED",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -110,7 +110,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Door State when Magnet is Close",
+			"label": "Door State When Magnet Is Close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -224,7 +224,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Forced Level of Dimming group 1",
+			"label": "Forced Level of Dimming Group 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,

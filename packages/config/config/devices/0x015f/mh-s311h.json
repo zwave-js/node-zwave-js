@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "4",
-			"label": "LED Backlit brightness level",
+			"label": "LED Backlit Brightness Level",
 			"description": "0x00 LED disabled 0x01~0x0A Min level-Max level >0x0A same level as 0x0A",
 			"valueSize": 1,
 			"minValue": 0,
@@ -52,7 +52,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Key On duration",
+			"label": "Key On Duration",
 			"description": "0=infinite 1~65535=unit \"sec\"",
 			"valueSize": 2,
 			"unit": "2",

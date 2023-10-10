@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Temperature offset",
+			"label": "Temperature Offset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,

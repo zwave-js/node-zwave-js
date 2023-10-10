@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Threshold of Current For Load Caution",
+			"label": "Threshold of Current for Load Caution",
 			"description": "500*0.01a=5a",
 			"valueSize": 2,
 			"minValue": 0,
@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Threshold of Kwh For Load Caution",
+			"label": "Threshold of kWh for Load Caution",
 			"description": "10000 * 1kwh = 10000 kwh",
 			"valueSize": 2,
 			"minValue": 0,

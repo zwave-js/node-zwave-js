@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Reset to factory settings",
+			"label": "Reset to Factory Settings",
 			"description": "Set all configuration values to default values (factory settings).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "2",
-			"label": "The way how the button reacts when press/released",
+			"label": "The Way How the Button Reacts When Press/released",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -81,24 +81,12 @@
 		},
 		{
 			"#": "4",
-			"label": "Enable dimming",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Dimming"
 		},
 		{
 			"#": "6",
-			"label": "Maximum load",
+			"label": "Maximum Load",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -107,7 +95,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Dimming speed",
+			"label": "Dimming Speed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -116,7 +104,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Fading up speed",
+			"label": "Fading Up Speed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -125,7 +113,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Toggle time",
+			"label": "Toggle Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -134,7 +122,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Auto meter report: percentage",
+			"label": "Auto Meter Report: Percentage",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -143,7 +131,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Auto meter report: watt",
+			"label": "Auto Meter Report: Watt",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -152,7 +140,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Auto meter report: time",
+			"label": "Auto Meter Report: Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -161,7 +149,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Last known status",
+			"label": "Last Known Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -170,7 +158,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Fading down speed",
+			"label": "Fading Down Speed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

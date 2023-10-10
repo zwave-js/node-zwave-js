@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "12",
-			"label": "Motor state mode",
+			"label": "Motor State Mode",
 			"description": "Allows to change motor state (normal/calibration/discalibration mode)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "13",
-			"label": "BASIC SET Respone",
+			"label": "Basic Set Respone",
 			"description": "Allows to change motor behavior after receiving BASIC_SET with value 0xFF",
 			"valueSize": 1,
 			"defaultValue": 0,

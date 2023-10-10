@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Override OFF-delay",
+			"label": "Override OFF-Delay",
 			"description": "Forced auto off period",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Relay 1: OFF-delay time (100ms steps)",
+			"label": "Relay 1: OFF-Delay Time (100ms Steps)",
 			"description": "Automatic turning off relay 1 after set time ...",
 			"valueSize": 2,
 			"minValue": 0,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Separation of association sending (key 1)",
+			"label": "Separation of Association Sending (Key 1)",
 			"description": "Sending commands to control devices assigned ...",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -111,7 +111,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Inputs behaviour",
+			"label": "Inputs Behaviour",
 			"description": "Assigns bistable key status to the device status.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -129,7 +129,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Inputs Button/Switch configuration",
+			"label": "Inputs Button/Switch Configuration",
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -147,7 +147,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Dimmer/Roller shutter control",
+			"label": "Dimmer/Roller Shutter Control",
 			"description": "Enable/Disable operation of dimmer or roller shutter devices ...",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -269,7 +269,7 @@
 		},
 		{
 			"#": "39",
-			"label": "ALARM FLASHING alarm time",
+			"label": "ALARM FLASHING Alarm Time",
 			"description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
 			"valueSize": 2,
 			"minValue": 0,

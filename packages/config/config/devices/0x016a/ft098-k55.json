@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "20",
-			"label": "Set The Bulbs State After It is Re-powered On",
+			"label": "Set the Bulbs State After It Is Re-Powered On",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Enable/Disable to Send Out a Report When The Color is Changed",
+			"label": "Enable/Disable to Send Out A Report When the Color Is Changed",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -55,7 +55,7 @@
 		},
 		{
 			"#": "33",
-			"label": "Get The Bulb’s Color Value",
+			"label": "Get the Bulb’s Color Value",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"readOnly": true,
@@ -73,37 +73,14 @@
 		},
 		{
 			"#": "34",
-			"label": "Enable/Disable The Function of Using External Switch to Turn On/Off The Bulb",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Use External Switch to Turn On/Off the Bulb"
 		},
 		{
 			"#": "35",
-			"label": "Enable/Disable The Function of Using External Switch to Changes The Bulb’s Color",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Use External Switch to Changes the Bulb’s Color",
+			"defaultValue": 1
 		},
 		{
 			"#": "36",
@@ -191,7 +168,7 @@
 		},
 		{
 			"#": "39",
-			"label": "Color Index Configuration When The Bulb is in Multi Color Mode",
+			"label": "Color Index Configuration When the Bulb Is in Multi Color Mode",
 			"valueSize": 4,
 			"defaultValue": 2003125025,
 			"allowManualEntry": false,
@@ -232,7 +209,7 @@
 		},
 		{
 			"#": "80",
-			"label": "To Set Which Notification Can Be Sent to The Associated Devices (group 1) When The State of LED Bulb is Changed",
+			"label": "To Set Which Notification Can Be Sent to the Associated Devices (Group 1) When the State of LED Bulb Is Changed",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -253,7 +230,7 @@
 		},
 		{
 			"#": "112",
-			"label": "Set The Dimmer Mode",
+			"label": "Set the Dimmer Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -278,24 +255,12 @@
 		},
 		{
 			"#": "252",
-			"label": "Enable/Disable Lock Configuration",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Lock Configuration"
 		},
 		{
 			"#": "255",
-			"label": "Reset The Bulb",
+			"label": "Reset the Bulb",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,

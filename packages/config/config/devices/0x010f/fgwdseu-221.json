@@ -435,7 +435,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Alarm configuration – duration",
+			"label": "Alarm Configuration – Duration",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,

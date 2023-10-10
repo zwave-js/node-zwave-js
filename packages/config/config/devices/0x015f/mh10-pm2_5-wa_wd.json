@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "PM2.5 report interval",
+			"label": "PM2.5 Report Interval",
 			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
 			"valueSize": 1,
 			"unit": "0.1μg/m³",

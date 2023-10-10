@@ -213,7 +213,7 @@
 			"#": "37",
 			"$if": "firmwareVersion >= 1.13",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Control Load With Paddle",
+			"label": "Control Load with Paddle",
 			"defaultValue": 0
 		}
 	],
