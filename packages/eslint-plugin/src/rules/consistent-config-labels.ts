@@ -504,17 +504,17 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					data: {
 						what: "Device descriptions",
 					},
-					// suggest: [
-					// 	{
-					// 		messageId: "change-to-fixed",
-					// 		data: { fixed },
-					fix: (fixer) =>
-						fixer.replaceTextRange(
-							value.range,
-							`"${titleCase}"`,
-						),
-					// 	},
-					// ],
+					suggest: [
+						{
+							messageId: "change-to-fixed",
+							data: { fixed: titleCase },
+							fix: (fixer) =>
+								fixer.replaceTextRange(
+									value.range,
+									`"${titleCase}"`,
+								),
+						},
+					],
 				});
 			},
 
@@ -538,17 +538,17 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					data: {
 						what: "Param labels",
 					},
-					// suggest: [
-					// 	{
-					// 		messageId: "change-to-fixed",
-					// 		data: { fixed },
-					fix: (fixer) =>
-						fixer.replaceTextRange(
-							value.range,
-							`"${titleCase}"`,
-						),
-					// 	},
-					// ],
+					suggest: [
+						{
+							messageId: "change-to-fixed",
+							data: { fixed: titleCase },
+							fix: (fixer) =>
+								fixer.replaceTextRange(
+									value.range,
+									`"${titleCase}"`,
+								),
+						},
+					],
 				});
 			},
 
@@ -602,18 +602,16 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 					data: {
 						what: "Parameter descriptions",
 					},
-					// suggest: [
-					// 	{
-					// 		messageId: "change-to-fixed",
-					// 		data: { fixed },
-					fix: (fixer) =>
-						fixer.replaceTextRange(
-							value.range,
-							`"${sentenceCase}"`,
-						),
-					// 	},
-					// ],
 					suggest: [
+						{
+							messageId: "change-to-fixed",
+							data: { fixed: sentenceCase },
+							fix: (fixer) =>
+								fixer.replaceTextRange(
+									value.range,
+									`"${sentenceCase}"`,
+								),
+						},
 						{
 							messageId: "disable-for-all-options",
 							fix: function*(fixer) {
