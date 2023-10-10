@@ -126,7 +126,7 @@
 			"label": "Slats Tilting Full Turn Time",
 			"description": "Slat full turn time in tenths of a second.",
 			"valueSize": 2,
-			"unit": "tenths of a second",
+			"unit": "tenths of a seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 150

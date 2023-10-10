@@ -44,7 +44,19 @@ export const consistentParamUnits: JSONCRule.RuleModule = {
 				if (node.value.type !== "JSONLiteral") return;
 				if (typeof node.value.value !== "string") return;
 
-				const unit = node.value.value;
+				const rawUnit = node.value.value;
+
+				let unit: string;
+				let multiplier: string;
+				const lastSpaceIndex = rawUnit.lastIndexOf(" ");
+				if (lastSpaceIndex > -1) {
+					unit = rawUnit.slice(lastSpaceIndex + 1);
+					multiplier = rawUnit.slice(0, lastSpaceIndex + 1);
+				} else {
+					unit = rawUnit;
+					multiplier = "";
+				}
+
 				if (correctUnits.has(unit)) return;
 
 				const lowercased = unit.toLowerCase();
@@ -61,7 +73,7 @@ export const consistentParamUnits: JSONCRule.RuleModule = {
 					fix(fixer) {
 						return fixer.replaceTextRange(
 							node.value.range,
-							`"${fixed}"`,
+							`"${multiplier}${fixed}"`,
 						);
 					},
 				});

@@ -45,7 +45,7 @@
 			"label": "Level for Low Battery Alarm",
 			"description": "Adjust the percent of battery left before a low battery level alarm is sent",
 			"valueSize": 1,
-			"unit": "Battery Percent",
+			"unit": "Battery %",
 			"minValue": 10,
 			"maxValue": 50,
 			"defaultValue": 20

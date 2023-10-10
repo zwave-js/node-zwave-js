@@ -547,7 +547,7 @@
 			"label": "Input 1 Trigger Duration",
 			"description": "How long contact needs to be made at the input for the status change to be recorded.",
 			"valueSize": 1,
-			"unit": "0.1 s",
+			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5

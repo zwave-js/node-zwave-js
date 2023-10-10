@@ -36,7 +36,7 @@
 			"label": "KWH Meter Report Period",
 			"description": "number of 10 minute intervals",
 			"valueSize": 2,
-			"unit": "10 min",
+			"unit": "10 minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 6,

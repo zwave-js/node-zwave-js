@@ -38,7 +38,7 @@
 			"#": "19",
 			"label": "Temperature Report Interval",
 			"valueSize": 1,
-			"unit": "1/10 minute",
+			"unit": "1/10 minutes",
 			"minValue": 3,
 			"maxValue": 240,
 			"defaultValue": 144,
