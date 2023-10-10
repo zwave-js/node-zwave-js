@@ -116,11 +116,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "3,6V",
+					"label": "3.6 V",
 					"value": 0
 				},
 				{
-					"label": "3,0V",
+					"label": "3.0 V",
 					"value": 1
 				},
 				{

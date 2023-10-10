@@ -24,11 +24,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : Disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "1 : Enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -42,15 +42,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : Switch off",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
-					"label": "1 : Last switch state",
+					"label": "Last switch state",
 					"value": 1
 				},
 				{
-					"label": "2 : Switch on",
+					"label": "Switch on",
 					"value": 2
 				}
 			]
@@ -64,11 +64,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : Disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "1 : Enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -83,7 +83,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "0 : Disable auto off function",
+					"label": "Disable auto off function",
 					"value": 0
 				}
 			]
@@ -97,19 +97,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : Switch off",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
-					"label": "1 : Ignore",
+					"label": "Ignore",
 					"value": 1
 				},
 				{
-					"label": "2 : Switch toggle",
+					"label": "Switch toggle",
 					"value": 2
 				},
 				{
-					"label": "3 : Switch on",
+					"label": "Switch on",
 					"value": 3
 				}
 			]

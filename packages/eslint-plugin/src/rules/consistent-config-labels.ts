@@ -2,13 +2,13 @@ import { type AST } from "jsonc-eslint-parser";
 import { CONFIG_OPTION, CONFIG_PARAM, ROOT } from "../jsonSelectors";
 import {
 	type JSONCRule,
+	getJSONNumber,
 	insertAfterJSONProperty,
 	insertBeforeJSONProperty,
 	removeJSONProperty,
 } from "../utils";
 
 // TODO: Avoid Enable/Disable in param labels
-// Forbid numbers at the start of option labels (except units)
 // Sensor Binary -> Binary Sensor
 // remove Z-Wave and all its variants
 
@@ -218,6 +218,10 @@ const alwaysUppercase: RegExp[] = [
 const alwaysLowercase: RegExp[] = [
 	/^\d+-in-\d+$/i,
 ];
+
+const startsWithNumber = /^\d(?![\/-])/; // allow - and / as the next chars
+const isNumberWithUnit = /^\d+(\.\d+)?\s?[°\w%µ]+/;
+const isOnlyNumeric = /^\d+(\.\d+)?$/;
 
 const splitIntoWordsCache = new Map<string, Word[]>();
 
@@ -660,6 +664,34 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 						fixer.replaceTextRange(node.value.range, fixed),
 				});
 			},
+
+			// Disallow options labels that start with their value
+			[`${CONFIG_OPTION} > JSONProperty[key.value='label']`](
+				node: AST.JSONProperty,
+			) {
+				if (
+					node.value.type !== "JSONLiteral"
+					|| typeof node.value.value !== "string"
+				) return;
+
+				const value = node.value.value;
+				if (
+					startsWithNumber.test(value)
+					&& !isNumberWithUnit.test(value)
+				) {
+					// Allow fully-numeric options that are different from their value
+					if (isOnlyNumeric.test(value)) {
+						const optionValue = getJSONNumber(node.parent, "value")
+							?.value;
+						if (optionValue !== parseFloat(value)) return;
+					}
+
+					context.report({
+						loc: node.value.loc,
+						messageId: "no-numeric-option",
+					});
+				}
+			},
 		};
 	},
 	meta: {
@@ -681,6 +713,8 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 				`Disable for all options of this parameter`,
 			"no-default":
 				"Do not use '(default)' in labels or descriptions. Use the 'default' property instead.",
+			"no-numeric-option":
+				"Option labels must not start with their value. Use the 'value' property instead.",
 		},
 		type: "problem",
 	},
