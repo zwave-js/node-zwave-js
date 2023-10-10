@@ -52,7 +52,6 @@
 		{
 			"#": "3",
 			"label": "Weak Electric Switch Mode",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -78,7 +77,6 @@
 		{
 			"#": "4",
 			"label": "Strong Electric Switch Mode",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -100,7 +98,6 @@
 		{
 			"#": "5",
 			"label": "Limit Position Status",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"readOnly": true,
@@ -119,7 +116,6 @@
 		{
 			"#": "6",
 			"label": "Device Type",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"readOnly": true,
@@ -142,7 +138,6 @@
 		{
 			"#": "7",
 			"label": "Power Supply Type",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"readOnly": true,
@@ -161,7 +156,6 @@
 		{
 			"#": "8",
 			"label": "Manually Set / Cancel Open Borders",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -179,7 +173,6 @@
 		{
 			"#": "9",
 			"label": "Manually Set / Cancel Close Borders",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -197,7 +190,6 @@
 		{
 			"#": "10",
 			"label": "Delete the Limit Position",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 127,
 			"writeOnly": true,

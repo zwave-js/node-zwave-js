@@ -28,7 +28,6 @@
 		{
 			"#": "3",
 			"label": "Stop by Block Function",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -46,7 +45,6 @@
 		{
 			"#": "4",
 			"label": "Learn Mode",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -72,7 +70,6 @@
 		{
 			"#": "5",
 			"label": "Ventilation Function",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

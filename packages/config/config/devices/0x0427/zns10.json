@@ -18,7 +18,6 @@
 		{
 			"#": "1",
 			"label": "LED Light During Sending",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -36,7 +35,6 @@
 		{
 			"#": "2",
 			"label": "Temperature Report Threshold",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

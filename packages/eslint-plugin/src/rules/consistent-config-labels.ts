@@ -3,6 +3,7 @@ import {
 	type JSONCRule,
 	insertAfterJSONProperty,
 	insertBeforeJSONProperty,
+	removeJSONProperty,
 } from "../utils";
 
 // TODO: Title Case param labels, forbid . at the end of label and options, Avoid Enable/Disable in param labels
@@ -551,6 +552,34 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 				});
 			},
 
+			// Disallow "empty" param descriptions
+			[`${CONFIG_PARAM} > JSONProperty[key.value='description']`](
+				node: AST.JSONProperty,
+			) {
+				if (
+					node.value.type !== "JSONLiteral"
+					|| typeof node.value.value !== "string"
+				) return;
+				const value = node.value;
+
+				const description = value.value.trim();
+
+				switch (description) {
+					case "":
+					case "0":
+					case "false": {
+						context.report({
+							loc: node.loc,
+							messageId: "no-useless-description",
+							data: {
+								what: description,
+							},
+							fix: removeJSONProperty(context, node),
+						});
+					}
+				}
+			},
+
 			// TODO: Enforce Sentence case for param descriptions - This is hard due to lots of false positives
 
 			// Enforce sentence case for option labels
@@ -618,6 +647,7 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 		hasSuggestions: true,
 		schema: [],
 		messages: {
+			"no-useless-description": "The description {{what}} is not allowed",
 			"no-surrounding-whitespace":
 				"Leading and trailing whitespace is not allowed",
 			"must-be-title-case": "{{what}} must be in Title Case",

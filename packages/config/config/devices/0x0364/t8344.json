@@ -18,7 +18,6 @@
 		{
 			"#": "3",
 			"label": "Remember the Last Status",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

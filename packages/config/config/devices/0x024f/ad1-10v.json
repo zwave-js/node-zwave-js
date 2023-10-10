@@ -18,7 +18,6 @@
 		{
 			"#": "1",
 			"label": "Hardware Combination Identifier",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 18,
 			"readOnly": true,

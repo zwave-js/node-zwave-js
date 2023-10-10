@@ -44,7 +44,6 @@
 		{
 			"#": "10",
 			"label": "Dimming Speed",
-			"description": "",
 			"valueSize": 2,
 			"unit": "0.01 seconds",
 			"minValue": 0,
