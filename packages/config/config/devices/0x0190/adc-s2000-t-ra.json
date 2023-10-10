@@ -19,7 +19,7 @@
 			"label": "Wake Up Period",
 			"description": "Seconds to stay awake following button press",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 32767,
 			"defaultValue": 32768

@@ -38,7 +38,7 @@
 			"label": "Delaying Time",
 			"description": "Set the delaying time to report to Group 1 in seconds",
 			"valueSize": 1,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 25,
 			"defaultValue": 3

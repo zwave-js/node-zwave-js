@@ -112,7 +112,7 @@
 			"label": "Tick Duration",
 			"description": "auto-reports tick duration",
 			"valueSize": 1,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,

@@ -228,7 +228,7 @@
 			"label": "Metering Heartbeat",
 			"description": "Reporting interval for power and energy to lifeline.",
 			"valueSize": 2,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 3600,

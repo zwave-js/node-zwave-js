@@ -91,7 +91,7 @@
 			"label": "Max Waiting Time From Temp Sensor",
 			"description": "Max time of data expectation from room temperature sensor",
 			"valueSize": 2,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 100,
 			"maxValue": 30000,
 			"defaultValue": 30000
@@ -118,7 +118,7 @@
 			"#": "8",
 			"label": "Time Turbo Mode",
 			"valueSize": 2,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 100,
 			"maxValue": 1200,
 			"defaultValue": 120
@@ -127,7 +127,7 @@
 			"#": "9",
 			"label": "Power on Turbo Mode",
 			"valueSize": 1,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
@@ -157,7 +157,7 @@
 			"#": "11",
 			"label": "Polling Period of the Room Sensor",
 			"valueSize": 2,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 15,
 			"maxValue": 600,
 			"defaultValue": 300

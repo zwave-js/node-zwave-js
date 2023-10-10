@@ -19,7 +19,7 @@
 			"label": "Latch Hold Time",
 			"description": "Defines how long the latch is kept open.",
 			"valueSize": 1,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 20,
 			"defaultValue": 3

@@ -310,7 +310,7 @@
 			"label": "Input 1 Status on Delay",
 			"description": "Switching reaction time on delay for I1",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -320,7 +320,7 @@
 			"label": "Input 1 Status Off Delay",
 			"description": "Switching reaction time off delay for I1",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -330,7 +330,7 @@
 			"label": "Input 2 Status on Delay",
 			"description": "Switching reaction time on delay for I2",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -340,7 +340,7 @@
 			"label": "Input 2 Status Off Delay",
 			"description": "Switching reaction time off delay for I2",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -350,7 +350,7 @@
 			"label": "Input 3 Status on Delay",
 			"description": "Switching reaction time on delay for I3",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
@@ -360,7 +360,7 @@
 			"label": "Input 3 Status Off Delay",
 			"description": "Switching reaction time off delay for I3",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0

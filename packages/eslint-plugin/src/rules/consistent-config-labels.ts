@@ -1,4 +1,5 @@
 import { type AST } from "jsonc-eslint-parser";
+import { CONFIG_OPTION, CONFIG_PARAM, ROOT } from "../jsonSelectors";
 import {
 	type JSONCRule,
 	insertAfterJSONProperty,
@@ -11,13 +12,6 @@ import {
 // Sensor Binary -> Binary Sensor
 // Remove separators before the first actual word
 // Labels should not start with "Set" or "The"
-
-const ROOT = "Program > JSONExpressionStatement > JSONObjectExpression";
-const CONFIG_PARAM =
-	"JSONProperty[key.value='paramInformation'] > JSONArrayExpression > JSONObjectExpression";
-const CONFIG_OPTIONS = `${CONFIG_PARAM} > JSONProperty[key.value='options']`;
-const CONFIG_OPTION =
-	`${CONFIG_OPTIONS} > JSONArrayExpression > JSONObjectExpression`;
 
 function isSurroundedByWhitespace(str: string) {
 	return /^\s/.test(str) || /\s$/.test(str);
@@ -130,12 +124,6 @@ const ccAndCommandNames = combinations(
 	],
 )
 	.filter((w) => w.includes(" "));
-// .sort((a, b) => {
-// 	// These need to be ordered from maximum number of words to minimum number of words so the most specific ones match first
-// 	const numWordsA = a.split(" ").length;
-// 	const numWordsB = b.split(" ").length;
-// 	return numWordsB - numWordsA;
-// });
 
 const fixedMultiWordNames = [
 	...ccAndCommandNames,

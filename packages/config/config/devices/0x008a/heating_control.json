@@ -43,7 +43,7 @@
 			"label": "Data Request Interval",
 			"description": "Interval of updating data from thermostat and boiler",
 			"valueSize": 1,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 14,

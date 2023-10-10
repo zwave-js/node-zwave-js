@@ -27,7 +27,7 @@
 			"label": "Delay Before Accept of Basic Set Off",
 			"description": "Delay, from the time the siren-strobe turns on",
 			"valueSize": 1,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,

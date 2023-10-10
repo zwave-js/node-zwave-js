@@ -83,7 +83,7 @@
 			"#": "4",
 			"label": "Temperature Control Interval",
 			"valueSize": 1,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 18

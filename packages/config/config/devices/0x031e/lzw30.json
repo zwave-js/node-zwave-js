@@ -39,7 +39,7 @@
 			"#": "3",
 			"label": "Auto Off Timer",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0

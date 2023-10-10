@@ -34,7 +34,7 @@
 			"#": "4",
 			"label": "Re-Trigger Interval",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 3600,
 			"defaultValue": 180
@@ -52,7 +52,7 @@
 			"#": "6",
 			"label": "On-Off Duration",
 			"valueSize": 2,
-			"unit": "Secs",
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 3600,
 			"defaultValue": 15

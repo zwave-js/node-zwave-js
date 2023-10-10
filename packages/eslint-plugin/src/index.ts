@@ -3,6 +3,7 @@ import { ccAPIValidateArgs } from "./rules/ccapi-validate-args.js";
 import { consistentCCClasses } from "./rules/consistent-cc-classes.js";
 import { consistentConfigLabels } from "./rules/consistent-config-labels.js";
 import { consistentDeviceConfigPropertyOrder } from "./rules/consistent-device-config-property-order.js";
+import { consistentParamUnits } from "./rules/consistent-param-units.js";
 import { noDebugInTests } from "./rules/no-debug-in-tests.js";
 import { noForbiddenImports } from "./rules/no-forbidden-imports.js";
 import { noUnnecessaryMinMaxValue } from "./rules/no-unnecessary-min-max-value.js";
@@ -18,5 +19,6 @@ module.exports = {
 		"no-unnecessary-min-max-value": noUnnecessaryMinMaxValue,
 		"auto-unsigned": autoUnsigned,
 		"consistent-config-labels": consistentConfigLabels,
+		"consistent-param-units": consistentParamUnits,
 	},
 };

@@ -102,7 +102,7 @@
 			"#": "8",
 			"label": "Auto Off Timer",
 			"valueSize": 2,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,

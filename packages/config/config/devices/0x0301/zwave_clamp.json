@@ -18,7 +18,7 @@
 			"#": "2",
 			"label": "MEAS_PERIOD",
 			"valueSize": 1,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 30,
 			"maxValue": 120,
 			"defaultValue": 30

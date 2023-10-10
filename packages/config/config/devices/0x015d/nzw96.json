@@ -41,7 +41,7 @@
 			"label": "Countdown",
 			"description": "Plug Auto Shutoff",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 36000,
 			"defaultValue": 0,

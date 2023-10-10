@@ -107,7 +107,7 @@
 			"#": "35",
 			"label": "Alarm Configuration – Duration",
 			"valueSize": 2,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600

@@ -13,5 +13,6 @@ module.exports = {
 		"@zwave-js/no-unnecessary-min-max-value": "error",
 		"@zwave-js/auto-unsigned": "error",
 		"@zwave-js/consistent-config-labels": "error",
+		"@zwave-js/consistent-param-units": "error",
 	}
 };

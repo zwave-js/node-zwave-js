@@ -39,7 +39,7 @@
 			"label": "Lock Mode - Time to Lock and Locking Button",
 			"description": "0 - Lock Mode disabled, 5-1791 - calculated value",
 			"valueSize": 2,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 1791,
 			"defaultValue": 60
@@ -103,7 +103,7 @@
 			"label": "Sequences - Timeout",
 			"description": "5-30 (0.5-3s, 0.1s step) - time to lock",
 			"valueSize": 1,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 30,
 			"defaultValue": 10
