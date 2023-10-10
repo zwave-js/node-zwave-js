@@ -152,7 +152,7 @@
 		{
 			"#": "13",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "/ Proximity Mode",
+			"label": "Proximity Mode",
 			"defaultValue": 1
 		},
 		{

@@ -261,7 +261,7 @@
 					"value": 1
 				},
 				{
-					"label": "(Push button) - blind actions; (Other types) S1 -> open, S2 -> close",
+					"label": "Push button: Blind actions; Other types: S1 -> open, S2 -> close",
 					"value": 2
 				}
 			]

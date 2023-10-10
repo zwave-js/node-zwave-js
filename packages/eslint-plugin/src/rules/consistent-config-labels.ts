@@ -7,11 +7,9 @@ import {
 	removeJSONProperty,
 } from "../utils";
 
-// TODO: Title Case param labels, forbid . at the end of label and options, Avoid Enable/Disable in param labels
+// TODO: Avoid Enable/Disable in param labels
 // Avoid default in option labels, forbid numbers at the start of option labels (except units)
 // Sensor Binary -> Binary Sensor
-// Remove separators before the first actual word
-// Labels should not start with "Set" or "The"
 
 function isSurroundedByWhitespace(str: string) {
 	return /^\s/.test(str) || /\s$/.test(str);
@@ -349,9 +347,15 @@ const titleCaseCache = new Map<string, string>();
 function toTitleCase(str: string, allowFinalSuffix = true) {
 	if (titleCaseCache.has(str)) return titleCaseCache.get(str)!;
 
-	const words = splitIntoWords(str)
+	let words = splitIntoWords(str);
+
+	words = words
+		// Disallow punctuation before the first word
+		.filter(({ word }, i) => i > 0 || word.length > 0)
 		// Forbid "The" at the start of titles
-		.filter(({ word }, i) => i > 0 || word.toLowerCase() !== "the")
+		.filter(({ word }, i) => i > 0 || word.toLowerCase() !== "the");
+
+	const titleCased = words
 		.map(({ word, suffix }, i, words) => {
 			const isFirstWord = i === 0
 				|| isEndOfSentence(words[i - 1].suffix, false);
@@ -366,7 +370,7 @@ function toTitleCase(str: string, allowFinalSuffix = true) {
 				suffix: fixedSuffix,
 			};
 		});
-	const ret = joinWords(words);
+	const ret = joinWords(titleCased);
 	titleCaseCache.set(str, ret);
 	return ret;
 }
@@ -435,7 +439,13 @@ const sentenceCaseCache = new Map<string, string>();
 function toSentenceCase(str: string) {
 	if (sentenceCaseCache.has(str)) return sentenceCaseCache.get(str)!;
 
-	const words = splitIntoWords(str)
+	let words = splitIntoWords(str);
+
+	words = words
+		// Disallow punctuation before the first word
+		.filter(({ word }, i) => i > 0 || word.length > 0);
+
+	const sentenceCased = words
 		.map(({ word, suffix }, i, words) => {
 			const isFirstWord = i === 0
 				|| isEndOfSentence(words[i - 1].suffix, false);
@@ -444,7 +454,7 @@ function toSentenceCase(str: string) {
 				suffix: suffix,
 			};
 		});
-	const ret = joinWords(words);
+	const ret = joinWords(sentenceCased);
 	sentenceCaseCache.set(str, ret);
 	return ret;
 }

@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "(I1) Input 1 Switch Type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "(I2) Input 2 Contact Type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "3",
-			"label": "(I3) Input 3 Contact Type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -181,11 +181,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(NC) output is 0V (Default)",
+					"label": "Output is 0V (NC) (Default)",
 					"value": 0
 				},
 				{
-					"label": "(NO) output is 230V / 24V",
+					"label": "Output is 230V / 24V (NO)",
 					"value": 1
 				}
 			]

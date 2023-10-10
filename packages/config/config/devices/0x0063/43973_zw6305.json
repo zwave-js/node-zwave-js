@@ -46,7 +46,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "- notification only",
+					"label": "Notification only",
 					"value": 1
 				},
 				{
