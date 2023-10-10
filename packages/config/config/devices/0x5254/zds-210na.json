@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Dimmer Time From 0% to Max.",
+			"label": "Dimmer Time From 0% to Max",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,

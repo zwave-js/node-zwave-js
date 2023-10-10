@@ -103,7 +103,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Insensitiveness to Temperature Changes.",
+			"label": "Temperature Change Report Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

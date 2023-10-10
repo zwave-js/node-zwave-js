@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Set 101‐103 to Default.",
+			"label": "Reset Parameters 101-103 to Default",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,
@@ -232,7 +232,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Set 111‐113 to Default.",
+			"label": "Reset Parameters 111-113 to Default",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,

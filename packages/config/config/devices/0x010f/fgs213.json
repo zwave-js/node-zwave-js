@@ -335,7 +335,7 @@
 		},
 		{
 			"#": "38",
-			"label": "S2 Double Click Sent to 4th and 5th Ass. Grps.",
+			"label": "S2 Double Click Sent to 4th and 5th Association Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

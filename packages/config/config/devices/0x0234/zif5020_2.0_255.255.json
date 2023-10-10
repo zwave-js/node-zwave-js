@@ -120,21 +120,21 @@
 		{
 			"#": "11",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Input Snubber-Filter Time Constant.",
+			"label": "Input Snubber-Filter Time Constant",
 			"unit": "50 ms",
 			"defaultValue": 5
 		},
 		{
 			"#": "12",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Threshold Value for Activation of Inputs.",
+			"label": "Threshold Value for Activation of Inputs",
 			"unit": "200 ms",
 			"defaultValue": 20
 		},
 		{
 			"#": "13",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Threshold for Input in Latched Mode.",
+			"label": "Threshold for Input in Latched Mode",
 			"unit": "50 ms",
 			"defaultValue": 50
 		},

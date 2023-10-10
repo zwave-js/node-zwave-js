@@ -294,7 +294,7 @@
 		},
 		{
 			"#": "30",
-			"label": "End Unsolicited Battery Report on Wake Up.",
+			"label": "End Unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Operating Mode.",
+			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

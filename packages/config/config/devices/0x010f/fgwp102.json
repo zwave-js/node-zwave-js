@@ -194,7 +194,7 @@
 		{
 			"#": "23",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "The Response After Exceeding Defined Power Values",
+			"label": "Response After Exceeding Defined Power Values",
 			"description": "defines the way that 3rd association group devices are controlled.",
 			"valueSize": 1,
 			"defaultValue": 6,
@@ -560,7 +560,7 @@
 		{
 			"#": "49",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Metering Energy Consumed by the Wall Plug Itself.",
+			"label": "Metering Energy Consumed by the Wall Plug Itself",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

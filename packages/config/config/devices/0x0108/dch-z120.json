@@ -173,12 +173,12 @@
 		{
 			"#": "7[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Sending Motion OFF Report."
+			"label": "Sending Motion OFF Report"
 		},
 		{
 			"#": "7[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "PIR Super Sensitivity Mode.",
+			"label": "PIR Super Sensitivity Mode",
 			"defaultValue": 1
 		},
 		{
@@ -201,7 +201,7 @@
 		{
 			"#": "7[0x20]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Multi CC in Auto Report.",
+			"label": "Multi CC in Auto Report",
 			"defaultValue": 0
 		},
 		{

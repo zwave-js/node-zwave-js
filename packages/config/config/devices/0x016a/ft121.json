@@ -24,7 +24,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Enable/Disable Report On Color Change.",
+			"label": "Enable/Disable Report On Color Change",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

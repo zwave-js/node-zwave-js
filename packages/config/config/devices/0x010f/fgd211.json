@@ -385,7 +385,7 @@
 		{
 			"#": "40",
 			"$if": "firmwareVersion >= 1.9 && firmwareVersion <= 2.0",
-			"label": "Updating the Dimming Level without Switch.",
+			"label": "Updating the Dimming Level without Switch",
 			"description": "Parameter’s value changes depending on the dimming level.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -396,7 +396,7 @@
 		{
 			"#": "40",
 			"$if": "firmwareVersion >= 2.1",
-			"label": "Updating the Dimming Level without Switch.",
+			"label": "Updating the Dimming Level without Switch",
 			"description": "Available settings: from 1 to 99.",
 			"valueSize": 1,
 			"minValue": 1,

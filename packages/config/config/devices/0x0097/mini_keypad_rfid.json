@@ -24,7 +24,7 @@
 	"associations": {
 		"1": {
 			"label": "Association",
-			"description": "The Association Command Class is used to associate the TagReader to other devices. When a tag or code is read, the TagReader will send a notification to the Z‐Wave devices in its association group. It will also report the state of the tamper alarm to the",
+			"description": "The Association Command Class is used to associate the TagReader to other devices. When a tag or code is read, the TagReader will send a notification to the Z-Wave devices in its association group. It will also report the state of the tamper alarm to the",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
@@ -86,8 +86,7 @@
 		},
 		{
 			"#": "5",
-			"label": "The Mode",
-			"description": "Operating mode",
+			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -101,7 +100,7 @@
 					"value": 2
 				},
 				{
-					"label": "Z‐Wave chip is always on to request",
+					"label": "Z-Wave chip is always on to request",
 					"value": 3
 				}
 			]

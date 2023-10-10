@@ -201,7 +201,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Temperature Differential Report.",
+			"label": "Temperature Differential Report",
 			"description": "The temperature differential to report. Not applicable to TSP01.",
 			"valueSize": 1,
 			"unit": "Fahrenheit",
@@ -211,7 +211,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Illumination Differential Report.",
+			"label": "Illumination Differential Report",
 			"description": "The illumination differential to report. Not applicable to TSP01.",
 			"valueSize": 1,
 			"unit": "percentage",

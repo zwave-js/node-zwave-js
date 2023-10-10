@@ -248,7 +248,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Interval Betw. Forcing to Send Report for Temp.",
+			"label": "Temperature Report Interval",
 			"description": "The forced report is sent immediately after ...",
 			"valueSize": 1,
 			"minValue": 1,
@@ -258,7 +258,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Insensitiveness to Temperature Changes.",
+			"label": "Temperature Change Report Threshold",
 			"description": "This is the maximum acceptable difference between",
 			"valueSize": 1,
 			"minValue": 0,

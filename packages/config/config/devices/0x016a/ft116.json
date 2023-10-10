@@ -289,7 +289,7 @@
 		},
 		{
 			"#": "111",
-			"label": "Interval for Automatic Report Group 1.",
+			"label": "Interval for Automatic Report Group 1",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,

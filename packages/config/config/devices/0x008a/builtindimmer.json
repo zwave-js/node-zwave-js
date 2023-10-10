@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "2",
-			"label": "The Way How the Button Reacts When Press/released",
+			"label": "Button Behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

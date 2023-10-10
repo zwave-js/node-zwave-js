@@ -48,17 +48,23 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatically Switch Off After x Seconds.",
-			"description": "If not zero, automatically switch device off after a user defined time",
+			"label": "Auto-Off Timer",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "3",
-			"label": "What to Do on RF Off Command.",
+			"label": "What to Do on RF Off Command",
 			"description": "Defines how to interpret RF Off-Command.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -84,21 +90,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore Switch State After Power Cycle.",
-			"description": "Defines if the switch should restore switch state.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No, turn off",
-					"value": 0
-				},
-				{
-					"label": "Yes, default",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		{
 			"#": "20",
@@ -141,7 +133,7 @@
 		},
 		{
 			"#": "22",
-			"label": "LED On Color.",
+			"label": "LED On Color",
 			"description": "Color for On state.",
 			"valueSize": 1,
 			"defaultValue": 3,

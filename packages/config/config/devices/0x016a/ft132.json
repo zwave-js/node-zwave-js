@@ -21,7 +21,7 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Current Overload Protection.",
+			"label": "Current Overload Protection",
 			"defaultValue": 1
 		},
 		{
@@ -102,7 +102,7 @@
 		},
 		{
 			"#": "91",
-			"label": "Set the Threshold Value of Wattage.",
+			"label": "Set the Threshold Value of Wattage",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -187,7 +187,7 @@
 		},
 		{
 			"#": "102",
-			"label": "Reports Sent to Report Group 2.",
+			"label": "Reports Sent to Report Group 2",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -301,7 +301,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Set Parameter 111-113 to Default Value.",
+			"label": "Set Parameter 111-113 to Default Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -310,7 +310,7 @@
 		},
 		{
 			"#": "111",
-			"label": "Automatic Report Interval for Report Group 1.",
+			"label": "Automatic Report Interval for Report Group 1",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -359,7 +359,7 @@
 		},
 		{
 			"#": "121",
-			"label": "Configure the External Switch Mode for S2.",
+			"label": "Configure the External Switch Mode for S2",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

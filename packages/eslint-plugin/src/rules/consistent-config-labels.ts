@@ -357,16 +357,24 @@ function titleCaseWord(
 
 const titleCaseCache = new Map<string, string>();
 
-function toTitleCase(str: string) {
+function toTitleCase(str: string, allowFinalSuffix = true) {
 	if (titleCaseCache.has(str)) return titleCaseCache.get(str)!;
 
 	const words = splitIntoWords(str)
+		// Forbid "The" at the start of titles
+		.filter(({ word }, i) => i > 0 || word.toLowerCase() !== "the")
 		.map(({ word, suffix }, i, words) => {
 			const isFirstWord = i === 0
 				|| isEndOfSentence(words[i - 1].suffix, false);
+
+			let fixedSuffix = suffix;
+			if (!allowFinalSuffix && i === words.length - 1) {
+				// When allowFinalSuffix is false, the last word may not have any suffix, except ")"
+				fixedSuffix = suffix.includes(")") ? ")" : "";
+			}
 			return {
 				word: titleCaseWord(word, isFirstWord),
-				suffix: suffix,
+				suffix: fixedSuffix,
 			};
 		});
 	const ret = joinWords(words);
@@ -520,7 +528,7 @@ export const consistentConfigLabels: JSONCRule.RuleModule = {
 				const value = node.value;
 
 				const rawValue = value.raw.slice(1, -1);
-				const titleCase = toTitleCase(rawValue);
+				const titleCase = toTitleCase(rawValue, false);
 				if (rawValue === titleCase) return;
 
 				context.report({

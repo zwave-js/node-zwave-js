@@ -149,7 +149,7 @@
 		},
 		{
 			"#": "49",
-			"label": "Metering Energy Consumed by the Wall Plug Itself.",
+			"label": "Metering Energy Consumed by the Wall Plug Itself",
 			"description": "This parameter determines whether energy metering ...",
 			"valueSize": 1,
 			"defaultValue": 0,

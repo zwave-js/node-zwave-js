@@ -130,7 +130,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Level Used to Control Association Group 4 and 5.",
+			"label": "Level Used to Control Association Group 4 and 5",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,

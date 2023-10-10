@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "5",
-			"label": "The Mode",
+			"label": "Operating Mode",
 			"description": "The mode that is entered after detection",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -85,8 +85,7 @@
 		},
 		{
 			"#": "6",
-			"label": "The Temperature Offset",
-			"description": "An offset for the temperature.",
+			"label": "Temperature Offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 0,

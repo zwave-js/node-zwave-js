@@ -235,7 +235,7 @@
 		},
 		{
 			"#": "2[0xff0000]",
-			"label": "# of Heat Pump Stages.",
+			"label": "# of Heat Pump Stages",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 128,
@@ -244,7 +244,7 @@
 		},
 		{
 			"#": "2[0x0f000000]",
-			"label": "# of Cool Stages.",
+			"label": "# of Cool Stages",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,

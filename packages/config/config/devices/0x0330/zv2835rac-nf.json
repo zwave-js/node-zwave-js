@@ -181,7 +181,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Power Automatic Report Threshold,",
+			"label": "Power Automatic Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,

@@ -146,7 +146,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Sensor Temperature Calibration.",
+			"label": "Sensor Temperature Calibration",
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,
@@ -154,7 +154,7 @@
 		},
 		{
 			"#": "13",
-			"label": "AUTO Report by Time Interval.",
+			"label": "AUTO Report by Time Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 16,

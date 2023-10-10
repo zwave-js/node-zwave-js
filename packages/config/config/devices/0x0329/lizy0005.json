@@ -26,7 +26,7 @@
 		},
 		{
 			"#": "2",
-			"label": "The Delaying Time to Report to Group 1",
+			"label": "Delaying Time to Report to Group 1",
 			"description": "",
 			"valueSize": 1,
 			"unit": "seconds",

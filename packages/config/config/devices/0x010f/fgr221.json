@@ -165,7 +165,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Smoke, CO, CO2 Alarm.",
+			"label": "Smoke, CO, CO2 Alarm",
 			"description": "Set for the roller shutter.",
 			"valueSize": 1,
 			"defaultValue": 1,

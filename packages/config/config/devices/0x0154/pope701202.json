@@ -31,7 +31,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Min Humidity Change.",
+			"label": "Min Humidity Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 20,
