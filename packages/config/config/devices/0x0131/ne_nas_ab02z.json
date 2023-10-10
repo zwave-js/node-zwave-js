@@ -81,15 +81,15 @@
 					"value": 0
 				},
 				{
-					"label": "30 Seconds",
+					"label": "30 seconds",
 					"value": 1
 				},
 				{
-					"label": "1 Minute",
+					"label": "1 minute",
 					"value": 2
 				},
 				{
-					"label": "5 Minutes",
+					"label": "5 minutes",
 					"value": 3
 				}
 			]

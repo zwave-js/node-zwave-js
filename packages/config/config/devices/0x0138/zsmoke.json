@@ -31,11 +31,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single Alarm",
+					"label": "Single alarm",
 					"value": 0
 				},
 				{
-					"label": "Double Alarm",
+					"label": "Double alarm",
 					"value": 1
 				}
 			]

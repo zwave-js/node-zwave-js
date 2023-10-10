@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "push-button (momentary)",
+					"label": "Push-Button (Momentary)",
 					"value": 0
 				},
 				{
-					"label": "on/off toggle switch",
+					"label": "On/Off toggle switch",
 					"value": 1
 				}
 			]
@@ -39,11 +39,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -146,11 +146,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "degrees Celsius",
+					"label": "Degrees celsius",
 					"value": 0
 				},
 				{
-					"label": "degrees Fahrenheit",
+					"label": "Degrees fahrenheit",
 					"value": 1
 				}
 			]

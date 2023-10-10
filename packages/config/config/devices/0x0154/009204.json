@@ -71,11 +71,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -83,11 +83,11 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
@@ -99,7 +99,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -117,11 +117,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -129,11 +129,11 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
@@ -145,7 +145,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -163,11 +163,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -175,11 +175,11 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
@@ -191,7 +191,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -209,11 +209,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -221,11 +221,11 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
@@ -237,7 +237,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -251,11 +251,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normal Open)",
+					"label": "NO (Normal open)",
 					"value": 1
 				},
 				{
-					"label": "NC (Normal Close)",
+					"label": "NC (Normal close)",
 					"value": 2
 				},
 				{
@@ -289,7 +289,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Wake up is blocked (default)",
+					"label": "Wake up is blocked",
 					"value": 0
 				},
 				{

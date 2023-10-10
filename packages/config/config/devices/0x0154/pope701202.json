@@ -24,7 +24,7 @@
 			"defaultValue": 20,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
@@ -38,7 +38,7 @@
 			"defaultValue": 7,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
@@ -53,7 +53,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
@@ -67,7 +67,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
@@ -89,7 +89,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
@@ -103,7 +103,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]

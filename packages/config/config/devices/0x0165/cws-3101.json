@@ -120,11 +120,11 @@
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "All switches on",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "All switches off",
 					"value": 2
 				}
 			]
@@ -142,11 +142,11 @@
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "All switches on",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "All switches off",
 					"value": 2
 				}
 			]
@@ -164,11 +164,11 @@
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "All switches on",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "All switches off",
 					"value": 2
 				}
 			]
@@ -186,11 +186,11 @@
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "All switches on",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "All switches off",
 					"value": 2
 				}
 			]
@@ -208,7 +208,7 @@
 					"value": 0
 				},
 				{
-					"label": "Flash Blue after button press",
+					"label": "Flash blue after button press",
 					"value": 1
 				},
 				{
@@ -216,7 +216,7 @@
 					"value": 2
 				},
 				{
-					"label": "Flash Blue and blink to confirm command",
+					"label": "Flash blue and blink to confirm command",
 					"value": 3
 				}
 			]

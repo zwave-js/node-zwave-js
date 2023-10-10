@@ -80,7 +80,7 @@
 					"value": 0
 				},
 				{
-					"label": "Non-dimmable load",
+					"label": "Non-Dimmable load",
 					"value": 1
 				}
 			]
@@ -205,7 +205,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Dimming duration according to Dimming Duration (Key Held)",
+					"label": "Dimming duration according to dimming duration (Key held)",
 					"value": 0
 				}
 			]

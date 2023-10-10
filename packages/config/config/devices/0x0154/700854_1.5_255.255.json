@@ -32,7 +32,7 @@
 					"value": 1
 				},
 				{
-					"label": "not trigger",
+					"label": "Not trigger",
 					"value": 2
 				}
 			]
@@ -46,15 +46,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Siren Only",
+					"label": "Siren only",
 					"value": 0
 				},
 				{
-					"label": "Flash Only",
+					"label": "Flash only",
 					"value": 1
 				},
 				{
-					"label": "Flash plus Siren",
+					"label": "Flash plus siren",
 					"value": 2
 				}
 			]

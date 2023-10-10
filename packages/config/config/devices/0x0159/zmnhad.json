@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -39,11 +39,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -56,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -75,19 +75,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF is not active",
+					"label": "All on active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
@@ -180,27 +180,27 @@
 					"value": 0
 				},
 				{
-					"label": "Home Security",
+					"label": "Home security",
 					"value": 1
 				},
 				{
-					"label": "Carbon Monoxide",
+					"label": "Carbon monoxide",
 					"value": 2
 				},
 				{
-					"label": "Carbon Dioxide",
+					"label": "Carbon dioxide",
 					"value": 3
 				},
 				{
-					"label": "Water Alarm",
+					"label": "Water alarm",
 					"value": 4
 				},
 				{
-					"label": "Heat Alarm",
+					"label": "Heat alarm",
 					"value": 5
 				},
 				{
-					"label": "Smoke Alarm",
+					"label": "Smoke alarm",
 					"value": 6
 				},
 				{
@@ -222,27 +222,27 @@
 					"value": 0
 				},
 				{
-					"label": "Home Security",
+					"label": "Home security",
 					"value": 1
 				},
 				{
-					"label": "Carbon Monoxide",
+					"label": "Carbon monoxide",
 					"value": 2
 				},
 				{
-					"label": "Carbon Dioxide",
+					"label": "Carbon dioxide",
 					"value": 3
 				},
 				{
-					"label": "Water Alarm",
+					"label": "Water alarm",
 					"value": 4
 				},
 				{
-					"label": "Heat Alarm",
+					"label": "Heat alarm",
 					"value": 5
 				},
 				{
-					"label": "Smoke Alarm",
+					"label": "Smoke alarm",
 					"value": 6
 				},
 				{

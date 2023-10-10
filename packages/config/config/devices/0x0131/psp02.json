@@ -149,28 +149,16 @@
 					"value": 0
 				},
 				{
-					"label": "test mode",
+					"label": "Test mode",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "5[0x04]",
-			"label": "Disable the door/window function",
-			"description": "Disable/Enable the function",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable the door/window function",
-					"value": 0
-				},
-				{
-					"label": "disable the door/window function",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Door/window function",
+			"defaultValue": 0
 		},
 		{
 			"#": "5[0x08]",
@@ -191,109 +179,42 @@
 		},
 		{
 			"#": "5[0x10]",
-			"label": "Disable illumination reports",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "illumination reports",
+			"defaultValue": 0
 		},
 		{
 			"#": "5[0x20]",
-			"label": "Disable temperature reports",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "temperature reports",
+			"defaultValue": 0
 		},
 		{
 			"#": "5[0x80]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Back key release action",
 			"description": "Disable/enable the back key release into test mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Magnetic integration for lighting control",
 			"description": "Switch control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "PIR integration to control lighting",
 			"description": "PIR integration",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Magetic/pir integration",
-			"description": "control lighting in association group 2",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"description": "control lighting in association group 2"
 		},
 		{
 			"#": "6[0x08]",
@@ -303,102 +224,46 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "same room",
+					"label": "Same room",
 					"value": 0
 				},
 				{
-					"label": "different rooms",
+					"label": "Different rooms",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6[0x10]",
-			"label": "Disable delay to turn off the light",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "delay to turn off the light",
 			"description": "disable/enable delay",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Light off control",
 			"description": "disable/enable auto turn off the light",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x02]",
-			"label": "Motion Off Report",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Motion Off Report"
 		},
 		{
 			"#": "7[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "PIR Super-Sensitivity",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "BASIC OFF report",
 			"description": "Disable/enable report after door closed",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x10]",
@@ -409,49 +274,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "notification report",
+					"label": "Notification Report",
 					"value": 0
 				},
 				{
-					"label": "sensor binary report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Multi CC in auto report",
 			"description": "disable/enable multi CC in report",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x40]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Battery state reports",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		}
 	]
 }

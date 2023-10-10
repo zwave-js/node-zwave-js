@@ -2,7 +2,7 @@
 	"manufacturer": "Dragon Tech Industrial, Ltd.",
 	"manufacturerId": "0x0184",
 	"label": "PA-100",
-	"description": "Plug-in On/Off Switch",
+	"description": "Plug-In On/Off Switch",
 	"devices": [
 		{
 			"productType": "0x4447",
@@ -23,15 +23,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "off/on",
+					"label": "Off/On",
 					"value": 0
 				},
 				{
-					"label": "on/off",
+					"label": "On/Off",
 					"value": 1
 				},
 				{
-					"label": "off",
+					"label": "Off",
 					"value": 2
 				}
 			]

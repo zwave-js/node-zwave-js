@@ -68,11 +68,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -96,7 +96,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -113,11 +113,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -141,7 +141,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -158,11 +158,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -186,7 +186,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -203,11 +203,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -231,7 +231,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -245,7 +245,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off only (default)",
+					"label": "Switch off only",
 					"value": 1
 				},
 				{
@@ -266,7 +266,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (default)",
+					"label": "No",
 					"value": 0
 				},
 				{
@@ -283,7 +283,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Wake up is blocked (default)",
+					"label": "Wake up is blocked",
 					"value": 0
 				},
 				{
@@ -304,7 +304,7 @@
 					"value": 0
 				},
 				{
-					"label": "To same node as Wake Up Notification",
+					"label": "To same node as wake up notification",
 					"value": 1
 				},
 				{

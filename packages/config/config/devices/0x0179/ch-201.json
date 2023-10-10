@@ -234,54 +234,53 @@
 		},
 		{
 			"#": "40",
-			"label": "Adjustment of a temperature sensor",
-			"description": "Adjust temperature sensor if required.",
+			"label": "Temperature Calibration",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send the actual temperature (further t);",
+					"label": "+/- 0 °C",
 					"value": 0
 				},
 				{
-					"label": "t +1°С",
+					"label": "+1 °C",
 					"value": 1
 				},
 				{
-					"label": "t +2°С",
+					"label": "+2 °C",
 					"value": 2
 				},
 				{
-					"label": "t +3°С",
+					"label": "+3 °C",
 					"value": 3
 				},
 				{
-					"label": "t +4°С",
+					"label": "+4 °C",
 					"value": 4
 				},
 				{
-					"label": "t +5°С",
+					"label": "+5 °C",
 					"value": 5
 				},
 				{
-					"label": "t -1°С",
+					"label": "-1 °C",
 					"value": 6
 				},
 				{
-					"label": "t -2°С;",
+					"label": "-2 °C;",
 					"value": 7
 				},
 				{
-					"label": "t -3°С;",
+					"label": "-3 °C;",
 					"value": 8
 				},
 				{
-					"label": "t -4°С",
+					"label": "-4 °C",
 					"value": 9
 				},
 				{
-					"label": "t -5°С;",
+					"label": "-5 °C;",
 					"value": 10
 				}
 			]

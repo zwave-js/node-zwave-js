@@ -76,11 +76,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "inactive",
+					"label": "Inactive",
 					"value": 0
 				},
 				{
-					"label": "active",
+					"label": "Active",
 					"value": 1
 				}
 			]
@@ -94,11 +94,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "inactive",
+					"label": "Inactive",
 					"value": 0
 				},
 				{
-					"label": "active",
+					"label": "Active",
 					"value": 1
 				}
 			]

@@ -50,11 +50,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -67,11 +67,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -84,11 +84,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -101,11 +101,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -118,11 +118,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -135,11 +135,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -160,19 +160,19 @@
 					"value": 1
 				},
 				{
-					"label": "Comfort-1°C",
+					"label": "Comfort -1 °C",
 					"value": 2
 				},
 				{
-					"label": "Comfort-2°C",
+					"label": "Comfort -2 °C",
 					"value": 3
 				},
 				{
-					"label": "Eco Mode",
+					"label": "Eco mode",
 					"value": 4
 				},
 				{
-					"label": "Frost Protection",
+					"label": "Frost protection",
 					"value": 5
 				},
 				{
@@ -197,19 +197,19 @@
 					"value": 1
 				},
 				{
-					"label": "Comfort-1°C",
+					"label": "Comfort -1 °C",
 					"value": 2
 				},
 				{
-					"label": "Comfort-2°C",
+					"label": "Comfort -2 °C",
 					"value": 3
 				},
 				{
-					"label": "Eco Mode",
+					"label": "Eco mode",
 					"value": 4
 				},
 				{
-					"label": "Frost Protection",
+					"label": "Frost protection",
 					"value": 5
 				},
 				{
@@ -234,19 +234,19 @@
 					"value": 1
 				},
 				{
-					"label": "Comfort-1°C",
+					"label": "Comfort -1 °C",
 					"value": 2
 				},
 				{
-					"label": "Comfort-2°C",
+					"label": "Comfort -2 °C",
 					"value": 3
 				},
 				{
-					"label": "Eco Mode",
+					"label": "Eco mode",
 					"value": 4
 				},
 				{
-					"label": "Frost Protection",
+					"label": "Frost protection",
 					"value": 5
 				},
 				{

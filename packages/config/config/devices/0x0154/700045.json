@@ -62,31 +62,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Constant Scene ID 20 for all User Codes",
+					"label": "Constant scene id 20 for all user codes",
 					"value": 0
 				},
 				{
-					"label": "Individual User Codes 1 ... 20",
+					"label": "Individual user codes 1 ... 20",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer Confirmation",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	]
 }

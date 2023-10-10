@@ -2,7 +2,7 @@
 	"manufacturer": "Devolo",
 	"manufacturerId": "0x0175",
 	"label": "PAN11",
-	"description": "Smart Energy Plug-in Switch",
+	"description": "Smart Energy Plug-In Switch",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -57,24 +57,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "Last switch state (default)",
-					"value": 1
-				},
-				{
-					"label": "On",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "6",
@@ -88,7 +71,7 @@
 					"value": 0
 				},
 				{
-					"label": "Enable (default)",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -137,7 +120,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (default)",
+					"label": "Switch off",
 					"value": 0
 				},
 				{

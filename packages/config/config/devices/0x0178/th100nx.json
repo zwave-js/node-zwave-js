@@ -288,19 +288,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable Parameters 2, 5, 12, 15",
+					"label": "Enable parameters 2, 5, 12, 15",
 					"value": 1
 				},
 				{
-					"label": "Enable Parameters 2, 5, 13, 14",
+					"label": "Enable parameters 2, 5, 13, 14",
 					"value": 2
 				},
 				{
-					"label": "Enable Parameters 3, 4, 12, 15",
+					"label": "Enable parameters 3, 4, 12, 15",
 					"value": 3
 				},
 				{
-					"label": "Enable Parameters 3, 4, 13, 14",
+					"label": "Enable parameters 3, 4, 13, 14",
 					"value": 4
 				}
 			]

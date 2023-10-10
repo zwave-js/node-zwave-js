@@ -2,7 +2,7 @@
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
 	"label": "POPE700342",
-	"description": "10-Years Smoke Detector Without Siren",
+	"description": "10-Years Smoke Detector without Siren",
 	"devices": [
 		{
 			"productType": "0x0004",

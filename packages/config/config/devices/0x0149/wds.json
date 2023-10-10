@@ -50,19 +50,19 @@
 					"value": 0
 				},
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
@@ -76,19 +76,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
@@ -111,11 +111,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by 1 Click",
+					"label": "Controlled by 1 click",
 					"value": 1
 				},
 				{
-					"label": "Controlled by 2 Clicks",
+					"label": "Controlled by 2 clicks",
 					"value": 2
 				}
 			]
@@ -186,19 +186,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "As Received",
+					"label": "As received",
 					"value": 1
 				},
 				{
-					"label": "Ignore if ON",
+					"label": "Ignore if on",
 					"value": 2
 				},
 				{
-					"label": "Ignore if OFF",
+					"label": "Ignore if off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
@@ -212,11 +212,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "CHANNEL 1",
+					"label": "Channel 1",
 					"value": 1
 				},
 				{
-					"label": "BOTH CHANNELS",
+					"label": "Both channels",
 					"value": 3
 				}
 			]
@@ -246,7 +246,7 @@
 					"value": 3
 				},
 				{
-					"label": "PREVIOUS STATUS",
+					"label": "Previous status",
 					"value": 4
 				}
 			]
@@ -260,23 +260,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "FACTORY RESET",
+					"label": "Factory reset",
 					"value": 0
 				},
 				{
-					"label": "ASSOCIATIONS RESET",
+					"label": "Associations reset",
 					"value": 1
 				},
 				{
-					"label": "CONFIGURATIONS RESET",
+					"label": "Configurations reset",
 					"value": 2
 				},
 				{
-					"label": "RESTART DEVICE",
+					"label": "Restart device",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
@@ -290,15 +290,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "BUTTON",
+					"label": "Button",
 					"value": 1
 				},
 				{
-					"label": "SWITCH",
+					"label": "Switch",
 					"value": 2
 				}
 			]

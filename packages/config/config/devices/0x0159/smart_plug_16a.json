@@ -22,19 +22,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON disabled, ALL of disabled",
+					"label": "All on disabled, all off disabled",
 					"value": 0
 				},
 				{
-					"label": "ALL ON disabled, AL OFF active",
+					"label": "All on disabled, al off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active, ALL OFF disabled",
+					"label": "All on active, all off disabled",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
@@ -72,18 +72,17 @@
 		},
 		{
 			"#": "15",
-			"label": "Timer Settings Unit",
-			"description": "Set Timer Units to Seconds or Milliseconds",
+			"label": "Timer Unit",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "timer set in seconds",
+					"label": "Seconds",
 					"value": 0
 				},
 				{
-					"label": "timer set in milliseconds",
+					"label": "Milliseconds",
 					"value": 1
 				}
 			]

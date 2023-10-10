@@ -27,7 +27,7 @@
 					"value": 0
 				},
 				{
-					"label": "Defined by Parameter 21 and 22",
+					"label": "Defined by parameter 21 and 22",
 					"value": 1
 				}
 			]
@@ -55,7 +55,7 @@
 					"value": 0
 				},
 				{
-					"label": "Ignores Off command",
+					"label": "Ignores off command",
 					"value": 1
 				},
 				{
@@ -77,11 +77,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controls Load + Scenes",
+					"label": "Controls load + scenes",
 					"value": 0
 				},
 				{
-					"label": "Scene Control Only",
+					"label": "Scene control only",
 					"value": 1
 				}
 			]

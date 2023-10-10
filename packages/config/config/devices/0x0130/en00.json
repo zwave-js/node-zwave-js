@@ -26,11 +26,11 @@
 					"value": 0
 				},
 				{
-					"label": "Gas Enabled",
+					"label": "Gas enabled",
 					"value": 1
 				},
 				{
-					"label": "Heat Enabled",
+					"label": "Heat enabled",
 					"value": 2
 				}
 			]

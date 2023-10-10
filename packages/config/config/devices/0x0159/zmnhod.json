@@ -22,19 +22,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active, ALL OFF is not active",
+					"label": "All on is not active, all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
@@ -67,7 +67,7 @@
 					"value": 0
 				},
 				{
-					"label": "Venetian mode (up/down and slate rotation)",
+					"label": "Venetian mode (Up/Down and slate rotation)",
 					"value": 1
 				}
 			]
@@ -88,11 +88,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Return to previous position only with Z-wave",
+					"label": "Return to previous position only with Z-Wave",
 					"value": 0
 				},
 				{
-					"label": "Return to previous position with Z-wave or button",
+					"label": "Return to previous position with Z-Wave or button",
 					"value": 1
 				}
 			]

@@ -36,7 +36,7 @@
 			"defaultValue": 99,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				}
 			]

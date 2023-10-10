@@ -24,7 +24,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
@@ -56,7 +56,7 @@
 			"defaultValue": 50,
 			"options": [
 				{
-					"label": "reporting disabled",
+					"label": "Reporting disabled",
 					"value": 0
 				}
 			]
@@ -72,7 +72,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "reporting disabled",
+					"label": "Reporting disabled",
 					"value": 0
 				}
 			]
@@ -89,7 +89,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "reporting disabled",
+					"label": "Reporting disabled",
 					"value": 0
 				}
 			]
@@ -110,7 +110,7 @@
 					"value": 1
 				},
 				{
-					"label": "IR relay enabled for Phase 1",
+					"label": "IR relay enabled for phase 1",
 					"value": 2
 				}
 			]

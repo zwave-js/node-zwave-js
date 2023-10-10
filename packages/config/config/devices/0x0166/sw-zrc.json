@@ -24,11 +24,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Association Group 1",
+					"label": "Association group 1",
 					"value": 1
 				},
 				{
-					"label": "Association Group 2",
+					"label": "Association group 2",
 					"value": 2
 				}
 			]

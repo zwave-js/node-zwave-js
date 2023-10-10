@@ -63,24 +63,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Ignore start level after pwr outage",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch Off",
-					"value": 0
-				},
-				{
-					"label": "Last Switch State",
-					"value": 1
-				},
-				{
-					"label": "Switch On",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "11",

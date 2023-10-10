@@ -16,7 +16,7 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "This group is normally automatically assigned to the Z-Wave system controller when EZMultiPli is added to the ZWave network.",
+			"description": "This group is normally automatically assigned to the Z-Wave system controller when EZMultiPli is added to the Z-Wave network.",
 			"maxNodes": 1,
 			"isLifeline": true
 		},

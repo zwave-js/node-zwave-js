@@ -60,7 +60,7 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{

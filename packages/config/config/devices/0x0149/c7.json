@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Direct Load Control or Normally Open Relay",
+					"label": "Direct load control or normally open relay",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed Relay",
+					"label": "Normally closed relay",
 					"value": 1
 				}
 			]
@@ -138,11 +138,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Standard Type",
+					"label": "Standard type",
 					"value": 1
 				},
 				{
-					"label": "Type 2 Version",
+					"label": "Type 2 version",
 					"value": 2
 				}
 			]

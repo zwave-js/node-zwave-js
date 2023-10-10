@@ -27,15 +27,15 @@
 					"value": 0
 				},
 				{
-					"label": "Switch Binary",
+					"label": "Switch binary",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Switch Multilevel",
+					"label": "Switch multilevel",
 					"value": 3
 				}
 			]
@@ -87,15 +87,15 @@
 					"value": 0
 				},
 				{
-					"label": "Switch Binary",
+					"label": "Switch binary",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Switch Multilevel",
+					"label": "Switch multilevel",
 					"value": 3
 				}
 			]

@@ -64,7 +64,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -72,7 +72,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{

@@ -46,11 +46,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -82,19 +82,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active, ALL OFF is not active",
+					"label": "All on is not active, all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active, ALL OFF active",
+					"label": "All on is not active, all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active, ALL OFF is not active",
+					"label": "All on active, all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
@@ -109,7 +109,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Auto off DISABLED",
+					"label": "Auto off disabled",
 					"value": 0
 				}
 			]
@@ -124,28 +124,16 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Auto on DISABLED",
+					"label": "Auto on disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Enable / Disable Double click function",
-			"description": "If Double click function is enabled, double click to maximum dimming power",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "double click disabled",
-					"value": 0
-				},
-				{
-					"label": "double click enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double click function",
+			"description": "If Double click function is enabled, double click to maximum dimming power"
 		},
 		{
 			"#": "30",
@@ -215,11 +203,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "respect start level",
+					"label": "Respect start level",
 					"value": 0
 				},
 				{
-					"label": "ignore start level",
+					"label": "Ignore start level",
 					"value": 1
 				}
 			]
@@ -236,7 +224,7 @@
 		{
 			"#": "110",
 			"label": "Temperature sensor offset settings",
-			"description": "32536 = no offset; 1-100 = 0.1°C added; 1001-1100 = 0.1°C subtracted",
+			"description": "32536 = no offset; 1-100 = 0.1 °C added; 1001-1100 = 0.1 °C subtracted",
 			"valueSize": 2,
 			"unit": "°C",
 			"minValue": 1,

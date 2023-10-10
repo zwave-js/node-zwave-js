@@ -77,6 +77,7 @@ const titleCaseExceptions = [
 	"and",
 	"kW",
 	"kWh",
+	"Wh",
 	"RFID",
 	"LEDs",
 ];
@@ -164,6 +165,7 @@ const sentenceCaseIgnored: (RegExp)[] = [
 	// Units:
 	/^\d+(\.\d+)?°?[smCF]$/,
 	/^[VWA]$/,
+	/^Wh$/,
 	/^°[CF]$/,
 	// Common abbreviations:
 	/^N[CO]$/,
@@ -194,11 +196,13 @@ const alwaysUppercase: RegExp[] = [
 	/^PWM$/i,
 	/^VSP$/i,
 	/^PIR$/i,
+	/^PID$/i,
 	/^OK$/i,
 	/^HSB$/i,
 	/^OTA$/i,
 	/^CRC$/i,
 	/^UI$/i,
+	/^U[KS]$/i,
 ];
 
 const alwaysLowercase: RegExp[] = [

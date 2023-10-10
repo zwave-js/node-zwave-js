@@ -22,19 +22,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DISABLED",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "ONE_CLICK",
+					"label": "1 click",
 					"value": 1
 				},
 				{
-					"label": "TWO_CLICKS",
+					"label": "2 clicks",
 					"value": 2
 				},
 				{
-					"label": "ONE_CLICK and TWO_CLICKS",
+					"label": "1 clicks and 2 clicks",
 					"value": 3
 				}
 			]

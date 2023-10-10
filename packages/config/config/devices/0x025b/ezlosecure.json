@@ -22,7 +22,7 @@
 		}
 	},
 	"metadata": {
-		"reset": "Find the \"Reset\" button on the controller near the Ethernet cable connector.\nPush and hold the RESET button for at least 5 sec (on Ezlo Secure LED starts blinking RED), After that your Ezlo controller will be reset to factory defaults.\nReset to Factory Settings remove all the information about added devices\nand reset ZWave chip (new Home ID, new S0/S2 keys, remove all Z-Wave\nnodes), scenes created, House modes settings, etc. The process is\nirreversible.",
+		"reset": "Find the \"Reset\" button on the controller near the Ethernet cable connector.\nPush and hold the RESET button for at least 5 sec (on Ezlo Secure LED starts blinking RED), After that your Ezlo controller will be reset to factory defaults.\nReset to Factory Settings remove all the information about added devices\nand reset Z-Wave chip (new Home ID, new S0/S2 keys, remove all Z-Wave\nnodes), scenes created, House modes settings, etc. The process is\nirreversible.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4111/Ezlo%20Secure%20User%20Manual.pdf"
 	}
 }

@@ -22,43 +22,43 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NORMAL mode – momentary switch type",
+					"label": "Normal mode – momentary switch type",
 					"value": 1
 				},
 				{
-					"label": "NORMAL mode – toggle switch type",
+					"label": "Normal mode – toggle switch type",
 					"value": 2
 				},
 				{
-					"label": "NORMAL mode – toggle with memory switch type",
+					"label": "Normal mode – toggle with memory switch type",
 					"value": 3
 				},
 				{
-					"label": "BRIGHTNESS mode – momentary switch type",
+					"label": "Brightness mode – momentary switch type",
 					"value": 4
 				},
 				{
-					"label": "BRIGHTNESS mode – toggle switch type",
+					"label": "Brightness mode – toggle switch type",
 					"value": 5
 				},
 				{
-					"label": "BRIGHTNESS mode – toggle with memory switch type",
+					"label": "Brightness mode – toggle with memory switch type",
 					"value": 6
 				},
 				{
-					"label": "RAINBOW mode – momentary switch type",
+					"label": "Rainbow mode – momentary switch type",
 					"value": 7
 				},
 				{
-					"label": "SCENE mode – momentary switch type",
+					"label": "Scene mode – momentary switch type",
 					"value": 8
 				},
 				{
-					"label": "SCENE mode – toggle switch type",
+					"label": "Scene mode – toggle switch type",
 					"value": 9
 				},
 				{
-					"label": "SCENE mode – toggle with memory switch type",
+					"label": "Scene mode – toggle with memory switch type",
 					"value": 10
 				}
 			]
@@ -71,43 +71,43 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NORMAL mode – momentary switch type",
+					"label": "Normal mode – momentary switch type",
 					"value": 1
 				},
 				{
-					"label": "NORMAL mode – toggle switch type",
+					"label": "Normal mode – toggle switch type",
 					"value": 2
 				},
 				{
-					"label": "NORMAL mode – toggle with memory switch type",
+					"label": "Normal mode – toggle with memory switch type",
 					"value": 3
 				},
 				{
-					"label": "BRIGHTNESS mode – momentary switch type",
+					"label": "Brightness mode – momentary switch type",
 					"value": 4
 				},
 				{
-					"label": "BRIGHTNESS mode – toggle switch type",
+					"label": "Brightness mode – toggle switch type",
 					"value": 5
 				},
 				{
-					"label": "BRIGHTNESS – toggle with memory switch",
+					"label": "Brightness – toggle with memory switch",
 					"value": 6
 				},
 				{
-					"label": "RAINBOW mode – momentary switch type",
+					"label": "Rainbow mode – momentary switch type",
 					"value": 7
 				},
 				{
-					"label": "SCENE mode – momentary switch type",
+					"label": "Scene mode – momentary switch type",
 					"value": 8
 				},
 				{
-					"label": "SCENE mode – toggle switch type",
+					"label": "Scene mode – toggle switch type",
 					"value": 9
 				},
 				{
-					"label": "SCENE mode – toggle with memory switch type",
+					"label": "Scene mode – toggle with memory switch type",
 					"value": 10
 				}
 			]
@@ -120,43 +120,43 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NORMAL mode – momentary switch type",
+					"label": "Normal mode – momentary switch type",
 					"value": 1
 				},
 				{
-					"label": "NORMAL mode – toggle switch type",
+					"label": "Normal mode – toggle switch type",
 					"value": 2
 				},
 				{
-					"label": "NORMAL mode – toggle with memory switch type",
+					"label": "Normal mode – toggle with memory switch type",
 					"value": 3
 				},
 				{
-					"label": "BRIGHTNESS mode – momentary switch type",
+					"label": "Brightness mode – momentary switch type",
 					"value": 4
 				},
 				{
-					"label": "BRIGHTNESS mode – toggle switch type",
+					"label": "Brightness mode – toggle switch type",
 					"value": 5
 				},
 				{
-					"label": "BRIGHTNESS mode – toggle with memory switch type",
+					"label": "Brightness mode – toggle with memory switch type",
 					"value": 6
 				},
 				{
-					"label": "RAINBOW mode – momentary switch type",
+					"label": "Rainbow mode – momentary switch type",
 					"value": 7
 				},
 				{
-					"label": "SCENE mode – momentary switch type",
+					"label": "Scene mode – momentary switch type",
 					"value": 8
 				},
 				{
-					"label": "SCENE mode – toggle switch type",
+					"label": "Scene mode – toggle switch type",
 					"value": 9
 				},
 				{
-					"label": "SCENE mode – toggle with memory switch type",
+					"label": "Scene mode – toggle with memory switch type",
 					"value": 10
 				}
 			]
@@ -169,43 +169,43 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NORMAL mode – momentary switch type",
+					"label": "Normal mode – momentary switch type",
 					"value": 1
 				},
 				{
-					"label": "NORMAL mode – toggle switch type",
+					"label": "Normal mode – toggle switch type",
 					"value": 2
 				},
 				{
-					"label": "NORMAL mode – toggle with memory switch type",
+					"label": "Normal mode – toggle with memory switch type",
 					"value": 3
 				},
 				{
-					"label": "BRIGHTNESS mode – momentary switch type",
+					"label": "Brightness mode – momentary switch type",
 					"value": 4
 				},
 				{
-					"label": "BRIGHTNESS mode – toggle switch type",
+					"label": "Brightness mode – toggle switch type",
 					"value": 5
 				},
 				{
-					"label": "BRIGHTNESS mode – toggle with memory switch type",
+					"label": "Brightness mode – toggle with memory switch type",
 					"value": 6
 				},
 				{
-					"label": "RAINBOW mode – momentary switch type",
+					"label": "Rainbow mode – momentary switch type",
 					"value": 7
 				},
 				{
-					"label": "SCENE mode – momentary switch type",
+					"label": "Scene mode – momentary switch type",
 					"value": 8
 				},
 				{
-					"label": "SCENE mode – toggle switch type",
+					"label": "Scene mode – toggle switch type",
 					"value": 9
 				},
 				{
-					"label": "SCENE mode – toggle with memory switch type",
+					"label": "Scene mode – toggle with memory switch type",
 					"value": 10
 				}
 			]

@@ -24,17 +24,17 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LCD Invert",
+			"label": "Invert LCD",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LCD-content normal",
+					"label": "Normal",
 					"value": 0
 				},
 				{
-					"label": "LCD-content inverted (UK Edition)",
+					"label": "Inverted (UK edition)",
 					"value": 1
 				}
 			]
@@ -49,27 +49,16 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "No Timeout LCD always on",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Backlight",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Backlight disabled",
-					"value": 0
-				},
-				{
-					"label": "Backlight enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
@@ -79,7 +68,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "system notification",
+					"label": "System notification",
 					"value": 0
 				},
 				{

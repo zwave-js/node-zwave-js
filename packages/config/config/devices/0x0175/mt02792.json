@@ -66,25 +66,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Mode for restoring status",
-			"description": "Restore switch state mode.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch will remain Off.",
-					"value": 0
-				},
-				{
-					"label": "resume previous state",
-					"value": 1
-				},
-				{
-					"label": "Switch will turn On.",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "6",
@@ -95,11 +77,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "SWITCH OFF commands received are ignored.",
+					"label": "Switch off commands received are ignored.",
 					"value": 0
 				},
 				{
-					"label": "SWITCH OFF commands received are honored.",
+					"label": "Switch off commands received are honored.",
 					"value": 1
 				}
 			]
@@ -117,7 +99,7 @@
 					"value": 1
 				},
 				{
-					"label": "LED off with load ON",
+					"label": "LED off with load on",
 					"value": 2
 				},
 				{
@@ -151,19 +133,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "When ALL OFF is received, MT2792 goes Off.",
+					"label": "When all off is received, MT2792 goes off.",
 					"value": 0
 				},
 				{
-					"label": "Ignore ALL OFF",
+					"label": "Ignore all off",
 					"value": 1
 				},
 				{
-					"label": "If ALL OFF is received, turn ON if it is OFF",
+					"label": "If all off is received, turn on if it is off",
 					"value": 2
 				},
 				{
-					"label": "WhenALL OFF is received, the MT2792 goes On.",
+					"label": "WhenALL off is received, the MT2792 goes on.",
 					"value": 3
 				}
 			]

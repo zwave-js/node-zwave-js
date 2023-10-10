@@ -23,19 +23,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
@@ -71,7 +71,7 @@
 					"value": 0
 				},
 				{
-					"label": "Venetian mode (up/down and slate rotation)",
+					"label": "Venetian mode (Up/Down and slate rotation)",
 					"value": 1
 				}
 			]
@@ -95,11 +95,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ret. to previous position for Z-wave control only",
+					"label": "Ret. To previous position for Z-Wave control only",
 					"value": 0
 				},
 				{
-					"label": "return to previous position in all cases",
+					"label": "Return to previous position in all cases",
 					"value": 1
 				}
 			]
@@ -135,28 +135,17 @@
 					"value": 0
 				},
 				{
-					"label": "Start Calibration Process",
+					"label": "Start calibration process",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "80",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Reporting to Controller",
 			"description": "Defines if reporting regarding power level, etc is reported to controller.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reporting to Controller Disabled",
-					"value": 0
-				},
-				{
-					"label": "Reporting to Controller Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "85",

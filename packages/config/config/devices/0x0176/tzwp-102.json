@@ -52,7 +52,7 @@
 					"value": 1
 				},
 				{
-					"label": "Basic Report when Load status not changed by ZWave",
+					"label": "Basic Report when load status not changed by Z-Wave",
 					"value": 2
 				}
 			]

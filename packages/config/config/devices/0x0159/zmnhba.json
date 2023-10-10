@@ -37,11 +37,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -54,11 +54,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -72,19 +72,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF is not active",
+					"label": "All on active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]

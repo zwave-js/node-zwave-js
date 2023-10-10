@@ -23,11 +23,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono stable switch type (push button)",
+					"label": "Mono stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type (default)",
+					"label": "Bi-Stable switch type (Default)",
 					"value": 1
 				}
 			]
@@ -40,11 +40,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type (default)",
+					"label": "NO (Normally open) input type (Default)",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -57,11 +57,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type (default)",
+					"label": "NO (Normally open) input type (Default)",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -76,19 +76,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NONE",
+					"label": "None",
 					"value": 0
 				},
 				{
-					"label": "ALL OFF",
+					"label": "All off",
 					"value": 1
 				},
 				{
-					"label": "ALL ON",
+					"label": "All on",
 					"value": 2
 				},
 				{
-					"label": "ALL ON / ALL OFF",
+					"label": "All on / All off",
 					"value": 255
 				}
 			]
@@ -103,7 +103,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "AUTO OFF disabled",
+					"label": "Auto off disabled",
 					"value": 0
 				}
 			]
@@ -118,25 +118,24 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "AUTO ON disabled",
+					"label": "Auto on disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "15",
-			"label": "Auto off / on, s or ms selection",
-			"description": "Automatic turning off / on seconds or milliseconds selection",
+			"label": "Auto-On/Off Timer Unit",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "seconds selected (default)",
+					"label": "Seconds",
 					"value": 0
 				},
 				{
-					"label": "milliseconds selected",
+					"label": "Milliseconds",
 					"value": 1
 				}
 			]
@@ -182,7 +181,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(NC) output is 0V (default)",
+					"label": "(NC) output is 0V (Default)",
 					"value": 0
 				},
 				{
@@ -204,27 +203,27 @@
 					"value": 0
 				},
 				{
-					"label": "Home Security: Motion Detection",
+					"label": "Home security: Motion detection",
 					"value": 1
 				},
 				{
-					"label": "Carbon Monoxide",
+					"label": "Carbon monoxide",
 					"value": 2
 				},
 				{
-					"label": "Carbon Dioxide",
+					"label": "Carbon dioxide",
 					"value": 3
 				},
 				{
-					"label": "Water Alarm",
+					"label": "Water alarm",
 					"value": 4
 				},
 				{
-					"label": "Heat Alarm",
+					"label": "Heat alarm",
 					"value": 5
 				},
 				{
-					"label": "Smoke Alarm",
+					"label": "Smoke alarm",
 					"value": 6
 				}
 			]
@@ -242,27 +241,27 @@
 					"value": 0
 				},
 				{
-					"label": "Home Security: Motion Detection",
+					"label": "Home security: Motion detection",
 					"value": 1
 				},
 				{
-					"label": "Carbon Monoxide",
+					"label": "Carbon monoxide",
 					"value": 2
 				},
 				{
-					"label": "Carbon Dioxide",
+					"label": "Carbon dioxide",
 					"value": 3
 				},
 				{
-					"label": "Water Alarm",
+					"label": "Water alarm",
 					"value": 4
 				},
 				{
-					"label": "Heat Alarm",
+					"label": "Heat alarm",
 					"value": 5
 				},
 				{
-					"label": "Smoke Alarm",
+					"label": "Smoke alarm",
 					"value": 6
 				}
 			]

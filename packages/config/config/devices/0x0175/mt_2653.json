@@ -46,15 +46,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Button 1 -> Group A; Button 3 -> Group C",
+					"label": "Button 1 -> group A; Button 3 -> group c",
 					"value": 0
 				},
 				{
-					"label": "Button 1/3 -> Up/Down; Click -> Group A, without double clicks",
+					"label": "Button 1/3 -> up/down; Click -> group A, without double clicks",
 					"value": 1
 				},
 				{
-					"label": "Button 1/3 -> Up/Down; Click -> Group A; Double Click -> Group C",
+					"label": "Button 1/3 -> up/down; Click -> group A; Double click -> group c",
 					"value": 2
 				}
 			]
@@ -68,15 +68,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Button 2 -> Group B; Button 4 -> Group D",
+					"label": "Button 2 -> group b; Button 4 -> group d",
 					"value": 0
 				},
 				{
-					"label": "Button 2/4 -> Up/Down; Click -> Group B, without double clicks",
+					"label": "Button 2/4 -> up/down; Click -> group b, without double clicks",
 					"value": 1
 				},
 				{
-					"label": "Button 2/4 -> Up/Down; Click -> Group B; Double Click -> Group D",
+					"label": "Button 2/4 -> up/down; Click -> group b; Double click -> group d",
 					"value": 2
 				}
 			]
@@ -93,11 +93,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (basic set)",
+					"label": "Switch on/off only (Basic Set)",
 					"value": 2
 				},
 				{
@@ -121,7 +121,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -138,11 +138,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (basic set)",
+					"label": "Switch on/off only (Basic Set)",
 					"value": 2
 				},
 				{
@@ -166,7 +166,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -183,11 +183,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (basic set)",
+					"label": "Switch on/off only (Basic Set)",
 					"value": 2
 				},
 				{
@@ -211,7 +211,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -228,11 +228,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (basic set)",
+					"label": "Switch on/off only (Basic Set)",
 					"value": 2
 				},
 				{
@@ -256,7 +256,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]

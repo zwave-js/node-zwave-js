@@ -23,11 +23,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Internal Magnet Sensor Used",
+					"label": "Internal magnet sensor used",
 					"value": 0
 				},
 				{
-					"label": "External Terminal Inputs Used",
+					"label": "External terminal inputs used",
 					"value": 1
 				}
 			]
@@ -41,11 +41,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Closed when Magnet in proximity",
+					"label": "Closed when magnet in proximity",
 					"value": 0
 				},
 				{
-					"label": "Opened when Magnet in proximity",
+					"label": "Opened when magnet in proximity",
 					"value": 1
 				}
 			]
@@ -60,40 +60,28 @@
 			"defaultValue": 7,
 			"options": [
 				{
-					"label": "No Indications",
+					"label": "No indications",
 					"value": 0
 				},
 				{
-					"label": "Open/Close Status Change",
+					"label": "Open/Close status change",
 					"value": 1
 				},
 				{
-					"label": "Wake Up",
+					"label": "Wake up",
 					"value": 2
 				},
 				{
-					"label": "Device Tampering",
+					"label": "Device tampering",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Range Test after double click",
-			"description": "Allows to enable the activation of a Z-Wave range test",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"description": "Allows to enable the activation of a Z-Wave range test"
 		},
 		{
 			"#": "5",
@@ -104,15 +92,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch after Open and Close",
+					"label": "Switch after open and close",
 					"value": 0
 				},
 				{
-					"label": "Switch after Open",
+					"label": "Switch after open",
 					"value": 1
 				},
 				{
-					"label": "Switch after Close",
+					"label": "Switch after close",
 					"value": 2
 				}
 			]
@@ -134,7 +122,7 @@
 					"value": 1
 				},
 				{
-					"label": "On and Off",
+					"label": "On and off",
 					"value": 2
 				}
 			]
@@ -194,50 +182,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Do not send Report",
+					"label": "Do not send report",
 					"value": 0
 				},
 				{
-					"label": "Send Report",
+					"label": "Send report",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "13",
-			"label": "Central Scene Event Functionality",
-			"description": "enables/disables the central scene function",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Central Scene Event Functionality"
 		},
 		{
 			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Tilt Sensor Functionality",
 			"description": "enables/disables the tilt function",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	]
 }

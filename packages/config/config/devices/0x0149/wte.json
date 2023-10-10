@@ -82,7 +82,7 @@
 					"value": 0
 				},
 				{
-					"label": "DIMMABLE LOAD",
+					"label": "Dimmable load",
 					"value": 1
 				}
 			]
@@ -96,15 +96,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "BUTTON",
+					"label": "Button",
 					"value": 1
 				},
 				{
-					"label": "SWITCH",
+					"label": "Switch",
 					"value": 2
 				}
 			]

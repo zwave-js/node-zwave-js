@@ -54,9 +54,9 @@
 		},
 		{
 			"#": "3",
-			"label": "Send unsolicited temperature report",
-			"description": "Threshold temperature to send unsolicited report. 10 = 1°C",
+			"label": "Temperature Report Threshold",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
@@ -95,7 +95,7 @@
 					"value": 1
 				},
 				{
-					"label": "Flash + Siren",
+					"label": "Flash + siren",
 					"value": 2
 				}
 			]

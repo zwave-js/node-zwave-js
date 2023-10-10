@@ -16,25 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Default State",
-			"description": "Status after a power outage or after being plugged",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "OFF",
-					"value": 0
-				},
-				{
-					"label": "ON",
-					"value": 1
-				},
-				{
-					"label": "Status before power outage",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "3",
@@ -45,7 +27,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Group 2 & Group 3 disable",
+					"label": "Group 2 & group 3 disable",
 					"value": 0
 				},
 				{
@@ -57,28 +39,16 @@
 					"value": 2
 				},
 				{
-					"label": "Group 2 & Group 3 enable",
+					"label": "Group 2 & group 3 enable",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Always On",
-			"description": "Forces the Micro Smart Plug status to be ON",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Always ON disable",
-					"value": 0
-				},
-				{
-					"label": "Always ON enable",
-					"value": 1
-				}
-			]
+			"description": "Forces the Micro Smart Plug status to be ON"
 		},
 		{
 			"#": "21",
@@ -91,47 +61,47 @@
 			"defaultValue": 10,
 			"options": [
 				{
-					"label": "Power Auto-Polling Report Disable",
+					"label": "Power auto-polling report disable",
 					"value": 0
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 10%",
+					"label": "Power auto-polling report enable if 10%",
 					"value": 10
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 20 %",
+					"label": "Power auto-polling report enable if 20 %",
 					"value": 20
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 30 %",
+					"label": "Power auto-polling report enable if 30 %",
 					"value": 30
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 40 %",
+					"label": "Power auto-polling report enable if 40 %",
 					"value": 40
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 50 %",
+					"label": "Power auto-polling report enable if 50 %",
 					"value": 50
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 60 %",
+					"label": "Power auto-polling report enable if 60 %",
 					"value": 60
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 70 %",
+					"label": "Power auto-polling report enable if 70 %",
 					"value": 70
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 80 %",
+					"label": "Power auto-polling report enable if 80 %",
 					"value": 80
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 90 %",
+					"label": "Power auto-polling report enable if 90 %",
 					"value": 90
 				},
 				{
-					"label": "Power Auto-Polling Report Enable if 100%",
+					"label": "Power auto-polling report enable if 100%",
 					"value": 100
 				}
 			]
@@ -147,31 +117,31 @@
 			"defaultValue": 2000,
 			"options": [
 				{
-					"label": "Overload Report Disable (Not Recommended)",
+					"label": "Overload report disable (Not recommended)",
 					"value": 0
 				},
 				{
-					"label": "Overload Report enable with a upper limit of 50 W",
+					"label": "Overload report enable with a upper limit of 50 W",
 					"value": 50
 				},
 				{
-					"label": "Overload Report enable with a upper limit of 100 W",
+					"label": "Overload report enable with a upper limit of 100 W",
 					"value": 100
 				},
 				{
-					"label": "Overload Report enable with a upper limit of 150 W",
+					"label": "Overload report enable with a upper limit of 150 W",
 					"value": 150
 				},
 				{
-					"label": "Overload Report enable with a upper limit of 200 W",
+					"label": "Overload report enable with a upper limit of 200 W",
 					"value": 200
 				},
 				{
-					"label": "Overload Report enable with a upper limit of 250 W",
+					"label": "Overload report enable with a upper limit of 250 W",
 					"value": 250
 				},
 				{
-					"label": "Overload Report enable with a upper limit of 500 W",
+					"label": "Overload report enable with a upper limit of 500 W",
 					"value": 500
 				},
 				{
@@ -200,7 +170,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Energy Auto-Polling Report Disable",
+					"label": "Energy auto-polling report disable",
 					"value": 0
 				},
 				{
@@ -265,11 +235,11 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Metering Pulse disable",
+					"label": "Metering pulse disable",
 					"value": 0
 				},
 				{
-					"label": "Metering Pulse enable and send report every hour",
+					"label": "Metering pulse enable and send report every hour",
 					"value": 3600
 				},
 				{
@@ -294,59 +264,59 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Power High Threshold disable",
+					"label": "Power high threshold disable",
 					"value": 0
 				},
 				{
-					"label": "Power High Threshold enable 10 W",
+					"label": "Power high threshold enable 10 W",
 					"value": 10
 				},
 				{
-					"label": "Power High Threshold enable 20 W",
+					"label": "Power high threshold enable 20 W",
 					"value": 20
 				},
 				{
-					"label": "Power High Threshold enable 30 W",
+					"label": "Power high threshold enable 30 W",
 					"value": 30
 				},
 				{
-					"label": "Power High Threshold enable 40 W",
+					"label": "Power high threshold enable 40 W",
 					"value": 40
 				},
 				{
-					"label": "Power High Threshold enable 50 W",
+					"label": "Power high threshold enable 50 W",
 					"value": 50
 				},
 				{
-					"label": "Power High Threshold enable 100 W",
+					"label": "Power high threshold enable 100 W",
 					"value": 100
 				},
 				{
-					"label": "Power High Threshold enable 200 W",
+					"label": "Power high threshold enable 200 W",
 					"value": 200
 				},
 				{
-					"label": "Power High Threshold enable 300 W",
+					"label": "Power high threshold enable 300 W",
 					"value": 300
 				},
 				{
-					"label": "Power High Threshold enable 400 W",
+					"label": "Power high threshold enable 400 W",
 					"value": 400
 				},
 				{
-					"label": "Power High Threshold enable 500 W",
+					"label": "Power high threshold enable 500 W",
 					"value": 500
 				},
 				{
-					"label": "Power High Threshold enable 1000 W",
+					"label": "Power high threshold enable 1000 W",
 					"value": 1000
 				},
 				{
-					"label": "Power High Threshold enable 1500 W",
+					"label": "Power high threshold enable 1500 W",
 					"value": 1500
 				},
 				{
-					"label": "Power High Threshold enable 2000 W",
+					"label": "Power high threshold enable 2000 W",
 					"value": 2000
 				}
 			]
@@ -363,63 +333,63 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Power Low Threshold disable",
+					"label": "Power low threshold disable",
 					"value": 0
 				},
 				{
-					"label": "Power Low Threshold enable 5 W",
+					"label": "Power low threshold enable 5 W",
 					"value": 5
 				},
 				{
-					"label": "Power Low Threshold enable 10 W",
+					"label": "Power low threshold enable 10 W",
 					"value": 10
 				},
 				{
-					"label": "Power Low Threshold enable 20 W",
+					"label": "Power low threshold enable 20 W",
 					"value": 20
 				},
 				{
-					"label": "Power Low Threshold enable 30 W",
+					"label": "Power low threshold enable 30 W",
 					"value": 30
 				},
 				{
-					"label": "Power Low Threshold enable 40 W",
+					"label": "Power low threshold enable 40 W",
 					"value": 40
 				},
 				{
-					"label": "Power Low Threshold enable 50 W",
+					"label": "Power low threshold enable 50 W",
 					"value": 50
 				},
 				{
-					"label": "Power Low Threshold enable 100 W",
+					"label": "Power low threshold enable 100 W",
 					"value": 100
 				},
 				{
-					"label": "Power Low Threshold enable 200 W",
+					"label": "Power low threshold enable 200 W",
 					"value": 200
 				},
 				{
-					"label": "Power Low Threshold enable 300 W",
+					"label": "Power low threshold enable 300 W",
 					"value": 300
 				},
 				{
-					"label": "Power Low Threshold enable 400 W",
+					"label": "Power low threshold enable 400 W",
 					"value": 400
 				},
 				{
-					"label": "Power Low Threshold enable 500 W",
+					"label": "Power low threshold enable 500 W",
 					"value": 500
 				},
 				{
-					"label": "Power Low Threshold enable 1000 W",
+					"label": "Power low threshold enable 1000 W",
 					"value": 1000
 				},
 				{
-					"label": "Power Low Threshold enable 1500 W",
+					"label": "Power low threshold enable 1500 W",
 					"value": 1500
 				},
 				{
-					"label": "Power Low Threshold enable 2000 W",
+					"label": "Power low threshold enable 2000 W",
 					"value": 2000
 				}
 			]
@@ -433,39 +403,39 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Power Threshold Action is disable.",
+					"label": "Power threshold action is disable.",
 					"value": 0
 				},
 				{
-					"label": "Power High Group 4 OFF",
+					"label": "Power high group 4 off",
 					"value": 1
 				},
 				{
-					"label": "Power High Group 4 ON",
+					"label": "Power high group 4 on",
 					"value": 3
 				},
 				{
-					"label": "Power Low Group 5 OFF",
+					"label": "Power low group 5 off",
 					"value": 4
 				},
 				{
-					"label": "Power High Group 4 OFF & Power Low Group 5 OFF",
+					"label": "Power high group 4 off & power low group 5 off",
 					"value": 5
 				},
 				{
-					"label": "Power High Group 4 ON & Power Low Group 5 OFF",
+					"label": "Power high group 4 on & power low group 5 off",
 					"value": 7
 				},
 				{
-					"label": "Power High Group 5 ON",
+					"label": "Power high group 5 on",
 					"value": 12
 				},
 				{
-					"label": "Power High Group 4 OFF & Power Low Gourp 5 ON",
+					"label": "Power high group 4 off & power low gourp 5 on",
 					"value": 13
 				},
 				{
-					"label": "Power High Group 4 ON & Power Low Group 5 ON",
+					"label": "Power high group 4 on & power low group 5 on",
 					"value": 15
 				}
 			]

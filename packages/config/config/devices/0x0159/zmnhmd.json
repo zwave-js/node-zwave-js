@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normally Open)",
+					"label": "NO (Normally open)",
 					"value": 0
 				},
 				{
-					"label": "NC (Normally Closed)",
+					"label": "NC (Normally closed)",
 					"value": 1
 				}
 			]
@@ -39,11 +39,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normally Open)",
+					"label": "NO (Normally open)",
 					"value": 0
 				},
 				{
-					"label": "NC (Normally Closed)",
+					"label": "NC (Normally closed)",
 					"value": 1
 				}
 			]
@@ -56,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normally Open)",
+					"label": "NO (Normally open)",
 					"value": 0
 				},
 				{
-					"label": "NC (Normally Closed)",
+					"label": "NC (Normally closed)",
 					"value": 1
 				}
 			]

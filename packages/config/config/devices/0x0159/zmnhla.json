@@ -49,11 +49,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -66,11 +66,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -83,11 +83,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -100,11 +100,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -117,11 +117,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -134,11 +134,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
@@ -153,19 +153,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF is not active",
+					"label": "All on active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
@@ -254,11 +254,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "PID value equals ZERO",
+					"label": "PID value equals zero",
 					"value": 0
 				},
 				{
-					"label": "PID value set to LAST VALUE",
+					"label": "PID value set to last value",
 					"value": 1
 				}
 			]
@@ -314,11 +314,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Heat Mode",
+					"label": "Heat mode",
 					"value": 0
 				},
 				{
-					"label": "Cool Mode",
+					"label": "Cool mode",
 					"value": 1
 				}
 			]
@@ -347,11 +347,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "System OFF the output is 0V (NC)",
+					"label": "System off the output is 0V (NC)",
 					"value": 0
 				},
 				{
-					"label": "System OFF the output is 230V (NO)",
+					"label": "System off the output is 230V (NO)",
 					"value": 1
 				}
 			]

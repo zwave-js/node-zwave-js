@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				},
 				{

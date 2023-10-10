@@ -80,7 +80,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "MANUAL",
+					"label": "Manual",
 					"value": 0
 				},
 				{
@@ -123,7 +123,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "MANUAL",
+					"label": "Manual",
 					"value": 0
 				},
 				{

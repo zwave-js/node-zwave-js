@@ -23,7 +23,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
@@ -31,7 +31,7 @@
 					"value": 2
 				},
 				{
-					"label": "IR external relay control - bi stable switch",
+					"label": "IR external relay control - Bi stable switch",
 					"value": 3
 				},
 				{
@@ -56,11 +56,11 @@
 					"value": 0
 				},
 				{
-					"label": "Disable All On, Enable All Off",
+					"label": "Disable all on, enable all off",
 					"value": 1
 				},
 				{
-					"label": "Enable All On, Disable All Off",
+					"label": "Enable all on, disable all off",
 					"value": 2
 				},
 				{
@@ -147,19 +147,19 @@
 					"value": 0
 				},
 				{
-					"label": "reset counter 1 – KWh",
+					"label": "Reset counter 1 – kWh",
 					"value": 1
 				},
 				{
-					"label": "reset counter 2 – kVARh",
+					"label": "Reset counter 2 – kVarh",
 					"value": 2
 				},
 				{
-					"label": "reset counter 3 – kVAh",
+					"label": "Reset counter 3 – kVAh",
 					"value": 4
 				},
 				{
-					"label": "reset ALL counters",
+					"label": "Reset all counters",
 					"value": 15
 				}
 			]
@@ -170,6 +170,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-labels */
 			"options": [
 				{
 					"label": "IR (BICOM) and TRIAC (IKA) disabled",
@@ -188,6 +189,7 @@
 					"value": 3
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-labels */
 		},
 		{
 			"#": "110",
@@ -202,7 +204,7 @@
 					"value": 0
 				},
 				{
-					"label": "Maximum Power Consumption",
+					"label": "Maximum power consumption",
 					"value": 15000
 				}
 			]
@@ -224,19 +226,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "switch between the 2 relays",
+					"label": "Switch between the 2 relays",
 					"value": 0
 				},
 				{
-					"label": "always power off relay 1 (IR external relay)",
+					"label": "Always power off relay 1 (IR external relay)",
 					"value": 1
 				},
 				{
-					"label": "always power off relay 2 (External relay)",
+					"label": "Always power off relay 2 (External relay)",
 					"value": 2
 				},
 				{
-					"label": "always power off both relays (relay 1 and relay 2)",
+					"label": "Always power off both relays (Relay 1 and relay 2)",
 					"value": 3
 				}
 			]

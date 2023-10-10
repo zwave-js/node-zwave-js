@@ -47,19 +47,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
@@ -73,19 +73,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]

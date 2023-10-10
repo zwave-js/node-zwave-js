@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type",
+					"label": "Mono-Stable switch type",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -39,11 +39,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type",
+					"label": "Mono-Stable switch type",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -56,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normally open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "normally closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -73,11 +73,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normally open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "normally closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -90,19 +90,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active / ALL OFF is not active",
+					"label": "All on is not active / All off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active / ALL OFF is active",
+					"label": "All on is not active / All off is active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON is active / ALL OFF is not active",
+					"label": "All on is active / All off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON is active / ALL OFF is active",
+					"label": "All on is active / All off is active",
 					"value": 255
 				}
 			]
@@ -115,7 +115,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Input I1 changes between Off and Heat/Cool",
+					"label": "Input I1 changes between off and heat/cool",
 					"value": 1
 				},
 				{
@@ -140,7 +140,7 @@
 					"value": 2000
 				},
 				{
-					"label": "Input I2 doesn't influence on the Heat/Cool process",
+					"label": "Input I2 doesn't influence on the heat/cool process",
 					"value": 32767
 				}
 			]
@@ -178,11 +178,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type",
+					"label": "Mono-Stable switch type",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -196,11 +196,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normally open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "normally closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -339,20 +339,7 @@
 		},
 		{
 			"#": "78",
-			"label": "Scale Selection",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "degrees Celsius",
-					"value": 0
-				},
-				{
-					"label": "degrees Fahrenheit",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit"
 		},
 		{
 			"#": "100",
@@ -362,7 +349,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
@@ -403,7 +390,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
@@ -461,27 +448,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "internal sensor is mounted",
+					"label": "Internal sensor is mounted",
 					"value": 0
 				},
 				{
-					"label": "temperature is grabbed by sensor with assoc 3",
+					"label": "Temperature is grabbed by sensor with assoc 3",
 					"value": 1
 				},
 				{
-					"label": "temperature is grabbed from ext battery sensor",
+					"label": "Temperature is grabbed from ext battery sensor",
 					"value": 2
 				},
 				{
-					"label": "setpoint is grabbed by sensor with assoc 5",
+					"label": "Setpoint is grabbed by sensor with assoc 5",
 					"value": 4
 				},
 				{
-					"label": "setpoint is grabbed from ext battery sensor",
+					"label": "Setpoint is grabbed from ext battery sensor",
 					"value": 8
 				},
 				{
-					"label": "temperature & setpoint from ext batt sensor",
+					"label": "Temperature & setpoint from ext batt sensor",
 					"value": 10
 				}
 			]

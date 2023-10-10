@@ -135,15 +135,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 2
 				},
 				{
-					"label": "PREVIOUS STATUS",
+					"label": "Previous status",
 					"value": 3
 				}
 			]
@@ -157,15 +157,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "BUTTON",
+					"label": "Button",
 					"value": 1
 				},
 				{
-					"label": "SWITCH",
+					"label": "Switch",
 					"value": 2
 				}
 			]
